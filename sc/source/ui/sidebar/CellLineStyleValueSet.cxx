@@ -27,6 +27,7 @@ namespace sc::sidebar {
 
 CellLineStyleValueSet::CellLineStyleValueSet()
     : ValueSet(nullptr)
+    , mnMaxTextWidth(0)
     , nSelItem(0)
 {
 }
@@ -38,12 +39,13 @@ CellLineStyleValueSet::~CellLineStyleValueSet()
 void CellLineStyleValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ValueSet::SetDrawingArea(pDrawingArea);
-    Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(80, 12 * 9), MapMode(MapUnit::MapAppFont));
+    Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(120, 12 * CELL_LINE_STYLE_ENTRIES),
+                                                             MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     SetOutputSizePixel(aSize);
 
     SetColCount();
-    SetLineCount( 9);
+    SetLineCount(CELL_LINE_STYLE_ENTRIES);
 }
 
 void CellLineStyleValueSet::SetUnit(const OUString* str)
@@ -67,6 +69,18 @@ void CellLineStyleValueSet::SetSelItem(sal_uInt16 nSel)
         SelectItem(nSelItem);
         GrabFocus();
     }
+}
+
+tools::Long CellLineStyleValueSet::GetMaxTextWidth(vcl::RenderContext* pDev)
+{
+    if (mnMaxTextWidth > 0)
+        return mnMaxTextWidth;
+
+    for (int i = 0; i < CELL_LINE_STYLE_ENTRIES; ++i)
+    {
+        mnMaxTextWidth = std::max(pDev->GetTextWidth(maStrUnit[i]), mnMaxTextWidth);
+    }
+    return mnMaxTextWidth;
 }
 
 void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
@@ -111,7 +125,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         aFont.SetColor(rStyleSettings.GetFieldTextColor()); //high contrast
 
     pDev->SetFont(aFont);
-    tools::Long nTextWidth = pDev->GetTextWidth(maStrUnit[nItemId - 1]);
+    tools::Long nTextWidth = GetMaxTextWidth(pDev);
     tools::Long nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
     tools::Long nTRX = aBLPos.X() + nRectWidth - nTextWidth - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
     Point aStart(aBLPos.X() + nRectWidth - nTextWidth - 5 , aBLPos.Y() + nRectHeight/6);
@@ -135,25 +149,27 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         case 2:
         case 3:
         case 4:
-            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + nItemId * 2 - 1 ));
-            break;
         case 5:
-            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
-            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 4 ));
-            break;
         case 6:
-            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
-            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 6 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + nItemId * 2 - 1 ));
             break;
         case 7:
             pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
-            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 6 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 4 ));
             break;
         case 8:
-            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 3 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
             pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 6 ));
             break;
         case 9:
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 6 ));
+            break;
+        case 10:
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 3 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 6 ));
+            break;
+        case 11:
             pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 3 ));
             pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 8 ));
             break;
