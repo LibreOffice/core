@@ -365,5 +365,15 @@
 #define STR_NO_USER_DATA_AVAILABLE                  NC_("sharedocumentdlg|nouserdata", "No user data available.")
 #define STR_EXCLUSIVE_ACCESS                        NC_("sharedocumentdlg|exclusive", "(exclusive access)")
 #define STR_NO_NAMED_RANGES_AVAILABLE               NC_("STR_NO_NAMED_RANGES_AVAILABLE", "No named ranges available in the selected document")
+#define STR_BORDER_HAIRLINE                         NC_("STR_BORDER_HAIRLINE", "Hairline (%s pt)")
+#define STR_BORDER_VERY_THIN                        NC_("STR_BORDER_VERY_THIN", "Very thin (%s pt)")
+#define STR_BORDER_THIN                             NC_("STR_BORDER_THIN", "Thin (%s pt)")
+#define STR_BORDER_MEDIUM                           NC_("STR_BORDER_MEDIUM", "Medium (%s pt)")
+#define STR_BORDER_THICK                            NC_("STR_BORDER_THICK", "Thick (%s pt)")
+#define STR_BORDER_EXTRA_THICK                      NC_("STR_BORDER_EXTRA_THICK", "Extra thick (%s pt)")
+#define STR_BORDER_DOUBLE_1                         NC_("STR_BORDER_DOUBLE_1", "Double Hairline (%s pt)")
+#define STR_BORDER_DOUBLE_2                         NC_("STR_BORDER_DOUBLE_2", "Thin/Medium (%s pt)")
+#define STR_BORDER_DOUBLE_3                         NC_("STR_BORDER_DOUBLE_3", "Medium/Hairline (%s pt)")
+#define STR_BORDER_DOUBLE_4                         NC_("STR_BORDER_DOUBLE_4", "Medium/Medium (%s pt)")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
