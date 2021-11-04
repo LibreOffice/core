@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d8ae974_3728845f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-04T14:39:31Z",
+      "side": 1,
+      "message": "\u003e Does that make sense?\n\nYes! :-) Thank you.\n\n\u003e But what is correct there is not entirely clear, given that Word ignores the value. :-)\n\nDoes it also ignore it when there\u0027s no picwgoal/pichgoal ?",
+      "parentUuid": "55a0ac61_e350b56a",
+      "revId": "300a233439fecbe62d3a00e1d762c3af0e814979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9dd3988e_b4a24f03",
