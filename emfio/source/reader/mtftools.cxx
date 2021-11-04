@@ -1773,7 +1773,7 @@ namespace emfio
             double fY = aP2.Y();
             if ( fX )
             {
-                double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * 57.29577951308;
+                double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * basegfx::rad2deg(1.0);
                 if ( fY > 0 )
                     fOrientation = 360 - fOrientation;
                 fOrientation += 90;
