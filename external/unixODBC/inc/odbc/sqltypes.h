@@ -131,10 +131,12 @@ typedef void*               HINSTANCE;
  ***************************/
 typedef unsigned char   SQLCHAR;
 
+#if (ODBCVER >= 0x0300)
 typedef unsigned char   SQLDATE;
 typedef unsigned char   SQLDECIMAL;
 typedef double          SQLDOUBLE;
 typedef double          SQLFLOAT;
+#endif
 
 /*
  * can't use a long it fails on 64 platforms
@@ -192,26 +194,42 @@ typedef SQLULEN         SQLTRANSID;
 typedef SQLLEN          SQLROWOFFSET;
 #endif
 
+#if (ODBCVER >= 0x0300)
 typedef unsigned char   SQLNUMERIC;
+#endif
 
 typedef void *          SQLPOINTER;
 
+#if (ODBCVER >= 0x0300)
 typedef float           SQLREAL;
+#endif
 
 typedef signed short int   SQLSMALLINT;
 typedef unsigned short  SQLUSMALLINT;
 
+#if (ODBCVER >= 0x0300)
 typedef unsigned char   SQLTIME;
 typedef unsigned char   SQLTIMESTAMP;
 typedef unsigned char   SQLVARCHAR;
+#endif
 
 typedef SQLSMALLINT     SQLRETURN;
 
+#if (ODBCVER >= 0x0300)
 typedef void *                  SQLHANDLE;
 typedef SQLHANDLE               SQLHENV;
 typedef SQLHANDLE               SQLHDBC;
 typedef SQLHANDLE               SQLHSTMT;
 typedef SQLHANDLE               SQLHDESC;
+#else
+typedef void *                  SQLHENV;
+typedef void *                  SQLHDBC;
+typedef void *                  SQLHSTMT;
+/*
+ * some things like PHP won't build without this
+ */
+typedef void *                  SQLHANDLE;
+#endif
 
 /****************************
  * These are cast into the actual struct that is being passed around. The
@@ -220,9 +238,15 @@ typedef SQLHANDLE               SQLHDESC;
  * These are deprecated in favour of SQLHENV, SQLHDBC, SQLHSTMT
  ***************************/
 
+#if (ODBCVER >= 0x0300)
 typedef SQLHANDLE               HENV;
 typedef SQLHANDLE               HDBC;
 typedef SQLHANDLE               HSTMT;
+#else
+typedef void *                  HENV;
+typedef void *                  HDBC;
+typedef void *                  HSTMT;
+#endif
 
 
 /****************************
@@ -268,7 +292,9 @@ typedef struct tagDATE_STRUCT
         SQLUSMALLINT   day;
 } DATE_STRUCT;
 
+#if (ODBCVER >= 0x0300)
 typedef DATE_STRUCT SQL_DATE_STRUCT;
+#endif
 
 typedef struct tagTIME_STRUCT
 {
@@ -277,7 +303,9 @@ typedef struct tagTIME_STRUCT
         SQLUSMALLINT   second;
 } TIME_STRUCT;
 
+#if (ODBCVER >= 0x0300)
 typedef TIME_STRUCT SQL_TIME_STRUCT;
+#endif
 
 typedef struct tagTIMESTAMP_STRUCT
 {
@@ -290,9 +318,12 @@ typedef struct tagTIMESTAMP_STRUCT
         SQLUINTEGER    fraction;
 } TIMESTAMP_STRUCT;
 
+#if (ODBCVER >= 0x0300)
 typedef TIMESTAMP_STRUCT    SQL_TIMESTAMP_STRUCT;
+#endif
 
 
+#if (ODBCVER >= 0x0300)
 typedef enum
 {
     SQL_IS_YEAR                     = 1,
@@ -310,7 +341,9 @@ typedef enum
     SQL_IS_MINUTE_TO_SECOND         = 13
 } SQLINTERVAL;
 
+#endif
 
+#if (ODBCVER >= 0x0300)
 typedef struct tagSQL_YEAR_MONTH
 {
         SQLUINTEGER     year;
@@ -337,10 +370,12 @@ typedef struct tagSQL_INTERVAL_STRUCT
 
 } SQL_INTERVAL_STRUCT;
 
+#endif
 
 #endif
 
 #ifndef ODBCINT64
+# if (ODBCVER >= 0x0300)
 # if (SIZEOF_LONG_INT == 8)
 #   define ODBCINT64        long
 #   define UODBCINT64   unsigned long
@@ -367,6 +402,7 @@ struct __bigint_struct_u
 #  endif
 # endif
 #endif
+#endif
 
 #ifdef ODBCINT64
 typedef ODBCINT64   SQLBIGINT;
@@ -379,6 +415,7 @@ typedef UODBCINT64  SQLUBIGINT;
 /****************************
  * cursor and bookmark
  ***************************/
+#if (ODBCVER >= 0x0300)
 #define SQL_MAX_NUMERIC_LEN     16
 typedef struct tagSQL_NUMERIC_STRUCT
 {
@@ -387,6 +424,7 @@ typedef struct tagSQL_NUMERIC_STRUCT
     SQLCHAR     sign;   /* 1=pos 0=neg */
     SQLCHAR     val[SQL_MAX_NUMERIC_LEN];
 } SQL_NUMERIC_STRUCT;
+#endif
 
 #if (ODBCVER >= 0x0350)
 #ifdef GUID_DEFINED
