@@ -80,12 +80,11 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
     std::shared_ptr< css::i18n::Calendar2 >            xSecondaryCalendar;
     css::i18n::LocaleDataItem2                         aLocaleDataItem;
-    css::uno::Sequence< OUString >                     aReservedWordSeq;
     css::uno::Sequence< OUString >                     aDateAcceptancePatterns;
     css::uno::Sequence< sal_Int32 >                    aGrouping;
     // cached items
     OUString                aLocaleItem[css::i18n::LocaleItem::COUNT2];
-    OUString                aReservedWord[css::i18n::reservedWords::COUNT];
+    std::vector<OUString>   aReservedWords;
     OUString                aCurrSymbol;
     OUString                aCurrBankSymbol;
     DateOrder               nDateOrder;
