@@ -16,6 +16,23 @@
       "message": "Rene: just reminded about unixodbc package.\nI downloaded latest version from official website ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.9.tar.gz and noticed the file:\n./unixODBC-2.3.9/include/sql.h\nDo you think I should revert this patch and the previous one about tdf#1432499 because of a possible side-effect or no pb at all?\nThe goal of the bugtracker is to decruftify some files.",
       "revId": "0464b86787da269be7b16a6f1f124d774f78fa97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63783d88_2934408d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-11-04T08:46:06Z",
+      "side": 1,
+      "message": "I didn\u0027t pay proper attention before, sorry. I don\u0027t think \"decruftifying\" externals as a local patch in LibreOffice is worth it, or even a net gain: it increases our work and burden when we want to upgrade to a new version of the external.\n\nSuch clean-up/decruftify should be done upstream, if it is to be done.\n\nDecruftifying our _own_ code is another matter and the above remarks don\u0027t apply to that.",
+      "revId": "0464b86787da269be7b16a6f1f124d774f78fa97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
