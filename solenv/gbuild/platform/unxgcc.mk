@@ -42,10 +42,10 @@ gb_CFLAGS := \
 	-Wdeclaration-after-statement \
 	-Wshadow \
 
-# At least libstdc++ (which is approximated here with !HAVE_LIBCXX) needs -pthread when including
-# various C++ headers like <thread>, see <https://gcc.gnu.org/onlinedocs/gcc-8.3.0/libstdc++/manual/
-# manual/using.html#manual.intro.using.flags>:
-ifeq ($(HAVE_LIBCXX),)
+# At least libstdc++ needs -pthread when including various C++ headers like <thread>, see
+# <https://gcc.gnu.org/onlinedocs/gcc-8.3.0/libstdc++/manual/manual/using.html
+# #manual.intro.using.flags>:
+ifneq ($(HAVE_LIBSTDCPP),)
 gb_CXX_LINKFLAGS := -pthread
 endif
 
