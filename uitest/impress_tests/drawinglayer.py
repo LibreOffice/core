@@ -33,6 +33,9 @@ class ImpressDrawinglayerTest(UITestCase):
             xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
             xDrawinglayerObject.executeAction("MOVE", mkPropertyValues({"X": "1000", "Y":"1000"}))
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
             self.assertEqual(1400, document.DrawPages[0].getByIndex(0).Position.X)
             self.assertEqual(628, document.DrawPages[0].getByIndex(0).Position.Y)
             self.assertEqual(2400, document.DrawPages[0].getByIndex(1).Position.X)
@@ -76,6 +79,9 @@ class ImpressDrawinglayerTest(UITestCase):
             xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
             xDrawinglayerObject.executeAction("RESIZE", mkPropertyValues({"X": "500", "Y":"4000", "FRAC_X": "0.5", "FRAC_Y": "0.5"}))
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
             self.assertEqual(12600, document.DrawPages[0].getByIndex(1).Size.Width)
@@ -117,6 +123,9 @@ class ImpressDrawinglayerTest(UITestCase):
 
             xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
             xDrawinglayerObject.executeAction("ROTATE", mkPropertyValues({"X": "500", "Y":"4000", "ANGLE": "3000"}))
+
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
 
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
