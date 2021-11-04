@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a4413c3_548e646c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-11-04T11:09:56Z",
+      "side": 1,
+      "message": "Hi! The undo does the same as before the patch. Should I integrate the undo functionality as in ScDocFunc::SetEditCell? AFAIU I have to remember all the positions and then add the undo functionality at the end.",
+      "revId": "3e37a0de6d6f6944a8109b157a044d9ebbb4ac08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
