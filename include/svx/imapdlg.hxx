@@ -104,16 +104,16 @@ class SVX_DLLPUBLIC SvxIMapDlg final : public SfxModelessDialogController
     std::unique_ptr<weld::Label> m_xStbStatus3;
     std::unique_ptr<weld::CustomWeld> m_xIMapWndWeld;
 
-    DECL_LINK( TbxClickHdl, const OString&, void );
-    DECL_LINK( InfoHdl, IMapWindow&, void );
-    DECL_LINK( MousePosHdl, GraphCtrl*, void );
-    DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
-    DECL_LINK( URLModifyHdl, weld::ComboBox&, void );
-    DECL_LINK( EntryModifyHdl, weld::Entry&, void );
-    DECL_LINK( URLLoseFocusHdl, weld::Widget&, void );
-    DECL_LINK( UpdateHdl, Timer *, void );
-    DECL_LINK( StateHdl, GraphCtrl*, void );
-    DECL_LINK( CancelHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( TbxClickHdl, const OString&, void );
+    DECL_DLLPRIVATE_LINK( InfoHdl, IMapWindow&, void );
+    DECL_DLLPRIVATE_LINK( MousePosHdl, GraphCtrl*, void );
+    DECL_DLLPRIVATE_LINK( GraphSizeHdl, GraphCtrl*, void );
+    DECL_DLLPRIVATE_LINK( URLModifyHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK( EntryModifyHdl, weld::Entry&, void );
+    DECL_DLLPRIVATE_LINK( URLLoseFocusHdl, weld::Widget&, void );
+    DECL_DLLPRIVATE_LINK( UpdateHdl, Timer *, void );
+    DECL_DLLPRIVATE_LINK( StateHdl, GraphCtrl*, void );
+    DECL_DLLPRIVATE_LINK( CancelHdl, weld::Button&, void );
 
     void                URLModify();
     void                DoOpen();

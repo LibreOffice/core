@@ -151,7 +151,7 @@ protected:
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
-    DECL_LINK(VscrollHdl, weld::ScrolledWindow&, void);
+    DECL_DLLPRIVATE_LINK(VscrollHdl, weld::ScrolledWindow&, void);
     void ContextMenuSelect(std::string_view rIdent);
 
     void            init();

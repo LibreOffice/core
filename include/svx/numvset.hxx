@@ -92,7 +92,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet final : public SvxNumValueSet
     Idle        aFormatIdle;
     bool        bGrfNotFound;
 
-    DECL_LINK(FormatHdl_Impl, Timer *, void);
+    DECL_DLLPRIVATE_LINK(FormatHdl_Impl, Timer *, void);
 
 public:
     SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);

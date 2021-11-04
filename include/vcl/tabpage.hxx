@@ -35,7 +35,7 @@ private:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
     void    lcl_Scroll( tools::Long nX, tools::Long nY );
-    DECL_LINK( ScrollBarHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK( ScrollBarHdl, ScrollBar*, void );
 
     VclPtr<ScrollBar>    m_pVScroll;
     VclPtr<ScrollBar>    m_pHScroll;

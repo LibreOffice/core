@@ -36,9 +36,9 @@ private:
     weld::Builder* m_pBuilder;
     bool m_bSideBar;
 
-    DECL_LINK(SelectHdl, const OString&, void);
-    DECL_LINK(ToggleMenuHdl, const OString&, void);
-    DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void);
+    DECL_DLLPRIVATE_LINK(SelectHdl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(ToggleMenuHdl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(ChangedIconSizeHandler, LinkParamNone*, void);
 
     void CreateController(const OUString& rCommand);
     static vcl::ImageType GetIconSize();

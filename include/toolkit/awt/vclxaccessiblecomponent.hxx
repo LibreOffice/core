@@ -55,8 +55,8 @@ private:
     rtl::Reference<VCLXWindow>      m_xVCLXWindow;
     VclPtr<vcl::Window>             m_xEventSource;
 
-    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
-    DECL_LINK( WindowChildEventListener, VclWindowEvent&, void );
+    DECL_DLLPRIVATE_LINK( WindowEventListener, VclWindowEvent&, void );
+    DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclWindowEvent&, void );
     void            DisconnectEvents();
 
 protected:

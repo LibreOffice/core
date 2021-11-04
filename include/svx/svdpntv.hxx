@@ -222,7 +222,7 @@ public:
     OutputDevice* GetFirstOutputDevice() const;
 
 private:
-    DECL_LINK(ImpComeBackHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(ImpComeBackHdl, Timer*, void);
 
 protected:
     sal_uInt16 ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const;

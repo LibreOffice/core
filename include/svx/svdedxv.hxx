@@ -128,7 +128,7 @@ protected:
 
     // Chaining
     void ImpChainingEventHdl();
-    DECL_LINK(ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void);
+    DECL_DLLPRIVATE_LINK(ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void);
 
 
     // Check if the whole text is selected.
@@ -137,17 +137,17 @@ protected:
     void ImpMakeTextCursorAreaVisible();
 
     // handler for AutoGrowing text with active Outliner
-    DECL_LINK(ImpOutlinerStatusEventHdl, EditStatus&, void);
-    DECL_LINK(ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, void);
+    DECL_DLLPRIVATE_LINK(ImpOutlinerStatusEventHdl, EditStatus&, void);
+    DECL_DLLPRIVATE_LINK(ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, void);
 
     // link for EndTextEditHdl
-    DECL_LINK(EndTextEditHdl, SdrUndoManager*, void);
+    DECL_DLLPRIVATE_LINK(EndTextEditHdl, SdrUndoManager*, void);
 
     void ImpMacroUp(const Point& rUpPos);
     void ImpMacroDown(const Point& rDownPos);
 
-    DECL_LINK( BeginPasteOrDropHdl, PasteOrDropInfos*, void );
-    DECL_LINK( EndPasteOrDropHdl, PasteOrDropInfos*, void );
+    DECL_DLLPRIVATE_LINK( BeginPasteOrDropHdl, PasteOrDropInfos*, void );
+    DECL_DLLPRIVATE_LINK( EndPasteOrDropHdl, PasteOrDropInfos*, void );
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
