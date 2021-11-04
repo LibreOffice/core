@@ -54,6 +54,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0417841c_13f993ca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-04T14:59:44Z",
+      "side": 1,
+      "message": "\u003e Does it also ignore it when there\u0027s no picwgoal/pichgoal ?\n\nNo it reads the picw/pich when there is a no picwgoal/pichgoal (and we do the same).",
+      "parentUuid": "5d8ae974_3728845f",
+      "revId": "300a233439fecbe62d3a00e1d762c3af0e814979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9dd3988e_b4a24f03",
