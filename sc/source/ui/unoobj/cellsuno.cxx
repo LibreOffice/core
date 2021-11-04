@@ -1082,6 +1082,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         const uno::Sequence< uno::Sequence<uno::Any> >& aData )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
+    ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -1158,9 +1159,8 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         rElement >>= aUStr;
                         if ( !aUStr.isEmpty() )
                         {
-                            ScSetStringParam aParam;
-                            aParam.setTextInput();
-                            rDoc.SetString(aPos, aUStr, &aParam);
+                            std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
+                            rDocShell.GetDocFunc().SetEditCell(aPos, *pEditText, false);
                         }
                     }
                     break;
