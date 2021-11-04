@@ -95,6 +95,9 @@ public:
 
     void element_block_acquired(const mdds::mtv::base_element_block* block);
     void element_block_released(const mdds::mtv::base_element_block* block);
+
+    /** Stop processing events. */
+    void stop();
 };
 
 struct CellStoreTrait
