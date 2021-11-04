@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "230bc954_daedfbad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-11-04T07:17:51Z",
+      "side": 1,
+      "message": "Restoring +2 after rebase.",
+      "revId": "0d96dc09de0d956cc7311f4488f3d8cdeff94d95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
