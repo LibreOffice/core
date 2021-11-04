@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d56720_e188c2d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-11-04T13:30:47Z",
+      "side": 1,
+      "message": "In Patchset 3 the undo feels correct, even there is a lot of duplicated code ...",
+      "revId": "4fab958998371a1b9aedac7057331282d1483116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
