@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "756ac446_2f3b8c51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-04T13:52:13Z",
+      "side": 1,
+      "message": "Interesting: why the size in picw/pich is much smaller? As mentioned above, we ourselves provide it - do we write wrong values? Or are the values get combined somehow?",
+      "revId": "300a233439fecbe62d3a00e1d762c3af0e814979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9dd3988e_b4a24f03",
