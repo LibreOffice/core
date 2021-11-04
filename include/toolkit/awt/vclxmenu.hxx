@@ -68,7 +68,7 @@ private:
 protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }
 
-    DECL_LINK( MenuEventListener, VclMenuEvent&, void );
+    DECL_DLLPRIVATE_LINK( MenuEventListener, VclMenuEvent&, void );
 
     void ImplCreateMenu( bool bPopup );
     void ImplAddListener();

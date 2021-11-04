@@ -38,8 +38,8 @@ private:
     ImplSVEvent* m_nAsyncModifyEvent;
 
     DECL_STATIC_LINK(HexColorControl, ImplProcessInputHdl, OUString&, bool);
-    DECL_LINK(ImplProcessModifyHdl, weld::Entry&, void);
-    DECL_LINK(OnAsyncModifyHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(ImplProcessModifyHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(OnAsyncModifyHdl, void*, void);
 public:
     HexColorControl(std::unique_ptr<weld::Entry> pEdit);
     ~HexColorControl();

@@ -127,10 +127,10 @@ private:
 
     void Initialize();
 
-    DECL_LINK(ToolboxWidthSelectHdl, const OString&, void);
-    DECL_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(ChangeEdgeStyleHdl, weld::ComboBox&, void);
-    DECL_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(ToolboxWidthSelectHdl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(ChangeEdgeStyleHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);
 };
 
 } // end of namespace svx::sidebar

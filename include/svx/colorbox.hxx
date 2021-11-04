@@ -48,7 +48,7 @@ private:
     void LockWidthRequest();
     ColorWindow* getColorWindow() const;
 
-    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
+    DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
 
 public:
     // rTopLevelParentFunction will be used to get parent for any color picker dialog created

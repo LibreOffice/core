@@ -181,14 +181,14 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
     std::unique_ptr<weld::CheckButton> m_xCbComment;
     std::unique_ptr<weld::Entry> m_xEdComment;
 
-    DECL_LINK( SelDateHdl, weld::ComboBox&, void );
-    DECL_LINK( RowEnableHdl, weld::Toggleable&, void );
-    DECL_LINK( TimeHdl, weld::Button&, void );
-    DECL_LINK( ModifyHdl, weld::Entry&, void );
-    DECL_LINK( ModifyListBoxHdl, weld::ComboBox&, void );
-    DECL_LINK( ModifyDate, SvtCalendarBox&, void );
-    DECL_LINK( ModifyTime, weld::FormattedSpinButton&, void );
-    DECL_LINK( RefHandle, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( SelDateHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK( RowEnableHdl, weld::Toggleable&, void );
+    DECL_DLLPRIVATE_LINK( TimeHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( ModifyHdl, weld::Entry&, void );
+    DECL_DLLPRIVATE_LINK( ModifyListBoxHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK( ModifyDate, SvtCalendarBox&, void );
+    DECL_DLLPRIVATE_LINK( ModifyTime, weld::FormattedSpinButton&, void );
+    DECL_DLLPRIVATE_LINK( RefHandle, weld::Button&, void );
 
     void            EnableDateLine1(bool bFlag);
     void            EnableDateLine2(bool bFlag);
@@ -282,7 +282,7 @@ private:
     std::unique_ptr<weld::Button> m_xUndo;
     std::unique_ptr<SvxRedlinTable> m_xViewData;
 
-    DECL_LINK( PbClickHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( PbClickHdl, weld::Button&, void );
 
     void            EnableClearFormatButton(weld::Button&, bool bFlag);
 public:

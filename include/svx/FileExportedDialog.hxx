@@ -16,7 +16,7 @@ private:
     std::unique_ptr<weld::Label> m_xFileLabel;
     std::unique_ptr<weld::Button> m_xButton;
 
-    DECL_LINK(OpenHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(OpenHdl, weld::Button&, void);
 
 public:
     explicit FileExportedDialog(weld::Window* pParent, OUString atitle);

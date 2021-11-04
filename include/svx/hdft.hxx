@@ -83,8 +83,8 @@ protected:
     void            InitHandler();
     void TurnOn(const weld::Toggleable* pButton);
     DECL_LINK(TurnOnHdl, weld::Toggleable&, void);
-    DECL_LINK(BackgroundHdl, weld::Button&, void);
-    DECL_LINK(ValueChangeHdl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(BackgroundHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ValueChangeHdl, weld::MetricSpinButton&, void);
     void RangeHdl();
     void            UpdateExample();
 

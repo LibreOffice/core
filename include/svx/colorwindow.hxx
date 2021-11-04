@@ -101,10 +101,10 @@ private:
     weld::Button* mpDefaultButton;
 
     Link<const NamedColor&, void> maSelectedLink;
-    DECL_LINK(SelectHdl, ValueSet*, void);
-    DECL_LINK(SelectPaletteHdl, weld::ComboBox&, void);
-    DECL_LINK(AutoColorClickHdl, weld::Button&, void);
-    DECL_LINK(OpenPickerClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(SelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(SelectPaletteHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(AutoColorClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(OpenPickerClickHdl, weld::Button&, void);
 
     static bool SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor);
     static NamedColor GetSelectEntryColor(ValueSet const * pColorSet);

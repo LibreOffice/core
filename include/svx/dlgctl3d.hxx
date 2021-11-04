@@ -165,12 +165,12 @@ public:
 
 private:
 
-    DECL_LINK(InternalInteractiveChange, Svx3DLightControl*, void);
-    DECL_LINK(InternalSelectionChange, Svx3DLightControl*, void);
-    DECL_LINK(ScrollBarMove, weld::Scale&, void);
-    DECL_LINK(ButtonPress, weld::Button&, void);
-    DECL_LINK(KeyInput, const KeyEvent&, bool);
-    DECL_LINK(FocusIn, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(InternalInteractiveChange, Svx3DLightControl*, void);
+    DECL_DLLPRIVATE_LINK(InternalSelectionChange, Svx3DLightControl*, void);
+    DECL_DLLPRIVATE_LINK(ScrollBarMove, weld::Scale&, void);
+    DECL_DLLPRIVATE_LINK(ButtonPress, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(KeyInput, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(FocusIn, weld::Widget&, void);
 
     // initialize local parameters
     void Init();

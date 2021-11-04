@@ -103,7 +103,7 @@ public:
     void                SetMinOutputSizePixel( const Size& rSize );
     const Size&         GetMinOutputSizePixel() const;
     virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
-    DECL_LINK(TimerHdl, Timer *, void);
+    DECL_DLLPRIVATE_LINK(TimerHdl, Timer *, void);
 
     SAL_DLLPRIVATE void Initialize_Impl();
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );

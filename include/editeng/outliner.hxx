@@ -599,12 +599,12 @@ private:
     bool                bStrippingPortions;
     bool                bPasting;
 
-    DECL_LINK(    ParaVisibleStateChangedHdl, Paragraph&, void );
-    DECL_LINK(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
-    DECL_LINK(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
-    DECL_LINK(    BeginPasteOrDropHdl, PasteOrDropInfos&, void );
-    DECL_LINK(    EndPasteOrDropHdl, PasteOrDropInfos&, void );
-    DECL_LINK(    EditEngineNotifyHdl, EENotify&, void );
+    DECL_DLLPRIVATE_LINK(    ParaVisibleStateChangedHdl, Paragraph&, void );
+    DECL_DLLPRIVATE_LINK(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
+    DECL_DLLPRIVATE_LINK(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
+    DECL_DLLPRIVATE_LINK(    BeginPasteOrDropHdl, PasteOrDropInfos&, void );
+    DECL_DLLPRIVATE_LINK(    EndPasteOrDropHdl, PasteOrDropInfos&, void );
+    DECL_DLLPRIVATE_LINK(    EditEngineNotifyHdl, EENotify&, void );
     void                ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd );
     bool                ImplHasNumberFormat( sal_Int32 nPara ) const;
     Size                ImplGetBulletSize( sal_Int32 nPara );

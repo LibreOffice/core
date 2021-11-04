@@ -81,12 +81,12 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
     std::unique_ptr<weld::Label> m_xAltTitleFt;
 
-    DECL_LINK( Update, Timer *, void );
+    DECL_DLLPRIVATE_LINK( Update, Timer *, void );
 
-    DECL_LINK(RegionSelect, weld::TreeView&, void);
-    DECL_LINK(TemplateSelect, weld::TreeView&, void);
-    DECL_LINK(DoubleClick, weld::TreeView&, bool);
-    DECL_LINK(Expand, weld::Expander&, void);
+    DECL_DLLPRIVATE_LINK(RegionSelect, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(TemplateSelect, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(DoubleClick, weld::TreeView&, bool);
+    DECL_DLLPRIVATE_LINK(Expand, weld::Expander&, void);
     sal_uInt16  GetSelectedTemplatePos() const;
 
 public:

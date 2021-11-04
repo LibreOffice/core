@@ -207,7 +207,7 @@ private:
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
     SAL_DLLPRIVATE void ShowInfoBars( );
 
-    DECL_LINK( CheckOutHandler, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( CheckOutHandler, weld::Button&, void );
 
     std::unique_ptr<IMPL_SfxBaseController_DataContainer>   m_pData ;
 

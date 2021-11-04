@@ -60,10 +60,10 @@ protected:
     std::unique_ptr<weld::Notebook> m_xTabCtrl;
 
     DECL_LINK(OkHdl, weld::Button&, void);
-    DECL_LINK(ResetHdl, weld::Button&, void);
-    DECL_LINK(BaseFmtHdl, weld::Button&, void);
-    DECL_LINK(UserHdl, weld::Button&, void);
-    DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ResetHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(BaseFmtHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(UserHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(CancelHdl, weld::Button&, void);
 private:
     std::unique_ptr<weld::Button> m_xOKBtn;
     std::unique_ptr<weld::Button> m_xApplyBtn;

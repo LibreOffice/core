@@ -279,8 +279,8 @@ public:
     virtual ~LongCurrencyFormatter() override;
 
 private:
-    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
-    DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
 
     void Init();
 
@@ -307,9 +307,9 @@ public:
     virtual ~TimeFormatter() override;
 
 private:
-    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
-    DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
-    DECL_LINK(CursorChangedHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 
     void Init();
 
@@ -340,9 +340,9 @@ public:
     virtual ~DateFormatter() override;
 
 private:
-    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
-    DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
-    DECL_LINK(CursorChangedHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 
     void Init();
     CalendarWrapper& GetCalendarWrapper() const;
@@ -407,9 +407,9 @@ private:
     const Link<const CommandEvent&, void> m_aContextLink;
     bool m_bModKey;
 
-    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
-    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
-    DECL_LINK(RepeatTimerHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(MouseReleaseHdl, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(RepeatTimerHdl, Timer*, void);
 
 public:
     ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink,
