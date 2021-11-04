@@ -129,14 +129,7 @@ class SvtCompatibilityEntry
         template<typename T>
         void setValue( const Index rIdx, T rValue )
         {
-            if ( static_cast<size_t>(rIdx) < getElementCount() )
-            {
-                m_aPropertyValue[ static_cast<int>(rIdx) ] = css::uno::Any(rValue);
-            } else
-            {
-                /* Wrong index. */
-                assert( false );
-            }
+            setValue(rIdx, css::uno::Any(rValue));
         }
 
         bool isDefaultEntry() const
