@@ -31,8 +31,8 @@ protected:
     virtual weld::Window* GetFrameWeld() const;
 
 private:
-    DECL_LINK(DataChangedEventListener, VclSimpleEvent&, void);
-    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
+    DECL_DLLPRIVATE_LINK(DataChangedEventListener, VclSimpleEvent&, void);
+    DECL_DLLPRIVATE_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 
 public:
     PanelLayout(weld::Widget* pParent, const OString& rID, const OUString& rUIXMLDescription);

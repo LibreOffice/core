@@ -105,14 +105,14 @@ class SAL_WARN_UNUSED SvxFontWorkDialog final : public SfxDockingWindow
     friend class SvxFontWorkChildWindow;
     friend class SvxFontWorkControllerItem;
 
-    DECL_LINK( SelectStyleHdl_Impl, const OString&, void );
-    DECL_LINK( SelectAdjustHdl_Impl, const OString&, void );
-    DECL_LINK( SelectShadowHdl_Impl, const OString&, void );
+    DECL_DLLPRIVATE_LINK( SelectStyleHdl_Impl, const OString&, void );
+    DECL_DLLPRIVATE_LINK( SelectAdjustHdl_Impl, const OString&, void );
+    DECL_DLLPRIVATE_LINK( SelectShadowHdl_Impl, const OString&, void );
 
-    DECL_LINK( ModifyInputHdl_Impl, weld::MetricSpinButton&, void );
-    DECL_LINK( InputTimeoutHdl_Impl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( ModifyInputHdl_Impl, weld::MetricSpinButton&, void );
+    DECL_DLLPRIVATE_LINK( InputTimeoutHdl_Impl, Timer*, void );
 
-    DECL_LINK( ColorSelectHdl_Impl, ColorListBox&, void );
+    DECL_DLLPRIVATE_LINK( ColorSelectHdl_Impl, ColorListBox&, void );
 
     void SetStyle_Impl(const XFormTextStyleItem*);
     void SetAdjust_Impl(const XFormTextAdjustItem*);

@@ -59,18 +59,18 @@ private:
     std::unique_ptr<ClassificationEditView> m_xEditWindow;
     std::unique_ptr<weld::CustomWeld> m_xEditWindowWeld;
 
-    DECL_LINK(ButtonClicked, weld::Button&, void);
-    DECL_LINK(OkHdl, weld::Button&, void);
-    DECL_LINK(SelectToolboxHdl, weld::Toggleable&, void);
-    DECL_LINK(SelectClassificationHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectMarkingHdl, weld::TreeView&, bool);
-    DECL_LINK(SelectIPPartNumbersHdl, weld::TreeView&, bool);
-    DECL_LINK(SelectRecentlyUsedHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectIPPartHdl, weld::TreeView&, bool);
-    DECL_LINK(EditWindowModifiedHdl, LinkParamNone*, void);
+    DECL_DLLPRIVATE_LINK(ButtonClicked, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(OkHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(SelectToolboxHdl, weld::Toggleable&, void);
+    DECL_DLLPRIVATE_LINK(SelectClassificationHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectMarkingHdl, weld::TreeView&, bool);
+    DECL_DLLPRIVATE_LINK(SelectIPPartNumbersHdl, weld::TreeView&, bool);
+    DECL_DLLPRIVATE_LINK(SelectRecentlyUsedHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectIPPartHdl, weld::TreeView&, bool);
+    DECL_DLLPRIVATE_LINK(EditWindowModifiedHdl, LinkParamNone*, void);
     DECL_STATIC_LINK(ClassificationDialog, ExpandedHdl, weld::Expander&, void);
     DECL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, bool);
-    DECL_LINK(OnAsyncExpandHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(OnAsyncExpandHdl, void*, void);
 
     void insertField(ClassificationType eType, OUString const& rString, OUString const& rFullString,
                      OUString const& rIdentifier = OUString());

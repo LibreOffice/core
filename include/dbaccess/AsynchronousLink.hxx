@@ -41,7 +41,7 @@ namespace dbaui
         ::osl::Mutex        m_aEventSafety;
         ::osl::Mutex        m_aDestructionSafety;
         ImplSVEvent *       m_nEventId;
-        DECL_LINK(OnAsyncCall, void*, void);
+        DECL_DLLPRIVATE_LINK(OnAsyncCall, void*, void);
 
     public:
         /** constructs the object

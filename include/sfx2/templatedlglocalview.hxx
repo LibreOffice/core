@@ -58,13 +58,13 @@ private:
 
     void updateSelection();
 
-    DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
+    DECL_DLLPRIVATE_LINK(RowActivatedHdl, weld::TreeView&, bool);
 
-    DECL_LINK(ListViewChangedHdl, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(ListViewChangedHdl, weld::TreeView&, void);
 
-    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
+    DECL_DLLPRIVATE_LINK(PopupMenuHdl, const CommandEvent&, bool);
 
-    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(KeyPressHdl, const KeyEvent&, bool);
 
     TemplateViewMode mViewMode;
 };

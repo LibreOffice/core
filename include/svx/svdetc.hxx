@@ -165,7 +165,7 @@ class OLEObjCache
     std::unique_ptr<AutoTimer>  pTimer;
 
     static bool UnloadObj(SdrOle2Obj& rObj);
-    DECL_LINK( UnloadCheckHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( UnloadCheckHdl, Timer*, void );
 
 public:
     OLEObjCache();

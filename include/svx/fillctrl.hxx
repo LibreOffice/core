@@ -60,8 +60,8 @@ private:
     sal_Int32           mnLastPosBitmap;
     sal_Int32           mnLastPosPattern;
 
-    DECL_LINK(SelectFillTypeHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectFillAttrHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectFillTypeHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectFillAttrHdl, weld::ComboBox&, void);
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -86,12 +86,12 @@ private:
     int mnTypeCurPos;
     int mnAttrCurPos;
 
-    DECL_LINK(AttrKeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(TypeKeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(ColorKeyInputHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(AttrKeyInputHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(TypeKeyInputHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(ColorKeyInputHdl, const KeyEvent&, bool);
     DECL_STATIC_LINK(FillControl, DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
-    DECL_LINK(AttrFocusHdl, weld::Widget&, void);
-    DECL_LINK(TypeFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(AttrFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(TypeFocusHdl, weld::Widget&, void);
 
     void SetOptimalSize();
 

@@ -65,7 +65,7 @@ class SVX_DLLPUBLIC GraphCtrl : public weld::CustomWidgetController
     bool                mbInIdleUpdate;
     weld::Dialog*       mpDialog;
 
-                        DECL_LINK( UpdateHdl, Timer*, void );
+                        DECL_DLLPRIVATE_LINK( UpdateHdl, Timer*, void );
 
     rtl::Reference<SvxGraphCtrlAccessibleContext> mpAccContext;
 

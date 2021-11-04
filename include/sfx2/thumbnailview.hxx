@@ -286,7 +286,7 @@ protected:
     ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
     void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     bool         ImplHasAccessibleListeners() const;
-    DECL_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
+    DECL_DLLPRIVATE_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
 
 protected:
 

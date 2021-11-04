@@ -44,7 +44,7 @@ private:
     /** is position X position hitting text */
     SAL_DLLPRIVATE bool ImplIsOverText(Point rPosition) const;
 
-    DECL_LINK(HandleClick, FixedHyperlink&, void);
+    DECL_DLLPRIVATE_LINK(HandleClick, FixedHyperlink&, void);
 
     /** overwrites Window::MouseMove().
 

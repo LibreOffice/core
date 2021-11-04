@@ -395,7 +395,7 @@ public:
 class VclVPaned final : public VclPaned
 {
 private:
-    DECL_LINK(SplitHdl, Splitter*, void);
+    DECL_DLLPRIVATE_LINK(SplitHdl, Splitter*, void);
     void arrange(const Size& rAllocation, tools::Long nFirstHeight, tools::Long nSecondHeight);
 
 public:
@@ -409,7 +409,7 @@ public:
 class VclHPaned final : public VclPaned
 {
 private:
-    DECL_LINK(SplitHdl, Splitter*, void);
+    DECL_DLLPRIVATE_LINK(SplitHdl, Splitter*, void);
     void arrange(const Size& rAllocation, tools::Long nFirstHeight, tools::Long nSecondHeight);
 
 public:
@@ -427,7 +427,7 @@ private:
 private:
     friend class VclBuilder;
     void designate_label(vcl::Window *pWindow);
-    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
+    DECL_DLLPRIVATE_LINK(WindowEventListener, VclWindowEvent&, void);
 public:
     VclFrame(vcl::Window *pParent)
         : VclBin(pParent)
@@ -476,7 +476,7 @@ private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
     Link<VclExpander&,void> maExpandedHdl;
-    DECL_LINK(ClickHdl, CheckBox&, void);
+    DECL_DLLPRIVATE_LINK(ClickHdl, CheckBox&, void);
 };
 
 class VclScrolledWindow final : public VclBin
@@ -501,7 +501,7 @@ private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
     int CalcBorderWidth() const;
-    DECL_LINK(ScrollBarHdl, ScrollBar*, void);
+    DECL_DLLPRIVATE_LINK(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
     bool m_bUserManagedScrolling;
