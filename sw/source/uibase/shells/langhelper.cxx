@@ -568,11 +568,6 @@ namespace SwLangHelper
         rWrtSh.SwapPam();
         if (!rWrtSh.IsEndPara())
             rWrtSh.MovePara( GoCurrPara, fnParaEnd );
-    #if OSL_DEBUG_LEVEL > 1
-        OUString aSelText;
-        rWrtSh.GetSelectedText( aSelText );
-        (void) aSelText;
-    #endif
     }
 }
 
