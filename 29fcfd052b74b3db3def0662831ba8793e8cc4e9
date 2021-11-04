@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3be3e74_41409a0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-04T07:58:35Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix!\n\nNote: I suggest to use minimized flat ODS (.fods) format instead of binary OpenDocument, because it\u0027s more transparent with gerrit, git log -u and in extending the test document, as here. See\n\nfind sc/qa -name \u0027*.fods\u0027\n\nfor the existing flat ODS test documents.",
+      "revId": "29fcfd052b74b3db3def0662831ba8793e8cc4e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
