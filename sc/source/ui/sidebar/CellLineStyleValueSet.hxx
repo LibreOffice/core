@@ -21,13 +21,14 @@
 
 #include <svtools/valueset.hxx>
 
-#define CELL_LINE_STYLE_ENTRIES 9
+#define CELL_LINE_STYLE_ENTRIES 11
 
 namespace sc { namespace sidebar {
 
 class CellLineStyleValueSet : public ValueSet
 {
 private:
+    long mnMaxTextWidth;
     sal_uInt16      nSelItem;
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
 public:
@@ -36,6 +37,7 @@ public:
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
+    long GetMaxTextWidth(vcl::RenderContext* pDev);
     virtual Size GetOptimalSize() const override;
     virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
 };
