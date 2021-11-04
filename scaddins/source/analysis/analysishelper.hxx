@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <unotools/resmgr.hxx>
 
-#include <math.h>
+#include <cmath>
 
 #include <memory>
 #include <vector>
@@ -34,10 +34,6 @@ namespace com::sun::star::util { class XNumberFormatter2; }
 namespace sca::analysis {
 
 class ScaAnyConverter;
-
-
-#define PI          3.1415926535897932
-
 
 inline bool     IsLeapYear( sal_uInt16 nYear );
 
