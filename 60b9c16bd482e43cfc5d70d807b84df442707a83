@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb62476_383ef454",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-04T14:07:49Z",
+      "side": 1,
+      "message": "I suppose that it would be safer to use\n\n    static_cast\u003csal_uInt16\u003e(nWord) \u003e\u003d aReservedWords.size()\n\nbecause casting a non-negative sal_Int16 to sal_uInt16 is safe, but casting a size_t to sal_Int16 is not :-)",
+      "range": {
+        "startLine": 378,
+        "startChar": 22,
+        "endLine": 378,
+        "endChar": 76
+      },
+      "revId": "60b9c16bd482e43cfc5d70d807b84df442707a83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
