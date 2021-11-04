@@ -1082,6 +1082,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         const uno::Sequence< uno::Sequence<uno::Any> >& aData )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
+    ScDocFunc& rDocFunc = rDocShell.GetDocFunc();
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -1158,9 +1159,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         rElement >>= aUStr;
                         if ( !aUStr.isEmpty() )
                         {
-                            ScSetStringParam aParam;
-                            aParam.setTextInput();
-                            rDoc.SetString(aPos, aUStr, &aParam);
+                            rDocFunc.SetStringOrEditCell(aPos, aUStr, false);
                         }
                     }
                     break;
