@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b17ccf4a_7e88ae58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-04T07:31:18Z",
+      "side": 1,
+      "message": "(Turns out that didn\u0027t hit on Jenkins (building gerrit_linux_clang_dbgutil with Clang 5.0.2) because for a static_assert with a non-bool integer argument, an ImplicitCastExpr (which is what loplugin:consttobool triggers on) apparently only gets inserted since Clang 10.)",
+      "range": {
+        "startLine": 10,
+        "startChar": 21,
+        "endLine": 10,
+        "endChar": 59
+      },
+      "revId": "ff22a3ff99da3abc0531c5a4eeccc25d45b61adb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
