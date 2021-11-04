@@ -33,6 +33,24 @@
       "message": "I didn\u0027t pay proper attention before, sorry. I don\u0027t think \"decruftifying\" externals as a local patch in LibreOffice is worth it, or even a net gain: it increases our work and burden when we want to upgrade to a new version of the external.\n\nSuch clean-up/decruftify should be done upstream, if it is to be done.\n\nDecruftifying our _own_ code is another matter and the above remarks don\u0027t apply to that.",
       "revId": "0464b86787da269be7b16a6f1f124d774f78fa97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad59b99f_c3309bc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-11-04T08:47:12Z",
+      "side": 1,
+      "message": "that is not a valid TDF bug number",
+      "parentUuid": "c2d83fd1_cc86e6f1",
+      "revId": "0464b86787da269be7b16a6f1f124d774f78fa97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
