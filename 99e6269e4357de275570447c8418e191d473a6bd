@@ -16,6 +16,23 @@
       "message": "Thanks a lot for the patch, that was fast ;-)",
       "revId": "99e6269e4357de275570447c8418e191d473a6bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f72ffec_8b001ba8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-05T14:06:40Z",
+      "side": 1,
+      "message": "Yep, I mentioned it in dev chat and Mike K. agreed that we should change it.",
+      "revId": "99e6269e4357de275570447c8418e191d473a6bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
