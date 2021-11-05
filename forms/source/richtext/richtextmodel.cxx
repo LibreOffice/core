@@ -311,7 +311,7 @@ namespace frm
     void ORichTextModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )
-            DECL_PROP2( TABINDEX,       sal_Int16,  BOUND,    MAYBEDEFAULT );
+            DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         END_DESCRIBE_PROPERTIES();
 
         // properties which the OPropertyContainerHelper is responsible for

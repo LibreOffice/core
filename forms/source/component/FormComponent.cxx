@@ -1010,7 +1010,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES( 7 )
-        DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
+        DECL_PROP_IMPL(CLASSID, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1      (NAME,        OUString,  BOUND);
         DECL_BOOL_PROP_IMPL(NATIVE_LOOK) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1      (TAG,         OUString,  BOUND);
@@ -2780,9 +2780,11 @@ void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps 
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OControlModel )
         DECL_PROP1      ( CONTROLSOURCE,           OUString,     BOUND );
-        DECL_IFACE_PROP_IMPL(BOUNDFIELD, XPropertySet) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-        DECL_IFACE_PROP_IMPL(CONTROLLABEL, XPropertySet) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP2      ( CONTROLSOURCEPROPERTY,    OUString,    READONLY, TRANSIENT );
+    *pProperties++ = css::beans::Property(PROPERTY_BOUNDFIELD, PROPERTY_ID_BOUNDFIELD, cppu::UnoType<XPropertySet>::get(),
+                                              css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_CONTROLLABEL, PROPERTY_ID_CONTROLLABEL, cppu::UnoType<XPropertySet>::get(),
+                                              css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
+        DECL_PROP_IMPL(CONTROLSOURCEPROPERTY, OUString) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_BOOL_PROP_IMPL(INPUT_REQUIRED) css::beans::PropertyAttribute::BOUND);
     END_DESCRIBE_PROPERTIES()
 }

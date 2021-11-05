@@ -311,7 +311,8 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
 void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OBoundControlModel )
-        DECL_IFACE_PROP_IMPL(GRAPHIC, XGraphic) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_GRAPHIC, PROPERTY_ID_GRAPHIC, cppu::UnoType<XGraphic>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1      ( IMAGE_URL, OUString, BOUND );
         DECL_BOOL_PROP_IMPL(READONLY) css::beans::PropertyAttribute::BOUND);
         DECL_PROP1      ( TABINDEX,  sal_Int16,       BOUND );

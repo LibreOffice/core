@@ -99,10 +99,10 @@ css::uno::Sequence<OUString> SAL_CALL OPatternModel::getSupportedServiceNames()
 void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
-        DECL_PROP2(DEFAULT_TEXT,    OUString,    BOUND, MAYBEDEFAULT);
+        DECL_PROP_IMPL(DEFAULT_TEXT, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_BOOL_PROP_IMPL(EMPTY_IS_NULL) css::beans::PropertyAttribute::BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
-        DECL_PROP2(FILTERPROPOSAL,  sal_Bool,           BOUND, MAYBEDEFAULT);
+        DECL_PROP_IMPL(FILTERPROPOSAL, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();
 }
 
