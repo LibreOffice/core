@@ -7099,7 +7099,7 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                     xCursor->goLeft( 1, false );
                 }
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
-                assert(!aBookmarkIter->second.m_sBookmarkName.isEmpty());
+                SAL_WARN_IF(aBookmarkIter->second.m_sBookmarkName.isEmpty(), "writerfilter.dmapper", "anonymous bookmark");
                 //todo: make sure the name is not used already!
                 xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
                 xTextAppend->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
