@@ -102,6 +102,7 @@ public:
     virtual void tearDown() override;
 
     void testMatrixMultiplicationXLSX();
+    void testTdf121260();
     void testTextDirectionXLSX();
     void testTdf120168();
     void testTdf66668();
@@ -217,6 +218,7 @@ public:
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
+    CPPUNIT_TEST(testTdf121260);
     CPPUNIT_TEST(testTextDirectionXLSX);
     CPPUNIT_TEST(testTdf120168);
     CPPUNIT_TEST(testTdf66668);
@@ -541,6 +543,32 @@ void ScExportTest2::testTextDirectionXLSX()
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1"); //LTR
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2"); //RTL
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf121260()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf121260.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    // change formula syntax (i.e. not string ref syntax) to ExcelA1
+    rDoc.SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_A1);
+
+    xmlDocUniquePtr pChart1 = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                        "xl/charts/chart1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pChart1);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Sheet1!$A$1:$A$2
+    // - Actual  : sheet1 $A$1:$A$2
+    assertXPathContent(pChart1,
+                       "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:val/c:numRef/c:f",
+                       "Sheet1!$A$1:$A$2");
+    assertXPathContent(pChart1,
+                       "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:val/c:numRef/c:f",
+                       "Sheet1!$B$1:$B$2");
 
     xDocSh->DoClose();
 }
