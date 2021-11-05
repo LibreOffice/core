@@ -147,6 +147,7 @@ public:
     void testGroupsRotatedPosition();
     void testAccentColor();
     void testThemeColors();
+    void testTdf111785();
     void testTdf118825();
     void testTextColumns_tdf140852();
     void testTextColumns_3columns();
@@ -212,6 +213,7 @@ public:
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
     CPPUNIT_TEST(testThemeColors);
+    CPPUNIT_TEST(testTdf111785);
     CPPUNIT_TEST(testTdf118825);
     CPPUNIT_TEST(testTextColumns_tdf140852);
     CPPUNIT_TEST(testTextColumns_3columns);
@@ -1620,6 +1622,20 @@ void SdOOXMLExportTest2::testThemeColors()
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent3/a:srgbClr", "val", "a5a5a5");
 }
 
+void SdOOXMLExportTest2::testTdf111785()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf111785.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ed1c24
+    // - Actual  : ffffff
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:pattFill/a:bgClr/a:srgbClr", "val", "ed1c24");
+}
 
 void SdOOXMLExportTest2::testTdf118825()
 {
