@@ -352,9 +352,11 @@ void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
         DECL_PROP_IMPL(PERSISTENCE_MAXTEXTLENGTH, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP_IMPL(DEFAULT_TEXT, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_BOOL_PROP_IMPL(EMPTY_IS_NULL) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
-        DECL_BOOL_PROP_IMPL(FILTERPROPOSAL) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_FILTERPROPOSAL, PROPERTY_ID_FILTERPROPOSAL, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();
 }
 

@@ -295,7 +295,8 @@ void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
         DECL_PROP1(LISTSOURCETYPE,      ListSourceType, BOUND);
         DECL_PROP1(LISTSOURCE,          OUString,            BOUND);
-        DECL_BOOL_PROP_IMPL(EMPTY_IS_NULL) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
+                                              css::beans::PropertyAttribute::BOUND);
         DECL_PROP1(DEFAULT_TEXT,        OUString,            BOUND);
         DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,BOUND);
         DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,        OPTIONAL);

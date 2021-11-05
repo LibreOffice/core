@@ -341,20 +341,11 @@ public:
     *pProperties++ = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<type>::get(),
 
 
-#define DECL_BOOL_PROP_IMPL(varname) \
-    *pProperties++ = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<bool>::get(),
-
-
 #define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
     baseclass::describeFixedProperties( _rProps ); \
     sal_Int32 nOldCount = _rProps.getLength(); \
     _rProps.realloc( nOldCount + ( count ) );   \
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;       \
-
-
-#define BEGIN_DESCRIBE_BASE_PROPERTIES( count ) \
-    _rProps.realloc( count );   \
-    css::beans::Property* pProperties = _rProps.getArray();       \
 
 
 #define DECL_PROP1(varname, type, attrib1)  \

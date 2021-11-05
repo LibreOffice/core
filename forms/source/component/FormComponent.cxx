@@ -1009,10 +1009,12 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 
 void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES( 7 )
+    _rProps.realloc(7);
+    css::beans::Property* pProperties = _rProps.getArray();
         DECL_PROP_IMPL(CLASSID, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1      (NAME,        OUString,  BOUND);
-        DECL_BOOL_PROP_IMPL(NATIVE_LOOK) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_NATIVE_LOOK, PROPERTY_ID_NATIVE_LOOK, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1      (TAG,         OUString,  BOUND);
         DECL_PROP1      (GENERATEVBAEVENTS,         sal_Bool,  TRANSIENT);
         DECL_PROP1      (CONTROL_TYPE_IN_MSO,sal_Int16,     BOUND);
@@ -2785,7 +2787,8 @@ void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps 
     *pProperties++ = css::beans::Property(PROPERTY_CONTROLLABEL, PROPERTY_ID_CONTROLLABEL, cppu::UnoType<XPropertySet>::get(),
                                               css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP_IMPL(CONTROLSOURCEPROPERTY, OUString) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-        DECL_BOOL_PROP_IMPL(INPUT_REQUIRED) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_INPUT_REQUIRED, PROPERTY_ID_INPUT_REQUIRED, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND);
     END_DESCRIBE_PROPERTIES()
 }
 }

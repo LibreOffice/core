@@ -348,7 +348,8 @@ void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
     DECL_PROP1(LABEL,               OUString,    BOUND);
     DECL_PROP_IMPL(WIDTH, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(ALIGN, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_BOOL_PROP_IMPL(HIDDEN) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_HIDDEN, PROPERTY_ID_HIDDEN, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP1(COLUMNSERVICENAME,   OUString,    READONLY);
 }
 
