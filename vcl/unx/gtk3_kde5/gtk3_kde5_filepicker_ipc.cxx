@@ -85,9 +85,10 @@ void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq)
     stream >> numFiles;
     stream.ignore(); // skip space;
     seq.realloc(numFiles);
+    OUString* pSeq = seq.getArray();
     for (size_t i = 0; i < numFiles; ++i)
     {
-        readIpcArg(stream, seq[i]);
+        readIpcArg(stream, pSeq[i]);
     }
 }
 
