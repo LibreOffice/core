@@ -1376,24 +1376,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 // Only DAV resources support PROPFIND
                 std::vector< OUString > aPropNames;
 
-                uno::Sequence< beans::Property > aProperties(
-                    rProperties.getLength() );
-
-                if ( !m_aFailedPropNames.empty() )
-                {
-                    sal_Int32 nProps = 0;
-                    sal_Int32 nCount = rProperties.getLength();
-                    for ( sal_Int32 n = 0; n < nCount; ++n, ++nProps )
-                    {
-                        aProperties[ nProps ] = rProperties[ n ];
-                    }
-
-                    aProperties.realloc( nProps );
-                }
-                else
-                {
-                    aProperties = rProperties;
-                }
+                uno::Sequence< beans::Property > aProperties(rProperties);
 
                 if ( aProperties.getLength() > 0 )
                     ContentProperties::UCBNamesToDAVNames(
@@ -1739,6 +1722,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     }
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
+    auto aRetRange = asNonConstRange(aRet);
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
@@ -1776,7 +1760,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         if ( aTmpProp.Attributes & beans::PropertyAttribute::READONLY )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
             continue;
@@ -1789,21 +1773,21 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         if ( rName == "ContentType" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                 "Property is read-only!",
                 static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rName == "IsDocument" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                 "Property is read-only!",
                 static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rName == "IsFolder" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
@@ -1836,7 +1820,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     }
                     catch ( DAVException const & )
                     {
-                        aRet[ n ] <<= lang::IllegalArgumentException(
+                        aRetRange[ n ] <<= lang::IllegalArgumentException(
                             "Invalid content identifier!",
                             static_cast< cppu::OWeakObject * >( this ),
                             -1 );
@@ -1844,7 +1828,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
                 else
                 {
-                    aRet[ n ] <<= lang::IllegalArgumentException(
+                    aRetRange[ n ] <<= lang::IllegalArgumentException(
                         "Empty title not allowed!",
                         static_cast< cppu::OWeakObject * >( this ),
                         -1 );
@@ -1852,7 +1836,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             }
             else
             {
-                aRet[ n ] <<= beans::IllegalTypeException(
+                aRetRange[ n ] <<= beans::IllegalTypeException(
                     "Property value has wrong type!",
                     static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1875,7 +1859,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 // Check, whether property exists. Skip otherwise.
                 // PROPPATCH::set would add the property automatically, which
                 // is not allowed for "setPropertyValues" command!
-                aRet[ n ] <<= beans::UnknownPropertyException(
+                aRetRange[ n ] <<= beans::UnknownPropertyException(
                                 "Property is unknown!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 continue;
@@ -1884,21 +1868,21 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( rName == "Size" )
             {
                 // Read-only property!
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rName == "DateCreated" )
             {
                 // Read-only property!
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rName == "DateModified" )
             {
                 // Read-only property!
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1906,14 +1890,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 // (but could be writable, if 'getcontenttype' would be)
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             if ( rName == "CreatableContentsInfo" )
             {
                 // Read-only property!
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1961,24 +1945,24 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         }
                         catch ( beans::UnknownPropertyException const & e )
                         {
-                            aRet[ n ] <<= e;
+                            aRetRange[ n ] <<= e;
                         }
                         catch ( lang::WrappedTargetException const & e )
                         {
-                            aRet[ n ] <<= e;
+                            aRetRange[ n ] <<= e;
                         }
                         catch ( beans::PropertyVetoException const & e )
                         {
-                            aRet[ n ] <<= e;
+                            aRetRange[ n ] <<= e;
                         }
                         catch ( lang::IllegalArgumentException const & e )
                         {
-                            aRet[ n ] <<= e;
+                            aRetRange[ n ] <<= e;
                         }
                     }
                     else
                     {
-                        aRet[ n ] <<= uno::Exception(
+                        aRetRange[ n ] <<= uno::Exception(
                                 "No property set for storing the value!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                     }
@@ -2027,7 +2011,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             while ( it != end )
             {
                 // Set error.
-                aRet[ (*it) ] <<= MapDAVException( e, true );
+                aRetRange[ (*it) ] <<= MapDAVException( e, true );
                 ++it;
             }
 #endif
@@ -2089,7 +2073,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 aNewTitle.clear();
 
                 // Set error .
-                aRet[ nTitlePos ] <<= uno::Exception(
+                aRetRange[ nTitlePos ] <<= uno::Exception(
                     "Exchange failed!",
                     static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -2100,7 +2084,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aNewTitle.clear();
 
             // Set error .
-            aRet[ nTitlePos ] = MapDAVException( e, true );
+            aRetRange[ nTitlePos ] = MapDAVException( e, true );
         }
     }
 
@@ -3049,7 +3033,7 @@ Content::ResourceType Content::resourceTypeForLocks(
                         std::vector< DAVResource > resources;
                         std::vector< OUString > aPropNames;
                         uno::Sequence< beans::Property > aProperties( 1 );
-                        aProperties[ 0 ].Name = DAVProperties::SUPPORTEDLOCK;
+                        aProperties.getArray()[ 0 ].Name = DAVProperties::SUPPORTEDLOCK;
 
                         ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );
                         rResAccess->PROPFIND( DAVZERO, aPropNames, resources, Environment );
@@ -3514,8 +3498,9 @@ bool Content::isFolder(
     }
 
     uno::Sequence< beans::Property > aProperties( 1 );
-    aProperties[ 0 ].Name   = "IsFolder";
-    aProperties[ 0 ].Handle = -1;
+    auto pProperties = aProperties.getArray();
+    pProperties[ 0 ].Name   = "IsFolder";
+    pProperties[ 0 ].Handle = -1;
     uno::Reference< sdbc::XRow > xRow( getPropertyValues( aProperties, xEnv ) );
     if ( xRow.is() )
     {
@@ -3555,11 +3540,8 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
     {
         case SC_NOT_FOUND:
         {
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= beans::PropertyValue(
-                "Uri", -1,
-                uno::makeAny(aURL),
-                beans::PropertyState_DIRECT_VALUE);
+            uno::Sequence<uno::Any> aArgs{ uno::Any(beans::PropertyValue(
+                "Uri", -1, uno::makeAny(aURL), beans::PropertyState_DIRECT_VALUE)) };
 
             aException <<=
                 ucb::InteractiveAugmentedIOException(
@@ -3792,11 +3774,12 @@ Content::ResourceType Content::getResourceType(
                 std::vector< DAVResource > resources;
                 std::vector< OUString > aPropNames;
                 uno::Sequence< beans::Property > aProperties( 5 );
-                aProperties[ 0 ].Name = "IsFolder";
-                aProperties[ 1 ].Name = "IsDocument";
-                aProperties[ 2 ].Name = "IsReadOnly";
-                aProperties[ 3 ].Name = "MediaType";
-                aProperties[ 4 ].Name = DAVProperties::SUPPORTEDLOCK;
+                auto pProperties = aProperties.getArray();
+                pProperties[ 0 ].Name = "IsFolder";
+                pProperties[ 1 ].Name = "IsDocument";
+                pProperties[ 2 ].Name = "IsReadOnly";
+                pProperties[ 3 ].Name = "MediaType";
+                pProperties[ 4 ].Name = DAVProperties::SUPPORTEDLOCK;
 
                 ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );
 
