@@ -153,11 +153,7 @@ public:
     {
         if (pFrame)
         {
-#if BOOST_VERSION < 105600
-            m_oMergedIter.reset(*pFrame);
-#else
             m_oMergedIter.emplace(*pFrame);
-#endif
         }
     }
 

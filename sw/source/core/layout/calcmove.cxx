@@ -409,31 +409,18 @@ void SwFrame::PrepareCursor()
         const bool bTab = IsTabFrame();
         bool bNoSect = IsInSct();
 
-#if BOOST_VERSION < 105600
-        std::list<FlowFrameJoinLockGuard> tabGuard;
-        std::list<SwFrameDeleteGuard> rowGuard;
-#else
         std::optional<FlowFrameJoinLockGuard> tabGuard;
         std::optional<SwFrameDeleteGuard> rowGuard;
-#endif
         SwFlowFrame* pThis = bCnt ? static_cast<SwContentFrame*>(this) : nullptr;
 
         if ( bTab )
         {
-#if BOOST_VERSION < 105600
-            tabGuard.emplace_back(static_cast<SwTabFrame*>(this)); // tdf#125741
-#else
             tabGuard.emplace(static_cast<SwTabFrame*>(this)); // tdf#125741
-#endif
             pThis = static_cast<SwTabFrame*>(this);
         }
         else if (IsRowFrame())
         {
-#if BOOST_VERSION < 105600
-            rowGuard.emplace_back(this); // tdf#125741 keep this alive
-#else
             rowGuard.emplace(this); // tdf#125741 keep this alive
-#endif
         }
         else if( IsSctFrame() )
         {

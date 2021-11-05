@@ -984,13 +984,8 @@ struct MergedPara
 class MergedAttrIterBase
 {
 protected:
-#if BOOST_VERSION < 105600
-    sw::MergedPara const* m_pMerged;
-    SwTextNode const* m_pNode;
-#else
     sw::MergedPara const*const m_pMerged;
     SwTextNode const*const m_pNode;
-#endif
     size_t m_CurrentExtent;
     size_t m_CurrentHint;
     MergedAttrIterBase(SwTextFrame const& rFrame);
