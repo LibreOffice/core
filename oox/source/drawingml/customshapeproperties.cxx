@@ -158,16 +158,12 @@ void CustomShapeProperties::pushToPropSet(
         {
             static const OUStringLiteral sCustomShapeGeometry(u"CustomShapeGeometry");
             static const OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
-            static const OUStringLiteral sType = u"Type";
             uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
-                // aGeoPropSeq gets modified in the loop, and gets copied elsewhere;
-                // don't use range-based for here
-                for ( sal_Int32 i = 0; i < aGeoPropSeq.getLength(); ++i )
+                for ( auto& rGeoProp : asNonConstRange(aGeoPropSeq) )
                 {
-                    const auto& rGeoProp = aGeoPropSeq[i];
                     if ( rGeoProp.Name == sAdjustmentValues )
                     {
                         uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
@@ -200,20 +196,10 @@ void CustomShapeProperties::pushToPropSet(
                                     }
                                 }
                             }
-                            // getArray ensures COW here - there may be copies of aGeoPropSeq from
-                            // prior calls to xPropSet->setPropertyValue, so getArray can't be
-                            // moved out of the loop:
-                            aGeoPropSeq.getArray()[i].Value <<= aAdjustmentSeq;
+                            rGeoProp.Value <<= aAdjustmentSeq;
                             xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
+                            break;
                         }
-                    }
-                    else if ( rGeoProp.Name == sType )
-                    {
-                        // getArray ensures COW here - there may be copies of aGeoPropSeq:
-                        if ( sConnectorShapeType.getLength() > 0 )
-                            aGeoPropSeq.getArray()[i].Value <<= sConnectorShapeType;
-                        else
-                            aGeoPropSeq.getArray()[i].Value <<= OUString( "ooxml-CustomShape" );
                     }
                 }
             }
