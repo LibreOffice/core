@@ -16,6 +16,23 @@
       "message": "Please Miklos have a look at it, whether you see problems.",
       "revId": "c1164d429bff317a1fd4f0a39c2cc0aae5e183dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "950fded3_9352149d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-05T10:03:27Z",
+      "side": 1,
+      "message": "Oh, I was not aware that fontworks use the 3D object code. I don\u0027t see anything obviously problematic with this patch. It may make sense to cover this with a test in the same change. But as you discussed it on the mailing list, possibly the test framework has to be extended first, so it\u0027s fine to do that only as a follow-up change, I think.",
+      "revId": "c1164d429bff317a1fd4f0a39c2cc0aae5e183dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
