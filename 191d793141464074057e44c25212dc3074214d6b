@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "50576c45_1ab4c4bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-05T11:30:09Z",
+      "side": 1,
+      "message": "Absolutely - thanks!",
+      "parentUuid": "f6588c64_b373ab5a",
+      "range": {
+        "startLine": 28,
+        "startChar": 37,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "191d793141464074057e44c25212dc3074214d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2ae7e6c8_917c20df",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 21
