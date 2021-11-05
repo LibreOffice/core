@@ -199,22 +199,22 @@ namespace frm
         DECL_PROP_IMPL(TEXTCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP_IMPL(TEXTLINECOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
 
-        DECL_PROP1      ( FONT_CHARWIDTH,     float,            MAYBEDEFAULT );
+        DECL_PROP_IMPL(FONT_CHARWIDTH, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
         *pProperties++ = css::beans::Property(PROPERTY_FONT_KERNING, PROPERTY_ID_FONT_KERNING, cppu::UnoType<bool>::get(),
                                               css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP1      ( FONT_ORIENTATION,   float,            MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_PITCH,         sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_TYPE,          sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_WIDTH,         sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_NAME,          OUString,  MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_STYLENAME,     OUString,  MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_FAMILY,        sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_CHARSET,       sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_HEIGHT,        float,            MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_WEIGHT,        float,            MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_SLANT,         sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_UNDERLINE,     sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_STRIKEOUT,     sal_Int16,        MAYBEDEFAULT );
+        DECL_PROP_IMPL(FONT_ORIENTATION, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_PITCH, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_TYPE, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_WIDTH, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_NAME, OUString) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_STYLENAME, OUString) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_FAMILY, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_CHARSET, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_HEIGHT, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_WEIGHT, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_SLANT, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_UNDERLINE, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT_STRIKEOUT, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
         *pProperties++ = css::beans::Property(PROPERTY_FONT_WORDLINEMODE, PROPERTY_ID_FONT_WORDLINEMODE, cppu::UnoType<bool>::get(),
                                               css::beans::PropertyAttribute::MAYBEDEFAULT);
     }

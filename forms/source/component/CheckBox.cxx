@@ -113,7 +113,7 @@ void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 1);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
+        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

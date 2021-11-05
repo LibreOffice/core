@@ -109,9 +109,9 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
     _rProps.realloc(4);
     css::beans::Property* pProperties = _rProps.getArray();
         DECL_PROP_IMPL(CLASSID, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-        DECL_PROP1(HIDDEN_VALUE,    OUString,    BOUND);
-        DECL_PROP1(NAME,            OUString,    BOUND);
-        DECL_PROP1(TAG,             OUString,    BOUND);
+        DECL_PROP_IMPL(HIDDEN_VALUE, OUString) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(NAME, OUString) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(TAG, OUString) css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

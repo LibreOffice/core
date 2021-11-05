@@ -105,12 +105,12 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 6);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP1( BUTTONTYPE,             FormButtonType,             BOUND );
-        DECL_PROP1( DEFAULT_STATE,          sal_Int16,                  BOUND );
-        DECL_PROP1( DISPATCHURLINTERNAL,    sal_Bool,                   BOUND );
-        DECL_PROP1( TARGET_URL,             OUString,            BOUND );
-        DECL_PROP1( TARGET_FRAME,           OUString,            BOUND );
-        DECL_PROP1( TABINDEX,               sal_Int16,                  BOUND );
+        DECL_PROP_IMPL(BUTTONTYPE, FormButtonType) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(DEFAULT_STATE, sal_Int16) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(DISPATCHURLINTERNAL, sal_Bool) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(TARGET_URL, OUString) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(TARGET_FRAME, OUString) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

@@ -146,8 +146,8 @@ void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     _rProps.realloc( nOldCount + 4);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP_IMPL(DEFAULT_DATE, util::Date) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
-        DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
+        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(FORMATKEY, sal_Int32) css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_FORMATSSUPPLIER, PROPERTY_ID_FORMATSSUPPLIER, cppu::UnoType<XNumberFormatsSupplier>::get(),
                                               css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
