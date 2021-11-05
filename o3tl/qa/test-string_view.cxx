@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <iostream>

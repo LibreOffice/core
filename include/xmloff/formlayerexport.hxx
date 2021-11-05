@@ -54,10 +54,10 @@ namespace xmloff
         // impl class
         std::unique_ptr<OFormLayerXMLExport_Impl> m_pImpl;
 
-        virtual ~OFormLayerXMLExport() override;
+        SAL_DLLPRIVATE virtual ~OFormLayerXMLExport() override;
 
     public:
-        OFormLayerXMLExport(SvXMLExport& _rContext);
+        SAL_DLLPRIVATE OFormLayerXMLExport(SvXMLExport& _rContext);
 
         /** initializes some internal structures for fast access to the given page
 
@@ -84,7 +84,7 @@ namespace xmloff
             @see seekPage
 
         */
-        OUString getControlId(
+        SAL_DLLPRIVATE OUString getControlId(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControl);
 
         /** retrieves the style name for the control's number style.
@@ -98,7 +98,7 @@ namespace xmloff
             @see examineForms
             @see seekPage
         */
-        OUString getControlNumberStyle(
+        SAL_DLLPRIVATE OUString getControlNumberStyle(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControl );
 
         /** examines the forms collection given.
@@ -146,7 +146,7 @@ namespace xmloff
 
         /** exports the automatic controls number styles
         */
-        void exportAutoControlNumberStyles();
+        SAL_DLLPRIVATE void exportAutoControlNumberStyles();
 
         /** exports the auto-styles collected during the examineForms calls
         */
@@ -159,7 +159,7 @@ namespace xmloff
             to the form layer exporter.<br/>
             Of course you have to do this before calling <member>exportForms</member></p>
         */
-        void excludeFromExport( const css::uno::Reference< css::awt::XControlModel >& _rxControl );
+        SAL_DLLPRIVATE void excludeFromExport( const css::uno::Reference< css::awt::XControlModel >& _rxControl );
     };
 
 

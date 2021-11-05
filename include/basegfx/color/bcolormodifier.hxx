@@ -94,10 +94,10 @@ namespace basegfx
         virtual ~BColorModifier_gray() override;
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 
     /** invert color
@@ -114,10 +114,10 @@ namespace basegfx
         virtual ~BColorModifier_invert() override;
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 
     /** convert to alpha based on luminance
@@ -138,10 +138,10 @@ namespace basegfx
         virtual ~BColorModifier_luminance_to_alpha() override;
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 
     /** replace color
@@ -167,10 +167,10 @@ namespace basegfx
         const ::basegfx::BColor& getBColor() const { return maBColor; }
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 
     /** interpolate color
@@ -196,10 +196,10 @@ namespace basegfx
         virtual ~BColorModifier_interpolate() override;
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 
     /** convert color to black and white
@@ -221,10 +221,10 @@ namespace basegfx
         virtual ~BColorModifier_black_and_white() override;
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 
     /** gamma correction
@@ -248,7 +248,7 @@ namespace basegfx
         virtual ~BColorModifier_gamma() override;
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
@@ -284,10 +284,10 @@ namespace basegfx
         virtual ~BColorModifier_RGBLuminanceContrast() override;
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const override;
+        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+        SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 
     /// typedef to allow working with shared instances of BColorModifier

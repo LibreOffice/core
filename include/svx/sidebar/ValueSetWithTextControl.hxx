@@ -38,11 +38,11 @@ class SVX_DLLPUBLIC ValueSetWithTextControl final : public ValueSet
 public:
     ValueSetWithTextControl();
 
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    SVX_DLLPRIVATE virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     void AddItem(const OUString& rItemText, const OUString& rItemText2);
 
-    virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
+    SVX_DLLPRIVATE virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
 
 private:
     struct ValueSetWithTextItem

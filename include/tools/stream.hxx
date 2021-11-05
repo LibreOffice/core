@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <tools/toolsdllapi.h>
 #include <tools/lineend.hxx>
 #include <tools/long.hxx>
@@ -186,12 +187,12 @@ protected:
     virtual void    SetSize(sal_uInt64 nSize);
 
     void            FlushBuffer();
-    void            ClearError();
-    void            ClearBuffer();
+    SAL_DLLPRIVATE void ClearError();
+    SAL_DLLPRIVATE void ClearBuffer();
 
     // encrypt and write in blocks
-    std::size_t     CryptAndWriteBuffer( const void* pStart, std::size_t nLen );
-    void            EncryptBuffer( void* pStart, std::size_t nLen ) const;
+    SAL_DLLPRIVATE std::size_t CryptAndWriteBuffer( const void* pStart, std::size_t nLen );
+    SAL_DLLPRIVATE void EncryptBuffer( void* pStart, std::size_t nLen ) const;
 
 public:
                     SvStream();
@@ -331,7 +332,7 @@ public:
                    Maximum of codepoints (UCS-2 or UTF-16 pairs, not bytes) to
                    read, if line is longer it will be truncated.
     */
-    bool            ReadUniStringLine(OUString& rStr, sal_Int32 nMaxCodepointsToRead);
+    SAL_DLLPRIVATE bool ReadUniStringLine(OUString& rStr, sal_Int32 nMaxCodepointsToRead);
     /** Read a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
         prefixed sequence of bytes and convert from eSrcCharSet */
@@ -416,13 +417,13 @@ private:
     void readNumberWithoutSwap(T& rDataDest)
     { readNumberWithoutSwap_(&rDataDest, sizeof(rDataDest)); }
 
-    void readNumberWithoutSwap_(void * pDataDest, int nDataSize);
+    SAL_DLLPRIVATE void readNumberWithoutSwap_(void * pDataDest, int nDataSize);
 
     template<typename T>
     void writeNumberWithoutSwap(T const & rDataSrc)
     { writeNumberWithoutSwap_(&rDataSrc, sizeof(rDataSrc)); }
 
-    void writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize);
+    SAL_DLLPRIVATE void writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize);
 };
 
 inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
@@ -491,7 +492,7 @@ std::size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-TOOLS_DLLPUBLIC std::size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) std::size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
                                                 std::u16string_view rStr);
 
 /// Attempt to read 8bit units to an OString until a zero terminator is

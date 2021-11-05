@@ -40,11 +40,11 @@ namespace basegfx::utils
 
         /** Create a unit 3D line polyPolygon which defines a cube.
          */
-        BASEGFX_DLLPUBLIC B3DPolyPolygon const & createUnitCubePolyPolygon();
+        B3DPolyPolygon const & createUnitCubePolyPolygon();
 
         /** Create a unit 3D fill polyPolygon which defines a cube.
          */
-        BASEGFX_DLLPUBLIC B3DPolyPolygon const & createUnitCubeFillPolyPolygon();
+        B3DPolyPolygon const & createUnitCubeFillPolyPolygon();
 
         /** Create a 3D line polyPolygon from a B3DRange which defines a cube.
          */
@@ -59,7 +59,7 @@ namespace basegfx::utils
             If nHorSeg == 0 and/or nVerSeg == 0, a default will be calculated to have a step at least each 15 degrees.
             With VerStart, VerStop and hor range in cartesian may be specified to create a partial sphere only.
          */
-        BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitSpherePolyPolygon(
+        B3DPolyPolygon createUnitSpherePolyPolygon(
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
             double fHorStart = 0.0, double fHorStop = 2 * M_PI);
