@@ -1,0 +1,94 @@
+From cec7de7a390dd6907b0ea0feb4488ed3934ee71d Mon Sep 17 00:00:00 2001
+From: Frank Tang <ftang@chromium.org>
+Date: Tue, 16 Mar 2021 22:08:29 -0700
+Subject: [PATCH] ICU-21537 Fix invalid free by long locale name
+
+Do not free baseName if it is pointing to fullNameBuffer.
+
+Better Fix
+---
+ icu4c/source/common/locid.cpp                |  9 +++++----
+ icu4c/source/test/intltest/collationtest.cpp | 10 ++++++++++
+ 2 files changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/icu4c/source/common/locid.cpp b/icu4c/source/common/locid.cpp
+index 5d604350ecd..e16fbb724a4 100644
+--- a/icu4c/source/common/locid.cpp
++++ b/icu4c/source/common/locid.cpp
+@@ -254,7 +254,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Locale)
+ 
+ Locale::~Locale()
+ {
+-    if (baseName != fullName) {
++    if ((baseName != fullName) && (baseName != fullNameBuffer)) {
+         uprv_free(baseName);
+     }
+     baseName = NULL;
+@@ -466,7 +466,7 @@ Locale& Locale::operator=(const Locale& other) {
+ }
+ 
+ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
+-    if (baseName != fullName) uprv_free(baseName);
++    if ((baseName != fullName) && (baseName != fullNameBuffer)) uprv_free(baseName);
+     if (fullName != fullNameBuffer) uprv_free(fullName);
+ 
+     if (other.fullName == other.fullNameBuffer) {
+@@ -1850,7 +1850,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
+ {
+     fIsBogus = FALSE;
+     /* Free our current storage */
+-    if (baseName != fullName) {
++    if ((baseName != fullName) && (baseName != fullNameBuffer)) {
+         uprv_free(baseName);
+     }
+     baseName = NULL;
+@@ -1886,6 +1886,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
+             uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
+ 
+         if(err == U_BUFFER_OVERFLOW_ERROR || length >= (int32_t)sizeof(fullNameBuffer)) {
++            U_ASSERT(baseName == nullptr);
+             /*Go to heap for the fullName if necessary*/
+             fullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
+             if(fullName == 0) {
+@@ -2039,7 +2040,7 @@ Locale::hashCode() const
+ void
+ Locale::setToBogus() {
+     /* Free our current storage */
+-    if(baseName != fullName) {
++    if((baseName != fullName) && (baseName != fullNameBuffer)) {
+         uprv_free(baseName);
+     }
+     baseName = NULL;
+diff --git a/icu4c/source/test/intltest/collationtest.cpp b/icu4c/source/test/intltest/collationtest.cpp
+index de51eece5c4..4f1fee9375e 100644
+--- a/icu4c/source/test/intltest/collationtest.cpp
++++ b/icu4c/source/test/intltest/collationtest.cpp
+@@ -78,6 +78,7 @@ class CollationTest : public IntlTest {
+     void TestRootElements();
+     void TestTailoredElements();
+     void TestDataDriven();
++    void TestLongLocale();
+ 
+ private:
+     void checkFCD(const char *name, CollationIterator &ci, CodePointIterator &cpi);
+@@ -148,6 +149,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
+     TESTCASE_AUTO(TestRootElements);
+     TESTCASE_AUTO(TestTailoredElements);
+     TESTCASE_AUTO(TestDataDriven);
++    TESTCASE_AUTO(TestLongLocale);
+     TESTCASE_AUTO_END;
+ }
+ 
+@@ -1852,4 +1854,12 @@ void CollationTest::TestDataDriven() {
+     }
+ }
+ 
++void CollationTest::TestLongLocale() {
++    IcuTestErrorCode errorCode(*this, "TestLongLocale");
++    Locale longLocale("sie__1G_C_CEIE_CEZCX_CSUE_E_EIESZNI2_GB_LM_LMCSUE_LMCSX_"
++                      "LVARIANT_MMCSIE_STEU_SU1GCEIE_SU6G_SU6SU6G_U_UBGE_UC_"
++                      "UCEZCSI_UCIE_UZSIU_VARIANT_X@collation=bcs-ukvsz");
++    LocalPointer<Collator> coll(Collator::createInstance(longLocale, errorCode));
++}
++
+ #endif  // !UCONFIG_NO_COLLATION
