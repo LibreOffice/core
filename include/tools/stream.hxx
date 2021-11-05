@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <tools/toolsdllapi.h>
 #include <tools/lineend.hxx>
 #include <tools/long.hxx>
@@ -491,7 +492,7 @@ std::size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-TOOLS_DLLPUBLIC std::size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) std::size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
                                                 std::u16string_view rStr);
 
 /// Attempt to read 8bit units to an OString until a zero terminator is

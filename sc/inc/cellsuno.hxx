@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include "address.hxx"
 #include "rangelst.hxx"
 
@@ -377,7 +378,7 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(ScCellRangesBase)
 };
 
-class SC_DLLPUBLIC ScCellRangesObj final : public ScCellRangesBase,
+class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangesObj final : public ScCellRangesBase,
                         public css::sheet::XSheetCellRangeContainer,
                         public css::container::XNameContainer,
                         public css::container::XEnumerationAccess
@@ -396,10 +397,12 @@ private:
     rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
+    IF_MERGELIBS(SC_DLLPUBLIC)
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    IF_MERGELIBS(SC_DLLPUBLIC)
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 

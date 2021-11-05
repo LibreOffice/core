@@ -31,16 +31,16 @@ namespace svxform
 
     //= OSystemParseContext
 
-    class SVXCORE_DLLPUBLIC OSystemParseContext final : public ::connectivity::IParseContext
+    class OSystemParseContext final : public ::connectivity::IParseContext
     {
     private:
 
         ::std::vector< OUString > m_aLocalizedKeywords;
 
     public:
-        OSystemParseContext();
+        SVXCORE_DLLPUBLIC OSystemParseContext();
+        SVXCORE_DLLPUBLIC virtual ~OSystemParseContext();
 
-        virtual ~OSystemParseContext();
         // retrieves language specific error messages
         virtual OUString getErrorMessage(ErrorCode _eCodes) const override;
 
@@ -53,7 +53,7 @@ namespace svxform
         /** gets a locale instance which should be used when parsing in the context specified by this instance
             <p>if this is not overridden by derived classes, it returns the static default locale.</p>
         */
-        virtual css::lang::Locale getPreferredLocale( ) const override;
+        SVXCORE_DLLPUBLIC virtual css::lang::Locale getPreferredLocale( ) const override;
 
     };
 
