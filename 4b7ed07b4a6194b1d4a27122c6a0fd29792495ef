@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f9d8950_be0eb737",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-05T09:48:39Z",
+      "side": 1,
+      "message": "assuming you forgot to add \"not\" to this sentence",
+      "range": {
+        "startLine": 11,
+        "startChar": 43,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "4b7ed07b4a6194b1d4a27122c6a0fd29792495ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
