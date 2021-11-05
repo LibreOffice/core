@@ -16,6 +16,11 @@
 #else
 #define UNLESS_MERGELIBS(x) x
 #endif
+#if ENABLE_MERGELIBS
+#define IF_MERGELIBS(x) x
+#else
+#define IF_MERGELIBS(x)
+#endif
 
 
 #endif

@@ -25,11 +25,12 @@ namespace writerperfect
 {
 class WPXSvInputStreamImpl;
 
-class WRITERPERFECT_DLLPUBLIC WPXSvInputStream final : public librevenge::RVNGInputStream
+class WPXSvInputStream final : public librevenge::RVNGInputStream
 {
 public:
+    WRITERPERFECT_DLLPUBLIC
     WPXSvInputStream(css::uno::Reference<css::io::XInputStream> const& xStream);
-    virtual ~WPXSvInputStream() override;
+    WRITERPERFECT_DLLPUBLIC virtual ~WPXSvInputStream() override;
 
     virtual bool isStructured() override;
     virtual unsigned subStreamCount() override;
@@ -38,8 +39,10 @@ public:
     virtual librevenge::RVNGInputStream* getSubStreamByName(const char* name) override;
     virtual librevenge::RVNGInputStream* getSubStreamById(unsigned id) override;
 
-    virtual const unsigned char* read(unsigned long numBytes, unsigned long& numBytesRead) override;
-    virtual int seek(long offset, librevenge::RVNG_SEEK_TYPE seekType) override;
+    WRITERPERFECT_DLLPUBLIC virtual const unsigned char* read(unsigned long numBytes,
+                                                              unsigned long& numBytesRead) override;
+    WRITERPERFECT_DLLPUBLIC virtual int seek(long offset,
+                                             librevenge::RVNG_SEEK_TYPE seekType) override;
     virtual long tell() override;
     virtual bool isEnd() override;
 

@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <iostream>
@@ -19,6 +20,9 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+
+// gcc 11.2.0 with mergedlibs triggers a spurious -Werror=stringop-overread
+#if !ENABLE_MERGELIBS
 
 namespace CppUnit
 {
@@ -587,5 +591,6 @@ private:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

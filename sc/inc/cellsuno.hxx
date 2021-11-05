@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include "address.hxx"
 #include "rangelst.hxx"
 
@@ -155,7 +156,7 @@ namespace ooo::vba::excel {
     class ScVbaCellRangeAccess;  // Vba Helper class
 }
 
-class SC_DLLPUBLIC ScCellRangesBase :
+class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangesBase :
                          public cppu::WeakImplHelper<
                             css::beans::XPropertySet,
                              css::beans::XMultiPropertySet,
@@ -203,6 +204,7 @@ private:
 
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
+    IF_MERGELIBS(SC_DLLPUBLIC)
     SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
@@ -232,6 +234,7 @@ protected:
 public:
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR);
+    IF_MERGELIBS(SC_DLLPUBLIC)
     virtual                 ~ScCellRangesBase() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -374,10 +377,11 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XUnoTunnel
+    IF_MERGELIBS(SC_DLLPUBLIC)
     UNO3_GETIMPLEMENTATION_DECL(ScCellRangesBase)
 };
 
-class SC_DLLPUBLIC ScCellRangesObj final : public ScCellRangesBase,
+class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangesObj final : public ScCellRangesBase,
                         public css::sheet::XSheetCellRangeContainer,
                         public css::container::XNameContainer,
                         public css::container::XEnumerationAccess
@@ -396,10 +400,12 @@ private:
     rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
+    IF_MERGELIBS(SC_DLLPUBLIC)
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    IF_MERGELIBS(SC_DLLPUBLIC)
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 
@@ -458,7 +464,7 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 
-class SC_DLLPUBLIC ScCellRangeObj : public ScCellRangesBase,
+class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangeObj : public ScCellRangesBase,
                        public css::sheet::XCellRangeAddressable,
                        public css::sheet::XSheetCellRange,
                        public css::sheet::XArrayFormulaRange,
@@ -499,7 +505,9 @@ protected:
                                 const formula::FormulaGrammar::Grammar eGrammar );
 
 public:
+    IF_MERGELIBS(SC_DLLPUBLIC)
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
+    IF_MERGELIBS(SC_DLLPUBLIC)
     virtual                 ~ScCellRangeObj() override;
 
                             // uses ObjectShell from document, if set (returns NULL otherwise)
@@ -508,6 +516,7 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface(
                                 const css::uno::Type & rType ) override;
+    IF_MERGELIBS(SC_DLLPUBLIC)
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 
@@ -631,7 +640,7 @@ public:
 
 //! really derive cell from range?
 
-class SC_DLLPUBLIC ScCellObj final : public ScCellRangeObj,
+class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellObj final : public ScCellRangeObj,
                     public css::text::XText,
                     public css::container::XEnumerationAccess,
                     public css::table::XCell2,
@@ -681,6 +690,7 @@ public:
                             // not meant for any other purpose.
     const ScAddress&        GetPosition() const { return aCellPos; }
 
+    IF_MERGELIBS(SC_DLLPUBLIC)
     void                    InputEnglishString( const OUString& rText );
 
                             // XText
