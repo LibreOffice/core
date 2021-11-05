@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6b5c2e5_b73198e4",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-05T09:43:32Z",
+      "side": 1,
+      "message": "I think this comment is a bit confusing, as it is not getArray (vs. no getArray, as in `aGeoPropSeq[i].Value \u003c\u003c\u003d ...`, which would no longer compile) that is the important point here, but rather to do the modification via aGeoPropSeq operator[] rather than through rGeoProp.  (Maybe it would be beneficial to make rGeoProp const?)\n\n(And two more nitpicks: \"this Sequence\" -\u003e \"aGeoPropSeq\", and end the comment in a colon to indicate that it appertains to the code following it.)",
+      "range": {
+        "startLine": 222,
+        "startChar": 31,
+        "endLine": 222,
+        "endChar": 39
+      },
+      "revId": "4809476b60e758be43b9c2d80de416f4b53a92db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
