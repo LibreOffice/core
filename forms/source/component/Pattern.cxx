@@ -98,7 +98,10 @@ css::uno::Sequence<OUString> SAL_CALL OPatternModel::getSupportedServiceNames()
 
 void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
+    OEditBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 4);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP_IMPL(DEFAULT_TEXT, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);

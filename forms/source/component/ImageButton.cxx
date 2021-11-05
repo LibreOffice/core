@@ -75,7 +75,10 @@ css::uno::Sequence<OUString>  OImageButtonModel::getSupportedServiceNames()
 
 void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
+    OClickableImageBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 5);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP1(BUTTONTYPE,          FormButtonType,     BOUND);
         DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,           BOUND);
         DECL_PROP1(TARGET_URL,          OUString,    BOUND);

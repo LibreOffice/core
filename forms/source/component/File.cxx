@@ -170,7 +170,10 @@ sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& 
 
 void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 2, OControlModel )
+    OControlModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 2);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP1(DEFAULT_TEXT,    OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");

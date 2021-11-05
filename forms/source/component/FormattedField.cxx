@@ -339,7 +339,10 @@ OUString SAL_CALL OFormattedModel::getServiceName()
 // XPropertySet
 void OFormattedModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 3, OEditBaseModel )
+    OEditBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 3);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
     *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);

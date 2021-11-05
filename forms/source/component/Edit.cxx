@@ -349,7 +349,10 @@ void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) 
 
 void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
+    OEditBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 5);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP_IMPL(PERSISTENCE_MAXTEXTLENGTH, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP_IMPL(DEFAULT_TEXT, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),

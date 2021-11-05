@@ -110,7 +110,10 @@ css::uno::Sequence<OUString> ONumericModel::getSupportedServiceNames()
 
 void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
+    OEditBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 2);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP_IMPL(DEFAULT_VALUE, double) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");

@@ -310,7 +310,10 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
 
 void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 4, OBoundControlModel )
+    OBoundControlModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 4);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
     *pProperties++ = css::beans::Property(PROPERTY_GRAPHIC, PROPERTY_ID_GRAPHIC, cppu::UnoType<XGraphic>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1      ( IMAGE_URL, OUString, BOUND );

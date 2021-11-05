@@ -109,7 +109,10 @@ css::uno::Sequence<OUString> SAL_CALL OCheckBoxModel::getSupportedServiceNames()
 
 void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
+    OReferenceValueComponent::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 1);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }

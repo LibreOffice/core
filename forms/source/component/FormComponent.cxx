@@ -2780,7 +2780,10 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
 
 void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 5, OControlModel )
+    OControlModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 5);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP1      ( CONTROLSOURCE,           OUString,     BOUND );
     *pProperties++ = css::beans::Property(PROPERTY_BOUNDFIELD, PROPERTY_ID_BOUNDFIELD, cppu::UnoType<XPropertySet>::get(),
                                               css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);

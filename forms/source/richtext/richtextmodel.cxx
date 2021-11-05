@@ -310,7 +310,10 @@ namespace frm
 
     void ORichTextModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )
+        OControlModel::describeFixedProperties( _rProps );
+        sal_Int32 nOldCount = _rProps.getLength();
+        _rProps.realloc( nOldCount + 1);
+        css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
             DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 

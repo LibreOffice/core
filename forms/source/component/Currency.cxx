@@ -156,7 +156,10 @@ css::uno::Sequence<OUString> SAL_CALL OCurrencyModel::getSupportedServiceNames()
 
 void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
+    OEditBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 2);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
     // Set Value to transient
     // ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 

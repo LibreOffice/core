@@ -146,7 +146,10 @@ OUString SAL_CALL OTimeModel::getServiceName()
 
 void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
+    OEditBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 4);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP_IMPL(DEFAULT_TIME, util::Time) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
