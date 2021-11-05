@@ -98,57 +98,57 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
     const OUString& sTarget ,
     sal_Int32              nFlags  )
 {
+    if ( !rURL.Complete.startsWith( "vnd.sun.star.popup:" ) )
+        return {};
+
+    // --- SAFE ---
+    SolarMutexClearableGuard aGuard;
+    impl_RetrievePopupControllerQuery();
+    if ( !m_xUriRefFactory.is() )
+        m_xUriRefFactory = css::uri::UriReferenceFactory::create( m_xContext );
+
+    css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
+    aGuard.clear();
+    // --- SAFE ---
+
+    if ( !xPopupCtrlQuery.is() )
+        return {};
+
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
-    if ( rURL.Complete.startsWith( "vnd.sun.star.popup:" ) )
+    try
     {
-        // --- SAFE ---
-        SolarMutexClearableGuard aGuard;
-        impl_RetrievePopupControllerQuery();
-        if ( !m_xUriRefFactory.is() )
-            m_xUriRefFactory = css::uri::UriReferenceFactory::create( m_xContext );
+        // Just use the main part of the URL for popup menu controllers
+        sal_Int32 nSchemePart( 0 );
+        OUString aBaseURL( "vnd.sun.star.popup:" );
+        OUString aURL( rURL.Complete );
 
-        css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
-        aGuard.clear();
-        // --- SAFE ---
-
-        if ( xPopupCtrlQuery.is() )
+        nSchemePart = aURL.indexOf( ':' );
+        if (( nSchemePart > 0 ) &&
+            ( aURL.getLength() > ( nSchemePart+1 )))
         {
-            try
-            {
-                // Just use the main part of the URL for popup menu controllers
-                sal_Int32     nSchemePart( 0 );
-                OUString aBaseURL( "vnd.sun.star.popup:" );
-                OUString aURL( rURL.Complete );
-
-                nSchemePart = aURL.indexOf( ':' );
-                if (( nSchemePart > 0 ) &&
-                    ( aURL.getLength() > ( nSchemePart+1 )))
-                {
-                    sal_Int32 nQueryPart  = aURL.indexOf( '?', nSchemePart );
-                    if ( nQueryPart > 0 )
-                        aBaseURL += aURL.subView( nSchemePart+1, nQueryPart-(nSchemePart+1) );
-                    else if ( nQueryPart == -1 )
-                        aBaseURL += aURL.subView( nSchemePart+1 );
-                }
-
-                css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
-
-                // Find popup menu controller using the base URL
-                xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
-
-                // Ask popup menu dispatch provider for dispatch object
-                if ( xDispatchProvider.is() )
-                    xDispatch = xDispatchProvider->queryDispatch( rURL, sTarget, nFlags );
-            }
-            catch ( const RuntimeException& )
-            {
-                throw;
-            }
-            catch ( const Exception& )
-            {
-            }
+            sal_Int32 nQueryPart  = aURL.indexOf( '?', nSchemePart );
+            if ( nQueryPart > 0 )
+                aBaseURL += aURL.subView( nSchemePart+1, nQueryPart-(nSchemePart+1) );
+            else if ( nQueryPart == -1 )
+                aBaseURL += aURL.subView( nSchemePart+1 );
         }
+
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
+
+        // Find popup menu controller using the base URL
+        xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
+
+        // Ask popup menu dispatch provider for dispatch object
+        if ( xDispatchProvider.is() )
+            xDispatch = xDispatchProvider->queryDispatch( rURL, sTarget, nFlags );
+    }
+    catch ( const RuntimeException& )
+    {
+        throw;
+    }
+    catch ( const Exception& )
+    {
     }
     return xDispatch;
 }
