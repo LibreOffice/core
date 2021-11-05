@@ -22,6 +22,30 @@
       },
       "revId": "4809476b60e758be43b9c2d80de416f4b53a92db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "832e880c_7531720e",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-05T09:49:38Z",
+      "side": 1,
+      "message": "Hmm, but the COW specifically happens in the getArray(), and then we get a raw pointer to the array, and the [] that used on that raw pointer is not a specific class operator anymore?\n\nrGeoProp *is* now const, since the change *removed* non-const operator[], and so the other, const operator[] is used, which returns a const reference.",
+      "parentUuid": "a6b5c2e5_b73198e4",
+      "range": {
+        "startLine": 222,
+        "startChar": 31,
+        "endLine": 222,
+        "endChar": 39
+      },
+      "revId": "4809476b60e758be43b9c2d80de416f4b53a92db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
