@@ -16,6 +16,24 @@
       "message": "Stephan: this is the line that fixes unit tests failing after the changes in the Sequence.h*. It is indeed a hack - and it scares me. It looks like a bug somewhere - as if some code somewhere does *not* do COW when modifying a Sequence, and the write in one Sequence modifies other Sequences pointing to the same uno_Sequence...\n\nI wasn\u0027t able to catch the point where this might happen - do you have an idea how to catch that? Thanks!",
       "revId": "e8be0d830ce1df1ceda055301a6325c18bb9e525",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33429f61_1976a7b3",
+        "filename": "svx/source/items/customshapeitem.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-05T08:13:25Z",
+      "side": 1,
+      "message": "\u003e It looks like a bug somewhere - as if some code somewhere does *not* do COW when modifying a Sequence, and the write in one Sequence modifies other Sequences pointing to the same uno_Sequence...\n\nlike that other code would modify a nominally const Sequence by casting away constness? yeah, might smell like something like that\n\n\u003e I wasn\u0027t able to catch the point where this might happen - do you have an idea how to catch that? Thanks!\n\nsorry, don\u0027t have a good idea either :(",
+      "parentUuid": "dfb102e7_1349cd64",
+      "revId": "e8be0d830ce1df1ceda055301a6325c18bb9e525",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
