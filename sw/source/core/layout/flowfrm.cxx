@@ -2618,11 +2618,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
 
         {
             auto const pOld = m_rThis.GetUpper();
-#if BOOST_VERSION < 105600
-            std::list<SwFrameDeleteGuard> g;
-#else
             ::std::optional<SwFrameDeleteGuard> g;
-#endif
             if (m_rThis.GetUpper()->IsCellFrame())
             {
                 // note: IsFollowFlowRow() is never set for new-style tables
@@ -2632,11 +2628,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                     && pTabFrame->GetFirstNonHeadlineRow() == m_rThis.GetUpper()->GetUpper())
                 {
                     // lock follow-flow-row (similar to sections above)
-#if BOOST_VERSION < 105600
-                    g.emplace_back(m_rThis.GetUpper()->GetUpper());
-#else
                     g.emplace(m_rThis.GetUpper()->GetUpper());
-#endif
                     assert(m_rThis.GetUpper()->GetUpper()->IsDeleteForbidden());
                 }
             }
