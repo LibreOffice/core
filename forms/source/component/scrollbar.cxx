@@ -139,7 +139,7 @@ namespace frm
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
             DECL_PROP1( DEFAULT_SCROLL_VALUE, sal_Int32,       BOUND );
             DECL_PROP1( TABINDEX,             sal_Int16,       BOUND );
-            DECL_PROP2( CONTROLSOURCEPROPERTY,OUString, READONLY, TRANSIENT );
+            DECL_PROP_IMPL(CONTROLSOURCEPROPERTY, OUString) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         END_DESCRIBE_PROPERTIES();
     }
 

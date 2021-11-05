@@ -193,9 +193,9 @@ namespace frm
         _rProps.realloc( nPos + 21 );
         Property* pProperties = _rProps.getArray();
 
-        DECL_PROP2      ( FONT,               FontDescriptor,   BOUND, MAYBEDEFAULT );
-        DECL_PROP2      ( FONTEMPHASISMARK,   sal_Int16,        BOUND, MAYBEDEFAULT );
-        DECL_PROP2      ( FONTRELIEF,         sal_Int16,        BOUND, MAYBEDEFAULT );
+        DECL_PROP_IMPL(FONT, FontDescriptor) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONTEMPHASISMARK, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONTRELIEF, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(TEXTCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP_IMPL(TEXTLINECOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
 

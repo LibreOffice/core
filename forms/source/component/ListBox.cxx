@@ -489,12 +489,12 @@ namespace frm
     {
         BEGIN_DESCRIBE_PROPERTIES( 10, OBoundControlModel )
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
-            DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
+            DECL_PROP_IMPL(BOUNDCOLUMN, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
             DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,                 BOUND);
             DECL_PROP_IMPL(VALUE_SEQ, css::uno::Sequence<OUString>) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-            DECL_PROP2(SELECT_VALUE_SEQ,    Sequence< Any >,                BOUND, TRANSIENT);
-            DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
+            DECL_PROP_IMPL(SELECT_VALUE_SEQ, Sequence< Any >) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
+            DECL_PROP_IMPL(SELECT_VALUE, Any) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
             DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
             DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,    OPTIONAL);

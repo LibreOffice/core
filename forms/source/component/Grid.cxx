@@ -376,19 +376,19 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES( 37 )
         DECL_PROP1(NAME,                OUString,    BOUND);
-        DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
+        DECL_PROP_IMPL(CLASSID, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1(TAG,                 OUString,    BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
         DECL_PROP_IMPL(TABSTOP, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
+        DECL_PROP_IMPL(HASNAVIGATION, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP1(ENABLED,             sal_Bool,           BOUND);
-        DECL_PROP2(ENABLEVISIBLE,       sal_Bool,           BOUND, MAYBEDEFAULT);
+        DECL_PROP_IMPL(ENABLEVISIBLE, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP1(BORDER,              sal_Int16,          BOUND);
-        DECL_PROP2(BORDERCOLOR,         sal_Int16,          BOUND, MAYBEVOID);
+        DECL_PROP_IMPL(BORDERCOLOR, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP1(DEFAULTCONTROL,      OUString,    BOUND);
         DECL_PROP_IMPL(TEXTCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP_IMPL(BACKGROUNDCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP2(FONT,                FontDescriptor,     BOUND, MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONT, FontDescriptor) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(ROWHEIGHT, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP1(HELPTEXT,            OUString,    BOUND);
         DECL_PROP1(FONT_NAME,           OUString,    MAYBEDEFAULT);
@@ -401,17 +401,17 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
         DECL_BOOL_PROP_IMPL(FONT_WORDLINEMODE) css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(TEXTLINECOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP2(FONTEMPHASISMARK,    sal_Int16,          BOUND, MAYBEDEFAULT);
-        DECL_PROP2(FONTRELIEF,          sal_Int16,          BOUND, MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONTEMPHASISMARK, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(FONTRELIEF, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP1(FONT_STRIKEOUT,      sal_Int16,          MAYBEDEFAULT);
-        DECL_PROP2(RECORDMARKER,        sal_Bool,           BOUND, MAYBEDEFAULT );
-        DECL_PROP2(PRINTABLE,           sal_Bool,           BOUND, MAYBEDEFAULT );
+        DECL_PROP_IMPL(RECORDMARKER, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(PRINTABLE, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(CURSORCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT |
                          css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP_IMPL(ALWAYSSHOWCURSOR, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP_IMPL(DISPLAYSYNCHRON, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
-        DECL_PROP2(HELPURL,             OUString,    BOUND, MAYBEDEFAULT);
-        DECL_PROP2(WRITING_MODE,        sal_Int16,          BOUND, MAYBEDEFAULT);
+        DECL_PROP_IMPL(HELPURL, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        DECL_PROP_IMPL(WRITING_MODE, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(CONTEXT_WRITING_MODE, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
     END_DESCRIBE_PROPERTIES();
 }

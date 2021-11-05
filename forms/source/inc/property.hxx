@@ -345,10 +345,6 @@ public:
     *pProperties++ = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<bool>::get(),
 
 
-#define DECL_IFACE_PROP_IMPL(varname, type) \
-    *pProperties++ = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<type>::get(),
-
-
 #define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
     baseclass::describeFixedProperties( _rProps ); \
     sal_Int32 nOldCount = _rProps.getLength(); \
@@ -361,17 +357,8 @@ public:
     css::beans::Property* pProperties = _rProps.getArray();       \
 
 
-#define DECL_PROP0(varname, type)   \
-    DECL_PROP_IMPL(varname, type) 0)
-
-
 #define DECL_PROP1(varname, type, attrib1)  \
         DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1)
-
-
-#define DECL_PROP2(varname, type, attrib1, attrib2) \
-        DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2)
-
 
 #define END_DESCRIBE_PROPERTIES()   \
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \

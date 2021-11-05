@@ -1290,22 +1290,23 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     RemoveProperty( _rAggregateProps, PROPERTY_HAVINGCLAUSE );
     RemoveProperty( _rAggregateProps, PROPERTY_APPLYFILTER );
 
-    DECL_IFACE_PROP_IMPL(ACTIVE_CONNECTION, XConnection) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT |
+    *pProperties++ = css::beans::Property(PROPERTY_ACTIVE_CONNECTION, PROPERTY_ID_ACTIVE_CONNECTION, cppu::UnoType<XConnection>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT |
                                                          css::beans::PropertyAttribute::MAYBEVOID | PropertyAttribute::CONSTRAINED);
     DECL_BOOL_PROP_IMPL(APPLYFILTER) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP1      ( NAME,             OUString,                BOUND                          );
     DECL_PROP1      ( MASTERFIELDS,     Sequence< OUString >,    BOUND                          );
     DECL_PROP1      ( DETAILFIELDS,     Sequence< OUString >,    BOUND                          );
-    DECL_PROP2      ( DATASOURCE,       OUString,                BOUND, CONSTRAINED             );
+    DECL_PROP_IMPL(DATASOURCE, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::CONSTRAINED);
     DECL_PROP_IMPL(CYCLE, TabulatorCycle) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP2      ( FILTER,           OUString,                BOUND, MAYBEDEFAULT            );
-    DECL_PROP2      ( HAVINGCLAUSE,     OUString,                BOUND, MAYBEDEFAULT            );
+    DECL_PROP_IMPL(FILTER, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    DECL_PROP_IMPL(HAVINGCLAUSE, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_BOOL_PROP_IMPL(INSERTONLY) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP1      ( NAVIGATION,       NavigationBarMode,       BOUND                          );
     DECL_BOOL_PROP_IMPL(ALLOWADDITIONS) css::beans::PropertyAttribute::BOUND);
     DECL_BOOL_PROP_IMPL(ALLOWEDITS) css::beans::PropertyAttribute::BOUND);
     DECL_BOOL_PROP_IMPL(ALLOWDELETIONS) css::beans::PropertyAttribute::BOUND);
-    DECL_PROP2      ( PRIVILEGES,       sal_Int32,               TRANSIENT, READONLY            );
+    DECL_PROP_IMPL(PRIVILEGES, sal_Int32) css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY);
     DECL_PROP1      ( TARGET_URL,       OUString,                BOUND                          );
     DECL_PROP1      ( TARGET_FRAME,     OUString,                BOUND                          );
     DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,        BOUND                          );
