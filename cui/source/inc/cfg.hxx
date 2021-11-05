@@ -48,7 +48,7 @@ inline constexpr OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_TYPE = u"Type";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_STYLE = u"Style";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible";
-const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
+inline constexpr OUStringLiteral ITEM_DESCRIPTOR_RESOURCEURL = u"ResourceURL";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
 
 inline constexpr OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
@@ -56,7 +56,7 @@ inline constexpr OUStringLiteral ITEM_TOOLBAR_URL = u"private:resource/toolbar/"
 
 inline constexpr OUStringLiteral CUSTOM_TOOLBAR_STR = u"custom_toolbar_";
 
-const char aMenuSeparatorStr[] = " | ";
+inline constexpr OUStringLiteral aMenuSeparatorStr = u" | ";
 
 class SvxConfigEntry;
 class SvxConfigPage;

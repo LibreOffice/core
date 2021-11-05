@@ -40,8 +40,8 @@ inline constexpr OUStringLiteral ITEM_DESCRIPTOR_ENABLED = u"Enabled";
 inline constexpr OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
 constexpr char16_t ITEM_TOOLBAR_URL[] = u"private:resource/toolbar/";
 
-const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
-const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
+inline constexpr OUStringLiteral CUSTOM_TOOLBAR_STR = u"custom_toolbar_";
+inline constexpr OUStringLiteral CUSTOM_MENU_STR = u"vnd.openoffice.org:CustomMenu";
 
 class VbaCommandBarHelper;
 typedef std::shared_ptr< VbaCommandBarHelper > VbaCommandBarHelperRef;
