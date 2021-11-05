@@ -452,7 +452,7 @@ namespace frm
         _rProps.realloc( nOldCount + 1);
         css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
             DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-        END_DESCRIBE_PROPERTIES();
+        DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 
         // properties which the OPropertyContainerHelper is responsible for
         Sequence< Property > aContainedProperties;

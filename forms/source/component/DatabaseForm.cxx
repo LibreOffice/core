@@ -1321,7 +1321,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     DECL_PROP_IMPL(CONTROL_BORDER_COLOR_FOCUS, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(CONTROL_BORDER_COLOR_MOUSE, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(CONTROL_BORDER_COLOR_INVALID, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 
