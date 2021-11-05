@@ -268,7 +268,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112694, "tdf112694.docx")
     uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
     // Header was on when header for file was for explicit first pages only
     // (marked via <w:titlePg>).
-    CPPUNIT_ASSERT(getProperty<bool>(aPageStyle, "FirstIsShared"));
+    CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf113849_evenAndOddHeaders, "tdf113849_evenAndOddHeaders.odt")

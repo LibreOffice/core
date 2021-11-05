@@ -1356,14 +1356,14 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
 
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
-    const bool bEmptyFirst = m_bFirstPageHeaderLinkToPrevious && m_bFirstPageFooterLinkToPrevious
-                             && m_bIsFirstSection;
+    //const bool bEmptyFirst = m_bFirstPageHeaderLinkToPrevious && m_bFirstPageFooterLinkToPrevious
+      //                       && m_bIsFirstSection;
 
     // Prior to LO 4.0, there was no "separate first header/footer".
     // So a first page header was emulated by using a first->follow page style.
     // In somes cases it still works better to emulate.
     // RTF does not export a first header well at all, so import the old way in that case.
-    const bool bUseFirstPageStyle = m_bTitlePage && (bEmptyFirst || rDM_Impl.IsRTFImport());
+    const bool bUseFirstPageStyle = m_bTitlePage;//&& (bEmptyFirst || rDM_Impl.IsRTFImport());
 
     SectionPropertyMap* pPrevSection = rDM_Impl.GetLastSectionContext();
 

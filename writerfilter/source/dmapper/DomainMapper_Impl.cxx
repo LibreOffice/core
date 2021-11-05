@@ -2882,7 +2882,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
     uno::Reference< beans::XPropertySet > xPageStyle =
         pSectionContext->GetPageStyle(
             *this,
-            bFirst && IsRTFImport()); // NOTE: needs to be compatible with bUseFirstPageStyle
+            bFirst);// && IsRTFImport()); // NOTE: needs to be compatible with bUseFirstPageStyle
     if (!xPageStyle.is())
         return;
     try
@@ -2900,7 +2900,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
             // However, if it is marked as shared, non-first text will be duplicated to the first,
             // which is not erased/removed when a bFirst concatinates its text.
             // So assume that it needs to be defined separately and set the correct value later on.
-            if (!IsRTFImport())
+            if (false && !IsRTFImport())
                 xPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::makeAny(false));
 
             // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
