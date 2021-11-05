@@ -340,9 +340,11 @@ OUString SAL_CALL OFormattedModel::getServiceName()
 void OFormattedModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 3, OEditBaseModel )
-        DECL_BOOL_PROP_IMPL(EMPTY_IS_NULL) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
-        DECL_BOOL_PROP_IMPL(FILTERPROPOSAL) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_FILTERPROPOSAL, PROPERTY_ID_FILTERPROPOSAL, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();
 }
 

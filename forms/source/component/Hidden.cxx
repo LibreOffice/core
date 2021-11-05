@@ -106,7 +106,8 @@ sal_Bool OHiddenModel::convertFastPropertyValue(
 
 void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES(4)
+    _rProps.realloc(4);
+    css::beans::Property* pProperties = _rProps.getArray();
         DECL_PROP_IMPL(CLASSID, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1(HIDDEN_VALUE,    OUString,    BOUND);
         DECL_PROP1(NAME,            OUString,    BOUND);

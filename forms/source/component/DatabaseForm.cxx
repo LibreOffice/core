@@ -1293,7 +1293,8 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     *pProperties++ = css::beans::Property(PROPERTY_ACTIVE_CONNECTION, PROPERTY_ID_ACTIVE_CONNECTION, cppu::UnoType<XConnection>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT |
                                                          css::beans::PropertyAttribute::MAYBEVOID | PropertyAttribute::CONSTRAINED);
-    DECL_BOOL_PROP_IMPL(APPLYFILTER) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_APPLYFILTER, PROPERTY_ID_APPLYFILTER, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP1      ( NAME,             OUString,                BOUND                          );
     DECL_PROP1      ( MASTERFIELDS,     Sequence< OUString >,    BOUND                          );
     DECL_PROP1      ( DETAILFIELDS,     Sequence< OUString >,    BOUND                          );
@@ -1301,17 +1302,22 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     DECL_PROP_IMPL(CYCLE, TabulatorCycle) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(FILTER, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(HAVINGCLAUSE, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_BOOL_PROP_IMPL(INSERTONLY) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_INSERTONLY, PROPERTY_ID_INSERTONLY, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP1      ( NAVIGATION,       NavigationBarMode,       BOUND                          );
-    DECL_BOOL_PROP_IMPL(ALLOWADDITIONS) css::beans::PropertyAttribute::BOUND);
-    DECL_BOOL_PROP_IMPL(ALLOWEDITS) css::beans::PropertyAttribute::BOUND);
-    DECL_BOOL_PROP_IMPL(ALLOWDELETIONS) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_ALLOWADDITIONS, PROPERTY_ID_ALLOWADDITIONS, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_ALLOWEDITS, PROPERTY_ID_ALLOWEDITS, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_ALLOWDELETIONS, PROPERTY_ID_ALLOWDELETIONS, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND);
     DECL_PROP_IMPL(PRIVILEGES, sal_Int32) css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY);
     DECL_PROP1      ( TARGET_URL,       OUString,                BOUND                          );
     DECL_PROP1      ( TARGET_FRAME,     OUString,                BOUND                          );
     DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,        BOUND                          );
     DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,      BOUND                          );
-    DECL_BOOL_PROP_IMPL(DYNAMIC_CONTROL_BORDER) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT );
+    *pProperties++ = css::beans::Property(PROPERTY_DYNAMIC_CONTROL_BORDER, PROPERTY_ID_DYNAMIC_CONTROL_BORDER, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT );
     DECL_PROP_IMPL(CONTROL_BORDER_COLOR_FOCUS, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(CONTROL_BORDER_COLOR_MOUSE, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(CONTROL_BORDER_COLOR_INVALID, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);

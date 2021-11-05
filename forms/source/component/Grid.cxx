@@ -374,7 +374,8 @@ void OGridControlModel::_reset()
 // XPropertySet
 void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES( 37 )
+    _rProps.realloc(37);
+    css::beans::Property* pProperties = _rProps.getArray();
         DECL_PROP1(NAME,                OUString,    BOUND);
         DECL_PROP_IMPL(CLASSID, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1(TAG,                 OUString,    BOUND);
@@ -399,7 +400,8 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP1(FONT_WEIGHT,         float,              MAYBEDEFAULT);
         DECL_PROP1(FONT_SLANT,          sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
-        DECL_BOOL_PROP_IMPL(FONT_WORDLINEMODE) css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_FONT_WORDLINEMODE, PROPERTY_ID_FONT_WORDLINEMODE, cppu::UnoType<bool>::get(),
+                                          css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(TEXTLINECOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP_IMPL(FONTEMPHASISMARK, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(FONTRELIEF, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);

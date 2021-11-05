@@ -200,7 +200,8 @@ namespace frm
         DECL_PROP_IMPL(TEXTLINECOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
 
         DECL_PROP1      ( FONT_CHARWIDTH,     float,            MAYBEDEFAULT );
-        DECL_BOOL_PROP_IMPL(FONT_KERNING) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_KERNING, PROPERTY_ID_FONT_KERNING, cppu::UnoType<bool>::get(),
+                                              css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP1      ( FONT_ORIENTATION,   float,            MAYBEDEFAULT );
         DECL_PROP1      ( FONT_PITCH,         sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_TYPE,          sal_Int16,        MAYBEDEFAULT );
@@ -214,7 +215,8 @@ namespace frm
         DECL_PROP1      ( FONT_SLANT,         sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_UNDERLINE,     sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_STRIKEOUT,     sal_Int16,        MAYBEDEFAULT );
-        DECL_BOOL_PROP_IMPL(FONT_WORDLINEMODE) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_WORDLINEMODE, PROPERTY_ID_FONT_WORDLINEMODE, cppu::UnoType<bool>::get(),
+                                              css::beans::PropertyAttribute::MAYBEDEFAULT);
     }
 
 
