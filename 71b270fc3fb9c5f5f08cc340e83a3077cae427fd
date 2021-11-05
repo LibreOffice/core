@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5caa6add_b4ac4953",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-05T16:09:18Z",
+      "side": 1,
+      "message": "Thank you Caolán for the fix!\nI had sent an email to Mike about this error after having indicated the error with webdav-curl (Mike has already a fix here: https://gerrit.libreoffice.org/c/core/+/124763)",
+      "revId": "71b270fc3fb9c5f5f08cc340e83a3077cae427fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
