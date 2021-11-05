@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d99a7997_04c3a986",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-05T22:38:47Z",
+      "side": 1,
+      "message": "All Jenkins ok just waiting Android, let\u0027s anticipate a bit. (at worst it can be reverted)",
+      "revId": "e4cde3fc8e2f022015a1e05d077ec42976e0f2e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
