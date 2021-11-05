@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cabdde2_8cdbfc19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-05T09:55:28Z",
+      "side": 1,
+      "message": "I did also consider splitting StartOrEndBookmark into something like StartBookmark and EndBookmark and rejecting ends without previous starts but I couldn\u0027t figure out how that should look in writerfilter/source/ooxml/model.xml so I plan to just throw this at it and keep it simple.",
+      "revId": "01cf939e1ad4f4060f9e70ce79d8ae582a52d041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
