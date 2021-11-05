@@ -4515,6 +4515,27 @@ namespace
         }
         return pLabel;
     }
+
+    GtkWidget* find_image_widget(GtkWidget* pContainer)
+    {
+        GtkWidget* pImage = nullptr;
+        for (GtkWidget* pChild = gtk_widget_get_first_child(pContainer);
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            if (GTK_IS_IMAGE(pChild))
+            {
+                pImage = pChild;
+                break;
+            }
+            else
+            {
+                pImage = find_image_widget(pChild);
+                if (pImage)
+                    break;
+            }
+        }
+        return pImage;
+    }
 #else
     GtkWidget* find_label_widget(GtkContainer* pContainer)
     {
@@ -9907,29 +9928,6 @@ private:
 #endif
         gtk_widget_show(GTK_WIDGET(m_pImage));
     }
-
-#if GTK_CHECK_VERSION(4, 0, 0)
-    static GtkWidget* find_image_widget(GtkWidget* pContainer)
-    {
-        GtkWidget* pImage = nullptr;
-        for (GtkWidget* pChild = gtk_widget_get_first_child(pContainer);
-             pChild; pChild = gtk_widget_get_next_sibling(pChild))
-        {
-            if (GTK_IS_IMAGE(pChild))
-            {
-                pImage = pChild;
-                break;
-            }
-            else
-            {
-                pImage = find_image_widget(pChild);
-                if (pImage)
-                    break;
-            }
-        }
-        return pImage;
-    }
-#endif
 
     static void find_image(GtkWidget *pWidget, gpointer user_data)
     {
