@@ -52,6 +52,24 @@
       "parentUuid": "611e4025_b3ff6718",
       "revId": "23214f1c14c4d3981dad90b6e3ba6e4ca2c8c30e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e56b6a6_675b2db9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-11-05T12:48:45Z",
+      "side": 1,
+      "message": "No problem. :-)   I\u0027m glad the issue is fixed.",
+      "parentUuid": "84a158be_905f9f00",
+      "revId": "23214f1c14c4d3981dad90b6e3ba6e4ca2c8c30e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
