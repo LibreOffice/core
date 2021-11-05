@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/i18n/intlwrapper \
     unotools/source/i18n/localedatawrapper \
     unotools/source/i18n/nativenumberwrapper \
+    unotools/source/i18n/resmgr \
     unotools/source/i18n/textsearch \
     unotools/source/i18n/transliterationwrapper \
     unotools/source/misc/closeveto \
@@ -114,12 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/ucbhelper/ucblockbytes \
     unotools/source/ucbhelper/ucbstreamhelper \
     unotools/source/ucbhelper/xtempfile \
-))
-
-# see the source file
-$(eval $(call gb_Library_add_exception_objects,utl,\
-    unotools/source/i18n/resmgr, \
-    -D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR= -D_HAS_AUTO_PTR_ETC=1 \
 ))
 
 # vim: set noet sw=4 ts=4:
