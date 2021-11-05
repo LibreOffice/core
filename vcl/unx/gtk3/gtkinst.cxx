@@ -4560,6 +4560,30 @@ namespace
 
         return pChild;
     }
+
+    GtkWidget* find_image_widget(GtkContainer* pContainer)
+    {
+        GList* pChildren = gtk_container_get_children(pContainer);
+
+        GtkWidget* pChild = nullptr;
+        for (GList* pCandidate = pChildren; pCandidate; pCandidate = pCandidate->next)
+        {
+            if (GTK_IS_IMAGE(pCandidate->data))
+            {
+                pChild = GTK_WIDGET(pCandidate->data);
+                break;
+            }
+            else if (GTK_IS_CONTAINER(pCandidate->data))
+            {
+                pChild = find_image_widget(GTK_CONTAINER(pCandidate->data));
+                if (pChild)
+                    break;
+            }
+        }
+        g_list_free(pChildren);
+
+        return pChild;
+    }
 #endif
 
     GtkLabel* get_label_widget(GtkWidget* pButton)
@@ -4578,6 +4602,21 @@ namespace
 #endif
     }
 
+    GtkImage* get_image_widget(GtkWidget *pButton)
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(pButton));
+
+        if (GTK_IS_CONTAINER(pChild))
+            pChild = find_image_widget(GTK_CONTAINER(pChild));
+        else if (!GTK_IS_IMAGE(pChild))
+            pChild = nullptr;
+
+        return GTK_IMAGE(pChild);
+#else
+        return GTK_IMAGE(find_image_widget(pButton));
+#endif
+    }
 
     OUString get_button_label(GtkButton* pButton)
     {
@@ -9929,19 +9968,6 @@ private:
         gtk_widget_show(GTK_WIDGET(m_pImage));
     }
 
-    static void find_image(GtkWidget *pWidget, gpointer user_data)
-    {
-        GtkImage **ppImage = static_cast<GtkImage**>(user_data);
-        if (GTK_IS_IMAGE(pWidget))
-            *ppImage = GTK_IMAGE(pWidget);
-#if GTK_CHECK_VERSION(4, 0, 0)
-        *ppImage = GTK_IMAGE(find_image_widget(pWidget));
-#else
-        if (GTK_IS_CONTAINER(pWidget))
-            gtk_container_forall(GTK_CONTAINER(pWidget), find_image, user_data);
-#endif
-    }
-
     static void signalFlagsChanged(GtkToggleButton* pToggleButton, GtkStateFlags flags, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
@@ -9988,7 +10014,7 @@ public:
         m_nToggledSignalId = g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalFlagsChanged), this);
 
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
-        find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
+        m_pImage = get_image_widget(GTK_WIDGET(m_pMenuButton));
         m_pBox = formatMenuButton(m_pLabel);
 #else
         GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
