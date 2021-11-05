@@ -36,7 +36,7 @@ namespace basegfx::utils
     // a clip axis parallel to X.Axis and 100 above it, use bParallelToXAxis = true and fValueOnOtherAxis = 100.
     // The value bAboveAxis defines on which side the return value will be (true -> above X, right of Y).
     // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
-    BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolyPolygonOnParallelAxis(const B2DPolyPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke);
+    B2DPolyPolygon clipPolyPolygonOnParallelAxis(const B2DPolyPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke);
     BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolygonOnParallelAxis(const B2DPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke);
 
     // Clip the given tools::PolyPolygon against the given range. bInside defines if the result will contain the

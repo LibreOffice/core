@@ -355,7 +355,7 @@ namespace basegfx::utils
             return aRetval;
         }
 
-        BASEGFX_DLLPUBLIC B2DHomMatrix createRotateAroundCenterKeepAspectRatioStayInsideRange(
+        B2DHomMatrix createRotateAroundCenterKeepAspectRatioStayInsideRange(
             const basegfx::B2DRange& rTargetRange,
             double fRotate)
         {

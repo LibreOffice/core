@@ -38,7 +38,7 @@ namespace basegfx::utils
             would introduce slight roundoff errors, instead of exactly
             mirroring the coordinate system)
          */
-        BASEGFX_DLLPUBLIC void createSinCosOrthogonal(double& o_rSin, double& rCos, double fRadiant);
+        void createSinCosOrthogonal(double& o_rSin, double& rCos, double fRadiant);
 
         /** Tooling methods for on-the-fly matrix generation e.g. for inline
             multiplications
@@ -128,7 +128,7 @@ namespace basegfx::utils
         /// special for creating a mapping for a Range rotated around it's center
         /// while keeping AspectRatio unchanged and staying inside the given Range
         /// by optimally using the available space (no overlap or outside allowed)
-        BASEGFX_DLLPUBLIC B2DHomMatrix createRotateAroundCenterKeepAspectRatioStayInsideRange(
+        B2DHomMatrix createRotateAroundCenterKeepAspectRatioStayInsideRange(
             const basegfx::B2DRange& rTargetRange,
             double fRotate);
 

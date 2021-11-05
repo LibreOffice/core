@@ -76,21 +76,21 @@ namespace basegfx::unotools
                                             const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
 
-        BASEGFX_DLLPUBLIC css::uno::Sequence<
+        css::uno::Sequence<
               css::uno::Sequence< css::geometry::RealBezierSegment2D > >
                     bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
-        BASEGFX_DLLPUBLIC css::uno::Sequence<
+        css::uno::Sequence<
               css::uno::Sequence< css::geometry::RealPoint2D > >
                     pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2DPolygon polygonFromPoint2DSequence(
+        ::basegfx::B2DPolygon polygonFromPoint2DSequence(
             const css::uno::Sequence< css::geometry::RealPoint2D >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence(
             const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& rPoints );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B2DPolygon polygonFromBezier2DSequence(
+        ::basegfx::B2DPolygon polygonFromBezier2DSequence(
             const css::uno::Sequence< css::geometry::RealBezierSegment2D >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence(
@@ -106,7 +106,7 @@ namespace basegfx::unotools
             affineMatrixFromHomMatrix( css::geometry::AffineMatrix2D&  matrix,
                                        const ::basegfx::B2DHomMatrix&               transform);
 
-        BASEGFX_DLLPUBLIC css::geometry::AffineMatrix3D& affineMatrixFromHomMatrix3D(
+        css::geometry::AffineMatrix3D& affineMatrixFromHomMatrix3D(
             css::geometry::AffineMatrix3D& matrix,
             const ::basegfx::B3DHomMatrix& transform);
 
@@ -126,7 +126,7 @@ namespace basegfx::unotools
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPoint       b2DPointFromRealPoint2D( const css::geometry::RealPoint2D& );
         BASEGFX_DLLPUBLIC ::basegfx::B2DRange       b2DRectangleFromRealRectangle2D( const css::geometry::RealRectangle2D& );
-        BASEGFX_DLLPUBLIC ::basegfx::B3DRange       b3DRectangleFromRealRectangle3D( const css::geometry::RealRectangle3D& );
+        ::basegfx::B3DRange       b3DRectangleFromRealRectangle3D( const css::geometry::RealRectangle3D& );
 
         BASEGFX_DLLPUBLIC css::geometry::IntegerSize2D         integerSize2DFromB2ISize( const ::basegfx::B2IVector& );
 

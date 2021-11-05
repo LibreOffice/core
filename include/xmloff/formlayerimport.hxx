@@ -51,8 +51,8 @@ namespace xmloff
         std::unique_ptr<OFormLayerXMLImport_Impl>   m_pImpl;
 
     public:
-        OFormLayerXMLImport(SvXMLImport& _rImporter);
-        virtual ~OFormLayerXMLImport() override;
+        SAL_DLLPRIVATE OFormLayerXMLImport(SvXMLImport& _rImporter);
+        SAL_DLLPRIVATE virtual ~OFormLayerXMLImport() override;
 
         /** start importing the forms of the given page
 
@@ -76,7 +76,7 @@ namespace xmloff
             @see startPage
             @see endPage
         */
-        SvXMLImportContext* createContext(
+        SAL_DLLPRIVATE SvXMLImportContext* createContext(
             const sal_Int32 _nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttribs);
 
@@ -88,7 +88,7 @@ namespace xmloff
 
             @see startPage
         */
-        css::uno::Reference< css::beans::XPropertySet >
+        SAL_DLLPRIVATE css::uno::Reference< css::beans::XPropertySet >
                 lookupControl(const OUString& _rId);
 
         /** end importing the forms of the current page
@@ -102,7 +102,7 @@ namespace xmloff
 
         /** announces the auto-style context to the form importer
         */
-        void setAutoStyleContext(SvXMLStylesContext* _pNewContext);
+        SAL_DLLPRIVATE void setAutoStyleContext(SvXMLStylesContext* _pNewContext);
 
         /** sets the given number style on the given control
             @param _rxControlModel
@@ -110,7 +110,7 @@ namespace xmloff
             @param _rControlNumberStyleName
                 the style name for the control's number style
         */
-        void applyControlNumberStyle(
+        SAL_DLLPRIVATE void applyControlNumberStyle(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
             const OUString& _rControlNumberStyleName
         );
@@ -121,7 +121,7 @@ namespace xmloff
             do to a post processing, since not all information from the file can be processed
             if the document is not completed, yet.</p>
         */
-        void documentDone( );
+        SAL_DLLPRIVATE void documentDone( );
     };
 
 

@@ -28,13 +28,14 @@
 #include <vcl/BitmapAccessMode.hxx>
 #include <vcl/BitmapInfoAccess.hxx>
 
-class VCL_DLLPUBLIC BitmapReadAccess : public BitmapInfoAccess
+class BitmapReadAccess : public BitmapInfoAccess
 {
     friend class BitmapWriteAccess;
 
 public:
-    BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode = BitmapAccessMode::Read);
-    virtual ~BitmapReadAccess() override;
+    VCL_DLLPUBLIC BitmapReadAccess(Bitmap& rBitmap,
+                                   BitmapAccessMode nMode = BitmapAccessMode::Read);
+    VCL_DLLPUBLIC virtual ~BitmapReadAccess() override;
 
     Scanline GetBuffer() const
     {
@@ -125,7 +126,7 @@ protected:
     FncSetPixel mFncSetPixel;
 
 public:
-    SAL_DLLPRIVATE BitmapBuffer* ImplGetBitmapBuffer() const { return mpBuffer; }
+    BitmapBuffer* ImplGetBitmapBuffer() const { return mpBuffer; }
 
     static BitmapColor GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX,
                                               const ColorMask& rMask);

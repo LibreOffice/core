@@ -102,7 +102,7 @@ struct LibraryContainerInfo
 
 #define LIB_NOTFOUND    0xFFFF
 
-class BASIC_DLLPUBLIC BasicManager final : public SfxBroadcaster
+class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) BasicManager final : public SfxBroadcaster
 {
     friend class LibraryContainer_Impl;
     friend class StarBasicAccess_Impl;
@@ -143,9 +143,9 @@ public:
     const OUString& GetName() const                         { return aName; }
 
 
-    sal_uInt16      GetLibCount() const;
-    StarBASIC*      GetLib( sal_uInt16 nLib ) const;
-    StarBASIC*      GetLib( std::u16string_view rName ) const;
+    IF_MERGELIBS(BASIC_DLLPUBLIC) sal_uInt16 GetLibCount() const;
+    IF_MERGELIBS(BASIC_DLLPUBLIC) StarBASIC* GetLib( sal_uInt16 nLib ) const;
+    IF_MERGELIBS(BASIC_DLLPUBLIC) StarBASIC* GetLib( std::u16string_view rName ) const;
     sal_uInt16      GetLibId( std::u16string_view rName ) const;
 
     OUString        GetLibName( sal_uInt16 nLib );
@@ -163,6 +163,7 @@ public:
                     GetScriptLibraryContainer()  const;
 
     bool            LoadLib( sal_uInt16 nLib );
+    IF_MERGELIBS(BASIC_DLLPUBLIC)
     bool            RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage );
 
     // Modify-Flag will be reset only during save.
@@ -175,11 +176,12 @@ public:
         If a constant with this name already existed before, its value is changed, and the old constant is
         returned. If it does not yet exist, it is newly created, and inserted into the basic library.
     */
-    css::uno::Any
-                    SetGlobalUNOConstant( const OUString& rName, const css::uno::Any& _rValue );
+    IF_MERGELIBS(BASIC_DLLPUBLIC)
+    css::uno::Any   SetGlobalUNOConstant( const OUString& rName, const css::uno::Any& _rValue );
 
     /** retrieves a global constant in the basic library, referring to some UNO object, returns true if a value is found ( value is in aOut ) false otherwise. */
-                    bool GetGlobalUNOConstant( const OUString& rName, css::uno::Any& aOut );
+    IF_MERGELIBS(BASIC_DLLPUBLIC)
+    bool            GetGlobalUNOConstant( const OUString& rName, css::uno::Any& aOut );
     /** determines whether there are password-protected modules whose size exceeds the
         legacy module size
         @param _out_rModuleNames
@@ -188,6 +190,7 @@ public:
     bool            LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames );
     bool HasExeCode( std::u16string_view );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
+    IF_MERGELIBS(BASIC_DLLPUBLIC)
     bool            HasMacro( OUString const& i_fullyQualifiedName ) const;
     /// executes a given macro
     ErrCode         ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue );

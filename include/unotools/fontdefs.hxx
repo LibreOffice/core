@@ -42,7 +42,7 @@ namespace o3tl
 
 UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags );
 
-UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, std::u16string_view rNewToken );
+UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) void AddTokenFontName( OUString& rName, std::u16string_view rNewToken );
 
 
 class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ConvertChar

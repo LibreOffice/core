@@ -135,7 +135,7 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         // Subdivide all contained curves. Use distanceBound value if given.
-        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound);
+        B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound);
 
         // Subdivide all contained curves. Use angleBound value if given.
         BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 0.0);
@@ -377,12 +377,12 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC bool isPointInTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC, const B2DPoint& rCandidate, bool bWithBorder);
 
         // test if candidateA and candidateB are on the same side of the given line
-        BASEGFX_DLLPUBLIC bool arePointsOnSameSideOfLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidateA, const B2DPoint& rCandidateB, bool bWithLine);
+        bool arePointsOnSameSideOfLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidateA, const B2DPoint& rCandidateB, bool bWithLine);
 
         // add triangles for given rCandidate to rTarget. For each triangle, 3 points will be added to rCandidate.
         // All triangles will go from the start point of rCandidate to two consecutive points, building (rCandidate.count() - 2)
         // triangles.
-        BASEGFX_DLLPUBLIC void addTriangleFan(
+        void addTriangleFan(
             const B2DPolygon& rCandidate,
             triangulator::B2DTriangleVector& rTarget);
 
@@ -433,7 +433,7 @@ namespace basegfx::utils
             @return
             The newly created polygon
          */
-        BASEGFX_DLLPUBLIC B2DPolygon createEdgesOfGivenLength(const B2DPolygon& rCandidate, double fLength, double fStart = 0.0, double fEnd = 0.0);
+        B2DPolygon createEdgesOfGivenLength(const B2DPolygon& rCandidate, double fLength, double fStart = 0.0, double fEnd = 0.0);
 
         /** Create Waveline along given polygon
             The implementation is based on createEdgesOfGivenLength and creates a curve

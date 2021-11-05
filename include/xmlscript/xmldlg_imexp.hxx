@@ -33,7 +33,7 @@ namespace com::sun::star::xml::sax { class XExtendedDocumentHandler; }
 namespace xmlscript
 {
 
-XMLSCRIPT_DLLPUBLIC void exportDialogModel(
+void exportDialogModel(
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > const & xOut,
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
     css::uno::Reference< css::frame::XModel > const & xDocument );

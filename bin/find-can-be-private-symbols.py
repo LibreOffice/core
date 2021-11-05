@@ -20,25 +20,25 @@ import subprocess
 import sys
 import re
 
-exported_symbols = set()
-imported_symbols = set()
-# standalone functions that are exported but not imported
-unused_function_exports = set()
-classes_with_exported_symbols = set()
-classes_with_imported_symbols = set()
+exported_symbols1 = set()
+imported_symbols1 = set()
+exported_symbols2 = set() # decoded
+imported_symbols2 = set() # decoded
 # all names that exist in the source code
-all_source_names = set()
+#all_source_names = set()
 
 
-subprocess_find_all_source_names = subprocess.Popen("git grep -oh -P '\\b\\w\\w\\w+\\b' -- '*.h*' | sort -u", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-with subprocess_find_all_source_names.stdout as txt:
-    for line in txt:
-        line = line.strip()
-        all_source_names.add(line)
-subprocess_find_all_source_names.terminate()
+#subprocess_find_all_source_names = subprocess.Popen("git grep -oh -P '\\b\\w\\w\\w+\\b' -- '*.h*' | sort -u",
+#    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+#with subprocess_find_all_source_names.stdout as txt:
+#    for line in txt:
+#        line = line.strip()
+#        all_source_names.add(line)
+#subprocess_find_all_source_names.terminate()
 
 # find all our shared libs
-subprocess_find = subprocess.Popen("find ./instdir -name *.so && find ./workdir/LinkTarget/CppunitTest -name *.so", stdout=subprocess.PIPE, shell=True)
+subprocess_find = subprocess.Popen("find ./instdir -name *.so && find ./workdir/LinkTarget/CppunitTest -name *.so",
+    stdout=subprocess.PIPE, shell=True)
 with subprocess_find.stdout as txt:
     for line in txt:
         sharedlib = line.strip()
@@ -51,8 +51,8 @@ with subprocess_find.stdout as txt:
             for line2_bytes in txt2:
                 line2 = line2_bytes.strip().decode("utf-8")
                 if line_regex.match(line2):
-                    sym = line2.split(" ")[2]
-                    exported_symbols.add(sym)
+                    sym = line2.split(" ")[2].strip()
+                    exported_symbols1.add(sym)
         subprocess_nm.terminate()
         # look for imported symbols
         subprocess_objdump = subprocess.Popen(b"objdump -T " + sharedlib, stdout=subprocess.PIPE, shell=True)
@@ -68,8 +68,8 @@ with subprocess_find.stdout as txt:
                 line2 = line2_bytes.strip().decode("utf-8")
                 if not("*UND*"in line2): continue
                 tokens = line2.split(" ")
-                sym = tokens[len(tokens)-1]
-                imported_symbols.add(sym)
+                sym = tokens[len(tokens)-1].strip()
+                imported_symbols1.add(sym)
         subprocess_objdump.terminate()
 subprocess_find.terminate()
 
@@ -86,52 +86,51 @@ with subprocess_find.stdout as txt:
             for line2_bytes in txt2:
                 line2 = line2_bytes.strip().decode("utf-8")
                 sym = line2.split(" ")[1]
-                imported_symbols.add(sym)
+                imported_symbols1.add(sym)
 subprocess_find.terminate()
 
-diff = exported_symbols - imported_symbols
-print("exported = " + str(len(exported_symbols)))
-print("imported = " + str(len(imported_symbols)))
-print("diff     = " + str(len(diff)))
+#progress = 0;
+#for sym in sorted(imported_symbols - exported_symbols):
+#    progress += 1
+#    if (progress % 128 == 0): print( str(int(progress * 100 / len(diff))) + "%")
+#    filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
+#    if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
+#    elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
+#    print("Symbol imported but not exported? " + filtered_sym)
 
+# Now we have to symbolize before comparing because sometimes (due to thunks) two
+# different encoded names symbolize to the same method/func name
+#
 progress = 0;
-for sym in sorted(exported_symbols):
+progress_max_len = len(imported_symbols1) + len(exported_symbols1)
+for sym in imported_symbols1:
     progress += 1
-    if (progress % 128 == 0): print( str(int(progress * 100 / len(exported_symbols))) + "%")
+    if (progress % 128 == 0): print( str(int(progress * 100 / progress_max_len)) + "%")
     filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
-    i = filtered_sym.find("(")
-    i = filtered_sym.rfind("::", 0, i)
-    if i != -1:
-        classname = filtered_sym[:i]
-        # find classes where all of the exported symbols are not imported
-        classes_with_exported_symbols.add(classname)
-    else:
-        func = filtered_sym
-        # find standalone functions which are exported but not imported
-        if not(sym in imported_symbols): unused_function_exports.add(func)
-
+    imported_symbols2.add(filtered_sym)
 progress = 0;
-for sym in sorted(imported_symbols):
+for sym in exported_symbols1:
     progress += 1
-    if (progress % 128 == 0): print( str(int(progress * 100 / len(imported_symbols))) + "%")
+    if (progress % 128 == 0): print( str(int(progress * 100 / progress_max_len)) + "%")
     filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
-    i = filtered_sym.find("(")
-    i = filtered_sym.rfind("::", 0, i)
-    if i != -1:
-        classname = filtered_sym[:i]
-        classes_with_imported_symbols.add(classname)
+    exported_symbols2.add(filtered_sym)
 
-def extractFunctionNameFromSignature(sym):
-    i = sym.find("(")
-    if i == -1: return sym
-    return sym[:i]
+unused_exports = exported_symbols2 - imported_symbols2
+print("exported       = " + str(len(exported_symbols2)))
+print("imported       = " + str(len(imported_symbols2)))
+print("unused_exports = " + str(len(unused_exports)))
+
+#def extractFunctionNameFromSignature(sym):
+#    i = sym.find("(")
+#    if i == -1: return sym
+#    return sym[:i]
 
 with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
-    for sym in sorted(unused_function_exports):
+    for sym in sorted(unused_exports):
         # Filter out most of the noise.
         # No idea where these are coming from, but not our code.
         if sym.startswith("CERT_"): continue
@@ -164,7 +163,6 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
         elif sym.startswith("SSL_"): continue
         elif sym.startswith("VFY_"): continue
         elif sym.startswith("_PR_"): continue
-        elif sym.startswith("_"): continue
         elif sym.startswith("ber_"): continue
         elif sym.startswith("bfp_"): continue
         elif sym.startswith("ldap_"): continue
@@ -174,6 +172,11 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
         elif sym.startswith("pq"): continue
         elif sym.startswith("presolve_"): continue
         elif sym.startswith("sqlite3_"): continue
+        elif sym.startswith("libepubgen::"): continue
+        elif sym.startswith("lucene::"): continue
+        elif sym.startswith("Hunspell::"): continue
+        elif sym.startswith("sk_"): continue
+        elif sym.startswith("_Z"): continue
         # dynamically loaded
         elif sym.endswith("get_implementation"): continue
         elif sym.endswith("component_getFactory"): continue
@@ -214,22 +217,6 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
         elif sym.startswith("typereg_"): continue
         elif sym.startswith("uno_"): continue
         # remove things we found that do not exist in our source code, they're not ours
-        if not(extractFunctionNameFromSignature(sym) in all_source_names): continue
+        #if not(extractFunctionNameFromSignature(sym) in all_source_names): continue
         f.write(sym + "\n")
 
-with open("bin/find-can-be-private-symbols.classes.results", "wt") as f:
-    for sym in sorted(classes_with_exported_symbols - classes_with_imported_symbols):
-        # externals
-        if sym.startswith("libcdr"): continue
-        elif sym.startswith("libabw"): continue
-        elif sym.startswith("libebook"): continue
-        elif sym.startswith("libepubgen"): continue
-        elif sym.startswith("libfreehand"): continue
-        elif sym.startswith("libmspub"): continue
-        elif sym.startswith("libpagemaker"): continue
-        elif sym.startswith("libqxp"): continue
-        elif sym.startswith("libvisio"): continue
-        elif sym.startswith("libzmf"): continue
-        elif sym.startswith("lucene::"): continue
-        elif sym.startswith("Sk"): continue
-        f.write(sym + "\n")
