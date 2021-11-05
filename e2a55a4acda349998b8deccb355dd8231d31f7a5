@@ -16,6 +16,24 @@
       "message": "Do you have _tested_ your solution?\n\nStart Writer, insert a shape from the Fontwork Gallery. Open the drop-down list \u0027Fontwork Alignment\u0027 of the \u0027Fontwork\u0027 toolbar \u003d\u003d\u003e Crash.\n\nDo you work on Linux or on Windows?",
       "revId": "e2a55a4acda349998b8deccb355dd8231d31f7a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f743fca4_8386084f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2021-11-05T05:21:31Z",
+      "side": 1,
+      "message": "I work on Linux",
+      "parentUuid": "1e75c043_6b62464c",
+      "revId": "e2a55a4acda349998b8deccb355dd8231d31f7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
