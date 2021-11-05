@@ -5187,6 +5187,97 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
     CPPUNIT_ASSERT_EQUAL(chart2::AxisOrientation_REVERSE, aScaleData.Orientation);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf93747)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    pWrtSh->Insert("Col1");
+
+    // Move the cursor to B1
+    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    pWrtSh->Insert("Col2");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col1"), xCellA1->getString());
+
+    uno::Reference<text::XTextRange> xCellB1(xTextTable->getCellByName("B1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), xCellB1->getString());
+
+    // Select backwards B1 and A1
+    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+
+    // Just select the whole B1
+    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::makeAny(OUString("Heading 1")) },
+        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Table Contents
+    // - Actual  : Heading 1
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Table Contents"),
+        getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "ParaStyleName"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Heading 1"),
+        getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
+
+    // Now select A1 again
+    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Heading 1"),
+        getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "ParaStyleName"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Heading 1"),
+        getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Table Contents"),
+        getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "ParaStyleName"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Heading 1"),
+        getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Table Contents"),
+        getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "ParaStyleName"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Table Contents"),
+        getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126735)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
