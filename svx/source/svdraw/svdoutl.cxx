@@ -39,7 +39,7 @@ SdrOutliner::~SdrOutliner()
 
 void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 {
-    if( pObj && pObj != mpTextObj.get() )
+    if( pObj && pObj != mxWeakTextObj.get() )
     {
         SetUpdateLayout(false);
         OutlinerMode nOutlinerMode2 = OutlinerMode::OutlineObject;
@@ -61,12 +61,12 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         ClearPolygon();
     }
 
-    mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
+    mxWeakTextObj.reset( const_cast< SdrTextObj* >(pObj) );
 }
 
 void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 {
-    mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
+    mxWeakTextObj.reset( const_cast< SdrTextObj* >(pObj) );
 }
 
 OUString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
@@ -75,8 +75,8 @@ OUString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara
     bool bOk = false;
     OUString aRet;
 
-    if(mpTextObj.is())
-        bOk = mpTextObj->CalcFieldValue(rField, nPara, nPos, false, rpTxtColor, rpFldColor, aRet);
+    if(mxWeakTextObj.is())
+        bOk = mxWeakTextObj->CalcFieldValue(rField, nPara, nPos, false, rpTxtColor, rpFldColor, aRet);
 
     if (!bOk)
         aRet = Outliner::CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor);
@@ -86,7 +86,7 @@ OUString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara
 
 const SdrTextObj* SdrOutliner::GetTextObj() const
 {
-    return mpTextObj.get();
+    return mxWeakTextObj.get();
 }
 
 bool SdrOutliner::hasEditViewCallbacks() const
