@@ -4494,15 +4494,9 @@ namespace
         gtk_label_set_label(pLabel, MapToGtkAccelerator(rText).getStr());
     }
 
-    OUString get_button_label(GtkButton* pButton)
-    {
-        const gchar* pStr = gtk_button_get_label(pButton);
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
-    void set_button_label(GtkButton* pButton, const OUString& rText)
-    {
 #if GTK_CHECK_VERSION(4, 0, 0)
+    GtkLabel* get_button_label_widget(GtkButton* pButton)
+    {
         GtkWidget* pChild = gtk_button_get_child(pButton);
         GtkLabel* pLabel = GTK_IS_LABEL(pChild) ? GTK_LABEL(pChild) : nullptr;
         if (!pLabel && pChild)
@@ -4515,16 +4509,31 @@ namespace
                     break;
             }
         }
-        if (pLabel)
+        return pLabel;
+    }
+#endif
+
+    OUString get_button_label(GtkButton* pButton)
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (GtkLabel* pLabel = get_button_label_widget(pButton))
+            return ::get_label(pLabel);
+#endif
+        const gchar* pStr = gtk_button_get_label(pButton);
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_button_label(GtkButton* pButton, const OUString& rText)
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (GtkLabel* pLabel = get_button_label_widget(pButton))
         {
             ::set_label(pLabel, rText);
             gtk_widget_set_visible(GTK_WIDGET(pLabel), true);
+            return;
         }
-        else
-            gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
-#else
-        gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
 #endif
+        gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
