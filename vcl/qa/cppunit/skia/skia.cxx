@@ -320,9 +320,6 @@ void SkiaTest::testBitmapCopyOnWrite()
 
 void SkiaTest::testMatrixQuality()
 {
-// This test fails on the tb68 tinderbox for a mysterious reason:
-// https://lists.freedesktop.org/archives/libreoffice/2021-March/086969.html
-#if !(defined(_WIN32) && !defined(_WIN64))
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
     // Not changing the size (but possibly rotated/flipped) does not need high quality transformations.
@@ -334,7 +331,6 @@ void SkiaTest::testMatrixQuality()
     CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::Scale(0, -1)));
     CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::Scale(2, 1)));
     CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::RotateDeg(89)));
-#endif
 }
 
 void SkiaTest::testDelayedScale()
