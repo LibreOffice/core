@@ -4618,7 +4618,7 @@ namespace
 #endif
     }
 
-    OUString get_button_label(GtkButton* pButton)
+    OUString button_get_label(GtkButton* pButton)
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         if (GtkLabel* pLabel = get_label_widget(GTK_WIDGET(pButton)))
@@ -4628,7 +4628,7 @@ namespace
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    void set_button_label(GtkButton* pButton, const OUString& rText)
+    void button_set_label(GtkButton* pButton, const OUString& rText)
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         if (GtkLabel* pLabel = get_label_widget(GTK_WIDGET(pButton)))
@@ -4953,8 +4953,15 @@ namespace
     }
 #endif
 
-    void set_from_icon_name(GtkButton* pButton, const OUString& rIconName)
+    void button_set_from_icon_name(GtkButton* pButton, const OUString& rIconName)
     {
+        if (GtkImage* pImage = get_image_widget(GTK_WIDGET(pButton)))
+        {
+            ::image_set_from_icon_name(pImage, rIconName);
+            gtk_widget_set_visible(GTK_WIDGET(pImage), true);
+            return;
+        }
+
         GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
         GtkWidget* pImage;
         if (!pixbuf)
@@ -4971,7 +4978,7 @@ namespace
 #endif
     }
 
-    void set_image(GtkButton* pButton, const VirtualDevice* pDevice)
+    void button_set_image(GtkButton* pButton, const VirtualDevice* pDevice)
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_button_set_always_show_image(pButton, true);
@@ -4985,8 +4992,15 @@ namespace
 #endif
     }
 
-    void set_image(GtkButton* pButton, const css::uno::Reference<css::graphic::XGraphic>& rImage)
+    void button_set_image(GtkButton* pButton, const css::uno::Reference<css::graphic::XGraphic>& rImage)
     {
+        if (GtkImage* pImage = get_image_widget(GTK_WIDGET(pButton)))
+        {
+            ::image_set_from_xgraphic(pImage, rImage);
+            gtk_widget_set_visible(GTK_WIDGET(pImage), true);
+            return;
+        }
+
         GdkPixbuf* pixbuf = getPixbuf(rImage);
         GtkWidget* pImage;
         if (!pixbuf)
@@ -9319,22 +9333,22 @@ public:
 
     virtual void set_label(const OUString& rText) override
     {
-        ::set_button_label(m_pButton, rText);
+        ::button_set_label(m_pButton, rText);
     }
 
     virtual void set_image(VirtualDevice* pDevice) override
     {
-        ::set_image(m_pButton, pDevice);
+        ::button_set_image(m_pButton, pDevice);
     }
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        ::set_from_icon_name(m_pButton, rIconName);
+        ::button_set_from_icon_name(m_pButton, rIconName);
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
     {
-        ::set_image(m_pButton, rImage);
+        ::button_set_image(m_pButton, rImage);
     }
 
     virtual void set_custom_button(VirtualDevice* pDevice) override
@@ -9344,7 +9358,7 @@ public:
 
     virtual OUString get_label() const override
     {
-        return ::get_button_label(m_pButton);
+        return ::button_get_label(m_pButton);
     }
 
     virtual void set_font(const vcl::Font& rFont) override
@@ -11548,7 +11562,7 @@ public:
 #else
         if (!GTK_IS_BUTTON(pItem))
             return;
-        ::set_button_label(GTK_BUTTON(pItem), rLabel);
+        ::button_set_label(GTK_BUTTON(pItem), rLabel);
 #endif
     }
 
@@ -11562,7 +11576,7 @@ public:
 #else
         if (!pItem || !GTK_IS_BUTTON(pItem))
             return;
-        ::set_button_label(GTK_BUTTON(pItem), rLabel);
+        ::button_set_label(GTK_BUTTON(pItem), rLabel);
 #endif
     }
 
@@ -11797,12 +11811,12 @@ public:
 
     virtual void set_label(const OUString& rText) override
     {
-        ::set_button_label(GTK_BUTTON(m_pButton), rText);
+        ::button_set_label(GTK_BUTTON(m_pButton), rText);
     }
 
     virtual OUString get_label() const override
     {
-        return ::get_button_label(GTK_BUTTON(m_pButton));
+        return ::button_get_label(GTK_BUTTON(m_pButton));
     }
 
     virtual void set_uri(const OUString& rText) override
@@ -11904,7 +11918,7 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_check_button_set_label(m_pCheckButton, MapToGtkAccelerator(rText).getStr());
 #else
-        ::set_button_label(GTK_BUTTON(m_pCheckButton), rText);
+        ::button_set_label(GTK_BUTTON(m_pCheckButton), rText);
 #endif
     }
 
@@ -11914,7 +11928,7 @@ public:
         const gchar* pStr = gtk_check_button_get_label(m_pCheckButton);
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
 #else
-        return ::get_button_label(GTK_BUTTON(m_pCheckButton));
+        return ::button_get_label(GTK_BUTTON(m_pCheckButton));
 #endif
     }
 
@@ -22128,9 +22142,9 @@ private:
             GtkButton* pButton = GTK_BUTTON(pWidget);
             if (m_pStringReplace)
             {
-                OUString aLabel(get_button_label(pButton));
+                OUString aLabel(button_get_label(pButton));
                 if (!aLabel.isEmpty())
-                    set_button_label(pButton, (*m_pStringReplace)(aLabel));
+                    button_set_label(pButton, (*m_pStringReplace)(aLabel));
             }
             if (gtk_button_get_use_underline(pButton))
                 m_aMnemonicButtons.push_back(pButton);
@@ -22320,7 +22334,7 @@ public:
     {
         MnemonicGenerator aMnemonicGenerator('_');
         for (const auto a : m_aMnemonicButtons)
-            aMnemonicGenerator.RegisterMnemonic(get_button_label(a));
+            aMnemonicGenerator.RegisterMnemonic(button_get_label(a));
 #if GTK_CHECK_VERSION(4, 0, 0)
         for (const auto a : m_aMnemonicCheckButtons)
             aMnemonicGenerator.RegisterMnemonic(get_label(a));
@@ -22330,11 +22344,11 @@ public:
 
         for (const auto a : m_aMnemonicButtons)
         {
-            OUString aLabel(get_button_label(a));
+            OUString aLabel(button_get_label(a));
             OUString aNewLabel = aMnemonicGenerator.CreateMnemonic(aLabel);
             if (aLabel == aNewLabel)
                 continue;
-            set_button_label(a, aNewLabel);
+            button_set_label(a, aNewLabel);
         }
 #if GTK_CHECK_VERSION(4, 0, 0)
         for (const auto a : m_aMnemonicCheckButtons)
