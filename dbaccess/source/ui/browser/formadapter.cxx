@@ -1305,7 +1305,7 @@ IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, VetoableChangeListen
 void SAL_CALL SbaXFormAdapter::cancel()
 {
     Reference< css::util::XCancellable >  xCancel(m_xMainForm, UNO_QUERY);
-    if (xCancel.is())
+    if (!xCancel.is())
         return;
     xCancel->cancel();
 }
