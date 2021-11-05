@@ -39,6 +39,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/strict_ansi.patch \
 	external/icu/icu4c-windows-cygwin-cross.patch.1 \
+	external/icu/cec7de7a390dd6907b0ea0feb4488ed3934ee71d.patch.2 \
+	external/icu/e450fa50fc242282551f56b941dc93b9a8a0bcbb.patch.2 \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
 ))
