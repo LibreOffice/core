@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9bb6ab7_83f41a83",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-05T16:38:09Z",
+      "side": 1,
+      "message": "This likely is the cause of the writerfilter unit test from commit 29993781ac991 failing.  (I was only testing sw.check)",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 30
+      },
+      "revId": "c264c866bbf5376b80ba0819838e19629b1fa4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
