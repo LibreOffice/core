@@ -242,13 +242,13 @@ void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 void SdrObjEditView::ModelHasChanged()
 {
     SdrGlueEditView::ModelHasChanged();
-    if (mxTextEditObj.is() && !mxTextEditObj->IsInserted())
+    if (mxWeakTextEditObj.is() && !mxWeakTextEditObj->IsInserted())
         SdrEndTextEdit(); // object deleted
     // TextEditObj changed?
     if (!IsTextEdit())
         return;
 
-    SdrTextObj* pTextObj = mxTextEditObj.get();
+    SdrTextObj* pTextObj = mxWeakTextEditObj.get();
     if (pTextObj != nullptr)
     {
         size_t nOutlViewCnt = mpTextEditOutliner->GetViewCount();
@@ -855,7 +855,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
 {
     // background
     Color aBackground(GetTextEditBackgroundColor(*this));
-    SdrTextObj* pText = mxTextEditObj.get();
+    SdrTextObj* pText = mxWeakTextEditObj.get();
     bool bTextFrame = pText != nullptr && pText->IsTextFrame();
     bool bContourFrame = pText != nullptr && pText->IsContourTextFrame();
     // create OutlinerView
@@ -910,7 +910,7 @@ IMPL_LINK(SdrObjEditView, ImpOutlinerStatusEventHdl, EditStatus&, rEditStat, voi
 {
     if (mpTextEditOutliner)
     {
-        SdrTextObj* pTextObj = mxTextEditObj.get();
+        SdrTextObj* pTextObj = mxWeakTextEditObj.get();
         if (pTextObj)
         {
             pTextObj->onEditOutlinerStatusEvent(&rEditStat);
@@ -923,7 +923,7 @@ void SdrObjEditView::ImpChainingEventHdl()
     if (!mpTextEditOutliner)
         return;
 
-    SdrTextObj* pTextObj = mxTextEditObj.get();
+    SdrTextObj* pTextObj = mxWeakTextEditObj.get();
     OutlinerView* pOLV = GetTextEditOutlinerView();
     if (pTextObj && pOLV)
     {
@@ -999,10 +999,10 @@ IMPL_LINK_NOARG(SdrObjEditView, ImpAfterCutOrPasteChainingEventHdl, LinkParamNon
 
 void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager* pCursorManager)
 {
-    if (!mxTextEditObj.is() || !pCursorManager)
+    if (!mxWeakTextEditObj.is() || !pCursorManager)
         return;
 
-    SdrTextObj* pTextObj = mxTextEditObj.get();
+    SdrTextObj* pTextObj = mxWeakTextEditObj.get();
 
     // Check if it has links to move it to
     if (!pTextObj || !pTextObj->IsChainable())
@@ -1022,7 +1022,7 @@ IMPL_LINK(SdrObjEditView, ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, pFI, voi
     bool bOk = false;
     OUString& rStr = pFI->GetRepresentation();
     rStr.clear();
-    SdrTextObj* pTextObj = mxTextEditObj.get();
+    SdrTextObj* pTextObj = mxWeakTextEditObj.get();
     if (pTextObj != nullptr)
     {
         std::optional<Color> pTxtCol;
@@ -1142,7 +1142,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
     {
         mpTextEditWin = pWin;
         mpTextEditPV = pPV;
-        mxTextEditObj.reset(pObj);
+        mxWeakTextEditObj.reset(pObj);
         if (pGivenOutliner)
         {
             mpTextEditOutliner.reset(pGivenOutliner);
@@ -1150,7 +1150,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
         }
         else
             mpTextEditOutliner = SdrMakeOutliner(OutlinerMode::TextObject,
-                                                 mxTextEditObj->getSdrModelFromSdrObject());
+                                                 mxWeakTextEditObj->getSdrModelFromSdrObject());
 
         {
             SvtAccessibilityOptions aOptions;
@@ -1167,11 +1167,11 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
         // It is just necessary to make the visualized page known. Set it.
         mpTextEditOutliner->setVisualizedPage(pPV->GetPage());
 
-        mpTextEditOutliner->SetTextObjNoInit(mxTextEditObj.get());
+        mpTextEditOutliner->SetTextObjNoInit(mxWeakTextEditObj.get());
 
-        if (mxTextEditObj->BegTextEdit(*mpTextEditOutliner))
+        if (mxWeakTextEditObj->BegTextEdit(*mpTextEditOutliner))
         {
-            SdrTextObj* pTextObj = mxTextEditObj.get();
+            SdrTextObj* pTextObj = mxWeakTextEditObj.get();
             DBG_ASSERT(pTextObj, "svx::SdrObjEditView::BegTextEdit(), no text object?");
             if (!pTextObj)
                 return false;
@@ -1411,7 +1411,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
     mpTextEditOutliner.reset();
 
     mpTextEditOutlinerView = nullptr;
-    mxTextEditObj.reset(nullptr);
+    mxWeakTextEditObj.reset(nullptr);
     mpTextEditPV = nullptr;
     mpTextEditWin = nullptr;
     maHdlList.SetMoveOutside(false);
@@ -1422,7 +1422,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 {
     SdrEndTextEditKind eRet = SdrEndTextEditKind::Unchanged;
-    SdrTextObj* pTEObj = mxTextEditObj.get();
+    SdrTextObj* pTEObj = mxWeakTextEditObj.get();
     vcl::Window* pTEWin = mpTextEditWin;
     OutlinerView* pTEOutlinerView = mpTextEditOutlinerView;
     vcl::Cursor* pTECursorBuffer = pTextEditCursorBuffer;
@@ -1484,9 +1484,9 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         assert(nullptr == mpOldTextEditUndoManager); // cannot be restored!
     }
 
-    if (GetModel() && mxTextEditObj.is())
+    if (GetModel() && mxWeakTextEditObj.is())
     {
-        SdrHint aHint(SdrHintKind::EndEdit, *mxTextEditObj);
+        SdrHint aHint(SdrHintKind::EndEdit, *mxWeakTextEditObj);
         GetModel()->Broadcast(aHint);
     }
 
@@ -1498,7 +1498,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         maTEOverlayGroup.clear();
     }
 
-    mxTextEditObj.reset(nullptr);
+    mxWeakTextEditObj.reset(nullptr);
     mpTextEditPV = nullptr;
     mpTextEditWin = nullptr;
     SdrOutliner* pTEOutliner = mpTextEditOutliner.release();
@@ -1687,7 +1687,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 }
 
 // info about TextEdit. Default is false.
-bool SdrObjEditView::IsTextEdit() const { return mxTextEditObj.is(); }
+bool SdrObjEditView::IsTextEdit() const { return mxWeakTextEditObj.is(); }
 
 // info about TextEditPageView. Default is 0L.
 SdrPageView* SdrObjEditView::GetTextEditPageView() const { return mpTextEditPV; }
@@ -1711,7 +1711,7 @@ OutlinerView* SdrObjEditView::ImpFindOutlinerView(vcl::Window const* pWin) const
 
 void SdrObjEditView::SetTextEditWin(vcl::Window* pWin)
 {
-    if (!(mxTextEditObj.is() && pWin != nullptr && pWin != mpTextEditWin))
+    if (!(mxWeakTextEditObj.is() && pWin != nullptr && pWin != mpTextEditWin))
         return;
 
     OutlinerView* pNewView = ImpFindOutlinerView(pWin);
@@ -1732,7 +1732,7 @@ void SdrObjEditView::SetTextEditWin(vcl::Window* pWin)
 bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
 {
     bool bOk = false;
-    if (mxTextEditObj.is())
+    if (mxWeakTextEditObj.is())
     {
         tools::Rectangle aEditArea;
         if (OutlinerView* pOLV = mpTextEditOutliner->GetView(0))
@@ -1755,9 +1755,9 @@ bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
 bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
 {
     bool bOk = false;
-    if (mxTextEditObj.is())
+    if (mxWeakTextEditObj.is())
     {
-        SdrTextObj* pText = mxTextEditObj.get();
+        SdrTextObj* pText = mxWeakTextEditObj.get();
         OutlinerView* pOLV = mpTextEditOutliner->GetView(0);
         if (pOLV)
         {
@@ -1787,7 +1787,7 @@ SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, bool*
 {
     *bOutHandled = false;
 
-    SdrTextObj* pTextObj = mxTextEditObj.get();
+    SdrTextObj* pTextObj = mxWeakTextEditObj.get();
     if (!pTextObj)
         return nullptr;
 
@@ -2079,8 +2079,9 @@ SvtScriptType SdrObjEditView::GetScriptType() const
 
     if (IsTextEdit())
     {
-        if (mxTextEditObj->GetOutlinerParaObject())
-            nScriptType = mxTextEditObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
+        if (mxWeakTextEditObj->GetOutlinerParaObject())
+            nScriptType
+                = mxWeakTextEditObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
 
         if (mpTextEditOutlinerView)
             nScriptType = mpTextEditOutlinerView->GetSelectedScriptType();
@@ -2120,11 +2121,11 @@ void SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) c
                    "SdrObjEditView::GetAttributes(): mpTextEditOutliner=NULL");
 
         // take care of bOnlyHardAttr(!)
-        if (!bOnlyHardAttr && mxTextEditObj->GetStyleSheet())
-            rTargetSet.Put(mxTextEditObj->GetStyleSheet()->GetItemSet());
+        if (!bOnlyHardAttr && mxWeakTextEditObj->GetStyleSheet())
+            rTargetSet.Put(mxWeakTextEditObj->GetStyleSheet()->GetItemSet());
 
         // add object attributes
-        rTargetSet.Put(mxTextEditObj->GetMergedItemSet());
+        rTargetSet.Put(mxWeakTextEditObj->GetMergedItemSet());
 
         if (mpTextEditOutlinerView)
         {
@@ -2132,7 +2133,7 @@ void SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) c
             rTargetSet.Put(mpTextEditOutlinerView->GetAttribs(), false);
         }
 
-        if (GetMarkedObjectCount() == 1 && GetMarkedObjectByIndex(0) == mxTextEditObj.get())
+        if (GetMarkedObjectCount() == 1 && GetMarkedObjectByIndex(0) == mxWeakTextEditObj.get())
         {
             MergeNotPersistAttrFromMarked(rTargetSet);
         }
@@ -2146,7 +2147,7 @@ void SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) c
 bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     bool bRet = false;
-    bool bTextEdit = mpTextEditOutlinerView != nullptr && mxTextEditObj.is();
+    bool bTextEdit = mpTextEditOutlinerView != nullptr && mxWeakTextEditObj.is();
     bool bAllTextSelected = ImpIsTextEditAllSelected();
     const SfxItemSet* pSet = &rSet;
 
@@ -2207,21 +2208,22 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 if (bUndo)
                 {
                     BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj));
+                    AddUndo(
+                        GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxWeakTextEditObj));
 
                     // If this is a text object also rescue the OutlinerParaObject since
                     // applying attributes to the object may change text layout when
                     // multiple portions exist with multiple formats. If an OutlinerParaObject
                     // really exists and needs to be rescued is evaluated in the undo
                     // implementation itself.
-                    bool bRescueText = mxTextEditObj;
+                    bool bRescueText = mxWeakTextEditObj;
 
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(
-                        *mxTextEditObj, false, !bNoEEItems || bRescueText));
+                        *mxWeakTextEditObj, false, !bNoEEItems || bRescueText));
                     EndUndo();
                 }
 
-                mxTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
+                mxWeakTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
 
                 FlushComeBackTimer(); // to set ModeHasChanged immediately
             }
@@ -2253,14 +2255,17 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 if (IsUndoEnabled())
                 {
                     BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj));
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj));
+                    AddUndo(
+                        GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxWeakTextEditObj));
+                    AddUndo(
+                        GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxWeakTextEditObj));
                     EndUndo();
                 }
 
-                mxTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
+                mxWeakTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
 
-                if (GetMarkedObjectCount() == 1 && GetMarkedObjectByIndex(0) == mxTextEditObj.get())
+                if (GetMarkedObjectCount() == 1
+                    && GetMarkedObjectByIndex(0) == mxWeakTextEditObj.get())
                 {
                     SetNotPersistAttrToMarked(aSet);
                 }
@@ -2336,7 +2341,8 @@ void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pW
 {
     SdrGlueEditView::AddWindowToPaintView(pNewWin, pWindow);
 
-    if (mxTextEditObj.is() && !mbTextEditOnlyOneView && pNewWin->GetOutDevType() == OUTDEV_WINDOW)
+    if (mxWeakTextEditObj.is() && !mbTextEditOnlyOneView
+        && pNewWin->GetOutDevType() == OUTDEV_WINDOW)
     {
         OutlinerView* pOutlView = ImpMakeOutlinerView(pNewWin->GetOwnerWindow(), nullptr);
         mpTextEditOutliner->InsertView(pOutlView);
@@ -2347,7 +2353,8 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
 {
     SdrGlueEditView::DeleteWindowFromPaintView(pOldWin);
 
-    if (mxTextEditObj.is() && !mbTextEditOnlyOneView && pOldWin->GetOutDevType() == OUTDEV_WINDOW)
+    if (mxWeakTextEditObj.is() && !mbTextEditOnlyOneView
+        && pOldWin->GetOutDevType() == OUTDEV_WINDOW)
     {
         for (size_t i = mpTextEditOutliner->GetViewCount(); i > 0;)
         {
