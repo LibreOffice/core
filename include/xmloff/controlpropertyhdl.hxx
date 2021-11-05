@@ -39,10 +39,10 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC ORotationAngleHandler final : public XMLPropertyHandler
     {
     public:
-        ORotationAngleHandler();
+        SAL_DLLPRIVATE ORotationAngleHandler();
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
-        virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 
 
@@ -51,10 +51,10 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC OFontWidthHandler final : public XMLPropertyHandler
     {
     public:
-        OFontWidthHandler();
+        SAL_DLLPRIVATE OFontWidthHandler();
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
-        virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 
 
@@ -69,10 +69,10 @@ namespace xmloff
             COLOR
         };
 
-        OControlBorderHandler( const BorderFacet _eFacet );
+        SAL_DLLPRIVATE OControlBorderHandler( const BorderFacet _eFacet );
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
-        virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
 
     private:
         BorderFacet m_eFacet;

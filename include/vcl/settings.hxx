@@ -687,7 +687,9 @@ public:
     void                                    SetMiscSettings( const MiscSettings& rSet );
     const MiscSettings&                     GetMiscSettings() const;
 
+    IF_MERGELIBS(SAL_DLLPRIVATE)
     void                                    SetHelpSettings( const HelpSettings& rSet );
+    IF_MERGELIBS(SAL_DLLPRIVATE)
     const HelpSettings&                     GetHelpSettings() const;
 
     void                                    SetLanguageTag(const OUString& rLanguage, bool bCanonicalize);
@@ -699,20 +701,21 @@ public:
     static OUString                         GetUIRootDir();
     const LocaleDataWrapper&                GetLocaleDataWrapper() const;
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;
+    IF_MERGELIBS(SAL_DLLPRIVATE)
     const LocaleDataWrapper&                GetNeutralLocaleDataWrapper() const;
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
     const vcl::I18nHelper&                  GetUILocaleI18nHelper() const;
 
-    static AllSettingsFlags                 GetWindowUpdate()
+    SAL_DLLPRIVATE static AllSettingsFlags GetWindowUpdate()
     { return AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE | AllSettingsFlags::MISC | AllSettingsFlags::LOCALE; }
 
     AllSettingsFlags                        Update( AllSettingsFlags nFlags, const AllSettings& rSettings );
-    AllSettingsFlags                        GetChangeFlags( const AllSettings& rSettings ) const;
+    SAL_DLLPRIVATE AllSettingsFlags         GetChangeFlags( const AllSettings& rSettings ) const;
 
     bool                                    operator ==( const AllSettings& rSet ) const;
     bool                                    operator !=( const AllSettings& rSet ) const;
-    static void                             LocaleSettingsChanged( ConfigurationHints nHint );
-    SvtSysLocale&                           GetSysLocale();
+    SAL_DLLPRIVATE static void             LocaleSettingsChanged( ConfigurationHints nHint );
+    SAL_DLLPRIVATE SvtSysLocale&           GetSysLocale();
 };
 
 #endif // INCLUDED_VCL_SETTINGS_HXX

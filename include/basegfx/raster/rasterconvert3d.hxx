@@ -400,12 +400,12 @@ namespace basegfx
             }
         };
 
-        void addArea(const B3DPolygon& rFill, const B3DHomMatrix* pViewToEye);
-        void addArea(const B3DPolyPolygon& rFill, const B3DHomMatrix* pViewToEye);
-        void addEdge(const B3DPolygon& rFill, sal_uInt32 a, sal_uInt32 b, const B3DHomMatrix* pViewToEye);
+        SAL_DLLPRIVATE void addArea(const B3DPolygon& rFill, const B3DHomMatrix* pViewToEye);
+        SAL_DLLPRIVATE void addArea(const B3DPolyPolygon& rFill, const B3DHomMatrix* pViewToEye);
+        SAL_DLLPRIVATE void addEdge(const B3DPolygon& rFill, sal_uInt32 a, sal_uInt32 b, const B3DHomMatrix* pViewToEye);
 
-        void rasterconvertB3DArea(sal_Int32 nStartLine, sal_Int32 nStopLine);
-        void rasterconvertB3DEdge(const B3DPolygon& rLine, sal_uInt32 nA, sal_uInt32 nB, sal_Int32 nStartLine, sal_Int32 nStopLine, sal_uInt16 nLineWidth);
+        SAL_DLLPRIVATE void rasterconvertB3DArea(sal_Int32 nStartLine, sal_Int32 nStopLine);
+        SAL_DLLPRIVATE void rasterconvertB3DEdge(const B3DPolygon& rLine, sal_uInt32 nA, sal_uInt32 nB, sal_Int32 nStartLine, sal_Int32 nStopLine, sal_uInt16 nLineWidth);
 
         virtual void processLineSpan(const RasterConversionLineEntry3D& rA, const RasterConversionLineEntry3D& rB, sal_Int32 nLine, sal_uInt32 nSpanCount) = 0;
 

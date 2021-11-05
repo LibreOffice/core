@@ -37,11 +37,12 @@ public:
     css::uno::Reference<css::ucb::XContent> getContent() const;
 
     virtual bool isStructured() override;
-    virtual unsigned subStreamCount() override;
-    virtual const char* subStreamName(unsigned id) override;
-    virtual bool existsSubStream(const char* name) override;
-    virtual librevenge::RVNGInputStream* getSubStreamByName(const char* name) override;
-    virtual librevenge::RVNGInputStream* getSubStreamById(unsigned id) override;
+    SAL_DLLPRIVATE virtual unsigned subStreamCount() override;
+    SAL_DLLPRIVATE virtual const char* subStreamName(unsigned id) override;
+    SAL_DLLPRIVATE virtual bool existsSubStream(const char* name) override;
+    SAL_DLLPRIVATE virtual librevenge::RVNGInputStream*
+    getSubStreamByName(const char* name) override;
+    SAL_DLLPRIVATE virtual librevenge::RVNGInputStream* getSubStreamById(unsigned id) override;
 
     virtual const unsigned char* read(unsigned long numBytes, unsigned long& numBytesRead) override;
     virtual int seek(long offset, librevenge::RVNG_SEEK_TYPE seekType) override;

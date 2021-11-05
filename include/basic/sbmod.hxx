@@ -71,62 +71,62 @@ protected:
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
 
-    static void     implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );
-    void            StartDefinitions();
-    SbMethod*       GetMethod( const OUString&, SbxDataType );
-    SbProperty*     GetProperty( const OUString&, SbxDataType );
-    void            GetProcedureProperty( const OUString&, SbxDataType );
-    void            GetIfaceMapperMethod( const OUString&, SbMethod* );
-    void            EndDefinitions( bool=false );
-    void            Run( SbMethod* );
-    void            RunInit();
-    void            ClearPrivateVars();
-    void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
-    void            GlobalRunInit( bool bBasicStart );  // for all modules
-    void            GlobalRunDeInit();
-    const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
-    const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
+    SAL_DLLPRIVATE static void implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );
+    SAL_DLLPRIVATE void StartDefinitions();
+    SAL_DLLPRIVATE SbMethod* GetMethod( const OUString&, SbxDataType );
+    SAL_DLLPRIVATE SbProperty* GetProperty( const OUString&, SbxDataType );
+    SAL_DLLPRIVATE void GetProcedureProperty( const OUString&, SbxDataType );
+    SAL_DLLPRIVATE void GetIfaceMapperMethod( const OUString&, SbMethod* );
+    SAL_DLLPRIVATE void EndDefinitions( bool=false );
+    SAL_DLLPRIVATE void Run( SbMethod* );
+    SAL_DLLPRIVATE void RunInit();
+    SAL_DLLPRIVATE void ClearPrivateVars();
+    SAL_DLLPRIVATE void ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
+    SAL_DLLPRIVATE void GlobalRunInit( bool bBasicStart );  // for all modules
+    SAL_DLLPRIVATE void GlobalRunDeInit();
+    SAL_DLLPRIVATE const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
+    SAL_DLLPRIVATE const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
                                     bool bFollowJumps, const SbiImage* pImg=nullptr ) const;
-    virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
-    virtual bool LoadCompleted() override;
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SAL_DLLPRIVATE virtual bool LoadData( SvStream&, sal_uInt16 ) override;
+    SAL_DLLPRIVATE virtual bool StoreData( SvStream& ) const override;
+    SAL_DLLPRIVATE virtual bool LoadCompleted() override;
+    SAL_DLLPRIVATE virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    SAL_DLLPRIVATE void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule() override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_BASICMOD,2);
                     SbModule( const OUString&, bool bCompat = false );
-    virtual void    SetParent( SbxObject* ) override;
-    virtual void    Clear() override;
+    SAL_DLLPRIVATE virtual void SetParent( SbxObject* ) override;
+    SAL_DLLPRIVATE virtual void Clear() override;
 
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
+    SAL_DLLPRIVATE virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     const OUString&  GetSource32() const { return aOUSource;}
     void             SetSource32( const OUString& r );
 
     bool Compile();
     bool IsCompiled() const;
-    const SbxObject* FindType( const OUString& aTypeName ) const;
+    SAL_DLLPRIVATE const SbxObject* FindType( const OUString& aTypeName ) const;
 
-    bool IsBreakable( sal_uInt16 nLine ) const;
-    bool IsBP( sal_uInt16 nLine ) const;
+    SAL_DLLPRIVATE bool IsBreakable( sal_uInt16 nLine ) const;
+    SAL_DLLPRIVATE bool IsBP( sal_uInt16 nLine ) const;
     bool SetBP( sal_uInt16 nLine );
     bool ClearBP( sal_uInt16 nLine );
     void ClearAllBP();
 
     // Store only image, no source (needed for new password protection)
-    void     StoreBinaryData( SvStream& );
-    void     LoadBinaryData( SvStream& );
-    bool     ExceedsLegacyModuleSize();
-    void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = nullptr ) const;
-    bool     HasExeCode();
+    SAL_DLLPRIVATE void StoreBinaryData( SvStream& );
+    SAL_DLLPRIVATE void LoadBinaryData( SvStream& );
+    SAL_DLLPRIVATE bool ExceedsLegacyModuleSize();
+    SAL_DLLPRIVATE void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = nullptr ) const;
+    SAL_DLLPRIVATE bool HasExeCode();
     bool     IsVBACompat() const { return mbVBACompat;}
-    void     SetVBACompat( bool bCompat );
+    SAL_DLLPRIVATE void SetVBACompat( bool bCompat );
     sal_Int32 GetModuleType() const { return mnType; }
     void     SetModuleType( sal_Int32 nType ) { mnType = nType; }
     bool     isProxyModule() const { return bIsProxyModule; }
-    void     AddVarName( const OUString& aName );
-    void     RemoveVars();
+    SAL_DLLPRIVATE void AddVarName( const OUString& aName );
+    SAL_DLLPRIVATE void RemoveVars();
     css::uno::Reference< css::script::XInvocation > const & GetUnoModule();
     bool     createCOMWrapperForIface( css::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);

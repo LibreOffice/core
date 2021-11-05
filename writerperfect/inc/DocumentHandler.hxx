@@ -36,11 +36,12 @@ class WRITERPERFECT_DLLPUBLIC DocumentHandler final : public OdfDocumentHandler
 {
 public:
     DocumentHandler(css::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler);
-    void startDocument() override;
-    void endDocument() override;
-    void startElement(const char* psName, const librevenge::RVNGPropertyList& xPropList) override;
-    void endElement(const char* psName) override;
-    void characters(const librevenge::RVNGString& sCharacters) override;
+    SAL_DLLPRIVATE void startDocument() override;
+    SAL_DLLPRIVATE void endDocument() override;
+    SAL_DLLPRIVATE void startElement(const char* psName,
+                                     const librevenge::RVNGPropertyList& xPropList) override;
+    SAL_DLLPRIVATE void endElement(const char* psName) override;
+    SAL_DLLPRIVATE void characters(const librevenge::RVNGString& sCharacters) override;
 
 private:
     css::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
