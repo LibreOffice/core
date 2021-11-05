@@ -56,10 +56,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
 
-const char STR_WORDPRO[] = "Wordpro";
-const char STR_IMPLEMENTATION_NAME[] = "com.ibm.ILWPImportFilter";
-const char STR_SERVICE_NAME[] = "com.sun.star.document.ImportFilter";
-const char STR_WRITER_IMPORTER_NAME[] = "com.sun.star.comp.Writer.XMLImporter";
+inline constexpr OUStringLiteral STR_WORDPRO = u"Wordpro";
+inline constexpr OUStringLiteral STR_IMPLEMENTATION_NAME = u"com.ibm.ILWPImportFilter";
+inline constexpr OUStringLiteral STR_SERVICE_NAME = u"com.sun.star.document.ImportFilter";
+inline constexpr OUStringLiteral STR_WRITER_IMPORTER_NAME = u"com.sun.star.comp.Writer.XMLImporter";
 
 #endif
 
