@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/version.hpp>
+#if BOOST_VERSION < 106700
 // Needed when #include <boost/locale.hpp> below includes Boost 1.65.1
 // workdir/UnpackedTarball/boost/boost/locale/format.hpp using "std::auto_ptr<data> d;", but must
 // come very early here in case <memory> is already (indirectly) included earlier:
@@ -25,6 +27,7 @@
 #define _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
 #elif defined _MSC_VER
 #define _HAS_AUTO_PTR_ETC 1
+#endif
 #endif
 
 #include <sal/config.h>
