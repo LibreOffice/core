@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ae7e6c8_917c20df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-05T10:41:05Z",
+      "side": 1,
+      "message": "But actually I suspect that the problem with CustomShapeProperties::pushToPropSet might be actually wrong old code doing strange thing: we get a sequence, iterate through it in context of only *one* xPropSet, and the result depends on if the \"Type\" property comes before or after \"AdjustmentValues\".\n\nSigh. Let me keep the logic here as it was before (and set in stone in unit tests) - if needed, the strange logic and unit tests should be fixed separately. The danger that is discussed in the commit message is real, though.",
+      "revId": "191d793141464074057e44c25212dc3074214d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58f27040_848cf7f4",
