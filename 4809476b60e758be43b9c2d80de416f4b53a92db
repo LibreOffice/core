@@ -46,6 +46,30 @@
       },
       "revId": "4809476b60e758be43b9c2d80de416f4b53a92db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99da3b3b_14d2c7e0",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-05T10:04:27Z",
+      "side": 1,
+      "message": "\u003e Hmm, but the COW specifically happens in the getArray(), and then we get a raw pointer to the array, and the [] that used on that raw pointer is not a specific class operator anymore?\n\nThat\u0027s all true technically, but when I read \"getArray to ensure COW\" I had a bit of a hard time understanding that it was meant to highlight that we must not go through rGeoProp, more than it was meant to highlight that we need to use `aGeoPropSeq.getArray()[i]` rather than `aGeoPropSeq[i]` here.  But maybe that\u0027s just me, and I\u0027m exaggerating a bit.\n\n\u003e rGeoProp *is* now const, since the change *removed* non-const operator[], and so the other, const operator[] is used, which returns a const reference.\n\nindeed, good point :)",
+      "parentUuid": "832e880c_7531720e",
+      "range": {
+        "startLine": 222,
+        "startChar": 31,
+        "endLine": 222,
+        "endChar": 39
+      },
+      "revId": "4809476b60e758be43b9c2d80de416f4b53a92db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
