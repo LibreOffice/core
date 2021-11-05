@@ -10649,27 +10649,11 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.17 >= 0.17.0])
 if test "$with_system_orcus" != "yes"; then
     if test "$SYSTEM_BOOST" = "TRUE"; then
-        # ===========================================================
-        # Determine if we are going to need to link with Boost.System
-        # ===========================================================
+        dnl Link with Boost.System
         dnl This seems to be necessary since boost 1.50 (1.48 does not need it,
         dnl 1.49 is untested). The macro BOOST_THREAD_DONT_USE_SYSTEM mentioned
         dnl in documentation has no effect.
-        AC_MSG_CHECKING([if we need to link with Boost.System])
-        AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-                @%:@include <boost/version.hpp>
-            ]],[[
-                #if BOOST_VERSION >= 105000
-                #   error yes, we need to link with Boost.System
-                #endif
-            ]])],[
-                AC_MSG_RESULT([no])
-            ],[
-                AC_MSG_RESULT([yes])
-                AX_BOOST_SYSTEM
-        ])
-        AC_LANG_POP([C++])
+        AX_BOOST_SYSTEM
     fi
 fi
 dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
