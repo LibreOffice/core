@@ -95,7 +95,7 @@ namespace svt
         DECL_DLLPRIVATE_LINK(OnFieldScroll, weld::ScrolledWindow&, void);
         DECL_DLLPRIVATE_LINK(OnFieldSelect, weld::ComboBox&, void);
         DECL_DLLPRIVATE_LINK(OnAdministrateDatasources, weld::Button&, void);
-        DECL_STATIC_LINK(AddressBookSourceDialog, OnComboGetFocus, weld::Widget&, void);
+        DECL_DLLPRIVATE_STATIC_LINK(AddressBookSourceDialog, OnComboGetFocus, weld::Widget&, void);
         DECL_DLLPRIVATE_LINK(OnComboLoseFocus, weld::Widget&, void);
         DECL_DLLPRIVATE_LINK(OnComboSelect, weld::ComboBox&, void);
         DECL_DLLPRIVATE_LINK(OnOkClicked, weld::Button&, void);

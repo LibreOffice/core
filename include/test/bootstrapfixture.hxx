@@ -55,7 +55,7 @@ protected:
     static bool IsDefaultDPI();
 
 public:
-    DECL_STATIC_LINK(BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool);
+    DECL_DLLPRIVATE_STATIC_LINK(BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool);
 
     BootstrapFixture(bool bAssertOnDialog = true, bool bNeedUCB = true);
     virtual ~BootstrapFixture() override;

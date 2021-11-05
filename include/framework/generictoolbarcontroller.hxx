@@ -51,7 +51,7 @@ class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxControll
         // XStatusListener
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
-        DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, void );
+        DECL_DLLPRIVATE_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, void );
 
         struct ExecuteInfo
         {

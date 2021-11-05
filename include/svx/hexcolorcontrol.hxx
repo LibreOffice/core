@@ -37,7 +37,7 @@ private:
     Link<weld::Entry&, void> m_aModifyHdl;
     ImplSVEvent* m_nAsyncModifyEvent;
 
-    DECL_STATIC_LINK(HexColorControl, ImplProcessInputHdl, OUString&, bool);
+    DECL_DLLPRIVATE_STATIC_LINK(HexColorControl, ImplProcessInputHdl, OUString&, bool);
     DECL_DLLPRIVATE_LINK(ImplProcessModifyHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(OnAsyncModifyHdl, void*, void);
 public:

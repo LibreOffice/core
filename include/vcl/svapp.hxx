@@ -1341,7 +1341,7 @@ public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
 
 private:
-    DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
+    DECL_DLLPRIVATE_STATIC_LINK( Application, PostEventHandler, void*, void );
 };
 
 class SolarMutexGuard

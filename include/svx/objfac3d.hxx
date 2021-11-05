@@ -38,7 +38,7 @@ public:
     E3dObjFactory();
     ~E3dObjFactory();
 
-    DECL_STATIC_LINK(E3dObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
+    DECL_DLLPRIVATE_STATIC_LINK(E3dObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
 };
 
 #endif // INCLUDED_SVX_OBJFAC3D_HXX

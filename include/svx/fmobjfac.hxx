@@ -32,7 +32,7 @@ public:
     FmFormObjFactory();
     ~FmFormObjFactory();
 
-    DECL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
+    DECL_DLLPRIVATE_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
 };
 
 #endif // _FM_FMOBJFAC_HXX
