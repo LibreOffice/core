@@ -5,7 +5,7 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">cmd/sc_outlinebullet.png</property>
+    <property name="icon-name">missing-image</property>
   </object>
   <object class="GtkPopover" id="NumberingWindow">
     <property name="can-focus">False</property>
