@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6588c64_b373ab5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-05T11:27:38Z",
+      "side": 1,
+      "message": "You probably meant \"detach\" here.",
+      "range": {
+        "startLine": 28,
+        "startChar": 37,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "191d793141464074057e44c25212dc3074214d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2ae7e6c8_917c20df",
