@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58f27040_848cf7f4",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-05T10:14:47Z",
+      "side": 1,
+      "message": "Is this better?",
+      "revId": "191d793141464074057e44c25212dc3074214d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
