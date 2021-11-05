@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libjpeg-turbo,\
 	external/libjpeg-turbo/jpeg-turbo.build.patch.1 \
 	$(if $(filter WNT,$(OS)),external/libjpeg-turbo/jpeg-turbo.win_build.patch.1) \
 	external/libjpeg-turbo/ubsan.patch \
+	external/libjpeg-turbo/c76f4a08263b0cea40d2967560ac7c21f6959079.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
