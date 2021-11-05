@@ -136,7 +136,6 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
 
                 // Find popup menu controller using the base URL
                 xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
-                aGuard.clear();
 
                 // Ask popup menu dispatch provider for dispatch object
                 if ( xDispatchProvider.is() )
