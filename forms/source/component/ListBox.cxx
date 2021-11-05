@@ -491,16 +491,16 @@ namespace frm
         sal_Int32 nOldCount = _rProps.getLength();
         _rProps.realloc( nOldCount + 10);
         css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-            DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
+            DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
             DECL_PROP_IMPL(BOUNDCOLUMN, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
-            DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
-            DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,                 BOUND);
+            DECL_PROP_IMPL(LISTSOURCETYPE, ListSourceType) css::beans::PropertyAttribute::BOUND);
+            DECL_PROP_IMPL(LISTSOURCE, css::uno::Sequence<OUString>) css::beans::PropertyAttribute::BOUND);
             DECL_PROP_IMPL(VALUE_SEQ, css::uno::Sequence<OUString>) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
             DECL_PROP_IMPL(SELECT_VALUE_SEQ, Sequence< Any >) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
             DECL_PROP_IMPL(SELECT_VALUE, Any) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
-            DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
-            DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
-            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,    OPTIONAL);
+            DECL_PROP_IMPL(DEFAULT_SELECT_SEQ, Sequence<sal_Int16>) css::beans::PropertyAttribute::BOUND);
+            DECL_PROP_IMPL(STRINGITEMLIST, Sequence< OUString >) css::beans::PropertyAttribute::BOUND);
+            DECL_PROP_IMPL(TYPEDITEMLIST, Sequence< Any >) css::beans::PropertyAttribute::OPTIONAL);
         DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
     }
 

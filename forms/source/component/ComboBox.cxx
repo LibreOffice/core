@@ -295,14 +295,14 @@ void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 7);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
-        DECL_PROP1(LISTSOURCETYPE,      ListSourceType, BOUND);
-        DECL_PROP1(LISTSOURCE,          OUString,            BOUND);
+        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(LISTSOURCETYPE, ListSourceType) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(LISTSOURCE, OUString) css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
                                               css::beans::PropertyAttribute::BOUND);
-        DECL_PROP1(DEFAULT_TEXT,        OUString,            BOUND);
-        DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,BOUND);
-        DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,        OPTIONAL);
+        DECL_PROP_IMPL(DEFAULT_TEXT, OUString) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(STRINGITEMLIST, Sequence< OUString >) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(TYPEDITEMLIST, Sequence< Any >) css::beans::PropertyAttribute::OPTIONAL);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

@@ -164,7 +164,7 @@ void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     // ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP_IMPL(DEFAULT_VALUE, double) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);
+        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

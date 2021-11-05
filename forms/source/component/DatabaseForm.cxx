@@ -1295,16 +1295,16 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
                                                          css::beans::PropertyAttribute::MAYBEVOID | PropertyAttribute::CONSTRAINED);
     *pProperties++ = css::beans::Property(PROPERTY_APPLYFILTER, PROPERTY_ID_APPLYFILTER, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP1      ( NAME,             OUString,                BOUND                          );
-    DECL_PROP1      ( MASTERFIELDS,     Sequence< OUString >,    BOUND                          );
-    DECL_PROP1      ( DETAILFIELDS,     Sequence< OUString >,    BOUND                          );
+    DECL_PROP_IMPL(NAME, OUString) css::beans::PropertyAttribute::BOUND);
+    DECL_PROP_IMPL(MASTERFIELDS, Sequence< OUString >) css::beans::PropertyAttribute::BOUND);
+    DECL_PROP_IMPL(DETAILFIELDS, Sequence< OUString >) css::beans::PropertyAttribute::BOUND);
     DECL_PROP_IMPL(DATASOURCE, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::CONSTRAINED);
     DECL_PROP_IMPL(CYCLE, TabulatorCycle) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(FILTER, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP_IMPL(HAVINGCLAUSE, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_INSERTONLY, PROPERTY_ID_INSERTONLY, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP1      ( NAVIGATION,       NavigationBarMode,       BOUND                          );
+    DECL_PROP_IMPL(NAVIGATION, NavigationBarMode) css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_ALLOWADDITIONS, PROPERTY_ID_ALLOWADDITIONS, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_ALLOWEDITS, PROPERTY_ID_ALLOWEDITS, cppu::UnoType<bool>::get(),
@@ -1312,10 +1312,10 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     *pProperties++ = css::beans::Property(PROPERTY_ALLOWDELETIONS, PROPERTY_ID_ALLOWDELETIONS, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
     DECL_PROP_IMPL(PRIVILEGES, sal_Int32) css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY);
-    DECL_PROP1      ( TARGET_URL,       OUString,                BOUND                          );
-    DECL_PROP1      ( TARGET_FRAME,     OUString,                BOUND                          );
-    DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,        BOUND                          );
-    DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,      BOUND                          );
+    DECL_PROP_IMPL(TARGET_URL, OUString) css::beans::PropertyAttribute::BOUND);
+    DECL_PROP_IMPL(TARGET_FRAME, OUString) css::beans::PropertyAttribute::BOUND);
+    DECL_PROP_IMPL(SUBMIT_METHOD, FormSubmitMethod) css::beans::PropertyAttribute::BOUND);
+    DECL_PROP_IMPL(SUBMIT_ENCODING, FormSubmitEncoding) css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_DYNAMIC_CONTROL_BORDER, PROPERTY_ID_DYNAMIC_CONTROL_BORDER, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT );
     DECL_PROP_IMPL(CONTROL_BORDER_COLOR_FOCUS, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
