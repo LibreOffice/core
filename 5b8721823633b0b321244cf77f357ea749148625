@@ -16,6 +16,24 @@
       "message": "I confirm it fixed the error I had sent you!\nThank you!",
       "revId": "5b8721823633b0b321244cf77f357ea749148625",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a5e00a_30eaf8ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-05T16:16:17Z",
+      "side": 1,
+      "message": "Thanks for confirmation; the other part is fixed by 71b270fc3fb9c5f5f08cc340e83a3077cae427fd by Caolan :-)",
+      "parentUuid": "398dae51_dd37935a",
+      "revId": "5b8721823633b0b321244cf77f357ea749148625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
