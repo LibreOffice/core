@@ -37,7 +37,7 @@ public:
 
     template <std::size_t N> void add(char const (&literal)[N]) { add(literal, N - 1); }
 
-    void addEphemeral(char const* begin, sal_Int32 length);
+    SAL_DLLPRIVATE void addEphemeral(char const* begin, sal_Int32 length);
 
     void clear();
 

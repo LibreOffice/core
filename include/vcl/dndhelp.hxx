@@ -64,7 +64,7 @@ public:
     virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde );
 };
 
-class VCL_DLLPUBLIC DragAndDropWrapper final :
+class DragAndDropWrapper final :
                             public css::datatransfer::dnd::XDragGestureListener,
                             public css::datatransfer::dnd::XDragSourceListener,
                             public css::datatransfer::dnd::XDropTargetListener,
@@ -74,7 +74,7 @@ private:
     DragAndDropClient* mpClient;
 
 public:
-                    DragAndDropWrapper( DragAndDropClient* pClient );
+    VCL_DLLPUBLIC   DragAndDropWrapper( DragAndDropClient* pClient );
                     virtual ~DragAndDropWrapper() override;
 
     // css::uno::XInterface

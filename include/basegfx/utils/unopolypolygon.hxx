@@ -44,32 +44,32 @@ namespace basegfx::unotools
         explicit UnoPolyPolygon( const B2DPolyPolygon& );
 
         // XPolyPolygon2D
-        virtual void SAL_CALL addPolyPolygon( const css::geometry::RealPoint2D& position, const css::uno::Reference< css::rendering::XPolyPolygon2D >& polyPolygon ) override;
-        virtual ::sal_Int32 SAL_CALL getNumberOfPolygons(  ) override;
-        virtual ::sal_Int32 SAL_CALL getNumberOfPolygonPoints( ::sal_Int32 polygon ) override;
-        virtual css::rendering::FillRule SAL_CALL getFillRule(  ) override;
-        virtual void SAL_CALL setFillRule( css::rendering::FillRule fillRule ) override;
-        virtual sal_Bool SAL_CALL isClosed( ::sal_Int32 index ) override;
-        virtual void SAL_CALL setClosed( ::sal_Int32 index, sal_Bool closedState ) override;
+        SAL_DLLPRIVATE virtual void SAL_CALL addPolyPolygon( const css::geometry::RealPoint2D& position, const css::uno::Reference< css::rendering::XPolyPolygon2D >& polyPolygon ) override;
+        SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getNumberOfPolygons(  ) override;
+        SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getNumberOfPolygonPoints( ::sal_Int32 polygon ) override;
+        SAL_DLLPRIVATE virtual css::rendering::FillRule SAL_CALL getFillRule(  ) override;
+        SAL_DLLPRIVATE virtual void SAL_CALL setFillRule( css::rendering::FillRule fillRule ) override;
+        SAL_DLLPRIVATE virtual sal_Bool SAL_CALL isClosed( ::sal_Int32 index ) override;
+        SAL_DLLPRIVATE virtual void SAL_CALL setClosed( ::sal_Int32 index, sal_Bool closedState ) override;
 
         // XLinePolyPolygon2D
-        virtual css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > > SAL_CALL getPoints( ::sal_Int32 nPolygonIndex, ::sal_Int32 nNumberOfPolygons, ::sal_Int32 nPointIndex, ::sal_Int32 nNumberOfPoints ) override;
-        virtual void SAL_CALL setPoints( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points, ::sal_Int32 nPolygonIndex ) override;
-        virtual css::geometry::RealPoint2D SAL_CALL getPoint( ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
-        virtual void SAL_CALL setPoint( const css::geometry::RealPoint2D& point, ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
+        SAL_DLLPRIVATE virtual css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > > SAL_CALL getPoints( ::sal_Int32 nPolygonIndex, ::sal_Int32 nNumberOfPolygons, ::sal_Int32 nPointIndex, ::sal_Int32 nNumberOfPoints ) override;
+        SAL_DLLPRIVATE virtual void SAL_CALL setPoints( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points, ::sal_Int32 nPolygonIndex ) override;
+        SAL_DLLPRIVATE virtual css::geometry::RealPoint2D SAL_CALL getPoint( ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
+        SAL_DLLPRIVATE virtual void SAL_CALL setPoint( const css::geometry::RealPoint2D& point, ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
 
         // XBezierPolyPolygon2D
-        virtual css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > > SAL_CALL getBezierSegments( ::sal_Int32 nPolygonIndex, ::sal_Int32 nNumberOfPolygons, ::sal_Int32 nPointIndex, ::sal_Int32 nNumberOfPoints ) override;
-        virtual void SAL_CALL setBezierSegments( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& points, ::sal_Int32 nPolygonIndex ) override;
-        virtual css::geometry::RealBezierSegment2D SAL_CALL getBezierSegment( ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
-        virtual void SAL_CALL setBezierSegment( const css::geometry::RealBezierSegment2D& point, ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
+        SAL_DLLPRIVATE virtual css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > > SAL_CALL getBezierSegments( ::sal_Int32 nPolygonIndex, ::sal_Int32 nNumberOfPolygons, ::sal_Int32 nPointIndex, ::sal_Int32 nNumberOfPoints ) override;
+        SAL_DLLPRIVATE virtual void SAL_CALL setBezierSegments( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& points, ::sal_Int32 nPolygonIndex ) override;
+        SAL_DLLPRIVATE virtual css::geometry::RealBezierSegment2D SAL_CALL getBezierSegment( ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
+        SAL_DLLPRIVATE virtual void SAL_CALL setBezierSegment( const css::geometry::RealBezierSegment2D& point, ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        SAL_DLLPRIVATE virtual OUString SAL_CALL getImplementationName() override;
+        SAL_DLLPRIVATE virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        SAL_DLLPRIVATE virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-        B2DPolyPolygon getPolyPolygon() const;
+        SAL_DLLPRIVATE B2DPolyPolygon getPolyPolygon() const;
 
     protected:
         /// Check whether index is a valid polygon index
@@ -79,7 +79,7 @@ namespace basegfx::unotools
                 throw css::lang::IndexOutOfBoundsException();
         }
 
-        B2DPolyPolygon getSubsetPolyPolygon( sal_Int32 nPolygonIndex,
+        SAL_DLLPRIVATE B2DPolyPolygon getSubsetPolyPolygon( sal_Int32 nPolygonIndex,
                                              sal_Int32 nNumberOfPolygons,
                                              sal_Int32 nPointIndex,
                                              sal_Int32 nNumberOfPoints ) const;

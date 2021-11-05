@@ -90,7 +90,7 @@ namespace basegfx::utils
 
     // directly create trapezoids from given edge. Depending on the given geometry,
     // none up to three trapezoids will be created
-    BASEGFX_DLLPUBLIC void createLineTrapezoidFromEdge(
+    void createLineTrapezoidFromEdge(
         B2DTrapezoidVector& ro_Result,
         const B2DPoint& rPointA,
         const B2DPoint& rPointB,
@@ -99,7 +99,7 @@ namespace basegfx::utils
     // create trapezoids for all edges of the given polygon. The closed state of
     // the polygon is taken into account. If curves are contained, the default
     // AdaptiveSubdivision will be used.
-    BASEGFX_DLLPUBLIC void createLineTrapezoidFromB2DPolygon(
+    void createLineTrapezoidFromB2DPolygon(
         B2DTrapezoidVector& ro_Result,
         const B2DPolygon& rPolygon,
         double fLineWidth);

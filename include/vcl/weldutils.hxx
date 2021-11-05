@@ -186,9 +186,10 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
 public:
-    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    SAL_DLLPRIVATE void SAL_CALL
+    statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
-    void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
+    SAL_DLLPRIVATE void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
 
     const css::uno::Reference<css::frame::XFrame>& getFrame() const { return mxFrame; }
 
@@ -206,20 +207,20 @@ public:
     weld::Entry& get_widget() { return m_rEntry; }
 
     // public Formatter overrides, drives interactions with the Entry
-    virtual Selection GetEntrySelection() const override;
-    virtual OUString GetEntryText() const override;
-    virtual void SetEntryText(const OUString& rText, const Selection& rSel) override;
-    virtual void SetEntryTextColor(const Color* pColor) override;
-    virtual SelectionOptions GetEntrySelectionOptions() const override;
-    virtual void FieldModified() override;
+    SAL_DLLPRIVATE virtual Selection GetEntrySelection() const override;
+    SAL_DLLPRIVATE virtual OUString GetEntryText() const override;
+    SAL_DLLPRIVATE virtual void SetEntryText(const OUString& rText, const Selection& rSel) override;
+    SAL_DLLPRIVATE virtual void SetEntryTextColor(const Color* pColor) override;
+    SAL_DLLPRIVATE virtual SelectionOptions GetEntrySelectionOptions() const override;
+    SAL_DLLPRIVATE virtual void FieldModified() override;
 
     // public Formatter overrides, drives optional SpinButton settings
-    virtual void ClearMinValue() override;
-    virtual void SetMinValue(double dMin) override;
-    virtual void ClearMaxValue() override;
-    virtual void SetMaxValue(double dMin) override;
+    SAL_DLLPRIVATE virtual void ClearMinValue() override;
+    SAL_DLLPRIVATE virtual void SetMinValue(double dMin) override;
+    SAL_DLLPRIVATE virtual void ClearMaxValue() override;
+    SAL_DLLPRIVATE virtual void SetMaxValue(double dMin) override;
 
-    virtual void SetSpinSize(double dStep) override;
+    SAL_DLLPRIVATE virtual void SetSpinSize(double dStep) override;
 
     void SetEntrySelectionOptions(SelectionOptions eOptions) { m_eOptions = eOptions; }
 
@@ -234,7 +235,7 @@ public:
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
     void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_aFocusOutHdl = rLink; }
 
-    virtual ~EntryFormatter() override;
+    SAL_DLLPRIVATE virtual ~EntryFormatter() override;
 
 private:
     weld::Entry& m_rEntry;
@@ -244,10 +245,10 @@ private:
     SelectionOptions m_eOptions;
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
-    void Init();
+    SAL_DLLPRIVATE void Init();
 
     // private Formatter overrides
-    virtual void UpdateCurrentValue(double dCurrentValue) override;
+    SAL_DLLPRIVATE virtual void UpdateCurrentValue(double dCurrentValue) override;
 };
 
 class VCL_DLLPUBLIC DoubleNumericFormatter final : public EntryFormatter
@@ -256,13 +257,13 @@ public:
     DoubleNumericFormatter(weld::Entry& rEntry);
     DoubleNumericFormatter(weld::FormattedSpinButton& rSpinButton);
 
-    virtual ~DoubleNumericFormatter() override;
+    SAL_DLLPRIVATE virtual ~DoubleNumericFormatter() override;
 
 private:
-    virtual bool CheckText(const OUString& sText) const override;
+    SAL_DLLPRIVATE virtual bool CheckText(const OUString& sText) const override;
 
-    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
-    void ResetConformanceTester();
+    SAL_DLLPRIVATE virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
+    SAL_DLLPRIVATE void ResetConformanceTester();
 
     std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
 };
@@ -276,13 +277,13 @@ public:
     void SetUseThousandSep(bool b);
     void SetCurrencySymbol(const OUString& rStr);
 
-    virtual ~LongCurrencyFormatter() override;
+    SAL_DLLPRIVATE virtual ~LongCurrencyFormatter() override;
 
 private:
     DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
     DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
 
-    void Init();
+    SAL_DLLPRIVATE void Init();
 
     OUString m_aCurrencySymbol;
     bool m_bThousandSep;
@@ -311,12 +312,12 @@ private:
     DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
     DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 
-    void Init();
+    SAL_DLLPRIVATE void Init();
 
-    static tools::Time ConvertValue(int nValue);
-    static int ConvertValue(const tools::Time& rTime);
+    SAL_DLLPRIVATE static tools::Time ConvertValue(int nValue);
+    SAL_DLLPRIVATE static int ConvertValue(const tools::Time& rTime);
 
-    OUString FormatNumber(int nValue) const;
+    SAL_DLLPRIVATE OUString FormatNumber(int nValue) const;
 
     TimeFieldFormat m_eFormat;
     TimeFormat m_eTimeFormat;
@@ -344,10 +345,10 @@ private:
     DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
     DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 
-    void Init();
-    CalendarWrapper& GetCalendarWrapper() const;
+    SAL_DLLPRIVATE void Init();
+    SAL_DLLPRIVATE CalendarWrapper& GetCalendarWrapper() const;
 
-    OUString FormatNumber(int nValue) const;
+    SAL_DLLPRIVATE OUString FormatNumber(int nValue) const;
 
     ExtDateFieldFormat m_eFormat;
     mutable std::unique_ptr<CalendarWrapper> m_xCalendarWrapper;
@@ -374,7 +375,7 @@ public:
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_aFocusInHdl = rLink; }
     void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_aKeyPressHdl = rLink; }
 
-    void Modify();
+    SAL_DLLPRIVATE void Modify();
 
 private:
     weld::Entry& m_rEntry;
@@ -389,8 +390,8 @@ private:
     OString m_aEditMask;
     OUString m_aLiteralMask;
 
-    void EntryGainFocus();
-    void EntryLostFocus();
+    SAL_DLLPRIVATE void EntryGainFocus();
+    SAL_DLLPRIVATE void EntryLostFocus();
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);

@@ -61,7 +61,7 @@ namespace basegfx::utils
             For a description see applyLineDashing in b2dpolygontoos.hxx
             Also 2nd version with callbacks, see comments in 2D version
         */
-        BASEGFX_DLLPUBLIC void applyLineDashing(
+        void applyLineDashing(
             const B3DPolygon& rCandidate,
             const std::vector<double>& rDotDashArray,
             std::function<void(const basegfx::B3DPolygon& rSnippet)> aLineTargetCallback,
@@ -76,7 +76,7 @@ namespace basegfx::utils
             rCandidate: the 3d geometry to change
             rCenter:    the center of the 3d geometry
          */
-        BASEGFX_DLLPUBLIC B3DPolygon applyDefaultNormalsSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter);
+        B3DPolygon applyDefaultNormalsSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter);
 
         /** invert normals for given 3d geometry.
          */
@@ -87,14 +87,14 @@ namespace basegfx::utils
             If bChangeX, x texture coordinate will be recalculated.
             If bChangeY, y texture coordinate will be recalculated.
          */
-        BASEGFX_DLLPUBLIC B3DPolygon applyDefaultTextureCoordinatesParallel( const B3DPolygon& rCandidate, const B3DRange& rRange, bool bChangeX, bool bChangeY);
+        B3DPolygon applyDefaultTextureCoordinatesParallel( const B3DPolygon& rCandidate, const B3DRange& rRange, bool bChangeX, bool bChangeY);
 
         /** Create/replace texture coordinates for given 3d geometry with spherical one
             rCenter: the centre of the used 3d geometry
             If bChangeX, x texture coordinate will be recalculated.
             If bChangeY, y texture coordinate will be recalculated.
          */
-        BASEGFX_DLLPUBLIC B3DPolygon applyDefaultTextureCoordinatesSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX, bool bChangeY);
+        B3DPolygon applyDefaultTextureCoordinatesSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX, bool bChangeY);
 
         // isInside tests for B3DPoint. On border is not inside as long as not true is given in bWithBorder flag.
         BASEGFX_DLLPUBLIC bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder);
