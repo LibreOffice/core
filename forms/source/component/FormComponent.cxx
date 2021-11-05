@@ -1019,7 +1019,7 @@ void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) con
         DECL_PROP1      (GENERATEVBAEVENTS,         sal_Bool,  TRANSIENT);
         DECL_PROP1      (CONTROL_TYPE_IN_MSO,sal_Int16,     BOUND);
         DECL_PROP1      (OBJ_ID_IN_MSO,cppu::UnoUnsignedShortType,      BOUND);
-    END_DESCRIBE_PROPERTIES()
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 void OControlModel::describeAggregateProperties( Sequence< Property >& /* [out] */ _rAggregateProps ) const
@@ -2789,7 +2789,7 @@ void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps 
         DECL_PROP_IMPL(CONTROLSOURCEPROPERTY, OUString) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_INPUT_REQUIRED, PROPERTY_ID_INPUT_REQUIRED, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
-    END_DESCRIBE_PROPERTIES()
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 }
 

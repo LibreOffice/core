@@ -112,7 +112,7 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
         DECL_PROP1(HIDDEN_VALUE,    OUString,    BOUND);
         DECL_PROP1(NAME,            OUString,    BOUND);
         DECL_PROP1(TAG,             OUString,    BOUND);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 // XServiceInfo

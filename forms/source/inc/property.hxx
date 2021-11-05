@@ -351,9 +351,6 @@ public:
 #define DECL_PROP1(varname, type, attrib1)  \
         DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1)
 
-#define END_DESCRIBE_PROPERTIES()   \
-    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \
-
 }
 //... namespace frm .......................................................
 

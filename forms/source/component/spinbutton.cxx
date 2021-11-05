@@ -94,7 +94,7 @@ namespace frm
             DECL_PROP1( DEFAULT_SPIN_VALUE,   sal_Int32,       BOUND );
             DECL_PROP1( TABINDEX,             sal_Int16,       BOUND );
             DECL_PROP_IMPL(CONTROLSOURCEPROPERTY, OUString) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-        END_DESCRIBE_PROPERTIES();
+        DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
     }
 
 

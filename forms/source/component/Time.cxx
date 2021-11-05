@@ -152,7 +152,7 @@ void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_FORMATSSUPPLIER, PROPERTY_ID_FORMATSSUPPLIER, cppu::UnoType<XNumberFormatsSupplier>::get(),
                                           css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 

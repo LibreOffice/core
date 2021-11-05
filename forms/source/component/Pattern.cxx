@@ -104,7 +104,7 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
                                           css::beans::PropertyAttribute::BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP_IMPL(FILTERPROPOSAL, sal_Bool) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 

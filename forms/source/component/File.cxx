@@ -173,7 +173,7 @@ void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps )
     BEGIN_DESCRIBE_PROPERTIES( 2, OControlModel )
         DECL_PROP1(DEFAULT_TEXT,    OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 

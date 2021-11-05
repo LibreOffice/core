@@ -415,7 +415,7 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP_IMPL(HELPURL, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(WRITING_MODE, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP_IMPL(CONTEXT_WRITING_MODE, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {

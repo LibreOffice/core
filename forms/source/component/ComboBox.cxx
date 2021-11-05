@@ -300,7 +300,7 @@ void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
         DECL_PROP1(DEFAULT_TEXT,        OUString,            BOUND);
         DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,BOUND);
         DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,        OPTIONAL);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 

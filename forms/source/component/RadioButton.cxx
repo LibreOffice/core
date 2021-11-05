@@ -240,7 +240,7 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 

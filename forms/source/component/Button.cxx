@@ -108,7 +108,7 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
         DECL_PROP1( TARGET_URL,             OUString,            BOUND );
         DECL_PROP1( TARGET_FRAME,           OUString,            BOUND );
         DECL_PROP1( TABINDEX,               sal_Int16,                  BOUND );
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 

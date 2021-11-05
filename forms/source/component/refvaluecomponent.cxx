@@ -158,7 +158,7 @@ namespace frm
             DECL_PROP1( REFVALUE,       OUString,    BOUND );
             DECL_PROP1( DEFAULT_STATE, sal_Int16,          BOUND );
             DECL_PROP1( UNCHECKED_REFVALUE, OUString,    BOUND );
-        END_DESCRIBE_PROPERTIES();
+        DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
     }
 
 

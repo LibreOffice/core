@@ -345,7 +345,7 @@ void OFormattedModel::describeFixedProperties( Sequence< Property >& _rProps ) c
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_FILTERPROPOSAL, PROPERTY_ID_FILTERPROPOSAL, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    END_DESCRIBE_PROPERTIES();
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
 void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
