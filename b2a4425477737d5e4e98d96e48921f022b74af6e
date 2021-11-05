@@ -16,6 +16,24 @@
       "message": "Hi Xisco, This is mostly and FYI but if you have concerns please let me know. I needed to make a change to the Navigator outline tracking ui test. The patch here makes the stored root type be used by the sidebar Navigator as well as the floating version so the content navigation view button needs to be clicked at the end of the test to set the content tree back to all content navigation view or following tests of objects in the content tree fail. ",
       "revId": "b2a4425477737d5e4e98d96e48921f022b74af6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de238fd_912c7b69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-05T11:38:52Z",
+      "side": 1,
+      "message": "Hi Jim,\nCould you please add a comment to the test why it\u0027s needed ?",
+      "parentUuid": "cbac391d_b43b8b97",
+      "revId": "b2a4425477737d5e4e98d96e48921f022b74af6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
