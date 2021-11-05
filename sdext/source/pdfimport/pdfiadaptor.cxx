@@ -214,25 +214,17 @@ void PDFIRawAdaptor::setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rV
     m_pVisitorFactory = rVisitorFactory;
 }
 
-bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput,
+bool PDFIRawAdaptor::parse( const OUString&                          rURL,
                             const uno::Reference<task::XInteractionHandler>& xIHdl,
                             const OUString&                          rPwd,
                             const uno::Reference<task::XStatusIndicator>& xStatus,
                             const XmlEmitterSharedPtr&                    rEmitter,
-                            const OUString&                          rURL,
                             const OUString&                          rFilterOptions )
 {
     // container for metaformat
     auto pSink = std::make_shared<PDFIProcessor>(xStatus, m_xContext);
 
-    bool bSuccess=false;
-
-    if( xInput.is() )
-        bSuccess = xpdf_ImportFromStream( xInput, pSink, xIHdl,
-                                          rPwd, m_xContext, rFilterOptions );
-    else
-        bSuccess = xpdf_ImportFromFile( rURL, pSink, xIHdl,
-                                        rPwd, m_xContext, rFilterOptions );
+    const bool bSuccess = xpdf_ImportFromFile(rURL, pSink, xIHdl, rPwd, m_xContext, rFilterOptions);
 
     if( bSuccess )
         pSink->emit(*rEmitter,*m_pVisitorFactory);
@@ -245,10 +237,8 @@ bool PDFIRawAdaptor::odfConvert( const OUString&                          rURL,
                                  const uno::Reference<task::XStatusIndicator>& xStatus )
 {
     XmlEmitterSharedPtr pEmitter = createOdfEmitter(xOutput);
-    const bool bSuccess = parse(uno::Reference<io::XInputStream>(),
-                                uno::Reference<task::XInteractionHandler>(),
-                                OUString(),
-                                xStatus,pEmitter,rURL, "");
+    const bool bSuccess = parse(rURL, uno::Reference<task::XInteractionHandler>(),
+                                OUString(), xStatus, pEmitter, "");
 
     // tell input stream that it is no longer needed
     xOutput->closeOutput();
@@ -272,7 +262,15 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     {
         SAL_INFO("sdext.pdfimport", "importer Attrib: " << rAttrib.Name );
         if ( rAttrib.Name == "InputStream" )
+        {
             rAttrib.Value >>= xInput;
+            if (xInput.is())
+            {
+                // We do not operate on the input stream. We operate on the URL instead.
+                xInput->closeInput();
+                xInput.clear();
+            }
+        }
         else if ( rAttrib.Name == "URL" )
             rAttrib.Value >>= aURL;
         else if ( rAttrib.Name == "StatusIndicator" )
@@ -284,16 +282,9 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
         else if ( rAttrib.Name == "FilterOptions" )
             rAttrib.Value >>= aFilterOptions;
     }
-    if( !xInput.is() )
-        return false;
 
     XmlEmitterSharedPtr pEmitter = createSaxEmitter(rHdl);
-    const bool bSuccess = parse(xInput, xInteractionHandler,
-                                aPwd, xStatus, pEmitter, aURL, aFilterOptions);
-
-    // tell input stream that it is no longer needed
-    xInput->closeInput();
-    xInput.clear();
+    const bool bSuccess = parse(aURL, xInteractionHandler, aPwd, xStatus, pEmitter, aFilterOptions);
 
     return bSuccess;
 }
