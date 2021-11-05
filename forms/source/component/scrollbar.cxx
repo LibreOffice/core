@@ -136,7 +136,10 @@ namespace frm
 
     void OScrollBarModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
+        OControlModel::describeFixedProperties( _rProps );
+        sal_Int32 nOldCount = _rProps.getLength();
+        _rProps.realloc( nOldCount + 3);
+        css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
             DECL_PROP1( DEFAULT_SCROLL_VALUE, sal_Int32,       BOUND );
             DECL_PROP1( TABINDEX,             sal_Int16,       BOUND );
             DECL_PROP_IMPL(CONTROLSOURCEPROPERTY, OUString) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);

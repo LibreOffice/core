@@ -154,7 +154,10 @@ namespace frm
 
     void OReferenceValueComponent::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 3, OBoundControlModel )
+        OBoundControlModel::describeFixedProperties( _rProps );
+        sal_Int32 nOldCount = _rProps.getLength();
+        _rProps.realloc( nOldCount + 3);
+        css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
             DECL_PROP1( REFVALUE,       OUString,    BOUND );
             DECL_PROP1( DEFAULT_STATE, sal_Int16,          BOUND );
             DECL_PROP1( UNCHECKED_REFVALUE, OUString,    BOUND );

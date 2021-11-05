@@ -487,7 +487,10 @@ namespace frm
 
     void OListBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 10, OBoundControlModel )
+        OBoundControlModel::describeFixedProperties( _rProps );
+        sal_Int32 nOldCount = _rProps.getLength();
+        _rProps.realloc( nOldCount + 10);
+        css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP_IMPL(BOUNDCOLUMN, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);

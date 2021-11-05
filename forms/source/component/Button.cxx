@@ -101,7 +101,10 @@ OButtonModel::~OButtonModel()
 
 void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 6, OClickableImageBaseModel )
+    OClickableImageBaseModel::describeFixedProperties( _rProps );
+    sal_Int32 nOldCount = _rProps.getLength();
+    _rProps.realloc( nOldCount + 6);
+    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
         DECL_PROP1( BUTTONTYPE,             FormButtonType,             BOUND );
         DECL_PROP1( DEFAULT_STATE,          sal_Int16,                  BOUND );
         DECL_PROP1( DISPATCHURLINTERNAL,    sal_Bool,                   BOUND );

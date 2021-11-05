@@ -340,14 +340,6 @@ public:
 #define DECL_PROP_IMPL(varname, type) \
     *pProperties++ = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<type>::get(),
 
-
-#define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
-    baseclass::describeFixedProperties( _rProps ); \
-    sal_Int32 nOldCount = _rProps.getLength(); \
-    _rProps.realloc( nOldCount + ( count ) );   \
-    css::beans::Property* pProperties = _rProps.getArray() + nOldCount;       \
-
-
 #define DECL_PROP1(varname, type, attrib1)  \
         DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1)
 
