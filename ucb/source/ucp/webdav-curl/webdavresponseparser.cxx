@@ -669,7 +669,7 @@ namespace
                                     aEntry.Scope = maLockScope;
                                     aEntry.Type = maLockType;
                                     maLockEntries.realloc(nLength + 1);
-                                    maLockEntries[nLength] = aEntry;
+                                    maLockEntries.getArray()[nLength] = aEntry;
                                 }
                                 break;
                             }
@@ -694,7 +694,7 @@ namespace
                                         "Parser error: wrong 'locktoken' value.");
                                 const sal_Int32 nLength(maLock.LockTokens.getLength());
                                 maLock.LockTokens.realloc(nLength+1);
-                                maLock.LockTokens[nLength] = sLockToken;
+                                maLock.LockTokens.getArray()[nLength] = sLockToken;
                                 break;
                             }
                             case WebDAVName_exclusive:

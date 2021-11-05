@@ -479,6 +479,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     // std::set -> uno::Sequence
     sal_Int32 nCount = aPropSet.size();
     uno::Sequence< beans::Property > aProperties( nCount );
+    auto aPropertiesRange = asNonConstRange(aProperties);
 
     beans::Property aProp;
     sal_Int32 n = 0;
@@ -486,7 +487,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     for ( const auto& rProp : aPropSet )
     {
         xProvider->getProperty( rProp, aProp );
-        aProperties[ n++ ] = aProp;
+        aPropertiesRange[ n++ ] = aProp;
     }
 
     return aProperties;
@@ -500,27 +501,28 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     uno::Sequence< ucb::CommandInfo > aCmdInfo( 10 );
+    auto pCmdInfo = aCmdInfo.getArray();
 
 
     // Mandatory commands
 
 
-    aCmdInfo[ 0 ] =
+    pCmdInfo[ 0 ] =
             ucb::CommandInfo(
                 "getCommandInfo",
                 -1,
                 cppu::UnoType<void>::get() );
-    aCmdInfo[ 1 ] =
+    pCmdInfo[ 1 ] =
             ucb::CommandInfo(
                 "getPropertySetInfo",
                 -1,
                 cppu::UnoType<void>::get() );
-    aCmdInfo[ 2 ] =
+    pCmdInfo[ 2 ] =
             ucb::CommandInfo(
                 "getPropertyValues",
                 -1,
                 cppu::UnoType<uno::Sequence< beans::Property >>::get());
-    aCmdInfo[ 3 ] =
+    pCmdInfo[ 3 ] =
             ucb::CommandInfo(
                 "setPropertyValues",
                 -1,
@@ -530,17 +532,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     // Optional standard commands
 
 
-    aCmdInfo[ 4 ] =
+    pCmdInfo[ 4 ] =
             ucb::CommandInfo(
                 "delete",
                 -1,
                 cppu::UnoType<bool>::get() );
-    aCmdInfo[ 5 ] =
+    pCmdInfo[ 5 ] =
             ucb::CommandInfo(
                 "insert",
                 -1,
                 cppu::UnoType<ucb::InsertCommandArgument>::get() );
-    aCmdInfo[ 6 ] =
+    pCmdInfo[ 6 ] =
             ucb::CommandInfo(
                 "open",
                 -1,
@@ -550,17 +552,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     // New commands
 
 
-    aCmdInfo[ 7 ] =
+    pCmdInfo[ 7 ] =
             ucb::CommandInfo(
                 "post",
                 -1,
                 cppu::UnoType<ucb::PostCommandArgument2>::get() );
-    aCmdInfo[ 8 ] =
+    pCmdInfo[ 8 ] =
             ucb::CommandInfo(
                 "addProperty",
                 -1,
                 cppu::UnoType<ucb::PropertyCommandArgument>::get() );
-    aCmdInfo[ 9 ] =
+    pCmdInfo[ 9 ] =
             ucb::CommandInfo(
                 "removeProperty",
                 -1,
@@ -587,19 +589,21 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     else
         return aCmdInfo;
 
+    pCmdInfo = aCmdInfo.getArray();
+
     if ( bFolder )
     {
 
         // Optional standard commands
 
 
-        aCmdInfo[ nPos ] =
+        pCmdInfo[ nPos ] =
             ucb::CommandInfo(
                 "transfer",
                 -1,
                 cppu::UnoType<ucb::TransferInfo>::get() );
         nPos++;
-        aCmdInfo[ nPos ] =
+        pCmdInfo[ nPos ] =
             ucb::CommandInfo(
                 "createNewContent",
                 -1,
@@ -613,13 +617,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     if ( bSupportsLocking )
     {
-        aCmdInfo[ nPos ] =
+        pCmdInfo[ nPos ] =
             ucb::CommandInfo(
                 "lock",
                 -1,
                 cppu::UnoType<void>::get() );
         nPos++;
-        aCmdInfo[ nPos ] =
+        pCmdInfo[ nPos ] =
             ucb::CommandInfo(
                 "unlock",
                 -1,
