@@ -4502,7 +4502,29 @@ namespace
 
     void set_button_label(GtkButton* pButton, const OUString& rText)
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget* pChild = gtk_button_get_child(pButton);
+        GtkLabel* pLabel = GTK_IS_LABEL(pChild) ? GTK_LABEL(pChild) : nullptr;
+        if (!pLabel && pChild)
+        {
+            for (GtkWidget* pBoxChild = gtk_widget_get_first_child(pChild);
+                 pBoxChild; pBoxChild = gtk_widget_get_next_sibling(pBoxChild))
+            {
+                pLabel = GTK_IS_LABEL(pBoxChild) ? GTK_LABEL(pBoxChild) : nullptr;
+                if (pLabel)
+                    break;
+            }
+        }
+        if (pLabel)
+        {
+            ::set_label(pLabel, rText);
+            gtk_widget_set_visible(GTK_WIDGET(pLabel), true);
+        }
+        else
+            gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
+#else
         gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
+#endif
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
