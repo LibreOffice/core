@@ -1,0 +1,38 @@
+From c76f4a08263b0cea40d2967560ac7c21f6959079 Mon Sep 17 00:00:00 2001
+From: DRC <information@libjpeg-turbo.org>
+Date: Thu, 5 Dec 2019 13:12:28 -0600
+Subject: [PATCH] Huffman enc.: Fix very rare local buffer overrun
+
+... detected by ASan.  This is a similar issue to the issue that was
+fixed with 402a715f82313384ef4606660c32d8678c79f197.  Apparently it is
+possible to create a malformed JPEG image that exceeds the Huffman
+encoder's 256-byte local buffer when attempting to losslessly tranform
+the image.  That makes sense, given that it was necessary to extend the
+Huffman decoder's local buffer to 512 bytes in order to handle all
+pathological cases (refer to 0463f7c9aad060fcd56e98d025ce16185279e2bc.)
+
+Since this issue affected only lossless transformation, a workflow that
+isn't generally exposed to arbitrary data exploits, and since the
+overrun did not overflow the stack (i.e. it did not result in a segfault
+or other user-visible issue, and valgrind didn't even detect it), it did
+not likely pose a security risk.
+
+Fixes #392
+---
+ ChangeLog.md | 10 ++++++++++
+ jchuff.c     |  2 +-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/jchuff.c b/jchuff.c
+index 206958e2f..cb05055d9 100644
+--- a/jchuff.c
++++ b/jchuff.c
+@@ -432,7 +432,7 @@ dump_buffer(working_state *state)
+  * scanning order-- 1, 8, 16, etc.), then this will produce an encoded block
+  * larger than 200 bytes.
+  */
+-#define BUFSIZE (DCTSIZE2 * 4)
++#define BUFSIZE (DCTSIZE2 * 8)
+ 
+ #define LOAD_BUFFER() { \
+   if (state->free_in_buffer < BUFSIZE) { \
