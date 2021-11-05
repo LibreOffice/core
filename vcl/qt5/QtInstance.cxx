@@ -358,6 +358,7 @@ QtInstance::CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools:
 
 std::unique_ptr<SalMenu> QtInstance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 {
+    SolarMutexGuard aGuard;
     std::unique_ptr<SalMenu> pRet;
     RunInMainThread([&pRet, bMenuBar, pVCLMenu]() {
         QtMenu* pSalMenu = new QtMenu(bMenuBar);
