@@ -1,0 +1,106 @@
+From e450fa50fc242282551f56b941dc93b9a8a0bcbb Mon Sep 17 00:00:00 2001
+From: Frank Tang <ftang@chromium.org>
+Date: Tue, 13 Apr 2021 15:16:50 -0700
+Subject: [PATCH] ICU-21587 Fix memory bug w/ baseName
+
+Edge cases not fixed in assign and move assign operator
+while the locale is long and call setKeywordValue with incorrect
+keyword/values.
+---
+ icu4c/source/common/locid.cpp          | 11 +++++++++--
+ icu4c/source/test/intltest/loctest.cpp | 26 ++++++++++++++++++++++++++
+ icu4c/source/test/intltest/loctest.h   |  2 ++
+ 3 files changed, 37 insertions(+), 2 deletions(-)
+
+diff --git a/icu4c/source/common/locid.cpp b/icu4c/source/common/locid.cpp
+index 02cd82a7b8e..3c6e5b06690 100644
+--- a/icu4c/source/common/locid.cpp
++++ b/icu4c/source/common/locid.cpp
+@@ -469,14 +469,18 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
+     if ((baseName != fullName) && (baseName != fullNameBuffer)) uprv_free(baseName);
+     if (fullName != fullNameBuffer) uprv_free(fullName);
+ 
+-    if (other.fullName == other.fullNameBuffer) {
++    if (other.fullName == other.fullNameBuffer || other.baseName == other.fullNameBuffer) {
+         uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
++    }
++    if (other.fullName == other.fullNameBuffer) {
+         fullName = fullNameBuffer;
+     } else {
+         fullName = other.fullName;
+     }
+ 
+-    if (other.baseName == other.fullName) {
++    if (other.baseName == other.fullNameBuffer) {
++        baseName = fullNameBuffer;
++    } else if (other.baseName == other.fullName) {
+         baseName = fullName;
+     } else {
+         baseName = other.baseName;
+@@ -2681,6 +2685,9 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
+         if (fullName != fullNameBuffer) {
+             // if full Name is already on the heap, need to free it.
+             uprv_free(fullName);
++            if (baseName == fullName) {
++                baseName = newFullName; // baseName should not point to freed memory.
++            }
+         }
+         fullName = newFullName;
+         status = U_ZERO_ERROR;
+diff --git a/icu4c/source/test/intltest/loctest.cpp b/icu4c/source/test/intltest/loctest.cpp
+index ce41a4c00e7..5503b008b0c 100644
+--- a/icu4c/source/test/intltest/loctest.cpp
++++ b/icu4c/source/test/intltest/loctest.cpp
+@@ -284,6 +284,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
+     TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
+     TESTCASE_AUTO(TestCanonicalize);
+     TESTCASE_AUTO(TestLeak21419);
++    TESTCASE_AUTO(TestLongLocaleSetKeywordAssign);
++    TESTCASE_AUTO(TestLongLocaleSetKeywordMoveAssign);
+     TESTCASE_AUTO_END;
+ }
+ 
+@@ -6520,6 +6522,30 @@ void LocaleTest::TestSetUnicodeKeywordValueInLongLocale() {
+     }
+ }
+ 
++void LocaleTest::TestLongLocaleSetKeywordAssign() {
++    IcuTestErrorCode status(*this, "TestLongLocaleSetKeywordAssign");
++    // A long base name, with an illegal keyword and copy constructor
++    icu::Locale l("de_AAAAAAA1_AAAAAAA2_AAAAAAA3_AAAAAAA4_AAAAAAA5_AAAAAAA6_"
++                  "AAAAAAA7_AAAAAAA8_AAAAAAA9_AAAAAA10_AAAAAA11_AAAAAA12_"
++                  "AAAAAA13_AAAAAA14_AAAAAA15_AAAAAA16_AAAAAA17_AAAAAA18");
++    Locale l2;
++    l.setUnicodeKeywordValue("co", "12", status); // Cause an error
++    status.reset();
++    l2 = l; // copy operator on such bogus locale.
++}
++
++void LocaleTest::TestLongLocaleSetKeywordMoveAssign() {
++    IcuTestErrorCode status(*this, "TestLongLocaleSetKeywordMoveAssign");
++    // A long base name, with an illegal keyword and copy constructor
++    icu::Locale l("de_AAAAAAA1_AAAAAAA2_AAAAAAA3_AAAAAAA4_AAAAAAA5_AAAAAAA6_"
++                  "AAAAAAA7_AAAAAAA8_AAAAAAA9_AAAAAA10_AAAAAA11_AAAAAA12_"
++                  "AAAAAA13_AAAAAA14_AAAAAA15_AAAAAA16_AAAAAA17");
++    Locale l2;
++    l.setUnicodeKeywordValue("co", "12", status); // Cause an error
++    status.reset();
++    Locale l3 = std::move(l); // move assign
++}
++
+ void LocaleTest::TestSetUnicodeKeywordValueNullInLongLocale() {
+     IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueNullInLongLocale");
+     const char *exts[] = {"cf", "cu", "em", "kk", "kr", "ks", "kv", "lb", "lw",
+diff --git a/icu4c/source/test/intltest/loctest.h b/icu4c/source/test/intltest/loctest.h
+index 05be4037bd6..12a93bde53d 100644
+--- a/icu4c/source/test/intltest/loctest.h
++++ b/icu4c/source/test/intltest/loctest.h
+@@ -156,6 +156,8 @@ class LocaleTest: public IntlTest {
+     void TestSetUnicodeKeywordValueInLongLocale();
+     void TestSetUnicodeKeywordValueNullInLongLocale();
+     void TestLeak21419();
++    void TestLongLocaleSetKeywordAssign();
++    void TestLongLocaleSetKeywordMoveAssign();
+ 
+ private:
+     void _checklocs(const char* label,
