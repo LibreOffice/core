@@ -4620,24 +4620,20 @@ namespace
 
     OUString button_get_label(GtkButton* pButton)
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
         if (GtkLabel* pLabel = get_label_widget(GTK_WIDGET(pButton)))
             return ::get_label(pLabel);
-#endif
         const gchar* pStr = gtk_button_get_label(pButton);
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
     void button_set_label(GtkButton* pButton, const OUString& rText)
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
         if (GtkLabel* pLabel = get_label_widget(GTK_WIDGET(pButton)))
         {
             ::set_label(pLabel, rText);
             gtk_widget_set_visible(GTK_WIDGET(pLabel), true);
             return;
         }
-#endif
         gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
     }
 
