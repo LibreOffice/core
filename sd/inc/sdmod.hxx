@@ -164,7 +164,7 @@ private:
         @VclSimpleEvent *
             a pointer to a VCLSimpleEvent (see vcl/vclevent.hxx )
     */
-    DECL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, void );
+    DECL_DLLPRIVATE_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, void );
 
     std::unique_ptr<svtools::ColorConfig> mpColorConfig;
 };

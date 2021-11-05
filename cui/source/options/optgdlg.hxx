@@ -55,7 +55,7 @@ private:
 
     DECL_LINK(TwoFigureHdl, weld::SpinButton&, void);
 #if defined(_WIN32)
-    DECL_STATIC_LINK(OfaMiscTabPage, FileAssocClick, weld::Button&, void);
+    DECL_DLLPRIVATE_STATIC_LINK(OfaMiscTabPage, FileAssocClick, weld::Button&, void);
 #endif
 protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;

@@ -68,8 +68,8 @@ private:
     DECL_DLLPRIVATE_LINK(SelectRecentlyUsedHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(SelectIPPartHdl, weld::TreeView&, bool);
     DECL_DLLPRIVATE_LINK(EditWindowModifiedHdl, LinkParamNone*, void);
-    DECL_STATIC_LINK(ClassificationDialog, ExpandedHdl, weld::Expander&, void);
-    DECL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_STATIC_LINK(ClassificationDialog, ExpandedHdl, weld::Expander&, void);
+    DECL_DLLPRIVATE_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, bool);
     DECL_DLLPRIVATE_LINK(OnAsyncExpandHdl, void*, void);
 
     void insertField(ClassificationType eType, OUString const& rString, OUString const& rFullString,

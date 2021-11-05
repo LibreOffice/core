@@ -95,7 +95,7 @@ public:
 
                         virtual ~SfxMedium() override;
 
-    DECL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, void);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, void);
     bool CheckCanGetLockfile() const;
     void SetOriginallyReadOnly(bool val);
     void AddToCheckEditableWorkerList();
