@@ -89,6 +89,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
         for(SwPaM& rCurrentCursor : getShellCursor( true )->GetRingContainer())
         {
             //OPT: GetSystemCharSet
+            GetDoc()->getIDocumentContentOperations().SetIME(false);
             const bool bSuccess =
                 GetDoc()->getIDocumentContentOperations().InsertString(rCurrentCursor, rStr, nInsertFlags);
             OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
