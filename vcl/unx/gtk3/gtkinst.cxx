@@ -22269,6 +22269,14 @@ private:
         // rehook handler and let vcl cycle its own way through this widget's
         // children
         pFrame->AllowCycleFocusOut();
+
+        // tdf#145567 if the focus is in this hierarchy then, now that we are tearing down,
+        // move focus to the usual focus candidate for the frame
+        GtkWindow* pFocusWin = get_active_window();
+        GtkWidget* pFocus = pFocusWin ? gtk_window_get_focus(pFocusWin) : nullptr;
+        bool bHasFocus = pFocus && gtk_widget_is_ancestor(pFocus, pTopLevel);
+        if (bHasFocus)
+            pFrame->GrabFocus();
     }
 
     static void signalUnmap(GtkWidget*, gpointer user_data)
