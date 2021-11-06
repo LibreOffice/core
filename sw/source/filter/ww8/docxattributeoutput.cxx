@@ -2804,7 +2804,7 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
     if (!pSdrObj)
         return;
 
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape());
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
     if( !xPropSet.is() )
         return;

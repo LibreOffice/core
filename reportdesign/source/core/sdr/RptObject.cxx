@@ -436,9 +436,9 @@ void OObjectBase::ensureSdrObjectOwnership( const uno::Reference< uno::XInterfac
 }
 
 
-uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrObject )
+uno::Reference< drawing::XShape > OObjectBase::getUnoShapeOf( SdrObject& _rSdrObject )
 {
-    uno::Reference< uno::XInterface > xShape( _rSdrObject.getWeakUnoShape() );
+    uno::Reference< drawing::XShape > xShape( _rSdrObject.getWeakUnoShape() );
     if ( xShape.is() )
         return xShape;
 
@@ -458,7 +458,7 @@ OCustomShape::OCustomShape(
 :   SdrObjCustomShape(rSdrModel)
     ,OObjectBase(_xComponent)
 {
-    impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY) );
+    impl_setUnoShape( uno::Reference< drawing::XShape >(_xComponent,uno::UNO_QUERY_THROW) );
     m_bIsListening = true;
 }
 
@@ -551,9 +551,9 @@ uno::Reference< beans::XPropertySet> OCustomShape::getAwtComponent()
 }
 
 
-uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
+uno::Reference< drawing::XShape > OCustomShape::getUnoShape()
 {
-    uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
+    uno::Reference<drawing::XShape> xShape = OObjectBase::getUnoShapeOf( *this );
     if ( !m_xReportComponent.is() )
     {
         OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
@@ -563,7 +563,7 @@ uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
     return xShape;
 }
 
-void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+void OCustomShape::impl_setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
 {
     SdrObjCustomShape::impl_setUnoShape( rxUnoShape );
     releaseUnoShape();
@@ -612,7 +612,7 @@ OUnoObject::OUnoObject(
     // tdf#119067
     ,m_bSetDefaultLabel(false)
 {
-    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
+    impl_setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
 
     if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
@@ -889,12 +889,12 @@ uno::Reference< beans::XPropertySet> OUnoObject::getAwtComponent()
 }
 
 
-uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
+uno::Reference< drawing::XShape > OUnoObject::getUnoShape()
 {
     return OObjectBase::getUnoShapeOf( *this );
 }
 
-void OUnoObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+void OUnoObject::impl_setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
 {
     SdrUnoObj::impl_setUnoShape( rxUnoShape );
     releaseUnoShape();
@@ -915,7 +915,7 @@ OOle2Obj::OOle2Obj(
     ,m_nType(_nType)
     ,m_bOnlyOnce(true)
 {
-    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
+    impl_setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
     m_bIsListening = true;
 }
 
@@ -1078,9 +1078,9 @@ uno::Reference< beans::XPropertySet> OOle2Obj::getAwtComponent()
 }
 
 
-uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
+uno::Reference< drawing::XShape > OOle2Obj::getUnoShape()
 {
-    uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
+    uno::Reference< drawing::XShape> xShape = OObjectBase::getUnoShapeOf( *this );
     if ( !m_xReportComponent.is() )
     {
         OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
@@ -1090,7 +1090,7 @@ uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
     return xShape;
 }
 
-void OOle2Obj::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+void OOle2Obj::impl_setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
 {
     SdrOle2Obj::impl_setUnoShape( rxUnoShape );
     releaseUnoShape();
