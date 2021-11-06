@@ -110,27 +110,6 @@ protected:
     virtual rtl::Reference<OGridColumn> createCloneColumn() const = 0;
 };
 
-#define DECL_COLUMN(ClassName)                                                                              \
-class ClassName                                                                                             \
-    :public OGridColumn                                                                                     \
-    ,public OAggregationArrayUsageHelper< ClassName >                                                       \
-{                                                                                                           \
-public:                                                                                                     \
-    explicit ClassName(const css::uno::Reference<css::uno::XComponentContext>& _rContext );                                            \
-    explicit ClassName(const ClassName* _pCloneFrom);                                                                \
-                                                                                                            \
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;  \
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;                                         \
-                                                                                                            \
-    virtual void fillProperties(                                                                            \
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,          \
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps  \
-        ) const override;                                                                                            \
-                                                                                                            \
-    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;                                                         \
-};
-
-
 #define IMPL_COLUMN(ClassName, Model, bAllowDropDown)                               \
     ClassName::ClassName( const css::uno::Reference<css::uno::XComponentContext>& _rContext ) \
     :OGridColumn(_rContext, Model) \
@@ -183,16 +162,195 @@ const css::uno::Sequence<OUString>& getColumnTypes();
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 
 // Columns
-DECL_COLUMN(TextFieldColumn)
-DECL_COLUMN(PatternFieldColumn)
-DECL_COLUMN(DateFieldColumn)
-DECL_COLUMN(TimeFieldColumn)
-DECL_COLUMN(NumericFieldColumn)
-DECL_COLUMN(CurrencyFieldColumn)
-DECL_COLUMN(CheckBoxColumn)
-DECL_COLUMN(ComboBoxColumn)
-DECL_COLUMN(ListBoxColumn)
-DECL_COLUMN(FormattedFieldColumn)
+class TextFieldColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< TextFieldColumn >
+{
+public:
+    explicit TextFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit TextFieldColumn(const TextFieldColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class PatternFieldColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< PatternFieldColumn >
+{
+public:
+    explicit PatternFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit PatternFieldColumn(const PatternFieldColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class DateFieldColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< DateFieldColumn >
+{
+public:
+    explicit DateFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit DateFieldColumn(const DateFieldColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class TimeFieldColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< TimeFieldColumn >
+{
+public:
+    explicit TimeFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit TimeFieldColumn(const TimeFieldColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class NumericFieldColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< NumericFieldColumn >
+{
+public:
+    explicit NumericFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit NumericFieldColumn(const NumericFieldColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class CurrencyFieldColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< CurrencyFieldColumn >
+{
+public:
+    explicit CurrencyFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit CurrencyFieldColumn(const CurrencyFieldColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class CheckBoxColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< CheckBoxColumn >
+{
+public:
+    explicit CheckBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit CheckBoxColumn(const CheckBoxColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class ComboBoxColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< ComboBoxColumn >
+{
+public:
+    explicit ComboBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit ComboBoxColumn(const ComboBoxColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class ListBoxColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< ListBoxColumn >
+{
+public:
+    explicit ListBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit ListBoxColumn(const ListBoxColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
+
+class FormattedFieldColumn
+    :public OGridColumn
+    ,public OAggregationArrayUsageHelper< FormattedFieldColumn >
+{
+public:
+    explicit FormattedFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit FormattedFieldColumn(const FormattedFieldColumn* _pCloneFrom);
+
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+    virtual void fillProperties(
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        ) const override;
+
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
+};
 
 }   // namespace frm
 
