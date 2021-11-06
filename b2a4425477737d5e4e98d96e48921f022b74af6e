@@ -34,6 +34,24 @@
       "parentUuid": "cbac391d_b43b8b97",
       "revId": "b2a4425477737d5e4e98d96e48921f022b74af6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e4a244b_df5f5435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-11-06T02:24:47Z",
+      "side": 1,
+      "message": "I\u0027ve added explanation of why the change is required. The switch to root mode to test outline tracking could be removed as outline tracking is now also done in non root mode.",
+      "parentUuid": "2de238fd_912c7b69",
+      "revId": "b2a4425477737d5e4e98d96e48921f022b74af6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
