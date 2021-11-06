@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25bac616_b6d7907f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-06T07:45:04Z",
+      "side": 1,
+      "message": "jenkins approved - just a commit message update.",
+      "revId": "091ee5a9daba2dcdd802a92cbe4a70bcbf4d539c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
