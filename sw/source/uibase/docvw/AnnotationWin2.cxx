@@ -804,6 +804,9 @@ void SwAnnotationWin::DoResize()
 
 void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     InterimItemWindow::SetSizePixel(rNewSize);
 
     if (mpShadow)
