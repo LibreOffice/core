@@ -417,7 +417,7 @@ void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
 
     pObj->getChildrenOfSdrObject()->ClearSdrObjList();
 
-    uno::Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY_THROW);
+    uno::Reference<css::drawing::XShape> xShape(pObj->getUnoShape());
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY_THROW);
 
     uno::Reference<xml::dom::XDocument> layoutDom;

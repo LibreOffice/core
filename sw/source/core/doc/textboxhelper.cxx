@@ -77,7 +77,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     {
         if (pObject)
         {
-            uno::Reference<text::XText> xSrcCnt(pObject->getWeakUnoShape(), uno::UNO_QUERY);
+            uno::Reference<text::XText> xSrcCnt(pObject->getWeakUnoShape().get(), uno::UNO_QUERY);
             auto xCur = xSrcCnt->createTextCursor();
             xCur->gotoStart(false);
             xCur->gotoEnd(true);
@@ -254,7 +254,7 @@ bool SwTextBoxHelper::hasTextFrame(const SdrObject* pObj)
     if (!pObj)
         return false;
 
-    uno::Reference<drawing::XShape> xShape(pObj->getWeakUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(pObj->getWeakUnoShape().get(), uno::UNO_QUERY);
     if (!xShape)
         return false;
     return SwTextBoxHelper::getOtherTextBoxFormat(xShape);

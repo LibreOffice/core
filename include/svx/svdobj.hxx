@@ -88,6 +88,7 @@ namespace sdr::properties { class BaseProperties; }
 namespace sdr::contact { class ViewContact; }
 
 namespace svx { class PropertyChangeNotifier; }
+namespace com::sun::star::drawing { class XShape; }
 
 
 struct SVXCORE_DLLPUBLIC SdrObjectFreeOp;
@@ -768,7 +769,7 @@ public:
     void DeleteUserData(sal_uInt16 nNum);
 
     // access to the UNO representation of the shape
-    virtual css::uno::Reference< css::uno::XInterface > getUnoShape();
+    virtual css::uno::Reference< css::drawing::XShape > getUnoShape();
 
     static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt );
 
@@ -861,9 +862,9 @@ public:
     // done by impl_setUnoShape().
     // Calling this function is only allowed for the UNO representation
     // itself!
-    void setUnoShape( const css::uno::Reference<css::uno::XInterface>& _rxUnoShape);
+    void setUnoShape( const css::uno::Reference<css::drawing::XShape>& _rxUnoShape);
 
-    const css::uno::WeakReference< css::uno::XInterface >& getWeakUnoShape() const { return maWeakUnoShape; }
+    const css::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
 
     void setSuitableOutlinerBg(Outliner& rOutliner) const;
     // If fillstyle is drawing::FillStyle_BITMAP, returns the graphic.
@@ -944,7 +945,7 @@ protected:
     ///
     /// The implementation _must_ call the same method of its parent
     /// class (preferably as the first step)!
-    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& _rxUnoShape );
+    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& _rxUnoShape );
 
     const SfxItemSet* getBackgroundFillSet() const;
 
@@ -970,7 +971,7 @@ private:
 
     // do not use directly, always use getSvxShape() if you have to!
     SvxShape*                   mpSvxShape;
-    css::uno::WeakReference< css::uno::XInterface >
+    css::uno::WeakReference< css::drawing::XShape >
                                 maWeakUnoShape;
     // HACK: Do not automatically insert newly created object into a page.
     // The user needs to do it manually later.
