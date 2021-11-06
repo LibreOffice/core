@@ -105,6 +105,11 @@ namespace drawinglayer::attribute
             return mpSdrLightingAttribute->getLightVector();
         }
 
+        const basegfx::BColor& SdrLightingAttribute::getAmbientLightColor() const
+        {
+            return mpSdrLightingAttribute->maAmbientLight;
+        }
+
         // color model solver
         basegfx::BColor SdrLightingAttribute::solveColorModel(
             const basegfx::B3DVector& rNormalInEyeCoordinates,
