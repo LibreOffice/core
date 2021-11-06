@@ -29,8 +29,7 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
         comphelper::getProcessServiceFactory()->createInstance(
             "com.sun.star.ucb.UniversalContentBroker"),
         css::uno::UNO_QUERY_THROW);
-    css::uno::Sequence<css::uno::Any> aArgs(1);
-    aArgs[0] <<= OUString("NoConfig");
+    css::uno::Sequence<css::uno::Any> aArgs{ css::uno::Any(OUString("NoConfig")) };
     css::uno::Reference<css::ucb::XContentProvider> xFileProvider(
         comphelper::getProcessServiceFactory()->createInstanceWithArguments(
             "com.sun.star.ucb.FileContentProvider", aArgs),
