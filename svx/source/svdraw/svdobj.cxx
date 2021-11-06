@@ -494,7 +494,7 @@ void SdrObject::Free( SdrObject*& _rpObject )
             try
             {
                 pShape->InvalidateSdrObject();
-                uno::Reference< lang::XComponent > xShapeComp( pObject->getWeakUnoShape(), uno::UNO_QUERY_THROW );
+                uno::Reference< lang::XComponent > xShapeComp( pObject->getWeakUnoShape().get(), uno::UNO_QUERY_THROW );
                 xShapeComp->dispose();
             }
             catch( const uno::Exception& )
@@ -2797,7 +2797,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
     }
 }
 
-void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUnoShape )
+void SdrObject::impl_setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShape )
 {
     const uno::Reference< uno::XInterface>& xOldUnoShape( maWeakUnoShape );
     // the UNO shape would be gutted by the following code; return early
@@ -2853,10 +2853,10 @@ SvxShape* SdrObject::getSvxShape()
     return mpSvxShape;
 }
 
-css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
+css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
 {
     // try weak reference first
-    uno::Reference< uno::XInterface > xShape( getWeakUnoShape() );
+    uno::Reference< css::drawing::XShape > xShape( getWeakUnoShape() );
     if( xShape )
         return xShape;
 
@@ -2932,13 +2932,13 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
         // using this fallback (!) - what a bad trap
         rtl::Reference<SvxShape> xNewShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this );
         mpSvxShape = xNewShape.get();
-        maWeakUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
+        maWeakUnoShape = xShape = mpSvxShape;
     }
 
     return xShape;
 }
 
-void SdrObject::setUnoShape(const uno::Reference<uno::XInterface >& _rxUnoShape)
+void SdrObject::setUnoShape(const uno::Reference<drawing::XShape >& _rxUnoShape)
 {
     impl_setUnoShape( _rxUnoShape );
 }

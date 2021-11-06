@@ -162,7 +162,7 @@ void Comment::finalizeImport()
         ScPostIt* pPostIt = pDocShell->GetDocFunc().ImportNote( maModel.maRange.aStart, OUString( ' ' ) );
         SdrCaptionObj* pCaption = pPostIt->GetOrCreateCaption( maModel.maRange.aStart );
 
-        Reference< XShape > xAnnoShape( pCaption->getUnoShape(), UNO_QUERY_THROW ); // SvxShapeText
+        Reference< XShape > xAnnoShape( pCaption->getUnoShape() ); // SvxShapeText
         // setting a property triggers expensive process, so set them all at once
         Reference< css::beans::XMultiPropertySet > xAnnoShapeMultiPropSet(xAnnoShape, UNO_QUERY_THROW);
 
