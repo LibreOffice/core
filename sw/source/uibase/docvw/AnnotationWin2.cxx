@@ -520,6 +520,10 @@ void SwAnnotationWin::Rescale()
 
 void SwAnnotationWin::SetPosAndSize()
 {
+    // no need to layout annotations in LOK case as we sent comments as a JSON
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     bool bChange = false;
 
     if (GetSizePixel() != mPosSize.GetSize())
