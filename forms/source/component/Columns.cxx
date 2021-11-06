@@ -553,18 +553,345 @@ void OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
     }
 }
 
+TextFieldColumn::TextFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_TEXTFIELD)
+{
+}
+TextFieldColumn::TextFieldColumn(const TextFieldColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> TextFieldColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& TextFieldColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void TextFieldColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> TextFieldColumn::createCloneColumn() const
+{
+    return new TextFieldColumn(this);
+}
 
-IMPL_COLUMN(TextFieldColumn,        FRM_SUN_COMPONENT_TEXTFIELD,        false);
-IMPL_COLUMN(PatternFieldColumn,     FRM_SUN_COMPONENT_PATTERNFIELD,     false);
-IMPL_COLUMN(DateFieldColumn,        FRM_SUN_COMPONENT_DATEFIELD,        true);
-IMPL_COLUMN(TimeFieldColumn,        FRM_SUN_COMPONENT_TIMEFIELD,        false);
-IMPL_COLUMN(NumericFieldColumn,     FRM_SUN_COMPONENT_NUMERICFIELD,     false);
-IMPL_COLUMN(CurrencyFieldColumn,    FRM_SUN_COMPONENT_CURRENCYFIELD,    false);
-IMPL_COLUMN(CheckBoxColumn,         FRM_SUN_COMPONENT_CHECKBOX,         false);
-IMPL_COLUMN(ComboBoxColumn,         FRM_SUN_COMPONENT_COMBOBOX,         false);
-IMPL_COLUMN(ListBoxColumn,          FRM_SUN_COMPONENT_LISTBOX,          false);
-IMPL_COLUMN(FormattedFieldColumn,   FRM_SUN_COMPONENT_FORMATTEDFIELD,   false);
+PatternFieldColumn::PatternFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_PATTERNFIELD)
+{
+}
+PatternFieldColumn::PatternFieldColumn(const PatternFieldColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> PatternFieldColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& PatternFieldColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void PatternFieldColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> PatternFieldColumn::createCloneColumn() const
+{
+    return new PatternFieldColumn(this);
+}
 
+DateFieldColumn::DateFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_DATEFIELD)
+{
+}
+DateFieldColumn::DateFieldColumn(const DateFieldColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> DateFieldColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& DateFieldColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void DateFieldColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, true);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> DateFieldColumn::createCloneColumn() const
+{
+    return new DateFieldColumn(this);
+}
+
+TimeFieldColumn::TimeFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_TIMEFIELD)
+{
+}
+TimeFieldColumn::TimeFieldColumn(const TimeFieldColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> TimeFieldColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& TimeFieldColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void TimeFieldColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> TimeFieldColumn::createCloneColumn() const
+{
+    return new TimeFieldColumn(this);
+}
+
+NumericFieldColumn::NumericFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_NUMERICFIELD)
+{
+}
+NumericFieldColumn::NumericFieldColumn(const NumericFieldColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> NumericFieldColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& NumericFieldColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void NumericFieldColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> NumericFieldColumn::createCloneColumn() const
+{
+    return new NumericFieldColumn(this);
+}
+
+CurrencyFieldColumn::CurrencyFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_CURRENCYFIELD)
+{
+}
+CurrencyFieldColumn::CurrencyFieldColumn(const CurrencyFieldColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> CurrencyFieldColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& CurrencyFieldColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void CurrencyFieldColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> CurrencyFieldColumn::createCloneColumn() const
+{
+    return new CurrencyFieldColumn(this);
+}
+
+CheckBoxColumn::CheckBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_CHECKBOX)
+{
+}
+CheckBoxColumn::CheckBoxColumn(const CheckBoxColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> CheckBoxColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& CheckBoxColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void CheckBoxColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> CheckBoxColumn::createCloneColumn() const
+{
+    return new CheckBoxColumn(this);
+}
+
+ComboBoxColumn::ComboBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_COMBOBOX)
+{
+}
+ComboBoxColumn::ComboBoxColumn(const ComboBoxColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> ComboBoxColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& ComboBoxColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void ComboBoxColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> ComboBoxColumn::createCloneColumn() const
+{
+    return new ComboBoxColumn(this);
+}
+
+ListBoxColumn::ListBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_LISTBOX)
+{
+}
+ListBoxColumn::ListBoxColumn(const ListBoxColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> ListBoxColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& ListBoxColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void ListBoxColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> ListBoxColumn::createCloneColumn() const
+{
+    return new ListBoxColumn(this);
+}
+
+FormattedFieldColumn::FormattedFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+                                :OGridColumn(_rContext, FRM_SUN_COMPONENT_FORMATTEDFIELD)
+{
+}
+FormattedFieldColumn::FormattedFieldColumn(const FormattedFieldColumn* _pCloneFrom)
+                                :OGridColumn( _pCloneFrom )
+{
+}
+css::uno::Reference< css::beans::XPropertySetInfo> FormattedFieldColumn::getPropertySetInfo()
+{
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& FormattedFieldColumn::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+void FormattedFieldColumn::fillProperties(
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    ) const
+{
+    if (m_xAggregateSet.is())
+    {
+        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties();
+        clearAggregateProperties(_rAggregateProps, false);
+        setOwnProperties(_rProps);
+    }
+}
+rtl::Reference<OGridColumn> FormattedFieldColumn::createCloneColumn() const
+{
+    return new FormattedFieldColumn(this);
+}
 
 }   // namespace frm
 

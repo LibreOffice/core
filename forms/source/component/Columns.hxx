@@ -110,41 +110,6 @@ protected:
     virtual rtl::Reference<OGridColumn> createCloneColumn() const = 0;
 };
 
-#define IMPL_COLUMN(ClassName, Model, bAllowDropDown)                               \
-    ClassName::ClassName( const css::uno::Reference<css::uno::XComponentContext>& _rContext ) \
-    :OGridColumn(_rContext, Model) \
-{ \
-} \
-ClassName::ClassName( const ClassName* _pCloneFrom ) \
-    :OGridColumn( _pCloneFrom ) \
-{ \
-} \
-css::uno::Reference< css::beans::XPropertySetInfo>  ClassName::getPropertySetInfo() \
-{ \
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) ); \
-    return xInfo; \
-} \
-::cppu::IPropertyArrayHelper& ClassName::getInfoHelper() \
-{ \
-    return *getArrayHelper(); \
-} \
-void ClassName::fillProperties( \
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps, \
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps \
-    ) const \
-{ \
-    if (m_xAggregateSet.is()) \
-    { \
-        _rAggregateProps = m_xAggregateSet->getPropertySetInfo()->getProperties(); \
-        clearAggregateProperties(_rAggregateProps, bAllowDropDown); \
-        setOwnProperties(_rProps); \
-    } \
-} \
-rtl::Reference<OGridColumn> ClassName::createCloneColumn() const \
-{ \
-    return new ClassName( this ); \
-} \
- \
 // column type ids
 #define TYPE_CHECKBOX       0
 #define TYPE_COMBOBOX       1
