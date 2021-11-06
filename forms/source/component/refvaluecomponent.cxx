@@ -158,9 +158,9 @@ namespace frm
         sal_Int32 nOldCount = _rProps.getLength();
         _rProps.realloc( nOldCount + 3);
         css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-            DECL_PROP_IMPL(REFVALUE, OUString) css::beans::PropertyAttribute::BOUND);
-            DECL_PROP_IMPL(DEFAULT_STATE, sal_Int16) css::beans::PropertyAttribute::BOUND);
-            DECL_PROP_IMPL(UNCHECKED_REFVALUE, OUString) css::beans::PropertyAttribute::BOUND);
+        *pProperties++ = css::beans::Property(PROPERTY_REFVALUE, PROPERTY_ID_REFVALUE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+        *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_STATE, PROPERTY_ID_DEFAULT_STATE, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
+        *pProperties++ = css::beans::Property(PROPERTY_UNCHECKED_REFVALUE, PROPERTY_ID_UNCHECKED_REFVALUE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
         DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
     }
 

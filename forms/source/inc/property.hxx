@@ -336,10 +336,6 @@ public:
     virtual sal_Int32 getPreferredPropertyId(const OUString& _rName) override;
 };
 
-
-#define DECL_PROP_IMPL(varname, type) \
-    *pProperties++ = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cppu::UnoType<type>::get(),
-
 }
 //... namespace frm .......................................................
 

@@ -108,10 +108,10 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 {
     _rProps.realloc(4);
     css::beans::Property* pProperties = _rProps.getArray();
-        DECL_PROP_IMPL(CLASSID, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-        DECL_PROP_IMPL(HIDDEN_VALUE, OUString) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(NAME, OUString) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(TAG, OUString) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_CLASSID, PROPERTY_ID_CLASSID, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_HIDDEN_VALUE, PROPERTY_ID_HIDDEN_VALUE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TAG, PROPERTY_ID_TAG, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 
