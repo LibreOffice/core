@@ -351,6 +351,46 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
         static_cast<sal_Int32>(o3tl::convert(2477601, o3tl::Length::emu, o3tl::Length::mm100)),
         xShape->getSize().Height, 1);
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
+{
+    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/FontWork.odg");
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPage.is());
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pSdrPage->GetObj(0) }, nullptr);
+    const auto& rDrawPageVOContact
+        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
+
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/primitive2D", 1);
+
+    assertXPath(pXmlDoc, "//scene", "projectionMode", "Perspective");
+    assertXPath(pXmlDoc, "//scene/extrude3D[1]/fill", "color", "#ff0000");
+    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "color", "#ff0000");
+    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "specularIntensity",
+                "20");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
