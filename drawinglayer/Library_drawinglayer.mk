@@ -153,6 +153,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive3d/shadowprimitive3d \
     drawinglayer/source/primitive3d/textureprimitive3d \
     drawinglayer/source/primitive3d/transformprimitive3d \
+    drawinglayer/source/primitive3d/Tools \
     drawinglayer/source/processor2d/baseprocessor2d \
     drawinglayer/source/processor2d/processor2dtools \
     drawinglayer/source/processor2d/contourextractor2d \

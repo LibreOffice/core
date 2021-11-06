@@ -68,6 +68,7 @@ namespace drawinglayer::attribute
             bool operator==(const SdrLightingAttribute& rCandidate) const;
 
             // data read access
+            const basegfx::BColor& getAmbientLightColor() const;
             const ::std::vector< Sdr3DLightAttribute >& getLightVector() const;
 
             // color model solver
