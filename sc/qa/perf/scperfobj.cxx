@@ -475,12 +475,7 @@ void ScPerfObj::testSubTotalWithFormulas()
     uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(true);
 
     // Create the column used for subtotal
-    uno::Sequence < sheet::SubTotalColumn > xSubTotalColumns;
-    xSubTotalColumns.realloc(1);
-
-    // Add the column to the descriptor
-    xSubTotalColumns[0].Column   = 1;
-    xSubTotalColumns[0].Function = sheet::GeneralFunction_SUM;
+    uno::Sequence < sheet::SubTotalColumn > xSubTotalColumns { { 1, sheet::GeneralFunction_SUM } };
 
     xSubDesc->addNew(xSubTotalColumns, 0);
 
@@ -511,12 +506,7 @@ void ScPerfObj::testSubTotalWithoutFormulas()
     uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(true);
 
     // Create the column used for subtotal
-    uno::Sequence < sheet::SubTotalColumn> xSubTotalColumns;
-    xSubTotalColumns.realloc(1);
-
-    // Add the column to the descriptor
-    xSubTotalColumns[0].Column   = 1;
-    xSubTotalColumns[0].Function = sheet::GeneralFunction_SUM;
+    uno::Sequence < sheet::SubTotalColumn> xSubTotalColumns { { 1, sheet::GeneralFunction_SUM } };
 
     xSubDesc->addNew(xSubTotalColumns, 0);
 
@@ -549,9 +539,10 @@ namespace {
             xSheetCellRange->getCellRangeByName(rCellRange), UNO_QUERY);
 
         uno::Sequence< uno::Sequence< OUString > > aFormulae(1000);
+        auto pFormulae = aFormulae.getArray();
         for (sal_Int32 i = 0; i < 1000; ++i)
         {
-            aFormulae[i] = { rFormula };
+            pFormulae[i] = { rFormula };
         }
 
         // NB. not set Array (matrix) formula
