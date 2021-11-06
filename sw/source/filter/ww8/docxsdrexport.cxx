@@ -1398,8 +1398,7 @@ static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
 void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat,
                                     int nAnchorId)
 {
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(),
-                                           uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape());
     if (!Impl::isSupportedDMLShape(xShape))
         return;
 
@@ -1588,8 +1587,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
     // Depending on the shape type, we actually don't write the shape as DML.
     OUString sShapeType;
     ShapeFlag nMirrorFlags = ShapeFlag::NONE;
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape(),
-                                           uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape());
 
     MSO_SPT eShapeType
         = EscherPropertyContainer::GetCustomShapeType(xShape, nMirrorFlags, sShapeType);

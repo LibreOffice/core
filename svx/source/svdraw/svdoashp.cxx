@@ -3213,7 +3213,7 @@ void SdrObjCustomShape::InvalidateRenderGeometry()
     mpLastShadowGeometry = nullptr;
 }
 
-void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& rxUnoShape)
+void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<drawing::XShape>& rxUnoShape)
 {
     SdrTextObj::impl_setUnoShape(rxUnoShape);
 

@@ -83,7 +83,7 @@ protected:
 
     /** called by instances of derived classes to implement their overriding of getUnoShape
     */
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< css::drawing::XShape >
             getUnoShapeOf( SdrObject& _rSdrObject );
 
 private:
@@ -138,12 +138,12 @@ public:
 
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
-    virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
+    virtual css::uno::Reference< css::drawing::XShape > getUnoShape() override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
 
 private:
-    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
+    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
 
     OCustomShape(
         SdrModel& rSdrModel,
@@ -183,7 +183,7 @@ public:
 
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
-    virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
+    virtual css::uno::Reference< css::drawing::XShape > getUnoShape() override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
@@ -212,7 +212,7 @@ private:
     virtual SdrPage* GetImplPage() const override;
 
     void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
-    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
+    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
 
     SdrObjKind m_nType;
     bool    m_bOnlyOnce;
@@ -266,13 +266,13 @@ public:
 
     static OUString GetDefaultName(const OUnoObject* _pObj);
 
-    virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
+    virtual css::uno::Reference< css::drawing::XShape > getUnoShape() override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     virtual OUnoObject* CloneSdrObject(SdrModel& rTargetModel) const override;
 
 private:
-    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
+    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
     void    impl_initializeModel_nothrow();
 };
 

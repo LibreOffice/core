@@ -9,6 +9,7 @@
 
 #include <svx/signaturelinehelper.hxx>
 
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
