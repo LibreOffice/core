@@ -193,28 +193,28 @@ namespace frm
         _rProps.realloc( nPos + 21 );
         Property* pProperties = _rProps.getArray();
 
-        DECL_PROP_IMPL(FONT, FontDescriptor) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONTEMPHASISMARK, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONTRELIEF, sal_Int16) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(TEXTCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP_IMPL(TEXTLINECOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT, PROPERTY_ID_FONT, cppu::UnoType<FontDescriptor>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONTEMPHASISMARK, PROPERTY_ID_FONTEMPHASISMARK, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONTRELIEF, PROPERTY_ID_FONTRELIEF, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
+        *pProperties++ = css::beans::Property(PROPERTY_TEXTLINECOLOR, PROPERTY_ID_TEXTLINECOLOR, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
 
-        DECL_PROP_IMPL(FONT_CHARWIDTH, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_CHARWIDTH, PROPERTY_ID_FONT_CHARWIDTH, cppu::UnoType<float>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
         *pProperties++ = css::beans::Property(PROPERTY_FONT_KERNING, PROPERTY_ID_FONT_KERNING, cppu::UnoType<bool>::get(),
                                               css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_ORIENTATION, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_PITCH, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_TYPE, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_WIDTH, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_NAME, OUString) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_STYLENAME, OUString) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_FAMILY, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_CHARSET, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_HEIGHT, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_WEIGHT, float) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_SLANT, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_UNDERLINE, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
-        DECL_PROP_IMPL(FONT_STRIKEOUT, sal_Int16) css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_ORIENTATION, PROPERTY_ID_FONT_ORIENTATION, cppu::UnoType<float>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_PITCH, PROPERTY_ID_FONT_PITCH, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_TYPE, PROPERTY_ID_FONT_TYPE, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_WIDTH, PROPERTY_ID_FONT_WIDTH, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_NAME, PROPERTY_ID_FONT_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_STYLENAME, PROPERTY_ID_FONT_STYLENAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_FAMILY, PROPERTY_ID_FONT_FAMILY, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_CHARSET, PROPERTY_ID_FONT_CHARSET, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_HEIGHT, PROPERTY_ID_FONT_HEIGHT, cppu::UnoType<float>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_WEIGHT, PROPERTY_ID_FONT_WEIGHT, cppu::UnoType<float>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_SLANT, PROPERTY_ID_FONT_SLANT, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_UNDERLINE, PROPERTY_ID_FONT_UNDERLINE, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
+        *pProperties++ = css::beans::Property(PROPERTY_FONT_STRIKEOUT, PROPERTY_ID_FONT_STRIKEOUT, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
         *pProperties++ = css::beans::Property(PROPERTY_FONT_WORDLINEMODE, PROPERTY_ID_FONT_WORDLINEMODE, cppu::UnoType<bool>::get(),
                                               css::beans::PropertyAttribute::MAYBEDEFAULT);
     }

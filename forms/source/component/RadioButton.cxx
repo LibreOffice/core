@@ -242,7 +242,7 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 1);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

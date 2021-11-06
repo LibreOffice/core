@@ -150,9 +150,9 @@ void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 4);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP_IMPL(DEFAULT_TIME, util::Time) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(FORMATKEY, sal_Int32) css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_TIME, PROPERTY_ID_DEFAULT_TIME, cppu::UnoType<util::Time>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
+    *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_FORMATKEY, PROPERTY_ID_FORMATKEY, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_FORMATSSUPPLIER, PROPERTY_ID_FORMATSSUPPLIER, cppu::UnoType<XNumberFormatsSupplier>::get(),
                                           css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");

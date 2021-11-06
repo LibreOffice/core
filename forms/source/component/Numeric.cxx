@@ -114,8 +114,8 @@ void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) con
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 2);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP_IMPL(DEFAULT_VALUE, double) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_VALUE, PROPERTY_ID_DEFAULT_VALUE, cppu::UnoType<double>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
+    *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

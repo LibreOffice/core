@@ -295,14 +295,14 @@ void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 7);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(LISTSOURCETYPE, ListSourceType) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(LISTSOURCE, OUString) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_LISTSOURCETYPE, PROPERTY_ID_LISTSOURCETYPE, cppu::UnoType<ListSourceType>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_LISTSOURCE, PROPERTY_ID_LISTSOURCE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
                                               css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(DEFAULT_TEXT, OUString) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(STRINGITEMLIST, Sequence< OUString >) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(TYPEDITEMLIST, Sequence< Any >) css::beans::PropertyAttribute::OPTIONAL);
+    *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_TEXT, PROPERTY_ID_DEFAULT_TEXT, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_STRINGITEMLIST, PROPERTY_ID_STRINGITEMLIST, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TYPEDITEMLIST, PROPERTY_ID_TYPEDITEMLIST, cppu::UnoType<Sequence< Any >>::get(), css::beans::PropertyAttribute::OPTIONAL);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

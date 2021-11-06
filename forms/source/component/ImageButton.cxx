@@ -79,11 +79,11 @@ void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 5);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP_IMPL(BUTTONTYPE, FormButtonType) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(DISPATCHURLINTERNAL, sal_Bool) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(TARGET_URL, OUString) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(TARGET_FRAME, OUString) css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_BUTTONTYPE, PROPERTY_ID_BUTTONTYPE, cppu::UnoType<FormButtonType>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_DISPATCHURLINTERNAL, PROPERTY_ID_DISPATCHURLINTERNAL, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TARGET_URL, PROPERTY_ID_TARGET_URL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TARGET_FRAME, PROPERTY_ID_TARGET_FRAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

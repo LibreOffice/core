@@ -1295,32 +1295,32 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
                                                          css::beans::PropertyAttribute::MAYBEVOID | PropertyAttribute::CONSTRAINED);
     *pProperties++ = css::beans::Property(PROPERTY_APPLYFILTER, PROPERTY_ID_APPLYFILTER, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP_IMPL(NAME, OUString) css::beans::PropertyAttribute::BOUND);
-    DECL_PROP_IMPL(MASTERFIELDS, Sequence< OUString >) css::beans::PropertyAttribute::BOUND);
-    DECL_PROP_IMPL(DETAILFIELDS, Sequence< OUString >) css::beans::PropertyAttribute::BOUND);
-    DECL_PROP_IMPL(DATASOURCE, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::CONSTRAINED);
-    DECL_PROP_IMPL(CYCLE, TabulatorCycle) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP_IMPL(FILTER, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP_IMPL(HAVINGCLAUSE, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_MASTERFIELDS, PROPERTY_ID_MASTERFIELDS, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_DETAILFIELDS, PROPERTY_ID_DETAILFIELDS, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_DATASOURCE, PROPERTY_ID_DATASOURCE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::CONSTRAINED);
+    *pProperties++ = css::beans::Property(PROPERTY_CYCLE, PROPERTY_ID_CYCLE, cppu::UnoType<TabulatorCycle>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_FILTER, PROPERTY_ID_FILTER, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_HAVINGCLAUSE, PROPERTY_ID_HAVINGCLAUSE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_INSERTONLY, PROPERTY_ID_INSERTONLY, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP_IMPL(NAVIGATION, NavigationBarMode) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_NAVIGATION, PROPERTY_ID_NAVIGATION, cppu::UnoType<NavigationBarMode>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_ALLOWADDITIONS, PROPERTY_ID_ALLOWADDITIONS, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_ALLOWEDITS, PROPERTY_ID_ALLOWEDITS, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_ALLOWDELETIONS, PROPERTY_ID_ALLOWDELETIONS, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
-    DECL_PROP_IMPL(PRIVILEGES, sal_Int32) css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY);
-    DECL_PROP_IMPL(TARGET_URL, OUString) css::beans::PropertyAttribute::BOUND);
-    DECL_PROP_IMPL(TARGET_FRAME, OUString) css::beans::PropertyAttribute::BOUND);
-    DECL_PROP_IMPL(SUBMIT_METHOD, FormSubmitMethod) css::beans::PropertyAttribute::BOUND);
-    DECL_PROP_IMPL(SUBMIT_ENCODING, FormSubmitEncoding) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY);
+    *pProperties++ = css::beans::Property(PROPERTY_TARGET_URL, PROPERTY_ID_TARGET_URL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TARGET_FRAME, PROPERTY_ID_TARGET_FRAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_SUBMIT_METHOD, PROPERTY_ID_SUBMIT_METHOD, cppu::UnoType<FormSubmitMethod>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_SUBMIT_ENCODING, PROPERTY_ID_SUBMIT_ENCODING, cppu::UnoType<FormSubmitEncoding>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_DYNAMIC_CONTROL_BORDER, PROPERTY_ID_DYNAMIC_CONTROL_BORDER, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT );
-    DECL_PROP_IMPL(CONTROL_BORDER_COLOR_FOCUS, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP_IMPL(CONTROL_BORDER_COLOR_MOUSE, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    DECL_PROP_IMPL(CONTROL_BORDER_COLOR_INVALID, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_CONTROL_BORDER_COLOR_FOCUS, PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_CONTROL_BORDER_COLOR_MOUSE, PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_CONTROL_BORDER_COLOR_INVALID, PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

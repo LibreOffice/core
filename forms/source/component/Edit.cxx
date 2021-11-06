@@ -353,11 +353,11 @@ void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     sal_Int32 nOldCount = _rProps.getLength();
     _rProps.realloc( nOldCount + 5);
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-        DECL_PROP_IMPL(PERSISTENCE_MAXTEXTLENGTH, sal_Int16) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-        DECL_PROP_IMPL(DEFAULT_TEXT, OUString) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_PERSISTENCE_MAXTEXTLENGTH, PROPERTY_ID_PERSISTENCE_MAXTEXTLENGTH, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_TEXT, PROPERTY_ID_DEFAULT_TEXT, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
-        DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_FILTERPROPOSAL, PROPERTY_ID_FILTERPROPOSAL, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");

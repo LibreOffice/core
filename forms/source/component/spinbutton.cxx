@@ -94,9 +94,9 @@ namespace frm
         sal_Int32 nOldCount = _rProps.getLength();
         _rProps.realloc( nOldCount + 3);
         css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
-            DECL_PROP_IMPL(DEFAULT_SPIN_VALUE, sal_Int32) css::beans::PropertyAttribute::BOUND);
-            DECL_PROP_IMPL(TABINDEX, sal_Int16) css::beans::PropertyAttribute::BOUND);
-            DECL_PROP_IMPL(CONTROLSOURCEPROPERTY, OUString) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
+        *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_SPIN_VALUE, PROPERTY_ID_DEFAULT_SPIN_VALUE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND);
+        *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
+        *pProperties++ = css::beans::Property(PROPERTY_CONTROLSOURCEPROPERTY, PROPERTY_ID_CONTROLSOURCEPROPERTY, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
     }
 
