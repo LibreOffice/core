@@ -36,7 +36,6 @@
 #include <svl/style.hxx>
 #include <svx/xtable.hxx>
 
-class OutputDevice;
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 
@@ -48,8 +47,7 @@ class OutputDevice;
 #include <unordered_set>
 #endif
 
-constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
-
+class OutputDevice;
 class SdrOutliner;
 class SdrLayerAdmin;
 class SdrObjList;
@@ -91,6 +89,9 @@ namespace sfx2
 namespace com::sun::star::beans {
     struct PropertyValue;
 }
+
+
+constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
 
 
 enum class SdrHintKind

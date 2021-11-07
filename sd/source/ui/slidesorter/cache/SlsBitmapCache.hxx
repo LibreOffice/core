@@ -19,11 +19,11 @@
 
 #pragma once
 
-class SdrPage;
-
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
+
+class SdrPage;
 
 namespace sd::slidesorter::cache
 {

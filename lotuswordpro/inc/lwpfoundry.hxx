@@ -68,11 +68,11 @@
 #include "lwpdropcapmgr.hxx"
 #include "xfilter/ixfstyle.hxx"
 #include <unordered_map>
+#include <memory>
+
 
 class LwpDocument;
 class LwpBookMark;
-
-#include <memory>
 
 class LwpVersionManager
 {

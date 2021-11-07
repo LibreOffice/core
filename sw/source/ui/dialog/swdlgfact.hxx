@@ -51,6 +51,10 @@
 #include <swuiidxmrk.hxx>
 #include <tautofmt.hxx>
 #include <wordcountdialog.hxx>
+#include <itabenum.hxx>
+#include <optional>
+#include <o3tl/deleter.hxx>
+
 
 class SwInsertAbstractDlg;
 class SwAsciiFilterDlg;
@@ -71,19 +75,15 @@ class SwRenameXNamedDlg;
 class SwModalRedlineAcceptDlg;
 class SwTOXMark;
 class SwSplitTableDlg;
-
-#include <itabenum.hxx>
-#include <optional>
-#include <o3tl/deleter.hxx>
-
 namespace sw
 {
 class DropDownFieldDialog;
 class DropDownFormFieldDialog;
 class DateFormFieldDialog;
 }
-
 class SwWordCountFloatDlg;
+
+
 class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
 {
     std::shared_ptr<SwWordCountFloatDlg> m_xDlg;

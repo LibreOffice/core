@@ -20,11 +20,10 @@
 #pragma once
 
 #include <shellids.hxx>
+#include "drawsh.hxx"
 
 class ScViewData;
 class SfxModule;
-
-#include "drawsh.hxx"
 
 class ScMediaShell final : public ScDrawShell
 {

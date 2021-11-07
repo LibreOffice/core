@@ -18,15 +18,12 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
-
 #include "TabPageNotifiable.hxx"
+#include <vcl/weld.hxx>
+#include <memory>
 
 namespace com::sun::star::chart2 { class XChartDocument; }
 namespace com::sun::star::uno { class XComponentContext; }
-
-#include <memory>
-
 class BuilderPage;
 
 namespace chart

@@ -27,17 +27,16 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <xmlsecuritydllapi.h>
 #include <cppuhelper/implbase.hxx>
+#include <vector>
+#include <memory>
 
 class BufferNode;
 class ElementMark;
 class ElementCollector;
-
-#include <vector>
-#include <memory>
-
 namespace com::sun::star::xml::crypto::sax { class XSAXEventKeeperStatusChangeListener; }
 namespace com::sun::star::xml::csax { class XCompressedDocumentHandler; }
 namespace com::sun::star::xml::wrapper { class XXMLDocumentWrapper; }
+
 
 class SAXEventKeeperImpl final : public cppu::WeakImplHelper
 <

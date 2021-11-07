@@ -20,11 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALDISP_HXX
 #define INCLUDED_VCL_INC_UNX_SALDISP_HXX
 
-class   SalDisplay;
-class   SalColormap;
-class   SalVisual;
-class   SalXLib;
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/render.h>
@@ -46,6 +41,12 @@ class   SalXLib;
 #include <o3tl/enumarray.hxx>
 
 #include <vclpluginapi.h>
+
+class   SalDisplay;
+class   SalColormap;
+class   SalVisual;
+class   SalXLib;
+
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
