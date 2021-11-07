@@ -5256,7 +5256,10 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         sal_uInt32 i;
         sal_Unicode nChar;
         std::unique_ptr<sal_Unicode[]> pBuf(new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ]);
-        rIn.ReadBytes(pBuf.get(), nMaxLen);
+        void* pDest = pBuf.get();
+        auto nRead = rIn.ReadBytes(pDest, nMaxLen);
+        if (nRead != nMaxLen)
+            memset(static_cast<char*>(pDest) + nRead, 0, nMaxLen - nRead);
         nMaxLen >>= 1;
         pBuf[ nMaxLen ] = 0;
         sal_Unicode* pPtr = pBuf.get();
