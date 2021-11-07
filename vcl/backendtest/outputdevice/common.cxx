@@ -937,6 +937,7 @@ TestResult OutputDeviceTestCommon::checkOpenBezier(Bitmap& rBitmap)
     {
         for (tools::Long y = 0; y < pAccess->Height(); ++y)
         {
+            // coverity[swapped_arguments : FALSE] - this is in the correct order
             if (SetPixels[{ y, x }])
             {
                 checkValue(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors, true);
