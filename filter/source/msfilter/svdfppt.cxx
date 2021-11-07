@@ -5253,16 +5253,17 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
 
     if( aTextHd.nRecType == PPT_PST_TextCharsAtom )
     {
-        sal_uInt32 i;
-        sal_Unicode nChar;
-        std::unique_ptr<sal_Unicode[]> pBuf(new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ]);
-        void* pDest = pBuf.get();
+        std::vector<sal_Unicode> aBuf(( nMaxLen >> 1 ) + 1);
+        void* pDest = aBuf.data();
         auto nRead = rIn.ReadBytes(pDest, nMaxLen);
         if (nRead != nMaxLen)
             memset(static_cast<char*>(pDest) + nRead, 0, nMaxLen - nRead);
         nMaxLen >>= 1;
-        pBuf[ nMaxLen ] = 0;
-        sal_Unicode* pPtr = pBuf.get();
+        aBuf[nMaxLen] = 0;
+
+        sal_uInt32 i;
+        sal_Unicode* pPtr = aBuf.data();
+
 #ifdef OSL_BIGENDIAN
         sal_Unicode nTemp;
         for ( i = 0; i < nMaxLen; i++ )
@@ -5270,12 +5271,12 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             nTemp = *pPtr;
             *pPtr++ = ( nTemp << 8 ) | ( nTemp >> 8 );
         }
-        pPtr = pBuf.get();
+        pPtr = aBuf.data();
 #endif
 
         for ( i = 0; i < nMaxLen; pPtr++, i++ )
         {
-            nChar = *pPtr;
+            sal_Unicode nChar = *pPtr;
             if ( !nChar )
                 break;
             if ( ( nChar & 0xff00 ) == 0xf000 )         // in this special case we got a symbol
@@ -5289,7 +5290,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             }
         }
         if ( i )
-            aString = OUString(pBuf.get(), i);
+            aString = OUString(aBuf.data(), i);
     }
     else if( aTextHd.nRecType == PPT_PST_TextBytesAtom )
     {
