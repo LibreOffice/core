@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f47aebd0_e04b7d2b",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-07T19:03:14Z",
+      "side": 1,
+      "message": "Could you please move these commented code to another patch?",
+      "revId": "d0851472b7ede5849fd337ba4de922ce03962e6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
