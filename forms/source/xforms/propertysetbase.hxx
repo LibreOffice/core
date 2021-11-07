@@ -341,7 +341,5 @@ public:
 #define PROPERTY_FLAGS( NAME, TYPE, FLAG ) css::beans::Property( \
     #NAME, \
     HANDLE_##NAME, cppu::UnoType<TYPE>::get(), FLAG )
-#define PROPERTY( NAME, TYPE )      PROPERTY_FLAGS( NAME, TYPE, css::beans::PropertyAttribute::BOUND )
-#define PROPERTY_RO( NAME, TYPE )   PROPERTY_FLAGS( NAME, TYPE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

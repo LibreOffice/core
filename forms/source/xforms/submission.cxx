@@ -297,32 +297,55 @@ Model* Submission::getModelImpl() const
 #define HANDLE_IncludeNamespacePrefixes 14
 #define HANDLE_Model 15
 
-#define REGISTER_PROPERTY( property, type )   \
-    registerProperty( PROPERTY( property, type ), \
-    new DirectPropertyAccessor< Submission, type >( this, &Submission::set##property, &Submission::get##property ) );
-
-#define REGISTER_PROPERTY_BOOL( property )   \
-    registerProperty( PROPERTY( property, bool ), \
-    new BooleanPropertyAccessor< Submission >( this, &Submission::set##property, &Submission::get##property ) );
-
 void Submission::initializePropertySet()
 {
-    REGISTER_PROPERTY     ( ID,                         OUString );
-    REGISTER_PROPERTY     ( Bind,                       OUString );
-    REGISTER_PROPERTY     ( Ref,                        OUString );
-    REGISTER_PROPERTY     ( Action,                     OUString );
-    REGISTER_PROPERTY     ( Method,                     OUString );
-    REGISTER_PROPERTY     ( Version,                    OUString );
-    REGISTER_PROPERTY_BOOL( Indent );
-    REGISTER_PROPERTY     ( MediaType,                  OUString );
-    REGISTER_PROPERTY     ( Encoding,                   OUString );
-    REGISTER_PROPERTY_BOOL( OmitXmlDeclaration );
-    REGISTER_PROPERTY_BOOL( Standalone );
-    REGISTER_PROPERTY     ( CDataSectionElement,        OUString );
-    REGISTER_PROPERTY     ( Replace,                    OUString );
-    REGISTER_PROPERTY     ( Separator,                  OUString );
-    REGISTER_PROPERTY     ( IncludeNamespacePrefixes,   Sequence< OUString > );
-    REGISTER_PROPERTY     ( Model,                      Reference<XModel> );
+    registerProperty( PROPERTY_FLAGS( ID, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setID, &Submission::getID) );
+
+    registerProperty( PROPERTY_FLAGS( Bind, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setBind, &Submission::getBind) );
+
+    registerProperty( PROPERTY_FLAGS( Ref, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setRef, &Submission::getRef) );
+
+    registerProperty( PROPERTY_FLAGS( Action, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setAction, &Submission::getAction) );
+
+    registerProperty( PROPERTY_FLAGS( Method, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setMethod, &Submission::getMethod) );
+
+    registerProperty( PROPERTY_FLAGS( Version, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setVersion, &Submission::getVersion) );
+
+    registerProperty( PROPERTY_FLAGS( Indent, bool, css::beans::PropertyAttribute::BOUND ),
+    new BooleanPropertyAccessor< Submission >(this, &Submission::setIndent, &Submission::getIndent));
+
+    registerProperty( PROPERTY_FLAGS( MediaType, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setMediaType, &Submission::getMediaType) );
+
+    registerProperty( PROPERTY_FLAGS( Encoding, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setEncoding, &Submission::getEncoding) );
+
+    registerProperty( PROPERTY_FLAGS( OmitXmlDeclaration, bool, css::beans::PropertyAttribute::BOUND ),
+    new BooleanPropertyAccessor< Submission >(this, &Submission::setOmitXmlDeclaration, &Submission::getOmitXmlDeclaration));
+
+    registerProperty( PROPERTY_FLAGS( Standalone, bool, css::beans::PropertyAttribute::BOUND ),
+    new BooleanPropertyAccessor< Submission >(this, &Submission::setStandalone, &Submission::getStandalone));
+
+    registerProperty( PROPERTY_FLAGS( CDataSectionElement, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setCDataSectionElement, &Submission::getCDataSectionElement) );
+
+    registerProperty( PROPERTY_FLAGS( Replace, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setReplace, &Submission::getReplace) );
+
+    registerProperty( PROPERTY_FLAGS( Separator, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, OUString >(this, &Submission::setSeparator, &Submission::getSeparator) );
+
+    registerProperty( PROPERTY_FLAGS( IncludeNamespacePrefixes, Sequence<OUString>, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, Sequence<OUString> >(this, &Submission::setIncludeNamespacePrefixes, &Submission::getIncludeNamespacePrefixes) );
+
+    registerProperty( PROPERTY_FLAGS( Model, Reference<XModel>, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Submission, Reference<XModel> >(this, &Submission::setModel, &Submission::getModel) );
 
     initializePropertyValueCache( HANDLE_Indent );
     initializePropertyValueCache( HANDLE_OmitXmlDeclaration );

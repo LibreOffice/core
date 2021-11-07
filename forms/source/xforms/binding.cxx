@@ -1191,36 +1191,52 @@ css::uno::Reference<css::util::XCloneable> SAL_CALL Binding::createClone()
 
 // property set implementations
 
-
-#define REGISTER_PROPERTY( property, type )   \
-    registerProperty( PROPERTY( property, type ), \
-    new DirectPropertyAccessor< Binding, type >( this, &Binding::set##property, &Binding::get##property ) );
-
-#define REGISTER_PROPERTY_RO( property, type )   \
-    registerProperty( PROPERTY_RO( property, type ), \
-    new DirectPropertyAccessor< Binding, type >( this, nullptr, &Binding::get##property ) );
-
-#define REGISTER_BOOL_PROPERTY_RO( property )   \
-    registerProperty( PROPERTY_RO( property, sal_Bool ), \
-    new BooleanPropertyAccessor< Binding >( this, nullptr, &Binding::get##property ) );
-
 void Binding::initializePropertySet()
 {
-    REGISTER_PROPERTY        ( BindingID,            OUString );
-    REGISTER_PROPERTY        ( BindingExpression,    OUString );
-    REGISTER_PROPERTY_RO     ( Model,                css::uno::Reference<css::xforms::XModel> );
-    REGISTER_PROPERTY        ( BindingNamespaces,    css::uno::Reference<css::container::XNameContainer> );
-    REGISTER_PROPERTY        ( ModelNamespaces,      css::uno::Reference<css::container::XNameContainer> );
-    REGISTER_PROPERTY_RO     ( ModelID,              OUString );
-    REGISTER_PROPERTY        ( ReadonlyExpression,   OUString );
-    REGISTER_PROPERTY        ( RelevantExpression,   OUString );
-    REGISTER_PROPERTY        ( RequiredExpression,   OUString );
-    REGISTER_PROPERTY        ( ConstraintExpression, OUString );
-    REGISTER_PROPERTY        ( CalculateExpression,  OUString );
-    REGISTER_PROPERTY        ( Type,                 OUString );
-    REGISTER_PROPERTY_RO     ( ReadOnly,             bool );
-    REGISTER_PROPERTY_RO     ( Relevant,             bool );
-    REGISTER_BOOL_PROPERTY_RO( ExternalData               );
+    registerProperty( PROPERTY_FLAGS( BindingID, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setBindingID, &Binding::getBindingID));
+
+    registerProperty( PROPERTY_FLAGS( BindingExpression, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setBindingExpression, &Binding::getBindingExpression));
+
+    registerProperty( PROPERTY_FLAGS( Model, css::uno::Reference<css::xforms::XModel>, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    new DirectPropertyAccessor< Binding, css::uno::Reference<css::xforms::XModel> >(this, nullptr, &Binding::getModel));
+
+    registerProperty( PROPERTY_FLAGS( BindingNamespaces, css::uno::Reference<css::container::XNameContainer>, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, css::uno::Reference<css::container::XNameContainer> >(this, &Binding::setBindingNamespaces, &Binding::getBindingNamespaces));
+
+    registerProperty( PROPERTY_FLAGS( ModelNamespaces, css::uno::Reference<css::container::XNameContainer>, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, css::uno::Reference<css::container::XNameContainer> >(this, &Binding::setModelNamespaces, &Binding::getModelNamespaces));
+
+    registerProperty( PROPERTY_FLAGS( ModelID, OUString, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    new DirectPropertyAccessor< Binding, OUString >(this, nullptr, &Binding::getModelID));
+
+    registerProperty( PROPERTY_FLAGS( ReadonlyExpression, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setReadonlyExpression, &Binding::getReadonlyExpression));
+
+    registerProperty( PROPERTY_FLAGS( RelevantExpression, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setRelevantExpression, &Binding::getRelevantExpression));
+
+    registerProperty( PROPERTY_FLAGS( RequiredExpression, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setRequiredExpression, &Binding::getRequiredExpression));
+
+    registerProperty( PROPERTY_FLAGS( ConstraintExpression, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setConstraintExpression, &Binding::getConstraintExpression));
+
+    registerProperty( PROPERTY_FLAGS( CalculateExpression, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setCalculateExpression, &Binding::getCalculateExpression));
+
+    registerProperty( PROPERTY_FLAGS( Type, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setType, &Binding::getType));
+
+    registerProperty( PROPERTY_FLAGS( ReadOnly, bool, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    new DirectPropertyAccessor< Binding, bool >(this, nullptr, &Binding::getReadOnly));
+
+    registerProperty( PROPERTY_FLAGS( Relevant, bool, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    new DirectPropertyAccessor< Binding, bool >(this, nullptr, &Binding::getRelevant));
+
+    registerProperty( PROPERTY_FLAGS( ExternalData, sal_Bool, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    new BooleanPropertyAccessor< Binding >(this, nullptr, &Binding::getExternalData));
 
     initializePropertyValueCache( HANDLE_ReadOnly );
     initializePropertyValueCache( HANDLE_Relevant );

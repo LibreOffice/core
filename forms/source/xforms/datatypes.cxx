@@ -466,9 +466,14 @@ namespace xforms
     {
         OStringType_Base::registerProperties();
 
-        REGISTER_VOID_PROP( XSD_LENGTH,     m_aLength,    sal_Int32 );
-        REGISTER_VOID_PROP( XSD_MIN_LENGTH, m_aMinLength, sal_Int32 );
-        REGISTER_VOID_PROP( XSD_MAX_LENGTH, m_aMaxLength, sal_Int32 );
+        registerMayBeVoidProperty( PROPERTY_XSD_LENGTH, PROPERTY_ID_XSD_LENGTH, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aLength, cppu::UnoType<sal_Int32>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_LENGTH, PROPERTY_ID_XSD_MIN_LENGTH, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinLength, cppu::UnoType<sal_Int32>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_LENGTH, PROPERTY_ID_XSD_MAX_LENGTH, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxLength, cppu::UnoType<sal_Int32>::get() );
     }
 
 
@@ -626,8 +631,11 @@ namespace xforms
     {
         ODecimalType_Base::registerProperties();
 
-        REGISTER_VOID_PROP( XSD_TOTAL_DIGITS,    m_aTotalDigits,    sal_Int32 );
-        REGISTER_VOID_PROP( XSD_FRACTION_DIGITS, m_aFractionDigits, sal_Int32 );
+        registerMayBeVoidProperty( PROPERTY_XSD_TOTAL_DIGITS, PROPERTY_ID_XSD_TOTAL_DIGITS, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aTotalDigits, cppu::UnoType<sal_Int32>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_FRACTION_DIGITS, PROPERTY_ID_XSD_FRACTION_DIGITS, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aFractionDigits, cppu::UnoType<sal_Int32>::get() );
     }
 
 

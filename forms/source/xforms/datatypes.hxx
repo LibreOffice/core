@@ -131,10 +131,6 @@ namespace xforms
 
     //= helper for deriving from OXSDDataType
 
-#define REGISTER_VOID_PROP( prop, memberAny, type ) \
-    registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID, \
-        &memberAny, cppu::UnoType<type>::get() );
-
     class OValueLimitedType_Base : public OXSDDataType
     {
     protected:

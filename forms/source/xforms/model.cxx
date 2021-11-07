@@ -560,25 +560,21 @@ css::uno::Reference<css::container::XSet> Model::getSubmissions()
 #define HANDLE_Namespaces 5
 #define HANDLE_ExternalData 6
 
-#define REGISTER_PROPERTY( property, type )   \
-    registerProperty( PROPERTY( property, type ), \
-    new DirectPropertyAccessor< Model, type >( this, &Model::set##property, &Model::get##property ) );
-
-#define REGISTER_PROPERTY_API( property, type )   \
-    registerProperty( PROPERTY( property, type ), \
-    new APIPropertyAccessor< Model, type >( this, &Model::set##property, &Model::get##property ) );
-
-#define REGISTER_BOOL_PROPERTY( property )   \
-    registerProperty( PROPERTY( property, sal_Bool ), \
-    new BooleanPropertyAccessor< Model >( this, &Model::set##property, &Model::get##property ) );
-
 void Model::initializePropertySet()
 {
-    REGISTER_PROPERTY_API ( ID,            OUString );
-    REGISTER_PROPERTY     ( ForeignSchema, css::uno::Reference<css::xml::dom::XDocument> );
-    REGISTER_PROPERTY     ( SchemaRef,     OUString );
-    REGISTER_PROPERTY     ( Namespaces,    css::uno::Reference<css::container::XNameContainer> );
-    REGISTER_BOOL_PROPERTY( ExternalData );
+    registerProperty( PROPERTY_FLAGS( ID, OUString, css::beans::PropertyAttribute::BOUND ),
+    new APIPropertyAccessor< Model, OUString >(this, &Model::setID, &Model::getID) );
+    registerProperty( PROPERTY_FLAGS( ForeignSchema, css::uno::Reference<css::xml::dom::XDocument>, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Model, css::uno::Reference<css::xml::dom::XDocument> >( this, &Model::setForeignSchema, &Model::getForeignSchema) );
+
+    registerProperty( PROPERTY_FLAGS( SchemaRef, OUString, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Model, OUString >( this, &Model::setSchemaRef, &Model::getSchemaRef) );
+
+    registerProperty( PROPERTY_FLAGS( Namespaces, css::uno::Reference<css::container::XNameContainer>, css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Model, css::uno::Reference<css::container::XNameContainer> >( this, &Model::setNamespaces, &Model::getNamespaces) );
+
+    registerProperty( PROPERTY_FLAGS( ExternalData, sal_Bool, css::beans::PropertyAttribute::BOUND ),
+    new BooleanPropertyAccessor< Model >( this, &Model::setExternalData, &Model::getExternalData ) );
 }
 
 void Model::update()
