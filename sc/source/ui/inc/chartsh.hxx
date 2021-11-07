@@ -21,10 +21,9 @@
 
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
+#include "drawsh.hxx"
 
 class ScViewData;
-
-#include "drawsh.hxx"
 
 class ScChartShell final : public ScDrawShell
 {

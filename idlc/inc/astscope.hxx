@@ -22,12 +22,11 @@
 #include <sal/config.h>
 
 #include <string_view>
-
 #include "idlc.hxx"
-
-class AstExpression;
 #include "astdeclaration.hxx"
 #include "astexpression.hxx"
+
+class AstExpression;
 
 class AstScope
 {
