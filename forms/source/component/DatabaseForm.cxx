@@ -1151,7 +1151,7 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
         if (!m_sCurrentErrorContext.isEmpty())
             onError(eDb, m_sCurrentErrorContext);
         else
-            onError(eDb, FRM_RES_STRING(RID_STR_READERROR));
+            onError(eDb, ResourceManager::loadString(RID_STR_READERROR));
         _rClearForNotifies.reset();
 
         restoreInsertOnlyState( );
@@ -1193,7 +1193,7 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
                 if (!m_sCurrentErrorContext.isEmpty())
                     onError(eDB, m_sCurrentErrorContext);
                 else
-                    onError(eDB, FRM_RES_STRING(RID_STR_READERROR));
+                    onError(eDB, ResourceManager::loadString(RID_STR_READERROR));
                 _rClearForNotifies.reset();
                 bSuccess = false;
             }
@@ -2795,7 +2795,7 @@ bool ODatabaseForm::implEnsureConnection()
     }
     catch(const SQLException& eDB)
     {
-        onError(eDB, FRM_RES_STRING(RID_STR_CONNECTERROR));
+        onError(eDB, ResourceManager::loadString(RID_STR_CONNECTERROR));
     }
     catch(const Exception&)
     {
@@ -2836,7 +2836,7 @@ void ODatabaseForm::load_impl(bool bCausedByParentForm, bool bMoveToFirst, const
     bool bSuccess = false;
     if (bExecute)
     {
-        m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_LOADING_FORM);
+        m_sCurrentErrorContext = ResourceManager::loadString(RID_ERR_LOADING_FORM);
         bSuccess = executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
     }
 
@@ -2937,7 +2937,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
     bool bSuccess = true;
     try
     {
-        m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_REFRESHING_FORM);
+        m_sCurrentErrorContext = ResourceManager::loadString(RID_ERR_REFRESHING_FORM);
         bSuccess = executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
     }
     catch(const SQLException&)
@@ -3432,7 +3432,7 @@ void SAL_CALL ODatabaseForm::insertRow()
     }
     catch(const SQLException& eDb)
     {
-        onError(eDb, FRM_RES_STRING(RID_STR_ERR_INSERTRECORD));
+        onError(eDb, ResourceManager::loadString(RID_STR_ERR_INSERTRECORD));
         throw;
     }
 }
@@ -3452,7 +3452,7 @@ void SAL_CALL ODatabaseForm::updateRow()
     }
     catch(const SQLException& eDb)
     {
-        onError(eDb, FRM_RES_STRING(RID_STR_ERR_UPDATERECORD));
+        onError(eDb, ResourceManager::loadString(RID_STR_ERR_UPDATERECORD));
         throw;
     }
 }
@@ -3472,7 +3472,7 @@ void SAL_CALL ODatabaseForm::deleteRow()
     }
     catch(const SQLException& eDb)
     {
-        onError(eDb, FRM_RES_STRING(RID_STR_ERR_DELETERECORD));
+        onError(eDb, ResourceManager::loadString(RID_STR_ERR_DELETERECORD));
         throw;
     }
 }
@@ -3492,7 +3492,7 @@ void SAL_CALL ODatabaseForm::cancelRowUpdates()
     }
     catch(const SQLException& eDb)
     {
-        onError(eDb, FRM_RES_STRING(RID_STR_ERR_INSERTRECORD));
+        onError(eDb, ResourceManager::loadString(RID_STR_ERR_INSERTRECORD));
         throw;
     }
 }
@@ -3556,7 +3556,7 @@ Sequence<sal_Int32> SAL_CALL ODatabaseForm::deleteRows(const Sequence<Any>& rows
     }
     catch(const SQLException& eDb)
     {
-        onError(eDb, FRM_RES_STRING(RID_STR_ERR_DELETERECORDS));
+        onError(eDb, ResourceManager::loadString(RID_STR_ERR_DELETERECORDS));
         throw;
     }
 

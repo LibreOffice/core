@@ -435,7 +435,7 @@ namespace frm
                 // TODO: shouldn't this be done with an interaction handler?
                 std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
                                                                VclMessageType::Question, VclButtonsType::YesNo,
-                                                               FRM_RES_STRING(RID_STR_QUERY_SAVE_MODIFIED_ROW)));
+                                                               ResourceManager::loadString(RID_STR_QUERY_SAVE_MODIFIED_ROW)));
                 xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
                 xQueryBox->set_default_response(RET_YES);
 
@@ -776,7 +776,7 @@ namespace frm
                     pErrorResourceId = RID_STR_FEATURE_REQUIRES_PARAMETERS;
                 else if ( !lcl_isExecutableFeature( _nFeature ) )
                     pErrorResourceId = RID_STR_FEATURE_NOT_EXECUTABLE;
-                throw IllegalArgumentException( FRM_RES_STRING( pErrorResourceId ), *this, 1 );
+                throw IllegalArgumentException( ResourceManager::loadString(pErrorResourceId), *this, 1 );
             }
             }   // switch
         }
@@ -804,7 +804,7 @@ namespace frm
 
         // at the moment we have only one feature which supports execution parameters
         if ( !lcl_isExecutableFeature( _nFeature ) )
-            throw IllegalArgumentException( FRM_RES_STRING( RID_STR_FEATURE_NOT_EXECUTABLE ), *this, 1 );
+            throw IllegalArgumentException( ResourceManager::loadString(RID_STR_FEATURE_NOT_EXECUTABLE), *this, 1 );
 
         switch ( _nFeature )
         {
@@ -843,7 +843,7 @@ namespace frm
         }
         break;
         default:
-            throw IllegalArgumentException( FRM_RES_STRING( RID_STR_FEATURE_UNKNOWN ), *this, 1 );
+            throw IllegalArgumentException( ResourceManager::loadString(RID_STR_FEATURE_UNKNOWN), *this, 1 );
         }   // switch
     }
 
@@ -1742,7 +1742,7 @@ namespace frm
                 throw;
 
             SQLExceptionInfo aInfo( ::cppu::getCaughtException() );
-            OUString sAdditionalError( FRM_RES_STRING( pErrorResourceId ) );
+            OUString sAdditionalError( ResourceManager::loadString(pErrorResourceId) );
             aInfo.prepend( sAdditionalError );
             aInfo.doThrow();
         }
@@ -1750,7 +1750,7 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            OUString sAdditionalError( FRM_RES_STRING( pErrorResourceId ) );
+            OUString sAdditionalError( ResourceManager::loadString(pErrorResourceId) );
             throw WrappedTargetException( sAdditionalError, *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
         }
     }

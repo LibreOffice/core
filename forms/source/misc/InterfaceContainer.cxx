@@ -488,8 +488,8 @@ namespace
             {
                 try
                 {
-                    xObjProps->setPropertyValue( PROPERTY_NAME, makeAny( FRM_RES_STRING( RID_STR_CONTROL_SUBSTITUTED_NAME ) ) );
-                    xObjProps->setPropertyValue( PROPERTY_TAG, makeAny( FRM_RES_STRING( RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN ) ) );
+                    xObjProps->setPropertyValue( PROPERTY_NAME, makeAny( ResourceManager::loadString(RID_STR_CONTROL_SUBSTITUTED_NAME) ) );
+                    xObjProps->setPropertyValue( PROPERTY_TAG, makeAny( ResourceManager::loadString(RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN) ) );
                 }
                 catch(const Exception&)
                 {
@@ -733,7 +733,7 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
 {
     // it has to be non-NULL
     if ( !_rxObject.is() )
-        throw IllegalArgumentException(FRM_RES_STRING(RID_STR_NEED_NON_NULL_OBJECT), static_cast<XContainer*>(this), 1);
+        throw IllegalArgumentException(ResourceManager::loadString(RID_STR_NEED_NON_NULL_OBJECT), static_cast<XContainer*>(this), 1);
 
     // it has to support our element type interface
     Any aCorrectType = _rxObject->queryInterface( m_aElementType );

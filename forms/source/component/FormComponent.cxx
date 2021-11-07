@@ -743,7 +743,7 @@ void SAL_CALL OControlModel::write(const Reference<css::io::XObjectOutputStream>
     if ( !xMark.is() )
     {
         throw IOException(
-            FRM_RES_STRING( RID_STR_INVALIDSTREAM ),
+            ResourceManager::loadString(RID_STR_INVALIDSTREAM),
             static_cast< ::cppu::OWeakObject* >( this )
         );
     }
@@ -786,7 +786,7 @@ void OControlModel::read(const Reference<css::io::XObjectInputStream>& InStream)
     if ( !xMark.is() )
     {
         throw IOException(
-            FRM_RES_STRING( RID_STR_INVALIDSTREAM ),
+            ResourceManager::loadString(RID_STR_INVALIDSTREAM),
             static_cast< ::cppu::OWeakObject* >( this )
         );
     }
@@ -2471,7 +2471,7 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
     if ( _rxBinding.is() && !impl_approveValueBinding_nolock( _rxBinding ) )
     {
         throw IncompatibleTypesException(
-            FRM_RES_STRING( RID_STR_INCOMPATIBLE_TYPES ),
+            ResourceManager::loadString(RID_STR_INCOMPATIBLE_TYPES),
             *this
         );
     }
@@ -2690,7 +2690,7 @@ void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _
 
     if ( m_xValidator.is() && ( m_xValidator == m_xExternalBinding ) )
         throw VetoException(
-            FRM_RES_STRING( RID_STR_INVALID_VALIDATOR ),
+            ResourceManager::loadString(RID_STR_INVALID_VALIDATOR),
             *this
         );
 

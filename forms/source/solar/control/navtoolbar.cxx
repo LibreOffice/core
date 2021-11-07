@@ -58,7 +58,7 @@ namespace frm
 
         OUString getLabelString(TranslateId pResId)
         {
-            OUString sLabel( " " + FRM_RES_STRING(pResId) + " " );
+            OUString sLabel( " " + ResourceManager::loadString(pResId) + " " );
             return sLabel;
         }
 
