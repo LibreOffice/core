@@ -562,18 +562,18 @@ css::uno::Reference<css::container::XSet> Model::getSubmissions()
 
 void Model::initializePropertySet()
 {
-    registerProperty( PROPERTY_FLAGS( ID, OUString, css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property("ID", HANDLE_ID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new APIPropertyAccessor< Model, OUString >(this, &Model::setID, &Model::getID) );
-    registerProperty( PROPERTY_FLAGS( ForeignSchema, css::uno::Reference<css::xml::dom::XDocument>, css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property("ForeignSchema", HANDLE_ForeignSchema, cppu::UnoType<css::uno::Reference<css::xml::dom::XDocument>>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Model, css::uno::Reference<css::xml::dom::XDocument> >( this, &Model::setForeignSchema, &Model::getForeignSchema) );
 
-    registerProperty( PROPERTY_FLAGS( SchemaRef, OUString, css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property("SchemaRef", HANDLE_SchemaRef, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Model, OUString >( this, &Model::setSchemaRef, &Model::getSchemaRef) );
 
-    registerProperty( PROPERTY_FLAGS( Namespaces, css::uno::Reference<css::container::XNameContainer>, css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property("Namespaces", HANDLE_Namespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Model, css::uno::Reference<css::container::XNameContainer> >( this, &Model::setNamespaces, &Model::getNamespaces) );
 
-    registerProperty( PROPERTY_FLAGS( ExternalData, sal_Bool, css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property("ExternalData", HANDLE_ExternalData, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND ),
     new BooleanPropertyAccessor< Model >( this, &Model::setExternalData, &Model::getExternalData ) );
 }
 

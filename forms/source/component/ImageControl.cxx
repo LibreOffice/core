@@ -775,7 +775,7 @@ bool OImageControlControl::implInsertGraphics()
     if ( !xSet.is() )
         return false;
 
-    OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
+    OUString sTitle = ResourceManager::loadString(RID_STR_IMPORT_GRAPHIC);
     // build some arguments for the upcoming dialog
     try
     {
@@ -878,8 +878,8 @@ void OImageControlControl::mousePressed(const css::awt::MouseEvent& e)
 
         if ( xMenu.is() && xWindowPeer.is() )
         {
-            xMenu->insertItem( ID_OPEN_GRAPHICS, FRM_RES_STRING( RID_STR_OPEN_GRAPHICS ), 0, 0 );
-            xMenu->insertItem( ID_CLEAR_GRAPHICS, FRM_RES_STRING( RID_STR_CLEAR_GRAPHICS ), 0, 1 );
+            xMenu->insertItem( ID_OPEN_GRAPHICS, ResourceManager::loadString(RID_STR_OPEN_GRAPHICS), 0, 0 );
+            xMenu->insertItem( ID_CLEAR_GRAPHICS, ResourceManager::loadString(RID_STR_CLEAR_GRAPHICS), 0, 1 );
 
             // check if the ImageURL is empty
             if ( impl_isEmptyGraphics_nothrow() )

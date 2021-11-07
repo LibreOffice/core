@@ -25,8 +25,6 @@
 namespace frm
 {
 
-#define FRM_RES_STRING(id) ResourceManager::loadString(id)
-
     // handling resources within the FormLayer library
     namespace ResourceManager
     {

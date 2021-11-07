@@ -924,15 +924,14 @@ void xforms::getInstanceData(
     for( sal_Int32 n = 0; n < nValues; n++ )
     {
         const PropertyValue& rValue = pValues[n];
-#define PROP(NAME) \
-        if( p##NAME != nullptr && \
-            rValue.Name == #NAME ) \
-            rValue.Value >>= (*p##NAME)
-        PROP(ID);
-        PROP(Instance);
-        PROP(URL);
-        PROP(URLOnce);
-#undef PROP
+        if( pID != nullptr && rValue.Name == "ID")
+            rValue.Value >>= *pID;
+        if( pInstance != nullptr && rValue.Name == "Instance")
+            rValue.Value >>= *pInstance;
+        if( pURL != nullptr && rValue.Name == "URL")
+            rValue.Value >>= *pURL;
+        if( pURLOnce != nullptr && rValue.Name == "URLOnce")
+            rValue.Value >>= *pURLOnce;
     }
 }
 
@@ -955,38 +954,54 @@ void xforms::setInstanceData(
     const bool* pURLOnce = ( bURLOnce && pURL != nullptr ) ? &bURLOnce : nullptr;
 
     // determine new instance data
-#define PROP(NAME) if( _p##NAME != nullptr ) p##NAME = _p##NAME
-    PROP(ID);
-    PROP(Instance);
-    PROP(URL);
-    PROP(URLOnce);
-#undef PROP
+    if (_pID != nullptr)
+        pID = _pID;
+    if (_pInstance != nullptr)
+        pInstance = _pInstance;
+    if (_pURL != nullptr)
+        pURL = _pURL;
+    if (_pURLOnce != nullptr)
+        pURLOnce = _pURLOnce;
 
     // count # of values we want to set
     sal_Int32 nCount = 0;
-#define PROP(NAME) if( p##NAME != nullptr ) nCount++
-    PROP(ID);
-    PROP(Instance);
-    PROP(URL);
-    PROP(URLOnce);
-#undef PROP
+    if (pID != nullptr)
+        ++nCount;
+    if (pInstance != nullptr)
+        ++nCount;
+    if (pURL != nullptr)
+        ++nCount;
+    if (pURLOnce != nullptr)
+        ++nCount;
 
     // realloc sequence and enter values;
     aSequence.realloc( nCount );
     PropertyValue* pSequence = aSequence.getArray();
     sal_Int32 nIndex = 0;
-#define PROP(NAME) \
-    if( p##NAME != nullptr ) \
-    { \
-        pSequence[ nIndex ].Name = #NAME; \
-        pSequence[ nIndex ].Value <<= *p##NAME; \
-        nIndex++; \
+    if(pID != nullptr)
+    {
+        pSequence[ nIndex ].Name = "ID";
+        pSequence[ nIndex ].Value <<= *pID;
+        nIndex++;
     }
-    PROP(ID);
-    PROP(Instance);
-    PROP(URL);
-    PROP(URLOnce);
-#undef PROP
+    if(pInstance != nullptr)
+    {
+        pSequence[ nIndex ].Name = "Instance";
+        pSequence[ nIndex ].Value <<= *pInstance;
+        nIndex++;
+    }
+    if(pURL != nullptr)
+    {
+        pSequence[ nIndex ].Name = "URL";
+        pSequence[ nIndex ].Value <<= *pURL;
+        nIndex++;
+    }
+    if(pURLOnce != nullptr)
+    {
+        pSequence[ nIndex ].Name = "URLOnce";
+        pSequence[ nIndex ].Value <<= *pURLOnce;
+        nIndex++;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

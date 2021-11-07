@@ -49,40 +49,40 @@ namespace xforms
     {
 
         // insert some basic types
-        OUString sName( FRM_RES_STRING( RID_STR_DATATYPE_STRING ) );
+        OUString sName( ResourceManager::loadString(RID_STR_DATATYPE_STRING) );
         m_aRepository[ sName ] = new OStringType( sName, css::xsd::DataTypeClass::STRING );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_URL );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_URL);
         m_aRepository[ sName ] = new OStringType( sName, css::xsd::DataTypeClass::anyURI );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_BOOLEAN );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_BOOLEAN);
         m_aRepository[ sName ] = new OBooleanType( sName );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_DECIMAL );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_DECIMAL);
         m_aRepository[ sName ] = new ODecimalType( sName, css::xsd::DataTypeClass::DECIMAL );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_FLOAT );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_FLOAT);
         m_aRepository[ sName ] = new ODecimalType( sName, css::xsd::DataTypeClass::FLOAT );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_DOUBLE );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_DOUBLE);
         m_aRepository[ sName ] = new ODecimalType( sName, css::xsd::DataTypeClass::DOUBLE );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_DATE );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_DATE);
         m_aRepository[ sName ] = new ODateType( sName );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_TIME );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_TIME);
         m_aRepository[ sName ] = new OTimeType( sName );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_DATETIME );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_DATETIME);
         m_aRepository[ sName ] = new ODateTimeType( sName );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_YEAR );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_YEAR);
         m_aRepository[ sName ] = new OShortIntegerType( sName, css::xsd::DataTypeClass::gYear );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_MONTH );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_MONTH);
         m_aRepository[ sName ] = new OShortIntegerType( sName, css::xsd::DataTypeClass::gMonth );
 
-        sName = FRM_RES_STRING( RID_STR_DATATYPE_DAY );
+        sName = ResourceManager::loadString(RID_STR_DATATYPE_DAY);
         m_aRepository[ sName ] = new OShortIntegerType( sName, css::xsd::DataTypeClass::gDay );
     }
 
@@ -145,7 +145,7 @@ namespace xforms
         Repository::iterator aTypePos = implLocate( typeName );
         if ( aTypePos->second->getIsBasic() )
             // "This is a built-in type and cannot be removed."
-            throw VetoException(FRM_RES_STRING( RID_STR_XFORMS_CANT_REMOVE_TYPE ), *this );
+            throw VetoException(ResourceManager::loadString(RID_STR_XFORMS_CANT_REMOVE_TYPE), *this );
 
         m_aRepository.erase( aTypePos );
     }

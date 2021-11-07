@@ -337,9 +337,4 @@ public:
     }
 };
 
-
-#define PROPERTY_FLAGS( NAME, TYPE, FLAG ) css::beans::Property( \
-    #NAME, \
-    HANDLE_##NAME, cppu::UnoType<TYPE>::get(), FLAG )
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

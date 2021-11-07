@@ -522,7 +522,7 @@ namespace frm
                 {
                     // display the error and outta here
                     SQLContext aError;
-                    aError.Message = FRM_RES_STRING( RID_STR_SYNTAXERROR );
+                    aError.Message = ResourceManager::loadString(RID_STR_SYNTAXERROR);
                     aError.Details = sErrorMessage;
                     displayException( aError );
                     return false;

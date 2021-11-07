@@ -859,7 +859,7 @@ namespace frm
         }
         catch(const SQLException& eSQL)
         {
-            onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
+            onError(eSQL, ResourceManager::loadString(RID_BASELISTBOX_ERROR_FILLLIST));
             return;
         }
         catch(const Exception&)
@@ -988,7 +988,7 @@ namespace frm
         }
         catch(const SQLException& eSQL)
         {
-            onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
+            onError(eSQL, ResourceManager::loadString(RID_BASELISTBOX_ERROR_FILLLIST));
             return;
         }
         catch( const Exception& )
