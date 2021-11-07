@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffd38711_f2819f1b",
+        "filename": "sw/source/filter/ww8/wrtw8num.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-07T15:37:57Z",
+      "side": 1,
+      "message": "There are a lot of new asserts here in the most recent crashtesting run: https://dev-builds.libreoffice.org/crashtest/32c01c6653b85082e2d5e03ab3095768402834eb/exportCrash.txt\n\ne.g. to reproduce\n$ wget https://bz.apache.org/ooo/attachment.cgi?id\u003d12916 -O /tmp/ooo25141-1.doc\n$ ./instdir/program/soffice --headless --convert-to doc /tmp/ooo25141-1.doc",
+      "revId": "e0b41fcb56e51f20684da4ba44d7ed6e0e1a3234",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
