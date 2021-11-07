@@ -1222,9 +1222,17 @@ int SwAnnotationWin::GetPrefScrollbarWidth() const
 
 sal_Int32 SwAnnotationWin::GetMetaHeight() const
 {
-    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     const int fields = GetNumFields();
-    return tools::Long(fields*POSTIT_META_FIELD_HEIGHT * f);
+
+    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
+    sal_Int32 nClassicHeight(fields * POSTIT_META_FIELD_HEIGHT * f);
+
+    sal_Int32 nRequiredHeight = 0;
+    weld::Label* aLabels[3] = { mxMetadataAuthor.get(), mxMetadataDate.get(), mxMetadataResolved.get() };
+    for (int i = 0; i < fields; ++i)
+        nRequiredHeight += aLabels[i]->get_preferred_size().Height();
+
+    return std::max(nClassicHeight, nRequiredHeight);
 }
 
 sal_Int32 SwAnnotationWin::GetNumFields() const
