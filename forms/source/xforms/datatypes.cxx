@@ -102,11 +102,6 @@ namespace xforms
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OXSDDataType, OXSDDataType_Base, ::comphelper::OPropertyContainer )
 
-#define SET_PROPERTY( propertyid, value, member ) \
-    setFastPropertyValue( PROPERTY_ID_##propertyid, makeAny( value ) ); \
-    SAL_WARN_IF( member != value, "forms.misc", "OXSDDataType::setFoo: inconsistency!" );
-
-
     OUString SAL_CALL OXSDDataType::getName(  )
     {
         return m_sName;
@@ -116,7 +111,8 @@ namespace xforms
     void SAL_CALL OXSDDataType::setName( const OUString& aName )
     {
         // TODO: check the name for conflicts in the repository
-        SET_PROPERTY( NAME, aName, m_sName );
+        setFastPropertyValue( PROPERTY_ID_NAME, makeAny(aName) );
+        SAL_WARN_IF( m_sName != aName, "forms.misc", "OXSDDataType::setName: inconsistency!" );
     }
 
 
@@ -128,7 +124,8 @@ namespace xforms
 
     void SAL_CALL OXSDDataType::setPattern( const OUString& _pattern )
     {
-        SET_PROPERTY( XSD_PATTERN, _pattern, m_sPattern );
+        setFastPropertyValue( PROPERTY_ID_XSD_PATTERN, makeAny(_pattern) );
+        SAL_WARN_IF( m_sPattern != _pattern, "forms.misc", "OXSDDataType::setPattern: inconsistency!" );
     }
 
 
@@ -140,7 +137,8 @@ namespace xforms
 
     void SAL_CALL OXSDDataType::setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment )
     {
-        SET_PROPERTY( XSD_WHITESPACE, _whitespacetreatment, m_nWST );
+        setFastPropertyValue( PROPERTY_ID_XSD_WHITESPACE, makeAny(_whitespacetreatment) );
+        SAL_WARN_IF( m_nWST != _whitespacetreatment, "forms.misc", "OXSDDataType::setWhiteSpaceTreatment: inconsistency!" );
     }
 
 
@@ -478,7 +476,7 @@ namespace xforms
     {
         return new OStringType( _rName, getTypeClass() );
     }
-    void OStringType::initializeClone( const OXSDDataType& _rCloneSource ) \
+    void OStringType::initializeClone( const OXSDDataType& _rCloneSource )
     {
         OStringType_Base::initializeClone( _rCloneSource );
         initializeTypedClone( static_cast< const OStringType& >( _rCloneSource ) );
@@ -611,7 +609,7 @@ namespace xforms
     {
         return new ODecimalType( _rName, getTypeClass() );
     }
-    void ODecimalType::initializeClone( const OXSDDataType& _rCloneSource ) \
+    void ODecimalType::initializeClone( const OXSDDataType& _rCloneSource )
     {
         ODecimalType_Base::initializeClone( _rCloneSource );
         initializeTypedClone( static_cast< const ODecimalType& >( _rCloneSource ) );
@@ -703,35 +701,24 @@ namespace xforms
     }
 
 
-    //=
-
-#define DEFAULT_IMPLEMNENT_SUBTYPE( classname, typeclass )      \
-    classname::classname( const OUString& _rName )       \
-        :classname##_Base( _rName, DataTypeClass::typeclass )   \
-    {                                                           \
-    }                                                           \
-    rtl::Reference<OXSDDataType> classname::createClone( const OUString& _rName ) const \
-    {                                                       \
-        return new classname( _rName );                     \
-    }                                                       \
-    void classname::initializeClone( const OXSDDataType& _rCloneSource ) \
-    { \
-         classname##_Base::initializeClone( _rCloneSource );        \
-        initializeTypedClone( static_cast< const classname& >( _rCloneSource ) ); \
-    } \
-
-
-    //= ODateType
-
-
-    DEFAULT_IMPLEMNENT_SUBTYPE( ODateType, DATE )
-
+    ODateType::ODateType(const OUString& _rName)
+        :ODateType_Base(_rName, DataTypeClass::DATE)
+    {
+    }
+    rtl::Reference<OXSDDataType> ODateType::createClone(const OUString& _rName) const
+    {
+        return new ODateType(_rName);
+    }
+    void ODateType::initializeClone( const OXSDDataType& _rCloneSource )
+    {
+        ODateType_Base::initializeClone(_rCloneSource);
+        initializeTypedClone(static_cast< const ODateType& >(_rCloneSource));
+    }
 
     TranslateId ODateType::_validate( const OUString& _rValue )
     {
         return ODateType_Base::_validate( _rValue );
     }
-
 
     bool ODateType::_getValue( const OUString& value, double& fValue )
     {
@@ -763,17 +750,24 @@ namespace xforms
     }
 
 
-    //= OTimeType
-
-
-    DEFAULT_IMPLEMNENT_SUBTYPE( OTimeType, TIME )
-
+    OTimeType::OTimeType(const OUString& _rName)
+        :OTimeType_Base(_rName, DataTypeClass::TIME)
+    {
+    }
+    rtl::Reference<OXSDDataType> OTimeType::createClone(const OUString& _rName) const
+    {
+        return new OTimeType(_rName);
+    }
+    void OTimeType::initializeClone( const OXSDDataType& _rCloneSource )
+    {
+        OTimeType_Base::initializeClone(_rCloneSource);
+        initializeTypedClone(static_cast< const OTimeType& >(_rCloneSource));
+    }
 
     TranslateId OTimeType::_validate( const OUString& _rValue )
     {
         return OTimeType_Base::_validate( _rValue );
     }
-
 
     bool OTimeType::_getValue( const OUString& value, double& fValue )
     {
@@ -812,10 +806,19 @@ namespace xforms
     }
 
 
-    //= ODateTimeType
-
-
-    DEFAULT_IMPLEMNENT_SUBTYPE( ODateTimeType, DATETIME )
+    ODateTimeType::ODateTimeType(const OUString& _rName)
+        :ODateTimeType_Base(_rName, DataTypeClass::DATETIME)
+    {
+    }
+    rtl::Reference<OXSDDataType> ODateTimeType::createClone(const OUString& _rName) const
+    {
+        return new ODateTimeType(_rName);
+    }
+    void ODateTimeType::initializeClone( const OXSDDataType& _rCloneSource )
+    {
+        ODateTimeType_Base::initializeClone(_rCloneSource);
+        initializeTypedClone(static_cast< const ODateTimeType& >(_rCloneSource));
+    }
 
     TranslateId ODateTimeType::_validate( const OUString& _rValue )
     {
@@ -879,7 +882,7 @@ namespace xforms
     {
         return new OShortIntegerType( _rName, getTypeClass() );
     }
-    void OShortIntegerType::initializeClone( const OXSDDataType& _rCloneSource ) \
+    void OShortIntegerType::initializeClone( const OXSDDataType& _rCloneSource )
     {
         OShortIntegerType_Base::initializeClone( _rCloneSource );
         initializeTypedClone( static_cast< const OShortIntegerType& >( _rCloneSource ) );
