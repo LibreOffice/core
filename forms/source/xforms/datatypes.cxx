@@ -474,7 +474,16 @@ namespace xforms
     }
 
 
-    IMPLEMENT_DEFAULT_TYPED_CLONING( OStringType, OStringType_Base )
+    rtl::Reference<OXSDDataType> OStringType::createClone( const OUString& _rName ) const
+    {
+        return new OStringType( _rName, getTypeClass() );
+    }
+    void OStringType::initializeClone( const OXSDDataType& _rCloneSource ) \
+    {
+        OStringType_Base::initializeClone( _rCloneSource );
+        initializeTypedClone( static_cast< const OStringType& >( _rCloneSource ) );
+    }
+
 
 
     void OStringType::initializeTypedClone( const OStringType& _rCloneSource )
@@ -598,9 +607,15 @@ namespace xforms
     {
     }
 
-
-    IMPLEMENT_DEFAULT_TYPED_CLONING( ODecimalType, ODecimalType_Base )
-
+    rtl::Reference<OXSDDataType> ODecimalType::createClone( const OUString& _rName ) const
+    {
+        return new ODecimalType( _rName, getTypeClass() );
+    }
+    void ODecimalType::initializeClone( const OXSDDataType& _rCloneSource ) \
+    {
+        ODecimalType_Base::initializeClone( _rCloneSource );
+        initializeTypedClone( static_cast< const ODecimalType& >( _rCloneSource ) );
+    }
 
     void ODecimalType::initializeTypedClone( const ODecimalType& _rCloneSource )
     {
@@ -860,9 +875,15 @@ namespace xforms
     {
     }
 
-
-    IMPLEMENT_DEFAULT_TYPED_CLONING( OShortIntegerType, OShortIntegerType_Base )
-
+    rtl::Reference<OXSDDataType> OShortIntegerType::createClone( const OUString& _rName ) const
+    {
+        return new OShortIntegerType( _rName, getTypeClass() );
+    }
+    void OShortIntegerType::initializeClone( const OXSDDataType& _rCloneSource ) \
+    {
+        OShortIntegerType_Base::initializeClone( _rCloneSource );
+        initializeTypedClone( static_cast< const OShortIntegerType& >( _rCloneSource ) );
+    }
 
     bool OShortIntegerType::_getValue( const OUString& value, double& fValue )
     {
