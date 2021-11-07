@@ -458,7 +458,7 @@ public:
         }
     }
 
-    // XTypeProvider (implemnented by base, but needs to be overridden for
+    // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual Sequence< Type > SAL_CALL getTypes() override
     {

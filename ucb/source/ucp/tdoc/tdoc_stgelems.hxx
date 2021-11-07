@@ -198,7 +198,7 @@ public:
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type& aType ) override;
 
-    // XTypeProvider (implemnented by base, but needs to be overridden for
+    // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;
@@ -257,7 +257,7 @@ public:
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type& aType ) override;
 
-    // XTypeProvider (implemnented by base, but needs to be overridden for
+    // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;
