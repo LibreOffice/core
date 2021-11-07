@@ -54,7 +54,14 @@ class OComboBoxModel final
     virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OComboBoxModel );
+    OComboBoxModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OComboBoxModel(
+        const OComboBoxModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OComboBoxModel() override;
 
     virtual void SAL_CALL disposing() override;
 

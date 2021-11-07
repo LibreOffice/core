@@ -30,7 +30,14 @@ class OCheckBoxModel final : public OReferenceValueComponent
     bool        DbUseBool();
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OCheckBoxModel );
+    OCheckBoxModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OCheckBoxModel(
+        const OCheckBoxModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OCheckBoxModel() override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override

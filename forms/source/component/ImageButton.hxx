@@ -30,7 +30,14 @@ class OImageButtonModel
         :public OClickableImageBaseModel
 {
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OImageButtonModel );
+    OImageButtonModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OImageButtonModel(
+        const OImageButtonModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OImageButtonModel() override;
 
 // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override

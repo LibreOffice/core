@@ -45,7 +45,14 @@ class OButtonModel  :public OClickableImageBaseModel
                     ,public OButtonModel_Base
 {
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OButtonModel );
+    OButtonModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OButtonModel(
+        const OButtonModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OButtonModel() override;
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OButtonModel, OClickableImageBaseModel )

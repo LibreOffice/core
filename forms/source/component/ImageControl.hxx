@@ -57,7 +57,14 @@ class OImageControlModel final
     ImageProducer* GetImageProducer() { return m_xImageProducer.get(); }
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OImageControlModel );
+    OImageControlModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OImageControlModel(
+        const OImageControlModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OImageControlModel() override;
 
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;

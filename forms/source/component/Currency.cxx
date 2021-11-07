@@ -130,7 +130,13 @@ OCurrencyModel::~OCurrencyModel()
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( OCurrencyModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OCurrencyModel::createClone()
+{
+    rtl::Reference<OCurrencyModel> pClone = new OCurrencyModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
+
 
 // XServiceInfo
 

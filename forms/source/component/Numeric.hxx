@@ -32,7 +32,14 @@ private:
     css::uno::Any          m_aSaveValue;
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( ONumericModel );
+    ONumericModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    ONumericModel(
+        const ONumericModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~ONumericModel() override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override

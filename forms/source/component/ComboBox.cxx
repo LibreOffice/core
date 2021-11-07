@@ -144,7 +144,12 @@ OComboBoxModel::~OComboBoxModel()
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( OComboBoxModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OComboBoxModel::createClone()
+{
+    rtl::Reference<OComboBoxModel> pClone = new OComboBoxModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
 void OComboBoxModel::disposing()

@@ -95,7 +95,12 @@ OFileControlModel::~OFileControlModel()
 }
 
 
-IMPLEMENT_DEFAULT_CLONING( OFileControlModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OFileControlModel::createClone()
+{
+    rtl::Reference<OFileControlModel> pClone = new OFileControlModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
 Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType)

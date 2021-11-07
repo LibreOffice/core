@@ -48,13 +48,6 @@ namespace frm
     using namespace ::com::sun::star::graphic;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-#define FORWARD_TO_PEER_1( unoInterface, method, param1 )   \
-    Reference< unoInterface > xTypedPeer( getPeer(), UNO_QUERY );   \
-    if ( xTypedPeer.is() )  \
-    {   \
-        xTypedPeer->method( param1 );  \
-    }
-
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
         : m_xContext(_rxORB)
     {
@@ -174,20 +167,32 @@ namespace frm
 
     void SAL_CALL ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
-        FORWARD_TO_PEER_1( XDispatchProviderInterception, registerDispatchProviderInterceptor, _rxInterceptor );
+        Reference< XDispatchProviderInterception > xTypedPeer(getPeer(), UNO_QUERY);
+        if (xTypedPeer.is())
+        {
+            xTypedPeer->registerDispatchProviderInterceptor(_rxInterceptor);
+        }
     }
 
 
     void SAL_CALL ONavigationBarControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
-        FORWARD_TO_PEER_1( XDispatchProviderInterception, releaseDispatchProviderInterceptor, _rxInterceptor );
+        Reference< XDispatchProviderInterception > xTypedPeer(getPeer(), UNO_QUERY);
+        if (xTypedPeer.is())
+        {
+            xTypedPeer->registerDispatchProviderInterceptor(_rxInterceptor);
+        }
     }
 
 
     void SAL_CALL ONavigationBarControl::setDesignMode( sal_Bool _bOn )
     {
         UnoControl::setDesignMode( _bOn );
-        FORWARD_TO_PEER_1( XVclWindowPeer, setDesignMode, _bOn );
+        Reference< XVclWindowPeer > xTypedPeer(getPeer(), UNO_QUERY);
+        if (xTypedPeer.is())
+        {
+            xTypedPeer->setDesignMode(_bOn);
+        }
     }
 
 

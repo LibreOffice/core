@@ -291,44 +291,78 @@ namespace xforms
 
     //=
 
-#define DEFAULT_DECLARE_SUBTYPE( classname, valuetype )         \
-    class classname;                                            \
-    typedef ODerivedDataType< classname, OValueLimitedType< valuetype > > classname##_Base;  \
-    class classname : public classname##_Base                   \
-    {                                                           \
-    public:                                                     \
-        explicit classname( const OUString& _rName );           \
-                                                                \
-    protected:                                                  \
-        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override; \
-        virtual void initializeClone(const OXSDDataType& _rCloneSource) override; \
-                                                                \
-        /* OXSDDataType overridables */                         \
-        virtual TranslateId         _validate( const OUString& value ) override;  \
-        virtual bool                _getValue( const OUString& value, double& fValue ) override;  \
-                                                                \
-        /* OValueLimitedType overridables */                    \
-        virtual OUString     typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;  \
-        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override; \
-                                                                \
-    private:                                                    \
-        using classname##_Base::initializeTypedClone;          \
+    class ODateType;
+    typedef ODerivedDataType< ODateType, OValueLimitedType< css::util::Date > > ODateType_Base;
+    class ODateType : public ODateType_Base
+    {
+    public:
+        explicit ODateType( const OUString& _rName );
+
+    protected:
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
+
+        /* OXSDDataType overridables */
+        virtual TranslateId         _validate( const OUString& value ) override;
+        virtual bool                _getValue( const OUString& value, double& fValue ) override;
+
+        /* OValueLimitedType overridables */
+        virtual OUString     typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+
+    private:
+        using ODateType_Base::initializeTypedClone;
     };
 
 
-    //= ODateType
+    class OTimeType;
+    typedef ODerivedDataType< OTimeType, OValueLimitedType< css::util::Time > > OTimeType_Base;
+    class OTimeType : public OTimeType_Base
+    {
+    public:
+        explicit OTimeType( const OUString& _rName );
 
-    DEFAULT_DECLARE_SUBTYPE( ODateType, css::util::Date )
+    protected:
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
+
+        /* OXSDDataType overridables */
+        virtual TranslateId         _validate( const OUString& value ) override;
+        virtual bool                _getValue( const OUString& value, double& fValue ) override;
+
+        /* OValueLimitedType overridables */
+        virtual OUString     typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+
+    private:
+        using OTimeType_Base::initializeTypedClone;
+    };
 
 
-    //= OTimeType
 
-    DEFAULT_DECLARE_SUBTYPE( OTimeType, css::util::Time )
+    class ODateTimeType;
+    typedef ODerivedDataType< OTimeType, OValueLimitedType< css::util::DateTime > > ODateTimeType_Base;
+    class ODateTimeType : public ODateTimeType_Base
+    {
+    public:
+        explicit ODateTimeType( const OUString& _rName );
 
+    protected:
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
 
-    //= ODateTimeType
+        /* OXSDDataType overridables */
+        virtual TranslateId         _validate( const OUString& value ) override;
+        virtual bool                _getValue( const OUString& value, double& fValue ) override;
 
-    DEFAULT_DECLARE_SUBTYPE( ODateTimeType, css::util::DateTime )
+        /* OValueLimitedType overridables */
+        virtual OUString     typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+
+    private:
+        using ODateTimeType_Base::initializeTypedClone;
+    };
+
 
     class OShortIntegerType;
     typedef ODerivedDataType< OShortIntegerType, OValueLimitedType< sal_Int16 > > OShortIntegerType_Base;

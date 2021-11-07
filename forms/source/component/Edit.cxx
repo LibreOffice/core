@@ -288,7 +288,12 @@ OEditModel::~OEditModel()
 }
 
 
-IMPLEMENT_DEFAULT_CLONING( OEditModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OEditModel::createClone()
+{
+    rtl::Reference<OEditModel> pClone = new OEditModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
 void OEditModel::disposing()

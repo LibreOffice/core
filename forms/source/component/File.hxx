@@ -36,7 +36,14 @@ protected:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OFileControlModel );
+    OFileControlModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OFileControlModel(
+        const OFileControlModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OFileControlModel() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel)
     virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
