@@ -225,23 +225,24 @@ bool SvtLanguageTable::HasLanguageType( const LanguageType eType )
 
 OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
 {
-    LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType );
-    sal_uInt32 nPos = FindIndex(eLang);
+    const LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eType);
+    const sal_uInt32 nPos = (eType == LANGUAGE_PROCESS_OR_USER_DEFAULT ?
+            FindIndex(LANGUAGE_SYSTEM) : FindIndex( nLang));
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < GetEntryCount() )
         return m_aStrings[nPos].first;
 
     // Obtain from ICU, or a geeky but usable-in-a-pinch lang-tag.
-    OUString sLangTag( lcl_getDescription( LanguageTag(eType)));
+    OUString sLangTag( lcl_getDescription( LanguageTag(nLang)));
     SAL_WARN("svtools.misc", "Language: 0x"
-        << std::hex << eType
+        << std::hex << nLang
         << " with unknown name, so returning lang-tag of: "
         << sLangTag);
 
     // And add it to the table if it is an on-the-fly-id, which it usually is,
     // so it is available in all subsequent language boxes.
-    if (LanguageTag::isOnTheFlyID( eType))
-        const_cast<SvtLanguageTableImpl*>(this)->AddItem( sLangTag, eType);
+    if (LanguageTag::isOnTheFlyID( nLang))
+        const_cast<SvtLanguageTableImpl*>(this)->AddItem( sLangTag, nLang);
 
     return sLangTag;
 }
