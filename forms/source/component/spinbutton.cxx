@@ -85,7 +85,12 @@ namespace frm
         );
     }
 
-    IMPLEMENT_DEFAULT_CLONING( OSpinButtonModel )
+    css::uno::Reference< css::util::XCloneable > SAL_CALL OSpinButtonModel::createClone()
+{
+    rtl::Reference<OSpinButtonModel> pClone = new OSpinButtonModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
     void OSpinButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const

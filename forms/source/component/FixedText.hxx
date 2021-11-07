@@ -29,7 +29,14 @@ class OFixedTextModel
         :public OControlModel
 {
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OFixedTextModel );
+    OFixedTextModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OFixedTextModel(
+        const OFixedTextModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OFixedTextModel() override;
 
 // XServiceInfo
     OUString SAL_CALL getImplementationName() override

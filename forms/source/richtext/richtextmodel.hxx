@@ -53,7 +53,14 @@ namespace frm
             ,public ORichTextModel_BASE
     {
     public:
-        DECLARE_DEFAULT_LEAF_XTOR( ORichTextModel );
+        ORichTextModel(
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        ORichTextModel(
+            const ORichTextModel* _pOriginal,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        virtual ~ORichTextModel() override;
 
     private:
         // <properties>

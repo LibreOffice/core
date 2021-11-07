@@ -79,7 +79,12 @@ OPatternModel::~OPatternModel()
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( OPatternModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OPatternModel::createClone()
+{
+    rtl::Reference<OPatternModel> pClone = new OPatternModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 // XServiceInfo
 

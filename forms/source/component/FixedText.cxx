@@ -60,7 +60,12 @@ OFixedTextModel::~OFixedTextModel( )
 }
 
 
-IMPLEMENT_DEFAULT_CLONING( OFixedTextModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OFixedTextModel::createClone()
+{
+    rtl::Reference<OFixedTextModel> pClone = new OFixedTextModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
 css::uno::Sequence<OUString> SAL_CALL OFixedTextModel::getSupportedServiceNames()

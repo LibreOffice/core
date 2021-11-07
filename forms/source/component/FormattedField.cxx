@@ -287,7 +287,12 @@ OFormattedModel::~OFormattedModel()
 }
 
 // XCloneable
-IMPLEMENT_DEFAULT_CLONING( OFormattedModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OFormattedModel::createClone()
+{
+    rtl::Reference<OFormattedModel> pClone = new OFormattedModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 void SAL_CALL OFormattedModel::disposing()
 {

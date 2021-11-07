@@ -483,34 +483,6 @@ public:
                         getInstanceMutex() { return m_aMutex; }
 };
 
-// constructor for cloning a class
-#define DECLARE_DEFAULT_CLONE_CTOR( classname )  \
-    classname( \
-        const classname* _pOriginal, \
-        const   css::uno::Reference< css::uno::XComponentContext>& _rxFactory \
-    ); \
-
-// all xtors for a leaf class of the object hierarchy
-#define DECLARE_DEFAULT_LEAF_XTOR( classname )  \
-    classname( \
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory \
-    ); \
-    classname( \
-        const classname* _pOriginal, \
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory \
-    ); \
-    virtual ~classname() override \
-
-
-#define IMPLEMENT_DEFAULT_CLONING( classname ) \
-    css::uno::Reference< css::util::XCloneable > SAL_CALL classname::createClone( ) \
-    { \
-        rtl::Reference<classname> pClone = new classname( this, getContext() ); \
-        pClone->clonedFrom( this ); \
-        return pClone; \
-    }
-
-
 //= OBoundControlModel
 //= model of a form layer control which is bound to a data source field
 

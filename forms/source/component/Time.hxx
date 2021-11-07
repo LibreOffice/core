@@ -38,7 +38,14 @@ protected:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OTimeModel );
+    OTimeModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OTimeModel(
+        const OTimeModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OTimeModel() override;
 
     // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() override;

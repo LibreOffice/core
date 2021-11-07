@@ -121,7 +121,14 @@ private:
     virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OListBoxModel );
+    OListBoxModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OListBoxModel(
+        const OListBoxModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OListBoxModel() override;
 
 // XServiceInfo
     OUString SAL_CALL getImplementationName() override

@@ -52,7 +52,11 @@ namespace frm
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault
         );
-        DECLARE_DEFAULT_CLONE_CTOR( OReferenceValueComponent )
+        OReferenceValueComponent(
+            const OReferenceValueComponent* _pOriginal,
+            const   css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+
         virtual ~OReferenceValueComponent() override;
 
         // OPropertySet and friends

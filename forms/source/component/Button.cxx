@@ -115,7 +115,13 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 }
 
 
-IMPLEMENT_DEFAULT_CLONING( OButtonModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OButtonModel::createClone()
+{
+    rtl::Reference<OButtonModel> pClone = new OButtonModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
+
 
 // XServiceInfo
 

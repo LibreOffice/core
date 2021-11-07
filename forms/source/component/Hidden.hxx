@@ -31,7 +31,14 @@ class OHiddenModel
     OUString     m_sHiddenValue;
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OHiddenModel );
+    OHiddenModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OHiddenModel(
+        const OHiddenModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OHiddenModel() override;
 
     // OPropertySetHelper
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;

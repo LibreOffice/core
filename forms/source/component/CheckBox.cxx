@@ -78,7 +78,13 @@ OCheckBoxModel::~OCheckBoxModel()
 }
 
 
-IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OCheckBoxModel::createClone()
+{
+    rtl::Reference<OCheckBoxModel> pClone = new OCheckBoxModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
+
 
 // XServiceInfo
 

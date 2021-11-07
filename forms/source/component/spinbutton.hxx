@@ -32,7 +32,14 @@ namespace frm
         // </properties>
 
     public:
-        DECLARE_DEFAULT_LEAF_XTOR( OSpinButtonModel );
+        OSpinButtonModel(
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        OSpinButtonModel(
+            const OSpinButtonModel* _pOriginal,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        virtual ~OSpinButtonModel() override;
 
     protected:
         // XServiceInfo

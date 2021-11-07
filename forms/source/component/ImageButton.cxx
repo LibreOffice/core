@@ -55,7 +55,12 @@ OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const
     implInitializeImageURL();
 }
 
-IMPLEMENT_DEFAULT_CLONING( OImageButtonModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OImageButtonModel::createClone()
+{
+    rtl::Reference<OImageButtonModel> pClone = new OImageButtonModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 OImageButtonModel::~OImageButtonModel()
 {

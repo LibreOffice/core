@@ -57,7 +57,12 @@ public:
         const bool _bSupportExternalBinding,
         const bool _bSupportsValidation
     );
-    DECLARE_DEFAULT_CLONE_CTOR( OEditBaseModel )
+
+    OEditBaseModel(
+        const OEditBaseModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+
     virtual ~OEditBaseModel() override;
 
     // XPersistObject

@@ -28,7 +28,14 @@ namespace frm
 class ORadioButtonModel final : public OReferenceValueComponent
 {
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( ORadioButtonModel );
+    ORadioButtonModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    ORadioButtonModel(
+        const ORadioButtonModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~ORadioButtonModel() override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override

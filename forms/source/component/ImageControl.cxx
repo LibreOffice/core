@@ -178,7 +178,12 @@ OImageControlModel::~OImageControlModel()
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OImageControlModel::createClone()
+{
+    rtl::Reference<OImageControlModel> pClone = new OImageControlModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 // XServiceInfo
 

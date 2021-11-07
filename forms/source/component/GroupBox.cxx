@@ -73,7 +73,12 @@ OGroupBoxModel::~OGroupBoxModel()
 }
 
 
-IMPLEMENT_DEFAULT_CLONING( OGroupBoxModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OGroupBoxModel::createClone()
+{
+    rtl::Reference<OGroupBoxModel> pClone = new OGroupBoxModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
 void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const

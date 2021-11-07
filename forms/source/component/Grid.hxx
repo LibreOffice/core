@@ -87,7 +87,14 @@ class OGridControlModel final :public OControlModel
     void _reset();
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OGridControlModel );
+    OGridControlModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OGridControlModel(
+        const OGridControlModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OGridControlModel() override;
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel)

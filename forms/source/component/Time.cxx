@@ -134,7 +134,12 @@ OTimeModel::~OTimeModel( )
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( OTimeModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OTimeModel::createClone()
+{
+    rtl::Reference<OTimeModel> pClone = new OTimeModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
 OUString SAL_CALL OTimeModel::getServiceName()

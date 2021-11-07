@@ -59,7 +59,14 @@ namespace frm
         // </properties>
 
     public:
-        DECLARE_DEFAULT_LEAF_XTOR( ONavigationBarModel );
+        ONavigationBarModel(
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        ONavigationBarModel(
+            const ONavigationBarModel* _pOriginal,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        virtual ~ONavigationBarModel() override;
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel )

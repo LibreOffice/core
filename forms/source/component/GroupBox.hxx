@@ -29,7 +29,14 @@ class OGroupBoxModel
         :public OControlModel
 {
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OGroupBoxModel );
+    OGroupBoxModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OGroupBoxModel(
+        const OGroupBoxModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OGroupBoxModel() override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override

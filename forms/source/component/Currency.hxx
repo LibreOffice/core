@@ -31,7 +31,14 @@ class OCurrencyModel final
     css::uno::Any          m_aSaveValue;
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OCurrencyModel );
+    OCurrencyModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OCurrencyModel(
+        const OCurrencyModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OCurrencyModel() override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override

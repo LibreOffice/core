@@ -90,9 +90,6 @@ using com::sun::star::xml::dom::events::XEventListener;
 using com::sun::star::xml::dom::events::XEventTarget;
 using com::sun::star::xsd::XDataType;
 
-
-#define EXCEPT(msg) msg,static_cast<XValueBinding*>(this)
-
 #define HANDLE_BindingID 0
 #define HANDLE_BindingExpression 1
 #define HANDLE_Model 2
@@ -437,7 +434,7 @@ bool Binding::getExternalData() const
 void Binding::checkLive()
 {
     if( ! isLive() )
-        throw RuntimeException( EXCEPT("Binding not initialized") );
+        throw RuntimeException("Binding not initialized", static_cast<XValueBinding*>(this));
 }
 
 bool Binding::isLive() const
@@ -512,7 +509,7 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
 void Binding::bind( bool bForceRebind )
 {
     if( ! mxModel.is() )
-        throw RuntimeException( EXCEPT("Binding has no Model") );
+        throw RuntimeException("Binding has no Model", static_cast<XValueBinding*>(this));
 
     // bind() will evaluate this binding as follows:
     // 1) evaluate the binding expression
@@ -964,7 +961,7 @@ css::uno::Any Binding::getValue( const css::uno::Type& rType )
 
     // second, check for type
     if( ! supportsType( rType ) )
-        throw IncompatibleTypesException( EXCEPT( "type unsupported" ) );
+        throw IncompatibleTypesException("type unsupported", static_cast<XValueBinding*>(this));
 
     // return string value (if present; else return empty Any)
     css::uno::Any result;
@@ -984,19 +981,19 @@ void Binding::setValue( const css::uno::Any& aValue )
 
     // check for supported type
     if( ! supportsType( aValue.getValueType() ) )
-        throw IncompatibleTypesException( EXCEPT( "type unsupported" ) );
+        throw IncompatibleTypesException("type unsupported", static_cast<XValueBinding*>(this));
 
     if( !maBindingExpression.hasValue() )
-        throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
+        throw InvalidBindingStateException("no suitable node found", static_cast<XValueBinding*>(this));
 
     css::uno::Reference<css::xml::dom::XNode> xNode = maBindingExpression.getNode();
     if( !xNode.is() )
-        throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
+        throw InvalidBindingStateException("no suitable node found", static_cast<XValueBinding*>(this));
 
     OUString sValue = Convert::get().toXSD( aValue );
     bool bSuccess = getModelImpl()->setSimpleContent( xNode, sValue );
     if( ! bSuccess )
-        throw InvalidBindingStateException( EXCEPT( "can't set value" ) );
+        throw InvalidBindingStateException("can't set value", static_cast<XValueBinding*>(this));
 
 
 }
@@ -1047,7 +1044,7 @@ OUString Binding::getListEntry( sal_Int32 nPosition )
     // check bounds and return proper item
     PathExpression::NodeVector_t aNodes = maBindingExpression.getNodeList();
     if( nPosition < 0 || nPosition >= static_cast<sal_Int32>( aNodes.size() ) )
-        throw IndexOutOfBoundsException( EXCEPT("") );
+        throw IndexOutOfBoundsException("", static_cast<XValueBinding*>(this));
     return lcl_getString( aNodes[ nPosition ] );
 }
 

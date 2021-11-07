@@ -79,7 +79,12 @@ ONumericModel::~ONumericModel()
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( ONumericModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL ONumericModel::createClone()
+{
+    rtl::Reference<ONumericModel> pClone = new ONumericModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 // XServiceInfo
 

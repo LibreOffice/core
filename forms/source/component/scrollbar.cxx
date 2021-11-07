@@ -131,7 +131,12 @@ namespace frm
         );
     }
 
-    IMPLEMENT_DEFAULT_CLONING( OScrollBarModel )
+    css::uno::Reference< css::util::XCloneable > SAL_CALL OScrollBarModel::createClone()
+{
+    rtl::Reference<OScrollBarModel> pClone = new OScrollBarModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
     void OScrollBarModel::describeFixedProperties( Sequence< Property >& _rProps ) const

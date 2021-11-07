@@ -193,7 +193,12 @@ namespace frm
 
     // XCloneable
 
-    IMPLEMENT_DEFAULT_CLONING( OListBoxModel )
+    css::uno::Reference< css::util::XCloneable > SAL_CALL OListBoxModel::createClone()
+{
+    rtl::Reference<OListBoxModel> pClone = new OListBoxModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
     // XServiceInfo
 

@@ -158,7 +158,12 @@ namespace frm
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarModel, OControlModel, ONavigationBarModel_BASE )
 
 
-    IMPLEMENT_DEFAULT_CLONING( ONavigationBarModel )
+    css::uno::Reference< css::util::XCloneable > SAL_CALL ONavigationBarModel::createClone()
+{
+    rtl::Reference<ONavigationBarModel> pClone = new ONavigationBarModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
     OUString SAL_CALL ONavigationBarModel::getImplementationName()

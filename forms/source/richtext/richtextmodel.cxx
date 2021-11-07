@@ -279,7 +279,12 @@ namespace frm
         );
     }
 
-    IMPLEMENT_DEFAULT_CLONING( ORichTextModel )
+    css::uno::Reference< css::util::XCloneable > SAL_CALL ORichTextModel::createClone()
+{
+    rtl::Reference<ORichTextModel> pClone = new ORichTextModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
     void SAL_CALL ORichTextModel::disposing()

@@ -50,7 +50,14 @@ class OFormattedModel final
         css::uno::Reference< css::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
         css::uno::Reference< css::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
 
-        DECLARE_DEFAULT_LEAF_XTOR( OFormattedModel );
+        OFormattedModel(
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        OFormattedModel(
+            const OFormattedModel* _pOriginal,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        virtual ~OFormattedModel() override;
 
         friend class OFormattedFieldWrapper;
 

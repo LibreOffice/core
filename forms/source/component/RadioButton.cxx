@@ -83,7 +83,12 @@ ORadioButtonModel::~ORadioButtonModel()
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL ORadioButtonModel::createClone()
+{
+    rtl::Reference<ORadioButtonModel> pClone = new ORadioButtonModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 // XServiceInfo
 

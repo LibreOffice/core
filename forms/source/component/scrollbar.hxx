@@ -31,7 +31,14 @@ namespace frm
         // </properties>
 
     public:
-        DECLARE_DEFAULT_LEAF_XTOR( OScrollBarModel );
+        OScrollBarModel(
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        OScrollBarModel(
+            const OScrollBarModel* _pOriginal,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        );
+        virtual ~OScrollBarModel() override;
 
     protected:
         // XServiceInfo

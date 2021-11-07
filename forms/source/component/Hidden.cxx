@@ -59,7 +59,12 @@ OHiddenModel::~OHiddenModel( )
 }
 
 
-IMPLEMENT_DEFAULT_CLONING( OHiddenModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL OHiddenModel::createClone()
+{
+    rtl::Reference<OHiddenModel> pClone = new OHiddenModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 
 void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const

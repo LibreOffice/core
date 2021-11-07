@@ -110,7 +110,12 @@ ODateModel::~ODateModel( )
 
 // XCloneable
 
-IMPLEMENT_DEFAULT_CLONING( ODateModel )
+css::uno::Reference< css::util::XCloneable > SAL_CALL ODateModel::createClone()
+{
+    rtl::Reference<ODateModel> pClone = new ODateModel(this, getContext());
+    pClone->clonedFrom(this);
+    return pClone;
+}
 
 // XServiceInfo
 

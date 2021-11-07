@@ -42,7 +42,14 @@ class OEditModel final : public OEditBaseModel
     bool                    m_bWritingFormattedFake : 1; // are we writing something which should be interpreted as formatted upon reading?
 
 public:
-    DECLARE_DEFAULT_LEAF_XTOR( OEditModel );
+    OEditModel(
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    OEditModel(
+        const OEditModel* _pOriginal,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+    );
+    virtual ~OEditModel() override;
 
 private:
     void enableFormattedWriteFake() { m_bWritingFormattedFake = true; }
