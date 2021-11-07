@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "566d871a_43111b50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-07T12:25:20Z",
+      "side": 1,
+      "message": "I\u0027ll followup the patch with some more tests as time permits. ",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3bd2ae2_ee21919d",
@@ -31,6 +48,24 @@
       "writtenOn": "2021-11-04T03:03:15Z",
       "side": 1,
       "message": "I think constexpr is better here.",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b94dc65_16d37e49",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-07T12:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3bd2ae2_ee21919d",
       "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +87,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54508dd2_bd4500a7",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-07T12:25:20Z",
+      "side": 1,
+      "message": "That won\u0027t relax the search in any way. See:\n\n    if( nSearchType \u003d\u003d ImplFontAttrs::None\n    \u0026\u0026 ((eSearchWeight \u003d\u003d WEIGHT_DONTKNOW) || (eSearchWeight \u003d\u003d WEIGHT_NORMAL))\n    \u0026\u0026 ((eSearchWidth \u003d\u003d WIDTH_DONTKNOW) || (eSearchWidth \u003d\u003d WIDTH_NORMAL)) )\n\nI don\u0027t think this is necessary.\n\nI\u0027ll update to constexpr.",
+      "parentUuid": "4b9d436d_e5640a6b",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29ea51b5_f3f19c6c",
@@ -65,6 +118,24 @@
       "writtenOn": "2021-11-04T03:03:15Z",
       "side": 1,
       "message": "If you invoke GetFamilyName() on the output from FindFontFamilyByAttributes(), the result would be \"matchingfamilyname\". Can you check for this?",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d63e4f8c_9dfcd648",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-07T12:25:20Z",
+      "side": 1,
+      "message": "I\u0027ll follow this up in another patch.",
+      "parentUuid": "29ea51b5_f3f19c6c",
       "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -86,6 +157,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b9c3125_615fe884",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-07T12:25:20Z",
+      "side": 1,
+      "message": "I\u0027ll follow this up in another patch.",
+      "parentUuid": "997ec01c_46fbb443",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2264ea8_9698d9a5",
@@ -99,6 +188,24 @@
       "writtenOn": "2021-11-04T03:03:15Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd202a93_eab91f68",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-07T12:25:20Z",
+      "side": 1,
+      "message": "To follow up in another patch.",
+      "parentUuid": "e2264ea8_9698d9a5",
       "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
