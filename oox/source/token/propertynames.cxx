@@ -21,12 +21,13 @@
 
 namespace oox
 {
-PropertyNameVector::PropertyNameVector()
-    : ::std::vector<OUString>{
+const std::vector<OUString>& GetPropertyNameVector()
+{
+    static const std::vector<OUString> NAMES{
 // include auto-generated C array with property names as C strings
 #include <propertynames.inc>
-    }
-{
+    };
+    return NAMES;
 }
 
 } // namespace oox
