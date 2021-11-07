@@ -127,7 +127,7 @@ MSCodec_Xor95::MSCodec_Xor95(int nRotateDistance) :
 
 MSCodec_Xor95::~MSCodec_Xor95()
 {
-    (void)memset( mpnKey, 0, sizeof( mpnKey ) );
+    memset( mpnKey, 0, sizeof( mpnKey ) );
     mnKey = mnHash = 0;
 }
 
@@ -136,7 +136,7 @@ void MSCodec_Xor95::InitKey( const sal_uInt8 pnPassData[ 16 ] )
     mnKey = lclGetKey( pnPassData, 16 );
     mnHash = lclGetHash( pnPassData, 16 );
 
-    (void)memcpy( mpnKey, pnPassData, 16 );
+    memcpy( mpnKey, pnPassData, 16 );
 
     static const sal_uInt8 spnFillChars[] =
     {
@@ -170,7 +170,7 @@ bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 
     if ( aKey.getLength() == 16 )
     {
-        (void)memcpy( mpnKey, aKey.getConstArray(), 16 );
+        memcpy( mpnKey, aKey.getConstArray(), 16 );
         bResult = true;
 
         mnKey = static_cast<sal_uInt16>(aHashData.getUnpackedValueOrDefault("XOR95BaseKey", sal_Int16(0) ));
@@ -269,8 +269,8 @@ MSCodec_CryptoAPI::MSCodec_CryptoAPI()
 
 MSCodec97::~MSCodec97()
 {
-    (void)memset(m_aDigestValue.data(), 0, m_aDigestValue.size());
-    (void)memset(m_aDocId.data(), 0, m_aDocId.size());
+    memset(m_aDigestValue.data(), 0, m_aDigestValue.size());
+    memset(m_aDocId.data(), 0, m_aDocId.size());
     rtl_cipher_destroy(m_hCipher);
 }
 
@@ -306,12 +306,12 @@ bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
     if (nKeyLen == m_nHashLen)
     {
         assert(m_aDigestValue.size() == m_nHashLen);
-        (void)memcpy(m_aDigestValue.data(), aKey.getConstArray(), m_nHashLen);
+        memcpy(m_aDigestValue.data(), aKey.getConstArray(), m_nHashLen);
         uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault("STD97UniqueID", uno::Sequence< sal_Int8 >() );
         if ( aUniqueID.getLength() == 16 )
         {
             assert(m_aDocId.size() == static_cast<size_t>(aUniqueID.getLength()));
-            (void)memcpy(m_aDocId.data(), aUniqueID.getConstArray(), m_aDocId.size());
+            memcpy(m_aDocId.data(), aUniqueID.getConstArray(), m_aDocId.size());
             bResult = true;
             lcl_PrintDigest(m_aDigestValue.data(), "digest value");
             lcl_PrintDigest(m_aDocId.data(), "DocId value");
@@ -347,13 +347,13 @@ void MSCodec_Std97::InitKey (
 
     const size_t nKeyLen = aKey.getLength();
     if (m_aDigestValue.size() == nKeyLen)
-        (void)memcpy(m_aDigestValue.data(), aKey.getConstArray(), m_aDigestValue.size());
+        memcpy(m_aDigestValue.data(), aKey.getConstArray(), m_aDigestValue.size());
     else
         memset(m_aDigestValue.data(), 0, m_aDigestValue.size());
 
     lcl_PrintDigest(m_aDigestValue.data(), "digest value");
 
-    (void)memcpy (m_aDocId.data(), pDocId, 16);
+    memcpy (m_aDocId.data(), pDocId, 16);
 
     lcl_PrintDigest(m_aDocId.data(), "DocId value");
 }
@@ -382,7 +382,7 @@ void MSCodec_CryptoAPI::InitKey (
 
     lcl_PrintDigest(m_aDigestValue.data(), "digest value");
 
-    (void)memcpy(m_aDocId.data(), pDocId, 16);
+    memcpy(m_aDocId.data(), pDocId, 16);
 
     lcl_PrintDigest(m_aDocId.data(), "DocId value");
 
@@ -437,7 +437,7 @@ bool MSCodec_Std97::InitCipher(sal_uInt32 nCounter)
     sal_uInt8      pKeyData[64] = {}; // 512-bit message block
 
     // Fill 40 bit of DigestValue into [0..4].
-    (void)memcpy (pKeyData, m_aDigestValue.data(), 5);
+    memcpy (pKeyData, m_aDigestValue.data(), 5);
 
     // Fill counter into [5..8].
     pKeyData[ 5] = sal_uInt8((nCounter >>  0) & 0xff);
@@ -506,7 +506,7 @@ void MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 n
         rtl_cipher_decode (
             m_hCipher, pDigest, 16, pDigest, sizeof(pDigest));
 
-        (void)memcpy(nSaltDigest, pDigest, 16);
+        memcpy(nSaltDigest, pDigest, 16);
     }
 }
 
@@ -559,7 +559,7 @@ void MSCodec_Std97::GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8* pDi
     pBuffer[16] = 0x80;
 
     // erase the rest of the buffer with zeros.
-    (void)memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
+    memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
 
     // set the 441st bit.
     pBuffer[56] = 0x80;
@@ -587,10 +587,10 @@ void MSCodec_Std97::GetEncryptKey (
     rtl_cipher_encode (
         m_hCipher, pSalt, 16, pSaltData, sizeof(pBuffer));
 
-    (void)memcpy( pBuffer, pSalt, 16 );
+    memcpy( pBuffer, pSalt, 16 );
 
     pBuffer[16] = 0x80;
-    (void)memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
+    memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
     pBuffer[56] = 0x80;
 
     rtl_digest_updateMD5 (
@@ -608,7 +608,7 @@ void MSCodec_Std97::GetEncryptKey (
 void MSCodec97::GetDocId( sal_uInt8 pDocId[16] )
 {
     assert(m_aDocId.size() == 16);
-    (void)memcpy(pDocId, m_aDocId.data(), 16);
+    memcpy(pDocId, m_aDocId.data(), 16);
 }
 
 EncryptionStandardHeader::EncryptionStandardHeader()
