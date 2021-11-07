@@ -180,7 +180,7 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
 } // namespace
 
 PropertyMap::PropertyMap() :
-    mpPropNames( &StaticPropertyNameVector::get() ) // pointer instead reference to get compiler generated copy c'tor and operator=
+    mpPropNames( &GetPropertyNameVector() ) // pointer instead reference to get compiler generated copy c'tor and operator=
 {
 }
 
@@ -221,7 +221,7 @@ void PropertyMap::assignUsed( const PropertyMap& rPropMap )
 const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 {
     OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );
-    return StaticPropertyNameVector::get()[ nPropId ];
+    return GetPropertyNameVector()[ nPropId ];
 }
 
 void PropertyMap::assignAll( const PropertyMap& rPropMap )
