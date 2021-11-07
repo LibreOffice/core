@@ -2896,6 +2896,12 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
     // At that Model extended functionality for that factory (or overloads and implementations)
     // should be placed. But to be realistic, migrating the factories to Model now is too much
     // work - maybe over time when melting SdrObject/SvxObject one day...
+    //
+    // More Note (added by noel grandin)
+    // Except that sd/ is being naughty and doing all kinds of magic during CreateShape that
+    // requires knowing which page the object is being created for. Fixing that would require
+    // moving a bunch of nasty logic from object creation time, to the point in time when
+    // it is actually added to a page.
     if(nullptr == pPageCandidate)
     {
         // If not inserted, alternatively access a SdrPage using the SdrModel. There is
