@@ -2769,7 +2769,6 @@ void SwContentTree::ToggleToRoot()
     m_pConfig->SetRootType( m_nRootType );
     weld::Toolbar* pBox = GetParentWindow()->m_xContent5ToolBox.get();
     pBox->set_item_active("root", m_bIsRoot);
-    UpdateTracking();
 }
 
 bool SwContentTree::HasContentChanged()
