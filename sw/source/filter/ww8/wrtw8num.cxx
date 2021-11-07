@@ -473,7 +473,8 @@ void MSWordExportBase::NumberingLevel(
     else
     {
         // Create level string
-        if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType())
+        if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType() &&
+            rFormat.HasListFormat())
         {
             sal_uInt8* pLvlPos = aNumLvlPos;
             sNumStr = rFormat.GetListFormat();
