@@ -18,10 +18,10 @@
  */
 #pragma once
 
-class SwTextFrame;
-
 #include <swtypes.hxx>
 #include "itrtxt.hxx"
+
+class SwTextFrame;
 
 class SwTextFrameBreak
 {

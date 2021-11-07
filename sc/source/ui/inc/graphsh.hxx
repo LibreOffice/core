@@ -23,12 +23,12 @@
 #include <vector>
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
+#include "drawsh.hxx"
 
 class SdrExternalToolEdit;
 class ScViewData;
 class SfxModule;
 
-#include "drawsh.hxx"
 
 class ScGraphicShell final : public ScDrawShell
 {

@@ -19,25 +19,20 @@
 
 #pragma once
 
-class SdDrawDocument;
-
 #include <model/SlsSharedPageDescriptor.hxx>
-
 #include <pres.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/region.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-
 #include <vector>
 
+class SdDrawDocument;
 class SdrPage;
 class SdPage;
-
 namespace sd::slidesorter
 {
 class SlideSorter;
 }
-
 namespace com::sun::star::container
 {
 class XIndexAccess;

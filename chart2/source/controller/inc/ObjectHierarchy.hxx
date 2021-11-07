@@ -19,12 +19,11 @@
 #pragma once
 
 #include <ObjectIdentifier.hxx>
+#include <map>
+#include <vector>
 
 namespace com::sun::star::awt { struct KeyEvent; }
 namespace com::sun::star::chart2 { class XChartDocument; }
-
-#include <map>
-#include <vector>
 
 namespace chart
 {

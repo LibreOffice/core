@@ -21,11 +21,10 @@
 
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
+#include "drawsh.hxx"
 
 class ScViewData;
 class SfxModule;
-
-#include "drawsh.hxx"
 
 class ScOleObjectShell final : public ScDrawShell
 {
