@@ -205,10 +205,17 @@ namespace xforms
     {
         OValueLimitedType_Base::registerProperties();
 
-        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_DATE, m_aMaxInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_DATE, m_aMaxExclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_DATE, m_aMinInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_DATE, m_aMinExclusive, ValueType );
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_INCLUSIVE_DATE, PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_EXCLUSIVE_DATE, PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxExclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_INCLUSIVE_DATE, PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_EXCLUSIVE_DATE, PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinExclusive, cppu::UnoType<ValueType>::get() );
     }
 
     template<>
@@ -216,10 +223,17 @@ namespace xforms
     {
         OValueLimitedType_Base::registerProperties();
 
-        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_TIME, m_aMaxInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_TIME, m_aMaxExclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_TIME, m_aMinInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_TIME, m_aMinExclusive, ValueType );
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_INCLUSIVE_TIME, PROPERTY_ID_XSD_MAX_INCLUSIVE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_EXCLUSIVE_TIME, PROPERTY_ID_XSD_MAX_EXCLUSIVE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxExclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_INCLUSIVE_TIME, PROPERTY_ID_XSD_MIN_INCLUSIVE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_EXCLUSIVE_TIME, PROPERTY_ID_XSD_MIN_EXCLUSIVE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinExclusive, cppu::UnoType<ValueType>::get() );
     }
 
     template<>
@@ -227,10 +241,17 @@ namespace xforms
     {
         OValueLimitedType_Base::registerProperties();
 
-        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_DATE_TIME, m_aMaxInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_DATE_TIME, m_aMaxExclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_DATE_TIME, m_aMinInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_DATE_TIME, m_aMinExclusive, ValueType );
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME, PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME, PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxExclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME, PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME, PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE_TIME, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinExclusive, cppu::UnoType<ValueType>::get() );
     }
 
     template<>
@@ -238,10 +259,17 @@ namespace xforms
     {
         OValueLimitedType_Base::registerProperties();
 
-        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_DOUBLE, m_aMaxInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_DOUBLE, m_aMaxExclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_DOUBLE, m_aMinInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_DOUBLE, m_aMinExclusive, ValueType );
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE, PROPERTY_ID_XSD_MAX_INCLUSIVE_DOUBLE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE, PROPERTY_ID_XSD_MAX_EXCLUSIVE_DOUBLE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxExclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE, PROPERTY_ID_XSD_MIN_INCLUSIVE_DOUBLE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE, PROPERTY_ID_XSD_MIN_EXCLUSIVE_DOUBLE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinExclusive, cppu::UnoType<ValueType>::get() );
     }
 
     template<>
@@ -249,10 +277,17 @@ namespace xforms
     {
         OValueLimitedType_Base::registerProperties();
 
-        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_INT, m_aMaxInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_INT, m_aMaxExclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_INT, m_aMinInclusive, ValueType );
-        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_INT, m_aMinExclusive, ValueType );
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_INCLUSIVE_INT, PROPERTY_ID_XSD_MAX_INCLUSIVE_INT, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MAX_EXCLUSIVE_INT, PROPERTY_ID_XSD_MAX_EXCLUSIVE_INT, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMaxExclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_INCLUSIVE_INT, PROPERTY_ID_XSD_MIN_INCLUSIVE_INT, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinInclusive, cppu::UnoType<ValueType>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_XSD_MIN_EXCLUSIVE_INT, PROPERTY_ID_XSD_MIN_EXCLUSIVE_INT, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID,
+            &m_aMinExclusive, cppu::UnoType<ValueType>::get() );
     }
 
 } // namespace xforms

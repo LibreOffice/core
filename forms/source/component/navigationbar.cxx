@@ -44,10 +44,6 @@ namespace frm
 
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-#define REGISTER_VOID_PROP( prop, memberAny, type ) \
-    registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID, \
-        &memberAny, cppu::UnoType<type>::get() );
-
     ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
         ,FontControlModel( true )
@@ -129,8 +125,11 @@ namespace frm
         registerProperty( PROPERTY_CONTEXT_WRITING_MODE, PROPERTY_ID_CONTEXT_WRITING_MODE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::TRANSIENT,
                           &m_nContextWritingMode, cppu::UnoType<decltype(m_nContextWritingMode)>::get() );
 
-        REGISTER_VOID_PROP( TABSTOP,         m_aTabStop,         sal_Bool );
-        REGISTER_VOID_PROP( BACKGROUNDCOLOR, m_aBackgroundColor, sal_Int32 );
+        registerMayBeVoidProperty( PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID,
+            &m_aTabStop, cppu::UnoType<sal_Bool>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_BACKGROUNDCOLOR, PROPERTY_ID_BACKGROUNDCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID,
+            &m_aBackgroundColor, cppu::UnoType<sal_Int32>::get() );
     }
 
 
