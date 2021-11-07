@@ -3766,7 +3766,7 @@ ISYSTEM=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING( for -isystem )
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror"
+    CFLAGS="$CFLAGS -isystem /usr/include -Werror"
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ ISYSTEM="-isystem " ],[])
     CFLAGS=$save_CFLAGS
     if test -n "$ISYSTEM"; then
