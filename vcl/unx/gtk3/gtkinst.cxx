@@ -9177,7 +9177,7 @@ void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
         // because pango_attr_list_change(..., pango_attr_size_new...) isn't
         // sufficient on its own to ensure a new size sticks.
         PangoAttrType aFilterAttrs[] = {PANGO_ATTR_ABSOLUTE_SIZE, PANGO_ATTR_SIZE, PANGO_ATTR_INVALID};
-        PangoAttrList* pRemovedAttrs = pOrigList ? pango_attr_list_filter(pAttrList, filter_pango_attrs, &aFilterAttrs) : nullptr;
+        PangoAttrList* pRemovedAttrs = pango_attr_list_filter(pAttrList, filter_pango_attrs, &aFilterAttrs);
         pango_attr_list_unref(pRemovedAttrs);
     }
 
