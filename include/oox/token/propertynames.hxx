@@ -16,30 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_OOX_TOKEN_PROPERTYNAMES_HXX
-#define INCLUDED_OOX_TOKEN_PROPERTYNAMES_HXX
+#pragma once
 
 #include <vector>
 
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 
 namespace oox
 {
 /** A vector that contains all predefined property names used in the filters. */
-struct PropertyNameVector : public ::std::vector<OUString>
-{
-    PropertyNameVector();
-};
-
-/** Thread-save singleton of a vector of all supported property names. */
-struct StaticPropertyNameVector : public ::rtl::Static<PropertyNameVector, StaticPropertyNameVector>
-{
-};
+/** Thread-safe singleton of a vector of all supported property names. */
+const std::vector<OUString>& GetPropertyNameVector();
 
 } // namespace oox
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

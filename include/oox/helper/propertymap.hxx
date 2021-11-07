@@ -37,8 +37,6 @@ namespace com::sun::star::beans {
 
 namespace oox {
 
-struct PropertyNameVector;
-
 
 typedef ::std::map< OUString, css::uno::Any > PropertyNameMap;
 
@@ -114,7 +112,7 @@ public:
   static void dumpData( const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
 #endif
 private:
-    const PropertyNameVector* mpPropNames;
+    const std::vector<OUString>* mpPropNames;
 
 protected:
     std::map< sal_Int32, css::uno::Any > maProperties;
