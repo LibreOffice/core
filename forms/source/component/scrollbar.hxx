@@ -39,7 +39,9 @@ namespace frm
         virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XPersistObject
-        DECLARE_XPERSISTOBJECT()
+        virtual OUString SAL_CALL getServiceName() override;
+        virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
         // XCloneable
         virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;

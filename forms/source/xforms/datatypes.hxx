@@ -131,21 +131,6 @@ namespace xforms
 
     //= helper for deriving from OXSDDataType
 
-#define DECLARE_DEFAULT_CLONING( classname )        \
-    virtual rtl::Reference<OXSDDataType> createClone( const OUString& _rName ) const override;    \
-    virtual void       initializeClone( const OXSDDataType& _rCloneSource ) override;
-
-#define IMPLEMENT_DEFAULT_TYPED_CLONING( classname, baseclass )   \
-    rtl::Reference<OXSDDataType> classname::createClone( const OUString& _rName ) const              \
-    {                                                       \
-        return new classname( _rName, getTypeClass() );     \
-    }                                                       \
-    void classname::initializeClone( const OXSDDataType& _rCloneSource ) \
-    { \
-        baseclass::initializeClone( _rCloneSource );        \
-        initializeTypedClone( static_cast< const classname& >( _rCloneSource ) ); \
-    }
-
 #define REGISTER_VOID_PROP( prop, memberAny, type ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID, \
         &memberAny, cppu::UnoType<type>::get() );
@@ -246,7 +231,8 @@ namespace xforms
         explicit OBooleanType( const OUString& _rName );
 
     protected:
-        DECLARE_DEFAULT_CLONING( OBooleanType )
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
 
         // OXSDDataType overridables
         virtual TranslateId _validate( const OUString& value ) override;
@@ -267,7 +253,8 @@ namespace xforms
         OStringType( const OUString& _rName, sal_Int16 _nTypeClass /* = css::xsd::DataTypeClass::STRING */ );
 
     protected:
-        DECLARE_DEFAULT_CLONING( OStringType )
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
         void       initializeTypedClone( const OStringType& _rCloneSource );
 
         // OXSDDataType overridables
@@ -288,7 +275,8 @@ namespace xforms
         ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass /* = css::xsd::DataTypeClass::DECIMAL */ );
 
     protected:
-        DECLARE_DEFAULT_CLONING( ODecimalType )
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
         void       initializeTypedClone( const ODecimalType& _rCloneSource );
 
         // OXSDDataType overridables
@@ -316,7 +304,8 @@ namespace xforms
         explicit classname( const OUString& _rName );           \
                                                                 \
     protected:                                                  \
-        DECLARE_DEFAULT_CLONING( classname )                    \
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override; \
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override; \
                                                                 \
         /* OXSDDataType overridables */                         \
         virtual TranslateId         _validate( const OUString& value ) override;  \
@@ -353,7 +342,8 @@ namespace xforms
         OShortIntegerType( const OUString& _rName, sal_Int16 _nTypeClass );
 
     protected:
-        DECLARE_DEFAULT_CLONING( OShortIntegerType )
+        virtual rtl::Reference<OXSDDataType> createClone(const OUString& _rName) const override;
+        virtual void initializeClone(const OXSDDataType& _rCloneSource) override;
 
         // OXSDDataType overridables
         virtual bool            _getValue( const OUString& value, double& fValue ) override;

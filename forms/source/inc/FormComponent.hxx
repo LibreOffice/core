@@ -70,12 +70,6 @@ namespace frm
     // default tab index for components
     const sal_Int16 FRM_DEFAULT_TABINDEX = 0;
 
-    // macros for quickly declaring/implementing XServiceInfo
-    #define DECLARE_XPERSISTOBJECT() \
-    virtual OUString SAL_CALL getServiceName() override;    \
-    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;    \
-    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
-
     class OControlModel;
 
 
