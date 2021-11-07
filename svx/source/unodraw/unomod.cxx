@@ -174,7 +174,7 @@ css::uno::Reference<css::uno::XInterface> create(
             sal_uInt16 nT = static_cast<sal_uInt16>(nType & ~E3D_INVENTOR_FLAG);
             SdrInventor nI = (nType & E3D_INVENTOR_FLAG) ? SdrInventor::E3d : SdrInventor::Default;
 
-            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer ).get()) );
+            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SdrModel::CreateShapeByTypeAndInventor( nullptr, nT, nI, nullptr, referer ).get()) );
         }
     }
     else if (rServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
@@ -448,7 +448,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         }
 
         // create the API wrapper
-        rtl::Reference<SvxShape> xNewShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor::Default, "" );
+        rtl::Reference<SvxShape> xNewShape = CreateSvxShapeByTypeAndInventor( mpDoc, nType, SdrInventor::Default, "" );
         pShape = xNewShape.get();
 
         // set shape type

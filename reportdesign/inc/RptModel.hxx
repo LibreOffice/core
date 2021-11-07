@@ -83,6 +83,10 @@ public:
                 getReportDefinition() const;
 
     css::uno::Reference< css::uno::XInterface > createShape(const OUString& aServiceSpecifier,css::uno::Reference< css::drawing::XShape >& _rShape,sal_Int32 nOrientation = -1);
+
+protected:
+    virtual SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape > & xShape, SvxDrawPage* ) override;
+    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) override;
 };
 }
 

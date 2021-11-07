@@ -62,22 +62,14 @@ using namespace ::com::sun::star::container;
     if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
-Svx3DSceneObject::Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage)
+Svx3DSceneObject::Svx3DSceneObject(SdrObject* pObj)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DSCENEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DSCENEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
-,   mxPage( pDrawPage )
 {
 }
 
 
 Svx3DSceneObject::~Svx3DSceneObject() noexcept
 {
-}
-
-
-void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
-{
-    SvxShape::Create( pNewObj, pNewPage );
-    mxPage = pNewPage;
 }
 
 
@@ -113,14 +105,14 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
 
     SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
 
-    if(!HasSdrObject() || !mxPage.is() || pShape == nullptr || nullptr != pShape->GetSdrObject() )
+    if(!HasSdrObject() || pShape == nullptr || nullptr != pShape->GetSdrObject() )
         throw uno::RuntimeException();
 
-    SdrObject* pSdrShape = mxPage->CreateSdrObject_( xShape );
+    SdrObject* pSdrShape = GetSdrObject()->getSdrModelFromSdrObject().CreateSdrObject( xShape, nullptr );
     if( dynamic_cast<const E3dObject* >(pSdrShape) !=  nullptr )
     {
         GetSdrObject()->GetSubList()->NbcInsertObject( pSdrShape );
-        pShape->Create(pSdrShape, mxPage.get());
+        pShape->Create(pSdrShape);
     }
     else
     {

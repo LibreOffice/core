@@ -43,7 +43,6 @@ class SwXShape;
 class SwFmDrawPage final : public SvxFmDrawPage
 {
     SdrPageView*        m_pPageView;
-    std::vector<SwXShape*> m_vShapes;
 public:
     SwFmDrawPage( SdrPage* pPage );
     virtual ~SwFmDrawPage() noexcept override;
@@ -54,19 +53,7 @@ public:
     SdrView*            GetDrawView() {return mpView.get();}
     SdrPageView*        GetPageView();
     void                RemovePageView();
-    static css::uno::Reference<css::drawing::XShape> GetShape(SdrObject* pObj);
     static css::uno::Reference<css::drawing::XShapeGroup> GetShapeGroup(SdrObject* pObj);
-
-    // The following method is called when a SvxShape-object is to be created.
-    // Derived classes may obtain at this point a derivation or an object
-    // that is aggregating a SvxShape.
-    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
-    void RemoveShape(const SwXShape* pShape)
-    {
-        auto ppShape = find(m_vShapes.begin(), m_vShapes.end(), pShape);
-        if(ppShape != m_vShapes.end())
-            m_vShapes.erase(ppShape);
-    };
 };
 
 typedef cppu::WeakAggImplHelper4
@@ -134,7 +121,6 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     friend class SwXGroupShape;
     friend class SwXDrawPage;
     friend class SwFmDrawPage;
-    const SwFmDrawPage* m_pPage;
     SwFrameFormat* m_pFormat;
 
     css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;

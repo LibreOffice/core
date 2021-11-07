@@ -31,12 +31,12 @@
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
 #include <svx/svdpage.hxx>
+#include <RptModel.hxx>
+
+using namespace ::com::sun::star;
 
 namespace reportdesign
 {
-    using namespace ::com::sun::star;
-    using namespace rptui;
-
 OReportDrawPage::OReportDrawPage(SdrPage* _pPage
                                  ,const uno::Reference< report::XSection >& _xSection)
 : SvxDrawPage(_pPage)
@@ -44,29 +44,29 @@ OReportDrawPage::OReportDrawPage(SdrPage* _pPage
 {
 }
 
-SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XShape > & xDescr)
+}
+
+namespace rptui
+{
+
+SdrObject* OReportModel::CreateSdrObject(const uno::Reference< drawing::XShape > & xDescr, SvxDrawPage* pPage)
 {
     uno::Reference< report::XReportComponent> xReportComponent(xDescr,uno::UNO_QUERY);
     if ( xReportComponent.is() )
     {
-        return OObjectBase::createObject(
-            GetSdrPage()->getSdrModelFromSdrPage(),
-            xReportComponent);
+        return OObjectBase::createObject(*this, xReportComponent);
     }
 
-    return SvxDrawPage::CreateSdrObject_( xDescr );
+    return SdrModel::CreateSdrObject( xDescr, pPage );
 }
 
-uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj ) const
+uno::Reference< drawing::XShape >  OReportModel::CreateShape( SdrObject *pObj )
 {
     OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
     if ( !pBaseObj )
-        return SvxDrawPage::CreateShape( pObj );
+        return SdrModel::CreateShape( pObj );
 
-    uno::Reference< report::XSection> xSection = m_xSection;
-    uno::Reference< lang::XMultiServiceFactory> xFactory;
-    if ( xSection.is() )
-        xFactory.set(xSection->getReportDefinition(),uno::UNO_QUERY);
+    uno::Reference< lang::XMultiServiceFactory> xFactory(getReportDefinition(),uno::UNO_QUERY);
     uno::Reference< drawing::XShape > xRet;
     uno::Reference< drawing::XShape > xShape;
     if ( xFactory.is() )
@@ -130,12 +130,11 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
         }
 
         if ( !xShape.is() )
-            xShape.set( SvxDrawPage::CreateShape( pObj ) );
+            xShape.set( SdrModel::CreateShape( pObj ) );
 
         try
         {
-            OReportModel& rRptModel(static_cast< OReportModel& >(pObj->getSdrModelFromSdrObject()));
-            xRet.set( rRptModel.createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
+            xRet.set( createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {

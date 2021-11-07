@@ -78,22 +78,14 @@ using namespace ::com::sun::star::container;
     if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
-SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SvxDrawPage* pDrawPage)
+SvxShapeGroup::SvxShapeGroup(SdrObject* pObj)
     : SvxShape(pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()))
-    , mxPage(pDrawPage)
 {
 }
 
 SvxShapeGroup::~SvxShapeGroup() noexcept
 {
 }
-
-void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
-{
-    SvxShape::Create( pNewObj, pNewPage );
-    mxPage = pNewPage;
-}
-
 
 uno::Any SAL_CALL SvxShapeGroup::queryInterface( const uno::Type & rType )
 {
@@ -169,22 +161,22 @@ void SAL_CALL SvxShapeGroup::leaveGroup(  )
 
 void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape, size_t nPos )
 {
-    if (!HasSdrObject() || !mxPage.is())
+    if (!HasSdrObject())
     {
-        OSL_FAIL("could not add XShape to group shape!");
+        assert(false && "could not add XShape to group shape!");
         return;
     }
 
     SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
     if (!pShape)
     {
-        OSL_FAIL("could not add XShape to group shape!");
+        assert(false && "could not add XShape to group shape!");
         return;
     }
 
     SdrObject* pSdrShape = pShape->GetSdrObject();
     if( pSdrShape == nullptr )
-        pSdrShape = mxPage->CreateSdrObject_( xShape );
+        pSdrShape = GetSdrObject()->getSdrModelFromSdrObject().CreateSdrObject( xShape, nullptr );
 
     if( pSdrShape->IsInserted() )
         pSdrShape->getParentSdrObjListFromSdrObject()->RemoveObject( pSdrShape->GetOrdNum() );
@@ -205,7 +197,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
     // Establish connection between new SdrObject and its wrapper before
     // inserting the new shape into the group.  There a new wrapper
     // would be created when this connection would not already exist.
-    pShape->Create( pSdrShape, mxPage.get() );
+    pShape->Create( pSdrShape );
 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }

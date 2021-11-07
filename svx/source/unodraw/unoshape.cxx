@@ -379,7 +379,7 @@ void SvxShape::impl_initFromSdrObject()
 }
 
 
-void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
+void SvxShape::Create( SdrObject* pNewObj )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -3800,11 +3800,11 @@ SvxShapeText::~SvxShapeText() noexcept
         "svx::SvxShapeText::~SvxShapeText(), text shape with living text ranges destroyed!");
 }
 
-void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxShapeText::Create( SdrObject* pNewObj )
 {
     if( pNewObj && (nullptr == GetEditSource()))
         SetEditSource( new SvxTextEditSource( pNewObj, nullptr ) );
-    SvxShape::Create( pNewObj, pNewPage );
+    SvxShape::Create( pNewObj );
 }
 
 // XInterface

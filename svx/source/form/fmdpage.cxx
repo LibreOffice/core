@@ -20,6 +20,7 @@
 #include <svx/fmpage.hxx>
 #include <fmobj.hxx>
 #include <svx/fmdpage.hxx>
+#include <svx/fmmodel.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -59,7 +60,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  )
         css::uno::Sequence { cppu::UnoType<css::form::XFormsSupplier>::get() });
 }
 
-SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xDescr )
+SdrObject *FmFormModel::CreateSdrObject( const css::uno::Reference< css::drawing::XShape > & xDescr, SvxDrawPage* pDrawPage )
 {
     OUString aShapeType( xDescr->getShapeType() );
 
@@ -67,15 +68,15 @@ SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::draw
         ||  aShapeType == "com.sun.star.drawing.ControlShape"
         )
     {
-        return new FmFormObj(GetSdrPage()->getSdrModelFromSdrPage());
+        return new FmFormObj(*this);
     }
     else
     {
-        return SvxDrawPage::CreateSdrObject_( xDescr );
+        return SdrModel::CreateSdrObject( xDescr, pDrawPage );
     }
 }
 
-css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::CreateShape( SdrObject *pObj ) const
+css::uno::Reference< css::drawing::XShape >  FmFormModel::CreateShape( SdrObject *pObj )
 {
     if( SdrInventor::FmForm == pObj->GetObjInventor() )
     {
@@ -83,7 +84,7 @@ css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::CreateShape( SdrObje
         return xShape;
     }
     else
-        return SvxDrawPage::CreateShape( pObj );
+        return SdrModel::CreateShape( pObj );
 }
 
 // XFormsSupplier

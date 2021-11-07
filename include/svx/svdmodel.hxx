@@ -21,6 +21,7 @@
 
 #include <functional>
 #include <memory>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/outliner.hxx>
@@ -34,9 +35,9 @@
 #include <o3tl/enumarray.hxx>
 
 #include <svl/style.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/xtable.hxx>
 
-class OutputDevice;
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 
@@ -50,6 +51,7 @@ class OutputDevice;
 
 constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
 
+class OutputDevice;
 class SdrOutliner;
 class SdrLayerAdmin;
 class SdrObjList;
@@ -78,7 +80,10 @@ class SdrOutlinerCache;
 class SdrUndoFactory;
 class ImageMap;
 class TextChain;
+class SvxShape;
+class SvxDrawPage;
 enum class CharCompressType;
+enum class SdrInventor : sal_uInt32;
 namespace comphelper
 {
     class IEmbeddedHelper;
@@ -141,6 +146,7 @@ struct SdrModelImpl;
 
 class SVXCORE_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
 {
+friend class SdrObject;
 private:
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:
@@ -602,6 +608,22 @@ public:
     void DoMakePageObjectsNamesUnique(bool bDo) { mbMakePageObjectsNamesUnique = bDo; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    // Determine Type and Inventor
+    static void GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) noexcept;
+
+    /// @throws css::uno::RuntimeException
+    static rtl::Reference<SvxShape> CreateShapeByTypeAndInventor( const SdrModel* pModel, sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, OUString const & referer = OUString() );
+
+    // Creating a SdrObject using it's Description.
+    // Can be used by derived classes to support their own Shapes (e.g. Controls).
+    /// @throws css::uno::RuntimeException
+    virtual SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, SvxDrawPage* );
+
+    // The following method is called if a SvxShape object is to be created.
+    // Derived classes can create a derivation or an SvxShape aggregating object.
+    /// @throws css::uno::RuntimeException
+    virtual css::uno::Reference< css::drawing::XShape > CreateShape( SdrObject *pObj );
 };
 
 /*

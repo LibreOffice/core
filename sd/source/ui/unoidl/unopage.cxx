@@ -390,16 +390,17 @@ void SdGenericDrawPage::UpdateModel()
 }
 
 // this is called whenever a SdrObject must be created for an empty api shape wrapper
-SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShape >& xShape )
+SdrObject * SdDrawDocument::CreateSdrObject( const Reference< drawing::XShape >& xShape, SvxDrawPage* pDrawPage )
 {
-    if( nullptr == SvxFmDrawPage::mpPage || !xShape.is() )
+    if( !xShape.is() )
         return nullptr;
+    SdPage* pPage = static_cast<SdGenericDrawPage*>(pDrawPage)->GetPage();
 
     OUString aType( xShape->getShapeType() );
     static const OUStringLiteral aPrefix( u"com.sun.star.presentation." );
     if( !aType.startsWith( aPrefix ) )
     {
-        SdrObject* pObj = SvxFmDrawPage::CreateSdrObject_( xShape );
+        SdrObject* pObj = FmFormModel::CreateSdrObject( xShape, pDrawPage );
         return pObj;
     }
 
@@ -445,7 +446,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     }
     else if( aType == "PageShape" )
     {
-        if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
+        if( pPage->GetPageKind() == PageKind::Notes && pPage->IsMasterPage() )
             eObjKind = PresObjKind::Title;
         else
             eObjKind = PresObjKind::Page;
@@ -479,7 +480,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
         eObjKind = PresObjKind::Media;
     }
 
-    ::tools::Rectangle aRect( eObjKind == PresObjKind::Title ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
+    ::tools::Rectangle aRect( eObjKind == PresObjKind::Title ? pPage->GetTitleRect() : pPage->GetLayoutRect()  );
 
     const awt::Point aPos( aRect.Left(), aRect.Top() );
     xShape->setPosition( aPos );
@@ -490,21 +491,20 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     SdrObject *pPresObj = nullptr;
     if( (eObjKind == PresObjKind::Table) || (eObjKind == PresObjKind::Media) )
     {
-        pPresObj = SvxFmDrawPage::CreateSdrObject_( xShape );
+        pPresObj = FmFormModel::CreateSdrObject( xShape, pDrawPage );
         if( pPresObj )
         {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
-            pPresObj->NbcSetStyleSheet(rDoc.GetDefaultStyleSheet(), true);
-            GetPage()->InsertPresObj( pPresObj, eObjKind );
+            pPresObj->NbcSetStyleSheet(GetDefaultStyleSheet(), true);
+            pPage->InsertPresObj( pPresObj, eObjKind );
         }
     }
     else
     {
-        pPresObj = GetPage()->CreatePresObj( eObjKind, false, aRect );
+        pPresObj = pPage->CreatePresObj( eObjKind, false, aRect );
     }
 
     if( pPresObj )
-        pPresObj->SetUserCall( GetPage() );
+        pPresObj->SetUserCall( pPage );
 
     return pPresObj;
 }
@@ -1353,17 +1353,18 @@ void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUSt
 {
 }
 
-Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) const
+Reference< drawing::XShape > SdDrawDocument::CreateShape(SdrObject *pObj)
 {
-    DBG_ASSERT( GetPage(), "SdGenericDrawPage::CreateShape(), can't create shape for disposed page!" );
-    DBG_ASSERT( pObj, "SdGenericDrawPage::CreateShape(), invalid call with pObj == 0!" );
-
+    assert( pObj && "SdDrawDocument::CreateShape(), invalid call with pObj == 0!" );
     if (!pObj)
         return Reference< drawing::XShape >();
 
-    if (GetPage())
+    SdPage* pPage = static_cast<SdPage*>(pObj->getSdrPageFromSdrObject());
+    assert( pPage && "SdDrawDocument::CreateShape(), can't create shape for disposed page!" );
+
+    if (pPage)
     {
-        PresObjKind eKind = GetPage()->GetPresObjKind(pObj);
+        PresObjKind eKind = pPage->GetPresObjKind(pObj);
 
         rtl::Reference<SvxShape> pShape;
 
@@ -1374,7 +1375,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
             {
             case OBJ_TITLETEXT:
                 pShape = new SvxShapeText( pObj );
-                if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
+                if( pPage->GetPageKind() == PageKind::Notes && pPage->IsMasterPage() )
                 {
                     // fake an empty PageShape if it's a title shape on the master page
                     pShape->SetShapeType("com.sun.star.presentation.PageShape");
@@ -1396,7 +1397,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
         Reference< drawing::XShape >  xShape( pShape );
 
         if(!xShape.is())
-            xShape = SvxFmDrawPage::CreateShape( pObj );
+            xShape = FmFormModel::CreateShape( pObj );
 
         if( eKind != PresObjKind::NONE )
         {
@@ -1471,13 +1472,14 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
         if (pSdShape)
         {
             // SdXShape aggregates SvxShape
-            new SdXShape(pSdShape, GetModel());
+            SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(getUnoModel());
+            new SdXShape(pSdShape, pDoc);
         }
         return xShape;
     }
     else
     {
-        return SvxFmDrawPage::CreateShape( pObj );
+        return FmFormModel::CreateShape( pObj );
     }
 
 }

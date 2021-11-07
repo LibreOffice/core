@@ -19,6 +19,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
+#include <drwlayer.hxx>
 #include <pageuno.hxx>
 #include <shapeuno.hxx>
 
@@ -33,9 +34,9 @@ ScPageObj::~ScPageObj() noexcept
 {
 }
 
-uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
+uno::Reference<drawing::XShape > ScDrawLayer::CreateShape( SdrObject *pObj )
 {
-    uno::Reference<drawing::XShape> xShape(SvxFmDrawPage::CreateShape( pObj ));
+    uno::Reference<drawing::XShape> xShape(FmFormModel::CreateShape( pObj ));
 
     new ScShapeObj( xShape );       // aggregates object and modifies xShape
 

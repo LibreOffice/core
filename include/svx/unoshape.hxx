@@ -193,7 +193,7 @@ public:
 
     // Internals
     void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet);
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage );
+    virtual void Create( SdrObject* pNewObj );
     /** takes the ownership of the SdrObject.
 
         When the shape is disposed, and it has the ownership of its associated SdrObject, then
@@ -370,7 +370,7 @@ public:
     SvxShapeText(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet);
     virtual ~SvxShapeText() noexcept override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
+    virtual void Create( SdrObject* pNewObj ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
@@ -426,15 +426,11 @@ class SvxShapeGroup final : public SvxShape,
                       public css::drawing::XShapes
 {
 private:
-    rtl::Reference< SvxDrawPage> mxPage;
-
     void addUnoShape( const css::uno::Reference< css::drawing::XShape >& xShape, size_t nPos );
 
 public:
-    SvxShapeGroup(SdrObject* pObj,SvxDrawPage* pDrawPage);
+    SvxShapeGroup(SdrObject* pObj);
     virtual ~SvxShapeGroup() noexcept override;
-
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
@@ -659,23 +655,18 @@ public:
 ***********************************************************************/
 class Svx3DSceneObject final : public css::drawing::XShapes, public SvxShape
 {
-private:
-    rtl::Reference< SvxDrawPage > mxPage;
-
 protected:
     using SvxShape::setPropertyValue;
     using SvxShape::getPropertyValue;
 
 public:
-    Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage);
+    Svx3DSceneObject(SdrObject* pObj);
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
         css::uno::Any& rValue ) override;
 
     virtual ~Svx3DSceneObject() noexcept override;
-
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;

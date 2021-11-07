@@ -195,6 +195,11 @@ public:
     SAL_DLLPRIVATE SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
     SAL_DLLPRIVATE virtual ~SdDrawDocument() override;
 
+    // this is called whenever a SdrObject must be created for an empty api shape wrapper
+    virtual SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, SvxDrawPage* ) override;
+    // FmFormModel
+    virtual css::uno::Reference<css::drawing::XShape>  CreateShape(SdrObject *pObj) override;
+
     // Adapt to given Size and Borders scaling all contained data, maybe
     // including PresObj's in higher derivations
     virtual void adaptSizeAndBorderForAllPages(

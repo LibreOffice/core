@@ -32,6 +32,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
@@ -351,7 +352,8 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     {
         aCustomShape2d.ApplyGluePoints(xRenderedShape.get());
         SdrObject* pRenderedShape = xRenderedShape.release();
-        xShape = SvxDrawPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
+        xShape = SdrModel::CreateShapeByTypeAndInventor( &pRenderedShape->getSdrModelFromSdrObject(),
+            pRenderedShape->GetObjIdentifier(),
             pRenderedShape->GetObjInventor(), pRenderedShape );
     }
 

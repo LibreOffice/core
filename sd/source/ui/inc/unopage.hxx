@@ -103,12 +103,6 @@ public:
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
-    // this is called whenever a SdrObject must be created for an empty api shape wrapper
-    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-
-    // SvxFmDrawPage
-    virtual css::uno::Reference<css::drawing::XShape>  CreateShape(SdrObject *pObj) const override;
-
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL release() noexcept override;

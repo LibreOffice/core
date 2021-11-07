@@ -113,6 +113,8 @@ public:
                     ScDrawLayer( ScDocument* pDocument, const OUString& rName );
     virtual         ~ScDrawLayer() override;
 
+    virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject* pObj) override;
+
     virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
     virtual SdrModel* AllocModel() const override;
     virtual void    SetChanged( bool bFlg = true ) override;

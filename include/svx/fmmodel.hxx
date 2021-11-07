@@ -75,6 +75,15 @@ public:
 
     FmXUndoEnvironment& GetUndoEnv();
 
+protected:
+    // Creating a SdrObject based on a Description. Can be used by derived classes to
+    // support own css::drawing::Shapes (for example Controls)
+    virtual SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape > & xShape, SvxDrawPage* ) override;
+
+    // The following method is called when a SvxShape object should be created.
+    // Derived classes can create a derivation or an object aggregating SvxShape.
+    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) override;
+
 private:
     void        implSetOpenInDesignMode( bool _bOpenDesignMode );
 };

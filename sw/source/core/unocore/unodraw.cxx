@@ -258,8 +258,6 @@ SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
 
 SwFmDrawPage::~SwFmDrawPage() noexcept
 {
-    while (!m_vShapes.empty())
-        m_vShapes.back()->dispose();
     RemovePageView();
 }
 
@@ -289,29 +287,12 @@ void    SwFmDrawPage::RemovePageView()
     m_pPageView = nullptr;
 }
 
-uno::Reference<drawing::XShape> SwFmDrawPage::GetShape(SdrObject* pObj)
-{
-    if(!pObj)
-        return nullptr;
-    SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
-    SwFmDrawPage* pPage = dynamic_cast<SwFmDrawPage*>(pFormat);
-    if(!pPage || pPage->m_vShapes.empty())
-        return uno::Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY);
-    for(auto pShape : pPage->m_vShapes)
-    {
-        SvxShape* pSvxShape = pShape->GetSvxShape();
-        if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
-            return uno::Reference<drawing::XShape>(static_cast<::cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
-    }
-    return nullptr;
-}
-
 uno::Reference<drawing::XShapeGroup> SwFmDrawPage::GetShapeGroup(SdrObject* pObj)
 {
-    return uno::Reference<drawing::XShapeGroup>(GetShape(pObj), uno::UNO_QUERY);
+    return uno::Reference<drawing::XShapeGroup>(pObj->getUnoShape(), uno::UNO_QUERY);
 }
 
-uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) const
+uno::Reference< drawing::XShape > SwDrawModel::CreateShape( SdrObject *pObj )
 {
     uno::Reference< drawing::XShape >  xRet;
     if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
@@ -356,9 +337,9 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
         // own block - temporary object has to be destroyed before
         // the delegator is set #81670#
         {
-            xRet = SvxFmDrawPage::CreateShape( pObj );
+            xRet = FmFormModel::CreateShape( pObj );
         }
-        uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
+        uno::Reference< css::lang::XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
         //don't create an SwXShape if it already exists
         rtl::Reference<SwXShape> pShape = comphelper::getFromUnoTunnel<SwXShape>(xShapeTunnel);
         if(!pShape)
@@ -372,8 +353,6 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
                 pShape = new SwXShape(xCreate, nullptr);
             xRet = pShape;
         }
-        const_cast<std::vector<SwXShape*>*>(&m_vShapes)->push_back(pShape.get());
-        pShape->m_pPage = this;
     }
     return xRet;
 }
@@ -564,7 +543,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
                                     static_cast< cppu::OWeakObject * > ( this ) );
 
     // we're already registered in the model / SwXDrawPage::add() already called
-    if(pShape->m_pPage || pShape->m_pFormat || !pShape->m_bDescriptor )
+    if(pShape->m_pFormat || !pShape->m_bDescriptor )
         return;
 
     // we're inserted elsewhere already
@@ -873,8 +852,7 @@ namespace
 SwXShape::SwXShape(
         uno::Reference<uno::XInterface> & xShape,
         SwDoc const*const pDoc)
-    : m_pPage(nullptr)
-    , m_pFormat(nullptr)
+    : m_pFormat(nullptr)
     , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE))
     , m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE))
     , m_pImpl(new SwShapeDescriptor_Impl(pDoc))
@@ -956,9 +934,6 @@ SwXShape::~SwXShape()
     }
     m_pImpl.reset();
     EndListeningAll();
-    if(m_pPage)
-       const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
-    m_pPage = nullptr;
 }
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
@@ -2126,9 +2101,6 @@ void SwXShape::dispose()
         if(xComp.is())
             xComp->dispose();
     }
-    if(m_pPage)
-        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
-    m_pPage = nullptr;
 }
 
 void SwXShape::addEventListener(

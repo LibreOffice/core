@@ -421,7 +421,7 @@ uno::Any SwXTextView::getSelection()
                 for(size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    uno::Reference<drawing::XShape> xShape = SwFmDrawPage::GetShape( pObj );
+                    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), css::uno::UNO_QUERY_THROW);
                     xShCol->add(xShape);
                 }
                 aRef.set(xShCol, uno::UNO_QUERY);

@@ -1028,7 +1028,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         }
 
         // create the API wrapper
-        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor::Default, referer );
+        pShape = CreateSvxShapeByTypeAndInventor( mpDoc, nType, SdrInventor::Default, referer );
 
         // set shape type
         if( pShape && !mbClipBoard )
@@ -1038,7 +1038,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.TableShape" )
     {
-        rtl::Reference<SvxShape> pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor::Default, referer );
+        rtl::Reference<SvxShape> pShape = CreateSvxShapeByTypeAndInventor( mpDoc, OBJ_TABLE, SdrInventor::Default, referer );
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 

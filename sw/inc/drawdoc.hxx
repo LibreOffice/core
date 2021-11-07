@@ -20,8 +20,11 @@
 #define INCLUDED_SW_INC_DRAWDOC_HXX
 
 #include <svx/fmmodel.hxx>
+#include <vector>
 
 class SwDoc;
+class SwXShape;
+class SwFmDrawPage;
 
 class SwDrawModel final : public FmFormModel
 {
@@ -40,6 +43,11 @@ public:
     virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
 
     virtual css::uno::Reference<css::embed::XStorage> GetDocumentStorage() const override;
+
+    // The following method is called when a SvxShape-object is to be created.
+    // Derived classes may obtain at this point a derivation or an object
+    // that is aggregating a SvxShape.
+    virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject* pObj) override;
 
 private:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.

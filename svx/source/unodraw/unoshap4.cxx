@@ -561,9 +561,9 @@ SvxAppletShape::~SvxAppletShape() noexcept
 {
 }
 
-void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxAppletShape::Create( SdrObject* pNewObj )
 {
-    SvxShape::Create( pNewObj, pNewPage );
+    SvxShape::Create( pNewObj );
     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
     createObject(aAppletClassId);
     SetShapeType( "com.sun.star.drawing.AppletShape" );
@@ -632,9 +632,9 @@ SvxPluginShape::~SvxPluginShape() noexcept
 {
 }
 
-void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxPluginShape::Create( SdrObject* pNewObj )
 {
-    SvxShape::Create( pNewObj, pNewPage );
+    SvxShape::Create( pNewObj );
     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
     createObject(aPluginClassId);
     SetShapeType( "com.sun.star.drawing.PluginShape" );
@@ -704,9 +704,9 @@ SvxFrameShape::~SvxFrameShape() noexcept
 {
 }
 
-void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxFrameShape::Create( SdrObject* pNewObj )
 {
-    SvxShape::Create( pNewObj, pNewPage );
+    SvxShape::Create( pNewObj );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
     createObject(aIFrameClassId);
     SetShapeType( "com.sun.star.drawing.FrameShape" );
