@@ -17,12 +17,14 @@
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <editeng/langitem.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
+#include <UndoManager.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/doc/data/";
 
@@ -124,6 +126,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
     // an explicit language was not set for the document.
     CPPUNIT_ASSERT_EQUAL(LANGUAGE_ENGLISH_US, eLang);
     ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
+{
+// TODO figure out why the ext text input in this test code reaches the wrong window on
+// non-headless.
+#if !defined MACOSX && !defined _WIN32
+    // Given an empty document:
+    SwDoc* pDoc = createDoc();
+    // Make sure no idle is in action, so the ExtTextInput events go to SwEditWin.
+    Scheduler::ProcessEventsToIdle();
+
+    // When pressing two keys via IME:
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
+    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
+    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    // Then make sure that gets grouped together to a single undo action:
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pTextNode->GetText());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. 2 subsequent IME events got their own undo actions.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetUndoManager().GetUndoActionCount());
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
