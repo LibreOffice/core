@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bed9ef8_98f82aec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-08T21:43:31Z",
+      "side": 1,
+      "message": "After forms part, I\u0027ll try to \"demacrofy\" a bit dbaccess.\nIt seems quite a bigger task...\n\nIt seems some people loved \"meta programming\" with macros :-)",
+      "revId": "9b6c4215bad81955de533b8a3a8d0280d66859d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
