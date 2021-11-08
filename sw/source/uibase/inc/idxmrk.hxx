@@ -42,7 +42,7 @@ public:
 
 class SwInsertAuthMarkWrapper final : public SfxChildWindow
 {
-    ScopedVclPtr<AbstractMarkFloatDlg> xAbstDlg;
+    ScopedVclPtr<AbstractMarkFloatDlg> m_xAbstDlg;
 
 public:
     SwInsertAuthMarkWrapper(vcl::Window *pParentWindow,

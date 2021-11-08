@@ -150,14 +150,14 @@ friend class InputEdit;
 
     VclPtr<PosEdit> mxPos;
     VclPtr<InputEdit> mxEdit;
-    std::unique_ptr<SwFieldMgr> pMgr;
-    SwWrtShell*     pWrtShell;
-    SwView*         pView;
-    OUString        aCurrentTableName, sOldFormula;
+    std::unique_ptr<SwFieldMgr> m_pMgr;
+    SwWrtShell*     m_pWrtShell;
+    SwView*         m_pView;
+    OUString        m_aCurrentTableName, m_sOldFormula;
 
-    bool            bFirst : 1;  // initialisations at first call
-    bool            bIsTable : 1;
-    bool            bDelSel : 1;
+    bool            m_bFirst : 1;  // initialisations at first call
+    bool            m_bIsTable : 1;
+    bool            m_bDelSel : 1;
     bool            m_bDoesUndo : 1;
     bool            m_bResetUndo : 1;
     bool            m_bCallUndo : 1;
@@ -186,12 +186,12 @@ public:
     DECL_LINK( SelTableCellsNotify, SwWrtShell&, void );
 
     void            SetFormula( const OUString& rFormula );
-    const SwView*   GetView() const{return pView;}
+    const SwView*   GetView() const{return m_pView;}
 };
 
 class SwInputChild final : public SfxChildWindow
 {
-    SfxDispatcher*  pDispatch;
+    SfxDispatcher*  m_pDispatch;
 public:
     SwInputChild( vcl::Window* ,
                         sal_uInt16 nId,
