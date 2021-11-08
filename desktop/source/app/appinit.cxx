@@ -36,7 +36,6 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
@@ -122,8 +121,16 @@ typedef std::map< OUString, css::uno::Reference<css::lang::XInitialization> > Ac
 
 namespace
 {
-    struct acceptorMap : public rtl::Static< AcceptorMap, acceptorMap > {};
-    struct CurrentTempURL : public rtl::Static< OUString, CurrentTempURL > {};
+    AcceptorMap& acceptorMap()
+    {
+        static AcceptorMap SINGLETON;
+        return SINGLETON;
+    }
+    OUString& CurrentTempURL()
+    {
+        static OUString SINGLETON;
+        return SINGLETON;
+    }
 }
 
 static bool bAccept = false;
@@ -131,7 +138,7 @@ static bool bAccept = false;
 void Desktop::createAcceptor(const OUString& aAcceptString)
 {
     // check whether the requested acceptor already exists
-    AcceptorMap &rMap = acceptorMap::get();
+    AcceptorMap &rMap = acceptorMap();
     AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
     if (pIter != rMap.end() )
         return;
@@ -188,7 +195,7 @@ IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl, void*, void)
         bAccept = true;
         // enable existing acceptors by calling initialize(true)
         // on all existing acceptors
-        AcceptorMap &rMap = acceptorMap::get();
+        AcceptorMap &rMap = acceptorMap();
         std::for_each(rMap.begin(), rMap.end(), enable());
     }
 }
@@ -196,7 +203,7 @@ IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl, void*, void)
 void Desktop::destroyAcceptor(const OUString& aAcceptString)
 {
     // special case stop all acceptors
-    AcceptorMap &rMap = acceptorMap::get();
+    AcceptorMap &rMap = acceptorMap();
     if (aAcceptString == "all") {
         rMap.clear();
 
@@ -217,7 +224,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
 void Desktop::DeregisterServices()
 {
     // stop all acceptors by clearing the map
-    acceptorMap::get().clear();
+    acceptorMap().clear();
 }
 
 void Desktop::CreateTemporaryDirectory()
@@ -252,13 +259,13 @@ void Desktop::CreateTemporaryDirectory()
     {
         aRet.clear();
     }
-    CurrentTempURL::get() = aRet;
+    CurrentTempURL() = aRet;
 }
 
 void Desktop::RemoveTemporaryDirectory()
 {
     // remove current temporary directory
-    OUString &rCurrentTempURL = CurrentTempURL::get();
+    OUString &rCurrentTempURL = CurrentTempURL();
     if ( !rCurrentTempURL.isEmpty() )
     {
         ::utl::UCBContentHelper::Kill( rCurrentTempURL );

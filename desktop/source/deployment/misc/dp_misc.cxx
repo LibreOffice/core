@@ -23,6 +23,7 @@
 
 #include <dp_misc.h>
 #include <dp_interact.h>
+#include <dp_shared.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/digest.h>
 #include <rtl/random.h>
@@ -549,5 +550,12 @@ void disposeBridges(Reference<css::uno::XComponentContext> const & ctx)
 }
 
 }
+
+OUString DpResId(TranslateId aId)
+{
+    static std::locale SINGLETON = Translate::Create("dkt");
+    return Translate::get(aId, SINGLETON);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,6 @@
 #include <osl/pipe.hxx>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <osl/conditn.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <rtl/strbuf.hxx>

@@ -21,9 +21,6 @@
 
 #include <unotools/resmgr.hxx>
 
-// ---- needed as long as we have no contexts for components ---
-#include <rtl/instance.hxx>
-
 namespace dbaccess
 {
     OUString ResourceManager::loadString(TranslateId pResId)
