@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>

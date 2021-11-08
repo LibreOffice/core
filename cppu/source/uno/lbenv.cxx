@@ -33,7 +33,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <typelib/typedescription.h>
 #include <uno/dispatcher.h>
 #include <uno/environment.h>
@@ -127,7 +126,11 @@ struct EnvironmentsData
     bool isDisposing;
 };
 
-struct theEnvironmentsData : public rtl::Static< EnvironmentsData, theEnvironmentsData > {};
+EnvironmentsData& theEnvironmentsData()
+{
+    static EnvironmentsData SINGLETON;
+    return SINGLETON;
+}
 
 struct uno_DefaultEnvironment : public uno_ExtEnvironment
 {
@@ -563,7 +566,7 @@ static void defenv_harden(
         *ppHardEnv = nullptr;
     }
 
-    EnvironmentsData & rData = theEnvironmentsData::get();
+    EnvironmentsData & rData = theEnvironmentsData();
 
     if (rData.isDisposing)
         return;
@@ -1110,7 +1113,7 @@ void SAL_CALL uno_getEnvironment(
     assert(ppEnv && "### null ptr!");
     OUString const & rEnvDcp = OUString::unacquired( &pEnvDcp );
 
-    EnvironmentsData & rData = theEnvironmentsData::get();
+    EnvironmentsData & rData = theEnvironmentsData();
 
     ::osl::MutexGuard guard( rData.mutex );
     rData.getEnvironment( ppEnv, rEnvDcp, pContext );
@@ -1130,7 +1133,7 @@ void SAL_CALL uno_getRegisteredEnvironments(
     rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C()
 {
-    EnvironmentsData & rData = theEnvironmentsData::get();
+    EnvironmentsData & rData = theEnvironmentsData();
 
     ::osl::MutexGuard guard( rData.mutex );
     rData.getRegisteredEnvironments(
