@@ -73,6 +73,8 @@ public:
     virtual ~ColorConfig_Impl() override;
 
     void                            Load(const OUString& rScheme);
+    void                            LoadFromExtension(const OUString& rScheme);
+    bool                            IsRegistryScheme(const OUString& rScheme);
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
@@ -202,6 +204,40 @@ ColorConfig_Impl::ColorConfig_Impl() :
 ColorConfig_Impl::~ColorConfig_Impl()
 {
     ::Application::RemoveEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
+}
+
+bool ColorConfig_Impl::IsRegistryScheme(const OUString& rScheme)
+{
+    OUString aName = "ColorSchemes/" + utl::wrapConfigurationElementName(rScheme);
+    return (GetNodeNames(aName).hasElements());
+}
+
+void ColorConfig_Impl::LoadFromExtension(const OUString& rScheme)
+{
+    osl::File aFile = maFile.open( nFlags );
+    osl::Directory aDir( SvtPathOptions().GetUserConfigPath() );
+    aDir.open();
+    osl::DirectoryItem aDirItem;
+    osl::FileBase::RC aRC = aDir.getNextItem(aDirItem, SAL_MAX_UINT32);
+        if (aRC == osl::FileBase::E_NOENT) {
+            break;
+        }
+        if (aRC != osl::FileBase::E_None) {
+            throw css::uno::RuntimeException(
+                "cannot iterate user config directory");
+        }
+        osl::FileStatus aStat(
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+            osl_FileStatus_Mask_FileURL);
+        if (aDirItem.getFileStatus(aStat) != osl::FileBase::E_None) {
+            throw css::uno::RuntimeException(
+                "cannot stat in user config directory");
+        }
+        OUString aFileName(aStat.getFileName());
+        if (aFileName.endsWith(".sok"))
+            m_xColorSchemeLB->append_text(aFileName.replaceAll(".sok",""));
+    }
+
 }
 
 void ColorConfig_Impl::Load(const OUString& rScheme)
@@ -541,7 +577,10 @@ void EditableColorConfig::LoadScheme(const OUString& rScheme )
     if(m_pImpl->IsModified())
         m_pImpl->Commit();
     m_bModified = false;
-    m_pImpl->Load(rScheme);
+    if (m_pImpl->IsRegistryScheme(rScheme))
+        m_pImpl->Load(rScheme);
+    else
+        m_pImpl->LoadFromExtension(rScheme);
     //the name of the loaded scheme has to be committed separately
     m_pImpl->CommitCurrentSchemeName();
 }

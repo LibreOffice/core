@@ -46,6 +46,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
     DECL_LINK(CheckNameHdl_Impl, AbstractSvxNameDialog&, bool);
     DECL_LINK(AdjustHeaderBar, const Size&, void);
     void UpdateColorConfig();
+    void LoadExtensions();
 
 public:
     SvxColorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

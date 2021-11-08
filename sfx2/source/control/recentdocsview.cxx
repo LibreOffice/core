@@ -86,8 +86,8 @@ bool IsDocEncrypted(const OUString& rURL)
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION("sfx",
-            "caught exception trying to find out if doc <" << rURL << "> is encrypted:");
+//        TOOLS_WARN_EXCEPTION("sfx",
+//            "caught exception trying to find out if doc <" << rURL << "> is encrypted:");
     }
 
     return bIsEncrypted;

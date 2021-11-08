@@ -34,6 +34,8 @@
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <strings.hrc>
+#include <osl/file.hxx>
+#include <unotools/pathoptions.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::svtools;
@@ -781,10 +783,38 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
     const uno::Sequence< OUString >  aSchemes = pColorConfig->GetSchemeNames();
     for(const OUString& s : aSchemes)
         m_xColorSchemeLB->append_text(s);
+    LoadExtensions();
     m_xColorSchemeLB->set_active_text(pColorConfig->GetCurrentSchemeName());
     m_xColorSchemeLB->save_value();
     m_xDeleteSchemePB->set_sensitive( aSchemes.getLength() > 1 );
     UpdateColorConfig();
+}
+
+void SvxColorOptionsTabPage::LoadExtensions()
+{
+    osl::Directory aDir( SvtPathOptions().GetUserConfigPath() );
+    if (aDir.open() == osl::FileBase::E_None)
+    for (;;) {
+        osl::DirectoryItem aDirItem;
+        osl::FileBase::RC aRC = aDir.getNextItem(aDirItem, SAL_MAX_UINT32);
+        if (aRC == osl::FileBase::E_NOENT) {
+            break;
+        }
+        if (aRC != osl::FileBase::E_None) {
+            throw css::uno::RuntimeException(
+                "cannot iterate user config directory");
+        }
+        osl::FileStatus aStat(
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+            osl_FileStatus_Mask_FileURL);
+        if (aDirItem.getFileStatus(aStat) != osl::FileBase::E_None) {
+            throw css::uno::RuntimeException(
+                "cannot stat in user config directory");
+        }
+        OUString aFileName(aStat.getFileName());
+        if (aFileName.endsWith(".sok"))
+            m_xColorSchemeLB->append_text(aFileName.replaceAll(".sok",""));
+    }
 }
 
 DeactivateRC SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* pSet_ )

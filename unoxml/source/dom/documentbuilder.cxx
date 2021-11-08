@@ -283,11 +283,11 @@ namespace DOM
         try
         {
             xmlParserCtxtPtr const pctx = static_cast<xmlParserCtxtPtr>(ctx);
-            SAL_WARN(
+/*            SAL_WARN(
                 "unoxml",
                 "libxml2 error: "
                 << make_error_message(pctx));
-
+*/
             CDocumentBuilder * const pDocBuilder = static_cast<CDocumentBuilder*>(pctx->_private);
 
             if (pDocBuilder->getErrorHandler().is())   // if custom error handler is set (using setErrorHandler ())
