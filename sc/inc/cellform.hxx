@@ -21,6 +21,7 @@
 
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
+#include <svl/sharedstring.hxx>
 
 class SvNumberFormatter;
 class Color;
@@ -42,9 +43,17 @@ public:
         const Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
         bool bFormula  = false );
 
+    // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
     static OUString GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
-        const ScDocument& rDoc, bool bFiltering = false );
+        const ScDocument& rDoc, const svl::SharedString** pShared = nullptr, bool bFiltering = false );
+
+    static OUString GetInputString(
+        const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
+        const ScDocument& rDoc, bool bFiltering)
+    {
+        return GetInputString( rCell, nFormat, rFormatter, rDoc, nullptr, bFiltering );
+    }
 
     static OUString GetOutputString(
         ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell );

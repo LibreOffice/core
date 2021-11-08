@@ -2607,13 +2607,20 @@ public:
                 sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
                     mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
-                OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, rEntry.bDoQuery);
+                const svl::SharedString* sharedString = nullptr;
+                OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, &sharedString, rEntry.bDoQuery);
+                // Use the shared string for less conversions, if available.
+                if( sharedString != nullptr )
+                    return compareByStringComparator(rEntry, rItem, sharedString, nullptr);
                 return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
             }
         }
         else
         {
-            OUString aStr = mrTab.GetInputString(static_cast<SCCOL>(rEntry.nField), nRow);
+            const svl::SharedString* sharedString = nullptr;
+            OUString aStr = mrTab.GetInputString(static_cast<SCCOL>(rEntry.nField), nRow, &sharedString);
+            if( sharedString != nullptr )
+                return compareByStringComparator(rEntry, rItem, sharedString, nullptr);
             return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
         }
     }

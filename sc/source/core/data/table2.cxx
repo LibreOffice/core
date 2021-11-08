@@ -1756,10 +1756,10 @@ double* ScTable::GetValueCell( SCCOL nCol, SCROW nRow )
     return CreateColumnIfNotExists(nCol).GetValueCell(nRow);
 }
 
-OUString ScTable::GetInputString( SCCOL nCol, SCROW nRow ) const
+OUString ScTable::GetInputString( SCCOL nCol, SCROW nRow, const svl::SharedString** pShared ) const
 {
     if (ValidColRow(nCol, nRow) && nCol < GetAllocatedColumnsCount())
-        return aCol[nCol].GetInputString( nRow );
+        return aCol[nCol].GetInputString( nRow, pShared );
     else
         return OUString();
 }
