@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bb6b6d1_48a0b160",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-08T17:26:01Z",
+      "side": 1,
+      "message": "This is done for most of the enums. Some of them had binary or comparison operations, so I haven\u0027t touched them for now. The remaining is listed in the commit message.",
+      "parentUuid": "5666d5ff_e7ec4341",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 38
+      },
+      "revId": "2bc249b4a1eaf9d554a827de158e9d5fd6da410e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fd85c0f_feacc1ce",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-10-24T11:48:35Z",
       "side": 1,
       "message": "This whitespace formatting is:\n\n1. Unrelated to the changes here;\n2. Inconsistent with our formatting guidelines.\n\nPlease avoid prettifying such things, which would quickly become obsolete with addition of another value with longer name, which would require to edit more lines to keep the pretty look, and introduce noise.",
+      "revId": "2bc249b4a1eaf9d554a827de158e9d5fd6da410e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c588a04_0c773e7a",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-08T17:26:01Z",
+      "side": 1,
+      "message": "I have reverted changes to the white space for the enum classes that were here before, but I think the remaining should be OK, because:\n1. They are from standards/documents and do not change much.\n2. The white space style follow the style from the code that was here for years, and I tried to keep it as it was to the extent possible.",
+      "parentUuid": "8fd85c0f_feacc1ce",
       "revId": "2bc249b4a1eaf9d554a827de158e9d5fd6da410e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
