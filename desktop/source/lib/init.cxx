@@ -1159,6 +1159,8 @@ static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
+static char* doc_getParagraphText(LibreOfficeKitDocument* pThis,
+                                  const char* pMimeType);
 static int doc_getSelectionType(LibreOfficeKitDocument* pThis);
 static int doc_getClipboard (LibreOfficeKitDocument* pThis,
                              const char **pMimeTypes,
@@ -1351,6 +1353,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->setWindowTextSelection = doc_setWindowTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
+        m_pDocumentClass->getParagraphText = doc_getParagraphText;
         m_pDocumentClass->getSelectionType = doc_getSelectionType;
         m_pDocumentClass->getClipboard = doc_getClipboard;
         m_pDocumentClass->setClipboard = doc_setClipboard;
@@ -4652,6 +4655,34 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         else
             *pUsedMimeType = nullptr;
     }
+
+    return convertOString(aRet);
+}
+
+static char* doc_getParagraphText(LibreOfficeKitDocument* pThis, const char* pMimeType)
+{
+    comphelper::ProfileZone aZone("doc_getParagraphText");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return nullptr;
+    }
+
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getParagraphText();
+
+    const char *pType = pMimeType;
+    if (!pType || pType[0] == '\0')
+        pType = "text/plain;charset=utf-8";
+
+    OString aRet;
+    bool bSuccess = getFromTransferrable(xTransferable, OString(pType), aRet);
+    if (!bSuccess)
+        return nullptr;
 
     return convertOString(aRet);
 }

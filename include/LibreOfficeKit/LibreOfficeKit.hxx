@@ -361,6 +361,16 @@ public:
     }
 
     /**
+     * Gets the currently selected paragraph's text.
+     *
+     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
+     */
+    char* getParagraphText(const char* pMimeType)
+    {
+        return mpDoc->pClass->getParagraphText(mpDoc, pMimeType);
+    }
+
+    /**
      * Gets the type of the selected content.
      *
      * @return an element of the LibreOfficeKitSelectionType enum.

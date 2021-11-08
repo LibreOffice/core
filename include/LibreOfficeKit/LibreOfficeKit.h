@@ -224,6 +224,10 @@ struct _LibreOfficeKitDocumentClass
                                const char* pMimeType,
                                char** pUsedMimeType);
 
+    /// @see lok::Document::getParagraphText
+    char* (*getParagraphText) (LibreOfficeKitDocument* pThis,
+                               const char* pMimeType);
+
     /// @see lok::Document::paste().
     bool (*paste) (LibreOfficeKitDocument* pThis,
                    const char* pMimeType,
