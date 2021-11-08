@@ -1189,16 +1189,14 @@ public:
     void                                      BlockFormulaGroupContextDiscard( bool block )
                                                   { mbFormulaGroupCxtBlockDiscard = block; }
 
-    SC_DLLPUBLIC void                         GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
+    SC_DLLPUBLIC OUString                     GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     FormulaError                              GetStringForFormula( const ScAddress& rPos, OUString& rString );
     SC_DLLPUBLIC double                       GetValue( const ScAddress& rPos ) const;
     SC_DLLPUBLIC double                       GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC void                         GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
     SC_DLLPUBLIC const EditTextObject*        GetEditText( const ScAddress& rPos ) const;
     void                                      RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr );
     SC_DLLPUBLIC double                       RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScInterpreterContext* pContext = nullptr ) const;
-    SC_DLLPUBLIC void                         GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                                               sal_uInt32& rFormat ) const;
+    SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     sal_uInt32                                GetNumberFormat( const ScRange& rRange ) const;
     SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& ) const;
     void                                      SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
@@ -1206,8 +1204,8 @@ public:
     void                                      GetNumberFormatInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex, const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScFormulaCell*         GetFormulaCell( const ScAddress& rPos ) const;
     SC_DLLPUBLIC ScFormulaCell*               GetFormulaCell( const ScAddress& rPos );
-    SC_DLLPUBLIC void                         GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const;
-    SC_DLLPUBLIC void                         GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
+    SC_DLLPUBLIC OUString                     GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC CellType                     GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC CellType                     GetCellType( const ScAddress& rPos ) const;
 
     SC_DLLPUBLIC bool                         HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
@@ -2079,7 +2077,7 @@ public:
     void               PrepareQuery( SCTAB nTab, ScQueryParam& rQueryParam );
     SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
     SC_DLLPUBLIC bool  CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam );
-    void               GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rStr);
+    OUString           GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab);
 
     /**
      * Get a list of unique strings to use in filtering criteria.  The string

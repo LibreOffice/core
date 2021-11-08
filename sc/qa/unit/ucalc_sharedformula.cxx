@@ -2744,8 +2744,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithRef()
     const std::u16string_view sForm[] = { u"=SUM(A1:B1)", u"=SUM(A2:B2)", u"=SUM(A1:B1)", u"=SUM(A4:B4)" };
     for (SCROW i=0; i < 4; ++i)
     {
-        OUString aFormula;
-        m_pDoc->GetFormula( 2,i,0, aFormula);
+        OUString aFormula = m_pDoc->GetFormula( 2,i,0 );
         CPPUNIT_ASSERT_EQUAL( OUString(sForm[i]), aFormula);
     }
 

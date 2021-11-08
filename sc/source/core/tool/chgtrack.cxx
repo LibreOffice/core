@@ -417,11 +417,11 @@ void ScChangeAction::UpdateReference( const ScChangeTrack* /* pTrack */,
     ScRefUpdate::Update( eMode, rRange, nDx, nDy, nDz, GetBigRange() );
 }
 
-void ScChangeAction::GetDescription(
-    OUString& rStr, ScDocument& /* rDoc */, bool /* bSplitRange */, bool bWarning ) const
+OUString ScChangeAction::GetDescription(
+    ScDocument& /* rDoc */, bool /* bSplitRange */, bool bWarning ) const
 {
     if (!IsRejecting() || !bWarning)
-        return;
+        return OUString();
 
     // Add comment if rejection may have resulted in references
     // not properly restored in formulas. See specification at
@@ -429,39 +429,35 @@ void ScChangeAction::GetDescription(
 
     if (GetType() == SC_CAT_MOVE)
     {
-        rStr += ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
-        return;
+        return ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
     }
 
     if (IsInsertType())
     {
-        rStr += ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
-        return;
+        return ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
     }
 
     const ScChangeTrack* pCT = GetChangeTrack();
     if (!pCT)
-        return;
+        return OUString();
 
     ScChangeAction* pReject = pCT->GetActionOrGenerated(GetRejectAction());
 
     if (!pReject)
-        return;
+        return OUString();
 
     if (pReject->GetType() == SC_CAT_MOVE)
     {
-        rStr += ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
-        return;
+        return ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
     }
 
     if (pReject->IsDeleteType())
     {
-        rStr += ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
-        return;
+        return ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
     }
 
     if (!pReject->HasDependent())
-        return;
+        return OUString();
 
     ScChangeActionMap aMap;
     pCT->GetDependents( pReject, aMap, false, true );
@@ -469,12 +465,12 @@ void ScChangeAction::GetDescription(
         [&pReject](const ScChangeActionMap::value_type& rEntry) {
             return rEntry.second->GetType() == SC_CAT_MOVE || pReject->IsDeleteType(); });
     if (itChangeAction == aMap.end())
-        return;
+        return OUString();
 
     if( itChangeAction->second->GetType() == SC_CAT_MOVE)
-        rStr += ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
+        return ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
     else
-        rStr += ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
+        return ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
 }
 
 OUString ScChangeAction::GetRefString(
@@ -542,10 +538,9 @@ void ScChangeAction::SetComment( const OUString& rStr )
     aComment = rStr;
 }
 
-void ScChangeAction::GetRefString(
-    OUString& rStr, ScDocument& rDoc, bool bFlag3D ) const
+OUString ScChangeAction::GetRefString( ScDocument& rDoc, bool bFlag3D ) const
 {
-    rStr = GetRefString( GetBigRange(), rDoc, bFlag3D );
+    return GetRefString( GetBigRange(), rDoc, bFlag3D );
 }
 
 void ScChangeAction::Accept()
@@ -667,10 +662,9 @@ ScChangeActionIns::~ScChangeActionIns()
 {
 }
 
-void ScChangeActionIns::GetDescription(
-    OUString& rStr, ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
+OUString ScChangeActionIns::GetDescription( ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, rDoc, bSplitRange, bWarning );
+    OUString str = ScChangeAction::GetDescription( rDoc, bSplitRange, bWarning );
 
     TranslateId pWhatId;
     switch ( GetType() )
@@ -688,7 +682,7 @@ void ScChangeActionIns::GetDescription(
     OUString aRsc = ScResId(STR_CHANGED_INSERT);
     sal_Int32 nPos = aRsc.indexOf("#1");
     if (nPos < 0)
-        return;
+        return str;
 
     // Construct a range string to replace '#1' first.
     OUString aRangeStr = ScResId(pWhatId) +
@@ -697,7 +691,7 @@ void ScChangeActionIns::GetDescription(
 
     aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the range string.
 
-    rStr += aRsc;
+    return str + aRsc;
 }
 
 bool ScChangeActionIns::IsEndOfList() const
@@ -901,10 +895,9 @@ ScBigRange ScChangeActionDel::GetOverAllRange() const
     return aTmpRange;
 }
 
-void ScChangeActionDel::GetDescription(
-    OUString& rStr, ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
+OUString ScChangeActionDel::GetDescription( ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, rDoc, bSplitRange, bWarning );
+    OUString str = ScChangeAction::GetDescription( rDoc, bSplitRange, bWarning );
 
     TranslateId pWhatId;
     switch ( GetType() )
@@ -934,14 +927,14 @@ void ScChangeActionDel::GetDescription(
     OUString aRsc = ScResId(STR_CHANGED_DELETE);
     sal_Int32 nPos = aRsc.indexOf("#1");
     if (nPos < 0)
-        return;
+        return str;
 
     // Build a string to replace with.
     OUString aRangeStr = ScResId(pWhatId) + " " +
         GetRefString(aTmpRange, rDoc);
     aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the string.
 
-    rStr += aRsc; // append to the original.
+    return str + aRsc; // append to the original.
 }
 
 bool ScChangeActionDel::Reject( ScDocument& rDoc )
@@ -1143,10 +1136,10 @@ void ScChangeActionMove::GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nD
     nDz = rToPos.Tab() - rFromPos.Tab();
 }
 
-void ScChangeActionMove::GetDescription(
-    OUString& rStr, ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
+OUString ScChangeActionMove::GetDescription(
+    ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, rDoc, bSplitRange, bWarning );
+    OUString str = ScChangeAction::GetDescription( rDoc, bSplitRange, bWarning );
 
     bool bFlag3D = GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab();
 
@@ -1167,17 +1160,15 @@ void ScChangeActionMove::GetDescription(
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
     }
 
-    rStr += aRsc; // append to the original string.
+    return str + aRsc; // append to the original string.
 }
 
-void ScChangeActionMove::GetRefString(
-    OUString& rStr, ScDocument& rDoc, bool bFlag3D ) const
+OUString ScChangeActionMove::GetRefString( ScDocument& rDoc, bool bFlag3D ) const
 {
     if ( !bFlag3D )
         bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
 
-    // overwrite existing string value.
-    rStr = ScChangeAction::GetRefString(GetFromRange(), rDoc, bFlag3D)
+    return ScChangeAction::GetRefString(GetFromRange(), rDoc, bFlag3D)
         + ", "
         + ScChangeAction::GetRefString(GetBigRange(), rDoc, bFlag3D);
 }
@@ -1390,25 +1381,24 @@ void ScChangeActionContent::SetOldValue( const OUString& rOld, ScDocument* pDoc 
     SetValueString(maOldValue, maOldCell, rOld, pDoc);
 }
 
-void ScChangeActionContent::GetOldString( OUString& rStr, const ScDocument* pDoc ) const
+OUString ScChangeActionContent::GetOldString( const ScDocument* pDoc ) const
 {
-    GetValueString(rStr, maOldValue, maOldCell, pDoc);
+    return GetValueString(maOldValue, maOldCell, pDoc);
 }
 
-void ScChangeActionContent::GetNewString( OUString& rStr, const ScDocument* pDoc ) const
+OUString ScChangeActionContent::GetNewString( const ScDocument* pDoc ) const
 {
-    GetValueString(rStr, maNewValue, maNewCell, pDoc);
+    return GetValueString(maNewValue, maNewCell, pDoc);
 }
 
-void ScChangeActionContent::GetDescription(
-    OUString& rStr, ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
+OUString ScChangeActionContent::GetDescription(
+    ScDocument& rDoc, bool bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, rDoc, bSplitRange, bWarning );
+    OUString str = ScChangeAction::GetDescription( rDoc, bSplitRange, bWarning );
 
     OUString aRsc = ScResId(STR_CHANGED_CELL);
 
-    OUString aTmpStr;
-    GetRefString(aTmpStr, rDoc);
+    OUString aTmpStr = GetRefString(rDoc);
 
     sal_Int32 nPos = aRsc.indexOf("#1", 0);
     if (nPos >= 0)
@@ -1417,7 +1407,7 @@ void ScChangeActionContent::GetDescription(
         nPos += aTmpStr.getLength();
     }
 
-    GetOldString( aTmpStr, &rDoc );
+    aTmpStr = GetOldString( &rDoc );
     if (aTmpStr.isEmpty())
         aTmpStr = ScResId( STR_CHANGED_BLANK );
 
@@ -1428,7 +1418,7 @@ void ScChangeActionContent::GetDescription(
         nPos += aTmpStr.getLength();
     }
 
-    GetNewString( aTmpStr, &rDoc );
+    aTmpStr = GetNewString( &rDoc );
     if (aTmpStr.isEmpty())
         aTmpStr = ScResId( STR_CHANGED_BLANK );
 
@@ -1438,11 +1428,11 @@ void ScChangeActionContent::GetDescription(
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
     }
 
-    rStr += aRsc; // append to the original string.
+    return str + aRsc; // append to the original string.
 }
 
-void ScChangeActionContent::GetRefString(
-    OUString& rStr, ScDocument& rDoc, bool bFlag3D ) const
+OUString ScChangeActionContent::GetRefString(
+    ScDocument& rDoc, bool bFlag3D ) const
 {
     ScRefFlags nFlags = ( GetBigRange().IsValid( rDoc ) ? ScRefFlags::VALID : ScRefFlags::ZERO );
     if ( nFlags != ScRefFlags::ZERO )
@@ -1456,23 +1446,22 @@ void ScChangeActionContent::GetRefString(
             rCell.mpFormula->GetMatColsRows( nC, nR );
             aLocalBigRange.aEnd.IncCol( nC-1 );
             aLocalBigRange.aEnd.IncRow( nR-1 );
-            rStr = ScChangeAction::GetRefString( aLocalBigRange, rDoc, bFlag3D );
-
-            return ;
+            return ScChangeAction::GetRefString( aLocalBigRange, rDoc, bFlag3D );
         }
 
         ScAddress aTmpAddress( GetBigRange().aStart.MakeAddress() );
         if ( bFlag3D )
             nFlags |= ScRefFlags::TAB_3D;
-        rStr = aTmpAddress.Format(nFlags, &rDoc, rDoc.GetAddressConvention());
+        OUString str = aTmpAddress.Format(nFlags, &rDoc, rDoc.GetAddressConvention());
         if ( IsDeletedIn() )
         {
             // Insert the parentheses.
-            rStr = "(" + rStr + ")";
+            str = "(" + str + ")";
         }
+        return str;
     }
     else
-        rStr = ScCompiler::GetNativeSymbol(ocErrRef);
+        return ScCompiler::GetNativeSymbol(ocErrRef);
 }
 
 bool ScChangeActionContent::Reject( ScDocument& rDoc )
@@ -1553,40 +1542,39 @@ bool ScChangeActionContent::Select( ScDocument& rDoc, ScChangeTrack* pTrack,
     return true;
 }
 
-void ScChangeActionContent::GetStringOfCell(
-    OUString& rStr, const ScCellValue& rCell, const ScDocument* pDoc, const ScAddress& rPos )
+OUString ScChangeActionContent::GetStringOfCell(
+    const ScCellValue& rCell, const ScDocument* pDoc, const ScAddress& rPos )
 {
     if (NeedsNumberFormat(rCell))
-        GetStringOfCell(rStr, rCell, pDoc, pDoc->GetNumberFormat(rPos));
+        return GetStringOfCell(rCell, pDoc, pDoc->GetNumberFormat(rPos));
     else
-        GetStringOfCell(rStr, rCell, pDoc, 0);
+        return GetStringOfCell(rCell, pDoc, 0);
 }
 
-void ScChangeActionContent::GetStringOfCell(
-    OUString& rStr, const ScCellValue& rCell, const ScDocument* pDoc, sal_uLong nFormat )
+OUString ScChangeActionContent::GetStringOfCell(
+    const ScCellValue& rCell, const ScDocument* pDoc, sal_uLong nFormat )
 {
-    rStr = EMPTY_OUSTRING;
-
     if (!GetContentCellType(rCell))
-        return;
+        return EMPTY_OUSTRING;
 
     switch (rCell.meType)
     {
         case CELLTYPE_VALUE:
-            pDoc->GetFormatTable()->GetInputLineString(rCell.mfValue, nFormat, rStr);
-        break;
+        {
+            OUString str;
+            pDoc->GetFormatTable()->GetInputLineString(rCell.mfValue, nFormat, str);
+            return str;
+        }
         case CELLTYPE_STRING:
-            rStr = rCell.mpString->getString();
-        break;
+            return rCell.mpString->getString();
         case CELLTYPE_EDIT:
             if (rCell.mpEditText)
-                rStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
-        break;
+                return ScEditUtil::GetString(*rCell.mpEditText, pDoc);
+            return EMPTY_OUSTRING;
         case CELLTYPE_FORMULA:
-            rCell.mpFormula->GetFormula(rStr);
-        break;
+            return rCell.mpFormula->GetFormula();
         default:
-            ;
+            return EMPTY_OUSTRING;
     }
 }
 
@@ -1708,47 +1696,43 @@ void ScChangeActionContent::SetCell( OUString& rStr, ScCellValue& rCell, sal_uLo
     }
 }
 
-void ScChangeActionContent::GetValueString(
-    OUString& rStr, const OUString& rValue, const ScCellValue& rCell, const ScDocument* pDoc ) const
+OUString ScChangeActionContent::GetValueString(
+    const OUString& rValue, const ScCellValue& rCell, const ScDocument* pDoc ) const
 {
     if (!rValue.isEmpty())
     {
-        rStr = rValue;
-        return;
+        return rValue;
     }
 
     switch (rCell.meType)
     {
         case CELLTYPE_STRING :
-            rStr = rCell.mpString->getString();
-        break;
+            return rCell.mpString->getString();
         case CELLTYPE_EDIT :
             if (rCell.mpEditText)
-                rStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
-        break;
+                return ScEditUtil::GetString(*rCell.mpEditText, pDoc);
+            return OUString();
         case CELLTYPE_VALUE : // Is always in rValue
-            rStr = rValue;
-        break;
+            return rValue;
         case CELLTYPE_FORMULA :
-            GetFormulaString(rStr, rCell.mpFormula);
-        break;
+            return GetFormulaString(rCell.mpFormula);
         case CELLTYPE_NONE:
         default:
-            rStr.clear();
+            return OUString();
     }
 }
 
-void ScChangeActionContent::GetFormulaString(
-    OUString& rStr, const ScFormulaCell* pCell ) const
+OUString ScChangeActionContent::GetFormulaString(
+    const ScFormulaCell* pCell ) const
 {
     ScAddress aPos( aBigRange.aStart.MakeAddress() );
     if ( aPos == pCell->aPos || IsDeletedIn() )
-        pCell->GetFormula( rStr );
+        return pCell->GetFormula();
     else
     {
         OSL_FAIL( "ScChangeActionContent::GetFormulaString: aPos != pCell->aPos" );
         ScFormulaCell aNew( *pCell, pCell->GetDocument(), aPos );
-        aNew.GetFormula( rStr );
+        return aNew.GetFormula();
     }
 }
 
@@ -2570,13 +2554,11 @@ void ScChangeTrack::AppendContent(
     if ( !pRefDoc )
         pRefDoc = &rDoc;
 
-    OUString aOldValue;
-    ScChangeActionContent::GetStringOfCell(aOldValue, rOldCell, pRefDoc, nOldFormat);
+    OUString aOldValue = ScChangeActionContent::GetStringOfCell(rOldCell, pRefDoc, nOldFormat);
 
-    OUString aNewValue;
     ScCellValue aNewCell;
     aNewCell.assign(rDoc, rPos);
-    ScChangeActionContent::GetStringOfCell(aNewValue, aNewCell, &rDoc, rPos);
+    OUString aNewValue = ScChangeActionContent::GetStringOfCell(aNewCell, &rDoc, rPos);
 
     if (aOldValue != aNewValue || IsMatrixFormulaRangeDifferent(rOldCell, aNewCell))
     {   // Only track real changes
@@ -2591,15 +2573,13 @@ void ScChangeTrack::AppendContent(
 void ScChangeTrack::AppendContent( const ScAddress& rPos,
         const ScDocument* pRefDoc )
 {
-    OUString aOldValue;
     ScCellValue aOldCell;
     aOldCell.assign(*pRefDoc, rPos);
-    ScChangeActionContent::GetStringOfCell(aOldValue, aOldCell, pRefDoc, rPos);
+    OUString aOldValue = ScChangeActionContent::GetStringOfCell(aOldCell, pRefDoc, rPos);
 
-    OUString aNewValue;
     ScCellValue aNewCell;
     aNewCell.assign(rDoc, rPos);
-    ScChangeActionContent::GetStringOfCell(aNewValue, aNewCell, &rDoc, rPos);
+    OUString aNewValue = ScChangeActionContent::GetStringOfCell(aNewCell, &rDoc, rPos);
 
     if (aOldValue != aNewValue || IsMatrixFormulaRangeDifferent(aOldCell, aNewCell))
     {   // Only track real changes
@@ -4392,8 +4372,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         {
             ScCellValue aClonedNewCell;
             aClonedNewCell.assign(rNewCell, *pDocument);
-            OUString aNewValue;
-            rContent.GetNewString( aNewValue, pDocument );
+            OUString aNewValue = rContent.GetNewString( pDocument );
             pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
             pClonedTrack->AddLoadedGenerated(aClonedNewCell, pGenerated->GetBigRange(), aNewValue);
         }
@@ -4477,8 +4456,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScCellValue& rOldCell = rContent.GetOldCell();
                     ScCellValue aClonedOldCell;
                     aClonedOldCell.assign(rOldCell, *pDocument);
-                    OUString aOldValue;
-                    rContent.GetOldString( aOldValue, pDocument );
+                    OUString aOldValue = rContent.GetOldString( pDocument );
 
                     ScChangeActionContent* pClonedContent = new ScChangeActionContent(
                         pAction->GetActionNumber(),
@@ -4661,8 +4639,7 @@ static void lcl_getTrackedChange(ScDocument& rDoc, int nIndex, const ScChangeAct
 
     rRedlines.put("comment", pAction->GetComment());
 
-    OUString aDescription;
-    pAction->GetDescription(aDescription, rDoc, true);
+    OUString aDescription = pAction->GetDescription(rDoc, true);
     rRedlines.put("description", aDescription);
 
     OUString sDateTime = utl::toISO8601(pAction->GetDateTimeUTC().GetUNODateTime());

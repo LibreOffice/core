@@ -32,8 +32,8 @@ class SC_DLLPUBLIC ScCellFormat
 {
 public:
 
-    static void GetString(
-        const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,
+    static OUString GetString(
+        const ScRefCellValue& rCell, sal_uInt32 nFormat,
         const Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument& rDoc, bool bNullVals = true,
         bool bFormula  = false, bool bUseStarFormat = false );
 
@@ -42,8 +42,8 @@ public:
         const Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
         bool bFormula  = false );
 
-    static void GetInputString(
-        const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter,
+    static OUString GetInputString(
+        const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
         const ScDocument& rDoc, bool bFiltering = false );
 
     static OUString GetOutputString(

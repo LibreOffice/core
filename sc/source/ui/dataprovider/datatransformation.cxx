@@ -78,8 +78,7 @@ void SplitColumnTransformation::Transform(ScDocument& rDoc) const
     SCROW nEndRow = getLastRow(rDoc, mnCol);
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
-        CellType eType;
-        rDoc.GetCellType(mnCol, nRow, 0, eType);
+        CellType eType = rDoc.GetCellType(mnCol, nRow, 0);
         if (eType == CELLTYPE_STRING)
         {
             OUString aStr = rDoc.GetString(mnCol, nRow, 0);
@@ -209,8 +208,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_STRING)
                     {
                         OUString aStr = rDoc.GetString(rCol, nRow, 0);
@@ -223,8 +221,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_STRING)
                     {
                         OUString aStr = rDoc.GetString(rCol, nRow, 0);
@@ -237,8 +234,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_STRING)
                     {
                         OUString aStr = rDoc.GetString(rCol, nRow, 0);
@@ -267,8 +263,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_STRING)
                     {
                         OUString aStr = rDoc.GetString(rCol, nRow, 0);
@@ -322,8 +317,7 @@ void AggregateFunction::Transform(ScDocument& rDoc) const
                 double nSum = 0;
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -338,8 +332,7 @@ void AggregateFunction::Transform(ScDocument& rDoc) const
                 double nSum = 0;
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -356,8 +349,7 @@ void AggregateFunction::Transform(ScDocument& rDoc) const
                 double nMin = std::numeric_limits<double>::max();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -373,8 +365,7 @@ void AggregateFunction::Transform(ScDocument& rDoc) const
                 double nMax = std::numeric_limits<double>::lowest();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -441,8 +432,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
                 {
                     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                     {
-                        CellType eType;
-                        rDoc.GetCellType(rCol, nRow, 0, eType);
+                        CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                         if (eType == CELLTYPE_VALUE)
                         {
                             double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -456,8 +446,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -470,8 +459,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -484,8 +472,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -499,8 +486,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -520,8 +506,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -541,8 +526,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -555,8 +539,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -569,8 +552,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -590,8 +572,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -607,8 +588,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -624,8 +604,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -682,8 +661,7 @@ void ReplaceNullTransformation::Transform(ScDocument& rDoc) const
         SCROW nEndRow = getLastRow(rDoc, rCol);
         for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
         {
-            CellType eType;
-            rDoc.GetCellType(rCol, nRow, 0, eType);
+            CellType eType = rDoc.GetCellType(rCol, nRow, 0);
             if (eType == CELLTYPE_NONE)
             {
                // OUString aStr = rDoc.GetString(rCol, nRow, 0);
@@ -737,8 +715,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         ScAddress aAddress(rCol, nRow, 0);
@@ -752,8 +729,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -770,8 +746,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -794,8 +769,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
 
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -815,8 +789,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -832,8 +805,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 LanguageType eLanguage = ScGlobal::eLnge;
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -852,8 +824,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -874,8 +845,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -894,8 +864,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -910,8 +879,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -926,8 +894,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -942,8 +909,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -976,8 +942,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, eLanguage );
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -1032,8 +997,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     ScAddress aAddress(rCol, nRow, 0);
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -1090,8 +1054,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
                     ScAddress aAddress(rCol, nRow, 0);
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         rDoc.SetNumberFormat(aAddress, nFormat);
@@ -1103,8 +1066,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -1120,8 +1082,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -1137,8 +1098,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
             {
                 for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
                 {
-                    CellType eType;
-                    rDoc.GetCellType(rCol, nRow, 0, eType);
+                    CellType eType = rDoc.GetCellType(rCol, nRow, 0);
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
@@ -1186,8 +1146,7 @@ void FindReplaceTransformation::Transform(ScDocument& rDoc) const
     SCROW nEndRow = getLastRow(rDoc, mnCol);
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
-        CellType eType;
-        rDoc.GetCellType(mnCol, nRow, 0, eType);
+        CellType eType = rDoc.GetCellType(mnCol, nRow, 0);
         if (eType != CELLTYPE_NONE)
         {
             OUString aStr = rDoc.GetString(mnCol, nRow, 0);
@@ -1232,8 +1191,7 @@ void DeleteRowTransformation::Transform(ScDocument& rDoc) const
     SCROW nEndRow = getLastRow(rDoc, mnCol);
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
-        CellType eType;
-        rDoc.GetCellType(mnCol, nRow - nIncrementIndex, 0, eType);
+        CellType eType = rDoc.GetCellType(mnCol, nRow - nIncrementIndex, 0);
         if (eType != CELLTYPE_NONE)
         {
             OUString aStr = rDoc.GetString(mnCol, nRow - nIncrementIndex, 0);
@@ -1274,8 +1232,7 @@ void SwapRowsTransformation::Transform(ScDocument& rDoc) const
 
     for (SCCOL nCol = 0; nCol <= rDoc.MaxCol(); ++nCol)
     {
-        CellType aType;
-        rDoc.GetCellType(nCol, mxRow, 0, aType);
+        CellType aType = rDoc.GetCellType(nCol, mxRow, 0);
         if (aType == CELLTYPE_STRING)
         {
             OUString aStr = rDoc.GetString(nCol, mxRow, 0);

@@ -690,8 +690,7 @@ private:
                 ScSubTotalFunc eFunc = aParam.pFunctions[i][j];
 
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(nCol));
-                OUString aFuncStr;
-                ScXMLConverter::GetStringFromFunction(aFuncStr, eFunc);
+                OUString aFuncStr = ScXMLConverter::GetStringFromFunction(eFunc);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, aFuncStr);
 
                 SvXMLElementExport aElemSTF(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_FIELD, true, true);

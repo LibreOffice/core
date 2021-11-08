@@ -354,28 +354,27 @@ void testRangeNameImpl(const ScDocument& rDoc)
     //add some more checks here
     ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(OUString("GLOBAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
-    double aValue;
-    rDoc.GetValue(1,0,0,aValue);
+    double aValue = rDoc.GetValue(1,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
     pRangeData = rDoc.GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
-    rDoc.GetValue(1,2,0,aValue);
+    aValue = rDoc.GetValue(1,2,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", 3.0, aValue);
     pRangeData = rDoc.GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
-    rDoc.GetValue(1,1,1,aValue);
+    aValue = rDoc.GetValue(1,1,1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", 7.0, aValue);
     //check for correct results for the remaining formulas
-    rDoc.GetValue(1,1,0, aValue);
+    aValue = rDoc.GetValue(1,1,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("=global2 should be 2", 2.0, aValue);
-    rDoc.GetValue(1,3,0, aValue);
+    aValue = rDoc.GetValue(1,3,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("=local2 should be 4", 4.0, aValue);
-    rDoc.GetValue(2,0,0, aValue);
+    aValue = rDoc.GetValue(2,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("=SUM(global3) should be 10", 10.0, aValue);
-    rDoc.GetValue(1,0,1,aValue);
+    aValue = rDoc.GetValue(1,0,1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", 5.0, aValue);
     // Test if Global5 ( which depends on Global6 ) is evaluated
-    rDoc.GetValue(0,5,1, aValue);
+    aValue = rDoc.GetValue(0,5,1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
@@ -668,11 +667,10 @@ void ScFiltersTest::testBooleanFormatXLSX()
     const OUString aBooleanTypeStr = "BOOLEAN";
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load check-boolean.xlsx", xDocSh.is());
-    sal_uInt32 nNumberFormat;
 
     for (SCROW i = 0; i <= 1; i++)
     {
-        rDoc.GetNumberFormat(0, i, 0, nNumberFormat);
+        sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(0, i, 0);
         const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
         const OUString& rFormatStr = pNumberFormat->GetFormatstring();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", aBooleanTypeStr, rFormatStr);
@@ -687,8 +685,7 @@ void ScFiltersTest::testTdf143809()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    OUString aFormula;
-    rDoc.GetFormula(0, 0, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(0, 0, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMPRODUCT(IFERROR(CEILING.MATH(DURATIONS,300),0))"), aFormula);
 
     // Without the fix in place, this test would have failed with
@@ -696,7 +693,7 @@ void ScFiltersTest::testTdf143809()
     // - Actual  : Err:502
     CPPUNIT_ASSERT_EQUAL(OUString("53700"), rDoc.GetString(0, 0, 0));
 
-    rDoc.GetFormula(0, 1, 0, aFormula);
+    aFormula = rDoc.GetFormula(0, 1, 0);
     CPPUNIT_ASSERT_EQUAL(
             OUString("=SUMPRODUCT(IFERROR(CEILING(SUMIFS(DURATIONS,IDS,IDS),300)/COUNTIFS(IDS,IDS),0))"), aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("51900"), rDoc.GetString(0, 1, 0));
@@ -710,8 +707,7 @@ void ScFiltersTest::testTdf76310()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    OUString aFormula;
-    rDoc.GetFormula(0, 0, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(0, 0, 0);
     // Without the fix in place, this test would have failed with
     // - Expected: =1
     // +
@@ -749,12 +745,11 @@ void ScFiltersTest::testRangeNameLocalXLS()
     CPPUNIT_ASSERT(pRangeName);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pRangeName->size());
 
-    OUString aFormula;
-    rDoc.GetFormula(3, 11, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(3, 11, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(local_name2)"), aFormula);
     ASSERT_DOUBLES_EQUAL(14.0, rDoc.GetValue(3, 11, 0));
 
-    rDoc.GetFormula(6, 4, 0, aFormula);
+    aFormula = rDoc.GetFormula(6, 4, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
 
     xDocSh->DoClose();
@@ -1081,16 +1076,14 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", MAXROW, nRow2);
     if (nFormat == FORMAT_ODS) //excel doesn't support named db ranges
     {
-        double aValue;
-        rDoc.GetValue(0,10,1, aValue);
+        double aValue = rDoc.GetValue(0,10,1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: A11: formula result is incorrect", 4.0, aValue);
-        rDoc.GetValue(1, 10, 1, aValue);
+        aValue = rDoc.GetValue(1, 10, 1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: B11: formula result is incorrect", 2.0, aValue);
     }
-    double aValue;
-    rDoc.GetValue(3,10,1, aValue);
+    double aValue = rDoc.GetValue(3,10,1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: D11: formula result is incorrect", 4.0, aValue);
-    rDoc.GetValue(4, 10, 1, aValue);
+    aValue = rDoc.GetValue(4, 10, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: E11: formula result is incorrect", 2.0, aValue);
 }
 

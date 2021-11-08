@@ -179,7 +179,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
                 || pData->HasType( ScRangeData::Type::AbsArea )
                 || pData->HasType( ScRangeData::Type::AbsPos ) )
             {
-                pData->GetSymbol(aPos);
+                aPos = pData->GetSymbol();
             }
         }
     }
@@ -1914,7 +1914,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     {
                         if (bFormulas)
                         {
-                            aCell.mpFormula->GetFormula( aCellStr );
+                            aCellStr = aCell.mpFormula->GetFormula();
                             if( aCellStr.indexOf( cSep ) != -1 )
                                 lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                             else
@@ -1923,7 +1923,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         else
                         {
                             const Color* pColor;
-                            ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, rDoc);
+                            aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc);
 
                             bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                             if( bMultiLineText )
@@ -1947,7 +1947,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     case CELLTYPE_VALUE:
                     {
                         const Color* pColor;
-                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, rDoc);
+                        aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc);
                         lcl_WriteSimpleString( rStrm, aCellStr );
                     }
                     break;
@@ -1956,7 +1956,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     default:
                     {
                         const Color* pColor;
-                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, rDoc);
+                        aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc);
 
                         bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                         if( bMultiLineText )
@@ -2356,7 +2356,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 
                 case CELLTYPE_VALUE:
                 hasvalue:
-                    rDoc.GetValue( nCol, nRow, aRange.aStart.Tab(), nVal );
+                    nVal = rDoc.GetValue( nCol, nRow, aRange.aStart.Tab() );
 
                     aValStr = ::rtl::math::doubleToUString( nVal,
                             rtl_math_StringFormat_Automatic,
@@ -2395,9 +2395,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aCellStr.clear();
                             break;
                             default:
-                                OUString aOUCellStr;
-                                pFCell->GetFormula( aOUCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
-                                aCellStr = aOUCellStr;
+                                aCellStr = pFCell->GetFormula( formula::FormulaGrammar::GRAM_PODF_A1);
                                 /* FIXME: do we want GRAM_ODFF_A1 instead? At
                                  * the end it probably should be
                                  * GRAM_ODFF_R1C1, since R1C1 is what Excel

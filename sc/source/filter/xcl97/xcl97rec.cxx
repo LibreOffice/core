@@ -1508,7 +1508,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
             {
                 if( rDoc.HasValueData( nCol, nRow, nTab ) )
                 {
-                    rDoc.GetValue( nCol, nRow, nTab, fVal );
+                    fVal = rDoc.GetValue( nCol, nRow, nTab );
                     sText = ::rtl::math::doubleToUString( fVal,
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max,

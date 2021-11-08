@@ -1830,8 +1830,7 @@ bool ScQueryCellIterator::BinarySearch()
         {
             aCell = sc::toRefCell(aPos.first, aPos.second);
             sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, nRow);
-            OUString aCellStr;
-            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, rDoc);
+            OUString aCellStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
             sal_Int32 nTmp = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                     (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
@@ -1864,8 +1863,7 @@ bool ScQueryCellIterator::BinarySearch()
     if (aCell.hasString())
     {
         sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
-        OUString aStr;
-        ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter, rDoc);
+        OUString aStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
         aLastInRangeString = aStr;
     }
     else
@@ -1953,9 +1951,8 @@ bool ScQueryCellIterator::BinarySearch()
         }
         else if (bStr && bByString)
         {
-            OUString aCellStr;
             sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
-            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, rDoc);
+            OUString aCellStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
 
             nRes = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if (nRes < 0 && bLessEqual)

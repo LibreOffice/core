@@ -1740,12 +1740,12 @@ void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rSt
         CreateColumnIfNotExists(nCol).SetRawString(nRow, rStr);
 }
 
-void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString, const ScInterpreterContext* pContext ) const
+OUString ScTable::GetString( SCCOL nCol, SCROW nRow, const ScInterpreterContext* pContext ) const
 {
     if (ValidColRow(nCol,nRow) && nCol < GetAllocatedColumnsCount())
-        aCol[nCol].GetString( nRow, rString, pContext );
+        return aCol[nCol].GetString( nRow, pContext );
     else
-        rString.clear();
+        return OUString();
 }
 
 double* ScTable::GetValueCell( SCCOL nCol, SCROW nRow )
@@ -1756,12 +1756,12 @@ double* ScTable::GetValueCell( SCCOL nCol, SCROW nRow )
     return CreateColumnIfNotExists(nCol).GetValueCell(nRow);
 }
 
-void ScTable::GetInputString( SCCOL nCol, SCROW nRow, OUString& rString ) const
+OUString ScTable::GetInputString( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol, nRow) && nCol < GetAllocatedColumnsCount())
-        aCol[nCol].GetInputString( nRow, rString );
+        return aCol[nCol].GetInputString( nRow );
     else
-        rString.clear();
+        return OUString();
 }
 
 double ScTable::GetValue( SCCOL nCol, SCROW nRow ) const
@@ -1787,12 +1787,12 @@ void ScTable::RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPattern
     return aCol[nCol].RemoveEditTextCharAttribs(nRow, rAttr);
 }
 
-void ScTable::GetFormula( SCCOL nCol, SCROW nRow, OUString& rFormula ) const
+OUString ScTable::GetFormula( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol, nRow) && nCol < GetAllocatedColumnsCount())
-        aCol[nCol].GetFormula( nRow, rFormula );
+        return aCol[nCol].GetFormula( nRow );
     else
-        rFormula.clear();
+        return EMPTY_OUSTRING;
 }
 
 const ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow ) const
@@ -4045,10 +4045,9 @@ bool ScTable::RefVisible(const ScFormulaCell* pCell)
     return true;                        // somehow different
 }
 
-void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, OUString& rStr)
+OUString ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow)
 {
-    GetInputString(nCol, nRow, rStr);
-    rStr = ScGlobal::getCharClass().uppercase(rStr.trim());
+    return ScGlobal::getCharClass().uppercase(GetInputString(nCol, nRow).trim());
 }
 
 // Calculate the size of the sheet and set the size on DrawPage

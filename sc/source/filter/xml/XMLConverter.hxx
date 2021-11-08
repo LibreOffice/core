@@ -55,11 +55,9 @@ public:
                             std::u16string_view rString );
 
 // EXPORT: GeneralFunctio2 / ScSubTotalFunc
-    static void         GetStringFromFunction(
-                            OUString& rString,
+    static OUString     GetStringFromFunction(
                             const sal_Int16 eFunction );
-    static void         GetStringFromFunction(
-                            OUString& rString,
+    static OUString     GetStringFromFunction(
                             const ScSubTotalFunc eFunction );
 
 // IMPORT: DataPilotFieldOrientation
@@ -68,8 +66,7 @@ public:
                             std::u16string_view rString );
 
 // EXPORT: DataPilotFieldOrientation
-    static void         GetStringFromOrientation(
-                            OUString& rString,
+    static OUString     GetStringFromOrientation(
                             const css::sheet::DataPilotFieldOrientation eOrientation );
 
 // IMPORT: Detective
@@ -81,11 +78,9 @@ public:
                             std::u16string_view rString );
 
 // EXPORT: Detective
-    static void         GetStringFromDetObjType(
-                            OUString& rString,
+    static OUString     GetStringFromDetObjType(
                             const ScDetectiveObjType eObjType );
-    static void         GetStringFromDetOpType(
-                            OUString& rString,
+    static OUString     GetStringFromDetOpType(
                             const ScDetOpType eOpType );
 
 // IMPORT: Formulas

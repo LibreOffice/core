@@ -1037,17 +1037,12 @@ OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName)
 {
     ScRangeData* pName = pDoc->GetRangeName()->findByUpperName(aRangeName.toAsciiUpperCase());
     CPPUNIT_ASSERT(pName);
-    OUString aSymbol;
-    pName->GetSymbol(aSymbol, pDoc->GetGrammar());
-
-    return aSymbol;
+    return pName->GetSymbol(pDoc->GetGrammar());
 }
 
 OUString getFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    OUString aFormula;
-    pDoc->GetFormula(nCol, nRow, nTab, aFormula);
-    return aFormula;
+    return pDoc->GetFormula(nCol, nRow, nTab);
 }
 
 #if CALC_DEBUG_OUTPUT != 0

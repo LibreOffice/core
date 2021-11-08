@@ -673,12 +673,11 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
             else
             {
                 ScMatrixMode nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
-                OUString sFormula;
                 // With GRAM_ODFF reference detection is faster on compilation.
                 /* FIXME: new cell should be created with a clone
                  * of the token array instead. Any reason why this
                  * wasn't done? */
-                aCell.mpFormula->GetFormula(sFormula, formula::FormulaGrammar::GRAM_ODFF);
+                OUString sFormula = aCell.mpFormula->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
 
                 // #i87826# [Collaboration] Rejected move destroys formulas
                 // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string

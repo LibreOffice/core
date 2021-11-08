@@ -688,8 +688,7 @@ void Test::testTdf90698()
     // Without the fix in place, this would have failed with
     // - Expected: =(1;2)
     // - Actual  : =(1~2)
-    OUString aFormula;
-    m_pDoc->GetFormula(0,0,0, aFormula);
+    OUString aFormula = m_pDoc->GetFormula(0,0,0);
     CPPUNIT_ASSERT_EQUAL(OUString("=(1;2)"), aFormula);
 
     m_pDoc->DeleteTab(0);
@@ -1678,15 +1677,14 @@ void Test::testFuncParam()
     // First, the normal case, with no missing parameters.
     m_pDoc->SetString(0, 0, 0, "=AVERAGE(1;2;3)");
     m_pDoc->CalcFormulaTree(false, false);
-    double val;
-    m_pDoc->GetValue(0, 0, 0, val);
+    double val = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 2.0, val);
 
     // Now function with missing parameters.  Missing values should be treated
     // as zeros.
     m_pDoc->SetString(0, 0, 0, "=AVERAGE(1;;;)");
     m_pDoc->CalcFormulaTree(false, false);
-    m_pDoc->GetValue(0, 0, 0, val);
+    val = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 0.25, val);
 
     // Conversion of string to numeric argument.
@@ -1704,15 +1702,15 @@ void Test::testFuncParam()
     aConfig.mbEmptyStringAsZero = true;
     m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
-    m_pDoc->GetValue(0, 0, 0, val);
+    val = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 1, 0, val);
+    val = m_pDoc->GetValue(0, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 2, 0, val);
+    val = m_pDoc->GetValue(0, 2, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 7.0, val);
     aVal = m_pDoc->GetString( 0, 3, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
-    m_pDoc->GetValue(0, 4, 0, val);
+    val = m_pDoc->GetValue(0, 4, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 7.4, val);
 
     // With "Convert also locale dependent" and "Empty string as zero"=False option.
@@ -1724,11 +1722,11 @@ void Test::testFuncParam()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
     aVal = m_pDoc->GetString( 0, 1, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
-    m_pDoc->GetValue(0, 2, 0, val);
+    val = m_pDoc->GetValue(0, 2, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 7.0, val);
     aVal = m_pDoc->GetString( 0, 3, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
-    m_pDoc->GetValue(0, 4, 0, val);
+    val = m_pDoc->GetValue(0, 4, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 7.4, val);
 
     // With "Convert only unambiguous" and "Empty string as zero"=True option.
@@ -1736,11 +1734,11 @@ void Test::testFuncParam()
     aConfig.mbEmptyStringAsZero = true;
     m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
-    m_pDoc->GetValue(0, 0, 0, val);
+    val = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 1, 0, val);
+    val = m_pDoc->GetValue(0, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 2, 0, val);
+    val = m_pDoc->GetValue(0, 2, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 7.0, val);
     aVal = m_pDoc->GetString( 0, 3, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
@@ -1756,7 +1754,7 @@ void Test::testFuncParam()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
     aVal = m_pDoc->GetString( 0, 1, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
-    m_pDoc->GetValue(0, 2, 0, val);
+    m_pDoc->GetValue(0, 2, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 7.0, val);
     aVal = m_pDoc->GetString( 0, 3, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("incorrect result", OUString("#VALUE!"), aVal);
@@ -1768,15 +1766,15 @@ void Test::testFuncParam()
     aConfig.mbEmptyStringAsZero = true;
     m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
-    m_pDoc->GetValue(0, 0, 0, val);
+    val = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 1, 0, val);
+    val = m_pDoc->GetValue(0, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 2, 0, val);
+    val = m_pDoc->GetValue(0, 2, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 3, 0, val);
+    val = m_pDoc->GetValue(0, 3, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
-    m_pDoc->GetValue(0, 4, 0, val);
+    val = m_pDoc->GetValue(0, 4, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("incorrect result", 3.0, val);
 
     // With "Generate #VALUE! error" ("Empty string as zero" is ignored).
@@ -1832,8 +1830,7 @@ void Test::testNamedRange()
     m_pDoc->SetString (1, 0, 0, "=A1/Divisor");
     m_pDoc->CalcAll();
 
-    double result;
-    m_pDoc->GetValue (1, 0, 0, result);
+    double result = m_pDoc->GetValue (1, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE ("calculation failed", 1.0, result);
 
     // Test copy-ability of range names.
@@ -1866,8 +1863,7 @@ void Test::testNamedRange()
     ScAddress aPos(1,0,1);
     OUString aFormula("=Sheet1.local1+Sheet1.local2+Sheet1.local3+Sheet1.local4");
     m_pDoc->SetString(aPos, aFormula);
-    OUString aString;
-    m_pDoc->GetFormula(1,0,1, aString);
+    OUString aString = m_pDoc->GetFormula(1,0,1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula string should be equal", aFormula, aString);
     double fValue = m_pDoc->GetValue(aPos);
     ASSERT_DOUBLES_EQUAL_MESSAGE("value should be 4 times Sheet1.A1", 404.0, fValue);
@@ -3787,10 +3783,9 @@ void Test::testTdf98642()
     CPPUNIT_ASSERT_EQUAL(OUString("test"), m_pDoc->GetString(1, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("test"), m_pDoc->GetString(1, 1, 0));
 
-    OUString aFormula;
-    m_pDoc->GetFormula(1,0,0, aFormula);
+    OUString aFormula = m_pDoc->GetFormula(1,0,0);
     CPPUNIT_ASSERT_EQUAL(OUString("=name1"), aFormula);
-    m_pDoc->GetFormula(1,1,0, aFormula);
+    aFormula = m_pDoc->GetFormula(1,1,0);
 
     // Without the fix in place, this test would have failed with
     // - Expected: =name2
@@ -3912,54 +3907,52 @@ void Test::testUpdateReference()
     m_pDoc->SetString(2,1,2, "=Sheet4.B2+A1");
 
     double aValue;
-    m_pDoc->GetValue(2,0,2, aValue);
+    aValue = m_pDoc->GetValue(2,0,2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3);
-    m_pDoc->GetValue(2,1,2, aValue);
+    aValue = m_pDoc->GetValue(2,1,2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 5);
 
     //test deleting both sheets: one is not directly before the sheet, the other one is
     m_pDoc->DeleteTab(0);
-    m_pDoc->GetValue(2,0,1, aValue);
+    aValue = m_pDoc->GetValue(2,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3);
-    m_pDoc->GetValue(2,1,1, aValue);
+    aValue = m_pDoc->GetValue(2,1,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5);
 
     m_pDoc->DeleteTab(0);
-    m_pDoc->GetValue(2,0,0, aValue);
+    aValue = m_pDoc->GetValue(2,0,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3);
-    m_pDoc->GetValue(2,1,0, aValue);
+    aValue = m_pDoc->GetValue(2,1,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5);
 
     //test adding two sheets
     m_pDoc->InsertTab(0, "Sheet2");
-    m_pDoc->GetValue(2,0,1, aValue);
+    aValue = m_pDoc->GetValue(2,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3);
-    m_pDoc->GetValue(2,1,1, aValue);
+    aValue = m_pDoc->GetValue(2,1,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5);
 
     m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->GetValue(2,0,2, aValue);
+    aValue = m_pDoc->GetValue(2,0,2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3);
-    m_pDoc->GetValue(2,1,2, aValue);
+    aValue = m_pDoc->GetValue(2,1,2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5);
 
     //test new DeleteTabs/InsertTabs methods
     m_pDoc->DeleteTabs(0, 2);
-    m_pDoc->GetValue(2, 0, 0, aValue);
+    aValue = m_pDoc->GetValue(2, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3);
-    m_pDoc->GetValue(2, 1, 0, aValue);
+    aValue = m_pDoc->GetValue(2, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5);
 
     std::vector<OUString> aSheets;
     aSheets.emplace_back("Sheet1");
     aSheets.emplace_back("Sheet2");
     m_pDoc->InsertTabs(0, aSheets, true);
-    m_pDoc->GetValue(2, 0, 2, aValue);
-    OUString aFormula;
-    m_pDoc->GetFormula(2,0,2, aFormula);
+    aValue = m_pDoc->GetValue(2, 0, 2);
 
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3);
-    m_pDoc->GetValue(2, 1, 2, aValue);
+    aValue = m_pDoc->GetValue(2, 1, 2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5);
 
     m_pDoc->DeleteTab(3);
@@ -3973,13 +3966,13 @@ void Test::testUpdateReference()
     m_pDoc->InsertTab(1, "Sheet2");
     m_pDoc->SetString(0,1,0, "s1");
     m_pDoc->SetString(0,0,1, "=MATCH(\"s1\";Sheet1.A:A;0)");
-    m_pDoc->GetValue(0,0,1, aValue);
+    aValue = m_pDoc->GetValue(0,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected MATCH result", 2, aValue);
     m_pDoc->InsertRow(0,0,MAXCOL,0,0,1);    // insert 1 row before row 1 in Sheet1
-    m_pDoc->GetValue(0,0,1, aValue);
+    aValue = m_pDoc->GetValue(0,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected MATCH result", 3, aValue);
     m_pDoc->DeleteRow(0,0,MAXCOL,0,0,1);    // delete row 1 in Sheet1
-    m_pDoc->GetValue(0,0,1, aValue);
+    aValue = m_pDoc->GetValue(0,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected MATCH result", 2, aValue);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -4274,8 +4267,7 @@ void Test::testAutoFill()
     for(SCROW nRow = 110; nRow >= 100; --nRow)
     {
         OUString aExpected = "=A" + OUString::number(nRow +1);
-        OUString aFormula;
-        m_pDoc->GetFormula(100, nRow, 0, aFormula);
+        OUString aFormula = m_pDoc->GetFormula(100, nRow, 0);
         CPPUNIT_ASSERT_EQUAL(aExpected, aFormula);
     }
 
@@ -5824,9 +5816,8 @@ void Test::testSetFormula()
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
     {
-        OUString aBuffer;
         m_pDoc->SetFormula(ScAddress(aTest[i].nCol, aTest[i].nRow, 0), OUString::createFromAscii(aTest[i].aFormula1), aTest[i].eGram);
-        m_pDoc->GetFormula(aTest[i].nCol, aTest[i].nRow, 0, aBuffer);
+        OUString aBuffer = m_pDoc->GetFormula(aTest[i].nCol, aTest[i].nRow, 0);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to set formula", OUString::createFromAscii(aTest[i].aFormula2), aBuffer);
     }
