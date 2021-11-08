@@ -65,6 +65,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "773f56e4_edbdf963",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-08T05:57:21Z",
+      "side": 1,
+      "message": "Addressed in https://gerrit.libreoffice.org/c/core/+/124749",
+      "parentUuid": "2ae7e6c8_917c20df",
+      "revId": "191d793141464074057e44c25212dc3074214d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58f27040_848cf7f4",
