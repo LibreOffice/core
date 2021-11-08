@@ -288,6 +288,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
     CPPUNIT_ASSERT_EQUAL(OUString("Text Inserted\t1"), pNext->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124904)
+{
+    // don't show deletions in referenced text,
+    // (except if the full text is deleted)
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf124904.fodt");
+
+    // show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // remove the first word "Heading" (with change tracking) to update the referenced text
+    dispatchCommand(mxComponent, ".uno:DelToEndOfWord", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // This was "Reference to Heading of document file"
+    CPPUNIT_ASSERT_EQUAL(OUString("Reference to of example document "),
+                         getParagraph(2)->getString());
+
+    // don't hide the wholly deleted referenced text
+    dispatchCommand(mxComponent, ".uno:DelToEndOfLine", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("Reference to Heading of example document file"),
+                         getParagraph(2)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf100691.fodt");
