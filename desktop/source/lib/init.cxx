@@ -2198,7 +2198,8 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
 void CallbackFlushHandler::enqueueUpdatedType( int type, SfxViewShell* viewShell, int viewId )
 {
     OString payload = viewShell->getLOKPayload( type, viewId );
-    if(payload.isEmpty())
+    // LOK_CALLBACK_TEXT_SELECTION can have empty payload when selection should be hidden
+    if(payload.isEmpty() && type != LOK_CALLBACK_TEXT_SELECTION)
         return; // No actual payload to send.
     CallbackData callbackData(payload.getStr(), viewId);
     m_queue1.emplace_back(type);
