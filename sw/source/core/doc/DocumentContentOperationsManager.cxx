@@ -2902,6 +2902,16 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
     return true;
 }
 
+void DocumentContentOperationsManager::SetIME(bool bIME)
+{
+    m_bIME = bIME;
+}
+
+bool DocumentContentOperationsManager::GetIME() const
+{
+    return m_bIME;
+}
+
 void DocumentContentOperationsManager::TransliterateText(
     const SwPaM& rPaM,
     utl::TransliterationWrapper& rTrans )
