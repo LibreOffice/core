@@ -30,7 +30,6 @@
 #include <unonames.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
-#include <rtl/instance.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -179,46 +178,31 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEVOID );
 }
 
-struct StaticDiagramDefaults_Initializer
+const ::chart::tPropertyValueMap& StaticDiagramDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
+    static ::chart::tPropertyValueMap aStaticDefaults = []()
     {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEHBORDER, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEVBORDER, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
-        ::chart::SceneProperties::AddDefaultsToMap( rOutMap );
-    }
+        ::chart::tPropertyValueMap aMap;
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_CONNECT_BARS, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEHBORDER, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEVBORDER, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
+        ::chart::SceneProperties::AddDefaultsToMap( aMap );
+        return aMap;
+    }();
+    return aStaticDefaults;
 };
 
-struct StaticDiagramDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticDiagramDefaults_Initializer >
+::cppu::OPropertyArrayHelper& StaticDiagramInfoHelper()
 {
-};
-
-struct StaticDiagramInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
+    static ::cppu::OPropertyArrayHelper aPropHelper = []()
     {
         std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
@@ -228,26 +212,16 @@ private:
         std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return comphelper::containerToSequence( aProperties );
-    }
+        return ::cppu::OPropertyArrayHelper( aProperties.data(), aProperties.size() );
+    }();
+    return aPropHelper;
 };
 
-struct StaticDiagramInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDiagramInfoHelper_Initializer >
+const uno::Reference< beans::XPropertySetInfo >& StaticDiagramInfo()
 {
-};
-
-struct StaticDiagramInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDiagramInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticDiagramInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDiagramInfo_Initializer >
-{
+    static const uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDiagramInfoHelper() ) );
+    return xPropertySetInfo;
 };
 
 /// clones a UNO-sequence of UNO-References
@@ -595,7 +569,7 @@ void Diagram::fireModifyEvent()
 // ____ OPropertySet ____
 uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticDiagramDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticDiagramDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -605,13 +579,13 @@ uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL Diagram::getInfoHelper()
 {
-    return *StaticDiagramInfoHelper::get();
+    return StaticDiagramInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
 {
-    return *StaticDiagramInfo::get();
+    return StaticDiagramInfo();
 }
 
 // ____ XFastPropertySet ____
