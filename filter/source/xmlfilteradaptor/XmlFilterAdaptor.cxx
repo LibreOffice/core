@@ -64,7 +64,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
 
     utl::MediaDescriptor aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
-        utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
+        utl::MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is()){
         xStatusIndicator->start( "Loading :", 4);
@@ -231,7 +231,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
     sal_Int32 nSteps= 1;
     utl::MediaDescriptor aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
-        utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
+        utl::MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is())
        xStatusIndicator->start( "Saving :", 3);

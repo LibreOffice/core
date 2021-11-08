@@ -48,7 +48,7 @@ SmFilterDetect::~SmFilterDetect()
 OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
     MediaDescriptor aMediaDesc( lDescriptor );
-    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
+    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
     if ( !xInStream.is() )
         return OUString();
 

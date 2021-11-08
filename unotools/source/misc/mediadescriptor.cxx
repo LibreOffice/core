@@ -66,270 +66,6 @@ OUString removeFragment(OUString const & uri) {
 
 }
 
-const OUString& MediaDescriptor::PROP_ABORTED()
-{
-    static const OUString sProp("Aborted");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_ASTEMPLATE()
-{
-    static const OUString sProp("AsTemplate");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_COMPONENTDATA()
-{
-    static const OUString sProp("ComponentData");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
-{
-    static const OUString sProp("DocumentService");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
-{
-    static const OUString sProp("EncryptionData");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_FILENAME()
-{
-    static const OUString sProp("FileName");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_FILTERNAME()
-{
-    static const OUString sProp("FilterName");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_FILTERPROVIDER()
-{
-    static const OUString aProp("FilterProvider");
-    return aProp;
-}
-
-const OUString& MediaDescriptor::PROP_FILTEROPTIONS()
-{
-    static const OUString sProp("FilterOptions");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_FRAME()
-{
-    static const OUString sProp("Frame");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_FRAMENAME()
-{
-    static const OUString sProp("FrameName");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_HIDDEN()
-{
-    static const OUString sProp("Hidden");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_INPUTSTREAM()
-{
-    static const OUString sProp("InputStream");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_INTERACTIONHANDLER()
-{
-    static const OUString sProp("InteractionHandler");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_AUTHENTICATIONHANDLER()
-{
-    static const OUString sProp("AuthenticationHandler");
-    return sProp;
-}
-
- const OUString& MediaDescriptor::PROP_JUMPMARK()
-{
-    static const OUString sProp("JumpMark");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_MACROEXECUTIONMODE()
-{
-    static const OUString sProp("MacroExecutionMode");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_MEDIATYPE()
-{
-    static const OUString sProp("MediaType");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_MINIMIZED()
-{
-    static const OUString sProp("Minimized");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_NOAUTOSAVE()
-{
-    static const OUString sProp("NoAutoSave");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_OPENNEWVIEW()
-{
-    static const OUString sProp("OpenNewView");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_OUTPUTSTREAM()
-{
-    static const OUString sProp("OutputStream");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_POSTDATA()
-{
-    static const OUString sProp("PostData");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_PREVIEW()
-{
-    static const OUString sProp("Preview");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_READONLY()
-{
-    static const OUString sProp("ReadOnly");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_REFERRER()
-{
-    static const OUString sProp("Referer");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_REPLACEABLE()
-{
-    static const OUString sProp("Replaceable");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_STATUSINDICATOR()
-{
-    static const OUString sProp("StatusIndicator");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_STREAM()
-{
-    static const OUString sProp("Stream");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
-{
-    static const OUString sProp("StreamForOutput");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_TEMPLATENAME()
-{
-    static const OUString sProp("TemplateName");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_TYPENAME()
-{
-    static const OUString sProp("TypeName");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_UCBCONTENT()
-{
-    static const OUString sProp("UCBContent");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_UPDATEDOCMODE()
-{
-    static const OUString sProp("UpdateDocMode");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_URL()
-{
-    static const OUString sProp("URL");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_VERSION()
-{
-    static const OUString sProp("Version");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_DOCUMENTTITLE()
-{
-    static const OUString sProp("DocumentTitle");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_MODEL()
-{
-    static const OUString sProp("Model");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_PASSWORD()
-{
-    static const OUString sProp("Password");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_TITLE()
-{
-    static const OUString sProp("Title");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_SALVAGEDFILE()
-{
-    static const OUString sProp("SalvagedFile");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_VIEWONLY()
-{
-    static const OUString sProp("ViewOnly");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
-{
-    static const OUString sProp("DocumentBaseURL");
-    return sProp;
-}
-
-const OUString& MediaDescriptor::PROP_SUGGESTEDSAVEASNAME()
-{
-    static const OUString sProp("SuggestedSaveAsName");
-    return sProp;
-}
-
 MediaDescriptor::MediaDescriptor()
 {
 }
@@ -344,7 +80,7 @@ bool MediaDescriptor::isStreamReadOnly() const
     bool bReadOnly = false;
 
     // check for explicit readonly state
-    const_iterator pIt = find(MediaDescriptor::PROP_READONLY());
+    const_iterator pIt = find(MediaDescriptor::PROP_READONLY);
     if (pIt != end())
     {
         pIt->second >>= bReadOnly;
@@ -352,13 +88,13 @@ bool MediaDescriptor::isStreamReadOnly() const
     }
 
     // streams based on post data are readonly by definition
-    pIt = find(MediaDescriptor::PROP_POSTDATA());
+    pIt = find(MediaDescriptor::PROP_POSTDATA);
     if (pIt != end())
         return true;
 
     // A XStream capsulate XInputStream and XOutputStream ...
     // If it exists - the file must be open in read/write mode!
-    pIt = find(MediaDescriptor::PROP_STREAM());
+    pIt = find(MediaDescriptor::PROP_STREAM);
     if (pIt != end())
         return false;
 
@@ -367,7 +103,7 @@ bool MediaDescriptor::isStreamReadOnly() const
     // switch to readonly mode.
     try
     {
-        css::uno::Reference< css::ucb::XContent > xContent = getUnpackedValueOrDefault(MediaDescriptor::PROP_UCBCONTENT(), css::uno::Reference< css::ucb::XContent >());
+        css::uno::Reference< css::ucb::XContent > xContent = getUnpackedValueOrDefault(MediaDescriptor::PROP_UCBCONTENT, css::uno::Reference< css::ucb::XContent >());
         if (xContent.is())
         {
             css::uno::Reference< css::ucb::XContentIdentifier > xId = xContent->getIdentifier();
@@ -396,7 +132,7 @@ bool MediaDescriptor::isStreamReadOnly() const
 
 css::uno::Any MediaDescriptor::getComponentDataEntry( const OUString& rName ) const
 {
-    comphelper::SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );
+    comphelper::SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA );
     if( aPropertyIter != end() )
         return comphelper::NamedValueCollection( aPropertyIter->second ).get( rName );
     return css::uno::Any();
@@ -407,7 +143,7 @@ void MediaDescriptor::setComponentDataEntry( const OUString& rName, const css::u
     if( rValue.hasValue() )
     {
         // get or create the 'ComponentData' property entry
-        css::uno::Any& rCompDataAny = operator[]( PROP_COMPONENTDATA() );
+        css::uno::Any& rCompDataAny = operator[]( PROP_COMPONENTDATA );
         // insert the value (retain sequence type, create NamedValue elements by default)
         bool bHasNamedValues = !rCompDataAny.hasValue() || rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
         bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
@@ -430,7 +166,7 @@ void MediaDescriptor::setComponentDataEntry( const OUString& rName, const css::u
 
 void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
 {
-    comphelper::SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
+    comphelper::SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA );
     if( aPropertyIter == end() )
         return;
 
@@ -457,25 +193,25 @@ css::uno::Sequence< css::beans::NamedValue > MediaDescriptor::requestAndVerifyDo
         const ::std::vector< OUString >* pDefaultPasswords )
 {
     css::uno::Sequence< css::beans::NamedValue > aMediaEncData = getUnpackedValueOrDefault(
-        PROP_ENCRYPTIONDATA(), css::uno::Sequence< css::beans::NamedValue >() );
+        PROP_ENCRYPTIONDATA, css::uno::Sequence< css::beans::NamedValue >() );
     OUString aMediaPassword = getUnpackedValueOrDefault(
-        PROP_PASSWORD(), OUString() );
+        PROP_PASSWORD, OUString() );
     css::uno::Reference< css::task::XInteractionHandler > xInteractHandler = getUnpackedValueOrDefault(
-        PROP_INTERACTIONHANDLER(), css::uno::Reference< css::task::XInteractionHandler >() );
+        PROP_INTERACTIONHANDLER, css::uno::Reference< css::task::XInteractionHandler >() );
     OUString aDocumentName = getUnpackedValueOrDefault(
-        PROP_URL(), OUString() );
+        PROP_URL, OUString() );
 
     bool bIsDefaultPassword = false;
     css::uno::Sequence< css::beans::NamedValue > aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
         rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
 
-    erase( PROP_PASSWORD() );
-    erase( PROP_ENCRYPTIONDATA() );
+    erase( PROP_PASSWORD );
+    erase( PROP_ENCRYPTIONDATA );
 
     // insert encryption info into media descriptor
     // TODO
     if( aEncryptionData.hasElements() )
-        (*this)[ PROP_ENCRYPTIONDATA() ] <<= aEncryptionData;
+        (*this)[ PROP_ENCRYPTIONDATA ] <<= aEncryptionData;
 
     return aEncryptionData;
 }
@@ -497,7 +233,7 @@ bool MediaDescriptor::addInputStreamOwnLock()
 bool MediaDescriptor::impl_addInputStream( bool bLockFile )
 {
     // check for an already existing stream item first
-    const_iterator pIt = find(MediaDescriptor::PROP_INPUTSTREAM());
+    const_iterator pIt = find(MediaDescriptor::PROP_INPUTSTREAM);
     if (pIt != end())
         return true;
 
@@ -505,7 +241,7 @@ bool MediaDescriptor::impl_addInputStream( bool bLockFile )
     {
         // No stream available - create a new one
         // a) data comes as PostData ...
-        pIt = find(MediaDescriptor::PROP_POSTDATA());
+        pIt = find(MediaDescriptor::PROP_POSTDATA);
         if (pIt != end())
         {
             const css::uno::Any& rPostData = pIt->second;
@@ -516,7 +252,7 @@ bool MediaDescriptor::impl_addInputStream( bool bLockFile )
         }
 
         // b) ... or we must get it from the given URL
-        OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString());
+        OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString());
         if (sURL.isEmpty())
             throw css::uno::Exception("Found no URL.",
                     css::uno::Reference< css::uno::XInterface >());
@@ -537,25 +273,25 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
                 css::uno::Reference< css::uno::XInterface >(), 1);
 
     // PostData can't be used in read/write mode!
-    (*this)[MediaDescriptor::PROP_READONLY()] <<= true;
+    (*this)[MediaDescriptor::PROP_READONLY] <<= true;
 
     // prepare the environment
     css::uno::Reference< css::task::XInteractionHandler > xInteraction = getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_INTERACTIONHANDLER(),
+        MediaDescriptor::PROP_INTERACTIONHANDLER,
         css::uno::Reference< css::task::XInteractionHandler >());
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
     rtl::Reference<::ucbhelper::CommandEnvironment> xCommandEnv = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
 
     // media type
-    OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), OUString());
+    OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE, OUString());
     if (sMediaType.isEmpty())
     {
         sMediaType = "application/x-www-form-urlencoded";
-        (*this)[MediaDescriptor::PROP_MEDIATYPE()] <<= sMediaType;
+        (*this)[MediaDescriptor::PROP_MEDIATYPE] <<= sMediaType;
     }
 
     // url
-    OUString sURL( getUnpackedValueOrDefault( PROP_URL(), OUString() ) );
+    OUString sURL( getUnpackedValueOrDefault( PROP_URL, OUString() ) );
 
     css::uno::Reference< css::io::XInputStream > xResultStream;
     try
@@ -574,7 +310,7 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
         css::uno::Reference< css::io::XActiveDataSink > xSink( new ucbhelper::ActiveDataSink );
         aPostArgument.Sink = xSink;
         aPostArgument.MediaType = sMediaType;
-        aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER(), OUString() );
+        aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER, OUString() );
 
         aContent.executeCommand( "post", css::uno::makeAny( aPostArgument ) );
 
@@ -592,25 +328,25 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
         return false;
     }
 
-    (*this)[MediaDescriptor::PROP_INPUTSTREAM()] <<= xResultStream;
+    (*this)[MediaDescriptor::PROP_INPUTSTREAM] <<= xResultStream;
     return true;
 }
 
 /*-----------------------------------------------*/
 bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFile )
 {
-    OUString referer(getUnpackedValueOrDefault(PROP_REFERRER(), OUString()));
+    OUString referer(getUnpackedValueOrDefault(PROP_REFERRER, OUString()));
     if (SvtSecurityOptions::isUntrustedReferer(referer)) {
         return false;
     }
 
     // prepare the environment
     css::uno::Reference< css::task::XInteractionHandler > xOrgInteraction = getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_INTERACTIONHANDLER(),
+        MediaDescriptor::PROP_INTERACTIONHANDLER,
         css::uno::Reference< css::task::XInteractionHandler >());
 
     css::uno::Reference< css::task::XInteractionHandler > xAuthenticationInteraction = getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_AUTHENTICATIONHANDLER(),
+        MediaDescriptor::PROP_AUTHENTICATIONHANDLER,
         css::uno::Reference< css::task::XInteractionHandler >());
 
     rtl::Reference<comphelper::StillReadWriteInteraction> xInteraction = new comphelper::StillReadWriteInteraction(xOrgInteraction,xAuthenticationInteraction);
@@ -649,7 +385,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
 
     bool bReadOnly = false;
     bool bModeRequestedExplicitly = false;
-    const_iterator pIt = find(MediaDescriptor::PROP_READONLY());
+    const_iterator pIt = find(MediaDescriptor::PROP_READONLY);
     if (pIt != end())
     {
         pIt->second >>= bReadOnly;
@@ -722,7 +458,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
             { /* no error handling if IsReadOnly property does not exist for UCP */ }
 
         if ( bReadOnly )
-               (*this)[MediaDescriptor::PROP_READONLY()] <<= bReadOnly;
+               (*this)[MediaDescriptor::PROP_READONLY] <<= bReadOnly;
 
         xInteraction->resetInterceptions();
         xInteraction->resetErrorStates();
@@ -747,11 +483,11 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
 
     // add streams to the descriptor
     if (xContent.is())
-        (*this)[MediaDescriptor::PROP_UCBCONTENT()] <<= xContent;
+        (*this)[MediaDescriptor::PROP_UCBCONTENT] <<= xContent;
     if (xStream.is())
-        (*this)[MediaDescriptor::PROP_STREAM()] <<= xStream;
+        (*this)[MediaDescriptor::PROP_STREAM] <<= xStream;
     if (xInputStream.is())
-        (*this)[MediaDescriptor::PROP_INPUTSTREAM()] <<= xInputStream;
+        (*this)[MediaDescriptor::PROP_INPUTSTREAM] <<= xInputStream;
 
     // At least we need an input stream. The r/w stream is optional ...
     return xInputStream.is();

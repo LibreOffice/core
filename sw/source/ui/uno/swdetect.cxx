@@ -45,8 +45,8 @@ SwFilterDetect::~SwFilterDetect()
 OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
     MediaDescriptor aMediaDesc( lDescriptor );
-    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
-    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
+    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
+    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
     if ( !xInStream.is() )
         return OUString();
 

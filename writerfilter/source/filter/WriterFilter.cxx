@@ -190,7 +190,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
             = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream,
                                                                       bRepairStorage);
         uno::Reference<task::XStatusIndicator> xStatusIndicator
-            = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(),
+            = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR,
                                                    uno::Reference<task::XStatusIndicator>());
         writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(
             writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator,
@@ -261,7 +261,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         {
             ::oox::ole::VbaProject aVbaProject(m_xContext, xModel, u"Writer");
             uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_FRAME(), uno::Reference<frame::XFrame>());
+                utl::MediaDescriptor::PROP_FRAME, uno::Reference<frame::XFrame>());
 
             // if no XFrame try fallback to what we can glean from the Model
             if (!xFrame.is())

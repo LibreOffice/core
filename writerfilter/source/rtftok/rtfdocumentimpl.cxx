@@ -2246,7 +2246,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 if (m_aPicturePath.endsWith(".png"))
                     dispatchFlag(RTFKeyword::PNGBLIP);
                 OUString aFileURL = m_rMediaDescriptor.getUnpackedValueOrDefault(
-                    utl::MediaDescriptor::PROP_URL(), OUString());
+                    utl::MediaDescriptor::PROP_URL, OUString());
                 OUString aPictureURL;
                 try
                 {

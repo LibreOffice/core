@@ -54,7 +54,7 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
         utl::MediaDescriptor aMediaDesc(rDescriptor);
         aMediaDesc.addInputStream();
         uno::Reference<io::XInputStream> xInputStream;
-        aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+        aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
         std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream));
         if (pStream)
         {

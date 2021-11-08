@@ -153,7 +153,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             utl::MediaDescriptor aMediaDescriptor(rDescriptor);
             uno::Reference<io::XInputStream> xInputStream;
 
-            xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+            xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
 
             if(!xInputStream.is())
             {
@@ -777,7 +777,7 @@ public:
 OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 {
     utl::MediaDescriptor aMediaDescriptor(rDescriptor);
-    uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+    uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
     OUString aRetval;
 
     if (!xInput.is())

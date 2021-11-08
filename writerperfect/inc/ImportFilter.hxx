@@ -59,7 +59,7 @@ public:
     {
         utl::MediaDescriptor aDescriptor(rDescriptor);
         css::uno::Reference<css::io::XInputStream> xInputStream;
-        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
         if (!xInputStream.is())
         {
             OSL_ASSERT(false);

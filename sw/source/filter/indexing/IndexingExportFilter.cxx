@@ -35,7 +35,7 @@ sal_Bool IndexingExportFilter::filter(const uno::Sequence<beans::PropertyValue>&
     if (pXTextDocument)
     {
         uno::Reference<io::XOutputStream> xOutputStream = aMediaDesc.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_OUTPUTSTREAM(), uno::Reference<io::XOutputStream>());
+            utl::MediaDescriptor::PROP_OUTPUTSTREAM, uno::Reference<io::XOutputStream>());
 
         std::unique_ptr<SvStream> pStream(new SvOutputStream(xOutputStream));
         SwDocShell* pShell = pXTextDocument->GetDocShell();

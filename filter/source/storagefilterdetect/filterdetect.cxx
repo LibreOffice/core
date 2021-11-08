@@ -87,7 +87,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
 
     try
     {
-        uno::Reference< io::XInputStream > xInStream( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
+        uno::Reference< io::XInputStream > xInStream( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
         if ( !xInStream.is() )
             return OUString();
 
@@ -109,16 +109,16 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         packages::zip::ZipIOException aZipException;
         // We don't do any type detection on broken packages (f.e. because it might be impossible),
         // so for repairing we'll use the requested type, which was detected by the flat detection.
-        OUString aRequestedTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
+        OUString aRequestedTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
         if ( ( aWrap.TargetException >>= aZipException ) && !aRequestedTypeName.isEmpty() )
         {
             // The package is a broken one.
             uno::Reference< task::XInteractionHandler > xInteraction =
-                aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), uno::Reference< task::XInteractionHandler >() );
+                aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER, uno::Reference< task::XInteractionHandler >() );
 
             if ( xInteraction.is() )
             {
-                INetURLObject aParser( aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() ) );
+                INetURLObject aParser( aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL, OUString() ) );
                 OUString aDocumentTitle = aParser.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
                 bool bRepairPackage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
                 // fdo#46310 Don't try to repair if the user rejected it once.
@@ -133,8 +133,8 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
                     if ( aRequest.isApproved() )
                     {
                         aTypeName = aRequestedTypeName;
-                        aMediaDesc[MediaDescriptor::PROP_DOCUMENTTITLE()] <<= aDocumentTitle;
-                        aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE()] <<= true;
+                        aMediaDesc[MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
+                        aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE] <<= true;
                         aMediaDesc["RepairPackage"] <<= true;
                     }
                     else

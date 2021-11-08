@@ -289,8 +289,8 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
             {
                 utl::MediaDescriptor aMD( model->getArgs() );
                 bool bDefault = false;
-                bool bHidden  = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN(),  bDefault );
-                bool bPreview = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), bDefault );
+                bool bHidden  = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN,  bDefault );
+                bool bPreview = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW, bDefault );
                 if( !bHidden && !bPreview )
                 {
                     Reference< document::XEmbeddedScripts > xScripts( model, UNO_QUERY );

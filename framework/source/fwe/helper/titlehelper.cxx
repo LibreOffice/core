@@ -350,9 +350,9 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
     if (xURLProvider.is())
         sURL = xURLProvider->getLocation ();
 
-    utl::MediaDescriptor aDescriptor(xModel->getArgs2( { utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME() } ));
+    utl::MediaDescriptor aDescriptor(xModel->getArgs2( { utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME } ));
     const OUString sSuggestedSaveAsName = aDescriptor.getUnpackedValueOrDefault(
-        utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME(), OUString());
+        utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME, OUString());
 
     if (!sURL.isEmpty())
     {

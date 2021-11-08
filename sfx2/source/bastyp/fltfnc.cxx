@@ -376,23 +376,23 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
         {
             utl::MediaDescriptor aDescriptor;
 
-            aDescriptor[utl::MediaDescriptor::PROP_URL()               ] <<= sURL;
-            aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()       ] <<= xInStream;
-            aDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= rMedium.GetInteractionHandler();
+            aDescriptor[utl::MediaDescriptor::PROP_URL               ] <<= sURL;
+            aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM       ] <<= xInStream;
+            aDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER] <<= rMedium.GetInteractionHandler();
             SfxStringItem const * it = static_cast<SfxStringItem const *>(
                 rMedium.GetItemSet()->GetItem(SID_REFERER));
             if (it != nullptr) {
-                aDescriptor[utl::MediaDescriptor::PROP_REFERRER()]
+                aDescriptor[utl::MediaDescriptor::PROP_REFERRER]
                     <<= it->GetValue();
             }
 
             if ( !m_rImpl.aName.isEmpty() )
-                aDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= m_rImpl.aName;
+                aDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE] <<= m_rImpl.aName;
 
             if ( pOldFilter )
             {
-                aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= pOldFilter->GetTypeName();
-                aDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= pOldFilter->GetFilterName();
+                aDescriptor[utl::MediaDescriptor::PROP_TYPENAME  ] <<= pOldFilter->GetTypeName();
+                aDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= pOldFilter->GetFilterName();
             }
 
             uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();

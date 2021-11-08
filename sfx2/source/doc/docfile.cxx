@@ -2727,8 +2727,8 @@ void SfxMedium::GetLockingStream_Impl()
     aMedium.addInputStreamOwnLock();
 
     uno::Reference< io::XInputStream > xInputStream;
-    aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImpl->m_xLockingStream;
-    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    aMedium[utl::MediaDescriptor::PROP_STREAM] >>= pImpl->m_xLockingStream;
+    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
 
     if ( !pImpl->pTempFile && pImpl->m_aName.isEmpty() )
     {
@@ -2819,8 +2819,8 @@ void SfxMedium::GetMedium_Impl()
             {
                 if ( bFromTempFile )
                 {
-                    aMedium[utl::MediaDescriptor::PROP_URL()] <<= aFileName;
-                    aMedium.erase( utl::MediaDescriptor::PROP_READONLY() );
+                    aMedium[utl::MediaDescriptor::PROP_URL] <<= aFileName;
+                    aMedium.erase( utl::MediaDescriptor::PROP_READONLY );
                     aMedium.addInputStream();
                 }
                 else if ( GetURLObject().GetProtocol() == INetProtocol::File )
@@ -2834,7 +2834,7 @@ void SfxMedium::GetMedium_Impl()
                     // the interaction handler to be used by the authentication dialog
                     if ( GetURLObject().isAnyKnownWebDAVScheme() )
                     {
-                        aMedium[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= GetInteractionHandler( true );
+                        aMedium[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER] <<= GetInteractionHandler( true );
                     }
                     aMedium.addInputStream();
                 }
@@ -2842,8 +2842,8 @@ void SfxMedium::GetMedium_Impl()
                 // the check is done in LockOrigFileOnDemand() for file and non-file URLs
 
                 //TODO/MBA: what happens if property is not there?!
-                aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImpl->xStream;
-                aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImpl->xInputStream;
+                aMedium[utl::MediaDescriptor::PROP_STREAM] >>= pImpl->xStream;
+                aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= pImpl->xInputStream;
             }
 
             GetContent();

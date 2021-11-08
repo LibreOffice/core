@@ -81,7 +81,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
 
     utl::MediaDescriptor aMediaDescriptor(rMediaDescriptor);
     {
-        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_MODEL()));
+        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_MODEL));
         if( aIt != aMediaDescriptor.end())
         {
             xModel.set( (*aIt).second.get< uno::Reference< frame::XModel > >());
@@ -137,7 +137,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     if(!bHaveLoadedModel)
         try
         {
-            utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_URL()));
+            utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_URL));
             if( aIt != aMediaDescriptor.end())
             {
                 OUString aURL( (*aIt).second.get< OUString >());
@@ -152,7 +152,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
                     // use the URL as BaseURL, similar to what SfxBaseModel effectively does
                     if (!aURL.isEmpty())
                     {
-                        aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= aURL;
+                        aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL] <<= aURL;
                     }
                     aMediaDescriptor.addInputStream();
                     uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;

@@ -172,7 +172,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     //close streams otherwise on windows we can't reopen the file in the
     //media player when we pass the url to directx as it'll already be open
     css::uno::Reference< css::io::XInputStream > xInputStream =
-        aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM(),
+        aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM,
         css::uno::Reference< css::io::XInputStream >());
     if (xInputStream.is()) xInputStream->closeInput();
     }
@@ -192,7 +192,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     try
     {
         m_bError = false;
-        m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString()) ), css::uno::UNO_SET_THROW );
+        m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER, OUString()) ), css::uno::UNO_SET_THROW );
         // OK- we can start async playing ...
         // Count this request and initialize self-holder against dying by uno ref count ...
         m_xSelfHold.set(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
@@ -243,8 +243,8 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
 
     // Analyze given descriptor to find filename or input stream or ...
     utl::MediaDescriptor aDescriptor(lDescriptor);
-    OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
-    OUString                      sReferer   = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString());
+    OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString());
+    OUString                      sReferer   = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER, OUString());
 
     if (
         !sURL.isEmpty() &&
@@ -256,7 +256,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
         sTypeName = "wav_Wave_Audio_File";
-        aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
+        aDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
 

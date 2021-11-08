@@ -119,7 +119,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
         uno::Reference<io::XInputStream> xInputStream;
 
         aMediaDesc.addInputStream();
-        aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+        aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
 
         // If this is set, write to this file, instead of the real document during paste.
         char* pEnv = getenv("SW_DEBUG_RTF_PASTE_TO");
@@ -148,10 +148,10 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
         }
 
         uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_FRAME(), uno::Reference<frame::XFrame>());
+            utl::MediaDescriptor::PROP_FRAME, uno::Reference<frame::XFrame>());
 
         xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
+            utl::MediaDescriptor::PROP_STATUSINDICATOR, uno::Reference<task::XStatusIndicator>());
 
         writerfilter::Stream::Pointer_t pStream(
             writerfilter::dmapper::DomainMapperFactory::createMapper(

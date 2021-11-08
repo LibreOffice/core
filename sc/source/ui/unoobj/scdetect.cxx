@@ -264,8 +264,8 @@ static bool lcl_MayBeDBase( SvStream& rStream )
 OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
 {
     MediaDescriptor aMediaDesc( lDescriptor );
-    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
-    uno::Reference< io::XInputStream > xStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
+    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
+    uno::Reference< io::XInputStream > xStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
     if ( !xStream.is() )
         return OUString();
 
@@ -323,7 +323,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     if (!pFilter)
         return OUString();
 
-    aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= pFilter->GetName();
+    aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= pFilter->GetName();
     aMediaDesc >> lDescriptor;
     return aTypeName;
 }

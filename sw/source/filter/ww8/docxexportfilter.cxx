@@ -76,7 +76,7 @@ bool DocxExportFilter::exportDocument()
     *pCurPam->GetPoint() = *aPam.Start();
 
     OUString aFilterName;
-    getMediaDescriptor()[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
+    getMediaDescriptor()[utl::MediaDescriptor::PROP_FILTERNAME] >>= aFilterName;
     bool bDocm = aFilterName.endsWith("VBA");
 
     // export the document

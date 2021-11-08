@@ -245,7 +245,7 @@ uno::Any VbaDocumentsBase::createDocument()
 
     // prepare the media descriptor
     utl::MediaDescriptor aMediaDesc;
-    aMediaDesc[ utl::MediaDescriptor::PROP_MACROEXECUTIONMODE() ] <<= document::MacroExecMode::USE_CONFIG;
+    aMediaDesc[ utl::MediaDescriptor::PROP_MACROEXECUTIONMODE ] <<= document::MacroExecMode::USE_CONFIG;
     aMediaDesc.setComponentDataEntry( "ApplyFormDesignMode" , uno::Any( false ) );
 
     // create the new document

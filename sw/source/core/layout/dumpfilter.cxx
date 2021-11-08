@@ -83,7 +83,7 @@ namespace sw
 
         // Get the output stream
         uno::Reference< io::XOutputStream > xOut = aMediaDesc.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_OUTPUTSTREAM(),
+                utl::MediaDescriptor::PROP_OUTPUTSTREAM,
                 uno::Reference< io::XOutputStream >() );
 
         // Actually get the SwRootFrame to call dumpAsXml

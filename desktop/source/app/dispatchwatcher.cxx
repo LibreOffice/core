@@ -364,7 +364,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
 
         if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
         {
-            aArgs.emplace_back(utl::MediaDescriptor::PROP_DOCUMENTSERVICE(), 0,
+            aArgs.emplace_back(utl::MediaDescriptor::PROP_DOCUMENTSERVICE, 0,
                                Any(aDispatchRequest.aPreselectedFactory),
                                PropertyState_DIRECT_VALUE);
         }
@@ -590,7 +590,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 if ( xModel.is() )
                                 {
                                     utl::MediaDescriptor aMediaDesc( xModel->getArgs() );
-                                    aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString() );
+                                    aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
                                 }
                                 aFilter = impl_GuessFilter( aOutFile, aDocService );
                             }
