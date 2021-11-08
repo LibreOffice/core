@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05b1469c_23e04196",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-08T01:26:21Z",
+      "side": 1,
+      "message": "Done - Removed from the commit message.",
+      "parentUuid": "1b240c7c_e09662f7",
+      "revId": "41a68d1cf4c85354d4c45e5a7f6a3a560370bcd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e50f05f8_730ce4b3",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-24T11:52:49Z",
       "side": 1,
       "message": "There should be a space between \u0027if\u0027 and opening parenthesis.",
+      "revId": "41a68d1cf4c85354d4c45e5a7f6a3a560370bcd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d983c6f1_b44a040e",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1954,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-08T01:26:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e50f05f8_730ce4b3",
       "revId": "41a68d1cf4c85354d4c45e5a7f6a3a560370bcd9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
