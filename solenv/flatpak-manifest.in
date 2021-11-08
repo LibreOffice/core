@@ -271,11 +271,11 @@
                     "dest-filename": "libetonyek-0.1.10.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libexttextcat-3.4.5.tar.xz",
-                    "sha256": "13fdbc9d4c489a4d0519e51933a1aa21fe3fb9eb7da191b87f7a63e82797dac8",
+                    "url": "https://dev-www.libreoffice.org/src/libexttextcat-3.4.6.tar.xz",
+                    "sha256": "6d77eace20e9ea106c1330e268ede70c9a4a89744ddc25715682754eca3368df",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "libexttextcat-3.4.5.tar.xz"
+                    "dest-filename": "libexttextcat-3.4.6.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libfreehand-0.1.2.tar.xz",
