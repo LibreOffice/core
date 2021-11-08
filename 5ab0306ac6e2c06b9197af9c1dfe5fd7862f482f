@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51fcda58_124ab06c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-08T07:49:17Z",
+      "side": 1,
+      "message": "Please only revert this when there is a proper fix. This was still an improvement, helping users, and producing less problems than benefits.",
+      "revId": "5ab0306ac6e2c06b9197af9c1dfe5fd7862f482f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
