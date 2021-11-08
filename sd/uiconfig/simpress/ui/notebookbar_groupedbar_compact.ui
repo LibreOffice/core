@@ -562,7 +562,7 @@
       <object class="GtkMenuItem" id="MenuEdit-PageSetup">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:PageSetup</property>
+        <property name="action_name">.uno:SlideSetup</property>
       </object>
     </child>
   </object>
@@ -1767,14 +1767,14 @@
       <object class="GtkMenuItem" id="MenuInsert-InsertPageField">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertPageField</property>
+        <property name="action_name">.uno:InsertSlideField</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuInsert-InsertPagesField">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertPagesField</property>
+        <property name="action_name">.uno:InsertSlidesField</property>
       </object>
     </child>
     <child>
@@ -3295,7 +3295,7 @@
                                 <child>
                                   <object class="GtkToolButton" id="Default-InsertPage">
                                     <property name="visible">True</property>
-                                    <property name="action_name">.uno:InsertPage</property>
+                                    <property name="action_name">.uno:InsertSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -4478,7 +4478,7 @@
                                 <child>
                                   <object class="GtkToolButton" id="Text-InsertPage">
                                     <property name="visible">True</property>
-                                    <property name="action_name">.uno:InsertPage</property>
+                                    <property name="action_name">.uno:InsertSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6693,7 +6693,7 @@
                                 <child>
                                   <object class="GtkToolButton" id="Default-InsertPage1">
                                     <property name="visible">True</property>
-                                    <property name="action_name">.uno:InsertPage</property>
+                                    <property name="action_name">.uno:InsertSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>

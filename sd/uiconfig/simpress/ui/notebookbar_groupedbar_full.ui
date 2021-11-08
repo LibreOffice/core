@@ -712,7 +712,7 @@
       <object class="GtkMenuItem" id="MenuEdit-PageSetup">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:PageSetup</property>
+        <property name="action_name">.uno:SlideSetup</property>
       </object>
     </child>
   </object>
@@ -1684,14 +1684,14 @@
       <object class="GtkMenuItem" id="InsertPageFieldD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertPageField</property>
+        <property name="action_name">.uno:InsertSlideField</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="InsertPagesFieldD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertPagesField</property>
+        <property name="action_name">.uno:InsertSlidesField</property>
       </object>
     </child>
     <child>
@@ -3694,7 +3694,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="InsertPage">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:InsertPage</property>
+                                            <property name="action_name">.uno:InsertSlide</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -3717,7 +3717,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="DuplicateSlide2">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:DuplicatePage</property>
+                                            <property name="action_name">.uno:DuplicateSlide</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -5711,7 +5711,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="InsertPageField3">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:InsertPageField</property>
+                                            <property name="action_name">.uno:InsertSlideField</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -5778,7 +5778,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="InsertPagesField3">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:InsertPagesField</property>
+                                            <property name="action_name">.uno:InsertSlidesField</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -11584,7 +11584,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="InsertPageField1">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:InsertPageField</property>
+                                            <property name="action_name">.uno:InsertSlideField</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -11594,7 +11594,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="InsertPagesField1">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:InsertPagesField</property>
+                                            <property name="action_name">.uno:InsertSlidesField</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -11661,7 +11661,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="InsertPageTitleField1">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:InsertPageTitleField</property>
+                                            <property name="action_name">.uno:InsertSlideTitleField</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>

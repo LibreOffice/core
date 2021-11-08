@@ -192,7 +192,7 @@
                             <child>
                               <object class="GtkToolButton" id="Home-InsertPage">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:InsertPage</property>
+                                <property name="action_name">.uno:InsertSlide</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -242,7 +242,7 @@
                               <object class="GtkToolButton" id="Home-DuplicatePage">
                                 <property name="visible">True</property>
                                 <property name="valign">center</property>
-                                <property name="action_name">.uno:DuplicatePage</property>
+                                <property name="action_name">.uno:DuplicateSlide</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -253,7 +253,7 @@
                               <object class="GtkToolButton" id="Home-DeletePage">
                                 <property name="visible">True</property>
                                 <property name="valign">center</property>
-                                <property name="action_name">.uno:DeletePage</property>
+                                <property name="action_name">.uno:DeleteSlide</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -10958,7 +10958,7 @@
                               <object class="GtkToolButton" id="Master-PageSetup">
                                 <property name="visible">True</property>
                                 <property name="visible_horizontal">False</property>
-                                <property name="action_name">.uno:PageSetup</property>
+                                <property name="action_name">.uno:SlideSetup</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
                               </object>
                               <packing>
