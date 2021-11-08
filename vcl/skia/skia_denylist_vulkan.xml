@@ -27,6 +27,9 @@
         <entry os="all" vendor="intel" compare="equal" version="0.402.743"> <!-- tdf#138729 -->
             <device id="all"/>
         </entry>
+        <entry os="windows" vendor="intel" compare="equal" version="0.402.1173"> <!-- tdf#144923 off-topic comment 14 -->
+            <device id="0x9a49"/>
+        </entry>
         <entry os="all" vendor="amd" compare="less_equal" version="2.0.49">
             <device id="all"/>
         </entry>
