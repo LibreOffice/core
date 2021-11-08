@@ -334,14 +334,6 @@ void SlideBackground::HandleContextChange(
             mxInsertImage->show();
         }
 
-        // The Insert Image button in the sidebar issues .uno:SelectBackground,
-        // which when invoked without arguments will open the file-open-dialog
-        // to prompt the user to select a file. This is useless in LOOL.
-        // Hide for now so the user will only be able to use the menu to insert
-        // background image, which prompts the user for file selection in the browser.
-        if (comphelper::LibreOfficeKit::isActive())
-            mxInsertImage->hide();
-
         // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
         if (m_pPanel)
             m_pPanel->TriggerDeckLayouting();
@@ -363,6 +355,14 @@ void SlideBackground::HandleContextChange(
             mxBackgroundLabel->hide();
         }
     }
+
+    // The Insert Image button in the sidebar issues .uno:SelectBackground,
+    // which when invoked without arguments will open the file-open-dialog
+    // to prompt the user to select a file. This is useless in LOOL.
+    // Hide for now so the user will only be able to use the menu to insert
+    // background image, which prompts the user for file selection in the browser.
+    if (comphelper::LibreOfficeKit::isActive())
+        mxInsertImage->hide();
 }
 
 void SlideBackground::Update()
