@@ -63,11 +63,11 @@ css::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
 OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
 {
     utl::MediaDescriptor aMediaDescriptor( rMediaDescSeq );
-    bool bAborted = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED(), false);
+    bool bAborted = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED, false);
     if (bAborted)
         return OUString();
 
-    css::uno::Reference<css::io::XInputStream> xInputStream(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], css::uno::UNO_QUERY );
+    css::uno::Reference<css::io::XInputStream> xInputStream(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], css::uno::UNO_QUERY );
     OStringBuffer aContent(xInputStream->available());
 
     static const sal_Int32 nBytes = 4096;

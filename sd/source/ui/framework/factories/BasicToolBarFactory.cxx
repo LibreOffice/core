@@ -77,7 +77,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
 
         utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
         if ( ! aDescriptor.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_PREVIEW(),
+            utl::MediaDescriptor::PROP_PREVIEW,
             false))
         {
             // Register the factory for its supported tool bars.

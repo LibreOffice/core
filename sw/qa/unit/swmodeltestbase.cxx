@@ -545,7 +545,7 @@ void SwModelTestBase::reload(const char* pFilter, const char* filename, const ch
                 { "CryptoType", css::uno::makeAny(OUString("Standard")) },
                 { "OOXPassword", css::uno::makeAny(sPassword) }
             };
-            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
+            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
         }
     }
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());

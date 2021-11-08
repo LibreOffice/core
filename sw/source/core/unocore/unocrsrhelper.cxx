@@ -1036,16 +1036,16 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     uno::Reference < io::XInputStream > xInputStream;
 
     if( sFileName.isEmpty() )
-        aMediaDescriptor[utl::MediaDescriptor::PROP_URL()] >>= sFileName;
+        aMediaDescriptor[utl::MediaDescriptor::PROP_URL] >>= sFileName;
     if( sFileName.isEmpty() )
-        aMediaDescriptor[utl::MediaDescriptor::PROP_FILENAME()] >>= sFileName;
-    aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
-    aMediaDescriptor[utl::MediaDescriptor::PROP_STREAM()] >>= xStream;
-    aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
-    aMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sFilterName;
-    aMediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS()] >>= sFilterOptions;
-    aMediaDescriptor[utl::MediaDescriptor::PROP_PASSWORD()] >>= sPassword;
-    aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL() ] >>= sBaseURL;
+        aMediaDescriptor[utl::MediaDescriptor::PROP_FILENAME] >>= sFileName;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_STREAM] >>= xStream;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] >>= sFilterName;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS] >>= sFilterOptions;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_PASSWORD] >>= sPassword;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL ] >>= sBaseURL;
     if ( !xInputStream.is() && xStream.is() )
         xInputStream = xStream->getInputStream();
 

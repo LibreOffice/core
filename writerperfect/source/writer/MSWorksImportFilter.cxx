@@ -44,7 +44,7 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
     {
         OUString encoding;
         // first check if we can find the encoding in the filter options (headless mode)
-        mediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS()] >>= encoding;
+        mediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS] >>= encoding;
         if (!encoding.isEmpty()) // TODO: check if the encoding string is valid
             fileEncoding = encoding.toUtf8().getStr();
         else

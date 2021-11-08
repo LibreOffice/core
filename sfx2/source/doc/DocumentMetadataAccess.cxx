@@ -612,7 +612,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
             try {
                 OUString mimeType;
                 xDirProps->getPropertyValue(
-                        utl::MediaDescriptor::PROP_MEDIATYPE() )
+                        utl::MediaDescriptor::PROP_MEDIATYPE )
                     >>= mimeType;
                 if (mimeType.startsWith(s_odfmime)) {
                     SAL_WARN("sfx", "readStream: refusing to recurse into embedded document");
@@ -707,7 +707,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
             try {
                 OUString mimeType;
                 xDirProps->getPropertyValue(
-                        utl::MediaDescriptor::PROP_MEDIATYPE() )
+                        utl::MediaDescriptor::PROP_MEDIATYPE )
                     >>= mimeType;
                 if (mimeType.startsWith(s_odfmime)) {
                     SAL_WARN("sfx", "writeStream: refusing to recurse into embedded document");
@@ -1262,11 +1262,11 @@ DocumentMetadataAccess::loadMetadataFromMedium(
     uno::Reference<io::XInputStream> xIn;
     utl::MediaDescriptor md(i_rMedium);
     OUString URL;
-    md[ utl::MediaDescriptor::PROP_URL() ] >>= URL;
+    md[ utl::MediaDescriptor::PROP_URL ] >>= URL;
     OUString BaseURL;
-    md[ utl::MediaDescriptor::PROP_DOCUMENTBASEURL() ] >>= BaseURL;
+    md[ utl::MediaDescriptor::PROP_DOCUMENTBASEURL ] >>= BaseURL;
     if (md.addInputStream()) {
-        md[ utl::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
+        md[ utl::MediaDescriptor::PROP_INPUTSTREAM ] >>= xIn;
     }
     if (!xIn.is() && URL.isEmpty()) {
         throw lang::IllegalArgumentException(
@@ -1309,7 +1309,7 @@ DocumentMetadataAccess::loadMetadataFromMedium(
         }
     }
     uno::Reference<task::XInteractionHandler> xIH;
-    md[ utl::MediaDescriptor::PROP_INTERACTIONHANDLER() ] >>= xIH;
+    md[ utl::MediaDescriptor::PROP_INTERACTIONHANDLER ] >>= xIH;
     loadMetadataFromStorage(xStorage, xBaseURI, xIH);
 }
 
@@ -1319,7 +1319,7 @@ DocumentMetadataAccess::storeMetadataToMedium(
 {
     utl::MediaDescriptor md(i_rMedium);
     OUString URL;
-    md[ utl::MediaDescriptor::PROP_URL() ] >>= URL;
+    md[ utl::MediaDescriptor::PROP_URL ] >>= URL;
     if (URL.isEmpty()) {
         throw lang::IllegalArgumentException(
             "DocumentMetadataAccess::storeMetadataToMedium: "
@@ -1344,14 +1344,14 @@ DocumentMetadataAccess::storeMetadataToMedium(
     }
     // set MIME type of the storage
     utl::MediaDescriptor::const_iterator iter
-        = md.find(utl::MediaDescriptor::PROP_MEDIATYPE());
+        = md.find(utl::MediaDescriptor::PROP_MEDIATYPE);
     if (iter != md.end()) {
         uno::Reference< beans::XPropertySet > xProps(xStorage,
             uno::UNO_QUERY_THROW);
         try {
             // this is NOT supported in FileSystemStorage
             xProps->setPropertyValue(
-                utl::MediaDescriptor::PROP_MEDIATYPE(),
+                utl::MediaDescriptor::PROP_MEDIATYPE,
                 iter->second);
         } catch (const uno::Exception &) { }
     }

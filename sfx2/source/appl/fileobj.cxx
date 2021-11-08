@@ -212,7 +212,7 @@ static OUString impl_getFilter( const OUString& _rURL )
         if ( xTypeDetection.is() )
         {
             utl::MediaDescriptor aDescr;
-            aDescr[ utl::MediaDescriptor::PROP_URL() ] <<= _rURL;
+            aDescr[ utl::MediaDescriptor::PROP_URL ] <<= _rURL;
             css::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();
             OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, true );

@@ -263,7 +263,7 @@ bool implts_isPreviewModel( const uno::Reference< frame::XModel >& xModel )
     if ( xModel.is() )
     {
         utl::MediaDescriptor aDesc( xModel->getArgs() );
-        return aDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
+        return aDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false);
     }
     else
         return false;

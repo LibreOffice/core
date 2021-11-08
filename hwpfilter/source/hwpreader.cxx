@@ -148,7 +148,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
     aDescriptor.addInputStream();
 
     Reference< XInputStream > xInputStream(
-        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY_THROW);
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY_THROW);
 
     std::unique_ptr<HStream> stream(new HStream);
     Sequence < sal_Int8 > aBuffer;
@@ -4911,7 +4911,7 @@ OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue 
     aDescriptor.addInputStream();
 
     Reference< XInputStream > xInputStream(
-        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
 
     if (xInputStream.is())
     {

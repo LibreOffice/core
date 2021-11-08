@@ -32,8 +32,8 @@ EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
 {
     // Extract the output stream from the descriptor.
     utl::MediaDescriptor aMediaDesc(rDescriptor);
-    auto xStream = aMediaDesc.getUnpackedValueOrDefault(
-        utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference<io::XStream>());
+    auto xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT,
+                                                        uno::Reference<io::XStream>());
     const sal_Int32 nOpenMode = embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
     mxStorage.set(comphelper::OStorageHelper::GetStorageOfFormatFromStream(
                       ZIP_STORAGE_FORMAT_STRING, xStream, nOpenMode, mxContext),

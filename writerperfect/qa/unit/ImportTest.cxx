@@ -96,13 +96,13 @@ WpftLoader ImportTest::createCalcLoader(std::u16string_view rFile) const
 WpftLoader ImportTest::createLoader(const OUString& rUrl, const OUString& rFactoryUrl) const
 {
     utl::MediaDescriptor aDesc;
-    aDesc[utl::MediaDescriptor::PROP_URL()] <<= rUrl;
-    aDesc[utl::MediaDescriptor::PROP_READONLY()] <<= true;
+    aDesc[utl::MediaDescriptor::PROP_URL] <<= rUrl;
+    aDesc[utl::MediaDescriptor::PROP_READONLY] <<= true;
     uno::Sequence<beans::PropertyValue> lDesc(aDesc.getAsConstPropertyValueList());
     m_xTypeDetection->queryTypeByDescriptor(lDesc, true);
     aDesc = lDesc;
     OUString sFilter;
-    aDesc[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sFilter;
+    aDesc[utl::MediaDescriptor::PROP_FILTERNAME] >>= sFilter;
     CPPUNIT_ASSERT(!sFilter.isEmpty());
     const uno::Reference<document::XFilter> xFilter(m_xFilterFactory->createInstance(sFilter),
                                                     UNO_QUERY);

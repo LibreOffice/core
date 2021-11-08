@@ -315,7 +315,7 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
 {
     // try the plain input stream
-    Reference<XInputStream> xInputStream( rMediaDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY );
+    Reference<XInputStream> xInputStream( rMediaDescriptor[ MediaDescriptor::PROP_INPUTSTREAM ], UNO_QUERY );
     if( !xInputStream.is() || lclIsZipPackage( mxContext, xInputStream ) )
         return xInputStream;
 
@@ -357,7 +357,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
 
                 if( !aEncryptionData.hasElements() )
                 {
-                    rMediaDescriptor[ MediaDescriptor::PROP_ABORTED() ] <<= true;
+                    rMediaDescriptor[ MediaDescriptor::PROP_ABORTED ] <<= true;
                 }
                 else
                 {
@@ -370,7 +370,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     // if decryption was unsuccessful (corrupted file or any other reason)
                     if (!aDecryptor.decrypt(xTempStream))
                     {
-                        rMediaDescriptor[ MediaDescriptor::PROP_ABORTED() ] <<= true;
+                        rMediaDescriptor[ MediaDescriptor::PROP_ABORTED ] <<= true;
                     }
                     else
                     {
@@ -436,7 +436,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_packageContentTypes );
 
             OUString aFileName;
-            aMediaDescriptor[utl::MediaDescriptor::PROP_URL()] >>= aFileName;
+            aMediaDescriptor[utl::MediaDescriptor::PROP_URL] >>= aFileName;
 
             aParser.setDocumentHandler( new FilterDetectDocHandler( mxContext, aFilterName, aFileName ) );
 
@@ -448,7 +448,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     }
     catch( const Exception& )
     {
-        if ( aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED(), false ) )
+        if ( aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED, false ) )
             /*  The user chose to abort detection, e.g. by hitting 'Cancel' in the password input dialog,
                 so we have to return non-empty type name to abort the detection loop. The loading code is
                 supposed to check whether the "Aborted" flag is present in the descriptor, and to not attempt
@@ -459,7 +459,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
                 already know that the file is OLE encrypted package, so trying with other type detectors doesn't
                 make much sense anyway.
             */
-            aFilterName = aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
+            aFilterName = aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
     }
 
     // write back changed media descriptor members

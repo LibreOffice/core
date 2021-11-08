@@ -22,7 +22,7 @@ DomainMapperFactory::createMapper(css::uno::Reference<css::uno::XComponentContex
 {
 #ifdef DBG_UTIL
     OUString sURL
-        = rMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
+        = rMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString());
     ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
     if (getenv("SW_DEBUG_WRITERFILTER"))

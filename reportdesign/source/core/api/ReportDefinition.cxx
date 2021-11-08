@@ -201,7 +201,7 @@ static void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDe
 {
     try
     {
-        _rxStatusIndicator = _rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STATUSINDICATOR(), _rxStatusIndicator );
+        _rxStatusIndicator = _rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STATUSINDICATOR, _rxStatusIndicator );
         if ( _rxStatusIndicator.is() )
         {
             _rxStatusIndicator->start( OUString(), sal_Int32(1000000) );
@@ -1320,7 +1320,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
     if ( officecfg::Office::Common::Save::URL::FileSystem::get() )
     {
-        const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL(),OUString()) );
+        const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString()) );
         xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sVal));
     }
     const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString()) );

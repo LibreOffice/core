@@ -2374,11 +2374,11 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     aCacheLock.unlock();
 
-    utl::MediaDescriptor lDescriptor(xDocument->getArgs2( { utl::MediaDescriptor::PROP_FILTERNAME(), utl::MediaDescriptor::PROP_NOAUTOSAVE() } ));
+    utl::MediaDescriptor lDescriptor(xDocument->getArgs2( { utl::MediaDescriptor::PROP_FILTERNAME, utl::MediaDescriptor::PROP_NOAUTOSAVE } ));
 
     // check if this document must be ignored for recovery !
     // Some use cases don't wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
-    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), false);
+    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE, false);
     if (bNoAutoSave)
         return;
 
@@ -2433,7 +2433,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // and save an information about the real used filter by this document.
     // We save this document with DefaultFilter ... and load it with the RealFilter.
     implts_specifyDefaultFilterAndExtension(aNew);
-    aNew.RealFilter = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME()  , OUString());
+    aNew.RealFilter = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME, OUString());
 
     // Further we must know, if this document base on a template.
     // Then we must load it in a different way.
@@ -2626,16 +2626,16 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     aInfo.NewTempURL.clear();
 
     utl::MediaDescriptor lDescriptor(aInfo.Document->getArgs());
-    aInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
+    aInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME, OUString());
 
     css::uno::Reference< css::frame::XTitle > xDocTitle(xDocument, css::uno::UNO_QUERY);
     if (xDocTitle.is ())
         aInfo.Title = xDocTitle->getTitle ();
     else
     {
-        aInfo.Title      = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TITLE()     , OUString());
+        aInfo.Title      = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TITLE, OUString());
         if (aInfo.Title.isEmpty())
-            aInfo.Title  = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTTITLE(), OUString());
+            aInfo.Title  = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTTITLE, OUString());
     }
 
     aInfo.UsedForSaving = false;
@@ -2796,7 +2796,7 @@ bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo const & rInf
         return true;
 
     utl::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
-    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), false);
+    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE, false);
 
     return bNoAutoSave;
 }
@@ -2989,24 +2989,24 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // stored with password
     utl::MediaDescriptor lNewArgs;
     css::uno::Sequence< css::beans::NamedValue > aEncryptionData =
-        lOldArgs.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ENCRYPTIONDATA(),
+        lOldArgs.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ENCRYPTIONDATA,
                 css::uno::Sequence< css::beans::NamedValue >());
     if (aEncryptionData.hasElements())
-        lNewArgs[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
+        lNewArgs[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
 
     // Further it must be saved using the default file format of that application.
     // Otherwise we will some data lost.
     if (!rInfo.DefaultFilter.isEmpty())
-        lNewArgs[utl::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.DefaultFilter;
+        lNewArgs[utl::MediaDescriptor::PROP_FILTERNAME] <<= rInfo.DefaultFilter;
 
     // prepare frame/document/mediadescriptor in a way, that it uses OUR progress .-)
     if (xExternalProgress.is())
-        lNewArgs[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xExternalProgress;
+        lNewArgs[utl::MediaDescriptor::PROP_STATUSINDICATOR] <<= xExternalProgress;
     impl_establishProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
 
     // #i66598# use special handling of property "DocumentBaseURL" (it must be an empty string!)
     // for make hyperlinks working
-    lNewArgs[utl::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= OUString();
+    lNewArgs[utl::MediaDescriptor::PROP_DOCUMENTBASEURL] <<= OUString();
 
     // try to save this document as a new temp file every time.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
@@ -3150,14 +3150,14 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         utl::MediaDescriptor lDescriptor;
 
         // it's a UI feature - so the "USER" itself must be set as referrer
-        lDescriptor[utl::MediaDescriptor::PROP_REFERRER()] <<= OUString(REFERRER_USER);
-        lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE()] <<= OUString();
+        lDescriptor[utl::MediaDescriptor::PROP_REFERRER] <<= OUString(REFERRER_USER);
+        lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE] <<= OUString();
 
         // recovered documents are loaded hidden, and shown all at once, later
-        lDescriptor[utl::MediaDescriptor::PROP_HIDDEN()] <<= true;
+        lDescriptor[utl::MediaDescriptor::PROP_HIDDEN] <<= true;
 
         if (aParams.m_xProgress.is())
-            lDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= aParams.m_xProgress;
+            lDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR] <<= aParams.m_xProgress;
 
         bool bBackupWasTried   = (
                                         ((info.DocumentState & DocState::TryLoadBackup  ) == DocState::TryLoadBackup) || // temp. state!
@@ -3192,13 +3192,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         else if (!info.TemplateURL.isEmpty())
         {
             sLoadOriginalURL = info.TemplateURL;
-            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()]   <<= true;
-            lDescriptor[utl::MediaDescriptor::PROP_TEMPLATENAME()] <<= info.TemplateURL;
+            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE]   <<= true;
+            lDescriptor[utl::MediaDescriptor::PROP_TEMPLATENAME] <<= info.TemplateURL;
         }
         else if (!info.FactoryURL.isEmpty())
         {
             sLoadOriginalURL = info.FactoryURL;
-            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= true;
+            lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= true;
         }
 
         // A "Salvaged" item must exists every time. The core can make something special then for recovery.
@@ -3208,7 +3208,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         {
             sURL = sLoadBackupURL;
             info.DocumentState |= DocState::TryLoadBackup;
-            lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE()] <<= sLoadOriginalURL;
+            lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE] <<= sLoadOriginalURL;
         }
         else if (!sLoadOriginalURL.isEmpty())
         {
@@ -3259,7 +3259,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         if (!info.RealFilter.isEmpty())
         {
             utl::MediaDescriptor lPatchDescriptor(info.Document->getArgs());
-            lPatchDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= info.RealFilter;
+            lPatchDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= info.RealFilter;
             info.Document->attachResource(info.Document->getURL(), lPatchDescriptor.getAsConstPropertyValueList());
                 // do *not* use sURL here. In case this points to the recovery file, it has already been passed
                 // to recoverFromFile. Also, passing it here is logically wrong, as attachResource is intended
@@ -3318,9 +3318,9 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         // put the filter name into the descriptor - we're not going to involve any type detection, so
         // the document might be lost without the FilterName property
         if ( (rInfo.DocumentState & DocState::TryLoadOriginal) == DocState::TryLoadOriginal)
-            lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.RealFilter;
+            lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME ] <<= rInfo.RealFilter;
         else
-            lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.DefaultFilter;
+            lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME ] <<= rInfo.DefaultFilter;
 
         if ( sURL == rInfo.FactoryURL )
         {
@@ -3336,7 +3336,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         else
         {
             OUString sFilterName;
-            lDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sFilterName;
+            lDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] >>= sFilterName;
             if (!sFilterName.isEmpty()
                 && (   sFilterName == "Calc MS Excel 2007 XML"
                     || sFilterName == "Impress MS PowerPoint 2007 XML"
@@ -3353,12 +3353,12 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
                     m_xContext->getServiceManager()->createInstanceWithContext(
                         "com.sun.star.comp.oox.FormatDetector", m_xContext),
                     UNO_QUERY_THROW);
-                lDescriptor[utl::MediaDescriptor::PROP_URL()] <<= sURL;
+                lDescriptor[utl::MediaDescriptor::PROP_URL] <<= sURL;
                 Sequence< css::beans::PropertyValue > aDescriptorSeq = lDescriptor.getAsConstPropertyValueList();
                 OUString sType = xDetection->detect(aDescriptorSeq);
 
                 OUString sNewFilterName;
-                lDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sNewFilterName;
+                lDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] >>= sNewFilterName;
                 if (!sType.isEmpty() && sNewFilterName == sFilterName)
                 {
                     // Filter detection was okay, update media descriptor with one received from FilterDetect
@@ -3370,7 +3370,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
             Reference< XDocumentRecovery > xDocRecover( xModel, UNO_QUERY_THROW );
             xDocRecover->recoverFromFile(
                 sURL,
-                lDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_SALVAGEDFILE(), OUString() ),
+                lDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_SALVAGEDFILE, OUString() ),
                 lDescriptor.getAsConstPropertyValueList()
             );
 
@@ -4088,7 +4088,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     // Only if there is no progress, we can create our own one.
     css::uno::Reference< css::task::XStatusIndicator > xInternalProgress;
     css::uno::Reference< css::task::XStatusIndicator > xExternalProgress = rArgs.getUnpackedValueOrDefault(
-                                                                                utl::MediaDescriptor::PROP_STATUSINDICATOR(),
+                                                                                utl::MediaDescriptor::PROP_STATUSINDICATOR,
                                                                                 css::uno::Reference< css::task::XStatusIndicator >() );
 
     // Normally a progress is set from outside (e.g. by the CrashSave/Recovery dialog, which uses our dispatch API).
@@ -4126,7 +4126,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
 
     // But inside the MediaDescriptor we must set our own create progress ...
     // in case there is not already another progress set.
-    rArgs.createItemIfMissing(utl::MediaDescriptor::PROP_STATUSINDICATOR(), xInternalProgress);
+    rArgs.createItemIfMissing(utl::MediaDescriptor::PROP_STATUSINDICATOR, xInternalProgress);
 }
 
 void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
@@ -4155,7 +4155,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
         xFrameProps->setPropertyValue(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION, css::uno::makeAny(css::uno::Reference< css::task::XStatusIndicator >()));
 
     // forget progress inside list of arguments.
-    utl::MediaDescriptor::iterator pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR());
+    utl::MediaDescriptor::iterator pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR);
     if (pArg != rArgs.end())
     {
         rArgs.erase(pArg);

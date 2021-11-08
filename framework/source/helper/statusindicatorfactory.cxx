@@ -353,7 +353,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         {
             utl::MediaDescriptor lDocArgs(xModel->getArgs());
             bHiddenDoc = lDocArgs.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_HIDDEN(),
+                utl::MediaDescriptor::PROP_HIDDEN,
                 false);
         }
     }

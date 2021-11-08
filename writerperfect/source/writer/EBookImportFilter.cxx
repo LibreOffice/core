@@ -24,7 +24,7 @@ bool EBookImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStr
 {
     OUString aFilterName;
 
-    rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
+    rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] >>= aFilterName;
     assert(!aFilterName.isEmpty());
 
     if (aFilterName == "Palm_Text_Document")

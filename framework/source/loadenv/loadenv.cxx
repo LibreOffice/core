@@ -213,14 +213,14 @@ namespace {
 utl::MediaDescriptor addModelArgs(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     utl::MediaDescriptor rResult(rDescriptor);
-    uno::Reference<frame::XModel> xModel(rResult.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MODEL(), uno::Reference<frame::XModel>()));
+    uno::Reference<frame::XModel> xModel(rResult.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MODEL, uno::Reference<frame::XModel>()));
 
     if (xModel.is())
     {
         utl::MediaDescriptor aModelArgs(xModel->getArgs());
-        utl::MediaDescriptor::iterator pIt = aModelArgs.find( utl::MediaDescriptor::PROP_MACROEXECUTIONMODE());
+        utl::MediaDescriptor::iterator pIt = aModelArgs.find( utl::MediaDescriptor::PROP_MACROEXECUTIONMODE);
         if (pIt != aModelArgs.end())
-            rResult[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()] = pIt->second;
+            rResult[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE] = pIt->second;
     }
 
     return rResult;
@@ -266,7 +266,7 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
     // make URL part of the MediaDescriptor
     // It doesn't matter if it is already an item of it.
     // It must be the same value... so we can overwrite it :-)
-    m_lMediaDescriptor[utl::MediaDescriptor::PROP_URL()] <<= aRealURL;
+    m_lMediaDescriptor[utl::MediaDescriptor::PROP_URL] <<= aRealURL;
 
     // parse it - because some following code require that
     m_aURL.Complete = aRealURL;
@@ -276,10 +276,10 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
     // BTW: Split URL and JumpMark ...
     // Because such mark is an explicit value of the media descriptor!
     if (!m_aURL.Mark.isEmpty())
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_JUMPMARK()] <<= m_aURL.Mark;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_JUMPMARK] <<= m_aURL.Mark;
 
     // By the way: remove the old and deprecated value "FileName" from the descriptor!
-    utl::MediaDescriptor::iterator pIt = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FILENAME());
+    utl::MediaDescriptor::iterator pIt = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FILENAME);
     if (pIt != m_lMediaDescriptor.end())
         m_lMediaDescriptor.erase(pIt);
 
@@ -292,8 +292,8 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
     // UI mode
     const bool bUIMode =
         (m_eFeature & LoadEnvFeatures::WorkWithUI) &&
-        !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false) &&
-        !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
+        !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false) &&
+        !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false);
 
     initializeUIDefaults(m_xContext, m_lMediaDescriptor, bUIMode, &m_pQuietInteraction);
 
@@ -334,21 +334,21 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
 
     if ( xInteractionHandler.is() )
     {
-        if( io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_INTERACTIONHANDLER()) == io_lMediaDescriptor.end() )
+        if( io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_INTERACTIONHANDLER) == io_lMediaDescriptor.end() )
         {
-            io_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+            io_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER] <<= xInteractionHandler;
         }
-        if( io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()) == io_lMediaDescriptor.end() )
+        if( io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER) == io_lMediaDescriptor.end() )
         {
-            io_lMediaDescriptor[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= xInteractionHandler;
+            io_lMediaDescriptor[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER] <<= xInteractionHandler;
         }
     }
 
-    if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()) == io_lMediaDescriptor.end())
-        io_lMediaDescriptor[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()] <<= nMacroMode;
+    if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_MACROEXECUTIONMODE) == io_lMediaDescriptor.end())
+        io_lMediaDescriptor[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE] <<= nMacroMode;
 
-    if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_UPDATEDOCMODE()) == io_lMediaDescriptor.end())
-        io_lMediaDescriptor[utl::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
+    if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_UPDATEDOCMODE) == io_lMediaDescriptor.end())
+        io_lMediaDescriptor[utl::MediaDescriptor::PROP_UPDATEDOCMODE] <<= nUpdateMode;
 }
 
 void LoadEnv::start()
@@ -574,7 +574,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     utl::MediaDescriptor::const_iterator pIt;
     if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateStream))
     {
-        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM());
+        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM);
         css::uno::Reference< css::io::XInputStream > xStream;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xStream;
@@ -587,7 +587,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     // using of a full featured document
     if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateObject))
     {
-        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL());
+        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL);
         css::uno::Reference< css::frame::XModel > xModel;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xModel;
@@ -743,10 +743,10 @@ void LoadEnv::impl_detectTypeAndFilter()
 
         // Orcus type detected.  Skip the normal type detection process.
         m_lMediaDescriptor << lDescriptor;
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERPROVIDER()] <<= OUString("orcus");
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sType;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= sFilter;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERPROVIDER] <<= OUString("orcus");
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE] <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
         return;
         // <- SAFE
     }
@@ -767,16 +767,16 @@ void LoadEnv::impl_detectTypeAndFilter()
 
     // detection was successful => update the descriptor member of this class
     m_lMediaDescriptor << lDescriptor;
-    m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
+    m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sType;
     // Is there an already detected (may be preselected) filter?
     // see below ...
-    sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
+    sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME, OUString());
 
     aWriteLock.clear();
     // <- SAFE
 
     // We do have potentially correct type, but the detection process was aborted.
-    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED(), false))
+    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED, false))
         throw LoadEnvException(
             LoadEnvException::ID_UNSUPPORTED_CONTENT, "type detection aborted");
 
@@ -800,7 +800,7 @@ void LoadEnv::impl_detectTypeAndFilter()
             {
                 // SAFE ->
                 aWriteLock.reset();
-                m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+                m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= sFilter;
                 aWriteLock.clear();
                 // <- SAFE
             }
@@ -835,9 +835,9 @@ void LoadEnv::impl_detectTypeAndFilter()
         // SAFE ->
         aWriteLock.reset();
         // Don't overwrite external decisions! See comments before ...
-        utl::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_ASTEMPLATE());
+        utl::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_ASTEMPLATE);
         if (pAsTemplateItem == m_lMediaDescriptor.end())
-            m_lMediaDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= true;
+            m_lMediaDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= true;
         aWriteLock.clear();
         // <- SAFE
     }
@@ -849,7 +849,7 @@ bool LoadEnv::impl_handleContent()
     osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // the type must exist inside the descriptor ... otherwise this class is implemented wrong :-)
-    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
+    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME, OUString());
     if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
@@ -946,7 +946,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
         // SAFE ->
         aReadLock.reset();
         css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
-                                                                                utl::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+                                                                                utl::MediaDescriptor::PROP_INTERACTIONHANDLER,
                                                                                 css::uno::Reference< css::task::XInteractionHandler >());
         aReadLock.clear();
         // <- SAFE
@@ -984,7 +984,7 @@ bool LoadEnv::impl_filterHasInteractiveDialog() const
     if (m_aURL.Arguments.indexOf("slot=") != -1)
         return true;
 
-    OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
+    OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME, OUString());
     if (sFilter.isEmpty())
         return false;
 
@@ -1084,14 +1084,14 @@ bool LoadEnv::impl_loadContent()
     // So we prevent our code against wrong using. Why?
     // It could be, that using of this progress could make trouble. e.g. He makes window visible...
     // but shouldn't do that. But if no indicator is available... nobody has a chance to do that!
-    bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
-    bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
-    bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
+    bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
+    bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
+    bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false);
 
     if (!bHidden && !bMinimized && !bPreview)
     {
         css::uno::Reference<css::task::XStatusIndicator> xProgress = m_lMediaDescriptor.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference<css::task::XStatusIndicator>());
+            utl::MediaDescriptor::PROP_STATUSINDICATOR, css::uno::Reference<css::task::XStatusIndicator>());
         if (!xProgress.is())
         {
             // Note: it's an optional interface!
@@ -1100,14 +1100,14 @@ bool LoadEnv::impl_loadContent()
             {
                 xProgress = xProgressFactory->createStatusIndicator();
                 if (xProgress.is())
-                    m_lMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+                    m_lMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR] <<= xProgress;
             }
         }
 
         // Now that we have a target window into which we can load, reinit the interaction handler to have this
         // window as its parent for modal dialogs and ensure the window is visible
         css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
-                                                                                utl::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+                                                                                utl::MediaDescriptor::PROP_INTERACTIONHANDLER,
                                                                                 css::uno::Reference< css::task::XInteractionHandler >());
         css::uno::Reference<css::lang::XInitialization> xHandler(xInteraction, css::uno::UNO_QUERY);
         if (xHandler.is())
@@ -1193,7 +1193,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     // Otherwise...
     // We need this type information to locate a registered frame loader
     // Without such information we can't work!
-    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
+    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME, OUString());
     if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
@@ -1268,9 +1268,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // or better it's not allowed for some requests in general :-)
     if (
         ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::ESpecialTarget::Default)                                               ) ||
-        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false) ||
+        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE , false) ||
 //      (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()     , false) == sal_True) ||
-        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), false)
+        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW, false)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
@@ -1299,7 +1299,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // Note: To detect if a document was already loaded before
     // we check URLs here only. But might the existing and the required
     // document has different versions! Then its URLs are the same...
-    sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), sal_Int16(-1));
+    sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION, sal_Int16(-1));
 
     // will be used to save the first hidden frame referring the searched model
     // Normally we are interested on visible frames... but if there is no such visible
@@ -1367,7 +1367,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
                 lOldDocDescriptor = xModel->getArgs();
 
                 if (lOldDocDescriptor.getUnpackedValueOrDefault(
-                        utl::MediaDescriptor::PROP_VERSION(), sal_Int32(-1))
+                        utl::MediaDescriptor::PROP_VERSION, sal_Int32(-1))
                     != nNewVersion)
                 {
                     xTask.clear();
@@ -1378,7 +1378,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // Hidden frames are special.
             // They will be used as "last chance" if there is no visible frame pointing to the same model.
             // Safe the result but continue with current loop might be looking for other visible frames.
-            bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
+            bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
             if ( bIsHidden && ! xHiddenTask.is() )
             {
                 xHiddenTask = xTask;
@@ -1440,7 +1440,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // It doesn't matter if somewhere wants to create a new view
     // or open a new untitled document...
     // The only exception from that - hidden frames!
-    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false))
+    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false))
         return css::uno::Reference< css::frame::XFrame >();
 
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier = css::frame::Desktop::create( m_xContext );
@@ -1458,8 +1458,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 
     // These states indicates a wish for creation of a new view in general.
     if (
-        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false) ||
-        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), false)
+        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE , false) ||
+        m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW, false)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
@@ -1543,7 +1543,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
 
         // replaceable document
-        if (!lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REPLACEABLE(), false))
+        if (!lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REPLACEABLE, false))
             return css::uno::Reference< css::frame::XFrame >();
 
         bReactivateOldControllerOnError = xOldDoc->suspend(true);
@@ -1582,8 +1582,8 @@ void LoadEnv::impl_reactForLoadingState()
         // Note: We show new created frames here only.
         // We don't hide already visible frames here ...
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
-        bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
-        bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
+        bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
+        bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
 
         if (bMinimized)
         {
@@ -1603,7 +1603,7 @@ void LoadEnv::impl_reactForLoadingState()
         // Note: Only if an existing property "FrameName" is given by this media descriptor,
         // it should be used. Otherwise we should do nothing. May be the outside code has already
         // set a frame name on the target!
-        utl::MediaDescriptor::const_iterator pFrameName = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FRAMENAME());
+        utl::MediaDescriptor::const_iterator pFrameName = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FRAMENAME);
         if (pFrameName != m_lMediaDescriptor.end())
         {
             OUString sFrameName;
@@ -1699,7 +1699,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         return;
 
     bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_PREVIEW(), false) );
+            utl::MediaDescriptor::PROP_PREVIEW, false) );
 
     bool bForceFrontAndFocus(false);
     if ( !preview )
@@ -1754,7 +1754,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
     // no filter -> no module -> no persistent window state
     OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(
-                                    utl::MediaDescriptor::PROP_FILTERNAME(),
+                                    utl::MediaDescriptor::PROP_FILTERNAME,
                                     OUString());
     if (sFilter.isEmpty())
         return;

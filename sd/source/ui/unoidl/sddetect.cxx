@@ -51,8 +51,8 @@ SdFilterDetect::~SdFilterDetect()
 OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDescriptor )
 {
     MediaDescriptor aMediaDesc( lDescriptor );
-    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
-    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
+    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
+    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
     if ( !xInStream.is() )
         return OUString();
 
@@ -88,7 +88,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     {
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
-        const OUString aFileName( aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() ) );
+        const OUString aFileName( aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL, OUString() ) );
         GraphicDescriptor aDesc( *pInStrm, &aFileName );
         if( !aDesc.Detect() )
         {

@@ -197,7 +197,7 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
     {
         OUString encoding;
         // first check if we can find the encoding in the filter options (headless mode)
-        mediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS()] >>= encoding;
+        mediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS] >>= encoding;
         if (!encoding.isEmpty()) // TODO: check if the encoding string is valid
             fileEncoding = encoding.toUtf8().getStr();
         else
@@ -258,7 +258,7 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
         OUString sPassword;
         // now check if we can find the password in the properties
         // (just in case, "soffice --headless" adds an option to send password)
-        mediaDescriptor[utl::MediaDescriptor::PROP_PASSWORD()] >>= sPassword;
+        mediaDescriptor[utl::MediaDescriptor::PROP_PASSWORD] >>= sPassword;
         if (!sPassword.isEmpty())
             aUtf8Passwd = OUStringToOString(sPassword, RTL_TEXTENCODING_UTF8);
         else

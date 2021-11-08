@@ -353,10 +353,10 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSaxError(false)
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
-        utl::MediaDescriptor::PROP_DOCUMENTBASEURL(), OUString());
+        utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString());
     if (m_aBaseUrl.isEmpty()) {
         m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_URL(), OUString());
+            utl::MediaDescriptor::PROP_URL, OUString());
     }
 
     appendTableManager( );

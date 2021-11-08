@@ -64,11 +64,11 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
     aMedium.addInputStream();
 
     css::uno::Reference<css::io::XInputStream> xInputStream;
-    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM] >>= xInputStream;
     if ( !xInputStream.is() )
     {
         css::uno::Reference<css::io::XStream> xStream;
-        aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= xStream;
+        aMedium[utl::MediaDescriptor::PROP_STREAM] >>= xStream;
         if ( xStream.is() )
         {
             xInputStream = xStream->getInputStream();

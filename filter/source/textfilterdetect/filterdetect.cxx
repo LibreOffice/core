@@ -137,7 +137,7 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
 bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& rExt,
                                    OUString& rType, OUString& rService)
 {
-    OUString aURL = rMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString());
+    OUString aURL = rMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString());
     if (!tools::isEmptyFileUrl(aURL))
     {
         return false;
@@ -154,7 +154,7 @@ bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& 
         return false;
     }
 
-    rMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= pFilter->GetFilterName();
+    rMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= pFilter->GetFilterName();
     rType = pFilter->GetTypeName();
     rService = pFilter->GetServiceName();
     return true;
@@ -169,27 +169,27 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
 {
     MediaDescriptor aMediaDesc(lDescriptor);
 
-    OUString aType = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_TYPENAME(), OUString() );
-    OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString() );
+    OUString aType = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_TYPENAME, OUString() );
+    OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
 
     if ((aType == "generic_HTML") || (aType == "calc_HTML"))
     {
-        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY);
+        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
         if (!xInStream.is() || !IsHTMLStream(xInStream))
             return OUString();
 
         if ((aDocService == CALC_DOCSERVICE) || (aType == "calc_HTML"))
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_HTML_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_HTML_FILTER);
         else if (aDocService == WRITER_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_HTML_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_HTML_FILTER);
         else
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WEB_HTML_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WEB_HTML_FILTER);
     }
 
     else if (aType == "generic_Text")
     {
-        uno::Reference<io::XStream> xStream(aMediaDesc[MediaDescriptor::PROP_STREAM()], uno::UNO_QUERY);
-        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY);
+        uno::Reference<io::XStream> xStream(aMediaDesc[MediaDescriptor::PROP_STREAM], uno::UNO_QUERY);
+        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
         if (xStream.is() || xInStream.is())
         {
             ZCodec aCodecGZ;
@@ -202,16 +202,16 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             if (aCodecGZ.AttemptDecompression(*pInStream, *pDecompressedStream))
             {
                 uno::Reference<io::XStream> xStreamDecompressed(new utl::OStreamWrapper(std::move(pDecompressedStream)));
-                aMediaDesc[MediaDescriptor::PROP_STREAM()] <<= xStreamDecompressed;
-                aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()] <<= xStreamDecompressed->getInputStream();
-                OUString aURL = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() );
+                aMediaDesc[MediaDescriptor::PROP_STREAM] <<= xStreamDecompressed;
+                aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM] <<= xStreamDecompressed->getInputStream();
+                OUString aURL = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString() );
                 sal_Int32 nIdx = aURL.lastIndexOf(".gz");
                 if (nIdx != -1)
-                    aMediaDesc[MediaDescriptor::PROP_URL()] <<= aURL.copy(0, nIdx);
+                    aMediaDesc[MediaDescriptor::PROP_URL] <<= aURL.copy(0, nIdx);
             }
         }
         // Get the file name extension.
-        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() ) );
+        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString() ) );
         OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
         aExt = aExt.toAsciiLowerCase();
         OUString aName = aParser.getName().toAsciiLowerCase();
@@ -228,15 +228,15 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         }
 
         if (aDocService == CALC_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_TEXT_FILTER);
         else if (aDocService == WRITER_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_TEXT_FILTER);
         else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls" || aName.endsWith(".csv.gz"))
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_TEXT_FILTER);
         else if (bEmpty)
             aType = aEmptyType; // aMediaDesc is already updated in HandleEmptyFileUrlByExtension
         else
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_TEXT_FILTER);
     }
 
     else

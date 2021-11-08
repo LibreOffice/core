@@ -1850,7 +1850,7 @@ bool ToolBarManager::IsPluginMode() const
         {
             Sequence< PropertyValue > aSeq = xModel->getArgs();
             utl::MediaDescriptor aMediaDescriptor( aSeq );
-            bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VIEWONLY(), false );
+            bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VIEWONLY, false );
         }
     }
 
