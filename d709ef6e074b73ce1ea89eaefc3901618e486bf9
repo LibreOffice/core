@@ -50,6 +50,24 @@
       "message": "Thanks Miklos; let the refactoring be a separate job (easyhackers need more easy hacks :-))",
       "revId": "d709ef6e074b73ce1ea89eaefc3901618e486bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc2663a7_8a63ce1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-08T11:09:06Z",
+      "side": 1,
+      "message": "Sure, that\u0027s fine.",
+      "parentUuid": "773daeed_2da61a8e",
+      "revId": "d709ef6e074b73ce1ea89eaefc3901618e486bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
