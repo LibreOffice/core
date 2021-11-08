@@ -621,7 +621,7 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_SIDAMA,                "sid", "ET", k0    },
     { LANGUAGE_USER_NKO,                   "nqo", "GN", k0    },
     { LANGUAGE_USER_UDMURT,                "udm", "RU", k0    },
-    { LANGUAGE_USER_CORNISH,               "kw",  "UK", k0    },
+    { LANGUAGE_USER_CORNISH,               "kw",  "GB", k0    },
     { LANGUAGE_USER_SAMI_PITE_SWEDEN,      "sje", "SE", k0    },
     { LANGUAGE_USER_NGAEBERE,              "gym", "PA", k0    },
     { LANGUAGE_USER_KUMYK,                 "kum", "RU", k0    },
