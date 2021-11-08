@@ -88,15 +88,15 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         case SvxSearchCellType::FORMULA:
         {
             if ( eCellType == CELLTYPE_FORMULA )
-                aCell.mpFormula->GetFormula(aString, rDocument.GetGrammar());
+                aString = aCell.mpFormula->GetFormula(rDocument.GetGrammar());
             else if ( eCellType == CELLTYPE_EDIT )
                 bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, &rDocument, aString);
             else
             {
                 if( !bSearchFormatted )
-                    aCol[nCol].GetInputString( rBlockPos, nRow, aString );
+                    aString = aCol[nCol].GetInputString( rBlockPos, nRow );
                 else
-                    aCol[nCol].GetString( rBlockPos, nRow, aString );
+                    aString = aCol[nCol].GetString( rBlockPos, nRow );
             }
             break;
         }
@@ -106,9 +106,9 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
             else
             {
                 if( !bSearchFormatted )
-                    aCol[nCol].GetInputString( rBlockPos, nRow, aString );
+                    aString = aCol[nCol].GetInputString( rBlockPos, nRow );
                 else
-                    aCol[nCol].GetString( rBlockPos, nRow, aString );
+                    aString = aCol[nCol].GetString( rBlockPos, nRow );
             }
             break;
         case SvxSearchCellType::NOTE:

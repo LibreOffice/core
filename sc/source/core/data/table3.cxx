@@ -1575,11 +1575,11 @@ short ScTable::CompareCell(
                 if (eType1 == CELLTYPE_STRING)
                     aStr1 = rCell1.mpString->getString();
                 else
-                    GetString(nCell1Col, nCell1Row, aStr1);
+                    aStr1 = GetString(nCell1Col, nCell1Row);
                 if (eType2 == CELLTYPE_STRING)
                     aStr2 = rCell2.mpString->getString();
                 else
-                    GetString(nCell2Col, nCell2Row, aStr2);
+                    aStr2 = GetString(nCell2Col, nCell2Row);
 
                 bool bUserDef     = aSortParam.bUserDef;        // custom sort order
                 bool bNaturalSort = aSortParam.bNaturalSort;    // natural sort
@@ -2119,7 +2119,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         {
             for (i=0; i<=aRowEntry.nGroupNo; i++)
             {
-                GetString( nGroupCol[i], nStartRow, aSubString );
+                aSubString = GetString( nGroupCol[i], nStartRow );
                 if ( bIgnoreCase )
                     aCompString[i] = ScGlobal::getCharClass().uppercase( aSubString );
                 else
@@ -2139,7 +2139,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     OUString aString;
                     for (i=0; i<=aRowEntry.nGroupNo && !bChanged; i++)
                     {
-                        GetString( nGroupCol[i], nRow, aString );
+                        aString = GetString( nGroupCol[i], nRow );
                         if (bIgnoreCase)
                             aString = ScGlobal::getCharClass().uppercase(aString);
                         //  when sorting, blanks are separate group
@@ -2199,7 +2199,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         aRowEntry.nSubStartRow = nRow;
                         for (i=0; i<=aRowEntry.nGroupNo; i++)
                         {
-                            GetString( nGroupCol[i], nRow, aSubString );
+                            aSubString = GetString( nGroupCol[i], nRow );
                             if ( bIgnoreCase )
                                 aCompString[i] = ScGlobal::getCharClass().uppercase( aSubString );
                             else
@@ -2606,16 +2606,14 @@ public:
             {
                 sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
                     mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
-                OUString aStr;
                 SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
-                ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrDoc, rEntry.bDoQuery);
+                OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, rEntry.bDoQuery);
                 return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
             }
         }
         else
         {
-            OUString aStr;
-            mrTab.GetInputString(static_cast<SCCOL>(rEntry.nField), nRow, aStr);
+            OUString aStr = mrTab.GetInputString(static_cast<SCCOL>(rEntry.nField), nRow);
             return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
         }
     }
@@ -3423,8 +3421,7 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
                 OUStringBuffer aStr;
                 for (SCCOL k=aParam.nCol1; k <= aParam.nCol2; k++)
                 {
-                    OUString aCellStr;
-                    GetString(k, j, aCellStr);
+                    OUString aCellStr = GetString(k, j);
                     aStr.append(aCellStr + u"\x0001");
                 }
 
@@ -3483,16 +3480,15 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     // First row must be column headers
     while (bValid && (nCol <= nCol2))
     {
-        OUString aQueryStr;
-        GetUpperCellString(nCol, nRow1, aQueryStr);
+        OUString aQueryStr = GetUpperCellString(nCol, nRow1);
         bool bFound = false;
         SCCOL i = rQueryParam.nCol1;
         while (!bFound && (i <= nDBCol2))
         {
             if ( nTab == nDBTab )
-                GetUpperCellString(i, nDBRow1, aCellStr);
+                aCellStr = GetUpperCellString(i, nDBRow1);
             else
-                rDocument.GetUpperCellString(i, nDBRow1, nDBTab, aCellStr);
+                aCellStr = rDocument.GetUpperCellString(i, nDBRow1, nDBTab);
             bFound = (aCellStr == aQueryStr);
             if (!bFound) i++;
         }
@@ -3525,7 +3521,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             nCol = nCol1;
             while (nCol <= nCol2)
             {
-                GetInputString( nCol, nRow, aCellStr );
+                aCellStr = GetInputString( nCol, nRow );
                 if (!aCellStr.isEmpty())
                 {
                     if (nIndex < nNewEntries)
@@ -3583,7 +3579,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // First column AND/OR
         if (nIndex > 0)
         {
-            GetUpperCellString(nCol1, nRow, aCellStr);
+            aCellStr = GetUpperCellString(nCol1, nRow);
             if ( aCellStr == ScResId(STR_TABLE_AND) )
             {
                 rEntry.eConnect = SC_AND;
@@ -3599,14 +3595,14 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         if ((nIndex < 1) || bValid)
         {
             bool bFound = false;
-            GetUpperCellString(nCol1 + 1, nRow, aCellStr);
+            aCellStr = GetUpperCellString(nCol1 + 1, nRow);
             for (SCCOL i=rQueryParam.nCol1; (i <= nDBCol2) && (!bFound); i++)
             {
                 OUString aFieldStr;
                 if ( nTab == nDBTab )
-                    GetUpperCellString(i, nDBRow1, aFieldStr);
+                    aFieldStr = GetUpperCellString(i, nDBRow1);
                 else
-                    rDocument.GetUpperCellString(i, nDBRow1, nDBTab, aFieldStr);
+                    aFieldStr = rDocument.GetUpperCellString(i, nDBRow1, nDBTab);
                 bFound = (aCellStr == aFieldStr);
                 if (bFound)
                 {
@@ -3620,7 +3616,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // Third column operator =<>...
         if (bValid)
         {
-            GetUpperCellString(nCol1 + 2, nRow, aCellStr);
+            aCellStr = GetUpperCellString(nCol1 + 2, nRow);
             if (aCellStr.startsWith("<"))
             {
                 if (aCellStr[1] == '>')
@@ -3644,8 +3640,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // Fourth column values
         if (bValid)
         {
-            OUString aStr;
-            GetString(nCol1 + 3, nRow, aStr);
+            OUString aStr = GetString(nCol1 + 3, nRow);
             rEntry.GetQueryItem().maString = rPool.intern(aStr);
             rEntry.bDoQuery = true;
         }

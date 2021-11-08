@@ -409,8 +409,7 @@ void ScConflictsDlg::SetActionString(const ScChangeAction* pAction, ScDocument* 
         return;
 
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
-    OUString aDesc;
-    pAction->GetDescription(aDesc, *pDoc, true, false);
+    OUString aDesc = pAction->GetDescription(*pDoc, true, false);
     rTreeView.set_text(rEntry, aDesc, 0);
 
     OUString aUser = comphelper::string::strip(pAction->GetUser(), ' ');

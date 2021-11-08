@@ -126,7 +126,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
                     if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 && eFunc != SUBTOTAL_FUNC_SELECTION_COUNT)
                     {
                         // number format from attributes or formula
-                        rDoc.GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
+                        nNumFmt = rDoc.GetNumberFormat( nPosX, nPosY, nTab );
                     }
 
                     OUString aValStr;
@@ -695,7 +695,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
             if (rCell.meType == CELLTYPE_FORMULA)
             {
                 if (!bHideFormula)
-                    rCell.mpFormula->GetFormula(aString);
+                    aString = rCell.mpFormula->GetFormula();
             }
             else if (rCell.meType == CELLTYPE_EDIT)
             {
@@ -706,7 +706,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 sal_uInt32 nNumFmt = rDoc.GetNumberFormat( aPos );
 
-                ScCellFormat::GetInputString( rCell, nNumFmt, aString, *pFormatter, rDoc );
+                aString = ScCellFormat::GetInputString( rCell, nNumFmt, *pFormatter, rDoc );
                 if (rCell.meType == CELLTYPE_STRING)
                 {
                     // Put a ' in front if necessary, so that the string is not

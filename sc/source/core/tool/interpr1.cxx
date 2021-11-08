@@ -2788,7 +2788,7 @@ void ScInterpreter::ScFormula()
                         switch (aCell.meType)
                         {
                             case CELLTYPE_FORMULA :
-                                aCell.mpFormula->GetFormula(aFormula, formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
+                                aFormula = aCell.mpFormula->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
                                 pResMat->PutString( mrStrPool.intern( aFormula), i,j);
                                 break;
                             default:
@@ -2814,7 +2814,7 @@ void ScInterpreter::ScFormula()
             switch (aCell.meType)
             {
                 case CELLTYPE_FORMULA :
-                    aCell.mpFormula->GetFormula(aFormula, formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
+                    aFormula = aCell.mpFormula->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
                 break;
                 default:
                     SetError( FormulaError::NotAvailable );

@@ -750,10 +750,8 @@ static bool lcl_FindAction( ScDocument& rDoc, const ScChangeAction* pAction, ScD
                 pAction->GetDateTimeUTC() == pA->GetDateTimeUTC() ) &&
              pAction->GetBigRange() == pA->GetBigRange() )
         {
-            OUString aActionDesc;
-            pAction->GetDescription(aActionDesc, rDoc, true);
-            OUString aADesc;
-            pA->GetDescription(aADesc, rSearchDoc, true);
+            OUString aActionDesc = pAction->GetDescription(rDoc, true);
+            OUString aADesc = pA->GetDescription(rSearchDoc, true);
             if (aActionDesc == aADesc)
             {
                 OSL_FAIL( "lcl_FindAction(): found equal action!" );
@@ -922,7 +920,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 #if OSL_DEBUG_LEVEL > 0
                 OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
-                    static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( aValue, &m_aDocument );
+                    aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( &m_aDocument );
                 SAL_WARN( "sc", aValue << " omitted");
 #endif
             }
@@ -983,8 +981,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
-                            OUString aValue;
-                            static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( aValue, &m_aDocument );
+                            OUString aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( &m_aDocument );
                             ScMatrixMode eMatrix = ScMatrixMode::NONE;
                             const ScCellValue& rCell = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewCell();
                             if (rCell.meType == CELLTYPE_FORMULA)

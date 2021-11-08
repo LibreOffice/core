@@ -5224,8 +5224,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
     ScRangeData* pOld = rList.findByUpperName(ScGlobal::getCharClass().uppercase(aName));
     if (pOld)
     {
-        OUString aOldStr;
-        pOld->GetSymbol( aOldStr );
+        OUString aOldStr = pOld->GetSymbol();
         if (aOldStr != aContent)
         {
             if (bApi)
@@ -5471,8 +5470,7 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     SCROW nStartRow = rOldRange.aStart.Row();
     SCTAB nTab = rOldRange.aStart.Tab();
 
-    OUString aFormula;
-    rDoc.GetFormula( nStartCol, nStartRow, nTab, aFormula );
+    OUString aFormula = rDoc.GetFormula( nStartCol, nStartRow, nTab );
     if ( !(aFormula.startsWith("{") && aFormula.endsWith("}")) )
         return;
 

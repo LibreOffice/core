@@ -234,8 +234,7 @@ void ScMacrosTest::testStarBasic()
         xComponent,
         "vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
-    double aValue;
-    rDoc.GetValue(0,0,0,aValue);
+    double aValue = rDoc.GetValue(0,0,0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
     pDocSh->DoClose();
 }

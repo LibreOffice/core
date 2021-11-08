@@ -2487,7 +2487,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
             if( pData->HasType( ScRangeData::Type::RefArea    )
                 || pData->HasType( ScRangeData::Type::AbsArea )
                 || pData->HasType( ScRangeData::Type::AbsPos  ) )
-                pData->GetSymbol( aPos );           // continue with the name's contents
+                aPos = pData->GetSymbol();           // continue with the name's contents
         }
     }
 

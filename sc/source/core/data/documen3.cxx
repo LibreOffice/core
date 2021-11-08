@@ -1475,12 +1475,12 @@ SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeep
     return 0;
 }
 
-void ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rStr)
+OUString ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        maTabs[nTab]->GetUpperCellString( nCol, nRow, rStr );
+        return maTabs[nTab]->GetUpperCellString( nCol, nRow );
     else
-        rStr.clear();
+        return EMPTY_OUSTRING;
 }
 
 bool ScDocument::CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam )

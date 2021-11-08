@@ -132,8 +132,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
 
     // edit if formula exists
 
-    OUString aFormula;
-    m_pDoc->GetFormula( nCol, nRow, nTab, aFormula );
+    OUString aFormula = m_pDoc->GetFormula( nCol, nRow, nTab );
     bool bEdit   = ( aFormula.getLength() > 1 );
     bool bMatrix = false;
     if ( bEdit )

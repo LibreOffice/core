@@ -158,7 +158,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 break;
                 case CELLTYPE_VALUE:
                     aOS.append(pNumData);
-                    pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
+                    aString = pDoc->GetInputString( nColCnt, nRowCnt, nTab );
                     aOS.append(aString);
                     aOS.append("\nV\n");
                 break;
@@ -173,7 +173,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     else if (aCell.mpFormula->IsValue())
                     {
                         aOS.append(pNumData);
-                        pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
+                        aString = pDoc->GetInputString( nColCnt, nRowCnt, nTab );
                         aOS.append(aString);
                         aOS.append("\nV\n");
                     }

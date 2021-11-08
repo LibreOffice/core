@@ -2803,8 +2803,7 @@ void TestFormula::testFormulaRefUpdateInsertColumns()
     // Check that the named reference points to the moved cell, now D2.
     ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("ROWRELATIVERANGE");
     CPPUNIT_ASSERT(pName);
-    OUString aSymbol;
-    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    OUString aSymbol = pName->GetSymbol(aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(OUString("$Formula.$D2"), aSymbol);
 
     // Check that the formula using the name, now in E2, still has the same result.
@@ -2815,7 +2814,7 @@ void TestFormula::testFormulaRefUpdateInsertColumns()
     // Check that the named column reference points to the moved column, now D.
     pName = m_pDoc->GetRangeName()->findByUpperName("ENTIRECOLUMN");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    aSymbol = pName->GetSymbol(aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(OUString("$D:$D"), aSymbol);
 
     // Check that the formula using the name, now in E3, still has the same result.
@@ -2827,7 +2826,7 @@ void TestFormula::testFormulaRefUpdateInsertColumns()
     // and does not have a #REF! error due to inserted columns.
     pName = m_pDoc->GetRangeName()->findByUpperName("ENTIREROW");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    aSymbol = pName->GetSymbol(aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(OUString("$2:$2"), aSymbol);
 
     // Check that the formula using the name, now in E4, still has the same result.
@@ -3761,8 +3760,7 @@ void TestFormula::testFormulaRefUpdateName()
     // This should shift the absolute range B10:B12 that MyRange references.
     pName = pGlobalNames->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
-    OUString aExpr;
-    pName->GetSymbol(aExpr);
+    OUString aExpr = pName->GetSymbol();
     CPPUNIT_ASSERT_EQUAL(OUString("$D$10:$D$12"), aExpr);
 
     // This move shouldn't affect the value of C8.
@@ -3807,14 +3805,14 @@ void TestFormula::testFormulaRefUpdateName()
         *m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
-    pName->GetSymbol(aExpr);
+    aExpr = pName->GetSymbol();
     CPPUNIT_ASSERT_EQUAL(OUString("$B$1:$C$6"), aExpr);
 
     // Insert range of cells to shift right. The range partially overlaps the named range.
     m_pDoc->InsertCol(ScRange(2,4,0,3,8,0));
 
     // This should not alter the range.
-    pName->GetSymbol(aExpr);
+    aExpr = pName->GetSymbol();
     CPPUNIT_ASSERT_EQUAL(OUString("$B$1:$C$6"), aExpr);
 
     m_pDoc->DeleteTab(0);
@@ -3841,8 +3839,7 @@ void TestFormula::testFormulaRefUpdateNameMove()
 
     ScRangeData* pData = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pData);
-    OUString aSymbol;
-    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    OUString aSymbol = pData->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$B$4"), aSymbol);
 
     // Move B2:B4 to D3.
@@ -3851,7 +3848,7 @@ void TestFormula::testFormulaRefUpdateNameMove()
     CPPUNIT_ASSERT(bMoved);
 
     // The named range should have moved as well.
-    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    aSymbol = pData->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$3:$D$5"), aSymbol);
 
     // The value of A10 should remain unchanged.
@@ -3865,7 +3862,7 @@ void TestFormula::testFormulaRefUpdateNameMove()
 
     pData = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pData);
-    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    aSymbol = pData->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$B$4"), aSymbol);
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
 
@@ -3874,7 +3871,7 @@ void TestFormula::testFormulaRefUpdateNameMove()
 
     pData = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pData);
-    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    aSymbol = pData->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$3:$D$5"), aSymbol);
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
 
@@ -3948,8 +3945,7 @@ void TestFormula::testFormulaRefUpdateNameExpandRef()
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
     ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
-    OUString aSymbol;
-    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    OUString aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$A$4"), aSymbol);
 
     // Make sure the listening area has been expanded as well.  Note the
@@ -3962,7 +3958,7 @@ void TestFormula::testFormulaRefUpdateNameExpandRef()
     rFunc.InsertCells(ScRange(1,0,0,1,m_pDoc->MaxRow(),0), &aMark, INS_INSCOLS_BEFORE, false, true);
     pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$A$4"), aSymbol);
 
     // Make sure the referenced area has not changed.
@@ -3993,7 +3989,7 @@ void TestFormula::testFormulaRefUpdateNameExpandRef()
     pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
 
-    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$B$4:$B$9"), aSymbol);
 
     // Clear the document and start over.
@@ -4064,8 +4060,7 @@ void TestFormula::testFormulaRefUpdateNameExpandRef2()
     rFunc.InsertCells(ScRange(1,0,0,1,m_pDoc->MaxRow(),0), &aMark, INS_INSCOLS_BEFORE, false, true);
     ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
-    OUString aSymbol;
-    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    OUString aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$C$3"), aSymbol);
 
     m_pDoc->DeleteTab(0);
@@ -4399,9 +4394,9 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
     // Formulas not changed.
-    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 1,2,nSheet2, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", OUString("=MyCell"), aFormula);
 
     // Move Sheet2.B2 ("2.0") to Sheet1.C2
@@ -4411,9 +4406,9 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
     // Formulas not changed.
-    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 1,2,nSheet2, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", OUString("=MyCell"), aFormula);
 
     ScRangeData* pName;
@@ -4422,7 +4417,7 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     // Sheet1.C2
     pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
 
     // Move Sheet2.B3 ("=MyCell") to Sheet1.C3
@@ -4433,23 +4428,23 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet2.B3", 0.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
     // One formula identical, one adjusted.
-    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 2,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
 
     // Check that the sheet-local named reference in Sheet1 still points to the
     // original cell Sheet1.B2
     pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
 
     // Check that the sheet-local named reference in Sheet2 still points to the
     // moved cell, now Sheet1.C2
     pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
 
     // Insert sheet before the others.
@@ -4460,17 +4455,17 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     // Nothing changed.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
-    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 2,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
 
     // Delete sheet before the others.
@@ -4481,17 +4476,17 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     // Nothing changed.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
-    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 2,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
 
     // Delete last sheet with sheet-local name.
@@ -4504,13 +4499,13 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", 0.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", OUString("#NAME?"), m_pDoc->GetString(ScAddress(2,2,nSheet1)));
-    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 1,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
+    aFormula = m_pDoc->GetFormula( 2,2,nSheet1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", OUString("=#NAME?"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
-    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    aFormula = pName->GetSymbol( ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
     CPPUNIT_ASSERT(!m_pDoc->GetRangeName(nSheet2));
     nSheet2 = -1;
@@ -5108,9 +5103,8 @@ void TestFormula::testFuncSUMXMY2()
     m_pDoc->SetValue(ScAddress(2,2,0),  1.0); // C3
     CPPUNIT_ASSERT_EQUAL(9.0,  m_pDoc->GetValue(aPos));
 
-    double result = 0.0;
     m_pDoc->SetString(0, 4, 0, "=SUMXMY2({2;3;4};{4;3;2})");
-    m_pDoc->GetValue(0, 4, 0, result);
+    double result = m_pDoc->GetValue(0, 4, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of SUMXMY2 with inline arrays failed", 8.0, result);
 
     m_pDoc->DeleteTab(0);
@@ -5220,7 +5214,7 @@ void TestFormula::testFuncN()
     };
     for (size_t i = 0; i < SAL_N_ELEMENTS(checks1); ++i)
     {
-        m_pDoc->GetValue(1, i, 0, result);
+        result = m_pDoc->GetValue(1, i, 0);
         bool bGood = result == checks1[i];
         if (!bGood)
         {
@@ -5233,7 +5227,7 @@ void TestFormula::testFuncN()
     };
     for (size_t i = 0; i < SAL_N_ELEMENTS(checks2); ++i)
     {
-        m_pDoc->GetValue(1, i+2, 0, result);
+        result = m_pDoc->GetValue(1, i+2, 0);
         bool bGood = result == checks2[i];
         if (!bGood)
         {
@@ -5302,9 +5296,8 @@ void TestFormula::testFuncCOUNTIF()
 
     for (SCROW i = 0; i < nRows; ++i)
     {
-        double result;
         SCROW nRow = 20 + i;
-        m_pDoc->GetValue(0, nRow, 0, result);
+        double result = m_pDoc->GetValue(0, nRow, 0);
         bool bGood = result == aChecks[i].fResult;
         if (!bGood)
         {
@@ -5345,10 +5338,9 @@ void TestFormula::testFuncCOUNTIF()
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0,0, 0,1, aMark, "=COUNTIF(B1:B5;C1:C2)");
     // As we will be testing for 0.0 values, check that formulas are actually present.
-    OUString aFormula;
-    m_pDoc->GetFormula(0,0,0, aFormula);
+    OUString aFormula = m_pDoc->GetFormula(0,0,0);
     CPPUNIT_ASSERT_EQUAL(OUString("{=COUNTIF(B1:B5;C1:C2)}"), aFormula);
-    m_pDoc->GetFormula(0,1,0, aFormula);
+    aFormula = m_pDoc->GetFormula(0,1,0);
     CPPUNIT_ASSERT_EQUAL(OUString("{=COUNTIF(B1:B5;C1:C2)}"), aFormula);
     // The 0.0 results expected.
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,0,0)));
@@ -5556,8 +5548,7 @@ void TestFormula::testFuncSHEET()
 
     m_pDoc->SetString(0, 0, 0, "=SHEETS()");
     m_pDoc->CalcFormulaTree(false, false);
-    double original;
-    m_pDoc->GetValue(0, 0, 0, original);
+    double original = m_pDoc->GetValue(0, 0, 0);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("result of SHEETS() should equal the number of sheets, but doesn't.",
                            static_cast<SCTAB>(original), m_pDoc->GetTableCount());
@@ -5565,15 +5556,14 @@ void TestFormula::testFuncSHEET()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (SC_TAB_APPEND, "test2"));
 
-    double modified;
-    m_pDoc->GetValue(0, 0, 0, modified);
+    double modified = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("result of SHEETS() did not get updated after sheet insertion.",
                            1.0, modified - original);
 
     SCTAB nTabCount = m_pDoc->GetTableCount();
     m_pDoc->DeleteTab(--nTabCount);
 
-    m_pDoc->GetValue(0, 0, 0, modified);
+    modified = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("result of SHEETS() did not get updated after sheet removal.",
                            0.0, modified - original);
 
@@ -5588,22 +5578,19 @@ void TestFormula::testFuncNOW()
     double val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
     m_pDoc->SetString(0, 1, 0, "=IF(A1>0;NOW();0");
-    double now1;
-    m_pDoc->GetValue(0, 1, 0, now1);
+    double now1 = m_pDoc->GetValue(0, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Value of NOW() should be positive.", now1 > 0.0);
 
     val = 0;
     m_pDoc->SetValue(0, 0, 0, val);
     m_pDoc->CalcFormulaTree(false, false);
-    double zero;
-    m_pDoc->GetValue(0, 1, 0, zero);
+    double zero = m_pDoc->GetValue(0, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Result should equal the 3rd parameter of IF, which is zero.", 0.0, zero);
 
     val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
     m_pDoc->CalcFormulaTree(false, false);
-    double now2;
-    m_pDoc->GetValue(0, 1, 0, now2);
+    double now2 = m_pDoc->GetValue(0, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
 
     m_pDoc->DeleteTab(0);
@@ -6461,18 +6448,17 @@ void TestFormula::testFormulaDepTracking()
 
     // B2 listens on D2.
     m_pDoc->SetString(1, 1, 0, "=D2");
-    double val = -999.0; // dummy initial value
-    m_pDoc->GetValue(1, 1, 0, val);
+    double val = m_pDoc->GetValue(1, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Referencing an empty cell should yield zero.", 0.0, val);
 
     // Changing the value of D2 should trigger recalculation of B2.
     m_pDoc->SetValue(3, 1, 0, 1.1);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Failed to recalculate on value change.", 1.1, val);
 
     // And again.
     m_pDoc->SetValue(3, 1, 0, 2.2);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Failed to recalculate on value change.", 2.2, val);
 
     clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
@@ -6481,12 +6467,12 @@ void TestFormula::testFormulaDepTracking()
 
     // B2 listens on D2:E6.
     m_pDoc->SetString(1, 1, 0, "=SUM(D2:E6)");
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Summing an empty range should yield zero.", 0.0, val);
 
     // Set value to E3. This should trigger recalc on B2.
     m_pDoc->SetValue(4, 2, 0, 2.4);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Failed to recalculate on single value change.", 2.4, val);
 
     // Set value to D5 to trigger recalc again.  Note that this causes an
@@ -6494,32 +6480,32 @@ void TestFormula::testFormulaDepTracking()
     // rounding error.  We need to use approxEqual to assess its value.
 
     m_pDoc->SetValue(3, 4, 0, 1.2);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 3.6));
 
     // Change the value of D2 (boundary case).
     m_pDoc->SetValue(3, 1, 0, 1.0);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 4.6));
 
     // Change the value of E6 (another boundary case).
     m_pDoc->SetValue(4, 5, 0, 2.0);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 6.6));
 
     // Change the value of D6 (another boundary case).
     m_pDoc->SetValue(3, 5, 0, 3.0);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 9.6));
 
     // Change the value of E2 (another boundary case).
     m_pDoc->SetValue(4, 1, 0, 0.4);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 10.0));
 
     // Change the existing non-empty value cell (E2).
     m_pDoc->SetValue(4, 1, 0, 2.4);
-    m_pDoc->GetValue(1, 1, 0, val);
+    val = m_pDoc->GetValue(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 12.0));
 
     clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
@@ -6913,7 +6899,7 @@ void TestFormula::testExternalRef()
         double pChecks[] = { 10, 11, 12, 13, 0 };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
         {
-            m_pDoc->GetValue(1, static_cast<SCROW>(i+1), 0, val);
+            val = m_pDoc->GetValue(1, static_cast<SCROW>(i+1), 0);
             ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected cell value.", pChecks[i], val);
         }
     }
@@ -7152,7 +7138,7 @@ void TestFormula::testExternalRefFunctions()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
         m_pDoc->SetString(0, 0, 0, OUString::createFromAscii(aChecks[i].pFormula));
-        m_pDoc->GetValue(0, 0, 0, val);
+        val = m_pDoc->GetValue(0, 0, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected result involving external ranges.", aChecks[i].fResult, val, 1e-15);
     }
 

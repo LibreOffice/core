@@ -3517,13 +3517,8 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
 OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScInterpreterContext* pContext ) const
 {
     if (TableExists(nTab))
-    {
-        OUString aStr;
-        maTabs[nTab]->GetString(nCol, nRow, aStr, pContext);
-        return aStr;
-    }
-    else
-        return EMPTY_OUSTRING;
+        return maTabs[nTab]->GetString(nCol, nRow, pContext);
+    return EMPTY_OUSTRING;
 }
 
 OUString ScDocument::GetString( const ScAddress& rPos, const ScInterpreterContext* pContext ) const
@@ -3531,9 +3526,7 @@ OUString ScDocument::GetString( const ScAddress& rPos, const ScInterpreterContex
     if (!TableExists(rPos.Tab()))
         return EMPTY_OUSTRING;
 
-    OUString aStr;
-    maTabs[rPos.Tab()]->GetString(rPos.Col(), rPos.Row(), aStr, pContext);
-    return aStr;
+    return maTabs[rPos.Tab()]->GetString(rPos.Col(), rPos.Row(), pContext);
 }
 
 double* ScDocument::GetValueCell( const ScAddress& rPos )
@@ -3568,12 +3561,12 @@ void ScDocument::DiscardFormulaGroupContext()
         mpFormulaGroupCxt.reset();
 }
 
-void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
+OUString ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        maTabs[nTab]->GetInputString( nCol, nRow, rString );
+        return maTabs[nTab]->GetInputString( nCol, nRow );
     else
-        rString.clear();
+        return OUString();
 }
 
 FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rString )
@@ -3631,14 +3624,6 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
     return nErr;
 }
 
-void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const
-{
-    if (TableExists(nTab))
-        rValue = maTabs[nTab]->GetValue( nCol, nRow );
-    else
-        rValue = 0.0;
-}
-
 const EditTextObject* ScDocument::GetEditText( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
@@ -3666,19 +3651,18 @@ double ScDocument::GetValue( const ScAddress& rPos ) const
 
 double ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);
+    ScAddress aAdr(nCol, nRow, nTab);
+    return GetValue(aAdr);
 }
 
-void ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                  sal_uInt32& rFormat ) const
+sal_uInt32 ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
         {
-            rFormat = maTabs[nTab]->GetNumberFormat( nCol, nRow );
-            return ;
+            return maTabs[nTab]->GetNumberFormat( nCol, nRow );
         }
-    rFormat = 0;
+    return 0;
 }
 
 sal_uInt32 ScDocument::GetNumberFormat( const ScRange& rRange ) const
@@ -3743,12 +3727,12 @@ void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, SvNu
     }
 }
 
-void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const
+OUString ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-            maTabs[nTab]->GetFormula( nCol, nRow, rFormula );
-    else
-        rFormula.clear();
+        return maTabs[nTab]->GetFormula( nCol, nRow );
+
+    return EMPTY_OUSTRING;
 }
 
 const ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos ) const
@@ -3775,13 +3759,12 @@ CellType ScDocument::GetCellType( const ScAddress& rPos ) const
     return CELLTYPE_NONE;
 }
 
-void ScDocument::GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab,
-        CellType& rCellType ) const
+CellType ScDocument::GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        rCellType = maTabs[nTab]->GetCellType( nCol, nRow );
-    else
-        rCellType = CELLTYPE_NONE;
+        return maTabs[nTab]->GetCellType( nCol, nRow );
+
+    return CELLTYPE_NONE;
 }
 
 bool ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const

@@ -168,8 +168,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
             sal_uInt32 nNumFmt = rDoc.getDoc().GetNumberFormat(rDoc.getDoc().GetNonThreadedContext(), aScPos);
             SvNumberFormatter* pFormatter = rDoc.getDoc().GetFormatTable();
             const Color* pColor;
-            OUString aDisplText;
-            ScCellFormat::GetString(aCell, nNumFmt, aDisplText, &pColor, *pFormatter, rDoc.getDoc());
+            OUString aDisplText = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc.getDoc());
             if (aDisplText.isEmpty())
                 aDisplText = rUrl;
 

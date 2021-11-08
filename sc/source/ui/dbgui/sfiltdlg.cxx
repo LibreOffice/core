@@ -138,8 +138,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
             if (!rEntry.second->HasType(ScRangeData::Type::Criteria))
                 continue;
 
-            OUString aSymbol;
-            rEntry.second->GetSymbol(aSymbol);
+            OUString aSymbol = rEntry.second->GetSymbol();
             m_xLbFilterArea->append(aSymbol, rEntry.second->GetName());
         }
 

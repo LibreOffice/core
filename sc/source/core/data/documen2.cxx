@@ -1346,7 +1346,7 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
         aTrackText += aComStr;
         aTrackText += "\n( ";
     }
-    pFound->GetDescription( aTrackText, *this );
+    aTrackText = pFound->GetDescription( *this );
     if (!aComStr.isEmpty())
     {
         aTrackText += ")";

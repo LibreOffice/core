@@ -302,8 +302,7 @@ bool lcl_GetBoolValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const Sf
 
 static bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW nCellY, SCTAB nTab )
 {
-    sal_uInt32 nCurrentNumberFormat;
-    pDoc->GetNumberFormat( nCellX, nCellY, nTab, nCurrentNumberFormat);
+    sal_uInt32 nCurrentNumberFormat = pDoc->GetNumberFormat( nCellX, nCellY, nTab );
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
     return pNumberFormatter->GetType( nCurrentNumberFormat ) == SvNumFormatType::TEXT;
 }
@@ -518,8 +517,8 @@ bool ScDrawStringsVars::SetText( const ScRefCellValue& rCell )
 
             const Color* pColor;
             sal_uLong nFormat = nValueFormat;
-            ScCellFormat::GetString( rCell,
-                                     nFormat, aString, &pColor,
+            aString = ScCellFormat::GetString( rCell,
+                                     nFormat, &pColor,
                                      *pOutput->mpDoc->GetFormatTable(),
                                      *pOutput->mpDoc,
                                      pOutput->mbShowNullValues,
@@ -2437,10 +2436,9 @@ bool ScOutputData::DrawEditParam::readCellContent(
     {
         sal_uInt32 nFormat = mpPattern->GetNumberFormat(
                                     pDoc->GetFormatTable(), mpCondSet );
-        OUString aString;
         const Color* pColor;
-        ScCellFormat::GetString( maCell,
-                                 nFormat,aString, &pColor,
+        OUString aString = ScCellFormat::GetString( maCell,
+                                 nFormat, &pColor,
                                  *pDoc->GetFormatTable(),
                                  *pDoc,
                                  bShowNullValues,
@@ -4771,10 +4769,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             {
                                 sal_uInt32 nFormat = pPattern->GetNumberFormat(
                                                             mpDoc->GetFormatTable(), pCondSet );
-                                OUString aString;
                                 const Color* pColor;
-                                ScCellFormat::GetString( aCell,
-                                                         nFormat,aString, &pColor,
+                                OUString aString = ScCellFormat::GetString( aCell,
+                                                         nFormat, &pColor,
                                                          *mpDoc->GetFormatTable(),
                                                          *mpDoc,
                                                          mbShowNullValues,

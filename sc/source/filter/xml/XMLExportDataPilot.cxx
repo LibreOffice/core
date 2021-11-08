@@ -443,9 +443,8 @@ void ScXMLExportDataPilot::WriteSubTotals(const ScDPSaveDimension* pDim)
     rExport.CheckAttrList();
     for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
     {
-        OUString sFunction;
         sal_Int16 nFunc = static_cast<sal_Int16>(pDim->GetSubTotalFunc(nSubTotal));
-        ScXMLConverter::GetStringFromFunction( sFunction, nFunc);
+        OUString sFunction = ScXMLConverter::GetStringFromFunction(nFunc);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
         if (pLayoutName && nFunc == sheet::GeneralFunction2::AUTO)
             rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
@@ -685,17 +684,15 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
 
     if (pDim->IsDataLayout())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD, XML_TRUE);
-    OUString sValueStr;
     sheet::DataPilotFieldOrientation eOrientation = pDim->GetOrientation();
-    ScXMLConverter::GetStringFromOrientation( sValueStr,
-         eOrientation);
+    OUString sValueStr = ScXMLConverter::GetStringFromOrientation(eOrientation);
     if( !sValueStr.isEmpty() )
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, sValueStr );
     if (pDim->GetUsedHierarchy() != 1)
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USED_HIERARCHY, OUString::number(pDim->GetUsedHierarchy()));
     }
-    ScXMLConverter::GetStringFromFunction( sValueStr, static_cast<sal_Int16>(pDim->GetFunction()) );
+    sValueStr = ScXMLConverter::GetStringFromFunction( static_cast<sal_Int16>(pDim->GetFunction()) );
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);
 
     if (eOrientation == sheet::DataPilotFieldOrientation_PAGE)

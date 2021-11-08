@@ -130,8 +130,7 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( std::u16string_view sF
     return SUBTOTAL_FUNC_NONE;
 }
 
-void ScXMLConverter::GetStringFromFunction(
-        OUString& rString,
+OUString ScXMLConverter::GetStringFromFunction(
         sal_Int16 eFunction )
 {
     OUString sFuncStr;
@@ -156,11 +155,12 @@ void ScXMLConverter::GetStringFromFunction(
             assert(false);
         }
     }
-    ScRangeStringConverter::AssignString( rString, sFuncStr, false );
+    OUString str;
+    ScRangeStringConverter::AssignString( str, sFuncStr, false );
+    return str;
 }
 
-void ScXMLConverter::GetStringFromFunction(
-        OUString& rString,
+OUString ScXMLConverter::GetStringFromFunction(
         const ScSubTotalFunc eFunction )
 {
     OUString sFuncStr;
@@ -183,7 +183,9 @@ void ScXMLConverter::GetStringFromFunction(
         case SUBTOTAL_FUNC_VAR:     sFuncStr = GetXMLToken( XML_VAR );          break;
         case SUBTOTAL_FUNC_VARP:    sFuncStr = GetXMLToken( XML_VARP );         break;
     }
-    ScRangeStringConverter::AssignString( rString, sFuncStr, false );
+    OUString str;
+    ScRangeStringConverter::AssignString( str, sFuncStr, false );
+    return str;
 }
 
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
@@ -200,8 +202,7 @@ sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
     return sheet::DataPilotFieldOrientation_HIDDEN;
 }
 
-void ScXMLConverter::GetStringFromOrientation(
-    OUString& rString,
+OUString ScXMLConverter::GetStringFromOrientation(
     const sheet::DataPilotFieldOrientation eOrientation )
 {
     OUString sOrientStr;
@@ -227,7 +228,9 @@ void ScXMLConverter::GetStringFromOrientation(
             // added to avoid warnings
         }
     }
-    ScRangeStringConverter::AssignString( rString, sOrientStr, false );
+    OUString str;
+    ScRangeStringConverter::AssignString( str, sOrientStr, false );
+    return str;
 }
 
 ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( std::u16string_view rString )
@@ -258,8 +261,7 @@ bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, std::u16st
     return true;
 }
 
-void ScXMLConverter::GetStringFromDetObjType(
-        OUString& rString,
+OUString ScXMLConverter::GetStringFromDetObjType(
         const ScDetectiveObjType eObjType )
 {
     OUString sTypeStr;
@@ -279,11 +281,12 @@ void ScXMLConverter::GetStringFromDetObjType(
             // added to avoid warnings
         }
     }
-    ScRangeStringConverter::AssignString( rString, sTypeStr, false );
+    OUString str;
+    ScRangeStringConverter::AssignString( str, sTypeStr, false );
+    return str;
 }
 
-void ScXMLConverter::GetStringFromDetOpType(
-        OUString& rString,
+OUString ScXMLConverter::GetStringFromDetOpType(
         const ScDetOpType eOpType )
 {
     OUString sTypeStr;
@@ -305,7 +308,9 @@ void ScXMLConverter::GetStringFromDetOpType(
             sTypeStr = GetXMLToken( XML_REMOVE_PRECEDENTS );
         break;
     }
-    ScRangeStringConverter::AssignString( rString, sTypeStr, false );
+    OUString str;
+    ScRangeStringConverter::AssignString( str, sTypeStr, false );
+    return str;
 }
 
 void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula)

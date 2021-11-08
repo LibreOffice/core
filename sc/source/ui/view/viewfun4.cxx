@@ -250,8 +250,7 @@ void ScViewFunc::DoRefConversion()
                 if (eMatrixMode == ScMatrixMode::Reference)
                     continue;
 
-                OUString aOld;
-                pCell->GetFormula(aOld);
+                OUString aOld = pCell->GetFormula();
                 sal_Int32 nLen = aOld.getLength();
                 if (eMatrixMode == ScMatrixMode::Formula)
                 {
@@ -722,8 +721,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
         aEngine.SetText(*pOld);
     else
     {
-        OUString aOld;
-        rDoc.GetInputString(nPosX, nPosY, nTab, aOld);
+        OUString aOld = rDoc.GetInputString(nPosX, nPosY, nTab);
         if (!aOld.isEmpty())
             aEngine.SetText(aOld);
     }

@@ -1045,10 +1045,9 @@ private:
             pCondSet = mrCol.GetDoc().GetCondResult(rCell, maPos, *mpCFList, rData);
         }
 
-        OUString aStr;
         const Color* pColor;
         sal_uInt32 nFormat = pPat->GetNumberFormat(mpFormatter, pCondSet);
-        ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *mpFormatter, mrCol.GetDoc());
+        OUString aStr = ScCellFormat::GetString(rCell, nFormat, &pColor, *mpFormatter, mrCol.GetDoc());
 
         rAttr.mnScriptType = mrCol.GetDoc().GetStringScriptType(aStr);
         mbUpdated = true;
@@ -1971,8 +1970,7 @@ public:
                 for (; it != itEnd; /* incrementing through std::advance*/)
                 {
                     const ScFormulaCell* pCell = *it;
-                    OUString aFormula;
-                    pCell->GetFormula(aFormula, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+                    OUString aFormula = pCell->GetFormula(formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
                     const auto& xCellGroup = pCell->GetCellGroup();
                     sal_uInt64 nGroupLength = 0;
                     if (xCellGroup)

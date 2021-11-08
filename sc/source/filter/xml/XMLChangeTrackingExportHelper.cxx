@@ -129,8 +129,7 @@ void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGenerat
 #endif
     SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, true, true);
     WriteBigRange(pGeneratedAction->GetBigRange(), XML_CELL_ADDRESS);
-    OUString sValue;
-    static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(sValue, rExport.GetDocument());
+    OUString sValue = static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(rExport.GetDocument());
     WriteCell(static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewCell(), sValue);
 }
 
@@ -148,8 +147,7 @@ void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAc
                 SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, true, true);
                 if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
                 {
-                    OUString sValue;
-                    pContentAction->GetNewString(sValue, rExport.GetDocument());
+                    OUString sValue = pContentAction->GetNewString(rExport.GetDocument());
                     WriteCell(pContentAction->GetNewCell(), sValue);
                 }
             }
@@ -304,8 +302,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, co
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
     const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
     sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
-    OUString sFormula;
-    pFormulaCell->GetFormula(sFormula, eGrammar);
+    OUString sFormula = pFormulaCell->GetFormula(eGrammar);
     ScMatrixMode nMatrixFlag(pFormulaCell->GetMatrixFlag());
     if (nMatrixFlag != ScMatrixMode::NONE)
     {
@@ -388,8 +385,7 @@ void ScChangeTrackingExportHelper::WriteContentChange(const ScChangeAction* pAct
         if (pPrevAction)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pPrevAction->GetActionNumber()));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_PREVIOUS, true, true);
-        OUString sValue;
-        static_cast<const ScChangeActionContent*>(pAction)->GetOldString(sValue, rExport.GetDocument());
+        OUString sValue = static_cast<const ScChangeActionContent*>(pAction)->GetOldString(rExport.GetDocument());
         WriteCell(static_cast<const ScChangeActionContent*>(pAction)->GetOldCell(), sValue);
     }
 }

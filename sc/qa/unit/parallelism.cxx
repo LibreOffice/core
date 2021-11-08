@@ -230,7 +230,7 @@ void ScParallelismTest::testSUMIFS()
             m_pDoc->GetValue(5, i, 0) << "  " <<
             m_pDoc->GetValue(11, i, 0) << "," <<
             m_pDoc->GetValue(12, i, 0) << "  \"";
-        m_pDoc->GetFormula(15, i, 0, sFormula);
+        sFormula = m_pDoc->GetFormula(15, i, 0);
         std::cerr << sFormula << "\": \"" <<
             m_pDoc->GetString(15, i, 0) << "\": " <<
             m_pDoc->GetValue(15, i, 0) << std::endl;

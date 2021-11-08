@@ -716,11 +716,10 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_RANGE_FORMULA:
                 {
-                    OUString aString;
-                    rDoc.GetFormula( nPosX, nPosY, nTab, aString );
+                    OUString aString = rDoc.GetFormula( nPosX, nPosY, nTab );
                     if( aString.isEmpty() )
                     {
-                        rDoc.GetInputString( nPosX, nPosY, nTab, aString );
+                        aString = rDoc.GetInputString( nPosX, nPosY, nTab );
                     }
                     rSet.Put( SfxStringItem( nWhich, aString ) );
                 }

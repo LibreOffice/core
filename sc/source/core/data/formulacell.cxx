@@ -943,15 +943,14 @@ size_t ScFormulaCell::GetHash() const
     return pCode->GetHash();
 }
 
-void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
-                                const FormulaGrammar::Grammar eGrammar, const ScInterpreterContext* pContext ) const
+OUString ScFormulaCell::GetFormula( const FormulaGrammar::Grammar eGrammar, const ScInterpreterContext* pContext ) const
 {
     if( pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen() )
     {
-        rBuffer = ScGlobal::GetErrorString(pCode->GetCodeError());
-        return;
+        return ScGlobal::GetErrorString(pCode->GetCodeError());
     }
-    else if( cMatrixFlag == ScMatrixMode::Reference )
+    OUStringBuffer buffer;
+    if( cMatrixFlag == ScMatrixMode::Reference )
     {
         // Reference to another cell that contains a matrix formula.
         formula::FormulaTokenArrayPlainIterator aIter(*pCode);
@@ -970,13 +969,12 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
 
             if (pCell)
             {
-                pCell->GetFormula( rBuffer, eGrammar, pContext );
-                return;
+                return pCell->GetFormula( eGrammar, pContext );
             }
             else
             {
                 ScCompiler aComp( rDocument, aPos, *pCode, eGrammar, false, false, pContext );
-                aComp.CreateStringFromTokenArray( rBuffer );
+                aComp.CreateStringFromTokenArray( buffer );
             }
         }
         else
@@ -987,23 +985,16 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     else
     {
         ScCompiler aComp( rDocument, aPos, *pCode, eGrammar, false, false, pContext );
-        aComp.CreateStringFromTokenArray( rBuffer );
+        aComp.CreateStringFromTokenArray( buffer );
     }
 
-    rBuffer.insert( 0, '=');
+    buffer.insert( 0, '=');
     if( cMatrixFlag != ScMatrixMode::NONE )
     {
-        rBuffer.insert( 0, '{');
-        rBuffer.append( '}');
+        buffer.insert( 0, '{');
+        buffer.append( '}');
     }
-}
-
-void ScFormulaCell::GetFormula( OUString& rFormula, const FormulaGrammar::Grammar eGrammar,
-    const ScInterpreterContext* pContext ) const
-{
-    OUStringBuffer rBuffer( rFormula );
-    GetFormula( rBuffer, eGrammar, pContext );
-    rFormula = rBuffer.makeStringAndClear();
+    return buffer.makeStringAndClear();
 }
 
 OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInterpreterContext* pContext ) const

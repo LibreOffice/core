@@ -389,8 +389,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             // is non-empty and not a number, handle as formula
             if ( aString.getLength() > 1 )
             {
-                sal_uInt32 nFormat = 0;
-                rDoc.GetNumberFormat( nCol, nRow, nTab, nFormat );
+                sal_uInt32 nFormat = rDoc.GetNumberFormat( nCol, nRow, nTab );
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 double fNumber = 0;
                 if ( !pFormatter->IsNumberFormat( aString, nFormat, fNumber ) )
@@ -2618,11 +2617,9 @@ void ScViewFunc::SetNumberFormat( SvNumFormatType nFormatType, sal_uLong nAdd )
 
     //  always take language from cursor position, even if there is a selection
 
-    sal_uInt32 nCurrentNumberFormat;
-    rDoc.GetNumberFormat( rViewData.GetCurX(),
-                          rViewData.GetCurY(),
-                          rViewData.GetTabNo(),
-                          nCurrentNumberFormat );
+    sal_uInt32 nCurrentNumberFormat = rDoc.GetNumberFormat( rViewData.GetCurX(),
+                                                            rViewData.GetCurY(),
+                                                            rViewData.GetTabNo());
     const SvNumberformat* pEntry = pNumberFormatter->GetEntry( nCurrentNumberFormat );
     if (pEntry)
         eLanguage = pEntry->GetLanguage();      // else keep ScGlobal::eLnge
@@ -2651,9 +2648,8 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
 
     //  language always from cursor position
 
-    sal_uInt32 nCurrentNumberFormat;
-    rDoc.GetNumberFormat( rViewData.GetCurX(), rViewData.GetCurY(),
-                           rViewData.GetTabNo(), nCurrentNumberFormat );
+    sal_uInt32 nCurrentNumberFormat = rDoc.GetNumberFormat( rViewData.GetCurX(), rViewData.GetCurY(),
+                                                            rViewData.GetTabNo());
     const SvNumberformat* pEntry = pFormatter->GetEntry( nCurrentNumberFormat );
     LanguageType eLanguage = pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge;
 
@@ -2700,8 +2696,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
     SCROW nRow = GetViewData().GetCurY();
     SCTAB nTab = GetViewData().GetTabNo();
 
-    sal_uInt32 nOldFormat;
-    rDoc.GetNumberFormat( nCol, nRow, nTab, nOldFormat );
+    sal_uInt32 nOldFormat = rDoc.GetNumberFormat( nCol, nRow, nTab );
     const SvNumberformat* pOldEntry = pFormatter->GetEntry( nOldFormat );
     if (!pOldEntry)
     {

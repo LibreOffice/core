@@ -543,8 +543,7 @@ void TestCopyPaste::testCopyPaste()
     m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
     //check values after copying
-    OUString aString;
-    m_pDoc->GetFormula(1, 1, 1, aString);
+    OUString aString = m_pDoc->GetFormula(1, 1, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula string was not copied correctly", aString,
                                  aFormulaString);
     // Only the global range points to Sheet1.A1, all copied sheet-local ranges
@@ -621,7 +620,7 @@ void TestCopyPaste::testCopyPaste()
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 1 after redo", 1.0, fValue);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell Sheet2.C2 should contain: test", OUString("test"), aString);
-    m_pDoc->GetFormula(1, 1, 1, aString);
+    aString = m_pDoc->GetFormula(1, 1, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula should be correct again", aFormulaString, aString);
 
     CPPUNIT_ASSERT_MESSAGE("After Redo, there should be a note on Sheet2.A2",
@@ -649,8 +648,7 @@ void TestCopyPaste::testCopyPaste()
     // The global2 range must not have changed.
     pGlobal2 = m_pDoc->GetRangeName()->findByUpperName("GLOBAL2");
     CPPUNIT_ASSERT_MESSAGE("GLOBAL2 name not found", pGlobal2);
-    OUString aSymbol;
-    pGlobal2->GetSymbol(aSymbol);
+    OUString aSymbol = pGlobal2->GetSymbol();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("GLOBAL2 named range changed", aGlobal2Symbol, aSymbol);
 
     m_pDoc->DeleteTab(1);
@@ -735,7 +733,7 @@ void TestCopyPaste::testCopyPasteTranspose()
     ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell should return 1", 1, fValue);
     fValue = m_pDoc->GetValue(ScAddress(3, 2, 1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula should return 2", 2, fValue);
-    m_pDoc->GetFormula(3, 2, 1, aString);
+    aString = m_pDoc->GetFormula(3, 2, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula should point on Sheet2.D2", OUString("=D2+1"),
                                  aString);
 
@@ -2931,9 +2929,8 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 3, destSheet));
     }
-    OUString aStr;
     double fValue = m_pDoc->GetValue(8, 4, destSheet);
-    m_pDoc->GetFormula(8, 4, destSheet, aStr);
+    OUString aStr = m_pDoc->GetFormula(8, 4, destSheet);
     if (!bCut)
     {
         CPPUNIT_ASSERT_EQUAL(OUString("=E$3+$B$5+80"), aStr);
@@ -3563,8 +3560,7 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 6, destSheet));
     }
     double fValue = m_pDoc->GetValue(6, 6, destSheet); // G7
-    OUString aStr;
-    m_pDoc->GetFormula(6, 6, destSheet, aStr); // G7
+    OUString aStr = m_pDoc->GetFormula(6, 6, destSheet); // G7
     if (!bCut)
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7", OUString("=C$3+$B$5+80"), aStr);
@@ -9685,7 +9681,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
         OUString aString = m_pDoc->GetString(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Initial data failure",
                                      OUString::createFromAscii(aDataCheck[i][0]), aString);
-        m_pDoc->GetFormula(0, i, 0, aString);
+        aString = m_pDoc->GetFormula(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Initial formula failure",
                                      OUString::createFromAscii(aDataCheck[i][1]), aString);
     }
@@ -9735,7 +9731,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
             OUString aString = m_pDoc->GetString(j, i, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Paste data failure",
                                          OUString::createFromAscii(aPasteCheck[i][j]), aString);
-            m_pDoc->GetFormula(j, i, 0, aString);
+            aString = m_pDoc->GetFormula(j, i, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Paste formula failure",
                                          OUString::createFromAscii(aPasteCheck[i][2 + j]), aString);
         }
@@ -9757,7 +9753,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
         OUString aString = m_pDoc->GetString(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo Cut data failure",
                                      OUString::createFromAscii(aDataCheck[i][0]), aString);
-        m_pDoc->GetFormula(0, i, 0, aString);
+        aString = m_pDoc->GetFormula(0, i, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Undo Cut formula failure",
                                      OUString::createFromAscii(aDataCheck[i][1]), aString);
     }
@@ -9888,7 +9884,7 @@ void TestCopyPaste::testMoveBlock()
     //check cell content
     OUString aString = m_pDoc->GetString(3, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D1 should contain: test", OUString("test"), aString);
-    m_pDoc->GetFormula(2, 0, 0, aString);
+    aString = m_pDoc->GetFormula(2, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C1 should contain an updated formula", OUString("=B1+1"),
                                  aString);
     double fValue = m_pDoc->GetValue(aAddrB1);
@@ -10204,21 +10200,20 @@ void TestCopyPaste::testCopyPasteFormulasExternalDoc()
     aMarkData2.SetMarkArea(aRange);
     rExtDoc.CopyFromClip(aRange, aMarkData2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
-    OUString aFormula;
-    rExtDoc.GetFormula(1, 1, 1, aFormula);
+    OUString aFormula = rExtDoc.GetFormula(1, 1, 1);
     //adjust absolute refs pointing to the copy area
     CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($B$2)"), aFormula);
-    rExtDoc.GetFormula(1, 2, 1, aFormula);
+    aFormula = rExtDoc.GetFormula(1, 2, 1);
     //adjust absolute refs and keep relative refs
     CPPUNIT_ASSERT_EQUAL(OUString("=$B$2+C3"), aFormula);
-    rExtDoc.GetFormula(1, 3, 1, aFormula);
+    aFormula = rExtDoc.GetFormula(1, 3, 1);
     // make absolute sheet refs external refs
     CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.B2"), aFormula);
-    rExtDoc.GetFormula(1, 4, 1, aFormula);
+    aFormula = rExtDoc.GetFormula(1, 4, 1);
     CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.$A$1"), aFormula);
-    rExtDoc.GetFormula(1, 5, 1, aFormula);
+    aFormula = rExtDoc.GetFormula(1, 5, 1);
     CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.B$1"), aFormula);
-    rExtDoc.GetFormula(1, 6, 1, aFormula);
+    aFormula = rExtDoc.GetFormula(1, 6, 1);
     CPPUNIT_ASSERT_EQUAL(OUString("=$ExtSheet2.$B$2"), aFormula);
 
     xExtDocSh->DoClose();
@@ -10256,8 +10251,7 @@ void TestCopyPaste::testCopyPasteReferencesExternalDoc()
     aMarkData2.SetMarkArea(aRange);
     rExtDoc.CopyFromClip(aRange, aMarkData2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
-    OUString aFormula;
-    rExtDoc.GetFormula(0, 3, 0, aFormula);
+    OUString aFormula = rExtDoc.GetFormula(0, 3, 0);
     //adjust absolute refs pointing to the copy area
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM('file:///source.fake'#$Sheet1.A#REF!:A3)"), aFormula);
 

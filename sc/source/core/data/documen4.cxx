@@ -79,9 +79,8 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
          nFTab < static_cast<SCTAB>( maTabs.size() ) && maTabs[nFTab] &&
          nVTab < static_cast<SCTAB>( maTabs.size() ) && maTabs[nVTab] )
     {
-        CellType eFType, eVType;
-        GetCellType(nFCol, nFRow, nFTab, eFType);
-        GetCellType(nVCol, nVRow, nVTab, eVType);
+        CellType eFType = GetCellType(nFCol, nFRow, nFTab);
+        CellType eVType = GetCellType(nVCol, nVRow, nVTab);
         // #i108005# convert target value to number using default format,
         // as previously done in ScInterpreter::GetDouble
         ScFormulaCell* pFormula = nullptr;

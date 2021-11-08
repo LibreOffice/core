@@ -90,7 +90,7 @@ OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar 
     {
         ScRangeData* pData = pNamedRange->GetRangeData_Impl();
         if (pData)
-            pData->GetSymbol( aContent, eGrammar );
+            aContent = pData->GetSymbol( eGrammar );
     }
     if (aContent.indexOf('=') != 0)
         aContent = "=" + aContent;

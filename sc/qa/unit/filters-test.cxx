@@ -167,21 +167,20 @@ void testRangeNameImpl(const ScDocument& rDoc)
     //add some more checks here
     ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(OUString("GLOBAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
-    double aValue;
-    rDoc.GetValue(1,0,0,aValue);
+    double aValue = rDoc.GetValue(1,0,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
     pRangeData = rDoc.GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
-    rDoc.GetValue(1,2,0,aValue);
+    aValue = rDoc.GetValue(1,2,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", 3.0, aValue);
     pRangeData = rDoc.GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
     //check for correct results for the remaining formulas
-    rDoc.GetValue(1,1,0, aValue);
+    aValue = rDoc.GetValue(1,1,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("=global2 should be 2", 2.0, aValue);
-    rDoc.GetValue(1,3,0, aValue);
+    aValue = rDoc.GetValue(1,3,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("=local2 should be 4", 4.0, aValue);
-    rDoc.GetValue(2,0,0, aValue);
+    aValue = rDoc.GetValue(2,0,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("=SUM(global3) should be 10", 10.0, aValue);
 }
 
@@ -210,9 +209,9 @@ void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, 
 {
     double fValue;
     //check value import
-    rDoc.GetValue(0,0,0,fValue);
+    fValue = rDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("value not imported correctly", 1.0, fValue);
-    rDoc.GetValue(0,1,0,fValue);
+    fValue = rDoc.GetValue(0,1,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("value not imported correctly", 2.0, fValue);
     OUString aString = rDoc.GetString(1, 0, 0);
 
@@ -223,13 +222,13 @@ void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, 
 
     //check basic formula import
     // in case of DIF it just contains values
-    rDoc.GetValue(2,0,0,fValue);
+    fValue = rDoc.GetValue(2,0,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("=2*3", 6.0, fValue);
-    rDoc.GetValue(2,1,0,fValue);
+    fValue = rDoc.GetValue(2,1,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("=2+3", 5.0, fValue);
-    rDoc.GetValue(2,2,0,fValue);
+    fValue = rDoc.GetValue(2,2,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("=2-3", -1.0, fValue);
-    rDoc.GetValue(2,3,0,fValue);
+    fValue = rDoc.GetValue(2,3,0);
     ASSERT_DOUBLES_EQUAL_MESSAGE("=C1+C2", 11.0, fValue);
 
     //check merged cells import

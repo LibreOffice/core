@@ -220,13 +220,11 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
     {
         case CELLTYPE_STRING:
         {
-            OUString aStr;
             const Color* pColor;
             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
             sal_uInt32 nFormat = pDoc->GetNumberFormat(rAddr);
-            ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *pFormatter, *pDoc);
-            return aStr;
+            return ScCellFormat::GetString(rCell, nFormat, &pColor, *pFormatter, *pDoc);
         }
         case CELLTYPE_EDIT:
         {
@@ -3756,7 +3754,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
                 ScRangeStringConverter::GetStringFromRange( sString, rObj.aSourceRange, pDoc, FormulaGrammar::CONV_OOO );
                 AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sString );
             }
-            ScXMLConverter::GetStringFromDetObjType( sString, rObj.eObjType );
+            sString = ScXMLConverter::GetStringFromDetObjType( rObj.eObjType );
             AddAttribute( XML_NAMESPACE_TABLE, XML_DIRECTION, sString );
             if( rObj.bHasError )
                 AddAttribute( XML_NAMESPACE_TABLE, XML_CONTAINS_ERROR, XML_TRUE );
@@ -3767,8 +3765,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
     }
     for(const auto& rOp : rOpVec)
     {
-        OUString sOpString;
-        ScXMLConverter::GetStringFromDetOpType( sOpString, rOp.eOpType );
+        OUString sOpString = ScXMLConverter::GetStringFromDetOpType( rOp.eOpType );
         AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, sOpString );
         AddAttribute( XML_NAMESPACE_TABLE, XML_INDEX, OUString::number(rOp.nIndex) );
         SvXMLElementExport aRangeElem( *this, XML_NAMESPACE_TABLE, XML_OPERATION, true, true );
@@ -4474,8 +4471,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
                             FormulaGrammar::CONV_OOO, ' ', false, ScRefFlags::ADDR_ABS_3D);
         AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
 
-        OUString sSymbol;
-        rxEntry.second->GetSymbol(sSymbol, pDoc->GetStorageGrammar());
+        OUString sSymbol = rxEntry.second->GetSymbol(pDoc->GetStorageGrammar());
         OUString sTempSymbol(sSymbol);
         ScRange aRange;
         if (rxEntry.second->IsReference(aRange))
@@ -5083,9 +5079,7 @@ void ScXMLExport::WriteConsolidation()
     if( !pCons )
         return;
 
-    OUString sStrData;
-
-    ScXMLConverter::GetStringFromFunction( sStrData, pCons->eFunction );
+    OUString sStrData = ScXMLConverter::GetStringFromFunction( pCons->eFunction );
     AddAttribute( XML_NAMESPACE_TABLE, XML_FUNCTION, sStrData );
 
     sStrData.clear();

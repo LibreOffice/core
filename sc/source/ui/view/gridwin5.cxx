@@ -138,8 +138,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
             {
                 aTrackText += aComStr + "\n( ";
             }
-            OUString aTmp;
-            pFound->GetDescription(aTmp, rDoc);
+            OUString aTmp = pFound->GetDescription(rDoc);
             aTrackText += aTmp;
             if(!aComStr.isEmpty())
             {

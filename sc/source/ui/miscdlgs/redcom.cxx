@@ -98,8 +98,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
     if(pChangeAction==nullptr || pDocShell ==nullptr)
         return;
 
-    OUString aTitle;
-    pChangeAction->GetDescription(aTitle, pDocShell->GetDocument());
+    OUString aTitle = pChangeAction->GetDescription(pDocShell->GetDocument());
     pDlg->SetText(aTitle);
     aComment=pChangeAction->GetComment();
 

@@ -350,8 +350,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                     }
                     else
                     {
-                        double nVal;
-                        pSrcDoc->GetValue( nCol, nRow, nTab, nVal );
+                        double nVal = pSrcDoc->GetValue( nCol, nRow, nTab );
                         if (!ppUsed[nArrX][nArrY])
                         {
                             ppUsed[nArrX][nArrY] = true;

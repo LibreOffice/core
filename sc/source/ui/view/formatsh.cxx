@@ -1121,14 +1121,14 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
         {
             ScDocument& rDoc = rViewData.GetDocument();
             SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-            sal_uInt32 nCurrentNumberFormat;
             bool bThousand(false);
             bool bNegRed(false);
             sal_uInt16 nPrecision(0);
             sal_uInt16 nLeadZeroes(0);
             LanguageType eLanguage = ScGlobal::eLnge;
 
-            rDoc.GetNumberFormat(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo(), nCurrentNumberFormat);
+            sal_uInt32 nCurrentNumberFormat = rDoc.GetNumberFormat(
+                rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
             const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
             if (pEntry)
@@ -1156,9 +1156,9 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 ScDocument& rDoc = rViewData.GetDocument();
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                sal_uInt32 nCurrentNumberFormat;
 
-                rDoc.GetNumberFormat(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo(), nCurrentNumberFormat);
+                sal_uInt32 nCurrentNumberFormat = rDoc.GetNumberFormat(
+                    rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
                 const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
                 if(!pEntry)
@@ -2872,9 +2872,8 @@ SvNumFormatType ScFormatShell::GetCurrentNumberFormatType()
     }
     else
     {
-        sal_uInt32 nNumFmt;
-        rDoc.GetNumberFormat( rViewData.GetCurX(), rViewData.GetCurY(),
-                               rViewData.GetTabNo(), nNumFmt );
+        sal_uInt32 nNumFmt = rDoc.GetNumberFormat( rViewData.GetCurX(), rViewData.GetCurY(),
+                               rViewData.GetTabNo());
         nType = pFormatter->GetType( nNumFmt );
     }
     return nType;

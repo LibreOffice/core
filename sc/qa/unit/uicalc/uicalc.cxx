@@ -274,20 +274,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    OUString aFormula;
-    pDoc->GetFormula(3, 10, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(3, 10, 0);
 
     // Without the fix in place, this test would have failed with
     // - Expected: {=SUM(($B$3:$B$7=$B11)*(D$3:D$7))}
     //- Actual  :
     CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(D$3:D$7))}"), aFormula);
-    pDoc->GetFormula(4, 10, 0, aFormula);
+    aFormula = pDoc->GetFormula(4, 10, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(E$3:E$7))}"), aFormula);
-    pDoc->GetFormula(5, 10, 0, aFormula);
+    aFormula = pDoc->GetFormula(5, 10, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(F$3:F$7))}"), aFormula);
-    pDoc->GetFormula(6, 10, 0, aFormula);
+    aFormula = pDoc->GetFormula(6, 10, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(G$3:G$7))}"), aFormula);
-    pDoc->GetFormula(7, 10, 0, aFormula);
+    aFormula = pDoc->GetFormula(7, 10, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(H$3:H$7))}"), aFormula);
 
     // Restore previous status
@@ -644,7 +643,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(0, 0, 0)); // A1
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0)); // A1
     CPPUNIT_ASSERT_EQUAL(OUString("a"), pDoc->GetString(1, 0, 0)); // B1
-    pDoc->GetFormula(2, 0, 0, aFormula); // C1
+    aFormula = pDoc->GetFormula(2, 0, 0); // C1
     CPPUNIT_ASSERT_EQUAL(OUString("=A1"), aFormula); // C1
     CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(2, 0, 0)); // C1
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(2, 0, 0)); // C1
@@ -696,12 +695,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
 
     dispatchCommand(mxComponent, ".uno:PasteAsLink", {});
 
-    OUString aFormula;
-    pDoc->GetFormula(2, 0, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(2, 0, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet1.$A$1"), aFormula); // C1
-    pDoc->GetFormula(2, 1, 0, aFormula);
+    aFormula = pDoc->GetFormula(2, 1, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet1.$A$2"), aFormula); // C2
-    pDoc->GetFormula(2, 2, 0, aFormula);
+    aFormula = pDoc->GetFormula(2, 2, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet1.$A$3"), aFormula); // C3
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(2, 0, 0)); // C1
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(2, 2, 0)); // C3
@@ -841,14 +839,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    OUString aFormula;
-    pDoc->GetFormula(3, 126, 1, aFormula);
+    OUString aFormula = pDoc->GetFormula(3, 126, 1);
     CPPUNIT_ASSERT_EQUAL(OUString("=VLOOKUP(C127,#REF!,D$1,0)"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    pDoc->GetFormula(3, 126, 1, aFormula);
+    aFormula = pDoc->GetFormula(3, 126, 1);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
@@ -870,20 +867,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
 
     insertNewSheet(*pDoc);
 
-    OUString aFormula;
-    pDoc->GetFormula(0, 0, 1, aFormula);
+    OUString aFormula = pDoc->GetFormula(0, 0, 1);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    pDoc->GetFormula(0, 0, 1, aFormula);
+    aFormula = pDoc->GetFormula(0, 0, 1);
     CPPUNIT_ASSERT_EQUAL(OUString("=RAND()*1000000"), aFormula);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    pDoc->GetFormula(0, 0, 1, aFormula);
+    aFormula = pDoc->GetFormula(0, 0, 1);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
@@ -896,14 +892,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
-    pDoc->GetFormula(0, 0, 1, aFormula);
+    aFormula = pDoc->GetFormula(0, 0, 1);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     // Without the fix in place, it would have crashed here
     dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
-    pDoc->GetFormula(0, 0, 1, aFormula);
+    aFormula = pDoc->GetFormula(0, 0, 1);
     CPPUNIT_ASSERT_EQUAL(OUString("=RAND()*1000000"), aFormula);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 }
@@ -1110,14 +1106,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142010)
 
     goToCell("A1");
 
-    OUString aFormula;
-    pDoc->GetFormula(5, 71, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(5, 71, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=MOD(F$71+$C72,9)"), aFormula);
     CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(5, 71, 0)));
 
     dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
 
-    pDoc->GetFormula(6, 71, 0, aFormula);
+    aFormula = pDoc->GetFormula(6, 71, 0);
 
     // Without the fix in place, this test would have failed with
     // - Expected: =MOD(G$71+$D72,9)
@@ -1127,7 +1122,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142010)
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
 
-    pDoc->GetFormula(5, 71, 0, aFormula);
+    aFormula = pDoc->GetFormula(5, 71, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=MOD(F$71+$C72,9)"), aFormula);
     CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(5, 71, 0)));
 }
@@ -1138,8 +1133,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    OUString aFormula;
-    pDoc->GetFormula(7, 219, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(7, 219, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIFS($H$2:$H$198,B$2:B$198,G220)"), aFormula);
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(7, 219, 0)));
 
@@ -1148,7 +1142,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
     // - vector::_M_fill_insert
     insertStringToCell(*pModelObj, "H220", "=SUMIFS($H$2:$DB$198,B$2:B$198,G220)");
 
-    pDoc->GetFormula(7, 219, 0, aFormula);
+    aFormula = pDoc->GetFormula(7, 219, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIFS($H$2:$DB$198,B$2:B$198,G220)"), aFormula);
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(7, 219, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Err:502"), pDoc->GetString(ScAddress(7, 219, 0)));
@@ -1222,20 +1216,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    OUString aFormula;
-    pDoc->GetFormula(0, 77, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
 
-    pDoc->GetFormula(0, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    pDoc->GetFormula(0, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 }
 
@@ -1256,13 +1249,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     // Select column A
     goToCell("A:A");
 
-    OUString aFormula;
-    pDoc->GetFormula(0, 77, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
 
-    pDoc->GetFormula(0, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     // Select column B
@@ -1270,32 +1262,32 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    pDoc->GetFormula(1, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(1, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
-    pDoc->GetFormula(1, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(1, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    pDoc->GetFormula(1, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(1, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    pDoc->GetFormula(1, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(1, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
-    pDoc->GetFormula(0, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    pDoc->GetFormula(0, 77, 0, aFormula);
+    aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     // Restore previous status
@@ -1526,8 +1518,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 3, 0)));
 
-    OUString aFormula;
-    pDoc->GetFormula(0, 3, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(0, 3, 0);
 
     // Without the fix in place, this test would have failed with
     // - Expected: =SUM(A1:A3)
@@ -1561,8 +1552,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116421)
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 3, 0)));
 
-    OUString aFormula;
-    pDoc->GetFormula(0, 3, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(0, 3, 0);
 
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A3)"), aFormula);
 }
@@ -1574,15 +1564,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86305)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    OUString aFormula;
-    pDoc->GetFormula(1, 6, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(1, 6, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("{=IF(SUM(B2:B4) > 0, SUM(B2:B4*D2:D4/C2:C4), 0)}"), aFormula);
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(1, 6, 0)));
 
     insertStringToCell(*pModelObj, "B3", "50");
     CPPUNIT_ASSERT_EQUAL(50.0, pDoc->GetValue(ScAddress(1, 2, 0)));
 
-    pDoc->GetFormula(1, 6, 0, aFormula);
+    aFormula = pDoc->GetFormula(1, 6, 0);
 
     // Without the fix in place, this test would have failed with
     // - Expected: {=IF(SUM(B2:B4) > 0, SUM(B2:B4*D2:D4/C2:C4), 0)}
@@ -1747,23 +1736,22 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116215)
     dispatchCommand(mxComponent, ".uno:AutoSum", {});
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 2, 0)));
-    OUString aFormula;
-    pDoc->GetFormula(0, 2, 0, aFormula);
+    OUString aFormula = pDoc->GetFormula(0, 2, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A2)"), aFormula);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 2
     // - Actual  : 4
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 2, 0)));
-    pDoc->GetFormula(1, 2, 0, aFormula);
+    aFormula = pDoc->GetFormula(1, 2, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B1:B2)"), aFormula);
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(2, 0, 0)));
-    pDoc->GetFormula(2, 0, 0, aFormula);
+    aFormula = pDoc->GetFormula(2, 0, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:B1)"), aFormula);
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(2, 1, 0)));
-    pDoc->GetFormula(2, 1, 0, aFormula);
+    aFormula = pDoc->GetFormula(2, 1, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A2:B2)"), aFormula);
 }
 

@@ -1491,7 +1491,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_BOTTOM:
                     for ( SCCOL nColItr = nStartCol; nColItr <= nEndCol; ++nColItr )
                     {
-                        pDoc->GetCellType(nColItr, nStartRow, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        eCellType = pDoc->GetCellType(nColItr, nStartRow, nTab); // We need this optimization only for EditTextObject source cells
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
@@ -1505,7 +1505,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_TOP:
                     for ( SCCOL nColItr = nStartCol; nColItr <= nEndCol; ++nColItr )
                     {
-                        pDoc->GetCellType(nColItr, nEndRow, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        eCellType = pDoc->GetCellType(nColItr, nEndRow, nTab); // We need this optimization only for EditTextObject source cells
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
@@ -1519,7 +1519,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_RIGHT:
                     for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
                     {
-                        pDoc->GetCellType(nStartCol, nRowItr, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        eCellType = pDoc->GetCellType(nStartCol, nRowItr, nTab); // We need this optimization only for EditTextObject source cells
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
@@ -1533,7 +1533,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_LEFT:
                     for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
                     {
-                        pDoc->GetCellType(nEndCol, nRowItr, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        eCellType = pDoc->GetCellType(nEndCol, nRowItr, nTab); // We need this optimization only for EditTextObject source cells
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
@@ -1559,7 +1559,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
         {
             for ( SCCOL nColIdx = 0; nColIdx < nColRepeatSize; ++nColIdx )
             {
-                pDoc->GetCellType(nStartCol + nColIdx, nStartRow + nRowIdx, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                eCellType = pDoc->GetCellType(nStartCol + nColIdx, nStartRow + nRowIdx, nTab); // We need this optimization only for EditTextObject source cells
                 if (eCellType != CELLTYPE_EDIT)
                     continue;
 

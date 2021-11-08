@@ -109,8 +109,7 @@ void ScCacheTest::testCacheFormula()
     std::vector<OUString> aFormulas = { "=B1", "=B2", "=B3", "=B4", "=B5", "=B1" };
     for (SCROW nRow = 0; nRow <= 5; ++nRow)
     {
-        OUString aFormula;
-        aNewDoc.GetFormula(0, nRow, 0, aFormula);
+        OUString aFormula = aNewDoc.GetFormula(0, nRow, 0);
         CPPUNIT_ASSERT_EQUAL(aFormulas[nRow], aFormula);
     }
 }

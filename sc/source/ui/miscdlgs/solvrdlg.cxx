@@ -208,11 +208,9 @@ IMPL_LINK(ScSolverDlg, BtnHdl, weld::Button&, rBtn, void)
             {
                 if ( CheckTargetValue( theTargetValStr ) )
                 {
-                    CellType eType;
-                    pDoc->GetCellType( theFormulaCell.Col(),
-                                       theFormulaCell.Row(),
-                                       theFormulaCell.Tab(),
-                                       eType );
+                    CellType eType = pDoc->GetCellType( theFormulaCell.Col(),
+                                                        theFormulaCell.Row(),
+                                                        theFormulaCell.Tab());
 
                     if ( CELLTYPE_FORMULA  == eType )
                     {

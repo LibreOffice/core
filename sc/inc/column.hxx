@@ -362,20 +362,20 @@ public:
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
     void        SetError( SCROW nRow, const FormulaError nError);
 
-    void        GetString( SCROW nRow, OUString& rString, const ScInterpreterContext* pContext = nullptr ) const
-        { return GetString( GetCellValue( nRow ), nRow, rString, pContext ); }
-    void        GetString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
-                           OUString& rString, const ScInterpreterContext* pContext = nullptr ) const
-        { return GetString( GetCellValue( rBlockPos, nRow ), nRow, rString, pContext ); }
+    OUString    GetString( SCROW nRow, const ScInterpreterContext* pContext = nullptr ) const
+        { return GetString( GetCellValue( nRow ), nRow, pContext ); }
+    OUString    GetString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
+                           const ScInterpreterContext* pContext = nullptr ) const
+        { return GetString( GetCellValue( rBlockPos, nRow ), nRow, pContext ); }
     double* GetValueCell( SCROW nRow );
-    void        GetInputString( SCROW nRow, OUString& rString ) const
-        { return GetInputString( GetCellValue( nRow ), nRow, rString ); }
-    void        GetInputString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow, OUString& rString ) const
-        { return GetInputString( GetCellValue( rBlockPos, nRow ), nRow, rString ); }
+    OUString    GetInputString( SCROW nRow ) const
+        { return GetInputString( GetCellValue( nRow ), nRow ); }
+    OUString    GetInputString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
+        { return GetInputString( GetCellValue( rBlockPos, nRow ), nRow ); }
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr );
-    void        GetFormula( SCROW nRow, OUString& rFormula ) const;
+    OUString GetFormula( SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCROW nRow ) const;
     ScFormulaCell* GetFormulaCell( SCROW nRow );
     ScFormulaCell * const * GetFormulaCellBlockAddress( SCROW nRow, size_t& rBlockSize ) const;
@@ -746,8 +746,8 @@ private:
         sc::CellStoreType::const_iterator& itPos, SCROW nRow, bool bForward) const;
     SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;
 
-    void GetString( const ScRefCellValue& cell, SCROW nRow, OUString& rString, const ScInterpreterContext* pContext = nullptr ) const;
-    void GetInputString( const ScRefCellValue& cell, SCROW nRow, OUString& rString ) const;
+    OUString GetString( const ScRefCellValue& cell, SCROW nRow, const ScInterpreterContext* pContext = nullptr ) const;
+    OUString GetInputString( const ScRefCellValue& cell, SCROW nRow ) const;
 
     /**
      * Called whenever the state of cell array gets modified i.e. new cell

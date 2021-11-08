@@ -994,8 +994,7 @@ void ScExportTest2::testExponentWithoutSignFormatXLSX()
     CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
-    sal_uInt32 nNumberFormat;
-    rDoc.GetNumberFormat(0, 0, 0, nNumberFormat);
+    sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(0, 0, 0);
     const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
     const OUString& rFormatStr = pNumberFormat->GetFormatstring();
 
@@ -1035,7 +1034,6 @@ void ScExportTest2::testExtendedLCIDXLSX()
     // Check import
     ScDocument& rDoc = xDocSh->GetDocument();
     SvNumberFormatter* pNumFormatter = rDoc.GetFormatTable();
-    sal_uInt32 nNumberFormat;
     const OUString aLang[5] = { "[$-41E]", "[$-411]", "[$-40D]", "[$-401]", "[$-500]" };
     const OUString aCalendar[5] = { "[~buddhist]DD-MM-YYYY", "DD-MM-EE", "[~jewish]DD-MM-YYYY",
                                     "[~hijri]DD-MM-YYYY", "[~dangi]YYYY/MM/DD" };
@@ -1046,7 +1044,7 @@ void ScExportTest2::testExtendedLCIDXLSX()
     {
         for (sal_Int16 nRow = 1; nRow <= 4; nRow++)
         {
-            rDoc.GetNumberFormat(nCol, nRow, 0, nNumberFormat);
+            sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(nCol, nRow, 0);
             const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
             const OUString& rFormatStr = pNumberFormat->GetFormatstring();
             const OUString aExpectedFormatStr
@@ -2328,8 +2326,7 @@ void ScExportTest2::testTdf87973_externalLinkSkipUnuseds()
     ScDocument& rDoc = pShell->GetDocument();
 
     // change external link to: 87973_externalSource.ods
-    OUString aFormula, aFormula2;
-    rDoc.GetFormula(3, 1, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(3, 1, 0);
     auto nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
     aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
     auto nIdxOfFile = aFormula.indexOf("file");
@@ -2345,7 +2342,7 @@ void ScExportTest2::testTdf87973_externalLinkSkipUnuseds()
     rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
 
     // tdf#138832: test the same thing with singleref link
-    rDoc.GetFormula(3, 2, 0, aFormula);
+    aFormula = rDoc.GetFormula(3, 2, 0);
     nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
     aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
     nIdxOfFile = aFormula.indexOf("file");
@@ -2359,10 +2356,10 @@ void ScExportTest2::testTdf87973_externalLinkSkipUnuseds()
 
     // check if the new filename is present in the link (and not replaced by '[2]')
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    rDoc2.GetFormula(3, 1, 0, aFormula2);
+    OUString aFormula2 = rDoc2.GetFormula(3, 1, 0);
     CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
     CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
-    rDoc2.GetFormula(3, 2, 0, aFormula2);
+    aFormula2 = rDoc2.GetFormula(3, 2, 0);
     CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
     CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
 
@@ -2423,8 +2420,7 @@ void ScExportTest2::testTdf138824_linkToParentDirectory()
     aTempFilename = aTempFilename.copy(0, nIdxOfTmpFile + 1);
 
     // change external link to tmp directory
-    OUString aFormula;
-    rDoc.GetFormula(3, 1, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(3, 1, 0);
     auto nIdxOfFilename = aFormula.indexOf("tdf138824_externalSource.ods");
     auto nIdxOfFile = aFormula.indexOf("file");
 
