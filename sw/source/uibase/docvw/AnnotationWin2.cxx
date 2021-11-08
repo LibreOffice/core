@@ -100,7 +100,6 @@ namespace sw::annotation {
 
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
-#define POSTIT_META_FIELD_HEIGHT  sal_Int32(15)
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
 void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -1224,15 +1223,12 @@ sal_Int32 SwAnnotationWin::GetMetaHeight() const
 {
     const int fields = GetNumFields();
 
-    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
-    sal_Int32 nClassicHeight(fields * POSTIT_META_FIELD_HEIGHT * f);
-
     sal_Int32 nRequiredHeight = 0;
     weld::Label* aLabels[3] = { mxMetadataAuthor.get(), mxMetadataDate.get(), mxMetadataResolved.get() };
     for (int i = 0; i < fields; ++i)
         nRequiredHeight += aLabels[i]->get_preferred_size().Height();
 
-    return std::max(nClassicHeight, nRequiredHeight);
+    return nRequiredHeight;
 }
 
 sal_Int32 SwAnnotationWin::GetNumFields() const
