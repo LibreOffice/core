@@ -61,6 +61,10 @@ public:
     bool InsertString(const SwPaM &rRg, const OUString&,
               const SwInsertFlags nInsertMode = SwInsertFlags::EMPTYEXPAND ) override;
 
+    void SetIME(bool bIME) override;
+
+    bool GetIME() const override;
+
     void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&) override;
 
     SwFlyFrameFormat* InsertGraphic(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
@@ -158,6 +162,8 @@ public:
 
 private:
     SwDoc& m_rDoc;
+
+    bool m_bIME = false;
 
     bool DeleteAndJoinImpl(SwPaM&, const bool);
     bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);

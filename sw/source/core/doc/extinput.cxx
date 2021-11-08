@@ -61,7 +61,12 @@ SwExtTextInput::~SwExtTextInput()
 
     // Prevent IME edited text being grouped with non-IME edited text.
     bool bKeepGroupUndo = rDoc.GetIDocumentUndoRedo().DoesGroupUndo();
-    rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
+    bool bWasIME = rDoc.GetIDocumentUndoRedo().GetUndoActionCount() == 0 || rDoc.getIDocumentContentOperations().GetIME();
+    if (!bWasIME)
+    {
+        rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
+    }
+    rDoc.getIDocumentContentOperations().SetIME(true);
     if( nEndCnt < nSttCnt )
     {
         std::swap(nSttCnt, nEndCnt);
@@ -119,7 +124,10 @@ SwExtTextInput::~SwExtTextInput()
 
         pTNd->EraseText( rIdx, nLenghtOfOldString );
     }
-    rDoc.GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
+    if (!bWasIME)
+    {
+        rDoc.GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
+    }
     if (m_eInputLanguage == LANGUAGE_DONTKNOW)
         return;
 
