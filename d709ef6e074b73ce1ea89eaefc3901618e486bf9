@@ -33,6 +33,23 @@
       "message": "Looks reasonable -- and perhaps you could go further and extract the Any to a comphelper::SequenceAsHashMap, work on it and then push it back to the Any? That would completely avoid the for loop, I would hope.",
       "revId": "d709ef6e074b73ce1ea89eaefc3901618e486bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "773daeed_2da61a8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-08T11:08:15Z",
+      "side": 1,
+      "message": "Thanks Miklos; let the refactoring be a separate job (easyhackers need more easy hacks :-))",
+      "revId": "d709ef6e074b73ce1ea89eaefc3901618e486bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
