@@ -22,6 +22,30 @@
       },
       "revId": "13ef320d8f0d1a5586f8953efb1d83dae9c03f91",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f14d16a_56551348",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-08T21:40:04Z",
+      "side": 1,
+      "message": "Done. Also, a note is added to the commit message.",
+      "parentUuid": "5a56106c_51c77760",
+      "range": {
+        "startLine": 1803,
+        "startChar": 37,
+        "endLine": 1803,
+        "endChar": 54
+      },
+      "revId": "13ef320d8f0d1a5586f8953efb1d83dae9c03f91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
