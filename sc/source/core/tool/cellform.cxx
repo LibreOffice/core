@@ -128,7 +128,8 @@ OUString ScCellFormat::GetString(
 }
 
 OUString ScCellFormat::GetInputString(
-    const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter, const ScDocument& rDoc, bool bFiltering )
+    const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter, const ScDocument& rDoc,
+    const svl::SharedString** pShared, bool bFiltering )
 {
     switch (rCell.meType)
     {
@@ -151,11 +152,23 @@ OUString ScCellFormat::GetInputString(
             else if (pFC->IsValue())
                 rFormatter.GetInputLineString(pFC->GetValue(), nFormat, str, bFiltering);
             else
-                str = pFC->GetString().getString();
+            {
+                const svl::SharedString& shared = pFC->GetString();
+                // Allow callers to optimize by avoiding converting later back to OUString.
+                // To avoid refcounting that won't be needed, do not even return the OUString.
+                if( pShared != nullptr )
+                    *pShared = &shared;
+                else
+                    str = shared.getString();
+            }
 
             const FormulaError nErrCode = pFC->GetErrCode();
             if (nErrCode != FormulaError::NONE)
+            {
                 str.clear();
+                if( pShared != nullptr )
+                    *pShared = nullptr;
+            }
 
             return str;
         }

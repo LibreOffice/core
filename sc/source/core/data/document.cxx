@@ -3561,10 +3561,10 @@ void ScDocument::DiscardFormulaGroupContext()
         mpFormulaGroupCxt.reset();
 }
 
-OUString ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+OUString ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, const svl::SharedString** pShared ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetInputString( nCol, nRow );
+        return maTabs[nTab]->GetInputString( nCol, nRow, pShared );
     else
         return OUString();
 }
