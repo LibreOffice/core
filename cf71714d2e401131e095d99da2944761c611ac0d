@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c31a86_89627746",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-08T14:01:29Z",
+      "side": 1,
+      "message": "Noel: just a FYI, good to handle lokdocview as the SDK examples as \"external code\".",
+      "revId": "cf71714d2e401131e095d99da2944761c611ac0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
