@@ -34,6 +34,24 @@
       "parentUuid": "f91d510e_1c785ceb",
       "revId": "4ea931baed841763b444b0cc6ee3020a93e3d5b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a65e362_58fb095d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-08T22:19:57Z",
+      "side": 1,
+      "message": "It would probably be worth to create a\n\n  static bool MsLangId::doesNotKnowHyphenation()\n\nor some such function, similar to hasForbiddenCharacters() and needsSequenceChecking(), and use it here, so other languages can be easily added there. See\ninclude/i18nlangtag/mslangid.hxx\ni18nlangtag/source/isolang/mslangid.cxx",
+      "parentUuid": "2bd4693e_8c394844",
+      "revId": "4ea931baed841763b444b0cc6ee3020a93e3d5b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
