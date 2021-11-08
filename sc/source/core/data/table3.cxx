@@ -2705,6 +2705,12 @@ public:
             // Simple string matching i.e. no regexp match.
             if (isTextMatchOp(rEntry))
             {
+                bool matchWholeCell = bMatchWholeCell;
+                // When comparing for (in)equality, we can simply compare the whole cell
+                // even when not explicitly asked, and that code is faster (it's simpler,
+                // no SharedString temporary, etc.).
+                if( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL )
+                    matchWholeCell = true;
                 if (rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                 {
                     // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
@@ -2714,7 +2720,7 @@ public:
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
-                else if ( bMatchWholeCell )
+                else if ( matchWholeCell )
                 {
                     if (pValueSource1)
                     {
@@ -2752,7 +2758,7 @@ public:
                     sal_Int32 nStrPos;
 
                     if (!mbCaseSensitive)
-                    { // Common case for vlookup etc.
+                    {
                         const svl::SharedString rSource(pValueSource1? *pValueSource1 : mrStrPool.intern(*pValueSource2));
 
                         const rtl_uString *pQuer = rItem.maString.getDataIgnoreCase();
