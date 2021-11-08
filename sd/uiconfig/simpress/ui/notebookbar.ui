@@ -1168,7 +1168,7 @@
       <object class="GtkMenuItem" id="MenuInsert-ImportFromFile">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ImportFromFile</property>
+        <property name="action_name">.uno:ImportSlideFromFile</property>
       </object>
     </child>
     <child>
@@ -1242,14 +1242,14 @@
       <object class="GtkMenuItem" id="MenuInsert-InsertPageField">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertPageField</property>
+        <property name="action_name">.uno:InsertSlideField</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuInsert-InsertPagesField">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertPagesField</property>
+        <property name="action_name">.uno:InsertSlidesField</property>
       </object>
     </child>
     <child>
@@ -3432,7 +3432,7 @@
                                   <object class="GtkToolButton" id="Home-InsertPage">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:InsertPage</property>
+                                    <property name="action_name">.uno:InsertSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -3457,7 +3457,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="action_name">.uno:DuplicatePage</property>
+                                    <property name="action_name">.uno:DuplicateSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -3469,7 +3469,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="action_name">.uno:DeletePage</property>
+                                    <property name="action_name">.uno:DeleteSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -4991,7 +4991,7 @@
                               <object class="GtkToolButton" id="Insert-InsertPage">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:InsertPage</property>
+                                <property name="action_name">.uno:InsertSlide</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -5034,7 +5034,7 @@
                                   <object class="GtkToolButton" id="Insert-DuplicatePage">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:DuplicatePage</property>
+                                    <property name="action_name">.uno:DuplicateSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -5058,7 +5058,7 @@
                                   <object class="GtkToolButton" id="Insert-ImportFromFile">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:ImportFromFile</property>
+                                    <property name="action_name">.uno:ImportSlideFromFile</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6172,7 +6172,7 @@
                               <object class="GtkToolButton" id="Insert-InsertPage1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:InsertPage</property>
+                                <property name="action_name">.uno:InsertSlide</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -6266,7 +6266,7 @@
                               <object class="GtkToolButton" id="Slide-PageSetup">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:PageSetup</property>
+                                <property name="action_name">.uno:SlideSetup</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -6410,7 +6410,7 @@
                               <object class="GtkToolButton" id="Slide-InsertPage">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:InsertPage</property>
+                                <property name="action_name">.uno:InsertSlide</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -6453,7 +6453,7 @@
                                   <object class="GtkToolButton" id="Slide-DuplicatePage">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:DuplicatePage</property>
+                                    <property name="action_name">.uno:DuplicateSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6477,7 +6477,7 @@
                                   <object class="GtkToolButton" id="Slide-DeletePage">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:DeletePage</property>
+                                    <property name="action_name">.uno:DeleteSlide</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6542,7 +6542,7 @@
                               <object class="GtkToolButton" id="Slide-RenamePage">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:RenamePage</property>
+                                <property name="action_name">.uno:RenameSlide</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -6677,7 +6677,7 @@
                                   <object class="GtkToolButton" id="Slide-MovePageUp">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:MovePageUp</property>
+                                    <property name="action_name">.uno:MoveSlideUp</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6702,7 +6702,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="action_name">.uno:MovePageDown</property>
+                                    <property name="action_name">.uno:MoveSlideDown</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -16905,7 +16905,7 @@
                               <object class="GtkToolButton" id="MasterPageMenu-PageSetup1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:PageSetup</property>
+                                <property name="action_name">.uno:SlideSetup</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -17116,7 +17116,7 @@
                               <object class="GtkToolButton" id="MasterPageMenu-PageSetup">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:PageSetup</property>
+                                <property name="action_name">.uno:SlideSetup</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
