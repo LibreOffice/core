@@ -22,6 +22,30 @@
       },
       "revId": "4091397523e164224ca6511bafc8fade0e710b6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f66297a6_7fe123eb",
+        "filename": "odk/examples/cpp/Convertor/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-08T21:43:39Z",
+      "side": 1,
+      "message": "Done. Used the license from ../Draw/Makefile, which is also a new example ported from Java.",
+      "parentUuid": "67d69ecb_37978345",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 75
+      },
+      "revId": "4091397523e164224ca6511bafc8fade0e710b6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
