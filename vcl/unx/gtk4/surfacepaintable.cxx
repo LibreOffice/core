@@ -36,6 +36,12 @@ static void surface_paintable_snapshot(GdkPaintable* paintable, GdkSnapshot* sna
     cairo_destroy(cr);
 }
 
+static GdkPaintableFlags surface_paintable_get_flags(GdkPaintable* /*paintable*/)
+{
+    return static_cast<GdkPaintableFlags>(GDK_PAINTABLE_STATIC_SIZE
+                                          | GDK_PAINTABLE_STATIC_CONTENTS);
+}
+
 static int surface_paintable_get_intrinsic_width(GdkPaintable* paintable)
 {
     SurfacePaintable* self = SURFACE_PAINTABLE(paintable);
@@ -51,6 +57,7 @@ static int surface_paintable_get_intrinsic_height(GdkPaintable* paintable)
 static void surface_paintable_init_interface(GdkPaintableInterface* iface)
 {
     iface->snapshot = surface_paintable_snapshot;
+    iface->get_flags = surface_paintable_get_flags;
     iface->get_intrinsic_width = surface_paintable_get_intrinsic_width;
     iface->get_intrinsic_height = surface_paintable_get_intrinsic_height;
 }
