@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eac6da0_eb94fd77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-08T20:33:44Z",
+      "side": 1,
+      "message": "so i thought if you copy the file manually anyway you might as well run this script before copying it...",
+      "revId": "795b80f0354ed33d440599fc76b6be267364c8ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
