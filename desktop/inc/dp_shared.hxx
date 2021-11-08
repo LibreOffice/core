@@ -19,23 +19,9 @@
 
 #pragma once
 
-#include <rtl/instance.hxx>
 #include <unotools/resmgr.hxx>
+#include <dp_misc_api.hxx>
 
-namespace dp {
-
-struct DeploymentLocale :
-    public ::rtl::StaticWithInit<std::locale, DeploymentLocale > {
-        std::locale operator () () {
-            return Translate::Create("dkt");
-    }
-};
-
-} // namespace dp
-
-inline OUString DpResId(TranslateId aId)
-{
-    return Translate::get(aId, dp::DeploymentLocale::get());
-}
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString DpResId(TranslateId aId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

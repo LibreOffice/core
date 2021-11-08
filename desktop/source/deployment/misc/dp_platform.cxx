@@ -20,7 +20,6 @@
 
 #include <dp_platform.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
 
@@ -31,36 +30,41 @@ namespace dp_misc
 {
 namespace
 {
-    struct StrOperatingSystem :
-        public rtl::StaticWithInit<OUString, StrOperatingSystem> {
-             OUString operator () () {
+    OUString& StrOperatingSystem()
+    {
+        static OUString SINGLETON = []()
+            {
                 OUString os( "$_OS" );
                 ::rtl::Bootstrap::expandMacros( os );
                 return os;
-            }
+            }();
+        return SINGLETON;
     };
 
-    struct StrCPU :
-        public rtl::StaticWithInit<OUString, StrCPU> {
-            OUString operator () () {
+    OUString& StrCPU()
+    {
+        static OUString SINGLETON = []()
+            {
                 OUString arch( "$_ARCH" );
                 ::rtl::Bootstrap::expandMacros( arch );
                 return arch;
-            }
+            }();
+        return SINGLETON;
     };
 
-
-    struct StrPlatform : public rtl::StaticWithInit<
-        OUString, StrPlatform> {
-            OUString operator () () {
-                return StrOperatingSystem::get() + "_" + StrCPU::get();
-            }
+    OUString& StrPlatform()
+    {
+        static OUString SINGLETON = []()
+            {
+                return StrOperatingSystem() + "_" + StrCPU();
+            }();
+        return SINGLETON;
     };
 
     bool checkOSandCPU(std::u16string_view os, std::u16string_view cpu)
     {
-        return (os == StrOperatingSystem::get())
-            && (cpu == StrCPU::get());
+        return (os == StrOperatingSystem())
+            && (cpu == StrCPU());
     }
 
     bool isPlatformSupported( std::u16string_view token )
@@ -164,7 +168,7 @@ namespace
 
 OUString const & getPlatformString()
 {
-    return StrPlatform::get();
+    return StrPlatform();
 }
 
 bool platform_fits( OUString const & platform_string )
@@ -175,9 +179,9 @@ bool platform_fits( OUString const & platform_string )
         const OUString token(
             platform_string.getToken( 0, ',', index ).trim() );
         // check if this platform:
-        if (token.equalsIgnoreAsciiCase( StrPlatform::get() ) ||
+        if (token.equalsIgnoreAsciiCase( StrPlatform() ) ||
             (token.indexOf( '_' ) < 0 && /* check OS part only */
-             token.equalsIgnoreAsciiCase( StrOperatingSystem::get() )))
+             token.equalsIgnoreAsciiCase( StrOperatingSystem() )))
         {
             return true;
         }
