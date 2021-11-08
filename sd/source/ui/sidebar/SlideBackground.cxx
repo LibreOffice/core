@@ -328,14 +328,6 @@ void SlideBackground::HandleContextChange(
             mpInsertImage->Show();
         }
 
-        // The Insert Image button in the sidebar issues .uno:SelectBackground,
-        // which when invoked without arguments will open the file-open-dialog
-        // to prompt the user to select a file. This is useless in LOOL.
-        // Hide for now so the user will only be able to use the menu to insert
-        // background image, which prompts the user for file selection in the browser.
-        if (comphelper::LibreOfficeKit::isActive())
-            mpInsertImage->Hide();
-
         // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
         sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
         if(pPanel)
@@ -357,6 +349,14 @@ void SlideBackground::HandleContextChange(
             mpBackgroundLabel->Hide();
         }
     }
+
+    // The Insert Image button in the sidebar issues .uno:SelectBackground,
+    // which when invoked without arguments will open the file-open-dialog
+    // to prompt the user to select a file. This is useless in LOOL.
+    // Hide for now so the user will only be able to use the menu to insert
+    // background image, which prompts the user for file selection in the browser.
+    if (comphelper::LibreOfficeKit::isActive())
+        mpInsertImage->Hide();
 }
 
 void SlideBackground::Update()
