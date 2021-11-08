@@ -13124,10 +13124,8 @@ if test "$enable_build_opensymbol" = "yes"; then
     fi
 else
     AC_MSG_RESULT([no])
-    OPENSYMBOL_TTF=f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf
     BUILD_TYPE="$BUILD_TYPE OPENSYMBOL"
 fi
-AC_SUBST(OPENSYMBOL_TTF)
 AC_SUBST(FONTFORGE)
 
 dnl ===================================================================
