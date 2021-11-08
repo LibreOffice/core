@@ -155,7 +155,7 @@ bool SwGlosDocShell::Save()
     // tries to save the doc, again.
     // 96380 - 2002-03-03 - fs@openoffice.org
     if ( GetWrtShell() )
-        return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
+        return ::lcl_Save( *GetWrtShell(), m_aGroupName, m_aShortName, m_aLongName );
     else
     {
         SetModified( false );

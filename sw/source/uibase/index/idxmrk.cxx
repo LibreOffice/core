@@ -55,8 +55,8 @@ SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   vcl::Window *pParentWindow,
         SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    xAbstDlg = pFact->CreateAuthMarkFloatDlg(pBindings, this, pParentWindow->GetFrameWeld(), pInfo);
-    SetController(xAbstDlg->GetController());
+    m_xAbstDlg = pFact->CreateAuthMarkFloatDlg(pBindings, this, pParentWindow->GetFrameWeld(), pInfo);
+    SetController(m_xAbstDlg->GetController());
 }
 
 SfxChildWinInfo SwInsertAuthMarkWrapper::GetInfo() const
@@ -67,7 +67,7 @@ SfxChildWinInfo SwInsertAuthMarkWrapper::GetInfo() const
 
 void SwInsertAuthMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    xAbstDlg->ReInitDlg(rWrtShell);
+    m_xAbstDlg->ReInitDlg(rWrtShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

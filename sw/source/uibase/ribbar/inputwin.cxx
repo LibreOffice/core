@@ -71,14 +71,14 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     : ToolBox(pParent, WB_3DLOOK|WB_BORDER)
     , mxPos(VclPtr<PosEdit>::Create(this))
     , mxEdit(VclPtr<InputEdit>::Create(this))
-    , pWrtShell(nullptr)
-    , pView(nullptr)
+    , m_pWrtShell(nullptr)
+    , m_pView(nullptr)
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
     , m_bCallUndo(false)
 {
-    bFirst = true;
-    bIsTable = bDelSel = false;
+    m_bFirst = true;
+    m_bIsTable = m_bDelSel = false;
 
     InsertItem(FN_FORMULA_CALC, Image(StockImage::Yes, RID_BMP_FORMULA_CALC),
                SwResId(STR_FORMULA_CALC));
@@ -94,8 +94,8 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     SwView *pDispatcherView = dynamic_cast<SwView*>(pDispatcher ? pDispatcher->GetFrame()->GetViewShell() : nullptr);
     SwView* pActiveView = ::GetActiveView();
     if (pDispatcherView == pActiveView)
-        pView = pActiveView;
-    pWrtShell = pView ? pView->GetWrtShellPtr() : nullptr;
+        m_pView = pActiveView;
+    m_pWrtShell = m_pView ? m_pView->GetWrtShellPtr() : nullptr;
 
     InsertWindow(ED_POS, mxPos.get(), ToolBoxItemBits::NONE, 0);
     SetItemText(ED_POS, SwResId(STR_ACCESS_FORMULA_TYPE));
@@ -141,14 +141,14 @@ SwInputWindow::~SwInputWindow()
 void SwInputWindow::dispose()
 {
     // wake rulers
-    if(pView)
+    if(m_pView)
     {
-        pView->GetHRuler().SetActive();
-        pView->GetVRuler().SetActive();
+        m_pView->GetHRuler().SetActive();
+        m_pView->GetVRuler().SetActive();
     }
-    pMgr.reset();
-    if(pWrtShell)
-        pWrtShell->EndSelTableCells();
+    m_pMgr.reset();
+    if(m_pWrtShell)
+        m_pWrtShell->EndSelTableCells();
 
     CleanupUglyHackWithUndo();
 
@@ -162,13 +162,13 @@ void SwInputWindow::CleanupUglyHackWithUndo()
     if (!m_bResetUndo)
         return;
 
-    if (pWrtShell)
+    if (m_pWrtShell)
     {
         DelBoxContent();
-        pWrtShell->DoUndo(m_bDoesUndo);
+        m_pWrtShell->DoUndo(m_bDoesUndo);
         if (m_bCallUndo)
         {
-            pWrtShell->Undo();
+            m_pWrtShell->Undo();
         }
     }
     m_bResetUndo = false; // #i117122# once is enough :)
@@ -188,103 +188,103 @@ void SwInputWindow::Resize()
 
 void SwInputWindow::ShowWin()
 {
-    bIsTable = false;
+    m_bIsTable = false;
     // stop rulers
-    if (pView)
+    if (m_pView)
     {
-        pView->GetHRuler().SetActive( false );
-        pView->GetVRuler().SetActive( false );
+        m_pView->GetHRuler().SetActive( false );
+        m_pView->GetVRuler().SetActive( false );
 
-        OSL_ENSURE(pWrtShell, "no WrtShell!");
+        OSL_ENSURE(m_pWrtShell, "no WrtShell!");
         // Cursor in table
-        bIsTable = pWrtShell->IsCursorInTable();
+        m_bIsTable = m_pWrtShell->IsCursorInTable();
 
-        if( bFirst )
-            pWrtShell->SelTableCells( LINK( this, SwInputWindow,
+        if( m_bFirst )
+            m_pWrtShell->SelTableCells( LINK( this, SwInputWindow,
                                                 SelTableCellsNotify) );
-        if( bIsTable )
+        if( m_bIsTable )
         {
-            const OUString& rPos = pWrtShell->GetBoxNms();
+            const OUString& rPos = m_pWrtShell->GetBoxNms();
             sal_Int32 nPos = 0;
             short nSrch = -1;
             while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
                 nSrch = static_cast<short>(nPos);
             mxPos->set_text( rPos.copy( ++nSrch ) );
-            aCurrentTableName = pWrtShell->GetTableFormat()->GetName();
+            m_aCurrentTableName = m_pWrtShell->GetTableFormat()->GetName();
         }
         else
             mxPos->set_text(SwResId(STR_TBL_FORMULA));
 
         // Edit current field
-        OSL_ENSURE(pMgr == nullptr, "FieldManager not deleted");
-        pMgr.reset(new SwFieldMgr);
+        OSL_ENSURE(m_pMgr == nullptr, "FieldManager not deleted");
+        m_pMgr.reset(new SwFieldMgr);
 
         // Form should always begin with "=" , so set here
         OUString sEdit('=');
-        if( pMgr->GetCurField() && SwFieldTypesEnum::Formel == pMgr->GetCurTypeId() )
+        if( m_pMgr->GetCurField() && SwFieldTypesEnum::Formel == m_pMgr->GetCurTypeId() )
         {
-            sEdit += pMgr->GetCurFieldPar2();
+            sEdit += m_pMgr->GetCurFieldPar2();
         }
-        else if( bFirst && bIsTable )
+        else if( m_bFirst && m_bIsTable )
         {
             m_bResetUndo = true;
             SAL_WARN_IF(
                 officecfg::Office::Common::Undo::Steps::get() <= 0,
                 "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
 
-            m_bDoesUndo = pWrtShell->DoesUndo();
+            m_bDoesUndo = m_pWrtShell->DoesUndo();
             if( !m_bDoesUndo )
             {
-                pWrtShell->DoUndo();
+                m_pWrtShell->DoUndo();
             }
 
-            if( !pWrtShell->SwCursorShell::HasSelection() )
+            if( !m_pWrtShell->SwCursorShell::HasSelection() )
             {
-                pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
-                pWrtShell->SetMark();
-                pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
+                m_pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
+                m_pWrtShell->SetMark();
+                m_pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
             }
-            if( pWrtShell->SwCursorShell::HasSelection() )
+            if( m_pWrtShell->SwCursorShell::HasSelection() )
             {
-                pWrtShell->StartUndo( SwUndoId::DELETE );
-                pWrtShell->Delete();
-                if( SwUndoId::EMPTY != pWrtShell->EndUndo( SwUndoId::DELETE ))
+                m_pWrtShell->StartUndo( SwUndoId::DELETE );
+                m_pWrtShell->Delete();
+                if( SwUndoId::EMPTY != m_pWrtShell->EndUndo( SwUndoId::DELETE ))
                 {
                     m_bCallUndo = true;
                 }
             }
-            pWrtShell->DoUndo(false);
+            m_pWrtShell->DoUndo(false);
 
-            SfxItemSetFixed<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA> aSet( pWrtShell->GetAttrPool() );
-            if( pWrtShell->GetTableBoxFormulaAttrs( aSet ))
+            SfxItemSetFixed<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA> aSet( m_pWrtShell->GetAttrPool() );
+            if( m_pWrtShell->GetTableBoxFormulaAttrs( aSet ))
                 sEdit += aSet.Get( RES_BOXATR_FORMULA ).GetFormula();
         }
 
-        if( bFirst )
+        if( m_bFirst )
         {
             // Set WrtShell flags correctly
-            pWrtShell->SttSelect();
-            pWrtShell->EndSelect();
+            m_pWrtShell->SttSelect();
+            m_pWrtShell->EndSelect();
         }
 
-        bFirst = false;
+        m_bFirst = false;
 
         mxEdit->connect_changed( LINK( this, SwInputWindow, ModifyHdl ));
 
         mxEdit->set_text( sEdit );
-        sOldFormula = sEdit;
+        m_sOldFormula = sEdit;
 
         // For input cut the UserInterface
 
-        pView->GetEditWin().LockKeyInput(true);
-        pView->GetViewFrame()->GetDispatcher()->Lock(true);
-        pWrtShell->Push();
+        m_pView->GetEditWin().LockKeyInput(true);
+        m_pView->GetViewFrame()->GetDispatcher()->Lock(true);
+        m_pWrtShell->Push();
     }
 
     ToolBox::Show();
 
     // grab focus after ToolBox is shown so focus isn't potentially lost elsewhere
-    if (pView)
+    if (m_pView)
     {
         int nPos = mxEdit->get_text().getLength();
         mxEdit->select_region(nPos, nPos);
@@ -331,7 +331,7 @@ void  SwInputWindow::ApplyFormula()
     // in case it was created while loading the document, the active view
     // wasn't initialised at that time, so ShowWin() didn't initialise anything
     // either - nothing to do
-    if (!pView)
+    if (!m_pView)
     {
         // presumably there must be an active view now since the event arrived
         SwView *const pActiveView = ::GetActiveView();
@@ -340,10 +340,10 @@ void  SwInputWindow::ApplyFormula()
         return;
     }
 
-    pView->GetViewFrame()->GetDispatcher()->Lock(false);
-    pView->GetEditWin().LockKeyInput(false);
+    m_pView->GetViewFrame()->GetDispatcher()->Lock(false);
+    m_pView->GetEditWin().LockKeyInput(false);
     CleanupUglyHackWithUndo();
-    pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+    m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
     // Form should always begin with "=", so remove it here again
     OUString sEdit(comphelper::string::strip(mxEdit->get_text(), ' '));
@@ -351,12 +351,12 @@ void  SwInputWindow::ApplyFormula()
         sEdit = sEdit.copy( 1 );
     SfxStringItem aParam(FN_EDIT_FORMULA, sEdit);
 
-    pWrtShell->EndSelTableCells();
-    pView->GetEditWin().GrabFocus();
+    m_pWrtShell->EndSelTableCells();
+    m_pView->GetEditWin().GrabFocus();
     const SfxPoolItem* aArgs[2];
     aArgs[0] = &aParam;
     aArgs[1] = nullptr;
-    pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs, SfxCallMode::ASYNCHRON );
+    m_pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs, SfxCallMode::ASYNCHRON );
 }
 
 void  SwInputWindow::CancelFormula()
@@ -364,7 +364,7 @@ void  SwInputWindow::CancelFormula()
     // in case it was created while loading the document, the active view
     // wasn't initialised at that time, so ShowWin() didn't initialise anything
     // either - nothing to do
-    if (!pView)
+    if (!m_pView)
     {
         // presumably there must be an active view now since the event arrived
         SwView *const pActiveView = ::GetActiveView();
@@ -373,19 +373,19 @@ void  SwInputWindow::CancelFormula()
         return;
     }
 
-    pView->GetViewFrame()->GetDispatcher()->Lock( false );
-    pView->GetEditWin().LockKeyInput(false);
+    m_pView->GetViewFrame()->GetDispatcher()->Lock( false );
+    m_pView->GetEditWin().LockKeyInput(false);
     CleanupUglyHackWithUndo();
-    pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+    m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
-    if( bDelSel )
-        pWrtShell->EnterStdMode();
+    if( m_bDelSel )
+        m_pWrtShell->EnterStdMode();
 
-    pWrtShell->EndSelTableCells();
+    m_pWrtShell->EndSelTableCells();
 
-    pView->GetEditWin().GrabFocus();
+    m_pView->GetEditWin().GrabFocus();
 
-    pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
+    m_pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
 }
 
 const sal_Unicode CH_LRE = 0x202a;
@@ -393,12 +393,12 @@ const sal_Unicode CH_PDF = 0x202c;
 
 IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
 {
-    if(bIsTable)
+    if(m_bIsTable)
     {
         SwFrameFormat* pTableFormat = rCaller.GetTableFormat();
         OUString sBoxNms( rCaller.GetBoxNms() );
         OUString sTableNm;
-        if( pTableFormat && aCurrentTableName != pTableFormat->GetName() )
+        if( pTableFormat && m_aCurrentTableName != pTableFormat->GetName() )
             sTableNm = pTableFormat->GetName();
 
         mxEdit->UpdateRange( sBoxNms, sTableNm );
@@ -406,23 +406,23 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
         OUString sNew = OUStringChar(CH_LRE) + mxEdit->get_text()
             + OUStringChar(CH_PDF);
 
-        if( sNew != sOldFormula )
+        if( sNew != m_sOldFormula )
         {
             // The WrtShell is in the table selection,
             // then cancel the table selection otherwise, the cursor is
             // positioned "in the forest" and the live update does not work!
-            pWrtShell->StartAllAction();
+            m_pWrtShell->StartAllAction();
 
-            SwPaM aPam( *pWrtShell->GetStackCursor()->GetPoint() );
+            SwPaM aPam( *m_pWrtShell->GetStackCursor()->GetPoint() );
             aPam.Move( fnMoveBackward, GoInSection );
             aPam.SetMark();
             aPam.Move( fnMoveForward, GoInSection );
 
-            IDocumentContentOperations& rIDCO = pWrtShell->getIDocumentContentOperations();
+            IDocumentContentOperations& rIDCO = m_pWrtShell->getIDocumentContentOperations();
             rIDCO.DeleteRange( aPam );
             rIDCO.InsertString( aPam, sNew );
-            pWrtShell->EndAllAction();
-            sOldFormula = sNew;
+            m_pWrtShell->EndAllAction();
+            m_sOldFormula = sNew;
         }
     }
     else
@@ -441,36 +441,36 @@ void SwInputWindow::SetFormula( const OUString& rFormula )
     }
     mxEdit->set_text( sEdit );
     mxEdit->select_region(sEdit.getLength(), sEdit.getLength());
-    bDelSel = true;
+    m_bDelSel = true;
 }
 
 IMPL_LINK_NOARG(SwInputWindow, ModifyHdl, weld::Entry&, void)
 {
-    if (bIsTable && m_bResetUndo)
+    if (m_bIsTable && m_bResetUndo)
     {
-        pWrtShell->StartAllAction();
+        m_pWrtShell->StartAllAction();
         DelBoxContent();
         OUString sNew = OUStringChar(CH_LRE) + mxEdit->get_text()
             + OUStringChar(CH_PDF);
-        pWrtShell->SwEditShell::Insert2( sNew );
-        pWrtShell->EndAllAction();
-        sOldFormula = sNew;
+        m_pWrtShell->SwEditShell::Insert2( sNew );
+        m_pWrtShell->EndAllAction();
+        m_sOldFormula = sNew;
     }
 }
 
 void SwInputWindow::DelBoxContent()
 {
-    if( bIsTable )
+    if( m_bIsTable )
     {
-        pWrtShell->StartAllAction();
-        pWrtShell->ClearMark();
-        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
-        pWrtShell->Push();
-        pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
-        pWrtShell->SetMark();
-        pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
-        pWrtShell->SwEditShell::Delete();
-        pWrtShell->EndAllAction();
+        m_pWrtShell->StartAllAction();
+        m_pWrtShell->ClearMark();
+        m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        m_pWrtShell->Push();
+        m_pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
+        m_pWrtShell->SetMark();
+        m_pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
+        m_pWrtShell->SwEditShell::Delete();
+        m_pWrtShell->EndAllAction();
     }
 }
 
@@ -597,16 +597,16 @@ SwInputChild::SwInputChild(vcl::Window* _pParent,
                                 SfxChildWinInfo* ) :
                                 SfxChildWindow( _pParent, nId )
 {
-    pDispatch = pBindings->GetDispatcher();
-    SetWindow(VclPtr<SwInputWindow>::Create(_pParent, pDispatch));
+    m_pDispatch = pBindings->GetDispatcher();
+    SetWindow(VclPtr<SwInputWindow>::Create(_pParent, m_pDispatch));
     static_cast<SwInputWindow*>(GetWindow())->ShowWin();
     SetAlignment(SfxChildAlignment::LOWESTTOP);
 }
 
 SwInputChild::~SwInputChild()
 {
-    if(pDispatch)
-        pDispatch->Lock(false);
+    if(m_pDispatch)
+        m_pDispatch->Lock(false);
 }
 
 SfxChildWinInfo SwInputChild::GetInfo() const

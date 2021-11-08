@@ -22,9 +22,9 @@
 
 class SwGlosDocShell final : public SwDocShell
 {
-    OUString          aLongName;
-    OUString          aShortName;
-    OUString          aGroupName;
+    OUString          m_aLongName;
+    OUString          m_aShortName;
+    OUString          m_aGroupName;
 
     virtual bool Save() override;
 
@@ -42,11 +42,11 @@ public:
     void            Execute( SfxRequest& );
     void            GetState( SfxItemSet& );
     void            SetLongName( const OUString& rLongName )
-                        { aLongName = rLongName; }
+                        { m_aLongName = rLongName; }
     void            SetShortName( const OUString& rShortName )
-                        { aShortName = rShortName; }
+                        { m_aShortName = rShortName; }
     void            SetGroupName( const OUString& rGroupName )
-                        { aGroupName = rGroupName; }
+                        { m_aGroupName = rGroupName; }
 };
 
 class SwWebGlosDocShell final : public SwWebDocShell
