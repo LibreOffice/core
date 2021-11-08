@@ -35,7 +35,7 @@
 #endif
 
 // Cursor bitmaps from the installation set.
-constexpr OUStringLiteral CURSOR_HANDLE_DIR = u"/../share/libreofficekit/";
+#define CURSOR_HANDLE_DIR "/../share/libreofficekit/"
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 // Maximum Zoom allowed
