@@ -867,11 +867,11 @@ private:
     typedef std::set< OUString > Set;
 
     void calculate(
+        Set& allSet,
         sal_Int32 directBaseIndex, Set & directBaseSet,
         sal_Int32 * directBaseMembers,
         typelib_InterfaceTypeDescription const * desc);
 
-    Set set;
     List list;
     sal_Int32 members;
 };
@@ -879,24 +879,26 @@ private:
 BaseList::BaseList(typelib_InterfaceTypeDescription const * desc)
    : members(0)
 {
+    Set allSet;
     for (sal_Int32 i = 0; i < desc->nBaseTypes; ++i) {
         Set directBaseSet;
         sal_Int32 directBaseMembers = 0;
-        calculate(i, directBaseSet, &directBaseMembers, desc->ppBaseTypes[i]);
+        calculate(allSet, i, directBaseSet, &directBaseMembers, desc->ppBaseTypes[i]);
     }
 }
 
 void BaseList::calculate(
+    Set& allSet,
     sal_Int32 directBaseIndex, Set & directBaseSet,
     sal_Int32 * directBaseMembers,
     typelib_InterfaceTypeDescription const * desc)
 {
     for (sal_Int32 i = 0; i < desc->nBaseTypes; ++i) {
-        calculate(
+        calculate(allSet,
             directBaseIndex, directBaseSet, directBaseMembers,
             desc->ppBaseTypes[i]);
     }
-    if (set.insert(desc->aBase.pTypeName).second) {
+    if (allSet.insert(desc->aBase.pTypeName).second) {
         Entry e;
         e.memberOffset = members;
         e.directBaseIndex = directBaseIndex;
