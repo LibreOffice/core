@@ -37,6 +37,7 @@ class SwDoc;
 namespace sw { class DocumentContentOperationsManager; }
 enum class MirrorGraph;
 
+/// Typing one or more characters to a single paragraph.
 class SwUndoInsert final : public SwUndo, private SwUndoSaveContent
 {
     /// start of Content in UndoNodes for Redo
