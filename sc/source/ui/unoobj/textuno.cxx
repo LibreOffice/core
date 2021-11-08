@@ -823,8 +823,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         else
         {
             sal_uInt32 nFormat = rDoc.GetNumberFormat(aCellPos);
-            OUString aText;
-            ScCellFormat::GetInputString(aCell, nFormat, aText, *rDoc.GetFormatTable(), rDoc);
+            OUString aText = ScCellFormat::GetInputString(aCell, nFormat, *rDoc.GetFormatTable(), rDoc);
             if (!aText.isEmpty())
                 pEditEngine->SetTextNewDefaults(aText, aDefaults);
             else

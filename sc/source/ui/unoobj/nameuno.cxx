@@ -176,8 +176,8 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (pNewName)
         aInsName = *pNewName;
 
-    OUString aContent;                            // Content string based =>
-    pOld->GetSymbol( aContent, eGrammar);   // no problems with changed positions and such.
+    // Content string based => no problems with changed positions and such.
+    OUString aContent = pOld->GetSymbol(eGrammar);
     if (pNewContent)
         aContent = *pNewContent;
 
@@ -236,7 +236,7 @@ OUString SAL_CALL ScNamedRangeObj::getContent()
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
         // GRAM_API for API compatibility.
-        pData->GetSymbol( aContent,formula::FormulaGrammar::GRAM_API);
+        aContent = pData->GetSymbol(formula::FormulaGrammar::GRAM_API);
     return aContent;
 }
 

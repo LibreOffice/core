@@ -298,10 +298,10 @@ bool ScRangeUtil::MakeRangeFromName (
             // tdf#145077: create range string according to current cell cursor
             // position if expression has relative references and details say so.
             if (bUseDetailsPos)
-                pData->GetSymbol( aStrArea, ScAddress( rDetails.nCol, rDetails.nRow, nCurTab),
+                aStrArea = pData->GetSymbol( ScAddress( rDetails.nCol, rDetails.nRow, nCurTab),
                         FormulaGrammar::mergeToGrammar(rDoc.GetGrammar(), rDetails.eConv));
             else
-                pData->GetSymbol( aStrArea,
+                aStrArea = pData->GetSymbol(
                         FormulaGrammar::mergeToGrammar(rDoc.GetGrammar(), rDetails.eConv));
 
             if ( IsAbsArea( aStrArea, rDoc, nTable,

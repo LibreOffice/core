@@ -224,13 +224,12 @@ const ScTokenArray* ScColorScaleEntry::GetFormula() const
 
 OUString ScColorScaleEntry::GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const
 {
-    OUString aFormula;
     if(mpCell)
     {
-        mpCell->GetFormula(aFormula, eGrammar);
+        return mpCell->GetFormula(eGrammar);
     }
 
-    return aFormula;
+    return OUString();
 }
 
 double ScColorScaleEntry::GetValue() const

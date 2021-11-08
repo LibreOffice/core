@@ -3164,8 +3164,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
     CPPUNIT_ASSERT(pCT);
     ScChangeAction* pAction = pCT->GetAction(1);
     CPPUNIT_ASSERT(pAction);
-    OUString aDesc;
-    pAction->GetDescription(aDesc, *pDoc);
+    OUString aDesc = pAction->GetDescription(*pDoc);
     CPPUNIT_ASSERT_EQUAL(OUString("Cell B2 changed from '<empty>' to '1'"), aDesc);
 
     bGood = aTest.checkRevisionUserAndTime(*pDoc, aOwnerName);
@@ -4067,12 +4066,11 @@ void ScExportTest::testSheetLocalRangeNameXLS()
     CPPUNIT_ASSERT(pRangeName);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pRangeName->size());
 
-    OUString aFormula;
-    rDoc.GetFormula(3, 11, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(3, 11, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(local_name2)"), aFormula);
     ASSERT_DOUBLES_EQUAL(14.0, rDoc.GetValue(3, 11, 0));
 
-    rDoc.GetFormula(6, 4, 0, aFormula);
+    aFormula = rDoc.GetFormula(6, 4, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
 
     xDocSh2->DoClose();

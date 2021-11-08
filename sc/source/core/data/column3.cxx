@@ -795,10 +795,9 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellSt
 
     SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
 
-    OUString aStr;
     const Color* pColor;
     sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
-    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter, rDocument);
+    OUString aStr = ScCellFormat::GetString(aCell, nFormat, &pColor, *pFormatter, rDocument);
 
     // Store the real script type to the array.
     rAttr.mnScriptType = rDocument.GetStringScriptType(aStr);
@@ -2427,9 +2426,8 @@ class FilterEntriesHandler
     void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell)
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
-        OUString aStr;
         sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
-        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrColumn.GetDoc(), mrColumn.HasFiltering());
+        OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrColumn.GetDoc(), mrColumn.HasFiltering());
 
         // Colors
         ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
@@ -2973,7 +2971,7 @@ void ScColumn::SetValue(
         BroadcastNewCell(nRow);
 }
 
-void ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, OUString& rString, const ScInterpreterContext* pContext ) const
+OUString ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, const ScInterpreterContext* pContext ) const
 {
     // ugly hack for ordering problem with GetNumberFormat and missing inherited formats
     if (aCell.meType == CELLTYPE_FORMULA)
@@ -2981,7 +2979,7 @@ void ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, OUString& rSt
 
     sal_uInt32 nFormat = GetNumberFormat( pContext ? *pContext : GetDoc().GetNonThreadedContext(), nRow);
     const Color* pColor = nullptr;
-    ScCellFormat::GetString(aCell, nFormat, rString, &pColor,
+    return ScCellFormat::GetString(aCell, nFormat, &pColor,
         pContext ? *(pContext->GetFormatTable()) : *(GetDoc().GetFormatTable()), GetDoc());
 }
 
@@ -2998,10 +2996,10 @@ double* ScColumn::GetValueCell( SCROW nRow )
     return &sc::numeric_block::at(*it->data, aPos.second);
 }
 
-void ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, OUString& rString ) const
+OUString ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow ) const
 {
     sal_uLong nFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
-    ScCellFormat::GetInputString(aCell, nFormat, rString, *(GetDoc().GetFormatTable()), GetDoc());
+    return ScCellFormat::GetInputString(aCell, nFormat, *(GetDoc().GetFormatTable()), GetDoc());
 }
 
 double ScColumn::GetValue( SCROW nRow ) const
@@ -3052,13 +3050,12 @@ void ScColumn::RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr
     ScEditUtil::RemoveCharAttribs(*p, rAttr);
 }
 
-void ScColumn::GetFormula( SCROW nRow, OUString& rFormula ) const
+OUString ScColumn::GetFormula( SCROW nRow ) const
 {
     const ScFormulaCell* p = FetchFormulaCell(nRow);
     if (p)
-        p->GetFormula(rFormula);
-    else
-        rFormula = EMPTY_OUSTRING;
+        return p->GetFormula();
+    return OUString();
 }
 
 const ScFormulaCell* ScColumn::GetFormulaCell( SCROW nRow ) const
@@ -3207,9 +3204,8 @@ class MaxStringLenHandler
     void processCell(size_t nRow, const ScRefCellValue& rCell)
     {
         const Color* pColor;
-        OUString aString;
         sal_uInt32 nFormat = mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
-        ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter, mrColumn.GetDoc());
+        OUString aString = ScCellFormat::GetString(rCell, nFormat, &pColor, *mpFormatter, mrColumn.GetDoc());
         sal_Int32 nLen = 0;
         if (mbOctetEncoding)
         {
@@ -3319,7 +3315,7 @@ class MaxNumStringLenHandler
         if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
         {
             aSep = mpFormatter->GetFormatDecimalSep(nFormat);
-            ScCellFormat::GetInputString(rCell, nFormat, aString, *mpFormatter, mrColumn.GetDoc());
+            aString = ScCellFormat::GetInputString(rCell, nFormat, *mpFormatter, mrColumn.GetDoc());
             const SvNumberformat* pEntry = mpFormatter->GetEntry(nFormat);
             if (pEntry)
             {

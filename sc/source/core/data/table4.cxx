@@ -422,8 +422,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             }
             else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
             {
-                OUString aStr,aStr2;
-                GetString(nColCurr, nRowCurr, aStr);
+                OUString aStr = GetString(nColCurr, nRowCurr );
+                OUString aStr2;
 
                 rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
                 if (rListData)
@@ -436,7 +436,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     {
                         nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
                         nRowCurr = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
-                        GetString(nColCurr, nRowCurr, aStr2);
+                        aStr2 = GetString(nColCurr, nRowCurr);
 
                         nPrevListIndex = rListIndex;
                         if (!rListData->GetSubIndex(aStr2, rListIndex, bMatchCase))
@@ -656,8 +656,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
     else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
     {
-        OUString aStr;
-        GetString(nCol, nRow, aStr);
+        OUString aStr = GetString(nCol, nRow);
 
         rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
         if (rListData)
@@ -671,7 +670,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             for (SCSIZE i=1; i<nCount && rListData; i++)
             {
                 nPrevListIndex = rListIndex;
-                GetString(nCol, nRow, aStr);
+                aStr = GetString(nCol, nRow);
                 if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
                     rListData = nullptr;
                 else
@@ -700,7 +699,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if ( nFlag1 )
             {
                 sal_Int32 nVal2;
-                GetString( nCol+nAddX, nRow+nAddY, aStr );
+                aStr = GetString( nCol+nAddX, nRow+nAddY );
                 short nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                 if ( nFlag1 == nFlag2 )
                 {
@@ -1106,9 +1105,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 OUString aStr;
                 if (bVertical)
-                    GetString(rOuter, nLastValueIdx, aStr);
+                    aStr = GetString(rOuter, nLastValueIdx);
                 else
-                    GetString(nLastValueIdx, rOuter, aStr);
+                    aStr = GetString(nLastValueIdx, rOuter);
 
                 bool bMatchCase = false;
                 (void)pListData->GetSubIndex(aStr, nListIndex, bMatchCase);

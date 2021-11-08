@@ -240,18 +240,20 @@ void ScRangeData::GuessPosition()
     aPos = ScAddress( static_cast<SCCOL>(-nMinCol), static_cast<SCROW>(-nMinRow), static_cast<SCTAB>(-nMinTab) );
 }
 
-void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
+OUString ScRangeData::GetSymbol( const FormulaGrammar::Grammar eGrammar ) const
 {
     ScCompiler aComp(rDoc, aPos, *pCode, eGrammar);
-    aComp.CreateStringFromTokenArray( rSymbol );
+    OUString symbol;
+    aComp.CreateStringFromTokenArray( symbol );
+    return symbol;
 }
 
-void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const FormulaGrammar::Grammar eGrammar ) const
+OUString ScRangeData::GetSymbol( const ScAddress& rPos, const FormulaGrammar::Grammar eGrammar ) const
 {
     OUString aStr;
     ScCompiler aComp(rDoc, rPos, *pCode, eGrammar);
     aComp.CreateStringFromTokenArray( aStr );
-    rSymbol = aStr;
+    return aStr;
 }
 
 void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos )

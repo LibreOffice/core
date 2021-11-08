@@ -784,11 +784,10 @@ void ScFiltersTest2::testSharedFormulaXLS()
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
 
-            OUString aFormula;
-            rDoc.GetFormula(2, 1, 0, aFormula);
+            OUString aFormula = rDoc.GetFormula(2, 1, 0);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B9:D9)"), aFormula);
 
-            rDoc.GetFormula(2, 10, 0, aFormula);
+            aFormula = rDoc.GetFormula(2, 10, 0);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B18:D18)"), aFormula);
         }
 
@@ -803,11 +802,10 @@ void ScFiltersTest2::testSharedFormulaXLS()
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
 
-            OUString aFormula;
-            rDoc.GetFormula(4, 8, 0, aFormula);
+            OUString aFormula = rDoc.GetFormula(4, 8, 0);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(G9:EY9)"), aFormula);
 
-            rDoc.GetFormula(4, 17, 0, aFormula);
+            aFormula = rDoc.GetFormula(4, 17, 0);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(G18:EY18)"), aFormula);
         }
 
@@ -822,11 +820,10 @@ void ScFiltersTest2::testSharedFormulaXLS()
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedTopRow());
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
 
-            OUString aFormula;
-            rDoc.GetFormula(6, 15, 0, aFormula);
+            OUString aFormula = rDoc.GetFormula(6, 15, 0);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A16:A40000)"), aFormula);
 
-            rDoc.GetFormula(6, 24, 0, aFormula);
+            aFormula = rDoc.GetFormula(6, 24, 0);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A25:A40009)"), aFormula);
         }
 
@@ -1329,14 +1326,13 @@ void ScFiltersTest2::testTdf136364()
     // Without the fix in place, it would have failed with
     // - Expected: =SUM((B2:B3~C4:C5~D6:D7))
     // - Actual  : =SUM((B2:B3~C4:C5,D6:D7))
-    OUString aFormula;
-    rDoc.GetFormula(4, 0, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(4, 0, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM((B2:B3~C4:C5~D6:D7))"), aFormula);
     CPPUNIT_ASSERT_EQUAL(27.0, rDoc.GetValue(ScAddress(4, 0, 0)));
 
     // - Expected: =SUM((B2~C4~D6))
     // - Actual  : =SUM((B2~C4,D6))
-    rDoc.GetFormula(4, 1, 0, aFormula);
+    aFormula = rDoc.GetFormula(4, 1, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM((B2~C4~D6))"), aFormula);
     CPPUNIT_ASSERT_EQUAL(12.0, rDoc.GetValue(ScAddress(4, 1, 0)));
 
@@ -2372,8 +2368,7 @@ void ScFiltersTest2::testTdf112780()
     // - Actual  : #VALUE!
     CPPUNIT_ASSERT_EQUAL(OUString(""), rDoc.GetString(ScAddress(3, 5, 0)));
 
-    OUString aFormula;
-    rDoc.GetFormula(3, 5, 0, aFormula);
+    OUString aFormula = rDoc.GetFormula(3, 5, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=G6+J6+M6"), aFormula);
 
     xDocSh->DoClose();
@@ -2452,8 +2447,7 @@ void ScFiltersTest2::testVBAMacroFunctionODS()
     ScDocShellRef xDocSh = loadDoc(u"vba_macro_functions.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    OUString aFunction;
-    rDoc.GetFormula(2, 0, 0, aFunction);
+    OUString aFunction = rDoc.GetFormula(2, 0, 0);
     std::cout << aFunction << std::endl;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, rDoc.GetValue(2, 0, 0), 1e-6);
 
@@ -2933,13 +2927,12 @@ void ScFiltersTest2::testInvalidBareBiff5()
     // Row 2
     aPos = ScAddress(0, 1, 0);
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, rDoc.GetCellType(aPos));
-    OUString sFormula;
-    rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab(), sFormula);
+    OUString sFormula = rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(OUString("=TRUE()"), sFormula);
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, rDoc.GetCellType(aPos));
-    rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab(), sFormula);
+    sFormula = rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), sFormula);
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(aPos));
     aPos.IncCol();

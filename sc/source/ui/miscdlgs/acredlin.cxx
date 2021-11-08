@@ -327,10 +327,10 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     if(eType==SC_CAT_CONTENT)
     {
         if(!pScChangeAction->IsDialogParent())
-            pScChangeAction->GetDescription(aDesc, *pDoc, true);
+            aDesc = pScChangeAction->GetDescription(*pDoc, true);
     }
     else
-        pScChangeAction->GetDescription(aDesc, *pDoc, !pScChangeAction->IsMasterDelete());
+        aDesc = pScChangeAction->GetDescription(*pDoc, !pScChangeAction->IsMasterDelete());
 
     if (!aDesc.isEmpty())
     {
@@ -399,7 +399,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
         else
         {
             aBuf.append(*MakeTypeString(eType));
-            pScChangeAction->GetDescription( aDesc, *pDoc, true);
+            aDesc = pScChangeAction->GetDescription(*pDoc, true);
         }
     }
     else
@@ -408,16 +408,16 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
 
         if(bDelMaster)
         {
-            pScChangeAction->GetDescription( aDesc, *pDoc,true);
+            aDesc = pScChangeAction->GetDescription(*pDoc,true);
             pNewData->bDisabled=true;
             pNewData->bIsRejectable=false;
         }
         else
-            pScChangeAction->GetDescription( aDesc, *pDoc, !pScChangeAction->IsMasterDelete());
+            aDesc = pScChangeAction->GetDescription(*pDoc, !pScChangeAction->IsMasterDelete());
 
     }
 
-    pScChangeAction->GetRefString(aRefStr, *pDoc, true);
+    aRefStr = pScChangeAction->GetRefString(*pDoc, true);
 
     aBuf.append('\t');
     aBuf.append(aRefStr);
@@ -570,7 +570,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
             else
             {
                 aActionString=*MakeTypeString(eType);
-                pScChangeAction->GetDescription( aDesc, *pDoc, true);
+                aDesc = pScChangeAction->GetDescription(*pDoc, true);
             }
         }
         else
@@ -579,12 +579,12 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
 
             if(bDelMaster)
             {
-                pScChangeAction->GetDescription( aDesc, *pDoc,true);
+                aDesc = pScChangeAction->GetDescription(*pDoc,true);
                 pNewData->bDisabled=true;
                 pNewData->bIsRejectable=false;
             }
             else
-                pScChangeAction->GetDescription( aDesc, *pDoc,!pScChangeAction->IsMasterDelete());
+                aDesc = pScChangeAction->GetDescription(*pDoc,!pScChangeAction->IsMasterDelete());
 
         }
 
@@ -601,8 +601,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewData.release())));
             rTreeView.insert(pParent, -1, &aActionString, &sId, nullptr, nullptr, bCreateOnDemand, xEntry.get());
 
-            OUString aRefStr;
-            pScChangeAction->GetRefString(aRefStr, *pDoc, true);
+            OUString aRefStr = pScChangeAction->GetRefString(*pDoc, true);
             rTreeView.set_text(*xEntry, aRefStr, 1);
 
             if (!bIsGenerated)
@@ -658,8 +657,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
 
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
-        OUString aTmp;
-        pScChangeAction->GetOldString(aTmp, pDoc);
+        OUString aTmp = pScChangeAction->GetOldString(pDoc);
         a2String = aTmp;
         if(a2String.isEmpty()) a2String=aStrEmpty;
 
@@ -671,8 +669,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
     }
     else
     {
-        OUString aTmp;
-        pScChangeAction->GetNewString(aTmp, pDoc);
+        OUString aTmp = pScChangeAction->GetNewString(pDoc);
         a2String = aTmp;
         if(a2String.isEmpty())
         {
@@ -690,7 +687,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
 
     aDesc += a2String;
     aString += "\t";
-    pScChangeAction->GetRefString(aRefStr, *pDoc, true);
+    aRefStr = pScChangeAction->GetRefString(*pDoc, true);
     aString += aRefStr + "\t";
 
     if(!bIsGenerated)

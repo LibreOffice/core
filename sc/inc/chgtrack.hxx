@@ -336,12 +336,10 @@ public:
                                 // description will be appended to string
                                 // with bSplitRange only one column/row will be considered for delete
                                 // (for a listing of entries)
-    virtual void GetDescription(
-        OUString& rStr, ScDocument& rDoc,
-        bool bSplitRange = false, bool bWarning = true ) const;
+    virtual OUString GetDescription(
+        ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true ) const;
 
-    virtual void GetRefString(
-        OUString& rStr, ScDocument& rDoc, bool bFlag3D = false ) const;
+    virtual OUString GetRefString( ScDocument& rDoc, bool bFlag3D = false ) const;
 
                         // for DocumentMerge set old date of the other
                         // action, fetched by GetDateTimeUTC
@@ -391,8 +389,8 @@ public:
         const ScChangeActionType eType,
         bool bEndOfList = false );
 
-    virtual void GetDescription(
-        OUString& rStr, ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true) const override;
+    virtual OUString GetDescription(
+        ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true) const override;
 
     SC_DLLPUBLIC bool IsEndOfList() const;
 };
@@ -486,8 +484,8 @@ public:
     const ScChangeActionIns*    GetCutOffInsert() const { return pCutOff; }
     short               GetCutOffCount() const { return nCutOff; }
 
-    virtual void GetDescription(
-        OUString& rStr, ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true ) const override;
+    virtual OUString GetDescription(
+        ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true ) const override;
 
     void                SetCutOffInsert( ScChangeActionIns* p, short n )
                             { pCutOff = p; nCutOff = n; }   // only to use in the XML import
@@ -557,12 +555,10 @@ public:
     const ScBigRange&   GetFromRange() const { return aFromRange; }
     SC_DLLPUBLIC        void                GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nDz ) const;
 
-    virtual void GetDescription(
-        OUString& rStr, ScDocument& rDoc, bool bSplitRange = false,
-        bool bWarning = true ) const override;
+    virtual OUString GetDescription(
+        ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true ) const override;
 
-    virtual void GetRefString(
-        OUString& rStr, ScDocument& rDoc, bool bFlag3D = false ) const override;
+    virtual OUString GetRefString( ScDocument& rDoc, bool bFlag3D = false ) const override;
 };
 
 ScChangeActionDelMoveEntry::ScChangeActionDelMoveEntry(
@@ -636,11 +632,11 @@ class SAL_DLLPUBLIC_RTTI ScChangeActionContent final : public ScChangeAction
 
     void ClearTrack();
 
-    static void GetStringOfCell(
-        OUString& rStr, const ScCellValue& rCell, const ScDocument* pDoc, const ScAddress& rPos );
+    static OUString GetStringOfCell(
+        const ScCellValue& rCell, const ScDocument* pDoc, const ScAddress& rPos );
 
-    static void GetStringOfCell(
-        OUString& rStr, const ScCellValue& rCell, const ScDocument* pDoc, sal_uLong nFormat );
+    static OUString GetStringOfCell(
+        const ScCellValue& rCell, const ScDocument* pDoc, sal_uLong nFormat );
 
     static void SetValue( OUString& rStr, ScCellValue& rCell, const ScAddress& rPos,
                           const ScCellValue& rOrgCell, const ScDocument* pFromDoc,
@@ -656,10 +652,10 @@ class SAL_DLLPUBLIC_RTTI ScChangeActionContent final : public ScChangeAction
 
     void SetValueString( OUString& rValue, ScCellValue& rCell, const OUString& rStr, ScDocument* pDoc );
 
-    void GetValueString( OUString& rStr, const OUString& rValue, const ScCellValue& rCell,
-                         const ScDocument* pDoc ) const;
+    OUString GetValueString( const OUString& rValue, const ScCellValue& rCell,
+                             const ScDocument* pDoc ) const;
 
-    void GetFormulaString( OUString& rStr, const ScFormulaCell* pCell ) const;
+    OUString GetFormulaString( const ScFormulaCell* pCell ) const;
 
     virtual void                AddContent( ScChangeActionContent* ) override {}
     virtual void                DeleteCellEntries() override {}
@@ -740,15 +736,14 @@ public:
     // assigns string / creates formula cell
     void SetOldValue( const OUString& rOld, ScDocument* pDoc );
 
-    void GetOldString( OUString& rStr, const ScDocument* pDoc ) const;
-    void GetNewString( OUString& rStr, const ScDocument* pDoc ) const;
+    OUString GetOldString( const ScDocument* pDoc ) const;
+    OUString GetNewString( const ScDocument* pDoc ) const;
     const ScCellValue& GetOldCell() const { return maOldCell;}
     const ScCellValue& GetNewCell() const { return maNewCell;}
-    virtual void GetDescription(
-        OUString& rStr, ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true ) const override;
+    virtual OUString GetDescription(
+        ScDocument& rDoc, bool bSplitRange = false, bool bWarning = true ) const override;
 
-    virtual void GetRefString(
-        OUString& rStr, ScDocument& rDoc, bool bFlag3D = false ) const override;
+    virtual OUString GetRefString( ScDocument& rDoc, bool bFlag3D = false ) const override;
 
     static ScChangeActionContentCellType GetContentCellType( const ScCellValue& rCell );
     static ScChangeActionContentCellType GetContentCellType( const ScRefCellValue& rIter );

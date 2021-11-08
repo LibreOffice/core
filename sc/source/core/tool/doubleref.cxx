@@ -303,13 +303,11 @@ SCSIZE ScDBInternalRange::getVisibleDataCellCount() const
 
 OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
 {
-    OUString aStr;
     const ScAddress& s = maRange.aStart;
     // #i109200# this is used in formula calculation, use GetInputString, not GetString
     // (consistent with ScDBInternalRange::getCellString)
     // GetStringForFormula is not used here, to allow querying for date values.
-    getDoc()->GetInputString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab(), aStr);
-    return aStr;
+    return getDoc()->GetInputString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab());
 }
 
 SCCOL ScDBInternalRange::getFirstFieldColumn() const

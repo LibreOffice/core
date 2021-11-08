@@ -103,8 +103,7 @@ void ScRangeManagerTable::CheckForFormulaString()
             ScRangeNameLine aLine;
             GetLine(aLine, rEntry);
             const ScRangeData* pData = findRangeData(aLine);
-            OUString aFormulaString;
-            pData->GetSymbol(aFormulaString, maPos);
+            OUString aFormulaString = pData->GetSymbol(maPos);
             m_xTreeView->set_text(rEntry, aFormulaString, 1);
             maCalculatedFormulaEntries.insert(std::pair<OUString, bool>(sId, true));
         }

@@ -234,8 +234,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<tools::Long>& 
         if (rScales[i] < 0)
             continue;
 
-        sal_uInt32 nOldFormat;
-        rDoc.GetNumberFormat(i, 0, 0, nOldFormat);
+        sal_uInt32 nOldFormat = rDoc.GetNumberFormat(i, 0, 0);
         const SvNumberformat* pOldEntry = pFormatter->GetEntry(nOldFormat);
         if (!pOldEntry)
             continue;
@@ -573,8 +572,7 @@ void lcl_GetColumnTypes(
                 nDbType = sdbc::DataType::VARCHAR;
             else
             {
-                sal_uInt32 nFormat;
-                rDoc.GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
+                sal_uInt32 nFormat = rDoc.GetNumberFormat( nCol, nFirstDataRow, nTab );
                 switch ( pNumFmt->GetType( nFormat ) )
                 {
                     case SvNumFormatType::LOGICAL :
@@ -929,7 +927,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
 
                     case sdbc::DataType::DATE:
                         {
-                            m_aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
+                            fVal = m_aDocument.GetValue( nDocCol, nDocRow, nTab );
                             // differentiate between 0 with value and 0 no-value
                             bool bIsNull = (fVal == 0.0);
                             if ( bIsNull )
@@ -952,7 +950,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
 
                     case sdbc::DataType::DECIMAL:
                     case sdbc::DataType::BIT:
-                        m_aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
+                        fVal = m_aDocument.GetValue( nDocCol, nDocRow, nTab );
                         if ( fVal == 0.0 && nErr == ERRCODE_NONE &&
                                             m_aDocument.HasStringData( nDocCol, nDocRow, nTab ) )
                             nErr = SCWARN_EXPORT_DATALOST;
@@ -966,7 +964,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
                         OSL_FAIL( "ScDocShell::DBaseExport: unknown FieldType" );
                         if ( nErr == ERRCODE_NONE )
                             nErr = SCWARN_EXPORT_DATALOST;
-                        m_aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
+                        fVal = m_aDocument.GetValue( nDocCol, nDocRow, nTab );
                         xRowUpdate->updateDouble( nCol+1, fVal );
                 }
             }

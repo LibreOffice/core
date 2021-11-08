@@ -226,13 +226,8 @@ public:
 
     size_t GetHash() const;
 
-    void            GetFormula( OUString& rFormula,
-                                const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                                const ScInterpreterContext* pContext = nullptr ) const;
-    void            GetFormula( OUStringBuffer& rBuffer,
-                                const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                                const ScInterpreterContext* pContext = nullptr ) const;
-
+    OUString GetFormula( const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
+                         const ScInterpreterContext* pContext = nullptr ) const;
     OUString GetFormula( sc::CompileFormulaContext& rCxt, const ScInterpreterContext* pContext = nullptr ) const;
 
     void            SetDirty( bool bDirtyFlag=true );

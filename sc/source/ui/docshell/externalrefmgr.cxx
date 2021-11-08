@@ -2279,8 +2279,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
     }
 
     // Get number format information.
-    sal_uInt32 nFmtIndex = 0;
-    rSrcDoc.GetNumberFormat(rPos.Col(), rPos.Row(), rPos.Tab(), nFmtIndex);
+    sal_uInt32 nFmtIndex = rSrcDoc.GetNumberFormat(rPos.Col(), rPos.Row(), rPos.Tab());
     nFmtIndex = getMappedNumberFormat(nFileId, nFmtIndex, rSrcDoc);
     fillCellFormat(nFmtIndex, pFmt);
     return pToken;

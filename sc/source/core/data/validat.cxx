@@ -857,8 +857,8 @@ bool ScValidationData::GetSelectionFromFormula(
                     //For external reference and a formula that results in an area or array, date formats are still lost.
                     if ( bRef )
                     {
-                        pDocument->GetInputString(static_cast<SCCOL>(nCol+aRange.aStart.Col()),
-                            static_cast<SCROW>(nRow+aRange.aStart.Row()), aRange.aStart.Tab() , aValStr);
+                        aValStr = pDocument->GetInputString(static_cast<SCCOL>(nCol+aRange.aStart.Col()),
+                            static_cast<SCROW>(nRow+aRange.aStart.Row()), aRange.aStart.Tab());
                     }
                     else
                     {

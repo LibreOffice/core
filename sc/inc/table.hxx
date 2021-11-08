@@ -446,14 +446,13 @@ public:
     bool        ReservePatternCount( SCCOL nCol, SCSIZE nReserve );
 
     void        SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rStr );
-    void        GetString( SCCOL nCol, SCROW nRow, OUString& rString,
-                           const ScInterpreterContext* pContext = nullptr ) const;
+    OUString    GetString( SCCOL nCol, SCROW nRow, const ScInterpreterContext* pContext = nullptr ) const;
     double*     GetValueCell( SCCOL nCol, SCROW nRow );
-    void        GetInputString( SCCOL nCol, SCROW nRow, OUString& rString ) const;
+    OUString    GetInputString( SCCOL nCol, SCROW nRow ) const;
     double      GetValue( SCCOL nCol, SCROW nRow ) const;
     const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
-    void GetFormula( SCCOL nCol, SCROW nRow, OUString& rFormula ) const;
+    OUString GetFormula( SCCOL nCol, SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow ) const;
     ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow );
 
@@ -1210,7 +1209,7 @@ private:
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
-    void        GetUpperCellString(SCCOL nCol, SCROW nRow, OUString& rStr);
+    OUString    GetUpperCellString(SCCOL nCol, SCROW nRow);
 
     bool        RefVisible(const ScFormulaCell* pCell);
 

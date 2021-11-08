@@ -1322,8 +1322,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
     if (eType == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pForm = aCell.mpFormula;
-        pForm->GetFormula( aVal, formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
-        return aVal;
+        return pForm->GetFormula( formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
     }
 
     SvNumberFormatter* pFormatter = bEnglish ? ScGlobal::GetEnglishFormatter() :
@@ -1346,7 +1345,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
         }
     }
     else
-        ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter, rDoc);
+        aVal = ScCellFormat::GetInputString(aCell, nNumFmt, *pFormatter, rDoc);
 
     //  if applicable, prepend ' like in ScTabViewShell::UpdateInputHandler
     if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
@@ -4794,8 +4793,6 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
     if (!pDocSh)
         return EMPTY_OUSTRING;
 
-    OUString aFormula;
-
     ScDocument& rDoc = pDocSh->GetDocument();
     ScRefCellValue aCell1(rDoc, aRange.aStart);
     ScRefCellValue aCell2(rDoc, aRange.aEnd);
@@ -4808,10 +4805,10 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
         if (pFCell1->GetMatrixOrigin(rDoc, aStart1) && pFCell2->GetMatrixOrigin(rDoc, aStart2))
         {
             if (aStart1 == aStart2)               // both the same matrix
-                pFCell1->GetFormula(aFormula);    // it doesn't matter from which cell
+                return pFCell1->GetFormula();    // it doesn't matter from which cell
         }
     }
-    return aFormula;
+    return EMPTY_OUSTRING;
 }
 
 void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,

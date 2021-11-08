@@ -138,8 +138,7 @@ public:
             }
             else
             {
-                double aValue;
-                mpDoc->GetValue(mnCol, mnRow, mnTab, aValue);
+                double aValue = mpDoc->GetValue(mnCol, mnRow, mnTab);
 #if DEBUG_CSV_HANDLER
                 std::cout << "Value: " << aValue << std::endl;
                 std::cout << "CSVValue: " << nValue << std::endl;

@@ -624,10 +624,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else // (pReqArgs == nullptr) => raise Dialog
                 {
-                    sal_uInt32 nPrivFormat;
-                    CellType eCellType;
-                    rDoc.GetNumberFormat( nStartCol, nStartRow, nStartTab, nPrivFormat );
-                    rDoc.GetCellType( nStartCol, nStartRow, nStartTab,eCellType );
+                    sal_uInt32 nPrivFormat = rDoc.GetNumberFormat( nStartCol, nStartRow, nStartTab );
+                    CellType eCellType = rDoc.GetCellType( nStartCol, nStartRow, nStartTab );
                     const SvNumberformat* pPrivEntry = pFormatter->GetEntry( nPrivFormat );
                     const SCSIZE nSelectHeight = nEndRow - nStartRow + 1;
                     const SCSIZE nSelectWidth = nEndCol - nStartCol + 1;
@@ -657,15 +655,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         double fInputEndVal = 0.0;
                         OUString aEndStr;
 
-                        rDoc.GetInputString( nStartCol, nStartRow, nStartTab, aStartStr);
-                        rDoc.GetValue( nStartCol, nStartRow, nStartTab, fStartVal );
+                        aStartStr = rDoc.GetInputString( nStartCol, nStartRow, nStartTab );
+                        fStartVal = rDoc.GetValue( nStartCol, nStartRow, nStartTab );
 
                         if(eFillDir==FILL_TO_BOTTOM && nStartRow < nEndRow )
                         {
-                            rDoc.GetInputString( nStartCol, nStartRow+1, nStartTab, aEndStr);
+                            aEndStr = rDoc.GetInputString( nStartCol, nStartRow+1, nStartTab );
                             if(!aEndStr.isEmpty())
                             {
-                                rDoc.GetValue( nStartCol, nStartRow+1, nStartTab, fInputEndVal);
+                                fInputEndVal = rDoc.GetValue( nStartCol, nStartRow+1, nStartTab );
                                 fIncVal=fInputEndVal-fStartVal;
                             }
                         }
@@ -673,10 +671,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             if(nStartCol < nEndCol)
                             {
-                                rDoc.GetInputString( nStartCol+1, nStartRow, nStartTab, aEndStr);
+                                aEndStr = rDoc.GetInputString( nStartCol+1, nStartRow, nStartTab );
                                 if(!aEndStr.isEmpty())
                                 {
-                                    rDoc.GetValue( nStartCol+1, nStartRow, nStartTab, fInputEndVal);
+                                    fInputEndVal = rDoc.GetValue( nStartCol+1, nStartRow, nStartTab );
                                     fIncVal=fInputEndVal-fStartVal;
                                 }
                             }
