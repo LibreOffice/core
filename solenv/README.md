@@ -40,8 +40,6 @@ critical for building LibreOffice:
 
 - `flatpak-manifest.in`
 
-    This file is used by `flatpak/build.sh` from the LO `dev-tools`
-    repository to generate the flatpak package. `download.lst` is
-    a `Makefile` snippet, so there seems to be no easy way to use
-    `download.lst` for the manifest generation (`build.sh` uses `sed`),
-    and its information must be kept in sync manually.
+    This file is copied manually to https://github.com/flathub/org.libreoffice.LibreOffice/blob/master/org.libreoffice.LibreOffice.json
+    The `flatpak/build.sh` in the LO `dev-tools` repository is obsolete.
+
