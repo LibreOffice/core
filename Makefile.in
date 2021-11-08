@@ -233,7 +233,7 @@ distclean : clean compilerplugins-clean
 # custom command
 #
 cmd:
-	echo "custom cmd" && ( $(cmd) )
+	$(if $(verbose),echo "custom cmd" &&) ( $(cmd) )
 
 #
 # Fetch
