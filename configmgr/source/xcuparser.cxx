@@ -286,11 +286,11 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         data_.getComponents().findNode(valueParser_.getLayer(),
                                        componentName_));
     if (!node.is()) {
-        SAL_WARN(
+/*        SAL_WARN(
             "configmgr",
             "unknown component \"" << componentName_ << "\" in \""
                 << reader.getUrl() << '"');
-        state_.push(State::Ignore(true));
+*/        state_.push(State::Ignore(true));
         return;
     }
     switch (op) {
@@ -898,11 +898,11 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
     switch (op) {
     case OPERATION_MODIFY:
         if (i == members.end()) {
-            SAL_WARN(
+/*            SAL_WARN(
                 "configmgr",
                 "ignoring modify of unknown set member node \"" << name
                     << "\" in \"" << reader.getUrl() << '"');
-            state_.push(State::Ignore(true));
+*/            state_.push(State::Ignore(true));
         } else {
             state_.push(State::Modify(i->second));
         }
