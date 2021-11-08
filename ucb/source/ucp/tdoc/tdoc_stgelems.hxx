@@ -87,7 +87,7 @@ public:
     virtual void SAL_CALL release()
         noexcept override;
 
-    // XTypeProvider (implemnented by base, but needs to be overridden for
+    // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;

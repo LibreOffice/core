@@ -684,7 +684,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             double fAmbientIntensity = GetDouble( rGeometryItem, "Brightness", 22178.0 / 655.36 ) / 100.0;
             bool bMetal = GetBool( rGeometryItem, "Metal", false );
 
-            // Currently needed for import from binar MS Office.
+            // Currently needed for import from binary MS Office.
             // ToDo: Create a solution in the filters.
             // MS Office adds black to diffuse and ambient color in case of metal. Use an
             // approximating ersatz.
