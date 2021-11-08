@@ -398,14 +398,37 @@ const SwTextNode* SwGetRefField::GetReferencedTextNode() const
     return SwGetRefFieldType::FindAnchor( &pTyp->GetDoc(), m_sSetRefName, m_nSubType, m_nSeqNo, &nDummy );
 }
 
+// strikethrough for tooltips using Unicode combining character
+static OUString lcl_formatStringByCombiningCharacter(const OUString& sText, const sal_Unicode cChar)
+{
+    OUStringBuffer sRet;
+    for (sal_Int32 i = 0; i < sText.getLength(); ++i)
+    {
+        sRet.append(sText[i]);
+        sRet.append(cChar);
+    }
+    return sRet.makeStringAndClear();
+}
+
 // #i85090#
 OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
         SwRootFrame const& rLayout) const
 {
     const SwTextNode* pReferencedTextNode( GetReferencedTextNode() );
-    return pReferencedTextNode
-           ? sw::GetExpandTextMerged(&rLayout, *pReferencedTextNode, true, false, ExpandMode(0))
-           : OUString();
+    if ( !pReferencedTextNode )
+        return OUString();
+
+    // show the referenced text without the deletions, but if the whole text was
+    // deleted, show the original text for the sake of the comfortable reviewing,
+    // but with Unicode strikethrough in the tooltip
+    OUString sRet = sw::GetExpandTextMerged(&rLayout, *pReferencedTextNode, true, false, ExpandMode::HideDeletions);
+    if ( sRet.isEmpty() )
+    {
+       static const sal_Unicode cStrikethrough = u'\x0336';
+       sRet = sw::GetExpandTextMerged(&rLayout, *pReferencedTextNode, true, false, ExpandMode(0));
+       sRet = lcl_formatStringByCombiningCharacter( sRet, cStrikethrough );
+    }
+    return sRet;
 }
 
 void SwGetRefField::SetExpand( const OUString& rStr )
@@ -608,7 +631,13 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
             if( nStart != nEnd ) // a section?
             {
-                m_sText = pTextNd->GetExpandText(pLayout, nStart, nEnd - nStart, false, false, false, ExpandMode(0));
+                m_sText = pTextNd->GetExpandText(pLayout, nStart, nEnd - nStart, false, false, false, ExpandMode::HideDeletions);
+                // show the referenced text without the deletions, but if the whole text was
+                // deleted, show the original text for the sake of the comfortable reviewing
+                // (with strikethrough in tooltip, see GetExpandedTextOfReferencedTextNode())
+                if ( m_sText.isEmpty() )
+                    m_sText = pTextNd->GetExpandText(pLayout, nStart, nEnd - nStart, false, false, false, ExpandMode(0));
+
                 if (m_nSubType == REF_OUTLINE
                     || (m_nSubType == REF_SEQUENCEFLD && REF_CONTENT == GetFormat()))
                 {
