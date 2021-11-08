@@ -112,32 +112,29 @@ namespace
         // </properties>
     };
 
-#define REGISTER_PROPERTY( propname, member ) \
-    registerProperty( PROPERTY_##propname, PROPERTY_ID_##propname, PropertyAttribute::BOUND, &member, cppu::UnoType<decltype(member)>::get() )
-
     DataAccessDescriptor::DataAccessDescriptor()
         :DataAccessDescriptor_PropertyBase( m_aBHelper )
         ,m_nCommandType( CommandType::COMMAND )
         ,m_bEscapeProcessing( true )
         ,m_bBookmarkSelection( true )
     {
-        REGISTER_PROPERTY( DATASOURCENAME,      m_sDataSourceName );
-        REGISTER_PROPERTY( DATABASE_LOCATION,   m_sDatabaseLocation );
-        REGISTER_PROPERTY( CONNECTION_RESOURCE, m_sConnectionResource );
-        REGISTER_PROPERTY( CONNECTION_INFO,     m_aConnectionInfo );
-        REGISTER_PROPERTY( ACTIVE_CONNECTION,   m_xActiveConnection );
-        REGISTER_PROPERTY( COMMAND,             m_sCommand );
-        REGISTER_PROPERTY( COMMAND_TYPE,        m_nCommandType );
-        REGISTER_PROPERTY( FILTER,              m_sFilter );
-        REGISTER_PROPERTY( ORDER,               m_sOrder );
-        REGISTER_PROPERTY( HAVING_CLAUSE,       m_sHavingClause );
-        REGISTER_PROPERTY( GROUP_BY,            m_sGroupBy );
-        REGISTER_PROPERTY( ESCAPE_PROCESSING,   m_bEscapeProcessing );
-        REGISTER_PROPERTY( RESULT_SET,          m_xResultSet );
-        REGISTER_PROPERTY( SELECTION,           m_aSelection );
-        REGISTER_PROPERTY( BOOKMARK_SELECTION,  m_bBookmarkSelection );
-        REGISTER_PROPERTY( COLUMN_NAME,         m_sColumnName );
-        REGISTER_PROPERTY( COLUMN,              m_xColumn );
+        registerProperty(PROPERTY_DATASOURCENAME, PROPERTY_ID_DATASOURCENAME, PropertyAttribute::BOUND, &m_sDataSourceName , cppu::UnoType<decltype(m_sDataSourceName )>::get());
+        registerProperty(PROPERTY_DATABASE_LOCATION, PROPERTY_ID_DATABASE_LOCATION, PropertyAttribute::BOUND, &m_sDatabaseLocation , cppu::UnoType<decltype(m_sDatabaseLocation )>::get());
+        registerProperty(PROPERTY_CONNECTION_RESOURCE, PROPERTY_ID_CONNECTION_RESOURCE, PropertyAttribute::BOUND, &m_sConnectionResource , cppu::UnoType<decltype(m_sConnectionResource )>::get());
+        registerProperty(PROPERTY_CONNECTION_INFO, PROPERTY_ID_CONNECTION_INFO, PropertyAttribute::BOUND, &m_aConnectionInfo , cppu::UnoType<decltype(m_aConnectionInfo )>::get());
+        registerProperty(PROPERTY_ACTIVE_CONNECTION, PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::BOUND, &m_xActiveConnection , cppu::UnoType<decltype(m_xActiveConnection )>::get());
+        registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND, &m_sCommand , cppu::UnoType<decltype(m_sCommand )>::get());
+        registerProperty(PROPERTY_COMMAND_TYPE, PROPERTY_ID_COMMAND_TYPE, PropertyAttribute::BOUND, &m_nCommandType , cppu::UnoType<decltype(m_nCommandType )>::get());
+        registerProperty(PROPERTY_FILTER, PROPERTY_ID_FILTER, PropertyAttribute::BOUND, &m_sFilter , cppu::UnoType<decltype(m_sFilter )>::get());
+        registerProperty(PROPERTY_ORDER, PROPERTY_ID_ORDER, PropertyAttribute::BOUND, &m_sOrder , cppu::UnoType<decltype(m_sOrder )>::get());
+        registerProperty(PROPERTY_HAVING_CLAUSE, PROPERTY_ID_HAVING_CLAUSE, PropertyAttribute::BOUND, &m_sHavingClause , cppu::UnoType<decltype(m_sHavingClause )>::get());
+        registerProperty(PROPERTY_GROUP_BY, PROPERTY_ID_GROUP_BY, PropertyAttribute::BOUND, &m_sGroupBy , cppu::UnoType<decltype(m_sGroupBy )>::get());
+        registerProperty(PROPERTY_ESCAPE_PROCESSING, PROPERTY_ID_ESCAPE_PROCESSING, PropertyAttribute::BOUND, &m_bEscapeProcessing , cppu::UnoType<decltype(m_bEscapeProcessing )>::get());
+        registerProperty(PROPERTY_RESULT_SET, PROPERTY_ID_RESULT_SET, PropertyAttribute::BOUND, &m_xResultSet , cppu::UnoType<decltype(m_xResultSet )>::get());
+        registerProperty(PROPERTY_SELECTION, PROPERTY_ID_SELECTION, PropertyAttribute::BOUND, &m_aSelection , cppu::UnoType<decltype(m_aSelection )>::get());
+        registerProperty(PROPERTY_BOOKMARK_SELECTION, PROPERTY_ID_BOOKMARK_SELECTION, PropertyAttribute::BOUND, &m_bBookmarkSelection , cppu::UnoType<decltype(m_bBookmarkSelection )>::get());
+        registerProperty(PROPERTY_COLUMN_NAME, PROPERTY_ID_COLUMN_NAME, PropertyAttribute::BOUND, &m_sColumnName , cppu::UnoType<decltype(m_sColumnName )>::get());
+        registerProperty(PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::BOUND, &m_xColumn , cppu::UnoType<decltype(m_xColumn )>::get());
     }
 
     DataAccessDescriptor::~DataAccessDescriptor()

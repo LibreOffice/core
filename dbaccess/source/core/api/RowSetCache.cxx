@@ -64,8 +64,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::osl;
 
-#define CHECK_MATRIX_POS(M) OSL_ENSURE(((M) >= static_cast<ORowSetMatrix::difference_type>(0)) && ((M) < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!")
-
 // This class calls m_pCacheSet->FOO_checked(..., sal_False)
 // (where FOO is absolute, last, previous)
 // when it does not immediately care about the values in the row's columns.
@@ -406,7 +404,7 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
         {
             if ( rPosChange.second )
             {
-                CHECK_MATRIX_POS(*aIter);
+                OSL_ENSURE((*aIter >= static_cast<ORowSetMatrix::difference_type>(0)) && (*aIter < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!");
                 if ( *aIter < _nSize )
                     aCacheIter->second.aIterator = m_pMatrix->begin() + *aIter++;
                 else
@@ -917,7 +915,8 @@ void ORowSetCache::moveWindow()
                             else
                             {
                                 // Inside overlap area: move to correct position
-                                CHECK_MATRIX_POS( (nDist + nStartPosOffset) );
+                                OSL_ENSURE(((nDist + nStartPosOffset) >= static_cast<ORowSetMatrix::difference_type>(0)) &&
+                                    ((nDist + nStartPosOffset) < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!");
                                 rCacheIter.second.aIterator += nStartPosOffset;
                                 OSL_ENSURE(rCacheIter.second.aIterator >= m_pMatrix->begin()
                                     && rCacheIter.second.aIterator < m_pMatrix->end(),"Iterator out of area!");
@@ -947,7 +946,7 @@ void ORowSetCache::moveWindow()
             if ( nRowsInCache < m_nFetchSize )
             {
                 // There is some unused space in *m_pMatrix; fill it
-                CHECK_MATRIX_POS(nRowsInCache);
+                OSL_ENSURE((nRowsInCache >= static_cast<ORowSetMatrix::difference_type>(0)) && (nRowsInCache < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!");
                 sal_Int32 nPos = m_nEndPos + 1;
                 bool bCheck = m_xCacheSet->absolute(nPos);
                 ORowSetMatrix::iterator aIter = m_pMatrix->begin() + nRowsInCache;
@@ -965,7 +964,7 @@ void ORowSetCache::moveWindow()
             // The rows behind this can be reused
             ORowSetMatrix::iterator aIter = m_pMatrix->begin();
             const sal_Int32 nNewStartPosInMatrix = nNewStartPos - m_nStartPos;
-            CHECK_MATRIX_POS( nNewStartPosInMatrix );
+            OSL_ENSURE((nNewStartPosInMatrix >= static_cast<ORowSetMatrix::difference_type>(0)) && (nNewStartPosInMatrix < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!");
             // first position we reuse
             const ORowSetMatrix::const_iterator aEnd  = m_pMatrix->begin() + nNewStartPosInMatrix;
             // End of used portion of the matrix. Is < m_pMatrix->end() if less data than window size
@@ -1624,7 +1623,7 @@ void ORowSetCache::clearInsertRow()
 ORowSetMatrix::iterator ORowSetCache::calcPosition() const
 {
     sal_Int32 nValue = (m_nPosition - m_nStartPos) - 1;
-    CHECK_MATRIX_POS(nValue);
+    OSL_ENSURE((nValue >= static_cast<ORowSetMatrix::difference_type>(0)) && (nValue < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!");
     return ( nValue < 0 || nValue >= static_cast<sal_Int32>(m_pMatrix->size()) ) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
 }
 

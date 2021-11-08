@@ -480,16 +480,16 @@ IMPLEMENT_FORWARD_XINTERFACE3( ODocumentDefinition,OContentHelper,OPropertyState
 
 void ODocumentDefinition::registerProperties()
 {
-#define REGISTER_PROPERTY( name, location ) \
-    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::READONLY, &location, cppu::UnoType<decltype(location)>::get() );
+    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::CONSTRAINED | PropertyAttribute::BOUND | PropertyAttribute::READONLY,
+                     &m_pImpl->m_aProps.aTitle, cppu::UnoType<decltype(m_pImpl->m_aProps.aTitle)>::get());
 
-#define REGISTER_PROPERTY_BV( name, location ) \
-    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::CONSTRAINED | PropertyAttribute::BOUND | PropertyAttribute::READONLY, &location, cppu::UnoType<decltype(location)>::get() );
+    registerProperty(PROPERTY_AS_TEMPLATE, PROPERTY_ID_AS_TEMPLATE, PropertyAttribute::READONLY, &m_pImpl->m_aProps.bAsTemplate,
+                     cppu::UnoType<decltype(m_pImpl->m_aProps.bAsTemplate)>::get());
 
-    REGISTER_PROPERTY_BV( NAME,            m_pImpl->m_aProps.aTitle            );
-    REGISTER_PROPERTY   ( AS_TEMPLATE,     m_pImpl->m_aProps.bAsTemplate       );
-    REGISTER_PROPERTY   ( PERSISTENT_NAME, m_pImpl->m_aProps.sPersistentName   );
-    REGISTER_PROPERTY   ( IS_FORM,         m_bForm                             );
+    registerProperty(PROPERTY_PERSISTENT_NAME, PROPERTY_ID_PERSISTENT_NAME, PropertyAttribute::READONLY, &m_pImpl->m_aProps.sPersistentName,
+                     cppu::UnoType<decltype(m_pImpl->m_aProps.sPersistentName)>::get());
+
+    registerProperty(PROPERTY_IS_FORM, PROPERTY_ID_IS_FORM, PropertyAttribute::READONLY, &m_bForm, cppu::UnoType<decltype(m_bForm)>::get());
 }
 
 void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int32 i_nHandle ) const

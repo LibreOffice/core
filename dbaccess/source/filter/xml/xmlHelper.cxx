@@ -68,12 +68,11 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
     return pHandler;
 }
 
-#define MAP_END() { nullptr, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMapper( bool bForExport )
 {
     static const XMLPropertyMapEntry s_aTableStylesProperties[] =
     {
-        MAP_END()
+        { nullptr, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aTableStylesProperties, xFac, bForExport);
@@ -81,13 +80,14 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMap
 
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapper( bool bForExport )
 {
-#define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TABLE_COLUMN, context, SvtSaveOptions::ODFSVER_010, false }
     static const XMLPropertyMapEntry s_aColumnStylesProperties[] =
     {
-        MAP_CONST_COLUMN( PROPERTY_WIDTH,           XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,       XML_TYPE_MEASURE, 0),
-        MAP_CONST_COLUMN( PROPERTY_HIDDEN,          XML_NAMESPACE_TABLE,    XML_DISPLAY,            XML_DB_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_DB_ISVISIBLE ),
-        MAP_CONST_COLUMN( PROPERTY_NUMBERFORMAT,    XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,    XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_DB_NUMBERFORMAT),
-        MAP_END()
+        { PROPERTY_WIDTH, sizeof(PROPERTY_WIDTH)-1,  XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH, XML_TYPE_MEASURE|XML_TYPE_PROP_TABLE_COLUMN, 0, SvtSaveOptions::ODFSVER_010, false },
+        { PROPERTY_HIDDEN, sizeof(PROPERTY_HIDDEN)-1,  XML_NAMESPACE_TABLE, XML_DISPLAY, XML_DB_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM|XML_TYPE_PROP_TABLE_COLUMN,
+          CTF_DB_ISVISIBLE, SvtSaveOptions::ODFSVER_010, false },
+        { PROPERTY_NUMBERFORMAT, sizeof(PROPERTY_NUMBERFORMAT)-1,  XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM|XML_TYPE_PROP_TABLE_COLUMN,
+           CTF_DB_NUMBERFORMAT, SvtSaveOptions::ODFSVER_010, false },
+        { nullptr, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aColumnStylesProperties, xFac, bForExport);
@@ -95,11 +95,10 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMa
 
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper( bool bForExport )
 {
-#define MAP_CONST_CELL( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFSVER_010, false }
 #define MAP_CONST_TEXT( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFSVER_010, false }
     static const XMLPropertyMapEntry s_aCellStylesProperties[] =
     {
-        MAP_CONST_CELL( PROPERTY_ALIGN,             XML_NAMESPACE_FO,       XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, CTF_DB_COLUMN_TEXT_ALIGN),
+        { PROPERTY_ALIGN, sizeof(PROPERTY_ALIGN)-1,  XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_TEXT_ALIGN|XML_TYPE_PROP_PARAGRAPH, CTF_DB_COLUMN_TEXT_ALIGN, SvtSaveOptions::ODFSVER_010, false },
         MAP_CONST_TEXT( PROPERTY_FONTNAME,          XML_NAMESPACE_STYLE,    XML_FONT_NAME,              XML_TYPE_STRING, 0 ),
         MAP_CONST_TEXT( PROPERTY_TEXTCOLOR,         XML_NAMESPACE_FO,       XML_COLOR,                  XML_TYPE_COLOR, 0 ),
         MAP_CONST_TEXT( PROPERTY_TEXTLINECOLOR,     XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,   XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
@@ -128,7 +127,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapp
         MAP_CONST_TEXT( PROPERTY_FONTWEIGHT,        XML_NAMESPACE_FO,       XML_FONT_WEIGHT,                XML_TYPE_TEXT_WEIGHT, 0 ),
         MAP_CONST_TEXT( PROPERTY_FONTWIDTH,         XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,                 XML_TYPE_FONT_WIDTH, 0 ),
         MAP_CONST_TEXT( PROPERTY_FONTWORDLINEMODE,  XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
-        MAP_END()
+        { nullptr, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new /*OPropertyHandlerFactory*/::xmloff::OControlPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aCellStylesProperties, xFac, bForExport);
@@ -140,7 +139,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMappe
     static const XMLPropertyMapEntry s_aStylesProperties[] =
     {
         MAP_CONST_ROW( PROPERTY_ROW_HEIGHT,         XML_NAMESPACE_STYLE,    XML_ROW_HEIGHT,             XML_TYPE_MEASURE, 0),
-        MAP_END()
+        { nullptr, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFSVER_010, false}
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
     return new XMLPropertySetMapper(s_aStylesProperties, xFac, true/*bForExport*/);
