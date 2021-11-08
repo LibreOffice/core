@@ -419,6 +419,8 @@ public:
     virtual void setTextSelection(int nType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::getSelection().
     virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
+    /// @see vcl::ITiledRenderable::getParagraphText().
+    virtual css::uno::Reference<css::datatransfer::XTransferable> getParagraphText() override;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
     virtual void setGraphicSelection(int nType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::resetSelection().

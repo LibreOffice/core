@@ -3638,6 +3638,35 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
     return xTransferable;
 }
 
+uno::Reference<datatransfer::XTransferable> SwXTextDocument::getParagraphText () {
+    SolarMutexGuard aGuard;
+
+    uno::Reference<datatransfer::XTransferable> xTransferable;
+
+    SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
+    if (SdrView* pSdrView = pWrtShell ? pWrtShell->GetDrawView() : nullptr)
+    {
+        if (pSdrView->GetTextEditObject())
+        {
+            // Editing shape text
+            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+
+            const Point cursorDocpos = rEditView.GetCursor()->GetPos();
+            sal_Int32 paragraphIndex = rEditView.GetEditEngine()->FindParagraph(cursorDocpos.getY());
+            sal_Int32 paragraphLength = rEditView.GetEditEngine()->GetTextLen(paragraphIndex);
+            //OUString content = rEditView.GetEditEngine()->GetText(paragraphIndex);
+            //ESelection selection = ESelection(paragraphIndex, 0);
+            ESelection selection = ESelection(paragraphIndex, 0, paragraphIndex, paragraphLength);
+            xTransferable = rEditView.GetEditEngine()->CreateTransferable(selection);
+        }
+    }
+
+    if (!xTransferable.is())
+        xTransferable = new SwTransferable(*pWrtShell);
+
+    return xTransferable;
+}
+
 void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;

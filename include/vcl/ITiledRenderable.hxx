@@ -151,6 +151,14 @@ public:
     virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() = 0;
 
     /**
+     * Gets the paragraph text as a transferable for later processing
+     */
+    virtual css::uno::Reference<css::datatransfer::XTransferable> getParagraphText()
+    {
+        return NULL;
+    }
+
+    /**
      * Adjusts the graphic selection.
      *
      * @see lok::Document::setGraphicSelection().
