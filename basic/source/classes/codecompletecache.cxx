@@ -19,13 +19,16 @@
 
 #include <basic/codecompletecache.hxx>
 #include <iostream>
-#include <rtl/instance.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
 #include <officecfg/Office/Common.hxx>
 
 namespace
 {
-    class theCodeCompleteOptions: public ::rtl::Static< CodeCompleteOptions, theCodeCompleteOptions >{};
+CodeCompleteOptions& theCodeCompleteOptions()
+{
+    static CodeCompleteOptions SINGLETON;
+    return SINGLETON;
+}
 }
 
 CodeCompleteOptions::CodeCompleteOptions()
@@ -40,62 +43,62 @@ CodeCompleteOptions::CodeCompleteOptions()
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsCodeCompleteOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsCodeCompleteOn;
 }
 
 void CodeCompleteOptions::SetCodeCompleteOn( bool b )
 {
-    theCodeCompleteOptions::get().bIsCodeCompleteOn = b;
+    theCodeCompleteOptions().bIsCodeCompleteOn = b;
 }
 
 bool CodeCompleteOptions::IsExtendedTypeDeclaration()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bExtendedTypeDeclarationOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bExtendedTypeDeclarationOn;
 }
 
 void CodeCompleteOptions::SetExtendedTypeDeclaration( bool b )
 {
-    theCodeCompleteOptions::get().bExtendedTypeDeclarationOn = b;
+    theCodeCompleteOptions().bExtendedTypeDeclarationOn = b;
 }
 
 bool CodeCompleteOptions::IsProcedureAutoCompleteOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsProcedureAutoCompleteOn;
 }
 
 void CodeCompleteOptions::SetProcedureAutoCompleteOn( bool b )
 {
-    theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn = b;
+    theCodeCompleteOptions().bIsProcedureAutoCompleteOn = b;
 }
 
 bool CodeCompleteOptions::IsAutoCloseQuotesOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsAutoCloseQuotesOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsAutoCloseQuotesOn;
 }
 
 void CodeCompleteOptions::SetAutoCloseQuotesOn( bool b )
 {
-    theCodeCompleteOptions::get().bIsAutoCloseQuotesOn = b;
+    theCodeCompleteOptions().bIsAutoCloseQuotesOn = b;
 }
 
 bool CodeCompleteOptions::IsAutoCloseParenthesisOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsAutoCloseParenthesisOn;
 }
 
 void CodeCompleteOptions::SetAutoCloseParenthesisOn( bool b )
 {
-    theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn = b;
+    theCodeCompleteOptions().bIsAutoCloseParenthesisOn = b;
 }
 
 bool CodeCompleteOptions::IsAutoCorrectOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsAutoCorrectOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsAutoCorrectOn;
 }
 
 void CodeCompleteOptions::SetAutoCorrectOn( bool b )
 {
-    theCodeCompleteOptions::get().bIsAutoCorrectOn = b;
+    theCodeCompleteOptions().bIsAutoCorrectOn = b;
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)

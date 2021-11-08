@@ -32,7 +32,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 

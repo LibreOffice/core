@@ -22,7 +22,6 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <rtl/instance.hxx>
 
 namespace chart
 {
@@ -78,17 +77,13 @@ FieldUnit CalcConfigItem::getFieldUnit()
     return eResult;
 }
 
-namespace
-{
-    //a CalcConfigItem Singleton
-    struct theCalcConfigItem : public rtl::Static< CalcConfigItem, theCalcConfigItem > {};
-}
-
 namespace ConfigurationAccess
 {
     FieldUnit getFieldUnit()
     {
-        FieldUnit aUnit( theCalcConfigItem::get().getFieldUnit() );
+        //a CalcConfigItem Singleton
+        static CalcConfigItem SINGLETON;
+        FieldUnit aUnit( SINGLETON.getFieldUnit() );
         return aUnit;
     }
 } //namespace ConfigurationAccess

@@ -41,7 +41,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/character.hxx>

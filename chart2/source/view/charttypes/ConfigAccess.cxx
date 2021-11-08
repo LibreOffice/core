@@ -21,7 +21,6 @@
 
 #include <unotools/configitem.hxx>
 #include <o3tl/any.hxx>
-#include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace chart
@@ -59,19 +58,13 @@ bool ChartConfigItem::getUseErrorRectangle()
     return b && *b;
 }
 
-namespace
-{
-//a ChartConfigItem Singleton
-struct theChartConfigItem : public rtl::Static<ChartConfigItem, theChartConfigItem>
-{
-};
-}
-
 namespace ConfigAccess
 {
 bool getUseErrorRectangle()
 {
-    bool bResult(theChartConfigItem::get().getUseErrorRectangle());
+    //a ChartConfigItem Singleton
+    static ChartConfigItem SINGLETON;
+    bool bResult(SINGLETON.getUseErrorRectangle());
     return bResult;
 }
 } //namespace ConfigAccess

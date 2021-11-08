@@ -24,13 +24,21 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/instance.hxx>
 
 #include <typelib/typedescription.h>
 #include "typelib.hxx"
 
 
 using namespace osl;
+
+namespace
+{
+    Mutex& typelib_StaticInitMutex()
+    {
+        static Mutex SINGLETON;
+        return SINGLETON;
+    }
+}
 
 extern "C"
 {
@@ -88,11 +96,6 @@ static sal_Int32 newAlignedSize(
 }
 
 
-namespace
-{
-    struct typelib_StaticInitMutex : public rtl::Static< Mutex, typelib_StaticInitMutex > {};
-}
-
 // !for NOT REALLY WEAK TYPES only!
 static typelib_TypeDescriptionReference * igetTypeByName( rtl_uString const * pTypeName )
 {
@@ -119,7 +122,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
 
     if (! s_aTypes[eTypeClass])
     {
-        MutexGuard aGuard( typelib_StaticInitMutex::get() );
+        MutexGuard aGuard( typelib_StaticInitMutex() );
         if (! s_aTypes[eTypeClass])
         {
             static const char * s_aTypeNames[] = {
@@ -280,7 +283,7 @@ void SAL_CALL typelib_static_type_init(
 {
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_StaticInitMutex::get() );
+        MutexGuard aGuard( typelib_StaticInitMutex() );
         if (! *ppRef)
         {
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
@@ -300,7 +303,7 @@ void SAL_CALL typelib_static_sequence_type_init(
     if ( *ppRef)
         return;
 
-    MutexGuard aGuard( typelib_StaticInitMutex::get() );
+    MutexGuard aGuard( typelib_StaticInitMutex() );
     if ( *ppRef)
         return;
 
@@ -338,7 +341,7 @@ void init(
     if ( *ppRef)
         return;
 
-    MutexGuard aGuard( typelib_StaticInitMutex::get() );
+    MutexGuard aGuard( typelib_StaticInitMutex() );
     if ( *ppRef)
         return;
 
@@ -452,7 +455,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
     if ( *ppRef)
         return;
 
-    MutexGuard aGuard( typelib_StaticInitMutex::get() );
+    MutexGuard aGuard( typelib_StaticInitMutex() );
     if ( *ppRef)
         return;
 
@@ -515,7 +518,7 @@ void SAL_CALL typelib_static_enum_type_init(
     if ( *ppRef)
         return;
 
-    MutexGuard aGuard( typelib_StaticInitMutex::get() );
+    MutexGuard aGuard( typelib_StaticInitMutex() );
     if ( *ppRef)
         return;
 
