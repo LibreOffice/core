@@ -1288,6 +1288,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUseFormerLineSpacing = false;
     bool bUseFormerObjectPositioning = false;
     bool bUseFormerTextWrapping = false;
+    bool bUseTextWrappingOnHeadersEndnotes = false;
     bool bConsiderWrapOnObjPos = false;
     bool bIgnoreFirstLineIndentInNumbering = false;
     bool bDoNotJustifyLinesWithManualBreak = false;
@@ -1361,6 +1362,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bUseFormerObjectPositioning = true;
                 else if ( rValue.Name == "UseFormerTextWrapping" )
                     bUseFormerTextWrapping = true;
+                else if ( rValue.Name == "UseTextWrappingOnHeadersEndnotes" )
+                    bUseTextWrappingOnHeadersEndnotes = true;
                 else if ( rValue.Name == "UseOldNumbering" )
                     bUseOldNumbering = true;
                 else if ( rValue.Name == "ConsiderTextWrapOnObjPos" )
@@ -1461,6 +1464,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !bUseFormerTextWrapping )
     {
         xProps->setPropertyValue( "UseFormerTextWrapping", makeAny( true ) );
+    }
+
+    if (!bUseTextWrappingOnHeadersEndnotes)
+    {
+        xProps->setPropertyValue("UseTextWrappingOnHeadersEndnotes", makeAny(false));
     }
 
     if (!bConsiderWrapOnObjPos && bAreUserSettingsFromDocument)

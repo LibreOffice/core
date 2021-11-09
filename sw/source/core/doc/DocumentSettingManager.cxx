@@ -60,7 +60,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbAddFlyOffsets(false),
     mbAddVerticalFlyOffsets(false),
     mbUseHiResolutionVirtualDevice(true),
-    mbUseTextWrappingOnHeadersEndnotes(false), // tdf#104254
+    mbUseTextWrappingOnHeadersEndnotes(true), // tdf#104254
     mbMathBaselineAlignment(false), // default for *old* documents is 'off'
     mbStylesNoDefault(false),
     mbFloattableNomargins(false),
