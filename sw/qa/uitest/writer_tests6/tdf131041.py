@@ -14,7 +14,7 @@ class tdf131041(UITestCase):
 
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
-                select_pos(tabcontrol, 4) #header
+                select_pos(tabcontrol, "4") #header
 
                 xHeaderOn = xDialog.getChild("checkHeaderOn")
                 xMoreBtn = xDialog.getChild("buttonMore")
