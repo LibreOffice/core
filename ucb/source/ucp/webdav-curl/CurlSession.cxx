@@ -776,7 +776,8 @@ struct CurlProcessor
     static auto ProcessRequest(
         CurlSession& rSession, CurlUri const& rURI, ::std::vector<CurlOption> const& rOptions,
         DAVRequestEnvironment const* pEnv,
-        ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+        ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>>
+            pRequestHeaderList,
         uno::Reference<io::XOutputStream> const* pxOutStream,
         uno::Reference<io::XInputStream> const* pxInStream,
         ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders) -> void;
@@ -792,10 +793,10 @@ struct CurlProcessor
                            ::std::u16string_view rDestinationURI, DAVRequestEnvironment const& rEnv,
                            bool isOverwrite, char const* pMethod) -> void;
 
-    static auto
-    Lock(CurlSession& rSession, CurlUri const& rURI, DAVRequestEnvironment const* pEnv,
-         ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
-         uno::Reference<io::XInputStream> const* pxInStream)
+    static auto Lock(CurlSession& rSession, CurlUri const& rURI, DAVRequestEnvironment const* pEnv,
+                     ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>>
+                         pRequestHeaderList,
+                     uno::Reference<io::XInputStream> const* pxInStream)
         -> ::std::vector<::std::pair<ucb::Lock, sal_Int32>>;
 
     static auto Unlock(CurlSession& rSession, CurlUri const& rURI,
@@ -1110,7 +1111,8 @@ static auto TryRemoveExpiredLockToken(CurlSession& rSession, CurlUri const& rURI
 auto CurlProcessor::ProcessRequest(
     CurlSession& rSession, CurlUri const& rURI, ::std::vector<CurlOption> const& rOptions,
     DAVRequestEnvironment const* const pEnv,
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>>
+        pRequestHeaderList,
     uno::Reference<io::XOutputStream> const* const pxOutStream,
     uno::Reference<io::XInputStream> const* const pxInStream,
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders)
@@ -1448,7 +1450,7 @@ auto CurlProcessor::PropFind(
                   != (::std::get<2>(*o_pRequestedProperties) != nullptr));
 
     // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
@@ -1603,7 +1605,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
     // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
@@ -1791,7 +1793,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
     // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
@@ -1833,7 +1835,7 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
     // TODO: either set CURLOPT_POSTFIELDSIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
@@ -1881,7 +1883,7 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
     // TODO: either set CURLOPT_POSTFIELDSIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
@@ -1929,7 +1931,7 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURI
 
     OString const utf8Destination("Destination: "
                                   + OUStringToOString(rDestinationURI, RTL_TEXTENCODING_ASCII_US));
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, utf8Destination.getStr()));
     if (!pList)
     {
@@ -1983,7 +1985,8 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
 
 auto CurlProcessor::Lock(
     CurlSession& rSession, CurlUri const& rURI, DAVRequestEnvironment const* const pEnv,
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>>
+        pRequestHeaderList,
     uno::Reference<io::XInputStream> const* const pxRequestInStream)
     -> ::std::vector<::std::pair<ucb::Lock, sal_Int32>>
 {
@@ -2095,7 +2098,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     xRequestOutStream->closeOutput();
 
     // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
@@ -2168,7 +2171,7 @@ auto CurlProcessor::Unlock(CurlSession& rSession, CurlUri const& rURI,
     }
     OString const utf8LockToken("Lock-Token: <"
                                 + OUStringToOString(*pToken, RTL_TEXTENCODING_ASCII_US) + ">");
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
         curl_slist_append(nullptr, utf8LockToken.getStr()));
     if (!pList)
     {
@@ -2206,7 +2209,7 @@ auto CurlSession::NonInteractive_LOCK(OUString const& rURI, ::std::u16string_vie
     try
     {
         CurlUri const uri(rURI);
-        ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
+        ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
             curl_slist_append(nullptr, "Timeout: Second-180"));
 
         assert(!rLockToken.empty()); // LockStore is the caller

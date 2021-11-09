@@ -29,14 +29,17 @@
 
 namespace http_dav_ucp
 {
-template <auto fn> using deleter_from_fn = ::std::integral_constant<decltype(fn), fn>;
-template <typename T> using CurlUniquePtr = ::std::unique_ptr<T, deleter_from_fn<curl_free>>;
+template <typename T, auto fn> struct deleter_from_fn
+{
+    void operator()(T* p) const { fn(p); }
+};
+template <typename T> using CurlUniquePtr = ::std::unique_ptr<T, deleter_from_fn<T, curl_free>>;
 
 class CurlUri
 {
 private:
     /// native curl representation of parsed URI
-    ::std::unique_ptr<CURLU, deleter_from_fn<curl_url_cleanup>> m_pUrl;
+    ::std::unique_ptr<CURLU, deleter_from_fn<CURLU, curl_url_cleanup>> m_pUrl;
     /// duplicate state for quick access to some components
     OUString m_URI;
     OUString m_Scheme;
