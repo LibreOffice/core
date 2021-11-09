@@ -491,6 +491,7 @@ certain functionality.
 @li @c vcl.osx.clipboard
 @li @c vcl.osx.print
 @li @c vcl.pdfwriter
+@li @c vcl.print
 @li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
 @li @c vcl.qt - Qt
 @li @c vcl.quartz
