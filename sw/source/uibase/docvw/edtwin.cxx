@@ -2501,6 +2501,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 weld::DialogController::runAsync(xInfo, [](int) {});
                 eKeyState = SwKeyState::End;
             }
+
+            if (aCh == ' ' && ((rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_SPACE))
+                rSh.AutoFormat(nullptr, true);
         break;
 
         case SwKeyState::CheckAutoCorrect:

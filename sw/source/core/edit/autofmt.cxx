@@ -392,7 +392,7 @@ bool SwAutoFormat::IsEnumericChar(const SwTextFrame& rFrame) const
         return false;
 
     // -, +, * separated by blank ??
-    if (TextFrameIndex(2) < nLen && IsSpace(rText[sal_Int32(nBlanks) + 1]))
+    if (TextFrameIndex(2) <= nLen && IsSpace(rText[sal_Int32(nBlanks) + 1]))
     {
         if (StrChr(pBulletChar, rText[sal_Int32(nBlanks)]))
             return true;
@@ -1497,6 +1497,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 || IsBlanksInString(*m_pCurTextFrame)
                 || IsSentenceAtEnd(*m_pCurTextFrame);
     bool bRTL = m_pEditShell->IsInRightToLeftText();
+
+    const OUString sStrWithTrailingBlanks = DelLeadingBlanks(m_pCurTextFrame->GetText());
+
     DeleteLeadingTrailingBlanks();
 
     bool bChgBullet = false, bChgEnum = false;
@@ -1518,10 +1521,11 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     }
 
     // replace bullet character with defined one
-    const OUString& rStr = m_pCurTextFrame->GetText();
+    bool bIsShortBullet = sStrWithTrailingBlanks == "* " || sStrWithTrailingBlanks == "- ";
+    const OUString& rStr = bIsShortBullet ? sStrWithTrailingBlanks : m_pCurTextFrame->GetText();
     TextFrameIndex nTextStt(0);
     const sal_Unicode* pFndBulletChr = nullptr;
-    if (m_aFlags.bChgEnumNum && 2 < rStr.getLength())
+    if (m_aFlags.bChgEnumNum && 2 <= rStr.getLength())
         pFndBulletChr = StrChr(pBulletChar, rStr[sal_Int32(nTextStt)]);
     if (nullptr != pFndBulletChr && IsSpace(rStr[sal_Int32(nTextStt) + 1]))
     {
@@ -1702,9 +1706,11 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             {
                 m_aDelPam.SetMark();
                 SwTextFrame const*const pNextFrame = GetNextNode(false);
-                assert(pNextFrame);
-                m_aDelPam.GetMark()->nNode = *pNextFrame->GetTextNodeForParaProps();
-                m_aDelPam.GetNode(false).GetTextNode()->SetAttrListLevel( nLvl );
+                if (pNextFrame)
+                {
+                    m_aDelPam.GetMark()->nNode = *pNextFrame->GetTextNodeForParaProps();
+                    m_aDelPam.GetNode(false).GetTextNode()->SetAttrListLevel( nLvl );
+                }
             }
 
             const_cast<SwTextNode*>(m_pCurTextFrame->GetTextNodeForParaProps())->SetAttrListLevel(nLvl);
@@ -1723,9 +1729,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         m_aDelPam.SetMark();
 
         if ( bChgBullet )
-            nTextStt += TextFrameIndex(2);
+            nTextStt += TextFrameIndex(bIsShortBullet ? 1 : 2);
 
-        while (nTextStt < TextFrameIndex(rStr.getLength()) && IsSpace(rStr[sal_Int32(nTextStt)]))
+        while (!bIsShortBullet && nTextStt < TextFrameIndex(rStr.getLength()) && IsSpace(rStr[sal_Int32(nTextStt)]))
             nTextStt++;
 
         *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nTextStt);
@@ -2323,7 +2329,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
     {
         READ_NEXT_PARA, // -> ISEND, TST_EMPTY_LINE
         TST_EMPTY_LINE, // -> READ_NEXT_PARA, TST_ALPHA_LINE
-        TST_ALPHA_LINE, // -> READ_NEXT_PARA, GET_ALL_INFO, IS_END
+        TST_ALPHA_LINE, // -> READ_NEXT_PARA, GET_ALL_INFO, TST_ENUMERIC, IS_END
         GET_ALL_INFO,   // -> READ_NEXT_PARA, IS_ONE_LINE, TST_ENUMERIC, HAS_FMTCOLL
         IS_ONE_LINE,    // -> READ_NEXT_PARA, TST_ENUMERIC
         TST_ENUMERIC,   // -> READ_NEXT_PARA, TST_IDENT, TST_NEG_IDENT
@@ -2380,6 +2386,13 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                     pEdShell->Push();
 
                     eStat = IS_END;
+                    break;
+                }
+
+                const OUString& rStr = m_pCurTextFrame->GetText();
+                if (rStr == "- " || rStr == "* ")
+                {
+                    eStat = TST_ENUMERIC;
                     break;
                 }
 
@@ -2705,7 +2718,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
         ::EndProgress( m_pDoc->GetDocShell() );
 }
 
-void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
+void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags, bool bCurrentParagraphOnly )
 {
     std::unique_ptr<SwWait> pWait;
 
@@ -2733,6 +2746,13 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
                                      &(rPaM.End()->nNode) );
             }
         }
+    }
+    else if (bCurrentParagraphOnly)
+    {
+        pCursor->SetMark();
+        SwIndex* pContent = &pCursor->GetMark()->nContent;
+        SwAutoFormat aFormat( this, aAFFlags, &pCursor->GetMark()->nNode,
+                                &pCursor->GetPoint()->nNode );
     }
     else
     {
