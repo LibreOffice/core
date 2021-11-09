@@ -71,7 +71,7 @@ void StringStatic::postRun()
     }
     for (auto const & varDecl : potentialVars) {
         report(DiagnosticsEngine::Warning,
-                "rather declare this using OUStringLiteral/OStringLiteral/char[]",
+                "rather declare this using OUStringConstExpr/OUStringLiteral/OStringLiteral/char[]",
                 varDecl->getLocation())
             << varDecl->getSourceRange();
     }

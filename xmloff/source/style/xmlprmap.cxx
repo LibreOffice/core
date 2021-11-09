@@ -75,8 +75,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     const XMLPropertyMapEntry& rMapEntry,
     const rtl::Reference< XMLPropertyHandlerFactory >& rFactory ) :
     sXMLAttributeName( GetXMLToken(rMapEntry.meXMLName) ),
-    sAPIPropertyName( OUString(rMapEntry.msApiName, rMapEntry.nApiNameLength,
-                               RTL_TEXTENCODING_ASCII_US ) ),
+    sAPIPropertyName( rMapEntry.msApiName ),
     nType( rMapEntry.mnType ),
     nXMLNameSpace( rMapEntry.mnNameSpace ),
     nContextId( rMapEntry.mnContextId ),
@@ -111,7 +110,7 @@ XMLPropertySetMapper::XMLPropertySetMapper(
 
     if (mpImpl->mbOnlyExportMappings)
     {
-        while( pIter->msApiName )
+        while( !static_cast<const OUString&>(pIter->msApiName).isEmpty() )
         {
             if (!pIter->mbImportOnly)
             {
@@ -123,7 +122,7 @@ XMLPropertySetMapper::XMLPropertySetMapper(
     }
     else
     {
-        while( pIter->msApiName )
+        while( !static_cast<const OUString&>(pIter->msApiName).isEmpty() )
         {
             XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
             mpImpl->maMapEntries.push_back( aEntry );
