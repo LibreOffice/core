@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace com::sun::star;
@@ -161,9 +160,11 @@ public:
 
 namespace
 {
-struct theGlobalDefault : public rtl::Static<ViewInformation2D::ImplType, theGlobalDefault>
+ViewInformation2D::ImplType& theGlobalDefault()
 {
-};
+    static ViewInformation2D::ImplType SINGLETON;
+    return SINGLETON;
+}
 }
 
 ViewInformation2D::ViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
@@ -178,7 +179,7 @@ ViewInformation2D::ViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransfo
 }
 
 ViewInformation2D::ViewInformation2D()
-    : mpViewInformation2D(theGlobalDefault::get())
+    : mpViewInformation2D(theGlobalDefault())
 {
 }
 

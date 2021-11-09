@@ -20,7 +20,6 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/vector/b3dvector.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -56,12 +55,6 @@ namespace drawinglayer::attribute
                     && getSpecular() == rCandidate.getSpecular());
             }
         };
-
-        namespace
-        {
-            struct theGlobalDefault :
-                public rtl::Static< Sdr3DLightAttribute::ImplType, theGlobalDefault > {};
-        }
 
         Sdr3DLightAttribute::Sdr3DLightAttribute(
             const basegfx::BColor& rColor,

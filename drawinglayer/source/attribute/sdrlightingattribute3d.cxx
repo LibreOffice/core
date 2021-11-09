@@ -21,7 +21,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -58,8 +57,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrLightingAttribute::ImplType, theGlobalDefault > {};
+            SdrLightingAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrLightingAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrLightingAttribute::SdrLightingAttribute(
@@ -71,7 +73,7 @@ namespace drawinglayer::attribute
         }
 
         SdrLightingAttribute::SdrLightingAttribute()
-        :   mpSdrLightingAttribute(theGlobalDefault::get())
+        :   mpSdrLightingAttribute(theGlobalDefault())
         {
         }
 
@@ -84,7 +86,7 @@ namespace drawinglayer::attribute
 
         bool SdrLightingAttribute::isDefault() const
         {
-            return mpSdrLightingAttribute.same_object(theGlobalDefault::get());
+            return mpSdrLightingAttribute.same_object(theGlobalDefault());
         }
 
         SdrLightingAttribute& SdrLightingAttribute::operator=(const SdrLightingAttribute&) = default;

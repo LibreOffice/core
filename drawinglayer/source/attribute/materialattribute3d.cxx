@@ -19,7 +19,6 @@
 
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -70,8 +69,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< MaterialAttribute3D::ImplType, theGlobalDefault > {};
+            MaterialAttribute3D::ImplType& theGlobalDefault()
+            {
+                static MaterialAttribute3D::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         MaterialAttribute3D::MaterialAttribute3D(
@@ -91,7 +93,7 @@ namespace drawinglayer::attribute
         }
 
         MaterialAttribute3D::MaterialAttribute3D()
-        :   mpMaterialAttribute3D(theGlobalDefault::get())
+        :   mpMaterialAttribute3D(theGlobalDefault())
         {
         }
 

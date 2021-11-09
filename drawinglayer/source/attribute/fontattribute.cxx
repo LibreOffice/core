@@ -18,7 +18,6 @@
  */
 
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 
 namespace drawinglayer::attribute
@@ -92,9 +91,11 @@ public:
 
 namespace
 {
-struct theGlobalDefault : public rtl::Static<FontAttribute::ImplType, theGlobalDefault>
+FontAttribute::ImplType& theGlobalDefault()
 {
-};
+    static FontAttribute::ImplType SINGLETON;
+    return SINGLETON;
+}
 }
 
 FontAttribute::FontAttribute(const OUString& rFamilyName, const OUString& rStyleName,
@@ -106,7 +107,7 @@ FontAttribute::FontAttribute(const OUString& rFamilyName, const OUString& rStyle
 }
 
 FontAttribute::FontAttribute()
-    : mpFontAttribute(theGlobalDefault::get())
+    : mpFontAttribute(theGlobalDefault())
 {
 }
 

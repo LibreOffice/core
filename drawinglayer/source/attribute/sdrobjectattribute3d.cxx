@@ -19,7 +19,6 @@
 
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -95,12 +94,6 @@ namespace drawinglayer::attribute
                     && getReducedLineGeometry() == rCandidate.getReducedLineGeometry());
             }
         };
-
-        namespace
-        {
-            struct theGlobalDefault :
-                public rtl::Static< Sdr3DObjectAttribute::ImplType, theGlobalDefault > {};
-        }
 
         Sdr3DObjectAttribute::Sdr3DObjectAttribute(
             css::drawing::NormalsKind  aNormalsKind,

@@ -18,7 +18,6 @@
  */
 
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -76,8 +75,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrSceneAttribute::ImplType, theGlobalDefault > {};
+            SdrSceneAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrSceneAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrSceneAttribute::SdrSceneAttribute(
@@ -92,7 +94,7 @@ namespace drawinglayer::attribute
         }
 
         SdrSceneAttribute::SdrSceneAttribute()
-        :   mpSdrSceneAttribute(theGlobalDefault::get())
+        :   mpSdrSceneAttribute(theGlobalDefault())
         {
         }
 
@@ -104,7 +106,7 @@ namespace drawinglayer::attribute
 
         bool SdrSceneAttribute::isDefault() const
         {
-            return mpSdrSceneAttribute.same_object(theGlobalDefault::get());
+            return mpSdrSceneAttribute.same_object(theGlobalDefault());
         }
 
         SdrSceneAttribute& SdrSceneAttribute::operator=(const SdrSceneAttribute&) = default;

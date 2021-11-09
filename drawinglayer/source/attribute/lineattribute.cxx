@@ -19,7 +19,6 @@
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -75,8 +74,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< LineAttribute::ImplType, theGlobalDefault > {};
+            LineAttribute::ImplType& theGlobalDefault()
+            {
+                static LineAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         LineAttribute::LineAttribute(
@@ -96,7 +98,7 @@ namespace drawinglayer::attribute
         }
 
         LineAttribute::LineAttribute()
-        :   mpLineAttribute(theGlobalDefault::get())
+        :   mpLineAttribute(theGlobalDefault())
         {
         }
 
@@ -106,7 +108,7 @@ namespace drawinglayer::attribute
 
         bool LineAttribute::isDefault() const
         {
-            return mpLineAttribute.same_object(theGlobalDefault::get());
+            return mpLineAttribute.same_object(theGlobalDefault());
         }
 
         LineAttribute& LineAttribute::operator=(const LineAttribute&) = default;

@@ -20,7 +20,6 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -74,8 +73,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrShadowAttribute::ImplType, theGlobalDefault > {};
+            SdrShadowAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrShadowAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
 
@@ -91,7 +93,7 @@ namespace drawinglayer::attribute
         }
 
         SdrShadowAttribute::SdrShadowAttribute()
-        :   mpSdrShadowAttribute(theGlobalDefault::get())
+        :   mpSdrShadowAttribute(theGlobalDefault())
         {
         }
 
@@ -103,7 +105,7 @@ namespace drawinglayer::attribute
 
         bool SdrShadowAttribute::isDefault() const
         {
-            return mpSdrShadowAttribute.same_object(theGlobalDefault::get());
+            return mpSdrShadowAttribute.same_object(theGlobalDefault());
         }
 
         SdrShadowAttribute& SdrShadowAttribute::operator=(const SdrShadowAttribute&) = default;

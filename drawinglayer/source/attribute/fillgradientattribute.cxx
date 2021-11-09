@@ -19,7 +19,6 @@
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -92,8 +91,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< FillGradientAttribute::ImplType, theGlobalDefault > {};
+            FillGradientAttribute::ImplType& theGlobalDefault()
+            {
+                static FillGradientAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         FillGradientAttribute::FillGradientAttribute(
@@ -111,7 +113,7 @@ namespace drawinglayer::attribute
         }
 
         FillGradientAttribute::FillGradientAttribute()
-        :   mpFillGradientAttribute(theGlobalDefault::get())
+        :   mpFillGradientAttribute(theGlobalDefault())
         {
         }
 
@@ -123,7 +125,7 @@ namespace drawinglayer::attribute
 
         bool FillGradientAttribute::isDefault() const
         {
-            return mpFillGradientAttribute.same_object(theGlobalDefault::get());
+            return mpFillGradientAttribute.same_object(theGlobalDefault());
         }
 
         FillGradientAttribute& FillGradientAttribute::operator=(const FillGradientAttribute&) = default;
