@@ -323,7 +323,7 @@ public:
 
     void AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel& rModel );
 
-    static bool isCategoryPositionShifted(
+    bool isCategoryPositionShifted(
         const chart2::ScaleData& rSourceScale, bool bHasComplexCategories );
 
 private:
@@ -348,12 +348,14 @@ private:
      */
     sal_Int32 m_nMaxAxisIndex;
 
+    bool m_bChartTypeUsesShiftedCategoryPositionPerDefault;
     sal_Int32 m_nDefaultDateNumberFormat;
 };
 
 SeriesPlotterContainer::SeriesPlotterContainer( std::vector< std::unique_ptr<VCoordinateSystem> >& rVCooSysList )
         : m_rVCooSysList( rVCooSysList )
         , m_nMaxAxisIndex(0)
+        , m_bChartTypeUsesShiftedCategoryPositionPerDefault(false)
         , m_nDefaultDateNumberFormat(0)
 {
 }
@@ -517,6 +519,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 }
             }
 
+            if(nT==0)
+                m_bChartTypeUsesShiftedCategoryPositionPerDefault = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( xChartType );
+
             bool bExcludingPositioning = DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_EXCLUDING;
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
             if( !pPlotter )
@@ -628,7 +633,7 @@ bool SeriesPlotterContainer::isCategoryPositionShifted(
     const chart2::ScaleData& rSourceScale, bool bHasComplexCategories )
 {
     if (rSourceScale.AxisType == AxisType::CATEGORY)
-        return bHasComplexCategories || rSourceScale.ShiftedCategoryPosition;
+        return bHasComplexCategories || rSourceScale.ShiftedCategoryPosition || m_bChartTypeUsesShiftedCategoryPositionPerDefault;
 
     if (rSourceScale.AxisType == AxisType::DATE)
         return rSourceScale.ShiftedCategoryPosition;
