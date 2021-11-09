@@ -16,6 +16,7 @@ def type_text(ui_object, text):
     ui_object.executeAction("TYPE", mkPropertyValues({"TEXT": text}))
 
 def select_pos(ui_object, pos):
+    assert isinstance(pos, str), "select_pos: POS must be of type str"
     ui_object.executeAction("SELECT", mkPropertyValues({"POS": pos}))
 
 def select_by_text(ui_object, text):

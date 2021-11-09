@@ -18,7 +18,7 @@ class tdf128431(UITestCase):
 
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
-                select_pos(tabcontrol, 6) #borders
+                select_pos(tabcontrol, "6") #borders
 
                 sync = xDialog.getChild("sync")
                 bottomft = xDialog.getChild("bottommf")

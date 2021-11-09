@@ -60,7 +60,7 @@ class AutoRedactDialog(UITestCase):
                         xNewContentTxt=dialog.getChild("content")
                         xTypeList = dialog.getChild("type") #0: Text, 1: Regex, 2: Predefined
 
-                        select_pos(xTypeList, 0) #Text
+                        select_pos(xTypeList, "0") #Text
                         self.assertEqual(int(get_state_as_dict(xTypeList)["SelectEntryPos"]), 0)
 
                         type_text(xNewNameTxt, targets_list[self.add_target_counter][0])
@@ -108,7 +108,7 @@ class AutoRedactDialog(UITestCase):
                     xNewContentTxt=dialog.getChild("content")
                     xTypeList = dialog.getChild("type") #0: Text, 1: Regex, 2: Predefined
 
-                    select_pos(xTypeList, 0) #Text
+                    select_pos(xTypeList, "0") #Text
                     self.assertEqual(int(get_state_as_dict(xTypeList)["SelectEntryPos"]), 0)
 
                     type_text(xNewNameTxt, "TestTarget")
