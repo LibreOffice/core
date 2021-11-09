@@ -121,10 +121,10 @@
 
 namespace
 {
-    void GetWinExtMax(const Point& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
+    void GetWinExtMax(const Point& rSource, tools::Rectangle& rPlaceableBound, emfio::MappingMode eMapMode)
     {
         Point aSource(rSource);
-        if (nMapMode == MM_HIMETRIC)
+        if (eMapMode == emfio::MappingMode::MM_HIMETRIC)
             aSource.setY( -rSource.Y() );
         if (aSource.X() < rPlaceableBound.Left())
             rPlaceableBound.SetLeft( aSource.X() );
@@ -136,7 +136,7 @@ namespace
             rPlaceableBound.SetBottom( aSource.Y() );
     }
 
-    void GetWinExtMax(const tools::Rectangle& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
+    void GetWinExtMax(const tools::Rectangle& rSource, tools::Rectangle& rPlaceableBound, emfio::MappingMode nMapMode)
     {
         GetWinExtMax(rSource.TopLeft(), rPlaceableBound, nMapMode);
         GetWinExtMax(rSource.BottomRight(), rPlaceableBound, nMapMode);
@@ -303,7 +303,7 @@ namespace emfio
             {
                 sal_Int16 nMapMode = 0;
                 mpInputStream->ReadInt16( nMapMode );
-                SetMapMode( nMapMode );
+                SetMapMode( static_cast<MappingMode>(nMapMode) );
             }
             break;
 
@@ -935,8 +935,9 @@ namespace emfio
                 sal_uInt16 nStyle(0), nColorUsage(0);
 
                 mpInputStream->ReadUInt16( nStyle ).ReadUInt16( nColorUsage );
+                BrushStyle eStyle = static_cast<BrushStyle>(nStyle);
                 SAL_INFO( "emfio", "\t\t Style:" << nStyle << ", ColorUsage: " << nColorUsage );
-                if ( nStyle == BS_PATTERN ) // TODO tdf#142625 Add support for pattern
+                if ( eStyle == BrushStyle::BS_PATTERN ) // TODO tdf#142625 Add support for pattern
                 {
                     SAL_WARN( "emfio", "\tTODO: Pattern brush style is not supported." );
                     CreateObject();
@@ -1091,8 +1092,9 @@ namespace emfio
             {
                 sal_uInt16  nBrushStyle = 0;
                 mpInputStream->ReadUInt16( nBrushStyle );
-                CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( nBrushStyle == BS_NULL ) ));
-                SAL_WARN_IF( (nBrushStyle != BS_SOLID) && (nBrushStyle != BS_NULL), "emfio", "TODO: Brush style not implemented. Please fill the bug report" );
+                BrushStyle eBrushStyle = static_cast<BrushStyle>(nBrushStyle);
+                CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( eBrushStyle == BrushStyle::BS_NULL ) ));
+                SAL_WARN_IF( (eBrushStyle != BrushStyle::BS_SOLID) && (eBrushStyle != BrushStyle::BS_NULL), "emfio", "TODO: Brush style not implemented. Please fill the bug report" );
             }
             break;
 
@@ -1187,7 +1189,7 @@ namespace emfio
                 if ( !nObjIndex )
                 {
                     tools::PolyPolygon aEmptyPolyPoly;
-                    SetClipPath( aEmptyPolyPoly, RGN_COPY, true );
+                    SetClipPath( aEmptyPolyPoly, RegionMode::RGN_COPY, true );
                 }
             }
             break;
@@ -1454,7 +1456,7 @@ namespace emfio
             if (mpExternalHeader != nullptr
                 && mpExternalHeader->xExt > 0
                 && mpExternalHeader->yExt > 0
-                && (mpExternalHeader->mapMode == MM_ISOTROPIC || mpExternalHeader->mapMode == MM_ANISOTROPIC))
+                && (mpExternalHeader->mapMode == MappingMode::MM_ISOTROPIC || mpExternalHeader->mapMode == MappingMode::MM_ANISOTROPIC))
             {
                 // #n417818#: If we have an external header then overwrite the bounds!
                 tools::Rectangle aExtRect(0, 0,
@@ -1466,7 +1468,7 @@ namespace emfio
                     " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top()
                     << " right: " << aPlaceableBound.Right() << " bottom: " << aPlaceableBound.Bottom());
 
-                SetMapMode(mpExternalHeader->mapMode);
+                SetMapMode(static_cast<MappingMode>(mpExternalHeader->mapMode));;
             }
             else
             {
@@ -1547,7 +1549,7 @@ namespace emfio
         mnEMFRec = 0;
         mnEMFSize = 0;
 
-        SetMapMode( MM_ANISOTROPIC );
+        SetMapMode( MappingMode::MM_ANISOTROPIC );
         SetWinOrg( Point() );
         SetWinExt( Size( 1, 1 ) );
         SetDevExt( Size( 10000, 10000 ) );
@@ -1667,7 +1669,7 @@ namespace emfio
 
         if (nEnd - nPos)
         {
-            sal_Int16 nMapMode = MM_ANISOTROPIC;
+            MappingMode eMapMode = MappingMode::MM_ANISOTROPIC;
             sal_uInt16 nFunction;
             sal_uInt32 nRSize;
 
@@ -1723,36 +1725,48 @@ namespace emfio
                     break;
 
                     case W_META_SETMAPMODE :
+                    {
+                        sal_Int16 nMapMode(0);
                         pStm->ReadInt16( nMapMode );
+                        eMapMode = static_cast<MappingMode>(nMapMode);
+                    }
                     break;
 
                     case W_META_MOVETO:
                     case W_META_LINETO:
-                        GetWinExtMax( ReadYX(), aBound, nMapMode );
+                    {
+                        GetWinExtMax( ReadYX(), aBound, eMapMode );
                         bBoundsDetermined = true;
+                    }
                     break;
 
                     case W_META_RECTANGLE:
                     case W_META_INTERSECTCLIPRECT:
                     case W_META_EXCLUDECLIPRECT :
                     case W_META_ELLIPSE:
-                        GetWinExtMax( ReadRectangle(), aBound, nMapMode );
+                    {
+                        GetWinExtMax( ReadRectangle(), aBound, eMapMode );
                         bBoundsDetermined = true;
+                    }
                     break;
 
                     case W_META_ROUNDRECT:
+                    {
                         ReadYXExt(); // size
-                        GetWinExtMax( ReadRectangle(), aBound, nMapMode );
+                        GetWinExtMax( ReadRectangle(), aBound, eMapMode );
                         bBoundsDetermined = true;
+                    }
                     break;
 
                     case W_META_ARC:
                     case W_META_PIE:
                     case W_META_CHORD:
+                    {
                         ReadYX(); // end
                         ReadYX(); // start
-                        GetWinExtMax( ReadRectangle(), aBound, nMapMode );
+                        GetWinExtMax( ReadRectangle(), aBound, eMapMode );
                         bBoundsDetermined = true;
+                    }
                     break;
 
                     case W_META_POLYGON:
@@ -1770,7 +1784,7 @@ namespace emfio
                         {
                             for(sal_uInt16 i = 0; i < nPoints; i++ )
                             {
-                                GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                                GetWinExtMax( ReadPoint(), aBound, eMapMode );
                                 bBoundsDetermined = true;
                             }
                         }
@@ -1831,7 +1845,7 @@ namespace emfio
                         {
                             for (sal_uInt16 i = 0; i < nPoints; i++ )
                             {
-                                GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                                GetWinExtMax( ReadPoint(), aBound, eMapMode );
                                 bBoundsDetermined = true;
                             }
                         }
@@ -1863,7 +1877,7 @@ namespace emfio
                         {
                             for (sal_uInt16 i = 0; i < nPoints; ++i)
                             {
-                                GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                                GetWinExtMax( ReadPoint(), aBound, eMapMode );
                                 bBoundsDetermined = true;
                             }
                         }
@@ -1884,7 +1898,7 @@ namespace emfio
                     case W_META_SETPIXEL:
                     {
                         ReadColor();
-                        GetWinExtMax( ReadYX(), aBound, nMapMode );
+                        GetWinExtMax( ReadYX(), aBound, eMapMode );
                         bBoundsDetermined = true;
                     }
                     break;
@@ -1897,7 +1911,7 @@ namespace emfio
                         if ( nLength )
                         {
                             pStm->SeekRel( ( nLength + 1 ) &~ 1 );
-                            GetWinExtMax( ReadYX(), aBound, nMapMode );
+                            GetWinExtMax( ReadYX(), aBound, eMapMode );
                             bBoundsDetermined = true;
                         }
                     }
@@ -1911,7 +1925,7 @@ namespace emfio
                         // todo: we also have to take care of the text width
                         if( nLen )
                         {
-                            GetWinExtMax( aPosition, aBound, nMapMode );
+                            GetWinExtMax( aPosition, aBound, eMapMode );
                             bBoundsDetermined = true;
                         }
                     }
@@ -1949,7 +1963,7 @@ namespace emfio
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                         {
                             tools::Rectangle aDestRect( ReadYX(), aDestSize );
-                            GetWinExtMax( aDestRect, aBound, nMapMode );
+                            GetWinExtMax( aDestRect, aBound, eMapMode );
                             bBoundsDetermined = true;
                         }
                     }
@@ -1960,7 +1974,7 @@ namespace emfio
                         sal_uInt32 nROP(0);
                         pStm->ReadUInt32( nROP );
                         Size aSize = ReadYXExt();
-                        GetWinExtMax( tools::Rectangle( ReadYX(), aSize ), aBound, nMapMode );
+                        GetWinExtMax( tools::Rectangle( ReadYX(), aSize ), aBound, eMapMode );
                         bBoundsDetermined = true;
                     }
                     break;
