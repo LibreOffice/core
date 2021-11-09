@@ -62,12 +62,19 @@ using namespace ::com::sun::star::style;
 #define CELLMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_CELL,context)
 #define MAP_END { nullptr, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false }
 
+constexpr OUStringLiteral WIDTH = u"Width";
+constexpr OUStringLiteral OPTIMAL_WIDTH = u"OptimalWidth";
+constexpr OUStringLiteral HEIGHT = u"Height";
+constexpr OUStringLiteral MIN_HEIGHT = u"MinHeight";
+constexpr OUStringLiteral OPTIMAL_HEIGHT = u"OptimalHeight";
+constexpr OUStringLiteral ROTATE_ANGLE = u"RotateAngle";
+
 const XMLPropertyMapEntry* getColumnPropertiesMap()
 {
     static const XMLPropertyMapEntry aXMLColumnProperties[] =
     {
-        CMAP( "Width",          XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,               XML_TYPE_MEASURE,   0 ),
-        CMAP( "OptimalWidth",   XML_NAMESPACE_STYLE,    XML_USE_OPTIMAL_COLUMN_WIDTH,   XML_TYPE_BOOL, 0 ),
+        CMAP( WIDTH,          XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,               XML_TYPE_MEASURE,   0 ),
+        CMAP( OPTIMAL_WIDTH,   XML_NAMESPACE_STYLE,    XML_USE_OPTIMAL_COLUMN_WIDTH,   XML_TYPE_BOOL, 0 ),
         MAP_END
     };
 
@@ -78,9 +85,9 @@ const XMLPropertyMapEntry* getRowPropertiesMap()
 {
     static const XMLPropertyMapEntry aXMLRowProperties[] =
     {
-        RMAP( "Height",         XML_NAMESPACE_STYLE, XML_ROW_HEIGHT,                    XML_TYPE_MEASURE,   0 ),
-        RMAP( "MinHeight",      XML_NAMESPACE_STYLE, XML_MIN_ROW_HEIGHT,                XML_TYPE_MEASURE,   0 ),
-        RMAP( "OptimalHeight",  XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT,        XML_TYPE_BOOL, 0 ),
+        RMAP( HEIGHT,         XML_NAMESPACE_STYLE, XML_ROW_HEIGHT,                    XML_TYPE_MEASURE,   0 ),
+        RMAP( MIN_HEIGHT,      XML_NAMESPACE_STYLE, XML_MIN_ROW_HEIGHT,                XML_TYPE_MEASURE,   0 ),
+        RMAP( OPTIMAL_HEIGHT,  XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT,        XML_TYPE_BOOL, 0 ),
         MAP_END
     };
 
@@ -91,7 +98,7 @@ const XMLPropertyMapEntry* getCellPropertiesMap()
 {
     static const XMLPropertyMapEntry aXMLCellProperties[] =
     {
-        CELLMAP( "RotateAngle",     XML_NAMESPACE_STYLE, XML_ROTATION_ANGLE,         XML_SD_TYPE_CELL_ROTATION_ANGLE,   0),
+        CELLMAP( ROTATE_ANGLE,     XML_NAMESPACE_STYLE, XML_ROTATION_ANGLE,         XML_SD_TYPE_CELL_ROTATION_ANGLE,   0),
         MAP_END
     };
 

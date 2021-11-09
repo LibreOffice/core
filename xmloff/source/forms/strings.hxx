@@ -25,71 +25,71 @@ namespace xmloff
 {
 
     // properties
-    #define PROPERTY_CLASSID "ClassId"
-    #define PROPERTY_ECHOCHAR "EchoChar"
-    #define PROPERTY_MULTILINE "MultiLine"
-    #define PROPERTY_NAME "Name"
-    #define PROPERTY_GRAPHIC "Graphic"
-    #define PROPERTY_LABEL "Label"
-    #define PROPERTY_TARGETFRAME "TargetFrame"
-    #define PROPERTY_TARGETURL "TargetURL"
-    #define PROPERTY_TITLE "Tag"
-    #define PROPERTY_DROPDOWN "Dropdown"
-    #define PROPERTY_PRINTABLE "Printable"
-    #define PROPERTY_READONLY "ReadOnly"
-    #define PROPERTY_DEFAULT_STATE "DefaultState"
-    #define PROPERTY_TABSTOP "Tabstop"
-    #define PROPERTY_STATE "State"
-    #define PROPERTY_ENABLED "Enabled"
-    #define PROPERTY_ENABLEVISIBLE "EnableVisible"
-    #define PROPERTY_MAXTEXTLENGTH "MaxTextLen"
-    #define PROPERTY_LINECOUNT "LineCount"
-    #define PROPERTY_TABINDEX "TabIndex"
-    #define PROPERTY_COMMAND "Command"
-    #define PROPERTY_DATASOURCENAME "DataSourceName"
-    #define PROPERTY_FILTER "Filter"
-    #define PROPERTY_ORDER "Order"
-    #define PROPERTY_ALLOWDELETES "AllowDeletes"
-    #define PROPERTY_ALLOWINSERTS "AllowInserts"
-    #define PROPERTY_ALLOWUPDATES "AllowUpdates"
-    #define PROPERTY_APPLYFILTER "ApplyFilter"
-    #define PROPERTY_ESCAPEPROCESSING "EscapeProcessing"
-    #define PROPERTY_IGNORERESULT "IgnoreResult"
-    #define PROPERTY_SUBMIT_ENCODING "SubmitEncoding"
-    #define PROPERTY_SUBMIT_METHOD "SubmitMethod"
-    #define PROPERTY_COMMAND_TYPE "CommandType"
-    #define PROPERTY_NAVIGATION "NavigationBarMode"
-    #define PROPERTY_CYCLE "Cycle"
-    #define PROPERTY_BUTTONTYPE "ButtonType"
-    #define PROPERTY_DATAFIELD "DataField"
-    #define PROPERTY_BOUNDCOLUMN "BoundColumn"
-    #define PROPERTY_EMPTY_IS_NULL "ConvertEmptyToNull"
-    #define PROPERTY_INPUT_REQUIRED "InputRequired"
-    #define PROPERTY_LISTSOURCE "ListSource"
-    #define PROPERTY_LISTSOURCETYPE "ListSourceType"
-    #define PROPERTY_ECHO_CHAR "EchoChar"
-    #define PROPERTY_STRICTFORMAT "StrictFormat"
-    #define PROPERTY_AUTOCOMPLETE "Autocomplete"
-    #define PROPERTY_MULTISELECTION "MultiSelection"
-    #define PROPERTY_DEFAULTBUTTON "DefaultButton"
-    #define PROPERTY_TRISTATE "TriState"
-    #define PROPERTY_CONTROLLABEL "LabelControl"
-    #define PROPERTY_STRING_ITEM_LIST "StringItemList"
-    #define PROPERTY_VALUE_SEQ "ValueItemList"
-    #define PROPERTY_DEFAULT_SELECT_SEQ "DefaultSelection"
-    #define PROPERTY_SELECT_SEQ "SelectedItems"
-    #define PROPERTY_DATE_MIN "DateMin"
-    #define PROPERTY_DATE_MAX "DateMax"
-    #define PROPERTY_TIME_MIN "TimeMin"
-    #define PROPERTY_TIME_MAX "TimeMax"
+    inline constexpr OUStringLiteral PROPERTY_CLASSID = u"ClassId";
+    inline constexpr OUStringLiteral PROPERTY_ECHOCHAR = u"EchoChar";
+    inline constexpr OUStringLiteral PROPERTY_MULTILINE = u"MultiLine";
+    inline constexpr OUStringLiteral PROPERTY_NAME = u"Name";
+    inline constexpr OUStringLiteral PROPERTY_GRAPHIC = u"Graphic";
+    inline constexpr OUStringLiteral PROPERTY_LABEL = u"Label";
+    inline constexpr OUStringLiteral PROPERTY_TARGETFRAME = u"TargetFrame";
+    inline constexpr OUStringLiteral PROPERTY_TARGETURL = u"TargetURL";
+    inline constexpr OUStringLiteral PROPERTY_TITLE = u"Tag";
+    inline constexpr OUStringLiteral PROPERTY_DROPDOWN = u"Dropdown";
+    inline constexpr OUStringLiteral PROPERTY_PRINTABLE = u"Printable";
+    inline constexpr OUStringLiteral PROPERTY_READONLY = u"ReadOnly";
+    inline constexpr OUStringLiteral PROPERTY_DEFAULT_STATE = u"DefaultState";
+    inline constexpr OUStringLiteral PROPERTY_TABSTOP = u"Tabstop";
+    inline constexpr OUStringLiteral PROPERTY_STATE = u"State";
+    inline constexpr OUStringLiteral PROPERTY_ENABLED = u"Enabled";
+    inline constexpr OUStringLiteral PROPERTY_ENABLEVISIBLE = u"EnableVisible";
+    inline constexpr OUStringLiteral PROPERTY_MAXTEXTLENGTH  = u"MaxTextLen";
+    inline constexpr OUStringLiteral PROPERTY_LINECOUNT = u"LineCount";
+    inline constexpr OUStringLiteral PROPERTY_TABINDEX = u"TabIndex";
+    inline constexpr OUStringLiteral PROPERTY_COMMAND = u"Command";
+    inline constexpr OUStringLiteral PROPERTY_DATASOURCENAME = u"DataSourceName";
+    inline constexpr OUStringLiteral PROPERTY_FILTER = u"Filter";
+    inline constexpr OUStringLiteral PROPERTY_ORDER = u"Order";
+    inline constexpr OUStringLiteral PROPERTY_ALLOWDELETES = u"AllowDeletes";
+    inline constexpr OUStringLiteral PROPERTY_ALLOWINSERTS = u"AllowInserts";
+    inline constexpr OUStringLiteral PROPERTY_ALLOWUPDATES = u"AllowUpdates";
+    inline constexpr OUStringLiteral PROPERTY_APPLYFILTER = u"ApplyFilter";
+    inline constexpr OUStringLiteral PROPERTY_ESCAPEPROCESSING = u"EscapeProcessing";
+    inline constexpr OUStringLiteral PROPERTY_IGNORERESULT = u"IgnoreResult";
+    inline constexpr OUStringLiteral PROPERTY_SUBMIT_ENCODING = u"SubmitEncoding";
+    inline constexpr OUStringLiteral PROPERTY_SUBMIT_METHOD = u"SubmitMethod";
+    inline constexpr OUStringLiteral PROPERTY_COMMAND_TYPE = u"CommandType";
+    inline constexpr OUStringLiteral PROPERTY_NAVIGATION = u"NavigationBarMode";
+    inline constexpr OUStringLiteral PROPERTY_CYCLE = u"Cycle";
+    inline constexpr OUStringLiteral PROPERTY_BUTTONTYPE = u"ButtonType";
+    inline constexpr OUStringLiteral PROPERTY_DATAFIELD = u"DataField";
+    inline constexpr OUStringLiteral PROPERTY_BOUNDCOLUMN = u"BoundColumn";
+    inline constexpr OUStringLiteral PROPERTY_EMPTY_IS_NULL = u"ConvertEmptyToNull";
+    inline constexpr OUStringLiteral PROPERTY_INPUT_REQUIRED = u"InputRequired";
+    inline constexpr OUStringLiteral PROPERTY_LISTSOURCE = u"ListSource";
+    inline constexpr OUStringLiteral PROPERTY_LISTSOURCETYPE = u"ListSourceType";
+    inline constexpr OUStringLiteral PROPERTY_ECHO_CHAR = u"EchoChar";
+    inline constexpr OUStringLiteral PROPERTY_STRICTFORMAT = u"StrictFormat";
+    inline constexpr OUStringLiteral PROPERTY_AUTOCOMPLETE = u"Autocomplete";
+    inline constexpr OUStringLiteral PROPERTY_MULTISELECTION = u"MultiSelection";
+    inline constexpr OUStringLiteral PROPERTY_DEFAULTBUTTON = u"DefaultButton";
+    inline constexpr OUStringLiteral PROPERTY_TRISTATE = u"TriState";
+    inline constexpr OUStringLiteral PROPERTY_CONTROLLABEL = u"LabelControl";
+    inline constexpr OUStringLiteral PROPERTY_STRING_ITEM_LIST = u"StringItemList";
+    inline constexpr OUStringLiteral PROPERTY_VALUE_SEQ = u"ValueItemList";
+    inline constexpr OUStringLiteral PROPERTY_DEFAULT_SELECT_SEQ = u"DefaultSelection";
+    inline constexpr OUStringLiteral PROPERTY_SELECT_SEQ = u"SelectedItems";
+    inline constexpr OUStringLiteral PROPERTY_DATE_MIN = u"DateMin";
+    inline constexpr OUStringLiteral PROPERTY_DATE_MAX = u"DateMax";
+    inline constexpr OUStringLiteral PROPERTY_TIME_MIN = u"TimeMin";
+    inline constexpr OUStringLiteral PROPERTY_TIME_MAX = u"TimeMax";
     #define PROPERTY_VALUE_MIN "ValueMin"
     #define PROPERTY_VALUE_MAX "ValueMax"
     #define PROPERTY_EFFECTIVE_MIN "EffectiveMin"
     #define PROPERTY_EFFECTIVE_MAX "EffectiveMax"
-    #define PROPERTY_DEFAULT_DATE "DefaultDate"
-    #define PROPERTY_DATE "Date"
-    #define PROPERTY_DEFAULT_TIME "DefaultTime"
-    #define PROPERTY_TIME "Time"
+    inline constexpr OUStringLiteral PROPERTY_DEFAULT_DATE = u"DefaultDate";
+    inline constexpr OUStringLiteral PROPERTY_DATE = u"Date";
+    inline constexpr OUStringLiteral PROPERTY_DEFAULT_TIME = u"DefaultTime";
+    inline constexpr OUStringLiteral PROPERTY_TIME = u"Time";
     #define PROPERTY_DEFAULT_VALUE "DefaultValue"
     #define PROPERTY_VALUE "Value"
     #define PROPERTY_HIDDEN_VALUE "HiddenValue"
@@ -98,49 +98,49 @@ namespace xmloff
     #define PROPERTY_EFFECTIVE_VALUE "EffectiveValue"
     #define PROPERTY_EFFECTIVE_DEFAULT "EffectiveDefault"
     #define PROPERTY_REFVALUE "RefValue"
-    #define PROPERTY_URL "URL"
-    #define PROPERTY_FONT "FontDescriptor"
-    #define PROPERTY_BACKGROUNDCOLOR "BackgroundColor"
-    #define PROPERTY_MASTERFIELDS "MasterFields"
-    #define PROPERTY_DETAILFIELDS "DetailFields"
-    #define PROPERTY_COLUMNSERVICENAME "ColumnServiceName"
-    #define PROPERTY_FORMATKEY "FormatKey"
-    #define PROPERTY_ALIGN "Align"
-    #define PROPERTY_BORDER "Border"
-    #define PROPERTY_AUTOCONTROLFOCUS "AutomaticControlFocus"
-    #define PROPERTY_APPLYDESIGNMODE "ApplyFormDesignMode"
-    #define PROPERTY_FORMATSSUPPLIER "FormatsSupplier"
-    #define PROPERTY_LOCALE "Locale"
-    #define PROPERTY_FORMATSTRING "FormatString"
-    #define PROPERTY_DATEFORMAT "DateFormat"
-    #define PROPERTY_TIMEFORMAT "TimeFormat"
-    #define PROPERTY_PERSISTENCE_MAXTEXTLENGTH "PersistenceMaxTextLength"
+    inline constexpr OUStringLiteral PROPERTY_URL = u"URL";
+    inline constexpr OUStringLiteral PROPERTY_FONT = u"FontDescriptor";
+    inline constexpr OUStringLiteral PROPERTY_BACKGROUNDCOLOR  = u"BackgroundColor";
+    inline constexpr OUStringLiteral PROPERTY_MASTERFIELDS = u"MasterFields";
+    inline constexpr OUStringLiteral PROPERTY_DETAILFIELDS = u"DetailFields";
+    inline constexpr OUStringLiteral PROPERTY_COLUMNSERVICENAME = u"ColumnServiceName";
+    inline constexpr OUStringLiteral PROPERTY_FORMATKEY = u"FormatKey";
+    inline constexpr OUStringLiteral PROPERTY_ALIGN = u"Align";
+    inline constexpr OUStringLiteral PROPERTY_BORDER = u"Border";
+    inline constexpr OUStringLiteral PROPERTY_AUTOCONTROLFOCUS = u"AutomaticControlFocus";
+    inline constexpr OUStringLiteral PROPERTY_APPLYDESIGNMODE = u"ApplyFormDesignMode";
+    inline constexpr OUStringLiteral PROPERTY_FORMATSSUPPLIER = u"FormatsSupplier";
+    inline constexpr OUStringLiteral PROPERTY_LOCALE = u"Locale";
+    inline constexpr OUStringLiteral PROPERTY_FORMATSTRING = u"FormatString";
+    inline constexpr OUStringLiteral PROPERTY_DATEFORMAT = u"DateFormat";
+    inline constexpr OUStringLiteral PROPERTY_TIMEFORMAT = u"TimeFormat";
+    inline constexpr OUStringLiteral PROPERTY_PERSISTENCE_MAXTEXTLENGTH = u"PersistenceMaxTextLength";
     #define PROPERTY_SCROLLVALUE_MIN "ScrollValueMin"
     #define PROPERTY_SCROLLVALUE_MAX "ScrollValueMax"
     #define PROPERTY_SCROLLVALUE "ScrollValue"
     #define PROPERTY_SCROLLVALUE_DEFAULT "DefaultScrollValue"
-    #define PROPERTY_LINE_INCREMENT "LineIncrement"
-    #define PROPERTY_BLOCK_INCREMENT "BlockIncrement"
-    #define PROPERTY_REPEAT_DELAY "RepeatDelay"
+    inline constexpr OUStringLiteral PROPERTY_LINE_INCREMENT = u"LineIncrement";
+    inline constexpr OUStringLiteral PROPERTY_BLOCK_INCREMENT = u"BlockIncrement";
+    inline constexpr OUStringLiteral PROPERTY_REPEAT_DELAY = u"RepeatDelay";
     #define PROPERTY_SPINVALUE "SpinValue"
     #define PROPERTY_SPINVALUE_MIN "SpinValueMin"
     #define PROPERTY_SPINVALUE_MAX "SpinValueMax"
     #define PROPERTY_DEFAULT_SPINVALUE "DefaultSpinValue"
-    #define PROPERTY_SPIN_INCREMENT "SpinIncrement"
-    #define PROPERTY_ORIENTATION "Orientation"
-    #define PROPERTY_TOGGLE "Toggle"
-    #define PROPERTY_FOCUS_ON_CLICK "FocusOnClick"
-    #define PROPERTY_VISUAL_EFFECT "VisualEffect"
-    #define PROPERTY_IMAGE_POSITION "ImagePosition"
-    #define PROPERTY_IMAGE_ALIGN "ImageAlign"
+    inline constexpr OUStringLiteral PROPERTY_SPIN_INCREMENT = u"SpinIncrement";
+    inline constexpr OUStringLiteral PROPERTY_ORIENTATION = u"Orientation";
+    inline constexpr OUStringLiteral PROPERTY_TOGGLE = u"Toggle";
+    inline constexpr OUStringLiteral PROPERTY_FOCUS_ON_CLICK = u"FocusOnClick";
+    inline constexpr OUStringLiteral PROPERTY_VISUAL_EFFECT = u"VisualEffect";
+    inline constexpr OUStringLiteral PROPERTY_IMAGE_POSITION = u"ImagePosition";
+    inline constexpr OUStringLiteral PROPERTY_IMAGE_ALIGN = u"ImageAlign";
     #define PROPERTY_SCALE_IMAGE "ScaleImage"
-    #define PROPERTY_GROUP_NAME "GroupName"
+    inline constexpr OUStringLiteral PROPERTY_GROUP_NAME  = u"GroupName";
 
-    #define PROPERTY_BOUND_CELL "BoundCell"
-    #define PROPERTY_LIST_CELL_RANGE "CellRange"
-    #define PROPERTY_ADDRESS "Address"
-    #define PROPERTY_FILE_REPRESENTATION "PersistentRepresentation"
-    #define PROPERTY_RICH_TEXT "RichText"
+    inline constexpr OUStringLiteral PROPERTY_BOUND_CELL = u"BoundCell";
+    inline constexpr OUStringLiteral PROPERTY_LIST_CELL_RANGE = u"CellRange";
+    inline constexpr OUStringLiteral PROPERTY_ADDRESS = u"Address";
+    inline constexpr OUStringLiteral PROPERTY_FILE_REPRESENTATION = u"PersistentRepresentation";
+    inline constexpr OUStringLiteral PROPERTY_RICH_TEXT = u"RichText";
 
     // services
     inline constexpr OUStringLiteral SERVICE_SPREADSHEET_DOCUMENT = u"com.sun.star.sheet.SpreadsheetDocument";

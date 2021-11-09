@@ -2568,9 +2568,9 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         return false;
     }
 
-    const OUString aPropertyNames[] =
+    static constexpr rtl::OUStringConstExpr aPropertyNames[]
     {
-        OUString(PROPERTY_URL), OUString(PROPERTY_USER)
+        PROPERTY_URL, PROPERTY_USER
     };
 
     // disconnect from old model

@@ -209,8 +209,8 @@ void OXMLCell::endFastElement(sal_Int32)
             {
                 pAutoStyle->FillPropertySet(xBorderProp);
                 table::BorderLine2 aRight,aLeft;
-                xBorderProp->getPropertyValue(PROPERTY_BORDERRIGHT) >>= aRight;
-                xBorderProp->getPropertyValue(PROPERTY_BORDERLEFT) >>= aLeft;
+                xBorderProp->getPropertyValue(PROPERTY_BORDER_RIGHT) >>= aRight;
+                xBorderProp->getPropertyValue(PROPERTY_BORDER_LEFT) >>= aLeft;
                 const sal_Int16 rWidth = (aRight.LineWidth == 0) ? aRight.OuterLineWidth : aRight.LineWidth;
                 const sal_Int16 lWidth = (aLeft.LineWidth  == 0) ? aLeft.OuterLineWidth  : aLeft.LineWidth;
                 xFixedLine->setOrientation( (rWidth != 0 || lWidth != 0) ? 1 : 0);
