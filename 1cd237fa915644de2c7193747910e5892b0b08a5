@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4db21136_f39ac76e",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-09T18:32:11Z",
+      "side": 1,
+      "message": "double dot here. Typo.",
+      "range": {
+        "startLine": 1245,
+        "startChar": 37,
+        "endLine": 1245,
+        "endChar": 38
+      },
+      "revId": "1cd237fa915644de2c7193747910e5892b0b08a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
