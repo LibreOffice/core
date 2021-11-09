@@ -1876,17 +1876,26 @@ class SFDocuments:
             return windowname,
 
         # Next functions are implemented in Basic as read-only properties with 1 argument
+        def FirstCell(self, rangename):
+            return self.GetProperty('FirstCell', rangename)
+
+        def FirstColumn(self, rangename):
+            return self.GetProperty('FirstColumn', rangename)
+
+        def FirstRow(self, rangename):
+            return self.GetProperty('FirstRow', rangename)
+
         def Height(self, rangename):
             return self.GetProperty('Height', rangename)
 
-        def LastCell(self, sheetname):
-            return self.GetProperty('LastCell', sheetname)
+        def LastCell(self, rangename):
+            return self.GetProperty('LastCell', rangename)
 
-        def LastColumn(self, sheetname):
-            return self.GetProperty('LastColumn', sheetname)
+        def LastColumn(self, rangename):
+            return self.GetProperty('LastColumn', rangename)
 
-        def LastRow(self, sheetname):
-            return self.GetProperty('LastRow', sheetname)
+        def LastRow(self, rangename):
+            return self.GetProperty('LastRow', rangename)
 
         def Range(self, rangename):
             return self.GetProperty('Range', rangename)
@@ -1896,6 +1905,9 @@ class SFDocuments:
 
         def Sheet(self, sheetname):
             return self.GetProperty('Sheet', sheetname)
+
+        def SheetName(self, rangename):
+            return self.GetProperty('SheetName', rangename)
 
         def Width(self, rangename):
             return self.GetProperty('Width', rangename)
@@ -1973,9 +1985,6 @@ class SFDocuments:
 
         def GetFormula(self, range):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetFormula', range)
-
-        def GetRangeAddress(self, range, addressitem = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'GetRangeAddress', range, addressitem)
 
         def GetValue(self, range):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetValue', range)
