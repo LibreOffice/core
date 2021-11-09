@@ -39,7 +39,6 @@ namespace pdfi
                               const ContentSinkSharedPtr&                        rSink,
                               const css::uno::Reference<
                                     css::task::XInteractionHandler >& xIHdl,
-                              const OUString&                               rPwd,
                               const css::uno::Reference<
                                     css::uno::XComponentContext >&    xContext,
                               const OUString&        rFilterOptions);
@@ -48,7 +47,6 @@ namespace pdfi
                                 const ContentSinkSharedPtr&                        rSink,
                                 const css::uno::Reference<
                                       css::task::XInteractionHandler >& xIHdl,
-                                const OUString&                               rPwd,
                                 const css::uno::Reference<
                                       css::uno::XComponentContext >&    xContext,
                                 const OUString&        rFilterOptions );

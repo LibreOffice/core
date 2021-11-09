@@ -466,7 +466,6 @@ namespace
                     m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testinput.pdf"),
                     pSink,
                     uno::Reference< task::XInteractionHandler >(),
-                    OUString(),
                     getComponentContext(), "" ) );
             pSink->check();
 #endif

@@ -998,7 +998,6 @@ public:
 bool xpdf_ImportFromFile(const OUString& rURL,
                          const ContentSinkSharedPtr& rSink,
                          const uno::Reference<task::XInteractionHandler>& xIHdl,
-                         const OUString& rPwd,
                          const uno::Reference<uno::XComponentContext>& xContext,
                          const OUString& rFilterOptions)
 {
@@ -1015,7 +1014,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
     OUString aDocName( rURL.copy( rURL.lastIndexOf( '/' )+1 ) );
 
     // check for encryption, if necessary get password
-    OUString aPwd( rPwd );
+    OUString aPwd;
     bool bIsEncrypted = false;
     if( !checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) )
     {
@@ -1182,7 +1181,6 @@ bool xpdf_ImportFromFile(const OUString& rURL,
 bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xInput,
                             const ContentSinkSharedPtr&                       rSink,
                             const uno::Reference<task::XInteractionHandler >& xIHdl,
-                            const OUString&                              rPwd,
                             const uno::Reference< uno::XComponentContext >&   xContext,
                             const OUString&                                   rFilterOptions )
 {
@@ -1227,7 +1225,7 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
     osl_closeFile( aFile );
 
     if ( bSuccess )
-        bSuccess = xpdf_ImportFromFile( aURL, rSink, xIHdl, rPwd, xContext, rFilterOptions );
+        bSuccess = xpdf_ImportFromFile( aURL, rSink, xIHdl, xContext, rFilterOptions );
     osl_removeFile( aURL.pData );
 
     return bSuccess;

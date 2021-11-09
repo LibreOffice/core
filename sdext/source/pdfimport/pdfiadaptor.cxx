@@ -216,7 +216,6 @@ void PDFIRawAdaptor::setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rV
 
 bool PDFIRawAdaptor::parse( const OUString&                          rURL,
                             const uno::Reference<task::XInteractionHandler>& xIHdl,
-                            const OUString&                          rPwd,
                             const uno::Reference<task::XStatusIndicator>& xStatus,
                             const XmlEmitterSharedPtr&                    rEmitter,
                             const OUString&                          rFilterOptions )
@@ -224,7 +223,7 @@ bool PDFIRawAdaptor::parse( const OUString&                          rURL,
     // container for metaformat
     auto pSink = std::make_shared<PDFIProcessor>(xStatus, m_xContext);
 
-    const bool bSuccess = xpdf_ImportFromFile(rURL, pSink, xIHdl, rPwd, m_xContext, rFilterOptions);
+    const bool bSuccess = xpdf_ImportFromFile(rURL, pSink, xIHdl, m_xContext, rFilterOptions);
 
     if( bSuccess )
         pSink->emit(*rEmitter,*m_pVisitorFactory);
@@ -238,7 +237,7 @@ bool PDFIRawAdaptor::odfConvert( const OUString&                          rURL,
 {
     XmlEmitterSharedPtr pEmitter = createOdfEmitter(xOutput);
     const bool bSuccess = parse(rURL, uno::Reference<task::XInteractionHandler>(),
-                                OUString(), xStatus, pEmitter, "");
+                                xStatus, pEmitter, "");
 
     // tell input stream that it is no longer needed
     xOutput->closeOutput();
@@ -256,7 +255,6 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     uno::Reference< task::XStatusIndicator > xStatus;
     uno::Reference< task::XInteractionHandler > xInteractionHandler;
     OUString aURL;
-    OUString aPwd;
     OUString aFilterOptions;
     for( const beans::PropertyValue& rAttrib : rSourceData )
     {
@@ -277,14 +275,12 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
             rAttrib.Value >>= xStatus;
         else if ( rAttrib.Name == "InteractionHandler" )
             rAttrib.Value >>= xInteractionHandler;
-        else if ( rAttrib.Name == "Password" )
-            rAttrib.Value >>= aPwd;
         else if ( rAttrib.Name == "FilterOptions" )
             rAttrib.Value >>= aFilterOptions;
     }
 
     XmlEmitterSharedPtr pEmitter = createSaxEmitter(rHdl);
-    const bool bSuccess = parse(aURL, xInteractionHandler, aPwd, xStatus, pEmitter, aFilterOptions);
+    const bool bSuccess = parse(aURL, xInteractionHandler, xStatus, pEmitter, aFilterOptions);
 
     return bSuccess;
 }

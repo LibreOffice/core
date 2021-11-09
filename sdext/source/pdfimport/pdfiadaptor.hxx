@@ -92,7 +92,6 @@ namespace pdfi
 
         bool parse( const OUString& rURL,
                     const css::uno::Reference<css::task::XInteractionHandler>& xIHdl,
-                    const OUString&                                                          rPwd,
                     const css::uno::Reference<css::task::XStatusIndicator>& xStatus,
                     const XmlEmitterSharedPtr&                                                    rEmitter,
                     const OUString&                                         rFilterOptions);
