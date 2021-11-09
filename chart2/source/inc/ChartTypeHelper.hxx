@@ -49,6 +49,7 @@ public:
     static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
     static bool isSupportingComplexCategory( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     static bool isSupportingCategoryPositioning( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool shiftCategoryPosAtXAxisPerDefault(     const css::uno::Reference< css::chart2::XChartType >& xChartType );
 
     //returns sequence of css::chart::DataLabelPlacement
     static css::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
