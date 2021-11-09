@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5df4051_160a0ff0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T15:10:34Z",
+      "side": 1,
+      "message": "Please do use the underlying integral type in the enum definitions that represent some type defined in standards. You use the type in function signatures; that may be used when processing data coming from arbitrary (even corrupt) sources; those sources may have random values for those fields, and if the enum type will not match the required type, some random cast will happen that may truncate values and produce \"valid\" result from invalid value.\n\nSo:\n\n  enum Foo : sal_Int32 { Foo1, Foo2, ... }; // for signed 32-bit value\n  enum class Bar : sal_uInt16 { Bar1, Bar2, ... }; // for unsigned 16-bit value",
+      "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8168b14e_02ed6282",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T15:10:34Z",
+      "side": 1,
+      "message": "Whenever you find a \"SOME_UNITS_PER_ANOTHER_UNIT\" definition, please consider converting its uses to proper use of o3tl::convert, instead of prettifying such constants.",
+      "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
