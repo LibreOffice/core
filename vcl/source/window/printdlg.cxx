@@ -859,6 +859,7 @@ void PrintDialog::setPaperSizes()
 
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     mePaper = aPrt->GetPaper();
+    Size aSizeOfPaper = aPrt->GetSizeOfPaper();
 
     if ( isPrintToFile() )
     {
@@ -897,8 +898,9 @@ void PrintDialog::setPaperSizes()
 
             mxPaperSizeBox->append_text(aPaperName);
 
-            if ( ePaper == mePaper )
-                mxPaperSizeBox->set_active( nPaper );
+            if ( (ePaper != PAPER_USER && ePaper == mePaper) ||
+                 (ePaper == PAPER_USER && aInfo.sloppyEqual( PaperInfo(aSizeOfPaper.getWidth(), aSizeOfPaper.getHeight())) ) )
+                 mxPaperSizeBox->set_active( nPaper );
         }
 
         mxPaperSizeBox->set_sensitive( true );
