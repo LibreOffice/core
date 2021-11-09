@@ -140,6 +140,54 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/engine3d/view3d \
     svx/source/engine3d/view3d1 \
     svx/source/engine3d/viewpt3d2 \
+    svx/source/fmcomp/dbaexchange \
+    svx/source/fmcomp/fmgridcl \
+    svx/source/fmcomp/fmgridif \
+    svx/source/fmcomp/gridcell \
+    svx/source/fmcomp/gridcols \
+    svx/source/fmcomp/gridctrl \
+    svx/source/fmcomp/xmlexchg \
+    svx/source/form/dataaccessdescriptor \
+    svx/source/form/datalistener \
+    svx/source/form/datanavi \
+    svx/source/form/delayedevent \
+    svx/source/form/labelitemwindow \
+    svx/source/form/fmcontrolbordermanager \
+    svx/source/form/fmcontrollayout \
+    svx/source/form/fmdmod \
+    svx/source/form/fmdocumentclassification \
+    svx/source/form/fmdpage \
+    svx/source/form/fmexch \
+    svx/source/form/fmexpl \
+    svx/source/form/fmmodel \
+    svx/source/form/fmobj \
+    svx/source/form/fmpage \
+    svx/source/form/fmpgeimp \
+    svx/source/form/fmscriptingenv \
+    svx/source/form/fmservs \
+    svx/source/form/fmshell \
+    svx/source/form/fmshimp \
+    svx/source/form/fmtextcontroldialogs \
+    svx/source/form/fmtextcontrolfeature \
+    svx/source/form/fmtextcontrolshell \
+    svx/source/form/fmtools \
+    svx/source/form/fmundo \
+    svx/source/form/fmview \
+    svx/source/form/fmvwimp \
+    svx/source/form/formcontrolfactory \
+    svx/source/form/formcontroller \
+    svx/source/form/formcontrolling \
+    svx/source/form/formdispatchinterceptor \
+    svx/source/form/formfeaturedispatcher \
+    svx/source/form/formtoolbars \
+    svx/source/form/legacyformcontroller \
+    svx/source/form/navigatortree \
+    svx/source/form/navigatortreemodel \
+    svx/source/form/ParseContext \
+    svx/source/form/sdbdatacolumn \
+    svx/source/form/sqlparserclient \
+    svx/source/form/typemap \
+    svx/source/form/xfm_addcondition \
     svx/source/gallery2/codec \
     svx/source/gallery2/galbrws1 \
     svx/source/gallery2/galbrws2 \
@@ -388,6 +436,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/tbxctrls/StylesPreviewWindow \
     svx/source/toolbars/extrusionbar \
     svx/source/toolbars/fontworkbar \
+    svx/source/uitest/sdrobject \
     svx/source/unodraw/gluepts \
     svx/source/unodraw/shapepropertynotifier \
     svx/source/unodraw/SvxXTextColumns \
@@ -431,58 +480,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtabptrn \
     svx/source/xoutdev/XPropertyEntry \
     svx/source/xoutdev/xtablend \
-))
-
-$(eval $(call gb_Library_add_exception_objects,svxcore,\
-    svx/source/fmcomp/dbaexchange \
-    svx/source/fmcomp/fmgridcl \
-    svx/source/fmcomp/fmgridif \
-    svx/source/fmcomp/gridcell \
-    svx/source/fmcomp/gridcols \
-    svx/source/fmcomp/gridctrl \
-    svx/source/fmcomp/xmlexchg \
-    svx/source/form/dataaccessdescriptor \
-    svx/source/form/datalistener \
-    svx/source/form/datanavi \
-    svx/source/form/delayedevent \
-    svx/source/form/labelitemwindow \
-    svx/source/form/fmcontrolbordermanager \
-    svx/source/form/fmcontrollayout \
-    svx/source/form/fmdmod \
-    svx/source/form/fmdocumentclassification \
-    svx/source/form/fmdpage \
-    svx/source/form/fmexch \
-    svx/source/form/fmexpl \
-    svx/source/form/fmmodel \
-    svx/source/form/fmobj \
-    svx/source/form/fmpage \
-    svx/source/form/fmpgeimp \
-    svx/source/form/fmscriptingenv \
-    svx/source/form/fmservs \
-    svx/source/form/fmshell \
-    svx/source/form/fmshimp \
-    svx/source/form/fmtextcontroldialogs \
-    svx/source/form/fmtextcontrolfeature \
-    svx/source/form/fmtextcontrolshell \
-    svx/source/form/fmtools \
-    svx/source/form/fmundo \
-    svx/source/form/fmview \
-    svx/source/form/fmvwimp \
-    svx/source/form/formcontrolfactory \
-    svx/source/form/formcontroller \
-    svx/source/form/formcontrolling \
-    svx/source/form/formdispatchinterceptor \
-    svx/source/form/formfeaturedispatcher \
-    svx/source/form/formtoolbars \
-    svx/source/form/legacyformcontroller \
-    svx/source/form/navigatortree \
-    svx/source/form/navigatortreemodel \
-    svx/source/form/ParseContext \
-    svx/source/form/sdbdatacolumn \
-    svx/source/form/sqlparserclient \
-    svx/source/form/typemap \
-    svx/source/form/xfm_addcondition \
-    svx/source/uitest/sdrobject \
 ))
 
 $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))

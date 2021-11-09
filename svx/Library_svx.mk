@@ -161,6 +161,16 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/weldeditview \
     svx/source/dialog/signaturelinehelper \
     svx/source/engine3d/float3d \
+    svx/source/fmcomp/dbaobjectex \
+    svx/source/form/databaselocationinput \
+    svx/source/form/dbcharsethelper \
+    $(call gb_Helper_optional,DBCONNECTIVITY,svx/source/form/filtnav) \
+    svx/source/form/fmobjfac \
+    svx/source/form/fmPropBrw \
+    svx/source/form/fmsrccfg \
+    svx/source/form/fmsrcimp \
+    svx/source/form/tabwin \
+    svx/source/form/tbxform \
     svx/source/items/algitem \
     svx/source/items/autoformathelper \
     svx/source/items/hlnkitem \
@@ -253,19 +263,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/unogallery/unogalitem \
     svx/source/unogallery/unogaltheme \
     svx/source/unogallery/unogalthemeprovider \
-))
-
-$(eval $(call gb_Library_add_exception_objects,svx,\
-    svx/source/fmcomp/dbaobjectex \
-    svx/source/form/databaselocationinput \
-    svx/source/form/dbcharsethelper \
-    $(call gb_Helper_optional,DBCONNECTIVITY,svx/source/form/filtnav) \
-    svx/source/form/fmobjfac \
-    svx/source/form/fmPropBrw \
-    svx/source/form/fmsrccfg \
-    svx/source/form/fmsrcimp \
-    svx/source/form/tabwin \
-    svx/source/form/tbxform \
 ))
 
 ifeq ($(OS),WNT)
