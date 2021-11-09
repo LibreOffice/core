@@ -186,8 +186,8 @@ tools::Long CalcToPoint( tools::Long nIn, MapUnit eUnit, sal_uInt16 nFactor )
                 eUnit == MapUnit::MapMM         ||
                 eUnit == MapUnit::MapCM, "this unit is not implemented" );
 
-    if (const auto eTo = MapToO3tlLength(eUnit); eTo != o3tl::Length::invalid)
-        return o3tl::convert(nIn, eTo, o3tl::Length::pt) * nFactor;
+    if (const auto eFrom = MapToO3tlLength(eUnit); eFrom != o3tl::Length::invalid)
+        return o3tl::convert(nIn * static_cast<sal_Int64>(nFactor), eFrom, o3tl::Length::pt);
     return 0;
 }
 
