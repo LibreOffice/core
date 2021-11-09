@@ -227,7 +227,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         nY = rDesc.mnR.Y - rDesc.mnP.Y;
 
         double fSqrt = sqrt(nX * nX + nY * nY);
-        rDesc.mnOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+        rDesc.mnOrientation = fSqrt != 0.0 ? basegfx::rad2deg(acos(nX / fSqrt)) : 0.0;
         if ( nY > 0 )
             rDesc.mnOrientation = 360 - rDesc.mnOrientation;
 
@@ -241,7 +241,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         nY = -( fSin * nX - fCos * nY );
 
         fSqrt = sqrt(nX * nX + nY * nY);
-        fAngle = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+        fAngle = fSqrt != 0.0 ? basegfx::rad2deg(acos(nX / fSqrt)) : 0.0;
         if ( nY > 0 )
             fAngle = 360 - fAngle;
 
