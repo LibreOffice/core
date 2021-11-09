@@ -116,6 +116,7 @@ class DocumentSettingManager final :
     bool mbAddParaSpacingToTableCells       : 1;
     bool mbUseFormerObjectPos               : 1;    // #i11860#
     bool mbUseFormerTextWrapping            : 1;
+    bool mbUseTextWrappingOnHeadersEndnotes : 1;    // tdf#104254
     bool mbConsiderWrapOnObjPos             : 1;    // #i28701#
                                                     // true: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
                                                     // floating screen objects as given by its

@@ -2760,6 +2760,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
 
     const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
     const bool bWrapAllowed = rIDSA.get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
+                              rIDSA.get(DocumentSettingId::USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES) ||
                                 ( !IsInFootnote() && nullptr == FindFooterOrHeader() );
 
     if ( pPage->GetSortedObjs() && bWrapAllowed )

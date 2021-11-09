@@ -60,6 +60,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbAddFlyOffsets(false),
     mbAddVerticalFlyOffsets(false),
     mbUseHiResolutionVirtualDevice(true),
+    mbUseTextWrappingOnHeadersEndnotes(false), // tdf#104254
     mbMathBaselineAlignment(false), // default for *old* documents is 'off'
     mbStylesNoDefault(false),
     mbFloattableNomargins(false),
@@ -181,6 +182,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS: return mbAddParaLineSpacingToTableCells;
         case DocumentSettingId::USE_FORMER_OBJECT_POS: return mbUseFormerObjectPos;
         case DocumentSettingId::USE_FORMER_TEXT_WRAPPING: return mbUseFormerTextWrapping;
+        case DocumentSettingId::USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES: return mbUseTextWrappingOnHeadersEndnotes;
         case DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
         case DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: return mbDoNotJustifyLinesWithManualBreak;
         case DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING: return mbIgnoreFirstLineIndentInNumbering;
@@ -307,6 +309,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::USE_FORMER_TEXT_WRAPPING:
             mbUseFormerTextWrapping = value;
+            break;
+        case DocumentSettingId::USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES:
+            mbUseTextWrappingOnHeadersEndnotes = value;
             break;
         case DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION:
             mbConsiderWrapOnObjPos = value;
@@ -640,6 +645,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbAddParaLineSpacingToTableCells = rSource.mbAddParaLineSpacingToTableCells;
     mbUseFormerObjectPos = rSource.mbUseFormerObjectPos;
     mbUseFormerTextWrapping = rSource.mbUseFormerTextWrapping;
+    mbUseTextWrappingOnHeadersEndnotes = rSource.mbUseTextWrappingOnHeadersEndnotes;
     mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
     mbMathBaselineAlignment = rSource.mbMathBaselineAlignment;
     mbStylesNoDefault = rSource.mbStylesNoDefault;
@@ -798,6 +804,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbUseFormerTextWrapping"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbUseFormerTextWrapping).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbUseTextWrappingOnHeadersEndnotes"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbUseTextWrappingOnHeadersEndnotes).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbConsiderWrapOnObjPos"));

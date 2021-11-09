@@ -98,6 +98,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS,
     HANDLE_USE_FORMER_OBJECT_POSITIONING,
     HANDLE_USE_FORMER_TEXT_WRAPPING,
+    HANDLE_USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES,
     HANDLE_CHANGES_PASSWORD,
     HANDLE_CONSIDER_WRAP_ON_OBJPOS,
     HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,
@@ -193,6 +194,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("AddParaLineSpacingToTableCells"), HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, cppu::UnoType<bool>::get(),           0},
         { OUString("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   cppu::UnoType<bool>::get(),           0},
         { OUString("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        cppu::UnoType<bool>::get(),           0},
+        { OUString("UseTextWrappingOnHeadersEndnotes"), HANDLE_USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES, cppu::UnoType<bool>::get(), 0},
         { OUString("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
         { OUString("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         cppu::UnoType<bool>::get(),           0},
         { OUString("IgnoreFirstLineIndentInNumbering"),   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         cppu::UnoType<bool>::get(),           0},
@@ -653,6 +655,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, bTmp);
+        }
+        break;
+        case HANDLE_USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES, bTmp);
         }
         break;
         case HANDLE_CHANGES_PASSWORD:
@@ -1259,6 +1267,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_USE_FORMER_TEXT_WRAPPING:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING);
+        }
+        break;
+        case HANDLE_USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES);
         }
         break;
         case HANDLE_CHANGES_PASSWORD:

@@ -1883,6 +1883,7 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
 
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, false); // #i13832#, #i24135#
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES, false);
 
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TABLE_ROW_KEEP, true); //SetTableRowKeep( true );
 

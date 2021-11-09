@@ -840,6 +840,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     // #i40155# - check, if frame is marked not to wrap
     const bool bAllowCompatWrap = m_pCurrFrame->IsInTab() && (bFooterHeader || m_pCurrFrame->IsInFootnote());
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
+                                pIDSA->get(DocumentSettingId::USE_TEXT_WRAPPING_ON_HEADERS_ENDNOTES) ||
                                     bAllowCompatWrap ||
                                     (!m_pCurrFrame->IsInFootnote() && !bFooterHeader));
 
