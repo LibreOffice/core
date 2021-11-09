@@ -69,7 +69,7 @@ public:
     static css::uno::Reference< css::uno::XInterface >
                             MakeInstance( Type nType, ScDocShell* pDocShell );
     static css::uno::Sequence<OUString> GetAllServiceNames();
-    static Type             GetProviderType(const OUString& rServiceName);
+    static Type             GetProviderType(std::u16string_view rServiceName);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

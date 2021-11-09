@@ -20,134 +20,134 @@
 #pragma once
 
 // service names
-#define SC_SERVICENAME_VALBIND          "com.sun.star.table.CellValueBinding"
-#define SC_SERVICENAME_LISTCELLBIND     "com.sun.star.table.ListPositionCellBinding"
-#define SC_SERVICENAME_LISTSOURCE       "com.sun.star.table.CellRangeListSource"
-#define SC_SERVICENAME_CELLADDRESS      "com.sun.star.table.CellAddressConversion"
-#define SC_SERVICENAME_RANGEADDRESS     "com.sun.star.table.CellRangeAddressConversion"
+constexpr OUStringLiteral SC_SERVICENAME_VALBIND = u"com.sun.star.table.CellValueBinding";
+constexpr OUStringLiteral SC_SERVICENAME_LISTCELLBIND = u"com.sun.star.table.ListPositionCellBinding";
+constexpr OUStringLiteral SC_SERVICENAME_LISTSOURCE = u"com.sun.star.table.CellRangeListSource";
+constexpr OUStringLiteral SC_SERVICENAME_CELLADDRESS = u"com.sun.star.table.CellAddressConversion";
+constexpr OUStringLiteral SC_SERVICENAME_RANGEADDRESS = u"com.sun.star.table.CellRangeAddressConversion";
 
-#define SC_SERVICENAME_FORMULAPARS      "com.sun.star.sheet.FormulaParser"
-#define SC_SERVICENAME_OPCODEMAPPER     "com.sun.star.sheet.FormulaOpCodeMapper"
+constexpr OUStringLiteral SC_SERVICENAME_FORMULAPARS = u"com.sun.star.sheet.FormulaParser";
+constexpr OUStringLiteral SC_SERVICENAME_OPCODEMAPPER = u"com.sun.star.sheet.FormulaOpCodeMapper";
 
-#define SC_SERVICENAME_CHDATAPROV       "com.sun.star.chart2.data.DataProvider"
-#define SC_SERVICENAME_CHRANGEHILIGHT   "com.sun.star.chart2.data.RangeHighlightListener"
-#define SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER "com.sun.star.chart2.data.PivotTableDataProvider"
+constexpr OUStringLiteral SC_SERVICENAME_CHDATAPROV = u"com.sun.star.chart2.data.DataProvider";
+constexpr OUStringLiteral SC_SERVICENAME_CHRANGEHILIGHT = u"com.sun.star.chart2.data.RangeHighlightListener";
+constexpr OUStringLiteral SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER = u"com.sun.star.chart2.data.PivotTableDataProvider";
 
 //  document
-#define SC_UNO_AREALINKS            "AreaLinks"
-#define SC_UNO_DDELINKS             "DDELinks"
-#define SC_UNO_EXTERNALDOCLINKS     "ExternalDocLinks"
-#define SC_UNO_COLLABELRNG          "ColumnLabelRanges"
-#define SC_UNO_DATABASERNG          "DatabaseRanges"
+constexpr OUStringLiteral SC_UNO_AREALINKS = u"AreaLinks";
+constexpr OUStringLiteral SC_UNO_DDELINKS = u"DDELinks";
+constexpr OUStringLiteral SC_UNO_EXTERNALDOCLINKS = u"ExternalDocLinks";
+constexpr OUStringLiteral SC_UNO_COLLABELRNG = u"ColumnLabelRanges";
+constexpr OUStringLiteral SC_UNO_DATABASERNG = u"DatabaseRanges";
 #define SC_UNO_UNNAMEDDBRNG         "UnnamedDatabaseRanges"
-#define SC_UNO_NAMEDRANGES          "NamedRanges"
-#define SC_UNO_ROWLABELRNG          "RowLabelRanges"
-#define SC_UNO_SHEETLINKS           "SheetLinks"
-#define SC_UNO_FORBIDDEN            "ForbiddenCharacters"
-#define SC_UNO_HASDRAWPAGES         "HasDrawPages"
+constexpr OUStringLiteral SC_UNO_NAMEDRANGES = u"NamedRanges";
+constexpr OUStringLiteral SC_UNO_ROWLABELRNG = u"RowLabelRanges";
+constexpr OUStringLiteral SC_UNO_SHEETLINKS = u"SheetLinks";
+constexpr OUStringLiteral SC_UNO_FORBIDDEN = u"ForbiddenCharacters";
+constexpr OUStringLiteral SC_UNO_HASDRAWPAGES = u"HasDrawPages";
 
 //  CharacterProperties
-#define SC_UNONAME_CCOLOR           "CharColor"
-#define SC_UNONAME_CHEIGHT          "CharHeight"
-#define SC_UNONAME_CUNDER           "CharUnderline"
-#define SC_UNONAME_CUNDLCOL         "CharUnderlineColor"
-#define SC_UNONAME_CUNDLHAS         "CharUnderlineHasColor"
-#define SC_UNONAME_COVER            "CharOverline"
-#define SC_UNONAME_COVRLCOL         "CharOverlineColor"
-#define SC_UNONAME_COVRLHAS         "CharOverlineHasColor"
-#define SC_UNONAME_CWEIGHT          "CharWeight"
-#define SC_UNONAME_CPOST            "CharPosture"
-#define SC_UNONAME_CCROSS           "CharCrossedOut"
-#define SC_UNONAME_CSTRIKE          "CharStrikeout"
-#define SC_UNONAME_CLOCAL           "CharLocale"
-#define SC_UNONAME_CSHADD           "CharShadowed"
-#define SC_UNONAME_CFONT            "CharFont"
-#define SC_UNONAME_COUTL            "CharContoured"
-#define SC_UNONAME_CEMPHAS          "CharEmphasis"
-#define SC_UNONAME_CFNAME           "CharFontName"
-#define SC_UNONAME_CFSTYLE          "CharFontStyleName"
-#define SC_UNONAME_CFFAMIL          "CharFontFamily"
-#define SC_UNONAME_CFCHARS          "CharFontCharSet"
-#define SC_UNONAME_CFPITCH          "CharFontPitch"
-#define SC_UNONAME_CRELIEF          "CharRelief"
-#define SC_UNONAME_CWORDMOD         "CharWordMode"
+constexpr OUStringLiteral SC_UNONAME_CCOLOR = u"CharColor";
+constexpr OUStringLiteral SC_UNONAME_CHEIGHT = u"CharHeight";
+constexpr OUStringLiteral SC_UNONAME_CUNDER = u"CharUnderline";
+constexpr OUStringLiteral SC_UNONAME_CUNDLCOL = u"CharUnderlineColor";
+constexpr OUStringLiteral SC_UNONAME_CUNDLHAS = u"CharUnderlineHasColor";
+constexpr OUStringLiteral SC_UNONAME_COVER = u"CharOverline";
+constexpr OUStringLiteral SC_UNONAME_COVRLCOL = u"CharOverlineColor";
+constexpr OUStringLiteral SC_UNONAME_COVRLHAS = u"CharOverlineHasColor";
+constexpr OUStringLiteral SC_UNONAME_CWEIGHT = u"CharWeight";
+constexpr OUStringLiteral SC_UNONAME_CPOST = u"CharPosture";
+constexpr OUStringLiteral SC_UNONAME_CCROSS = u"CharCrossedOut";
+constexpr OUStringLiteral SC_UNONAME_CSTRIKE = u"CharStrikeout";
+constexpr OUStringLiteral SC_UNONAME_CLOCAL = u"CharLocale";
+constexpr OUStringLiteral SC_UNONAME_CSHADD = u"CharShadowed";
+constexpr OUStringLiteral SC_UNONAME_CFONT = u"CharFont";
+constexpr OUStringLiteral SC_UNONAME_COUTL = u"CharContoured";
+constexpr OUStringLiteral SC_UNONAME_CEMPHAS = u"CharEmphasis";
+constexpr OUStringLiteral SC_UNONAME_CFNAME = u"CharFontName";
+constexpr OUStringLiteral SC_UNONAME_CFSTYLE = u"CharFontStyleName";
+constexpr OUStringLiteral SC_UNONAME_CFFAMIL = u"CharFontFamily";
+constexpr OUStringLiteral SC_UNONAME_CFCHARS = u"CharFontCharSet";
+constexpr OUStringLiteral SC_UNONAME_CFPITCH = u"CharFontPitch";
+constexpr OUStringLiteral SC_UNONAME_CRELIEF = u"CharRelief";
+constexpr OUStringLiteral SC_UNONAME_CWORDMOD = u"CharWordMode";
 
-#define SC_UNO_CJK_CFNAME           "CharFontNameAsian"
-#define SC_UNO_CJK_CFSTYLE          "CharFontStyleNameAsian"
-#define SC_UNO_CJK_CFFAMIL          "CharFontFamilyAsian"
-#define SC_UNO_CJK_CFCHARS          "CharFontCharSetAsian"
-#define SC_UNO_CJK_CFPITCH          "CharFontPitchAsian"
-#define SC_UNO_CJK_CHEIGHT          "CharHeightAsian"
-#define SC_UNO_CJK_CWEIGHT          "CharWeightAsian"
-#define SC_UNO_CJK_CPOST            "CharPostureAsian"
-#define SC_UNO_CJK_CLOCAL           "CharLocaleAsian"
+constexpr OUStringLiteral SC_UNO_CJK_CFNAME = u"CharFontNameAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CFSTYLE = u"CharFontStyleNameAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CFFAMIL = u"CharFontFamilyAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CFCHARS = u"CharFontCharSetAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CFPITCH = u"CharFontPitchAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CHEIGHT = u"CharHeightAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CWEIGHT = u"CharWeightAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CPOST = u"CharPostureAsian";
+constexpr OUStringLiteral SC_UNO_CJK_CLOCAL = u"CharLocaleAsian";
 
-#define SC_UNO_CTL_CFNAME           "CharFontNameComplex"
-#define SC_UNO_CTL_CFSTYLE          "CharFontStyleNameComplex"
-#define SC_UNO_CTL_CFFAMIL          "CharFontFamilyComplex"
-#define SC_UNO_CTL_CFCHARS          "CharFontCharSetComplex"
-#define SC_UNO_CTL_CFPITCH          "CharFontPitchComplex"
-#define SC_UNO_CTL_CHEIGHT          "CharHeightComplex"
-#define SC_UNO_CTL_CWEIGHT          "CharWeightComplex"
-#define SC_UNO_CTL_CPOST            "CharPostureComplex"
-#define SC_UNO_CTL_CLOCAL           "CharLocaleComplex"
+constexpr OUStringLiteral SC_UNO_CTL_CFNAME = u"CharFontNameComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CFSTYLE = u"CharFontStyleNameComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CFFAMIL = u"CharFontFamilyComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CFCHARS = u"CharFontCharSetComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CFPITCH = u"CharFontPitchComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CHEIGHT = u"CharHeightComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CWEIGHT = u"CharWeightComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CPOST = u"CharPostureComplex";
+constexpr OUStringLiteral SC_UNO_CTL_CLOCAL = u"CharLocaleComplex";
 
 //  CellProperties
-#define SC_UNONAME_CELLSTYL         "CellStyle"
-#define SC_UNONAME_CELLBACK         "CellBackColor"
-#define SC_UNONAME_CELLTRAN         "IsCellBackgroundTransparent"
-#define SC_UNONAME_CELLPRO          "CellProtection"
-#define SC_UNONAME_CELLHJUS         "HoriJustify"
-#define SC_UNONAME_CELLVJUS         "VertJustify"
-#define SC_UNONAME_CELLHJUS_METHOD  "HoriJustifyMethod"
-#define SC_UNONAME_CELLVJUS_METHOD  "VertJustifyMethod"
-#define SC_UNONAME_CELLORI          "Orientation"
-#define SC_UNONAME_NUMFMT           "NumberFormat"
-#define SC_UNONAME_FORMATID         "FormatID"
-#define SC_UNONAME_SHADOW           "ShadowFormat"
-#define SC_UNONAME_TBLBORD          "TableBorder"
-#define SC_UNONAME_TBLBORD2         "TableBorder2"
-#define SC_UNONAME_WRAP             "IsTextWrapped"
-#define SC_UNONAME_PINDENT          "ParaIndent"
-#define SC_UNONAME_PTMARGIN         "ParaTopMargin"
-#define SC_UNONAME_PBMARGIN         "ParaBottomMargin"
-#define SC_UNONAME_PLMARGIN         "ParaLeftMargin"
-#define SC_UNONAME_PRMARGIN         "ParaRightMargin"
-#define SC_UNONAME_ROTANG           "RotateAngle"
-#define SC_UNONAME_ROTREF           "RotateReference"
-#define SC_UNONAME_ASIANVERT        "AsianVerticalMode"
-#define SC_UNONAME_WRITING          "WritingMode"
-#define SC_UNONAME_HIDDEN           "Hidden"
+constexpr OUStringLiteral SC_UNONAME_CELLSTYL = u"CellStyle";
+constexpr OUStringLiteral SC_UNONAME_CELLBACK = u"CellBackColor";
+constexpr OUStringLiteral SC_UNONAME_CELLTRAN = u"IsCellBackgroundTransparent";
+constexpr OUStringLiteral SC_UNONAME_CELLPRO = u"CellProtection";
+constexpr OUStringLiteral SC_UNONAME_CELLHJUS = u"HoriJustify";
+constexpr OUStringLiteral SC_UNONAME_CELLVJUS = u"VertJustify";
+constexpr OUStringLiteral SC_UNONAME_CELLHJUS_METHOD = u"HoriJustifyMethod";
+constexpr OUStringLiteral SC_UNONAME_CELLVJUS_METHOD = u"VertJustifyMethod";
+constexpr OUStringLiteral SC_UNONAME_CELLORI = u"Orientation";
+constexpr OUStringLiteral SC_UNONAME_NUMFMT = u"NumberFormat";
+constexpr OUStringLiteral SC_UNONAME_FORMATID = u"FormatID";
+constexpr OUStringLiteral SC_UNONAME_SHADOW = u"ShadowFormat";
+constexpr OUStringLiteral SC_UNONAME_TBLBORD = u"TableBorder";
+constexpr OUStringLiteral SC_UNONAME_TBLBORD2 = u"TableBorder2";
+constexpr OUStringLiteral SC_UNONAME_WRAP = u"IsTextWrapped";
+constexpr OUStringLiteral SC_UNONAME_PINDENT = u"ParaIndent";
+constexpr OUStringLiteral SC_UNONAME_PTMARGIN = u"ParaTopMargin";
+constexpr OUStringLiteral SC_UNONAME_PBMARGIN = u"ParaBottomMargin";
+constexpr OUStringLiteral SC_UNONAME_PLMARGIN = u"ParaLeftMargin";
+constexpr OUStringLiteral SC_UNONAME_PRMARGIN = u"ParaRightMargin";
+constexpr OUStringLiteral SC_UNONAME_ROTANG = u"RotateAngle";
+constexpr OUStringLiteral SC_UNONAME_ROTREF = u"RotateReference";
+constexpr OUStringLiteral SC_UNONAME_ASIANVERT = u"AsianVerticalMode";
+constexpr OUStringLiteral SC_UNONAME_WRITING = u"WritingMode";
+constexpr OUStringLiteral SC_UNONAME_HIDDEN = u"Hidden";
 
-#define SC_UNONAME_BOTTBORDER       "BottomBorder"
-#define SC_UNONAME_LEFTBORDER       "LeftBorder"
-#define SC_UNONAME_RIGHTBORDER      "RightBorder"
-#define SC_UNONAME_TOPBORDER        "TopBorder"
+constexpr OUStringLiteral SC_UNONAME_BOTTBORDER = u"BottomBorder";
+constexpr OUStringLiteral SC_UNONAME_LEFTBORDER = u"LeftBorder";
+constexpr OUStringLiteral SC_UNONAME_RIGHTBORDER = u"RightBorder";
+constexpr OUStringLiteral SC_UNONAME_TOPBORDER = u"TopBorder";
 
-#define SC_UNONAME_BOTTBORDER2      "BottomBorder2"
-#define SC_UNONAME_LEFTBORDER2      "LeftBorder2"
-#define SC_UNONAME_RIGHTBORDER2     "RightBorder2"
-#define SC_UNONAME_TOPBORDER2       "TopBorder2"
+constexpr OUStringLiteral SC_UNONAME_BOTTBORDER2 = u"BottomBorder2";
+constexpr OUStringLiteral SC_UNONAME_LEFTBORDER2 = u"LeftBorder2";
+constexpr OUStringLiteral SC_UNONAME_RIGHTBORDER2 = u"RightBorder2";
+constexpr OUStringLiteral SC_UNONAME_TOPBORDER2 = u"TopBorder2";
 
-#define SC_UNONAME_DIAGONAL_TLBR    "DiagonalTLBR"
-#define SC_UNONAME_DIAGONAL_BLTR    "DiagonalBLTR"
+constexpr OUStringLiteral SC_UNONAME_DIAGONAL_TLBR = u"DiagonalTLBR";
+constexpr OUStringLiteral SC_UNONAME_DIAGONAL_BLTR = u"DiagonalBLTR";
 
-#define SC_UNONAME_DIAGONAL_TLBR2   "DiagonalTLBR2"
-#define SC_UNONAME_DIAGONAL_BLTR2   "DiagonalBLTR2"
+constexpr OUStringLiteral SC_UNONAME_DIAGONAL_TLBR2 = u"DiagonalTLBR2";
+constexpr OUStringLiteral SC_UNONAME_DIAGONAL_BLTR2 = u"DiagonalBLTR2";
 
-#define SC_UNONAME_SHRINK_TO_FIT    "ShrinkToFit"
+constexpr OUStringLiteral SC_UNONAME_SHRINK_TO_FIT = u"ShrinkToFit";
 
-#define SC_UNONAME_PISHANG          "ParaIsHangingPunctuation"
-#define SC_UNONAME_PISCHDIST        "ParaIsCharacterDistance"
-#define SC_UNONAME_PISFORBID        "ParaIsForbiddenRules"
-#define SC_UNONAME_PISHYPHEN        "ParaIsHyphenation"
-#define SC_UNONAME_PADJUST          "ParaAdjust"
-#define SC_UNONAME_PLASTADJ         "ParaLastLineAdjust"
+constexpr OUStringLiteral SC_UNONAME_PISHANG = u"ParaIsHangingPunctuation";
+constexpr OUStringLiteral SC_UNONAME_PISCHDIST = u"ParaIsCharacterDistance";
+constexpr OUStringLiteral SC_UNONAME_PISFORBID = u"ParaIsForbiddenRules";
+constexpr OUStringLiteral SC_UNONAME_PISHYPHEN = u"ParaIsHyphenation";
+constexpr OUStringLiteral SC_UNONAME_PADJUST = u"ParaAdjust";
+constexpr OUStringLiteral SC_UNONAME_PLASTADJ = u"ParaLastLineAdjust";
 
-#define SC_UNONAME_NUMRULES         "NumberingRules"
+constexpr OUStringLiteral SC_UNONAME_NUMRULES = u"NumberingRules";
 
 //  Styles
-#define SC_UNONAME_DISPNAME         "DisplayName"
+constexpr OUStringLiteral SC_UNONAME_DISPNAME = u"DisplayName";
 
 //  XStyleLoader
 #define SC_UNONAME_OVERWSTL         "OverwriteStyles"
@@ -155,72 +155,72 @@
 #define SC_UNONAME_LOADPAGE         "LoadPageStyles"
 
 //  SheetCellRange
-#define SC_UNONAME_POS              "Position"
-#define SC_UNONAME_SIZE             "Size"
-#define SC_UNONAME_ABSNAME          "AbsoluteName"
+constexpr OUStringLiteral SC_UNONAME_POS = u"Position";
+constexpr OUStringLiteral SC_UNONAME_SIZE = u"Size";
+constexpr OUStringLiteral SC_UNONAME_ABSNAME = u"AbsoluteName";
 
 //  column/row/sheet
-#define SC_UNONAME_CELLHGT          "Height"
-#define SC_UNONAME_CELLWID          "Width"
-#define SC_UNONAME_CELLVIS          "IsVisible"
-#define SC_UNONAME_CELLFILT         "IsFiltered"
-#define SC_UNONAME_MANPAGE          "IsManualPageBreak"
-#define SC_UNONAME_NEWPAGE          "IsStartOfNewPage"
-#define SC_UNONAME_OHEIGHT          "OptimalHeight"
-#define SC_UNONAME_OWIDTH           "OptimalWidth"
-#define SC_UNONAME_PAGESTL          "PageStyle"
-#define SC_UNONAME_ISACTIVE         "IsActive"
-#define SC_UNONAME_BORDCOL          "BorderColor"
-#define SC_UNONAME_PROTECT          "Protected"
-#define SC_UNONAME_SHOWBORD         "ShowBorder"
-#define SC_UNONAME_PRINTBORD        "PrintBorder"
-#define SC_UNONAME_COPYBACK         "CopyBack"
-#define SC_UNONAME_COPYSTYL         "CopyStyles"
-#define SC_UNONAME_COPYFORM         "CopyFormulas"
-#define SC_UNONAME_TABLAYOUT        "TableLayout"
-#define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
-#define SC_UNONAME_TABCOLOR         "TabColor"
-#define SC_UNONAME_CONDFORMAT       "ConditionalFormats"
+constexpr OUStringLiteral SC_UNONAME_CELLHGT = u"Height";
+constexpr OUStringLiteral SC_UNONAME_CELLWID = u"Width";
+constexpr OUStringLiteral SC_UNONAME_CELLVIS = u"IsVisible";
+constexpr OUStringLiteral SC_UNONAME_CELLFILT = u"IsFiltered";
+constexpr OUStringLiteral SC_UNONAME_MANPAGE = u"IsManualPageBreak";
+constexpr OUStringLiteral SC_UNONAME_NEWPAGE = u"IsStartOfNewPage";
+constexpr OUStringLiteral SC_UNONAME_OHEIGHT = u"OptimalHeight";
+constexpr OUStringLiteral SC_UNONAME_OWIDTH = u"OptimalWidth";
+constexpr OUStringLiteral SC_UNONAME_PAGESTL = u"PageStyle";
+constexpr OUStringLiteral SC_UNONAME_ISACTIVE = u"IsActive";
+constexpr OUStringLiteral SC_UNONAME_BORDCOL = u"BorderColor";
+constexpr OUStringLiteral SC_UNONAME_PROTECT = u"Protected";
+constexpr OUStringLiteral SC_UNONAME_SHOWBORD = u"ShowBorder";
+constexpr OUStringLiteral SC_UNONAME_PRINTBORD = u"PrintBorder";
+constexpr OUStringLiteral SC_UNONAME_COPYBACK = u"CopyBack";
+constexpr OUStringLiteral SC_UNONAME_COPYSTYL = u"CopyStyles";
+constexpr OUStringLiteral SC_UNONAME_COPYFORM = u"CopyFormulas";
+constexpr OUStringLiteral SC_UNONAME_TABLAYOUT = u"TableLayout";
+constexpr OUStringLiteral SC_UNONAME_AUTOPRINT = u"AutomaticPrintArea";
+constexpr OUStringLiteral SC_UNONAME_TABCOLOR = u"TabColor";
+constexpr OUStringLiteral SC_UNONAME_CONDFORMAT = u"ConditionalFormats";
 
 #define SC_UNONAME_VISFLAG          "VisibleFlag"
 
 //  LinkTarget
-#define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
-#define SC_UNO_LINKDISPNAME         "LinkDisplayName"
+constexpr OUStringLiteral SC_UNO_LINKDISPBIT = u"LinkDisplayBitmap";
+constexpr OUStringLiteral SC_UNO_LINKDISPNAME = u"LinkDisplayName";
 
 //  drawing objects
-#define SC_UNONAME_IMAGEMAP         "ImageMap"
-#define SC_UNONAME_ANCHOR           "Anchor"
-#define SC_UNONAME_RESIZE_WITH_CELL "ResizeWithCell"
-#define SC_UNONAME_HORIPOS          "HoriOrientPosition"
-#define SC_UNONAME_VERTPOS          "VertOrientPosition"
-#define SC_UNONAME_HYPERLINK        "Hyperlink"
-#define SC_UNONAME_MOVEPROTECT      "MoveProtect"
+constexpr OUStringLiteral SC_UNONAME_IMAGEMAP = u"ImageMap";
+constexpr OUStringLiteral SC_UNONAME_ANCHOR = u"Anchor";
+constexpr OUStringLiteral SC_UNONAME_RESIZE_WITH_CELL = u"ResizeWithCell";
+constexpr OUStringLiteral SC_UNONAME_HORIPOS = u"HoriOrientPosition";
+constexpr OUStringLiteral SC_UNONAME_VERTPOS = u"VertOrientPosition";
+constexpr OUStringLiteral SC_UNONAME_HYPERLINK = u"Hyperlink";
+constexpr OUStringLiteral SC_UNONAME_MOVEPROTECT = u"MoveProtect";
 
 //  other cell properties
-#define SC_UNONAME_CHCOLHDR         "ChartColumnAsLabel"
-#define SC_UNONAME_CHROWHDR         "ChartRowAsLabel"
-#define SC_UNONAME_CONDFMT          "ConditionalFormat"
-#define SC_UNONAME_CONDLOC          "ConditionalFormatLocal"
-#define SC_UNONAME_CONDXML          "ConditionalFormatXML"
-#define SC_UNONAME_VALIDAT          "Validation"
-#define SC_UNONAME_VALILOC          "ValidationLocal"
-#define SC_UNONAME_VALIXML          "ValidationXML"
-#define SC_UNONAME_FORMLOC          "FormulaLocal"
-#define SC_UNONAME_FORMRT           "FormulaResultType"
-#define SC_UNONAME_FORMRT2          "FormulaResultType2"
-#define SC_UNONAME_CELLCONTENTTYPE  "CellContentType"
+constexpr OUStringLiteral SC_UNONAME_CHCOLHDR = u"ChartColumnAsLabel";
+constexpr OUStringLiteral SC_UNONAME_CHROWHDR = u"ChartRowAsLabel";
+constexpr OUStringLiteral SC_UNONAME_CONDFMT = u"ConditionalFormat";
+constexpr OUStringLiteral SC_UNONAME_CONDLOC = u"ConditionalFormatLocal";
+constexpr OUStringLiteral SC_UNONAME_CONDXML = u"ConditionalFormatXML";
+constexpr OUStringLiteral SC_UNONAME_VALIDAT = u"Validation";
+constexpr OUStringLiteral SC_UNONAME_VALILOC = u"ValidationLocal";
+constexpr OUStringLiteral SC_UNONAME_VALIXML = u"ValidationXML";
+constexpr OUStringLiteral SC_UNONAME_FORMLOC = u"FormulaLocal";
+constexpr OUStringLiteral SC_UNONAME_FORMRT = u"FormulaResultType";
+constexpr OUStringLiteral SC_UNONAME_FORMRT2 = u"FormulaResultType2";
+constexpr OUStringLiteral SC_UNONAME_CELLCONTENTTYPE = u"CellContentType";
 
-#define SC_UNONAME_USERDEF          "UserDefinedAttributes"
-#define SC_UNONAME_TEXTUSER         "TextUserDefinedAttributes"
+constexpr OUStringLiteral SC_UNONAME_USERDEF = u"UserDefinedAttributes";
+constexpr OUStringLiteral SC_UNONAME_TEXTUSER = u"TextUserDefinedAttributes";
 
 //  auto format
-#define SC_UNONAME_INCBACK          "IncludeBackground"
-#define SC_UNONAME_INCBORD          "IncludeBorder"
-#define SC_UNONAME_INCFONT          "IncludeFont"
-#define SC_UNONAME_INCJUST          "IncludeJustify"
-#define SC_UNONAME_INCNUM           "IncludeNumberFormat"
-#define SC_UNONAME_INCWIDTH         "IncludeWidthAndHeight"
+constexpr OUStringLiteral SC_UNONAME_INCBACK = u"IncludeBackground";
+constexpr OUStringLiteral SC_UNONAME_INCBORD = u"IncludeBorder";
+constexpr OUStringLiteral SC_UNONAME_INCFONT = u"IncludeFont";
+constexpr OUStringLiteral SC_UNONAME_INCJUST = u"IncludeJustify";
+constexpr OUStringLiteral SC_UNONAME_INCNUM = u"IncludeNumberFormat";
+constexpr OUStringLiteral SC_UNONAME_INCWIDTH = u"IncludeWidthAndHeight";
 
 //  function description
 #define SC_UNONAME_ARGUMENTS        "Arguments"
@@ -230,112 +230,112 @@
 #define SC_UNONAME_NAME             "Name"
 
 //  application settings
-#define SC_UNONAME_DOAUTOCP         "DoAutoComplete"
-#define SC_UNONAME_ENTERED          "EnterEdit"
-#define SC_UNONAME_EXPREF           "ExpandReferences"
-#define SC_UNONAME_EXTFMT           "ExtendFormat"
-#define SC_UNONAME_LINKUPD          "LinkUpdateMode"
-#define SC_UNONAME_MARKHDR          "MarkHeader"
-#define SC_UNONAME_METRIC           "Metric"
-#define SC_UNONAME_MOVEDIR          "MoveDirection"
-#define SC_UNONAME_MOVESEL          "MoveSelection"
-#define SC_UNONAME_RANGEFIN         "RangeFinder"
-#define SC_UNONAME_SCALE            "Scale"
-#define SC_UNONAME_STBFUNC          "StatusBarFunction"
-#define SC_UNONAME_ULISTS           "UserLists"
-#define SC_UNONAME_USETABCOL        "UseTabCol"
-#define SC_UNONAME_PRMETRICS        "UsePrinterMetrics"
-#define SC_UNONAME_PRALLSH          "PrintAllSheets"
-#define SC_UNONAME_PREMPTY          "PrintEmptyPages"
-#define SC_UNONAME_REPLWARN         "ReplaceCellsWarning"
+constexpr OUStringLiteral SC_UNONAME_DOAUTOCP = u"DoAutoComplete";
+constexpr OUStringLiteral SC_UNONAME_ENTERED = u"EnterEdit";
+constexpr OUStringLiteral SC_UNONAME_EXPREF = u"ExpandReferences";
+constexpr OUStringLiteral SC_UNONAME_EXTFMT = u"ExtendFormat";
+constexpr OUStringLiteral SC_UNONAME_LINKUPD = u"LinkUpdateMode";
+constexpr OUStringLiteral SC_UNONAME_MARKHDR = u"MarkHeader";
+constexpr OUStringLiteral SC_UNONAME_METRIC = u"Metric";
+constexpr OUStringLiteral SC_UNONAME_MOVEDIR = u"MoveDirection";
+constexpr OUStringLiteral SC_UNONAME_MOVESEL = u"MoveSelection";
+constexpr OUStringLiteral SC_UNONAME_RANGEFIN = u"RangeFinder";
+constexpr OUStringLiteral SC_UNONAME_SCALE = u"Scale";
+constexpr OUStringLiteral SC_UNONAME_STBFUNC = u"StatusBarFunction";
+constexpr OUStringLiteral SC_UNONAME_ULISTS = u"UserLists";
+constexpr OUStringLiteral SC_UNONAME_USETABCOL = u"UseTabCol";
+constexpr OUStringLiteral SC_UNONAME_PRMETRICS = u"UsePrinterMetrics";
+constexpr OUStringLiteral SC_UNONAME_PRALLSH = u"PrintAllSheets";
+constexpr OUStringLiteral SC_UNONAME_PREMPTY = u"PrintEmptyPages";
+constexpr OUStringLiteral SC_UNONAME_REPLWARN = u"ReplaceCellsWarning";
 
 //  data pilot field
-#define SC_UNONAME_FUNCTION         "Function"
-#define SC_UNONAME_FUNCTION2        "Function2"
-#define SC_UNONAME_SUBTOTALS        "Subtotals"
-#define SC_UNONAME_SUBTOTALS2       "Subtotals2"
-#define SC_UNONAME_SELPAGE          "SelectedPage"
-#define SC_UNONAME_USESELPAGE       "UseSelectedPage"
-#define SC_UNONAME_HASREFERENCE     "HasReference"
-#define SC_UNONAME_REFERENCE        "Reference"
-#define SC_UNONAME_HASAUTOSHOW      "HasAutoShowInfo"
-#define SC_UNONAME_AUTOSHOW         "AutoShowInfo"
-#define SC_UNONAME_HASSORTINFO      "HasSortInfo"
-#define SC_UNONAME_SORTINFO         "SortInfo"
-#define SC_UNONAME_HASLAYOUTINFO    "HasLayoutInfo"
-#define SC_UNONAME_LAYOUTINFO       "LayoutInfo"
-#define SC_UNONAME_ISGROUP          "IsGroupField"
-#define SC_UNONAME_GROUPINFO        "GroupInfo"
-#define SC_UNONAME_SHOWEMPTY        "ShowEmpty"
-#define SC_UNONAME_REPEATITEMLABELS "RepeatItemLabels"
+constexpr OUStringLiteral SC_UNONAME_FUNCTION = u"Function";
+constexpr OUStringLiteral SC_UNONAME_FUNCTION2 = u"Function2";
+constexpr OUStringLiteral SC_UNONAME_SUBTOTALS = u"Subtotals";
+constexpr OUStringLiteral SC_UNONAME_SUBTOTALS2 = u"Subtotals2";
+constexpr OUStringLiteral SC_UNONAME_SELPAGE = u"SelectedPage";
+constexpr OUStringLiteral SC_UNONAME_USESELPAGE = u"UseSelectedPage";
+constexpr OUStringLiteral SC_UNONAME_HASREFERENCE = u"HasReference";
+constexpr OUStringLiteral SC_UNONAME_REFERENCE = u"Reference";
+constexpr OUStringLiteral SC_UNONAME_HASAUTOSHOW = u"HasAutoShowInfo";
+constexpr OUStringLiteral SC_UNONAME_AUTOSHOW = u"AutoShowInfo";
+constexpr OUStringLiteral SC_UNONAME_HASSORTINFO = u"HasSortInfo";
+constexpr OUStringLiteral SC_UNONAME_SORTINFO = u"SortInfo";
+constexpr OUStringLiteral SC_UNONAME_HASLAYOUTINFO = u"HasLayoutInfo";
+constexpr OUStringLiteral SC_UNONAME_LAYOUTINFO = u"LayoutInfo";
+constexpr OUStringLiteral SC_UNONAME_ISGROUP = u"IsGroupField";
+constexpr OUStringLiteral SC_UNONAME_GROUPINFO = u"GroupInfo";
+constexpr OUStringLiteral SC_UNONAME_SHOWEMPTY = u"ShowEmpty";
+constexpr OUStringLiteral SC_UNONAME_REPEATITEMLABELS = u"RepeatItemLabels";
 
 //  data pilot item
-#define SC_UNONAME_SHOWDETAIL       "ShowDetail"
-#define SC_UNONAME_ISHIDDEN         "IsHidden"
+constexpr OUStringLiteral SC_UNONAME_SHOWDETAIL = u"ShowDetail";
+constexpr OUStringLiteral SC_UNONAME_ISHIDDEN = u"IsHidden";
 
 //  database options
-#define SC_UNONAME_CASE             "CaseSensitive"
+constexpr OUStringLiteral SC_UNONAME_CASE = u"CaseSensitive";
 #define SC_UNONAME_DBNAME           "DatabaseName"
-#define SC_UNONAME_FORMATS          "IncludeFormats"
-#define SC_UNONAME_INSBRK           "InsertPageBreaks"
-#define SC_UNONAME_KEEPFORM         "KeepFormats"
-#define SC_UNONAME_MOVCELLS         "MoveCells"
-#define SC_UNONAME_ISUSER           "IsUserDefined"
+constexpr OUStringLiteral SC_UNONAME_FORMATS = u"IncludeFormats";
+constexpr OUStringLiteral SC_UNONAME_INSBRK = u"InsertPageBreaks";
+constexpr OUStringLiteral SC_UNONAME_KEEPFORM = u"KeepFormats";
+constexpr OUStringLiteral SC_UNONAME_MOVCELLS = u"MoveCells";
+constexpr OUStringLiteral SC_UNONAME_ISUSER = u"IsUserDefined";
 #define SC_UNONAME_ISNATIVE         "IsNative"
 #define SC_UNONAME_REGEXP           "RegularExpressions"
 #define SC_UNONAME_WILDCARDS        "Wildcards"
-#define SC_UNONAME_SAVEOUT          "SaveOutputPosition"
-#define SC_UNONAME_SKIPDUP          "SkipDuplicates"
+constexpr OUStringLiteral SC_UNONAME_SAVEOUT = u"SaveOutputPosition";
+constexpr OUStringLiteral SC_UNONAME_SKIPDUP = u"SkipDuplicates";
 #define SC_UNONAME_SRCOBJ           "SourceObject"
 #define SC_UNONAME_SRCTYPE          "SourceType"
-#define SC_UNONAME_STRIPDAT         "StripData"
-#define SC_UNONAME_USEREGEX         "UseRegularExpressions"
-#define SC_UNONAME_ULIST            "UserListEnabled"
-#define SC_UNONAME_UINDEX           "UserListIndex"
-#define SC_UNONAME_BINDFMT          "BindFormatsToContent"
-#define SC_UNONAME_COPYOUT          "CopyOutputData"
-#define SC_UNONAME_ISCASE           "IsCaseSensitive"
+constexpr OUStringLiteral SC_UNONAME_STRIPDAT = u"StripData";
+constexpr OUStringLiteral SC_UNONAME_USEREGEX = u"UseRegularExpressions";
+constexpr OUStringLiteral SC_UNONAME_ULIST = u"UserListEnabled";
+constexpr OUStringLiteral SC_UNONAME_UINDEX = u"UserListIndex";
+constexpr OUStringLiteral SC_UNONAME_BINDFMT = u"BindFormatsToContent";
+constexpr OUStringLiteral SC_UNONAME_COPYOUT = u"CopyOutputData";
+constexpr OUStringLiteral SC_UNONAME_ISCASE = u"IsCaseSensitive";
 #define SC_UNONAME_ISULIST          "IsUserListEnabled"
-#define SC_UNONAME_OUTPOS           "OutputPosition"
-#define SC_UNONAME_CONTHDR          "ContainsHeader"
-#define SC_UNONAME_MAXFLD           "MaxFieldCount"
-#define SC_UNONAME_ORIENT           "Orientation"
+constexpr OUStringLiteral SC_UNONAME_OUTPOS = u"OutputPosition";
+constexpr OUStringLiteral SC_UNONAME_CONTHDR = u"ContainsHeader";
+constexpr OUStringLiteral SC_UNONAME_MAXFLD = u"MaxFieldCount";
+constexpr OUStringLiteral SC_UNONAME_ORIENT = u"Orientation";
 #define SC_UNONAME_ISSORTCOLUMNS    "IsSortColumns"
 #define SC_UNONAME_SORTFLD          "SortFields"
-#define SC_UNONAME_SORTASC          "SortAscending"
-#define SC_UNONAME_ENUSLIST         "EnableUserSortList"
-#define SC_UNONAME_USINDEX          "UserSortListIndex"
+constexpr OUStringLiteral SC_UNONAME_SORTASC = u"SortAscending";
+constexpr OUStringLiteral SC_UNONAME_ENUSLIST = u"EnableUserSortList";
+constexpr OUStringLiteral SC_UNONAME_USINDEX = u"UserSortListIndex";
 #define SC_UNONAME_COLLLOC          "CollatorLocale"
 #define SC_UNONAME_COLLALG          "CollatorAlgorithm"
-#define SC_UNONAME_AUTOFLT          "AutoFilter"
-#define SC_UNONAME_FLTCRT           "FilterCriteriaSource"
-#define SC_UNONAME_USEFLTCRT        "UseFilterCriteriaSource"
-#define SC_UNONAME_ENABSORT         "EnableSort"
-#define SC_UNONAME_FROMSELECT       "FromSelection"
+constexpr OUStringLiteral SC_UNONAME_AUTOFLT = u"AutoFilter";
+constexpr OUStringLiteral SC_UNONAME_FLTCRT = u"FilterCriteriaSource";
+constexpr OUStringLiteral SC_UNONAME_USEFLTCRT = u"UseFilterCriteriaSource";
+constexpr OUStringLiteral SC_UNONAME_ENABSORT = u"EnableSort";
+constexpr OUStringLiteral SC_UNONAME_FROMSELECT = u"FromSelection";
 #define SC_UNONAME_CONRES           "ConnectionResource"
-#define SC_UNONAME_TOKENINDEX       "TokenIndex"
-#define SC_UNONAME_ISSHAREDFMLA     "IsSharedFormula"
-#define SC_UNONAME_TOTALSROW        "TotalsRow"
+constexpr OUStringLiteral SC_UNONAME_TOKENINDEX = u"TokenIndex";
+constexpr OUStringLiteral SC_UNONAME_ISSHAREDFMLA = u"IsSharedFormula";
+constexpr OUStringLiteral SC_UNONAME_TOTALSROW = u"TotalsRow";
 
 //  text fields
-#define SC_UNONAME_ANCTYPE          "AnchorType"
-#define SC_UNONAME_ANCTYPES         "AnchorTypes"
-#define SC_UNONAME_TEXTWRAP         "TextWrap"
-#define SC_UNONAME_FILEFORM         "FileFormat"
+constexpr OUStringLiteral SC_UNONAME_ANCTYPE = u"AnchorType";
+constexpr OUStringLiteral SC_UNONAME_ANCTYPES = u"AnchorTypes";
+constexpr OUStringLiteral SC_UNONAME_TEXTWRAP = u"TextWrap";
+constexpr OUStringLiteral SC_UNONAME_FILEFORM = u"FileFormat";
 #define SC_UNONAME_TEXTFIELD_TYPE   "TextFieldType"
 
 //  url field
-#define SC_UNONAME_REPR             "Representation"
-#define SC_UNONAME_TARGET           "TargetFrame"
-#define SC_UNONAME_URL              "URL"
+constexpr OUStringLiteral SC_UNONAME_REPR = u"Representation";
+constexpr OUStringLiteral SC_UNONAME_TARGET = u"TargetFrame";
+constexpr OUStringLiteral SC_UNONAME_URL = u"URL";
 
 // date time field
-#define SC_UNONAME_ISDATE           "IsDate"
-#define SC_UNONAME_ISFIXED          "IsFixed"
-#define SC_UNONAME_DATETIME         "DateTime"
+constexpr OUStringLiteral SC_UNONAME_ISDATE = u"IsDate";
+constexpr OUStringLiteral SC_UNONAME_ISFIXED = u"IsFixed";
+constexpr OUStringLiteral SC_UNONAME_DATETIME = u"DateTime";
 
 // table field
-#define SC_UNONAME_TABLEPOS         "TablePosition"
+constexpr OUStringLiteral SC_UNONAME_TABLEPOS = u"TablePosition";
 
 //  conditional format
 #define SC_UNONAME_OPERATOR         "Operator"
@@ -350,38 +350,38 @@
 #define SC_UNONAME_STYLENAME        "StyleName"
 
 //  validation
-#define SC_UNONAME_ERRALSTY         "ErrorAlertStyle"
-#define SC_UNONAME_ERRMESS          "ErrorMessage"
-#define SC_UNONAME_ERRTITLE         "ErrorTitle"
-#define SC_UNONAME_IGNOREBL         "IgnoreBlankCells"
-#define SC_UNONAME_INPMESS          "InputMessage"
-#define SC_UNONAME_INPTITLE         "InputTitle"
-#define SC_UNONAME_SHOWERR          "ShowErrorMessage"
-#define SC_UNONAME_SHOWINP          "ShowInputMessage"
-#define SC_UNONAME_SHOWLIST         "ShowList"
-#define SC_UNONAME_TYPE             "Type"
+constexpr OUStringLiteral SC_UNONAME_ERRALSTY = u"ErrorAlertStyle";
+constexpr OUStringLiteral SC_UNONAME_ERRMESS = u"ErrorMessage";
+constexpr OUStringLiteral SC_UNONAME_ERRTITLE = u"ErrorTitle";
+constexpr OUStringLiteral SC_UNONAME_IGNOREBL = u"IgnoreBlankCells";
+constexpr OUStringLiteral SC_UNONAME_INPMESS = u"InputMessage";
+constexpr OUStringLiteral SC_UNONAME_INPTITLE = u"InputTitle";
+constexpr OUStringLiteral SC_UNONAME_SHOWERR = u"ShowErrorMessage";
+constexpr OUStringLiteral SC_UNONAME_SHOWINP = u"ShowInputMessage";
+constexpr OUStringLiteral SC_UNONAME_SHOWLIST = u"ShowList";
+constexpr OUStringLiteral SC_UNONAME_TYPE = u"Type";
 
 //  links
-#define SC_UNONAME_FILTER           "Filter"
-#define SC_UNONAME_FILTOPT          "FilterOptions"
-#define SC_UNONAME_LINKURL          "Url"
-#define SC_UNONAME_REFPERIOD        "RefreshPeriod"
-#define SC_UNONAME_REFDELAY         "RefreshDelay" // deprecated, don't use anymore
+constexpr OUStringLiteral SC_UNONAME_FILTER = u"Filter";
+constexpr OUStringLiteral SC_UNONAME_FILTOPT = u"FilterOptions";
+constexpr OUStringLiteral SC_UNONAME_LINKURL = u"Url";
+constexpr OUStringLiteral SC_UNONAME_REFPERIOD = u"RefreshPeriod";
+constexpr OUStringLiteral SC_UNONAME_REFDELAY = u"RefreshDelay"; // deprecated, don't use anymore
 
 //  search descriptor
-#define SC_UNO_SRCHBACK             "SearchBackwards"
-#define SC_UNO_SRCHBYROW            "SearchByRow"
-#define SC_UNO_SRCHCASE             "SearchCaseSensitive"
-#define SC_UNO_SRCHREGEXP           "SearchRegularExpression"
-#define SC_UNO_SRCHWILDCARD         "SearchWildcard"
-#define SC_UNO_SRCHSIM              "SearchSimilarity"
-#define SC_UNO_SRCHSIMADD           "SearchSimilarityAdd"
-#define SC_UNO_SRCHSIMEX            "SearchSimilarityExchange"
-#define SC_UNO_SRCHSIMREL           "SearchSimilarityRelax"
-#define SC_UNO_SRCHSIMREM           "SearchSimilarityRemove"
-#define SC_UNO_SRCHSTYLES           "SearchStyles"
-#define SC_UNO_SRCHTYPE             "SearchType"
-#define SC_UNO_SRCHWORDS            "SearchWords"
+constexpr OUStringLiteral SC_UNO_SRCHBACK = u"SearchBackwards";
+constexpr OUStringLiteral SC_UNO_SRCHBYROW = u"SearchByRow";
+constexpr OUStringLiteral SC_UNO_SRCHCASE = u"SearchCaseSensitive";
+constexpr OUStringLiteral SC_UNO_SRCHREGEXP = u"SearchRegularExpression";
+constexpr OUStringLiteral SC_UNO_SRCHWILDCARD = u"SearchWildcard";
+constexpr OUStringLiteral SC_UNO_SRCHSIM = u"SearchSimilarity";
+constexpr OUStringLiteral SC_UNO_SRCHSIMADD = u"SearchSimilarityAdd";
+constexpr OUStringLiteral SC_UNO_SRCHSIMEX = u"SearchSimilarityExchange";
+constexpr OUStringLiteral SC_UNO_SRCHSIMREL = u"SearchSimilarityRelax";
+constexpr OUStringLiteral SC_UNO_SRCHSIMREM = u"SearchSimilarityRemove";
+constexpr OUStringLiteral SC_UNO_SRCHSTYLES = u"SearchStyles";
+constexpr OUStringLiteral SC_UNO_SRCHTYPE = u"SearchType";
+constexpr OUStringLiteral SC_UNO_SRCHWORDS = u"SearchWords";
 #define SC_UNO_SRCHFILTERED         "SearchFiltered"
 #define SC_UNO_SRCHFORMATTED        "SearchFormatted"
 
@@ -400,235 +400,235 @@
 #define OLD_UNO_PAGE_FTRON          "FooterOn"
 
 //  page styles
-#define SC_UNO_PAGE_BACKCOLOR       "BackColor"
-#define SC_UNO_PAGE_BACKTRANS       "BackTransparent"
-#define SC_UNO_PAGE_GRAPHICFILT     "BackGraphicFilter"
-#define SC_UNO_PAGE_GRAPHICLOC      "BackGraphicLocation"
-#define SC_UNO_PAGE_GRAPHICURL      "BackGraphicURL"
-#define SC_UNO_PAGE_GRAPHIC         "BackGraphic"
+constexpr OUStringLiteral SC_UNO_PAGE_BACKCOLOR = u"BackColor";
+constexpr OUStringLiteral SC_UNO_PAGE_BACKTRANS = u"BackTransparent";
+constexpr OUStringLiteral SC_UNO_PAGE_GRAPHICFILT = u"BackGraphicFilter";
+constexpr OUStringLiteral SC_UNO_PAGE_GRAPHICLOC = u"BackGraphicLocation";
+constexpr OUStringLiteral SC_UNO_PAGE_GRAPHICURL = u"BackGraphicURL";
+constexpr OUStringLiteral SC_UNO_PAGE_GRAPHIC = u"BackGraphic";
 #define SC_UNO_PAGE_LEFTBORDER      SC_UNONAME_LEFTBORDER
 #define SC_UNO_PAGE_RIGHTBORDER     SC_UNONAME_RIGHTBORDER
 #define SC_UNO_PAGE_BOTTBORDER      SC_UNONAME_BOTTBORDER
 #define SC_UNO_PAGE_TOPBORDER       SC_UNONAME_TOPBORDER
-#define SC_UNO_PAGE_LEFTBRDDIST     "LeftBorderDistance"
-#define SC_UNO_PAGE_RIGHTBRDDIST    "RightBorderDistance"
-#define SC_UNO_PAGE_BOTTBRDDIST     "BottomBorderDistance"
-#define SC_UNO_PAGE_TOPBRDDIST      "TopBorderDistance"
-#define SC_UNO_PAGE_BORDERDIST      "BorderDistance"
-#define SC_UNO_PAGE_SHADOWFORM      "ShadowFormat"
-#define SC_UNO_PAGE_LEFTMARGIN      "LeftMargin"
-#define SC_UNO_PAGE_RIGHTMARGIN     "RightMargin"
-#define SC_UNO_PAGE_TOPMARGIN       "TopMargin"
-#define SC_UNO_PAGE_BOTTMARGIN      "BottomMargin"
-#define SC_UNO_PAGE_LANDSCAPE       "IsLandscape"
-#define SC_UNO_PAGE_NUMBERTYPE      "NumberingType"
-#define SC_UNO_PAGE_SYTLELAYOUT     "PageStyleLayout"
-#define SC_UNO_PAGE_PAPERTRAY       "PrinterPaperTray"
-#define SC_UNO_PAGE_SIZE            "Size"
-#define SC_UNO_PAGE_WIDTH           "Width"
-#define SC_UNO_PAGE_HEIGHT          "Height"
-#define SC_UNO_PAGE_CENTERHOR       "CenterHorizontally"
-#define SC_UNO_PAGE_CENTERVER       "CenterVertically"
-#define SC_UNO_PAGE_PRINTANNOT      "PrintAnnotations"
-#define SC_UNO_PAGE_PRINTGRID       "PrintGrid"
-#define SC_UNO_PAGE_PRINTHEADER     "PrintHeaders"
-#define SC_UNO_PAGE_PRINTCHARTS     "PrintCharts"
-#define SC_UNO_PAGE_PRINTOBJS       "PrintObjects"
-#define SC_UNO_PAGE_PRINTDRAW       "PrintDrawing"
-#define SC_UNO_PAGE_PRINTDOWN       "PrintDownFirst"
-#define SC_UNO_PAGE_SCALEVAL        "PageScale"
-#define SC_UNO_PAGE_SCALETOPAG      "ScaleToPages"
-#define SC_UNO_PAGE_SCALETOX        "ScaleToPagesX"
-#define SC_UNO_PAGE_SCALETOY        "ScaleToPagesY"
-#define SC_UNO_PAGE_FIRSTPAGE       "FirstPageNumber"
-#define SC_UNO_PAGE_FIRSTHDRSHARED  "FirstPageHeaderIsShared"
-#define SC_UNO_PAGE_FIRSTFTRSHARED  "FirstPageFooterIsShared"
-#define SC_UNO_PAGE_LEFTHDRCONT     "LeftPageHeaderContent"
-#define SC_UNO_PAGE_LEFTFTRCONT     "LeftPageFooterContent"
-#define SC_UNO_PAGE_RIGHTHDRCON     "RightPageHeaderContent"
-#define SC_UNO_PAGE_RIGHTFTRCON     "RightPageFooterContent"
-#define SC_UNO_PAGE_FIRSTHDRCONT    "FirstPageHeaderContent"
-#define SC_UNO_PAGE_FIRSTFTRCONT    "FirstPageFooterContent"
-#define SC_UNO_PAGE_PRINTFORMUL     "PrintFormulas"
-#define SC_UNO_PAGE_PRINTZERO       "PrintZeroValues"
-#define SC_UNO_PAGE_HDRBACKCOL      "HeaderBackColor"
-#define SC_UNO_PAGE_HDRBACKTRAN     "HeaderBackTransparent"
-#define SC_UNO_PAGE_HDRGRFFILT      "HeaderBackGraphicFilter"
-#define SC_UNO_PAGE_HDRGRFLOC       "HeaderBackGraphicLocation"
-#define SC_UNO_PAGE_HDRGRF          "HeaderBackGraphic"
-#define SC_UNO_PAGE_HDRGRFURL       "HeaderBackGraphicURL"
-#define SC_UNO_PAGE_HDRLEFTBOR      "HeaderLeftBorder"
-#define SC_UNO_PAGE_HDRRIGHTBOR     "HeaderRightBorder"
-#define SC_UNO_PAGE_HDRBOTTBOR      "HeaderBottomBorder"
-#define SC_UNO_PAGE_HDRTOPBOR       "HeaderTopBorder"
-#define SC_UNO_PAGE_HDRLEFTBDIS     "HeaderLeftBorderDistance"
-#define SC_UNO_PAGE_HDRRIGHTBDIS    "HeaderRightBorderDistance"
-#define SC_UNO_PAGE_HDRBOTTBDIS     "HeaderBottomBorderDistance"
-#define SC_UNO_PAGE_HDRTOPBDIS      "HeaderTopBorderDistance"
-#define SC_UNO_PAGE_HDRBRDDIST      "HeaderBorderDistance"
-#define SC_UNO_PAGE_HDRSHADOW       "HeaderShadowFormat"
-#define SC_UNO_PAGE_HDRLEFTMAR      "HeaderLeftMargin"
-#define SC_UNO_PAGE_HDRRIGHTMAR     "HeaderRightMargin"
-#define SC_UNO_PAGE_HDRBODYDIST     "HeaderBodyDistance"
-#define SC_UNO_PAGE_HDRHEIGHT       "HeaderHeight"
-#define SC_UNO_PAGE_HDRON           "HeaderIsOn"
-#define SC_UNO_PAGE_HDRDYNAMIC      "HeaderIsDynamicHeight"
-#define SC_UNO_PAGE_HDRSHARED       "HeaderIsShared"
-#define SC_UNO_PAGE_FTRBACKCOL      "FooterBackColor"
-#define SC_UNO_PAGE_FTRBACKTRAN     "FooterBackTransparent"
-#define SC_UNO_PAGE_FTRGRFFILT      "FooterBackGraphicFilter"
-#define SC_UNO_PAGE_FTRGRFLOC       "FooterBackGraphicLocation"
-#define SC_UNO_PAGE_FTRGRF          "FooterBackGraphic"
-#define SC_UNO_PAGE_FTRGRFURL       "FooterBackGraphicURL"
-#define SC_UNO_PAGE_FTRLEFTBOR      "FooterLeftBorder"
-#define SC_UNO_PAGE_FTRRIGHTBOR     "FooterRightBorder"
-#define SC_UNO_PAGE_FTRBOTTBOR      "FooterBottomBorder"
-#define SC_UNO_PAGE_FTRTOPBOR       "FooterTopBorder"
-#define SC_UNO_PAGE_FTRLEFTBDIS     "FooterLeftBorderDistance"
-#define SC_UNO_PAGE_FTRRIGHTBDIS    "FooterRightBorderDistance"
-#define SC_UNO_PAGE_FTRBOTTBDIS     "FooterBottomBorderDistance"
-#define SC_UNO_PAGE_FTRTOPBDIS      "FooterTopBorderDistance"
-#define SC_UNO_PAGE_FTRBRDDIST      "FooterBorderDistance"
-#define SC_UNO_PAGE_FTRSHADOW       "FooterShadowFormat"
-#define SC_UNO_PAGE_FTRLEFTMAR      "FooterLeftMargin"
-#define SC_UNO_PAGE_FTRRIGHTMAR     "FooterRightMargin"
-#define SC_UNO_PAGE_FTRBODYDIST     "FooterBodyDistance"
-#define SC_UNO_PAGE_FTRHEIGHT       "FooterHeight"
-#define SC_UNO_PAGE_FTRON           "FooterIsOn"
-#define SC_UNO_PAGE_FTRDYNAMIC      "FooterIsDynamicHeight"
-#define SC_UNO_PAGE_FTRSHARED       "FooterIsShared"
+constexpr OUStringLiteral SC_UNO_PAGE_LEFTBRDDIST = u"LeftBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_RIGHTBRDDIST = u"RightBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_BOTTBRDDIST = u"BottomBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_TOPBRDDIST = u"TopBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_BORDERDIST = u"BorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_SHADOWFORM = u"ShadowFormat";
+constexpr OUStringLiteral SC_UNO_PAGE_LEFTMARGIN = u"LeftMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_RIGHTMARGIN = u"RightMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_TOPMARGIN = u"TopMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_BOTTMARGIN = u"BottomMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_LANDSCAPE = u"IsLandscape";
+constexpr OUStringLiteral SC_UNO_PAGE_NUMBERTYPE = u"NumberingType";
+constexpr OUStringLiteral SC_UNO_PAGE_SYTLELAYOUT = u"PageStyleLayout";
+constexpr OUStringLiteral SC_UNO_PAGE_PAPERTRAY = u"PrinterPaperTray";
+constexpr OUStringLiteral SC_UNO_PAGE_SIZE = u"Size";
+constexpr OUStringLiteral SC_UNO_PAGE_WIDTH = u"Width";
+constexpr OUStringLiteral SC_UNO_PAGE_HEIGHT = u"Height";
+constexpr OUStringLiteral SC_UNO_PAGE_CENTERHOR = u"CenterHorizontally";
+constexpr OUStringLiteral SC_UNO_PAGE_CENTERVER = u"CenterVertically";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTANNOT = u"PrintAnnotations";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTGRID = u"PrintGrid";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTHEADER = u"PrintHeaders";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTCHARTS = u"PrintCharts";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTOBJS = u"PrintObjects";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTDRAW = u"PrintDrawing";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTDOWN = u"PrintDownFirst";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALEVAL = u"PageScale";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALETOPAG = u"ScaleToPages";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALETOX = u"ScaleToPagesX";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALETOY = u"ScaleToPagesY";
+constexpr OUStringLiteral SC_UNO_PAGE_FIRSTPAGE = u"FirstPageNumber";
+constexpr OUStringLiteral SC_UNO_PAGE_FIRSTHDRSHARED = u"FirstPageHeaderIsShared";
+constexpr OUStringLiteral SC_UNO_PAGE_FIRSTFTRSHARED = u"FirstPageFooterIsShared";
+constexpr OUStringLiteral SC_UNO_PAGE_LEFTHDRCONT = u"LeftPageHeaderContent";
+constexpr OUStringLiteral SC_UNO_PAGE_LEFTFTRCONT = u"LeftPageFooterContent";
+constexpr OUStringLiteral SC_UNO_PAGE_RIGHTHDRCON = u"RightPageHeaderContent";
+constexpr OUStringLiteral SC_UNO_PAGE_RIGHTFTRCON = u"RightPageFooterContent";
+constexpr OUStringLiteral SC_UNO_PAGE_FIRSTHDRCONT = u"FirstPageHeaderContent";
+constexpr OUStringLiteral SC_UNO_PAGE_FIRSTFTRCONT = u"FirstPageFooterContent";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTFORMUL = u"PrintFormulas";
+constexpr OUStringLiteral SC_UNO_PAGE_PRINTZERO = u"PrintZeroValues";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBACKCOL = u"HeaderBackColor";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBACKTRAN = u"HeaderBackTransparent";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRGRFFILT = u"HeaderBackGraphicFilter";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRGRFLOC = u"HeaderBackGraphicLocation";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRGRF = u"HeaderBackGraphic";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRGRFURL = u"HeaderBackGraphicURL";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRLEFTBOR = u"HeaderLeftBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRRIGHTBOR = u"HeaderRightBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBOTTBOR = u"HeaderBottomBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRTOPBOR = u"HeaderTopBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRLEFTBDIS = u"HeaderLeftBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRRIGHTBDIS = u"HeaderRightBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBOTTBDIS = u"HeaderBottomBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRTOPBDIS = u"HeaderTopBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBRDDIST = u"HeaderBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRSHADOW = u"HeaderShadowFormat";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRLEFTMAR = u"HeaderLeftMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRRIGHTMAR = u"HeaderRightMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBODYDIST = u"HeaderBodyDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRHEIGHT = u"HeaderHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRON = u"HeaderIsOn";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRDYNAMIC = u"HeaderIsDynamicHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRSHARED = u"HeaderIsShared";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBACKCOL = u"FooterBackColor";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBACKTRAN = u"FooterBackTransparent";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRGRFFILT = u"FooterBackGraphicFilter";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRGRFLOC = u"FooterBackGraphicLocation";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRGRF = u"FooterBackGraphic";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRGRFURL = u"FooterBackGraphicURL";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRLEFTBOR = u"FooterLeftBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRRIGHTBOR = u"FooterRightBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBOTTBOR = u"FooterBottomBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRTOPBOR = u"FooterTopBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRLEFTBDIS = u"FooterLeftBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRRIGHTBDIS = u"FooterRightBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBOTTBDIS = u"FooterBottomBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRTOPBDIS = u"FooterTopBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBRDDIST = u"FooterBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRSHADOW = u"FooterShadowFormat";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRLEFTMAR = u"FooterLeftMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRRIGHTMAR = u"FooterRightMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBODYDIST = u"FooterBodyDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRHEIGHT = u"FooterHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRON = u"FooterIsOn";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRDYNAMIC = u"FooterIsDynamicHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRSHARED = u"FooterIsShared";
 
 //  document settings
-#define SC_UNO_CALCASSHOWN              "CalcAsShown"
-#define SC_UNO_DEFTABSTOP               "DefaultTabStop"
-#define SC_UNO_TABSTOPDIS               "TabStopDistance" // is the same like the before, but only the writer name
-#define SC_UNO_IGNORECASE               "IgnoreCase"
-#define SC_UNO_ITERCOUNT                "IterationCount"
-#define SC_UNO_ITERENABLED              "IsIterationEnabled"
-#define SC_UNO_ITEREPSILON              "IterationEpsilon"
-#define SC_UNO_LOOKUPLABELS             "LookUpLabels"
-#define SC_UNO_MATCHWHOLE               "MatchWholeCell"
-#define SC_UNO_NULLDATE                 "NullDate"
-#define SC_UNO_SPELLONLINE              "SpellOnline"
-#define SC_UNO_STANDARDDEC              "StandardDecimals"
-#define SC_UNO_REGEXENABLED             "RegularExpressions"
-#define SC_UNO_WILDCARDSENABLED         "Wildcards"
-#define SC_UNO_BASICLIBRARIES           "BasicLibraries"
-#define SC_UNO_DIALOGLIBRARIES          "DialogLibraries"
-#define SC_UNO_RUNTIMEUID               "RuntimeUID"
-#define SC_UNO_HASVALIDSIGNATURES       "HasValidSignatures"
-#define SC_UNO_ISLOADED                 "IsLoaded"
-#define SC_UNO_ISUNDOENABLED            "IsUndoEnabled"
-#define SC_UNO_ISADJUSTHEIGHTENABLED    "IsAdjustHeightEnabled"
-#define SC_UNO_ISEXECUTELINKENABLED     "IsExecuteLinkEnabled"
-#define SC_UNO_ISCHANGEREADONLYENABLED  "IsChangeReadOnlyEnabled"
-#define SC_UNO_REFERENCEDEVICE          "ReferenceDevice"
-#define SC_UNO_CODENAME                 "CodeName"
-#define SC_UNO_INTEROPGRABBAG           "InteropGrabBag"
-#define SC_UNO_RECORDCHANGES            "RecordChanges"
-#define SC_UNO_ISRECORDCHANGESPROTECTED "IsRecordChangesProtected"
-#define SC_UNO_SYNTAXSTRINGREF          "SyntaxStringRef"
+constexpr OUStringLiteral SC_UNO_CALCASSHOWN = u"CalcAsShown";
+constexpr OUStringLiteral SC_UNO_DEFTABSTOP = u"DefaultTabStop";
+constexpr OUStringLiteral SC_UNO_TABSTOPDIS = u"TabStopDistance"; // is the same like the before, but only the writer name
+constexpr OUStringLiteral SC_UNO_IGNORECASE = u"IgnoreCase";
+constexpr OUStringLiteral SC_UNO_ITERCOUNT = u"IterationCount";
+constexpr OUStringLiteral SC_UNO_ITERENABLED = u"IsIterationEnabled";
+constexpr OUStringLiteral SC_UNO_ITEREPSILON = u"IterationEpsilon";
+constexpr OUStringLiteral SC_UNO_LOOKUPLABELS = u"LookUpLabels";
+constexpr OUStringLiteral SC_UNO_MATCHWHOLE = u"MatchWholeCell";
+constexpr OUStringLiteral SC_UNO_NULLDATE = u"NullDate";
+constexpr OUStringLiteral SC_UNO_SPELLONLINE = u"SpellOnline";
+constexpr OUStringLiteral SC_UNO_STANDARDDEC = u"StandardDecimals";
+constexpr OUStringLiteral SC_UNO_REGEXENABLED = u"RegularExpressions";
+constexpr OUStringLiteral SC_UNO_WILDCARDSENABLED = u"Wildcards";
+constexpr OUStringLiteral SC_UNO_BASICLIBRARIES = u"BasicLibraries";
+constexpr OUStringLiteral SC_UNO_DIALOGLIBRARIES = u"DialogLibraries";
+constexpr OUStringLiteral SC_UNO_RUNTIMEUID = u"RuntimeUID";
+constexpr OUStringLiteral SC_UNO_HASVALIDSIGNATURES = u"HasValidSignatures";
+constexpr OUStringLiteral SC_UNO_ISLOADED = u"IsLoaded";
+constexpr OUStringLiteral SC_UNO_ISUNDOENABLED = u"IsUndoEnabled";
+constexpr OUStringLiteral SC_UNO_ISADJUSTHEIGHTENABLED = u"IsAdjustHeightEnabled";
+constexpr OUStringLiteral SC_UNO_ISEXECUTELINKENABLED = u"IsExecuteLinkEnabled";
+constexpr OUStringLiteral SC_UNO_ISCHANGEREADONLYENABLED = u"IsChangeReadOnlyEnabled";
+constexpr OUStringLiteral SC_UNO_REFERENCEDEVICE = u"ReferenceDevice";
+constexpr OUStringLiteral SC_UNO_CODENAME = u"CodeName";
+constexpr OUStringLiteral SC_UNO_INTEROPGRABBAG = u"InteropGrabBag";
+constexpr OUStringLiteral SC_UNO_RECORDCHANGES = u"RecordChanges";
+constexpr OUStringLiteral SC_UNO_ISRECORDCHANGESPROTECTED = u"IsRecordChangesProtected";
+constexpr OUStringLiteral SC_UNO_SYNTAXSTRINGREF = u"SyntaxStringRef";
 
 
 //  document properties from FormModel
-#define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"
-#define SC_UNO_AUTOCONTFOC          "AutomaticControlFocus"
+constexpr OUStringLiteral SC_UNO_APPLYFMDES = u"ApplyFormDesignMode";
+constexpr OUStringLiteral SC_UNO_AUTOCONTFOC = u"AutomaticControlFocus";
 
 //  view options
-#define SC_UNO_COLROWHDR            "HasColumnRowHeaders"
-#define SC_UNO_GRIDCOLOR            "GridColor"
-#define SC_UNO_HIDESPELL            "HideSpellMarks"                /* deprecated #i91949 */
-#define SC_UNO_HORSCROLL            "HasHorizontalScrollBar"
-#define SC_UNO_OUTLSYMB             "IsOutlineSymbolsSet"
-#define SC_UNO_SHEETTABS            "HasSheetTabs"
-#define SC_UNO_SHOWANCHOR           "ShowAnchor"
-#define SC_UNO_SHOWCHARTS           "ShowCharts"
-#define SC_UNO_SHOWDRAW             "ShowDrawing"
-#define SC_UNO_SHOWFORM             "ShowFormulas"
-#define SC_UNO_SHOWGRID             "ShowGrid"
-#define SC_UNO_SHOWHELP             "ShowHelpLines"
-#define SC_UNO_SHOWNOTES            "ShowNotes"
-#define SC_UNO_SHOWOBJ              "ShowObjects"
-#define SC_UNO_SHOWPAGEBR           "ShowPageBreaks"
-#define SC_UNO_SHOWZERO             "ShowZeroValues"
-#define SC_UNO_VALUEHIGH            "IsValueHighlightingEnabled"
-#define SC_UNO_VERTSCROLL           "HasVerticalScrollBar"
-#define SC_UNO_SNAPTORASTER         "IsSnapToRaster"
-#define SC_UNO_RASTERVIS            "RasterIsVisible"
-#define SC_UNO_RASTERRESX           "RasterResolutionX"
-#define SC_UNO_RASTERRESY           "RasterResolutionY"
-#define SC_UNO_RASTERSUBX           "RasterSubdivisionX"
-#define SC_UNO_RASTERSUBY           "RasterSubdivisionY"
-#define SC_UNO_RASTERSYNC           "IsRasterAxisSynchronized"
-#define SC_UNO_AUTOCALC             "AutoCalculate"
-#define SC_UNO_PRINTERNAME          "PrinterName"
-#define SC_UNO_PRINTERSETUP         "PrinterSetup"
-#define SC_UNO_PRINTERPAPER         "PrinterPaperFromSetup"
-#define SC_UNO_APPLYDOCINF          "ApplyUserData"
-#define SC_UNO_SAVE_THUMBNAIL       "SaveThumbnail"
-#define SC_UNO_CHARCOMP             "CharacterCompressionType"
-#define SC_UNO_ASIANKERN            "IsKernAsianPunctuation"
-#define SC_UNO_VISAREA              "VisibleArea"
-#define SC_UNO_ZOOMTYPE             "ZoomType"
-#define SC_UNO_ZOOMVALUE            "ZoomValue"
-#define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
-#define SC_UNO_FILTERED_RANGE_SELECTION       "FilteredRangeSelection"
-#define SC_UNO_VISAREASCREEN        "VisibleAreaOnScreen"
+constexpr OUStringLiteral SC_UNO_COLROWHDR = u"HasColumnRowHeaders";
+constexpr OUStringLiteral SC_UNO_GRIDCOLOR = u"GridColor";
+constexpr OUStringLiteral SC_UNO_HIDESPELL = u"HideSpellMarks";                /* deprecated #i91949 */
+constexpr OUStringLiteral SC_UNO_HORSCROLL = u"HasHorizontalScrollBar";
+constexpr OUStringLiteral SC_UNO_OUTLSYMB = u"IsOutlineSymbolsSet";
+constexpr OUStringLiteral SC_UNO_SHEETTABS = u"HasSheetTabs";
+constexpr OUStringLiteral SC_UNO_SHOWANCHOR = u"ShowAnchor";
+constexpr OUStringLiteral SC_UNO_SHOWCHARTS = u"ShowCharts";
+constexpr OUStringLiteral SC_UNO_SHOWDRAW = u"ShowDrawing";
+constexpr OUStringLiteral SC_UNO_SHOWFORM = u"ShowFormulas";
+constexpr OUStringLiteral SC_UNO_SHOWGRID = u"ShowGrid";
+constexpr OUStringLiteral SC_UNO_SHOWHELP = u"ShowHelpLines";
+constexpr OUStringLiteral SC_UNO_SHOWNOTES = u"ShowNotes";
+constexpr OUStringLiteral SC_UNO_SHOWOBJ = u"ShowObjects";
+constexpr OUStringLiteral SC_UNO_SHOWPAGEBR = u"ShowPageBreaks";
+constexpr OUStringLiteral SC_UNO_SHOWZERO = u"ShowZeroValues";
+constexpr OUStringLiteral SC_UNO_VALUEHIGH = u"IsValueHighlightingEnabled";
+constexpr OUStringLiteral SC_UNO_VERTSCROLL = u"HasVerticalScrollBar";
+constexpr OUStringLiteral SC_UNO_SNAPTORASTER = u"IsSnapToRaster";
+constexpr OUStringLiteral SC_UNO_RASTERVIS = u"RasterIsVisible";
+constexpr OUStringLiteral SC_UNO_RASTERRESX = u"RasterResolutionX";
+constexpr OUStringLiteral SC_UNO_RASTERRESY = u"RasterResolutionY";
+constexpr OUStringLiteral SC_UNO_RASTERSUBX = u"RasterSubdivisionX";
+constexpr OUStringLiteral SC_UNO_RASTERSUBY = u"RasterSubdivisionY";
+constexpr OUStringLiteral SC_UNO_RASTERSYNC = u"IsRasterAxisSynchronized";
+constexpr OUStringLiteral SC_UNO_AUTOCALC = u"AutoCalculate";
+constexpr OUStringLiteral SC_UNO_PRINTERNAME = u"PrinterName";
+constexpr OUStringLiteral SC_UNO_PRINTERSETUP = u"PrinterSetup";
+constexpr OUStringLiteral SC_UNO_PRINTERPAPER = u"PrinterPaperFromSetup";
+constexpr OUStringLiteral SC_UNO_APPLYDOCINF = u"ApplyUserData";
+constexpr OUStringLiteral SC_UNO_SAVE_THUMBNAIL = u"SaveThumbnail";
+constexpr OUStringLiteral SC_UNO_CHARCOMP = u"CharacterCompressionType";
+constexpr OUStringLiteral SC_UNO_ASIANKERN = u"IsKernAsianPunctuation";
+constexpr OUStringLiteral SC_UNO_VISAREA = u"VisibleArea";
+constexpr OUStringLiteral SC_UNO_ZOOMTYPE = u"ZoomType";
+constexpr OUStringLiteral SC_UNO_ZOOMVALUE = u"ZoomValue";
+constexpr OUStringLiteral SC_UNO_UPDTEMPL = u"UpdateFromTemplate";
+constexpr OUStringLiteral SC_UNO_FILTERED_RANGE_SELECTION = u"FilteredRangeSelection";
+constexpr OUStringLiteral SC_UNO_VISAREASCREEN = u"VisibleAreaOnScreen";
 
 /*Stampit enable/disable print cancel */
-#define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"
+constexpr OUStringLiteral SC_UNO_ALLOWPRINTJOBCANCEL = u"AllowPrintJobCancel";
 
 //  old (5.2) property names for view options - for compatibility only!
-#define OLD_UNO_COLROWHDR           "ColumnRowHeaders"
-#define OLD_UNO_HORSCROLL           "HorizontalScrollBar"
-#define OLD_UNO_OUTLSYMB            "OutlineSymbols"
-#define OLD_UNO_SHEETTABS           "SheetTabs"
-#define OLD_UNO_VALUEHIGH           "ValueHighlighting"
-#define OLD_UNO_VERTSCROLL          "VerticalScrollBar"
+constexpr OUStringLiteral OLD_UNO_COLROWHDR = u"ColumnRowHeaders";
+constexpr OUStringLiteral OLD_UNO_HORSCROLL = u"HorizontalScrollBar";
+constexpr OUStringLiteral OLD_UNO_OUTLSYMB = u"OutlineSymbols";
+constexpr OUStringLiteral OLD_UNO_SHEETTABS = u"SheetTabs";
+constexpr OUStringLiteral OLD_UNO_VALUEHIGH = u"ValueHighlighting";
+constexpr OUStringLiteral OLD_UNO_VERTSCROLL = u"VerticalScrollBar";
 
 //  data pilot source
-#define SC_UNO_DP_COLGRAND             "ColumnGrand"
-#define SC_UNO_DP_ROWGRAND             "RowGrand"
-#define SC_UNO_DP_ORIGINAL             "Original"
-#define SC_UNO_DP_ORIGINAL_POS         "OriginalPosition"
-#define SC_UNO_DP_ISDATALAYOUT         "IsDataLayoutDimension"
-#define SC_UNO_DP_ORIENTATION          "Orientation"
-#define SC_UNO_DP_POSITION             "Position"
-#define SC_UNO_DP_FUNCTION             "Function"
-#define SC_UNO_DP_FUNCTION2            "Function2"
-#define SC_UNO_DP_USEDHIERARCHY        "UsedHierarchy"
-#define SC_UNO_DP_FILTER               "Filter"
-#define SC_UNO_DP_SUBTOTAL             "SubTotals"
-#define SC_UNO_DP_SUBTOTAL2            "SubTotals2"
-#define SC_UNO_DP_SHOWEMPTY            "ShowEmpty"
-#define SC_UNO_DP_REPEATITEMLABELS     "RepeatItemLabels"
-#define SC_UNO_DP_ISVISIBLE            "IsVisible"
-#define SC_UNO_DP_SHOWDETAILS          "ShowDetails"
-#define SC_UNO_DP_IGNOREEMPTY          "IgnoreEmptyRows"
-#define SC_UNO_DP_REPEATEMPTY          "RepeatIfEmpty"
-#define SC_UNO_DP_DATADESC             "DataDescription"
+constexpr OUStringLiteral SC_UNO_DP_COLGRAND = u"ColumnGrand";
+constexpr OUStringLiteral SC_UNO_DP_ROWGRAND = u"RowGrand";
+constexpr OUStringLiteral SC_UNO_DP_ORIGINAL = u"Original";
+constexpr OUStringLiteral SC_UNO_DP_ORIGINAL_POS = u"OriginalPosition";
+constexpr OUStringLiteral SC_UNO_DP_ISDATALAYOUT = u"IsDataLayoutDimension";
+constexpr OUStringLiteral SC_UNO_DP_ORIENTATION = u"Orientation";
+constexpr OUStringLiteral SC_UNO_DP_POSITION = u"Position";
+constexpr OUStringLiteral SC_UNO_DP_FUNCTION = u"Function";
+constexpr OUStringLiteral SC_UNO_DP_FUNCTION2 = u"Function2";
+constexpr OUStringLiteral SC_UNO_DP_USEDHIERARCHY = u"UsedHierarchy";
+constexpr OUStringLiteral SC_UNO_DP_FILTER = u"Filter";
+constexpr OUStringLiteral SC_UNO_DP_SUBTOTAL = u"SubTotals";
+constexpr OUStringLiteral SC_UNO_DP_SUBTOTAL2 = u"SubTotals2";
+constexpr OUStringLiteral SC_UNO_DP_SHOWEMPTY = u"ShowEmpty";
+constexpr OUStringLiteral SC_UNO_DP_REPEATITEMLABELS = u"RepeatItemLabels";
+constexpr OUStringLiteral SC_UNO_DP_ISVISIBLE = u"IsVisible";
+constexpr OUStringLiteral SC_UNO_DP_SHOWDETAILS = u"ShowDetails";
+constexpr OUStringLiteral SC_UNO_DP_IGNOREEMPTY = u"IgnoreEmptyRows";
+constexpr OUStringLiteral SC_UNO_DP_REPEATEMPTY = u"RepeatIfEmpty";
+constexpr OUStringLiteral SC_UNO_DP_DATADESC = u"DataDescription";
 #define SC_UNO_DP_NUMBERFO             SC_UNONAME_NUMFMT
-#define SC_UNO_DP_ROWFIELDCOUNT        "RowFieldCount"
-#define SC_UNO_DP_COLUMNFIELDCOUNT     "ColumnFieldCount"
-#define SC_UNO_DP_DATAFIELDCOUNT       "DataFieldCount"
-#define SC_UNO_DP_LAYOUTNAME           "LayoutName"
-#define SC_UNO_DP_FIELD_SUBTOTALNAME   "FieldSubtotalName"
-#define SC_UNO_DP_GRANDTOTAL_NAME      "GrandTotalName"
-#define SC_UNO_DP_HAS_HIDDEN_MEMBER    "HasHiddenMember"
-#define SC_UNO_DP_FLAGS                "Flags"
+constexpr OUStringLiteral SC_UNO_DP_ROWFIELDCOUNT = u"RowFieldCount";
+constexpr OUStringLiteral SC_UNO_DP_COLUMNFIELDCOUNT = u"ColumnFieldCount";
+constexpr OUStringLiteral SC_UNO_DP_DATAFIELDCOUNT = u"DataFieldCount";
+constexpr OUStringLiteral SC_UNO_DP_LAYOUTNAME = u"LayoutName";
+constexpr OUStringLiteral SC_UNO_DP_FIELD_SUBTOTALNAME = u"FieldSubtotalName";
+constexpr OUStringLiteral SC_UNO_DP_GRANDTOTAL_NAME = u"GrandTotalName";
+constexpr OUStringLiteral SC_UNO_DP_HAS_HIDDEN_MEMBER = u"HasHiddenMember";
+constexpr OUStringLiteral SC_UNO_DP_FLAGS = u"Flags";
 
-#define SC_UNO_DP_REFVALUE             "ReferenceValue"
-#define SC_UNO_DP_SORTING              "Sorting"
-#define SC_UNO_DP_AUTOSHOW             "AutoShow"
-#define SC_UNO_DP_LAYOUT               "Layout"
+constexpr OUStringLiteral SC_UNO_DP_REFVALUE = u"ReferenceValue";
+constexpr OUStringLiteral SC_UNO_DP_SORTING = u"Sorting";
+constexpr OUStringLiteral SC_UNO_DP_AUTOSHOW = u"AutoShow";
+constexpr OUStringLiteral SC_UNO_DP_LAYOUT = u"Layout";
 
 // data pilot descriptor
-#define SC_UNO_DP_IGNORE_EMPTYROWS     "IgnoreEmptyRows"
-#define SC_UNO_DP_DRILLDOWN            "DrillDownOnDoubleClick"
-#define SC_UNO_DP_SHOWFILTER           "ShowFilterButton"
-#define SC_UNO_DP_IMPORTDESC           "ImportDescriptor"
-#define SC_UNO_DP_SOURCESERVICE        "SourceServiceName"
-#define SC_UNO_DP_SERVICEARG           "ServiceArguments"
+constexpr OUStringLiteral SC_UNO_DP_IGNORE_EMPTYROWS = u"IgnoreEmptyRows";
+constexpr OUStringLiteral SC_UNO_DP_DRILLDOWN = u"DrillDownOnDoubleClick";
+constexpr OUStringLiteral SC_UNO_DP_SHOWFILTER = u"ShowFilterButton";
+constexpr OUStringLiteral SC_UNO_DP_IMPORTDESC = u"ImportDescriptor";
+constexpr OUStringLiteral SC_UNO_DP_SOURCESERVICE = u"SourceServiceName";
+constexpr OUStringLiteral SC_UNO_DP_SERVICEARG = u"ServiceArguments";
 
 // properties in data pilot descriptor ServiceArguments
 #define SC_UNO_DP_SOURCENAME           "SourceName"
@@ -638,7 +638,7 @@
 
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
-#define SC_UNONAME_TITLE            "Title"
+constexpr OUStringLiteral SC_UNONAME_TITLE = u"Title";
 #define SC_UNONAME_CLOSEONUP        "CloseOnMouseRelease"
 #define SC_UNONAME_SINGLECELL       "SingleCellMode"
 #define SC_UNONAME_MULTISEL         "MultiSelectionMode"
@@ -652,9 +652,9 @@
 #define SC_UNONAME_CALCPAGEPOS      "CalcPagePos"
 
 // CellValueBinding
-#define SC_UNONAME_BOUNDCELL        "BoundCell"
+constexpr OUStringLiteral SC_UNONAME_BOUNDCELL = u"BoundCell";
 // CellRangeListSource
-#define SC_UNONAME_CELLRANGE        "CellRange"
+constexpr OUStringLiteral SC_UNONAME_CELLRANGE = u"CellRange";
 
 // CellAddressConversion / CellRangeAddressConversion
 #define SC_UNONAME_ADDRESS          "Address"
@@ -664,17 +664,17 @@
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
 // Security options
-#define SC_UNO_LOADREADONLY         "LoadReadonly"
-#define SC_UNO_MODIFYPASSWORDINFO   "ModifyPasswordInfo"
-#define SC_UNO_MODIFYPASSWORDHASH   "ModifyPasswordHash"
+constexpr OUStringLiteral SC_UNO_LOADREADONLY = u"LoadReadonly";
+constexpr OUStringLiteral SC_UNO_MODIFYPASSWORDINFO = u"ModifyPasswordInfo";
+constexpr OUStringLiteral SC_UNO_MODIFYPASSWORDHASH = u"ModifyPasswordHash";
 
 // FormulaParser
-#define SC_UNO_COMPILEENGLISH       "CompileEnglish"
-#define SC_UNO_FORMULACONVENTION    "FormulaConvention"
-#define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
-#define SC_UNO_OPCODEMAP            "OpCodeMap"
+constexpr OUStringLiteral SC_UNO_COMPILEENGLISH = u"CompileEnglish";
+constexpr OUStringLiteral SC_UNO_FORMULACONVENTION = u"FormulaConvention";
+constexpr OUStringLiteral SC_UNO_IGNORELEADING = u"IgnoreLeadingSpaces";
+constexpr OUStringLiteral SC_UNO_OPCODEMAP = u"OpCodeMap";
 #define SC_UNO_EXTERNALLINKS        "ExternalLinks"
-#define SC_UNO_COMPILEFAP           "CompileFAP"
+constexpr OUStringLiteral SC_UNO_COMPILEFAP = u"CompileFAP";
 #define SC_UNO_REF_CONV_CHARTOOXML  "RefConventionChartOOXML"
 
 // Chart2
@@ -687,22 +687,22 @@
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"
-#define SC_UNO_SHAREDOC             "IsDocumentShared"
+constexpr OUStringLiteral SC_UNO_SHAREDOC = u"IsDocumentShared";
 
 // EventDescriptor
 #define SC_UNO_EVENTTYPE            "EventType"
 #define SC_UNO_SCRIPT               "Script"
 
 // Named ranges
-#define SC_UNO_MODIFY_BROADCAST     "ModifyAndBroadcast"
+constexpr OUStringLiteral SC_UNO_MODIFY_BROADCAST = u"ModifyAndBroadcast";
 
-#define SC_UNO_EMBED_FONTS               "EmbedFonts"
-#define SC_UNO_EMBED_ONLY_USED_FONTS     "EmbedOnlyUsedFonts"
-#define SC_UNO_EMBED_FONT_SCRIPT_LATIN   "EmbedLatinScriptFonts"
-#define SC_UNO_EMBED_FONT_SCRIPT_ASIAN   "EmbedAsianScriptFonts"
-#define SC_UNO_EMBED_FONT_SCRIPT_COMPLEX "EmbedComplexScriptFonts"
+constexpr OUStringLiteral SC_UNO_EMBED_FONTS = u"EmbedFonts";
+constexpr OUStringLiteral SC_UNO_EMBED_ONLY_USED_FONTS = u"EmbedOnlyUsedFonts";
+constexpr OUStringLiteral SC_UNO_EMBED_FONT_SCRIPT_LATIN = u"EmbedLatinScriptFonts";
+constexpr OUStringLiteral SC_UNO_EMBED_FONT_SCRIPT_ASIAN = u"EmbedAsianScriptFonts";
+constexpr OUStringLiteral SC_UNO_EMBED_FONT_SCRIPT_COMPLEX = u"EmbedComplexScriptFonts";
 
-#define SC_UNO_ODS_LOCK_SOLAR_MUTEX "ODSLockSolarMutex"
-#define SC_UNO_ODS_IMPORT_STYLES    "ODSImportStyles"
+constexpr OUStringLiteral SC_UNO_ODS_LOCK_SOLAR_MUTEX = u"ODSLockSolarMutex";
+constexpr OUStringLiteral SC_UNO_ODS_IMPORT_STYLES = u"ODSImportStyles";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

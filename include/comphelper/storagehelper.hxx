@@ -27,13 +27,13 @@
 #include <string_view>
 
 #define PACKAGE_STORAGE_FORMAT_STRING   "PackageFormat"
-#define ZIP_STORAGE_FORMAT_STRING       "ZipFormat"
-#define OFOPXML_STORAGE_FORMAT_STRING   "OFOPXMLFormat"
+constexpr OUStringLiteral ZIP_STORAGE_FORMAT_STRING = u"ZipFormat";
+constexpr OUStringLiteral OFOPXML_STORAGE_FORMAT_STRING = u"OFOPXMLFormat";
 
-#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 "PackageSHA256UTF8EncryptionKey"
-#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   "PackageSHA1UTF8EncryptionKey"
-#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 "PackageSHA1MS1252EncryptionKey"
-#define PACKAGE_ENCRYPTIONDATA_SHA1CORRECT "PackageSHA1CorrectEncryptionKey"
+constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA256UTF8 = u"PackageSHA256UTF8EncryptionKey";
+constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA1UTF8 = u"PackageSHA1UTF8EncryptionKey";
+constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA1MS1252  = u"PackageSHA1MS1252EncryptionKey";
+constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA1CORRECT  = u"PackageSHA1CorrectEncryptionKey";
 
 namespace com::sun::star {
     namespace beans { struct NamedValue; }

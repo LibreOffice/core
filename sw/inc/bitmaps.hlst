@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SW_INC_BITMAPS_HRC
 #define INCLUDED_SW_INC_BITMAPS_HRC
 
-#define BMP_PAGE_SHADOW_MASK                    "sw/res/page-shadow-mask.png"
+constexpr OUStringLiteral BMP_PAGE_SHADOW_MASK = u"sw/res/page-shadow-mask.png";
 
 #define BMP_STYLES_FAMILY_PARA                  "sw/res/sf01.png"
 #define BMP_STYLES_FAMILY_CHAR                  "sw/res/sf02.png"
@@ -18,8 +18,8 @@
 #define BMP_STYLES_FAMILY_PAGE                  "sw/res/sf04.png"
 #define BMP_STYLES_FAMILY_LIST                  "sw/res/sf05.png"
 #define BMP_STYLES_FAMILY_TABLE                 "sw/res/sf06.png"
-#define RID_GRAPHIC_REPLACEBMP                  "res/grafikei.png"
-#define RID_GRAPHIC_ERRORBMP                    "res/grafikde.png"
+constexpr OUStringLiteral RID_GRAPHIC_REPLACEBMP = u"res/grafikei.png";
+constexpr OUStringLiteral RID_GRAPHIC_ERRORBMP = u"res/grafikde.png";
 
 #define BMP_REDLINE_INSERTED                    "sw/res/redline_inserted.png"
 #define BMP_REDLINE_DELETED                     "sw/res/redline_deleted.png"

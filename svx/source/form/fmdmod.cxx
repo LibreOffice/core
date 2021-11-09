@@ -60,10 +60,10 @@ using namespace ::svxform;
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames()
 {
-    static const std::u16string_view aSvxComponentServiceNameList[] =
+    static const OUString aSvxComponentServiceNameList[] =
     {
         u"" FM_SUN_COMPONENT_TEXTFIELD,
-        u"" FM_SUN_COMPONENT_FORM,
+        FM_SUN_COMPONENT_FORM,
         u"" FM_SUN_COMPONENT_LISTBOX,
         u"" FM_SUN_COMPONENT_COMBOBOX,
         u"" FM_SUN_COMPONENT_RADIOBUTTON,
@@ -71,7 +71,7 @@ using namespace ::svxform;
         u"" FM_SUN_COMPONENT_FIXEDTEXT,
         u"" FM_SUN_COMPONENT_COMMANDBUTTON,
         u"" FM_SUN_COMPONENT_CHECKBOX,
-        u"" FM_SUN_COMPONENT_GRIDCONTROL,
+        FM_SUN_COMPONENT_GRIDCONTROL,
         u"" FM_SUN_COMPONENT_IMAGEBUTTON,
         u"" FM_SUN_COMPONENT_FILECONTROL,
         u"" FM_SUN_COMPONENT_TIMEFIELD,

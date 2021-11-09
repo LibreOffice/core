@@ -317,7 +317,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         * Objects was created on the slide master page
         ***********************************************/
         OUString aName( pPage->GetLayoutName() );
-        sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + strlen(SD_LT_SEPARATOR);
+        sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + SD_LT_SEPARATOR.getLength();
         aName = OUString::Concat(aName.subView(0, n)) + STR_LAYOUT_BACKGROUNDOBJECTS;
         SfxStyleSheet* pSheet(
             static_cast< SfxStyleSheet* >(

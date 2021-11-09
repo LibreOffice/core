@@ -45,7 +45,7 @@ namespace pcr
         OUString sDisplayName;
         OUString sListenerClassName;
         OUString sListenerMethodName;
-        OString  sHelpId;
+        OUString sHelpId;
         OString  sUniqueBrowseId;
         EventId         nId;
 
@@ -60,7 +60,7 @@ namespace pcr
             const char* _pListenerClassAsciiName,
             const char* _pListenerMethodAsciiName,
             TranslateId pDisplayNameResId,
-            const OString& _sHelpId,
+            const OUString& _sHelpId,
             const OString& _sUniqueBrowseId );
     };
 

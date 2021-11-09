@@ -131,7 +131,7 @@ namespace pcr
         {
             const char* programmaticName;
             TranslateId uiNameResId;
-            const char* helpId;
+            OUString helpId;
         } const aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_FM_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_FM_PROPDLG_TAB_DATA },

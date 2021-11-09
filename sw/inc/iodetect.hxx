@@ -28,22 +28,22 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
-#define FILTER_RTF      "RTF"       ///< RTF filter
-#define sRtfWH          "WH_RTF"
-#define FILTER_TEXT     u"TEXT"      ///< text filter with default codeset
-#define FILTER_BAS      "BAS"       ///< StarBasic (identical to ANSI)
-#define FILTER_WW8      "CWW8"      ///< WinWord 97 filter
-#define FILTER_TEXT_DLG "TEXT_DLG"  ///< text filter with encoding dialog
-#define FILTER_XML      u"CXML"      ///< XML filter
+constexpr OUStringLiteral FILTER_RTF = u"RTF";       ///< RTF filter
+constexpr OUStringLiteral sRtfWH = u"WH_RTF";
+constexpr OUStringLiteral FILTER_TEXT = u"TEXT"; ///< text filter with default codeset
+constexpr OUStringLiteral FILTER_BAS = u"BAS";       ///< StarBasic (identical to ANSI)
+constexpr OUStringLiteral FILTER_WW8 = u"CWW8";      ///< WinWord 97 filter
+constexpr OUStringLiteral FILTER_TEXT_DLG = u"TEXT_DLG";  ///< text filter with encoding dialog
+constexpr OUStringLiteral FILTER_XML = u"CXML";      ///< XML filter
 #define FILTER_XMLV     "CXMLV"     ///< XML filter
 #define FILTER_XMLVW    "CXMLVWEB"  ///< XML filter
-#define FILTER_DOCX     "OXML"
-#define sHTML           "HTML"
-#define sWW5            "WW6"
-#define sWW6            "CWW6"
+constexpr OUStringLiteral FILTER_DOCX = u"OXML";
+constexpr OUStringLiteral sHTML = u"HTML";
+constexpr OUStringLiteral sWW5 = u"WW6";
+constexpr OUStringLiteral sWW6 = u"CWW6";
 
-#define sSWRITER        "swriter"
-#define sSWRITERWEB     "swriter/web"
+constexpr OUStringLiteral sSWRITER = u"swriter";
+constexpr OUStringLiteral sSWRITERWEB = u"swriter/web";
 
 class SfxFilter;
 class SfxFilterContainer;

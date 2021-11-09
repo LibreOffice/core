@@ -11,7 +11,7 @@
 
 /* do not translate */
 #define STR_LAYOUT_TITLE                "Titel"
-#define STR_LAYOUT_OUTLINE              "Gliederung"
+constexpr OUStringLiteral STR_LAYOUT_OUTLINE = u"Gliederung";
 #define STR_LAYOUT_BACKGROUND           "Hintergrund"
 #define STR_LAYOUT_BACKGROUNDOBJECTS    "Hintergrundobjekte"
 #define STR_LAYOUT_NOTES                "Notizen"

@@ -184,13 +184,13 @@ RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
 
 void RenameLayoutTemplateUndoAction::Undo()
 {
-    OUString aLayoutName(maNewName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE);
+    OUString aLayoutName(maNewName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE);
     mpDoc->RenameLayoutTemplate( aLayoutName, maOldName );
 }
 
 void RenameLayoutTemplateUndoAction::Redo()
 {
-    OUString aLayoutName(maOldName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE);
+    OUString aLayoutName(maOldName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE);
     mpDoc->RenameLayoutTemplate( aLayoutName, maNewName );
 }
 

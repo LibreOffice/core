@@ -37,12 +37,12 @@ namespace com::sun::star::util {
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 // Common URL prefixes for various schemes:
-#define INET_FTP_SCHEME "ftp://"
-#define INET_HTTP_SCHEME "http://"
+constexpr OUStringLiteral INET_FTP_SCHEME = u"ftp://";
+constexpr OUStringLiteral INET_HTTP_SCHEME = u"http://";
 #define INET_HTTPS_SCHEME "https://"
-#define INET_FILE_SCHEME "file://"
+constexpr OUStringLiteral INET_FILE_SCHEME = u"file://";
 #define INET_MAILTO_SCHEME "mailto:"
-#define INET_HID_SCHEME "hid:"
+constexpr OUStringLiteral INET_HID_SCHEME = u"hid:";
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"
 

@@ -55,7 +55,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     // delete layout name and separator
     sal_Int32 nPos = aName.indexOf(SD_LT_SEPARATOR);
     if (nPos != -1)
-        aName = aName.copy(nPos + strlen(SD_LT_SEPARATOR));
+        aName = aName.copy(nPos + SD_LT_SEPARATOR.getLength());
 
     if (aName == STR_LAYOUT_TITLE)
     {

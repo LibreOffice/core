@@ -17,10 +17,10 @@
 #define RID_BMP_LEVEL6                          "sc/res/ou06.png"
 #define RID_BMP_LEVEL7                          "sc/res/ou07.png"
 #define RID_BMP_LEVEL8                          "sc/res/ou08.png"
-#define RID_BMP_PLUS                            "sc/res/ou09.png"
-#define RID_BMP_MINUS                           "sc/res/ou010.png"
-#define RID_BMP_NOTPRESSED                      "sc/res/ou011.png"
-#define RID_BMP_PRESSED                         "sc/res/ou012.png"
+constexpr OUStringLiteral RID_BMP_PLUS = u"sc/res/ou09.png";
+constexpr OUStringLiteral RID_BMP_MINUS = u"sc/res/ou010.png";
+constexpr OUStringLiteral RID_BMP_NOTPRESSED = u"sc/res/ou011.png";
+constexpr OUStringLiteral RID_BMP_PRESSED = u"sc/res/ou012.png";
 
 #define RID_BMP_SELECT_CURRENT                  "sc/res/popup_select_current.png"
 #define RID_BMP_UNSELECT_CURRENT                "sc/res/popup_unselect_current.png"
@@ -40,28 +40,28 @@
 #define RID_BMP_ELEMENT_REPEAT                  "sc/res/xml_element_repeat.png"
 #define RID_BMP_ELEMENT_ATTRIBUTE               "sc/res/xml_attribute.png"
 
-#define BMP_LEFTRIGHT                           "sc/res/lftrgt.png"
-#define BMP_TOPDOWN                             "sc/res/topdown.png"
+constexpr OUStringLiteral BMP_LEFTRIGHT = u"sc/res/lftrgt.png";
+constexpr OUStringLiteral BMP_TOPDOWN = u"sc/res/topdown.png";
 
-#define RID_BMP_CELL_BORDER                     "sc/res/sidebar/CellBorder.png"
-#define RID_BMP_LINE_STYLE1                     "sc/res/sidebar/CellBorderLineStyle_005.png"
-#define RID_BMP_LINE_STYLE2                     "sc/res/sidebar/CellBorderLineStyle_250.png"
-#define RID_BMP_LINE_STYLE3                     "sc/res/sidebar/CellBorderLineStyle_400.png"
-#define RID_BMP_LINE_STYLE4                     "sc/res/sidebar/CellBorderLineStyle_500.png"
-#define RID_BMP_LINE_STYLE5                     "sc/res/sidebar/CellBorderLineStyle_110.png"
-#define RID_BMP_LINE_STYLE6                     "sc/res/sidebar/CellBorderLineStyle_260.png"
-#define RID_BMP_LINE_STYLE7                     "sc/res/sidebar/CellBorderLineStyle_450.png"
-#define RID_BMP_LINE_STYLE8                     "sc/res/sidebar/CellBorderLineStyle_505.png"
-#define RID_BMP_LINE_STYLE9                     "sc/res/sidebar/CellBorderLineStyle_750.png"
+constexpr OUStringLiteral RID_BMP_CELL_BORDER = u"sc/res/sidebar/CellBorder.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE1 = u"sc/res/sidebar/CellBorderLineStyle_005.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE2 = u"sc/res/sidebar/CellBorderLineStyle_250.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE3 = u"sc/res/sidebar/CellBorderLineStyle_400.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE4 = u"sc/res/sidebar/CellBorderLineStyle_500.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE5 = u"sc/res/sidebar/CellBorderLineStyle_110.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE6 = u"sc/res/sidebar/CellBorderLineStyle_260.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE7 = u"sc/res/sidebar/CellBorderLineStyle_450.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE8 = u"sc/res/sidebar/CellBorderLineStyle_505.png";
+constexpr OUStringLiteral RID_BMP_LINE_STYLE9 = u"sc/res/sidebar/CellBorderLineStyle_750.png";
 
-#define RID_BMP_INPUT_FUNCTION                  "sc/res/sc26047.png"
-#define RID_BMP_INPUT_SUM                       "sc/res/sc26048.png"
-#define RID_BMP_INPUT_EQUAL                     "sc/res/sc26049.png"
-#define RID_BMP_INPUT_CANCEL                    "sc/res/sc26050.png"
-#define RID_BMP_INPUT_OK                        "sc/res/sc26051.png"
+constexpr OUStringLiteral RID_BMP_INPUT_FUNCTION = u"sc/res/sc26047.png";
+constexpr OUStringLiteral RID_BMP_INPUT_SUM = u"sc/res/sc26048.png";
+constexpr OUStringLiteral RID_BMP_INPUT_EQUAL = u"sc/res/sc26049.png";
+constexpr OUStringLiteral RID_BMP_INPUT_CANCEL = u"sc/res/sc26050.png";
+constexpr OUStringLiteral RID_BMP_INPUT_OK = u"sc/res/sc26051.png";
 
-#define BMP_STYLES_FAMILY_CELL                  "sc/res/sf01.png"
-#define BMP_STYLES_FAMILY_PAGE                  "sc/res/sf02.png"
+constexpr OUStringLiteral BMP_STYLES_FAMILY_CELL = u"sc/res/sf01.png";
+constexpr OUStringLiteral BMP_STYLES_FAMILY_PAGE = u"sc/res/sf02.png";
 
 #define BMP_ICON_SET_CIRCLES1_GRAY              "sc/res/icon-set-circles1-gray.png"
 #define BMP_ICON_SET_CIRCLES1_GREEN             "sc/res/icon-set-circles1-green.png"
@@ -120,8 +120,8 @@
 #define BMP_ICON_SET_POSITIVE_YELLOW_SMILIE     "sc/res/icon-set-positive-yellow-smilie.png"
 #define BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE     "sc/res/icon-set-negative-yellow-smilie.png"
 
-#define RID_SVXBMP_SLIDERBUTTON                 "svx/res/slidezoombutton_10.png"
-#define RID_SVXBMP_SLIDERDECREASE               "svx/res/slidezoomout_10.png"
-#define RID_SVXBMP_SLIDERINCREASE               "svx/res/slidezoomin_10.png"
+constexpr OUStringLiteral RID_SVXBMP_SLIDERBUTTON = u"svx/res/slidezoombutton_10.png";
+constexpr OUStringLiteral RID_SVXBMP_SLIDERDECREASE = u"svx/res/slidezoomout_10.png";
+constexpr OUStringLiteral RID_SVXBMP_SLIDERINCREASE = u"svx/res/slidezoomin_10.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

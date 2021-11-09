@@ -617,7 +617,7 @@ static bool lcl_GetHeaderFooterItem(
         bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
         false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
     if (SfxItemState::SET != eState &&
-        rPropName == u"" UNO_NAME_FIRST_IS_SHARED)
+        rPropName == UNO_NAME_FIRST_IS_SHARED)
     {   // fdo#79269 header may not exist, check footer then
         eState = rSet.GetItemState(
             (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
@@ -2506,7 +2506,7 @@ static const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxSt
     if(eFamily != SfxStyleFamily::Page)
         return &rSet;
     const bool isFooter = o3tl::starts_with(rPropertyName, u"Footer");
-    if(!isFooter && !o3tl::starts_with(rPropertyName, u"Header") && rPropertyName != u"" UNO_NAME_FIRST_IS_SHARED)
+    if(!isFooter && !o3tl::starts_with(rPropertyName, u"Header") && rPropertyName != UNO_NAME_FIRST_IS_SHARED)
         return &rSet;
     const SvxSetItem* pSetItem;
     if(!lcl_GetHeaderFooterItem(rSet, rPropertyName, isFooter, pSetItem))

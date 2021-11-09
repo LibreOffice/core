@@ -21,333 +21,333 @@
 #define INCLUDED_EDITENG_UNOPRNMS_HXX
 
 
-#define UNO_NAME_CHAR_COLOR                     "CharColor"
-#define UNO_NAME_CHAR_HEIGHT                    "CharHeight"
-#define UNO_NAME_CHAR_POSTURE                   "CharPosture"
-#define UNO_NAME_CHAR_SHADOWED                  "CharShadowed"
-#define UNO_NAME_CHAR_UNDERLINE                 "CharUnderline"
-#define UNO_NAME_CHAR_WEIGHT                    "CharWeight"
+constexpr OUStringLiteral UNO_NAME_CHAR_COLOR = u"CharColor";
+constexpr OUStringLiteral UNO_NAME_CHAR_HEIGHT = u"CharHeight";
+constexpr OUStringLiteral UNO_NAME_CHAR_POSTURE = u"CharPosture";
+constexpr OUStringLiteral UNO_NAME_CHAR_SHADOWED = u"CharShadowed";
+constexpr OUStringLiteral UNO_NAME_CHAR_UNDERLINE = u"CharUnderline";
+constexpr OUStringLiteral UNO_NAME_CHAR_WEIGHT = u"CharWeight";
 
-#define UNO_NAME_FILLSTYLE                      "FillStyle"
-#define UNO_NAME_FILLCOLOR                      "FillColor"
-#define UNO_NAME_FILLGRADIENT                   "FillGradient"
-#define UNO_NAME_FILLGRADIENTNAME               "FillGradientName"
-#define UNO_NAME_FILLHATCH                      "FillHatch"
-#define UNO_NAME_FILLHATCHNAME                  "FillHatchName"
-#define UNO_NAME_FILLBITMAP                     "FillBitmap"
-#define UNO_NAME_FILLBITMAPURL                  "FillBitmapURL"
-#define UNO_NAME_FILLBITMAPNAME                 "FillBitmapName"
-#define UNO_NAME_FILLGRADIENTSTEPCOUNT          "FillGradientStepCount"
-#define UNO_NAME_FILLBACKGROUND                 "FillBackground"
-#define UNO_NAME_FILLCOLOR_2                    "FillColor2"
+constexpr OUStringLiteral UNO_NAME_FILLSTYLE = u"FillStyle";
+constexpr OUStringLiteral UNO_NAME_FILLCOLOR = u"FillColor";
+constexpr OUStringLiteral UNO_NAME_FILLGRADIENT = u"FillGradient";
+constexpr OUStringLiteral UNO_NAME_FILLGRADIENTNAME = u"FillGradientName";
+constexpr OUStringLiteral UNO_NAME_FILLHATCH = u"FillHatch";
+constexpr OUStringLiteral UNO_NAME_FILLHATCHNAME = u"FillHatchName";
+constexpr OUStringLiteral UNO_NAME_FILLBITMAP = u"FillBitmap";
+constexpr OUStringLiteral UNO_NAME_FILLBITMAPURL = u"FillBitmapURL";
+constexpr OUStringLiteral UNO_NAME_FILLBITMAPNAME = u"FillBitmapName";
+constexpr OUStringLiteral UNO_NAME_FILLGRADIENTSTEPCOUNT = u"FillGradientStepCount";
+constexpr OUStringLiteral UNO_NAME_FILLBACKGROUND = u"FillBackground";
+constexpr OUStringLiteral UNO_NAME_FILLCOLOR_2 = u"FillColor2";
 
-#define UNO_NAME_EDGEKIND                       "EdgeKind"
-#define UNO_NAME_EDGELINE1DELTA                 "EdgeLine1Delta"
-#define UNO_NAME_EDGELINE2DELTA                 "EdgeLine2Delta"
-#define UNO_NAME_EDGELINE3DELTA                 "EdgeLine3Delta"
-#define UNO_NAME_EDGENODE1HORZDIST              "EdgeNode1HorzDist"
-#define UNO_NAME_EDGENODE1VERTDIST              "EdgeNode1VertDist"
-#define UNO_NAME_EDGENODE2HORZDIST              "EdgeNode2HorzDist"
-#define UNO_NAME_EDGENODE2VERTDIST              "EdgeNode2VertDist"
+constexpr OUStringLiteral UNO_NAME_EDGEKIND = u"EdgeKind";
+constexpr OUStringLiteral UNO_NAME_EDGELINE1DELTA = u"EdgeLine1Delta";
+constexpr OUStringLiteral UNO_NAME_EDGELINE2DELTA = u"EdgeLine2Delta";
+constexpr OUStringLiteral UNO_NAME_EDGELINE3DELTA = u"EdgeLine3Delta";
+constexpr OUStringLiteral UNO_NAME_EDGENODE1HORZDIST = u"EdgeNode1HorzDist";
+constexpr OUStringLiteral UNO_NAME_EDGENODE1VERTDIST = u"EdgeNode1VertDist";
+constexpr OUStringLiteral UNO_NAME_EDGENODE2HORZDIST = u"EdgeNode2HorzDist";
+constexpr OUStringLiteral UNO_NAME_EDGENODE2VERTDIST = u"EdgeNode2VertDist";
 
-#define UNO_NAME_FILLBMP_OFFSET_X               "FillBitmapOffsetX"
-#define UNO_NAME_FILLBMP_OFFSET_Y               "FillBitmapOffsetY"
-#define UNO_NAME_FILLBMP_POSITION_OFFSET_X      "FillBitmapPositionOffsetX"
-#define UNO_NAME_FILLBMP_POSITION_OFFSET_Y      "FillBitmapPositionOffsetY"
-#define UNO_NAME_FILLBMP_RECTANGLE_POINT        "FillBitmapRectanglePoint"
-#define UNO_NAME_FILLBMP_TILE                   "FillBitmapTile"
-#define UNO_NAME_FILLBMP_STRETCH                "FillBitmapStretch"
-#define UNO_NAME_FILLBMP_LOGICAL_SIZE           "FillBitmapLogicalSize"
-#define UNO_NAME_FILLBMP_SIZE_X                 "FillBitmapSizeX"
-#define UNO_NAME_FILLBMP_SIZE_Y                 "FillBitmapSizeY"
-#define UNO_NAME_FILL_TRANSPARENCE              "FillTransparence"
-#define UNO_NAME_FILLTRANSPARENCEGRADIENT       "FillTransparenceGradient"
-#define UNO_NAME_FILLTRANSPARENCEGRADIENTNAME   "FillTransparenceGradientName"
-#define UNO_NAME_FILLBMP_MODE                   "FillBitmapMode"
+constexpr OUStringLiteral UNO_NAME_FILLBMP_OFFSET_X = u"FillBitmapOffsetX";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_OFFSET_Y = u"FillBitmapOffsetY";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_POSITION_OFFSET_X = u"FillBitmapPositionOffsetX";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_POSITION_OFFSET_Y = u"FillBitmapPositionOffsetY";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_RECTANGLE_POINT = u"FillBitmapRectanglePoint";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_TILE = u"FillBitmapTile";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_STRETCH = u"FillBitmapStretch";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_LOGICAL_SIZE = u"FillBitmapLogicalSize";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_SIZE_X = u"FillBitmapSizeX";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_SIZE_Y = u"FillBitmapSizeY";
+constexpr OUStringLiteral UNO_NAME_FILL_TRANSPARENCE = u"FillTransparence";
+constexpr OUStringLiteral UNO_NAME_FILLTRANSPARENCEGRADIENT = u"FillTransparenceGradient";
+constexpr OUStringLiteral UNO_NAME_FILLTRANSPARENCEGRADIENTNAME = u"FillTransparenceGradientName";
+constexpr OUStringLiteral UNO_NAME_FILLBMP_MODE = u"FillBitmapMode";
 
 
-#define UNO_NAME_LINESTYLE                      "LineStyle"
-#define UNO_NAME_LINEDASH                       "LineDash"
-#define UNO_NAME_LINEWIDTH                      "LineWidth"
-#define UNO_NAME_LINECOLOR                      "LineColor"
-#define UNO_NAME_LINEJOINT                      "LineJoint"
-#define UNO_NAME_LINESTART                      "LineStart"
-#define UNO_NAME_LINEEND                        "LineEnd"
-#define UNO_NAME_LINESTARTWIDTH                 "LineStartWidth"
-#define UNO_NAME_LINEENDWIDTH                   "LineEndWidth"
-#define UNO_NAME_LINESTARTCENTER                "LineStartCenter"
-#define UNO_NAME_LINEENDCENTER                  "LineEndCenter"
-#define UNO_NAME_LINETRANSPARENCE               "LineTransparence"
-#define UNO_NAME_LINECAP                        "LineCap"
+constexpr OUStringLiteral UNO_NAME_LINESTYLE = u"LineStyle";
+constexpr OUStringLiteral UNO_NAME_LINEDASH = u"LineDash";
+constexpr OUStringLiteral UNO_NAME_LINEWIDTH = u"LineWidth";
+constexpr OUStringLiteral UNO_NAME_LINECOLOR = u"LineColor";
+constexpr OUStringLiteral UNO_NAME_LINEJOINT = u"LineJoint";
+constexpr OUStringLiteral UNO_NAME_LINESTART = u"LineStart";
+constexpr OUStringLiteral UNO_NAME_LINEEND = u"LineEnd";
+constexpr OUStringLiteral UNO_NAME_LINESTARTWIDTH = u"LineStartWidth";
+constexpr OUStringLiteral UNO_NAME_LINEENDWIDTH = u"LineEndWidth";
+constexpr OUStringLiteral UNO_NAME_LINESTARTCENTER = u"LineStartCenter";
+constexpr OUStringLiteral UNO_NAME_LINEENDCENTER = u"LineEndCenter";
+constexpr OUStringLiteral UNO_NAME_LINETRANSPARENCE = u"LineTransparence";
+constexpr OUStringLiteral UNO_NAME_LINECAP = u"LineCap";
 
-#define UNO_NAME_SHADOW                         "Shadow"
-#define UNO_NAME_SHADOWCOLOR                    "ShadowColor"
-#define UNO_NAME_SHADOWXDIST                    "ShadowXDistance"
-#define UNO_NAME_SHADOWYDIST                    "ShadowYDistance"
-#define UNO_NAME_SHADOWSIZEX                    "ShadowSizeX"
-#define UNO_NAME_SHADOWSIZEY                    "ShadowSizeY"
-#define UNO_NAME_SHADOWTRANSPARENCE             "ShadowTransparence"
-#define UNO_NAME_SHADOWBLUR                     "ShadowBlur"
+constexpr OUStringLiteral UNO_NAME_SHADOW = u"Shadow";
+constexpr OUStringLiteral UNO_NAME_SHADOWCOLOR = u"ShadowColor";
+constexpr OUStringLiteral UNO_NAME_SHADOWXDIST = u"ShadowXDistance";
+constexpr OUStringLiteral UNO_NAME_SHADOWYDIST = u"ShadowYDistance";
+constexpr OUStringLiteral UNO_NAME_SHADOWSIZEX = u"ShadowSizeX";
+constexpr OUStringLiteral UNO_NAME_SHADOWSIZEY = u"ShadowSizeY";
+constexpr OUStringLiteral UNO_NAME_SHADOWTRANSPARENCE = u"ShadowTransparence";
+constexpr OUStringLiteral UNO_NAME_SHADOWBLUR = u"ShadowBlur";
 
-#define UNO_NAME_EDGERADIUS                     "CornerRadius"
+constexpr OUStringLiteral UNO_NAME_EDGERADIUS = u"CornerRadius";
 
-#define UNO_NAME_TEXT_MINFRAMEHEIGHT            "TextMinimumFrameHeight"
-#define UNO_NAME_TEXT_AUTOGROWHEIGHT            u"TextAutoGrowHeight"
-#define UNO_NAME_TEXT_FITTOSIZE                 "TextFitToSize"
-#define UNO_NAME_TEXT_LEFTDIST                  u"TextLeftDistance"
-#define UNO_NAME_TEXT_RIGHTDIST                 u"TextRightDistance"
-#define UNO_NAME_TEXT_UPPERDIST                 u"TextUpperDistance"
-#define UNO_NAME_TEXT_LOWERDIST                 u"TextLowerDistance"
-#define UNO_NAME_TEXT_VERTADJUST                u"TextVerticalAdjust"
-#define UNO_NAME_TEXT_MAXFRAMEHEIGHT            "TextMaximumFrameHeight"
-#define UNO_NAME_TEXT_MINFRAMEWIDTH             "TextMinimumFrameWidth"
-#define UNO_NAME_TEXT_MAXFRAMEWIDTH             "TextMaximumFrameWidth"
-#define UNO_NAME_TEXT_AUTOGROWWIDTH             "TextAutoGrowWidth"
-#define UNO_NAME_TEXT_HORZADJUST                u"TextHorizontalAdjust"
-#define UNO_NAME_TEXT_ANIKIND                   "TextAnimationKind"
-#define UNO_NAME_TEXT_ANIDIRECTION              "TextAnimationDirection"
-#define UNO_NAME_TEXT_ANISTARTINSIDE            "TextAnimationStartInside"
-#define UNO_NAME_TEXT_ANISTOPINSIDE             "TextAnimationStopInside"
-#define UNO_NAME_TEXT_ANICOUNT                  "TextAnimationCount"
-#define UNO_NAME_TEXT_ANIDELAY                  "TextAnimationDelay"
-#define UNO_NAME_TEXT_ANIAMOUNT                 "TextAnimationAmount"
-#define UNO_NAME_TEXT_CONTOURFRAME              "TextContourFrame"
-#define UNO_NAME_TEXT_WRITINGMODE               u"TextWritingMode"
-#define UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING "FontIndependentLineSpacing"
-#define UNO_NAME_TEXT_WORDWRAP                  "TextWordWrap"
-#define UNO_NAME_TEXT_CHAINNEXTNAME              "TextChainNextName"
+constexpr OUStringLiteral UNO_NAME_TEXT_MINFRAMEHEIGHT = u"TextMinimumFrameHeight";
+constexpr OUStringLiteral UNO_NAME_TEXT_AUTOGROWHEIGHT = u"TextAutoGrowHeight";
+constexpr OUStringLiteral UNO_NAME_TEXT_FITTOSIZE = u"TextFitToSize";
+constexpr OUStringLiteral UNO_NAME_TEXT_LEFTDIST = u"TextLeftDistance";
+constexpr OUStringLiteral UNO_NAME_TEXT_RIGHTDIST = u"TextRightDistance";
+constexpr OUStringLiteral UNO_NAME_TEXT_UPPERDIST = u"TextUpperDistance";
+constexpr OUStringLiteral UNO_NAME_TEXT_LOWERDIST = u"TextLowerDistance";
+constexpr OUStringLiteral UNO_NAME_TEXT_VERTADJUST = u"TextVerticalAdjust";
+constexpr OUStringLiteral UNO_NAME_TEXT_MAXFRAMEHEIGHT = u"TextMaximumFrameHeight";
+constexpr OUStringLiteral UNO_NAME_TEXT_MINFRAMEWIDTH = u"TextMinimumFrameWidth";
+constexpr OUStringLiteral UNO_NAME_TEXT_MAXFRAMEWIDTH = u"TextMaximumFrameWidth";
+constexpr OUStringLiteral UNO_NAME_TEXT_AUTOGROWWIDTH = u"TextAutoGrowWidth";
+constexpr OUStringLiteral UNO_NAME_TEXT_HORZADJUST = u"TextHorizontalAdjust";
+constexpr OUStringLiteral UNO_NAME_TEXT_ANIKIND = u"TextAnimationKind";
+constexpr OUStringLiteral UNO_NAME_TEXT_ANIDIRECTION = u"TextAnimationDirection";
+constexpr OUStringLiteral UNO_NAME_TEXT_ANISTARTINSIDE = u"TextAnimationStartInside";
+constexpr OUStringLiteral UNO_NAME_TEXT_ANISTOPINSIDE = u"TextAnimationStopInside";
+constexpr OUStringLiteral UNO_NAME_TEXT_ANICOUNT = u"TextAnimationCount";
+constexpr OUStringLiteral UNO_NAME_TEXT_ANIDELAY = u"TextAnimationDelay";
+constexpr OUStringLiteral UNO_NAME_TEXT_ANIAMOUNT = u"TextAnimationAmount";
+constexpr OUStringLiteral UNO_NAME_TEXT_CONTOURFRAME = u"TextContourFrame";
+constexpr OUStringLiteral UNO_NAME_TEXT_WRITINGMODE = u"TextWritingMode";
+constexpr OUStringLiteral UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING = u"FontIndependentLineSpacing";
+constexpr OUStringLiteral UNO_NAME_TEXT_WORDWRAP = u"TextWordWrap";
+constexpr OUStringLiteral UNO_NAME_TEXT_CHAINNEXTNAME = u"TextChainNextName";
 
-#define UNO_NAME_MEASUREKIND                    "MeasureKind"
-#define UNO_NAME_MEASURETEXTHPOS                "MeasureTextHorizontalPosition"
-#define UNO_NAME_MEASURETEXTVPOS                "MeasureTextVerticalPosition"
-#define UNO_NAME_MEASURELINEDIST                "MeasureLineDistance"
-#define UNO_NAME_MEASUREHELPLINEOVERHANG        "MeasureHelpLineOverhang"
-#define UNO_NAME_MEASUREHELPLINEDIST            "MeasureHelpLineDistance"
-#define UNO_NAME_MEASUREHELPLINE1LEN            "MeasureHelpLine1Length"
-#define UNO_NAME_MEASUREHELPLINE2LEN            "MeasureHelpLine2Length"
-#define UNO_NAME_MEASUREBELOWREFEDGE            "MeasureBelowReferenceEdge"
-#define UNO_NAME_MEASURETEXTROTA90              "MeasureTextRotate90"
-#define UNO_NAME_MEASURETEXTUPSIDEDOWN          "MeasureTextUpsideDown"
-#define UNO_NAME_MEASUREOVERHANG                "MeasureOverhang"
-#define UNO_NAME_MEASUREUNIT                    "MeasureUnit"
-#define UNO_NAME_MEASURESHOWUNIT                "MeasureShowUnit"
-#define UNO_NAME_MEASUREFORMATSTRING            "MeasureFormatString"
-#define UNO_NAME_MEASURETEXTAUTOANGLE           "MeasureTextAutoAngle"
-#define UNO_NAME_MEASURETEXTAUTOANGLEVIEW       "MeasureTextAutoAngleView"
-#define UNO_NAME_MEASURETEXTISFIXEDANGLE        "MeasureTextIsFixedAngle"
-#define UNO_NAME_MEASURETEXTFIXEDANGLE          "MeasureTextFixedAngle"
+constexpr OUStringLiteral UNO_NAME_MEASUREKIND = u"MeasureKind";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTHPOS = u"MeasureTextHorizontalPosition";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTVPOS = u"MeasureTextVerticalPosition";
+constexpr OUStringLiteral UNO_NAME_MEASURELINEDIST = u"MeasureLineDistance";
+constexpr OUStringLiteral UNO_NAME_MEASUREHELPLINEOVERHANG = u"MeasureHelpLineOverhang";
+constexpr OUStringLiteral UNO_NAME_MEASUREHELPLINEDIST = u"MeasureHelpLineDistance";
+constexpr OUStringLiteral UNO_NAME_MEASUREHELPLINE1LEN = u"MeasureHelpLine1Length";
+constexpr OUStringLiteral UNO_NAME_MEASUREHELPLINE2LEN = u"MeasureHelpLine2Length";
+constexpr OUStringLiteral UNO_NAME_MEASUREBELOWREFEDGE = u"MeasureBelowReferenceEdge";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTROTA90 = u"MeasureTextRotate90";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTUPSIDEDOWN = u"MeasureTextUpsideDown";
+constexpr OUStringLiteral UNO_NAME_MEASUREOVERHANG = u"MeasureOverhang";
+constexpr OUStringLiteral UNO_NAME_MEASUREUNIT = u"MeasureUnit";
+constexpr OUStringLiteral UNO_NAME_MEASURESHOWUNIT = u"MeasureShowUnit";
+constexpr OUStringLiteral UNO_NAME_MEASUREFORMATSTRING = u"MeasureFormatString";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTAUTOANGLE = u"MeasureTextAutoAngle";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTAUTOANGLEVIEW = u"MeasureTextAutoAngleView";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTISFIXEDANGLE = u"MeasureTextIsFixedAngle";
+constexpr OUStringLiteral UNO_NAME_MEASURETEXTFIXEDANGLE = u"MeasureTextFixedAngle";
 
-#define UNO_NAME_CIRCKIND                       "CircleKind"
-#define UNO_NAME_CIRCSTARTANGLE                 "CircleStartAngle"
-#define UNO_NAME_CIRCENDANGLE                   "CircleEndAngle"
+constexpr OUStringLiteral UNO_NAME_CIRCKIND = u"CircleKind";
+constexpr OUStringLiteral UNO_NAME_CIRCSTARTANGLE = u"CircleStartAngle";
+constexpr OUStringLiteral UNO_NAME_CIRCENDANGLE = u"CircleEndAngle";
 
-#define UNO_NAME_POLYGONKIND                    "PolygonKind"
-#define UNO_NAME_POLYPOLYGON                    "PolyPolygon"
-#define UNO_NAME_POLYPOLYGONBEZIER              "PolyPolygonBezier"
-#define UNO_NAME_POLYGON                        "Polygon"
+constexpr OUStringLiteral UNO_NAME_POLYGONKIND = u"PolygonKind";
+constexpr OUStringLiteral UNO_NAME_POLYPOLYGON = u"PolyPolygon";
+constexpr OUStringLiteral UNO_NAME_POLYPOLYGONBEZIER = u"PolyPolygonBezier";
+constexpr OUStringLiteral UNO_NAME_POLYGON = u"Polygon";
 
-#define UNO_NAME_MISC_OBJ_INTEROPGRABBAG        "InteropGrabBag"
-#define UNO_NAME_MISC_OBJ_ZORDER                "ZOrder"
-#define UNO_NAME_MISC_OBJ_MOVEPROTECT           "MoveProtect"
-#define UNO_NAME_MISC_OBJ_SIZEPROTECT           "SizeProtect"
-#define UNO_NAME_MISC_OBJ_PRINTABLE             "Printable"
-#define UNO_NAME_MISC_OBJ_LAYERID               "LayerID"
-#define UNO_NAME_MISC_OBJ_LAYERNAME             "LayerName"
-#define UNO_NAME_MISC_OBJ_NAME                  "Name"
-#define UNO_NAME_MISC_OBJ_ROTATEANGLE           "RotateAngle"
-#define UNO_NAME_MISC_OBJ_SHEARANGLE            "ShearAngle"
-#define UNO_NAME_MISC_OBJ_FRAMERECT             "FrameRect"
-#define UNO_NAME_MISC_OBJ_BOUNDRECT             "BoundRect"
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_INTEROPGRABBAG = u"InteropGrabBag";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_ZORDER = u"ZOrder";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_MOVEPROTECT = u"MoveProtect";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_SIZEPROTECT = u"SizeProtect";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_PRINTABLE = u"Printable";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_LAYERID = u"LayerID";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_LAYERNAME = u"LayerName";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_NAME = u"Name";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_ROTATEANGLE = u"RotateAngle";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_SHEARANGLE = u"ShearAngle";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_FRAMERECT = u"FrameRect";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_BOUNDRECT = u"BoundRect";
 
 // #i68101#
-#define UNO_NAME_MISC_OBJ_TITLE                 "Title"
-#define UNO_NAME_MISC_OBJ_DESCRIPTION           "Description"
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_TITLE = u"Title";
+constexpr OUStringLiteral UNO_NAME_MISC_OBJ_DESCRIPTION = u"Description";
 
-#define UNO_NAME_HYPERLINK                      "Hyperlink"
+constexpr OUStringLiteral UNO_NAME_HYPERLINK = u"Hyperlink";
 
-#define UNO_NAME_GRAPHOBJ_FILLBITMAP            "GraphicObjectFillBitmap"
-#define UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC   "ReplacementGraphic"
-#define UNO_NAME_GRAPHOBJ_GRAFSTREAMURL         "GraphicStreamURL"
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_FILLBITMAP = u"GraphicObjectFillBitmap";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC = u"ReplacementGraphic";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_GRAFSTREAMURL = u"GraphicStreamURL";
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX          "vnd.sun.star.Package:"
-#define UNO_NAME_GRAPHOBJ_GRAPHIC               "Graphic"
-#define UNO_NAME_GRAPHOBJ_GRAPHIC_URL           "GraphicURL"
-#define UNO_NAME_GRAPHOBJ_IS_SIGNATURELINE      "IsSignatureLine"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_ID      "SignatureLineId"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_SUGGESTED_SIGNER_NAME "SignatureLineSuggestedSignerName"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_SUGGESTED_SIGNER_TITLE "SignatureLineSuggestedSignerTitle"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_SUGGESTED_SIGNER_EMAIL "SignatureLineSuggestedSignerEmail"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_SIGNING_INSTRUCTIONS "SignatureLineSigningInstructions"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_SHOW_SIGN_DATE "SignatureLineShowSignDate"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_CAN_ADD_COMMENT "SignatureLineCanAddComment"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE "SignatureLineUnsignedImage"
-#define UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED "SignatureLineIsSigned"
-#define UNO_NAME_GRAPHOBJ_QRCODE                "BarCodeProperties"
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_GRAPHIC = u"Graphic";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_GRAPHIC_URL = u"GraphicURL";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_IS_SIGNATURELINE = u"IsSignatureLine";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_ID = u"SignatureLineId";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_SUGGESTED_SIGNER_NAME = u"SignatureLineSuggestedSignerName";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_SUGGESTED_SIGNER_TITLE = u"SignatureLineSuggestedSignerTitle";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_SUGGESTED_SIGNER_EMAIL = u"SignatureLineSuggestedSignerEmail";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_SIGNING_INSTRUCTIONS = u"SignatureLineSigningInstructions";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_SHOW_SIGN_DATE = u"SignatureLineShowSignDate";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_CAN_ADD_COMMENT = u"SignatureLineCanAddComment";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE = u"SignatureLineUnsignedImage";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED = u"SignatureLineIsSigned";
+constexpr OUStringLiteral UNO_NAME_GRAPHOBJ_QRCODE = u"BarCodeProperties";
 
-#define UNO_NAME_OLE2_METAFILE                  "MetaFile"
-#define UNO_NAME_OLE2_PERSISTNAME               "PersistName"
+constexpr OUStringLiteral UNO_NAME_OLE2_METAFILE = u"MetaFile";
+constexpr OUStringLiteral UNO_NAME_OLE2_PERSISTNAME = u"PersistName";
 
-#define UNO_NAME_3D_SCENE_PERSPECTIVE           "D3DScenePerspective"
-#define UNO_NAME_3D_SCENE_DISTANCE              "D3DSceneDistance"
-#define UNO_NAME_3D_SCENE_FOCAL_LENGTH          "D3DSceneFocalLength"
-#define UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING    "D3DSceneTwoSidedLighting"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_1          "D3DSceneLightColor1"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_2          "D3DSceneLightColor2"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_3          "D3DSceneLightColor3"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_4          "D3DSceneLightColor4"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_5          "D3DSceneLightColor5"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_6          "D3DSceneLightColor6"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_7          "D3DSceneLightColor7"
-#define UNO_NAME_3D_SCENE_LIGHTCOLOR_8          "D3DSceneLightColor8"
-#define UNO_NAME_3D_SCENE_LIGHTON_1             "D3DSceneLightOn1"
-#define UNO_NAME_3D_SCENE_LIGHTON_2             "D3DSceneLightOn2"
-#define UNO_NAME_3D_SCENE_LIGHTON_3             "D3DSceneLightOn3"
-#define UNO_NAME_3D_SCENE_LIGHTON_4             "D3DSceneLightOn4"
-#define UNO_NAME_3D_SCENE_LIGHTON_5             "D3DSceneLightOn5"
-#define UNO_NAME_3D_SCENE_LIGHTON_6             "D3DSceneLightOn6"
-#define UNO_NAME_3D_SCENE_LIGHTON_7             "D3DSceneLightOn7"
-#define UNO_NAME_3D_SCENE_LIGHTON_8             "D3DSceneLightOn8"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_1      "D3DSceneLightDirection1"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_2      "D3DSceneLightDirection2"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_3      "D3DSceneLightDirection3"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_4      "D3DSceneLightDirection4"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_5      "D3DSceneLightDirection5"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_6      "D3DSceneLightDirection6"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_7      "D3DSceneLightDirection7"
-#define UNO_NAME_3D_SCENE_LIGHTDIRECTION_8      "D3DSceneLightDirection8"
-#define UNO_NAME_3D_SCENE_AMBIENTCOLOR          "D3DSceneAmbientColor"
-#define UNO_NAME_3D_SCENE_SHADOW_SLANT          "D3DSceneShadowSlant"
-#define UNO_NAME_3D_SCENE_SHADE_MODE            "D3DSceneShadeMode"
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_PERSPECTIVE = u"D3DScenePerspective";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_DISTANCE = u"D3DSceneDistance";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_FOCAL_LENGTH = u"D3DSceneFocalLength";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING = u"D3DSceneTwoSidedLighting";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_1 = u"D3DSceneLightColor1";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_2 = u"D3DSceneLightColor2";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_3 = u"D3DSceneLightColor3";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_4 = u"D3DSceneLightColor4";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_5 = u"D3DSceneLightColor5";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_6 = u"D3DSceneLightColor6";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_7 = u"D3DSceneLightColor7";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTCOLOR_8 = u"D3DSceneLightColor8";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_1 = u"D3DSceneLightOn1";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_2 = u"D3DSceneLightOn2";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_3 = u"D3DSceneLightOn3";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_4 = u"D3DSceneLightOn4";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_5 = u"D3DSceneLightOn5";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_6 = u"D3DSceneLightOn6";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_7 = u"D3DSceneLightOn7";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTON_8 = u"D3DSceneLightOn8";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_1 = u"D3DSceneLightDirection1";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 = u"D3DSceneLightDirection2";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_3 = u"D3DSceneLightDirection3";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_4 = u"D3DSceneLightDirection4";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_5 = u"D3DSceneLightDirection5";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_6 = u"D3DSceneLightDirection6";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_7 = u"D3DSceneLightDirection7";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_LIGHTDIRECTION_8 = u"D3DSceneLightDirection8";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_AMBIENTCOLOR = u"D3DSceneAmbientColor";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_SHADOW_SLANT = u"D3DSceneShadowSlant";
+constexpr OUStringLiteral UNO_NAME_3D_SCENE_SHADE_MODE = u"D3DSceneShadeMode";
 
-#define UNO_NAME_3D_DOUBLE_SIDED                "D3DDoubleSided"
-#define UNO_NAME_3D_NORMALS_KIND                "D3DNormalsKind"
-#define UNO_NAME_3D_NORMALS_INVERT              "D3DNormalsInvert"
-#define UNO_NAME_3D_TEXTURE_PROJ_X              "D3DTextureProjectionX"
-#define UNO_NAME_3D_TEXTURE_PROJ_Y              "D3DTextureProjectionY"
-#define UNO_NAME_3D_SHADOW_3D                   "D3DShadow3D"
-#define UNO_NAME_3D_MAT_COLOR                   "D3DMaterialColor"
-#define UNO_NAME_3D_MAT_EMISSION                "D3DMaterialEmission"
-#define UNO_NAME_3D_MAT_SPECULAR                "D3DMaterialSpecular"
-#define UNO_NAME_3D_MAT_SPECULAR_INTENSITY      "D3DMaterialSpecularIntensity"
-#define UNO_NAME_3D_TEXTURE_KIND                "D3DTextureKind"
-#define UNO_NAME_3D_TEXTURE_MODE                "D3DTextureMode"
-#define UNO_NAME_3D_TEXTURE_FILTER              "D3DTextureFilter"
+constexpr OUStringLiteral UNO_NAME_3D_DOUBLE_SIDED = u"D3DDoubleSided";
+constexpr OUStringLiteral UNO_NAME_3D_NORMALS_KIND = u"D3DNormalsKind";
+constexpr OUStringLiteral UNO_NAME_3D_NORMALS_INVERT = u"D3DNormalsInvert";
+constexpr OUStringLiteral UNO_NAME_3D_TEXTURE_PROJ_X = u"D3DTextureProjectionX";
+constexpr OUStringLiteral UNO_NAME_3D_TEXTURE_PROJ_Y = u"D3DTextureProjectionY";
+constexpr OUStringLiteral UNO_NAME_3D_SHADOW_3D = u"D3DShadow3D";
+constexpr OUStringLiteral UNO_NAME_3D_MAT_COLOR = u"D3DMaterialColor";
+constexpr OUStringLiteral UNO_NAME_3D_MAT_EMISSION = u"D3DMaterialEmission";
+constexpr OUStringLiteral UNO_NAME_3D_MAT_SPECULAR = u"D3DMaterialSpecular";
+constexpr OUStringLiteral UNO_NAME_3D_MAT_SPECULAR_INTENSITY = u"D3DMaterialSpecularIntensity";
+constexpr OUStringLiteral UNO_NAME_3D_TEXTURE_KIND = u"D3DTextureKind";
+constexpr OUStringLiteral UNO_NAME_3D_TEXTURE_MODE = u"D3DTextureMode";
+constexpr OUStringLiteral UNO_NAME_3D_TEXTURE_FILTER = u"D3DTextureFilter";
 
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-#define UNO_NAME_3D_REDUCED_LINE_GEOMETRY       "D3DReducedLineGeometry"
+constexpr OUStringLiteral UNO_NAME_3D_REDUCED_LINE_GEOMETRY = u"D3DReducedLineGeometry";
 
-#define UNO_NAME_3D_HORZ_SEGS                   "D3DHorizontalSegments"
-#define UNO_NAME_3D_VERT_SEGS                   "D3DVerticalSegments"
+constexpr OUStringLiteral UNO_NAME_3D_HORZ_SEGS = u"D3DHorizontalSegments";
+constexpr OUStringLiteral UNO_NAME_3D_VERT_SEGS = u"D3DVerticalSegments";
 
-#define UNO_NAME_3D_PERCENT_DIAGONAL            "D3DPercentDiagonal"
-#define UNO_NAME_3D_BACKSCALE                   "D3DBackscale"
-#define UNO_NAME_3D_LATHE_END_ANGLE             "D3DEndAngle"
+constexpr OUStringLiteral UNO_NAME_3D_PERCENT_DIAGONAL = u"D3DPercentDiagonal";
+constexpr OUStringLiteral UNO_NAME_3D_BACKSCALE = u"D3DBackscale";
+constexpr OUStringLiteral UNO_NAME_3D_LATHE_END_ANGLE = u"D3DEndAngle";
 
-#define UNO_NAME_3D_EXTRUDE_DEPTH               "D3DDepth"
+constexpr OUStringLiteral UNO_NAME_3D_EXTRUDE_DEPTH = u"D3DDepth";
 
-#define UNO_NAME_3D_TRANSFORM_MATRIX            "D3DTransformMatrix"
-#define UNO_NAME_3D_CAMERA_GEOMETRY             "D3DCameraGeometry"
-#define UNO_NAME_3D_POS                         "D3DPosition"
-#define UNO_NAME_3D_SIZE                        "D3DSize"
-#define UNO_NAME_3D_POS_IS_CENTER               "D3DPositionIsCenter"
-#define UNO_NAME_3D_POLYPOLYGON3D               "D3DPolyPolygon3D"
-#define UNO_NAME_3D_NORMALSPOLYGON3D            "D3DNormalsPolygon3D"
-#define UNO_NAME_3D_TEXTUREPOLYGON3D            "D3DTexturePolygon3D"
-#define UNO_NAME_3D_LINEONLY                    "D3DLineOnly"
+constexpr OUStringLiteral UNO_NAME_3D_TRANSFORM_MATRIX = u"D3DTransformMatrix";
+constexpr OUStringLiteral UNO_NAME_3D_CAMERA_GEOMETRY = u"D3DCameraGeometry";
+constexpr OUStringLiteral UNO_NAME_3D_POS = u"D3DPosition";
+constexpr OUStringLiteral UNO_NAME_3D_SIZE = u"D3DSize";
+constexpr OUStringLiteral UNO_NAME_3D_POS_IS_CENTER = u"D3DPositionIsCenter";
+constexpr OUStringLiteral UNO_NAME_3D_POLYPOLYGON3D = u"D3DPolyPolygon3D";
+constexpr OUStringLiteral UNO_NAME_3D_NORMALSPOLYGON3D = u"D3DNormalsPolygon3D";
+constexpr OUStringLiteral UNO_NAME_3D_TEXTUREPOLYGON3D = u"D3DTexturePolygon3D";
+constexpr OUStringLiteral UNO_NAME_3D_LINEONLY = u"D3DLineOnly";
 
 // New 3D properties which are possible for lathe and extrude 3d objects
-#define UNO_NAME_3D_SMOOTH_NORMALS              "D3DSmoothNormals"
-#define UNO_NAME_3D_SMOOTH_LIDS                 "D3DSmoothLids"
-#define UNO_NAME_3D_CHARACTER_MODE              "D3DCharacterMode"
-#define UNO_NAME_3D_CLOSE_FRONT                 "D3DCloseFront"
-#define UNO_NAME_3D_CLOSE_BACK                  "D3DCloseBack"
+constexpr OUStringLiteral UNO_NAME_3D_SMOOTH_NORMALS = u"D3DSmoothNormals";
+constexpr OUStringLiteral UNO_NAME_3D_SMOOTH_LIDS = u"D3DSmoothLids";
+constexpr OUStringLiteral UNO_NAME_3D_CHARACTER_MODE = u"D3DCharacterMode";
+constexpr OUStringLiteral UNO_NAME_3D_CLOSE_FRONT = u"D3DCloseFront";
+constexpr OUStringLiteral UNO_NAME_3D_CLOSE_BACK = u"D3DCloseBack";
 
-#define UNO_NAME_NUMBERING                      "NumberingIsNumber"
-#define UNO_NAME_NUMBERING_RULES                "NumberingRules"
-#define UNO_NAME_NUMBERING_LEVEL                "NumberingLevel"
+constexpr OUStringLiteral UNO_NAME_NUMBERING = u"NumberingIsNumber";
+constexpr OUStringLiteral UNO_NAME_NUMBERING_RULES = u"NumberingRules";
+constexpr OUStringLiteral UNO_NAME_NUMBERING_LEVEL = u"NumberingLevel";
 
-#define UNO_NAME_NRULE_NUMBERINGTYPE            "NumberingType"
-#define UNO_NAME_NRULE_PREFIX                   "Prefix"
-#define UNO_NAME_NRULE_SUFFIX                   "Suffix"
+constexpr OUStringLiteral UNO_NAME_NRULE_NUMBERINGTYPE = u"NumberingType";
+constexpr OUStringLiteral UNO_NAME_NRULE_PREFIX = u"Prefix";
+constexpr OUStringLiteral UNO_NAME_NRULE_SUFFIX = u"Suffix";
 #define UNO_NAME_NRULE_BULLETID                 "BulletId"
-#define UNO_NAME_NRULE_BULLET_COLOR             "BulletColor"
-#define UNO_NAME_NRULE_BULLET_RELSIZE           "BulletRelSize"
-#define UNO_NAME_NRULE_BULLET_FONT              "BulletFont"
-#define UNO_NAME_NRULE_START_WITH               "StartWith"
-#define UNO_NAME_NRULE_LEFT_MARGIN              "LeftMargin"
-#define UNO_NAME_NRULE_FIRST_LINE_OFFSET        "FirstLineOffset"
-#define UNO_NAME_NRULE_ADJUST                   "Adjust"
+constexpr OUStringLiteral UNO_NAME_NRULE_BULLET_COLOR = u"BulletColor";
+constexpr OUStringLiteral UNO_NAME_NRULE_BULLET_RELSIZE = u"BulletRelSize";
+constexpr OUStringLiteral UNO_NAME_NRULE_BULLET_FONT = u"BulletFont";
+constexpr OUStringLiteral UNO_NAME_NRULE_START_WITH = u"StartWith";
+constexpr OUStringLiteral UNO_NAME_NRULE_LEFT_MARGIN = u"LeftMargin";
+constexpr OUStringLiteral UNO_NAME_NRULE_FIRST_LINE_OFFSET = u"FirstLineOffset";
+constexpr OUStringLiteral UNO_NAME_NRULE_ADJUST = u"Adjust";
 
-#define UNO_NAME_EDIT_FONT_DESCRIPTOR           "FontDescriptor"
+constexpr OUStringLiteral UNO_NAME_EDIT_FONT_DESCRIPTOR = u"FontDescriptor";
 
-#define UNO_NAME_EDIT_PARA_ADJUST               "ParaAdjust"
-#define UNO_NAME_EDIT_PARA_BMARGIN              "ParaBottomMargin"
-#define UNO_NAME_EDIT_PARA_LASTLINEADJ          "ParaLastLineAdjust"
-#define UNO_NAME_EDIT_PARA_LMARGIN              "ParaLeftMargin"
-#define UNO_NAME_EDIT_PARA_LINESPACING          "ParaLineSpacing"
-#define UNO_NAME_EDIT_PARA_RMARGIN              "ParaRightMargin"
-#define UNO_NAME_EDIT_PARA_TAPSTOPS             "ParaTabStops"
-#define UNO_NAME_EDIT_PARA_TMARGIN              "ParaTopMargin"
-#define UNO_NAME_EDIT_PARA_IS_HYPHEN            "ParaIsHyphenation"
-#define UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION    "ParaIsHangingPunctuation"
-#define UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE     "ParaIsCharacterDistance"
-#define UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES       "ParaIsForbiddenRules"
-#define UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT    "ParaFirstLineIndent"
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_ADJUST = u"ParaAdjust";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_BMARGIN = u"ParaBottomMargin";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_LASTLINEADJ = u"ParaLastLineAdjust";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_LMARGIN = u"ParaLeftMargin";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_LINESPACING = u"ParaLineSpacing";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_RMARGIN = u"ParaRightMargin";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_TAPSTOPS = u"ParaTabStops";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_TMARGIN = u"ParaTopMargin";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_IS_HYPHEN = u"ParaIsHyphenation";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION = u"ParaIsHangingPunctuation";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE = u"ParaIsCharacterDistance";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES = u"ParaIsForbiddenRules";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT = u"ParaFirstLineIndent";
 
-#define UNO_NAME_EDIT_CHAR_HEIGHT               "CharHeight"
-#define UNO_NAME_EDIT_CHAR_FONTNAME             "CharFontName"
-#define UNO_NAME_EDIT_CHAR_FONTSTYLENAME        "CharFontStyleName"
-#define UNO_NAME_EDIT_CHAR_FONTFAMILY           "CharFontFamily"
-#define UNO_NAME_EDIT_CHAR_FONTCHARSET          "CharFontCharSet"
-#define UNO_NAME_EDIT_CHAR_FONTPITCH            "CharFontPitch"
-#define UNO_NAME_EDIT_CHAR_POSTURE              "CharPosture"
-#define UNO_NAME_EDIT_CHAR_WEIGHT               "CharWeight"
-#define UNO_NAME_EDIT_CHAR_LOCALE               "CharLocale"
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_HEIGHT = u"CharHeight";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTNAME = u"CharFontName";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTSTYLENAME = u"CharFontStyleName";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTFAMILY = u"CharFontFamily";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTCHARSET = u"CharFontCharSet";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTPITCH = u"CharFontPitch";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_POSTURE = u"CharPosture";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_WEIGHT = u"CharWeight";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_LOCALE = u"CharLocale";
 
-#define UNO_NAME_EDIT_CHAR_HEIGHT_ASIAN         "CharHeightAsian"
-#define UNO_NAME_EDIT_CHAR_FONTNAME_ASIAN       "CharFontNameAsian"
-#define UNO_NAME_EDIT_CHAR_FONTSTYLENAME_ASIAN  "CharFontStyleNameAsian"
-#define UNO_NAME_EDIT_CHAR_FONTFAMILY_ASIAN     "CharFontFamilyAsian"
-#define UNO_NAME_EDIT_CHAR_FONTCHARSET_ASIAN    "CharFontCharSetAsian"
-#define UNO_NAME_EDIT_CHAR_FONTPITCH_ASIAN      "CharFontPitchAsian"
-#define UNO_NAME_EDIT_CHAR_POSTURE_ASIAN        "CharPostureAsian"
-#define UNO_NAME_EDIT_CHAR_WEIGHT_ASIAN         "CharWeightAsian"
-#define UNO_NAME_EDIT_CHAR_LOCALE_ASIAN         "CharLocaleAsian"
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_HEIGHT_ASIAN = u"CharHeightAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTNAME_ASIAN = u"CharFontNameAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTSTYLENAME_ASIAN = u"CharFontStyleNameAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTFAMILY_ASIAN = u"CharFontFamilyAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTCHARSET_ASIAN = u"CharFontCharSetAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTPITCH_ASIAN = u"CharFontPitchAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_POSTURE_ASIAN = u"CharPostureAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_WEIGHT_ASIAN = u"CharWeightAsian";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_LOCALE_ASIAN = u"CharLocaleAsian";
 
-#define UNO_NAME_EDIT_CHAR_HEIGHT_COMPLEX       "CharHeightComplex"
-#define UNO_NAME_EDIT_CHAR_FONTNAME_COMPLEX     "CharFontNameComplex"
-#define UNO_NAME_EDIT_CHAR_FONTSTYLENAME_COMPLEX "CharFontStyleNameComplex"
-#define UNO_NAME_EDIT_CHAR_FONTFAMILY_COMPLEX   "CharFontFamilyComplex"
-#define UNO_NAME_EDIT_CHAR_FONTCHARSET_COMPLEX  "CharFontCharSetComplex"
-#define UNO_NAME_EDIT_CHAR_FONTPITCH_COMPLEX    "CharFontPitchComplex"
-#define UNO_NAME_EDIT_CHAR_POSTURE_COMPLEX      "CharPostureComplex"
-#define UNO_NAME_EDIT_CHAR_WEIGHT_COMPLEX       "CharWeightComplex"
-#define UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX       "CharLocaleComplex"
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_HEIGHT_COMPLEX = u"CharHeightComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTNAME_COMPLEX = u"CharFontNameComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTSTYLENAME_COMPLEX = u"CharFontStyleNameComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTFAMILY_COMPLEX = u"CharFontFamilyComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTCHARSET_COMPLEX = u"CharFontCharSetComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTPITCH_COMPLEX = u"CharFontPitchComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_POSTURE_COMPLEX = u"CharPostureComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_WEIGHT_COMPLEX = u"CharWeightComplex";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX = u"CharLocaleComplex";
 
-#define UNO_NAME_EDIT_CHAR_COLOR                "CharColor"
-#define UNO_NAME_EDIT_CHAR_TRANSPARENCE         "CharTransparence"
-#define UNO_NAME_EDIT_CHAR_CROSSEDOUT           "CharCrossedOut"
-#define UNO_NAME_EDIT_CHAR_STRIKEOUT            "CharStrikeout"
-#define UNO_NAME_EDIT_CHAR_CASEMAP              "CharCaseMap"
-#define UNO_NAME_EDIT_CHAR_ESCAPEMENT           "CharEscapement"
-#define UNO_NAME_EDIT_CHAR_SHADOWED             "CharShadowed"
-#define UNO_NAME_EDIT_CHAR_UNDERLINE            "CharUnderline"
-#define UNO_NAME_EDIT_CHAR_OVERLINE             "CharOverline"
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_COLOR = u"CharColor";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_TRANSPARENCE = u"CharTransparence";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_CROSSEDOUT = u"CharCrossedOut";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_STRIKEOUT = u"CharStrikeout";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_CASEMAP = u"CharCaseMap";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_ESCAPEMENT = u"CharEscapement";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_SHADOWED = u"CharShadowed";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_UNDERLINE = u"CharUnderline";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_OVERLINE = u"CharOverline";
 
-#define UNO_NAME_BITMAP                         "Bitmap"
+constexpr OUStringLiteral UNO_NAME_BITMAP = u"Bitmap";
 
-#define UNO_NAME_LINKDISPLAYNAME                "LinkDisplayName"
-#define UNO_NAME_LINKDISPLAYBITMAP              "LinkDisplayBitmap"
+constexpr OUStringLiteral UNO_NAME_LINKDISPLAYNAME = u"LinkDisplayName";
+constexpr OUStringLiteral UNO_NAME_LINKDISPLAYBITMAP = u"LinkDisplayBitmap";
 
-#define UNO_NAME_GRAPHIC_LUMINANCE              "AdjustLuminance"
-#define UNO_NAME_GRAPHIC_CONTRAST               "AdjustContrast"
-#define UNO_NAME_GRAPHIC_RED                    "AdjustRed"
-#define UNO_NAME_GRAPHIC_GREEN                  "AdjustGreen"
-#define UNO_NAME_GRAPHIC_BLUE                   "AdjustBlue"
-#define UNO_NAME_GRAPHIC_GAMMA                  "Gamma"
-#define UNO_NAME_GRAPHIC_TRANSPARENCY           "Transparency"
-#define UNO_NAME_GRAPHIC_COLOR_MODE             "GraphicColorMode"
-#define UNO_NAME_GRAPHIC_GRAPHICCROP            "GraphicCrop"
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_LUMINANCE = u"AdjustLuminance";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_CONTRAST = u"AdjustContrast";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_RED = u"AdjustRed";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_GREEN = u"AdjustGreen";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_BLUE = u"AdjustBlue";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_GAMMA = u"Gamma";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_TRANSPARENCY = u"Transparency";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_COLOR_MODE = u"GraphicColorMode";
+constexpr OUStringLiteral UNO_NAME_GRAPHIC_GRAPHICCROP = u"GraphicCrop";
 
 #endif
 

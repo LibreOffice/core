@@ -94,8 +94,9 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
     if (!varDecl->isThisDeclarationADefinition()
         || !qt.isConstQualified())
         return true;
+    // FIXME: should actually be checking if the array is initialised from OUStringLiteral, which should be cheap
     if (qt->isArrayType())
-        qt = qt->getAsArrayTypeUnsafe()->getElementType();
+        return true;
 
     auto tc = loplugin::TypeCheck(qt);
     if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()

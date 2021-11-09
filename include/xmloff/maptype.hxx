@@ -30,8 +30,7 @@
 */
 struct XMLPropertyMapEntry
 {
-    const char*     msApiName;      /// Property-Name
-    sal_Int32       nApiNameLength; /// length of property name
+    OUString        msApiName;      /// Property-Name
     enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
     sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */

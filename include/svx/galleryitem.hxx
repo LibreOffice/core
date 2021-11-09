@@ -29,13 +29,13 @@ namespace com::sun::star::lang { class XComponent; }
 
 // property names map those from css::gallery::GalleryItem
 // with exception of "AsLink" and "FilterName"
-#define SVXGALLERYITEM_TYPE     "GalleryItemType"
-#define SVXGALLERYITEM_URL      "URL"
-#define SVXGALLERYITEM_FILTER   "FilterName"
-#define SVXGALLERYITEM_DRAWING  "Drawing"
-#define SVXGALLERYITEM_GRAPHIC  "Graphic"
+constexpr OUStringLiteral SVXGALLERYITEM_TYPE = u"GalleryItemType";
+constexpr OUStringLiteral SVXGALLERYITEM_URL = u"URL";
+constexpr OUStringLiteral SVXGALLERYITEM_FILTER = u"FilterName";
+constexpr OUStringLiteral SVXGALLERYITEM_DRAWING = u"Drawing";
+constexpr OUStringLiteral SVXGALLERYITEM_GRAPHIC = u"Graphic";
 #define SVXGALLERYITEM_PARAMS   5
-#define SVXGALLERYITEM_ARGNAME  "GalleryItem"
+constexpr OUStringLiteral SVXGALLERYITEM_ARGNAME = u"GalleryItem";
 
 class SVXCORE_DLLPUBLIC SvxGalleryItem final : public SfxPoolItem
 {

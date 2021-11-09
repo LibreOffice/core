@@ -135,8 +135,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createV
     }
     else
     {
-        static vcl::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > aDiscreteShadow(
-                BitmapEx(SIP_SA_PAGESHADOW35X35));
+        static vcl::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > aDiscreteShadow((
+                BitmapEx(SIP_SA_PAGESHADOW35X35)));
 
         if(aDiscreteShadow.get())
         {

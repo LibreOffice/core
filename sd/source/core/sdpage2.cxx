@@ -81,7 +81,7 @@ void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
     |* Name of the layout of the page
     \********************************************************************/
     OUString aOldLayoutName(maLayoutName);    // memorize
-    maLayoutName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+    maLayoutName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
     /*********************************************************************
     |* search and replace master page if necessary

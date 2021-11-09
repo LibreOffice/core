@@ -25,7 +25,7 @@ void f1()
     f(OUString(XXX));
 
     // FIXME no warning expected
-    //#define FOO f(OUString("xxx"))
+    //    #define FOO f(OUString("xxx"))
     //    FOO;
 }
 

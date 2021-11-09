@@ -19,29 +19,29 @@
 
 #pragma once
 
-#define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
-#define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
-#define HID_FILEDLG_STANDARD                                  "SVT_HID_FILEDLG_STANDARD"
+constexpr OStringLiteral HID_FILEDLG_LINK_CB = "SVT_HID_FILEDLG_LINK_CB";
+constexpr OStringLiteral HID_FILEDLG_PREVIEW_CB = "SVT_HID_FILEDLG_PREVIEW_CB";
+constexpr OStringLiteral HID_FILEDLG_STANDARD = "SVT_HID_FILEDLG_STANDARD";
 
 // help ids for the different modi of the file picker dialog
-#define HID_FILESAVE_LEVELUP                                   "SVT_HID_FILESAVE_LEVELUP"
-#define HID_FILESAVE_CREATEDIRECTORY                           "SVT_HID_FILESAVE_CREATEDIRECTORY"
-#define HID_FILESAVE_FILEVIEW                                  "SVT_HID_FILESAVE_FILEVIEW"
-#define HID_FILESAVE_TEMPLATE                                  "SVT_HID_FILESAVE_TEMPLATE"
-#define HID_FILESAVE_FILEURL                                   "SVT_HID_FILESAVE_FILEURL"
-#define HID_FILESAVE_FILETYPE                                  "SVT_HID_FILESAVE_FILETYPE"
-#define HID_FILESAVE_DOSAVE                                    "SVT_HID_FILESAVE_DOSAVE"
-#define HID_FILESAVE_AUTOEXTENSION                             "SVT_HID_FILESAVE_AUTOEXTENSION"
-#define HID_FILESAVE_SAVEWITHPASSWORD                          "SVT_HID_FILESAVE_SAVEWITHPASSWORD"
-#define HID_FILESAVE_CUSTOMIZEFILTER                           "SVT_HID_FILESAVE_CUSTOMIZEFILTER"
-#define HID_FILESAVE_SELECTION                                 "SVT_HID_FILESAVE_SELECTION"
-#define HID_FILESAVE_DIALOG                                    "SVT_HID_FILESAVE_DIALOG"
-#define HID_FILESAVE_DOPLAY                                    "SVT_HID_FILESAVE_DOPLAY"
+constexpr OStringLiteral HID_FILESAVE_LEVELUP = "SVT_HID_FILESAVE_LEVELUP";
+constexpr OStringLiteral HID_FILESAVE_CREATEDIRECTORY = "SVT_HID_FILESAVE_CREATEDIRECTORY";
+constexpr OStringLiteral HID_FILESAVE_FILEVIEW = "SVT_HID_FILESAVE_FILEVIEW";
+constexpr OStringLiteral HID_FILESAVE_TEMPLATE = "SVT_HID_FILESAVE_TEMPLATE";
+constexpr OStringLiteral HID_FILESAVE_FILEURL = "SVT_HID_FILESAVE_FILEURL";
+constexpr OStringLiteral HID_FILESAVE_FILETYPE = "SVT_HID_FILESAVE_FILETYPE";
+constexpr OStringLiteral HID_FILESAVE_DOSAVE = "SVT_HID_FILESAVE_DOSAVE";
+constexpr OStringLiteral HID_FILESAVE_AUTOEXTENSION = "SVT_HID_FILESAVE_AUTOEXTENSION";
+constexpr OStringLiteral HID_FILESAVE_SAVEWITHPASSWORD = "SVT_HID_FILESAVE_SAVEWITHPASSWORD";
+constexpr OStringLiteral HID_FILESAVE_CUSTOMIZEFILTER = "SVT_HID_FILESAVE_CUSTOMIZEFILTER";
+constexpr OStringLiteral HID_FILESAVE_SELECTION = "SVT_HID_FILESAVE_SELECTION";
+constexpr OStringLiteral HID_FILESAVE_DIALOG = "SVT_HID_FILESAVE_DIALOG";
+constexpr OStringLiteral HID_FILESAVE_DOPLAY = "SVT_HID_FILESAVE_DOPLAY";
 
-#define HID_FILEOPEN_LEVELUP                                   "SVT_HID_FILEOPEN_LEVELUP"
-#define HID_FILEOPEN_READONLY                                  "SVT_HID_FILEOPEN_READONLY"
-#define HID_FILEOPEN_VERSION                                   "SVT_HID_FILEOPEN_VERSION"
-#define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
-#define HID_FILEOPEN_IMAGE_ANCHOR                              "SVT_HID_FILEOPEN_IMAGE_ANCHOR"
+constexpr OStringLiteral HID_FILEOPEN_LEVELUP = "SVT_HID_FILEOPEN_LEVELUP";
+constexpr OStringLiteral HID_FILEOPEN_READONLY = "SVT_HID_FILEOPEN_READONLY";
+constexpr OStringLiteral HID_FILEOPEN_VERSION = "SVT_HID_FILEOPEN_VERSION";
+constexpr OStringLiteral HID_FILEOPEN_IMAGE_TEMPLATE = "SVT_HID_FILEOPEN_IMAGE_TEMPLATE";
+constexpr OStringLiteral HID_FILEOPEN_IMAGE_ANCHOR = "SVT_HID_FILEOPEN_IMAGE_ANCHOR";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

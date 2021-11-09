@@ -248,7 +248,7 @@ using Type = ScServiceProvider::Type;
 
 struct ProvNamesId_Type
 {
-    const char *            pName;
+    OUString                pName;
     ScServiceProvider::Type nType;
 };
 
@@ -370,13 +370,13 @@ sal_Int32 getFieldType(ScServiceProvider::Type nOldType)
 } // namespace
 
 
-ScServiceProvider::Type ScServiceProvider::GetProviderType(const OUString& rServiceName)
+ScServiceProvider::Type ScServiceProvider::GetProviderType(std::u16string_view rServiceName)
 {
-    if (!rServiceName.isEmpty())
+    if (!rServiceName.empty())
     {
         for (const ProvNamesId_Type & i : aProvNamesId)
         {
-            if (rServiceName.equalsAscii( i.pName ))
+            if (rServiceName == i.pName)
             {
                 return i.nType;
             }
@@ -384,8 +384,7 @@ ScServiceProvider::Type ScServiceProvider::GetProviderType(const OUString& rServ
 
         for (const ProvNamesId_Type & rOldName : aOldNames)
         {
-            OSL_ENSURE( rOldName.pName, "ScServiceProvider::GetProviderType: no oldname => crash");
-            if (rServiceName.equalsAscii( rOldName.pName ))
+            if (rServiceName == rOldName.pName)
             {
                 OSL_FAIL("old service name used");
                 return rOldName.nType;
@@ -613,7 +612,7 @@ uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
     OUString* pArray = aRet.getArray();
     for (sal_uInt16 i = 0; i < nEntries; i++)
     {
-        pArray[i] = OUString::createFromAscii( aProvNamesId[i].pName );
+        pArray[i] = aProvNamesId[i].pName;
     }
     return aRet;
 }

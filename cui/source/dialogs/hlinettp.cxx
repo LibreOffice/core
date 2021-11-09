@@ -241,7 +241,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, weld::Entry&, voi
 void SvxHyperlinkInternetTp::SetScheme(std::u16string_view rScheme)
 {
     //if rScheme is empty or unknown the default behaviour is like it where HTTP
-    bool bFTP = o3tl::starts_with(rScheme, u"" INET_FTP_SCHEME);
+    bool bFTP = o3tl::starts_with(rScheme, INET_FTP_SCHEME);
     bool bInternet = !bFTP;
 
     //update protocol button selection:
@@ -260,7 +260,7 @@ void SvxHyperlinkInternetTp::SetScheme(std::u16string_view rScheme)
     m_xCbAnonymous->set_visible( bFTP );
 
     //update 'link target in document'-window and opening-button
-    if (o3tl::starts_with(rScheme, u"" INET_HTTP_SCHEME) || rScheme.empty())
+    if (o3tl::starts_with(rScheme, INET_HTTP_SCHEME) || rScheme.empty())
     {
         if ( m_bMarkWndOpen )
             ShowMarkWnd ();

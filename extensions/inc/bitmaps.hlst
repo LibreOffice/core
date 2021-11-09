@@ -10,7 +10,7 @@
 #ifndef INCLUDED_EXTENSIONS_INC_BITMAPS_HRC
 #define INCLUDED_EXTENSIONS_INC_BITMAPS_HRC
 
-#define RID_EXTBMP_CONTROL                  "res/sx10144.png"
+constexpr OUStringLiteral RID_EXTBMP_CONTROL = u"res/sx10144.png";
 #define RID_EXTBMP_BUTTON                   "res/sx10594.png"
 #define RID_EXTBMP_RADIOBUTTON              "res/sx10595.png"
 #define RID_EXTBMP_CHECKBOX                 "res/sx10596.png"
@@ -31,22 +31,22 @@
 #define RID_EXTBMP_HIDDEN                   "res/sx18022.png"
 #define RID_EXTBMP_FORMATTEDFIELD           "res/sx10728.png"
 #define RID_EXTBMP_FILTER                   "res/sx10715.png"
-#define RID_EXTBMP_FORMS                    "res/sx18013.png"
-#define RID_EXTBMP_FORM                     "res/sx10593.png"
+constexpr OUStringLiteral RID_EXTBMP_FORMS = u"res/sx18013.png";
+constexpr OUStringLiteral RID_EXTBMP_FORM = u"res/sx10593.png";
 #define RID_EXTBMP_COLLAPSEDNODE            "res/sx18002.png"
 #define RID_EXTBMP_EXPANDEDNODE             "res/sx18003.png"
 #define RID_EXTBMP_SCROLLBAR                "res/sx10768.png"
 #define RID_EXTBMP_SPINBUTTON               "res/sx10769.png"
 #define RID_EXTBMP_NAVIGATIONBAR            "res/sx10607.png"
-#define RID_SCANNER_HANDLE                  "extensions/res/scanner/handle.png"
-#define BMP_TABLE                           "res/sx03188.png"
-#define BMP_QUERY                           "res/sx03202.png"
-#define RID_EXTBMP_AUTOFILTER_SC            "res/sc10716.png"
-#define RID_EXTBMP_FILTERCRIT_SC            "res/sc10715.png"
-#define RID_EXTBMP_REMOVE_FILTER_SORT_SC    "res/sc10711.png"
-#define RID_EXTBMP_AUTOFILTER_LC            "res/lc10716.png"
-#define RID_EXTBMP_FILTERCRIT_LC            "res/lc10715.png"
-#define RID_EXTBMP_REMOVE_FILTER_SORT_LC    "res/lc10711.png"
+constexpr OUStringLiteral RID_SCANNER_HANDLE = u"extensions/res/scanner/handle.png";
+constexpr OUStringLiteral BMP_TABLE = u"res/sx03188.png";
+constexpr OUStringLiteral BMP_QUERY = u"res/sx03202.png";
+constexpr OUStringLiteral RID_EXTBMP_AUTOFILTER_SC = u"res/sc10716.png";
+constexpr OUStringLiteral RID_EXTBMP_FILTERCRIT_SC = u"res/sc10715.png";
+constexpr OUStringLiteral RID_EXTBMP_REMOVE_FILTER_SORT_SC = u"res/sc10711.png";
+constexpr OUStringLiteral RID_EXTBMP_AUTOFILTER_LC = u"res/lc10716.png";
+constexpr OUStringLiteral RID_EXTBMP_FILTERCRIT_LC = u"res/lc10715.png";
+constexpr OUStringLiteral RID_EXTBMP_REMOVE_FILTER_SORT_LC = u"res/lc10711.png";
 #define SV_RESID_BITMAP_INFOBOX             "vcl/res/infobox.png"
 
 #endif

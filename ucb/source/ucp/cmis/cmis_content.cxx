@@ -1738,9 +1738,10 @@ namespace cmis
         OUString sRet;
         try
         {
-            sRet = isFolder( uno::Reference< ucb::XCommandEnvironment >() )
-                ? std::u16string_view(u"" CMIS_FOLDER_TYPE)
-                : std::u16string_view(u"" CMIS_FILE_TYPE);
+            if (isFolder( uno::Reference< ucb::XCommandEnvironment >() ))
+                sRet = CMIS_FOLDER_TYPE;
+            else
+                sRet = CMIS_FILE_TYPE;
         }
         catch (const uno::RuntimeException&)
         {

@@ -122,8 +122,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     else
     {
         ePO = static_cast<PresentationObjects>( static_cast<int>(PresentationObjects::Outline_1) + nDepth - 1 );
-        aStyleName += STR_LAYOUT_OUTLINE " "
-            + OUString::number(nDepth);
+        aStyleName += STR_LAYOUT_OUTLINE + " " + OUString::number(nDepth);
     }
 
     SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();

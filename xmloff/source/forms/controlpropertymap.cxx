@@ -90,11 +90,11 @@ namespace xmloff
         {
             XMLPropertyMapEntry const * pEnd;
             // determine the last element
-            for ( pEnd = aControlStyleProperties; pEnd->msApiName; ++pEnd)
+            for ( pEnd = aControlStyleProperties; !pEnd->msApiName.isEmpty(); ++pEnd)
                 ;
             assert( ::std::is_sorted(aControlStyleProperties, pEnd,
                                     [](const XMLPropertyMapEntry& _rLeft, const XMLPropertyMapEntry& _rRight)
-                                    { return strcmp(_rLeft.msApiName, _rRight.msApiName) < 0; }) );
+                                    { return _rLeft.msApiName < _rRight.msApiName; }) );
             bSorted = true;
         }
     }

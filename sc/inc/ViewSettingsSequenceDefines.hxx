@@ -79,14 +79,14 @@
 #define SC_HORIZONTALSPLITPOSITION_TWIPS    "HorizontalSplitPositionTwips"
 #define SC_VERTICALSPLITPOSITION_TWIPS      "VerticalSplitPositionTwips"
 #define SC_ACTIVESPLITRANGE                 "ActiveSplitRange"
-#define SC_POSITIONLEFT                     "PositionLeft"
+constexpr OUStringLiteral SC_POSITIONLEFT = u"PositionLeft";
 #define SC_POSITIONRIGHT                    "PositionRight"
-#define SC_POSITIONTOP                      "PositionTop"
+constexpr OUStringLiteral SC_POSITIONTOP = u"PositionTop";
 #define SC_POSITIONBOTTOM                   "PositionBottom"
 #define SC_TABLESELECTED                    "TableSelected"
 
 #define SC_TABLES                           "Tables"
-#define SC_ACTIVETABLE                      "ActiveTable"
+constexpr OUStringLiteral SC_ACTIVETABLE = u"ActiveTable";
 #define SC_HORIZONTALSCROLLBARWIDTH         "HorizontalScrollbarWidth"
 #define SC_RELHORIZONTALTABBARWIDTH         "RelativeHorizontalTabbarWidth"
 #define SC_ZOOMTYPE                         "ZoomType"

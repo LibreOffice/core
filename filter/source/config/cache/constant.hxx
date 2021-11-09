@@ -28,34 +28,34 @@
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_NAME  "Name"
+constexpr OUStringLiteral PROPNAME_NAME = u"Name";
 
 /** @short  used to identify a type item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_UINAME            "UIName"
-#define  PROPNAME_UINAMES           "UINames"
-#define  PROPNAME_PREFERRED         "Preferred"
-#define  PROPNAME_PREFERREDFILTER   "PreferredFilter"
-#define  PROPNAME_DETECTSERVICE     "DetectService"
-#define  PROPNAME_MEDIATYPE         "MediaType"
-#define  PROPNAME_CLIPBOARDFORMAT   "ClipboardFormat"
-#define  PROPNAME_URLPATTERN        "URLPattern"
-#define  PROPNAME_EXTENSIONS        "Extensions"
+constexpr OUStringLiteral PROPNAME_UINAME = u"UIName";
+constexpr OUStringLiteral PROPNAME_UINAMES = u"UINames";
+constexpr OUStringLiteral PROPNAME_PREFERRED = u"Preferred";
+constexpr OUStringLiteral PROPNAME_PREFERREDFILTER = u"PreferredFilter";
+constexpr OUStringLiteral PROPNAME_DETECTSERVICE = u"DetectService";
+constexpr OUStringLiteral PROPNAME_MEDIATYPE = u"MediaType";
+constexpr OUStringLiteral PROPNAME_CLIPBOARDFORMAT = u"ClipboardFormat";
+constexpr OUStringLiteral PROPNAME_URLPATTERN = u"URLPattern";
+constexpr OUStringLiteral PROPNAME_EXTENSIONS = u"Extensions";
 
 /** @short  used to identify a filter item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_TYPE              "Type"
-#define  PROPNAME_DOCUMENTSERVICE   "DocumentService"
-#define  PROPNAME_FILTERSERVICE     "FilterService"
-#define  PROPNAME_UICOMPONENT       "UIComponent"
-#define  PROPNAME_FLAGS             "Flags"
-#define  PROPNAME_USERDATA          "UserData"
-#define  PROPNAME_TEMPLATENAME      "TemplateName"
-#define  PROPNAME_FILEFORMATVERSION "FileFormatVersion"
+constexpr OUStringLiteral PROPNAME_TYPE = u"Type";
+constexpr OUStringLiteral PROPNAME_DOCUMENTSERVICE = u"DocumentService";
+constexpr OUStringLiteral PROPNAME_FILTERSERVICE = u"FilterService";
+constexpr OUStringLiteral PROPNAME_UICOMPONENT = u"UIComponent";
+constexpr OUStringLiteral PROPNAME_FLAGS = u"Flags";
+constexpr OUStringLiteral PROPNAME_USERDATA = u"UserData";
+constexpr OUStringLiteral PROPNAME_TEMPLATENAME = u"TemplateName";
+constexpr OUStringLiteral PROPNAME_FILEFORMATVERSION = u"FileFormatVersion";
 #define  PROPNAME_EXPORTEXTENSION   "ExportExtension"
 #define  PROPNAME_ENABLED           "Enabled"
 
@@ -63,23 +63,23 @@
             property against the configuration API and can be used
             at all name containers (based on this filtercache) too.
  */
-#define  PROPNAME_TYPES     "Types"
+constexpr OUStringLiteral PROPNAME_TYPES = u"Types";
 
 /** @short  used to identify the list of sorted filters for a specific
             office module
  */
-#define  PROPNAME_SORTEDFILTERLIST     "SortedFilterList"
+constexpr OUStringLiteral PROPNAME_SORTEDFILTERLIST = u"SortedFilterList";
 
 /** @short  implicit properties. which are used at the container interface only.
  */
-#define  PROPNAME_FINALIZED "Finalized"
-#define  PROPNAME_MANDATORY "Mandatory"
+constexpr OUStringLiteral PROPNAME_FINALIZED = u"Finalized";
+constexpr OUStringLiteral PROPNAME_MANDATORY = u"Mandatory";
 
 /** @short  used to identify a set of items against the configuration API. */
-#define  CFGSET_TYPES               "Types"
-#define  CFGSET_FILTERS             "Filters"
-#define  CFGSET_FRAMELOADERS        "FrameLoaders"
-#define  CFGSET_CONTENTHANDLERS     "ContentHandlers"
+constexpr OUStringLiteral CFGSET_TYPES = u"Types";
+constexpr OUStringLiteral CFGSET_FILTERS = u"Filters";
+constexpr OUStringLiteral CFGSET_FRAMELOADERS = u"FrameLoaders";
+constexpr OUStringLiteral CFGSET_CONTENTHANDLERS = u"ContentHandlers";
 
 /** @short  used to address some configuration keys directly.
 
@@ -88,8 +88,8 @@
 
     @TODO   define these direct keys ...
  */
-#define  CFGDIRECTKEY_OFFICELOCALE          "/org.openoffice.Setup/L10N/ooLocale"
-#define  CFGDIRECTKEY_DEFAULTFRAMELOADER    "/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader"
+constexpr OUStringLiteral CFGDIRECTKEY_OFFICELOCALE = u"/org.openoffice.Setup/L10N/ooLocale";
+constexpr OUStringLiteral CFGDIRECTKEY_DEFAULTFRAMELOADER = u"/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader";
 #define  CFGDIRECTKEY_PRODUCTNAME           "/org.openoffice.Setup/Product/ooName"
 
 // Note that these flag bits have parallel names in
@@ -123,8 +123,8 @@
 
 /** @short  some uno service names.
  */
-#define  SERVICE_CONFIGURATIONUPDATEACCESS  "com.sun.star.configuration.ConfigurationUpdateAccess"
-#define  SERVICE_CONFIGURATIONACCESS        "com.sun.star.configuration.ConfigurationAccess"
+constexpr OUStringLiteral SERVICE_CONFIGURATIONUPDATEACCESS = u"com.sun.star.configuration.ConfigurationUpdateAccess";
+constexpr OUStringLiteral SERVICE_CONFIGURATIONACCESS = u"com.sun.star.configuration.ConfigurationAccess";
 
 /** @short  some configuration paths.
  */
@@ -139,13 +139,13 @@
 
 /** @short  used for the queries of the FilterFactory service.
  */
-#define  QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE    "matchByDocumentService"
-#define  QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE "getDefaultFilterForType"
-#define  QUERY_IDENTIFIER_GET_SORTED_FILTERLIST     "getSortedFilterList()"
+constexpr OUStringLiteral QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE = u"matchByDocumentService";
+constexpr OUStringLiteral QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE = u"getDefaultFilterForType";
+constexpr OUStringLiteral QUERY_IDENTIFIER_GET_SORTED_FILTERLIST = u"getSortedFilterList()";
 
-#define  QUERY_PARAM_IFLAGS                         "iflags"
-#define  QUERY_PARAM_EFLAGS                         "eflags"
-#define  QUERY_PARAM_MODULE                         "module"
+constexpr OUStringLiteral QUERY_PARAM_IFLAGS = u"iflags";
+constexpr OUStringLiteral QUERY_PARAM_EFLAGS = u"eflags";
+constexpr OUStringLiteral QUERY_PARAM_MODULE = u"module";
 #define  QUERY_PARAM_DEFAULTFIRST                   "default_first"
 #define  QUERY_CONSTVALUE_ALL                       "all"
 
