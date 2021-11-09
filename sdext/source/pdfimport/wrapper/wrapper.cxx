@@ -24,6 +24,30 @@
 #include <pdfihelper.hxx>
 #include <wrapper.hxx>
 
+// poppler headers
+
+#if defined __GNUC__ || defined __clang__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wundef"
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+
+#elif defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4100) // unreferenced formal parameter
+#pragma warning(disable : 4310) // cast truncates constant value
+
+#endif
+
+#include <poppler/PDFDocFactory.h>
+#include <poppler/PDFDoc.h>
+#include <poppler/ErrorCodes.h>
+
+#if defined __GNUC__ || defined __clang__
+# pragma GCC diagnostic pop
+#elif defined _MSC_VER
+#pragma warning(pop)
+#endif
+
 #include <o3tl/string_view.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
@@ -81,53 +105,53 @@ namespace
 // identifier of the strings coming from the out-of-process xpdf
 // converter
 enum parseKey {
-    CLIPPATH,
-    DRAWCHAR,
-    DRAWIMAGE,
-    DRAWLINK,
-    DRAWMASK,
-    DRAWMASKEDIMAGE,
-    DRAWSOFTMASKEDIMAGE,
-    ENDPAGE,
-    ENDTEXTOBJECT,
-    EOCLIPPATH,
-    EOFILLPATH,
-    FILLPATH,
-    HYPERLINK,
-    INTERSECTCLIP,
-    INTERSECTEOCLIP,
-    POPSTATE,
-    PUSHSTATE,
-    RESTORESTATE,
-    SAVESTATE,
-    SETBLENDMODE,
-    SETFILLCOLOR,
-    SETFONT,
-    SETLINECAP,
-    SETLINEDASH,
-    SETLINEJOIN,
-    SETLINEWIDTH,
-    SETMITERLIMIT,
-    SETPAGENUM,
-    SETSTROKECOLOR,
-    SETTEXTRENDERMODE,
-    SETTRANSFORMATION,
-    STARTPAGE,
-    STROKEPATH,
-    UPDATEBLENDMODE,
-    UPDATECTM,
-    UPDATEFILLCOLOR,
-    UPDATEFILLOPACITY,
-    UPDATEFLATNESS,
-    UPDATEFONT,
-    UPDATELINECAP,
-    UPDATELINEDASH,
-    UPDATELINEJOIN,
-    UPDATELINEWIDTH,
-    UPDATEMITERLIMIT,
-    UPDATESTROKECOLOR,
-    UPDATESTROKEOPACITY,
-    NONE
+    parseKey_CLIPPATH,
+    parseKey_DRAWCHAR,
+    parseKey_DRAWIMAGE,
+    parseKey_DRAWLINK,
+    parseKey_DRAWMASK,
+    parseKey_DRAWMASKEDIMAGE,
+    parseKey_DRAWSOFTMASKEDIMAGE,
+    parseKey_ENDPAGE,
+    parseKey_ENDTEXTOBJECT,
+    parseKey_EOCLIPPATH,
+    parseKey_EOFILLPATH,
+    parseKey_FILLPATH,
+    parseKey_HYPERLINK,
+    parseKey_INTERSECTCLIP,
+    parseKey_INTERSECTEOCLIP,
+    parseKey_POPSTATE,
+    parseKey_PUSHSTATE,
+    parseKey_RESTORESTATE,
+    parseKey_SAVESTATE,
+    parseKey_SETBLENDMODE,
+    parseKey_SETFILLCOLOR,
+    parseKey_SETFONT,
+    parseKey_SETLINECAP,
+    parseKey_SETLINEDASH,
+    parseKey_SETLINEJOIN,
+    parseKey_SETLINEWIDTH,
+    parseKey_SETMITERLIMIT,
+    parseKey_SETPAGENUM,
+    parseKey_SETSTROKECOLOR,
+    parseKey_SETTEXTRENDERMODE,
+    parseKey_SETTRANSFORMATION,
+    parseKey_STARTPAGE,
+    parseKey_STROKEPATH,
+    parseKey_UPDATEBLENDMODE,
+    parseKey_UPDATECTM,
+    parseKey_UPDATEFILLCOLOR,
+    parseKey_UPDATEFILLOPACITY,
+    parseKey_UPDATEFLATNESS,
+    parseKey_UPDATEFONT,
+    parseKey_UPDATELINECAP,
+    parseKey_UPDATELINEDASH,
+    parseKey_UPDATELINEJOIN,
+    parseKey_UPDATELINEWIDTH,
+    parseKey_UPDATEMITERLIMIT,
+    parseKey_UPDATESTROKECOLOR,
+    parseKey_UPDATESTROKEOPACITY,
+    parseKey_NONE
 };
 
 #if defined _MSC_VER && defined __clang__
@@ -811,71 +835,71 @@ void Parser::parseLine( const OString& rLine )
     OSL_ASSERT(pEntry);
     switch( pEntry->eKey )
     {
-        case CLIPPATH:
+        case parseKey_CLIPPATH:
             m_pSink->intersectClip(lp.readPath()); break;
-        case DRAWCHAR:
+        case parseKey_DRAWCHAR:
             lp.readChar(); break;
-        case DRAWIMAGE:
+        case parseKey_DRAWIMAGE:
             lp.readImage(); break;
-        case DRAWLINK:
+        case parseKey_DRAWLINK:
             lp.readLink(); break;
-        case DRAWMASK:
+        case parseKey_DRAWMASK:
             lp.readMask(); break;
-        case DRAWMASKEDIMAGE:
+        case parseKey_DRAWMASKEDIMAGE:
             lp.readMaskedImage(); break;
-        case DRAWSOFTMASKEDIMAGE:
+        case parseKey_DRAWSOFTMASKEDIMAGE:
             lp.readSoftMaskedImage(); break;
-        case ENDPAGE:
+        case parseKey_ENDPAGE:
             m_pSink->endPage(); break;
-        case ENDTEXTOBJECT:
+        case parseKey_ENDTEXTOBJECT:
             m_pSink->endText(); break;
-        case EOCLIPPATH:
+        case parseKey_EOCLIPPATH:
             m_pSink->intersectEoClip(lp.readPath()); break;
-        case EOFILLPATH:
+        case parseKey_EOFILLPATH:
             m_pSink->eoFillPath(lp.readPath()); break;
-        case FILLPATH:
+        case parseKey_FILLPATH:
             m_pSink->fillPath(lp.readPath()); break;
-        case RESTORESTATE:
+        case parseKey_RESTORESTATE:
             m_pSink->popState(); break;
-        case SAVESTATE:
+        case parseKey_SAVESTATE:
             m_pSink->pushState(); break;
-        case SETPAGENUM:
+        case parseKey_SETPAGENUM:
             m_pSink->setPageNum( lp.readInt32() ); break;
-        case STARTPAGE:
+        case parseKey_STARTPAGE:
         {
             const double nWidth ( lp.readDouble() );
             const double nHeight( lp.readDouble() );
             m_pSink->startPage( geometry::RealSize2D( nWidth, nHeight ) );
             break;
         }
-        case STROKEPATH:
+        case parseKey_STROKEPATH:
             m_pSink->strokePath(lp.readPath()); break;
-        case UPDATECTM:
+        case parseKey_UPDATECTM:
             lp.readTransformation(); break;
-        case UPDATEFILLCOLOR:
+        case parseKey_UPDATEFILLCOLOR:
             m_pSink->setFillColor( lp.readColor() ); break;
-        case UPDATEFLATNESS:
+        case parseKey_UPDATEFLATNESS:
             m_pSink->setFlatness( lp.readDouble( ) ); break;
-        case UPDATEFONT:
+        case parseKey_UPDATEFONT:
             lp.readFont(); break;
-        case UPDATELINECAP:
+        case parseKey_UPDATELINECAP:
             lp.readLineCap(); break;
-        case UPDATELINEDASH:
+        case parseKey_UPDATELINEDASH:
             lp.readLineDash(); break;
-        case UPDATELINEJOIN:
+        case parseKey_UPDATELINEJOIN:
             lp.readLineJoin(); break;
-        case UPDATELINEWIDTH:
+        case parseKey_UPDATELINEWIDTH:
             m_pSink->setLineWidth( lp.readDouble() );break;
-        case UPDATEMITERLIMIT:
+        case parseKey_UPDATEMITERLIMIT:
             m_pSink->setMiterLimit( lp.readDouble() ); break;
-        case UPDATESTROKECOLOR:
+        case parseKey_UPDATESTROKECOLOR:
             m_pSink->setStrokeColor( lp.readColor() ); break;
-        case UPDATESTROKEOPACITY:
+        case parseKey_UPDATESTROKEOPACITY:
             break;
-        case SETTEXTRENDERMODE:
+        case parseKey_SETTEXTRENDERMODE:
             m_pSink->setTextRenderMode( lp.readInt32() ); break;
 
-        case NONE:
+        case parseKey_NONE:
         default:
             OSL_PRECOND(false,"Unknown input");
             break;
@@ -887,70 +911,6 @@ void Parser::parseLine( const OString& rLine )
 }
 
 } // namespace
-
-static bool checkEncryption( std::u16string_view                           i_rPath,
-                             const uno::Reference< task::XInteractionHandler >& i_xIHdl,
-                             OUString&                                     io_rPwd,
-                             bool&                                              o_rIsEncrypted,
-                             const OUString&                               i_rDocName
-                             )
-{
-    bool bSuccess = false;
-    OString aPDFFile = OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
-
-    std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
-    if( pEntry )
-    {
-        pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());
-        if( pPDFFile )
-        {
-            o_rIsEncrypted = pPDFFile->isEncrypted();
-            if( o_rIsEncrypted )
-            {
-                if( pPDFFile->usesSupportedEncryptionFormat() )
-                {
-                    bool bAuthenticated = false;
-                    if( !io_rPwd.isEmpty() )
-                    {
-                        OString aIsoPwd = OUStringToOString( io_rPwd,
-                                                                       RTL_TEXTENCODING_ISO_8859_1 );
-                        bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                    }
-                    if( bAuthenticated )
-                        bSuccess = true;
-                    else
-                    {
-                        if( i_xIHdl.is() )
-                        {
-                            bool bEntered = false;
-                            do
-                            {
-                                bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
-                                OString aIsoPwd = OUStringToOString( io_rPwd,
-                                                                               RTL_TEXTENCODING_ISO_8859_1 );
-                                bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                            } while( bEntered && ! bAuthenticated );
-                        }
-
-                        bSuccess = bAuthenticated;
-                    }
-                }
-                else if( i_xIHdl.is() )
-                {
-                    reportUnsupportedEncryptionFormat( i_xIHdl );
-                        //TODO: this should either be handled further down the
-                        // call stack, or else information that this has already
-                        // been handled should be passed down the call stack, so
-                        // that SfxBaseModel::load does not show an additional
-                        // "General Error" message box
-                }
-            }
-            else
-                bSuccess = true;
-        }
-    }
-    return bSuccess;
-}
 
 namespace {
 
@@ -1013,16 +973,36 @@ bool xpdf_ImportFromFile(const OUString& rURL,
     }
     OUString aDocName( rURL.copy( rURL.lastIndexOf( '/' )+1 ) );
 
-    // check for encryption, if necessary get password
+    /* Use poppler to check for encryption, and get password if necessary. */
+
     OUString aPwd;
+    GooString SysUPathGoo(OUStringToOString(aSysUPath, RTL_TEXTENCODING_UTF8).getStr());
+    // Try to open the PDF without password.
+    std::unique_ptr<PDFDoc> pPDFDoc(PDFDocFactory().createPDFDoc(SysUPathGoo, nullptr, nullptr));
     bool bIsEncrypted = false;
-    if( !checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) )
+    // If open unsuccessful and error code is errEncrypted, then prompt the user to provide a password.
+    // TODO: Implement both Owner Password and User Password separately.
+    if (!pPDFDoc->isOk())
     {
-        SAL_INFO(
-            "sdext.pdfimport",
-            "checkEncryption(" << aSysUPath << ") failed");
-        return false;
+        if (pPDFDoc->getErrorCode() == errEncrypted)
+        {
+            bIsEncrypted = true;
+            bool bEntered = false;
+            bool bAuthenticated = false;
+            GooString PwdGoo;
+            do
+            {
+                bEntered = getPassword(xIHdl, aPwd, !bEntered, aDocName);
+                PwdGoo = GooString(OUStringToOString(aPwd, RTL_TEXTENCODING_UTF8).getStr());
+                pPDFDoc.reset(PDFDocFactory().createPDFDoc(SysUPathGoo, &PwdGoo, &PwdGoo));
+                bAuthenticated = (pPDFDoc->isOk() and pPDFDoc->getErrorCode() != errEncrypted);
+            } while (bEntered && !bAuthenticated);
+            if (!bEntered and !bAuthenticated) // user clicked "Cancel"
+                return false;
+        }
     }
+    // pPDFDoc is not useful anymore, release now.
+    pPDFDoc.release();
 
     // Determine xpdfimport executable URL:
     OUString converterURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport");

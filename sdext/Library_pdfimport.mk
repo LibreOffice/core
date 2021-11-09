@@ -35,6 +35,9 @@ $(eval $(call gb_Library_use_externals,pdfimport,\
 	boost_headers \
     zlib \
     $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
+ifeq ($(ENABLE_POPPLER),TRUE)
+	poppler \
+endif
 ))
 
 ifeq ($(COM),MSC)
