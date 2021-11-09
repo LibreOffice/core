@@ -51,6 +51,24 @@
       "message": "Please also remove the leading comment from download.lst (\"For the Flatpak build...\")",
       "revId": "795b80f0354ed33d440599fc76b6be267364c8ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47ae2bdb_3f0d7459",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-09T15:39:21Z",
+      "side": 1,
+      "message": "done (adapted the comment)",
+      "parentUuid": "6bcc74f8_10fafa3b",
+      "revId": "795b80f0354ed33d440599fc76b6be267364c8ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
