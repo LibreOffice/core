@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+\
+#include <rtl/ustring.hxx>
 
 inline constexpr OUStringLiteral RID_SVXBMP_SELECT_REPORT = u"reportdesign/res/sx12464.png";
 inline constexpr OUStringLiteral RID_SVXBMP_FM_FIXEDTEXT = u"reportdesign/res/sx10597.png";

@@ -15,7 +15,7 @@ OUString const INCLUDED = "xxx";
 
 inline void f()
 {
-    // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
+    // expected-error@+1 {{rather declare this using OUStringConstExpr/OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
     static OUString const XXX = "xxx";
     (void)XXX;
 }
