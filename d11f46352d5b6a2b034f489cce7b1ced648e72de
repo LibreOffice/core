@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23717eb2_3a70e000",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-09T18:10:04Z",
+      "side": 1,
+      "message": "the failure is on mac and not related since UItests are only executed on linux. pushing",
+      "revId": "d11f46352d5b6a2b034f489cce7b1ced648e72de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
