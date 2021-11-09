@@ -1,0 +1,34 @@
+--- src/core/CLucene/util/Equators.h
++++ src/core/CLucene/util/Equators.h
+@@ -22,19 +22,19 @@
+ /** @internal */
+ class CLUCENE_INLINE_EXPORT Equals{
+ public:
+-	class CLUCENE_INLINE_EXPORT Int32:public CL_NS_STD(binary_function)<const int32_t*,const int32_t*,bool>
++	class CLUCENE_INLINE_EXPORT Int32
+ 	{
+ 	public:
+ 		bool operator()( const int32_t val1, const int32_t val2 ) const;
+ 	};
+ 	
+-	class CLUCENE_INLINE_EXPORT Char:public CL_NS_STD(binary_function)<const char*,const char*,bool>
++	class CLUCENE_INLINE_EXPORT Char
+ 	{
+ 	public:
+ 		bool operator()( const char* val1, const char* val2 ) const;
+ 	};
+ #ifdef _UCS2
+-	class CLUCENE_INLINE_EXPORT WChar: public CL_NS_STD(binary_function)<const wchar_t*,const wchar_t*,bool>
++	class CLUCENE_INLINE_EXPORT WChar
+ 	{
+ 	public:
+ 		bool operator()( const wchar_t* val1, const wchar_t* val2 ) const;
+@@ -48,7 +48,7 @@
+ 
+ 
+     template<typename _cl>
+-	class CLUCENE_INLINE_EXPORT Void:public CL_NS_STD(binary_function)<const void*,const void*,bool>
++	class CLUCENE_INLINE_EXPORT Void
+ 	{
+ 	public:
+ 		bool operator()( _cl* val1, _cl* val2 ) const{
