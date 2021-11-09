@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,rhino,\
 	external/rhino/rhino1_5R5.patch \
 	external/rhino/rhino1_5R5-find_swing.patch \
 	external/rhino/rhino1_5R5-updateToolTip.patch \
+	external/rhino/rhino-classpath.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,rhino,toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java,external/rhino/OfficeScriptInfo.java))
