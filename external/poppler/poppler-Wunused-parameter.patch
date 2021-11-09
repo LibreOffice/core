@@ -1,0 +1,38 @@
+From 4d2276cbf044e868c98f83f2909d17d91c962cb7 Mon Sep 17 00:00:00 2001
+From: Kevin Suo <suokunlong@126.com>
+Date: Mon, 8 Nov 2021 17:29:53 +0800
+Subject: [PATCH] Fix -Wunused-parameter 'psLevel', 'indent' and 'last'
+
+---
+ poppler/Stream.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/poppler/Stream.h b/poppler/Stream.h
+index 10028e40..dfc36f5f 100644
+--- a/poppler/Stream.h
++++ b/poppler/Stream.h
+@@ -1235,8 +1235,8 @@ public:
+     void reset() override;
+     int getChar() override;
+     int lookChar() override;
+-    GooString *getPSFilter(int psLevel, const char *indent) override { return nullptr; }
+-    bool isBinary(bool last = true) override;
++    GooString *getPSFilter(int /* psLevel */, const char * /* indent */) override { return nullptr; }
++    bool isBinary(bool /* last = true */) override;
+ 
+     int lookChar(int idx);
+ 
+@@ -1368,8 +1368,8 @@ public:
+     void reset() override;
+     int getChar() override;
+     int lookChar() override;
+-    GooString *getPSFilter(int psLevel, const char *indent) override { return nullptr; }
+-    bool isBinary(bool last = true) override { return true; }
++    GooString *getPSFilter(int /* psLevel */, const char * /* indent */) override { return nullptr; }
++    bool isBinary(bool /* last = true */) override { return true; }
+     bool isEncoder() override { return true; }
+ 
+ private:
+-- 
+2.31.1
+
