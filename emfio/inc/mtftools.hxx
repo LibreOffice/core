@@ -259,8 +259,6 @@ namespace emfio
 //Scalar constants
 #define UNDOCUMENTED_WIN_RCL_RELATION 32
 #define MS_FIXPOINT_BITCOUNT_28_4 4
-#define HUNDREDTH_MILLIMETERS_PER_MILLIINCH 2.54
-#define MILLIINCH_PER_TWIPS   1.44
 
 class MetaFontAction;
 

@@ -519,84 +519,38 @@ namespace emfio
 
             if ( mnGfxMode == GM_COMPATIBLE )
             {
+                fX2 -= mnWinOrgX;
+                fY2 -= mnWinOrgY;
+
                 switch( mnMapMode )
                 {
                     case MM_LOENGLISH :
                     {
-                        fX2 -= mnWinOrgX;
-                        fY2  = mnWinOrgY-fY2;
-                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH * 10;
-                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH * 10;
-                        double nDevOrgX = mnDevOrgX;
-                        if (mnPixX)
-                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
-                        fX2 += nDevOrgX;
-                        double nDevOrgY = mnDevOrgY;
-                        if (mnPixY)
-                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
-                        fY2 += nDevOrgY;
+                        fX2 = o3tl::convert(fX2, o3tl::Length::in100, o3tl::Length::mm100);
+                        fY2 = o3tl::convert(-fY2, o3tl::Length::in100, o3tl::Length::mm100);
                     }
                     break;
                     case MM_HIENGLISH :
                     {
-                        fX2 -= mnWinOrgX;
-                        fY2  = mnWinOrgY-fY2;
-                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
-                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
-                        double nDevOrgX = mnDevOrgX;
-                        if (mnPixX)
-                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
-                        fX2 += nDevOrgX;
-                        double nDevOrgY = mnDevOrgY;
-                        if (mnPixY)
-                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
-                        fY2 += nDevOrgY;
+                        fX2 = o3tl::convert(fX2, o3tl::Length::in1000, o3tl::Length::mm100);
+                        fY2 = o3tl::convert(-fY2, o3tl::Length::in1000, o3tl::Length::mm100);
                     }
                     break;
                     case MM_TWIPS:
                     {
-                        fX2 -= mnWinOrgX;
-                        fY2  = mnWinOrgY-fY2;
-                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH / MILLIINCH_PER_TWIPS;
-                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH / MILLIINCH_PER_TWIPS;
-                        double nDevOrgX = mnDevOrgX;
-                        if (mnPixX)
-                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
-                        fX2 += nDevOrgX;
-                        double nDevOrgY = mnDevOrgY;
-                        if (mnPixY)
-                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
-                        fY2 += nDevOrgY;
+                        fX2 = o3tl::convert(fX2, o3tl::Length::twip, o3tl::Length::mm100);
+                        fY2 = o3tl::convert(-fY2, o3tl::Length::twip, o3tl::Length::mm100);
                     }
                     break;
                     case MM_LOMETRIC :
                     {
-                        fX2 -= mnWinOrgX;
-                        fY2  = mnWinOrgY-fY2;
-                        fX2 *= 10;
-                        fY2 *= 10;
-                        double nDevOrgX = mnDevOrgX;
-                        if (mnPixX)
-                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
-                        fX2 += nDevOrgX;
-                        double nDevOrgY = mnDevOrgY;
-                        if (mnPixY)
-                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
-                        fY2 += nDevOrgY;
+                        fX2 = o3tl::convert(fX2, o3tl::Length::mm10, o3tl::Length::mm100);
+                        fY2 = o3tl::convert(-fY2, o3tl::Length::mm10, o3tl::Length::mm100);
                     }
                     break;
                     case MM_HIMETRIC : // in hundredth of a millimeter
                     {
-                        fX2 -= mnWinOrgX;
-                        fY2  = mnWinOrgY-fY2;
-                        double nDevOrgX = mnDevOrgX;
-                        if (mnPixX)
-                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
-                        fX2 += nDevOrgX;
-                        double nDevOrgY = mnDevOrgY;
-                        if (mnPixY)
-                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
-                        fY2 += nDevOrgY;
+                        fY2 *= -1;
                     }
                     break;
                     default :
@@ -608,8 +562,6 @@ namespace emfio
                         }
                         else
                         {
-                            fX2 -= mnWinOrgX;
-                            fY2 -= mnWinOrgY;
                             if ( mnMapMode != MM_TEXT )
                             {
                                 fX2 /= mnWinExtX;
@@ -617,14 +569,22 @@ namespace emfio
                                 fX2 *= mnDevWidth;
                                 fY2 *= mnDevHeight;
                             }
-                            fX2 += mnDevOrgX;
-                            fY2 += mnDevOrgY;   // fX2, fY2 now in device units
                             fX2 *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
                             fY2 *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
                         }
                     }
                     break;
                 }
+
+                double nDevOrgX = mnDevOrgX;
+                if (mnPixX)
+                    nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                fX2 += nDevOrgX;
+                double nDevOrgY = mnDevOrgY;
+                if (mnPixY)
+                    nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
+                fY2 += nDevOrgY;
+
                 fX2 -= mrclFrame.Left();
                 fY2 -= mrclFrame.Top();
             }
@@ -667,20 +627,20 @@ namespace emfio
                 {
                     case MM_LOENGLISH :
                     {
-                        fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
-                        fHeight*=-HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
+                        fWidth = o3tl::convert(fWidth, o3tl::Length::in100, o3tl::Length::mm100);
+                        fHeight = o3tl::convert(-fHeight, o3tl::Length::in100, o3tl::Length::mm100);
                     }
                     break;
                     case MM_HIENGLISH :
                     {
-                        fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
-                        fHeight*=-HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
+                        fWidth = o3tl::convert(fWidth, o3tl::Length::in1000, o3tl::Length::mm100);
+                        fHeight = o3tl::convert(-fHeight, o3tl::Length::in1000, o3tl::Length::mm100);
                     }
                     break;
                     case MM_LOMETRIC :
                     {
-                        fWidth *= 10;
-                        fHeight*=-10;
+                        fWidth = o3tl::convert(fWidth, o3tl::Length::mm10, o3tl::Length::mm100);
+                        fHeight = o3tl::convert(-fHeight, o3tl::Length::mm10, o3tl::Length::mm100);
                     }
                     break;
                     case MM_HIMETRIC : // in hundredth of millimeters
@@ -690,8 +650,8 @@ namespace emfio
                     break;
                     case MM_TWIPS:
                     {
-                        fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
-                        fHeight*=-HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
+                        fWidth = o3tl::convert(fWidth, o3tl::Length::twip, o3tl::Length::mm100);
+                        fHeight = o3tl::convert(-fHeight, o3tl::Length::twip, o3tl::Length::mm100);
                     }
                     break;
                     default :
