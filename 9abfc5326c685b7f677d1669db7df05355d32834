@@ -16,6 +16,23 @@
       "message": "Hi Andreas,\njust for your information, I\u0027ve just submitted this unittest for your fix, so we don\u0027t do the same work twice ",
       "revId": "9abfc5326c685b7f677d1669db7df05355d32834",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d52fefe8_86ca614a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-11-09T13:50:46Z",
+      "side": 1,
+      "message": "Thank you Xisco. Higly appreciated.",
+      "revId": "9abfc5326c685b7f677d1669db7df05355d32834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
