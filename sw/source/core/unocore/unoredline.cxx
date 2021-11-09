@@ -252,35 +252,35 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  )
 uno::Any  SwXRedlinePortion::GetPropertyValue( std::u16string_view rPropertyName, const SwRangeRedline& rRedline )
 {
     uno::Any aRet;
-    if(rPropertyName == u"" UNO_NAME_REDLINE_AUTHOR)
+    if(rPropertyName == UNO_NAME_REDLINE_AUTHOR)
         aRet <<= rRedline.GetAuthorString();
-    else if(rPropertyName == u"" UNO_NAME_REDLINE_DATE_TIME)
+    else if(rPropertyName == UNO_NAME_REDLINE_DATE_TIME)
     {
         aRet <<= rRedline.GetTimeStamp().GetUNODateTime();
     }
-    else if(rPropertyName == u"" UNO_NAME_REDLINE_COMMENT)
+    else if(rPropertyName == UNO_NAME_REDLINE_COMMENT)
         aRet <<= rRedline.GetComment();
-    else if(rPropertyName == u"" UNO_NAME_REDLINE_DESCRIPTION)
+    else if(rPropertyName == UNO_NAME_REDLINE_DESCRIPTION)
         aRet <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
-    else if(rPropertyName == u"" UNO_NAME_REDLINE_TYPE)
+    else if(rPropertyName == UNO_NAME_REDLINE_TYPE)
     {
         aRet <<= SwRedlineTypeToOUString(rRedline.GetType());
     }
-    else if(rPropertyName == u"" UNO_NAME_REDLINE_SUCCESSOR_DATA)
+    else if(rPropertyName == UNO_NAME_REDLINE_SUCCESSOR_DATA)
     {
         if(rRedline.GetRedlineData().Next())
             aRet <<= lcl_GetSuccessorProperties(rRedline);
     }
-    else if (rPropertyName == u"" UNO_NAME_REDLINE_IDENTIFIER)
+    else if (rPropertyName == UNO_NAME_REDLINE_IDENTIFIER)
     {
         aRet <<= OUString::number(
             sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
     }
-    else if (rPropertyName == u"" UNO_NAME_IS_IN_HEADER_FOOTER)
+    else if (rPropertyName == UNO_NAME_IS_IN_HEADER_FOOTER)
     {
         aRet <<= rRedline.GetDoc().IsInHeaderFooter( rRedline.GetPoint()->nNode );
     }
-    else if (rPropertyName == u"" UNO_NAME_MERGE_LAST_PARA)
+    else if (rPropertyName == UNO_NAME_MERGE_LAST_PARA)
     {
         aRet <<= !rRedline.IsDelLastPara();
     }

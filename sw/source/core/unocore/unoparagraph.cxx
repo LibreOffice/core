@@ -842,11 +842,11 @@ bool ::sw::GetDefaultTextContentValue(
 {
     if(!nWID)
     {
-        if(rPropertyName == u"" UNO_NAME_ANCHOR_TYPE)
+        if(rPropertyName == UNO_NAME_ANCHOR_TYPE)
             nWID = FN_UNO_ANCHOR_TYPE;
-        else if(rPropertyName == u"" UNO_NAME_ANCHOR_TYPES)
+        else if(rPropertyName == UNO_NAME_ANCHOR_TYPES)
             nWID = FN_UNO_ANCHOR_TYPES;
-        else if(rPropertyName == u"" UNO_NAME_TEXT_WRAP)
+        else if(rPropertyName == UNO_NAME_TEXT_WRAP)
             nWID = FN_UNO_TEXT_WRAP;
         else
             return false;

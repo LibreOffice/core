@@ -221,34 +221,69 @@ void SwXTextPortion::GetPropertyValue(
     {
         case FN_UNO_TEXT_PORTION_TYPE:
         {
-            const char* pRet;
+            const OUString* pRet = nullptr;
             switch (m_ePortionType)
             {
-            case PORTION_TEXT:          pRet = "Text";break;
-            case PORTION_FIELD:         pRet = "TextField";break;
-            case PORTION_FRAME:         pRet = "Frame";break;
-            case PORTION_FOOTNOTE:      pRet = "Footnote";break;
+            case PORTION_TEXT:
+                static constexpr OUStringLiteral TEXT = u"Text";
+                pRet = &static_cast<const OUString &>(TEXT);
+                break;
+            case PORTION_FIELD:
+                static constexpr OUStringLiteral TEXTFIELD = u"TextField";
+                pRet = &static_cast<const OUString &>(TEXTFIELD);
+                break;
+            case PORTION_FRAME:
+                static constexpr OUStringLiteral FRAME = u"Frame";
+                pRet = &static_cast<const OUString &>(FRAME);
+                break;
+            case PORTION_FOOTNOTE:
+                static constexpr OUStringLiteral FOOTNOTE = u"Footnote";
+                pRet = &static_cast<const OUString &>(FOOTNOTE);
+                break;
             case PORTION_REFMARK_START:
-            case PORTION_REFMARK_END:   pRet = UNO_NAME_REFERENCE_MARK;break;
+            case PORTION_REFMARK_END:   pRet = &static_cast<const OUString &>(UNO_NAME_REFERENCE_MARK); break;
             case PORTION_TOXMARK_START:
-            case PORTION_TOXMARK_END:   pRet = UNO_NAME_DOCUMENT_INDEX_MARK;break;
+            case PORTION_TOXMARK_END:   pRet = &static_cast<const OUString &>(UNO_NAME_DOCUMENT_INDEX_MARK); break;
             case PORTION_BOOKMARK_START :
-            case PORTION_BOOKMARK_END : pRet = UNO_NAME_BOOKMARK;break;
+            case PORTION_BOOKMARK_END : pRet = &static_cast<const OUString &>(UNO_NAME_BOOKMARK); break;
             case PORTION_REDLINE_START:
-            case PORTION_REDLINE_END:   pRet = "Redline";break;
+            case PORTION_REDLINE_END:
+                static constexpr OUStringLiteral REDLINE = u"Redline";
+                pRet = &static_cast<const OUString &>(REDLINE);
+                break;
             case PORTION_RUBY_START:
-            case PORTION_RUBY_END:      pRet = "Ruby";break;
-            case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
-            case PORTION_META:          pRet = UNO_NAME_META; break;
-            case PORTION_FIELD_START:pRet = "TextFieldStart";break;
-            case PORTION_FIELD_SEP:     pRet = "TextFieldSeparator";break;
-            case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
-            case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
+            case PORTION_RUBY_END:
+                static constexpr OUStringLiteral RUBY = u"Ruby";
+                pRet = &static_cast<const OUString &>(RUBY);
+                break;
+            case PORTION_SOFT_PAGEBREAK:
+                static constexpr OUStringLiteral SOFTPAGEBREAK = u"SoftPageBreak";
+                pRet = &static_cast<const OUString &>(SOFTPAGEBREAK);
+                break;
+            case PORTION_META:          pRet = &static_cast<const OUString &>(UNO_NAME_META); break;
+            case PORTION_FIELD_START:
+                static constexpr OUStringLiteral TEXTFIELDSTART = u"TextFieldStart";
+                pRet = &static_cast<const OUString &>(TEXTFIELDSTART);
+                break;
+            case PORTION_FIELD_SEP:
+                static constexpr OUStringLiteral TEXTFIELDSEPARATOR = u"TextFieldSeparator";
+                pRet = &static_cast<const OUString &>(TEXTFIELDSEPARATOR);
+                break;
+            case PORTION_FIELD_END:
+                static constexpr OUStringLiteral TEXTFIELDEND = u"TextFieldEnd";
+                pRet = &static_cast<const OUString &>(TEXTFIELDEND);
+                break;
+            case PORTION_FIELD_START_END:
+                static constexpr OUStringLiteral TEXTFIELDSTARTEND = u"TextFieldStartEnd";
+                pRet = &static_cast<const OUString &>(TEXTFIELDSTARTEND);
+                break;
             case PORTION_ANNOTATION:
-                pRet = "Annotation";
+                static constexpr OUStringLiteral ANNOTATION = u"Annotation";
+                pRet = &static_cast<const OUString &>(ANNOTATION);
                 break;
             case PORTION_ANNOTATION_END:
-                pRet = "AnnotationEnd";
+                static constexpr OUStringLiteral ANNOTATIONEND = u"AnnotationEnd";
+                pRet = &static_cast<const OUString &>(ANNOTATIONEND);
                 break;
             default:
                 pRet = nullptr;
@@ -256,7 +291,7 @@ void SwXTextPortion::GetPropertyValue(
 
             OUString sRet;
             if( pRet )
-                sRet = OUString::createFromAscii( pRet );
+                sRet = *pRet;
             rVal <<= sRet;
         }
         break;

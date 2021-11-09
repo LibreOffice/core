@@ -80,238 +80,418 @@ using namespace ::xmloff::token;
 
 // entry list for graphic properties
 
+constexpr OUStringLiteral USER_DEFINED_ATTRIBUTES = u"UserDefinedAttributes";
+constexpr OUStringLiteral LINE_STYLE = u"LineStyle";
+constexpr OUStringLiteral ADJUST_BLUE = u"AdjustBlue";
+constexpr OUStringLiteral ADJUST_CONTRAST = u"AdjustContrast";
+constexpr OUStringLiteral ADJUST_GREEN = u"AdjustGreen";
+constexpr OUStringLiteral ADJUST_LUMINANCE = u"AdjustLuminance";
+constexpr OUStringLiteral ADJUST_RED = u"AdjustRed";
+constexpr OUStringLiteral ASPECT = u"Aspect";
+constexpr OUStringLiteral BACKGROUND_FULL_SIZE = u"BackgroundFullSize";
+constexpr OUStringLiteral CAPTION_ANGLE = u"CaptionAngle";
+constexpr OUStringLiteral CAPTION_ESCAPE_ABSOLUTE = u"CaptionEscapeAbsolute";
+constexpr OUStringLiteral CAPTION_ESCAPE_DIRECTION = u"CaptionEscapeDirection";
+constexpr OUStringLiteral CAPTION_ESCAPE_RELATIVE = u"CaptionEscapeRelative";
+constexpr OUStringLiteral CAPTION_GAP = u"CaptionGap";
+constexpr OUStringLiteral CAPTION_IS_ESCAPE_RELATIVE = u"CaptionIsEscapeRelative";
+constexpr OUStringLiteral CAPTION_IS_FIT_LINE_LENGTH = u"CaptionIsFitLineLength";
+constexpr OUStringLiteral CAPTION_IS_FIXED_ANGLE = u"CaptionIsFixedAngle";
+constexpr OUStringLiteral CAPTION_LINE_LENGTH = u"CaptionLineLength";
+constexpr OUStringLiteral CAPTION_TYPE = u"CaptionType";
+constexpr OUStringLiteral CHANGE = u"Change";
+constexpr OUStringLiteral CONTROL_BACKGROUND = u"ControlBackground";
+constexpr OUStringLiteral CONTROL_BORDER = u"ControlBorder";
+constexpr OUStringLiteral CONTROL_BORDER_COLOR = u"ControlBorderColor";
+constexpr OUStringLiteral CONTROL_DATA_STYLE = u"ControlDataStyle";
+constexpr OUStringLiteral CONTROL_SYMBOL_COLOR = u"ControlSymbolColor";
+constexpr OUStringLiteral CONTROL_TEXT_EMPHASIS = u"ControlTextEmphasis";
+constexpr OUStringLiteral CONTROL_WRITING_MODE = u"ControlWritingMode";
+constexpr OUStringLiteral D3_DBACKSCALE = u"D3DBackscale";
+constexpr OUStringLiteral D3_DCLOSE_BACK = u"D3DCloseBack";
+constexpr OUStringLiteral D3_DCLOSE_FRONT = u"D3DCloseFront";
+constexpr OUStringLiteral D3_DDEPTH = u"D3DDepth";
+constexpr OUStringLiteral D3_DDOUBLE_SIDED = u"D3DDoubleSided";
+constexpr OUStringLiteral D3_DEND_ANGLE = u"D3DEndAngle";
+constexpr OUStringLiteral D3_DHORIZONTAL_SEGMENTS = u"D3DHorizontalSegments";
+constexpr OUStringLiteral D3_DMATERIAL_COLOR = u"D3DMaterialColor";
+constexpr OUStringLiteral D3_DMATERIAL_EMISSION = u"D3DMaterialEmission";
+constexpr OUStringLiteral D3_DMATERIAL_SPECULAR = u"D3DMaterialSpecular";
+constexpr OUStringLiteral D3_DMATERIAL_SPECULAR_INTENSITY = u"D3DMaterialSpecularIntensity";
+constexpr OUStringLiteral D3_DNORMALS_INVERT = u"D3DNormalsInvert";
+constexpr OUStringLiteral D3_DNORMALS_KIND = u"D3DNormalsKind";
+constexpr OUStringLiteral D3_DPERCENT_DIAGONAL = u"D3DPercentDiagonal";
+constexpr OUStringLiteral D3_DSHADOW3_D = u"D3DShadow3D";
+constexpr OUStringLiteral D3_DTEXTURE_FILTER = u"D3DTextureFilter";
+constexpr OUStringLiteral D3_DTEXTURE_KIND = u"D3DTextureKind";
+constexpr OUStringLiteral D3_DTEXTURE_MODE = u"D3DTextureMode";
+constexpr OUStringLiteral D3_DTEXTURE_PROJECTION_X = u"D3DTextureProjectionX";
+constexpr OUStringLiteral D3_DTEXTURE_PROJECTION_Y = u"D3DTextureProjectionY";
+constexpr OUStringLiteral D3_DVERTICAL_SEGMENTS = u"D3DVerticalSegments";
+constexpr OUStringLiteral EDGE_NODE1_HORZ_DIST = u"EdgeNode1HorzDist";
+constexpr OUStringLiteral EDGE_NODE1_VERT_DIST = u"EdgeNode1VertDist";
+constexpr OUStringLiteral EDGE_NODE2_HORZ_DIST = u"EdgeNode2HorzDist";
+constexpr OUStringLiteral EDGE_NODE2_VERT_DIST = u"EdgeNode2VertDist";
+constexpr OUStringLiteral EFFECT = u"Effect";
+constexpr OUStringLiteral FILL_BACKGROUND = u"FillBackground";
+constexpr OUStringLiteral FILL_BITMAP_LOGICAL_SIZE = u"FillBitmapLogicalSize";
+constexpr OUStringLiteral FILL_BITMAP_MODE = u"FillBitmapMode";
+constexpr OUStringLiteral FILL_BITMAP_NAME = u"FillBitmapName";
+constexpr OUStringLiteral FILL_BITMAP_OFFSET_X = u"FillBitmapOffsetX";
+constexpr OUStringLiteral FILL_BITMAP_OFFSET_Y = u"FillBitmapOffsetY";
+constexpr OUStringLiteral FILL_BITMAP_POSITION_OFFSET_X = u"FillBitmapPositionOffsetX";
+constexpr OUStringLiteral FILL_BITMAP_POSITION_OFFSET_Y = u"FillBitmapPositionOffsetY";
+constexpr OUStringLiteral FILL_BITMAP_RECTANGLE_POINT = u"FillBitmapRectanglePoint";
+constexpr OUStringLiteral FILL_BITMAP_SIZE_X = u"FillBitmapSizeX";
+constexpr OUStringLiteral FILL_BITMAP_SIZE_Y = u"FillBitmapSizeY";
+constexpr OUStringLiteral FILL_COLOR = u"FillColor";
+constexpr OUStringLiteral FILL_COLOR2 = u"FillColor2";
+constexpr OUStringLiteral FILL_GRADIENT_NAME = u"FillGradientName";
+constexpr OUStringLiteral FILL_GRADIENT_STEP_COUNT = u"FillGradientStepCount";
+constexpr OUStringLiteral FILL_HATCH_NAME = u"FillHatchName";
+constexpr OUStringLiteral FILL_STYLE = u"FillStyle";
+constexpr OUStringLiteral FILL_TRANSPARENCE = u"FillTransparence";
+constexpr OUStringLiteral FILL_TRANSPARENCE_GRADIENT_NAME = u"FillTransparenceGradientName";
+constexpr OUStringLiteral FONT_WORK_ADJUST = u"FontWorkAdjust";
+constexpr OUStringLiteral FONT_WORK_DISTANCE = u"FontWorkDistance";
+constexpr OUStringLiteral FONT_WORK_FORM = u"FontWorkForm";
+constexpr OUStringLiteral FONT_WORK_HIDE_FORM = u"FontWorkHideForm";
+constexpr OUStringLiteral FONT_WORK_MIRROR = u"FontWorkMirror";
+constexpr OUStringLiteral FONT_WORK_OUTLINE = u"FontWorkOutline";
+constexpr OUStringLiteral FONT_WORK_SHADOW = u"FontWorkShadow";
+constexpr OUStringLiteral FONT_WORK_SHADOW_COLOR = u"FontWorkShadowColor";
+constexpr OUStringLiteral FONT_WORK_SHADOW_OFFSET_X = u"FontWorkShadowOffsetX";
+constexpr OUStringLiteral FONT_WORK_SHADOW_OFFSET_Y = u"FontWorkShadowOffsetY";
+constexpr OUStringLiteral FONT_WORK_SHADOW_TRANSPARENCE = u"FontWorkShadowTransparence";
+constexpr OUStringLiteral FONT_WORK_START = u"FontWorkStart";
+constexpr OUStringLiteral FONT_WORK_STYLE = u"FontWorkStyle";
+constexpr OUStringLiteral FRAME_IS_AUTO_SCROLL = u"FrameIsAutoScroll";
+constexpr OUStringLiteral FRAME_IS_BORDER = u"FrameIsBorder";
+constexpr OUStringLiteral FRAME_MARGIN_HEIGHT = u"FrameMarginHeight";
+constexpr OUStringLiteral FRAME_MARGIN_WIDTH = u"FrameMarginWidth";
+constexpr OUStringLiteral GAMMA = u"Gamma";
+constexpr OUStringLiteral GLOW_EFFECT_COLOR = u"GlowEffectColor";
+constexpr OUStringLiteral GLOW_EFFECT_RADIUS = u"GlowEffectRadius";
+constexpr OUStringLiteral GLOW_EFFECT_TRANSPARENCY = u"GlowEffectTransparency";
+constexpr OUStringLiteral GRAPHIC_COLOR_MODE = u"GraphicColorMode";
+constexpr OUStringLiteral GRAPHIC_CROP = u"GraphicCrop";
+constexpr OUStringLiteral HIGH_RES_DURATION = u"HighResDuration";
+constexpr OUStringLiteral IMAGE_SCALE_MODE = u"ImageScaleMode";
+constexpr OUStringLiteral IS_BACKGROUND_OBJECTS_VISIBLE = u"IsBackgroundObjectsVisible";
+constexpr OUStringLiteral IS_BACKGROUND_VISIBLE = u"IsBackgroundVisible";
+constexpr OUStringLiteral IS_DATE_TIME_VISIBLE = u"IsDateTimeVisible";
+constexpr OUStringLiteral IS_FOOTER_VISIBLE = u"IsFooterVisible";
+constexpr OUStringLiteral IS_HEADER_VISIBLE = u"IsHeaderVisible";
+constexpr OUStringLiteral IS_INTERNAL = u"IsInternal";
+constexpr OUStringLiteral IS_MIRRORED = u"IsMirrored";
+constexpr OUStringLiteral IS_PAGE_NUMBER_VISIBLE = u"IsPageNumberVisible";
+constexpr OUStringLiteral LINE_CAP = u"LineCap";
+constexpr OUStringLiteral LINE_COLOR = u"LineColor";
+constexpr OUStringLiteral LINE_DASH_NAME = u"LineDashName";
+constexpr OUStringLiteral LINE_END_CENTER = u"LineEndCenter";
+constexpr OUStringLiteral LINE_END_NAME = u"LineEndName";
+constexpr OUStringLiteral LINE_END_WIDTH = u"LineEndWidth";
+constexpr OUStringLiteral LINE_JOINT = u"LineJoint";
+constexpr OUStringLiteral LINE_START_CENTER = u"LineStartCenter";
+constexpr OUStringLiteral LINE_START_NAME = u"LineStartName";
+constexpr OUStringLiteral LINE_START_WIDTH = u"LineStartWidth";
+constexpr OUStringLiteral LINE_TRANSPARENCE = u"LineTransparence";
+constexpr OUStringLiteral LINE_WIDTH = u"LineWidth";
+constexpr OUStringLiteral MEASURE_BELOW_REFERENCE_EDGE = u"MeasureBelowReferenceEdge";
+constexpr OUStringLiteral MEASURE_DECIMAL_PLACES = u"MeasureDecimalPlaces";
+constexpr OUStringLiteral MEASURE_HELP_LINE1_LENGTH = u"MeasureHelpLine1Length";
+constexpr OUStringLiteral MEASURE_HELP_LINE2_LENGTH = u"MeasureHelpLine2Length";
+constexpr OUStringLiteral MEASURE_HELP_LINE_DISTANCE = u"MeasureHelpLineDistance";
+constexpr OUStringLiteral MEASURE_HELP_LINE_OVERHANG = u"MeasureHelpLineOverhang";
+constexpr OUStringLiteral MEASURE_LINE_DISTANCE = u"MeasureLineDistance";
+constexpr OUStringLiteral MEASURE_SHOW_UNIT = u"MeasureShowUnit";
+constexpr OUStringLiteral MEASURE_TEXT_HORIZONTAL_POSITION = u"MeasureTextHorizontalPosition";
+constexpr OUStringLiteral MEASURE_TEXT_ROTATE90 = u"MeasureTextRotate90";
+constexpr OUStringLiteral MEASURE_TEXT_VERTICAL_POSITION = u"MeasureTextVerticalPosition";
+constexpr OUStringLiteral MEASURE_UNIT = u"MeasureUnit";
+constexpr OUStringLiteral MOVE_PROTECT = u"MoveProtect";
+constexpr OUStringLiteral NUMBERING_RULES = u"NumberingRules";
+constexpr OUStringLiteral SHADOW = u"Shadow";
+constexpr OUStringLiteral SHADOW_BLUR = u"ShadowBlur";
+constexpr OUStringLiteral SHADOW_COLOR = u"ShadowColor";
+constexpr OUStringLiteral SHADOW_TRANSPARENCE = u"ShadowTransparence";
+constexpr OUStringLiteral SHADOW_XDISTANCE = u"ShadowXDistance";
+constexpr OUStringLiteral SHADOW_YDISTANCE = u"ShadowYDistance";
+constexpr OUStringLiteral SIZE_PROTECT = u"SizeProtect";
+constexpr OUStringLiteral SOFT_EDGE_RADIUS = u"SoftEdgeRadius";
+constexpr OUStringLiteral SOUND = u"Sound";
+constexpr OUStringLiteral SPEED = u"Speed";
+constexpr OUStringLiteral TEXT_ANIMATION_AMOUNT = u"TextAnimationAmount";
+constexpr OUStringLiteral TEXT_ANIMATION_COUNT = u"TextAnimationCount";
+constexpr OUStringLiteral TEXT_ANIMATION_DELAY = u"TextAnimationDelay";
+constexpr OUStringLiteral TEXT_ANIMATION_DIRECTION = u"TextAnimationDirection";
+constexpr OUStringLiteral TEXT_ANIMATION_KIND = u"TextAnimationKind";
+constexpr OUStringLiteral TEXT_ANIMATION_START_INSIDE = u"TextAnimationStartInside";
+constexpr OUStringLiteral TEXT_ANIMATION_STOP_INSIDE = u"TextAnimationStopInside";
+constexpr OUStringLiteral TEXT_AUTO_GROW_HEIGHT = u"TextAutoGrowHeight";
+constexpr OUStringLiteral TEXT_AUTO_GROW_WIDTH = u"TextAutoGrowWidth";
+constexpr OUStringLiteral TEXT_CHAIN_NEXT_NAME = u"TextChainNextName";
+constexpr OUStringLiteral TEXT_COLUMNS = u"TextColumns";
+constexpr OUStringLiteral TEXT_CONTOUR_FRAME = u"TextContourFrame";
+constexpr OUStringLiteral TEXT_FIT_TO_SIZE = u"TextFitToSize";
+constexpr OUStringLiteral TEXT_HORIZONTAL_ADJUST = u"TextHorizontalAdjust";
+constexpr OUStringLiteral TEXT_LEFT_DISTANCE = u"TextLeftDistance";
+constexpr OUStringLiteral TEXT_LOWER_DISTANCE = u"TextLowerDistance";
+constexpr OUStringLiteral TEXT_MAXIMUM_FRAME_HEIGHT = u"TextMaximumFrameHeight";
+constexpr OUStringLiteral TEXT_MAXIMUM_FRAME_WIDTH = u"TextMaximumFrameWidth";
+constexpr OUStringLiteral TEXT_MINIMUM_FRAME_HEIGHT = u"TextMinimumFrameHeight";
+constexpr OUStringLiteral TEXT_MINIMUM_FRAME_WIDTH = u"TextMinimumFrameWidth";
+constexpr OUStringLiteral TEXT_RIGHT_DISTANCE = u"TextRightDistance";
+constexpr OUStringLiteral TEXT_UPPER_DISTANCE = u"TextUpperDistance";
+constexpr OUStringLiteral TEXT_VERTICAL_ADJUST = u"TextVerticalAdjust";
+constexpr OUStringLiteral TEXT_WORD_WRAP = u"TextWordWrap";
+constexpr OUStringLiteral TEXT_WRITING_MODE = u"TextWritingMode";
+constexpr OUStringLiteral TRANSITION_DIRECTION = u"TransitionDirection";
+constexpr OUStringLiteral TRANSITION_FADE_COLOR = u"TransitionFadeColor";
+constexpr OUStringLiteral TRANSITION_SUBTYPE = u"TransitionSubtype";
+constexpr OUStringLiteral TRANSITION_TYPE = u"TransitionType";
+constexpr OUStringLiteral TRANSPARENCY = u"Transparency";
+constexpr OUStringLiteral USE_BANDING_COLUMN_STYLE = u"UseBandingColumnStyle";
+constexpr OUStringLiteral USE_BANDING_ROW_STYLE = u"UseBandingRowStyle";
+constexpr OUStringLiteral USE_FIRST_COLUMN_STYLE = u"UseFirstColumnStyle";
+constexpr OUStringLiteral USE_FIRST_ROW_STYLE = u"UseFirstRowStyle";
+constexpr OUStringLiteral USE_LAST_COLUMN_STYLE = u"UseLastColumnStyle";
+constexpr OUStringLiteral USE_LAST_ROW_STYLE = u"UseLastRowStyle";
+constexpr OUStringLiteral VISIBLE = u"Visible";
+constexpr OUStringLiteral VISIBLE_AREA = u"VisibleArea";
+
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // this entry must be first! this is needed for XMLShapeImportHelper::CreateExternalShapePropMapper
 
     // ^^^though CreateExternalShapePropMapper is gone now, hmm^^^
-    GMAP( "UserDefinedAttributes",          XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    GMAP( USER_DEFINED_ATTRIBUTES,          XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     // stroke attributes
-    GMAP( "LineStyle",                      XML_NAMESPACE_DRAW, XML_STROKE,                 XML_SD_TYPE_STROKE, 0 ),
-    GMAP( "LineDashName",                   XML_NAMESPACE_DRAW, XML_STROKE_DASH,            XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT , CTF_DASHNAME ),
-    GMAP( "LineWidth",                      XML_NAMESPACE_SVG,  XML_STROKE_WIDTH,           XML_TYPE_MEASURE, 0 ),
-    GMAP_D("LineColor",                     XML_NAMESPACE_SVG,  XML_STROKE_COLOR,           XML_TYPE_COLOR, 0),
-    GMAP( "LineStartName",                  XML_NAMESPACE_DRAW, XML_MARKER_START,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_LINESTARTNAME ),
-    GMAP( "LineStartWidth",                 XML_NAMESPACE_DRAW, XML_MARKER_START_WIDTH,     XML_TYPE_MEASURE, 0 ),
-    GMAP( "LineStartCenter",                XML_NAMESPACE_DRAW, XML_MARKER_START_CENTER,    XML_TYPE_BOOL, 0 ),
-    GMAP( "LineEndName",                    XML_NAMESPACE_DRAW, XML_MARKER_END,             XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_LINEENDNAME ),
-    GMAP( "LineEndWidth",                   XML_NAMESPACE_DRAW, XML_MARKER_END_WIDTH,       XML_TYPE_MEASURE, 0 ),
-    GMAP( "LineEndCenter",                  XML_NAMESPACE_DRAW, XML_MARKER_END_CENTER,      XML_TYPE_BOOL, 0 ),
-    GMAP( "LineTransparence",               XML_NAMESPACE_SVG,  XML_STROKE_OPACITY,         XML_SD_TYPE_OPACITY, 0 ),
-    GMAP( "LineJoint",                      XML_NAMESPACE_DRAW, XML_STROKE_LINEJOIN,        XML_SD_TYPE_LINEJOIN, 0 ),
-    GMAP( "LineCap",                        XML_NAMESPACE_SVG , XML_STROKE_LINECAP,         XML_SD_TYPE_LINECAP, 0 ),
+    GMAP( LINE_STYLE,                      XML_NAMESPACE_DRAW, XML_STROKE,                 XML_SD_TYPE_STROKE, 0 ),
+    GMAP( LINE_DASH_NAME,                   XML_NAMESPACE_DRAW, XML_STROKE_DASH,            XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT , CTF_DASHNAME ),
+    GMAP( LINE_WIDTH,                      XML_NAMESPACE_SVG,  XML_STROKE_WIDTH,           XML_TYPE_MEASURE, 0 ),
+    GMAP_D(LINE_COLOR,                     XML_NAMESPACE_SVG,  XML_STROKE_COLOR,           XML_TYPE_COLOR, 0),
+    GMAP( LINE_START_NAME,                  XML_NAMESPACE_DRAW, XML_MARKER_START,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_LINESTARTNAME ),
+    GMAP( LINE_START_WIDTH,                 XML_NAMESPACE_DRAW, XML_MARKER_START_WIDTH,     XML_TYPE_MEASURE, 0 ),
+    GMAP( LINE_START_CENTER,                XML_NAMESPACE_DRAW, XML_MARKER_START_CENTER,    XML_TYPE_BOOL, 0 ),
+    GMAP( LINE_END_NAME,                    XML_NAMESPACE_DRAW, XML_MARKER_END,             XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_LINEENDNAME ),
+    GMAP( LINE_END_WIDTH,                   XML_NAMESPACE_DRAW, XML_MARKER_END_WIDTH,       XML_TYPE_MEASURE, 0 ),
+    GMAP( LINE_END_CENTER,                  XML_NAMESPACE_DRAW, XML_MARKER_END_CENTER,      XML_TYPE_BOOL, 0 ),
+    GMAP( LINE_TRANSPARENCE,               XML_NAMESPACE_SVG,  XML_STROKE_OPACITY,         XML_SD_TYPE_OPACITY, 0 ),
+    GMAP( LINE_JOINT,                      XML_NAMESPACE_DRAW, XML_STROKE_LINEJOIN,        XML_SD_TYPE_LINEJOIN, 0 ),
+    GMAP( LINE_CAP,                        XML_NAMESPACE_SVG , XML_STROKE_LINECAP,         XML_SD_TYPE_LINECAP, 0 ),
 
     // fill attributes
-    GMAP( "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, CTF_FILLSTYLE ),
-    GMAP_D("FillColor",                     XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, CTF_FILLCOLOR ),
-    GMAP_D("FillColor2",                    XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0),
-    GMAP( "FillGradientName",               XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
-    GMAP( "FillGradientStepCount",          XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16, 0 ),
-    GMAP( "FillHatchName",                  XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
-    GMAP( "FillBackground",                 XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL, 0 ),
-    GMAP( "FillBitmapName",                 XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
-    GMAP( "FillTransparence",               XML_NAMESPACE_DRAW, XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ),    // exists in SW, too
-    GMAP( "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLTRANSNAME ),
-    GMAP( "FillBitmapSizeX",                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "FillBitmapSizeY",                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "FillBitmapMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "FillBitmapPositionOffsetX",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT, 0 ),
-    GMAP( "FillBitmapPositionOffsetY",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT, 0 ),
-    GMAP( "FillBitmapRectanglePoint",       XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 ),
-    GMAP( "FillBitmapOffsetX",              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X ),
-    GMAP( "FillBitmapOffsetY",              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y ),
+    GMAP( FILL_STYLE,                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, CTF_FILLSTYLE ),
+    GMAP_D(FILL_COLOR,                     XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, CTF_FILLCOLOR ),
+    GMAP_D(FILL_COLOR2,                    XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0),
+    GMAP( FILL_GRADIENT_NAME,               XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
+    GMAP( FILL_GRADIENT_STEP_COUNT,          XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16, 0 ),
+    GMAP( FILL_HATCH_NAME,                  XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
+    GMAP( FILL_BACKGROUND,                 XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL, 0 ),
+    GMAP( FILL_BITMAP_NAME,                 XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
+    GMAP( FILL_TRANSPARENCE,               XML_NAMESPACE_DRAW, XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ),    // exists in SW, too
+    GMAP( FILL_TRANSPARENCE_GRADIENT_NAME,   XML_NAMESPACE_DRAW, XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLTRANSNAME ),
+    GMAP( FILL_BITMAP_SIZE_X,                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( FILL_BITMAP_LOGICAL_SIZE,          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( FILL_BITMAP_SIZE_Y,                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( FILL_BITMAP_LOGICAL_SIZE,          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( FILL_BITMAP_MODE,                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( FILL_BITMAP_POSITION_OFFSET_X,      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT, 0 ),
+    GMAP( FILL_BITMAP_POSITION_OFFSET_Y,      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT, 0 ),
+    GMAP( FILL_BITMAP_RECTANGLE_POINT,       XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 ),
+    GMAP( FILL_BITMAP_OFFSET_X,              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X ),
+    GMAP( FILL_BITMAP_OFFSET_Y,              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y ),
 
     // text frame attributes
-    GMAP( "TextHorizontalAdjust",           XML_NAMESPACE_DRAW, XML_TEXTAREA_HORIZONTAL_ALIGN,  XML_SD_TYPE_TEXT_ALIGN, 0 ),
-    GMAP( "TextVerticalAdjust",             XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN,    XML_SD_TYPE_VERTICAL_ALIGN, 0 ),
-    GMAP( "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT,       XML_TYPE_BOOL, 0 ),
-    GMAP( "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH,        XML_TYPE_BOOL, 0 ),
-    GMAP( "TextFitToSize",                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_SD_TYPE_FITTOSIZE|MID_FLAG_MERGE_PROPERTY, 0),
-    GMAPV( "TextFitToSize",                 XML_NAMESPACE_STYLE, XML_SHRINK_TO_FIT,         XML_SD_TYPE_FITTOSIZE_AUTOFIT|MID_FLAG_MERGE_PROPERTY, 0, SvtSaveOptions::ODFSVER_012 ),
-    GMAP( "TextContourFrame",               XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR,         XML_TYPE_BOOL, 0 ),
-    GMAP( "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 ),
-    GMAP( "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 ),
-    GMAP( "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   XML_MIN_HEIGHT,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   XML_MIN_WIDTH,              XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "TextUpperDistance",              XML_NAMESPACE_FO,   XML_PADDING_TOP,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextLowerDistance",              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextLeftDistance",               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextRightDistance",              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    PMAP( "TextWritingMode",                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE|MID_FLAG_MULTI_PROPERTY, CTF_WRITINGMODE ),
-    GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
-    GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
-    GMAP( "TextWordWrap",                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
-    GMAP( "TextChainNextName",              XML_NAMESPACE_DRAW,   XML_CHAIN_NEXT_NAME,      XML_TYPE_STRING, 0 ),
+    GMAP( TEXT_HORIZONTAL_ADJUST,           XML_NAMESPACE_DRAW, XML_TEXTAREA_HORIZONTAL_ALIGN,  XML_SD_TYPE_TEXT_ALIGN, 0 ),
+    GMAP( TEXT_VERTICAL_ADJUST,             XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN,    XML_SD_TYPE_VERTICAL_ALIGN, 0 ),
+    GMAP( TEXT_AUTO_GROW_HEIGHT,             XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT,       XML_TYPE_BOOL, 0 ),
+    GMAP( TEXT_AUTO_GROW_WIDTH,              XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH,        XML_TYPE_BOOL, 0 ),
+    GMAP( TEXT_FIT_TO_SIZE,                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_SD_TYPE_FITTOSIZE|MID_FLAG_MERGE_PROPERTY, 0),
+    GMAPV( TEXT_FIT_TO_SIZE,                 XML_NAMESPACE_STYLE, XML_SHRINK_TO_FIT,         XML_SD_TYPE_FITTOSIZE_AUTOFIT|MID_FLAG_MERGE_PROPERTY, 0, SvtSaveOptions::ODFSVER_012 ),
+    GMAP( TEXT_CONTOUR_FRAME,               XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR,         XML_TYPE_BOOL, 0 ),
+    GMAP( TEXT_MAXIMUM_FRAME_HEIGHT,         XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 ),
+    GMAP( TEXT_MAXIMUM_FRAME_WIDTH,          XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 ),
+    GMAP( TEXT_MINIMUM_FRAME_HEIGHT,         XML_NAMESPACE_FO,   XML_MIN_HEIGHT,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
+    GMAP( TEXT_MINIMUM_FRAME_WIDTH,          XML_NAMESPACE_FO,   XML_MIN_WIDTH,              XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( TEXT_UPPER_DISTANCE,              XML_NAMESPACE_FO,   XML_PADDING_TOP,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
+    GMAP( TEXT_LOWER_DISTANCE,              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
+    GMAP( TEXT_LEFT_DISTANCE,               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
+    GMAP( TEXT_RIGHT_DISTANCE,              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
+    PMAP( TEXT_WRITING_MODE,                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE|MID_FLAG_MULTI_PROPERTY, CTF_WRITINGMODE ),
+    GMAP( NUMBERING_RULES,                 XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
+    GMAP( NUMBERING_RULES,                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
+    GMAP( TEXT_WORD_WRAP,                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
+    GMAP( TEXT_CHAIN_NEXT_NAME,              XML_NAMESPACE_DRAW,   XML_CHAIN_NEXT_NAME,      XML_TYPE_STRING, 0 ),
 
-    GMAP( "TextColumns",                    XML_NAMESPACE_STYLE, XML_COLUMNS, XML_TYPE_TEXT_COLUMNS|MID_FLAG_ELEMENT_ITEM, CTF_TEXTCOLUMNS ),
+    GMAP( TEXT_COLUMNS,                    XML_NAMESPACE_STYLE, XML_COLUMNS, XML_TYPE_TEXT_COLUMNS|MID_FLAG_ELEMENT_ITEM, CTF_TEXTCOLUMNS ),
 
     // shadow attributes
-    GMAP( "Shadow",                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
-    GMAP( "ShadowXDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_X,        XML_TYPE_MEASURE, 0 ),
-    GMAP( "ShadowYDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_Y,        XML_TYPE_MEASURE, 0 ),
-    GMAP( "ShadowColor",                        XML_NAMESPACE_DRAW, XML_SHADOW_COLOR,           XML_TYPE_COLOR, 0 ),
-    GMAP( "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
-    GMAPV( "ShadowBlur",                     XML_NAMESPACE_LO_EXT, XML_SHADOW_BLUR, XML_TYPE_MEASURE, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAP( SHADOW,                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
+    GMAP( SHADOW_XDISTANCE,                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_X,        XML_TYPE_MEASURE, 0 ),
+    GMAP( SHADOW_YDISTANCE,                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_Y,        XML_TYPE_MEASURE, 0 ),
+    GMAP( SHADOW_COLOR,                        XML_NAMESPACE_DRAW, XML_SHADOW_COLOR,           XML_TYPE_COLOR, 0 ),
+    GMAP( SHADOW_TRANSPARENCE,             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
+    GMAPV( SHADOW_BLUR,                     XML_NAMESPACE_LO_EXT, XML_SHADOW_BLUR, XML_TYPE_MEASURE, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // glow attributes
-    GMAPV( "GlowEffectRadius",                 XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV( "GlowEffectColor",                  XML_NAMESPACE_LO_EXT, XML_GLOW_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV( "GlowEffectTransparency",           XML_NAMESPACE_LO_EXT, XML_GLOW_TRANSPARENCY,    XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( GLOW_EFFECT_RADIUS,                 XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( GLOW_EFFECT_COLOR,                  XML_NAMESPACE_LO_EXT, XML_GLOW_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( GLOW_EFFECT_TRANSPARENCY,           XML_NAMESPACE_LO_EXT, XML_GLOW_TRANSPARENCY,    XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // soft edge attributes
-    GMAPV( "SoftEdgeRadius",                XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( SOFT_EDGE_RADIUS,                XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // graphic attributes
-    GMAP( "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
-    GMAP( "AdjustLuminance",                XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustContrast",                 XML_NAMESPACE_DRAW, XML_CONTRAST,               XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "Gamma",                          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE_PERCENT, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustRed",                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustGreen",                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustBlue",                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAPV( "GraphicCrop",                   XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFSVER_012), // exists in SW, too, with same property name
-    GMAP( "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ), // exists in SW, too, with same property name
-    GMAP( "Transparency",                   XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY,          XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // exists in SW, too, with same property name // #i25616#
-    GMAP( "IsMirrored",                     XML_NAMESPACE_STYLE,    XML_MIRROR,             XML_TYPE_SD_MIRROR|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too // #i40214#
+    GMAP( GRAPHIC_COLOR_MODE,               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
+    GMAP( ADJUST_LUMINANCE,                XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( ADJUST_CONTRAST,                 XML_NAMESPACE_DRAW, XML_CONTRAST,               XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( GAMMA,                          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE_PERCENT, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( ADJUST_RED,                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( ADJUST_GREEN,                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( ADJUST_BLUE,                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
+    GMAPV( GRAPHIC_CROP,                   XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFSVER_012), // exists in SW, too, with same property name
+    GMAP( GRAPHIC_CROP,                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ), // exists in SW, too, with same property name
+    GMAP( TRANSPARENCY,                   XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY,          XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // exists in SW, too, with same property name // #i25616#
+    GMAP( IS_MIRRORED,                     XML_NAMESPACE_STYLE,    XML_MIRROR,             XML_TYPE_SD_MIRROR|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too // #i40214#
 
     // animation text attributes
-    TMAP( "TextAnimationKind",              XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING ),
-    GMAP( "TextAnimationKind",              XML_NAMESPACE_TEXT, XML_ANIMATION,              XML_TYPE_TEXT_ANIMATION, CTF_TEXTANIMATION_KIND ),
-    GMAP( "TextAnimationDirection",         XML_NAMESPACE_TEXT, XML_ANIMATION_DIRECTION,    XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 ),
-    GMAP( "TextAnimationStartInside",       XML_NAMESPACE_TEXT, XML_ANIMATION_START_INSIDE, XML_TYPE_BOOL, 0 ),
-    GMAP( "TextAnimationStopInside",            XML_NAMESPACE_TEXT, XML_ANIMATION_STOP_INSIDE,  XML_TYPE_BOOL, 0 ),
-    GMAP( "TextAnimationCount",             XML_NAMESPACE_TEXT, XML_ANIMATION_REPEAT,       XML_TYPE_NUMBER16, 0 ),
-    GMAP( "TextAnimationDelay",             XML_NAMESPACE_TEXT, XML_ANIMATION_DELAY,        XML_TYPE_DURATION16_MS, 0 ),
-    GMAP( "TextAnimationAmount",                XML_NAMESPACE_TEXT, XML_ANIMATION_STEPS,        XML_TYPE_TEXT_ANIMATION_STEPS, 0 ),
+    TMAP( TEXT_ANIMATION_KIND,              XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING ),
+    GMAP( TEXT_ANIMATION_KIND,              XML_NAMESPACE_TEXT, XML_ANIMATION,              XML_TYPE_TEXT_ANIMATION, CTF_TEXTANIMATION_KIND ),
+    GMAP( TEXT_ANIMATION_DIRECTION,         XML_NAMESPACE_TEXT, XML_ANIMATION_DIRECTION,    XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 ),
+    GMAP( TEXT_ANIMATION_START_INSIDE,       XML_NAMESPACE_TEXT, XML_ANIMATION_START_INSIDE, XML_TYPE_BOOL, 0 ),
+    GMAP( TEXT_ANIMATION_STOP_INSIDE,            XML_NAMESPACE_TEXT, XML_ANIMATION_STOP_INSIDE,  XML_TYPE_BOOL, 0 ),
+    GMAP( TEXT_ANIMATION_COUNT,             XML_NAMESPACE_TEXT, XML_ANIMATION_REPEAT,       XML_TYPE_NUMBER16, 0 ),
+    GMAP( TEXT_ANIMATION_DELAY,             XML_NAMESPACE_TEXT, XML_ANIMATION_DELAY,        XML_TYPE_DURATION16_MS, 0 ),
+    GMAP( TEXT_ANIMATION_AMOUNT,                XML_NAMESPACE_TEXT, XML_ANIMATION_STEPS,        XML_TYPE_TEXT_ANIMATION_STEPS, 0 ),
 
     // connector attributes
-    GMAP( "EdgeNode1HorzDist",              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_HORIZONTAL,  XML_TYPE_MEASURE, 0 ),
-    GMAP( "EdgeNode1VertDist",              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_VERTICAL,    XML_TYPE_MEASURE, 0 ),
-    GMAP( "EdgeNode2HorzDist",              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_HORIZONTAL,    XML_TYPE_MEASURE, 0 ),
-    GMAP( "EdgeNode2VertDist",              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_VERTICAL,      XML_TYPE_MEASURE, 0 ),
+    GMAP( EDGE_NODE1_HORZ_DIST,              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_HORIZONTAL,  XML_TYPE_MEASURE, 0 ),
+    GMAP( EDGE_NODE1_VERT_DIST,              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_VERTICAL,    XML_TYPE_MEASURE, 0 ),
+    GMAP( EDGE_NODE2_HORZ_DIST,              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_HORIZONTAL,    XML_TYPE_MEASURE, 0 ),
+    GMAP( EDGE_NODE2_VERT_DIST,              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_VERTICAL,      XML_TYPE_MEASURE, 0 ),
 
     // measure attributes
-    GMAP( "MeasureLineDistance",                XML_NAMESPACE_DRAW, XML_LINE_DISTANCE,          XML_TYPE_MEASURE, 0 ),
-    GMAP( "MeasureHelpLineOverhang",            XML_NAMESPACE_DRAW, XML_GUIDE_OVERHANG,         XML_TYPE_MEASURE, 0 ),
-    GMAP( "MeasureHelpLineDistance",            XML_NAMESPACE_DRAW, XML_GUIDE_DISTANCE,         XML_TYPE_MEASURE, 0 ),
-    GMAP( "MeasureHelpLine1Length",         XML_NAMESPACE_DRAW, XML_START_GUIDE,            XML_TYPE_MEASURE, 0 ),
-    GMAP( "MeasureHelpLine2Length",         XML_NAMESPACE_DRAW, XML_END_GUIDE,              XML_TYPE_MEASURE, 0 ),
-    GMAP( "MeasureTextHorizontalPosition",  XML_NAMESPACE_DRAW, XML_MEASURE_ALIGN,          XML_SD_TYPE_MEASURE_HALIGN, 0 ),
-    GMAP( "MeasureTextVerticalPosition",    XML_NAMESPACE_DRAW, XML_MEASURE_VERTICAL_ALIGN, XML_SD_TYPE_MEASURE_VALIGN, 0 ),
-    GMAP( "MeasureUnit",                        XML_NAMESPACE_DRAW, XML_UNIT,                   XML_SD_TYPE_MEASURE_UNIT, 0 ),
-    GMAP( "MeasureShowUnit",                    XML_NAMESPACE_DRAW, XML_SHOW_UNIT,              XML_TYPE_BOOL, 0 ),
-    GMAP( "MeasureBelowReferenceEdge",      XML_NAMESPACE_DRAW, XML_PLACING,                XML_SD_TYPE_MEASURE_PLACING, 0 ),
-    GMAP( "MeasureTextRotate90",                XML_NAMESPACE_DRAW, XML_PARALLEL,               XML_TYPE_BOOL, 0 ),
-    GMAP( "MeasureDecimalPlaces",           XML_NAMESPACE_DRAW, XML_DECIMAL_PLACES,         XML_TYPE_NUMBER16, 0 ),
+    GMAP( MEASURE_LINE_DISTANCE,                XML_NAMESPACE_DRAW, XML_LINE_DISTANCE,          XML_TYPE_MEASURE, 0 ),
+    GMAP( MEASURE_HELP_LINE_OVERHANG,            XML_NAMESPACE_DRAW, XML_GUIDE_OVERHANG,         XML_TYPE_MEASURE, 0 ),
+    GMAP( MEASURE_HELP_LINE_DISTANCE,            XML_NAMESPACE_DRAW, XML_GUIDE_DISTANCE,         XML_TYPE_MEASURE, 0 ),
+    GMAP( MEASURE_HELP_LINE1_LENGTH,         XML_NAMESPACE_DRAW, XML_START_GUIDE,            XML_TYPE_MEASURE, 0 ),
+    GMAP( MEASURE_HELP_LINE2_LENGTH,         XML_NAMESPACE_DRAW, XML_END_GUIDE,              XML_TYPE_MEASURE, 0 ),
+    GMAP( MEASURE_TEXT_HORIZONTAL_POSITION,  XML_NAMESPACE_DRAW, XML_MEASURE_ALIGN,          XML_SD_TYPE_MEASURE_HALIGN, 0 ),
+    GMAP( MEASURE_TEXT_VERTICAL_POSITION,    XML_NAMESPACE_DRAW, XML_MEASURE_VERTICAL_ALIGN, XML_SD_TYPE_MEASURE_VALIGN, 0 ),
+    GMAP( MEASURE_UNIT,                        XML_NAMESPACE_DRAW, XML_UNIT,                   XML_SD_TYPE_MEASURE_UNIT, 0 ),
+    GMAP( MEASURE_SHOW_UNIT,                    XML_NAMESPACE_DRAW, XML_SHOW_UNIT,              XML_TYPE_BOOL, 0 ),
+    GMAP( MEASURE_BELOW_REFERENCE_EDGE,      XML_NAMESPACE_DRAW, XML_PLACING,                XML_SD_TYPE_MEASURE_PLACING, 0 ),
+    GMAP( MEASURE_TEXT_ROTATE90,                XML_NAMESPACE_DRAW, XML_PARALLEL,               XML_TYPE_BOOL, 0 ),
+    GMAP( MEASURE_DECIMAL_PLACES,           XML_NAMESPACE_DRAW, XML_DECIMAL_PLACES,         XML_TYPE_NUMBER16, 0 ),
 
     // 3D geometry attributes
-    GMAP( "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, XML_HORIZONTAL_SEGMENTS,    XML_TYPE_NUMBER, 0 ),
-    GMAP( "D3DVerticalSegments",                XML_NAMESPACE_DR3D, XML_VERTICAL_SEGMENTS,      XML_TYPE_NUMBER, 0 ),
-    GMAP( "D3DPercentDiagonal",             XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING,          XML_TYPE_PERCENT, 0 ),
-    GMAP( "D3DBackscale",                   XML_NAMESPACE_DR3D, XML_BACK_SCALE,             XML_TYPE_PERCENT, 0 ),
-    GMAP( "D3DEndAngle",                        XML_NAMESPACE_DR3D, XML_END_ANGLE,              XML_TYPE_NUMBER, 0 ),
-    GMAP( "D3DDepth",                       XML_NAMESPACE_DR3D, XML_DEPTH,                  XML_TYPE_MEASURE, 0 ),
-    GMAP( "D3DDoubleSided",                 XML_NAMESPACE_DR3D, XML_BACKFACE_CULLING,       XML_SD_TYPE_BACKFACE_CULLING, 0 ),
+    GMAP( D3_DHORIZONTAL_SEGMENTS,          XML_NAMESPACE_DR3D, XML_HORIZONTAL_SEGMENTS,    XML_TYPE_NUMBER, 0 ),
+    GMAP( D3_DVERTICAL_SEGMENTS,                XML_NAMESPACE_DR3D, XML_VERTICAL_SEGMENTS,      XML_TYPE_NUMBER, 0 ),
+    GMAP( D3_DPERCENT_DIAGONAL,             XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING,          XML_TYPE_PERCENT, 0 ),
+    GMAP( D3_DBACKSCALE,                   XML_NAMESPACE_DR3D, XML_BACK_SCALE,             XML_TYPE_PERCENT, 0 ),
+    GMAP( D3_DEND_ANGLE,                        XML_NAMESPACE_DR3D, XML_END_ANGLE,              XML_TYPE_NUMBER, 0 ),
+    GMAP( D3_DDEPTH,                       XML_NAMESPACE_DR3D, XML_DEPTH,                  XML_TYPE_MEASURE, 0 ),
+    GMAP( D3_DDOUBLE_SIDED,                 XML_NAMESPACE_DR3D, XML_BACKFACE_CULLING,       XML_SD_TYPE_BACKFACE_CULLING, 0 ),
 
     // #107245# New 3D properties which are possible for lathe and extrude 3d objects
-    GMAP( "D3DCloseFront",                  XML_NAMESPACE_DR3D, XML_CLOSE_FRONT,            XML_TYPE_BOOL, 0 ),
-    GMAP( "D3DCloseBack",                   XML_NAMESPACE_DR3D, XML_CLOSE_BACK,             XML_TYPE_BOOL, 0 ),
+    GMAP( D3_DCLOSE_FRONT,                  XML_NAMESPACE_DR3D, XML_CLOSE_FRONT,            XML_TYPE_BOOL, 0 ),
+    GMAP( D3_DCLOSE_BACK,                   XML_NAMESPACE_DR3D, XML_CLOSE_BACK,             XML_TYPE_BOOL, 0 ),
 
     // 3D lighting attributes
-    GMAP( "D3DNormalsKind",                 XML_NAMESPACE_DR3D, XML_NORMALS_KIND,           XML_SD_TYPE_NORMALS_KIND, 0 ),
-    GMAP( "D3DNormalsInvert",               XML_NAMESPACE_DR3D, XML_NORMALS_DIRECTION,      XML_SD_TYPE_NORMALS_DIRECTION, 0 ),
+    GMAP( D3_DNORMALS_KIND,                 XML_NAMESPACE_DR3D, XML_NORMALS_KIND,           XML_SD_TYPE_NORMALS_KIND, 0 ),
+    GMAP( D3_DNORMALS_INVERT,               XML_NAMESPACE_DR3D, XML_NORMALS_DIRECTION,      XML_SD_TYPE_NORMALS_DIRECTION, 0 ),
 
     // 3D texture attributes
-    GMAP( "D3DTextureProjectionX",          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_X,  XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 ),
-    GMAP( "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_Y,  XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 ),
-    GMAP( "D3DTextureKind",                 XML_NAMESPACE_DR3D, XML_TEX_KIND,               XML_SD_TYPE_TEX_KIND, 0 ),
-    GMAP( "D3DTextureMode",                 XML_NAMESPACE_DR3D, XML_TEX_MODE,               XML_SD_TYPE_TEX_MODE, 0 ),
-    GMAP( "D3DTextureFilter",               XML_NAMESPACE_DR3D, XML_TEX_FILTER,             XML_SD_TYPE_BACKFACE_CULLING, 0 ),
+    GMAP( D3_DTEXTURE_PROJECTION_X,          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_X,  XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 ),
+    GMAP( D3_DTEXTURE_PROJECTION_Y,          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_Y,  XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 ),
+    GMAP( D3_DTEXTURE_KIND,                 XML_NAMESPACE_DR3D, XML_TEX_KIND,               XML_SD_TYPE_TEX_KIND, 0 ),
+    GMAP( D3_DTEXTURE_MODE,                 XML_NAMESPACE_DR3D, XML_TEX_MODE,               XML_SD_TYPE_TEX_MODE, 0 ),
+    GMAP( D3_DTEXTURE_FILTER,               XML_NAMESPACE_DR3D, XML_TEX_FILTER,             XML_SD_TYPE_BACKFACE_CULLING, 0 ),
 
     // 3D material attributes
-    GMAP( "D3DMaterialColor",               XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR,          XML_TYPE_COLOR, 0 ),
-    GMAP( "D3DMaterialEmission",                XML_NAMESPACE_DR3D, XML_EMISSIVE_COLOR,         XML_TYPE_COLOR, 0 ),
-    GMAP( "D3DMaterialSpecular",                XML_NAMESPACE_DR3D, XML_SPECULAR_COLOR,         XML_TYPE_COLOR, 0 ),
-    GMAP( "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, XML_SHININESS,              XML_TYPE_PERCENT, 0 ),
+    GMAP( D3_DMATERIAL_COLOR,               XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR,          XML_TYPE_COLOR, 0 ),
+    GMAP( D3_DMATERIAL_EMISSION,                XML_NAMESPACE_DR3D, XML_EMISSIVE_COLOR,         XML_TYPE_COLOR, 0 ),
+    GMAP( D3_DMATERIAL_SPECULAR,                XML_NAMESPACE_DR3D, XML_SPECULAR_COLOR,         XML_TYPE_COLOR, 0 ),
+    GMAP( D3_DMATERIAL_SPECULAR_INTENSITY,   XML_NAMESPACE_DR3D, XML_SHININESS,              XML_TYPE_PERCENT, 0 ),
 
     // 3D shadow attributes
-    GMAP( "D3DShadow3D",                        XML_NAMESPACE_DR3D, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
+    GMAP( D3_DSHADOW3_D,                        XML_NAMESPACE_DR3D, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
 
     // #FontWork# attributes
-    GMAP( "FontWorkStyle",                  XML_NAMESPACE_DRAW, XML_FONTWORK_STYLE,                 XML_SD_TYPE_FONTWORK_STYLE| MID_FLAG_ELEMENT_ITEM_EXPORT, CTF_FONTWORK_STYLE  ),
-    GMAP( "FontWorkAdjust",                 XML_NAMESPACE_DRAW, XML_FONTWORK_ADJUST,                XML_SD_TYPE_FONTWORK_ADJUST | MID_FLAG_ELEMENT_ITEM_EXPORT,CTF_FONTWORK_ADJUST ),
-    GMAP( "FontWorkDistance",               XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE,              XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_DISTANCE   ),
-    GMAP( "FontWorkStart",                  XML_NAMESPACE_DRAW, XML_FONTWORK_START,                 XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_START  ),
-    GMAP( "FontWorkMirror",                 XML_NAMESPACE_DRAW, XML_FONTWORK_MIRROR,                XML_TYPE_BOOL | MID_FLAG_ELEMENT_ITEM_EXPORT,              CTF_FONTWORK_MIRROR ),
-    GMAP( "FontWorkOutline",                XML_NAMESPACE_DRAW, XML_FONTWORK_OUTLINE,               XML_TYPE_BOOL | MID_FLAG_ELEMENT_ITEM_EXPORT,              CTF_FONTWORK_OUTLINE    ),
-    GMAP( "FontWorkShadow",                 XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW,                XML_SD_TYPE_FONTWORK_SHADOW | MID_FLAG_ELEMENT_ITEM_EXPORT,CTF_FONTWORK_SHADOW ),
-    GMAP( "FontWorkShadowColor",            XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_COLOR,          XML_TYPE_COLOR | MID_FLAG_ELEMENT_ITEM_EXPORT,             CTF_FONTWORK_SHADOWCOLOR    ),
-    GMAP( "FontWorkShadowOffsetX",          XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_X,       XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_SHADOWOFFSETX  ),
-    GMAP( "FontWorkShadowOffsetY",          XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_Y,       XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_SHADOWOFFSETY  ),
-    GMAP( "FontWorkForm",                   XML_NAMESPACE_DRAW, XML_FONTWORK_FORM,                  XML_SD_TYPE_FONTWORK_FORM | MID_FLAG_ELEMENT_ITEM_EXPORT,  CTF_FONTWORK_FORM   ),
-    GMAP( "FontWorkHideForm",               XML_NAMESPACE_DRAW, XML_FONTWORK_HIDE_FORM,             XML_TYPE_BOOL | MID_FLAG_ELEMENT_ITEM_EXPORT,              CTF_FONTWORK_HIDEFORM   ),
-    GMAP( "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_SHADOWTRANSPARENCE ),
+    GMAP( FONT_WORK_STYLE,                  XML_NAMESPACE_DRAW, XML_FONTWORK_STYLE,                 XML_SD_TYPE_FONTWORK_STYLE| MID_FLAG_ELEMENT_ITEM_EXPORT, CTF_FONTWORK_STYLE  ),
+    GMAP( FONT_WORK_ADJUST,                 XML_NAMESPACE_DRAW, XML_FONTWORK_ADJUST,                XML_SD_TYPE_FONTWORK_ADJUST | MID_FLAG_ELEMENT_ITEM_EXPORT,CTF_FONTWORK_ADJUST ),
+    GMAP( FONT_WORK_DISTANCE,               XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE,              XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_DISTANCE   ),
+    GMAP( FONT_WORK_START,                  XML_NAMESPACE_DRAW, XML_FONTWORK_START,                 XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_START  ),
+    GMAP( FONT_WORK_MIRROR,                 XML_NAMESPACE_DRAW, XML_FONTWORK_MIRROR,                XML_TYPE_BOOL | MID_FLAG_ELEMENT_ITEM_EXPORT,              CTF_FONTWORK_MIRROR ),
+    GMAP( FONT_WORK_OUTLINE,                XML_NAMESPACE_DRAW, XML_FONTWORK_OUTLINE,               XML_TYPE_BOOL | MID_FLAG_ELEMENT_ITEM_EXPORT,              CTF_FONTWORK_OUTLINE    ),
+    GMAP( FONT_WORK_SHADOW,                 XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW,                XML_SD_TYPE_FONTWORK_SHADOW | MID_FLAG_ELEMENT_ITEM_EXPORT,CTF_FONTWORK_SHADOW ),
+    GMAP( FONT_WORK_SHADOW_COLOR,            XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_COLOR,          XML_TYPE_COLOR | MID_FLAG_ELEMENT_ITEM_EXPORT,             CTF_FONTWORK_SHADOWCOLOR    ),
+    GMAP( FONT_WORK_SHADOW_OFFSET_X,          XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_X,       XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_SHADOWOFFSETX  ),
+    GMAP( FONT_WORK_SHADOW_OFFSET_Y,          XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_Y,       XML_TYPE_MEASURE | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_SHADOWOFFSETY  ),
+    GMAP( FONT_WORK_FORM,                   XML_NAMESPACE_DRAW, XML_FONTWORK_FORM,                  XML_SD_TYPE_FONTWORK_FORM | MID_FLAG_ELEMENT_ITEM_EXPORT,  CTF_FONTWORK_FORM   ),
+    GMAP( FONT_WORK_HIDE_FORM,               XML_NAMESPACE_DRAW, XML_FONTWORK_HIDE_FORM,             XML_TYPE_BOOL | MID_FLAG_ELEMENT_ITEM_EXPORT,              CTF_FONTWORK_HIDEFORM   ),
+    GMAP( FONT_WORK_SHADOW_TRANSPARENCE,     XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_SHADOWTRANSPARENCE ),
 
     // #FontWork# attributes
-    GMAPV("FontWorkStyle",              XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_STYLE,                 XML_SD_TYPE_FONTWORK_STYLE, CTF_FONTWORK_STYLE,         SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkAdjust",             XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_ADJUST,                XML_SD_TYPE_FONTWORK_ADJUST,CTF_FONTWORK_ADJUST,        SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkDistance",           XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_DISTANCE,              XML_TYPE_MEASURE,           CTF_FONTWORK_DISTANCE,      SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkStart",              XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_START,                 XML_TYPE_MEASURE,           CTF_FONTWORK_START,         SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkMirror",             XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_MIRROR,                XML_TYPE_BOOL,              CTF_FONTWORK_MIRROR,        SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkOutline",            XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_OUTLINE,               XML_TYPE_BOOL,              CTF_FONTWORK_OUTLINE,       SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkShadow",             XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW,                XML_SD_TYPE_FONTWORK_SHADOW,CTF_FONTWORK_SHADOW,        SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkShadowColor",        XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_COLOR,          XML_TYPE_COLOR,             CTF_FONTWORK_SHADOWCOLOR,   SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkShadowOffsetX",      XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_OFFSET_X,       XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETX, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkShadowOffsetY",      XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_OFFSET_Y,       XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETY, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkForm",               XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_FORM,                  XML_SD_TYPE_FONTWORK_FORM,  CTF_FONTWORK_FORM,          SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkHideForm",           XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_HIDE_FORM,             XML_TYPE_BOOL,              CTF_FONTWORK_HIDEFORM,      SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV("FontWorkShadowTransparence", XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_STYLE,              XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_STYLE,                 XML_SD_TYPE_FONTWORK_STYLE, CTF_FONTWORK_STYLE,         SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_ADJUST,             XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_ADJUST,                XML_SD_TYPE_FONTWORK_ADJUST,CTF_FONTWORK_ADJUST,        SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_DISTANCE,           XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_DISTANCE,              XML_TYPE_MEASURE,           CTF_FONTWORK_DISTANCE,      SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_START,              XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_START,                 XML_TYPE_MEASURE,           CTF_FONTWORK_START,         SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_MIRROR,             XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_MIRROR,                XML_TYPE_BOOL,              CTF_FONTWORK_MIRROR,        SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_OUTLINE,            XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_OUTLINE,               XML_TYPE_BOOL,              CTF_FONTWORK_OUTLINE,       SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_SHADOW,             XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW,                XML_SD_TYPE_FONTWORK_SHADOW,CTF_FONTWORK_SHADOW,        SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_SHADOW_COLOR,        XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_COLOR,          XML_TYPE_COLOR,             CTF_FONTWORK_SHADOWCOLOR,   SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_SHADOW_OFFSET_X,      XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_OFFSET_X,       XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETX, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_SHADOW_OFFSET_Y,      XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_OFFSET_Y,       XML_TYPE_MEASURE,           CTF_FONTWORK_SHADOWOFFSETY, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_FORM,               XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_FORM,                  XML_SD_TYPE_FONTWORK_FORM,  CTF_FONTWORK_FORM,          SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_HIDE_FORM,           XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_HIDE_FORM,             XML_TYPE_BOOL,              CTF_FONTWORK_HIDEFORM,      SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV(FONT_WORK_SHADOW_TRANSPARENCE, XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // control attributes (border exists one more time for the text additions of shapes)
-    GMAP( "ControlSymbolColor",             XML_NAMESPACE_DRAW, XML_SYMBOL_COLOR,           XML_TYPE_COLOR, 0 ),
-    GMAP( "ControlBackground",              XML_NAMESPACE_FO,   XML_BACKGROUND_COLOR,       XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "ControlBorder",                  XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-    GMAP( "ControlBorderColor",             XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER_COLOR|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-    GMAP( "ControlDataStyle",               XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE ),
-    GMAP( "ControlTextEmphasis",            XML_NAMESPACE_STYLE,XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
-    GMAP( "ImageScaleMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_IMAGE_SCALE_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "ControlWritingMode",             XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT|MID_FLAG_MULTI_PROPERTY, CTF_CONTROLWRITINGMODE ),
+    GMAP( CONTROL_SYMBOL_COLOR,             XML_NAMESPACE_DRAW, XML_SYMBOL_COLOR,           XML_TYPE_COLOR, 0 ),
+    GMAP( CONTROL_BACKGROUND,              XML_NAMESPACE_FO,   XML_BACKGROUND_COLOR,       XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( CONTROL_BORDER,                  XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    GMAP( CONTROL_BORDER_COLOR,             XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER_COLOR|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    GMAP( CONTROL_DATA_STYLE,               XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE ),
+    GMAP( CONTROL_TEXT_EMPHASIS,            XML_NAMESPACE_STYLE,XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
+    GMAP( IMAGE_SCALE_MODE,                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_IMAGE_SCALE_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( CONTROL_WRITING_MODE,             XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT|MID_FLAG_MULTI_PROPERTY, CTF_CONTROLWRITINGMODE ),
 
     // special entries for floating frames
-    GMAP( "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR ),
-    GMAP( "FrameIsBorder",              XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_BORDER,       XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER ),
-    GMAP( "FrameMarginWidth",           XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_HORIZONTAL,    XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI ),
-    GMAP( "FrameMarginHeight",          XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_VERTICAL,      XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_VERT ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,   CTF_SD_OLE_VIS_AREA_IMPORT_LEFT ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,    CTF_SD_OLE_VIS_AREA_IMPORT_TOP ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,  CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY, CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT ),
-    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML__EMPTY,                     XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL ),
-    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_SD_OLE_VIS_AREA_EXPORT_LEFT ),
-    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_SD_OLE_VIS_AREA_EXPORT_TOP ),
-    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,   CTF_SD_OLE_VIS_AREA_EXPORT_WIDTH ),
-    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,  CTF_SD_OLE_VIS_AREA_EXPORT_HEIGHT ),
+    GMAP( FRAME_IS_AUTO_SCROLL,          XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR ),
+    GMAP( FRAME_IS_BORDER,              XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_BORDER,       XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER ),
+    GMAP( FRAME_MARGIN_WIDTH,           XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_HORIZONTAL,    XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI ),
+    GMAP( FRAME_MARGIN_HEIGHT,          XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_VERTICAL,      XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_VERT ),
+    GMAP( VISIBLE_AREA,                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,   CTF_SD_OLE_VIS_AREA_IMPORT_LEFT ),
+    GMAP( VISIBLE_AREA,                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,    CTF_SD_OLE_VIS_AREA_IMPORT_TOP ),
+    GMAP( VISIBLE_AREA,                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,  CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH ),
+    GMAP( VISIBLE_AREA,                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY, CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT ),
+    GMAP( IS_INTERNAL,                 XML_NAMESPACE_DRAW, XML__EMPTY,                     XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL ),
+    GMAP( IS_INTERNAL,                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_SD_OLE_VIS_AREA_EXPORT_LEFT ),
+    GMAP( IS_INTERNAL,                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_SD_OLE_VIS_AREA_EXPORT_TOP ),
+    GMAP( IS_INTERNAL,                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,   CTF_SD_OLE_VIS_AREA_EXPORT_WIDTH ),
+    GMAP( IS_INTERNAL,                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,  CTF_SD_OLE_VIS_AREA_EXPORT_HEIGHT ),
 
-    GMAP( "Aspect",                     XML_NAMESPACE_DRAW, XML_DRAW_ASPECT,                XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_ASPECT ),
+    GMAP( ASPECT,                     XML_NAMESPACE_DRAW, XML_DRAW_ASPECT,                XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_ASPECT ),
 
     // caption properties
-    GMAP( "CaptionType",                    XML_NAMESPACE_DRAW, XML_CAPTION_TYPE,               XML_SD_TYPE_CAPTION_TYPE, 0 ),
-    GMAP( "CaptionIsFixedAngle",            XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE_TYPE,         XML_SD_TYPE_CAPTION_ANGLE_TYPE, 0 ),
-    GMAP( "CaptionAngle",               XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE,              XML_TYPE_NUMBER, 0 ),
-    GMAP( "CaptionGap",                 XML_NAMESPACE_DRAW, XML_CAPTION_GAP,                XML_TYPE_MEASURE, 0 ),
-    GMAP( "CaptionEscapeDirection",     XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE_DIRECTION,   XML_SD_TYPE_CAPTION_ESC_DIR, 0 ),
-    GMAP( "CaptionIsEscapeRelative",    XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_IS_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ISESCREL ),
-    GMAP( "CaptionEscapeRelative",      XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCREL ),
-    GMAP( "CaptionEscapeAbsolute",      XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_ESC_ABS|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCABS ),
-    GMAP( "CaptionLineLength",          XML_NAMESPACE_DRAW, XML_CAPTION_LINE_LENGTH,        XML_TYPE_MEASURE, 0 ),
-    GMAP( "CaptionIsFitLineLength",     XML_NAMESPACE_DRAW, XML_CAPTION_FIT_LINE_LENGTH,    XML_TYPE_BOOL, 0 ),
+    GMAP( CAPTION_TYPE,                    XML_NAMESPACE_DRAW, XML_CAPTION_TYPE,               XML_SD_TYPE_CAPTION_TYPE, 0 ),
+    GMAP( CAPTION_IS_FIXED_ANGLE,            XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE_TYPE,         XML_SD_TYPE_CAPTION_ANGLE_TYPE, 0 ),
+    GMAP( CAPTION_ANGLE,               XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE,              XML_TYPE_NUMBER, 0 ),
+    GMAP( CAPTION_GAP,                 XML_NAMESPACE_DRAW, XML_CAPTION_GAP,                XML_TYPE_MEASURE, 0 ),
+    GMAP( CAPTION_ESCAPE_DIRECTION,     XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE_DIRECTION,   XML_SD_TYPE_CAPTION_ESC_DIR, 0 ),
+    GMAP( CAPTION_IS_ESCAPE_RELATIVE,    XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_IS_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ISESCREL ),
+    GMAP( CAPTION_ESCAPE_RELATIVE,      XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCREL ),
+    GMAP( CAPTION_ESCAPE_ABSOLUTE,      XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE,             XML_SD_TYPE_CAPTION_ESC_ABS|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCABS ),
+    GMAP( CAPTION_LINE_LENGTH,          XML_NAMESPACE_DRAW, XML_CAPTION_LINE_LENGTH,        XML_TYPE_MEASURE, 0 ),
+    GMAP( CAPTION_IS_FIT_LINE_LENGTH,     XML_NAMESPACE_DRAW, XML_CAPTION_FIT_LINE_LENGTH,    XML_TYPE_BOOL, 0 ),
 
     // misc object properties
-    GMAP( "MoveProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
-    GMAP( "SizeProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
+    GMAP( MOVE_PROTECT,                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
+    GMAP( SIZE_PROTECT,                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
 
     MAP_END()
 };
@@ -320,48 +500,48 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
 const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 {
-    DPMAP( "UserDefinedAttributes",     XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    DPMAP( USER_DEFINED_ATTRIBUTES,     XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
-    DPMAP( "Change",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_TYPE,    XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE ),
-    DPMAP( "Effect",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE ),
-    DPMAP( "Speed",                     XML_NAMESPACE_PRESENTATION, XML_TRANSITION_SPEED,   XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED ),
-    DPMAP( "HighResDuration",           XML_NAMESPACE_PRESENTATION, XML_DURATION,           XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION ),
-    DPMAP( "Visible",                   XML_NAMESPACE_PRESENTATION, XML_VISIBILITY,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE ),
-    DPMAP( "Sound",                     XML_NAMESPACE_PRESENTATION, XML_SOUND,              XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL ),
-    DPMAP( "BackgroundFullSize",            XML_NAMESPACE_DRAW,         XML_BACKGROUND_SIZE,    XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE ),
+    DPMAP( CHANGE,                      XML_NAMESPACE_PRESENTATION, XML_TRANSITION_TYPE,    XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE ),
+    DPMAP( EFFECT,                      XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE ),
+    DPMAP( SPEED,                       XML_NAMESPACE_PRESENTATION, XML_TRANSITION_SPEED,   XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED ),
+    DPMAP( HIGH_RES_DURATION,           XML_NAMESPACE_PRESENTATION, XML_DURATION,           XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION ),
+    DPMAP( VISIBLE,                   XML_NAMESPACE_PRESENTATION, XML_VISIBILITY,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE ),
+    DPMAP( SOUND,                     XML_NAMESPACE_PRESENTATION, XML_SOUND,              XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL ),
+    DPMAP( BACKGROUND_FULL_SIZE,            XML_NAMESPACE_DRAW,         XML_BACKGROUND_SIZE,    XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE ),
 
-    DPMAP( "IsBackgroundVisible",       XML_NAMESPACE_PRESENTATION, XML_BACKGROUND_VISIBLE, XML_TYPE_BOOL, 0 ),
-    DPMAP( "IsBackgroundObjectsVisible",    XML_NAMESPACE_PRESENTATION, XML_BACKGROUND_OBJECTS_VISIBLE, XML_TYPE_BOOL, 0 ),
+    DPMAP( IS_BACKGROUND_VISIBLE,       XML_NAMESPACE_PRESENTATION, XML_BACKGROUND_VISIBLE, XML_TYPE_BOOL, 0 ),
+    DPMAP( IS_BACKGROUND_OBJECTS_VISIBLE,    XML_NAMESPACE_PRESENTATION, XML_BACKGROUND_OBJECTS_VISIBLE, XML_TYPE_BOOL, 0 ),
 
-    DPMAP( "FillStyle",                 XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 ),
-    DPMAP( "FillColor",                 XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
-    DPMAP( "FillGradientName",          XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
-    DPMAP( "FillGradientStepCount",     XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 ),
-    DPMAP( "FillHatchName",             XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
-    GMAP( "FillBackground",                 XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL, 0 ),
-    DPMAP( "FillBitmapName",                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,    XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
-    DPMAP( "FillTransparence",              XML_NAMESPACE_DRAW, XML_OPACITY,           XML_TYPE_NEG_PERCENT|MID_FLAG_MULTI_PROPERTY,  0 ),
-    DPMAP( "FillTransparenceGradientName",  XML_NAMESPACE_DRAW, XML_OPACITY_NAME,       XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLTRANSNAME ),
-    DPMAP( "FillBitmapSizeX",           XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    DPMAP( "FillBitmapLogicalSize",     XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    DPMAP( "FillBitmapSizeY",           XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    DPMAP( "FillBitmapLogicalSize",     XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    DPMAP( "FillBitmapMode",            XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE, 0 ),
-    DPMAP( "FillBitmapPositionOffsetX", XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT, 0 ),
-    DPMAP( "FillBitmapPositionOffsetY", XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT, 0 ),
-    DPMAP( "FillBitmapRectanglePoint",  XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 ),
-    DPMAP( "FillBitmapOffsetX",         XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X ),
-    DPMAP( "FillBitmapOffsetY",         XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET, XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y ),
+    DPMAP( FILL_STYLE,                 XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 ),
+    DPMAP( FILL_COLOR,                 XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
+    DPMAP( FILL_GRADIENT_NAME,          XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
+    DPMAP( FILL_GRADIENT_STEP_COUNT,     XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 ),
+    DPMAP( FILL_HATCH_NAME,             XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
+    GMAP( FILL_BACKGROUND,                 XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL, 0 ),
+    DPMAP( FILL_BITMAP_NAME,                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,    XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
+    DPMAP( FILL_TRANSPARENCE,              XML_NAMESPACE_DRAW, XML_OPACITY,           XML_TYPE_NEG_PERCENT|MID_FLAG_MULTI_PROPERTY,  0 ),
+    DPMAP( FILL_TRANSPARENCE_GRADIENT_NAME,  XML_NAMESPACE_DRAW, XML_OPACITY_NAME,       XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLTRANSNAME ),
+    DPMAP( FILL_BITMAP_SIZE_X,           XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    DPMAP( FILL_BITMAP_LOGICAL_SIZE,     XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    DPMAP( FILL_BITMAP_SIZE_Y,           XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    DPMAP( FILL_BITMAP_LOGICAL_SIZE,     XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    DPMAP( FILL_BITMAP_MODE,            XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE, 0 ),
+    DPMAP( FILL_BITMAP_POSITION_OFFSET_X, XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT, 0 ),
+    DPMAP( FILL_BITMAP_POSITION_OFFSET_Y, XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT, 0 ),
+    DPMAP( FILL_BITMAP_RECTANGLE_POINT,  XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 ),
+    DPMAP( FILL_BITMAP_OFFSET_X,         XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X ),
+    DPMAP( FILL_BITMAP_OFFSET_Y,         XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET, XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y ),
 
-    DPMAP( "IsHeaderVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_HEADER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_HEADER_VISIBLE ),
-    DPMAP( "IsFooterVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_FOOTER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_FOOTER_VISIBLE ),
-    DPMAP( "IsPageNumberVisible",       XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_PAGE_NUMBER_VISIBLE ),
-    DPMAP( "IsDateTimeVisible",         XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_DATE_TIME_VISIBLE ),
+    DPMAP( IS_HEADER_VISIBLE,           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_HEADER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_HEADER_VISIBLE ),
+    DPMAP( IS_FOOTER_VISIBLE,           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_FOOTER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_FOOTER_VISIBLE ),
+    DPMAP( IS_PAGE_NUMBER_VISIBLE,       XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_PAGE_NUMBER_VISIBLE ),
+    DPMAP( IS_DATE_TIME_VISIBLE,         XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_DATE_TIME_VISIBLE ),
 
-    DPMAP( "TransitionType",            XML_NAMESPACE_SMIL, XML_TYPE,                   XML_SD_TYPE_TRANSITION_TYPE, CTF_PAGE_TRANSITION_TYPE ),
-    DPMAP( "TransitionSubtype",         XML_NAMESPACE_SMIL, XML_SUBTYPE,                XML_SD_TYPE_TRANSTIION_SUBTYPE, CTF_PAGE_TRANSITION_SUBTYPE ),
-    DPMAP( "TransitionDirection",       XML_NAMESPACE_SMIL, XML_DIRECTION,              XML_SD_TYPE_TRANSTIION_DIRECTION, CTF_PAGE_TRANSITION_DIRECTION ),
-    DPMAP( "TransitionFadeColor",       XML_NAMESPACE_SMIL, XML_FADECOLOR,              XML_TYPE_COLOR, CTF_PAGE_TRANSITION_FADECOLOR ),
+    DPMAP( TRANSITION_TYPE,            XML_NAMESPACE_SMIL, XML_TYPE,                   XML_SD_TYPE_TRANSITION_TYPE, CTF_PAGE_TRANSITION_TYPE ),
+    DPMAP( TRANSITION_SUBTYPE,         XML_NAMESPACE_SMIL, XML_SUBTYPE,                XML_SD_TYPE_TRANSTIION_SUBTYPE, CTF_PAGE_TRANSITION_SUBTYPE ),
+    DPMAP( TRANSITION_DIRECTION,       XML_NAMESPACE_SMIL, XML_DIRECTION,              XML_SD_TYPE_TRANSTIION_DIRECTION, CTF_PAGE_TRANSITION_DIRECTION ),
+    DPMAP( TRANSITION_FADE_COLOR,       XML_NAMESPACE_SMIL, XML_FADECOLOR,              XML_TYPE_COLOR, CTF_PAGE_TRANSITION_FADECOLOR ),
     MAP_END()
 };
 
@@ -370,12 +550,12 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 */
 const XMLPropertyMapEntry aXMLTableShapeAttributes[] =
 {
-    MAP_( "UseFirstRowStyle",       XML_NAMESPACE_TABLE, XML_USE_FIRST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
-    MAP_( "UseLastRowStyle",        XML_NAMESPACE_TABLE, XML_USE_LAST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
-    MAP_( "UseFirstColumnStyle",    XML_NAMESPACE_TABLE, XML_USE_FIRST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
-    MAP_( "UseLastColumnStyle",     XML_NAMESPACE_TABLE, XML_USE_LAST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
-    MAP_( "UseBandingRowStyle",     XML_NAMESPACE_TABLE, XML_USE_BANDING_ROWS_STYLES, XML_TYPE_BOOL, 0 ),
-    MAP_( "UseBandingColumnStyle",  XML_NAMESPACE_TABLE, XML_USE_BANDING_COLUMNS_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( USE_FIRST_ROW_STYLE,       XML_NAMESPACE_TABLE, XML_USE_FIRST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( USE_LAST_ROW_STYLE,        XML_NAMESPACE_TABLE, XML_USE_LAST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( USE_FIRST_COLUMN_STYLE,    XML_NAMESPACE_TABLE, XML_USE_FIRST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( USE_LAST_COLUMN_STYLE,     XML_NAMESPACE_TABLE, XML_USE_LAST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( USE_BANDING_ROW_STYLE,     XML_NAMESPACE_TABLE, XML_USE_BANDING_ROWS_STYLES, XML_TYPE_BOOL, 0 ),
+    MAP_( USE_BANDING_COLUMN_STYLE,  XML_NAMESPACE_TABLE, XML_USE_BANDING_COLUMNS_STYLES, XML_TYPE_BOOL, 0 ),
     MAP_END()
 };
 

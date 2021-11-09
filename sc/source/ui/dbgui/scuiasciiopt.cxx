@@ -307,8 +307,6 @@ static void lcl_SaveSeparators(
     aItem.PutProperties(aNames, aValues);
 }
 
-constexpr OUStringLiteral gaTextSepList(u"" SCSTR_TEXTSEP);
-
 ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatName,
                                    SvStream* pInStream, ScImportAsciiCall eCall)
     : GenericDialogController(pParent, "modules/scalc/ui/textimportcsv.ui", "TextImportCsvDialog")
@@ -487,10 +485,10 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     mxNfRow->connect_value_changed( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
 
     // *** Separator characters ***
-    lcl_FillCombo( *mxCbTextSep, gaTextSepList, mcTextSep );
+    lcl_FillCombo( *mxCbTextSep, SCSTR_TEXTSEP, mcTextSep );
     mxCbTextSep->set_entry_text(sTextSeparators);
     // tdf#69207 - use selected text delimiter to parse the provided data
-    mcTextSep = lcl_CharFromCombo(*mxCbTextSep, gaTextSepList);
+    mcTextSep = lcl_CharFromCombo(*mxCbTextSep, SCSTR_TEXTSEP);
 
     Link<weld::Toggleable&,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
     mxCbTextSep->connect_changed( LINK( this, ScImportAsciiDlg, SeparatorComboBoxHdl ) );
@@ -678,7 +676,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
         rOpt.SetFieldSeps( GetSeparators() );
         rOpt.SetMergeSeps( mxCkbAsOnce->get_active() );
         rOpt.SetRemoveSpace( mxCkbRemoveSpace->get_active() );
-        rOpt.SetTextSep( lcl_CharFromCombo( *mxCbTextSep, gaTextSepList ) );
+        rOpt.SetTextSep( lcl_CharFromCombo( *mxCbTextSep, SCSTR_TEXTSEP ) );
     }
 
     rOpt.SetQuotedAsText(mxCkbQuotedAsText->get_active());
@@ -836,7 +834,7 @@ void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
     OUString aOldFldSeps( maFieldSeparators);
     maFieldSeparators = GetSeparators();
     sal_Unicode cOldSep = mcTextSep;
-    mcTextSep = lcl_CharFromCombo( *mxCbTextSep, gaTextSepList );
+    mcTextSep = lcl_CharFromCombo( *mxCbTextSep, SCSTR_TEXTSEP );
     // Any separator changed may result in completely different lines due to
     // embedded line breaks.
     if (cOldSep != mcTextSep || aOldFldSeps != maFieldSeparators)

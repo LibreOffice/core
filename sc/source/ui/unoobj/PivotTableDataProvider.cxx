@@ -64,8 +64,8 @@ const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
-        { u"" SC_UNONAME_INCLUDEHIDDENCELLS, 0, cppu::UnoType<bool>::get(), 0, 0 },
-        { u"" SC_UNONAME_USE_INTERNAL_DATA_PROVIDER, 0, cppu::UnoType<bool>::get(), 0, 0 },
+        { SC_UNONAME_INCLUDEHIDDENCELLS, 0, cppu::UnoType<bool>::get(), 0, 0 },
+        { SC_UNONAME_USE_INTERNAL_DATA_PROVIDER, 0, cppu::UnoType<bool>::get(), 0, 0 },
         { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDataProviderPropertyMap_Impl;

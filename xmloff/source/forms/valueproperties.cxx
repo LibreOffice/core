@@ -30,10 +30,11 @@ namespace xmloff
     //= OValuePropertiesMetaData
     void OValuePropertiesMetaData::getValuePropertyNames(
             OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
-            char const * & _rpCurrentValuePropertyName, char const * & _rpValuePropertyName)
+            std::optional<OUString> & _rpCurrentValuePropertyName, std::optional<OUString> & _rpValuePropertyName)
     {
         // reset the pointers in case we can't determine the property names
-        _rpCurrentValuePropertyName = _rpValuePropertyName = nullptr;
+        _rpCurrentValuePropertyName.reset();
+        _rpValuePropertyName.reset();
         switch (_nFormComponentType)
         {
             case FormComponentType::TEXTFIELD:
@@ -92,9 +93,10 @@ namespace xmloff
     }
 
     void OValuePropertiesMetaData::getValueLimitPropertyNames(sal_Int16 _nFormComponentType,
-        char const * & _rpMinValuePropertyName, char const * & _rpMaxValuePropertyName)
+        std::optional<OUString> & _rpMinValuePropertyName, std::optional<OUString> & _rpMaxValuePropertyName)
     {
-        _rpMinValuePropertyName = _rpMaxValuePropertyName = nullptr;
+        _rpMinValuePropertyName.reset();
+        _rpMaxValuePropertyName.reset();
         switch (_nFormComponentType)
         {
             case FormComponentType::NUMERICFIELD:
@@ -126,10 +128,11 @@ namespace xmloff
 
     void OValuePropertiesMetaData::getRuntimeValuePropertyNames(
         OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
-        char const * & _rpValuePropertyName, char const * & _rpDefaultValuePropertyName )
+        std::optional<OUString> & _rpValuePropertyName, std::optional<OUString> & _rpDefaultValuePropertyName )
     {
         // reset the pointers in case we can't determine the property names
-        _rpValuePropertyName = _rpDefaultValuePropertyName = nullptr;
+        _rpValuePropertyName.reset();
+        _rpDefaultValuePropertyName.reset();
         switch (_nFormComponentType)
         {
             case FormComponentType::TEXTFIELD:

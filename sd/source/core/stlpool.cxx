@@ -137,7 +137,7 @@ rtl::Reference<SfxStyleSheetBase> SdStyleSheetPool::Create(const OUString& rName
 
 SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(std::u16string_view rLayoutName)
 {
-    OUString aName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_TITLE;
+    OUString aName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR + STR_LAYOUT_TITLE;
     SfxStyleSheetBase* pResult = Find(aName, SfxStyleFamily::Page);
     return pResult;
 }
@@ -151,7 +151,7 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(std::u16string_view rLayoutNa
 
 void SdStyleSheetPool::CreateOutlineSheetList (std::u16string_view rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
 {
-    OUString aName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+    OUString aName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
     for (sal_Int32 nSheet = 1; nSheet < 10; nSheet++)
     {
@@ -782,7 +782,7 @@ void SdStyleSheetPool::CreateLayoutSheetNames(std::u16string_view rLayoutName, s
     OUString aPrefix(OUString::Concat(rLayoutName) + SD_LT_SEPARATOR);
 
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
-        aNameList.emplace_back(aPrefix + STR_LAYOUT_OUTLINE " " + OUString::number( nLevel ) );
+        aNameList.emplace_back(aPrefix + STR_LAYOUT_OUTLINE + " " + OUString::number( nLevel ) );
 
     aNameList.emplace_back(aPrefix + STR_LAYOUT_TITLE);
     aNameList.emplace_back(aPrefix + STR_LAYOUT_SUBTITLE);

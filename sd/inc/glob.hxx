@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 #define SD_IF_SDAPP                     SFX_INTERFACE_SD_START + SfxInterfaceId(0)
 #define SD_IF_SDDRAWDOCSHELL            SFX_INTERFACE_SD_START + SfxInterfaceId(1)
 #define SD_IF_SDDRAWVIEWSHELL           SFX_INTERFACE_SD_START + SfxInterfaceId(3)
@@ -44,7 +46,7 @@
 // SVX_IMAPINFO_ID = 2
 
 // Separator between layout name and template name of presentation templates
-#define SD_LT_SEPARATOR "~LT~"
+inline constexpr OUStringLiteral SD_LT_SEPARATOR = u"~LT~";
 
 // option-stream identifier
 #define SD_OPTION_MORPHING  u"Morph"

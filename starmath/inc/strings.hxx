@@ -15,7 +15,7 @@
 
 #pragma once
 
-#define RID_UNDOFORMATNAME "Format"
+inline constexpr OUStringLiteral RID_UNDOFORMATNAME = u"Format";
 
 // clang-format off
 #define RID_PLUSX               "+<?> "

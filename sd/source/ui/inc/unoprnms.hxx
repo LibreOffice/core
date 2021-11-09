@@ -19,55 +19,55 @@
 #pragma once
 
 
-#define UNO_NAME_PAGE_BACKGROUND        "Background"
-#define UNO_NAME_PAGE_LEFT              "BorderLeft"
-#define UNO_NAME_PAGE_RIGHT             "BorderRight"
-#define UNO_NAME_PAGE_TOP               "BorderTop"
-#define UNO_NAME_PAGE_BOTTOM            "BorderBottom"
-#define UNO_NAME_PAGE_CHANGE            "Change"
-#define UNO_NAME_PAGE_DURATION          "Duration"
-#define UNO_NAME_PAGE_EFFECT            "Effect"
-#define UNO_NAME_PAGE_HEIGHT            "Height"
-#define UNO_NAME_PAGE_LAYOUT            "Layout"
-#define UNO_NAME_PAGE_NUMBER            "Number"
-#define UNO_NAME_PAGE_ORIENTATION       "Orientation"
-#define UNO_NAME_PAGE_SPEED             "Speed"
-#define UNO_NAME_PAGE_TRANSITION_DURATION  "TransitionDuration"
-#define UNO_NAME_PAGE_WIDTH             "Width"
-#define UNO_NAME_PAGE_PREVIEW           "Preview"
-#define UNO_NAME_PAGE_PREVIEWBITMAP     "PreviewBitmap"
-#define UNO_NAME_PAGE_PREVIEWMETAFILE   "PreviewMetafile"
-#define UNO_NAME_PAGE_VISIBLE           "Visible"
+inline constexpr OUStringLiteral UNO_NAME_PAGE_BACKGROUND = u"Background";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_LEFT = u"BorderLeft";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_RIGHT = u"BorderRight";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_TOP = u"BorderTop";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_BOTTOM = u"BorderBottom";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_CHANGE = u"Change";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_DURATION = u"Duration";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_EFFECT = u"Effect";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_HEIGHT = u"Height";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_LAYOUT = u"Layout";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_NUMBER = u"Number";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_ORIENTATION = u"Orientation";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_SPEED = u"Speed";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_TRANSITION_DURATION = u"TransitionDuration";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_WIDTH = u"Width";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_PREVIEW = u"Preview";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_PREVIEWBITMAP = u"PreviewBitmap";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_PREVIEWMETAFILE = u"PreviewMetafile";
+inline constexpr OUStringLiteral UNO_NAME_PAGE_VISIBLE = u"Visible";
 
-#define UNO_NAME_OBJ_BOOKMARK           "Bookmark"
-#define UNO_NAME_OBJ_DIMCOLOR           "DimColor"
-#define UNO_NAME_OBJ_DIMHIDE            "DimHide"
-#define UNO_NAME_OBJ_DIMPREV            "DimPrevious"
-#define UNO_NAME_OBJ_EFFECT             "Effect"
-#define UNO_NAME_OBJ_ISEMPTYPRESOBJ     "IsEmptyPresentationObject"
-#define UNO_NAME_OBJ_ISPRESOBJ          "IsPresentationObject"
-#define UNO_NAME_OBJ_CLICKACTION        "OnClick"
-#define UNO_NAME_OBJ_PLAYFULL           "PlayFull"
-#define UNO_NAME_OBJ_PRESORDER          "PresentationOrder"
-#define UNO_NAME_OBJ_SOUNDFILE          "Sound"
-#define UNO_NAME_OBJ_SOUNDON            "SoundOn"
-#define UNO_NAME_OBJ_SPEED              "Speed"
-#define UNO_NAME_OBJ_TEXTEFFECT         "TextEffect"
-#define UNO_NAME_OBJ_BLUESCREEN         "TransparentColor"
-#define UNO_NAME_OBJ_VERB               "Verb"
-#define UNO_NAME_OBJ_STYLE              "Style"
-#define UNO_NAME_OBJ_MASTERDEPENDENT    "IsPlaceholderDependent"
-#define UNO_NAME_OBJ_ANIMATIONPATH      "AnimationPath"
-#define UNO_NAME_OBJ_LEGACYFRAGMENT     "LegacyFragment"
+inline constexpr OUStringLiteral UNO_NAME_OBJ_BOOKMARK = u"Bookmark";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_DIMCOLOR = u"DimColor";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_DIMHIDE = u"DimHide";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_DIMPREV = u"DimPrevious";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_EFFECT = u"Effect";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_ISEMPTYPRESOBJ = u"IsEmptyPresentationObject";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_ISPRESOBJ = u"IsPresentationObject";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_CLICKACTION = u"OnClick";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_PLAYFULL = u"PlayFull";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_PRESORDER = u"PresentationOrder";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_SOUNDFILE = u"Sound";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_SOUNDON = u"SoundOn";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_SPEED = u"Speed";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_TEXTEFFECT = u"TextEffect";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_BLUESCREEN = u"TransparentColor";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_VERB = u"Verb";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_STYLE = u"Style";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_MASTERDEPENDENT = u"IsPlaceholderDependent";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_ANIMATIONPATH = u"AnimationPath";
+inline constexpr OUStringLiteral UNO_NAME_OBJ_LEGACYFRAGMENT = u"LegacyFragment";
 
-#define UNO_NAME_LAYER_LOCKED           "IsLocked"
-#define UNO_NAME_LAYER_PRINTABLE        "IsPrintable"
-#define UNO_NAME_LAYER_VISIBLE          "IsVisible"
-#define UNO_NAME_LAYER_NAME             "Name"
+inline constexpr OUStringLiteral UNO_NAME_LAYER_LOCKED = u"IsLocked";
+inline constexpr OUStringLiteral UNO_NAME_LAYER_PRINTABLE = u"IsPrintable";
+inline constexpr OUStringLiteral UNO_NAME_LAYER_VISIBLE = u"IsVisible";
+inline constexpr OUStringLiteral UNO_NAME_LAYER_NAME = u"Name";
 
 
-#define UNO_NAME_SEARCH_BACKWARDS   "SearchBackwards"
-#define UNO_NAME_SEARCH_CASE        "SearchCaseSensitive"
-#define UNO_NAME_SEARCH_WORDS       "SearchWords"
+inline constexpr OUStringLiteral UNO_NAME_SEARCH_BACKWARDS = u"SearchBackwards";
+inline constexpr OUStringLiteral UNO_NAME_SEARCH_CASE = u"SearchCaseSensitive";
+inline constexpr OUStringLiteral UNO_NAME_SEARCH_WORDS = u"SearchWords";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

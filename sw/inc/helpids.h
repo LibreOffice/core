@@ -20,7 +20,9 @@
 #ifndef INCLUDED_SW_INC_HELPIDS_H
 #define INCLUDED_SW_INC_HELPIDS_H
 
-#define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
+#include <rtl/string.hxx>
+
+inline constexpr OStringLiteral HID_EDIT_WIN = "SW_HID_EDIT_WIN";
 
 #define HID_NAVI_DRAG_HYP                                       "SW_HID_NAVI_DRAG_HYP"
 #define HID_NAVI_DRAG_LINK                                      "SW_HID_NAVI_DRAG_LINK"
@@ -28,17 +30,17 @@
 #define HID_NAVI_OUTLINES                                       "SW_HID_NAVI_OUTLINES"
 
 
-#define HID_PAGEPREVIEW                                         "SW_HID_PAGEPREVIEW"
-#define HID_SOURCE_EDITWIN                                      "SW_HID_SOURCE_EDITWIN"
+inline constexpr OStringLiteral HID_PAGEPREVIEW = "SW_HID_PAGEPREVIEW";
+inline constexpr OStringLiteral HID_SOURCE_EDITWIN = "SW_HID_SOURCE_EDITWIN";
 
 // Dialog Help-IDs
 
-#define HID_NAVIGATOR_TREELIST                                  "SW_HID_NAVIGATOR_TREELIST"
-#define HID_NAVIGATOR_TOOLBOX                                   "SW_HID_NAVIGATOR_TOOLBOX"
-#define HID_NAVIGATOR_LISTBOX                                   "SW_HID_NAVIGATOR_LISTBOX"
+inline constexpr OStringLiteral HID_NAVIGATOR_TREELIST = "SW_HID_NAVIGATOR_TREELIST";
+inline constexpr OStringLiteral HID_NAVIGATOR_TOOLBOX = "SW_HID_NAVIGATOR_TOOLBOX";
+inline constexpr OStringLiteral HID_NAVIGATOR_LISTBOX = "SW_HID_NAVIGATOR_LISTBOX";
 #define HID_NAVI_VS                                             "SW_HID_NAVI_VS"
-#define HID_NAVIGATOR_GLOBAL_TOOLBOX                            "SW_HID_NAVIGATOR_GLOBAL_TOOLBOX"
-#define HID_NAVIGATOR_GLOB_TREELIST                             "SW_HID_NAVIGATOR_GLOB_TREELIST"
+inline constexpr OStringLiteral HID_NAVIGATOR_GLOBAL_TOOLBOX = "SW_HID_NAVIGATOR_GLOBAL_TOOLBOX";
+inline constexpr OStringLiteral HID_NAVIGATOR_GLOB_TREELIST = "SW_HID_NAVIGATOR_GLOB_TREELIST";
 #define HID_GLBLTREE_UPDATE                                     "SW_HID_GLBLTREE_UPDATE"
 #define HID_GLBLTREE_INSERT                                     "SW_HID_GLBLTREE_INSERT"
 #define HID_GLBLTREE_EDIT                                       "SW_HID_GLBLTREE_EDIT"
@@ -57,14 +59,14 @@
 
 // TabPage Help-IDs
 
-#define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
+inline constexpr OStringLiteral HID_REDLINE_CTRL = "SW_HID_REDLINE_CTRL";
 
-#define HID_LINGU_AUTOCORR                                      "SW_HID_LINGU_AUTOCORR"
-#define HID_LINGU_REPLACE                                       "SW_HID_LINGU_REPLACE"
-#define HID_LINGU_IGNORE_SELECTION                              "SW_HID_LINGU_IGNORE_SELECTION"    // grammar check context menu
+inline constexpr OStringLiteral HID_LINGU_AUTOCORR = "SW_HID_LINGU_AUTOCORR";
+inline constexpr OStringLiteral HID_LINGU_REPLACE = "SW_HID_LINGU_REPLACE";
+inline constexpr OStringLiteral HID_LINGU_IGNORE_SELECTION = "SW_HID_LINGU_IGNORE_SELECTION";    // grammar check context menu
 
 // More Help-IDs
-#define HID_EDIT_FORMULA                                        "SW_HID_EDIT_FORMULA"
+inline constexpr OStringLiteral HID_EDIT_FORMULA = "SW_HID_EDIT_FORMULA";
 
 #define HID_AUTH_FIELD_IDENTIFIER                               "SW_HID_AUTH_FIELD_IDENTIFIER"
 #define HID_AUTH_FIELD_AUTHORITY_TYPE                           "SW_HID_AUTH_FIELD_AUTHORITY_TYPE"
@@ -99,11 +101,11 @@
 #define HID_AUTH_FIELD_ISBN                                     "SW_HID_AUTH_FIELD_ISBN"
 #define HID_AUTH_FIELD_LOCAL_URL                                "SW_HID_AUTH_FIELD_LOCAL_URL"
 
-#define HID_BUSINESS_FMT_PAGE                                   "SW_HID_BUSINESS_FMT_PAGE"
-#define HID_BUSINESS_FMT_PAGE_CONT                              "SW_HID_BUSINESS_FMT_PAGE_CONT"
-#define HID_BUSINESS_FMT_PAGE_SHEET                             "SW_HID_BUSINESS_FMT_PAGE_SHEET"
-#define HID_BUSINESS_FMT_PAGE_BRAND                             "SW_HID_BUSINESS_FMT_PAGE_BRAND"
-#define HID_BUSINESS_FMT_PAGE_TYPE                              "SW_HID_BUSINESS_FMT_PAGE_TYPE"
+inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE = "SW_HID_BUSINESS_FMT_PAGE";
+inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE_CONT = "SW_HID_BUSINESS_FMT_PAGE_CONT";
+inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE_SHEET = "SW_HID_BUSINESS_FMT_PAGE_SHEET";
+inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE_BRAND = "SW_HID_BUSINESS_FMT_PAGE_BRAND";
+inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE_TYPE = "SW_HID_BUSINESS_FMT_PAGE_TYPE";
 #define HID_SEND_MASTER_CTRL_PUSHBUTTON_OK                      "SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_OK"
 #define HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL                  "SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL"
 #define HID_SEND_MASTER_CTRL_LISTBOX_FILTER                     "SW_HID_SEND_MASTER_CTRL_LISTBOX_FILTER"
@@ -120,7 +122,7 @@
 #define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION               "SW_HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION"
 #define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE                     "SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE"
 
-#define HID_PVIEW_ZOOM_LB                                       "SW_HID_PVIEW_ZOOM_LB"
+inline constexpr OStringLiteral HID_PVIEW_ZOOM_LB = "SW_HID_PVIEW_ZOOM_LB";
 
 #define HID_NID_TBL                                             "SW_HID_NID_TBL"
 #define HID_NID_FRM                                             "SW_HID_NID_FRM"
@@ -142,18 +144,18 @@
 #define HID_NID_TABLE_FORMULA                                   "SW_HID_NID_TABLE_FORMULA"
 #define HID_NID_TABLE_FORMULA_ERROR                             "SW_HID_NID_TABLE_FORMULA_ERROR"
 #define HID_NID_NEXT                                            "SW_HID_NID_NEXT"
-#define HID_MM_NEXT_PAGE                                        "SW_HID_MM_NEXT_PAGE"
-#define HID_MM_PREV_PAGE                                        "SW_HID_MM_PREV_PAGE"
-#define HID_MM_ADDBLOCK_ELEMENTS                                "SW_HID_MM_ADDBLOCK_ELEMENTS"
-#define HID_MM_ADDBLOCK_INSERT                                  "SW_HID_MM_ADDBLOCK_INSERT"
-#define HID_MM_ADDBLOCK_REMOVE                                  "SW_HID_MM_ADDBLOCK_REMOVE"
-#define HID_MM_ADDBLOCK_DRAG                                    "SW_HID_MM_ADDBLOCK_DRAG"
-#define HID_MM_ADDBLOCK_PREVIEW                                 "SW_HID_MM_ADDBLOCK_PREVIEW"
-#define HID_MM_ADDBLOCK_MOVEBUTTONS                             "SW_HID_MM_ADDBLOCK_MOVEBUTTONS"
+inline constexpr OStringLiteral HID_MM_NEXT_PAGE = "SW_HID_MM_NEXT_PAGE";
+inline constexpr OStringLiteral HID_MM_PREV_PAGE = "SW_HID_MM_PREV_PAGE";
+inline constexpr OStringLiteral HID_MM_ADDBLOCK_ELEMENTS = "SW_HID_MM_ADDBLOCK_ELEMENTS";
+inline constexpr OStringLiteral HID_MM_ADDBLOCK_INSERT = "SW_HID_MM_ADDBLOCK_INSERT";
+inline constexpr OStringLiteral HID_MM_ADDBLOCK_REMOVE = "SW_HID_MM_ADDBLOCK_REMOVE";
+inline constexpr OStringLiteral HID_MM_ADDBLOCK_DRAG = "SW_HID_MM_ADDBLOCK_DRAG";
+inline constexpr OStringLiteral HID_MM_ADDBLOCK_PREVIEW = "SW_HID_MM_ADDBLOCK_PREVIEW";
+inline constexpr OStringLiteral HID_MM_ADDBLOCK_MOVEBUTTONS = "SW_HID_MM_ADDBLOCK_MOVEBUTTONS";
 
-#define HID_TBX_FORMULA_CALC                                    "SW_HID_TBX_FORMULA_CALC"
-#define HID_TBX_FORMULA_CANCEL                                  "SW_HID_TBX_FORMULA_CANCEL"
-#define HID_TBX_FORMULA_APPLY                                   "SW_HID_TBX_FORMULA_APPLY"
+inline constexpr OStringLiteral HID_TBX_FORMULA_CALC = "SW_HID_TBX_FORMULA_CALC";
+inline constexpr OStringLiteral HID_TBX_FORMULA_CANCEL = "SW_HID_TBX_FORMULA_CANCEL";
+inline constexpr OStringLiteral HID_TBX_FORMULA_APPLY = "SW_HID_TBX_FORMULA_APPLY";
 
 #endif
 
