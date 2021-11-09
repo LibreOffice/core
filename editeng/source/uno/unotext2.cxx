@@ -24,7 +24,6 @@
 
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/instance.hxx>
 
 #include <editeng/unotext.hxx>
 #include <comphelper/sequence.hxx>
