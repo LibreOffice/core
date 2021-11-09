@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88f9f349_afac51a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-09T19:24:48Z",
+      "side": 1,
+      "message": "Good find. But looking at the commit that introduced this, getLOKPayload() returns empty string to mean \u0027ignore\u0027 only in SwSelPaintRects::getLOKPayload() for LOK_CALLBACK_TEXT_SELECTION_START/END, so it\u0027s only those for which the function should return.\n",
+      "revId": "e55207056662673456186aa80d365a38aa2e787f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
