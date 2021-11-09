@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e922bc10_a2c61e58",
+        "filename": "solenv/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-09T07:23:11Z",
+      "side": 1,
+      "message": "nitpick 1: why the excitement?  :)",
+      "range": {
+        "startLine": 44,
+        "startChar": 71,
+        "endLine": 44,
+        "endChar": 72
+      },
+      "revId": "2c4a6a5d35dcbea522c185ec6dd693a3e8499fb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb88d747_98087e39",
+        "filename": "solenv/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-09T07:23:11Z",
+      "side": 1,
+      "message": "nitpick 2: why add an empty line at the end?",
+      "revId": "2c4a6a5d35dcbea522c185ec6dd693a3e8499fb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
