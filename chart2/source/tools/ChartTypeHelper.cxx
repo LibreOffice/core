@@ -464,6 +464,19 @@ bool ChartTypeHelper::isSupportingCategoryPositioning( const uno::Reference< cha
     return false;
 }
 
+bool ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
+{
+    if(xChartType.is())
+    {
+        OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+            return true;
+    }
+    return false;
+}
+
 bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XChartType >& xChartType )
 {
     if(xChartType.is())
