@@ -188,7 +188,7 @@ $(eval $(call repositorymodule_serialize,\
 	$(call gb_Helper_optional,DESKTOP,swui) \
 	sw sd \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
-	writerfilter cui chartcontroller chartcore oox \
+	writerfilter cui chart2 oox \
 	$(if $(MERGELIBS), merged, \
 		svx svxcore xo sfx fwk svt vcl) \
 ))

@@ -67,8 +67,7 @@ $(eval $(call gb_CppunitTest_use_ure,sc_chart_regression_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_chart_regression_test,\
     basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

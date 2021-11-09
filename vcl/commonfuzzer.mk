@@ -105,8 +105,7 @@ fuzzer_core_libraries = \
     xo \
     xstor \
     cui \
-    chartcontroller \
-    chartcore \
+    chart2 \
     sm \
     oox \
     proxyfac \
