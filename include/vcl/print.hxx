@@ -230,7 +230,10 @@ public:
     sal_uInt16                  GetPaperBin() const;
     void                        SetPaper( Paper ePaper );
     bool                        SetPaperSizeUser( const Size& rSize );
+    /** @return The paper format of the printer's current "jobsetup". Note that if PAPER_USER the actual size can be anything. */
     Paper                       GetPaper() const;
+    /** @return Size of the paper of the printer's current "jobsetup". */
+    Size                        GetSizeOfPaper() const;
     static OUString             GetPaperName( Paper ePaper );
 
     /** @return Number of available paper formats */
