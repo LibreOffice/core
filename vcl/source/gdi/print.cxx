@@ -1560,6 +1560,11 @@ Paper Printer::GetPaper() const
     return maJobSetup.ImplGetConstData().GetPaperFormat();
 }
 
+Size Printer::GetSizeOfPaper() const
+{
+    return Size(maJobSetup.ImplGetConstData().GetPaperWidth(), maJobSetup.ImplGetConstData().GetPaperHeight());
+}
+
 sal_uInt16 Printer::GetPaperBinCount() const
 {
     if ( IsDisplayPrinter() )
