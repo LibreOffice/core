@@ -1592,12 +1592,17 @@ bool SwTable::IsDeleted() const
     return true;
 }
 
-bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
+// TODO Set HasTextChangesOnly=true, if needed based on the redlines in the cells.
+// At tracked row deletion, return with the newest deletion of the row or
+// at tracked row insertion, return with the oldest insertion in the row, which
+// contain the change data of the row change.
+// If the return value is SwRedlineTable::npos, there is no tracked row change.
+SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(SwRedlineTable::size_type& rRedlinePos) const
 {
-    bool bRet = false;
+    SwRedlineTable::size_type nRet = SwRedlineTable::npos;
     const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     if ( aRedlineTable.empty() )
-        return false;
+        return nRet;
 
     // check table row property "HasTextChangesOnly", if it's defined and its
     // value is false, and all text content is in delete redlines, the row is deleted
@@ -1607,6 +1612,8 @@ bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
     {
         const SwTableBoxes & rBoxes = GetTabBoxes();
         size_t nBoxes = rBoxes.size();
+        bool bInsertion = false;
+
         for (size_t nBoxIndex = 0; nBoxIndex < nBoxes && rRedlinePos < aRedlineTable.size(); ++nBoxIndex)
         {
             auto pBox = rBoxes[nBoxIndex];
@@ -1616,10 +1623,11 @@ bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
                continue;
             }
 
+            bool bHasRedline = false;
             SwPosition aCellStart( SwNodeIndex( *pBox->GetSttNd(), 0 ) );
             SwPosition aCellEnd( SwNodeIndex( *pBox->GetSttNd()->EndOfSectionNode(), -1 ) );
             SwNodeIndex pEndNodeIndex(aCellEnd.nNode.GetNode());
-            for( bRet = false ; rRedlinePos < aRedlineTable.size(); ++rRedlinePos )
+            for( ; rRedlinePos < aRedlineTable.size(); ++rRedlinePos )
             {
                 const SwRangeRedline* pRedline = aRedlineTable[ rRedlinePos ];
 
@@ -1630,26 +1638,61 @@ bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
                     break;
                 }
 
-                // redline in the cell, it must be a delete redline
+                // redline in the cell
                 if ( aCellStart <= *pRedline->Start() )
                 {
-                    bRet = RedlineType::Delete == pRedline->GetType();
-                    if ( !bRet )
-                        // other type of redline, e.g. tracked row insertion
-                        // contains an insert redline at the beginning of the first cell
-                        return false;
+                    bHasRedline = true;
+                    RedlineType nType = pRedline->GetType();
+
+                    // first insert redline
+                    if ( !bInsertion && RedlineType::Insert == nType )
+                    {
+                        bInsertion = true;
+                        nRet = rRedlinePos;
+                        continue;
+                        // TODO check older delete redlines to remove row change, if needed
+                    }
+
+                    // search newest deletion or oldest insertion
+                    if ( ( !bInsertion && RedlineType::Delete == nType &&
+                           ( nRet == SwRedlineTable::npos ||
+                             aRedlineTable[nRet]->GetRedlineData().GetTimeStamp() <
+                                 pRedline->GetRedlineData().GetTimeStamp() ) ) ||
+                         ( bInsertion && RedlineType::Insert == nType &&
+                           ( nRet == SwRedlineTable::npos ||
+                             aRedlineTable[nRet]->GetRedlineData().GetTimeStamp() >
+                                 pRedline->GetRedlineData().GetTimeStamp() ) ) )
+                    {
+                        nRet = rRedlinePos;
+                    }
                 }
             }
 
-            if ( !bRet )
+            if ( !bHasRedline && !bInsertion )
             {
                 // not deleted cell content: the row is not empty
-                return false;
+                // maybe insertion of a row, try to search it
+                bInsertion = true;
+                // drop collected deletion
+                nRet = SwRedlineTable::npos;
             }
             // TODO: check also text outside of the redlines
         }
     }
-    return bRet;
+    return nRet;
+}
+
+bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
+{
+   SwRedlineTable::size_type nPos = UpdateTextChangesOnly(rRedlinePos);
+   if ( nPos != SwRedlineTable::npos )
+   {
+       const SwRedlineTable& aRedlineTable =
+           GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+       if ( RedlineType::Delete == aRedlineTable[nPos]->GetType() )
+           return true;
+   }
+   return false;
 }
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
