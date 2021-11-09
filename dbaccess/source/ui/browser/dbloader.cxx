@@ -115,9 +115,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     static const struct ServiceNameToImplName
     {
-        const char*     pAsciiServiceName;
+        OUString     pAsciiServiceName;
         const char*     pAsciiImplementationName;
-        ServiceNameToImplName( const char* _pService, const char* _pImpl )
+        ServiceNameToImplName( const OUString& _pService, const char* _pImpl )
             :pAsciiServiceName( _pService )
             ,pAsciiImplementationName( _pImpl )
         {
@@ -137,7 +137,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     const OUString sComponentURL( aParser.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
     for (const ServiceNameToImplName& aImplementation : aImplementations)
     {
-        if ( sComponentURL.equalsAscii( aImplementation.pAsciiServiceName ) )
+        if ( sComponentURL == aImplementation.pAsciiServiceName )
         {
             xController.set( m_xContext->getServiceManager()->
                createInstanceWithContext( OUString::createFromAscii( aImplementation.pAsciiImplementationName ), m_xContext), UNO_QUERY_THROW );

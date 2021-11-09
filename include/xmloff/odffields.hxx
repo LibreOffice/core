@@ -29,7 +29,7 @@
 #define ODF_FORMCHECKBOX_RESULT "Checkbox_Checked"
 
 #define ODF_FORMDROPDOWN u"vnd.oasis.opendocument.field.FORMDROPDOWN"
-#define ODF_FORMDROPDOWN_LISTENTRY "Dropdown_ListEntry"
+constexpr OUStringLiteral ODF_FORMDROPDOWN_LISTENTRY = u"Dropdown_ListEntry";
 #define ODF_FORMDROPDOWN_RESULT "Dropdown_Selected"
 #define ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT 25
 

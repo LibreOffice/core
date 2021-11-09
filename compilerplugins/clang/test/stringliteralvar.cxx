@@ -110,4 +110,41 @@ void f11(int nStreamType)
     (void)sStreamType;
 }
 
+void f12()
+{
+// expected-error@+1 {{change macro 'XXX' to 'inline constexpr OUStringLiteral' [loplugin:stringliteralvar]}}
+#define XXX "xxx"
+
+    // expected-note@+1 {{macro used here [loplugin:stringliteralvar]}}
+    f(OUString(XXX));
+
+// no warning expected
+#define FOO f(OUString("xxx"))
+    FOO;
+}
+
+// TODO?
+//void f13()
+//{
+//    struct DataFlavorRepresentation
+//    {
+//        OUString               pMimeType;
+//    };
+//
+//#define MIMETYPE_VND_SUN_XML_WRITER_ASCII "xxx"
+//    static const DataFlavorRepresentation aInstance[] =
+//    {
+//        { MIMETYPE_VND_SUN_XML_WRITER_ASCII },
+//    };
+//}
+
+void f14()
+{
+// expected-error@+1 {{change macro 'YYY' to 'inline constexpr OUStringLiteral' [loplugin:stringliteralvar]}}
+#define YYY "yyy"
+
+    // expected-note@+1 {{macro used here [loplugin:stringliteralvar]}}
+    f(YYY);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

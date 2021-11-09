@@ -19,21 +19,21 @@
 
 #pragma once
 
-#define WINDOWSTATE_PROPERTY_LOCKED         "Locked"
-#define WINDOWSTATE_PROPERTY_DOCKED         "Docked"
-#define WINDOWSTATE_PROPERTY_VISIBLE        "Visible"
-#define WINDOWSTATE_PROPERTY_DOCKINGAREA    "DockingArea"
-#define WINDOWSTATE_PROPERTY_DOCKPOS        "DockPos"
-#define WINDOWSTATE_PROPERTY_DOCKSIZE       "DockSize"
-#define WINDOWSTATE_PROPERTY_POS            "Pos"
-#define WINDOWSTATE_PROPERTY_SIZE           "Size"
-#define WINDOWSTATE_PROPERTY_UINAME         "UIName"
-#define WINDOWSTATE_PROPERTY_INTERNALSTATE  "InternalState"
-#define WINDOWSTATE_PROPERTY_STYLE          "Style"
-#define WINDOWSTATE_PROPERTY_CONTEXT        "ContextSensitive"
-#define WINDOWSTATE_PROPERTY_HIDEFROMENU    "HideFromToolbarMenu"
-#define WINDOWSTATE_PROPERTY_NOCLOSE        "NoClose"
-#define WINDOWSTATE_PROPERTY_SOFTCLOSE      "SoftClose"
-#define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_LOCKED = u"Locked";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKED = u"Docked";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_VISIBLE = u"Visible";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKINGAREA = u"DockingArea";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKPOS = u"DockPos";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKSIZE = u"DockSize";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_POS = u"Pos";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_SIZE = u"Size";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_UINAME = u"UIName";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_INTERNALSTATE = u"InternalState";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_STYLE = u"Style";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_CONTEXT = u"ContextSensitive";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_HIDEFROMENU = u"HideFromToolbarMenu";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_NOCLOSE = u"NoClose";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_SOFTCLOSE = u"SoftClose";
+constexpr OUStringLiteral WINDOWSTATE_PROPERTY_CONTEXTACTIVE = u"ContextActive";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

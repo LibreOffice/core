@@ -12,15 +12,15 @@
 
 // property names
 
-#define PROPERTY_URL "URL"
+constexpr OUStringLiteral PROPERTY_URL = u"URL";
 #define PROPERTY_INFO "Info"
 #define PROPERTY_SETTINGS "Settings"
 #define PROPERTY_ISPASSWORDREQUIRED "IsPasswordRequired"
 #define PROPERTY_TABLEFILTER "TableFilter"
 #define PROPERTY_TABLETYPEFILTER "TableTypeFilter"
-#define PROPERTY_NAME "Name"
-#define PROPERTY_SCHEMANAME "SchemaName"
-#define PROPERTY_CATALOGNAME "CatalogName"
+constexpr OUStringLiteral PROPERTY_NAME = u"Name";
+constexpr OUStringLiteral PROPERTY_SCHEMANAME = u"SchemaName";
+constexpr OUStringLiteral PROPERTY_CATALOGNAME = u"CatalogName";
 #define PROPERTY_PRIVILEGES "Privileges"
 #define PROPERTY_ESCAPE_PROCESSING "EscapeProcessing"
 #define PROPERTY_COMMAND "Command"
@@ -33,7 +33,7 @@
 #define PROPERTY_ISROWVERSION "IsRowVersion"
 #define PROPERTY_DESCRIPTION "Description"
 #define PROPERTY_DEFAULTVALUE "DefaultValue"
-#define PROPERTY_NUMBERFORMAT "FormatKey"
+constexpr OUStringLiteral PROPERTY_NUMBERFORMAT = u"FormatKey";
 #define PROPERTY_QUERYTIMEOUT "QueryTimeOut"
 #define PROPERTY_MAXFIELDSIZE "MaxFieldSize"
 #define PROPERTY_MAXROWS "MaxRows"
@@ -52,7 +52,7 @@
 #define PROPERTY_ISWRITABLE "IsWritable"
 #define PROPERTY_ISDEFINITELYWRITABLE "IsDefinitelyWritable"
 #define PROPERTY_VALUE "Value"
-#define PROPERTY_TABLENAME "TableName"
+constexpr OUStringLiteral PROPERTY_TABLENAME = u"TableName";
 #define PROPERTY_ISCASESENSITIVE "IsCaseSensitive"
 #define PROPERTY_SERVICENAME "ServiceName"
 #define PROPERTY_ISBOOKMARKABLE "IsBookmarkable"
@@ -73,36 +73,36 @@
 #define PROPERTY_DATASOURCE "DataSource"
 #define PROPERTY_TRANSACTIONISOLATION "TransactionIsolation"
 #define PROPERTY_TYPEMAP "TypeMap"
-#define PROPERTY_USER "User"
+constexpr OUStringLiteral PROPERTY_USER = u"User";
 #define PROPERTY_PASSWORD "Password"
 #define PROPERTY_COMMAND_TYPE "CommandType"
 #define PROPERTY_ACTIVECOMMAND "ActiveCommand"
 #define PROPERTY_ACTIVE_CONNECTION "ActiveConnection"
-#define PROPERTY_FILTER "Filter"
-#define PROPERTY_APPLYFILTER "ApplyFilter"
-#define PROPERTY_ORDER "Order"
+constexpr OUStringLiteral PROPERTY_FILTER = u"Filter";
+constexpr OUStringLiteral PROPERTY_APPLYFILTER = u"ApplyFilter";
+constexpr OUStringLiteral PROPERTY_ORDER = u"Order";
 #define PROPERTY_APPLYORDER "ApplyOrder"
 #define PROPERTY_ISMODIFIED "IsModified"
 #define PROPERTY_ISNEW "IsNew"
 #define PROPERTY_ROWCOUNT "RowCount"
 #define PROPERTY_ISROWCOUNTFINAL "IsRowCountFinal"
 #define PROPERTY_HELPFILENAME "HelpFileName"
-#define PROPERTY_WIDTH "Width"
-#define PROPERTY_ROW_HEIGHT "RowHeight"
+constexpr OUStringLiteral PROPERTY_WIDTH = u"Width";
+constexpr OUStringLiteral PROPERTY_ROW_HEIGHT = u"RowHeight";
 #define PROPERTY_AUTOGROW "AutoGrow"
 #define PROPERTY_FORMATKEY "FormatKey"
-#define PROPERTY_ALIGN "Align"
-#define PROPERTY_FONT "FontDescriptor"
-#define PROPERTY_TEXTCOLOR "TextColor"
+constexpr OUStringLiteral PROPERTY_ALIGN = u"Align";
+constexpr OUStringLiteral PROPERTY_FONT = u"FontDescriptor";
+constexpr OUStringLiteral PROPERTY_TEXTCOLOR = u"TextColor";
 #define PROPERTY_BOUNDFIELD "BoundField"
 #define PROPERTY_CONTROLSOURCE "DataField"
-#define PROPERTY_REALNAME "RealName"
+constexpr OUStringLiteral PROPERTY_REALNAME = u"RealName";
 #define PROPERTY_ISHIDDEN "IsHidden"
-#define PROPERTY_UPDATE_TABLENAME "UpdateTableName"
-#define PROPERTY_UPDATE_SCHEMANAME "UpdateSchemaName"
-#define PROPERTY_UPDATE_CATALOGNAME "UpdateCatalogName"
-#define PROPERTY_RELATIVEPOSITION "RelativePosition"
-#define PROPERTY_CONTROLMODEL "ControlModel"
+constexpr OUStringLiteral PROPERTY_UPDATE_TABLENAME = u"UpdateTableName";
+constexpr OUStringLiteral PROPERTY_UPDATE_SCHEMANAME = u"UpdateSchemaName";
+constexpr OUStringLiteral PROPERTY_UPDATE_CATALOGNAME = u"UpdateCatalogName";
+constexpr OUStringLiteral PROPERTY_RELATIVEPOSITION = u"RelativePosition";
+constexpr OUStringLiteral PROPERTY_CONTROLMODEL = u"ControlModel";
 #define PROPERTY_ISASCENDING "IsAscending"
 #define PROPERTY_RELATEDCOLUMN "RelatedColumn"
 #define PROPERTY_ISUNIQUE "IsUnique"
@@ -116,9 +116,9 @@
 #define PROPERTY_SQLEXCEPTION "SQLException"
 #define PROPERTY_BORDER "Border"
 #define PROPERTY_THREADSAFE "ThreadSafe"
-#define PROPERTY_HELPTEXT "HelpText"
-#define PROPERTY_CONTROLDEFAULT "ControlDefault"
-#define PROPERTY_HIDDEN "Hidden"
+constexpr OUStringLiteral PROPERTY_HELPTEXT = u"HelpText";
+constexpr OUStringLiteral PROPERTY_CONTROLDEFAULT = u"ControlDefault";
+constexpr OUStringLiteral PROPERTY_HIDDEN = u"Hidden";
 #define PROPERTY_DEFAULTSTATE "DefaultState"
 #define PROPERTY_SUPPRESSVERSIONCL "SuppressVersionColumns"
 #define PROPERTY_SHOW_BROWSER "ShowBrowser"
@@ -130,13 +130,13 @@
 #define PROPERTY_CONTROLUSER "ControlUser"
 #define PROPERTY_CONTROLPASSWORD "ControlPassword"
 #define PROPERTY_CACHESIZE "CacheSize"
-#define PROPERTY_TEXTLINECOLOR "TextLineColor"
-#define PROPERTY_TEXTEMPHASIS "FontEmphasisMark"
-#define PROPERTY_TEXTRELIEF "FontRelief"
+constexpr OUStringLiteral PROPERTY_TEXTLINECOLOR = u"TextLineColor";
+constexpr OUStringLiteral PROPERTY_TEXTEMPHASIS = u"FontEmphasisMark";
+constexpr OUStringLiteral PROPERTY_TEXTRELIEF = u"FontRelief";
 #define PROPERTY_DEFAULTTEXT "DefaultText"
 #define PROPERTY_EFFECTIVEDEFAULT "EffectiveDefault"
 #define PROPERTY_AUTOINCREMENTCREATION "AutoIncrementCreation"
-#define PROPERTY_BOOLEANCOMPARISONMODE "BooleanComparisonMode"
+constexpr OUStringLiteral PROPERTY_BOOLEANCOMPARISONMODE = u"BooleanComparisonMode";
 #define PROPERTY_ENABLESQL92CHECK "EnableSQL92Check"
 #define PROPERTY_FONTCHARWIDTH "FontCharWidth"
 #define PROPERTY_FONTCHARSET "FontCharset"
@@ -161,8 +161,8 @@
 #define PROPERTY_USESCHEMAINSELECT "UseSchemaInSelect"
 #define PROPERTY_OUTERJOINESCAPE "EnableOuterJoinEscape"
 #define PROPERTY_AS_TEMPLATE "AsTemplate"
-#define PROPERTY_HAVING_CLAUSE "HavingClause"
-#define PROPERTY_GROUP_BY "GroupBy"
+constexpr OUStringLiteral PROPERTY_HAVING_CLAUSE = u"HavingClause";
+constexpr OUStringLiteral PROPERTY_GROUP_BY = u"GroupBy";
 #define PROPERTY_EDIT_WIDTH "EditWidth"
 #define PROPERTY_SINGLESELECTQUERYCOMPOSER "SingleSelectQueryComposer"
 #define PROPERTY_CHANGE_NOTIFICATION_ENABLED "PropertyChangeNotificationEnabled"
@@ -179,8 +179,8 @@
 #define SERVICE_SDBCX_TABLE "com.sun.star.sdbcx.Table"
 #define SERVICE_SDBCX_RESULTSET "com.sun.star.sdbcx.ResultSet"
 #define SERVICE_SDB_CONNECTION "com.sun.star.sdb.Connection"
-#define SERVICE_SDBCX_COLUMN "com.sun.star.sdbcx.Column"
-#define SERVICE_SDBCX_COLUMNDESCRIPTOR "com.sun.star.sdbcx.ColumnDescriptor"
+constexpr OUStringLiteral SERVICE_SDBCX_COLUMN = u"com.sun.star.sdbcx.Column";
+constexpr OUStringLiteral SERVICE_SDBCX_COLUMNDESCRIPTOR = u"com.sun.star.sdbcx.ColumnDescriptor";
 #define SERVICE_SDB_COLUMNSETTINGS "com.sun.star.sdb.ColumnSettings"
 #define SERVICE_SDB_RESULTCOLUMN "com.sun.star.sdb.ResultColumn"
 #define SERVICE_SDB_DATACOLUMN "com.sun.star.sdb.DataColumn"
@@ -198,11 +198,11 @@
 #define SERVICE_SDB_QUERIES "com.sun.star.sdb.Queries"
 #define SERVICE_SDBCX_INDEXCOLUMN "com.sun.star.sdbcx.IndexColumn"
 #define SERVICE_SDBCX_KEYCOLUMN "com.sun.star.sdbcx.KeyColumn"
-#define SERVICE_SDB_DOCUMENTDEFINITION "com.sun.star.sdb.DocumentDefinition"
+constexpr OUStringLiteral SERVICE_SDB_DOCUMENTDEFINITION = u"com.sun.star.sdb.DocumentDefinition";
 #define SERVICE_NAME_FORM "com.sun.star.sdb.Form"
-#define SERVICE_NAME_FORM_COLLECTION "com.sun.star.sdb.Forms"
+constexpr OUStringLiteral SERVICE_NAME_FORM_COLLECTION = u"com.sun.star.sdb.Forms";
 #define SERVICE_NAME_REPORT "com.sun.star.sdb.Report"
-#define SERVICE_NAME_REPORT_COLLECTION "com.sun.star.sdb.Reports"
+constexpr OUStringLiteral SERVICE_NAME_REPORT_COLLECTION = u"com.sun.star.sdb.Reports";
 #define SERVICE_NAME_QUERY_COLLECTION "com.sun.star.sdb.Queries"
 #define SERVICE_NAME_TABLE_COLLECTION "com.sun.star.sdb.Tables"
 #define SERVICE_NAME_SINGLESELECTQUERYCOMPOSER "com.sun.star.sdb.SingleSelectQueryComposer"
@@ -240,12 +240,12 @@
 
 // URLs
 
-#define URL_COMPONENT_QUERYDESIGN ".component:DB/QueryDesign"
-#define URL_COMPONENT_VIEWDESIGN ".component:DB/ViewDesign"
-#define URL_COMPONENT_TABLEDESIGN ".component:DB/TableDesign"
+constexpr OUStringLiteral URL_COMPONENT_QUERYDESIGN = u".component:DB/QueryDesign";
+constexpr OUStringLiteral URL_COMPONENT_VIEWDESIGN = u".component:DB/ViewDesign";
+constexpr OUStringLiteral URL_COMPONENT_TABLEDESIGN = u".component:DB/TableDesign";
 #define URL_COMPONENT_FORMGRIDVIEW ".component:DB/FormGridView"
-#define URL_COMPONENT_DATASOURCEBROWSER ".component:DB/DataSourceBrowser"
-#define URL_COMPONENT_RELATIONDESIGN ".component:DB/RelationDesign"
+constexpr OUStringLiteral URL_COMPONENT_DATASOURCEBROWSER = u".component:DB/DataSourceBrowser";
+constexpr OUStringLiteral URL_COMPONENT_RELATIONDESIGN = u".component:DB/RelationDesign";
 #define URL_COMPONENT_APPLICATION ".component:DB/Application"
 #define URL_COMPONENT_REPORTDESIGN ".component:DB/ReportDesign"
 
@@ -255,8 +255,8 @@
 
 // other DBU relevant strings
 
-#define FRAME_NAME_QUERY_PREVIEW "QueryPreview"
-#define SERVICE_CONTROLDEFAULT "com.sun.star.comp.dbu.OColumnControl"
+constexpr OUStringLiteral FRAME_NAME_QUERY_PREVIEW = u"QueryPreview";
+constexpr OUStringLiteral SERVICE_CONTROLDEFAULT = u"com.sun.star.comp.dbu.OColumnControl";
 #define PROPERTY_QUERYDESIGNVIEW "QueryDesignView"
 #define PROPERTY_GRAPHICAL_DESIGN "GraphicalDesign"
 #define PROPERTY_HELP_URL "HelpURL"
@@ -276,7 +276,7 @@
 #define PROPERTY_IS_FORM "IsForm"
 #define PROPERTY_PERSISTENT_PATH "PersistentPath"
 
-#define STR_AUTOTEXTSEPARATORLIST "\"\t34\t'\t39"
+constexpr OUStringLiteral STR_AUTOTEXTSEPARATORLIST = u"\"\t34\t'\t39";
 
 #endif
 

@@ -9,9 +9,9 @@
 
 #pragma once
 
-#define BMP_SAVEMODIFIED_SMALL      "res/savemodified_small.png"
-#define BMP_SAVEMODIFIED_LARGE      "res/savemodified_large.png"
-#define BMP_SAVEMODIFIED_EXTRALARGE "res/savemodified_extralarge.png"
+constexpr OUStringLiteral BMP_SAVEMODIFIED_SMALL = u"res/savemodified_small.png";
+constexpr OUStringLiteral BMP_SAVEMODIFIED_LARGE = u"res/savemodified_large.png";
+constexpr OUStringLiteral BMP_SAVEMODIFIED_EXTRALARGE = u"res/savemodified_extralarge.png";
 
 #define RID_SVXBMP_BUTTON                           "res/sx10594.png"
 #define RID_SVXBMP_RADIOBUTTON                      "res/sx10595.png"

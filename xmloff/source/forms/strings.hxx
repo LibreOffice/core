@@ -40,7 +40,7 @@ namespace xmloff
     #define PROPERTY_STATE "State"
     #define PROPERTY_ENABLED "Enabled"
     #define PROPERTY_ENABLEVISIBLE "EnableVisible"
-    #define PROPERTY_MAXTEXTLENGTH "MaxTextLen"
+    constexpr OUStringLiteral PROPERTY_MAXTEXTLENGTH  = u"MaxTextLen";
     #define PROPERTY_LINECOUNT "LineCount"
     #define PROPERTY_TABINDEX "TabIndex"
     #define PROPERTY_COMMAND "Command"
@@ -142,11 +142,11 @@ namespace xmloff
 
     // services
     #define SERVICE_SPREADSHEET_DOCUMENT "com.sun.star.sheet.SpreadsheetDocument"
-    #define SERVICE_CELLVALUEBINDING "com.sun.star.table.CellValueBinding"
-    #define SERVICE_LISTINDEXCELLBINDING "com.sun.star.table.ListPositionCellBinding"
+    constexpr OUStringLiteral SERVICE_CELLVALUEBINDING  = u"com.sun.star.table.CellValueBinding";
+    constexpr OUStringLiteral SERVICE_LISTINDEXCELLBINDING  = u"com.sun.star.table.ListPositionCellBinding";
     #define SERVICE_CELLRANGELISTSOURCE "com.sun.star.table.CellRangeListSource"
-    #define SERVICE_ADDRESS_CONVERSION "com.sun.star.table.CellAddressConversion"
-    #define SERVICE_RANGEADDRESS_CONVERSION "com.sun.star.table.CellRangeAddressConversion"
+    constexpr OUStringLiteral SERVICE_ADDRESS_CONVERSION  = u"com.sun.star.table.CellAddressConversion";
+    constexpr OUStringLiteral SERVICE_RANGEADDRESS_CONVERSION = u"com.sun.star.table.CellRangeAddressConversion";
 
     // old service names (compatibility)
     #define SERVICE_PERSISTENT_COMPONENT_FORM "stardiv.one.form.component.Form"

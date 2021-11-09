@@ -135,7 +135,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapp
 
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper()
 {
-#define MAP_CONST_ROW( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_CONST_ROW( name, prefix, token, type, context )  { name, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFSVER_010, false }
     static const XMLPropertyMapEntry s_aStylesProperties[] =
     {
         MAP_CONST_ROW( PROPERTY_ROW_HEIGHT,         XML_NAMESPACE_STYLE,    XML_ROW_HEIGHT,             XML_TYPE_MEASURE, 0),

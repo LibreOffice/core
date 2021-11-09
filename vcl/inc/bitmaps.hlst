@@ -46,22 +46,22 @@
 #define SV_RESID_BITMAP_WARNINGBOX                   "vcl/res/warningbox.png"
 #define SV_RESID_BITMAP_INFOBOX                      "vcl/res/infobox.png"
 
-#define SV_RESID_BITMAP_SCROLLMSK                    "vcl/res/scrmsk.png"
+constexpr OUStringLiteral SV_RESID_BITMAP_SCROLLMSK = u"vcl/res/scrmsk.png";
 #define SV_RESID_BITMAP_WHEELVH                      "vcl/res/wheelvh.png"
 #define SV_RESID_BITMAP_WHEELV                       "vcl/res/wheelv.png"
 #define SV_RESID_BITMAP_WHEELH                       "vcl/res/wheelh.png"
 #define SV_RESID_BITMAP_SCROLLVH                     "vcl/res/scrollvh.png"
 #define SV_RESID_BITMAP_SCROLLV                      "vcl/res/scrollv.png"
 #define SV_RESID_BITMAP_SCROLLH                      "vcl/res/scrollh.png"
-#define SV_RESID_BITMAP_CLOSEDOC                     "vcl/res/closedoc.png"
-#define SV_RESID_BITMAP_REFRESH                      "res/reload.png"
-#define SV_RESID_BITMAP_NOTEBOOKBAR                  "res/notebookbar.png"
+constexpr OUStringLiteral SV_RESID_BITMAP_CLOSEDOC = u"vcl/res/closedoc.png";
+constexpr OUStringLiteral SV_RESID_BITMAP_REFRESH = u"res/reload.png";
+constexpr OUStringLiteral SV_RESID_BITMAP_NOTEBOOKBAR = u"res/notebookbar.png";
 
-#define SV_DISCLOSURE_PLUS                           "res/plus.png"
-#define SV_DISCLOSURE_MINUS                          "res/minus.png"
+constexpr OUStringLiteral SV_DISCLOSURE_PLUS = u"res/plus.png";
+constexpr OUStringLiteral SV_DISCLOSURE_MINUS = u"res/minus.png";
 
-#define SV_PRINT_COLLATE_BMP                         "vcl/res/collate.png"
-#define SV_PRINT_NOCOLLATE_BMP                       "vcl/res/ncollate.png"
+constexpr OUStringLiteral SV_PRINT_COLLATE_BMP = u"vcl/res/collate.png";
+constexpr OUStringLiteral SV_PRINT_NOCOLLATE_BMP = u"vcl/res/ncollate.png";
 
 #define MAINAPP_48_8                                 "res/mainapp_48_8.png"
 #define ODT_48_8                                     "res/odt_48_8.png"
@@ -131,86 +131,86 @@
 #define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
 //end, Throbber::getDefaultImageURLs
 
-#define IMG_WARN     "dbaccess/res/exwarning.png"
-#define IMG_ERROR    "dbaccess/res/exerror.png"
-#define IMG_INFO     "dbaccess/res/exinfo.png"
-#define IMG_ADD      "extensions/res/scanner/plus.png"
-#define IMG_REMOVE   "extensions/res/scanner/minus.png"
-#define IMG_COPY     "cmd/sc_copy.png"
-#define IMG_PASTE    "cmd/sc_paste.png"
-#define IMG_MENU     "sfx2/res/menu.png"
-#define IMG_CALENDAR "sc/res/date.png"
+constexpr OUStringLiteral IMG_WARN = u"dbaccess/res/exwarning.png";
+constexpr OUStringLiteral IMG_ERROR = u"dbaccess/res/exerror.png";
+constexpr OUStringLiteral IMG_INFO = u"dbaccess/res/exinfo.png";
+constexpr OUStringLiteral IMG_ADD = u"extensions/res/scanner/plus.png";
+constexpr OUStringLiteral IMG_REMOVE = u"extensions/res/scanner/minus.png";
+constexpr OUStringLiteral IMG_COPY = u"cmd/sc_copy.png";
+constexpr OUStringLiteral IMG_PASTE = u"cmd/sc_paste.png";
+constexpr OUStringLiteral IMG_MENU = u"sfx2/res/menu.png";
+constexpr OUStringLiteral IMG_CALENDAR = u"sc/res/date.png";
 
-#define RID_BMP_TREENODE_COLLAPSED  "res/plus.png"
-#define RID_BMP_TREENODE_EXPANDED   "res/minus.png"
+constexpr OUStringLiteral RID_BMP_TREENODE_COLLAPSED = u"res/plus.png";
+constexpr OUStringLiteral RID_BMP_TREENODE_EXPANDED = u"res/minus.png";
 
-#define RID_CURSOR_AUTOSCROLL_E      "vcl/res/autoscroll_e.png"
-#define RID_CURSOR_AUTOSCROLL_N      "vcl/res/autoscroll_n.png"
-#define RID_CURSOR_AUTOSCROLL_NE     "vcl/res/autoscroll_ne.png"
-#define RID_CURSOR_AUTOSCROLL_NS     "vcl/res/autoscroll_ns.png"
-#define RID_CURSOR_AUTOSCROLL_NSWE   "vcl/res/autoscroll_nswe.png"
-#define RID_CURSOR_AUTOSCROLL_NW     "vcl/res/autoscroll_nw.png"
-#define RID_CURSOR_AUTOSCROLL_S      "vcl/res/autoscroll_s.png"
-#define RID_CURSOR_AUTOSCROLL_SE     "vcl/res/autoscroll_se.png"
-#define RID_CURSOR_AUTOSCROLL_SW     "vcl/res/autoscroll_sw.png"
-#define RID_CURSOR_AUTOSCROLL_W      "vcl/res/autoscroll_w.png"
-#define RID_CURSOR_AUTOSCROLL_WE     "vcl/res/autoscroll_we.png"
-#define RID_CURSOR_CHAIN             "vcl/res/chain.png"
-#define RID_CURSOR_CHAIN_NOT_ALLOWED "vcl/res/chain_not_allowed.png"
-#define RID_CURSOR_CHART             "vcl/res/chart.png"
-#define RID_CURSOR_COPY_DATA         "vcl/res/copy_data.png"
-#define RID_CURSOR_COPY_DATA_LINK    "vcl/res/copy_data_link.png"
-#define RID_CURSOR_COPY_FILE         "vcl/res/copy_file.png"
-#define RID_CURSOR_COPY_FILES        "vcl/res/copy_files.png"
-#define RID_CURSOR_COPY_FILE_LINK    "vcl/res/copy_file_link.png"
-#define RID_CURSOR_CROOK             "vcl/res/crook.png"
-#define RID_CURSOR_CROP              "vcl/res/crop.png"
-#define RID_CURSOR_DRAW_ARC          "vcl/res/draw_arc.png"
-#define RID_CURSOR_DRAW_BEZIER       "vcl/res/draw_bezier.png"
-#define RID_CURSOR_DRAW_CAPTION      "vcl/res/draw_caption.png"
-#define RID_CURSOR_DRAW_CIRCLE_CUT   "vcl/res/draw_circle_cut.png"
-#define RID_CURSOR_DRAW_CONNECT      "vcl/res/draw_connect.png"
-#define RID_CURSOR_DRAW_ELLIPSE      "vcl/res/draw_ellipse.png"
-#define RID_CURSOR_DETECTIVE         "vcl/res/detective.png"
-#define RID_CURSOR_DRAW_FREEHAND     "vcl/res/draw_freehand.png"
-#define RID_CURSOR_DRAW_LINE         "vcl/res/draw_line.png"
-#define RID_CURSOR_DRAW_PIE          "vcl/res/draw_pie.png"
-#define RID_CURSOR_DRAW_POLYGON      "vcl/res/draw_polygon.png"
-#define RID_CURSOR_DRAW_RECT         "vcl/res/draw_rect.png"
-#define RID_CURSOR_DRAW_TEXT         "vcl/res/draw_text.png"
-#define RID_CURSOR_FILL              "vcl/res/fill.png"
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_E = u"vcl/res/autoscroll_e.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_N = u"vcl/res/autoscroll_n.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_NE = u"vcl/res/autoscroll_ne.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_NS = u"vcl/res/autoscroll_ns.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_NSWE = u"vcl/res/autoscroll_nswe.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_NW = u"vcl/res/autoscroll_nw.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_S = u"vcl/res/autoscroll_s.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_SE = u"vcl/res/autoscroll_se.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_SW = u"vcl/res/autoscroll_sw.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_W = u"vcl/res/autoscroll_w.png";
+constexpr OUStringLiteral RID_CURSOR_AUTOSCROLL_WE = u"vcl/res/autoscroll_we.png";
+constexpr OUStringLiteral RID_CURSOR_CHAIN = u"vcl/res/chain.png";
+constexpr OUStringLiteral RID_CURSOR_CHAIN_NOT_ALLOWED = u"vcl/res/chain_not_allowed.png";
+constexpr OUStringLiteral RID_CURSOR_CHART = u"vcl/res/chart.png";
+constexpr OUStringLiteral RID_CURSOR_COPY_DATA = u"vcl/res/copy_data.png";
+constexpr OUStringLiteral RID_CURSOR_COPY_DATA_LINK = u"vcl/res/copy_data_link.png";
+constexpr OUStringLiteral RID_CURSOR_COPY_FILE = u"vcl/res/copy_file.png";
+constexpr OUStringLiteral RID_CURSOR_COPY_FILES = u"vcl/res/copy_files.png";
+constexpr OUStringLiteral RID_CURSOR_COPY_FILE_LINK = u"vcl/res/copy_file_link.png";
+constexpr OUStringLiteral RID_CURSOR_CROOK = u"vcl/res/crook.png";
+constexpr OUStringLiteral RID_CURSOR_CROP = u"vcl/res/crop.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_ARC = u"vcl/res/draw_arc.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_BEZIER = u"vcl/res/draw_bezier.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_CAPTION = u"vcl/res/draw_caption.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_CIRCLE_CUT = u"vcl/res/draw_circle_cut.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_CONNECT = u"vcl/res/draw_connect.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_ELLIPSE = u"vcl/res/draw_ellipse.png";
+constexpr OUStringLiteral RID_CURSOR_DETECTIVE = u"vcl/res/detective.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_FREEHAND = u"vcl/res/draw_freehand.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_LINE = u"vcl/res/draw_line.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_PIE = u"vcl/res/draw_pie.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_POLYGON = u"vcl/res/draw_polygon.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_RECT = u"vcl/res/draw_rect.png";
+constexpr OUStringLiteral RID_CURSOR_DRAW_TEXT = u"vcl/res/draw_text.png";
+constexpr OUStringLiteral RID_CURSOR_FILL = u"vcl/res/fill.png";
 #define RID_CURSOR_HELP              "vcl/res/help.png"
-#define RID_CURSOR_H_SHEAR           "vcl/res/h_shear.png"
-#define RID_CURSOR_LINK_DATA         "vcl/res/link_data.png"
-#define RID_CURSOR_LINK_FILE         "vcl/res/link_file.png"
-#define RID_CURSOR_MAGNIFY           "vcl/res/magnify.png"
-#define RID_CURSOR_MIRROR            "vcl/res/mirror.png"
-#define RID_CURSOR_MOVE_BEZIER_WEIGHT   "vcl/res/move_bezier_weight.png"
-#define RID_CURSOR_MOVE_DATA         "vcl/res/move_data.png"
-#define RID_CURSOR_MOVE_DATA_LINK    "vcl/res/move_data_link.png"
-#define RID_CURSOR_MOVE_FILE         "vcl/res/move_file.png"
-#define RID_CURSOR_MOVE_FILES        "vcl/res/move_files.png"
-#define RID_CURSOR_MOVE_FILE_LINK    "vcl/res/move_file_link.png"
-#define RID_CURSOR_MOVE_POINT        "vcl/res/move_point.png"
+constexpr OUStringLiteral RID_CURSOR_H_SHEAR = u"vcl/res/h_shear.png";
+constexpr OUStringLiteral RID_CURSOR_LINK_DATA = u"vcl/res/link_data.png";
+constexpr OUStringLiteral RID_CURSOR_LINK_FILE = u"vcl/res/link_file.png";
+constexpr OUStringLiteral RID_CURSOR_MAGNIFY = u"vcl/res/magnify.png";
+constexpr OUStringLiteral RID_CURSOR_MIRROR = u"vcl/res/mirror.png";
+constexpr OUStringLiteral RID_CURSOR_MOVE_BEZIER_WEIGHT = u"vcl/res/move_bezier_weight.png";
+constexpr OUStringLiteral RID_CURSOR_MOVE_DATA = u"vcl/res/move_data.png";
+constexpr OUStringLiteral RID_CURSOR_MOVE_DATA_LINK = u"vcl/res/move_data_link.png";
+constexpr OUStringLiteral RID_CURSOR_MOVE_FILE = u"vcl/res/move_file.png";
+constexpr OUStringLiteral RID_CURSOR_MOVE_FILES = u"vcl/res/move_files.png";
+constexpr OUStringLiteral RID_CURSOR_MOVE_FILE_LINK = u"vcl/res/move_file_link.png";
+constexpr OUStringLiteral RID_CURSOR_MOVE_POINT = u"vcl/res/move_point.png";
 #define RID_CURSOR_NESWSIZE          "vcl/res/neswsize.png"
-#define RID_CURSOR_NOT_ALLOWED       "vcl/res/not_allowed.png"
-#define RID_CURSOR_NULL              "vcl/res/null.png"
+constexpr OUStringLiteral RID_CURSOR_NOT_ALLOWED = u"vcl/res/not_allowed.png";
+constexpr OUStringLiteral RID_CURSOR_NULL = u"vcl/res/null.png";
 #define RID_CURSOR_NWSESIZE          "vcl/res/nwsesize.png"
 #define RID_CURSOR_PEN               "vcl/res/pen.png"
-#define RID_CURSOR_PIVOT_COLUMN      "vcl/res/pivot_column.png"
-#define RID_CURSOR_PIVOT_DELETE      "vcl/res/pivot_delete.png"
-#define RID_CURSOR_PIVOT_FIELD       "vcl/res/pivot_field.png"
-#define RID_CURSOR_PIVOT_ROW         "vcl/res/pivot_row.png"
-#define RID_CURSOR_ROTATE            "vcl/res/rotate.png"
-#define RID_CURSOR_TAB_SELECT_E      "vcl/res/tab_select_e.png"
-#define RID_CURSOR_TAB_SELECT_S      "vcl/res/tab_select_s.png"
-#define RID_CURSOR_TAB_SELECT_SE     "vcl/res/tab_select_se.png"
-#define RID_CURSOR_TAB_SELECT_SW     "vcl/res/tab_select_sw.png"
-#define RID_CURSOR_TAB_SELECT_W      "vcl/res/tab_select_w.png"
-#define RID_CURSOR_V_SHEAR           "vcl/res/v_shear.png"
-#define RID_CURSOR_TEXT_VERTICAL     "vcl/res/text_vertical.png"
-#define RID_CURSOR_HIDE_WHITESPACE   "vcl/res/hide_whitespace.png"
-#define RID_CURSOR_SHOW_WHITESPACE   "vcl/res/show_whitespace.png"
+constexpr OUStringLiteral RID_CURSOR_PIVOT_COLUMN = u"vcl/res/pivot_column.png";
+constexpr OUStringLiteral RID_CURSOR_PIVOT_DELETE = u"vcl/res/pivot_delete.png";
+constexpr OUStringLiteral RID_CURSOR_PIVOT_FIELD = u"vcl/res/pivot_field.png";
+constexpr OUStringLiteral RID_CURSOR_PIVOT_ROW = u"vcl/res/pivot_row.png";
+constexpr OUStringLiteral RID_CURSOR_ROTATE = u"vcl/res/rotate.png";
+constexpr OUStringLiteral RID_CURSOR_TAB_SELECT_E = u"vcl/res/tab_select_e.png";
+constexpr OUStringLiteral RID_CURSOR_TAB_SELECT_S = u"vcl/res/tab_select_s.png";
+constexpr OUStringLiteral RID_CURSOR_TAB_SELECT_SE = u"vcl/res/tab_select_se.png";
+constexpr OUStringLiteral RID_CURSOR_TAB_SELECT_SW = u"vcl/res/tab_select_sw.png";
+constexpr OUStringLiteral RID_CURSOR_TAB_SELECT_W = u"vcl/res/tab_select_w.png";
+constexpr OUStringLiteral RID_CURSOR_V_SHEAR = u"vcl/res/v_shear.png";
+constexpr OUStringLiteral RID_CURSOR_TEXT_VERTICAL = u"vcl/res/text_vertical.png";
+constexpr OUStringLiteral RID_CURSOR_HIDE_WHITESPACE = u"vcl/res/hide_whitespace.png";
+constexpr OUStringLiteral RID_CURSOR_SHOW_WHITESPACE = u"vcl/res/show_whitespace.png";
 #define RID_CURSOR_WAIT              "vcl/res/wait.png"
 #define RID_CURSOR_NWSIZE            "vcl/res/nwsize.png"
 #define RID_CURSOR_NESIZE            "vcl/res/nesize.png"
@@ -220,9 +220,9 @@
 #define RID_CURSOR_WINDOW_NESIZE     "vcl/res/window_nesize.png"
 #define RID_CURSOR_WINDOW_SWSIZE     "vcl/res/window_swsize.png"
 #define RID_CURSOR_WINDOW_SESIZE     "vcl/res/window_sesize.png"
-#define RID_CURSOR_FATCROSS          "vcl/res/fatcross.png"
+constexpr OUStringLiteral RID_CURSOR_FATCROSS = u"vcl/res/fatcross.png";
 
-#define CHEVRON                      "sfx2/res/chevron.png"
+constexpr OUStringLiteral CHEVRON = u"sfx2/res/chevron.png";
 
 #define RID_UPDATE_AVAILABLE_16      "extensions/res/update/ui/onlineupdate_16.png"
 #define RID_UPDATE_AVAILABLE_26      "extensions/res/update/ui/onlineupdate_26.png"

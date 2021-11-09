@@ -15,10 +15,10 @@
 #define CHART_UNONAME_SPLINE_RESOLUTION     "SplineResolution"
 #define CHART_UNONAME_CURVE_STYLE           "CurveStyle"
 #define CHART_UNONAME_CURVE_RESOLUTION      "CurveResolution"
-#define CHART_UNONAME_NUMFMT                "NumberFormat"
+constexpr OUStringLiteral CHART_UNONAME_NUMFMT = u"NumberFormat";
 #define CHART_UNONAME_LINK_TO_SRC_NUMFMT    "LinkNumberFormatToSource"
-#define CHART_UNONAME_ERRORBAR_X            "ErrorBarX"
-#define CHART_UNONAME_ERRORBAR_Y            "ErrorBarY"
+constexpr OUStringLiteral CHART_UNONAME_ERRORBAR_X = u"ErrorBarX";
+constexpr OUStringLiteral CHART_UNONAME_ERRORBAR_Y = u"ErrorBarY";
 #define CHART_UNONAME_LABEL                 "Label"
 #define CHART_UNONAME_LABEL_SEP             "LabelSeparator"
 #define CHART_UNONAME_LABEL_BORDER_STYLE    "LabelBorderStyle"
