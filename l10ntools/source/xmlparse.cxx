@@ -251,7 +251,7 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
                     for (size_t j = 0; j < pElement->GetAttributeList()->size(); ++j)
                     {
                         const OString aAttrName((*pElement->GetAttributeList())[j]->GetName());
-                        if (!aAttrName.equalsIgnoreAsciiCase(XML_LANG))
+                        if (aAttrName != XML_LANG)
                         {
                             fprintf( stdout, " %s=\"%s\"",
                                 aAttrName.getStr(),
@@ -671,7 +671,7 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
                             for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
                             {
                                 const OString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
-                                if (!aAttrName.equalsIgnoreAsciiCase(XML_LANG))
+                                if (aAttrName != XML_LANG)
                                 {
                                     rBuffer.append(
                                         " " + aAttrName + "=\"" +

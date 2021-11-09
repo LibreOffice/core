@@ -11,16 +11,16 @@
 
 #include "stringstatic.hxx"
 
-// expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
+// expected-error@+1 {{rather declare this using OUStringConstExpr/OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
 static const OUString TEST1 = "xxx";
 
 void f(rtl_uString const*);
 
 void test2()
 {
-    // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
+    // expected-error@+1 {{rather declare this using OUStringConstExpr/OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
     static const OUString XXX = "xxx";
-    // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
+    // expected-error@+1 {{rather declare this using OUStringConstExpr/OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
     static const OUString XXX2 = "xxx";
     (void)XXX;
     (void)XXX2;

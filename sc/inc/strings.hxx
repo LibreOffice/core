@@ -9,18 +9,18 @@
 
 #pragma once
 
-#define SCSTR_FIELDSEP              ",\t44\t;\t59\t:\t58\t{%TAB}\t9\t{%SPACE}\t32 "
-#define SCSTR_TEXTSEP               "\"\t34\t'\t39"
-#define STR_ACC_DOC_DESCR           ""
-#define STR_ACC_TABLE_DESCR         ""
-#define STR_ACC_CELL_DESCR          ""
-#define STR_ACC_PREVIEWDOC_DESCR    ""
-#define STR_ACC_HEADERCELL_NAME     ""
-#define STR_ACC_HEADERCELL_DESCR    ""
-#define STR_ACC_LEFTAREA_DESCR      ""
-#define STR_ACC_CENTERAREA_DESCR    ""
-#define STR_ACC_RIGHTAREA_DESCR     ""
-#define STR_ACC_HEADER_DESCR        ""
-#define STR_ACC_FOOTER_DESCR        ""
+inline constexpr OUStringLiteral SCSTR_FIELDSEP = u",\t44\t;\t59\t:\t58\t{%TAB}\t9\t{%SPACE}\t32 ";
+inline constexpr OUStringLiteral SCSTR_TEXTSEP = u"\"\t34\t'\t39";
+inline constexpr OUStringLiteral STR_ACC_DOC_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_TABLE_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_CELL_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_PREVIEWDOC_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_HEADERCELL_NAME = u"";
+inline constexpr OUStringLiteral STR_ACC_HEADERCELL_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_LEFTAREA_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_CENTERAREA_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_RIGHTAREA_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_HEADER_DESCR = u"";
+inline constexpr OUStringLiteral STR_ACC_FOOTER_DESCR = u"";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

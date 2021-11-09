@@ -19,41 +19,43 @@
 #ifndef INCLUDED_SVX_INC_HELPIDS_H
 #define INCLUDED_SVX_INC_HELPIDS_H
 
-#define HID_BMPMASK_CTL_QCOL_1                                "SVX_HID_BMPMASK_CTL_QCOL_1"
-#define HID_COLOR_CTL_COLORS                                  "SVX_HID_COLOR_CTL_COLORS"
-#define HID_CTRL3D_HSCROLL                                    "SVX_HID_CTRL3D_HSCROLL"
-#define HID_CTRL3D_SWITCHER                                   "SVX_HID_CTRL3D_SWITCHER"
-#define HID_CTRL3D_VSCROLL                                    "SVX_HID_CTRL3D_VSCROLL"
-#define HID_CTRL_COLOR                                        "SVX_HID_CTRL_COLOR"
-#define HID_GALLERY_ICONVIEW                                  "SVX_HID_GALLERY_ICONVIEW"
-#define HID_GALLERY_LISTVIEW                                  "SVX_HID_GALLERY_LISTVIEW"
-#define HID_GALLERY_NEWTHEME                                  "SVX_HID_GALLERY_NEWTHEME"
-#define HID_GALLERY_THEMELIST                                 "SVX_HID_GALLERY_THEMELIST"
-#define HID_GALLERY_WINDOW                                    "SVX_HID_GALLERY_WINDOW"
-#define HID_POPUP_COLOR                                       "SVX_HID_POPUP_COLOR"
-#define HID_POPUP_COLOR_CTRL                                  "SVX_HID_POPUP_COLOR_CTRL"
-#define HID_POPUP_FRAME                                       "SVX_HID_POPUP_FRAME"
-#define HID_POPUP_LINE                                        "SVX_HID_POPUP_LINE"
-#define HID_POPUP_LINEEND                                     "SVX_HID_POPUP_LINEEND"
-#define HID_POPUP_LINEEND_CTRL                                "SVX_HID_POPUP_LINEEND_CTRL"
-#define HID_STYLE_LISTBOX                                     "SVX_HID_STYLE_LISTBOX"
-#define HID_VALUESET_EXTRUSION_LIGHTING                       "SVX_HID_VALUESET_EXTRUSION_LIGHTING"
-#define HID_UNDERLINE_BTN                                     "SVX_HID_UNDERLINE_BTN"
-#define HID_SPACING_MB_KERN                                   "SVX_HID_SPACING_MB_KERN"
+#include <rtl/string.hxx>
 
-#define HID_FORM_NAVIGATOR                                    "SVX_HID_FORM_NAVIGATOR"
-#define HID_FORM_NAVIGATOR_WIN                                "SVX_HID_FORM_NAVIGATOR_WIN"
-#define HID_FIELD_SEL                                         "SVX_HID_FIELD_SEL"
-#define HID_FIELD_SEL_WIN                                     "SVX_HID_FIELD_SEL_WIN"
-#define HID_FILTER_NAVIGATOR                                  "SVX_HID_FILTER_NAVIGATOR"
-#define HID_FILTER_NAVIGATOR_WIN                              "SVX_HID_FILTER_NAVIGATOR_WIN"
-#define HID_GRID_TRAVEL_FIRST                                 "SVX_HID_GRID_TRAVEL_FIRST"
-#define HID_GRID_TRAVEL_PREV                                  "SVX_HID_GRID_TRAVEL_PREV"
-#define HID_GRID_TRAVEL_NEXT                                  "SVX_HID_GRID_TRAVEL_NEXT"
-#define HID_GRID_TRAVEL_LAST                                  "SVX_HID_GRID_TRAVEL_LAST"
-#define HID_GRID_TRAVEL_NEW                                   "SVX_HID_GRID_TRAVEL_NEW"
-#define HID_GRID_TRAVEL_ABSOLUTE                              "SVX_HID_GRID_TRAVEL_ABSOLUTE"
-#define HID_GRID_NUMBEROFRECORDS                              "SVX_HID_GRID_NUMBEROFRECORDS"
+inline constexpr OStringLiteral HID_BMPMASK_CTL_QCOL_1 = "SVX_HID_BMPMASK_CTL_QCOL_1";
+inline constexpr OStringLiteral HID_COLOR_CTL_COLORS = "SVX_HID_COLOR_CTL_COLORS";
+inline constexpr OStringLiteral HID_CTRL3D_HSCROLL = "SVX_HID_CTRL3D_HSCROLL";
+inline constexpr OStringLiteral HID_CTRL3D_SWITCHER = "SVX_HID_CTRL3D_SWITCHER";
+inline constexpr OStringLiteral HID_CTRL3D_VSCROLL = "SVX_HID_CTRL3D_VSCROLL";
+inline constexpr OStringLiteral HID_CTRL_COLOR = "SVX_HID_CTRL_COLOR";
+inline constexpr OStringLiteral HID_GALLERY_ICONVIEW = "SVX_HID_GALLERY_ICONVIEW";
+inline constexpr OStringLiteral HID_GALLERY_LISTVIEW = "SVX_HID_GALLERY_LISTVIEW";
+inline constexpr OStringLiteral HID_GALLERY_NEWTHEME = "SVX_HID_GALLERY_NEWTHEME";
+inline constexpr OStringLiteral HID_GALLERY_THEMELIST = "SVX_HID_GALLERY_THEMELIST";
+inline constexpr OStringLiteral HID_GALLERY_WINDOW = "SVX_HID_GALLERY_WINDOW";
+inline constexpr OStringLiteral HID_POPUP_COLOR = "SVX_HID_POPUP_COLOR";
+inline constexpr OStringLiteral HID_POPUP_COLOR_CTRL = "SVX_HID_POPUP_COLOR_CTRL";
+inline constexpr OStringLiteral HID_POPUP_FRAME = "SVX_HID_POPUP_FRAME";
+inline constexpr OStringLiteral HID_POPUP_LINE = "SVX_HID_POPUP_LINE";
+inline constexpr OStringLiteral HID_POPUP_LINEEND = "SVX_HID_POPUP_LINEEND";
+inline constexpr OStringLiteral HID_POPUP_LINEEND_CTRL = "SVX_HID_POPUP_LINEEND_CTRL";
+inline constexpr OStringLiteral HID_STYLE_LISTBOX = "SVX_HID_STYLE_LISTBOX";
+inline constexpr OStringLiteral HID_VALUESET_EXTRUSION_LIGHTING = "SVX_HID_VALUESET_EXTRUSION_LIGHTING";
+inline constexpr OStringLiteral HID_UNDERLINE_BTN = "SVX_HID_UNDERLINE_BTN";
+inline constexpr OStringLiteral HID_SPACING_MB_KERN = "SVX_HID_SPACING_MB_KERN";
+
+inline constexpr OStringLiteral HID_FORM_NAVIGATOR = "SVX_HID_FORM_NAVIGATOR";
+inline constexpr OStringLiteral HID_FORM_NAVIGATOR_WIN = "SVX_HID_FORM_NAVIGATOR_WIN";
+inline constexpr OStringLiteral HID_FIELD_SEL = "SVX_HID_FIELD_SEL";
+inline constexpr OStringLiteral HID_FIELD_SEL_WIN = "SVX_HID_FIELD_SEL_WIN";
+inline constexpr OStringLiteral HID_FILTER_NAVIGATOR = "SVX_HID_FILTER_NAVIGATOR";
+inline constexpr OStringLiteral HID_FILTER_NAVIGATOR_WIN = "SVX_HID_FILTER_NAVIGATOR_WIN";
+inline constexpr OStringLiteral HID_GRID_TRAVEL_FIRST = "SVX_HID_GRID_TRAVEL_FIRST";
+inline constexpr OStringLiteral HID_GRID_TRAVEL_PREV = "SVX_HID_GRID_TRAVEL_PREV";
+inline constexpr OStringLiteral HID_GRID_TRAVEL_NEXT = "SVX_HID_GRID_TRAVEL_NEXT";
+inline constexpr OStringLiteral HID_GRID_TRAVEL_LAST = "SVX_HID_GRID_TRAVEL_LAST";
+inline constexpr OStringLiteral HID_GRID_TRAVEL_NEW = "SVX_HID_GRID_TRAVEL_NEW";
+inline constexpr OStringLiteral HID_GRID_TRAVEL_ABSOLUTE = "SVX_HID_GRID_TRAVEL_ABSOLUTE";
+inline constexpr OStringLiteral HID_GRID_NUMBEROFRECORDS = "SVX_HID_GRID_NUMBEROFRECORDS";
 
 #endif
 

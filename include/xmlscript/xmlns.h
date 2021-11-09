@@ -18,19 +18,21 @@
  */
 #pragma once
 
-#define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
+#include <rtl/ustring.hxx>
+
+inline constexpr OUStringLiteral XMLNS_DIALOGS_URI = u"http://openoffice.org/2000/dialog";
 #define XMLNS_DIALOGS_PREFIX "dlg"
 
-#define XMLNS_SCRIPT_URI "http://openoffice.org/2000/script"
+inline constexpr OUStringLiteral XMLNS_SCRIPT_URI = u"http://openoffice.org/2000/script";
 #define XMLNS_SCRIPT_PREFIX "script"
 
-#define XMLNS_OOO_URI "http://openoffice.org/2004/office"
-#define XMLNS_OOO_PREFIX "ooo"
+inline constexpr OUStringLiteral XMLNS_OOO_URI = u"http://openoffice.org/2004/office";
+inline constexpr OUStringLiteral XMLNS_OOO_PREFIX = u"ooo";
 
-#define XMLNS_LIBRARY_URI "http://openoffice.org/2000/library"
+inline constexpr OUStringLiteral XMLNS_LIBRARY_URI = u"http://openoffice.org/2000/library";
 #define XMLNS_LIBRARY_PREFIX "library"
 
-#define XMLNS_XLINK_URI "http://www.w3.org/1999/xlink"
+inline constexpr OUStringLiteral XMLNS_XLINK_URI = u"http://www.w3.org/1999/xlink";
 #define XMLNS_XLINK_PREFIX "xlink"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

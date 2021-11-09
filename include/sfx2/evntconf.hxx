@@ -84,10 +84,10 @@ public:
 };
 
 
-#define PROP_EVENT_TYPE     "EventType"
-#define PROP_LIBRARY        "Library"
-#define PROP_SCRIPT         "Script"
-#define PROP_MACRO_NAME     "MacroName"
+inline constexpr OUStringLiteral PROP_EVENT_TYPE = u"EventType";
+inline constexpr OUStringLiteral PROP_LIBRARY = u"Library";
+inline constexpr OUStringLiteral PROP_SCRIPT = u"Script";
+inline constexpr OUStringLiteral PROP_MACRO_NAME = u"MacroName";
 #define STAR_BASIC          "StarBasic"
 
 class SFX2_DLLPUBLIC SfxEventConfiguration

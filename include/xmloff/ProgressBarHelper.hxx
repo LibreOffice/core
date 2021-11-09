@@ -24,10 +24,10 @@
 #include <xmloff/dllapi.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-#define XML_PROGRESSRANGE   "ProgressRange"
-#define XML_PROGRESSMAX     "ProgressMax"
-#define XML_PROGRESSCURRENT "ProgressCurrent"
-#define XML_PROGRESSREPEAT  "ProgressRepeat"
+inline constexpr OUStringLiteral XML_PROGRESSRANGE = u"ProgressRange";
+inline constexpr OUStringLiteral XML_PROGRESSMAX = u"ProgressMax";
+inline constexpr OUStringLiteral XML_PROGRESSCURRENT = u"ProgressCurrent";
+inline constexpr OUStringLiteral XML_PROGRESSREPEAT = u"ProgressRepeat";
 
 class XMLOFF_DLLPUBLIC ProgressBarHelper
 {

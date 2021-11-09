@@ -36,8 +36,8 @@
 #include <cassert>
 #include <cstring>
 
-#define PIPEDEFAULTPATH     "/tmp"
-#define PIPEALTERNATEPATH   "/var/tmp"
+constexpr OStringLiteral PIPEDEFAULTPATH = "/tmp";
+constexpr OStringLiteral PIPEALTERNATEPATH = "/var/tmp";
 
 static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
@@ -148,9 +148,9 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
     OString name;
     oslPipe pPipe;
 
-    if (access(PIPEDEFAULTPATH, W_OK) == 0)
+    if (access(PIPEDEFAULTPATH.getStr(), W_OK) == 0)
         name = PIPEDEFAULTPATH;
-    else if (access(PIPEALTERNATEPATH, W_OK) == 0)
+    else if (access(PIPEALTERNATEPATH.getStr(), W_OK) == 0)
         name = PIPEALTERNATEPATH;
     else {
         name = getBootstrapSocketPath ();

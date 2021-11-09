@@ -6,22 +6,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#pragma once
 
-#ifndef INCLUDED_SFX2_INC_BITMAPS_HRC
-#define INCLUDED_SFX2_INC_BITMAPS_HRC
+#include <rtl/ustring.hxx>
 
-#define BMP_HELP_TOOLBOX_INDEX_ON           "sfx2/res/indexon_small.png"
-#define BMP_HELP_TOOLBOX_INDEX_OFF          "sfx2/res/indexoff_small.png"
-#define BMP_HELP_TOOLBOX_START              "res/sc06303.png"
-#define BMP_HELP_TOOLBOX_PREV               "res/sc06301.png"
-#define BMP_HELP_TOOLBOX_NEXT               "res/sc06300.png"
-#define BMP_HELP_TOOLBOX_PRINT              "res/sc05504.png"
-#define BMP_HELP_TOOLBOX_BOOKMARKS          "sfx2/res/favourite.png"
-#define BMP_HELP_TOOLBOX_SEARCHDIALOG       "sfx2/res/sc05961.png"
-#define BMP_HELP_TOOLBOX_COPY               "sfx2/res/sc05711.png"
-#define BMP_HELP_CONTENT_BOOK_OPEN          "sfx2/res/hlpbookopen.png"
-#define BMP_HELP_CONTENT_BOOK_CLOSED        "sfx2/res/hlpbookclosed.png"
-#define BMP_HELP_CONTENT_DOC                "sfx2/res/hlpdoc.png"
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_INDEX_ON = u"sfx2/res/indexon_small.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_INDEX_OFF = u"sfx2/res/indexoff_small.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_START = u"res/sc06303.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_PREV = u"res/sc06301.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_NEXT = u"res/sc06300.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_PRINT = u"res/sc05504.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_BOOKMARKS = u"sfx2/res/favourite.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_SEARCHDIALOG = u"sfx2/res/sc05961.png";
+inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_COPY = u"sfx2/res/sc05711.png";
+inline constexpr OUStringLiteral BMP_HELP_CONTENT_BOOK_OPEN = u"sfx2/res/hlpbookopen.png";
+inline constexpr OUStringLiteral BMP_HELP_CONTENT_BOOK_CLOSED = u"sfx2/res/hlpbookclosed.png";
+inline constexpr OUStringLiteral BMP_HELP_CONTENT_DOC = u"sfx2/res/hlpdoc.png";
 #define BMP_HELP_TOOLBOX_L_INDEX_ON         "sfx2/res/indexon_big.png"
 #define BMP_HELP_TOOLBOX_L_INDEX_OFF        "sfx2/res/indexoff_big.png"
 #define BMP_HELP_TOOLBOX_L_START            "res/lc06303.png"
@@ -33,7 +33,7 @@
 
 //start, sfx2/source/sidebar/Theme.cxx
 #define CHEVRON                             "sfx2/res/chevron.png"
-#define CLOSEDOC                            "sfx2/res/closedoc.png"
+inline constexpr OUStringLiteral CLOSEDOC = u"sfx2/res/closedoc.png";
 #define GRIP                                "sfx2/res/grip.png"
 #define OPEN_MORE                           "sfx2/res/symphony/open_more.png"
 #define MOREBUTTON                          "sfx2/res/symphony/morebutton.png"
@@ -63,52 +63,51 @@
 #define SIDEBAR_FUNCTIONS_SMALL             "sfx2/res/symphony/sidebar-functions-small.png"
 //end, sfx2/source/sidebar/Theme.cxx
 
-#define SFX_THUMBNAIL_TEXT                  "res/ott_96_8.png"
-#define SFX_THUMBNAIL_SHEET                 "res/ots_96_8.png"
-#define SFX_THUMBNAIL_PRESENTATION          "res/otp_96_8.png"
-#define SFX_THUMBNAIL_DRAWING               "res/otg_96_8.png"
-#define SFX_FILE_THUMBNAIL_TEXT             "res/odt_48_8.png"
-#define SFX_FILE_THUMBNAIL_SHEET            "res/ods_48_8.png"
-#define SFX_FILE_THUMBNAIL_PRESENTATION     "res/odp_48_8.png"
-#define SFX_FILE_THUMBNAIL_DRAWING          "res/odg_48_8.png"
-#define SFX_FILE_THUMBNAIL_DATABASE         "res/odb_48_8.png"
-#define SFX_FILE_THUMBNAIL_MATH             "res/odf_48_8.png"
-#define SFX_FILE_THUMBNAIL_DEFAULT          "res/mainapp_48_8.png"
+inline constexpr OUStringLiteral SFX_THUMBNAIL_TEXT = u"res/ott_96_8.png";
+inline constexpr OUStringLiteral SFX_THUMBNAIL_SHEET = u"res/ots_96_8.png";
+inline constexpr OUStringLiteral SFX_THUMBNAIL_PRESENTATION = u"res/otp_96_8.png";
+inline constexpr OUStringLiteral SFX_THUMBNAIL_DRAWING = u"res/otg_96_8.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_TEXT = u"res/odt_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_SHEET = u"res/ods_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_PRESENTATION = u"res/odp_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DRAWING = u"res/odg_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DATABASE = u"res/odb_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_MATH = u"res/odf_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DEFAULT = u"res/mainapp_48_8.png";
 #define SFX_THUMBNAIL_BASE_192              "res/base_thumbnail_192.png"
 #define SFX_THUMBNAIL_BASE_256              "res/base_thumbnail_256.png"
 
-#define BMP_RECENTDOC_REMOVE                "res/recentdoc_remove.png"
-#define BMP_RECENTDOC_REMOVE_HIGHLIGHTED    "res/recentdoc_remove_highlighted.png"
-#define BMP_DEFAULT                         "res/templatestar.png"
-#define BMP_ACTION_REFRESH                  "res/reload.png"
+inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE = u"res/recentdoc_remove.png";
+inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE_HIGHLIGHTED = u"res/recentdoc_remove_highlighted.png";
+inline constexpr OUStringLiteral BMP_DEFAULT = u"res/templatestar.png";
+inline constexpr OUStringLiteral BMP_ACTION_REFRESH = u"res/reload.png";
 
-#define BMP_128X128_CALC_DOC                "sfx2/res/128x128_calc_doc-p.png"
-#define BMP_128X128_DRAW_DOC                "sfx2/res/128x128_draw_doc-p.png"
-#define BMP_128X128_IMPRESS_DOC             "sfx2/res/128x128_impress_doc-p.png"
-#define BMP_128X128_MATH_DOC                "sfx2/res/128x128_math_doc-p.png"
-#define BMP_128X128_WRITER_DOC              "sfx2/res/128x128_writer_doc-p.png"
+inline constexpr OUStringLiteral BMP_128X128_CALC_DOC = u"sfx2/res/128x128_calc_doc-p.png";
+inline constexpr OUStringLiteral BMP_128X128_DRAW_DOC = u"sfx2/res/128x128_draw_doc-p.png";
+inline constexpr OUStringLiteral BMP_128X128_IMPRESS_DOC = u"sfx2/res/128x128_impress_doc-p.png";
+inline constexpr OUStringLiteral BMP_128X128_MATH_DOC = u"sfx2/res/128x128_math_doc-p.png";
+inline constexpr OUStringLiteral BMP_128X128_WRITER_DOC = u"sfx2/res/128x128_writer_doc-p.png";
 
-#define SFX_BMP_CLOSE_DOC                   "sfx2/res/closedoc.png"
+inline constexpr OUStringLiteral SFX_BMP_CLOSE_DOC = u"sfx2/res/closedoc.png";
 
-#define SIDEBAR_CLOSE_INDICATOR             "cmd/lc_decrementlevel.png"
-#define BMP_ACTION_DEFAULT_WRITER           "res/odt_16_8.png"
-#define BMP_ACTION_DEFAULT_CALC             "res/ods_16_8.png"
-#define BMP_ACTION_DEFAULT_IMPRESS          "res/odp_16_8.png"
-#define BMP_ACTION_DEFAULT_DRAW             "res/odg_16_8.png"
+inline constexpr OUStringLiteral SIDEBAR_CLOSE_INDICATOR = u"cmd/lc_decrementlevel.png";
+inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_WRITER = u"res/odt_16_8.png";
+inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_CALC = u"res/ods_16_8.png";
+inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_IMPRESS = u"res/odp_16_8.png";
+inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_DRAW = u"res/odg_16_8.png";
 #define BMP_ACTION_MOVE                     "cmd/sc_move.png"
-#define BMP_ACTION_IMPORT                   "cmd/sc_dataimport.png"
+inline constexpr OUStringLiteral BMP_ACTION_IMPORT = u"cmd/sc_dataimport.png";
 #define BMP_ACTION_EXPORT                   "cmd/sc_exportto.png"
-#define BMP_ACTION_EXTENSIONS               "cmd/sc_additionsdialog.png"
-#define BMP_ACTION_DELETE_CATEGORY          "cmd/sc_delete.png"
-#define BMP_ACTION_NEW_CATEGORY             "cmd/sc_add.png"
-#define BMP_ACTION_RENAME                   "cmd/sc_editdoc.png"
+inline constexpr OUStringLiteral BMP_ACTION_EXTENSIONS = u"cmd/sc_additionsdialog.png";
+inline constexpr OUStringLiteral BMP_ACTION_DELETE_CATEGORY = u"cmd/sc_delete.png";
+inline constexpr OUStringLiteral BMP_ACTION_NEW_CATEGORY = u"cmd/sc_add.png";
+inline constexpr OUStringLiteral BMP_ACTION_RENAME = u"cmd/sc_editdoc.png";
 
-#define BMP_MENU_OPEN                       "cmd/sc_opentemplate.png"
-#define BMP_MENU_EDIT                       "cmd/sc_opentemplate.png"
-#define BMP_MENU_MOVE                       "cmd/sc_move.png"
-#define BMP_MENU_RENAME                     "cmd/sc_editdoc.png"
-#define BMP_MENU_DELETE                     "cmd/sc_delete.png"
-#define BMP_MENU_EXPORT                     "cmd/sc_exportto.png"
-#endif
+inline constexpr OUStringLiteral BMP_MENU_OPEN = u"cmd/sc_opentemplate.png";
+inline constexpr OUStringLiteral BMP_MENU_EDIT = u"cmd/sc_opentemplate.png";
+inline constexpr OUStringLiteral BMP_MENU_MOVE = u"cmd/sc_move.png";
+inline constexpr OUStringLiteral BMP_MENU_RENAME = u"cmd/sc_editdoc.png";
+inline constexpr OUStringLiteral BMP_MENU_DELETE = u"cmd/sc_delete.png";
+inline constexpr OUStringLiteral BMP_MENU_EXPORT = u"cmd/sc_exportto.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

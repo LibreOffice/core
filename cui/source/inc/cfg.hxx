@@ -40,7 +40,7 @@
 #include "cfgutil.hxx"
 #include "CommandCategoryListBox.hxx"
 
-#define notebookbarTabScope "notebookbarTabScope"
+inline constexpr OUStringLiteral notebookbarTabScope = u"notebookbarTabScope";
 
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL  = u"CommandURL";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";

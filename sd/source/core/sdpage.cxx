@@ -129,7 +129,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     // The name of the layout of the page is used by SVDRAW to determine the
     // presentation template of the outline objects. Therefore, it already
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
-    maLayoutName = SdResId(STR_LAYOUT_DEFAULT_NAME)+ SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+    maLayoutName = SdResId(STR_LAYOUT_DEFAULT_NAME)+ SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
     // Stuff that former SetModel did also:
     ConnectLink();
@@ -672,7 +672,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     if( nIndex != -1 )
         aStyleName = aStyleName.copy(0, nIndex + aSep.getLength());
 
-    const char *pNameId;
+    OUString pNameId;
     bool bOutline = false;
     switch( nHelpId )
     {
@@ -695,7 +695,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
         OSL_FAIL( "SdPage::getPresentationStyle(), illegal argument!" );
         return nullptr;
     }
-    aStyleName += OUString::createFromAscii(pNameId);
+    aStyleName += pNameId;
     if (bOutline)
     {
         aStyleName += " " +

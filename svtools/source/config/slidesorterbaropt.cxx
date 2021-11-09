@@ -308,7 +308,7 @@ void SvtSlideSorterBarOptions_Impl::ImplCommit()
 Sequence< OUString > SvtSlideSorterBarOptions_Impl::GetPropertyNames()
 {
     // Build list of configuration key names.
-    const OUString pProperties[] =
+    return
     {
         PROPERTYNAME_VISIBLE_IMPRESSVIEW,
         PROPERTYNAME_VISIBLE_OUTLINEVIEW,
@@ -317,9 +317,6 @@ Sequence< OUString > SvtSlideSorterBarOptions_Impl::GetPropertyNames()
         PROPERTYNAME_VISIBLE_SLIDESORTERVIEW,
         PROPERTYNAME_VISIBLE_DRAWVIEW,
     };
-
-    // Initialize return sequence with these list and run
-    return Sequence< OUString >( pProperties, SAL_N_ELEMENTS( pProperties ) );
 }
 
 void SvtSlideSorterBarOptions_Impl::SetVisibleViewImpl( bool& bVisibleView, bool bVisible )

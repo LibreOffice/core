@@ -3178,14 +3178,14 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
             uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
 
-            const OUString sProps[] = {   OUString(PROPERTY_NAME)
-                                          ,OUString(PROPERTY_FONTDESCRIPTOR)
-                                          ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
-                                          ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
-                                          ,OUString(PROPERTY_ORIENTATION)
-                                          ,OUString(PROPERTY_BORDER)
-                                          ,OUString(PROPERTY_FORMATSSUPPLIER)
-                                          ,OUString(PROPERTY_BACKGROUNDCOLOR)
+            static constexpr rtl::OUStringConstExpr sProps[] = {   PROPERTY_NAME
+                                          ,PROPERTY_FONTDESCRIPTOR
+                                          ,PROPERTY_FONTDESCRIPTORASIAN
+                                          ,PROPERTY_FONTDESCRIPTORCOMPLEX
+                                          ,PROPERTY_ORIENTATION
+                                          ,PROPERTY_BORDER
+                                          ,PROPERTY_FORMATSSUPPLIER
+                                          ,PROPERTY_BACKGROUNDCOLOR
             };
             for(const auto & sProp : sProps)
             {
@@ -3493,11 +3493,11 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                         uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
                         uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
-                        const OUString sProps[] = {   OUString(PROPERTY_FONTDESCRIPTOR)
-                                                            ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
-                                                            ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
-                                                            ,OUString(PROPERTY_BORDER)
-                                                            ,OUString(PROPERTY_BACKGROUNDCOLOR)
+                        static constexpr rtl::OUStringConstExpr sProps[] {   PROPERTY_FONTDESCRIPTOR
+                                                            ,PROPERTY_FONTDESCRIPTORASIAN
+                                                            ,PROPERTY_FONTDESCRIPTORCOMPLEX
+                                                            ,PROPERTY_BORDER
+                                                            ,PROPERTY_BACKGROUNDCOLOR
                         };
                         for(const auto & sProp : sProps)
                         {
@@ -3662,9 +3662,10 @@ void OReportController::changeZOrder(sal_Int32 _nId)
 
 void OReportController::listen(const bool _bAdd)
 {
-    const OUString aProps [] = {    OUString(PROPERTY_REPORTHEADERON),OUString(PROPERTY_REPORTFOOTERON)
-                                            ,OUString(PROPERTY_PAGEHEADERON),OUString(PROPERTY_PAGEFOOTERON)
-                                            ,OUString(PROPERTY_COMMAND), OUString(PROPERTY_COMMANDTYPE),OUString(PROPERTY_CAPTION)
+    static constexpr rtl::OUStringConstExpr aProps [] {
+        PROPERTY_REPORTHEADERON, PROPERTY_REPORTFOOTERON
+        ,PROPERTY_PAGEHEADERON, PROPERTY_PAGEFOOTERON
+        ,PROPERTY_COMMAND, PROPERTY_COMMANDTYPE, PROPERTY_CAPTION
     };
 
     void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const OUString&, const uno::Reference< XPropertyChangeListener >& ) =
@@ -3676,8 +3677,8 @@ void OReportController::listen(const bool _bAdd)
     OXUndoEnvironment& rUndoEnv = m_aReportModel->GetUndoEnv();
     uno::Reference< XPropertyChangeListener > xUndo = &rUndoEnv;
     const uno::Sequence< beans::Property> aSeq = m_xReportDefinition->getPropertySetInfo()->getProperties();
-    const OUString* pPropsBegin = &aProps[0];
-    const OUString* pPropsEnd   = pPropsBegin + SAL_N_ELEMENTS(aProps) - 3;
+    auto pPropsBegin = &aProps[0];
+    auto pPropsEnd   = pPropsBegin + SAL_N_ELEMENTS(aProps) - 3;
     for(const beans::Property& rProp : aSeq)
     {
         if ( ::std::find(pPropsBegin,pPropsEnd,rProp.Name) == pPropsEnd )

@@ -143,11 +143,6 @@ void OControlStyleContext::SetAttribute( sal_Int32 nElement,
 }
 
 
-constexpr OUStringLiteral g_sTableStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME );
-constexpr OUStringLiteral g_sColumnStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME );
-constexpr OUStringLiteral g_sRowStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME );
-constexpr OUStringLiteral g_sCellStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME );
-
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         const bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport ),
@@ -360,16 +355,16 @@ OUString OReportStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
         switch( nFamily )
         {
             case XmlStyleFamily::TABLE_TABLE:
-                sServiceName = g_sTableStyleFamilyName;
+                sServiceName = XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME;
                 break;
             case XmlStyleFamily::TABLE_COLUMN:
-                sServiceName = g_sColumnStyleFamilyName;
+                sServiceName = XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME;
                 break;
             case XmlStyleFamily::TABLE_ROW:
-                sServiceName = g_sRowStyleFamilyName;
+                sServiceName = XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME;
                 break;
             case XmlStyleFamily::TABLE_CELL:
-                sServiceName = g_sCellStyleFamilyName;
+                sServiceName = XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME;
                 break;
             default:
                 break;

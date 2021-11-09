@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_HINTIDS_HXX
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 #include <svx/xdef.hxx>
 #include "swdllapi.h"
 #include <svl/typedwhich.hxx>
@@ -179,8 +180,8 @@ class SfxVoidItem;
 #define CH_TXT_ATR_FIELDSTART u'\x0007'
 #define CH_TXT_ATR_FIELDSEP u'\x0003'
 #define CH_TXT_ATR_FIELDEND u'\x0008'
-#define CH_TXT_ATR_SUBST_FIELDSTART ("[")
-#define CH_TXT_ATR_SUBST_FIELDEND ("]")
+inline constexpr OUStringLiteral CH_TXT_ATR_SUBST_FIELDSTART = u"[";
+inline constexpr OUStringLiteral CH_TXT_ATR_SUBST_FIELDEND = u"]";
 
 // a non-visible dummy character to track deleted tables,
 // table rows, and images anchored to characters

@@ -9,10 +9,12 @@
 
 #pragma once
 
-#define STR_DB_LOCAL_NONAME "__Anonymous_Sheet_DB__"
-#define STR_DB_GLOBAL_NONAME "__Anonymous_DB__"
+#include <rtl/ustring.hxx>
 
-#define STR_GLOBAL_RANGE_NAME "__Global_Range_Name__"
+inline constexpr OUStringLiteral STR_DB_LOCAL_NONAME = u"__Anonymous_Sheet_DB__";
+inline constexpr OUStringLiteral STR_DB_GLOBAL_NONAME = u"__Anonymous_DB__";
+
+inline constexpr OUStringLiteral STR_GLOBAL_RANGE_NAME = u"__Global_Range_Name__";
 
 #define TEXTWIDTH_DIRTY 0xffff
 

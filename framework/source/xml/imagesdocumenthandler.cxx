@@ -48,7 +48,7 @@ constexpr OUStringLiteral ELEMENT_NS_ENTRY = u"image:entry";
 #define ATTRIBUTE_MASKMODE              "maskmode"
 #define ATTRIBUTE_HIGHCONTRASTURL       "highcontrasturl"
 #define ATTRIBUTE_HIGHCONTRASTMASKURL   "highcontrastmaskurl"
-#define ATTRIBUTE_TYPE_CDATA            "CDATA"
+constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
 
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_IMAGE = u"xmlns:image";
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";

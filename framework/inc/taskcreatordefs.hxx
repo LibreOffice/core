@@ -20,20 +20,20 @@
 #pragma once
 
 /// [XFrame] if it's set, it will be used as parent frame for the new created frame.
-constexpr OUStringLiteral ARGUMENT_PARENTFRAME = u"ParentFrame"; // XFrame
+inline constexpr OUStringLiteral ARGUMENT_PARENTFRAME = u"ParentFrame"; // XFrame
 
 /** [OUString] if it's not a special name (beginning with "_" ... which are not allowed here!)
                it will be set as the API name of the new created frame.
  */
-constexpr OUStringLiteral ARGUMENT_FRAMENAME = u"FrameName"; // OUString
+inline constexpr OUStringLiteral ARGUMENT_FRAMENAME = u"FrameName"; // OUString
 
 /// [sal_Bool] If it's set to sal_True we will make the new created frame visible.
-constexpr OUStringLiteral ARGUMENT_MAKEVISIBLE = u"MakeVisible"; // sal_Bool
+inline constexpr OUStringLiteral ARGUMENT_MAKEVISIBLE = u"MakeVisible"; // sal_Bool
 
 /** [sal_Bool] If not "ContainerWindow" property is set it force creation of a
                top level window as new container window.
  */
-constexpr OUStringLiteral ARGUMENT_CREATETOPWINDOW = u"CreateTopWindow"; // sal_Bool
+inline constexpr OUStringLiteral ARGUMENT_CREATETOPWINDOW = u"CreateTopWindow"; // sal_Bool
 
 /// [Rectangle] Place the new created frame on this place and resize the container window.
 inline constexpr OUStringLiteral ARGUMENT_POSSIZE = u"PosSize"; // Rectangle
@@ -44,7 +44,7 @@ inline constexpr OUStringLiteral ARGUMENT_CONTAINERWINDOW = u"ContainerWindow"; 
 /** [sal_Bool] enable/disable special mode, where this frame will be part of
                the persistent window state feature suitable for any office module window
  */
-constexpr OUStringLiteral ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE
+inline constexpr OUStringLiteral ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE
     = u"SupportPersistentWindowState"; // sal_Bool
 
 /** [sal_Bool] enable/disable special mode, where the title bar of our

@@ -4869,7 +4869,7 @@ HwpImportFilter::HwpImportFilter(const Reference< XComponentContext >& rxContext
     }
     catch( Exception & )
     {
-        printf(" fail to instantiate %s\n", WRITER_IMPORTER_NAME );
+        printf(" fail to instantiate %s\n", OUString(WRITER_IMPORTER_NAME).toUtf8().getStr() );
         exit( 1 );
     }
 }

@@ -19,10 +19,12 @@
 
 #pragma once
 
-#define HID_SMA_WIN_DOCUMENT                              "STARMATH_HID_SMA_WIN_DOCUMENT"
-#define HID_SMA_COMMAND_WIN_EDIT                          "STARMATH_HID_SMA_COMMAND_WIN_EDIT"
+#include <rtl/string.hxx>
 
-#define HID_SMA_COMMAND_WIN                               "STARMATH_HID_SMA_COMMAND_WIN"
+inline constexpr OStringLiteral HID_SMA_WIN_DOCUMENT = "STARMATH_HID_SMA_WIN_DOCUMENT";
+inline constexpr OStringLiteral HID_SMA_COMMAND_WIN_EDIT = "STARMATH_HID_SMA_COMMAND_WIN_EDIT";
+
+inline constexpr OStringLiteral HID_SMA_COMMAND_WIN = "STARMATH_HID_SMA_COMMAND_WIN";
 
 #define HID_SMA_DEFAULT_DIST                              "STARMATH_HID_SMA_DEFAULT_DIST"
 #define HID_SMA_LINE_DIST                                 "STARMATH_HID_SMA_LINE_DIST"

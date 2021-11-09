@@ -23,26 +23,26 @@
     used in the SvXMLAutoStylePoolP.
  */
 
-#define XML_STYLE_FAMILY_PAGE_MASTER_NAME       "page-layout"
-#define XML_STYLE_FAMILY_PAGE_MASTER_PREFIX     "pm"
-#define XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME    "table"
-#define XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX  "ta"
-#define XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME   "table-column"
-#define XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX "co"
-#define XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME  "table-row"
-#define XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX    "ro"
-#define XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME "table-cell"
-#define XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX   "ce"
-#define XML_STYLE_FAMILY_SD_GRAPHICS_NAME       u"graphic"
-#define XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX     "gr"
-#define XML_STYLE_FAMILY_SD_PRESENTATION_NAME   u"presentation"
-#define XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX "pr"
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_PAGE_MASTER_NAME = u"page-layout";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_PAGE_MASTER_PREFIX = u"pm";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME = u"table";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX = u"ta";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME = u"table-column";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX  = u"co";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME = u"table-row";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX = u"ro";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME = u"table-cell";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX = u"ce";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SD_GRAPHICS_NAME = u"graphic";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX = u"gr";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SD_PRESENTATION_NAME = u"presentation";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX = u"pr";
 #define XML_STYLE_FAMILY_SD_POOL_NAME           u"default"
-#define XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME    u"drawing-page"
-#define XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX  "dp"
-#define XML_STYLE_FAMILY_SCH_CHART_NAME         u"chart"
-#define XML_STYLE_FAMILY_SCH_CHART_PREFIX       "ch"
-#define XML_STYLE_FAMILY_CONTROL_PREFIX         "ctrl"
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME = u"drawing-page";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX = u"dp";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SCH_CHART_NAME = u"chart";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_SCH_CHART_PREFIX = u"ch";
+inline constexpr OUStringLiteral XML_STYLE_FAMILY_CONTROL_PREFIX = u"ctrl";
 
 enum class XmlStyleFamily
 {

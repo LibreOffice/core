@@ -26,7 +26,7 @@ namespace svx {
 #define SPACING_CLOSE_BY_CLICK_ICON     -1
 #define SPACING_CLOSE_BY_CUS_EDIT       1
 
-#define SIDEBAR_SPACING_GLOBAL_VALUE   "PopupPanel_Spacing"
+inline constexpr OUStringLiteral SIDEBAR_SPACING_GLOBAL_VALUE = u"PopupPanel_Spacing";
 
 class TextCharacterSpacingPopup;
 

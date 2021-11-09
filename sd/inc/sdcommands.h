@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#define CMD_SID_HANDOUT_MASTER_MODE                 ".uno:HandoutMode"
-#define CMD_SID_NOTES_MODE                          ".uno:NotesMode"
+inline constexpr OStringLiteral CMD_SID_HANDOUT_MASTER_MODE = ".uno:HandoutMode";
+inline constexpr OStringLiteral CMD_SID_NOTES_MODE = ".uno:NotesMode";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

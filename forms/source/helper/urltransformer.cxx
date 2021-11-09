@@ -77,7 +77,6 @@ namespace frm
             m_xTransformer->parseSmart( _rURL, _rProtocol );
     }
 
-
 } // namespace frm
 
 

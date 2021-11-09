@@ -36,12 +36,11 @@ namespace reportdesign
     using namespace comphelper;
 static uno::Sequence< OUString > lcl_getShapeOptionals()
 {
-    const OUString pProps[] = {
-        OUString(PROPERTY_DATAFIELD)
-        ,OUString(PROPERTY_CONTROLBACKGROUND)
-        ,OUString(PROPERTY_CONTROLBACKGROUNDTRANSPARENT)
+    return {
+        PROPERTY_DATAFIELD
+        ,PROPERTY_CONTROLBACKGROUND
+        ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
     };
-    return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
 

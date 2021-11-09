@@ -75,16 +75,16 @@ const ScContentId pTypeList[int(ScContentId::LAST) + 1] =
     ScContentId::DRAWING
 };
 
-const std::u16string_view aContentBmps[]=
+constexpr rtl::OUStringConstExpr aContentBmps[]=
 {
-    u"" RID_BMP_CONTENT_TABLE,
-    u"" RID_BMP_CONTENT_RANGENAME,
-    u"" RID_BMP_CONTENT_DBAREA,
-    u"" RID_BMP_CONTENT_GRAPHIC,
-    u"" RID_BMP_CONTENT_OLEOBJECT,
-    u"" RID_BMP_CONTENT_NOTE,
-    u"" RID_BMP_CONTENT_AREALINK,
-    u"" RID_BMP_CONTENT_DRAWING
+    RID_BMP_CONTENT_TABLE,
+    RID_BMP_CONTENT_RANGENAME,
+    RID_BMP_CONTENT_DBAREA,
+    RID_BMP_CONTENT_GRAPHIC,
+    RID_BMP_CONTENT_OLEOBJECT,
+    RID_BMP_CONTENT_NOTE,
+    RID_BMP_CONTENT_AREALINK,
+    RID_BMP_CONTENT_DRAWING
 };
 
 ScDocShell* ScContentTree::GetManualOrCurrent()

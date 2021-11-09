@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 // preview bitmaps for layouts
 #define BMP_LAYOUT_EMPTY                                        "sd/res/layout_empty.png"
 #define BMP_LAYOUT_HEAD01                                       "sd/res/layout_head01.png"
@@ -24,61 +26,61 @@
 #define BMP_LAYOUT_TEXTONLY                                     "sd/res/layout_textonly.png"
 #define BMP_LAYOUT_VERTICAL01                                   "sd/res/layout_vertical01.png"
 #define BMP_LAYOUT_VERTICAL02                                   "sd/res/layout_vertical02.png"
-#define BMP_FOIL_NONE                                           "sd/res/foilnone.png"
+inline constexpr OUStringLiteral BMP_FOIL_NONE = u"sd/res/foilnone.png";
 #define BMP_FOILH_01                                            "sd/res/foilh01.png"
 #define BMP_FOILH_02                                            "sd/res/foilh02.png"
 #define BMP_FOILH_03                                            "sd/res/foilh03.png"
 #define BMP_FOILH_04                                            "sd/res/foilh04.png"
 #define BMP_FOILH_06                                            "sd/res/foilh06.png"
 #define BMP_FOILH_09                                            "sd/res/foilh09.png"
-#define BMP_DISPLAYMODE_SLIDE                                   "sd/res/displaymode_slide.png"
-#define BMP_DISPLAYMODE_OUTLINE                                 "sd/res/displaymode_outline.png"
-#define BMP_DISPLAYMODE_NOTES                                   "sd/res/displaymode_notes.png"
-#define BMP_DISPLAYMODE_SLIDE_SORTER                            "sd/res/displaymode_slidesorter.png"
-#define BMP_DISPLAYMODE_SLIDE_MASTER                            "sd/res/displaymode_slidemaster.png"
-#define BMP_DISPLAYMODE_NOTES_MASTER                            "sd/res/displaymode_notesmaster.png"
-#define BMP_DISPLAYMODE_HANDOUT_MASTER                          "sd/res/displaymode_handoutmaster.png"
-#define BMP_PLACEHOLDER_CHART_SMALL                             "sd/res/placeholder_chart_small.png"
-#define BMP_PLACEHOLDER_CHART_SMALL_HOVER                       "sd/res/placeholder_chart_small_hover.png"
-#define BMP_PLACEHOLDER_IMAGE_SMALL                             "sd/res/placeholder_image_small.png"
-#define BMP_PLACEHOLDER_IMAGE_SMALL_HOVER                       "sd/res/placeholder_image_small_hover.png"
-#define BMP_PLACEHOLDER_MOVIE_SMALL                             "sd/res/placeholder_movie_small.png"
-#define BMP_PLACEHOLDER_MOVIE_SMALL_HOVER                       "sd/res/placeholder_movie_small_hover.png"
-#define BMP_PLACEHOLDER_TABLE_SMALL                             "sd/res/placeholder_table_small.png"
-#define BMP_PLACEHOLDER_TABLE_SMALL_HOVER                       "sd/res/placeholder_table_small_hover.png"
-#define BMP_PLACEHOLDER_CHART_LARGE                             "sd/res/placeholder_chart_large.png"
-#define BMP_PLACEHOLDER_CHART_LARGE_HOVER                       "sd/res/placeholder_chart_large_hover.png"
-#define BMP_PLACEHOLDER_IMAGE_LARGE                             "sd/res/placeholder_image_large.png"
-#define BMP_PLACEHOLDER_IMAGE_LARGE_HOVER                       "sd/res/placeholder_image_large_hover.png"
-#define BMP_PLACEHOLDER_MOVIE_LARGE                             "sd/res/placeholder_movie_large.png"
-#define BMP_PLACEHOLDER_MOVIE_LARGE_HOVER                       "sd/res/placeholder_movie_large_hover.png"
-#define BMP_PLACEHOLDER_TABLE_LARGE                             "sd/res/placeholder_table_large.png"
-#define BMP_PLACEHOLDER_TABLE_LARGE_HOVER                       "sd/res/placeholder_table_large_hover.png"
+inline constexpr OUStringLiteral BMP_DISPLAYMODE_SLIDE = u"sd/res/displaymode_slide.png";
+inline constexpr OUStringLiteral BMP_DISPLAYMODE_OUTLINE = u"sd/res/displaymode_outline.png";
+inline constexpr OUStringLiteral BMP_DISPLAYMODE_NOTES = u"sd/res/displaymode_notes.png";
+inline constexpr OUStringLiteral BMP_DISPLAYMODE_SLIDE_SORTER = u"sd/res/displaymode_slidesorter.png";
+inline constexpr OUStringLiteral BMP_DISPLAYMODE_SLIDE_MASTER = u"sd/res/displaymode_slidemaster.png";
+inline constexpr OUStringLiteral BMP_DISPLAYMODE_NOTES_MASTER = u"sd/res/displaymode_notesmaster.png";
+inline constexpr OUStringLiteral BMP_DISPLAYMODE_HANDOUT_MASTER = u"sd/res/displaymode_handoutmaster.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_CHART_SMALL = u"sd/res/placeholder_chart_small.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_CHART_SMALL_HOVER = u"sd/res/placeholder_chart_small_hover.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_IMAGE_SMALL = u"sd/res/placeholder_image_small.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_IMAGE_SMALL_HOVER = u"sd/res/placeholder_image_small_hover.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_MOVIE_SMALL = u"sd/res/placeholder_movie_small.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_MOVIE_SMALL_HOVER = u"sd/res/placeholder_movie_small_hover.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_TABLE_SMALL = u"sd/res/placeholder_table_small.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_TABLE_SMALL_HOVER = u"sd/res/placeholder_table_small_hover.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_CHART_LARGE = u"sd/res/placeholder_chart_large.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_CHART_LARGE_HOVER = u"sd/res/placeholder_chart_large_hover.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_IMAGE_LARGE = u"sd/res/placeholder_image_large.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_IMAGE_LARGE_HOVER = u"sd/res/placeholder_image_large_hover.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_MOVIE_LARGE = u"sd/res/placeholder_movie_large.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_MOVIE_LARGE_HOVER = u"sd/res/placeholder_movie_large_hover.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_TABLE_LARGE = u"sd/res/placeholder_table_large.png";
+inline constexpr OUStringLiteral BMP_PLACEHOLDER_TABLE_LARGE_HOVER = u"sd/res/placeholder_table_large_hover.png";
 #define BMP_FOILN_01                                            "sd/res/foiln01.png" 
-#define BMP_PAGE                                                "sd/res/page.png" 
-#define BMP_PAGE_EXCLUDED                                       "sd/res/pageexcl.png" 
-#define BMP_PAGEOBJS_EXCLUDED                                   "sd/res/pagobjex.png" 
-#define BMP_PAGEOBJS                                            "sd/res/pageobjs.png" 
-#define BMP_OBJECTS                                             "sd/res/objects.png" 
-#define BMP_OLE                                                 "sd/res/ole.png" 
-#define BMP_GROUP                                               "sd/res/group.png" 
-#define BMP_DOC_OPEN                                            "sd/res/docopen.png" 
+inline constexpr OUStringLiteral BMP_PAGE = u"sd/res/page.png"; 
+inline constexpr OUStringLiteral BMP_PAGE_EXCLUDED = u"sd/res/pageexcl.png"; 
+inline constexpr OUStringLiteral BMP_PAGEOBJS_EXCLUDED = u"sd/res/pagobjex.png"; 
+inline constexpr OUStringLiteral BMP_PAGEOBJS = u"sd/res/pageobjs.png"; 
+inline constexpr OUStringLiteral BMP_OBJECTS = u"sd/res/objects.png"; 
+inline constexpr OUStringLiteral BMP_OLE = u"sd/res/ole.png"; 
+inline constexpr OUStringLiteral BMP_GROUP = u"sd/res/group.png"; 
+inline constexpr OUStringLiteral BMP_DOC_OPEN = u"sd/res/docopen.png"; 
 #define BMP_DOC_CLOSED                                          "sd/res/docclose.png" 
-#define BMP_DOC_TEXT                                            "sd/res/doctext.png" 
+inline constexpr OUStringLiteral BMP_DOC_TEXT = u"sd/res/doctext.png" ;
 #define BMP_EXPAND                                              "res/plus.png" 
 #define BMP_COLLAPSE                                            "res/minus.png" 
-#define BMP_GRAPHIC                                             "sd/res/graphic.png" 
-#define BMP_STYLES_FAMILY_GRAPHICS                              "sd/res/sf01.png" 
-#define BMP_STYLES_FAMILY_PRESENTATIONS                         "sd/res/sf02.png" 
-#define BMP_PRESOBJ_GRAPHIC                                     "sd/res/image.png" 
-#define BMP_PRESOBJ_OBJECT                                      "sd/res/object.png" 
-#define BMP_PRESOBJ_CHART                                       "sd/res/chart.png" 
-#define BMP_PRESOBJ_ORGCHART                                    "sd/res/orgchart.png" 
-#define BMP_PRESOBJ_TABLE                                       "sd/res/table.png" 
-#define BMP_POINTER_ICON                                        "sd/res/pointericon.png"
-#define BMP_WAIT_ICON                                           "sd/res/waiticon.png"
-#define BMP_FADE_EFFECT_INDICATOR                               "sd/res/fade_effect_indicator.png"
-#define BMP_CUSTOM_ANIMATION_INDICATOR                          "sd/res/click_16.png"
+inline constexpr OUStringLiteral BMP_GRAPHIC = u"sd/res/graphic.png"; 
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_GRAPHICS = u"sd/res/sf01.png"; 
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_PRESENTATIONS = u"sd/res/sf02.png"; 
+inline constexpr OUStringLiteral BMP_PRESOBJ_GRAPHIC = u"sd/res/image.png";
+inline constexpr OUStringLiteral BMP_PRESOBJ_OBJECT = u"sd/res/object.png";
+inline constexpr OUStringLiteral BMP_PRESOBJ_CHART = u"sd/res/chart.png";
+inline constexpr OUStringLiteral BMP_PRESOBJ_ORGCHART = u"sd/res/orgchart.png";
+inline constexpr OUStringLiteral BMP_PRESOBJ_TABLE = u"sd/res/table.png";
+inline constexpr OUStringLiteral BMP_POINTER_ICON = u"sd/res/pointericon.png";
+inline constexpr OUStringLiteral BMP_WAIT_ICON = u"sd/res/waiticon.png";
+inline constexpr OUStringLiteral BMP_FADE_EFFECT_INDICATOR = u"sd/res/fade_effect_indicator.png";
+inline constexpr OUStringLiteral BMP_CUSTOM_ANIMATION_INDICATOR = u"sd/res/click_16.png";
 // Presenter Screen bitmaps:
 #define BMP_PRESENTERSCREEN_BORDER_LEFT                         "sd/res/presenterscreen-BorderLeft.png"
 #define BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_DISABLED          "sd/res/presenterscreen-ButtonSlideNextDisabled.png"
@@ -183,29 +185,29 @@
 #define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_NORMAL       "sd/res/presenterscreen-ScrollbarThumbBottomNormal.png"
 #define BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED                "sd/res/presenterscreen-ButtonPlusDisabled.png"
 
-#define BMP_EMBEDDED                                            "sd/res/nv08.png" 
-#define BMP_LINK                                                "sd/res/nv09.png" 
-#define BMP_HYPERLINK                                           "sd/res/nv010.png" 
+inline constexpr OUStringLiteral BMP_EMBEDDED = u"sd/res/nv08.png"; 
+inline constexpr OUStringLiteral BMP_LINK = u"sd/res/nv09.png"; 
+inline constexpr OUStringLiteral BMP_HYPERLINK = u"sd/res/nv010.png"; 
 
-#define IMAGE_SHADOW                                            "sd/res/slide_sorter_shadow.png"
-#define IMAGE_INSERT_SHADOW                                     "sd/res/slide_sorter_insert_shadow.png"
-#define IMAGE_HIDE_SLIDE_OVERLAY                                "sd/res/slide_sorter_hide_slide_overlay.png"
-#define IMAGE_FOCUS_BORDER                                      "sd/res/slide_sorter_focus_border.png"
+inline constexpr OUStringLiteral IMAGE_SHADOW = u"sd/res/slide_sorter_shadow.png";
+inline constexpr OUStringLiteral IMAGE_INSERT_SHADOW = u"sd/res/slide_sorter_insert_shadow.png";
+inline constexpr OUStringLiteral IMAGE_HIDE_SLIDE_OVERLAY = u"sd/res/slide_sorter_hide_slide_overlay.png";
+inline constexpr OUStringLiteral IMAGE_FOCUS_BORDER = u"sd/res/slide_sorter_focus_border.png";
 
-#define BMP_CUSTOMANIMATION_ON_CLICK                            "sd/res/click_16.png"
-#define BMP_CUSTOMANIMATION_AFTER_PREVIOUS                      "sd/res/time_16.png"
-#define BMP_CUSTOMANIMATION_ENTRANCE_EFFECT                     "sd/res/effect_16.png"
-#define BMP_CUSTOMANIMATION_EMPHASIS_EFFECT                     "sd/res/effectshape_16.png"
-#define BMP_CUSTOMANIMATION_EXIT_EFFECT                         "sd/res/effectfade_16.png"
-#define BMP_CUSTOMANIMATION_MOTION_PATH                         "sd/res/effectpath_16.png"
-#define BMP_CUSTOMANIMATION_OLE                                 "sd/res/effectole_16.png"
-#define BMP_CUSTOMANIMATION_MEDIA_PLAY                          "sd/res/playblue_16.png"
-#define BMP_CUSTOMANIMATION_MEDIA_PAUSE                         "sd/res/breakplayingblue_16.png"
-#define BMP_CUSTOMANIMATION_MEDIA_STOP                          "sd/res/stopplayingblue_16.png"
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_ON_CLICK = u"sd/res/click_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_AFTER_PREVIOUS = u"sd/res/time_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_ENTRANCE_EFFECT = u"sd/res/effect_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_EMPHASIS_EFFECT = u"sd/res/effectshape_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_EXIT_EFFECT = u"sd/res/effectfade_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_MOTION_PATH = u"sd/res/effectpath_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_OLE = u"sd/res/effectole_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_MEDIA_PLAY = u"sd/res/playblue_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_MEDIA_PAUSE = u"sd/res/breakplayingblue_16.png";
+inline constexpr OUStringLiteral BMP_CUSTOMANIMATION_MEDIA_STOP = u"sd/res/stopplayingblue_16.png";
 
-#define BMP_MENU_NEXT                                           "cmd/sc_nextrecord.png"
-#define BMP_MENU_PREV                                           "cmd/sc_prevrecord.png"
-#define BMP_MENU_FIRST                                          "cmd/sc_firstrecord.png"
-#define BMP_MENU_LAST                                           "cmd/sc_lastrecord.png"
+inline constexpr OUStringLiteral BMP_MENU_NEXT = u"cmd/sc_nextrecord.png";
+inline constexpr OUStringLiteral BMP_MENU_PREV = u"cmd/sc_prevrecord.png";
+inline constexpr OUStringLiteral BMP_MENU_FIRST = u"cmd/sc_firstrecord.png";
+inline constexpr OUStringLiteral BMP_MENU_LAST = u"cmd/sc_lastrecord.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -54,12 +54,12 @@ enum class SvNumFormatType : sal_Int16;
 //  Clipboard names are in so3/soapp.hxx now
 //  STRING_SCAPP was "scalc3", "scalc4", now just "scalc"
 
-#define STRING_SCAPP    "scalc"
+inline constexpr OUStringLiteral STRING_SCAPP = u"scalc";
 
-#define STRING_STANDARD "Standard"
+inline constexpr OUStringLiteral STRING_STANDARD = u"Standard";
 
 // Have the dreaded programmatic filter name defined in one place.
-#define SC_TEXT_CSV_FILTER_NAME "Text - txt - csv (StarCalc)"
+inline constexpr OUStringLiteral SC_TEXT_CSV_FILTER_NAME = u"Text - txt - csv (StarCalc)";
 
 // characters
 

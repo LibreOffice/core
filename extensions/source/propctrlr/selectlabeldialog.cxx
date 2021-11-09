@@ -95,8 +95,8 @@ namespace pcr
             // check which service the allowed components must support
             sal_Int16 nClassId = 0;
             try { nClassId = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID)); } catch(...) { }
-            m_sRequiredService = (FormComponentType::RADIOBUTTON == nClassId) ? std::u16string_view(u"" SERVICE_COMPONENT_GROUPBOX) : std::u16string_view(u"" SERVICE_COMPONENT_FIXEDTEXT);
-            m_aRequiredControlImage = (FormComponentType::RADIOBUTTON == nClassId) ? std::u16string_view(u"" RID_EXTBMP_GROUPBOX) : std::u16string_view(u"" RID_EXTBMP_FIXEDTEXT);
+            m_sRequiredService = (FormComponentType::RADIOBUTTON == nClassId) ? OUString(SERVICE_COMPONENT_GROUPBOX) : OUString(SERVICE_COMPONENT_FIXEDTEXT);
+            m_aRequiredControlImage = (FormComponentType::RADIOBUTTON == nClassId) ? OUString(RID_EXTBMP_GROUPBOX) : OUString(RID_EXTBMP_FIXEDTEXT);
 
             // calc the currently set label control (so InsertEntries can calc m_xInitialSelection)
             Any aCurrentLabelControl( m_xControlModel->getPropertyValue(PROPERTY_CONTROLLABEL) );

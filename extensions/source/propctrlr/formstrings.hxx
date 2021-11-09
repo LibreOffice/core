@@ -19,294 +19,289 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
 
-namespace pcr
-{
+inline constexpr OUStringLiteral PROPERTY_DEFAULTCONTROL = u"DefaultControl";
+inline constexpr OUStringLiteral PROPERTY_INTROSPECTEDOBJECT = u"IntrospectedObject";
+inline constexpr OUStringLiteral PROPERTY_CURRENTPAGE = u"CurrentPage";
+inline constexpr OUStringLiteral PROPERTY_CONTROLCONTEXT = u"ControlContext";
 
+// properties
+inline constexpr OUStringLiteral PROPERTY_CLASSID = u"ClassId";
+inline constexpr OUStringLiteral PROPERTY_CONTROLLABEL = u"LabelControl";
+inline constexpr OUStringLiteral PROPERTY_LABEL = u"Label";
+inline constexpr OUStringLiteral PROPERTY_TABINDEX = u"TabIndex";
+inline constexpr OUStringLiteral PROPERTY_WHEEL_BEHAVIOR = u"MouseWheelBehavior";
+inline constexpr OUStringLiteral PROPERTY_TAG = u"Tag";
+inline constexpr OUStringLiteral PROPERTY_NAME = u"Name";
+inline constexpr OUStringLiteral PROPERTY_GROUP_NAME = u"GroupName";
+inline constexpr OUStringLiteral PROPERTY_VALUE = u"Value";
+inline constexpr OUStringLiteral PROPERTY_TEXT = u"Text";
+inline constexpr OUStringLiteral PROPERTY_NAVIGATION = u"NavigationBarMode";
+inline constexpr OUStringLiteral PROPERTY_CYCLE = u"Cycle";
+inline constexpr OUStringLiteral PROPERTY_CONTROLSOURCE = u"DataField";
+inline constexpr OUStringLiteral PROPERTY_INPUT_REQUIRED = u"InputRequired";
+inline constexpr OUStringLiteral PROPERTY_ENABLED = u"Enabled";
+inline constexpr OUStringLiteral PROPERTY_ENABLE_VISIBLE = u"EnableVisible";
+inline constexpr OUStringLiteral PROPERTY_READONLY = u"ReadOnly";
+#define PROPERTY_ISREADONLY              "IsReadOnly"
+inline constexpr OUStringLiteral PROPERTY_FILTER = u"Filter";
+inline constexpr OUStringLiteral PROPERTY_WIDTH = u"Width";
+inline constexpr OUStringLiteral PROPERTY_MULTILINE = u"MultiLine";
+inline constexpr OUStringLiteral PROPERTY_WORDBREAK = u"WordBreak";
+inline constexpr OUStringLiteral PROPERTY_TARGET_URL = u"TargetURL";
+inline constexpr OUStringLiteral PROPERTY_TARGET_FRAME = u"TargetFrame";
+inline constexpr OUStringLiteral PROPERTY_MAXTEXTLEN = u"MaxTextLen";
+inline constexpr OUStringLiteral PROPERTY_EDITMASK = u"EditMask";
+inline constexpr OUStringLiteral PROPERTY_SPIN = u"Spin";
+inline constexpr OUStringLiteral PROPERTY_TRISTATE = u"TriState";
+inline constexpr OUStringLiteral PROPERTY_HIDDEN_VALUE = u"HiddenValue";
+inline constexpr OUStringLiteral PROPERTY_BUTTONTYPE = u"ButtonType";
+inline constexpr OUStringLiteral PROPERTY_XFORMS_BUTTONTYPE = u"XFormsButtonType";
+inline constexpr OUStringLiteral PROPERTY_STRINGITEMLIST = u"StringItemList";
+inline constexpr OUStringLiteral PROPERTY_TYPEDITEMLIST = u"TypedItemList";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_TEXT = u"DefaultText";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_STATE = u"DefaultState";
+inline constexpr OUStringLiteral PROPERTY_FORMATKEY = u"FormatKey";
+inline constexpr OUStringLiteral PROPERTY_FORMATSSUPPLIER = u"FormatsSupplier";
+inline constexpr OUStringLiteral PROPERTY_SUBMIT_ACTION = u"SubmitAction";
+inline constexpr OUStringLiteral PROPERTY_SUBMIT_TARGET = u"SubmitTarget";
+inline constexpr OUStringLiteral PROPERTY_SUBMIT_METHOD = u"SubmitMethod";
+inline constexpr OUStringLiteral PROPERTY_SUBMIT_ENCODING = u"SubmitEncoding";
+inline constexpr OUStringLiteral PROPERTY_IMAGE_URL = u"ImageURL";
+inline constexpr OUStringLiteral PROPERTY_GRAPHIC = u"Graphic";
+inline constexpr OUStringLiteral PROPERTY_EMPTY_IS_NULL = u"ConvertEmptyToNull";
+inline constexpr OUStringLiteral PROPERTY_LISTSOURCETYPE = u"ListSourceType";
+inline constexpr OUStringLiteral PROPERTY_LISTSOURCE = u"ListSource";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_SELECT_SEQ = u"DefaultSelection";
+inline constexpr OUStringLiteral PROPERTY_MULTISELECTION = u"MultiSelection";
+inline constexpr OUStringLiteral PROPERTY_ALIGN = u"Align";
+inline constexpr OUStringLiteral PROPERTY_VERTICAL_ALIGN = u"VerticalAlign";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_DATE = u"DefaultDate";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_TIME = u"DefaultTime";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_VALUE = u"DefaultValue";
+inline constexpr OUStringLiteral PROPERTY_DECIMAL_ACCURACY = u"DecimalAccuracy";
+inline constexpr OUStringLiteral PROPERTY_REFVALUE = u"RefValue";
+inline constexpr OUStringLiteral PROPERTY_UNCHECKEDREFVALUE = u"SecondaryRefValue";
+inline constexpr OUStringLiteral PROPERTY_VALUEMIN = u"ValueMin";
+inline constexpr OUStringLiteral PROPERTY_VALUEMAX = u"ValueMax";
+inline constexpr OUStringLiteral PROPERTY_STRICTFORMAT = u"StrictFormat";
+inline constexpr OUStringLiteral PROPERTY_ALLOWADDITIONS = u"AllowInserts";
+inline constexpr OUStringLiteral PROPERTY_ALLOWEDITS = u"AllowUpdates";
+inline constexpr OUStringLiteral PROPERTY_ALLOWDELETIONS = u"AllowDeletes";
+inline constexpr OUStringLiteral PROPERTY_MASTERFIELDS = u"MasterFields";
+inline constexpr OUStringLiteral PROPERTY_LITERALMASK = u"LiteralMask";
+inline constexpr OUStringLiteral PROPERTY_VALUESTEP = u"ValueStep";
+inline constexpr OUStringLiteral PROPERTY_SHOWTHOUSANDSEP = u"ShowThousandsSeparator";
+inline constexpr OUStringLiteral PROPERTY_CURRENCYSYMBOL = u"CurrencySymbol";
+inline constexpr OUStringLiteral PROPERTY_DATEFORMAT = u"DateFormat";
+inline constexpr OUStringLiteral PROPERTY_DATEMIN = u"DateMin";
+inline constexpr OUStringLiteral PROPERTY_DATEMAX = u"DateMax";
+inline constexpr OUStringLiteral PROPERTY_TIMEFORMAT = u"TimeFormat";
+inline constexpr OUStringLiteral PROPERTY_TIMEMIN = u"TimeMin";
+inline constexpr OUStringLiteral PROPERTY_TIMEMAX = u"TimeMax";
+inline constexpr OUStringLiteral PROPERTY_LINECOUNT = u"LineCount";
+inline constexpr OUStringLiteral PROPERTY_BOUNDCOLUMN = u"BoundColumn";
+inline constexpr OUStringLiteral PROPERTY_BACKGROUNDCOLOR = u"BackgroundColor";
+inline constexpr OUStringLiteral PROPERTY_FILLCOLOR = u"FillColor";
+inline constexpr OUStringLiteral PROPERTY_TEXTCOLOR = u"TextColor";
+inline constexpr OUStringLiteral PROPERTY_LINECOLOR = u"LineColor";
+inline constexpr OUStringLiteral PROPERTY_BORDER = u"Border";
+inline constexpr OUStringLiteral PROPERTY_ICONSIZE = u"IconSize";
+inline constexpr OUStringLiteral PROPERTY_DROPDOWN = u"Dropdown";
+inline constexpr OUStringLiteral PROPERTY_HSCROLL = u"HScroll";
+inline constexpr OUStringLiteral PROPERTY_VSCROLL = u"VScroll";
+inline constexpr OUStringLiteral PROPERTY_SHOW_SCROLLBARS = u"ShowScrollbars";
+inline constexpr OUStringLiteral PROPERTY_TABSTOP = u"Tabstop";
+inline constexpr OUStringLiteral PROPERTY_AUTOCOMPLETE = u"Autocomplete";
+inline constexpr OUStringLiteral PROPERTY_PRINTABLE = u"Printable";
+inline constexpr OUStringLiteral PROPERTY_ECHO_CHAR = u"EchoChar";
+inline constexpr OUStringLiteral PROPERTY_ROWHEIGHT = u"RowHeight";
+inline constexpr OUStringLiteral PROPERTY_HELPTEXT = u"HelpText";
+inline constexpr OUStringLiteral PROPERTY_FONT = u"FontDescriptor";
+inline constexpr OUStringLiteral PROPERTY_FONT_NAME = u"FontName";
+inline constexpr OUStringLiteral PROPERTY_FONT_STYLENAME = u"FontStyleName";
+inline constexpr OUStringLiteral PROPERTY_FONT_FAMILY = u"FontFamily";
+inline constexpr OUStringLiteral PROPERTY_FONT_CHARSET = u"FontCharset";
+inline constexpr OUStringLiteral PROPERTY_FONT_HEIGHT = u"FontHeight";
+inline constexpr OUStringLiteral PROPERTY_FONT_WEIGHT = u"FontWeight";
+inline constexpr OUStringLiteral PROPERTY_FONT_SLANT = u"FontSlant";
+inline constexpr OUStringLiteral PROPERTY_FONT_UNDERLINE = u"FontUnderline";
+inline constexpr OUStringLiteral PROPERTY_FONT_STRIKEOUT = u"FontStrikeout";
+inline constexpr OUStringLiteral PROPERTY_FONT_RELIEF = u"FontRelief";
+inline constexpr OUStringLiteral PROPERTY_FONT_EMPHASIS_MARK = u"FontEmphasisMark";
+inline constexpr OUStringLiteral PROPERTY_TEXTLINECOLOR = u"TextLineColor";
+inline constexpr OUStringLiteral PROPERTY_HELPURL = u"HelpURL";
+inline constexpr OUStringLiteral PROPERTY_RECORDMARKER = u"HasRecordMarker";
+inline constexpr OUStringLiteral PROPERTY_EFFECTIVE_DEFAULT = u"EffectiveDefault";
+inline constexpr OUStringLiteral PROPERTY_EFFECTIVE_MIN = u"EffectiveMin";
+inline constexpr OUStringLiteral PROPERTY_EFFECTIVE_MAX = u"EffectiveMax";
+inline constexpr OUStringLiteral PROPERTY_FILTERPROPOSAL = u"UseFilterValueProposal";
+inline constexpr OUStringLiteral PROPERTY_CURRSYM_POSITION = u"PrependCurrencySymbol";
+inline constexpr OUStringLiteral PROPERTY_COMMAND = u"Command";
+inline constexpr OUStringLiteral PROPERTY_COMMANDTYPE = u"CommandType";
+inline constexpr OUStringLiteral PROPERTY_INSERTONLY = u"IgnoreResult";
+inline constexpr OUStringLiteral PROPERTY_ESCAPE_PROCESSING = u"EscapeProcessing";
+inline constexpr OUStringLiteral PROPERTY_TITLE = u"Title";
+inline constexpr OUStringLiteral PROPERTY_SORT = u"Order";
+inline constexpr OUStringLiteral PROPERTY_DATASOURCE = u"DataSourceName";
+inline constexpr OUStringLiteral PROPERTY_DETAILFIELDS = u"DetailFields";
+inline constexpr OUStringLiteral PROPERTY_DEFAULTBUTTON = u"DefaultButton";
+inline constexpr OUStringLiteral PROPERTY_LISTINDEX = u"ListIndex";
+inline constexpr OUStringLiteral PROPERTY_HEIGHT = u"Height";
+inline constexpr OUStringLiteral PROPERTY_HASNAVIGATION = u"HasNavigationBar";
+inline constexpr OUStringLiteral PROPERTY_POSITIONX = u"PositionX";
+inline constexpr OUStringLiteral PROPERTY_POSITIONY = u"PositionY";
+inline constexpr OUStringLiteral PROPERTY_AUTOGROW = u"AutoGrow";
+inline constexpr OUStringLiteral PROPERTY_STEP = u"Step";
+inline constexpr OUStringLiteral PROPERTY_WORDLINEMODE = u"FontWordLineMode";
+inline constexpr OUStringLiteral PROPERTY_PROGRESSVALUE = u"ProgressValue";
+inline constexpr OUStringLiteral PROPERTY_PROGRESSVALUE_MIN = u"ProgressValueMin";
+inline constexpr OUStringLiteral PROPERTY_PROGRESSVALUE_MAX = u"ProgressValueMax";
+inline constexpr OUStringLiteral PROPERTY_SCROLLVALUE = u"ScrollValue";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_SCROLLVALUE = u"DefaultScrollValue";
+inline constexpr OUStringLiteral PROPERTY_SCROLLVALUE_MIN = u"ScrollValueMin";
+inline constexpr OUStringLiteral PROPERTY_SCROLLVALUE_MAX = u"ScrollValueMax";
+inline constexpr OUStringLiteral PROPERTY_SCROLL_WIDTH = u"ScrollWidth";
+inline constexpr OUStringLiteral PROPERTY_SCROLL_HEIGHT = u"ScrollHeight";
+inline constexpr OUStringLiteral PROPERTY_SCROLL_TOP = u"ScrollTop";
+inline constexpr OUStringLiteral PROPERTY_SCROLL_LEFT = u"ScrollLeft";
+inline constexpr OUStringLiteral PROPERTY_LINEINCREMENT = u"LineIncrement";
+inline constexpr OUStringLiteral PROPERTY_BLOCKINCREMENT = u"BlockIncrement";
+inline constexpr OUStringLiteral PROPERTY_VISIBLESIZE = u"VisibleSize";
+inline constexpr OUStringLiteral PROPERTY_ORIENTATION = u"Orientation";
+inline constexpr OUStringLiteral PROPERTY_IMAGEPOSITION = u"ImagePosition";
+inline constexpr OUStringLiteral PROPERTY_ACTIVE_CONNECTION = u"ActiveConnection";
+inline constexpr OUStringLiteral PROPERTY_ACTIVECOMMAND = u"ActiveCommand";
+inline constexpr OUStringLiteral PROPERTY_DATE = u"Date";
+inline constexpr OUStringLiteral PROPERTY_STATE = u"State";
+inline constexpr OUStringLiteral PROPERTY_TIME = u"Time";
+inline constexpr OUStringLiteral PROPERTY_SCALEIMAGE = u"ScaleImage";
+inline constexpr OUStringLiteral PROPERTY_SCALE_MODE = u"ScaleMode";
+inline constexpr OUStringLiteral PROPERTY_PUSHBUTTONTYPE = u"PushButtonType";
+inline constexpr OUStringLiteral PROPERTY_EFFECTIVE_VALUE = u"EffectiveValue";
+inline constexpr OUStringLiteral PROPERTY_SELECTEDITEMS = u"SelectedItems";
+inline constexpr OUStringLiteral PROPERTY_REPEAT = u"Repeat";
+inline constexpr OUStringLiteral PROPERTY_REPEAT_DELAY = u"RepeatDelay";
+inline constexpr OUStringLiteral PROPERTY_SYMBOLCOLOR = u"SymbolColor";
+inline constexpr OUStringLiteral PROPERTY_SPINVALUE = u"SpinValue";
+inline constexpr OUStringLiteral PROPERTY_SPINVALUE_MIN = u"SpinValueMin";
+inline constexpr OUStringLiteral PROPERTY_SPINVALUE_MAX = u"SpinValueMax";
+inline constexpr OUStringLiteral PROPERTY_DEFAULT_SPINVALUE = u"DefaultSpinValue";
+inline constexpr OUStringLiteral PROPERTY_SPININCREMENT = u"SpinIncrement";
+inline constexpr OUStringLiteral PROPERTY_SHOW_POSITION = u"ShowPosition";
+inline constexpr OUStringLiteral PROPERTY_SHOW_NAVIGATION = u"ShowNavigation";
+inline constexpr OUStringLiteral PROPERTY_SHOW_RECORDACTIONS = u"ShowRecordActions";
+inline constexpr OUStringLiteral PROPERTY_SHOW_FILTERSORT = u"ShowFilterSort";
+inline constexpr OUStringLiteral PROPERTY_LINEEND_FORMAT = u"LineEndFormat";
+inline constexpr OUStringLiteral PROPERTY_DECORATION = u"Decoration";
+inline constexpr OUStringLiteral PROPERTY_NOLABEL = u"NoLabel";
+inline constexpr OUStringLiteral PROPERTY_URL = u"URL";
 
-    #define PROPERTY_DEFAULTCONTROL          "DefaultControl"
-    #define PROPERTY_INTROSPECTEDOBJECT      "IntrospectedObject"
-    #define PROPERTY_CURRENTPAGE             "CurrentPage"
-    #define PROPERTY_CONTROLCONTEXT          "ControlContext"
+inline constexpr OUStringLiteral PROPERTY_SELECTION_TYPE = u"SelectionType";
+inline constexpr OUStringLiteral PROPERTY_ROOT_DISPLAYED = u"RootDisplayed";
+inline constexpr OUStringLiteral PROPERTY_SHOWS_HANDLES = u"ShowsHandles";
+inline constexpr OUStringLiteral PROPERTY_SHOWS_ROOT_HANDLES = u"ShowsRootHandles";
+inline constexpr OUStringLiteral PROPERTY_EDITABLE = u"Editable";
+inline constexpr OUStringLiteral PROPERTY_INVOKES_STOP_NOT_EDITING = u"InvokesStopNodeEditing";
 
-    // properties
-    #define PROPERTY_CLASSID                 "ClassId"
-    #define PROPERTY_CONTROLLABEL            "LabelControl"
-    #define PROPERTY_LABEL                   "Label"
-    #define PROPERTY_TABINDEX                "TabIndex"
-    #define PROPERTY_WHEEL_BEHAVIOR          "MouseWheelBehavior"
-    #define PROPERTY_TAG                     "Tag"
-    #define PROPERTY_NAME                    "Name"
-    #define PROPERTY_GROUP_NAME              "GroupName"
-    #define PROPERTY_VALUE                   "Value"
-    #define PROPERTY_TEXT                    "Text"
-    #define PROPERTY_NAVIGATION              "NavigationBarMode"
-    #define PROPERTY_CYCLE                   "Cycle"
-    #define PROPERTY_CONTROLSOURCE           "DataField"
-    #define PROPERTY_INPUT_REQUIRED          "InputRequired"
-    #define PROPERTY_ENABLED                 "Enabled"
-    #define PROPERTY_ENABLE_VISIBLE          "EnableVisible"
-    #define PROPERTY_READONLY                "ReadOnly"
-    #define PROPERTY_ISREADONLY              "IsReadOnly"
-    #define PROPERTY_FILTER                  "Filter"
-    #define PROPERTY_WIDTH                   "Width"
-    #define PROPERTY_MULTILINE               "MultiLine"
-    #define PROPERTY_WORDBREAK               "WordBreak"
-    #define PROPERTY_TARGET_URL              "TargetURL"
-    #define PROPERTY_TARGET_FRAME            "TargetFrame"
-    #define PROPERTY_MAXTEXTLEN              "MaxTextLen"
-    #define PROPERTY_EDITMASK                "EditMask"
-    #define PROPERTY_SPIN                    "Spin"
-    #define PROPERTY_TRISTATE                "TriState"
-    #define PROPERTY_HIDDEN_VALUE            "HiddenValue"
-    #define PROPERTY_BUTTONTYPE             "ButtonType"
-    #define PROPERTY_XFORMS_BUTTONTYPE      "XFormsButtonType"
-    #define PROPERTY_STRINGITEMLIST         "StringItemList"
-    #define PROPERTY_TYPEDITEMLIST          "TypedItemList"
-    #define PROPERTY_DEFAULT_TEXT           "DefaultText"
-    #define PROPERTY_DEFAULT_STATE          "DefaultState"
-    #define PROPERTY_FORMATKEY              "FormatKey"
-    #define PROPERTY_FORMATSSUPPLIER        "FormatsSupplier"
-    #define PROPERTY_SUBMIT_ACTION          "SubmitAction"
-    #define PROPERTY_SUBMIT_TARGET          "SubmitTarget"
-    #define PROPERTY_SUBMIT_METHOD          "SubmitMethod"
-    #define PROPERTY_SUBMIT_ENCODING        "SubmitEncoding"
-    #define PROPERTY_IMAGE_URL              "ImageURL"
-    #define PROPERTY_GRAPHIC                "Graphic"
-    #define PROPERTY_EMPTY_IS_NULL          "ConvertEmptyToNull"
-    #define PROPERTY_LISTSOURCETYPE         "ListSourceType"
-    #define PROPERTY_LISTSOURCE             "ListSource"
-    #define PROPERTY_DEFAULT_SELECT_SEQ     "DefaultSelection"
-    #define PROPERTY_MULTISELECTION         "MultiSelection"
-    #define PROPERTY_ALIGN                  "Align"
-    #define PROPERTY_VERTICAL_ALIGN         "VerticalAlign"
-    #define PROPERTY_DEFAULT_DATE           "DefaultDate"
-    #define PROPERTY_DEFAULT_TIME           "DefaultTime"
-    #define PROPERTY_DEFAULT_VALUE          "DefaultValue"
-    #define PROPERTY_DECIMAL_ACCURACY       "DecimalAccuracy"
-    #define PROPERTY_REFVALUE               "RefValue"
-    #define PROPERTY_UNCHECKEDREFVALUE      "SecondaryRefValue"
-    #define PROPERTY_VALUEMIN               "ValueMin"
-    #define PROPERTY_VALUEMAX               "ValueMax"
-    #define PROPERTY_STRICTFORMAT           "StrictFormat"
-    #define PROPERTY_ALLOWADDITIONS         "AllowInserts"
-    #define PROPERTY_ALLOWEDITS             "AllowUpdates"
-    #define PROPERTY_ALLOWDELETIONS         "AllowDeletes"
-    #define PROPERTY_MASTERFIELDS           "MasterFields"
-    #define PROPERTY_LITERALMASK            "LiteralMask"
-    #define PROPERTY_VALUESTEP              "ValueStep"
-    #define PROPERTY_SHOWTHOUSANDSEP        "ShowThousandsSeparator"
-    #define PROPERTY_CURRENCYSYMBOL         "CurrencySymbol"
-    #define PROPERTY_DATEFORMAT             "DateFormat"
-    #define PROPERTY_DATEMIN                "DateMin"
-    #define PROPERTY_DATEMAX                "DateMax"
-    #define PROPERTY_TIMEFORMAT             "TimeFormat"
-    #define PROPERTY_TIMEMIN                "TimeMin"
-    #define PROPERTY_TIMEMAX                "TimeMax"
-    #define PROPERTY_LINECOUNT              "LineCount"
-    #define PROPERTY_BOUNDCOLUMN            "BoundColumn"
-    #define PROPERTY_BACKGROUNDCOLOR        "BackgroundColor"
-    #define PROPERTY_FILLCOLOR              "FillColor"
-    #define PROPERTY_TEXTCOLOR              "TextColor"
-    #define PROPERTY_LINECOLOR              "LineColor"
-    #define PROPERTY_BORDER                 "Border"
-    #define PROPERTY_ICONSIZE               "IconSize"
-    #define PROPERTY_DROPDOWN               "Dropdown"
-    #define PROPERTY_HSCROLL                "HScroll"
-    #define PROPERTY_VSCROLL                "VScroll"
-    #define PROPERTY_SHOW_SCROLLBARS        "ShowScrollbars"
-    #define PROPERTY_TABSTOP                "Tabstop"
-    #define PROPERTY_AUTOCOMPLETE           "Autocomplete"
-    #define PROPERTY_PRINTABLE              "Printable"
-    #define PROPERTY_ECHO_CHAR              "EchoChar"
-    #define PROPERTY_ROWHEIGHT              "RowHeight"
-    #define PROPERTY_HELPTEXT               "HelpText"
-    #define PROPERTY_FONT                   "FontDescriptor"
-    #define PROPERTY_FONT_NAME              "FontName"
-    #define PROPERTY_FONT_STYLENAME         "FontStyleName"
-    #define PROPERTY_FONT_FAMILY            "FontFamily"
-    #define PROPERTY_FONT_CHARSET           "FontCharset"
-    #define PROPERTY_FONT_HEIGHT            "FontHeight"
-    #define PROPERTY_FONT_WEIGHT            "FontWeight"
-    #define PROPERTY_FONT_SLANT             "FontSlant"
-    #define PROPERTY_FONT_UNDERLINE         "FontUnderline"
-    #define PROPERTY_FONT_STRIKEOUT         "FontStrikeout"
-    #define PROPERTY_FONT_RELIEF            "FontRelief"
-    #define PROPERTY_FONT_EMPHASIS_MARK     "FontEmphasisMark"
-    #define PROPERTY_TEXTLINECOLOR          "TextLineColor"
-    #define PROPERTY_HELPURL                "HelpURL"
-    #define PROPERTY_RECORDMARKER           "HasRecordMarker"
-    #define PROPERTY_EFFECTIVE_DEFAULT      "EffectiveDefault"
-    #define PROPERTY_EFFECTIVE_MIN          "EffectiveMin"
-    #define PROPERTY_EFFECTIVE_MAX          "EffectiveMax"
-    #define PROPERTY_FILTERPROPOSAL         "UseFilterValueProposal"
-    #define PROPERTY_CURRSYM_POSITION       "PrependCurrencySymbol"
-    #define PROPERTY_COMMAND                "Command"
-    #define PROPERTY_COMMANDTYPE            "CommandType"
-    #define PROPERTY_INSERTONLY             "IgnoreResult"
-    #define PROPERTY_ESCAPE_PROCESSING      "EscapeProcessing"
-    #define PROPERTY_TITLE                  "Title"
-    #define PROPERTY_SORT                   "Order"
-    #define PROPERTY_DATASOURCE             "DataSourceName"
-    #define PROPERTY_DETAILFIELDS           "DetailFields"
-    #define PROPERTY_DEFAULTBUTTON          "DefaultButton"
-    #define PROPERTY_LISTINDEX              "ListIndex"
-    #define PROPERTY_HEIGHT                 "Height"
-    #define PROPERTY_HASNAVIGATION          "HasNavigationBar"
-    #define PROPERTY_POSITIONX              "PositionX"
-    #define PROPERTY_POSITIONY              "PositionY"
-    #define PROPERTY_AUTOGROW               "AutoGrow"
-    #define PROPERTY_STEP                   "Step"
-    #define PROPERTY_WORDLINEMODE           "FontWordLineMode"
-    #define PROPERTY_PROGRESSVALUE          "ProgressValue"
-    #define PROPERTY_PROGRESSVALUE_MIN      "ProgressValueMin"
-    #define PROPERTY_PROGRESSVALUE_MAX      "ProgressValueMax"
-    #define PROPERTY_SCROLLVALUE            "ScrollValue"
-    #define PROPERTY_DEFAULT_SCROLLVALUE    "DefaultScrollValue"
-    #define PROPERTY_SCROLLVALUE_MIN        "ScrollValueMin"
-    #define PROPERTY_SCROLLVALUE_MAX        "ScrollValueMax"
-    #define PROPERTY_SCROLL_WIDTH        "ScrollWidth"
-    #define PROPERTY_SCROLL_HEIGHT        "ScrollHeight"
-    #define PROPERTY_SCROLL_TOP        "ScrollTop"
-    #define PROPERTY_SCROLL_LEFT        "ScrollLeft"
-    #define PROPERTY_LINEINCREMENT          "LineIncrement"
-    #define PROPERTY_BLOCKINCREMENT         "BlockIncrement"
-    #define PROPERTY_VISIBLESIZE            "VisibleSize"
-    #define PROPERTY_ORIENTATION            "Orientation"
-    #define PROPERTY_IMAGEPOSITION          "ImagePosition"
-    #define PROPERTY_ACTIVE_CONNECTION      "ActiveConnection"
-    #define PROPERTY_ACTIVECOMMAND          "ActiveCommand"
-    #define PROPERTY_DATE                   "Date"
-    #define PROPERTY_STATE                  "State"
-    #define PROPERTY_TIME                   "Time"
-    #define PROPERTY_SCALEIMAGE             "ScaleImage"
-    #define PROPERTY_SCALE_MODE             "ScaleMode"
-    #define PROPERTY_PUSHBUTTONTYPE         "PushButtonType"
-    #define PROPERTY_EFFECTIVE_VALUE        "EffectiveValue"
-    #define PROPERTY_SELECTEDITEMS          "SelectedItems"
-    #define PROPERTY_REPEAT                 "Repeat"
-    #define PROPERTY_REPEAT_DELAY           "RepeatDelay"
-    #define PROPERTY_SYMBOLCOLOR            "SymbolColor"
-    #define PROPERTY_SPINVALUE              "SpinValue"
-    #define PROPERTY_SPINVALUE_MIN          "SpinValueMin"
-    #define PROPERTY_SPINVALUE_MAX          "SpinValueMax"
-    #define PROPERTY_DEFAULT_SPINVALUE      "DefaultSpinValue"
-    #define PROPERTY_SPININCREMENT          "SpinIncrement"
-    #define PROPERTY_SHOW_POSITION          "ShowPosition"
-    #define PROPERTY_SHOW_NAVIGATION        "ShowNavigation"
-    #define PROPERTY_SHOW_RECORDACTIONS     "ShowRecordActions"
-    #define PROPERTY_SHOW_FILTERSORT        "ShowFilterSort"
-    #define PROPERTY_LINEEND_FORMAT         "LineEndFormat"
-    #define PROPERTY_DECORATION             "Decoration"
-    #define PROPERTY_NOLABEL                "NoLabel"
-    #define PROPERTY_URL                    "URL"
+#define PROPERTY_HARDLINEBREAKS         "HardLineBreaks"
 
-    #define PROPERTY_SELECTION_TYPE         "SelectionType"
-    #define PROPERTY_ROOT_DISPLAYED         "RootDisplayed"
-    #define PROPERTY_SHOWS_HANDLES          "ShowsHandles"
-    #define PROPERTY_SHOWS_ROOT_HANDLES     "ShowsRootHandles"
-    #define PROPERTY_EDITABLE               "Editable"
-    #define PROPERTY_INVOKES_STOP_NOT_EDITING "InvokesStopNodeEditing"
+inline constexpr OUStringLiteral PROPERTY_TOGGLE = u"Toggle";
+inline constexpr OUStringLiteral PROPERTY_FOCUSONCLICK = u"FocusOnClick";
+inline constexpr OUStringLiteral PROPERTY_HIDEINACTIVESELECTION = u"HideInactiveSelection";
+inline constexpr OUStringLiteral PROPERTY_VISUALEFFECT = u"VisualEffect";
+inline constexpr OUStringLiteral PROPERTY_BORDERCOLOR = u"BorderColor";
 
-    #define PROPERTY_HARDLINEBREAKS         "HardLineBreaks"
+inline constexpr OUStringLiteral PROPERTY_ADDRESS = u"Address";
+inline constexpr OUStringLiteral PROPERTY_REFERENCE_SHEET = u"ReferenceSheet";
+inline constexpr OUStringLiteral PROPERTY_UI_REPRESENTATION = u"UserInterfaceRepresentation";
 
-    #define PROPERTY_TOGGLE                 "Toggle"
-    #define PROPERTY_FOCUSONCLICK           "FocusOnClick"
-    #define PROPERTY_HIDEINACTIVESELECTION  "HideInactiveSelection"
-    #define PROPERTY_VISUALEFFECT           "VisualEffect"
-    #define PROPERTY_BORDERCOLOR            "BorderColor"
+inline constexpr OUStringLiteral PROPERTY_XML_DATA_MODEL = u"XMLDataModel";
+inline constexpr OUStringLiteral PROPERTY_BINDING_NAME = u"BindingName";
+inline constexpr OUStringLiteral PROPERTY_BIND_EXPRESSION = u"BindingExpression";
+inline constexpr OUStringLiteral PROPERTY_LIST_BINDING = u"ListBinding";
+inline constexpr OUStringLiteral PROPERTY_XSD_REQUIRED = u"RequiredExpression";
+inline constexpr OUStringLiteral PROPERTY_XSD_RELEVANT = u"RelevantExpression";
+inline constexpr OUStringLiteral PROPERTY_XSD_READONLY = u"ReadonlyExpression";
+inline constexpr OUStringLiteral PROPERTY_XSD_CONSTRAINT = u"ConstraintExpression";
+inline constexpr OUStringLiteral PROPERTY_XSD_CALCULATION = u"CalculateExpression";
+inline constexpr OUStringLiteral PROPERTY_XSD_DATA_TYPE = u"Type";
+inline constexpr OUStringLiteral PROPERTY_XSD_WHITESPACES = u"WhiteSpace";
+inline constexpr OUStringLiteral PROPERTY_XSD_PATTERN = u"Pattern";
+inline constexpr OUStringLiteral PROPERTY_XSD_LENGTH = u"Length";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_LENGTH = u"MinLength";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_LENGTH = u"MaxLength";
+inline constexpr OUStringLiteral PROPERTY_XSD_TOTAL_DIGITS = u"TotalDigits";
+inline constexpr OUStringLiteral PROPERTY_XSD_FRACTION_DIGITS = u"FractionDigits";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_INCLUSIVE_INT = u"MaxInclusiveInt";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_EXCLUSIVE_INT = u"MaxExclusiveInt";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_INCLUSIVE_INT = u"MinInclusiveInt";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_EXCLUSIVE_INT = u"MinExclusiveInt";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE = u"MaxInclusiveDouble";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE = u"MaxExclusiveDouble";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE = u"MinInclusiveDouble";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE = u"MinExclusiveDouble";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_INCLUSIVE_DATE = u"MaxInclusiveDate";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_EXCLUSIVE_DATE = u"MaxExclusiveDate";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_INCLUSIVE_DATE = u"MinInclusiveDate";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_EXCLUSIVE_DATE = u"MinExclusiveDate";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_INCLUSIVE_TIME = u"MaxInclusiveTime";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_EXCLUSIVE_TIME = u"MaxExclusiveTime";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_INCLUSIVE_TIME = u"MinInclusiveTime";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_EXCLUSIVE_TIME = u"MinExclusiveTime";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME = u"MaxInclusiveDateTime";
+inline constexpr OUStringLiteral PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME = u"MaxExclusiveDateTime";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME = u"MinInclusiveDateTime";
+inline constexpr OUStringLiteral PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME = u"MinExclusiveDateTime";
+inline constexpr OUStringLiteral PROPERTY_SUBMISSION_ID = u"SubmissionID";
+inline constexpr OUStringLiteral PROPERTY_BINDING_ID = u"BindingID";
+#define PROPERTY_ID                     "ID"
+inline constexpr OUStringLiteral PROPERTY_WRITING_MODE = u"WritingMode";
+inline constexpr OUStringLiteral PROPERTY_TEXT_ANCHOR_TYPE = u"TextAnchorType";
+inline constexpr OUStringLiteral PROPERTY_SHEET_ANCHOR_TYPE = u"SheetAnchorType";
+inline constexpr OUStringLiteral PROPERTY_ANCHOR_TYPE = u"AnchorType";
+inline constexpr OUStringLiteral PROPERTY_ANCHOR = u"Anchor";
+inline constexpr OUStringLiteral PROPERTY_IS_VISIBLE = u"IsVisible";
 
-    #define PROPERTY_ADDRESS                "Address"
-    #define PROPERTY_REFERENCE_SHEET        "ReferenceSheet"
-    #define PROPERTY_UI_REPRESENTATION      "UserInterfaceRepresentation"
+inline constexpr OUStringLiteral PROPERTY_MODEL = u"Model";
 
-    #define PROPERTY_XML_DATA_MODEL         "XMLDataModel"
-    #define PROPERTY_BINDING_NAME           "BindingName"
-    #define PROPERTY_BIND_EXPRESSION        "BindingExpression"
-    #define PROPERTY_LIST_BINDING           "ListBinding"
-    #define PROPERTY_XSD_REQUIRED           "RequiredExpression"
-    #define PROPERTY_XSD_RELEVANT           "RelevantExpression"
-    #define PROPERTY_XSD_READONLY           "ReadonlyExpression"
-    #define PROPERTY_XSD_CONSTRAINT         "ConstraintExpression"
-    #define PROPERTY_XSD_CALCULATION        "CalculateExpression"
-    #define PROPERTY_XSD_DATA_TYPE          "Type"
-    #define PROPERTY_XSD_WHITESPACES        "WhiteSpace"
-    #define PROPERTY_XSD_PATTERN            "Pattern"
-    #define PROPERTY_XSD_LENGTH             "Length"
-    #define PROPERTY_XSD_MIN_LENGTH         "MinLength"
-    #define PROPERTY_XSD_MAX_LENGTH         "MaxLength"
-    #define PROPERTY_XSD_TOTAL_DIGITS       "TotalDigits"
-    #define PROPERTY_XSD_FRACTION_DIGITS    "FractionDigits"
-    #define PROPERTY_XSD_MAX_INCLUSIVE_INT  "MaxInclusiveInt"
-    #define PROPERTY_XSD_MAX_EXCLUSIVE_INT  "MaxExclusiveInt"
-    #define PROPERTY_XSD_MIN_INCLUSIVE_INT  "MinInclusiveInt"
-    #define PROPERTY_XSD_MIN_EXCLUSIVE_INT  "MinExclusiveInt"
-    #define PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE "MaxInclusiveDouble"
-    #define PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE "MaxExclusiveDouble"
-    #define PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE "MinInclusiveDouble"
-    #define PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE "MinExclusiveDouble"
-    #define PROPERTY_XSD_MAX_INCLUSIVE_DATE "MaxInclusiveDate"
-    #define PROPERTY_XSD_MAX_EXCLUSIVE_DATE "MaxExclusiveDate"
-    #define PROPERTY_XSD_MIN_INCLUSIVE_DATE "MinInclusiveDate"
-    #define PROPERTY_XSD_MIN_EXCLUSIVE_DATE "MinExclusiveDate"
-    #define PROPERTY_XSD_MAX_INCLUSIVE_TIME "MaxInclusiveTime"
-    #define PROPERTY_XSD_MAX_EXCLUSIVE_TIME "MaxExclusiveTime"
-    #define PROPERTY_XSD_MIN_INCLUSIVE_TIME "MinInclusiveTime"
-    #define PROPERTY_XSD_MIN_EXCLUSIVE_TIME "MinExclusiveTime"
-    #define PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME "MaxInclusiveDateTime"
-    #define PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME "MaxExclusiveDateTime"
-    #define PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME "MinInclusiveDateTime"
-    #define PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME "MinExclusiveDateTime"
-    #define PROPERTY_SUBMISSION_ID          "SubmissionID"
-    #define PROPERTY_BINDING_ID             "BindingID"
-    #define PROPERTY_ID                     "ID"
-    #define PROPERTY_WRITING_MODE           "WritingMode"
-    #define PROPERTY_TEXT_ANCHOR_TYPE       "TextAnchorType"
-    #define PROPERTY_SHEET_ANCHOR_TYPE      "SheetAnchorType"
-    #define PROPERTY_ANCHOR_TYPE            "AnchorType"
-    #define PROPERTY_ANCHOR                 "Anchor"
-    #define PROPERTY_IS_VISIBLE             "IsVisible"
+inline constexpr OUStringLiteral PROPERTY_CELL_EXCHANGE_TYPE = u"ExchangeSelectionIndex";
+inline constexpr OUStringLiteral PROPERTY_BOUND_CELL = u"BoundCell";
+inline constexpr OUStringLiteral PROPERTY_LIST_CELL_RANGE = u"CellRange";
+#define PROPERTY_AUTOLINEBREAK          "AutomaticLineBreak"
+inline constexpr OUStringLiteral PROPERTY_TEXTTYPE = u"TextType";
+inline constexpr OUStringLiteral PROPERTY_RICHTEXT = u"RichText";
+inline constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
+inline constexpr OUStringLiteral PROPERTY_SELECTIONMODEL = u"SelectionModel";
+inline constexpr OUStringLiteral PROPERTY_USEGRIDLINE = u"UseGridLines";
+inline constexpr OUStringLiteral PROPERTY_GRIDLINECOLOR = u"GridLineColor";
+inline constexpr OUStringLiteral PROPERTY_SHOWCOLUMNHEADER = u"ShowColumnHeader";
+inline constexpr OUStringLiteral PROPERTY_SHOWROWHEADER = u"ShowRowHeader";
+inline constexpr OUStringLiteral PROPERTY_HEADERBACKGROUNDCOLOR = u"HeaderBackgroundColor";
+inline constexpr OUStringLiteral PROPERTY_HEADERTEXTCOLOR = u"HeaderTextColor";
+inline constexpr OUStringLiteral PROPERTY_ACTIVESELECTIONBACKGROUNDCOLOR = u"ActiveSelectionBackgroundColor";
+inline constexpr OUStringLiteral PROPERTY_ACTIVESELECTIONTEXTCOLOR = u"ActiveSelectionTextColor";
+inline constexpr OUStringLiteral PROPERTY_INACTIVESELECTIONBACKGROUNDCOLOR = u"InactiveSelectionBackgroundColor";
+inline constexpr OUStringLiteral PROPERTY_INACTIVESELECTIONTEXTCOLOR = u"InactiveSelectionTextColor";
 
-    #define PROPERTY_MODEL                  "Model"
+// services
+inline constexpr OUStringLiteral SERVICE_COMPONENT_GROUPBOX = u"com.sun.star.form.component.GroupBox";
+inline constexpr OUStringLiteral SERVICE_COMPONENT_FIXEDTEXT = u"com.sun.star.form.component.FixedText";
+inline constexpr OUStringLiteral SERVICE_COMPONENT_FORMATTEDFIELD = u"com.sun.star.form.component.FormattedField";
 
-    #define PROPERTY_CELL_EXCHANGE_TYPE     "ExchangeSelectionIndex"
-    #define PROPERTY_BOUND_CELL             "BoundCell"
-    #define PROPERTY_LIST_CELL_RANGE        "CellRange"
-    #define PROPERTY_AUTOLINEBREAK          "AutomaticLineBreak"
-    #define PROPERTY_TEXTTYPE               "TextType"
-    #define PROPERTY_RICHTEXT               "RichText"
-    #define PROPERTY_ROWSET                 "RowSet"
-    #define PROPERTY_SELECTIONMODEL         "SelectionModel"
-    #define PROPERTY_USEGRIDLINE            "UseGridLines"
-    #define PROPERTY_GRIDLINECOLOR          "GridLineColor"
-    #define PROPERTY_SHOWCOLUMNHEADER       "ShowColumnHeader"
-    #define PROPERTY_SHOWROWHEADER          "ShowRowHeader"
-    #define PROPERTY_HEADERBACKGROUNDCOLOR  "HeaderBackgroundColor"
-    #define PROPERTY_HEADERTEXTCOLOR        "HeaderTextColor"
-    #define PROPERTY_ACTIVESELECTIONBACKGROUNDCOLOR "ActiveSelectionBackgroundColor"
-    #define PROPERTY_ACTIVESELECTIONTEXTCOLOR "ActiveSelectionTextColor"
-    #define PROPERTY_INACTIVESELECTIONBACKGROUNDCOLOR "InactiveSelectionBackgroundColor"
-    #define PROPERTY_INACTIVESELECTIONTEXTCOLOR "InactiveSelectionTextColor"
+inline constexpr OUStringLiteral SERVICE_TEXT_DOCUMENT = u"com.sun.star.text.TextDocument";
+inline constexpr OUStringLiteral SERVICE_WEB_DOCUMENT = u"com.sun.star.text.WebDocument";
+inline constexpr OUStringLiteral SERVICE_SPREADSHEET_DOCUMENT = u"com.sun.star.sheet.SpreadsheetDocument";
+inline constexpr OUStringLiteral SERVICE_DRAWING_DOCUMENT = u"com.sun.star.drawing.DrawingDocument";
+inline constexpr OUStringLiteral SERVICE_PRESENTATION_DOCUMENT = u"com.sun.star.presentation.PresentationDocument";
 
-    // services
-    #define SERVICE_COMPONENT_GROUPBOX      "com.sun.star.form.component.GroupBox"
-    #define SERVICE_COMPONENT_FIXEDTEXT     "com.sun.star.form.component.FixedText"
-    #define SERVICE_COMPONENT_FORMATTEDFIELD "com.sun.star.form.component.FormattedField"
+inline constexpr OUStringLiteral SERVICE_SHEET_CELL_BINDING = u"com.sun.star.table.CellValueBinding";
+inline constexpr OUStringLiteral SERVICE_SHEET_CELL_INT_BINDING = u"com.sun.star.table.ListPositionCellBinding";
+inline constexpr OUStringLiteral SERVICE_SHEET_CELLRANGE_LISTSOURCE = u"com.sun.star.table.CellRangeListSource";
+inline constexpr OUStringLiteral SERVICE_ADDRESS_CONVERSION = u"com.sun.star.table.CellAddressConversion";
+inline constexpr OUStringLiteral SERVICE_RANGEADDRESS_CONVERSION = u"com.sun.star.table.CellRangeAddressConversion";
 
-    #define SERVICE_TEXT_DOCUMENT           "com.sun.star.text.TextDocument"
-    #define SERVICE_WEB_DOCUMENT            "com.sun.star.text.WebDocument"
-    #define SERVICE_SPREADSHEET_DOCUMENT    "com.sun.star.sheet.SpreadsheetDocument"
-    #define SERVICE_DRAWING_DOCUMENT        "com.sun.star.drawing.DrawingDocument"
-    #define SERVICE_PRESENTATION_DOCUMENT   "com.sun.star.presentation.PresentationDocument"
-
-    #define SERVICE_SHEET_CELL_BINDING      "com.sun.star.table.CellValueBinding"
-    #define SERVICE_SHEET_CELL_INT_BINDING  "com.sun.star.table.ListPositionCellBinding"
-    #define SERVICE_SHEET_CELLRANGE_LISTSOURCE "com.sun.star.table.CellRangeListSource"
-    #define SERVICE_ADDRESS_CONVERSION      "com.sun.star.table.CellAddressConversion"
-    #define SERVICE_RANGEADDRESS_CONVERSION "com.sun.star.table.CellRangeAddressConversion"
-
-
-} // namespace pcr
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

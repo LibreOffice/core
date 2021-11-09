@@ -48,47 +48,6 @@ using namespace ::com::sun::star;
 
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > const & xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
-    const OUString sFileEntryElement     ( ELEMENT_FILE_ENTRY );
-    const OUString sManifestElement      ( ELEMENT_MANIFEST );
-    const OUString sEncryptionDataElement( ELEMENT_ENCRYPTION_DATA );
-    const OUString sAlgorithmElement     ( ELEMENT_ALGORITHM );
-    const OUString sStartKeyGenerationElement ( ELEMENT_START_KEY_GENERATION );
-    const OUString sKeyDerivationElement ( ELEMENT_KEY_DERIVATION );
-
-    const OUString sCdataAttribute       ( ATTRIBUTE_CDATA );
-    const OUString sMediaTypeAttribute   ( ATTRIBUTE_MEDIA_TYPE );
-    const OUString sVersionAttribute     ( ATTRIBUTE_VERSION );
-    const OUString sFullPathAttribute    ( ATTRIBUTE_FULL_PATH );
-    const OUString sSizeAttribute        ( ATTRIBUTE_SIZE );
-    const OUString sKeySizeAttribute     ( ATTRIBUTE_KEY_SIZE );
-    const OUString sSaltAttribute        ( ATTRIBUTE_SALT );
-    const OUString sInitialisationVectorAttribute ( ATTRIBUTE_INITIALISATION_VECTOR );
-    const OUString sIterationCountAttribute  ( ATTRIBUTE_ITERATION_COUNT );
-    const OUString sAlgorithmNameAttribute   ( ATTRIBUTE_ALGORITHM_NAME );
-    const OUString sStartKeyGenerationNameAttribute ( ATTRIBUTE_START_KEY_GENERATION_NAME );
-    const OUString sKeyDerivationNameAttribute   ( ATTRIBUTE_KEY_DERIVATION_NAME );
-    const OUString sChecksumTypeAttribute    ( ATTRIBUTE_CHECKSUM_TYPE );
-    const OUString sChecksumAttribute    ( ATTRIBUTE_CHECKSUM);
-
-    const OUString sKeyInfoElement              ( ELEMENT_ENCRYPTED_KEYINFO );
-    const OUString sManifestKeyInfoElement      ( ELEMENT_MANIFEST_KEYINFO );
-    const OUString sEncryptedKeyElement         ( ELEMENT_ENCRYPTEDKEY );
-    const OUString sEncryptionMethodElement     ( ELEMENT_ENCRYPTIONMETHOD );
-    const OUString sPgpDataElement              ( ELEMENT_PGPDATA );
-    const OUString sPgpKeyIDElement             ( ELEMENT_PGPKEYID );
-    const OUString sPGPKeyPacketElement         ( ELEMENT_PGPKEYPACKET );
-    const OUString sAlgorithmAttribute          ( ATTRIBUTE_ALGORITHM );
-    const OUString sCipherDataElement           ( ELEMENT_CIPHERDATA );
-    const OUString sCipherValueElement          ( ELEMENT_CIPHERVALUE );
-    const OUString sManifestKeyInfoElement13    ( ELEMENT_MANIFEST13_KEYINFO );
-    const OUString sEncryptedKeyElement13       ( ELEMENT_ENCRYPTEDKEY13 );
-    const OUString sEncryptionMethodElement13   ( ELEMENT_ENCRYPTIONMETHOD13 );
-    const OUString sPgpDataElement13            ( ELEMENT_PGPDATA13 );
-    const OUString sPgpKeyIDElement13           ( ELEMENT_PGPKEYID13 );
-    const OUString sPGPKeyPacketElement13       ( ELEMENT_PGPKEYPACKET13 );
-    const OUString sAlgorithmAttribute13        ( ATTRIBUTE_ALGORITHM13 );
-    const OUString sCipherDataElement13         ( ELEMENT_CIPHERDATA13 );
-    const OUString sCipherValueElement13        ( ELEMENT_CIPHERVALUE13 );
     static const OUStringLiteral sKeyInfo                     ( u"KeyInfo" );
     static const OUStringLiteral sPgpKeyIDProperty            ( u"KeyId" );
     static const OUStringLiteral sPgpKeyPacketProperty        ( u"KeyPacket" );
@@ -185,7 +144,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         {
             // oasis format
             pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS,
-                                        sCdataAttribute,
+                                        ATTRIBUTE_CDATA,
                                         MANIFEST_OASIS_NAMESPACE );
             bAcceptNonemptyVersion = true;
             if ( aDocVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
@@ -193,10 +152,10 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 // this is ODF12 or later generation, let encrypted
                 // streams contain start-key-generation entry
                 bStoreStartKeyGeneration = true;
-                pRootAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aDocVersion );
+                pRootAttrList->AddAttribute ( ATTRIBUTE_VERSION, ATTRIBUTE_CDATA, aDocVersion );
                 // plus gpg4libre extensions - loext NS for that
                 pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS_LOEXT,
-                                              sCdataAttribute,
+                                              ATTRIBUTE_CDATA,
                                               MANIFEST_LOEXT_NAMESPACE );
             }
         }
@@ -205,7 +164,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             // even if it is no SO6 format the namespace must be specified
             // thus SO6 format is used as default one
             pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS,
-                                        sCdataAttribute,
+                                        ATTRIBUTE_CDATA,
                                         MANIFEST_NAMESPACE );
 
             bProvideDTD = true;
@@ -219,7 +178,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         xExtHandler->unknown ( MANIFEST_DOCTYPE );
         xHandler->ignorableWhitespace ( sWhiteSpace );
     }
-    xHandler->startElement( sManifestElement, pRootAttrList );
+    xHandler->startElement( ELEMENT_MANIFEST, pRootAttrList );
 
     const uno::Any *pKeyInfoProperty = nullptr;
     if ( pRootFolderPropSeq )
@@ -243,7 +202,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             bool const isODF13(aDocVersion.compareTo(ODFVER_013_TEXT) >= 0);
             if (!isODF13)
             {
-                xHandler->startElement(sManifestKeyInfoElement, nullptr);
+                xHandler->startElement(ELEMENT_MANIFEST_KEYINFO, nullptr);
             }
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
@@ -267,68 +226,68 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 if (aPgpKeyID.hasElements() && aCipherValue.hasElements() )
                 {
                     // ==== manifest:encrypted-key & children - one for each recipient
-                    xHandler->startElement(isODF13 ? sEncryptedKeyElement13 : sEncryptedKeyElement, nullptr);
+                    xHandler->startElement(isODF13 ? OUString(ELEMENT_ENCRYPTEDKEY13) : OUString(ELEMENT_ENCRYPTEDKEY), nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     rtl::Reference<::comphelper::AttributeList> pNewAttrList = new ::comphelper::AttributeList;
                     // TODO: the algorithm should rather be configurable
                     pNewAttrList->AddAttribute(
-                        isODF13 ? sAlgorithmAttribute13 : sAlgorithmAttribute,
-                        sCdataAttribute,
+                        isODF13 ? OUString(ATTRIBUTE_ALGORITHM13) : OUString(ATTRIBUTE_ALGORITHM),
+                        ATTRIBUTE_CDATA,
                                                  "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
-                    xHandler->startElement(isODF13 ? sEncryptionMethodElement13 : sEncryptionMethodElement, pNewAttrList);
-                    xHandler->endElement(isODF13 ? sEncryptionMethodElement13 :  sEncryptionMethodElement);
+                    xHandler->startElement(isODF13 ? OUString(ELEMENT_ENCRYPTIONMETHOD13) : OUString(ELEMENT_ENCRYPTIONMETHOD), pNewAttrList);
+                    xHandler->endElement(isODF13 ? OUString(ELEMENT_ENCRYPTIONMETHOD13) : OUString(ELEMENT_ENCRYPTIONMETHOD));
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     // note: the mismatch here corresponds to ODF 1.3 cs01 schema
-                    xHandler->startElement(isODF13 ? sManifestKeyInfoElement13 : sKeyInfoElement, nullptr);
+                    xHandler->startElement(isODF13 ? OUString(ELEMENT_MANIFEST13_KEYINFO) : OUString(ELEMENT_MANIFEST_KEYINFO), nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? sPgpDataElement13 : sPgpDataElement, nullptr);
+                    xHandler->startElement(isODF13 ? OUString(ELEMENT_PGPDATA13) : OUString(ELEMENT_PGPDATA), nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? sPgpKeyIDElement13 : sPgpKeyIDElement, nullptr);
+                    xHandler->startElement(isODF13 ? OUString(ELEMENT_PGPKEYID13) : OUString(ELEMENT_PGPKEYID), nullptr);
                     ::comphelper::Base64::encode(aBuffer, aPgpKeyID);
                     xHandler->characters( aBuffer.makeStringAndClear() );
-                    xHandler->endElement(isODF13 ? sPgpKeyIDElement13 : sPgpKeyIDElement);
+                    xHandler->endElement(isODF13 ? OUString(ELEMENT_PGPKEYID13) : OUString(ELEMENT_PGPKEYID));
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     // key packet is optional
                     if (aPgpKeyPacket.hasElements())
                     {
-                        xHandler->startElement(isODF13 ? sPGPKeyPacketElement13 : sPGPKeyPacketElement, nullptr);
+                        xHandler->startElement(isODF13 ? OUString(ELEMENT_PGPKEYPACKET13) : OUString(ELEMENT_PGPKEYPACKET), nullptr);
                         ::comphelper::Base64::encode(aBuffer, aPgpKeyPacket);
                         xHandler->characters( aBuffer.makeStringAndClear() );
-                        xHandler->endElement(isODF13 ? sPGPKeyPacketElement13 :  sPGPKeyPacketElement);
+                        xHandler->endElement(isODF13 ? OUString(ELEMENT_PGPKEYPACKET13) : OUString(ELEMENT_PGPKEYPACKET));
                         xHandler->ignorableWhitespace ( sWhiteSpace );
                     }
 
-                    xHandler->endElement(isODF13 ? sPgpDataElement13 : sPgpDataElement);
+                    xHandler->endElement(isODF13 ? OUString(ELEMENT_PGPDATA13) : OUString(ELEMENT_PGPDATA));
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement(isODF13 ? sManifestKeyInfoElement13 : sKeyInfoElement);
+                    xHandler->endElement(isODF13 ? OUString(ELEMENT_MANIFEST13_KEYINFO) : OUString(ELEMENT_MANIFEST_KEYINFO));
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? sCipherDataElement13 : sCipherDataElement, nullptr);
+                    xHandler->startElement(isODF13 ? OUString(ELEMENT_CIPHERDATA13) : OUString(ELEMENT_CIPHERDATA), nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? sCipherValueElement13 : sCipherValueElement, nullptr);
+                    xHandler->startElement(isODF13 ? OUString(ELEMENT_CIPHERVALUE13) : OUString(ELEMENT_CIPHERVALUE), nullptr);
                     ::comphelper::Base64::encode(aBuffer, aCipherValue);
                     xHandler->characters( aBuffer.makeStringAndClear() );
-                    xHandler->endElement(isODF13 ? sCipherValueElement13 : sCipherValueElement);
+                    xHandler->endElement(isODF13 ? OUString(ELEMENT_CIPHERVALUE13) : OUString(ELEMENT_CIPHERVALUE));
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement(isODF13 ? sCipherDataElement13 : sCipherDataElement);
+                    xHandler->endElement(isODF13 ? OUString(ELEMENT_CIPHERDATA13) : OUString(ELEMENT_CIPHERDATA));
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement(isODF13 ? sEncryptedKeyElement13 : sEncryptedKeyElement);
+                    xHandler->endElement(isODF13 ? OUString(ELEMENT_ENCRYPTEDKEY13) : OUString(ELEMENT_ENCRYPTEDKEY));
                     xHandler->ignorableWhitespace ( sWhiteSpace );
                 }
             }
 
             if (!isODF13)
             {
-                xHandler->endElement(sManifestKeyInfoElement);
+                xHandler->endElement(ELEMENT_MANIFEST_KEYINFO);
             }
             xHandler->ignorableWhitespace ( sWhiteSpace );
         }
@@ -345,25 +304,25 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             if (rValue.Name == sMediaTypeProperty )
             {
                 rValue.Value >>= aString;
-                pAttrList->AddAttribute ( sMediaTypeAttribute, sCdataAttribute, aString );
+                pAttrList->AddAttribute ( ATTRIBUTE_MEDIA_TYPE, ATTRIBUTE_CDATA, aString );
             }
             else if (rValue.Name == sVersionProperty )
             {
                 rValue.Value >>= aString;
                 // the version is stored only if it is not empty
                 if ( bAcceptNonemptyVersion && !aString.isEmpty() )
-                    pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
+                    pAttrList->AddAttribute ( ATTRIBUTE_VERSION, ATTRIBUTE_CDATA, aString );
             }
             else if (rValue.Name == sFullPathProperty )
             {
                 rValue.Value >>= aString;
-                pAttrList->AddAttribute ( sFullPathAttribute, sCdataAttribute, aString );
+                pAttrList->AddAttribute ( ATTRIBUTE_FULL_PATH, ATTRIBUTE_CDATA, aString );
             }
             else if (rValue.Name == sSizeProperty )
             {
                 sal_Int64 nSize = 0;
                 rValue.Value >>= nSize;
-                pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, OUString::number( nSize ) );
+                pAttrList->AddAttribute ( ATTRIBUTE_SIZE, ATTRIBUTE_CDATA, OUString::number( nSize ) );
             }
             else if (rValue.Name == sInitialisationVectorProperty )
                 pVector = &rValue.Value;
@@ -384,7 +343,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         }
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
-        xHandler->startElement( sFileEntryElement , pAttrList);
+        xHandler->startElement( ELEMENT_FILE_ENTRY , pAttrList);
         if ( pVector && pSalt && pIterationCount && pDigest && pDigestAlg && pEncryptAlg && pStartKeyAlg && pDerivedKeySize )
         {
             // ==== Encryption Data
@@ -405,12 +364,12 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             else
                 throw uno::RuntimeException( THROW_WHERE "Unexpected digest algorithm is provided!" );
 
-            pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
+            pNewAttrList->AddAttribute ( ATTRIBUTE_CHECKSUM_TYPE, ATTRIBUTE_CDATA, sChecksumType );
             *pDigest >>= aSequence;
             ::comphelper::Base64::encode(aBuffer, aSequence);
-            pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            pNewAttrList->AddAttribute ( ATTRIBUTE_CHECKSUM, ATTRIBUTE_CDATA, aBuffer.makeStringAndClear() );
 
-            xHandler->startElement( sEncryptionDataElement , pNewAttrList);
+            xHandler->startElement( ELEMENT_ENCRYPTION_DATA , pNewAttrList);
 
             // ==== Algorithm
             pNewAttrList = new ::comphelper::AttributeList;
@@ -436,16 +395,16 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             else
                 throw uno::RuntimeException( THROW_WHERE "Unexpected encryption algorithm is provided!" );
 
-            pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
+            pNewAttrList->AddAttribute ( ATTRIBUTE_ALGORITHM_NAME, ATTRIBUTE_CDATA, sEncAlgName );
 
             *pVector >>= aSequence;
             ::comphelper::Base64::encode(aBuffer, aSequence);
-            pNewAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            pNewAttrList->AddAttribute ( ATTRIBUTE_INITIALISATION_VECTOR, ATTRIBUTE_CDATA, aBuffer.makeStringAndClear() );
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->startElement( sAlgorithmElement , pNewAttrList);
+            xHandler->startElement( ELEMENT_ALGORITHM , pNewAttrList);
             xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->endElement( sAlgorithmElement );
+            xHandler->endElement( ELEMENT_ALGORITHM );
 
             if ( bStoreStartKeyGeneration )
             {
@@ -471,13 +430,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 else
                     throw uno::RuntimeException( THROW_WHERE "Unexpected start key algorithm is provided!" );
 
-                pNewAttrList->AddAttribute ( sStartKeyGenerationNameAttribute, sCdataAttribute, sStartKeyAlg );
-                pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sStartKeySize );
+                pNewAttrList->AddAttribute ( ATTRIBUTE_START_KEY_GENERATION_NAME, ATTRIBUTE_CDATA, sStartKeyAlg );
+                pNewAttrList->AddAttribute ( ATTRIBUTE_KEY_SIZE, ATTRIBUTE_CDATA, sStartKeySize );
 
                 xHandler->ignorableWhitespace ( sWhiteSpace );
-                xHandler->startElement( sStartKeyGenerationElement , pNewAttrList);
+                xHandler->startElement( ELEMENT_START_KEY_GENERATION , pNewAttrList);
                 xHandler->ignorableWhitespace ( sWhiteSpace );
-                xHandler->endElement( sStartKeyGenerationElement );
+                xHandler->endElement( ELEMENT_START_KEY_GENERATION );
             }
 
             // ==== Key Derivation
@@ -485,8 +444,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
             if (pKeyInfoProperty)
             {
-                pNewAttrList->AddAttribute(sKeyDerivationNameAttribute,
-                                           sCdataAttribute,
+                pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
+                                           ATTRIBUTE_CDATA,
                                            sPGP_Name);
                 // no start-key-generation needed, our session key has
                 // max size already
@@ -494,39 +453,39 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             }
             else
             {
-                pNewAttrList->AddAttribute(sKeyDerivationNameAttribute,
-                                           sCdataAttribute,
+                pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
+                                           ATTRIBUTE_CDATA,
                                            sPBKDF2_Name);
 
                 if (bStoreStartKeyGeneration)
                 {
                     aBuffer.append(nDerivedKeySize);
-                    pNewAttrList->AddAttribute(sKeySizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear());
+                    pNewAttrList->AddAttribute(ATTRIBUTE_KEY_SIZE, ATTRIBUTE_CDATA, aBuffer.makeStringAndClear());
                 }
 
                 sal_Int32 nCount = 0;
                 *pIterationCount >>= nCount;
                 aBuffer.append(nCount);
-                pNewAttrList->AddAttribute(sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear());
+                pNewAttrList->AddAttribute(ATTRIBUTE_ITERATION_COUNT, ATTRIBUTE_CDATA, aBuffer.makeStringAndClear());
 
                 *pSalt >>= aSequence;
                 ::comphelper::Base64::encode(aBuffer, aSequence);
-                pNewAttrList->AddAttribute(sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear());
+                pNewAttrList->AddAttribute(ATTRIBUTE_SALT, ATTRIBUTE_CDATA, aBuffer.makeStringAndClear());
             }
 
             xHandler->ignorableWhitespace(sWhiteSpace);
-            xHandler->startElement(sKeyDerivationElement, pNewAttrList);
+            xHandler->startElement(ELEMENT_KEY_DERIVATION, pNewAttrList);
             xHandler->ignorableWhitespace(sWhiteSpace);
-            xHandler->endElement(sKeyDerivationElement);
+            xHandler->endElement(ELEMENT_KEY_DERIVATION);
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->endElement( sEncryptionDataElement );
+            xHandler->endElement( ELEMENT_ENCRYPTION_DATA );
         }
         xHandler->ignorableWhitespace ( sWhiteSpace );
-        xHandler->endElement( sFileEntryElement );
+        xHandler->endElement( ELEMENT_FILE_ENTRY );
     }
     xHandler->ignorableWhitespace ( sWhiteSpace );
-    xHandler->endElement( sManifestElement );
+    xHandler->endElement( ELEMENT_MANIFEST );
     xHandler->endDocument();
 }
 

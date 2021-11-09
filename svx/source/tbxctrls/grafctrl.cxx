@@ -156,13 +156,14 @@ namespace {
 struct CommandToRID
 {
     const char* pCommand;
-    const char* sResId;
+    rtl::OUStringConstExpr sResId;
 };
 
 }
 
 static OUString ImplGetRID( const OUString& aCommand )
 {
+    static constexpr OUStringLiteral EMPTY = u"";
     static const CommandToRID aImplCommandToResMap[] =
     {
         { ".uno:GrafRed",           RID_SVXBMP_GRAF_RED             },
@@ -172,7 +173,7 @@ static OUString ImplGetRID( const OUString& aCommand )
         { ".uno:GrafContrast",      RID_SVXBMP_GRAF_CONTRAST        },
         { ".uno:GrafGamma",         RID_SVXBMP_GRAF_GAMMA           },
         { ".uno:GrafTransparence",  RID_SVXBMP_GRAF_TRANSPARENCE    },
-        { nullptr, "" }
+        { nullptr, EMPTY }
     };
 
     OUString sRID;
@@ -182,7 +183,7 @@ static OUString ImplGetRID( const OUString& aCommand )
     {
         if ( aCommand.equalsAscii( aImplCommandToResMap[ i ].pCommand ))
         {
-            sRID = OUString::createFromAscii(aImplCommandToResMap[i].sResId);
+            sRID = aImplCommandToResMap[i].sResId;
             break;
         }
         ++i;

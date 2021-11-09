@@ -19,48 +19,48 @@
 
 #pragma once
 
-#define HID_INSWIN_POS                                          "SC_HID_INSWIN_POS"
-#define HID_INSWIN_CALC                                         "SC_HID_INSWIN_CALC"
-#define HID_INSWIN_CANCEL                                       "SC_HID_INSWIN_CANCEL"
-#define HID_INSWIN_OK                                           "SC_HID_INSWIN_OK"
-#define HID_INSWIN_SUMME                                        "SC_HID_INSWIN_SUMME"
-#define HID_INSWIN_FUNC                                         "SC_HID_INSWIN_FUNC"
-#define HID_INSWIN_INPUT                                        "SC_HID_INSWIN_INPUT"
+inline constexpr OStringLiteral HID_INSWIN_POS = "SC_HID_INSWIN_POS";
+inline constexpr OStringLiteral HID_INSWIN_CALC = "SC_HID_INSWIN_CALC";
+inline constexpr OStringLiteral HID_INSWIN_CANCEL = "SC_HID_INSWIN_CANCEL";
+inline constexpr OStringLiteral HID_INSWIN_OK = "SC_HID_INSWIN_OK";
+inline constexpr OStringLiteral HID_INSWIN_SUMME = "SC_HID_INSWIN_SUMME";
+inline constexpr OStringLiteral HID_INSWIN_FUNC = "SC_HID_INSWIN_FUNC";
+inline constexpr OStringLiteral HID_INSWIN_INPUT = "SC_HID_INSWIN_INPUT";
 
 // Help IDs for document window ----------------------------------------------
-#define HID_SC_WIN_GRIDWIN                                      "SC_HID_SC_WIN_GRIDWIN"
-#define HID_SC_WIN_PREVIEW                                      "SC_HID_SC_WIN_PREVIEW"
+inline constexpr OStringLiteral HID_SC_WIN_GRIDWIN = "SC_HID_SC_WIN_GRIDWIN";
+inline constexpr OStringLiteral HID_SC_WIN_PREVIEW = "SC_HID_SC_WIN_PREVIEW";
 
-#define HID_SC_HEADER_EDIT                                      "SC_HID_SC_HEADER_EDIT"
-#define HID_SC_FOOTER_EDIT                                      "SC_HID_SC_FOOTER_EDIT"
+inline constexpr OStringLiteral HID_SC_HEADER_EDIT = "SC_HID_SC_HEADER_EDIT";
+inline constexpr OStringLiteral HID_SC_FOOTER_EDIT = "SC_HID_SC_FOOTER_EDIT";
 
-#define HID_SC_SCENWIN_TOP                                      "SC_HID_SC_SCENWIN_TOP"
-#define HID_SC_SCENWIN_BOTTOM                                   "SC_HID_SC_SCENWIN_BOTTOM"
+inline constexpr OStringLiteral HID_SC_SCENWIN_TOP = "SC_HID_SC_SCENWIN_TOP";
+inline constexpr OStringLiteral HID_SC_SCENWIN_BOTTOM = "SC_HID_SC_SCENWIN_BOTTOM";
 
-#define HID_SC_INPUTWIN                                         "SC_HID_SC_INPUTWIN"
+inline constexpr OStringLiteral HID_SC_INPUTWIN = "SC_HID_SC_INPUTWIN";
 
 #define HID_SC_RENAME_NAME                                      "SC_HID_SC_RENAME_NAME"
 #define HID_SC_APPEND_NAME                                      "SC_HID_SC_APPEND_NAME"
 
-#define HID_SC_ADD_AUTOFMT                                      "SC_HID_SC_ADD_AUTOFMT"
-#define HID_SC_AUTOFMT_NAME                                     "SC_HID_SC_AUTOFMT_NAME"
+inline constexpr OStringLiteral HID_SC_ADD_AUTOFMT = "SC_HID_SC_ADD_AUTOFMT";
+inline constexpr OStringLiteral HID_SC_AUTOFMT_NAME = "SC_HID_SC_AUTOFMT_NAME";
 
 //  wrong group - HID_SC_DLG_START is full
-#define HID_SC_REN_AFMT_NAME                                    "SC_HID_SC_REN_AFMT_NAME"
+inline constexpr OStringLiteral HID_SC_REN_AFMT_NAME = "SC_HID_SC_REN_AFMT_NAME";
 
-#define HID_CHG_PROTECT                                         "SC_HID_CHG_PROTECT"
+inline constexpr OStringLiteral HID_CHG_PROTECT = "SC_HID_CHG_PROTECT";
 
 
-#define HID_SC_REN_AFMT_DLG                                     "SC_HID_SC_REN_AFMT_DLG"
+inline constexpr OStringLiteral HID_SC_REN_AFMT_DLG = "SC_HID_SC_REN_AFMT_DLG";
 
 // Help IDs for Submenus (max.50) --------------------------------------------
-#define HID_PASSWD_TABLE                                        "SC_HID_PASSWD_TABLE"
-#define HID_PASSWD_DOC                                          "SC_HID_PASSWD_DOC"
-#define HID_PASSWD_DOC_CONFIRM                                  "SC_HID_PASSWD_DOC_CONFIRM"
+inline constexpr OStringLiteral HID_PASSWD_TABLE = "SC_HID_PASSWD_TABLE";
+inline constexpr OStringLiteral HID_PASSWD_DOC = "SC_HID_PASSWD_DOC";
+inline constexpr OStringLiteral HID_PASSWD_DOC_CONFIRM = "SC_HID_PASSWD_DOC_CONFIRM";
 
 
 // Other help IDs (max.70) ---------------------------------------------------
-#define HID_SELECTTABLES                                        "SC_HID_SELECTTABLES"
+inline constexpr OStringLiteral HID_SELECTTABLES = "SC_HID_SELECTTABLES";
 
 
 // Analysis Addin Functions (max.120) ----------------------------------------
