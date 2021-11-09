@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_ODFFIELDS_HXX
 #define INCLUDED_XMLOFF_ODFFIELDS_HXX
 
-#define ODF_FORMTEXT "vnd.oasis.opendocument.field.FORMTEXT"
+constexpr OUStringLiteral ODF_FORMTEXT = u"vnd.oasis.opendocument.field.FORMTEXT";
 #define ODF_FORMFIELD_DEFAULT_LENGTH 5
 
 #define ODF_FORMCHECKBOX u"vnd.oasis.opendocument.field.FORMCHECKBOX"
@@ -29,7 +29,7 @@
 #define ODF_FORMCHECKBOX_RESULT "Checkbox_Checked"
 
 #define ODF_FORMDROPDOWN u"vnd.oasis.opendocument.field.FORMDROPDOWN"
-#define ODF_FORMDROPDOWN_LISTENTRY "Dropdown_ListEntry"
+constexpr OUStringLiteral ODF_FORMDROPDOWN_LISTENTRY = u"Dropdown_ListEntry";
 #define ODF_FORMDROPDOWN_RESULT "Dropdown_Selected"
 #define ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT 25
 
@@ -46,10 +46,10 @@
 
 #define ODF_PAGEREF "vnd.oasis.opendocument.field.PAGEREF"
 
-#define ODF_UNHANDLED "vnd.oasis.opendocument.field.UNHANDLED"
+constexpr OUStringLiteral ODF_UNHANDLED = u"vnd.oasis.opendocument.field.UNHANDLED";
 #define ODF_OLE_PARAM "vnd.oasis.opendocument.field.ole"
 #define ODF_ID_PARAM "vnd.oasis.opendocument.field.id"
-#define ODF_CODE_PARAM "vnd.oasis.opendocument.field.code"
+constexpr OUStringLiteral ODF_CODE_PARAM = u"vnd.oasis.opendocument.field.code";
 
 #endif // INCLUDED_XMLOFF_ODFFIELDS_HXX
 

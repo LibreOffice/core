@@ -32,7 +32,8 @@
     LanguageTag contains a plain language/country combination or a more
     detailed BCP 47 language tag use LanguageTag::isIsoLocale() instead.
  */
-#define I18NLANGTAG_QLT "qlt"
+#define I18NLANGTAG_QLT_ASCII "qlt"
+inline constexpr OUStringLiteral I18NLANGTAG_QLT = u"qlt";
 
 
 class LanguageTagImpl;

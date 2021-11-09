@@ -10,7 +10,8 @@
 #ifndef INCLUDED_SFX2_INC_STRINGS_HXX
 #define INCLUDED_SFX2_INC_STRINGS_HXX
 
-#define STR_HTML_GENERATOR "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"
+constexpr OUStringLiteral STR_HTML_GENERATOR
+    = u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)";
 
 // Do not translate STR_TEMPLATE_NAME*_DEF names!!
 // STR_TEMPLATE_NAME*_DEF strings must EXACTLY fit dc:title tag in meta.xml of each template file
@@ -47,7 +48,7 @@
 #define STR_TEMPLATE_NAME31_DEF "Simple"
 #define STR_TEMPLATE_NAME32_DEF "BPMN"
 
-#define CMIS_TYPE_STRING "String"
+constexpr OUStringLiteral CMIS_TYPE_STRING = u"String";
 #define CMIS_TYPE_INTEGER "Integer"
 #define CMIS_TYPE_DECIMAL "Decimal"
 #define CMIS_TYPE_DATETIME "Datetime"

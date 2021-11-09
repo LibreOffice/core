@@ -27,26 +27,26 @@
 #define FM_ATTR_FORM_OPERATIONS ( FM_ATTR_START + 2 )
 
 #define FM_PROP_NAME                         "Name"
-#define FM_PROP_CLASSID                      "ClassId"
-#define FM_PROP_ALIGN                        "Align"
-#define FM_PROP_ROWCOUNT                     "RowCount"
+constexpr OUStringLiteral FM_PROP_CLASSID = u"ClassId";
+constexpr OUStringLiteral FM_PROP_ALIGN = u"Align";
+constexpr OUStringLiteral FM_PROP_ROWCOUNT = u"RowCount";
 #define FM_PROP_ROWCOUNTFINAL                "IsRowCountFinal"
 #define FM_PROP_FETCHSIZE                    "FetchSize"
-#define FM_PROP_VALUE                        "Value"
+constexpr OUStringLiteral FM_PROP_VALUE = u"Value";
 #define FM_PROP_VALUEMIN                     "ValueMin"
 #define FM_PROP_VALUEMAX                     "ValueMax"
 #define FM_PROP_VALUESTEP                    "ValueStep"
 #define FM_PROP_TEXT                         "Text"
-#define FM_PROP_LABEL                        "Label"
+constexpr OUStringLiteral FM_PROP_LABEL = u"Label";
 #define FM_PROP_NAVIGATION                   "NavigationBarMode"
 #define FM_PROP_CYCLE                        "Cycle"
 #define FM_PROP_CONTROLSOURCE                "DataField"
-#define FM_PROP_ENABLED                      "Enabled"
+constexpr OUStringLiteral FM_PROP_ENABLED = u"Enabled";
 #define FM_PROP_SPIN                         "Spin"
-#define FM_PROP_READONLY                     "ReadOnly"
+constexpr OUStringLiteral FM_PROP_READONLY = u"ReadOnly";
 #define FM_PROP_FILTER                       "Filter"
-#define FM_PROP_AUTOINCREMENT                "IsAutoIncrement"
-#define FM_PROP_WIDTH                        "Width"
+constexpr OUStringLiteral FM_PROP_AUTOINCREMENT = u"IsAutoIncrement";
+constexpr OUStringLiteral FM_PROP_WIDTH = u"Width";
 #define FM_PROP_SEARCHABLE                   "IsSearchable"
 #define FM_PROP_MULTILINE                    "MultiLine"
 #define FM_PROP_TARGET_URL                   "TargetURL"
@@ -62,8 +62,8 @@
 #define FM_PROP_DEFAULT_DATE                 "DefaultDate"
 #define FM_PROP_DEFAULT_TIME                 "DefaultTime"
 #define FM_PROP_DEFAULT_VALUE                "DefaultValue"
-#define FM_PROP_FORMATKEY                    "FormatKey"
-#define FM_PROP_FORMATSSUPPLIER              "FormatsSupplier"
+constexpr OUStringLiteral FM_PROP_FORMATKEY = u"FormatKey";
+constexpr OUStringLiteral FM_PROP_FORMATSSUPPLIER = u"FormatsSupplier";
 #define FM_PROP_LISTSOURCETYPE               "ListSourceType"
 #define FM_PROP_LISTSOURCE                   "ListSource"
 #define FM_PROP_SELECT_SEQ                   "SelectedItems"
@@ -71,11 +71,11 @@
 #define FM_PROP_DEFAULT_SELECT_SEQ           "DefaultSelection"
 #define FM_PROP_DECIMAL_ACCURACY             "DecimalAccuracy"
 #define FM_PROP_EDITMASK                     "EditMask"
-#define FM_PROP_ISREADONLY                   "IsReadOnly"
-#define FM_PROP_FIELDTYPE                    "Type"
+constexpr OUStringLiteral FM_PROP_ISREADONLY = u"IsReadOnly";
+constexpr OUStringLiteral FM_PROP_FIELDTYPE = u"Type";
 #define FM_PROP_REFVALUE                     "RefValue"
 #define FM_PROP_STRICTFORMAT                 "StrictFormat"
-#define FM_PROP_DATASOURCE                   "DataSourceName"
+constexpr OUStringLiteral FM_PROP_DATASOURCE = u"DataSourceName";
 #define FM_PROP_LITERALMASK                  "LiteralMask"
 #define FM_PROP_SHOWTHOUSANDSEP              "ShowThousandsSeparator"
 #define FM_PROP_CURRENCYSYMBOL               "CurrencySymbol"
@@ -92,9 +92,9 @@
 #define FM_PROP_FONT                         "FontDescriptor"
 #define FM_PROP_BACKGROUNDCOLOR              "BackgroundColor"
 #define FM_PROP_TEXTCOLOR                    "TextColor"
-#define FM_PROP_BORDER                       "Border"
+constexpr OUStringLiteral FM_PROP_BORDER = u"Border";
 #define FM_PROP_DROPDOWN                     "Dropdown"
-#define FM_PROP_ROWHEIGHT                    "RowHeight"
+constexpr OUStringLiteral FM_PROP_ROWHEIGHT = u"RowHeight";
 #define FM_PROP_HELPTEXT                     "HelpText"
 #define FM_PROP_HELPURL                      "HelpURL"
 #define FM_PROP_RECORDMARKER                 "HasRecordMarker"
@@ -103,7 +103,7 @@
 #define FM_PROP_EFFECTIVE_DEFAULT            "EffectiveDefault"
 #define FM_PROP_EFFECTIVE_MIN                "EffectiveMin"
 #define FM_PROP_EFFECTIVE_MAX                "EffectiveMax"
-#define FM_PROP_HIDDEN                       "Hidden"
+constexpr OUStringLiteral FM_PROP_HIDDEN = u"Hidden";
 #define FM_PROP_FILTERPROPOSAL               "UseFilterValueProposal"
 #define FM_PROP_FIELDSOURCE                  "FieldSource"
 #define FM_PROP_TABLENAME                    "TableName"
@@ -111,28 +111,28 @@
 #define FM_PROP_CURSORCOLOR                  "CursorColor"
 #define FM_PROP_ALWAYSSHOWCURSOR             "AlwaysShowCursor"
 #define FM_PROP_DISPLAYSYNCHRON              "DisplayIsSynchron"
-#define FM_PROP_ISMODIFIED                   "IsModified"
-#define FM_PROP_ISNEW                        "IsNew"
+constexpr OUStringLiteral FM_PROP_ISMODIFIED = u"IsModified";
+constexpr OUStringLiteral FM_PROP_ISNEW = u"IsNew";
 #define FM_PROP_PRIVILEGES                   "Privileges"
-#define FM_PROP_COMMAND                      "Command"
-#define FM_PROP_COMMANDTYPE                  "CommandType"
+constexpr OUStringLiteral FM_PROP_COMMAND = u"Command";
+constexpr OUStringLiteral FM_PROP_COMMANDTYPE = u"CommandType";
 #define FM_PROP_RESULTSET_CONCURRENCY        "ResultSetConcurrency"
 #define FM_PROP_INSERTONLY                   "IgnoreResult"
-#define FM_PROP_RESULTSET_TYPE               "ResultSetType"
-#define FM_PROP_ESCAPE_PROCESSING            "EscapeProcessing"
+constexpr OUStringLiteral FM_PROP_RESULTSET_TYPE = u"ResultSetType";
+constexpr OUStringLiteral FM_PROP_ESCAPE_PROCESSING = u"EscapeProcessing";
 #define FM_PROP_APPLYFILTER                  "ApplyFilter"
 #define FM_PROP_ISNULLABLE                   "IsNullable"
-#define FM_PROP_ACTIVECOMMAND                "ActiveCommand"
+constexpr OUStringLiteral FM_PROP_ACTIVECOMMAND = u"ActiveCommand";
 #define FM_PROP_ISCURRENCY                   "IsCurrency"
-#define FM_PROP_URL                          "URL"
-#define FM_PROP_ACTIVE_CONNECTION            "ActiveConnection"
+constexpr OUStringLiteral FM_PROP_URL = u"URL";
+constexpr OUStringLiteral FM_PROP_ACTIVE_CONNECTION = u"ActiveConnection";
 #define FM_PROP_CONTROLSOURCEPROPERTY        "DataFieldProperty"
 #define FM_PROP_REALNAME                     "RealName"
 #define FM_PROP_TEXTLINECOLOR                "TextLineColor"
 #define FM_PROP_FONTEMPHASISMARK             "FontEmphasisMark"
 #define FM_PROP_FONTRELIEF                   "FontRelief"
 #define FM_PROP_ORIENTATION                  "Orientation"
-#define FM_PROP_LINEENDFORMAT                "LineEndFormat"
+constexpr OUStringLiteral FM_PROP_LINEENDFORMAT = u"LineEndFormat";
 #define FM_PROP_VISUALEFFECT                 "VisualEffect"
 #define FM_PROP_BORDERCOLOR                  "BorderColor"
 #define FM_PROP_DYNAMIC_CONTROL_BORDER       "DynamicControlBorder"

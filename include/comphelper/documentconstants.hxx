@@ -22,14 +22,14 @@
 #include <o3tl/typed_flags_set.hxx>
 
 // formats of SO6/7
-#define MIMETYPE_VND_SUN_XML_WRITER_ASCII               "application/vnd.sun.xml.writer"
-#define MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII           "application/vnd.sun.xml.writer.web"
-#define MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII        "application/vnd.sun.xml.writer.global"
-#define MIMETYPE_VND_SUN_XML_DRAW_ASCII                 "application/vnd.sun.xml.draw"
-#define MIMETYPE_VND_SUN_XML_IMPRESS_ASCII              "application/vnd.sun.xml.impress"
-#define MIMETYPE_VND_SUN_XML_CALC_ASCII                 "application/vnd.sun.xml.calc"
-#define MIMETYPE_VND_SUN_XML_CHART_ASCII                "application/vnd.sun.xml.chart"
-#define MIMETYPE_VND_SUN_XML_MATH_ASCII                 "application/vnd.sun.xml.math"
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_WRITER_ASCII = u"application/vnd.sun.xml.writer";
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII = u"application/vnd.sun.xml.writer.web";
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII = u"application/vnd.sun.xml.writer.global";
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_DRAW_ASCII = u"application/vnd.sun.xml.draw";
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_IMPRESS_ASCII = u"application/vnd.sun.xml.impress";
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_CALC_ASCII = u"application/vnd.sun.xml.calc";
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_CHART_ASCII = u"application/vnd.sun.xml.chart";
+constexpr OUStringLiteral MIMETYPE_VND_SUN_XML_MATH_ASCII = u"application/vnd.sun.xml.math";
 #define MIMETYPE_VND_SUN_XML_BASE_ASCII                 "application/vnd.sun.xml.base"
 
 // template formats of SO6/7
@@ -39,33 +39,33 @@
 #define MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII        "application/vnd.sun.xml.calc.template"
 
 // formats of SO8
-#define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII          "application/vnd.oasis.opendocument.text"
-#define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII      "application/vnd.oasis.opendocument.text-web"
-#define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII   "application/vnd.oasis.opendocument.text-master"
-#define MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII       "application/vnd.oasis.opendocument.graphics"
-#define MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII  "application/vnd.oasis.opendocument.presentation"
-#define MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII   "application/vnd.oasis.opendocument.spreadsheet"
-#define MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII         "application/vnd.oasis.opendocument.chart"
-#define MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII       "application/vnd.oasis.opendocument.formula"
-#define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII      "application/vnd.oasis.opendocument.base"
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII = u"application/vnd.oasis.opendocument.text";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII = u"application/vnd.oasis.opendocument.text-web";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII = u"application/vnd.oasis.opendocument.text-master";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII = u"application/vnd.oasis.opendocument.graphics";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII = u"application/vnd.oasis.opendocument.presentation";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII = u"application/vnd.oasis.opendocument.spreadsheet";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII = u"application/vnd.oasis.opendocument.chart";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII = u"application/vnd.oasis.opendocument.formula";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII = u"application/vnd.oasis.opendocument.base";
 #define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII        "application/vnd.sun.xml.report"
 #define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII  "application/vnd.sun.xml.report.chart"
 
 // template formats of SO8
-#define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII          "application/vnd.oasis.opendocument.text-template"
-#define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII   "application/vnd.oasis.opendocument.text-master-template"
-#define MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII       "application/vnd.oasis.opendocument.graphics-template"
-#define MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII  "application/vnd.oasis.opendocument.presentation-template"
-#define MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII   "application/vnd.oasis.opendocument.spreadsheet-template"
-#define MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII         "application/vnd.oasis.opendocument.chart-template"
-#define MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII       "application/vnd.oasis.opendocument.formula-template"
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.text-template";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.text-master-template";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.graphics-template";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.presentation-template";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.spreadsheet-template";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.chart-template";
+constexpr OUStringLiteral MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.formula-template";
 
 
 // ODF versions
 #define ODFVER_010_TEXT "1.0"
 #define ODFVER_011_TEXT "1.1"
-#define ODFVER_012_TEXT "1.2"
-#define ODFVER_013_TEXT "1.3"
+constexpr OUStringLiteral ODFVER_012_TEXT = u"1.2";
+constexpr OUStringLiteral ODFVER_013_TEXT = u"1.3";
 
 // filter flags
 // TODO/LATER: The flags should be part of the UNO specification

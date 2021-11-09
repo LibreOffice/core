@@ -46,10 +46,10 @@ class CharClass;
 class LocaleDataWrapper;
 
 
-#define SN_GRAMMARCHECKER           u"com.sun.star.linguistic2.Proofreader"
-#define SN_SPELLCHECKER             u"com.sun.star.linguistic2.SpellChecker"
-#define SN_HYPHENATOR               u"com.sun.star.linguistic2.Hyphenator"
-#define SN_THESAURUS                u"com.sun.star.linguistic2.Thesaurus"
+constexpr OUStringLiteral SN_GRAMMARCHECKER = u"com.sun.star.linguistic2.Proofreader";
+constexpr OUStringLiteral SN_SPELLCHECKER = u"com.sun.star.linguistic2.SpellChecker";
+constexpr OUStringLiteral SN_HYPHENATOR = u"com.sun.star.linguistic2.Hyphenator";
+constexpr OUStringLiteral SN_THESAURUS = u"com.sun.star.linguistic2.Thesaurus";
 
 
 namespace linguistic

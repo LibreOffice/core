@@ -38,7 +38,7 @@
 #include <string_view>
 #include <unordered_map>
 
-#define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
+constexpr OUStringLiteral IMPL_NAME = u"com.sun.star.security.comp.stoc.FilePolicy";
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -371,7 +371,7 @@ void FilePolicy::refresh()
     // supported, so this is effectively dead code):
     OUString fileName;
     m_xComponentContext->getValueByName(
-        "/implementations/" IMPL_NAME "/file-name" ) >>= fileName;
+        "/implementations/" + IMPL_NAME + "/file-name" ) >>= fileName;
     if ( fileName.isEmpty() )
     {
         throw RuntimeException(

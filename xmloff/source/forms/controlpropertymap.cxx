@@ -34,10 +34,10 @@ using namespace ::xmloff::token;
 namespace xmloff
 {
 
-#define MAP_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFSVER_010, false }
-#define MAP_CONST( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFSVER_010, false }
-#define MAP_CONST_P( name, prefix, token, type, context ){ name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFSVER_010, false }
-#define MAP_END()   { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_ASCII( name, prefix, token, type, context )  { name, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_CONST( name, prefix, token, type, context )  { name, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_CONST_P( name, prefix, token, type, context ){ name, prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_END()   { nullptr, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFSVER_010, false }
 
     XMLPropertyMapEntry const aControlStyleProperties[] =
     {
@@ -90,11 +90,11 @@ namespace xmloff
         {
             XMLPropertyMapEntry const * pEnd;
             // determine the last element
-            for ( pEnd = aControlStyleProperties; pEnd->msApiName; ++pEnd)
+            for ( pEnd = aControlStyleProperties; !pEnd->msApiName.isEmpty(); ++pEnd)
                 ;
             assert( ::std::is_sorted(aControlStyleProperties, pEnd,
                                     [](const XMLPropertyMapEntry& _rLeft, const XMLPropertyMapEntry& _rRight)
-                                    { return strcmp(_rLeft.msApiName, _rRight.msApiName) < 0; }) );
+                                    { return _rLeft.msApiName < _rRight.msApiName; }) );
             bSorted = true;
         }
     }

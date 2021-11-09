@@ -262,39 +262,39 @@
 #define UNO_NAME_3D_CLOSE_FRONT                 "D3DCloseFront"
 #define UNO_NAME_3D_CLOSE_BACK                  "D3DCloseBack"
 
-#define UNO_NAME_NUMBERING                      "NumberingIsNumber"
-#define UNO_NAME_NUMBERING_RULES                "NumberingRules"
-#define UNO_NAME_NUMBERING_LEVEL                "NumberingLevel"
+constexpr OUStringLiteral UNO_NAME_NUMBERING = u"NumberingIsNumber";
+constexpr OUStringLiteral UNO_NAME_NUMBERING_RULES = u"NumberingRules";
+constexpr OUStringLiteral UNO_NAME_NUMBERING_LEVEL = u"NumberingLevel";
 
-#define UNO_NAME_NRULE_NUMBERINGTYPE            "NumberingType"
-#define UNO_NAME_NRULE_PREFIX                   "Prefix"
-#define UNO_NAME_NRULE_SUFFIX                   "Suffix"
+constexpr OUStringLiteral UNO_NAME_NRULE_NUMBERINGTYPE = u"NumberingType";
+constexpr OUStringLiteral UNO_NAME_NRULE_PREFIX = u"Prefix";
+constexpr OUStringLiteral UNO_NAME_NRULE_SUFFIX = u"Suffix";
 #define UNO_NAME_NRULE_BULLETID                 "BulletId"
-#define UNO_NAME_NRULE_BULLET_COLOR             "BulletColor"
-#define UNO_NAME_NRULE_BULLET_RELSIZE           "BulletRelSize"
-#define UNO_NAME_NRULE_BULLET_FONT              "BulletFont"
-#define UNO_NAME_NRULE_START_WITH               "StartWith"
-#define UNO_NAME_NRULE_LEFT_MARGIN              "LeftMargin"
-#define UNO_NAME_NRULE_FIRST_LINE_OFFSET        "FirstLineOffset"
-#define UNO_NAME_NRULE_ADJUST                   "Adjust"
+constexpr OUStringLiteral UNO_NAME_NRULE_BULLET_COLOR = u"BulletColor";
+constexpr OUStringLiteral UNO_NAME_NRULE_BULLET_RELSIZE = u"BulletRelSize";
+constexpr OUStringLiteral UNO_NAME_NRULE_BULLET_FONT = u"BulletFont";
+constexpr OUStringLiteral UNO_NAME_NRULE_START_WITH = u"StartWith";
+constexpr OUStringLiteral UNO_NAME_NRULE_LEFT_MARGIN = u"LeftMargin";
+constexpr OUStringLiteral UNO_NAME_NRULE_FIRST_LINE_OFFSET = u"FirstLineOffset";
+constexpr OUStringLiteral UNO_NAME_NRULE_ADJUST = u"Adjust";
 
-#define UNO_NAME_EDIT_FONT_DESCRIPTOR           "FontDescriptor"
+constexpr OUStringLiteral UNO_NAME_EDIT_FONT_DESCRIPTOR = u"FontDescriptor";
 
-#define UNO_NAME_EDIT_PARA_ADJUST               "ParaAdjust"
-#define UNO_NAME_EDIT_PARA_BMARGIN              "ParaBottomMargin"
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_ADJUST = u"ParaAdjust";
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_BMARGIN = u"ParaBottomMargin";
 #define UNO_NAME_EDIT_PARA_LASTLINEADJ          "ParaLastLineAdjust"
 #define UNO_NAME_EDIT_PARA_LMARGIN              "ParaLeftMargin"
 #define UNO_NAME_EDIT_PARA_LINESPACING          "ParaLineSpacing"
 #define UNO_NAME_EDIT_PARA_RMARGIN              "ParaRightMargin"
 #define UNO_NAME_EDIT_PARA_TAPSTOPS             "ParaTabStops"
 #define UNO_NAME_EDIT_PARA_TMARGIN              "ParaTopMargin"
-#define UNO_NAME_EDIT_PARA_IS_HYPHEN            "ParaIsHyphenation"
+constexpr OUStringLiteral UNO_NAME_EDIT_PARA_IS_HYPHEN = u"ParaIsHyphenation";
 #define UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION    "ParaIsHangingPunctuation"
 #define UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE     "ParaIsCharacterDistance"
 #define UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES       "ParaIsForbiddenRules"
 #define UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT    "ParaFirstLineIndent"
 
-#define UNO_NAME_EDIT_CHAR_HEIGHT               "CharHeight"
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_HEIGHT = u"CharHeight";
 #define UNO_NAME_EDIT_CHAR_FONTNAME             "CharFontName"
 #define UNO_NAME_EDIT_CHAR_FONTSTYLENAME        "CharFontStyleName"
 #define UNO_NAME_EDIT_CHAR_FONTFAMILY           "CharFontFamily"

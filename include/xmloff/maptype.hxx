@@ -30,8 +30,7 @@
 */
 struct XMLPropertyMapEntry
 {
-    const char*     msApiName;      /// Property-Name
-    sal_Int32       nApiNameLength; /// length of property name
+    OUString        msApiName;      /// Property-Name
     enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
     sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */
@@ -100,15 +99,14 @@ struct XMLPropertyMapEntry
     bool            mbImportOnly;
 
     XMLPropertyMapEntry(
-            const char*     sApiName,
-            sal_Int32       nApiNameLength_,
+            const OUString& sApiName,
             sal_uInt16      nNameSpace,
             enum ::xmloff::token::XMLTokenEnum eXMLName,
             sal_uInt32 nType,
             sal_Int16       nContextId,
             SvtSaveOptions::ODFSaneDefaultVersion nEarliestODFVersionForExport,
             bool            bImportOnly)
-        : msApiName(sApiName), nApiNameLength(nApiNameLength_),
+        : msApiName(sApiName),
         meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
         mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
         mbImportOnly(bImportOnly)

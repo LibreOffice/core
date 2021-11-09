@@ -38,28 +38,28 @@
 #define ATTRIBUTE_VISIBLE           "visible"
 #define ATTRIBUTE_ITEMSTYLE         "style"
 
-#define ELEMENT_NS_TOOLBAR          "toolbar:toolbar"
-#define ELEMENT_NS_TOOLBARITEM      "toolbar:toolbaritem"
-#define ELEMENT_NS_TOOLBARSPACE     "toolbar:toolbarspace"
-#define ELEMENT_NS_TOOLBARBREAK     "toolbar:toolbarbreak"
-#define ELEMENT_NS_TOOLBARSEPARATOR "toolbar:toolbarseparator"
+constexpr OUStringLiteral ELEMENT_NS_TOOLBAR = u"toolbar:toolbar";
+constexpr OUStringLiteral ELEMENT_NS_TOOLBARITEM = u"toolbar:toolbaritem";
+constexpr OUStringLiteral ELEMENT_NS_TOOLBARSPACE = u"toolbar:toolbarspace";
+constexpr OUStringLiteral ELEMENT_NS_TOOLBARBREAK = u"toolbar:toolbarbreak";
+constexpr OUStringLiteral ELEMENT_NS_TOOLBARSEPARATOR = u"toolbar:toolbarseparator";
 
-#define ATTRIBUTE_XMLNS_TOOLBAR     "xmlns:toolbar"
-#define ATTRIBUTE_XMLNS_XLINK       "xmlns:xlink"
+constexpr OUStringLiteral ATTRIBUTE_XMLNS_TOOLBAR = u"xmlns:toolbar";
+constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 
 #define ATTRIBUTE_TYPE_CDATA        "CDATA"
 
 #define ATTRIBUTE_BOOLEAN_TRUE      "true"
-#define ATTRIBUTE_BOOLEAN_FALSE     "false"
+constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_FALSE  = u"false";
 
-#define ATTRIBUTE_ITEMSTYLE_RADIO           "radio"
-#define ATTRIBUTE_ITEMSTYLE_AUTO            "auto"
-#define ATTRIBUTE_ITEMSTYLE_LEFT            "left"
-#define ATTRIBUTE_ITEMSTYLE_AUTOSIZE        "autosize"
-#define ATTRIBUTE_ITEMSTYLE_DROPDOWN        "dropdown"
-#define ATTRIBUTE_ITEMSTYLE_REPEAT          "repeat"
-#define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
-#define ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY    "dropdownonly"
-#define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_RADIO = u"radio";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTO = u"auto";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_LEFT = u"left";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTOSIZE = u"autosize";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWN = u"dropdown";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_REPEAT = u"repeat";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_TEXT = u"text";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY = u"dropdownonly";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_IMAGE = u"image";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

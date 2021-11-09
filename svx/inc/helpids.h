@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SVX_INC_HELPIDS_H
 #define INCLUDED_SVX_INC_HELPIDS_H
 
-#define HID_BMPMASK_CTL_QCOL_1                                "SVX_HID_BMPMASK_CTL_QCOL_1"
+constexpr OUStringLiteral HID_BMPMASK_CTL_QCOL_1 = u"SVX_HID_BMPMASK_CTL_QCOL_1";
 #define HID_COLOR_CTL_COLORS                                  "SVX_HID_COLOR_CTL_COLORS"
-#define HID_CTRL3D_HSCROLL                                    "SVX_HID_CTRL3D_HSCROLL"
-#define HID_CTRL3D_SWITCHER                                   "SVX_HID_CTRL3D_SWITCHER"
-#define HID_CTRL3D_VSCROLL                                    "SVX_HID_CTRL3D_VSCROLL"
+constexpr OUStringLiteral HID_CTRL3D_HSCROLL = u"SVX_HID_CTRL3D_HSCROLL";
+constexpr OUStringLiteral HID_CTRL3D_SWITCHER = u"SVX_HID_CTRL3D_SWITCHER";
+constexpr OUStringLiteral HID_CTRL3D_VSCROLL = u"SVX_HID_CTRL3D_VSCROLL";
 #define HID_CTRL_COLOR                                        "SVX_HID_CTRL_COLOR"
 #define HID_GALLERY_ICONVIEW                                  "SVX_HID_GALLERY_ICONVIEW"
 #define HID_GALLERY_LISTVIEW                                  "SVX_HID_GALLERY_LISTVIEW"

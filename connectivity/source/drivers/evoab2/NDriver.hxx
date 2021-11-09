@@ -28,7 +28,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 
-#define EVOAB_DRIVER_IMPL_NAME  "com.sun.star.comp.sdbc.evoab.OEvoabDriver"
+constexpr OUStringLiteral EVOAB_DRIVER_IMPL_NAME = u"com.sun.star.comp.sdbc.evoab.OEvoabDriver";
 
 namespace connectivity::evoab
     {

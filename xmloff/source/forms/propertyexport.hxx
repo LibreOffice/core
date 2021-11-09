@@ -292,7 +292,7 @@ namespace xmloff
         void exportGenericPropertyAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
             const OUString& _pAttributeName,
-            const char* _pPropertyName);
+            const OUString& _pPropertyName);
 
         /** exports a property value, which is a string sequence, as attribute
 

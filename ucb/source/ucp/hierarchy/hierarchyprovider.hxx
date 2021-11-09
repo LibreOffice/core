@@ -43,8 +43,8 @@ namespace hierarchy_ucp {
 
 #define HIERARCHY_FOLDER_CONTENT_TYPE \
                 "application/" HIERARCHY_URL_SCHEME "-folder"
-#define HIERARCHY_LINK_CONTENT_TYPE \
-                "application/" HIERARCHY_URL_SCHEME "-link"
+constexpr OUStringLiteral HIERARCHY_LINK_CONTENT_TYPE =
+                u"application/" HIERARCHY_URL_SCHEME "-link";
 
 struct ConfigProviderMapEntry
 {

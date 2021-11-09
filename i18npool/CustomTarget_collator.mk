@@ -66,8 +66,8 @@ $(i18npool_CODIR)/lrl_include.hxx : $(SRCDIR)/i18npool/CustomTarget_collator.mk 
 		$(SRCDIR)/i18npool/source/collator/data | $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
-	echo '#define LOCAL_RULE_LANGS "$(sort $(foreach txt,$(i18npool_COTXTS), \
-		$(firstword $(subst _, ,$(txt)))))"' > $@
+	echo 'constexpr OUStringLiteral LOCAL_RULE_LANGS = u"$(sort $(foreach txt,$(i18npool_COTXTS), \
+		$(firstword $(subst _, ,$(txt)))))";' > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:

@@ -70,11 +70,11 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 #define FM_SUN_COMPONENT_PATTERNFIELD   "com.sun.star.form.component.PatternField"
 #define FM_SUN_COMPONENT_HIDDENCONTROL  "com.sun.star.form.component.HiddenControl"
 #define FM_SUN_COMPONENT_IMAGECONTROL   "com.sun.star.form.component.DatabaseImageControl"
-#define FM_SUN_COMPONENT_FORMATTEDFIELD "com.sun.star.form.component.FormattedField"
+constexpr OUStringLiteral FM_SUN_COMPONENT_FORMATTEDFIELD = u"com.sun.star.form.component.FormattedField";
 #define FM_SUN_COMPONENT_SCROLLBAR      "com.sun.star.form.component.ScrollBar"
 #define FM_SUN_COMPONENT_SPINBUTTON     "com.sun.star.form.component.SpinButton"
 #define FM_SUN_COMPONENT_NAVIGATIONBAR  "com.sun.star.form.component.NavigationToolBar"
-#define FM_SUN_CONTROL_GRIDCONTROL      "com.sun.star.form.control.GridControl"
+constexpr OUStringLiteral FM_SUN_CONTROL_GRIDCONTROL = u"com.sun.star.form.control.GridControl";
 
 namespace svxform
 {

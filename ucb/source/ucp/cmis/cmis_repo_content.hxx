@@ -41,7 +41,7 @@ namespace ucbhelper
 
 namespace cmis
 {
-#define CMIS_REPO_TYPE   "application/vnd.libreoffice.cmis-repository"
+inline constexpr OUStringLiteral CMIS_REPO_TYPE = u"application/vnd.libreoffice.cmis-repository";
 
 class ContentProvider;
 class RepoContent : public ::ucbhelper::ContentImplHelper,
