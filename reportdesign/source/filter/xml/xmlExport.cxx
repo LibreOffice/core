@@ -1137,32 +1137,32 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             // check if border should be left
             if ( !aPos.X )
             {
-                sBorderProp = PROPERTY_BORDERLEFT;
-                aProps.emplace_back(PROPERTY_BORDERRIGHT);
+                sBorderProp = PROPERTY_BORDER_LEFT;
+                aProps.emplace_back(PROPERTY_BORDER_RIGHT);
             }
             else
             {
-                sBorderProp = PROPERTY_BORDERRIGHT;
-                aProps.emplace_back(PROPERTY_BORDERLEFT);
+                sBorderProp = PROPERTY_BORDER_RIGHT;
+                aProps.emplace_back(PROPERTY_BORDER_LEFT);
             }
-            aProps.emplace_back(PROPERTY_BORDERTOP);
-            aProps.emplace_back(PROPERTY_BORDERBOTTOM);
+            aProps.emplace_back(PROPERTY_BORDER_TOP);
+            aProps.emplace_back(PROPERTY_BORDER_BOTTOM);
         }
         else // horizontal
         {
             // check if border should be bottom
             if ( (aPos.Y + aSize.Height) == nSectionHeight )
             {
-                sBorderProp = PROPERTY_BORDERBOTTOM;
-                aProps.emplace_back(PROPERTY_BORDERTOP);
+                sBorderProp = PROPERTY_BORDER_BOTTOM;
+                aProps.emplace_back(PROPERTY_BORDER_TOP);
             }
             else
             {
-                sBorderProp = PROPERTY_BORDERTOP;
-                aProps.emplace_back(PROPERTY_BORDERBOTTOM);
+                sBorderProp = PROPERTY_BORDER_TOP;
+                aProps.emplace_back(PROPERTY_BORDER_BOTTOM);
             }
-            aProps.emplace_back(PROPERTY_BORDERRIGHT);
-            aProps.emplace_back(PROPERTY_BORDERLEFT);
+            aProps.emplace_back(PROPERTY_BORDER_RIGHT);
+            aProps.emplace_back(PROPERTY_BORDER_LEFT);
         }
 
         xBorderProp->setPropertyValue(sBorderProp,uno::makeAny(aValue));

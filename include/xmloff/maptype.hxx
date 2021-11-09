@@ -30,8 +30,9 @@
 */
 struct XMLPropertyMapEntry
 {
-    const char*     msApiName;      /// Property-Name
-    sal_Int32       nApiNameLength; /// length of property name
+    static constexpr OUStringLiteral EMPTY = u"";
+
+    rtl::OUStringConstExpr msApiName;      /// Property-Name
     enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
     sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */
@@ -100,8 +101,8 @@ struct XMLPropertyMapEntry
     bool            mbImportOnly;
 
     template< std::size_t N >
-    XMLPropertyMapEntry(
-            const char (&sApiName)[N],
+    constexpr XMLPropertyMapEntry(
+            const OUStringLiteral<N> & sApiName,
             sal_uInt16      nNameSpace,
             enum ::xmloff::token::XMLTokenEnum eXMLName,
             sal_uInt32 nType,
@@ -110,7 +111,6 @@ struct XMLPropertyMapEntry
             bool            bImportOnly)
         :
         msApiName(sApiName),
-        nApiNameLength(N-1),
         meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
         mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
         mbImportOnly(bImportOnly)
@@ -124,9 +124,7 @@ struct XMLPropertyMapEntry
             SvtSaveOptions::ODFSaneDefaultVersion nEarliestODFVersionForExport,
             bool            bImportOnly)
         :
-        msApiName(nullptr),
-        nApiNameLength(0),
-        meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
+        msApiName(EMPTY), meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
         mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
         mbImportOnly(bImportOnly)
     {}

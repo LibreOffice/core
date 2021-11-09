@@ -3775,12 +3775,11 @@ void SdXMLTableShapeContext::startFastElement (sal_Int32 nElement,
         }
 
         const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
-        for( int i = 0; pEntry->msApiName && (i < 6); i++, pEntry++ )
+        for( int i = 0; !OUString(pEntry->msApiName).isEmpty() && (i < 6); i++, pEntry++ )
         {
             try
             {
-                const OUString sAPIPropertyName( pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US );
-                xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i] ) );
+                xProps->setPropertyValue( pEntry->msApiName, Any( maTemplateStylesUsed[i] ) );
             }
             catch(const Exception&)
             {
@@ -3833,7 +3832,7 @@ bool SdXMLTableShapeContext::processAttribute( const sax_fastparser::FastAttribu
         {
             int i = 0;
             const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
-            while( pEntry->msApiName && (i < 6) )
+            while( !OUString(pEntry->msApiName).isEmpty() && (i < 6) )
             {
                 if( (nElement & TOKEN_MASK) == pEntry->meXMLName )
                 {
