@@ -16,6 +16,24 @@
       "message": "by the way, is tdf#106057 correct pointer? not tdf#143472?\n",
       "revId": "151f079972a6c7f2a2a682629e99dda1d7f915a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e2f988_6f8de689",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-09T15:16:54Z",
+      "side": 1,
+      "message": "This would fix all those issues. This moves to use poppler to \"check encryption\" (actually the previous code most of the time failed at the time when parsing the PDF xrefs, i.e. before any actual encryption check), and then go on with the xpdfimport staff which was originally there. As a result, with this we can import every PDF provided that poppler can open it.",
+      "parentUuid": "5241f5fd_1f59d93f",
+      "revId": "151f079972a6c7f2a2a682629e99dda1d7f915a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
