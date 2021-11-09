@@ -5,49 +5,49 @@ struct hash_entry { const char* name; enum parseKey eKey; };
 #endif
 
 %%
-clipPath,CLIPPATH
-drawChar,DRAWCHAR
-drawImage,DRAWIMAGE
-drawLink,DRAWLINK	
-drawMask,DRAWMASK
-drawMaskedImage,DRAWMASKEDIMAGE
-drawSoftMaskedImage,DRAWSOFTMASKEDIMAGE
-endPage,ENDPAGE
-endTextObject,ENDTEXTOBJECT
-eoClipPath,EOCLIPPATH
-eoFillPath,EOFILLPATH
-fillPath,FILLPATH
-hyperLink,HYPERLINK
-intersectClip,INTERSECTCLIP
-intersectEoClip,INTERSECTEOCLIP
-popState,POPSTATE
-pushState,PUSHSTATE
-restoreState,RESTORESTATE
-saveState,SAVESTATE
-setBlendMode,SETBLENDMODE
-setFillColor,SETFILLCOLOR
-setFont,SETFONT
-setLineCap,SETLINECAP
-setLineDash,SETLINEDASH
-setLineJoin,SETLINEJOIN
-setLineWidth,SETLINEWIDTH
-setMiterLimit,SETMITERLIMIT
-setPageNum,SETPAGENUM
-setStrokeColor,SETSTROKECOLOR
-setTextRenderMode,SETTEXTRENDERMODE
-setTransformation,SETTRANSFORMATION
-startPage,STARTPAGE
-strokePath,STROKEPATH
-updateBlendMode,UPDATEBLENDMODE
-updateCtm,UPDATECTM
-updateFillColor,UPDATEFILLCOLOR
-updateFillOpacity,UPDATEFILLOPACITY
-updateFlatness,UPDATEFLATNESS
-updateFont,UPDATEFONT
-updateLineCap,UPDATELINECAP
-updateLineDash,UPDATELINEDASH
-updateLineJoin,UPDATELINEJOIN
-updateLineWidth,UPDATELINEWIDTH
-updateMiterLimit,UPDATEMITERLIMIT
-updateStrokeColor,UPDATESTROKECOLOR
-updateStrokeOpacity,UPDATESTROKEOPACITY
+clipPath, parseKey_CLIPPATH
+drawChar, parseKey_DRAWCHAR
+drawImage, parseKey_DRAWIMAGE
+drawLink, parseKey_DRAWLINK
+drawMask, parseKey_DRAWMASK
+drawMaskedImage, parseKey_DRAWMASKEDIMAGE
+drawSoftMaskedImage, parseKey_DRAWSOFTMASKEDIMAGE
+endPage, parseKey_ENDPAGE
+endTextObject, parseKey_ENDTEXTOBJECT
+eoClipPath, parseKey_EOCLIPPATH
+eoFillPath, parseKey_EOFILLPATH
+fillPath, parseKey_FILLPATH
+hyperLink, parseKey_HYPERLINK
+intersectClip, parseKey_INTERSECTCLIP
+intersectEoClip, parseKey_INTERSECTEOCLIP
+popState, parseKey_POPSTATE
+pushState, parseKey_PUSHSTATE
+restoreState, parseKey_RESTORESTATE
+saveState, parseKey_SAVESTATE
+setBlendMode, parseKey_SETBLENDMODE
+setFillColor, parseKey_SETFILLCOLOR
+setFont, parseKey_SETFONT
+setLineCap, parseKey_SETLINECAP
+setLineDash, parseKey_SETLINEDASH
+setLineJoin, parseKey_SETLINEJOIN
+setLineWidth, parseKey_SETLINEWIDTH
+setMiterLimit, parseKey_SETMITERLIMIT
+setPageNum, parseKey_SETPAGENUM
+setStrokeColor, parseKey_SETSTROKECOLOR
+setTextRenderMode, parseKey_SETTEXTRENDERMODE
+setTransformation, parseKey_SETTRANSFORMATION
+startPage, parseKey_STARTPAGE
+strokePath, parseKey_STROKEPATH
+updateBlendMode, parseKey_UPDATEBLENDMODE
+updateCtm, parseKey_UPDATECTM
+updateFillColor, parseKey_UPDATEFILLCOLOR
+updateFillOpacity, parseKey_UPDATEFILLOPACITY
+updateFlatness, parseKey_UPDATEFLATNESS
+updateFont, parseKey_UPDATEFONT
+updateLineCap, parseKey_UPDATELINECAP
+updateLineDash, parseKey_UPDATELINEDASH
+updateLineJoin, parseKey_UPDATELINEJOIN
+updateLineWidth, parseKey_UPDATELINEWIDTH
+updateMiterLimit, parseKey_UPDATEMITERLIMIT
+updateStrokeColor, parseKey_UPDATESTROKECOLOR
+updateStrokeOpacity, parseKey_UPDATESTROKEOPACITY
