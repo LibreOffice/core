@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_externals,sdext_pdfimport,\
     boost_headers \
     zlib \
     libxml2 \
+	poppler \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
