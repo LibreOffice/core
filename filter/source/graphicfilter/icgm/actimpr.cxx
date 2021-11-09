@@ -792,7 +792,7 @@ void CGMImpressOutAct::DrawText(awt::Point const & rTextPos, awt::Size const & r
     double nX = mpCGM->pElement->nCharacterOrientation[ 2 ];
     double nY = mpCGM->pElement->nCharacterOrientation[ 3 ];
     double fSqrt = sqrt(nX * nX + nY * nY);
-    double nOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+    double nOrientation = fSqrt != 0.0 ? basegfx::rad2deg(acos(nX / fSqrt)) : 0.0;
     if ( nY < 0 )
         nOrientation = 360 - nOrientation;
 
