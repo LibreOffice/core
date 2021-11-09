@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ca067a_880e4ab4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-09T15:38:13Z",
+      "side": 1,
+      "message": "overriding jenkins failure, jenkins server doesn\u0027t want to talk to me",
+      "revId": "ccc2394dfa9c47d0447006d882f5f580f550a42a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
