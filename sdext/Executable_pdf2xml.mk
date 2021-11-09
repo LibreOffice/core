@@ -15,6 +15,8 @@ $(eval $(call gb_Executable_use_externals,pdf2xml,\
     boost_headers \
     cppunit \
     zlib \
+    $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
+	poppler \
 ))
 
 $(eval $(call gb_Executable_set_include,pdf2xml,\
