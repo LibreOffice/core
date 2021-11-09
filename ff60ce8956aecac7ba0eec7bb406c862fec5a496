@@ -33,6 +33,23 @@
       "message": "Whenever you find a \"SOME_UNITS_PER_ANOTHER_UNIT\" definition, please consider converting its uses to proper use of o3tl::convert, instead of prettifying such constants.",
       "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb25d713_1ac4f30e",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T15:26:32Z",
+      "side": 1,
+      "message": "By the way, my advice to consider converting such constants to proper use of o3tl::convert is to directly avoid this nonsense, when the author intended to convert twips to mm100s, but got confused and mistakenly used division where multiplication was needed.",
+      "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
