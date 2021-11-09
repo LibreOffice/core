@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b867fcc_b15c036f",
+        "filename": "emfio/inc/wmfreader.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T12:08:55Z",
+      "side": 1,
+      "message": "Why is this moved here? It doesn\u0027t look as if it is used in the header.",
+      "revId": "8341f406deb68e8b970fc57553ce9614eccc8245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2323ebd7_337c682e",
+        "filename": "emfio/inc/wmfreader.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T12:08:55Z",
+      "side": 1,
+      "message": "Please, do not introduce \"add a newline in a random place\" edits unrelated to the change, when the change is not a code reformat change itself. Thanks!",
+      "revId": "8341f406deb68e8b970fc57553ce9614eccc8245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
