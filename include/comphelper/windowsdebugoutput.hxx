@@ -766,6 +766,31 @@ inline std::string DMPAPER_to_string(int dmpaper)
     }
 }
 
+inline std::string DC_PAPERSIZE_array_to_string(POINT* pPaperSizes, DWORD nCount)
+{
+    std::string result;
+
+    for (DWORD i = 0; i < nCount; i++)
+    {
+        if (i > 0)
+            result += ", ";
+
+        result += std::to_string(std::lround(pPaperSizes[i].x / 10.0)) + "x"
+                  + std::to_string(std::lround(pPaperSizes[i].y / 10.0));
+
+#if 0
+        // WIP. Printer::GetPaperName() should really be inline in <i18nutil/paper.hxx> or
+        // something, so that it can be used anywhere. We can't depend on vcl in this file as we
+        // might be included in modules that precede vcl.
+        PaperInfo paperInfo(pPaperSizes[i].x * 10, pPaperSizes[i].y * 10);
+        paperInfo.doSloppyFit(true);
+        if (paperInfo.getPaper() != PAPER_USER)
+            result += "(" + std::string(Printer::GetPaperName(paperInfo.getPaper()).toUtf8().getStr()) + ")";
+#endif
+    }
+    return result;
+}
+
 #endif // INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
