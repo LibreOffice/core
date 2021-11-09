@@ -859,7 +859,6 @@ void PrintDialog::setPaperSizes()
 
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     mePaper = aPrt->GetPaper();
-    Size aSizeOfPaper = aPrt->GetSizeOfPaper();
 
     if ( isPrintToFile() )
     {
@@ -867,26 +866,28 @@ void PrintDialog::setPaperSizes()
     }
     else
     {
+        Size aSizeOfPaper = aPrt->GetSizeOfPaper();
+        PaperInfo aPaperInfo(aSizeOfPaper.getWidth(), aSizeOfPaper.getHeight());
+        const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
+        o3tl::Length eUnit = o3tl::Length::mm;
+        int nDigits = 0;
+        if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
+        {
+            eUnit = o3tl::Length::in100;
+            nDigits = 2;
+        }
         for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
         {
             PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
             aInfo.doSloppyFit(true);
             Paper ePaper = aInfo.getPaper();
 
-            const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
-            MapUnit eUnit = MapUnit::MapMM;
-            int nDigits = 0;
-            if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
-            {
-                eUnit = MapUnit::Map100thInch;
-                nDigits = 2;
-            }
             Size aSize = aPrt->GetPaperSize( nPaper );
-            Size aLogicPaperSize( OutputDevice::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( eUnit ) ) );
+            Size aLogicPaperSize( o3tl::convert(aSize, o3tl::Length::mm100, eUnit) );
 
             OUString aWidth( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
             OUString aHeight( rLocWrap.getNum( aLogicPaperSize.Height(), nDigits ) );
-            OUString aUnit = eUnit == MapUnit::MapMM ? OUString("mm") : OUString("in");
+            OUString aUnit = eUnit == o3tl::Length::mm ? OUString("mm") : OUString("in");
             OUString aPaperName;
 
             // Paper sizes that we don't know of but the system printer driver lists are not "User
@@ -899,7 +900,7 @@ void PrintDialog::setPaperSizes()
             mxPaperSizeBox->append_text(aPaperName);
 
             if ( (ePaper != PAPER_USER && ePaper == mePaper) ||
-                 (ePaper == PAPER_USER && aInfo.sloppyEqual( PaperInfo(aSizeOfPaper.getWidth(), aSizeOfPaper.getHeight())) ) )
+                 (ePaper == PAPER_USER && aInfo.sloppyEqual(aPaperInfo) ) )
                  mxPaperSizeBox->set_active( nPaper );
         }
 
@@ -979,13 +980,13 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
         mnCurPage = 0;
     mxPageEdit->set_text(OUString::number(mnCurPage + 1));
 
-    const MapMode aMapMode( MapUnit::Map100thMM );
     if( nPages > 0 )
     {
         PrinterController::PageSize aPageSize =
             maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
         if( ! aPageSize.bFullPaper )
         {
+            const MapMode aMapMode( MapUnit::Map100thMM );
             Point aOff( aPrt->PixelToLogic( aPrt->GetPageOffsetPixel(), aMapMode ) );
             aMtf.Move( aOff.X(), aOff.Y() );
         }
