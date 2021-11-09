@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "391e9d8f_e54490b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-09T17:55:32Z",
+      "side": 1,
+      "message": "wait for 7.4...",
+      "revId": "57b1f6c2db2340d078ee9e5f347efdf20dc1ea9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66b34d9f_9b36cdd9",
+        "filename": "sw/source/core/doc/DocumentSettingManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-09T17:55:32Z",
+      "side": 1,
+      "message": "add tdf#143793 here as well.",
+      "revId": "57b1f6c2db2340d078ee9e5f347efdf20dc1ea9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32e9599e_ea82365e",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-09T17:55:32Z",
+      "side": 1,
+      "message": "remove spaces",
+      "range": {
+        "startLine": 1365,
+        "startChar": 75,
+        "endLine": 1365,
+        "endChar": 76
+      },
+      "revId": "57b1f6c2db2340d078ee9e5f347efdf20dc1ea9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
