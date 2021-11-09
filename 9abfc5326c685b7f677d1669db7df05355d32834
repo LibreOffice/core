@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62b2caa5_225f5fec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-09T13:46:01Z",
+      "side": 1,
+      "message": "Hi Andreas,\njust for your information, I\u0027ve just submitted this unittest for your fix, so we don\u0027t do the same work twice ",
+      "revId": "9abfc5326c685b7f677d1669db7df05355d32834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
