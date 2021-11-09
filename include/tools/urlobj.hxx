@@ -42,7 +42,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 #define INET_HTTPS_SCHEME "https://"
 #define INET_FILE_SCHEME "file://"
 #define INET_MAILTO_SCHEME "mailto:"
-#define INET_HID_SCHEME "hid:"
+constexpr OUStringLiteral INET_HID_SCHEME = u"hid:";
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"
 

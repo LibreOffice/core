@@ -79,7 +79,7 @@ namespace svxform
     #define PN_INSTANCE_URL         "URL"
 
     // properties of binding
-    #define PN_BINDING_ID           "BindingID"
+    constexpr OUStringLiteral PN_BINDING_ID = u"BindingID";
     #define PN_BINDING_EXPR         "BindingExpression"
     #define PN_BINDING_MODEL        "Model"
     #define PN_BINDING_NAMESPACES   "ModelNamespaces"
@@ -91,7 +91,7 @@ namespace svxform
     #define PN_BINDING_TYPE         "Type"
 
     // properties of submission
-    #define PN_SUBMISSION_ID        "ID"
+    constexpr OUStringLiteral PN_SUBMISSION_ID = u"ID";
     #define PN_SUBMISSION_BIND      "Bind"
     #define PN_SUBMISSION_REF       "Ref"
     #define PN_SUBMISSION_ACTION    "Action"

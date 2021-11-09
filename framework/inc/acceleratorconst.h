@@ -21,11 +21,11 @@
 
 namespace framework{
 
-#define ATTRIBUTE_TYPE_CDATA            "CDATA"
+constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
 
 // same items with a name space alias
-#define AL_ELEMENT_ACCELERATORLIST      "accel:acceleratorlist"
-#define AL_ELEMENT_ITEM                 "accel:item"
+constexpr OUStringLiteral AL_ELEMENT_ACCELERATORLIST = u"accel:acceleratorlist";
+constexpr OUStringLiteral AL_ELEMENT_ITEM = u"accel:item";
 
 } // namespace framework
 

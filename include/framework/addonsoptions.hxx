@@ -40,7 +40,7 @@ namespace osl { class Mutex; }
 #define ADDONSMENUITEM_STRING_CONTEXT                   "Context"
 #define ADDONSMENUITEM_STRING_SUBMENU                   "Submenu"
 
-#define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
+constexpr OUStringLiteral ADDONSPOPUPMENU_URL_PREFIX_STR = u"private:menu/Addon";
 
 namespace framework
 {

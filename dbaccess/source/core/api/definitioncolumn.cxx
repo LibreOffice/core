@@ -190,7 +190,7 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
         SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " PROPERTY_ISCURRENCY);
 
     if( ! (_rxParserColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName) )
-        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " PROPERTY_NAME);
+        SAL_WARN("dbaccess.core", "OQueryColumn: unable to get property " << PROPERTY_NAME);
 
     m_bRowVersion = false;
 
@@ -243,11 +243,11 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         // respective properties
         OUString sCatalog, sSchema, sTable;
         if( ! (getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog) )
-            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " PROPERTY_CATALOGNAME);
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " << PROPERTY_CATALOGNAME);
         if( ! (getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema) )
-            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " PROPERTY_SCHEMANAME);
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " << PROPERTY_SCHEMANAME);
         if( ! (getPropertyValue( PROPERTY_TABLENAME ) >>= sTable) )
-            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " PROPERTY_TABLENAME);
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property "  <<PROPERTY_TABLENAME);
         if ( sCatalog.isEmpty() && sSchema.isEmpty() && sTable.isEmpty() )
             return nullptr;
 
@@ -265,7 +265,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
 
         OUString sColumn;
         if( ! (getPropertyValue( PROPERTY_REALNAME ) >>= sColumn) )
-            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " PROPERTY_REALNAME);
+            SAL_WARN("dbaccess.core", "impl_determineOriginalTableColumn: unable to get property " << PROPERTY_REALNAME);
         if ( !xColumns->hasByName( sColumn ) )
             return nullptr;
 

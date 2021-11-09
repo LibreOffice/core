@@ -67,7 +67,7 @@ namespace oox::dump {
 #define OOX_DUMP_ERRASCII( ascii )          "?err:" ascii
 
 #define OOX_DUMP_ERR_NOMAP                  "no-map"
-#define OOX_DUMP_ERR_NONAME                 "no-name"
+constexpr OUStringLiteral OOX_DUMP_ERR_NONAME = u"no-name";
 #define OOX_DUMP_ERR_STREAM                 "stream-error"
 
 #define OOX_DUMP_DUMPEXT                    ".dump"

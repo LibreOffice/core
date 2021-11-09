@@ -112,45 +112,95 @@ public:
             break;
             case 2:
             {
-                auto const e1 = dyn_cast<DeclRefExpr>(expr->getArg(0)->IgnoreParenImpCasts());
-                if (e1 == nullptr)
+                const Expr* arg0 = expr->getArg(0)->IgnoreParenImpCasts();
+                if (auto const e1 = dyn_cast<DeclRefExpr>(arg0))
                 {
-                    return true;
+                    auto const t = e1->getType();
+                    if (!(t.isConstQualified() && t->isConstantArrayType()))
+                    {
+                        return true;
+                    }
+                    auto const e2 = expr->getArg(1);
+                    if (!((isa<CXXDefaultArgExpr>(e2)
+                           && loplugin::TypeCheck(e2->getType())
+                                  .Struct("Dummy")
+                                  .Namespace("libreoffice_internal")
+                                  .Namespace("rtl")
+                                  .GlobalNamespace())
+                          || (loplugin::TypeCheck(ctor->getParamDecl(1)->getType())
+                                  .Typedef("sal_Int32")
+                                  .GlobalNamespace()
+                              && e2->isIntegerConstantExpr(compiler.getASTContext()))))
+                    {
+                        return true;
+                    }
+                    auto const d = e1->getDecl();
+                    if (!reportedArray_.insert(d).second)
+                    {
+                        return true;
+                    }
+                    report(
+                        DiagnosticsEngine::Warning,
+                        "change type of variable %0 from constant character array (%1) to "
+                        "%select{OStringLiteral|OUStringLiteral}2%select{|, and make it static}3",
+                        d->getLocation())
+                        << d << d->getType()
+                        << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
+                        << isAutomaticVariable(cast<VarDecl>(d)) << d->getSourceRange();
+                    report(DiagnosticsEngine::Note, "first passed into a %0 constructor here",
+                           expr->getLocation())
+                        << expr->getType().getUnqualifiedType() << expr->getSourceRange();
                 }
-                auto const t = e1->getType();
-                if (!(t.isConstQualified() && t->isConstantArrayType()))
+                else if (auto const e1 = dyn_cast<clang::StringLiteral>(arg0))
                 {
-                    return true;
+                    auto argLoc = compat::getBeginLoc(arg0);
+                    auto macroLoc = compiler.getSourceManager().getSpellingLoc(argLoc);
+                    if (argLoc == macroLoc)
+                        return true;
+                    //                    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(expr)))
+                    //                        return true;
+                    if (!macroLoc.isValid()
+                        || compiler.getSourceManager().isInSystemHeader(macroLoc)
+                        || compiler.getSourceManager().isWrittenInBuiltinFile(macroLoc)
+                        || compiler.getSourceManager().isWrittenInCommandLineFile(macroLoc)
+                        || isInUnoIncludeFile(macroLoc))
+                        return true;
+                    StringRef fileName = getFilenameOfLocation(macroLoc);
+                    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/config_host/"))
+                        return true;
+                    StringRef name{ Lexer::getImmediateMacroName(compat::getBeginLoc(arg0),
+                                                                 compiler.getSourceManager(),
+                                                                 compiler.getLangOpts()) };
+                    // used in both OUString and OString context
+                    if (name == "FM_COL_LISTBOX" || name == "HID_RELATIONDIALOG_LEFTFIELDCELL"
+                        || name == "OOO_HELP_INDEX" || name == "IMP_PNG"
+                        || name.startswith("MNI_ACTION_"))
+                        return true;
+                    // used as a prefix
+                    if (name.startswith("UNO_JAVA_JFW") || name == "SETNODE_BINDINGS"
+                        || name == "PATHDELIMITER" || name == "SETNODE_ALLFILEFORMATS"
+                        || name == "SETNODE_DISABLED" || name == "XMLNS_DIALOGS_PREFIX"
+                        || name == "XMLNS_LIBRARY_PREFIX" || name == "XMLNS_SCRIPT_PREFIX"
+                        || name == "XMLNS_TOOLBAR" || name == "XMLNS_XLINK"
+                        || name == "XMLNS_XLINK_PREFIX")
+                        return true;
+                    // not sure how else to exclude these
+                    if (name == "RTL_OS" || name == "RTL_ARCH" || name == "#" || name == "SAL_WHERE"
+                        || name == "__FILE__" || name == "assert" || name == "SAL_INFO"
+                        || name == "DECLIMPL_SERVICEINFO_DERIVED" || name == "OSL_VERIFY"
+                        || name == "OSL_ENSURE" || name == "DECL_PROP_2" || name == "DECL_PROP_3"
+                        || name == "DECL_PROP_1" || name == "DECL_DEP_PROP_2"
+                        || name == "DECL_DEP_PROP_3")
+                        return true;
+
+                    report(DiagnosticsEngine::Warning,
+                           "change macro '%0' to 'inline constexpr "
+                           "%select{OStringLiteral|OUStringLiteral}1'",
+                           macroLoc)
+                        << name << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1);
+                    report(DiagnosticsEngine::Note, "macro used here", compat::getBeginLoc(arg0))
+                        << arg0->getSourceRange();
                 }
-                auto const e2 = expr->getArg(1);
-                if (!((isa<CXXDefaultArgExpr>(e2)
-                       && loplugin::TypeCheck(e2->getType())
-                              .Struct("Dummy")
-                              .Namespace("libreoffice_internal")
-                              .Namespace("rtl")
-                              .GlobalNamespace())
-                      || (loplugin::TypeCheck(ctor->getParamDecl(1)->getType())
-                              .Typedef("sal_Int32")
-                              .GlobalNamespace()
-                          && e2->isIntegerConstantExpr(compiler.getASTContext()))))
-                {
-                    return true;
-                }
-                auto const d = e1->getDecl();
-                if (!reportedArray_.insert(d).second)
-                {
-                    return true;
-                }
-                report(DiagnosticsEngine::Warning,
-                       "change type of variable %0 from constant character array (%1) to "
-                       "%select{OStringLiteral|OUStringLiteral}2%select{|, and make it static}3",
-                       d->getLocation())
-                    << d << d->getType()
-                    << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
-                    << isAutomaticVariable(cast<VarDecl>(d)) << d->getSourceRange();
-                report(DiagnosticsEngine::Note, "first passed into a %0 constructor here",
-                       expr->getLocation())
-                    << expr->getType().getUnqualifiedType() << expr->getSourceRange();
             }
             break;
         }

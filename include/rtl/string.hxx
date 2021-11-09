@@ -1292,6 +1292,113 @@ public:
         return !( literal == rStr );
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /// @cond INTERNAL
+
+    /* Comparison between OString and OStringLiteral.
+
+       @since LibreOffice 5.0
+    */
+
+    template<std::size_t N>
+    friend bool operator ==(OString const & lhs, OStringLiteral<N> const & rhs) {
+        return
+            rtl_str_reverseCompare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength())
+            == 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator !=(OString const & lhs, OStringLiteral<N> const & rhs) {
+        return
+            rtl_str_reverseCompare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength())
+            != 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator <(OString const & lhs, OStringLiteral<N> const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
+            < 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator <=(OString const & lhs, OStringLiteral<N> const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
+            <= 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator >(OString const & lhs, OStringLiteral<N> const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
+            > 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator >=(OString const & lhs, OStringLiteral<N> const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
+            >= 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator ==(OStringLiteral<N> const & lhs, OString const & rhs) {
+        return
+            rtl_str_reverseCompare_WithLength(
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length)
+            == 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator !=(OStringLiteral<N> const & lhs, OString const & rhs) {
+        return
+            rtl_str_reverseCompare_WithLength(
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length)
+            != 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator <(OStringLiteral<N> const & lhs, OString const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
+            < 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator <=(OStringLiteral<N> const & lhs, OString const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
+            <= 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator >(OStringLiteral<N> const & lhs, OString const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
+            > 0;
+    }
+
+    template<std::size_t N>
+    friend bool operator >=(OStringLiteral<N> const & lhs, OString const & rhs) {
+        return
+            (rtl_str_compare_WithLength(
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
+            >= 0;
+    }
+
+    /// @endcond
+#endif
+
     /**
       Returns a hashcode for this string.
 

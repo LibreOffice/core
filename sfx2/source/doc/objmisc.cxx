@@ -965,7 +965,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
     {
     }
 
-    if ( aVersion.compareTo( u"" ODFVER_012_TEXT ) < 0 )
+    if ( aVersion.compareTo( ODFVER_012_TEXT ) < 0 )
         return;
 
     // this is ODF1.2 or later

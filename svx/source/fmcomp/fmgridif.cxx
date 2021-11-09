@@ -2636,7 +2636,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
 {
     static Sequence< css::util::URL> aSupported = []()
     {
-        static const char* sSupported[] = {
+        OUString sSupported[] = {
             FMURL_RECORD_MOVEFIRST,
             FMURL_RECORD_MOVEPREV,
             FMURL_RECORD_MOVENEXT,
@@ -2648,7 +2648,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
         css::util::URL* pSupported = tmp.getArray();
 
         for ( sal_Int32 i = 0; i < tmp.getLength(); ++i, ++pSupported)
-            pSupported->Complete = OUString::createFromAscii(sSupported[i]);
+            pSupported->Complete = sSupported[i];
 
         // let a css::util::URL-transformer normalize the URLs
         Reference< css::util::XURLTransformer >  xTransformer(

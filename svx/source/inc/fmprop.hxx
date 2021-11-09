@@ -43,7 +43,7 @@
 #define FM_PROP_CONTROLSOURCE                "DataField"
 #define FM_PROP_ENABLED                      "Enabled"
 #define FM_PROP_SPIN                         "Spin"
-#define FM_PROP_READONLY                     "ReadOnly"
+constexpr OUStringLiteral FM_PROP_READONLY = u"ReadOnly";
 #define FM_PROP_FILTER                       "Filter"
 #define FM_PROP_AUTOINCREMENT                "IsAutoIncrement"
 #define FM_PROP_WIDTH                        "Width"
@@ -71,7 +71,7 @@
 #define FM_PROP_DEFAULT_SELECT_SEQ           "DefaultSelection"
 #define FM_PROP_DECIMAL_ACCURACY             "DecimalAccuracy"
 #define FM_PROP_EDITMASK                     "EditMask"
-#define FM_PROP_ISREADONLY                   "IsReadOnly"
+constexpr OUStringLiteral FM_PROP_ISREADONLY = u"IsReadOnly";
 #define FM_PROP_FIELDTYPE                    "Type"
 #define FM_PROP_REFVALUE                     "RefValue"
 #define FM_PROP_STRICTFORMAT                 "StrictFormat"
