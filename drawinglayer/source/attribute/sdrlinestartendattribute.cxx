@@ -19,7 +19,6 @@
 
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -93,8 +92,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrLineStartEndAttribute::ImplType, theGlobalDefault > {};
+            SdrLineStartEndAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrLineStartEndAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrLineStartEndAttribute::SdrLineStartEndAttribute(
@@ -112,7 +114,7 @@ namespace drawinglayer::attribute
         }
 
         SdrLineStartEndAttribute::SdrLineStartEndAttribute()
-        :   mpSdrLineStartEndAttribute(theGlobalDefault::get())
+        :   mpSdrLineStartEndAttribute(theGlobalDefault())
         {
         }
 
@@ -124,7 +126,7 @@ namespace drawinglayer::attribute
 
         bool SdrLineStartEndAttribute::isDefault() const
         {
-            return mpSdrLineStartEndAttribute.same_object(theGlobalDefault::get());
+            return mpSdrLineStartEndAttribute.same_object(theGlobalDefault());
         }
 
         SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(const SdrLineStartEndAttribute&) = default;

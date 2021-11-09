@@ -20,7 +20,6 @@
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -65,8 +64,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< LineStartEndAttribute::ImplType, theGlobalDefault > {};
+            LineStartEndAttribute::ImplType& theGlobalDefault()
+            {
+                static LineStartEndAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         LineStartEndAttribute::LineStartEndAttribute(
@@ -79,7 +81,7 @@ namespace drawinglayer::attribute
         }
 
         LineStartEndAttribute::LineStartEndAttribute()
-        :   mpLineStartEndAttribute(theGlobalDefault::get())
+        :   mpLineStartEndAttribute(theGlobalDefault())
         {
         }
 
@@ -89,7 +91,7 @@ namespace drawinglayer::attribute
 
         bool LineStartEndAttribute::isDefault() const
         {
-            return mpLineStartEndAttribute.same_object(theGlobalDefault::get());
+            return mpLineStartEndAttribute.same_object(theGlobalDefault());
         }
 
         LineStartEndAttribute& LineStartEndAttribute::operator=(const LineStartEndAttribute&) = default;

@@ -23,7 +23,6 @@
 
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
-#include <rtl/instance.hxx>
 #include <vcl/graph.hxx>
 
 
@@ -99,8 +98,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrFillGraphicAttribute::ImplType, theGlobalDefault > {};
+            SdrFillGraphicAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrFillGraphicAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrFillGraphicAttribute::SdrFillGraphicAttribute(
@@ -128,7 +130,7 @@ namespace drawinglayer::attribute
         }
 
         SdrFillGraphicAttribute::SdrFillGraphicAttribute()
-        :   mpSdrFillGraphicAttribute(theGlobalDefault::get())
+        :   mpSdrFillGraphicAttribute(theGlobalDefault())
         {
         }
 
@@ -140,7 +142,7 @@ namespace drawinglayer::attribute
 
         bool SdrFillGraphicAttribute::isDefault() const
         {
-            return mpSdrFillGraphicAttribute.same_object(theGlobalDefault::get());
+            return mpSdrFillGraphicAttribute.same_object(theGlobalDefault());
         }
 
         SdrFillGraphicAttribute& SdrFillGraphicAttribute::operator=(const SdrFillGraphicAttribute&) = default;

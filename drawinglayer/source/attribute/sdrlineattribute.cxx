@@ -19,7 +19,6 @@
 
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -85,8 +84,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrLineAttribute::ImplType, theGlobalDefault > {};
+            SdrLineAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrLineAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrLineAttribute::SdrLineAttribute(
@@ -111,7 +113,7 @@ namespace drawinglayer::attribute
         }
 
         SdrLineAttribute::SdrLineAttribute()
-        :   mpSdrLineAttribute(theGlobalDefault::get())
+        :   mpSdrLineAttribute(theGlobalDefault())
         {
         }
 
@@ -123,7 +125,7 @@ namespace drawinglayer::attribute
 
         bool SdrLineAttribute::isDefault() const
         {
-            return mpSdrLineAttribute.same_object(theGlobalDefault::get());
+            return mpSdrLineAttribute.same_object(theGlobalDefault());
         }
 
         SdrLineAttribute& SdrLineAttribute::operator=(const SdrLineAttribute&) = default;

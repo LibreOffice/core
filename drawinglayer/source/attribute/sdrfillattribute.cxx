@@ -22,7 +22,6 @@
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -77,8 +76,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrFillAttribute::ImplType, theGlobalDefault > {};
+            SdrFillAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrFillAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrFillAttribute::SdrFillAttribute(
@@ -93,7 +95,7 @@ namespace drawinglayer::attribute
         }
 
         SdrFillAttribute::SdrFillAttribute()
-        :   mpSdrFillAttribute(theGlobalDefault::get())
+        :   mpSdrFillAttribute(theGlobalDefault())
         {
         }
 
@@ -105,7 +107,7 @@ namespace drawinglayer::attribute
 
         bool SdrFillAttribute::isDefault() const
         {
-            return mpSdrFillAttribute.same_object(theGlobalDefault::get());
+            return mpSdrFillAttribute.same_object(theGlobalDefault());
         }
 
         SdrFillAttribute& SdrFillAttribute::operator=(const SdrFillAttribute&) = default;

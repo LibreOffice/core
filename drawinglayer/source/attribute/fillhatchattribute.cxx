@@ -19,7 +19,6 @@
 
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -82,8 +81,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< FillHatchAttribute::ImplType, theGlobalDefault > {};
+            FillHatchAttribute::ImplType& theGlobalDefault()
+            {
+                static FillHatchAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         FillHatchAttribute::FillHatchAttribute(
@@ -100,7 +102,7 @@ namespace drawinglayer::attribute
         }
 
         FillHatchAttribute::FillHatchAttribute()
-        :   mpFillHatchAttribute(theGlobalDefault::get())
+        :   mpFillHatchAttribute(theGlobalDefault())
         {
         }
 
@@ -112,7 +114,7 @@ namespace drawinglayer::attribute
 
         bool FillHatchAttribute::isDefault() const
         {
-            return mpFillHatchAttribute.same_object(theGlobalDefault::get());
+            return mpFillHatchAttribute.same_object(theGlobalDefault());
         }
 
         FillHatchAttribute& FillHatchAttribute::operator=(const FillHatchAttribute&) = default;

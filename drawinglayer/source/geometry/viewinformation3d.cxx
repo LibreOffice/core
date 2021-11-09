@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/geometry/AffineMatrix3D.hpp>
 #include <basegfx/utils/canvastools.hxx>
-#include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 
@@ -277,8 +276,11 @@ namespace drawinglayer::geometry
 {
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< ViewInformation3D::ImplType, theGlobalDefault > {};
+            ViewInformation3D::ImplType& theGlobalDefault()
+            {
+                static ViewInformation3D::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         ViewInformation3D::ViewInformation3D(
@@ -300,7 +302,7 @@ namespace drawinglayer::geometry
         }
 
         ViewInformation3D::ViewInformation3D()
-        :   mpViewInformation3D(theGlobalDefault::get())
+        :   mpViewInformation3D(theGlobalDefault())
         {
         }
 
@@ -312,7 +314,7 @@ namespace drawinglayer::geometry
 
         bool ViewInformation3D::isDefault() const
         {
-            return mpViewInformation3D.same_object(theGlobalDefault::get());
+            return mpViewInformation3D.same_object(theGlobalDefault());
         }
 
         ViewInformation3D& ViewInformation3D::operator=(const ViewInformation3D&) = default;

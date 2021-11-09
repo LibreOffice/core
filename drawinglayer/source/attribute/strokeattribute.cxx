@@ -18,7 +18,6 @@
  */
 
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <rtl/instance.hxx>
 #include <numeric>
 
 
@@ -67,8 +66,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< StrokeAttribute::ImplType, theGlobalDefault > {};
+            StrokeAttribute::ImplType& theGlobalDefault()
+            {
+                static StrokeAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         StrokeAttribute::StrokeAttribute(
@@ -80,7 +82,7 @@ namespace drawinglayer::attribute
         }
 
         StrokeAttribute::StrokeAttribute()
-        :   mpStrokeAttribute(theGlobalDefault::get())
+        :   mpStrokeAttribute(theGlobalDefault())
         {
         }
 
@@ -92,7 +94,7 @@ namespace drawinglayer::attribute
 
         bool StrokeAttribute::isDefault() const
         {
-            return mpStrokeAttribute.same_object(theGlobalDefault::get());
+            return mpStrokeAttribute.same_object(theGlobalDefault());
         }
 
         StrokeAttribute& StrokeAttribute::operator=(const StrokeAttribute&) = default;

@@ -25,7 +25,6 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::primitive3d

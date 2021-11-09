@@ -86,8 +86,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< FillGraphicAttribute::ImplType, theGlobalDefault > {};
+            FillGraphicAttribute::ImplType& theGlobalDefault()
+            {
+                static FillGraphicAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         FillGraphicAttribute::FillGraphicAttribute(
@@ -109,7 +112,7 @@ namespace drawinglayer::attribute
 
         bool FillGraphicAttribute::isDefault() const
         {
-            return mpFillGraphicAttribute.same_object(theGlobalDefault::get());
+            return mpFillGraphicAttribute.same_object(theGlobalDefault());
         }
 
         FillGraphicAttribute& FillGraphicAttribute::operator=(const FillGraphicAttribute&) = default;
