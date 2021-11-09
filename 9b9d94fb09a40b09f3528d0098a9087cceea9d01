@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ced924b_a3f98a23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-09T15:39:13Z",
+      "side": 1,
+      "message": "Now the build is successful on my side and the unit test passes. Ready for review :-)",
+      "revId": "9b9d94fb09a40b09f3528d0098a9087cceea9d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
