@@ -33,6 +33,23 @@
       "message": "Mike, could you please help me, why this external/poppler/poppler-Wunused-parameter.patch has failed to be applied?",
       "revId": "09d37891c4b09ee03721cc5adbae481a829994cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "732fac1f_857f5c66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T11:31:48Z",
+      "side": 1,
+      "message": "No idea; but I\u0027d suggest you to avoid patching poppler, and instead push/pop warnings, like e.g. in https://opengrok.libreoffice.org/xref/core/extensions/source/activex/StdAfx2.h?r\u003d039e90ec#30",
+      "revId": "09d37891c4b09ee03721cc5adbae481a829994cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
