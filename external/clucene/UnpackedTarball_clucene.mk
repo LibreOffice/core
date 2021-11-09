@@ -40,6 +40,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-mutex.patch \
 	external/clucene/patches/clucene-asan.patch \
 	external/clucene/patches/clucene-mixes-uptemplate-parameter-msvc-14.patch \
+	external/clucene/patches/binary_function.patch \
 ))
 
 ifneq ($(OS),WNT)
