@@ -28,11 +28,11 @@
 #include <oox/mathml/export.hxx>
 #include <oox/mathml/import.hxx>
 
-#define PRTUIOPT_TITLE_ROW          "TitleRow"
-#define PRTUIOPT_FORMULA_TEXT       "FormulaText"
-#define PRTUIOPT_BORDER             "Border"
-#define PRTUIOPT_PRINT_FORMAT       "PrintFormat"
-#define PRTUIOPT_PRINT_SCALE        "PrintScale"
+inline constexpr OUStringLiteral PRTUIOPT_TITLE_ROW = u"TitleRow";
+inline constexpr OUStringLiteral PRTUIOPT_FORMULA_TEXT = u"FormulaText";
+inline constexpr OUStringLiteral PRTUIOPT_BORDER = u"Border";
+inline constexpr OUStringLiteral PRTUIOPT_PRINT_FORMAT = u"PrintFormat";
+inline constexpr OUStringLiteral PRTUIOPT_PRINT_SCALE = u"PrintScale";
 
 class SmPrintUIOptions : public vcl::PrinterOptionsHelper
 {

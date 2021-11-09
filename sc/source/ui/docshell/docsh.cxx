@@ -146,7 +146,6 @@ using ::std::vector;
 
 constexpr OUStringLiteral pFilterSc50 = u"StarCalc 5.0";
 const char pFilterXML[]      = "StarOffice XML (Calc)";
-constexpr OUStringLiteral pFilterAscii = u"" SC_TEXT_CSV_FILTER_NAME;
 constexpr OUStringLiteral pFilterLotus = u"Lotus";
 const char pFilterQPro6[]    = "Quattro Pro 6.0";
 const char16_t pFilterExcel4[] = u"MS Excel 4.0";
@@ -1247,7 +1246,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             bRet = pOrcus->importExcel2003XML(m_aDocument, rMedium);
         }
-        else if (aFltName == pFilterAscii)
+        else if (aFltName == SC_TEXT_CSV_FILTER_NAME)
         {
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
@@ -2415,7 +2414,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             SetError(ERRCODE_ABORT);
         }
     }
-    else if (aFltName == pFilterAscii)
+    else if (aFltName == SC_TEXT_CSV_FILTER_NAME)
     {
         OUString sItStr;
         SfxItemSet*  pSet = rMed.GetItemSet();
@@ -2812,7 +2811,7 @@ OUString ScDocShell::GetWebQueryFilterName()
 
 OUString ScDocShell::GetAsciiFilterName()
 {
-    return pFilterAscii;
+    return SC_TEXT_CSV_FILTER_NAME;
 }
 
 OUString ScDocShell::GetLotusFilterName()
@@ -2835,7 +2834,7 @@ bool ScDocShell::HasAutomaticTableName( std::u16string_view rFilter )
     //  sal_True for those filters that keep the default table name
     //  (which is language specific)
 
-    return rFilter == pFilterAscii
+    return rFilter == SC_TEXT_CSV_FILTER_NAME
         || rFilter == pFilterLotus
         || rFilter == pFilterExcel4
         || rFilter == pFilterEx4Temp

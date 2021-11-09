@@ -170,9 +170,15 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 void ScUnoHelpFunctions::SetOptionalPropertyValue(
     const Reference<beans::XPropertySet>& rPropSet, const char* pPropName, const Any& rVal )
 {
+    SetOptionalPropertyValue(rPropSet, OUString::createFromAscii(pPropName), rVal);
+}
+
+void ScUnoHelpFunctions::SetOptionalPropertyValue(
+    const Reference<beans::XPropertySet>& rPropSet, const OUString& sPropName, const Any& rVal )
+{
     try
     {
-        rPropSet->setPropertyValue(OUString::createFromAscii(pPropName), rVal);
+        rPropSet->setPropertyValue(sPropName, rVal);
     }
     catch (const beans::UnknownPropertyException&)
     {

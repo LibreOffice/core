@@ -1260,42 +1260,42 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     aNewProps.reserve(20); // only a guess
     rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
 
-    const OUString pIncludeProperties[] =
+    static constexpr rtl::OUStringConstExpr pIncludeProperties[]
     {
-         OUString(PROPERTY_FORCENEWPAGE)
-        ,OUString(PROPERTY_KEEPTOGETHER)
-        ,OUString(PROPERTY_CANGROW)
-        ,OUString(PROPERTY_CANSHRINK)
-        ,OUString(PROPERTY_REPEATSECTION)
-        ,OUString(PROPERTY_PRINTREPEATEDVALUES)
-        ,OUString(PROPERTY_CONDITIONALPRINTEXPRESSION)
-        ,OUString(PROPERTY_STARTNEWCOLUMN)
-        ,OUString(PROPERTY_RESETPAGENUMBER)
-        ,OUString(PROPERTY_PRINTWHENGROUPCHANGE)
-        ,OUString(PROPERTY_VISIBLE)
-        ,OUString(PROPERTY_PAGEHEADEROPTION)
-        ,OUString(PROPERTY_PAGEFOOTEROPTION)
-        ,OUString("ControlLabel")
-        ,OUString(PROPERTY_POSITIONX)
-        ,OUString(PROPERTY_POSITIONY)
-        ,OUString(PROPERTY_WIDTH)
-        ,OUString(PROPERTY_HEIGHT)
-        ,OUString(PROPERTY_AUTOGROW)
-        ,OUString(PROPERTY_PREEVALUATED)
-        ,OUString(PROPERTY_DEEPTRAVERSING)
-        ,OUString(PROPERTY_FORMULA)
-        ,OUString(PROPERTY_INITIALFORMULA)
-        ,OUString(PROPERTY_PRESERVEIRI)
-        ,OUString(PROPERTY_DATAFIELD)
-        ,OUString(PROPERTY_FONT)
-        ,OUString(PROPERTY_BACKCOLOR)
-        ,OUString(PROPERTY_BACKTRANSPARENT)
-        ,OUString(PROPERTY_CONTROLBACKGROUND)
-        ,OUString(PROPERTY_CONTROLBACKGROUNDTRANSPARENT)
-        ,OUString(PROPERTY_LABEL)
-        ,OUString(PROPERTY_MIMETYPE)
-        ,OUString(PROPERTY_VERTICALALIGN)
-        ,OUString(PROPERTY_PARAADJUST)
+         PROPERTY_FORCENEWPAGE
+        ,PROPERTY_KEEPTOGETHER
+        ,PROPERTY_CANGROW
+        ,PROPERTY_CANSHRINK
+        ,PROPERTY_REPEATSECTION
+        ,PROPERTY_PRINTREPEATEDVALUES
+        ,PROPERTY_CONDITIONALPRINTEXPRESSION
+        ,PROPERTY_STARTNEWCOLUMN
+        ,PROPERTY_RESETPAGENUMBER
+        ,PROPERTY_PRINTWHENGROUPCHANGE
+        ,PROPERTY_VISIBLE
+        ,PROPERTY_PAGEHEADEROPTION
+        ,PROPERTY_PAGEFOOTEROPTION
+        ,PROPERTY_CONTROL_LABEL
+        ,PROPERTY_POSITIONX
+        ,PROPERTY_POSITIONY
+        ,PROPERTY_WIDTH
+        ,PROPERTY_HEIGHT
+        ,PROPERTY_AUTOGROW
+        ,PROPERTY_PREEVALUATED
+        ,PROPERTY_DEEPTRAVERSING
+        ,PROPERTY_FORMULA
+        ,PROPERTY_INITIALFORMULA
+        ,PROPERTY_PRESERVEIRI
+        ,PROPERTY_DATAFIELD
+        ,PROPERTY_FONT
+        ,PROPERTY_BACKCOLOR
+        ,PROPERTY_BACKTRANSPARENT
+        ,PROPERTY_CONTROLBACKGROUND
+        ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
+        ,PROPERTY_LABEL
+        ,PROPERTY_MIMETYPE
+        ,PROPERTY_VERTICALALIGN
+        ,PROPERTY_PARAADJUST
     };
     const uno::Reference < beans::XPropertySetInfo > xInfo = m_xReportComponent->getPropertySetInfo();
     const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
@@ -1308,7 +1308,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
         if ( pFind != aSeq.end() )
         {
             // special case for controls which contain a data field
-            if ( PROPERTY_DATAFIELD == rIncludeProp )
+            if ( PROPERTY_DATAFIELD == static_cast<const OUString &>(rIncludeProp) )
             {
                 beans::Property aValue;
                 aValue.Name = PROPERTY_FORMULALIST;

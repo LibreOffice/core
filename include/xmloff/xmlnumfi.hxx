@@ -33,7 +33,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace com::sun::star::xml::sax { class XAttributeList; }
 
-#define XML_NUMBERSTYLES "NumberStyles"
+inline constexpr OUStringLiteral XML_NUMBERSTYLES = u"NumberStyles";
 
 enum class SvXMLStylesTokens
 {

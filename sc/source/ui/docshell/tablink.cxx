@@ -485,7 +485,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
 void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )
 {
-    OUString aAppPrefix( STRING_SCAPP ": ");
+    OUString aAppPrefix( STRING_SCAPP + ": ");
     if (rFilterName.startsWith( aAppPrefix))
         rFilterName = rFilterName.copy( aAppPrefix.getLength());
 }
