@@ -76,8 +76,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_chart2dataprovider))
 
 $(eval $(call gb_CppunitTest_use_components,sc_chart2dataprovider,\
 	basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

@@ -81,8 +81,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_datatransformation))
 
 $(eval $(call gb_CppunitTest_use_components,sc_datatransformation,\
 	basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
