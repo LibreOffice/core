@@ -13,10 +13,15 @@ $(eval $(call gb_ExternalProject_register_targets,rhino,\
 	build \
 ))
 
+# add OPT_JAR_LIST with a bogus non-empty value to prevent ant from reading
+# /etc/ant.d/* which may result in adding a system rhino.jar to the classpath,
+# breaking the build
+
 $(call gb_ExternalProject_get_state_target,rhino,build) :
 	$(call gb_Trace_StartRange,rhino,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
+		OPT_JAR_LIST=foo \
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
 			-f build.xml \
