@@ -12,160 +12,161 @@
 
 // property names
 
-#define PROPERTY_URL "URL"
-#define PROPERTY_INFO "Info"
-#define PROPERTY_SETTINGS "Settings"
-#define PROPERTY_ISPASSWORDREQUIRED "IsPasswordRequired"
-#define PROPERTY_TABLEFILTER "TableFilter"
-#define PROPERTY_TABLETYPEFILTER "TableTypeFilter"
-#define PROPERTY_NAME "Name"
-#define PROPERTY_SCHEMANAME "SchemaName"
-#define PROPERTY_CATALOGNAME "CatalogName"
-#define PROPERTY_PRIVILEGES "Privileges"
-#define PROPERTY_ESCAPE_PROCESSING "EscapeProcessing"
-#define PROPERTY_COMMAND "Command"
-#define PROPERTY_TYPE "Type"
-#define PROPERTY_TYPENAME "TypeName"
-#define PROPERTY_PRECISION "Precision"
-#define PROPERTY_SCALE "Scale"
-#define PROPERTY_ISNULLABLE "IsNullable"
-#define PROPERTY_ISAUTOINCREMENT "IsAutoIncrement"
-#define PROPERTY_ISROWVERSION "IsRowVersion"
-#define PROPERTY_DESCRIPTION "Description"
-#define PROPERTY_DEFAULTVALUE "DefaultValue"
-#define PROPERTY_NUMBERFORMAT "FormatKey"
-#define PROPERTY_QUERYTIMEOUT "QueryTimeOut"
-#define PROPERTY_MAXFIELDSIZE "MaxFieldSize"
-#define PROPERTY_MAXROWS "MaxRows"
-#define PROPERTY_CURSORNAME "CursorName"
-#define PROPERTY_RESULTSETCONCURRENCY "ResultSetConcurrency"
-#define PROPERTY_RESULTSETTYPE "ResultSetType"
-#define PROPERTY_FETCHDIRECTION "FetchDirection"
-#define PROPERTY_FETCHSIZE "FetchSize"
-#define PROPERTY_USEBOOKMARKS "UseBookmarks"
-#define PROPERTY_ISSEARCHABLE "IsSearchable"
-#define PROPERTY_ISCURRENCY "IsCurrency"
-#define PROPERTY_ISSIGNED "IsSigned"
-#define PROPERTY_DISPLAYSIZE "DisplaySize"
-#define PROPERTY_LABEL "Label"
-#define PROPERTY_ISREADONLY "IsReadOnly"
-#define PROPERTY_ISWRITABLE "IsWritable"
-#define PROPERTY_ISDEFINITELYWRITABLE "IsDefinitelyWritable"
-#define PROPERTY_VALUE "Value"
-#define PROPERTY_TABLENAME "TableName"
-#define PROPERTY_ISCASESENSITIVE "IsCaseSensitive"
-#define PROPERTY_SERVICENAME "ServiceName"
-#define PROPERTY_ISBOOKMARKABLE "IsBookmarkable"
-#define PROPERTY_CANUPDATEINSERTEDROWS "CanUpdateInsertedRows"
+inline constexpr OUStringLiteral PROPERTY_URL = u"URL";
+inline constexpr OUStringLiteral PROPERTY_INFO = u"Info";
+inline constexpr OUStringLiteral PROPERTY_SETTINGS = u"Settings";
+inline constexpr OUStringLiteral PROPERTY_ISPASSWORDREQUIRED = u"IsPasswordRequired";
+inline constexpr OUStringLiteral PROPERTY_TABLEFILTER = u"TableFilter";
+inline constexpr OUStringLiteral PROPERTY_TABLETYPEFILTER = u"TableTypeFilter";
+inline constexpr OUStringLiteral PROPERTY_NAME = u"Name";
+inline constexpr OUStringLiteral PROPERTY_SCHEMANAME = u"SchemaName";
+inline constexpr OUStringLiteral PROPERTY_CATALOGNAME = u"CatalogName";
+inline constexpr OUStringLiteral PROPERTY_PRIVILEGES = u"Privileges";
+inline constexpr OUStringLiteral PROPERTY_ESCAPE_PROCESSING = u"EscapeProcessing";
+inline constexpr OUStringLiteral PROPERTY_COMMAND = u"Command";
+inline constexpr OUStringLiteral PROPERTY_TYPE = u"Type";
+inline constexpr OUStringLiteral PROPERTY_TYPENAME = u"TypeName";
+inline constexpr OUStringLiteral PROPERTY_PRECISION = u"Precision";
+inline constexpr OUStringLiteral PROPERTY_SCALE = u"Scale";
+inline constexpr OUStringLiteral PROPERTY_ISNULLABLE = u"IsNullable";
+inline constexpr OUStringLiteral PROPERTY_ISAUTOINCREMENT = u"IsAutoIncrement";
+inline constexpr OUStringLiteral PROPERTY_ISROWVERSION = u"IsRowVersion";
+inline constexpr OUStringLiteral PROPERTY_DESCRIPTION = u"Description";
+inline constexpr OUStringLiteral PROPERTY_DEFAULTVALUE = u"DefaultValue";
+inline constexpr OUStringLiteral PROPERTY_NUMBERFORMAT = u"FormatKey";
+inline constexpr OUStringLiteral PROPERTY_QUERYTIMEOUT = u"QueryTimeOut";
+inline constexpr OUStringLiteral PROPERTY_MAXFIELDSIZE = u"MaxFieldSize";
+inline constexpr OUStringLiteral PROPERTY_MAXROWS = u"MaxRows";
+inline constexpr OUStringLiteral PROPERTY_CURSORNAME = u"CursorName";
+inline constexpr OUStringLiteral PROPERTY_RESULTSETCONCURRENCY = u"ResultSetConcurrency";
+inline constexpr OUStringLiteral PROPERTY_RESULTSETTYPE = u"ResultSetType";
+inline constexpr OUStringLiteral PROPERTY_FETCHDIRECTION = u"FetchDirection";
+inline constexpr OUStringLiteral PROPERTY_FETCHSIZE = u"FetchSize";
+inline constexpr OUStringLiteral PROPERTY_USEBOOKMARKS = u"UseBookmarks";
+inline constexpr OUStringLiteral PROPERTY_ISSEARCHABLE = u"IsSearchable";
+inline constexpr OUStringLiteral PROPERTY_ISCURRENCY = u"IsCurrency";
+inline constexpr OUStringLiteral PROPERTY_ISSIGNED = u"IsSigned";
+inline constexpr OUStringLiteral PROPERTY_DISPLAYSIZE = u"DisplaySize";
+inline constexpr OUStringLiteral PROPERTY_LABEL = u"Label";
+inline constexpr OUStringLiteral PROPERTY_ISREADONLY = u"IsReadOnly";
+inline constexpr OUStringLiteral PROPERTY_ISWRITABLE = u"IsWritable";
+inline constexpr OUStringLiteral PROPERTY_ISDEFINITELYWRITABLE = u"IsDefinitelyWritable";
+inline constexpr OUStringLiteral PROPERTY_VALUE = u"Value";
+inline constexpr OUStringLiteral PROPERTY_TABLENAME = u"TableName";
+inline constexpr OUStringLiteral PROPERTY_ISCASESENSITIVE = u"IsCaseSensitive";
+inline constexpr OUStringLiteral PROPERTY_SERVICENAME = u"ServiceName";
+inline constexpr OUStringLiteral PROPERTY_ISBOOKMARKABLE = u"IsBookmarkable";
+inline constexpr OUStringLiteral PROPERTY_CANUPDATEINSERTEDROWS = u"CanUpdateInsertedRows";
 #define PROPERTY_ISSET "IsSet"
 #define PROPERTY_ISOUTPARAMETER "IsOutParameter"
-#define PROPERTY_NUMBERFORMATSSUPPLIER "NumberFormatsSupplier"
+inline constexpr OUStringLiteral PROPERTY_NUMBERFORMATSSUPPLIER = u"NumberFormatsSupplier";
 #define PROPERTY_ISCALCULATED "IsCalculated"
-#define PROPERTY_DATASOURCENAME "DataSourceName"
-#define PROPERTY_DATABASE_LOCATION "DatabaseLocation"
-#define PROPERTY_CONNECTION_RESOURCE "ConnectionResource"
-#define PROPERTY_CONNECTION_INFO "ConnectionInfo"
-#define PROPERTY_RESULT_SET "ResultSet"
-#define PROPERTY_SELECTION "Selection"
-#define PROPERTY_BOOKMARK_SELECTION "BookmarkSelection"
-#define PROPERTY_COLUMN_NAME "ColumnName"
-#define PROPERTY_COLUMN "Column"
-#define PROPERTY_DATASOURCE "DataSource"
-#define PROPERTY_TRANSACTIONISOLATION "TransactionIsolation"
-#define PROPERTY_TYPEMAP "TypeMap"
-#define PROPERTY_USER "User"
-#define PROPERTY_PASSWORD "Password"
-#define PROPERTY_COMMAND_TYPE "CommandType"
-#define PROPERTY_ACTIVECOMMAND "ActiveCommand"
-#define PROPERTY_ACTIVE_CONNECTION "ActiveConnection"
-#define PROPERTY_FILTER "Filter"
-#define PROPERTY_APPLYFILTER "ApplyFilter"
-#define PROPERTY_ORDER "Order"
-#define PROPERTY_APPLYORDER "ApplyOrder"
-#define PROPERTY_ISMODIFIED "IsModified"
-#define PROPERTY_ISNEW "IsNew"
-#define PROPERTY_ROWCOUNT "RowCount"
-#define PROPERTY_ISROWCOUNTFINAL "IsRowCountFinal"
+inline constexpr OUStringLiteral PROPERTY_DATASOURCENAME = u"DataSourceName";
+inline constexpr OUStringLiteral PROPERTY_DATABASE_LOCATION = u"DatabaseLocation";
+inline constexpr OUStringLiteral PROPERTY_CONNECTION_RESOURCE = u"ConnectionResource";
+inline constexpr OUStringLiteral PROPERTY_CONNECTION_INFO = u"ConnectionInfo";
+inline constexpr OUStringLiteral PROPERTY_RESULT_SET = u"ResultSet";
+inline constexpr OUStringLiteral PROPERTY_SELECTION = u"Selection";
+inline constexpr OUStringLiteral PROPERTY_BOOKMARK_SELECTION = u"BookmarkSelection";
+inline constexpr OUStringLiteral PROPERTY_COLUMN_NAME = u"ColumnName";
+inline constexpr OUStringLiteral PROPERTY_COLUMN = u"Column";
+inline constexpr OUStringLiteral PROPERTY_DATASOURCE = u"DataSource";
+inline constexpr OUStringLiteral PROPERTY_TRANSACTIONISOLATION = u"TransactionIsolation";
+inline constexpr OUStringLiteral PROPERTY_TYPEMAP = u"TypeMap";
+inline constexpr OUStringLiteral PROPERTY_USER = u"User";
+inline constexpr OUStringLiteral PROPERTY_PASSWORD = u"Password";
+inline constexpr OUStringLiteral PROPERTY_COMMAND_TYPE = u"CommandType";
+inline constexpr OUStringLiteral PROPERTY_ACTIVECOMMAND = u"ActiveCommand";
+inline constexpr OUStringLiteral PROPERTY_ACTIVE_CONNECTION = u"ActiveConnection";
+inline constexpr OUStringLiteral PROPERTY_FILTER = u"Filter";
+inline constexpr OUStringLiteral PROPERTY_APPLYFILTER = u"ApplyFilter";
+inline constexpr OUStringLiteral PROPERTY_ORDER = u"Order";
+inline constexpr OUStringLiteral PROPERTY_APPLYORDER = u"ApplyOrder";
+inline constexpr OUStringLiteral PROPERTY_ISMODIFIED = u"IsModified";
+inline constexpr OUStringLiteral PROPERTY_ISNEW = u"IsNew";
+inline constexpr OUStringLiteral PROPERTY_ROWCOUNT = u"RowCount";
+inline constexpr OUStringLiteral PROPERTY_ISROWCOUNTFINAL = u"IsRowCountFinal";
 #define PROPERTY_HELPFILENAME "HelpFileName"
-#define PROPERTY_WIDTH "Width"
-#define PROPERTY_ROW_HEIGHT "RowHeight"
-#define PROPERTY_AUTOGROW "AutoGrow"
-#define PROPERTY_FORMATKEY "FormatKey"
-#define PROPERTY_ALIGN "Align"
-#define PROPERTY_FONT "FontDescriptor"
-#define PROPERTY_TEXTCOLOR "TextColor"
-#define PROPERTY_BOUNDFIELD "BoundField"
-#define PROPERTY_CONTROLSOURCE "DataField"
-#define PROPERTY_REALNAME "RealName"
+inline constexpr OUStringLiteral PROPERTY_WIDTH = u"Width";
+inline constexpr OUStringLiteral PROPERTY_ROW_HEIGHT = u"RowHeight";
+inline constexpr OUStringLiteral PROPERTY_AUTOGROW = u"AutoGrow";
+inline constexpr OUStringLiteral PROPERTY_FORMATKEY = u"FormatKey";
+inline constexpr OUStringLiteral PROPERTY_ALIGN = u"Align";
+inline constexpr OUStringLiteral PROPERTY_FONT = u"FontDescriptor";
+inline constexpr OUStringLiteral PROPERTY_TEXTCOLOR = u"TextColor";
+inline constexpr OUStringLiteral PROPERTY_BOUNDFIELD = u"BoundField";
+inline constexpr OUStringLiteral PROPERTY_CONTROLSOURCE = u"DataField";
+inline constexpr OUStringLiteral PROPERTY_REALNAME = u"RealName";
 #define PROPERTY_ISHIDDEN "IsHidden"
-#define PROPERTY_UPDATE_TABLENAME "UpdateTableName"
-#define PROPERTY_UPDATE_SCHEMANAME "UpdateSchemaName"
-#define PROPERTY_UPDATE_CATALOGNAME "UpdateCatalogName"
-#define PROPERTY_RELATIVEPOSITION "RelativePosition"
-#define PROPERTY_CONTROLMODEL "ControlModel"
+inline constexpr OUStringLiteral PROPERTY_UPDATE_TABLENAME = u"UpdateTableName";
+inline constexpr OUStringLiteral PROPERTY_UPDATE_SCHEMANAME = u"UpdateSchemaName";
+inline constexpr OUStringLiteral PROPERTY_UPDATE_CATALOGNAME = u"UpdateCatalogName";
+inline constexpr OUStringLiteral PROPERTY_RELATIVEPOSITION = u"RelativePosition";
+inline constexpr OUStringLiteral PROPERTY_CONTROLMODEL = u"ControlModel";
 #define PROPERTY_ISASCENDING "IsAscending"
-#define PROPERTY_RELATEDCOLUMN "RelatedColumn"
-#define PROPERTY_ISUNIQUE "IsUnique"
-#define PROPERTY_ISPRIMARYKEYINDEX "IsPrimaryKeyIndex"
-#define PROPERTY_IGNORERESULT "IgnoreResult"
-#define PROPERTY_UPDATERULE "UpdateRule"
-#define PROPERTY_DELETERULE "DeleteRule"
-#define PROPERTY_REFERENCEDTABLE "ReferencedTable"
+inline constexpr OUStringLiteral PROPERTY_RELATEDCOLUMN = u"RelatedColumn";
+inline constexpr OUStringLiteral PROPERTY_ISUNIQUE = u"IsUnique";
+inline constexpr OUStringLiteral PROPERTY_ISPRIMARYKEYINDEX = u"IsPrimaryKeyIndex";
+inline constexpr OUStringLiteral PROPERTY_IGNORERESULT = u"IgnoreResult";
+inline constexpr OUStringLiteral PROPERTY_UPDATERULE = u"UpdateRule";
+inline constexpr OUStringLiteral PROPERTY_DELETERULE = u"DeleteRule";
+inline constexpr OUStringLiteral PROPERTY_REFERENCEDTABLE = u"ReferencedTable";
 #define PROPERTY_REFERENCEDCOLUMN "ReferencedColumn"
 #define PROPERTY_PARENTWINDOW "ParentWindow"
-#define PROPERTY_SQLEXCEPTION "SQLException"
-#define PROPERTY_BORDER "Border"
+inline constexpr OUStringLiteral PROPERTY_SQLEXCEPTION = u"SQLException";
+inline constexpr OUStringLiteral PROPERTY_BORDER = u"Border";
 #define PROPERTY_THREADSAFE "ThreadSafe"
-#define PROPERTY_HELPTEXT "HelpText"
-#define PROPERTY_CONTROLDEFAULT "ControlDefault"
-#define PROPERTY_HIDDEN "Hidden"
-#define PROPERTY_DEFAULTSTATE "DefaultState"
-#define PROPERTY_SUPPRESSVERSIONCL "SuppressVersionColumns"
-#define PROPERTY_SHOW_BROWSER "ShowBrowser"
-#define PROPERTY_ENABLE_BROWSER "EnableBrowser"
-#define PROPERTY_SHOWMENU "ShowMenu"
-#define PROPERTY_LAYOUTINFORMATION "LayoutInformation"
-#define PROPERTY_CURRENTTABLE "CurrentTable"
+inline constexpr OUStringLiteral PROPERTY_HELPTEXT = u"HelpText";
+inline constexpr OUStringLiteral PROPERTY_CONTROLDEFAULT = u"ControlDefault";
+inline constexpr OUStringLiteral PROPERTY_HIDDEN = u"Hidden";
+inline constexpr OUStringLiteral PROPERTY_DEFAULTSTATE = u"DefaultState";
+inline constexpr OUStringLiteral PROPERTY_SUPPRESSVERSIONCL = u"SuppressVersionColumns";
+inline constexpr OUStringLiteral PROPERTY_SHOW_BROWSER = u"ShowBrowser";
+inline constexpr OUStringLiteral PROPERTY_ENABLE_BROWSER = u"EnableBrowser";
+inline constexpr OUStringLiteral PROPERTY_SHOWMENU = u"ShowMenu";
+inline constexpr OUStringLiteral PROPERTY_LAYOUTINFORMATION = u"LayoutInformation";
+inline constexpr OUStringLiteral PROPERTY_CURRENTTABLE = u"CurrentTable";
 #define PROPERTY_DATABASENAME "DatabaseName"
 #define PROPERTY_CONTROLUSER "ControlUser"
 #define PROPERTY_CONTROLPASSWORD "ControlPassword"
 #define PROPERTY_CACHESIZE "CacheSize"
-#define PROPERTY_TEXTLINECOLOR "TextLineColor"
-#define PROPERTY_TEXTEMPHASIS "FontEmphasisMark"
-#define PROPERTY_TEXTRELIEF "FontRelief"
-#define PROPERTY_DEFAULTTEXT "DefaultText"
-#define PROPERTY_EFFECTIVEDEFAULT "EffectiveDefault"
-#define PROPERTY_AUTOINCREMENTCREATION "AutoIncrementCreation"
-#define PROPERTY_BOOLEANCOMPARISONMODE "BooleanComparisonMode"
-#define PROPERTY_ENABLESQL92CHECK "EnableSQL92Check"
-#define PROPERTY_FONTCHARWIDTH "FontCharWidth"
-#define PROPERTY_FONTCHARSET "FontCharset"
-#define PROPERTY_FONTFAMILY "FontFamily"
-#define PROPERTY_FONTHEIGHT "FontHeight"
-#define PROPERTY_FONTKERNING "FontKerning"
-#define PROPERTY_FONTNAME "FontName"
-#define PROPERTY_FONTORIENTATION "FontOrientation"
-#define PROPERTY_FONTPITCH "FontPitch"
-#define PROPERTY_FONTSLANT "FontSlant"
-#define PROPERTY_FONTSTRIKEOUT "FontStrikeout"
-#define PROPERTY_FONTSTYLENAME "FontStyleName"
-#define PROPERTY_FONTUNDERLINE "FontUnderline"
-#define PROPERTY_FONTWEIGHT "FontWeight"
-#define PROPERTY_FONTWIDTH "FontWidth"
-#define PROPERTY_FONTWORDLINEMODE "FontWordLineMode"
-#define PROPERTY_FONTTYPE "FontType"
-#define PROPERTY_PERSISTENT_NAME "PersistentName"
-#define PROPERTY_EMBEDDEDOBJECT "EmbeddedObject"
-#define PROPERTY_ORIGINAL "Original"
-#define PROPERTY_USECATALOGINSELECT "UseCatalogInSelect"
-#define PROPERTY_USESCHEMAINSELECT "UseSchemaInSelect"
+inline constexpr OUStringLiteral PROPERTY_TEXTLINECOLOR = u"TextLineColor";
+inline constexpr OUStringLiteral PROPERTY_TEXTEMPHASIS = u"FontEmphasisMark";
+inline constexpr OUStringLiteral PROPERTY_TEXTRELIEF = u"FontRelief";
+inline constexpr OUStringLiteral PROPERTY_DEFAULTTEXT = u"DefaultText";
+inline constexpr OUStringLiteral PROPERTY_EFFECTIVEDEFAULT = u"EffectiveDefault";
+inline constexpr OUStringLiteral PROPERTY_AUTOINCREMENTCREATION = u"AutoIncrementCreation";
+inline constexpr OUStringLiteral PROPERTY_BOOLEANCOMPARISONMODE = u"BooleanComparisonMode";
+inline constexpr OUStringLiteral PROPERTY_ENABLESQL92CHECK = u"EnableSQL92Check";
+inline constexpr OUStringLiteral PROPERTY_FONTCHARWIDTH = u"FontCharWidth";
+inline constexpr OUStringLiteral PROPERTY_FONTCHARSET = u"FontCharset";
+inline constexpr OUStringLiteral PROPERTY_FONTFAMILY = u"FontFamily";
+inline constexpr OUStringLiteral PROPERTY_FONTHEIGHT = u"FontHeight";
+inline constexpr OUStringLiteral PROPERTY_FONTKERNING = u"FontKerning";
+inline constexpr OUStringLiteral PROPERTY_FONTNAME = u"FontName";
+inline constexpr OUStringLiteral PROPERTY_FONTORIENTATION = u"FontOrientation";
+inline constexpr OUStringLiteral PROPERTY_FONTPITCH = u"FontPitch";
+inline constexpr OUStringLiteral PROPERTY_FONTSLANT = u"FontSlant";
+inline constexpr OUStringLiteral PROPERTY_FONTSTRIKEOUT = u"FontStrikeout";
+inline constexpr OUStringLiteral PROPERTY_FONTSTYLENAME = u"FontStyleName";
+inline constexpr OUStringLiteral PROPERTY_FONTUNDERLINE = u"FontUnderline";
+inline constexpr OUStringLiteral PROPERTY_FONTWEIGHT = u"FontWeight";
+inline constexpr OUStringLiteral PROPERTY_FONTWIDTH = u"FontWidth";
+inline constexpr OUStringLiteral PROPERTY_FONTWORDLINEMODE = u"FontWordLineMode";
+inline constexpr OUStringLiteral PROPERTY_FONTTYPE = u"FontType";
+inline constexpr OUStringLiteral PROPERTY_PERSISTENT_NAME = u"PersistentName";
+inline constexpr OUStringLiteral PROPERTY_EMBEDDEDOBJECT = u"EmbeddedObject";
+inline constexpr OUStringLiteral PROPERTY_ORIGINAL = u"Original";
+inline constexpr OUStringLiteral PROPERTY_USECATALOGINSELECT = u"UseCatalogInSelect";
+inline constexpr OUStringLiteral PROPERTY_USESCHEMAINSELECT = u"UseSchemaInSelect";
 #define PROPERTY_OUTERJOINESCAPE "EnableOuterJoinEscape"
-#define PROPERTY_AS_TEMPLATE "AsTemplate"
-#define PROPERTY_HAVING_CLAUSE "HavingClause"
-#define PROPERTY_GROUP_BY "GroupBy"
-#define PROPERTY_EDIT_WIDTH "EditWidth"
-#define PROPERTY_SINGLESELECTQUERYCOMPOSER "SingleSelectQueryComposer"
-#define PROPERTY_CHANGE_NOTIFICATION_ENABLED "PropertyChangeNotificationEnabled"
+inline constexpr OUStringLiteral PROPERTY_AS_TEMPLATE = u"AsTemplate";
+inline constexpr OUStringLiteral PROPERTY_HAVING_CLAUSE = u"HavingClause";
+inline constexpr OUStringLiteral PROPERTY_GROUP_BY = u"GroupBy";
+inline constexpr OUStringLiteral PROPERTY_EDIT_WIDTH = u"EditWidth";
+inline constexpr OUStringLiteral PROPERTY_SINGLESELECTQUERYCOMPOSER = u"SingleSelectQueryComposer";
+inline constexpr OUStringLiteral PROPERTY_CHANGE_NOTIFICATION_ENABLED
+    = u"PropertyChangeNotificationEnabled";
 
 // service names
 
@@ -258,27 +259,32 @@ inline constexpr OUStringLiteral SERVICE_SDB_DIRECTSQLDIALOG
 
 // other DBU relevant strings
 
-#define PROPERTY_QUERYDESIGNVIEW "QueryDesignView"
-#define PROPERTY_GRAPHICAL_DESIGN "GraphicalDesign"
-#define PROPERTY_HELP_URL "HelpURL"
+inline constexpr OUStringLiteral PROPERTY_QUERYDESIGNVIEW = u"QueryDesignView";
+inline constexpr OUStringLiteral PROPERTY_GRAPHICAL_DESIGN = u"GraphicalDesign";
+inline constexpr OUStringLiteral PROPERTY_HELP_URL = u"HelpURL";
 inline constexpr OUStringLiteral FRAME_NAME_QUERY_PREVIEW = u"QueryPreview";
 inline constexpr OUStringLiteral SERVICE_CONTROLDEFAULT = u"com.sun.star.comp.dbu.OColumnControl";
 
 // other DBU properties
 
 #define PROPERTY_TRISTATE "TriState"
-#define PROPERTY_ENABLEOUTERJOIN "EnableOuterJoinEscape"
-#define PROPERTY_TABSTOP "TabStop"
-#define PROPERTY_DEFAULTCONTROL "DefaultControl"
-#define PROPERTY_ENABLED "Enabled"
-#define PROPERTY_MOUSE_WHEEL_BEHAVIOR "MouseWheelBehavior"
+inline constexpr OUStringLiteral PROPERTY_ENABLEOUTERJOIN = u"EnableOuterJoinEscape";
+inline constexpr OUStringLiteral PROPERTY_TABSTOP = u"TabStop";
+inline constexpr OUStringLiteral PROPERTY_DEFAULTCONTROL = u"DefaultControl";
+inline constexpr OUStringLiteral PROPERTY_ENABLED = u"Enabled";
+inline constexpr OUStringLiteral PROPERTY_MOUSE_WHEEL_BEHAVIOR = u"MouseWheelBehavior";
 
 inline constexpr OUStringLiteral SQLSTATE_GENERAL = u"01000";
 
 #define PROPERTY_APPLYFORMDESIGNMODE "ApplyFormDesignMode"
-#define PROPERTY_IS_FORM "IsForm"
-#define PROPERTY_PERSISTENT_PATH "PersistentPath"
+inline constexpr OUStringLiteral PROPERTY_IS_FORM = u"IsForm";
+inline constexpr OUStringLiteral PROPERTY_PERSISTENT_PATH = u"PersistentPath";
 
 inline constexpr OUStringLiteral STR_AUTOTEXTSEPARATORLIST = u"\"\t34\t'\t39";
+
+inline constexpr OUStringLiteral PROPERTY_CHAR_STRIKEOUT = u"CharStrikeout";
+inline constexpr OUStringLiteral PROPERTY_CHAR_UNDERLINE = u"CharUnderline";
+inline constexpr OUStringLiteral PROPERTY_CHAR_UNDERLINE_COLOR = u"CharUnderlineColor";
+inline constexpr OUStringLiteral PROPERTY_CHAR_UNDERLINE_HAS_COLOR = u"CharUnderlineHasColor";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

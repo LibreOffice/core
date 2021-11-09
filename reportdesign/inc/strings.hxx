@@ -32,222 +32,222 @@ inline constexpr OUStringLiteral SERVICE_GROUP = u"com.sun.star.report.Group";
 
 //= property names
 
-#define PROPERTY_VISIBLE "Visible"
-#define PROPERTY_NAME "Name"
-#define PROPERTY_HEIGHT "Height"
-#define PROPERTY_BACKCOLOR "BackColor"
-#define PROPERTY_BACKTRANSPARENT "BackTransparent"
-#define PROPERTY_CONTROLBACKGROUND "ControlBackground"
-#define PROPERTY_CONTROLBACKGROUNDTRANSPARENT "ControlBackgroundTransparent"
-#define PROPERTY_FORCENEWPAGE "ForceNewPage"
-#define PROPERTY_NEWROWORCOL "NewRowOrCol"
-#define PROPERTY_KEEPTOGETHER "KeepTogether"
-#define PROPERTY_CANGROW "CanGrow"
-#define PROPERTY_CANSHRINK "CanShrink"
-#define PROPERTY_REPEATSECTION "RepeatSection"
-#define PROPERTY_GROUP "Group"
-#define PROPERTY_REPORTDEFINITION "ReportDefinition"
+inline constexpr OUStringLiteral PROPERTY_VISIBLE = u"Visible";
+inline constexpr OUStringLiteral PROPERTY_NAME = u"Name";
+inline constexpr OUStringLiteral PROPERTY_HEIGHT = u"Height";
+inline constexpr OUStringLiteral PROPERTY_BACKCOLOR = u"BackColor";
+inline constexpr OUStringLiteral PROPERTY_BACKTRANSPARENT = u"BackTransparent";
+inline constexpr OUStringLiteral PROPERTY_CONTROLBACKGROUND = u"ControlBackground";
+inline constexpr OUStringLiteral PROPERTY_CONTROLBACKGROUNDTRANSPARENT = u"ControlBackgroundTransparent";
+inline constexpr OUStringLiteral PROPERTY_FORCENEWPAGE = u"ForceNewPage";
+inline constexpr OUStringLiteral PROPERTY_NEWROWORCOL = u"NewRowOrCol";
+inline constexpr OUStringLiteral PROPERTY_KEEPTOGETHER = u"KeepTogether";
+inline constexpr OUStringLiteral PROPERTY_CANGROW = u"CanGrow";
+inline constexpr OUStringLiteral PROPERTY_CANSHRINK = u"CanShrink";
+inline constexpr OUStringLiteral PROPERTY_REPEATSECTION = u"RepeatSection";
+inline constexpr OUStringLiteral PROPERTY_GROUP = u"Group";
+inline constexpr OUStringLiteral PROPERTY_REPORTDEFINITION = u"ReportDefinition";
 
-#define PROPERTY_GROUPINTERVAL "GroupInterval"
-#define PROPERTY_EXPRESSION "Expression"
-#define PROPERTY_GROUPON "GroupOn"
-#define PROPERTY_SORTASCENDING "SortAscending"
+inline constexpr OUStringLiteral PROPERTY_GROUPINTERVAL = u"GroupInterval";
+inline constexpr OUStringLiteral PROPERTY_EXPRESSION = u"Expression";
+inline constexpr OUStringLiteral PROPERTY_GROUPON = u"GroupOn";
+inline constexpr OUStringLiteral PROPERTY_SORTASCENDING = u"SortAscending";
 
-#define PROPERTY_MASTERFIELDS "MasterFields"
-#define PROPERTY_DETAILFIELDS "DetailFields"
-#define PROPERTY_CAPTION "Caption"
-#define PROPERTY_COMMAND "Command"
-#define PROPERTY_BACKGRAPHICLOCATION "BackGraphicLocation"
-#define PROPERTY_ORIENTATION "Orientation"
-#define PROPERTY_PAPERSIZE "Size"
-#define PROPERTY_GROUPKEEPTOGETHER "GroupKeepTogether"
-#define PROPERTY_PAGEHEADEROPTION "PageHeaderOption"
-#define PROPERTY_PAGEFOOTEROPTION "PageFooterOption"
-#define PROPERTY_COMMANDTYPE "CommandType"
-#define PROPERTY_REPORTHEADERON "ReportHeaderOn"
-#define PROPERTY_REPORTFOOTERON "ReportFooterOn"
-#define PROPERTY_PAGEHEADERON "PageHeaderOn"
-#define PROPERTY_PAGEFOOTERON "PageFooterOn"
-#define PROPERTY_HEADERON u"HeaderOn"
-#define PROPERTY_FOOTERON u"FooterOn"
-#define PROPERTY_WIDTH "Width"
-#define PROPERTY_POSITIONX "PositionX"
-#define PROPERTY_POSITIONY "PositionY"
-#define PROPERTY_AUTOGROW "AutoGrow"
-#define PROPERTY_MINHEIGHT "MinHeight"
-#define PROPERTY_DATAFIELD "DataField"
-#define PROPERTY_PARAADJUST "ParaAdjust"
-#define PROPERTY_FONTDESCRIPTOR "FontDescriptor"
-#define PROPERTY_FONTDESCRIPTORASIAN "FontDescriptorAsian"
-#define PROPERTY_FONTDESCRIPTORCOMPLEX "FontDescriptorComplex"
-#define PROPERTY_CONTROLTEXTEMPHASISMARK "ControlTextEmphasis"
-#define PROPERTY_CHARRELIEF "CharRelief"
-#define PROPERTY_CHARCOLOR "CharColor"
-#define PROPERTY_VERTICALALIGN "VerticalAlign"
+inline constexpr OUStringLiteral PROPERTY_MASTERFIELDS = u"MasterFields";
+inline constexpr OUStringLiteral PROPERTY_DETAILFIELDS = u"DetailFields";
+inline constexpr OUStringLiteral PROPERTY_CAPTION = u"Caption";
+inline constexpr OUStringLiteral PROPERTY_COMMAND = u"Command";
+inline constexpr OUStringLiteral PROPERTY_BACKGRAPHICLOCATION = u"BackGraphicLocation";
+inline constexpr OUStringLiteral PROPERTY_ORIENTATION = u"Orientation";
+inline constexpr OUStringLiteral PROPERTY_PAPERSIZE = u"Size";
+inline constexpr OUStringLiteral PROPERTY_GROUPKEEPTOGETHER = u"GroupKeepTogether";
+inline constexpr OUStringLiteral PROPERTY_PAGEHEADEROPTION = u"PageHeaderOption";
+inline constexpr OUStringLiteral PROPERTY_PAGEFOOTEROPTION = u"PageFooterOption";
+inline constexpr OUStringLiteral PROPERTY_COMMANDTYPE = u"CommandType";
+inline constexpr OUStringLiteral PROPERTY_REPORTHEADERON = u"ReportHeaderOn";
+inline constexpr OUStringLiteral PROPERTY_REPORTFOOTERON = u"ReportFooterOn";
+inline constexpr OUStringLiteral PROPERTY_PAGEHEADERON = u"PageHeaderOn";
+inline constexpr OUStringLiteral PROPERTY_PAGEFOOTERON = u"PageFooterOn";
+inline constexpr OUStringLiteral PROPERTY_HEADERON = u"HeaderOn";
+inline constexpr OUStringLiteral PROPERTY_FOOTERON = u"FooterOn";
+inline constexpr OUStringLiteral PROPERTY_WIDTH = u"Width";
+inline constexpr OUStringLiteral PROPERTY_POSITIONX = u"PositionX";
+inline constexpr OUStringLiteral PROPERTY_POSITIONY = u"PositionY";
+inline constexpr OUStringLiteral PROPERTY_AUTOGROW = u"AutoGrow";
+inline constexpr OUStringLiteral PROPERTY_MINHEIGHT = u"MinHeight";
+inline constexpr OUStringLiteral PROPERTY_DATAFIELD = u"DataField";
+inline constexpr OUStringLiteral PROPERTY_PARAADJUST = u"ParaAdjust";
+inline constexpr OUStringLiteral PROPERTY_FONTDESCRIPTOR = u"FontDescriptor";
+inline constexpr OUStringLiteral PROPERTY_FONTDESCRIPTORASIAN = u"FontDescriptorAsian";
+inline constexpr OUStringLiteral PROPERTY_FONTDESCRIPTORCOMPLEX = u"FontDescriptorComplex";
+inline constexpr OUStringLiteral PROPERTY_CONTROLTEXTEMPHASISMARK = u"ControlTextEmphasis";
+inline constexpr OUStringLiteral PROPERTY_CHARRELIEF = u"CharRelief";
+inline constexpr OUStringLiteral PROPERTY_CHARCOLOR = u"CharColor";
+inline constexpr OUStringLiteral PROPERTY_VERTICALALIGN = u"VerticalAlign";
 #define PROPERTY_IMAGEPOSITION "ImagePosition"
-#define PROPERTY_IMAGEURL "ImageURL"
-#define PROPERTY_CHARUNDERLINECOLOR "CharUnderlineColor"
-#define PROPERTY_LABEL "Label"
+inline constexpr OUStringLiteral PROPERTY_IMAGEURL = u"ImageURL";
+inline constexpr OUStringLiteral PROPERTY_CHARUNDERLINECOLOR = u"CharUnderlineColor";
+inline constexpr OUStringLiteral PROPERTY_LABEL = u"Label";
 #define PROPERTY_EFFECTIVEDEFAULT "EffectiveDefault"
 #define PROPERTY_EFFECTIVEMAX "EffectiveMax"
 #define PROPERTY_EFFECTIVEMIN "EffectiveMin"
-#define PROPERTY_FORMATKEY "FormatKey"
+inline constexpr OUStringLiteral PROPERTY_FORMATKEY = u"FormatKey";
 #define PROPERTY_MAXTEXTLEN "MaxTextLen"
 #define PROPERTY_LISTSOURCE "ListSource"
-#define PROPERTY_FORMATSSUPPLIER "FormatsSupplier"
-#define PROPERTY_CONTROLBORDER "ControlBorder"
-#define PROPERTY_CONTROLBORDERCOLOR "ControlBorderColor"
-#define PROPERTY_BORDER "Border"
-#define PROPERTY_BORDERCOLOR "BorderColor"
-#define PROPERTY_DEFAULTCONTROL "DefaultControl"
+inline constexpr OUStringLiteral PROPERTY_FORMATSSUPPLIER = u"FormatsSupplier";
+inline constexpr OUStringLiteral PROPERTY_CONTROLBORDER = u"ControlBorder";
+inline constexpr OUStringLiteral PROPERTY_CONTROLBORDERCOLOR = u"ControlBorderColor";
+inline constexpr OUStringLiteral PROPERTY_BORDER = u"Border";
+inline constexpr OUStringLiteral PROPERTY_BORDERCOLOR = u"BorderColor";
+inline constexpr OUStringLiteral PROPERTY_DEFAULTCONTROL = u"DefaultControl";
 
-#define PROPERTY_LEFTMARGIN "LeftMargin"
-#define PROPERTY_RIGHTMARGIN "RightMargin"
-#define PROPERTY_TOPMARGIN "TopMargin"
-#define PROPERTY_BOTTOMMARGIN "BottomMargin"
+inline constexpr OUStringLiteral PROPERTY_LEFTMARGIN = u"LeftMargin";
+inline constexpr OUStringLiteral PROPERTY_RIGHTMARGIN = u"RightMargin";
+inline constexpr OUStringLiteral PROPERTY_TOPMARGIN = u"TopMargin";
+inline constexpr OUStringLiteral PROPERTY_BOTTOMMARGIN = u"BottomMargin";
 
-#define PROPERTY_PRINTREPEATEDVALUES "PrintRepeatedValues"
-#define PROPERTY_CONDITIONALPRINTEXPRESSION "ConditionalPrintExpression"
-#define PROPERTY_STARTNEWCOLUMN "StartNewColumn"
-#define PROPERTY_RESETPAGENUMBER "ResetPageNumber"
-#define PROPERTY_PRINTWHENGROUPCHANGE "PrintWhenGroupChange"
-#define PROPERTY_STATE "State"
-#define PROPERTY_TIME_STATE "TimeState"
-#define PROPERTY_DATE_STATE "DateState"
+inline constexpr OUStringLiteral PROPERTY_PRINTREPEATEDVALUES = u"PrintRepeatedValues";
+inline constexpr OUStringLiteral PROPERTY_CONDITIONALPRINTEXPRESSION = u"ConditionalPrintExpression";
+inline constexpr OUStringLiteral PROPERTY_STARTNEWCOLUMN = u"StartNewColumn";
+inline constexpr OUStringLiteral PROPERTY_RESETPAGENUMBER = u"ResetPageNumber";
+inline constexpr OUStringLiteral PROPERTY_PRINTWHENGROUPCHANGE = u"PrintWhenGroupChange";
+inline constexpr OUStringLiteral PROPERTY_STATE = u"State";
+inline constexpr OUStringLiteral PROPERTY_TIME_STATE = u"TimeState";
+inline constexpr OUStringLiteral PROPERTY_DATE_STATE = u"DateState";
 #define PROPERTY_TRISTATE "TriState"
 #define PROPERTY_LISTSOURCETYPE "ListSourceType"
-#define PROPERTY_FONTCHARWIDTH    "FontCharWidth"
-#define PROPERTY_FONTCHARSET      "CharFontCharSet"
-#define PROPERTY_FONTFAMILY       "CharFontFamily"
-#define PROPERTY_CHARFONTHEIGHT   "CharHeight"
-#define PROPERTY_FONTHEIGHT       "FontHeight"
-#define PROPERTY_FONTKERNING      "FontKerning"
-#define PROPERTY_FONT             "FontDescriptor"
-#define PROPERTY_FONTNAME         "FontName"
-#define PROPERTY_FONTORIENTATION  "CharRotation"
-#define PROPERTY_FONTPITCH        "CharFontPitch"
+inline constexpr OUStringLiteral PROPERTY_FONTCHARWIDTH = u"FontCharWidth";
+inline constexpr OUStringLiteral PROPERTY_FONTCHARSET = u"CharFontCharSet";
+inline constexpr OUStringLiteral PROPERTY_FONTFAMILY = u"CharFontFamily";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTHEIGHT = u"CharHeight";
+inline constexpr OUStringLiteral PROPERTY_FONTHEIGHT = u"FontHeight";
+inline constexpr OUStringLiteral PROPERTY_FONTKERNING = u"FontKerning";
+inline constexpr OUStringLiteral PROPERTY_FONT = u"FontDescriptor";
+inline constexpr OUStringLiteral PROPERTY_FONTNAME = u"FontName";
+inline constexpr OUStringLiteral PROPERTY_FONTORIENTATION = u"CharRotation";
+inline constexpr OUStringLiteral PROPERTY_FONTPITCH = u"CharFontPitch";
 #define PROPERTY_FONTSLANT        "FontSlant"
-#define PROPERTY_CHARSTRIKEOUT    "CharStrikeout"
-#define PROPERTY_FONTSTRIKEOUT    "FontStrikeout"
-#define PROPERTY_FONTSTYLENAME    "CharFontStyleName"
-#define PROPERTY_FONTUNDERLINE    "CharUnderline"
-#define PROPERTY_FONTWEIGHT       "CharWeight"
-#define PROPERTY_FONTWIDTH        "FontWidth"
+inline constexpr OUStringLiteral PROPERTY_CHARSTRIKEOUT = u"CharStrikeout";
+inline constexpr OUStringLiteral PROPERTY_FONTSTRIKEOUT = u"FontStrikeout";
+inline constexpr OUStringLiteral PROPERTY_FONTSTYLENAME = u"CharFontStyleName";
+inline constexpr OUStringLiteral PROPERTY_FONTUNDERLINE = u"CharUnderline";
+inline constexpr OUStringLiteral PROPERTY_FONTWEIGHT = u"CharWeight";
+inline constexpr OUStringLiteral PROPERTY_FONTWIDTH = u"FontWidth";
 #define PROPERTY_FONTWORDLINEMODE "FontWordLineMode"
-#define PROPERTY_FONTTYPE         "FontType"
+inline constexpr OUStringLiteral PROPERTY_FONTTYPE = u"FontType";
 
-#define PROPERTY_ENABLED       "Enabled"
+inline constexpr OUStringLiteral PROPERTY_ENABLED = u"Enabled";
 
-#define PROPERTY_CHAREMPHASIS     "CharEmphasis"
-#define PROPERTY_CHARFONTNAME     "CharFontName"
-#define PROPERTY_CHARFONTSTYLENAME "CharFontStyleName"
-#define PROPERTY_CHARFONTFAMILY   "CharFontFamily"
-#define PROPERTY_CHARFONTCHARSET  "CharFontCharSet"
-#define PROPERTY_CHARFONTPITCH    "CharFontPitch"
-#define PROPERTY_CHARHEIGHT       "CharHeight"
-#define PROPERTY_CHARUNDERLINE    "CharUnderline"
-#define PROPERTY_CHARWEIGHT       "CharWeight"
-#define PROPERTY_CHARPOSTURE      "CharPosture"
-#define PROPERTY_CHARWORDMODE     "CharWordMode"
-#define PROPERTY_CHARROTATION     "CharRotation"
-#define PROPERTY_CHARSCALEWIDTH   "CharScaleWidth"
+inline constexpr OUStringLiteral PROPERTY_CHAREMPHASIS = u"CharEmphasis";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTNAME = u"CharFontName";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTSTYLENAME = u"CharFontStyleName";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTFAMILY = u"CharFontFamily";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTCHARSET = u"CharFontCharSet";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTPITCH = u"CharFontPitch";
+inline constexpr OUStringLiteral PROPERTY_CHARHEIGHT = u"CharHeight";
+inline constexpr OUStringLiteral PROPERTY_CHARUNDERLINE = u"CharUnderline";
+inline constexpr OUStringLiteral PROPERTY_CHARWEIGHT = u"CharWeight";
+inline constexpr OUStringLiteral PROPERTY_CHARPOSTURE = u"CharPosture";
+inline constexpr OUStringLiteral PROPERTY_CHARWORDMODE = u"CharWordMode";
+inline constexpr OUStringLiteral PROPERTY_CHARROTATION = u"CharRotation";
+inline constexpr OUStringLiteral PROPERTY_CHARSCALEWIDTH = u"CharScaleWidth";
 
 // Asian
-#define PROPERTY_CHAREMPHASISASIAN        "CharEmphasisAsian"
-#define PROPERTY_CHARFONTNAMEASIAN        "CharFontNameAsian"
-#define PROPERTY_CHARFONTSTYLENAMEASIAN   "CharFontStyleNameAsian"
-#define PROPERTY_CHARFONTFAMILYASIAN      "CharFontFamilyAsian"
-#define PROPERTY_CHARFONTCHARSETASIAN     "CharFontCharSetAsian"
-#define PROPERTY_CHARFONTPITCHASIAN       "CharFontPitchAsian"
-#define PROPERTY_CHARHEIGHTASIAN          "CharHeightAsian"
-#define PROPERTY_CHARUNDERLINEASIAN       "CharUnderlineAsian"
-#define PROPERTY_CHARWEIGHTASIAN          "CharWeightAsian"
-#define PROPERTY_CHARPOSTUREASIAN         "CharPostureAsian"
-#define PROPERTY_CHARWORDMODEASIAN        "CharWordModeAsian"
-#define PROPERTY_CHARROTATIONASIAN        "CharRotationAsian"
-#define PROPERTY_CHARSCALEWIDTHASIAN      "CharScaleWidthAsian"
-#define PROPERTY_CHARLOCALEASIAN           "CharLocaleAsian"
+inline constexpr OUStringLiteral PROPERTY_CHAREMPHASISASIAN = u"CharEmphasisAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTNAMEASIAN = u"CharFontNameAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTSTYLENAMEASIAN = u"CharFontStyleNameAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTFAMILYASIAN = u"CharFontFamilyAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTCHARSETASIAN = u"CharFontCharSetAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTPITCHASIAN = u"CharFontPitchAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARHEIGHTASIAN = u"CharHeightAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARUNDERLINEASIAN = u"CharUnderlineAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARWEIGHTASIAN = u"CharWeightAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARPOSTUREASIAN = u"CharPostureAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARWORDMODEASIAN = u"CharWordModeAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARROTATIONASIAN = u"CharRotationAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARSCALEWIDTHASIAN = u"CharScaleWidthAsian";
+inline constexpr OUStringLiteral PROPERTY_CHARLOCALEASIAN = u"CharLocaleAsian";
 
 // Complex
-#define PROPERTY_CHAREMPHASISCOMPLEX      "CharEmphasisComplex"
-#define PROPERTY_CHARFONTNAMECOMPLEX      "CharFontNameComplex"
-#define PROPERTY_CHARFONTSTYLENAMECOMPLEX "CharFontStyleNameComplex"
-#define PROPERTY_CHARFONTFAMILYCOMPLEX    "CharFontFamilyComplex"
-#define PROPERTY_CHARFONTCHARSETCOMPLEX   "CharFontCharSetComplex"
-#define PROPERTY_CHARFONTPITCHCOMPLEX     "CharFontPitchComplex"
-#define PROPERTY_CHARHEIGHTCOMPLEX        "CharHeightComplex"
-#define PROPERTY_CHARUNDERLINECOMPLEX     "CharUnderlineComplex"
-#define PROPERTY_CHARWEIGHTCOMPLEX        "CharWeightComplex"
-#define PROPERTY_CHARPOSTURECOMPLEX       "CharPostureComplex"
-#define PROPERTY_CHARWORDMODECOMPLEX      "CharWordModeComplex"
-#define PROPERTY_CHARROTATIONCOMPLEX      "CharRotationComplex"
-#define PROPERTY_CHARSCALEWIDTHCOMPLEX    "CharScaleWidthComplex"
-#define PROPERTY_CHARLOCALECOMPLEX        "CharLocaleComplex"
+inline constexpr OUStringLiteral PROPERTY_CHAREMPHASISCOMPLEX = u"CharEmphasisComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTNAMECOMPLEX = u"CharFontNameComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTSTYLENAMECOMPLEX = u"CharFontStyleNameComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTFAMILYCOMPLEX = u"CharFontFamilyComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTCHARSETCOMPLEX = u"CharFontCharSetComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARFONTPITCHCOMPLEX = u"CharFontPitchComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARHEIGHTCOMPLEX = u"CharHeightComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARUNDERLINECOMPLEX = u"CharUnderlineComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARWEIGHTCOMPLEX = u"CharWeightComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARPOSTURECOMPLEX = u"CharPostureComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARWORDMODECOMPLEX = u"CharWordModeComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARROTATIONCOMPLEX = u"CharRotationComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARSCALEWIDTHCOMPLEX = u"CharScaleWidthComplex";
+inline constexpr OUStringLiteral PROPERTY_CHARLOCALECOMPLEX = u"CharLocaleComplex";
 
-#define PROPERTY_STATUSINDICATOR  "StatusIndicator"
-#define PROPERTY_SECTION          "Section"
-#define PROPERTY_FILTER           "Filter"
-#define PROPERTY_ESCAPEPROCESSING "EscapeProcessing"
+inline constexpr OUStringLiteral PROPERTY_STATUSINDICATOR = u"StatusIndicator";
+inline constexpr OUStringLiteral PROPERTY_SECTION = u"Section";
+inline constexpr OUStringLiteral PROPERTY_FILTER = u"Filter";
+inline constexpr OUStringLiteral PROPERTY_ESCAPEPROCESSING = u"EscapeProcessing";
 
-#define PROPERTY_MULTILINE        "MultiLine"
-#define PROPERTY_ACTIVECONNECTION "ActiveConnection"
-#define PROPERTY_DATASOURCENAME   "DataSourceName"
-#define PROPERTY_FORMULA          "Formula"
-#define PROPERTY_INITIALFORMULA   "InitialFormula"
-#define PROPERTY_PREEVALUATED     "PreEvaluated"
-#define PROPERTY_DEEPTRAVERSING   "DeepTraversing"
-#define PROPERTY_MIMETYPE         "MimeType"
-#define PROPERTY_BACKGROUNDCOLOR  "BackgroundColor"
-#define PROPERTY_TEXT             "Text"
-#define PROPERTY_TEXTCOLOR        "TextColor"
-#define PROPERTY_TEXTLINECOLOR   "TextLineColor"
-#define PROPERTY_FONTRELIEF   "FontRelief"
-#define PROPERTY_FONTEMPHASISMARK "FontEmphasisMark"
-#define PROPERTY_ZORDER           "ZOrder"
-#define PROPERTY_OPAQUE           "Opaque"
-#define PROPERTY_TRANSFORMATION    "Transformation"
-#define PROPERTY_CUSTOMSHAPEENGINE "CustomShapeEngine"
-#define PROPERTY_CUSTOMSHAPEDATA   "CustomShapeData"
-#define PROPERTY_CUSTOMSHAPEGEOMETRY "CustomShapeGeometry"
+inline constexpr OUStringLiteral PROPERTY_MULTILINE = u"MultiLine";
+inline constexpr OUStringLiteral PROPERTY_ACTIVECONNECTION = u"ActiveConnection";
+inline constexpr OUStringLiteral PROPERTY_DATASOURCENAME = u"DataSourceName";
+inline constexpr OUStringLiteral PROPERTY_FORMULA = u"Formula";
+inline constexpr OUStringLiteral PROPERTY_INITIALFORMULA = u"InitialFormula";
+inline constexpr OUStringLiteral PROPERTY_PREEVALUATED = u"PreEvaluated";
+inline constexpr OUStringLiteral PROPERTY_DEEPTRAVERSING = u"DeepTraversing";
+inline constexpr OUStringLiteral PROPERTY_MIMETYPE = u"MimeType";
+inline constexpr OUStringLiteral PROPERTY_BACKGROUNDCOLOR = u"BackgroundColor";
+inline constexpr OUStringLiteral PROPERTY_TEXT = u"Text";
+inline constexpr OUStringLiteral PROPERTY_TEXTCOLOR = u"TextColor";
+inline constexpr OUStringLiteral PROPERTY_TEXTLINECOLOR = u"TextLineColor";
+inline constexpr OUStringLiteral PROPERTY_FONTRELIEF = u"FontRelief";
+inline constexpr OUStringLiteral PROPERTY_FONTEMPHASISMARK = u"FontEmphasisMark";
+inline constexpr OUStringLiteral PROPERTY_ZORDER = u"ZOrder";
+inline constexpr OUStringLiteral PROPERTY_OPAQUE = u"Opaque";
+inline constexpr OUStringLiteral PROPERTY_TRANSFORMATION = u"Transformation";
+inline constexpr OUStringLiteral PROPERTY_CUSTOMSHAPEENGINE = u"CustomShapeEngine";
+inline constexpr OUStringLiteral PROPERTY_CUSTOMSHAPEDATA = u"CustomShapeData";
+inline constexpr OUStringLiteral PROPERTY_CUSTOMSHAPEGEOMETRY = u"CustomShapeGeometry";
 
-#define PROPERTY_NUMBERINGTYPE     "NumberingType"
-#define PROPERTY_PAGESTYLELAYOUT   "PageStyleLayout"
-#define PROPERTY_ISLANDSCAPE       "IsLandscape"
-#define PROPERTY_ALIGN "Align"
-#define PROPERTY_TYPE  "Type"
+inline constexpr OUStringLiteral PROPERTY_NUMBERINGTYPE = u"NumberingType";
+inline constexpr OUStringLiteral PROPERTY_PAGESTYLELAYOUT = u"PageStyleLayout";
+inline constexpr OUStringLiteral PROPERTY_ISLANDSCAPE = u"IsLandscape";
+inline constexpr OUStringLiteral PROPERTY_ALIGN = u"Align";
+inline constexpr OUStringLiteral PROPERTY_TYPE = u"Type";
 
-#define PROPERTY_PRESERVEIRI  "PreserveIRI"
-#define PROPERTY_SCALEMODE  "ScaleMode"
+inline constexpr OUStringLiteral PROPERTY_PRESERVEIRI = u"PreserveIRI";
+inline constexpr OUStringLiteral PROPERTY_SCALEMODE = u"ScaleMode";
 
-#define PROPERTY_LINESTYLE  "LineStyle"
-#define PROPERTY_LINEDASH  "LineDash"
-#define PROPERTY_LINECOLOR  "LineColor"
-#define PROPERTY_LINETRANSPARENCE  "LineTransparence"
-#define PROPERTY_LINEWIDTH  "LineWidth"
+inline constexpr OUStringLiteral PROPERTY_LINESTYLE = u"LineStyle";
+inline constexpr OUStringLiteral PROPERTY_LINEDASH = u"LineDash";
+inline constexpr OUStringLiteral PROPERTY_LINECOLOR = u"LineColor";
+inline constexpr OUStringLiteral PROPERTY_LINETRANSPARENCE = u"LineTransparence";
+inline constexpr OUStringLiteral PROPERTY_LINEWIDTH = u"LineWidth";
 
-#define PROPERTY_CHARFLASH            "CharFlash"
-#define PROPERTY_CHARESCAPEMENTHEIGHT "CharEscapementHeight"
-#define PROPERTY_CHARLOCALE           "CharLocale"
-#define PROPERTY_CHARESCAPEMENT       "CharEscapement"
-#define PROPERTY_CHARCASEMAP          "CharCaseMap"
-#define PROPERTY_CHARCOMBINEISON      "CharCombineIsOn"
-#define PROPERTY_CHARCOMBINEPREFIX    "CharCombinePrefix"
-#define PROPERTY_CHARCOMBINESUFFIX    "CharCombineSuffix"
-#define PROPERTY_CHARHIDDEN           "CharHidden"
-#define PROPERTY_CHARSHADOWED         "CharShadowed"
-#define PROPERTY_CHARCONTOURED        "CharContoured"
-#define PROPERTY_CHARAUTOKERNING      "CharAutoKerning"
-#define PROPERTY_CHARKERNING          "CharKerning"
-#define PROPERTY_HYPERLINKURL "HyperLinkURL"
-#define PROPERTY_HYPERLINKTARGET "HyperLinkTarget"
-#define PROPERTY_HYPERLINKNAME "HyperLinkName"
-#define PROPERTY_VISITEDCHARSTYLENAME "VisitedCharStyleName"
-#define PROPERTY_UNVISITEDCHARSTYLENAME "UnvisitedCharStyleName"
+inline constexpr OUStringLiteral PROPERTY_CHARFLASH = u"CharFlash";
+inline constexpr OUStringLiteral PROPERTY_CHARESCAPEMENTHEIGHT = u"CharEscapementHeight";
+inline constexpr OUStringLiteral PROPERTY_CHARLOCALE = u"CharLocale";
+inline constexpr OUStringLiteral PROPERTY_CHARESCAPEMENT = u"CharEscapement";
+inline constexpr OUStringLiteral PROPERTY_CHARCASEMAP = u"CharCaseMap";
+inline constexpr OUStringLiteral PROPERTY_CHARCOMBINEISON = u"CharCombineIsOn";
+inline constexpr OUStringLiteral PROPERTY_CHARCOMBINEPREFIX = u"CharCombinePrefix";
+inline constexpr OUStringLiteral PROPERTY_CHARCOMBINESUFFIX = u"CharCombineSuffix";
+inline constexpr OUStringLiteral PROPERTY_CHARHIDDEN = u"CharHidden";
+inline constexpr OUStringLiteral PROPERTY_CHARSHADOWED = u"CharShadowed";
+inline constexpr OUStringLiteral PROPERTY_CHARCONTOURED = u"CharContoured";
+inline constexpr OUStringLiteral PROPERTY_CHARAUTOKERNING = u"CharAutoKerning";
+inline constexpr OUStringLiteral PROPERTY_CHARKERNING = u"CharKerning";
+inline constexpr OUStringLiteral PROPERTY_HYPERLINKURL = u"HyperLinkURL";
+inline constexpr OUStringLiteral PROPERTY_HYPERLINKTARGET = u"HyperLinkTarget";
+inline constexpr OUStringLiteral PROPERTY_HYPERLINKNAME = u"HyperLinkName";
+inline constexpr OUStringLiteral PROPERTY_VISITEDCHARSTYLENAME = u"VisitedCharStyleName";
+inline constexpr OUStringLiteral PROPERTY_UNVISITEDCHARSTYLENAME = u"UnvisitedCharStyleName";
 #define PROPERTY_ORDER                "Order"
-#define PROPERTY_APPLYFILTER          "ApplyFilter"
-#define PROPERTY_MAXROWS              "MaxRows"
+inline constexpr OUStringLiteral PROPERTY_APPLYFILTER = u"ApplyFilter";
+inline constexpr OUStringLiteral PROPERTY_MAXROWS = u"MaxRows";
 
-#define PROPERTY_REPORTNAME "ReportName"
+inline constexpr OUStringLiteral PROPERTY_REPORTNAME = u"ReportName";
 inline constexpr OUStringLiteral CFG_REPORTDESIGNER = u"SunReportBuilder";
 inline constexpr OUStringLiteral DBREPORTHEADER = u"ReportHeader";
 inline constexpr OUStringLiteral DBREPORTFOOTER = u"ReportFooter";
@@ -258,29 +258,29 @@ inline constexpr OUStringLiteral DBGROUPFOOTER = u"GroupFooter";
 inline constexpr OUStringLiteral DBDETAIL = u"Detail";
 inline constexpr OUStringLiteral REPORTCONTROLFORMAT = u"ReportControlFormat";
 inline constexpr OUStringLiteral CURRENT_WINDOW = u"CurrentWindow";
-#define PROPERTY_FONTCOLOR "FontColor"
-#define PROPERTY_EMPTY_IS_NULL "ConvertEmptyToNull"
-#define PROPERTY_FILTERPROPOSAL "UseFilterValueProposal"
-#define PROPERTY_POSITION "Position"
-#define PROPERTY_FORMATKEYDATE "FormatKeyDate"
-#define PROPERTY_FORMATKEYTIME "FormatKeyTime"
+inline constexpr OUStringLiteral PROPERTY_FONTCOLOR = u"FontColor";
+inline constexpr OUStringLiteral PROPERTY_EMPTY_IS_NULL = u"ConvertEmptyToNull";
+inline constexpr OUStringLiteral PROPERTY_FILTERPROPOSAL = u"UseFilterValueProposal";
+inline constexpr OUStringLiteral PROPERTY_POSITION = u"Position";
+inline constexpr OUStringLiteral PROPERTY_FORMATKEYDATE = u"FormatKeyDate";
+inline constexpr OUStringLiteral PROPERTY_FORMATKEYTIME = u"FormatKeyTime";
 inline constexpr OUStringLiteral DBOVERLAPPEDCONTROL = u"OverlappedControl";
-#define PROPERTY_FORMULALIST "FormulaList"
-#define PROPERTY_SCOPE "Scope"
-#define PROPERTY_CHARTTYPE "ChartType"
-#define PROPERTY_PREVIEW_COUNT "RowLimit"
-#define PROPERTY_TITLE "Title"
-#define PROPERTY_AREA "Area"
-#define PROPERTY_FILLCOLOR "FillColor"
+inline constexpr OUStringLiteral PROPERTY_FORMULALIST = u"FormulaList";
+inline constexpr OUStringLiteral PROPERTY_SCOPE = u"Scope";
+inline constexpr OUStringLiteral PROPERTY_CHARTTYPE = u"ChartType";
+inline constexpr OUStringLiteral PROPERTY_PREVIEW_COUNT = u"RowLimit";
+inline constexpr OUStringLiteral PROPERTY_TITLE = u"Title";
+inline constexpr OUStringLiteral PROPERTY_AREA = u"Area";
+inline constexpr OUStringLiteral PROPERTY_FILLCOLOR = u"FillColor";
 inline constexpr OUStringLiteral DBTEXTBOXBOUNDCONTENT = u"TextBoxBoundContent";
 
 inline constexpr OUStringLiteral SERVICE_SETTINGSIMPORTER = u"com.sun.star.comp.Report.XMLOasisSettingsImporter";
 inline constexpr OUStringLiteral SERVICE_STYLESIMPORTER = u"com.sun.star.comp.Report.XMLOasisStylesImporter";
 inline constexpr OUStringLiteral SERVICE_CONTENTIMPORTER = u"com.sun.star.comp.Report.XMLOasisContentImporter";
 inline constexpr OUStringLiteral SERVICE_METAIMPORTER = u"com.sun.star.comp.Report.XMLOasisMetaImporter";
-#define PROPERTY_BORDERLEFT "BorderLeft"
-#define PROPERTY_BORDERRIGHT "BorderRight"
-#define PROPERTY_BORDERTOP "BorderTop"
-#define PROPERTY_BORDERBOTTOM "BorderBottom"
+inline constexpr OUStringLiteral PROPERTY_BORDER_LEFT = u"BorderLeft";
+inline constexpr OUStringLiteral PROPERTY_BORDER_RIGHT = u"BorderRight";
+inline constexpr OUStringLiteral PROPERTY_BORDER_TOP = u"BorderTop";
+inline constexpr OUStringLiteral PROPERTY_BORDER_BOTTOM = u"BorderBottom";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

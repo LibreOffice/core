@@ -6,52 +6,52 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#pragma once
 
-#ifndef INCLUDED_SW_INC_BITMAPS_HRC
-#define INCLUDED_SW_INC_BITMAPS_HRC
+#include <rtl/ustring.hxx>
 
-#define BMP_PAGE_SHADOW_MASK                    "sw/res/page-shadow-mask.png"
+inline constexpr OUStringLiteral BMP_PAGE_SHADOW_MASK = u"sw/res/page-shadow-mask.png";
 
-#define BMP_STYLES_FAMILY_PARA                  "sw/res/sf01.png"
-#define BMP_STYLES_FAMILY_CHAR                  "sw/res/sf02.png"
-#define BMP_STYLES_FAMILY_FRAME                 "sw/res/sf03.png"
-#define BMP_STYLES_FAMILY_PAGE                  "sw/res/sf04.png"
-#define BMP_STYLES_FAMILY_LIST                  "sw/res/sf05.png"
-#define BMP_STYLES_FAMILY_TABLE                 "sw/res/sf06.png"
-#define RID_GRAPHIC_REPLACEBMP                  "res/grafikei.png"
-#define RID_GRAPHIC_ERRORBMP                    "res/grafikde.png"
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_PARA = u"sw/res/sf01.png";
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_CHAR = u"sw/res/sf02.png";
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_FRAME = u"sw/res/sf03.png";
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_PAGE = u"sw/res/sf04.png";
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_LIST = u"sw/res/sf05.png";
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_TABLE = u"sw/res/sf06.png";
+inline constexpr OUStringLiteral RID_GRAPHIC_REPLACEBMP = u"res/grafikei.png";
+inline constexpr OUStringLiteral RID_GRAPHIC_ERRORBMP = u"res/grafikde.png";
 
-#define BMP_REDLINE_INSERTED                    "sw/res/redline_inserted.png"
-#define BMP_REDLINE_DELETED                     "sw/res/redline_deleted.png"
-#define BMP_REDLINE_FORMATTED                   "sw/res/redline_formatted.png"
-#define BMP_REDLINE_TABLECHG                    "sw/res/redline_tablechg.png"
-#define BMP_REDLINE_FMTCOLLSET                  "sw/res/redline_fmtcollset.png"
-#define BMP_REDLINE_MOVED_INSERTION             "cmd/sc_paste.png"
-#define BMP_REDLINE_MOVED_DELETION              "cmd/sc_cut.png"
+inline constexpr OUStringLiteral BMP_REDLINE_INSERTED = u"sw/res/redline_inserted.png";
+inline constexpr OUStringLiteral BMP_REDLINE_DELETED = u"sw/res/redline_deleted.png";
+inline constexpr OUStringLiteral BMP_REDLINE_FORMATTED = u"sw/res/redline_formatted.png";
+inline constexpr OUStringLiteral BMP_REDLINE_TABLECHG = u"sw/res/redline_tablechg.png";
+inline constexpr OUStringLiteral BMP_REDLINE_FMTCOLLSET = u"sw/res/redline_fmtcollset.png";
+inline constexpr OUStringLiteral BMP_REDLINE_MOVED_INSERTION = u"cmd/sc_paste.png";
+inline constexpr OUStringLiteral BMP_REDLINE_MOVED_DELETION = u"cmd/sc_cut.png";
 
 #define RID_BMP_COLLAPSE                        "res/sx18002.png"
 #define RID_BMP_EXPAND                          "res/sx18003.png"
-#define RID_BMP_DB                              "sw/res/sx01.png"
-#define RID_BMP_DBTABLE                         "sw/res/sx02.png"
-#define RID_BMP_DBQUERY                         "sw/res/sx03.png"
-#define RID_BMP_VIEWLAYOUT_AUTOMATIC            "sw/res/twopages_10x24.png"
-#define RID_BMP_VIEWLAYOUT_AUTOMATIC_ACTIVE     "sw/res/twopages_a_10x24.png"
-#define RID_BMP_VIEWLAYOUT_BOOKMODE             "sw/res/doublepage_10x22.png"
-#define RID_BMP_VIEWLAYOUT_BOOKMODE_ACTIVE      "sw/res/doublepage_a_10x22.png"
-#define RID_BMP_VIEWLAYOUT_SINGLECOLUMN         "sw/res/emptypage_10x14.png"
-#define RID_BMP_VIEWLAYOUT_SINGLECOLUMN_ACTIVE  "sw/res/emptypage_a_10x14.png"
-#define RID_BMP_PAGE_BREAK                      "sw/res/page_break.png"
+inline constexpr OUStringLiteral RID_BMP_DB = u"sw/res/sx01.png";
+inline constexpr OUStringLiteral RID_BMP_DBTABLE = u"sw/res/sx02.png";
+inline constexpr OUStringLiteral RID_BMP_DBQUERY = u"sw/res/sx03.png";
+inline constexpr OUStringLiteral RID_BMP_VIEWLAYOUT_AUTOMATIC = u"sw/res/twopages_10x24.png";
+inline constexpr OUStringLiteral RID_BMP_VIEWLAYOUT_AUTOMATIC_ACTIVE = u"sw/res/twopages_a_10x24.png";
+inline constexpr OUStringLiteral RID_BMP_VIEWLAYOUT_BOOKMODE = u"sw/res/doublepage_10x22.png";
+inline constexpr OUStringLiteral RID_BMP_VIEWLAYOUT_BOOKMODE_ACTIVE = u"sw/res/doublepage_a_10x22.png";
+inline constexpr OUStringLiteral RID_BMP_VIEWLAYOUT_SINGLECOLUMN = u"sw/res/emptypage_10x14.png";
+inline constexpr OUStringLiteral RID_BMP_VIEWLAYOUT_SINGLECOLUMN_ACTIVE = u"sw/res/emptypage_a_10x14.png";
+inline constexpr OUStringLiteral RID_BMP_PAGE_BREAK = u"sw/res/page_break.png";
 
-#define RID_BMP_FORMULA_CALC                    "sw/res/sc20556.png"
-#define RID_BMP_FORMULA_CANCEL                  "sw/res/sc20557.png"
-#define RID_BMP_FORMULA_APPLY                   "sw/res/sc20558.png"
+inline constexpr OUStringLiteral RID_BMP_FORMULA_CALC = u"sw/res/sc20556.png";
+inline constexpr OUStringLiteral RID_BMP_FORMULA_CANCEL = u"sw/res/sc20557.png";
+inline constexpr OUStringLiteral RID_BMP_FORMULA_APPLY = u"sw/res/sc20558.png";
 
-#define RID_BMP_HIDE                            "sw/res/re01.png"
-#define RID_BMP_NO_HIDE                         "sw/res/re02.png"
-#define RID_BMP_PROT_HIDE                       "sw/res/re03.png"
-#define RID_BMP_PROT_NO_HIDE                    "sw/res/re04.png"
+inline constexpr OUStringLiteral RID_BMP_HIDE = u"sw/res/re01.png";
+inline constexpr OUStringLiteral RID_BMP_NO_HIDE = u"sw/res/re02.png";
+inline constexpr OUStringLiteral RID_BMP_PROT_HIDE = u"sw/res/re03.png";
+inline constexpr OUStringLiteral RID_BMP_PROT_NO_HIDE = u"sw/res/re04.png";
 
-#define BMP_INFO_16                             "res/info_16.png"
+inline constexpr OUStringLiteral BMP_INFO_16 = u"res/info_16.png";
 
 #define RID_BMP_RIBBAR_NEXT                     "sw/res/sr20000.png"
 #define RID_BMP_RIBBAR_PREV                     "sw/res/sr20001.png"
@@ -77,38 +77,36 @@
 #define RID_BMP_RIBBAR_FIELD                    "sw/res/sc20244.png"
 #define RID_BMP_RIBBAR_FIELD_BYTYPE             "sw/res/sc20244.png"
 
-#define RID_BMP_NAVI_OUTLINE                    "sw/res/nc20000.png"
-#define RID_BMP_NAVI_TABLE                      "sw/res/nc20001.png"
-#define RID_BMP_NAVI_FRAME                      "sw/res/nc20002.png"
-#define RID_BMP_NAVI_GRAPHIC                    "sw/res/nc20003.png"
-#define RID_BMP_NAVI_OLE                        "sw/res/nc20004.png"
-#define RID_BMP_NAVI_BOOKMARK                   "sw/res/nc20005.png"
-#define RID_BMP_NAVI_REGION                     "sw/res/nc20006.png"
-#define RID_BMP_NAVI_URLFIELD                   "sw/res/nc20007.png"
-#define RID_BMP_NAVI_REFERENCE                  "sw/res/nc20008.png"
-#define RID_BMP_NAVI_INDEX                      "sw/res/nc20009.png"
-#define RID_BMP_NAVI_POSTIT                     "sw/res/nc20010.png"
-#define RID_BMP_NAVI_DRAWOBJECT                 "sw/res/nc20011.png"
-#define RID_BMP_NAVI_TEXTFIELD                  "sw/res/nc20005.png"
-#define RID_BMP_NAVI_FOOTNOTE                   "sw/res/nc20000.png"
-#define RID_BMP_DROP_REGION                     "sw/res/sc20235.png"
-#define RID_BMP_DROP_LINK                       "sw/res/sc20238.png"
-#define RID_BMP_DROP_COPY                       "sw/res/sc20239.png"
+inline constexpr OUStringLiteral RID_BMP_NAVI_OUTLINE = u"sw/res/nc20000.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_TABLE = u"sw/res/nc20001.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_FRAME = u"sw/res/nc20002.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_GRAPHIC = u"sw/res/nc20003.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_OLE = u"sw/res/nc20004.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_BOOKMARK = u"sw/res/nc20005.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_REGION = u"sw/res/nc20006.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_URLFIELD = u"sw/res/nc20007.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_REFERENCE = u"sw/res/nc20008.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_INDEX = u"sw/res/nc20009.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_POSTIT = u"sw/res/nc20010.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_DRAWOBJECT = u"sw/res/nc20011.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_TEXTFIELD = u"sw/res/nc20005.png";
+inline constexpr OUStringLiteral RID_BMP_NAVI_FOOTNOTE = u"sw/res/nc20000.png";
+inline constexpr OUStringLiteral RID_BMP_DROP_REGION = u"sw/res/sc20235.png";
+inline constexpr OUStringLiteral RID_BMP_DROP_LINK = u"sw/res/sc20238.png";
+inline constexpr OUStringLiteral RID_BMP_DROP_COPY = u"sw/res/sc20239.png";
 
-#define RID_BMP_WRAP_RIGHT                      "sw/res/wr03.png"
-#define RID_BMP_WRAP_CONTOUR_RIGHT              "sw/res/wr09.png"
-#define RID_BMP_WRAP_LEFT                       "sw/res/wr02.png"
-#define RID_BMP_WRAP_CONTOUR_LEFT               "sw/res/wr08.png"
-#define RID_BMP_WRAP_NONE                       "sw/res/wr01.png"
-#define RID_BMP_WRAP_CONTOUR_NONE               "sw/res/wr07.png"
-#define RID_BMP_WRAP_IDEAL                      "sw/res/wr06.png"
-#define RID_BMP_WRAP_CONTOUR_IDEAL              "sw/res/wr011.png"
-#define RID_BMP_WRAP_THROUGH                    "sw/res/wr05.png"
-#define RID_BMP_WRAP_PARALLEL                   "sw/res/wr04.png"
-#define RID_BMP_WRAP_CONTOUR_PARALLEL           "sw/res/wr010.png"
+inline constexpr OUStringLiteral RID_BMP_WRAP_RIGHT = u"sw/res/wr03.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_CONTOUR_RIGHT = u"sw/res/wr09.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_LEFT = u"sw/res/wr02.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_CONTOUR_LEFT = u"sw/res/wr08.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_NONE = u"sw/res/wr01.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_CONTOUR_NONE = u"sw/res/wr07.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_IDEAL = u"sw/res/wr06.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_CONTOUR_IDEAL = u"sw/res/wr011.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_THROUGH = u"sw/res/wr05.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_PARALLEL = u"sw/res/wr04.png";
+inline constexpr OUStringLiteral RID_BMP_WRAP_CONTOUR_PARALLEL = u"sw/res/wr010.png";
 
-#define RID_BMP_PREVIEW_FALLBACK                "sw/res/image-example.png"
-
-#endif
+inline constexpr OUStringLiteral RID_BMP_PREVIEW_FALLBACK = u"sw/res/image-example.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -444,11 +444,10 @@ namespace xmloff
     }
 
     void OPropertyExport::exportGenericPropertyAttribute(
-            const sal_uInt16 _nAttributeNamespaceKey, const OUString& _pAttributeName, const char* _pPropertyName)
+            const sal_uInt16 _nAttributeNamespaceKey, const OUString& _pAttributeName, const OUString& sPropertyName)
     {
-        DBG_CHECK_PROPERTY_ASCII_NO_TYPE( _pPropertyName );
+        DBG_CHECK_PROPERTY_NO_TYPE( sPropertyName );
 
-        OUString sPropertyName = OUString::createFromAscii(_pPropertyName);
         exportedProperty(sPropertyName);
 
         Any aCurrentValue = m_xProps->getPropertyValue(sPropertyName);
