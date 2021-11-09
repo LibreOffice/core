@@ -34,6 +34,24 @@
       "parentUuid": "581c60ae_62ee79c5",
       "revId": "d4acfea2fed8f999347e49ed76c3f5115952df5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "186fbbd3_fe402f53",
+        "filename": "ucb/source/ucp/webdav-curl/CurlSession.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-09T11:14:27Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/124907\u003e \"The CurlOption curl_off_t case appears to be unused\"",
+      "parentUuid": "814b262a_5beee097",
+      "revId": "d4acfea2fed8f999347e49ed76c3f5115952df5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
