@@ -767,10 +767,10 @@ namespace xmloff
             return;
         }
 
-        const char* pValueProperty = nullptr;
-        const char* pCurrentValueProperty = nullptr;
-        const char* pMinValueProperty = nullptr;
-        const char* pMaxValueProperty = nullptr;
+        std::optional<OUString> pValueProperty;
+        std::optional<OUString> pCurrentValueProperty;
+        std::optional<OUString> pMinValueProperty;
+        std::optional<OUString> pMaxValueProperty;
 
         bool bRetrievedValues = false;
         bool bRetrievedValueLimits = false;
@@ -814,9 +814,9 @@ namespace xmloff
 
                     // transfer the name
                     if (PROPID_VALUE == rValueProps.Handle)
-                        rValueProps.Name = OUString::createFromAscii(pValueProperty);
+                        rValueProps.Name = *pValueProperty;
                     else
-                        rValueProps.Name = OUString::createFromAscii(pCurrentValueProperty);
+                        rValueProps.Name = *pCurrentValueProperty;
                     bSuccess = true;
                 }
                 break;
@@ -842,9 +842,9 @@ namespace xmloff
 
                     // transfer the name
                     if (PROPID_MIN_VALUE == rValueProps.Handle)
-                        rValueProps.Name = OUString::createFromAscii(pMinValueProperty);
+                        rValueProps.Name = *pMinValueProperty;
                     else
-                        rValueProps.Name = OUString::createFromAscii(pMaxValueProperty);
+                        rValueProps.Name = *pMaxValueProperty;
                     bSuccess = true;
                 }
                 break;
@@ -928,8 +928,8 @@ namespace xmloff
                                  "caught an exception while retrieving the class id!");
         }
 
-        const char* pValueProperty = nullptr;
-        const char* pDefaultValueProperty = nullptr;
+        std::optional<OUString> pValueProperty;
+        std::optional<OUString> pDefaultValueProperty;
         getRuntimeValuePropertyNames(m_eElementType, nClassId, pValueProperty, pDefaultValueProperty);
         if ( pDefaultValueProperty && pValueProperty )
         {
@@ -939,9 +939,9 @@ namespace xmloff
             // look up this property in our sequence
             for ( const auto& rCheck : m_aValues )
             {
-                if ( rCheck.Name.equalsAscii( pDefaultValueProperty ) )
+                if ( rCheck.Name == *pDefaultValueProperty )
                     bRestoreValuePropertyValue = true;
-                else if ( rCheck.Name.equalsAscii( pValueProperty ) )
+                else if ( rCheck.Name == *pValueProperty )
                 {
                     bNonDefaultValuePropertyValue = true;
                     // we need to restore the value property we found here, nothing else
@@ -954,7 +954,7 @@ namespace xmloff
                 // found it -> need to remember (and restore) the "value property value", which is not set explicitly
                 try
                 {
-                    aValuePropertyValue = m_xElement->getPropertyValue( OUString::createFromAscii( pValueProperty ) );
+                    aValuePropertyValue = m_xElement->getPropertyValue( *pValueProperty );
                 }
                 catch( const Exception& )
                 {
@@ -973,7 +973,7 @@ namespace xmloff
         {
             try
             {
-                m_xElement->setPropertyValue( OUString::createFromAscii( pValueProperty ), aValuePropertyValue );
+                m_xElement->setPropertyValue( *pValueProperty, aValuePropertyValue );
             }
             catch( const Exception& )
             {
