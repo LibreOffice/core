@@ -28,6 +28,7 @@
 #include <headless/svpbmp.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/inputtypes.hxx>
+#include <vcl/specialchars.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <unx/genpspgraphics.h>
@@ -2500,6 +2501,13 @@ void set_cursor(GtkWidget* pWidget, const char *pName)
 #endif
 }
 
+vcl::Font get_font(GtkWidget* pWidget)
+{
+    PangoContext* pContext = gtk_widget_get_pango_context(pWidget);
+    return pango_to_vcl(pango_context_get_font_description(pContext),
+                        Application::GetSettings().GetUILanguageTag().getLocale());
+}
+
 }
 
 OString get_buildable_id(GtkBuildable* pWidget)
@@ -3619,9 +3627,7 @@ public:
 
     virtual vcl::Font get_font() override
     {
-        PangoContext* pContext = gtk_widget_get_pango_context(m_pWidget);
-        return pango_to_vcl(pango_context_get_font_description(pContext),
-                            Application::GetSettings().GetUILanguageTag().getLocale());
+        return ::get_font(m_pWidget);
     }
 
     virtual void set_grid_left_attach(int nAttach) override
@@ -17678,6 +17684,43 @@ void GtkInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectang
 
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+static gboolean signalEntryInsertSpecialCharKeyPress(GtkEntry* pEntry, GdkEventKey* pEvent, gpointer)
+{
+    if ((pEvent->keyval == GDK_KEY_S || pEvent->keyval == GDK_KEY_s) && pEvent->state == static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK))
+    {
+        if (auto pImplFncGetSpecialChars = vcl::GetGetSpecialCharsFunction())
+        {
+            weld::Window* pDialogParent = nullptr;
+
+            GtkWidget* pTopLevel = widget_get_toplevel(GTK_WIDGET(pEntry));
+            if (GtkSalFrame* pFrame = pTopLevel ? GtkSalFrame::getFromWindow(pTopLevel) : nullptr)
+                pDialogParent = pFrame->GetFrameWeld();
+
+            std::unique_ptr<GtkInstanceWindow> xFrameWeld;
+            if (!pDialogParent && pTopLevel)
+            {
+                xFrameWeld.reset(new GtkInstanceWindow(GTK_WINDOW(pTopLevel), nullptr, false));
+                pDialogParent = xFrameWeld.get();
+            }
+
+            OUString aChars = pImplFncGetSpecialChars(pDialogParent, ::get_font(GTK_WIDGET(pEntry)));
+            if (!aChars.isEmpty())
+            {
+                gtk_editable_delete_selection(GTK_EDITABLE(pEntry));
+                gint position = gtk_editable_get_position(GTK_EDITABLE(pEntry));
+                OString sText(OUStringToOString(aChars, RTL_TEXTENCODING_UTF8));
+                gtk_editable_insert_text(GTK_EDITABLE(pEntry), sText.getStr(), sText.getLength(),
+                                         &position);
+                gtk_editable_set_position(GTK_EDITABLE(pEntry), position);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+#endif
+
 namespace {
 
 GtkBuilder* makeMenuToggleButtonBuilder()
@@ -19929,10 +19972,12 @@ private:
         return bDone;
     }
 
-    static gboolean signalEntryKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    static gboolean signalEntryKeyPress(GtkEntry* pEntry, GdkEventKey* pEvent, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         LocalizeDecimalSeparator(pEvent->keyval);
+        if (signalEntryInsertSpecialCharKeyPress(pEntry, pEvent, nullptr))
+            return true;
         return pThis->signal_entry_key_press(pEvent);
     }
 
@@ -22190,6 +22235,12 @@ private:
                 g_free(pTextStr);
             }
         }
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        else if (GTK_IS_ENTRY(pWidget))
+        {
+            g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalEntryInsertSpecialCharKeyPress), nullptr);
+        }
+#endif
         else if (GTK_IS_WINDOW(pWidget))
         {
             if (m_pStringReplace)
