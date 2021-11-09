@@ -113,21 +113,15 @@ action_wrapper_get_localized_name (AtkAction *, gint)
     return "";
 }
 
-#define ACTION_NAME_PAIR( OOoName, AtkName ) \
-    std::pair< const OUString, const gchar * > ( OUString( OOoName ), AtkName )
-
 static const gchar *
 action_wrapper_get_name (AtkAction *action,
                          gint       i)
 {
-    static std::map< OUString, const gchar * > aNameMap;
-
-    if( aNameMap.empty() )
-    {
-        aNameMap.insert( ACTION_NAME_PAIR( "click", "click" ) );
-        aNameMap.insert( ACTION_NAME_PAIR( "select", "click" ) );
-        aNameMap.insert( ACTION_NAME_PAIR( "togglePopup", "push" ) );
-    }
+    static std::map< OUString, const gchar * > aNameMap {
+        { "click", "click" },
+        { "select", "click" } ,
+        { "togglePopup", "push" }
+    };
 
     try {
         css::uno::Reference<css::accessibility::XAccessibleAction> pAction
