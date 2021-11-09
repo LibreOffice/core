@@ -105,7 +105,15 @@ css::uno::Sequence<sal_Int8> OQuery::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES3(OQuery,OQueryDescriptor_Base,ODataSettings,OContentHelper);
+css::uno::Sequence< css::uno::Type > OQuery::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        OQueryDescriptor_Base::getTypes( ),
+        ODataSettings::getTypes( ),
+        OContentHelper::getTypes( )
+    );
+}
+
 IMPLEMENT_FORWARD_XINTERFACE3( OQuery,OContentHelper,OQueryDescriptor_Base,ODataSettings)
 
 void OQuery::rebuildColumns()
@@ -204,7 +212,12 @@ void OQuery::rebuildColumns()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, "com.sun.star.sdb.QueryDefinition")
+IMPLEMENT_SERVICE_INFO_IMPLNAME(OQuery, "com.sun.star.sdb.dbaccess.OQuery")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OQuery)
+css::uno::Sequence< OUString > SAL_CALL OQuery::getSupportedServiceNames(  )
+{
+    return { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, "com.sun.star.sdb.QueryDefinition" };
+}
 
 // css::beans::XPropertyChangeListener
 void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource )

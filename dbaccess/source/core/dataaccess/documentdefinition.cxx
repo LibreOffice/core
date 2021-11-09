@@ -475,7 +475,14 @@ css::uno::Sequence<sal_Int8> ODocumentDefinition::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES3(ODocumentDefinition,OContentHelper,OPropertyStateContainer,ODocumentDefinition_Base);
+css::uno::Sequence< css::uno::Type > ODocumentDefinition::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        OContentHelper::getTypes( ),
+        OPropertyStateContainer::getTypes( ),
+        ODocumentDefinition_Base::getTypes( )
+    );
+}
 IMPLEMENT_FORWARD_XINTERFACE3( ODocumentDefinition,OContentHelper,OPropertyStateContainer,ODocumentDefinition_Base)
 
 void ODocumentDefinition::registerProperties()

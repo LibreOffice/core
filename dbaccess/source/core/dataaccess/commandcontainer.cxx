@@ -52,7 +52,13 @@ OCommandContainer::~OCommandContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
-IMPLEMENT_GETTYPES2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);
+css::uno::Sequence< css::uno::Type > OCommandContainer::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        ODefinitionContainer::getTypes( ),
+        OCommandContainer_BASE::getTypes( )
+    );
+}
 
 css::uno::Sequence<sal_Int8> OCommandContainer::getImplementationId()
 {
