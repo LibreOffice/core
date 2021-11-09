@@ -33,6 +33,24 @@
       "message": "Please do not use the \u0027typedef enum { ... } typedefname;\u0027 from C. Use normal\n\n    enum MappingMode { ... };",
       "revId": "f7cca79749d2b67974a2f27251bb67ec328f1330",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c43514d_2368889a",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-09T12:54:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "239e0b6a_f9a21a3f",
+      "revId": "f7cca79749d2b67974a2f27251bb67ec328f1330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
