@@ -156,8 +156,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(3), nRelativePosL);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf78749)
 {
+    loadAndSave("tdf78749.docx");
     //Shape lost the background image before, now check if it still has...
     auto xShape = getShape(1);
     uno::Reference<beans::XPropertySet> xShpProps(xShape, uno::UNO_QUERY);
@@ -166,16 +167,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
     CPPUNIT_ASSERT(!aPropertyVal.isEmpty());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128207)
 {
+    loadAndSave("tdf128207.docx");
     //There was the charts on each other, because their horizontal and vertical position was 0!
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPathContent(p_XmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor/wp:positionH/wp:posOffset", "4445");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123873)
 {
+    loadAndSave("tdf123873.docx");
     //OLE Object were overlapped due to missing wrap import
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
@@ -183,8 +186,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
         p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing/wp:anchor/wp:wrapTopAndBottom");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133065, "tdf133065.odt")
+CPPUNIT_TEST_FIXTURE(Test, Tdf133065)
 {
+    loadAndSave("tdf133065.odt");
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     auto pxmldoc = parseExport("word/document.xml");
@@ -222,8 +226,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(getRun(getParagraph(2), 1), "CharFontNameAsian"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107020, "tdf107020.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107020)
 {
+    loadAndSave("tdf107020.docx");
     if (!IsDefaultDPI())
         return;
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
@@ -238,8 +243,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107020, "tdf107020.docx")
         p_XmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:srcRect", "b", "48360");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130814ooxml, "tdf130814.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf130814ooxml)
 {
+    loadAndSave("tdf130814.docx");
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(
@@ -286,16 +292,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
         false, bValue);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130120, "tdf130120.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf130120)
 {
+    loadAndSave("tdf130120.docx");
     //Text for exporting the allowincell attribute:
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     assertXPath(p_XmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/"
         "mc:Choice/w:drawing/wp:anchor", "layoutInCell", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133030, "tdf133030.docx")
+CPPUNIT_TEST_FIXTURE(Test, Tdf133030)
 {
+    loadAndSave("tdf133030.docx");
     auto pExport = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pExport);
 
@@ -503,8 +511,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121045, "tdf121045.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121045)
 {
+    loadAndSave("tdf121045.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:sz", "val", "20");
@@ -561,8 +570,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81567, "tdf81567.odt")
     CPPUNIT_ASSERT_EQUAL(1638, nImageTop);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92472, "tdf92472.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf92472)
 {
+    loadAndSave("tdf92472.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:sz", "val", "20");
@@ -582,8 +592,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92472, "tdf92472.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[5]/w:rPr/w:szCs", "val", "20");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133035, "tdf133035.docx")
+CPPUNIT_TEST_FIXTURE(Test, Tdf133035)
 {
+    loadAndSave("tdf133035.docx");
     auto pxml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pxml);
     OUString aXmlVal = getXPath(pxml, "/w:document/w:body/w:p[1]/w:r[1]/w:object/v:shape", "style");
@@ -708,20 +719,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121661, "tdf121661.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121661)
 {
+    loadAndSave("tdf121661.docx");
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", "851");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121658, "tdf121658.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121658)
 {
+    loadAndSave("tdf121658.docx");
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableStyleConfNested, "table-style-conf-nested.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleConfNested)
 {
+    loadAndSave("table-style-conf-nested.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed, as the custom table cell
@@ -886,8 +900,9 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testHighlightEdit_numbering)
         rOpt.SetCharBackground2Shading();
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132766, "tdf132766.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf132766)
 {
+    loadAndSave("tdf132766.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -902,8 +917,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132766, "tdf132766.docx")
                 "cs", "Symbol");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128245, "tdf128245.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128245)
 {
+    loadAndSave("tdf128245.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -930,8 +946,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
                              .Position);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95189, "tdf95189.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf95189)
 {
+    loadAndSave("tdf95189.docx");
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
@@ -962,8 +979,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95189, "tdf95189.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128820)
 {
+    loadAndSave("tdf128820.fodt");
     // Import of exported DOCX failed because of wrong namespace used for wsp element
     // Now test the exported XML, in case we stop failing opening invalid files
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
@@ -987,8 +1005,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
                 "a:graphic/a:graphicData/wpg:wgp/wps:wsp");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128889)
 {
+    loadAndSave("tdf128889.fodt");
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     // There was an w:r (with w:br) as an invalid child of first paragraph's w:pPr
@@ -998,8 +1017,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132754, "tdf132754.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf132754)
 {
+    loadAndSave("tdf132754.docx");
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("0.0.0."), getProperty<OUString>(xPara, "ListLabelString"));
@@ -1041,8 +1061,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
                          aIndexString);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77796, "tdf77796.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 {
+    loadAndSave("tdf77796.docx");
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     // cell paddings from table style
@@ -1053,8 +1074,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77796, "tdf77796.docx")
     assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblCellMar/w:end", "w", "108");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128290, "tdf128290.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128290)
 {
+    loadAndSave("tdf128290.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
@@ -1137,23 +1159,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123757, "tdf123757.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 {
+    loadAndSave("tdf123757.docx");
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:tbl", 2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141172, "tdf141172.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf141172)
 {
+    loadAndSave("tdf141172.docx");
     xmlDocUniquePtr pXml = parseExport("word/endnotes.xml");
     CPPUNIT_ASSERT(pXml);
     // This was 1 (lost table during copying endnote content)
     assertXPath(pXml, "/w:endnotes/w:endnote/w:tbl", 2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141548, "tdf141548.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf141548)
 {
+    loadAndSave("tdf141548.docx");
     xmlDocUniquePtr pXml = parseExport("word/endnotes.xml");
     CPPUNIT_ASSERT(pXml);
     // This was 0 (lost text content of the run with endnoteRef)
@@ -1162,8 +1187,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141548, "tdf141548.docx")
     assertXPathContent(pXml, "/w:endnotes/w:endnote[4]/w:p/w:r[2]/w:t[2]", "new line");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143399, "tdf143399.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143399)
 {
+    loadAndSave("tdf143399.docx");
     xmlDocUniquePtr pXml = parseExport("word/footnotes.xml");
     CPPUNIT_ASSERT(pXml);
     // These were 0 (lost text content of documents both with footnotes and endnotes)
@@ -1179,8 +1205,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143399, "tdf143399.docx")
     assertXPathContent(pXml2, "/w:endnotes/w:endnote[3]/w:p/w:r[3]/w:t[1]", "Endnotes");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143583, "tdf143583_emptyParaAtEndOfFootnote.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143583)
 {
+    loadAndSave("tdf143583_emptyParaAtEndOfFootnote.docx");
     xmlDocUniquePtr pXml = parseExport("word/footnotes.xml");
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:footnotes/w:footnote[3]/w:p", 2);
@@ -1254,8 +1281,9 @@ DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/w:suppressAutoHyphens", "val", "true");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupShapeText.docx")
+CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 {
+    loadAndSave("tdf131776_StrikeoutGroupShapeText.docx");
     // tdf#131776: Check if strikeout is used in shape group texts
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
 
@@ -1292,8 +1320,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testStrikeoutGroupShapeText, "tdf131776_Stri
         "wps:wsp[6]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:strike", "val", "false");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 {
+    loadAndSave("tdf131539.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //The positions of OLE objects were not exported, check if now it is exported correctly
@@ -1304,16 +1333,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
     CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95")>-1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineWidthRounding, "tdf126363_LineWidthRounding.docx")
+CPPUNIT_TEST_FIXTURE(Test, testLineWidthRounding)
 {
+    loadAndSave("tdf126363_LineWidthRounding.docx");
     // tdf#126363: check if line with stays the same after export
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     // this was 57240 (it differs from the original 57150, losing the preset line width)
     assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", "57150");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108505, "tdf108505.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108505)
 {
+    loadAndSave("tdf108505.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     uno::Reference<text::XTextRange> xText
         = getRun(xParagraph, 1, "Wrong font when alone on the line");
@@ -1395,8 +1426,9 @@ DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredY, "tdf137678_testVmlLineShapeM
     CPPUNIT_ASSERT(sStyle.indexOf("flip:y") > 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVmlLineShapeRotated, "tdf137765_testVmlLineShapeRotated.docx")
+CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeRotated)
 {
+    loadAndSave("tdf137765_testVmlLineShapeRotated.docx");
     // tdf#137765 The "rotation" (in style attribute) was not handled correctly for VML line shapes.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // it was 1.55pt,279.5pt
