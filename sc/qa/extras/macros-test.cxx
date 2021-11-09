@@ -51,6 +51,7 @@ public:
     void testTdf114427();
     void testTdf107885();
     void testRowColumn();
+    void testTdf142033();
     void testTdf131562();
     void testPasswordProtectedUnicodeString();
     void testPasswordProtectedArrayInUserType();
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testTdf114427);
     CPPUNIT_TEST(testTdf107885);
     CPPUNIT_TEST(testRowColumn);
+    CPPUNIT_TEST(testTdf142033);
     CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
     CPPUNIT_TEST(testPasswordProtectedArrayInUserType);
@@ -518,6 +520,60 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
     xmlDocUniquePtr pWorkbookDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/workbook.xml");
     CPPUNIT_ASSERT(pWorkbookDoc);
     assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
+}
+
+void ScMacrosTest::testTdf142033()
+{
+    OUString aFileName;
+    createFileURL(u"tdf142033.ods", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.display_bug?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    // Export to ODS
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("calc8");
+    auto pTempFile = std::make_shared<utl::TempFile>();
+    pTempFile->EnableKillingFile();
+    xStorable->storeToURL(pTempFile->GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent->dispose();
+
+    xmlDocUniquePtr pContentXml = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
+    CPPUNIT_ASSERT(pContentXml);
+
+    assertXPathContent(pContentXml,
+                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                "table:table-row[1]/table:table-cell[1]/text:p", "string no newlines");
+
+    assertXPathContent(pContentXml,
+                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                "table:table-row[1]/table:table-cell[2]/text:p[1]", "string with");
+
+    // Without the fix in place, this test would have failed here with
+    // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
+    assertXPathContent(pContentXml,
+                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                "table:table-row[1]/table:table-cell[2]/text:p[2]", "newlines");
+
+    assertXPathContent(pContentXml,
+                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                "table:table-row[2]/table:table-cell[1]/text:p", "string no newlines");
+
+    assertXPathContent(pContentXml,
+                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                "table:table-row[2]/table:table-cell[2]/text:p[1]", "string with");
+    assertXPathContent(pContentXml,
+                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                "table:table-row[2]/table:table-cell[2]/text:p[2]", "newlines");
 }
 
 void ScMacrosTest::testTdf131562()
