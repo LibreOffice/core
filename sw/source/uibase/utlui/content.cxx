@@ -396,7 +396,6 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         break;
         case ContentTypeId::TEXTFIELD:
         {
-            m_nMemberCount = 0;
             m_sTypeToken.clear();
             m_bEdit = true;
             m_bDelete = true;
@@ -409,7 +408,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 pFieldType->GatherFields(vFields);
                 for (SwFormatField* pFormatField: vFields)
                 {
-                    if (pFormatField->GetTextField())
+                    SwField* pField = pFormatField->GetField();
+                    if (pField && pField->GetTypeId() != SwFieldTypesEnum::Postit)
                         m_nMemberCount++;
                 }
             }
@@ -793,7 +793,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 pFieldType->GatherFields(vFields);
                 for (SwFormatField* pFormatField: vFields)
                 {
-                    if (SwTextField* pTextField = pFormatField->GetTextField())
+                    SwTextField* pTextField = pFormatField->GetTextField();
+                    SwField* pField = pFormatField->GetField();
+                    if (pTextField && pField && pField->GetTypeId() != SwFieldTypesEnum::Postit)
                     {
                         const SwTextNode& rTextNode = pTextField->GetTextNode();
                         std::unique_ptr<SetGetExpField>
@@ -807,8 +809,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 const SwTextField* pTextField = aSrtLst[i]->GetTextField();
                 const SwFormatField& rFormatField = pTextField->GetFormatField();
                 const SwField* pField = rFormatField.GetField();
-                if (pField->GetTypeId() == SwFieldTypesEnum::Postit)
-                    continue;
                 OUString sExpandedField(pField->ExpandField(true, m_pWrtShell->GetLayout()));
                 if (!sExpandedField.isEmpty())
                     sExpandedField = u" - " + sExpandedField;
