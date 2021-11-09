@@ -57,10 +57,10 @@ void f()
     Sequence<Sequence<sal_Bool>> s2{ { false } };
     (void)s2;
     // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'const int' [loplugin:implicitboolconversion]}}
-    Sequence<sal_Int32> s3{ false };
+    Sequence<int> s3{ false };
     (void)s3;
     // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'const int' [loplugin:implicitboolconversion]}}
-    Sequence<Sequence<sal_Int32>> s4{ { false } };
+    Sequence<Sequence<int>> s4{ { false } };
     (void)s4;
     Wrap1<sal_Bool> w1{ false };
     (void)w1;
