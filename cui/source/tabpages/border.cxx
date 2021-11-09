@@ -310,7 +310,6 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
     , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xLineWidthGroup(m_xBuilder->weld_widget("gridlinewidth"))
     , m_xLineWidthLB(m_xBuilder->weld_combo_box("linewidthlb"))
     , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button("linewidthmf", FieldUnit::POINT))
     , m_xSpacingFrame(m_xBuilder->weld_container("spacing"))
@@ -540,12 +539,6 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     m_xLineWidthMF->connect_value_changed(LINK(this, SvxBorderTabPage, ModifyWidthMFHdl_Impl));
     m_xWndPresets->SetSelectHdl( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
     m_xWndShadows->SetSelectHdl( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
-
-    // lock the group to its original width where both widgets are shown so the
-    // notebook page contents don't jump around when the spinbox is
-    // hidden/shown
-    Size aOrigGroupSize(m_xLineWidthGroup->get_preferred_size());
-    m_xLineWidthGroup->set_size_request(aOrigGroupSize.Width(), -1);
 
     FillValueSets();
     FillLineListBox_Impl();

@@ -129,7 +129,6 @@ private:
 
     std::unique_ptr<SvtLineListBox> m_xLbLineStyle;
     std::unique_ptr<ColorListBox> m_xLbLineColor;
-    std::unique_ptr<weld::Widget> m_xLineWidthGroup;
     std::unique_ptr<weld::ComboBox> m_xLineWidthLB;
     std::unique_ptr<weld::MetricSpinButton> m_xLineWidthMF;
 
