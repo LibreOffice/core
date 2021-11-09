@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c66f73_db311110",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T16:31:43Z",
+      "side": 1,
+      "message": "Interesting, if this aligns well with use of PDFium?",
+      "revId": "d5fcf83287f791d9f3f890d1765fcfd2cc8b4e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c927bc7_f0daf02c",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-09T16:31:43Z",
+      "side": 1,
+      "message": "I suppose it\u0027s a typo, and it should be \"if unsuccessful\"?",
+      "range": {
+        "startLine": 971,
+        "startChar": 7,
+        "endLine": 971,
+        "endChar": 25
+      },
+      "revId": "d5fcf83287f791d9f3f890d1765fcfd2cc8b4e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
