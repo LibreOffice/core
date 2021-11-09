@@ -238,7 +238,8 @@ void CurlUri::AppendPath(::std::u16string_view const rPath)
 
 CurlUri CurlUri::CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) const
 {
-    ::std::unique_ptr<CURLU, deleter_from_fn<curl_url_cleanup>> pUrl(curl_url_dup(m_pUrl.get()));
+    ::std::unique_ptr<CURLU, deleter_from_fn<CURLU, curl_url_cleanup>> pUrl(
+        curl_url_dup(m_pUrl.get()));
     sal_Int32 indexEnd(rRelativeRef.getLength());
     auto const indexQuery(rRelativeRef.indexOf('?'));
     auto const indexFragment(rRelativeRef.indexOf('#'));

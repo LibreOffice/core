@@ -42,9 +42,9 @@ private:
     ::std::atomic<bool> m_AbortFlag;
 
     /// libcurl multi handle
-    ::std::unique_ptr<CURLM, deleter_from_fn<curl_multi_cleanup>> m_pCurlMulti;
+    ::std::unique_ptr<CURLM, deleter_from_fn<CURLM, curl_multi_cleanup>> m_pCurlMulti;
     /// libcurl easy handle
-    ::std::unique_ptr<CURL, deleter_from_fn<curl_easy_cleanup>> m_pCurl;
+    ::std::unique_ptr<CURL, deleter_from_fn<CURL, curl_easy_cleanup>> m_pCurl;
 
     // this class exists just to hide the implementation details in cxx file
     friend struct CurlProcessor;
