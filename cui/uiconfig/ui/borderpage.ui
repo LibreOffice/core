@@ -210,7 +210,7 @@
             <property name="top-padding">6</property>
             <property name="left-padding">12</property>
             <child>
-              <!-- n-columns=3 n-rows=3 -->
+              <!-- n-columns=2 n-rows=3 -->
               <object class="GtkGrid" id="grid8">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -236,8 +236,11 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="borderpage|label16">_Width:</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">linewidthmf</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="linewidthlb"/>
+                      <relation type="label-for" target="linewidthmf"/>
+                  </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -275,74 +278,6 @@
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=3 n-rows=3 -->
-                  <object class="GtkGrid" id="gridlinewidth">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="linewidthlb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <items>
-                          <item translatable="yes" context="borderpage|linewidthlb">Hairline</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Very thin</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Thin</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Medium</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Thick</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Extra thick</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Custom</item>
-                        </items>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="linewidthmf">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="halign">start</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <property name="digits">2</property>
-                        <property name="value">0.05</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkMenuButton" id="linecolorlb">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -359,13 +294,58 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkComboBoxText" id="linewidthlb">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">False</property>
+                        <items>
+                          <item translatable="yes" context="borderpage|linewidthlb">Hairline</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Very thin</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Thin</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Medium</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Thick</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Extra thick</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Custom</item>
+                        </items>
+                        <accessibility>
+                          <relation type="labelled-by" target="label16"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="linewidthmf">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <property name="adjustment">adjustment1</property>
+                        <property name="digits">2</property>
+                        <property name="value">0.05</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label16"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
                 </child>
               </object>
             </child>
