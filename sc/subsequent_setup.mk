@@ -75,8 +75,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_subsequent_$(1)))
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_$(1),\
     basic/util/sb \
     basctl/util/basctl \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

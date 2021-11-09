@@ -71,8 +71,7 @@ ifeq ($(gb_Side),host)
 
 $(eval $(call gb_Rdb_add_components,services,\
 	animations/source/animcore/animcore \
-	chart2/source/controller/chartcontroller \
-	chart2/source/chartcore \
+	chart2/source/chart2 \
 	cui/util/cui \
 	desktop/source/deployment/deployment \
 	embeddedobj/util/embobj \
