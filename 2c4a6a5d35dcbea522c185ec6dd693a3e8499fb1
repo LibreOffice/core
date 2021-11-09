@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ff234e_e18b9414",
+        "filename": "solenv/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-09T15:38:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e922bc10_a2c61e58",
+      "range": {
+        "startLine": 44,
+        "startChar": 71,
+        "endLine": 44,
+        "endChar": 72
+      },
+      "revId": "2c4a6a5d35dcbea522c185ec6dd693a3e8499fb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb88d747_98087e39",
