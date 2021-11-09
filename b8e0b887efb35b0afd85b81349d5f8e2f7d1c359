@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "634040eb_9c070762",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-09T09:41:00Z",
+      "side": 1,
+      "message": "Neither me, I just get the separation between \"ext text input\" (IME, and this autocomplete thing you get in browsers for Online) vs classic text input. :-)",
+      "revId": "b8e0b887efb35b0afd85b81349d5f8e2f7d1c359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
