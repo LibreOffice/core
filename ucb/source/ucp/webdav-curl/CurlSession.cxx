@@ -118,21 +118,15 @@ struct CurlOption
     enum class Type
     {
         Pointer,
-        Long,
-        CurlOffT
+        Long
     };
     Type const Tag;
     union {
         void const* const pValue;
         long const lValue;
-        curl_off_t const cValue;
     };
 #if 0
     ::std::variant<void const*, long
-#if SAL_TYPES_SIZEOFLONG == 4
-                   ,
-                   curl_off_t
-#endif
                    > const Value;
 #endif
     char const* const pExceptionString;
@@ -153,14 +147,11 @@ struct CurlOption
     {
     }
 #if SAL_TYPES_SIZEOFLONG == 4
-    CurlOption(CURLoption const i_Option, curl_off_t const i_Value,
-               char const* const i_pExceptionString)
-        : Option(i_Option)
-        , Tag(Type::CurlOffT)
-        , cValue(i_Value)
-        , pExceptionString(i_pExceptionString)
-    {
-    }
+    // According to mst this might get used "if one of the options to set stream size like
+    // CURLOPT_INFILESIZE_LARGE were used but it's not the case currently", so keep this ctor
+    // around as deleted in case it would ever becomes necessasy to extend Value with a curl_off_t
+    // case:
+    CurlOption(CURLoption, curl_off_t, char const*) = delete;
 #endif
 };
 
@@ -209,12 +200,6 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, *pLong);
             }
-#if SAL_TYPES_SIZEOFLONG == 4
-            else if (curl_off_t const* const pOfft = ::std::get_if<curl_off_t>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, *pOfft);
-            }
-#endif
 #endif
             if (it.Tag == CurlOption::Type::Pointer)
             {
@@ -224,12 +209,6 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, it.lValue);
             }
-#if SAL_TYPES_SIZEOFLONG == 4
-            else if (it.Tag == CurlOption::Type::CurlOffT)
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, it.cValue);
-            }
-#endif
             else
             {
                 assert(false);
@@ -267,12 +246,6 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, 0L);
             }
-#if SAL_TYPES_SIZEOFLONG == 4
-            else if (curl_off_t const* const pOfft = ::std::get_if<curl_off_t>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
-            }
-#endif
 #endif
             if (it.Tag == CurlOption::Type::Pointer)
             {
@@ -282,12 +255,6 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, 0L);
             }
-#if SAL_TYPES_SIZEOFLONG == 4
-            else if (it.Tag == CurlOption::Type::CurlOffT)
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
-            }
-#endif
             else
             {
                 assert(false);
