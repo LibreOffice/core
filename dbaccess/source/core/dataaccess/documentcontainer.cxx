@@ -115,7 +115,14 @@ css::uno::Sequence<sal_Int8> ODocumentContainer::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES3(ODocumentContainer,ODefinitionContainer,OPropertyStateContainer,ODocumentContainer_Base);
+css::uno::Sequence< css::uno::Type > ODocumentContainer::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        ODefinitionContainer::getTypes( ),
+        OPropertyStateContainer::getTypes( ),
+        ODocumentContainer_Base::getTypes( )
+    );
+}
 IMPLEMENT_SERVICE_INFO_IMPLNAME(ODocumentContainer, "com.sun.star.comp.dba.ODocumentContainer");
 IMPLEMENT_SERVICE_INFO_SUPPORTS(ODocumentContainer);
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(ODocumentContainer)

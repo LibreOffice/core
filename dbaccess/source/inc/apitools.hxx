@@ -96,37 +96,6 @@ public:
     }
 
 
-
-#define IMPLEMENT_SERVICE_INFO3(classname, implasciiname, serviceasciiname1, serviceasciiname2, serviceasciiname3)  \
-    IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
-    {   \
-        return { serviceasciiname1, serviceasciiname2, serviceasciiname3 };  \
-    }   \
-
-
-// XTypeProvider helpers
-
-#define IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )    \
-    css::uno::Sequence< css::uno::Type > classname::getTypes()    \
-    {   \
-        return  ::comphelper::concatSequences(  \
-            baseclass1::getTypes( ),    \
-            baseclass2::getTypes( ) \
-        );  \
-    }
-
-#define IMPLEMENT_GETTYPES3( classname, baseclass1, baseclass2, baseclass3 )    \
-    css::uno::Sequence< css::uno::Type > classname::getTypes()    \
-    {   \
-        return  ::comphelper::concatSequences(  \
-            baseclass1::getTypes( ),    \
-            baseclass2::getTypes( ),    \
-            baseclass3::getTypes( ) \
-        );  \
-    }
-
 // helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
 #define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
     virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override; \

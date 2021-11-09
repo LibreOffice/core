@@ -63,7 +63,14 @@ css::uno::Sequence<sal_Int8> OQueryDescriptor::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES2(OQueryDescriptor,OQueryDescriptor_Base,ODataSettings);
+css::uno::Sequence< css::uno::Type > OQueryDescriptor::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        OQueryDescriptor_Base::getTypes( ),
+        ODataSettings::getTypes( )
+    );
+}
+
 IMPLEMENT_FORWARD_XINTERFACE3( OQueryDescriptor,OWeakObject,OQueryDescriptor_Base,ODataSettings)
 
 void OQueryDescriptor::registerProperties()

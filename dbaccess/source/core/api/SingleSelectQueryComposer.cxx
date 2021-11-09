@@ -285,7 +285,15 @@ css::uno::Sequence<sal_Int8> OSingleSelectQueryComposer::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
+css::uno::Sequence< css::uno::Type > OSingleSelectQueryComposer::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        OSubComponent::getTypes( ),
+        OSingleSelectQueryComposer_BASE::getTypes( ),
+        OPropertyContainer::getTypes( )
+    );
+}
+
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
 
 // XSingleSelectQueryAnalyzer

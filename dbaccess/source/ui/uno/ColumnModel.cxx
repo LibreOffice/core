@@ -104,7 +104,13 @@ css::uno::Sequence<sal_Int8> OColumnControlModel::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES2(OColumnControlModel,OColumnControlModel_BASE,comphelper::OPropertyContainer)
+css::uno::Sequence< css::uno::Type > OColumnControlModel::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        OColumnControlModel_BASE::getTypes( ),
+        OPropertyContainer::getTypes( )
+    );
+}
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OColumnControlModel)
 OUString SAL_CALL OColumnControlModel::getImplementationName()
 {

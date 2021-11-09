@@ -142,7 +142,14 @@ css::uno::Sequence<sal_Int8> OComponentDefinition::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES3(OComponentDefinition,ODataSettings,OContentHelper,OComponentDefinition_BASE);
+css::uno::Sequence< css::uno::Type > OComponentDefinition::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        ODataSettings::getTypes( ),
+        OContentHelper::getTypes( ),
+        OComponentDefinition_BASE::getTypes( )
+    );
+}
 IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings,OComponentDefinition_BASE)
 
 OUString SAL_CALL OComponentDefinition::getImplementationName()

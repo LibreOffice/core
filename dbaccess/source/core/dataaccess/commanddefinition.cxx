@@ -81,7 +81,13 @@ css::uno::Sequence<sal_Int8> OCommandDefinition::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinition);
+css::uno::Sequence< css::uno::Type > OCommandDefinition::getTypes()
+{
+    return  ::comphelper::concatSequences(
+        OCommandDefinition_Base::getTypes( ),
+        OComponentDefinition::getTypes( )
+    );
+}
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
 
