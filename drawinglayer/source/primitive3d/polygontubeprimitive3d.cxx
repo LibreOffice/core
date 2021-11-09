@@ -25,7 +25,7 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-
+#include <mutex>
 
 namespace drawinglayer::primitive3d
 {
@@ -38,7 +38,7 @@ namespace drawinglayer::primitive3d
                 Primitive3DContainer m_aLineTubeList;
                 sal_uInt32 m_nLineTubeSegments;
                 attribute::MaterialAttribute3D m_aLineMaterial;
-                ::osl::Mutex m_aMutex;
+                std::mutex m_aMutex;
             public:
                 TubeBuffer()
                     : m_nLineTubeSegments(0)
@@ -53,7 +53,7 @@ namespace drawinglayer::primitive3d
                     const attribute::MaterialAttribute3D& rMaterial)
                 {
                     // may exclusively change cached data, use mutex
-                    ::osl::MutexGuard aGuard(m_aMutex);
+                    std::unique_lock aGuard(m_aMutex);
 
                     if (nSegments != m_nLineTubeSegments || !(rMaterial == m_aLineMaterial))
                     {
@@ -120,7 +120,7 @@ namespace drawinglayer::primitive3d
                 Primitive3DContainer m_aLineCapList;
                 sal_uInt32 m_nLineCapSegments;
                 attribute::MaterialAttribute3D m_aLineMaterial;
-                ::osl::Mutex m_aMutex;
+                std::mutex m_aMutex;
             public:
                 CapBuffer()
                     : m_nLineCapSegments(0)
@@ -134,7 +134,7 @@ namespace drawinglayer::primitive3d
                     const attribute::MaterialAttribute3D& rMaterial)
                 {
                     // may exclusively change cached data, use mutex
-                    ::osl::MutexGuard aGuard(m_aMutex);
+                    std::unique_lock aGuard(m_aMutex);
 
                     if (nSegments != m_nLineCapSegments || !(rMaterial == m_aLineMaterial))
                     {
@@ -195,7 +195,7 @@ namespace drawinglayer::primitive3d
                 Primitive3DContainer m_aLineCapRoundList;
                 sal_uInt32 m_nLineCapRoundSegments;
                 attribute::MaterialAttribute3D m_aLineMaterial;
-                ::osl::Mutex m_aMutex;
+                std::mutex m_aMutex;
             public:
                 CapRoundBuffer()
                     : m_nLineCapRoundSegments(0)
@@ -209,7 +209,7 @@ namespace drawinglayer::primitive3d
                     const attribute::MaterialAttribute3D& rMaterial)
                 {
                     // may exclusively change cached data, use mutex
-                    ::osl::MutexGuard aGuard(m_aMutex);
+                    std::unique_lock aGuard(m_aMutex);
 
                     if (nSegments != m_nLineCapRoundSegments || !(rMaterial == m_aLineMaterial))
                     {
