@@ -16,6 +16,23 @@
       "message": "Mike, could you help me, why this ",
       "revId": "09d37891c4b09ee03721cc5adbae481a829994cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d22624f_c26ef955",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-09T11:25:53Z",
+      "side": 1,
+      "message": "Mike, could you please help me, why this external/poppler/poppler-Wunused-parameter.patch has failed to be applied?",
+      "revId": "09d37891c4b09ee03721cc5adbae481a829994cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
