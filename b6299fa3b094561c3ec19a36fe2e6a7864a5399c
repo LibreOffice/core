@@ -16,6 +16,24 @@
       "message": "Or change constructs\n   acos(foo/bar) * 57.29577951308\nto\n   basegfx::rad2deg(acos(foo/bar))",
       "revId": "b6299fa3b094561c3ec19a36fe2e6a7864a5399c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf5a8a7d_cbe0a464",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-09T12:32:51Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "0668d699_27a6fbd5",
+      "revId": "b6299fa3b094561c3ec19a36fe2e6a7864a5399c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
