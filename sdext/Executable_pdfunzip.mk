@@ -14,6 +14,8 @@ $(eval $(call gb_Executable_use_sdk_api,pdfunzip))
 $(eval $(call gb_Executable_use_externals,pdfunzip,\
     boost_headers \
     zlib \
+    $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
+	poppler \
 ))
 
 $(eval $(call gb_Executable_set_include,pdfunzip,\
