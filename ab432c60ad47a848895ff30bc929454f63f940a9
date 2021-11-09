@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44b1199f_09f95e6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-11-09T14:20:41Z",
+      "side": 1,
+      "message": "Cherry-pick needed to be able to compile with a current toolchain on Fedora, at least.",
+      "revId": "ab432c60ad47a848895ff30bc929454f63f940a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
