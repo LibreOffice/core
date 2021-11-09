@@ -346,12 +346,12 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
     {
         rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
         beans::Property aValue;
-        static const std::u16string_view s_pProperties[] =
+        static const rtl::OUStringConstExpr s_pProperties[]
         {
-             u"" PROPERTY_CHARTTYPE
-            ,u"" PROPERTY_MASTERFIELDS
-            ,u"" PROPERTY_DETAILFIELDS
-            ,u"" PROPERTY_PREVIEW_COUNT
+             PROPERTY_CHARTTYPE
+            ,PROPERTY_MASTERFIELDS
+            ,PROPERTY_DETAILFIELDS
+            ,PROPERTY_PREVIEW_COUNT
         };
 
         for (const auto & rName : s_pProperties)

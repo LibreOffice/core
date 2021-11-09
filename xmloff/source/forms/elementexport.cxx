@@ -324,16 +324,16 @@ namespace xmloff
         if ( xControlText.is() )
         {
             const XMLPropertyMapEntry* pCharAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TextPropMap::TEXT );
-            while ( pCharAttributeProperties->msApiName )
+            while ( !OUString(pCharAttributeProperties->msApiName).isEmpty() )
             {
-                exportedProperty( OUString::createFromAscii( pCharAttributeProperties->msApiName ) );
+                exportedProperty( pCharAttributeProperties->msApiName );
                 ++pCharAttributeProperties;
             }
 
             const XMLPropertyMapEntry* pParaAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TextPropMap::SHAPE_PARA );
-            while ( pParaAttributeProperties->msApiName )
+            while ( !OUString(pParaAttributeProperties->msApiName).isEmpty() )
             {
-                exportedProperty( OUString::createFromAscii( pParaAttributeProperties->msApiName ) );
+                exportedProperty( pParaAttributeProperties->msApiName );
                 ++pParaAttributeProperties;
             }
 
@@ -504,7 +504,7 @@ namespace xmloff
                 CCAFlags::Label, CCAFlags::Title
             };
             // the names of all properties which are expected to be of type string
-            static const char * aStringPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr aStringPropertyNames[]
             {
                 PROPERTY_LABEL, PROPERTY_TITLE
             };
@@ -518,7 +518,7 @@ namespace xmloff
                     exportStringPropertyAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(nStringPropertyAttributeIds[i]),
                         OAttributeMetaData::getCommonControlAttributeName(nStringPropertyAttributeIds[i]),
-                        OUString::createFromAscii(aStringPropertyNames[i])
+                        aStringPropertyNames[i]
                         );
                 #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
@@ -533,7 +533,7 @@ namespace xmloff
             {   // attribute flags
                 CCAFlags::CurrentSelected, CCAFlags::Disabled, CCAFlags::Dropdown, CCAFlags::Printable, CCAFlags::ReadOnly, CCAFlags::Selected, CCAFlags::TabStop, CCAFlags::EnableVisible
             };
-            static const char * pBooleanPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr pBooleanPropertyNames[] =
             {   // property names
                 PROPERTY_STATE, PROPERTY_ENABLED,
                 PROPERTY_DROPDOWN, PROPERTY_PRINTABLE,
@@ -557,7 +557,7 @@ namespace xmloff
                     exportBooleanPropertyAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         OAttributeMetaData::getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
-                        OUString::createFromAscii(pBooleanPropertyNames[i]),
+                        pBooleanPropertyNames[i],
                         nBooleanPropertyAttrFlags[i]);
         #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
@@ -573,7 +573,7 @@ namespace xmloff
             {   // attribute flags
                 CCAFlags::Size, CCAFlags::TabIndex
             };
-            static const char * pIntegerPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr pIntegerPropertyNames[] =
             {   // property names
                 PROPERTY_LINECOUNT, PROPERTY_TABINDEX
             };
@@ -598,7 +598,7 @@ namespace xmloff
                     exportInt16PropertyAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(nIntegerPropertyAttributeIds[i]),
                         OAttributeMetaData::getCommonControlAttributeName(nIntegerPropertyAttributeIds[i]),
-                        OUString::createFromAscii(pIntegerPropertyNames[i]),
+                        pIntegerPropertyNames[i],
                         nIntegerPropertyAttrDefaults[i]);
         #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
@@ -733,8 +733,8 @@ namespace xmloff
 
         if ((CCAFlags::CurrentValue | CCAFlags::Value) & m_nIncludeCommon)
         {
-            const char* pCurrentValuePropertyName = nullptr;
-            const char* pValuePropertyName = nullptr;
+            std::optional<OUString> pCurrentValuePropertyName;
+            std::optional<OUString> pValuePropertyName;
 
             // get the property names
             getValuePropertyNames(m_eType, m_nClassId, pCurrentValuePropertyName, pValuePropertyName);
@@ -746,14 +746,14 @@ namespace xmloff
                 // don't export the current-value if this value originates from a data binding
                 // #i26944#
                 if ( controlHasActiveDataBinding() )
-                    exportedProperty( OUString::createFromAscii( pCurrentValuePropertyName ) );
+                    exportedProperty( *pCurrentValuePropertyName );
                 else
                 {
                     static const sal_uInt16 nCurrentValueAttributeNamespaceKey = OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::CurrentValue);
                     exportGenericPropertyAttribute(
                         nCurrentValueAttributeNamespaceKey,
                         pCurrentValueAttributeName,
-                        pCurrentValuePropertyName
+                        *pCurrentValuePropertyName
                     );
                 }
             }
@@ -765,12 +765,12 @@ namespace xmloff
                 exportGenericPropertyAttribute(
                     nValueAttributeNamespaceKey,
                     pValueAttributeName,
-                    pValuePropertyName);
+                    *pValuePropertyName);
             }
 
-            OSL_ENSURE((nullptr == pValuePropertyName) == (CCAFlags::NONE == (CCAFlags::Value & m_nIncludeCommon)),
+            OSL_ENSURE((!pValuePropertyName) == (CCAFlags::NONE == (CCAFlags::Value & m_nIncludeCommon)),
                 "OControlExport::exportCommonControlAttributes: no property found for the value attribute!");
-            OSL_ENSURE((nullptr == pCurrentValuePropertyName ) == (CCAFlags::NONE == (CCAFlags::CurrentValue & m_nIncludeCommon)),
+            OSL_ENSURE((!pCurrentValuePropertyName ) == (CCAFlags::NONE == (CCAFlags::CurrentValue & m_nIncludeCommon)),
                 "OControlExport::exportCommonControlAttributes: no property found for the current-value attribute!");
 
         #if OSL_DEBUG_LEVEL > 0
@@ -933,7 +933,7 @@ namespace xmloff
                 SCAFlags::Validation, SCAFlags::MultiLine, SCAFlags::AutoCompletion, SCAFlags::Multiple, SCAFlags::DefaultButton, SCAFlags::IsTristate,
                 SCAFlags::Toggle, SCAFlags::FocusOnClick
             };
-            static const char * pBooleanPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr pBooleanPropertyNames[] =
             {   // property names
                 PROPERTY_STRICTFORMAT, PROPERTY_MULTILINE,
                 PROPERTY_AUTOCOMPLETE,
@@ -955,7 +955,7 @@ namespace xmloff
                     exportBooleanPropertyAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace( *pAttributeId ),
                         OAttributeMetaData::getSpecialAttributeName( *pAttributeId ),
-                        OUString::createFromAscii(pBooleanPropertyNames[i]),
+                        pBooleanPropertyNames[i],
                         ( *pAttributeId == SCAFlags::FocusOnClick ) ? BoolAttrFlags::DefaultTrue : BoolAttrFlags::DefaultFalse
                     );
             #if OSL_DEBUG_LEVEL > 0
@@ -972,7 +972,7 @@ namespace xmloff
             {   // attribute flags
                 SCAFlags::PageStepSize
             };
-            static const char * pIntegerPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr pIntegerPropertyNames[] =
             {   // property names
                 PROPERTY_BLOCK_INCREMENT
             };
@@ -996,7 +996,7 @@ namespace xmloff
                     exportInt32PropertyAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace( nIntegerPropertyAttributeIds[i] ),
                         OAttributeMetaData::getSpecialAttributeName( nIntegerPropertyAttributeIds[i] ),
-                        OUString::createFromAscii(pIntegerPropertyNames[i]),
+                        pIntegerPropertyNames[i],
                         nIntegerPropertyAttrDefaults[i]
                     );
             #if OSL_DEBUG_LEVEL > 0
@@ -1123,9 +1123,9 @@ namespace xmloff
             {   // attribute flags
                 SCAFlags::GroupName
             };
-            static const std::u16string_view pStringPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr pStringPropertyNames[] =
             {   // property names
-                u"" PROPERTY_GROUP_NAME
+                PROPERTY_GROUP_NAME
             };
 
             static const sal_Int32 nIdCount = SAL_N_ELEMENTS( nStringPropertyAttributeIds );
@@ -1154,13 +1154,13 @@ namespace xmloff
             // need to export the min value and the max value as attributes
             // It depends on the real type (FormComponentType) of the control, which properties hold these
             // values
-            const char* pMinValuePropertyName = nullptr;
-            const char* pMaxValuePropertyName = nullptr;
+            std::optional<OUString> pMinValuePropertyName;
+            std::optional<OUString> pMaxValuePropertyName;
             getValueLimitPropertyNames(m_nClassId, pMinValuePropertyName, pMaxValuePropertyName);
 
-            OSL_ENSURE((nullptr == pMinValuePropertyName) == (SCAFlags::NONE == (SCAFlags::MinValue & m_nIncludeSpecial)),
+            OSL_ENSURE((!pMinValuePropertyName) == (SCAFlags::NONE == (SCAFlags::MinValue & m_nIncludeSpecial)),
                 "OControlExport::exportCommonControlAttributes: no property found for the min value attribute!");
-            OSL_ENSURE((nullptr == pMaxValuePropertyName) == (SCAFlags::NONE == (SCAFlags::MaxValue & m_nIncludeSpecial)),
+            OSL_ENSURE((!pMaxValuePropertyName) == (SCAFlags::NONE == (SCAFlags::MaxValue & m_nIncludeSpecial)),
                 "OControlExport::exportCommonControlAttributes: no property found for the max value attribute!");
 
             // add the two attributes
@@ -1173,13 +1173,13 @@ namespace xmloff
                 exportGenericPropertyAttribute(
                     nMinValueNamespaceKey,
                     pMinValueAttributeName,
-                    pMinValuePropertyName);
+                    *pMinValuePropertyName);
 
             if (pMaxValuePropertyName && (SCAFlags::MaxValue & m_nIncludeSpecial))
                 exportGenericPropertyAttribute(
                     nMaxValueNamespaceKey,
                     pMaxValueAttributeName,
-                    pMaxValuePropertyName);
+                    *pMaxValuePropertyName);
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeSpecial = m_nIncludeSpecial & ~SCAFlags(SCAFlags::MinValue | SCAFlags::MaxValue);
@@ -2045,7 +2045,7 @@ namespace xmloff
             {
                 faName, /*faAction,*/ faCommand, faFilter, faOrder
             };
-            static const char * aStringPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr aStringPropertyNames[] =
             {
                 PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_FILTER, PROPERTY_ORDER
             };
@@ -2059,7 +2059,7 @@ namespace xmloff
                 exportStringPropertyAttribute(
                     OAttributeMetaData::getFormAttributeNamespace(eStringPropertyIds[i]),
                     OAttributeMetaData::getFormAttributeName(eStringPropertyIds[i]),
-                    OUString::createFromAscii(aStringPropertyNames[i]));
+                    aStringPropertyNames[i]);
 
             // #i112082# xlink:type is added as part of exportTargetLocationAttribute
 
@@ -2089,7 +2089,7 @@ namespace xmloff
             {
                 faAllowDeletes, faAllowInserts, faAllowUpdates, faApplyFilter, faEscapeProcessing, faIgnoreResult
             };
-            static const char * pBooleanPropertyNames[] =
+            static constexpr rtl::OUStringConstExpr pBooleanPropertyNames[] =
             {
                 PROPERTY_ALLOWDELETES,
                 PROPERTY_ALLOWINSERTS,
@@ -2113,7 +2113,7 @@ namespace xmloff
                 exportBooleanPropertyAttribute(
                     OAttributeMetaData::getFormAttributeNamespace(eBooleanPropertyIds[i]),
                     OAttributeMetaData::getFormAttributeName(eBooleanPropertyIds[i]),
-                    OUString::createFromAscii(pBooleanPropertyNames[i]),
+                    pBooleanPropertyNames[i],
                     nBooleanPropertyAttrFlags[i]
                 );
         }

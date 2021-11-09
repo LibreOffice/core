@@ -668,7 +668,7 @@ std::string Flatten::getSourceAsString(SourceRange range)
     if (p2 - p1 > 64 * 1024) {
         // workaround clang weirdness, but don't return empty string
         // in case it happens during code replacement
-        return "clang returned overlay large source range";
+        return "clang returned overly large source range";
     }
     return std::string( p1, p2 - p1);
 }
