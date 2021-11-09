@@ -16,6 +16,24 @@
       "message": "Where would this ctor be called?  At least doing a Windows x86-64 clang-cl build reports it as unused (loplugin:unreffun, loplugin:unusedmember).",
       "revId": "d4acfea2fed8f999347e49ed76c3f5115952df5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "814b262a_5beee097",
+        "filename": "ucb/source/ucp/webdav-curl/CurlSession.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-09T10:44:23Z",
+      "side": 1,
+      "message": "i guess if one of the options to set stream sizes like CURLOPT_INFILESIZE_LARGE were used but it\u0027s not the case currently.\n\nthe Serf one has some funny code to automatically switch between \"chunked\" encoding and equivalent of CURLOPT_INFILESIZE_LARGE but there is no justification given why that is needed (also not in the AOO issuezilla) so i haven\u0027t added that yet.",
+      "parentUuid": "581c60ae_62ee79c5",
+      "revId": "d4acfea2fed8f999347e49ed76c3f5115952df5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
