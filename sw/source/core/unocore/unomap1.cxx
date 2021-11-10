@@ -1011,7 +1011,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePropertyMap(
 {
     static SfxItemPropertyMapEntry const aRedlineMap_Impl[] =
     {
-        REDLINE_PROPERTIES
+        REDLINE_PROPERTIES(PropertyAttribute::READONLY)
         REDLINE_NODE_PROPERTIES
         {u"" UNO_NAME_REDLINE_START, 0, cppu::UnoType<css::uno::XInterface>::get(),  PropertyAttribute::READONLY,    0},
         {u"" UNO_NAME_REDLINE_END, 0, cppu::UnoType<css::uno::XInterface>::get(),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
@@ -1051,7 +1051,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePortionPrope
         {u"" UNO_NAME_CONTROL_CHARACTER, FN_UNO_CONTROL_CHARACTER, cppu::UnoType<sal_Int16>::get(),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
         {u"" UNO_NAME_IS_COLLAPSED, FN_UNO_IS_COLLAPSED, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
         {u"" UNO_NAME_IS_START, FN_UNO_IS_START, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-        REDLINE_PROPERTIES
+        REDLINE_PROPERTIES(0)
         {u"" UNO_NAME_TEXT_PORTION_TYPE, FN_UNO_TEXT_PORTION_TYPE, cppu::UnoType<OUString>::get(),                        PropertyAttribute::READONLY, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
