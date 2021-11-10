@@ -158,6 +158,9 @@ class Forms(UITestCase):
                 xDialog = self.xUITest.getTopFocusWindow()
                 xDialog.getChild('numericfield-PositionY').executeAction("FOCUS", tuple())
 
+                xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                xToolkit.processEventsToIdle()
+
                 # Without the fix in place, the size of the form wouldn't have changed
                 self.assertEqual(20001, shape.getSize().Width)
                 self.assertEqual(5001, shape.getSize().Height)
