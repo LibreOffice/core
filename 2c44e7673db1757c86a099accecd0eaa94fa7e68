@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "beb3954c_76b34a61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000674
+      },
+      "writtenOn": "2021-11-10T20:35:09Z",
+      "side": 1,
+      "message": "Tested with PDF printer and it works as expected.",
+      "revId": "2c44e7673db1757c86a099accecd0eaa94fa7e68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
