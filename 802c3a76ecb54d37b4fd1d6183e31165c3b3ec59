@@ -33,6 +33,23 @@
       "message": "erack, that was your commit?",
       "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "236b15bf_fc641245",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-10T11:01:53Z",
+      "side": 1,
+      "message": "I do confirm the issue is fixed with this patch. Besides, I\u0027ve created a UItest for it in https://gerrit.libreoffice.org/c/core/+/124956",
+      "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
