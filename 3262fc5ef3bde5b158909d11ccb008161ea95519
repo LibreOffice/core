@@ -16,6 +16,23 @@
       "message": "cppcheck noticed an oddity that this ends up with a pair of ?:\u0027s in testDMLGroupShapeChildPosition with the same constant on either side of the :\n\n    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11331 : 11331), xChildGroup-\u003egetPosition().Y);\n",
       "revId": "3262fc5ef3bde5b158909d11ccb008161ea95519",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22a263cb_ece53d0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-11-10T23:55:08Z",
+      "side": 1,
+      "message": "\u003e cppcheck noticed an oddity that this ends up with a pair of ?:\u0027s in testDMLGroupShapeChildPosition with the same constant on either side of the :\n\u003e \n\u003e     CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11331 : 11331), xChildGroup-\u003egetPosition().Y);\n\u003e\n\nYes, I should have simplified it, same as I had done in the other cases there.",
+      "revId": "3262fc5ef3bde5b158909d11ccb008161ea95519",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
