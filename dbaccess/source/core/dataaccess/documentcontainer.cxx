@@ -125,7 +125,22 @@ css::uno::Sequence< css::uno::Type > ODocumentContainer::getTypes()
 }
 IMPLEMENT_SERVICE_INFO_IMPLNAME(ODocumentContainer, "com.sun.star.comp.dba.ODocumentContainer");
 IMPLEMENT_SERVICE_INFO_SUPPORTS(ODocumentContainer);
-IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(ODocumentContainer)
+css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ODocumentContainer::getPropertySetInfo()
+{
+    Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& ODocumentContainer::getInfoHelper()
+{
+    return *ODocumentContainer::getArrayHelper();
+}
+::cppu::IPropertyArrayHelper* ODocumentContainer::createArrayHelper( ) const
+{
+    css::uno::Sequence< css::beans::Property > aProps;
+    describeProperties(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+
 
 Sequence< OUString > SAL_CALL ODocumentContainer::getSupportedServiceNames(  )
 {

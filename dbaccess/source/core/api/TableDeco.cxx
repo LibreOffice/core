@@ -350,7 +350,13 @@ void ODBTableDecorator::construct()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO1(ODBTableDecorator, "com.sun.star.sdb.dbaccess.ODBTableDecorator", SERVICE_SDBCX_TABLE)
+IMPLEMENT_SERVICE_INFO_IMPLNAME(ODBTableDecorator, "com.sun.star.sdb.dbaccess.ODBTableDecorator")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(ODBTableDecorator)
+css::uno::Sequence< OUString > SAL_CALL ODBTableDecorator::getSupportedServiceNames()
+{
+    return { SERVICE_SDBCX_TABLE };
+}
+
 
 Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType )
 {

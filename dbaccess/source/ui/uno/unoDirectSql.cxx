@@ -72,7 +72,22 @@ namespace dbaui
         return { SERVICE_SDB_DIRECTSQLDIALOG };
     }
 
-    IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
+    css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ODirectSQLDialog::getPropertySetInfo()
+    {
+        Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+        return xInfo;
+    }
+    ::cppu::IPropertyArrayHelper& ODirectSQLDialog::getInfoHelper()
+    {
+        return *ODirectSQLDialog::getArrayHelper();
+    }
+    ::cppu::IPropertyArrayHelper* ODirectSQLDialog::createArrayHelper( ) const
+    {
+        css::uno::Sequence< css::beans::Property > aProps;
+        describeProperties(aProps);
+        return new ::cppu::OPropertyArrayHelper(aProps);
+    }
+
 
     std::unique_ptr<weld::DialogController> ODirectSQLDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {

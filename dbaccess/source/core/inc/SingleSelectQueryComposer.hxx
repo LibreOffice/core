@@ -218,7 +218,10 @@ namespace dbaccess
         // XServiceInfo
         DECLARE_SERVICE_INFO();
 
-        DECLARE_PROPERTYCONTAINER_DEFAULTS();
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+
 
         // css::sdb::XSingleSelectQueryComposer
         virtual OUString SAL_CALL getElementaryQuery() override;

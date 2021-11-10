@@ -89,7 +89,22 @@ css::uno::Sequence< css::uno::Type > OCommandDefinition::getTypes()
     );
 }
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
-IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
+css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OCommandDefinition::getPropertySetInfo()
+{
+    Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& OCommandDefinition::getInfoHelper()
+{
+    return *OCommandDefinition_PROP::getArrayHelper();
+}
+::cppu::IPropertyArrayHelper* OCommandDefinition::createArrayHelper( ) const
+{
+    css::uno::Sequence< css::beans::Property > aProps;
+    describeProperties(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+
 
 OUString SAL_CALL OCommandDefinition::getImplementationName()
 {

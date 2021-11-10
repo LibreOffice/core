@@ -86,7 +86,13 @@ void SAL_CALL OContentHelper::disposing()
     m_xParentContainer = nullptr;
 }
 
-IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.star.ucb.Content");
+IMPLEMENT_SERVICE_INFO_IMPLNAME(OContentHelper, "com.sun.star.comp.sdb.Content")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OContentHelper)
+css::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.Content" };
+}
+
 
 css::uno::Sequence<sal_Int8> OContentHelper::getUnoTunnelId()
 {

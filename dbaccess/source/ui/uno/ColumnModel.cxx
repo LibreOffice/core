@@ -111,7 +111,22 @@ css::uno::Sequence< css::uno::Type > OColumnControlModel::getTypes()
         OPropertyContainer::getTypes( )
     );
 }
-IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OColumnControlModel)
+css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OColumnControlModel::getPropertySetInfo()
+{
+    Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& OColumnControlModel::getInfoHelper()
+{
+    return *OColumnControlModel::getArrayHelper();
+}
+::cppu::IPropertyArrayHelper* OColumnControlModel::createArrayHelper( ) const
+{
+    css::uno::Sequence< css::beans::Property > aProps;
+    describeProperties(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+
 OUString SAL_CALL OColumnControlModel::getImplementationName()
 {
     return "com.sun.star.comp.dbu.OColumnControlModel";

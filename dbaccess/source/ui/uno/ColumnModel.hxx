@@ -85,7 +85,10 @@ public:
     virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
 // OPropertyArrayUsageHelper
-    DECLARE_PROPERTYCONTAINER_DEFAULTS( );
+    virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+
 
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 };

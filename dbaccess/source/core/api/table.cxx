@@ -233,7 +233,13 @@ void ODBTable::construct()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_SDBCX_TABLE)
+IMPLEMENT_SERVICE_INFO_IMPLNAME(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(ODBTable)
+css::uno::Sequence< OUString > SAL_CALL ODBTable::getSupportedServiceNames()
+{
+    return { SERVICE_SDBCX_TABLE };
+}
+
 
 Any SAL_CALL ODBTable::queryInterface( const Type & rType )
 {
