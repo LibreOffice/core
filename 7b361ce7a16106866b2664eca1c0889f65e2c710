@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "312884f9_8d9d2e56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-11-10T10:34:20Z",
+      "side": 1,
+      "message": "The Android and macOS Jenkins failures are unrelated.",
+      "revId": "7b361ce7a16106866b2664eca1c0889f65e2c710",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
