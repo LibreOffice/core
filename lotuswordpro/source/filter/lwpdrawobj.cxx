@@ -63,6 +63,7 @@
 #include "lwpdrawobj.hxx"
 #include <lwptools.hxx>
 #include <tools/stream.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 #include <xfilter/xfframe.hxx>
 
@@ -796,7 +797,7 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
 
         if (aSdwRect.IsRectRotated())
         {
-            pRect->SetRotate( fRotAngle / PI * 180);// aXFCenter);
+            pRect->SetRotate( basegfx::rad2deg(fRotAngle) );// aXFCenter);
         }
 
         pRect->SetStyleName(rStyleName);

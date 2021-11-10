@@ -22,11 +22,12 @@
 #include <string_view>
 
 #include "hwpreader.hxx"
-#include <math.h>
+#include <cmath>
 
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"
@@ -49,8 +50,6 @@
 #define WTI(x)          (static_cast<double>(x) / 1800.)     // unit => inch
 #define WTMM(x)     (static_cast<double>(x) / 1800. * 25.4)  // unit => mm
 #define WTSM(x)     (static_cast<int>((x) / 1800. * 2540))   // unit ==> 1/100 mm
-
-#define PI 3.14159265358979323846
 
 // xmloff/xmlkyd.hxx
 constexpr OUStringLiteral sXML_CDATA = u"CDATA";
@@ -4049,14 +4048,14 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 /* 2 - rotation angle calculation */
                 if( pt[1].x == pt[0].x ){
                          if( pt[1].y > pt[0].y )
-                             rotate = PI/2;
+                             rotate = M_PI_2;
                          else
-                             rotate = -(PI/2);
+                             rotate = -M_PI_2;
                 }
                 else
                     rotate = atan(static_cast<double>( pt[1].y - pt[0].y )/(pt[1].x - pt[0].x ));
                 if( pt[1].x < pt[0].x )
-                    rotate += PI;
+                    rotate += M_PI;
 
                 for( i = 0 ; i < 3 ; i++){
                          r_pt[i].x = static_cast<int>(pt[i].x * cos(-rotate) - pt[i].y * sin(-rotate));
@@ -4068,10 +4067,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                          skewX = 0;
                 else
                          skewX = atan(static_cast<double>(r_pt[2].x - r_pt[1].x )/( r_pt[2].y - r_pt[1].y ));
-                if( skewX >= PI/2 )
-                         skewX -= PI;
-                if( skewX <= -PI/2 )
-                         skewX += PI;
+                if( skewX >= M_PI_2 )
+                         skewX -= M_PI;
+                if( skewX <= -M_PI_2 )
+                         skewX += M_PI;
 
                 OUString trans;
                 if( skewX != 0.0 && rotate != 0.0 ){
@@ -4264,38 +4263,38 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                                 if( pal->pt[1].x == pal->pt[0].x ){
                                     if( pal->pt[0].y < pal->pt[1].y )
-                                        start_angle = 1.5 * PI;
+                                        start_angle = 3 * M_PI_2;
                                     else
-                                        start_angle = 0.5 * PI;
+                                        start_angle = M_PI_2;
                                 }
                                 else{
                                      start_angle = atan(static_cast<double>( pal->pt[0].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[0].x ));
                                      if( pal->pt[1].x < pal->pt[0].x )
-                                         start_angle += PI;
+                                         start_angle += M_PI;
                                 }
                                 if( pal->pt[1].x == pal->pt[2].x ){
                                     if( pal->pt[2].y < pal->pt[1].y )
-                                        end_angle = 1.5 * PI;
+                                        end_angle = 3 * M_PI_2;
                                     else
-                                        end_angle = 0.5 * PI;
+                                        end_angle = M_PI_2;
                                 }
                                 else{
                                      end_angle = atan(static_cast<double>( pal->pt[2].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[2].x ));
                                      if( pal->pt[1].x < pal->pt[2].x )
-                                         end_angle += PI;
+                                         end_angle += M_PI;
                                 }
 
-                                if( start_angle >= 2 * PI )
-                                    start_angle -= 2 * PI;
-                                if( end_angle >= 2 * PI )
-                                    end_angle -= 2 * PI;
-                                if( ( start_angle > end_angle ) && (start_angle - end_angle < PI )){
+                                if( start_angle >= 2 * M_PI )
+                                    start_angle -= 2 * M_PI;
+                                if( end_angle >= 2 * M_PI )
+                                    end_angle -= 2 * M_PI;
+                                if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI )){
                                     double tmp_angle = start_angle;
                                     start_angle = end_angle;
                                     end_angle = tmp_angle;
                                 }
-                                padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle * 180. / PI));
-                                padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle * 180. / PI));
+                                padd("draw:start-angle", sXML_CDATA, Double2Str(basegfx::rad2deg(start_angle)));
+                                padd("draw:end-angle", sXML_CDATA, Double2Str(basegfx::rad2deg(end_angle)));
 
                     }
                     else

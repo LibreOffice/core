@@ -89,7 +89,7 @@ public:
     void SetRotate(double degree)
     {
         m_nDrawFlag |= XFDRAWOBJECT_FLAG_ROTATE;
-        m_fRotate = degree*2*PI/360;
+        m_fRotate = degree*2*M_PI/360;
         m_aRotatePoint = XFPoint(0,0);
     }
 
