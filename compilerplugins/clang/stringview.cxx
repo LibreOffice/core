@@ -75,18 +75,18 @@ bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperator
     auto op = cxxOperatorCallExpr->getOperator();
     if (op == OO_Plus && cxxOperatorCallExpr->getNumArgs() == 2)
     {
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(0)));
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
+        handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(0));
+        handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(1));
     }
     if (compat::isComparisonOp(cxxOperatorCallExpr))
     {
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(0)));
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
+        handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(0));
+        handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(1));
     }
     else if (op == OO_PlusEqual)
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
+        handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(1));
     else if (op == OO_Subscript)
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(0)));
+        handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(0));
     else if (op == OO_Equal)
     {
         if (loplugin::TypeCheck(cxxOperatorCallExpr->getType())
@@ -98,7 +98,7 @@ bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperator
                    .Namespace("rtl")
                    .GlobalNamespace())
         {
-            handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
+            handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(1));
         }
     }
     return true;
@@ -130,7 +130,8 @@ bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
 
 void StringView::handleSubExprThatCouldBeView(Expr const* subExpr)
 {
-    auto const e = subExpr->IgnoreParens();
+    auto const e0 = compat::IgnoreImplicit(subExpr);
+    auto const e = e0->IgnoreParens();
     auto const tc = loplugin::TypeCheck(e->getType());
     if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
           || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
@@ -139,7 +140,10 @@ void StringView::handleSubExprThatCouldBeView(Expr const* subExpr)
     }
     if (auto const e1 = dyn_cast<CXXConstructExpr>(e))
     {
-        handleCXXConstructExpr(e1);
+        if (e0 == subExpr)
+        {
+            handleCXXConstructExpr(e1);
+        }
     }
     else if (auto const e2 = dyn_cast<CXXFunctionalCastExpr>(e))
     {
@@ -301,11 +305,11 @@ bool StringView::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     auto const dc = loplugin::DeclCheck(expr->getMethodDecl());
     if (dc.Function("append") || dc.Function("indexOf") || dc.Function("lastIndexOf"))
     {
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(expr->getArg(0)));
+        handleSubExprThatCouldBeView(expr->getArg(0));
     }
     else if (dc.Function("insert"))
     {
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(expr->getArg(1)));
+        handleSubExprThatCouldBeView(expr->getArg(1));
     }
     return true;
 }
@@ -330,7 +334,7 @@ bool StringView::VisitCXXConstructExpr(CXXConstructExpr const* expr)
         return true;
     }
     if (expr->getNumArgs() > 0)
-        handleSubExprThatCouldBeView(compat::IgnoreImplicit(expr->getArg(0)));
+        handleSubExprThatCouldBeView(expr->getArg(0));
     return true;
 }
 

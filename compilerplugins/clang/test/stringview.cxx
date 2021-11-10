@@ -145,6 +145,9 @@ void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2, OString 
     call_view(OUString(OUString::number(0)));
     // expected-error-re@+1 {{instead of an 'rtl::OUString' constructed from a 'typename std::enable_if_t<ToStringHelper<OUString>::allowOUStringConcat && ToStringHelper<OUString>::allowOUStringConcat, OUStringConcat<OUString, OUString>{{ ?}}>' (aka 'rtl::OUStringConcat<rtl::OUString, rtl::OUString>'), pass a 'std::u16string_view' via 'rtl::OUStringConcatenation' [loplugin:stringview]}}
     call_view(OUString(s4 + s4));
+
+    (void)(s3 == l1);
+    (void)(s4 == l2);
 }
 
 void f5(OUString s)
