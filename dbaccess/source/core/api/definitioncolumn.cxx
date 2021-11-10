@@ -446,41 +446,41 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
 
     BEGIN_PROPERTY_SEQUENCE( nHaveAlways + nHaveOptionally )
 
-    DECL_PROP0_BOOL( ISAUTOINCREMENT                );
-    DECL_PROP0_BOOL( ISCURRENCY                     );
-    DECL_PROP0( ISNULLABLE,         sal_Int32       );
-    DECL_PROP0( PRECISION,          sal_Int32       );
-    DECL_PROP0( SCALE,              sal_Int32       );
-    DECL_PROP0( TYPE,               sal_Int32       );
-    DECL_PROP0( TYPENAME,           OUString );
+    DECL_PROP_IMPL(ISAUTOINCREMENT, cppu::UnoType<bool>::get()) 0);
+    DECL_PROP_IMPL(ISCURRENCY, cppu::UnoType<bool>::get()) 0);
+    DECL_PROP_IMPL(ISNULLABLE, cppu::UnoType<sal_Int32       >::get()) 0);
+    DECL_PROP_IMPL(PRECISION, cppu::UnoType<sal_Int32       >::get()) 0);
+    DECL_PROP_IMPL(SCALE, cppu::UnoType<sal_Int32       >::get()) 0);
+    DECL_PROP_IMPL(TYPE, cppu::UnoType<sal_Int32       >::get()) 0);
+    DECL_PROP_IMPL(TYPENAME, cppu::UnoType<OUString >::get()) 0);
 
     if ( nId & HAS_AUTOINCREMENT_CREATION )
     {
-        DECL_PROP1( AUTOINCREMENTCREATION, OUString, MAYBEVOID );
+        DECL_PROP_IMPL(AUTOINCREMENTCREATION, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::MAYBEVOID );
     }
     if ( nId & HAS_DEFAULTVALUE )
     {
-        DECL_PROP0( DEFAULTVALUE, OUString );
+        DECL_PROP_IMPL(DEFAULTVALUE, cppu::UnoType<OUString >::get()) 0);
     }
     if ( nId & HAS_DESCRIPTION )
     {
-        DECL_PROP0( DESCRIPTION, OUString );
+        DECL_PROP_IMPL(DESCRIPTION, cppu::UnoType<OUString >::get()) 0);
     }
     if ( nId & HAS_ROWVERSION )
     {
-        DECL_PROP0_BOOL( ISROWVERSION );
+        DECL_PROP_IMPL(ISROWVERSION, cppu::UnoType<bool>::get()) 0);
     }
     if ( nId & HAS_CATALOGNAME )
     {
-        DECL_PROP0( CATALOGNAME, OUString );
+        DECL_PROP_IMPL(CATALOGNAME, cppu::UnoType<OUString >::get()) 0);
     }
     if ( nId & HAS_SCHEMANAME )
     {
-        DECL_PROP0( SCHEMANAME, OUString );
+        DECL_PROP_IMPL(SCHEMANAME, cppu::UnoType<OUString >::get()) 0);
     }
     if ( nId & HAS_TABLENAME )
     {
-        DECL_PROP0( TABLENAME, OUString );
+        DECL_PROP_IMPL(TABLENAME, cppu::UnoType<OUString >::get()) 0);
     }
 
     END_PROPERTY_SEQUENCE()

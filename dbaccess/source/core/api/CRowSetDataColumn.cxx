@@ -65,27 +65,27 @@ ORowSetDataColumn::~ORowSetDataColumn()
 {
     BEGIN_PROPERTY_SEQUENCE(21)
 
-    DECL_PROP1( CATALOGNAME,                OUString,    READONLY );
-    DECL_PROP1( DISPLAYSIZE,                sal_Int32,          READONLY );
-    DECL_PROP1_BOOL( ISAUTOINCREMENT,                           READONLY );
-    DECL_PROP1_BOOL( ISCASESENSITIVE,                           READONLY );
-    DECL_PROP1_BOOL( ISCURRENCY,                                READONLY );
-    DECL_PROP1_BOOL( ISDEFINITELYWRITABLE,                      READONLY );
-    DECL_PROP1( ISNULLABLE,                 sal_Int32,          READONLY );
-    DECL_PROP1_BOOL( ISREADONLY,                                BOUND );
-    DECL_PROP1_BOOL( ISROWVERSION,                              READONLY );
-    DECL_PROP1_BOOL( ISSEARCHABLE,                              READONLY );
-    DECL_PROP1_BOOL( ISSIGNED,                                  READONLY );
-    DECL_PROP1_BOOL( ISWRITABLE,                                READONLY );
-    DECL_PROP1( LABEL,                      OUString,    READONLY );
-    DECL_PROP1( PRECISION,                  sal_Int32,          READONLY );
-    DECL_PROP1( SCALE,                      sal_Int32,          READONLY );
-    DECL_PROP1( SCHEMANAME,                 OUString,    READONLY );
-    DECL_PROP1( SERVICENAME,                OUString,    READONLY );
-    DECL_PROP1( TABLENAME,                  OUString,    READONLY );
-    DECL_PROP1( TYPE,                       sal_Int32,          READONLY );
-    DECL_PROP1( TYPENAME,                   OUString,    READONLY );
-    DECL_PROP1( VALUE,                      Any,                BOUND );
+    DECL_PROP_IMPL(CATALOGNAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(DISPLAYSIZE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISAUTOINCREMENT, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISCASESENSITIVE, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISCURRENCY, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISDEFINITELYWRITABLE, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISNULLABLE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISREADONLY, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::BOUND );
+    DECL_PROP_IMPL(ISROWVERSION, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISSEARCHABLE, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISSIGNED, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(ISWRITABLE, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(LABEL, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(PRECISION, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(SCALE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(SCHEMANAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(SERVICENAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(TABLENAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(TYPE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(TYPENAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
+    DECL_PROP_IMPL(VALUE, cppu::UnoType<Any>::get()) css::beans::PropertyAttribute::BOUND );
 
     END_PROPERTY_SEQUENCE()
 

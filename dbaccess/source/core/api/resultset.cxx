@@ -186,12 +186,12 @@ Reference< XPropertySetInfo > OResultSet::getPropertySetInfo()
 ::cppu::IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(6)
-        DECL_PROP1(CURSORNAME,              OUString,    READONLY);
-        DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-        DECL_PROP0(FETCHSIZE,               sal_Int32);
-        DECL_PROP1_BOOL(ISBOOKMARKABLE,         READONLY);
-        DECL_PROP1(RESULTSETCONCURRENCY,    sal_Int32,      READONLY);
-        DECL_PROP1(RESULTSETTYPE,           sal_Int32,      READONLY);
+        DECL_PROP_IMPL(CURSORNAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY);
+        DECL_PROP_IMPL(FETCHDIRECTION, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(FETCHSIZE, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(ISBOOKMARKABLE, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY);
+        DECL_PROP_IMPL(RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY);
+        DECL_PROP_IMPL(RESULTSETTYPE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY);
     END_PROPERTY_HELPER();
 }
 

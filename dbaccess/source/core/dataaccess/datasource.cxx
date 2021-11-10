@@ -797,19 +797,19 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(13)
-        DECL_PROP1(INFO,                        Sequence< PropertyValue >,  BOUND);
-        DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
-        DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
-        DECL_PROP1(LAYOUTINFORMATION,           Sequence< PropertyValue >,  BOUND);
-        DECL_PROP1(NAME,                        OUString,            READONLY);
+        DECL_PROP_IMPL(INFO, cppu::UnoType<Sequence< PropertyValue >>::get()) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(ISPASSWORDREQUIRED, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(ISREADONLY, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY);
+        DECL_PROP_IMPL(LAYOUTINFORMATION, cppu::UnoType<Sequence< PropertyValue >>::get()) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(NAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY);
         DECL_PROP_IMPL(NUMBERFORMATSSUPPLIER, cppu::UnoType<XNumberFormatsSupplier>::get()) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-        DECL_PROP1(PASSWORD,                    OUString,            TRANSIENT);
+        DECL_PROP_IMPL(PASSWORD, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP_IMPL(SETTINGS, cppu::UnoType<XPropertySet>::get()) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY);
-        DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
-        DECL_PROP1(TABLEFILTER,                 Sequence< OUString >,BOUND);
-        DECL_PROP1(TABLETYPEFILTER,             Sequence< OUString >,BOUND);
-        DECL_PROP1(URL,                         OUString,            BOUND);
-        DECL_PROP1(USER,                        OUString,            BOUND);
+        DECL_PROP_IMPL(SUPPRESSVERSIONCL, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(TABLEFILTER, cppu::UnoType<Sequence< OUString >>::get()) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(TABLETYPEFILTER, cppu::UnoType<Sequence< OUString >>::get()) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(URL, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::BOUND);
+        DECL_PROP_IMPL(USER, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::BOUND);
     END_PROPERTY_HELPER();
 }
 
