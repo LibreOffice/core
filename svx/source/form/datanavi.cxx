@@ -74,36 +74,36 @@ namespace svxform
 {
 
     // properties of instance
-    #define PN_INSTANCE_MODEL       "Instance"
-    #define PN_INSTANCE_ID          "ID"
-    #define PN_INSTANCE_URL         "URL"
+    constexpr OUStringLiteral PN_INSTANCE_MODEL = u"Instance";
+    constexpr OUStringLiteral PN_INSTANCE_ID = u"ID";
+    constexpr OUStringLiteral PN_INSTANCE_URL = u"URL";
 
     // properties of binding
-    #define PN_BINDING_ID           "BindingID"
-    #define PN_BINDING_EXPR         "BindingExpression"
-    #define PN_BINDING_MODEL        "Model"
-    #define PN_BINDING_NAMESPACES   "ModelNamespaces"
-    #define PN_READONLY_EXPR        "ReadonlyExpression"
-    #define PN_RELEVANT_EXPR        "RelevantExpression"
-    #define PN_REQUIRED_EXPR        "RequiredExpression"
-    #define PN_CONSTRAINT_EXPR      "ConstraintExpression"
-    #define PN_CALCULATE_EXPR       "CalculateExpression"
-    #define PN_BINDING_TYPE         "Type"
+    constexpr OUStringLiteral PN_BINDING_ID = u"BindingID";
+    constexpr OUStringLiteral PN_BINDING_EXPR = u"BindingExpression";
+    constexpr OUStringLiteral PN_BINDING_MODEL = u"Model";
+    constexpr OUStringLiteral PN_BINDING_NAMESPACES = u"ModelNamespaces";
+    constexpr OUStringLiteral PN_READONLY_EXPR = u"ReadonlyExpression";
+    constexpr OUStringLiteral PN_RELEVANT_EXPR = u"RelevantExpression";
+    constexpr OUStringLiteral PN_REQUIRED_EXPR = u"RequiredExpression";
+    constexpr OUStringLiteral PN_CONSTRAINT_EXPR = u"ConstraintExpression";
+    constexpr OUStringLiteral PN_CALCULATE_EXPR = u"CalculateExpression";
+    constexpr OUStringLiteral PN_BINDING_TYPE = u"Type";
 
     // properties of submission
-    #define PN_SUBMISSION_ID        "ID"
-    #define PN_SUBMISSION_BIND      "Bind"
-    #define PN_SUBMISSION_REF       "Ref"
-    #define PN_SUBMISSION_ACTION    "Action"
-    #define PN_SUBMISSION_METHOD    "Method"
-    #define PN_SUBMISSION_REPLACE   "Replace"
+    constexpr OUStringLiteral PN_SUBMISSION_ID = u"ID";
+    constexpr OUStringLiteral PN_SUBMISSION_BIND = u"Bind";
+    constexpr OUStringLiteral PN_SUBMISSION_REF = u"Ref";
+    constexpr OUStringLiteral PN_SUBMISSION_ACTION = u"Action";
+    constexpr OUStringLiteral PN_SUBMISSION_METHOD = u"Method";
+    constexpr OUStringLiteral PN_SUBMISSION_REPLACE = u"Replace";
 
     // other const strings
-    #define TRUE_VALUE              "true()"
-    #define NEW_ELEMENT             "newElement"
-    #define NEW_ATTRIBUTE           "newAttribute"
-    #define EVENTTYPE_CHARDATA      "DOMCharacterDataModified"
-    #define EVENTTYPE_ATTR          "DOMAttrModified"
+    constexpr OUStringLiteral TRUE_VALUE = u"true()";
+    constexpr OUStringLiteral NEW_ELEMENT = u"newElement";
+    constexpr OUStringLiteral NEW_ATTRIBUTE = u"newAttribute";
+    constexpr OUStringLiteral EVENTTYPE_CHARDATA = u"DOMCharacterDataModified";
+    constexpr OUStringLiteral EVENTTYPE_ATTR = u"DOMAttrModified";
 
     #define MIN_PAGE_COUNT          3 // at least one instance, one submission and one binding page
 

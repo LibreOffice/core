@@ -36,7 +36,7 @@
 
 using namespace osl;
 
-#define XML_LANG    "xml-lang"
+constexpr OStringLiteral XML_LANG = "xml-lang";
 
 
 
