@@ -139,7 +139,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
         switch (getBaseToken(nElement))
         {
             case XML_wgp:
-                mxWpgContext.set(static_cast<oox::core::ContextHandler*>(new WpgContext(*rFragmentHandler)));
+                mxWpgContext.set(static_cast<oox::core::ContextHandler*>(new WpgContext(*rFragmentHandler, oox::drawingml::ShapePtr())));
                 break;
             default:
                 break;
