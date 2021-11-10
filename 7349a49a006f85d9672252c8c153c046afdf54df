@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af0d6a34_69d106b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-11-10T15:28:50Z",
+      "side": 1,
+      "message": "Thanks Eike - sorry to disturb with random back-ports \u003d)",
+      "revId": "7349a49a006f85d9672252c8c153c046afdf54df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
