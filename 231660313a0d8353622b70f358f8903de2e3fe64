@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56849b60_fb45e7c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-10T19:51:33Z",
+      "side": 1,
+      "message": "Hope there won\u0027t be much of this kind. If it\u0027s the case, perhaps there should be a global script to find them and make patch per module.",
+      "revId": "231660313a0d8353622b70f358f8903de2e3fe64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
