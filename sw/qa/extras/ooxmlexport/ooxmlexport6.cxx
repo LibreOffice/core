@@ -120,7 +120,7 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was 106.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4725), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4729), xShape->getPosition().Y);
 }
 
 // testDmlTextshapeB was only made export-only because as an import-export test it failed for an unknown reason
@@ -138,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlTextshapeB)
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was -5011.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4717), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4720), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
