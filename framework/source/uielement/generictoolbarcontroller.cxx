@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
@@ -151,7 +152,12 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
         aArgs[0].Name  = "KeyModifier";
         aArgs[0].Value <<= KeyModifier;
 
-        aTargetURL.Complete = aCommandURL;
+        // handle also command aliases
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(m_aCommandURL,
+            vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
+        OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
+
+        aTargetURL.Complete = sRealCommand.isEmpty() ? aCommandURL : sRealCommand;
         if ( m_xUrlTransformer.is() )
             m_xUrlTransformer->parseStrict( aTargetURL );
 
