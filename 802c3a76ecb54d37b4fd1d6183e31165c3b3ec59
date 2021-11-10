@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f99b4ded_4f17e1ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-10T07:29:37Z",
+      "side": 1,
+      "message": "Is there a better way to set (or clear) the maximum value of a spinbutton than using set_range?",
+      "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
