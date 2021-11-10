@@ -96,6 +96,7 @@
 
 #include <shellres.hxx>
 #include <UndoTable.hxx>
+#include <UndoManager.hxx>
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
@@ -554,7 +555,25 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             {
                 for (SwViewShell& rShell : rWrtShell.GetRingContainer())
                     rShell.LockPaint();
-                rWrtShell.Do( SwWrtShell::UNDO, nCnt );
+
+                sal_uInt16 nUndoOffset = 0;
+                if (comphelper::LibreOfficeKit::isActive() && !bRepair && nCnt == 1)
+                {
+                    sw::UndoManager& rManager = rWrtShell.GetDoc()->GetUndoManager();
+                    const SfxUndoAction* pAction = rManager.GetUndoAction();
+                    SwView& rView = rWrtShell.GetView();
+                    ViewShellId nViewShellId = rView.GetViewShellId();
+                    if (pAction->GetViewShellId() != nViewShellId
+                        && rManager.IsViewUndoActionIndependent(&rView))
+                    {
+                        // Execute the undo with an offset: don't undo the top action, but an
+                        // earlier one, since it's independent and that belongs to our view.
+                        nUndoOffset = 1;
+                    }
+                }
+
+                rWrtShell.Do(SwWrtShell::UNDO, nCnt, nUndoOffset);
+
                 for (SwViewShell& rShell : rWrtShell.GetRingContainer())
                     rShell.UnlockPaint();
             }
