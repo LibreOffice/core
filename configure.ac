@@ -7437,6 +7437,23 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+AC_MSG_CHECKING([whether $CXX_BASE supports C++20 std::atomic_ref])
+HAVE_CXX20_ATOMIC_REF=
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <atomic>
+        int x;
+        std::atomic_ref<int> y(x);
+    ])], [
+        HAVE_CXX20_ATOMIC_REF=TRUE
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+AC_SUBST([HAVE_CXX20_ATOMIC_REF])
+
 dnl Supported since GCC 9 and Clang 10 (which each also started to support -Wdeprecated-copy, but
 dnl which is included in -Wextra anyway):
 HAVE_WDEPRECATED_COPY_DTOR=

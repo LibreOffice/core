@@ -18,6 +18,11 @@ $(eval $(call gb_StaticLibrary_add_defs,boost_filesystem,\
 	-DBOOST_ALL_NO_LIB \
 ))
 
+# See workdir/UnpackedTarball/boost/libs/filesystem/build/Jamfile.v2:
+ifeq ($(HAVE_CXX20_ATOMIC_REF),)
+$(eval $(call gb_StaticLibrary_add_defs,boost_filesystem,-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF))
+endif
+
 $(eval $(call gb_StaticLibrary_use_external,boost_filesystem,boost_headers))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_filesystem,cpp))
