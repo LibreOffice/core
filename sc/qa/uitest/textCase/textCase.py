@@ -123,18 +123,4 @@ class textCase(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 0, 4).getString(), "")
             self.assertEqual(get_cell_by_position(document, 0, 0, 3).getString(), "Free suite")
 
-    def test_tdf119162_Cycle_Case(self):
-        #Bug 119162 - Format > Text > Cycle Case on attached example file hangs Calc reproducibly
-        with self.ui_test.load_file(get_url_for_data_file("tdf119162.xls")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            #1.Open the attached .xls file
-            #2. Select column A
-            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            #3. Select [Format] > [Text] > [Cycle Case]
-            self.xUITest.executeCommand(".uno:ChangeCaseRotateCase")
-            self.xUITest.executeCommand(".uno:ChangeCaseToLower")
-            #Actual Results:Freezes LibreOffice
-            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "test\n")
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

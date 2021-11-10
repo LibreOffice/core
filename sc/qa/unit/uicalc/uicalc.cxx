@@ -49,7 +49,8 @@ public:
                               const OUString& rFilter);
     void goToCell(const OUString& rCell);
     void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr,
-                            bool bIsArray = false);
+                            bool bUseReturn = true);
+    void insertArrayToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr);
     void insertNewSheet(ScDocument& rDoc);
 
 protected:
@@ -98,7 +99,7 @@ void ScUiCalcTest::goToCell(const OUString& rCell)
 }
 
 void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCell,
-                                      const std::string& rStr, bool bIsArray)
+                                      const std::string& rStr, bool bUseReturn)
 {
     goToCell(rCell);
 
@@ -109,18 +110,22 @@ void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCe
         Scheduler::ProcessEventsToIdle();
     }
 
-    if (bIsArray)
-    {
-        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
-        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
-        Scheduler::ProcessEventsToIdle();
-    }
-    else
+    if (bUseReturn)
     {
         rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
         rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
     }
+}
+
+void ScUiCalcTest::insertArrayToCell(ScModelObj& rModelObj, const OUString& rCell,
+                                     const std::string& rStr)
+{
+    insertStringToCell(rModelObj, rCell, rStr, false);
+
+    rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+    rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
 }
 
 void ScUiCalcTest::insertNewSheet(ScDocument& rDoc)
@@ -164,6 +169,44 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "Test", /*bUseReturn*/ false);
+
+    // Insert Newline
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Test" + OUStringChar(u'\xA')),
+                         pDoc->GetString(ScAddress(0, 0, 0)));
+
+    goToCell("A1");
+
+    // Without the fix in place, this test would have hung here
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Test" + OUStringChar(u'\xA')),
+                         pDoc->GetString(ScAddress(0, 0, 0)));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToLower", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"test" + OUStringChar(u'\xA')),
+                         pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119155)
@@ -257,7 +300,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145085)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    insertStringToCell(*pModelObj, "A1", "=HYPERLINK(\"a\";\"b\")", true);
+    insertArrayToCell(*pModelObj, "A1", "=HYPERLINK(\"a\";\"b\")");
 
     CPPUNIT_ASSERT_EQUAL(OUString("b"), pDoc->GetString(ScAddress(0, 0, 0)));
 
@@ -738,7 +781,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    insertStringToCell(*pModelObj, "A1:A5", "={6;4;2;5;3}", true);
+    insertArrayToCell(*pModelObj, "A1:A5", "={6;4;2;5;3}");
 
     CPPUNIT_ASSERT_EQUAL(OUString("6"), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetString(ScAddress(0, 1, 0)));
