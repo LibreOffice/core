@@ -267,7 +267,7 @@ void writeSdrFillAttribute(::tools::XmlWriter& rWriter,
             case drawinglayer::attribute::GradientStyle::Rect:
                 rWriter.attribute("style", "Rect");
                 break;
-        };
+        }
         rWriter.attribute("border", rGradient.getBorder());
         rWriter.attribute("offsetX", rGradient.getOffsetX());
         rWriter.attribute("offsetY", rGradient.getOffsetY());
@@ -293,7 +293,7 @@ void writeSdrFillAttribute(::tools::XmlWriter& rWriter,
             case drawinglayer::attribute::HatchStyle::Triple:
                 rWriter.attribute("style", "Triple");
                 break;
-        };
+        }
         rWriter.attribute("distance", rHatch.getDistance());
         rWriter.attribute("angle", rHatch.getAngle());
         rWriter.attribute("color", convertColorToString(rHatch.getColor()));
