@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d31c37d2_43a9a08f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-10T17:46:34Z",
+      "side": 1,
+      "message": "Maybe it then makes sense to mark this with a comment describing why can\u0027t it be converted to thread-safe static?",
+      "revId": "6334f7dc43f69ada4341d5f0dd1a0f1e13113b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
