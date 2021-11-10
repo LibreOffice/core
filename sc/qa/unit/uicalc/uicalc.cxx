@@ -166,6 +166,24 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     return pModelObj;
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119155)
+{
+    ScModelObj* pModelObj = createDoc("tdf119155.xlsx");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("C2:C14");
+
+    // Without the fix in place, this test would have hung here
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Collagene Expert Targeted Wrinkle Corrector Unboxed 10 Ml"),
+                         pDoc->GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Vitamina Suractivee Hand Cream 400 Ml"),
+                         pDoc->GetString(ScAddress(2, 13, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
 {
     ScModelObj* pModelObj = createDoc("tdf138432.ods");
