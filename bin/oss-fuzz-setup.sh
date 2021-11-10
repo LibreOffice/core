@@ -16,7 +16,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/a39f6c07ddb20d7dd2ff1f95fa21e2cd-raptor2-2.0.15.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/e5be03eda13ef68aabab6e42aa67715e-redland-1.0.17.tar.gz \
-    -C - -O https://dev-www.libreoffice.org/src/boost_1_76_0.tar.xz \
+    -C - -O https://dev-www.libreoffice.org/src/boost_1_77_0.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/box2d-2.3.1.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/dtoa-20180411.tgz \
     -C - -O https://dev-www.libreoffice.org/src/expat-2.4.1.tar.bz2 \
