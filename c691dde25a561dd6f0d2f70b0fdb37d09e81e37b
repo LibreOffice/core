@@ -52,6 +52,24 @@
       "parentUuid": "c0b92b39_bff17624",
       "revId": "c691dde25a561dd6f0d2f70b0fdb37d09e81e37b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf55f6f4_d66921ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-10T10:00:49Z",
+      "side": 1,
+      "message": "imho the only safe fix would be to bundle a minimal version of ant that doesn\u0027t reference random jar files from random system rpms.",
+      "parentUuid": "8775b0d0_df47a192",
+      "revId": "c691dde25a561dd6f0d2f70b0fdb37d09e81e37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
