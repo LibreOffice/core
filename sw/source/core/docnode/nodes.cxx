@@ -1365,12 +1365,8 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, SwNodeOffset nCnt )
             if (pNd->IsTextNode() && pNd->GetTextNode()->IsOutline())
             {
                 // remove the outline indices
-                SwOutlineNodes::size_type nIdxPos;
-                if( m_pOutlineNodes->Seek_Entry( pNd, &nIdxPos ))
-                {
-                    m_pOutlineNodes->erase_at(nIdxPos);
+                if (m_pOutlineNodes->erase(pNd))
                     bUpdateNum = 1;
-                }
             }
             if( pNd->IsContentNode() )
             {
