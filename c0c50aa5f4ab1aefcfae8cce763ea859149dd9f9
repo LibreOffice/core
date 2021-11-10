@@ -16,6 +16,24 @@
       "message": "The names are #define\u0027d in wingdi.h: https://imgur.com/a/ki4xQWC https://imgur.com/a/DYFsxoa\n\nYou may want to undefine those?",
       "revId": "c0c50aa5f4ab1aefcfae8cce763ea859149dd9f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3abcc9da_a0867e12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-10T09:24:12Z",
+      "side": 1,
+      "message": "I renamed the enumerators. I was almost killed by those compiling errors in different platforms. Hope this is the last round of updating patchset.",
+      "parentUuid": "81a4db94_3fb21924",
+      "revId": "c0c50aa5f4ab1aefcfae8cce763ea859149dd9f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
