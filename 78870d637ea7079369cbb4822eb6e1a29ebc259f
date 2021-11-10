@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de1c8895_f8797c96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-10T10:15:03Z",
+      "side": 1,
+      "message": "keep this out of 7-2 for a little while longer to let it burn in on master for another week or so",
+      "revId": "78870d637ea7079369cbb4822eb6e1a29ebc259f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
