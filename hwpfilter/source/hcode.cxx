@@ -24,16 +24,15 @@
  * Special johap code => ks code => unicode
  */
 #include "precompile.h"
+#include <basegfx/numeric/ftools.hxx>
 #include <sal/types.h>
 #include <sal/macros.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include "hcode.h"
 #include "ksc5601.h"
-
-#define PI 3.14159265358979323846
 
 static hchar jaso2ks(hchar hh);
 
@@ -1445,17 +1444,8 @@ double calcAngle(int x1, int y1, int x2, int y2)
                 return 270.;
      }
      double angle;
-     angle = (180 / PI) * atan( ( y2 - y1 ) * 1.0 / ( x2 - x1 ));
-     if( y2 >= y1 ){ /* 1, 2 quadrant */
-          if( angle < 0. )
-                angle += 180.;
-     }
-     else{ /* 3, 4 quadrants */
-          if( angle > 0 )
-                angle += 180.;
-          else
-                angle += 360.;
-     }
+     // atan2 handles all 4 quadrants
+     angle = basegfx::rad2deg(atan2(y2 - y1 , x2 - x1));
      return angle;
 }
 
