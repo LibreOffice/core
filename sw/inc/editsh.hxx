@@ -821,7 +821,7 @@ public:
     std::vector<OUString> GetChunkForAutoText();
 
     /// Set our styles according to the respective rules.
-    void AutoFormat( const SvxSwAutoFormatFlags* pAFlags );
+    void AutoFormat( const SvxSwAutoFormatFlags* pAFlags, bool bCurrentParagraphOnly );
 
     static SvxSwAutoFormatFlags* GetAutoFormatFlags();
     static void SetAutoFormatFlags(SvxSwAutoFormatFlags const *);

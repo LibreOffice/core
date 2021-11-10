@@ -2414,6 +2414,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             aCh = '\t';
             [[fallthrough]];
         case SwKeyState::InsChar:
+        {
             if (rSh.GetChar(false)==CH_TXT_ATR_FORMELEMENT)
             {
                 ::sw::mark::ICheckboxFieldmark* pFieldmark =
@@ -2495,6 +2496,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 weld::DialogController::runAsync(xInfo, [](int) {});
                 eKeyState = SwKeyState::End;
             }
+
+            bool bIsSpace = (aCh == ' ' && ((rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_SPACE));
+            if (bIsSpace && pACorr && pACfg)
+            {
+                SvxSwAutoFormatFlags& rFlags = pACorr->GetSwFlags();
+                if(pACfg->IsAutoFormatByInput() && rFlags.bSetNumRule)
+                    rSh.AutoFormat(&rFlags, true);
+            }
+        }
         break;
 
         case SwKeyState::CheckAutoCorrect:
