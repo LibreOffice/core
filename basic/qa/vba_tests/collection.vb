@@ -56,16 +56,18 @@ Sub verify_testCollection()
     ' tdf#144245 - German Eszett is uppercased to a two-character 'SS'.
     ' This test should fail after tdf#110003 has been fixed since the lowercase and the uppercase
     ' German Eszett should be matched to the same index.
-    TestUtil.AssertEqual(b.Count, 3, "b.Count")
+    ' Before the fix of tdf#110003
+    'TestUtil.AssertEqual(b.Count, 3, "b.Count")
     ' After the fix of tdf#110003
-    ' TestUtil.AssertEqual(b.Count, 2, "b.Count")
+    TestUtil.AssertEqual(b.Count, 2, "b.Count")
 
     TestUtil.AssertEqual(b.Item("SS"), 1, "b.Item(""SS"")")
     TestUtil.AssertEqual(b.Item("ss"), 1, "b.Item(""ss"")")
     TestUtil.AssertEqual(b.Item("ẞ"), 3, "b.Item(""ẞ"")")
-    TestUtil.AssertEqual(b.Item("ß"), 4, "b.Item(""ß"")")
+    ' Before the fix of tdf#110003
+    'TestUtil.AssertEqual(b.Item("ß"), 4, "b.Item(""ß"")")
     ' After the fix of tdf#110003
-    ' TestUtil.AssertEqual(b.Item("ß"), 3, "b.Item(""ß"")")
+    TestUtil.AssertEqual(b.Item("ß"), 3, "b.Item(""ß"")")
 
     Exit Sub
 errorHandler:
