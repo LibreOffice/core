@@ -126,7 +126,7 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
             @descr      There are two ways to delete an instance of this class.<BR>
                         1) delete with destructor<BR>
                         2) dispose from parent or factory or...<BR>
-                        This method do the same for both ways! It frees used memory and release references...
+                        This method does the same for both ways! It frees used memory and releases references...
 
             @seealso    method dispose()
             @seealso    destructor ~TaskEnumeration()
