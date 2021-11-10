@@ -80,6 +80,7 @@ public:
     virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const override;
     size_t GetRedoActionCount(const bool bCurrentLevel = true) const override;
     void SetView(SwView* pView) override;
+    bool UndoWithOffset(size_t nUndoOffset) override;
 
     // SfxUndoManager
     virtual void AddUndoAction(std::unique_ptr<SfxUndoAction> pAction,
@@ -94,6 +95,12 @@ public:
     SwNodes const& GetUndoNodes() const;
     SwNodes      & GetUndoNodes();
     void SetDocShell(SwDocShell* pDocShell);
+
+    /**
+     * Checks if the topmost undo action owned by pView is independent from the topmost action undo
+     * action.
+     */
+    bool IsViewUndoActionIndependent(const SwView* pView) const;
 
 private:
     virtual void EmptyActionsChanged() override;
@@ -118,7 +125,7 @@ private:
     SwView* m_pView;
 
     enum class UndoOrRedoType { Undo, Redo };
-    bool impl_DoUndoRedo(UndoOrRedoType undoOrRedo);
+    bool impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset);
 
     // UGLY: should not be called
     using SdrUndoManager::Repeat;

@@ -476,6 +476,11 @@ SwRewriter SwUndoInsert::GetRewriter() const
     return aResult;
 }
 
+bool SwUndoInsert::IsIndependent(const SwUndoInsert& rOther) const
+{
+    return m_nNode != rOther.m_nNode;
+}
+
 class SwUndoReplace::Impl
     : private SwUndoSaveContent
 {

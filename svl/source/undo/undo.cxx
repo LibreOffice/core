@@ -683,6 +683,16 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
         return false;
     }
 
+    if (i_contextOrNull && i_contextOrNull->GetUndoOffset() == 1)
+    {
+        if (m_xData->pActUndoArray->nCurUndoAction >= 2)
+        {
+            std::swap(
+                m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction - 1],
+                m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction - 2]);
+        }
+    }
+
     SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions[ --m_xData->pActUndoArray->nCurUndoAction ].pAction.get();
     const OUString sActionComment = pAction->GetComment();
     try

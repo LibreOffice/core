@@ -30,7 +30,7 @@
 // Undo ends all modes. If a selection is emerged by the Undo,
 // this must be considered for further action.
 
-void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
+void SwWrtShell::Do(DoType eDoType, sal_uInt16 nCnt, sal_uInt16 nOffset)
 {
     // #105332# save current state of DoesUndo()
     bool bSaveDoesUndo = DoesUndo();
@@ -42,7 +42,7 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
             DoUndo(false); // #i21739#
             // Reset modes
             EnterStdMode();
-            SwEditShell::Undo(nCnt);
+            SwEditShell::Undo(nCnt, nOffset);
             break;
         case REDO:
             DoUndo(false); // #i21739#

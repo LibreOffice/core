@@ -107,11 +107,16 @@ public:
         o_rpMarkList = m_pMarkList;
     }
 
+    void SetUndoOffset(size_t nUndoOffset) { m_nUndoOffset = nUndoOffset; }
+
+    size_t GetUndoOffset() override { return m_nUndoOffset; }
+
 private:
     SwDoc & m_rDoc;
     IShellCursorSupplier & m_rCursorSupplier;
     SwFrameFormat * m_pSelFormat;
     SdrMarkList * m_pMarkList;
+    size_t m_nUndoOffset = 0;
 };
 
 class RepeatContext final
