@@ -138,7 +138,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     m_pParent = pParent;
 
     Qt::WindowFlags aWinFlags(Qt::Widget);
-    if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD) && (nStyle != SalFrameStyleFlags::NONE))
+    if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD))
     {
         if (nStyle & SalFrameStyleFlags::INTRO)
             aWinFlags = Qt::SplashScreen;
