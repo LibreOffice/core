@@ -153,7 +153,7 @@ namespace {
             return nQuality;
         }
 
-        bool IsPaperSize() const
+        bool IsPageSize() const
         {
             return GetBoolValue("PageOptions", sal_Int32(1));
         }
@@ -173,10 +173,10 @@ namespace {
             return GetBoolValue("PrintProspect", false);
         }
 
-        bool IsPrinterPreferred() const
+        bool IsPrinterPreferred(DocumentType eDocType) const
         {
-            return IsTilePage() || IsPaperSize() || IsBooklet() ||
-                IsNotes() || IsHandout() || IsOutline();
+            bool bIsDraw = eDocType == DocumentType::Draw;
+            return IsTilePage() || IsPageSize() || IsBooklet() || (!bIsDraw && !IsNotes());
         }
 
         bool IsPrintExcluded() const
@@ -1374,7 +1374,7 @@ private:
 
         // Draw and Notes should usually abide by their specified paper size
         Size aPaperSize;
-        if (!mpOptions->IsPrinterPreferred())
+        if (!mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()))
         {
             aPaperSize.setWidth(rInfo.maPageSize.Width());
             aPaperSize.setHeight(rInfo.maPageSize.Height());
@@ -1387,7 +1387,7 @@ private:
 
         maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
 
-        if (mpOptions->IsPrinterPreferred())
+        if (mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()))
         {
             if( (rInfo.meOrientation == Orientation::Landscape &&
                   (aPaperSize.Width() < aPaperSize.Height()))
@@ -1448,7 +1448,7 @@ private:
             aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( ::tools::Time( ::tools::Time::SYSTEM ), false );
 
         // Draw and Notes should usually use specified paper size when printing
-        if (!mpOptions->IsPrinterPreferred())
+        if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))
         {
             aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->GetSize();
             maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
@@ -1770,7 +1770,7 @@ private:
         OSL_ASSERT(pDocument != nullptr);
         SdPage& rHandoutPage (*pDocument->GetSdPage(0, PageKind::Handout));
 
-        const bool bScalePage (mpOptions->IsPaperSize());
+        const bool bScalePage (mpOptions->IsPageSize());
 
         sal_uInt16 nPaperBin;
         if ( ! mpOptions->IsPaperBin())
@@ -1930,7 +1930,7 @@ private:
             // is it possible that the page size changed?
             const Size aPageSize = pPage->GetSize();
 
-            if (mpOptions->IsPrinterPreferred())
+            if (mpOptions->IsPageSize())
             {
                 const double fHorz (static_cast<double>(rInfo.maPrintSize.Width())  / aPageSize.Width());
                 const double fVert (static_cast<double>(rInfo.maPrintSize.Height()) / aPageSize.Height());
@@ -2159,7 +2159,7 @@ private:
         //    (without the unprintable borders).
         // 3. Split the page into parts of the size of the
         // printable area.
-        const bool bScalePage (mpOptions->IsPaperSize());
+        const bool bScalePage (mpOptions->IsPageSize());
         const bool bCutPage (mpOptions->IsCutPage());
         MapMode aMap (rInfo.maMap);
         if ( (bScalePage || bCutPage) && CheckForFrontBackPages( nPageIndex ) )
