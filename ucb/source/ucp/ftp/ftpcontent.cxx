@@ -557,9 +557,9 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
     }
 }
 
-#define FTP_FILE "application/vnd.sun.staroffice.ftp-file"
+constexpr OUStringLiteral FTP_FILE = u"application/vnd.sun.staroffice.ftp-file";
 
-#define FTP_FOLDER "application/vnd.sun.staroffice.ftp-folder"
+constexpr OUStringLiteral FTP_FOLDER = u"application/vnd.sun.staroffice.ftp-folder";
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
