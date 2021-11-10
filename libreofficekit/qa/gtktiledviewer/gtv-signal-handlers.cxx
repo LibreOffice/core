@@ -16,6 +16,7 @@
 
 #include <sal/macros.h>
 
+#include <cassert>
 #include <map>
 #include <vector>
 
@@ -186,8 +187,9 @@ static void iterateUnoParams(GtkWidget* pWidget, gpointer userdata)
     GList* pIt = nullptr;
     guint i = 0;
     const gchar* unoParam[3];
-    for (pIt = pChildren.get(), i = 0; pIt != nullptr && i < 3; pIt = pIt->next, i++)
+    for (pIt = pChildren.get(), i = 0; i < 3; pIt = pIt->next, i++)
     {
+        assert(pIt != nullptr);
         unoParam[i] = gtk_entry_get_text(GTK_ENTRY(pIt->data));
     }
 
