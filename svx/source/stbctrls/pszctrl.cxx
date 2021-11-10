@@ -162,7 +162,7 @@ FunctionPopup_Impl::FunctionPopup_Impl(sal_uInt32 nCheckEncoded)
     , m_nSelected(nCheckEncoded)
 {
     for ( sal_uInt16 nCheck = 1; nCheck < 32; ++nCheck )
-        if ( nCheckEncoded & (1 << nCheck) )
+        if ( nCheckEncoded & (1u << nCheck) )
             m_xMenu->set_active(function_to_id(nCheck), true);
 }
 
@@ -174,10 +174,10 @@ sal_uInt32 FunctionPopup_Impl::GetSelected(std::string_view curident) const
         nSelected = ( 1 << PSZ_FUNC_NONE );
     else
     {
-        nSelected &= (~( 1 << PSZ_FUNC_NONE )); // Clear the "None" bit
-        nSelected ^= ( 1 << nCurItemId ); // Toggle the bit corresponding to nCurItemId
+        nSelected &= (~( 1u << PSZ_FUNC_NONE )); // Clear the "None" bit
+        nSelected ^= ( 1u << nCurItemId ); // Toggle the bit corresponding to nCurItemId
         if ( !nSelected )
-            nSelected = ( 1 << PSZ_FUNC_NONE );
+            nSelected = ( 1u << PSZ_FUNC_NONE );
     }
     return nSelected;
 }
