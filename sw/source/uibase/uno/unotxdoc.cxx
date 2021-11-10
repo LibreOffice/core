@@ -3006,10 +3006,10 @@ void SAL_CALL SwXTextDocument::render(
     }
     if( bLastPage )
     {
-        m_pRenderData.reset();
-        m_pPrintUIOptions.reset();
         // tdf#144989 enable DoIdleJobs() again after last page
         pDoc->getIDocumentTimerAccess().UnblockIdling();
+        m_pRenderData.reset();
+        m_pPrintUIOptions.reset();
     }
 }
 
