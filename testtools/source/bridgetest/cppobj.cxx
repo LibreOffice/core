@@ -61,8 +61,8 @@ using namespace test::testtools::bridgetest;
 #pragma warning (disable : 4503) // irrelevant for test code
 #endif
 
-#define SERVICENAME     "com.sun.star.test.bridge.CppTestObject"
-#define IMPLNAME        "com.sun.star.comp.bridge.CppTestObject"
+constexpr OUStringLiteral SERVICENAME = u"com.sun.star.test.bridge.CppTestObject";
+constexpr OUStringLiteral IMPLNAME = u"com.sun.star.comp.bridge.CppTestObject";
 
 namespace bridge_object
 {
@@ -1199,7 +1199,7 @@ SAL_DLLPUBLIC_EXPORT void * component_getFactory(
 {
     void * pRet = nullptr;
 
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
+    if (pServiceManager && OUString(IMPLNAME).equalsAscii(pImplName))
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             static_cast< XMultiServiceFactory * >( pServiceManager ),

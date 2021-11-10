@@ -171,7 +171,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePage
                 aFollowPageWords[0] : OUString());
 }
 
-#define implementationName "com.sun.star.i18n.IndexEntrySupplier"
+constexpr OUStringLiteral implementationName = u"com.sun.star.i18n.IndexEntrySupplier";
 
 OUString SAL_CALL
 IndexEntrySupplier::getImplementationName()
