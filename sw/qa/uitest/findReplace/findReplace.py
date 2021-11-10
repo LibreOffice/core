@@ -173,4 +173,33 @@ class findReplace(UITestCase):
                 # Without the fix in place, this test would have failed with AssertionError: '' != 'x'
                 self.assertEqual(document.Text.String, "x")
 
+    def test_tdf143128(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            type_text(xWriterEdit, "ß")
+
+            self.assertEqual(document.Text.String, "ß")
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
+
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"ẞ"}))
+
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"SS"}))
+
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple())
+
+                # Without the fix in place, this test would have failed with
+                # AssertionError: 'ß' != 'SS'
+                self.assertEqual(document.Text.String, "SS")
+
+                self.xUITest.executeCommand(".uno:Undo")
+
+                self.assertEqual(document.Text.String, "ß")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
