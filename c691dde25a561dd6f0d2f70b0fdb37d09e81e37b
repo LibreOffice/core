@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79913e19_7b60fd2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-10T07:34:12Z",
+      "side": 1,
+      "message": "Instead patching an explicit\n  import java.util.Hashtable;\ninto workdir/UnpackedTarball/rhino/src/org/mozilla/javascript/optimizer/Codegen.java alongside the existing\n  import org.mozilla.javascript.*;\nand\n  import java.util.*;\nwould not help?",
+      "revId": "c691dde25a561dd6f0d2f70b0fdb37d09e81e37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
