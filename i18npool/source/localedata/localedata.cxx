@@ -31,7 +31,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 #include <sal/macros.h>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -505,8 +504,11 @@ private:
 // locking pattern correctly.
 // usage:  lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 // retrieves the singleton lookup table instance
-struct lcl_LookupTableStatic : public ::rtl::Static< lcl_LookupTableHelper, lcl_LookupTableStatic >
-{};
+lcl_LookupTableHelper& lcl_LookupTableStatic()
+{
+    static lcl_LookupTableHelper SINGLETON;
+    return SINGLETON;
+}
 
 lcl_LookupTableHelper::lcl_LookupTableHelper()
 {
@@ -1439,7 +1441,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
 
 oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, const char* pFunction )
 {
-    lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
+    lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic();
 
     if (cachedItem && cachedItem->equals(rLocale))
     {
@@ -1496,7 +1498,7 @@ LocaleDataImpl::getAllInstalledLocaleNames()
         // Check if the locale is really available and not just in the table,
         // don't allow fall backs.
         std::unique_ptr<LocaleDataLookupTableItem> pCachedItem;
-        if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
+        if (lcl_LookupTableStatic().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
             if( pCachedItem )
                 cachedItem = std::move( pCachedItem );
             seqRange[nInstalled++] = LanguageTag::convertToLocale( name.replace( cUnder, cHyphen), false);

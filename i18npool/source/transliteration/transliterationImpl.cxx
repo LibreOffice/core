@@ -27,7 +27,6 @@
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 
 #include <algorithm>
@@ -582,13 +581,13 @@ namespace
         OUString Name;
         css::uno::Reference< css::i18n::XExtendedTransliteration > Body;
     };
-    class theTransBodyMutex : public rtl::Static<osl::Mutex, theTransBodyMutex> {};
 }
 
 void TransliterationImpl::loadBody( OUString const &implName, Reference<XExtendedTransliteration>& body )
 {
     assert(!implName.isEmpty());
-    ::osl::MutexGuard guard(theTransBodyMutex::get());
+    static osl::Mutex transBodyMutex;
+    ::osl::MutexGuard guard(transBodyMutex);
     static TransBody lastTransBody;
     if (implName != lastTransBody.Name)
     {
