@@ -212,6 +212,9 @@ public:
      */
     virtual void SetView(SwView* pView) = 0;
 
+    /// Zero offset means undoing the top undo action.
+    virtual bool UndoWithOffset(size_t nUndoOffset) = 0;
+
 protected:
     virtual ~IDocumentUndoRedo() {};
 };

@@ -42,6 +42,12 @@ public:
 class SVL_DLLPUBLIC SfxUndoContext
 {
 public:
+    /**
+     * Don't undo the top undo action, but an earlier one. It's the caller's responsibility to
+     * ensure that the earlier undo action is independent from the following ones.
+     */
+    virtual size_t GetUndoOffset() { return 0; }
+
     virtual             ~SfxUndoContext() = 0;
 };
 

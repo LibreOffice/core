@@ -86,6 +86,8 @@ public:
     virtual SwRewriter GetRewriter() const override;
 
     void SetWithRsid() { m_bWithRsid = true; }
+
+    bool IsIndependent(const SwUndoInsert& rOther) const;
 };
 
 SwRewriter
