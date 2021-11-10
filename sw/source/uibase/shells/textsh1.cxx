@@ -26,7 +26,6 @@
 #include <comphelper/lok.hxx>
 
 #include <i18nutil/unicode.hxx>
-#include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/langitem.hxx>
@@ -1624,13 +1623,13 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 // get keyboard language
                 OUString aKeyboardLang;
                 SwEditWin& rEditWin = GetView().GetEditWin();
-                LanguageType nLang = MsLangId::getRealLanguage( rEditWin.GetInputLanguage() );
+                LanguageType nLang = rEditWin.GetInputLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
                 // get the language that is in use
                 OUString aCurrentLang = "*";
-                nLang = MsLangId::getRealLanguage( SwLangHelper::GetCurrentLanguage( rSh ) );
+                nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
                 {
                     aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
