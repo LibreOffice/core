@@ -746,7 +746,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // This must always be false for the postprocessing.
             aFlags.bAFormatByInput = false;
             aFlags.bWithRedlining = true;
-            rWrtSh.AutoFormat( &aFlags );
+            rWrtSh.AutoFormat( &aFlags, false );
             aFlags.bWithRedlining = false;
 
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
@@ -785,7 +785,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SvxSwAutoFormatFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // This must always be false for the postprocessing.
             aFlags.bAFormatByInput = false;
-            rWrtSh.AutoFormat( &aFlags );
+            rWrtSh.AutoFormat( &aFlags, false );
             rReq.Done();
         }
         break;
