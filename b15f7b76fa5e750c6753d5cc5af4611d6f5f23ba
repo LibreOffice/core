@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aea0b0a6_bb1c2eec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-10T16:04:36Z",
+      "side": 1,
+      "message": "@jmux: FYI, I came across this while testing https://gerrit.libreoffice.org/c/core/+/124958 on Wayland.\nSince LO builds use Qt \u003c 5.14, TDF builds should still see the behaviour described in tdf#12293 on Wayland. I tend to say that\u0027s \"NOTOURBUG\" though (and qt5 on Wayland is somewhat still \"experimental\" anyway). What do you think?",
+      "revId": "b15f7b76fa5e750c6753d5cc5af4611d6f5f23ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
