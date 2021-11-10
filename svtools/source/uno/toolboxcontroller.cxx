@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
@@ -520,6 +521,30 @@ void ToolboxController::bindListener()
                 catch ( Exception& )
                 {
                 }
+
+                // it may be a command alias
+                if (!xDispatch.is())
+                {
+                    try
+                    {
+                        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(listener.first,
+                            vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
+                        OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
+
+                        if (!sRealCommand.isEmpty())
+                        {
+                            aTargetURL.Complete = sRealCommand;
+                            if ( m_xUrlTransformer.is() )
+                                m_xUrlTransformer->parseStrict( aTargetURL );
+
+                            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+                        }
+                    }
+                    catch ( Exception& )
+                    {
+                    }
+                }
+
                 listener.second = xDispatch;
 
                 Listener aListener( aTargetURL, xDispatch );
