@@ -1126,20 +1126,15 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
                     pTableNd->DelFrames();
 
                 SwNode *pNd, *pChkNd = pCurrentNode->m_pStartOfSection;
-                SwOutlineNodes::size_type nIdxPos;
                 do {
                     pNd = &aRg.aEnd.GetNode();
 
                     if( pNd->IsTextNode() )
                     {
                         SwTextNode *const pTextNode(pNd->GetTextNode());
-                        if (pTextNode->IsOutline() &&
-                                m_pOutlineNodes->Seek_Entry( pNd, &nIdxPos ))
-                        {
-                            // remove outline indices
-                            m_pOutlineNodes->erase_at(nIdxPos);
+                        // remove outline indices
+                        if (m_pOutlineNodes->erase(pNd))
                             bUpdateOutline = true;
-                        }
                         pTextNode->InvalidateNumRule();
                     }
                     else if( pNd->IsEndNode() &&
@@ -1197,12 +1192,9 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
             SwTextNode* pTextNd = pCurrentNode->GetTextNode();
             if( pTextNd )
             {
-                if( pTextNd->IsOutline())
-                {
-                    // delete outline indices
-                    m_pOutlineNodes->erase( pTextNd );
+                // delete outline indices
+                if (m_pOutlineNodes->erase(pTextNd))
                     bUpdateOutline = true;
-                }
                 if (sw::HasNumberingWhichNeedsLayoutUpdate(*pTextNd))
                 {
                     pTextNd->InvalidateNumRule();
