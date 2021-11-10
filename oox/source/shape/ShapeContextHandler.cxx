@@ -47,7 +47,8 @@ using namespace drawingml;
 
 ShapeContextHandler::ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase) :
   mnStartToken(0),
-  mxShapeFilterBase(xFilterBase)
+  mxShapeFilterBase(xFilterBase),
+  m_bFullWPGSUpport(false)
 {
 }
 
@@ -139,8 +140,12 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
         switch (getBaseToken(nElement))
         {
             case XML_wgp:
-                mxWpgContext.set(static_cast<oox::core::ContextHandler*>(new WpgContext(*rFragmentHandler)));
+            {
+                auto pContext = new WpgContext(*rFragmentHandler, oox::drawingml::ShapePtr());
+                pContext->setFullWPGSupport(m_bFullWPGSUpport);
+                mxWpgContext.set(static_cast<oox::core::ContextHandler*>(pContext));
                 break;
+            }
             default:
                 break;
         }
