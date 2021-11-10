@@ -1529,6 +1529,13 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
         if (ScDrawView* pDrawView = mrViewData.GetScDrawView())
             pDrawView->resetGridOffsetsForAllSdrPageViews();
     }
+
+    if (bLayoutRTL)
+    {
+        Bitmap aCellBMP = rDevice.GetBitmap(Point(0, 0), Size(nOutputWidth, nOutputHeight));
+        aCellBMP.Mirror(BmpMirrorFlags::Horizontal);
+        rDevice.DrawBitmap(Point(0, 0), Size(nOutputWidth, nOutputHeight), aCellBMP);
+    }
 }
 
 void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
