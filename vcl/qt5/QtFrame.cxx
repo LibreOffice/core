@@ -363,8 +363,15 @@ QWindow* QtFrame::windowHandle() const
 
 QScreen* QtFrame::screen() const
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    return asChild()->screen();
+#else
+    // QWidget::screen only available from Qt 5.14 on, call windowHandle(),
+    // with the indirect result that mouse move events on Wayland will not be
+    // emitted reliably, s. QTBUG-75766
     QWindow* const pWindow = windowHandle();
     return pWindow ? pWindow->screen() : nullptr;
+#endif
 }
 
 bool QtFrame::isMinimized() const { return asChild()->isMinimized(); }
