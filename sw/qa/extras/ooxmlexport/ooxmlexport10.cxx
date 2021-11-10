@@ -114,6 +114,25 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    auto MyShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), MyShape->getShapeType());
+
+    uno::Reference<drawing::XShapes> xGroup(MyShape, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xTriangle(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCircle(xEmbedGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDiamond(xEmbedGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The circle lost its textbox", true, xCircle->getPropertyValue("TextBox").get<bool>());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The diamond lost its textbox", true, xDiamond->getPropertyValue("TextBox").get<bool>());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The triangle lost its textbox", true, xTriangle->getPropertyValue("TextBox").get<bool>());
+
+}
+
 DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -263,7 +282,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
     CPPUNIT_ASSERT_EQUAL(48.f, getProperty<float>(getRun(xParagraph, 1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor")));
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 1), "CharWeight"));
-    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xGroup->getByIndex(1), "TextVerticalAdjust"));
+    //FIXME: CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xGroup->getByIndex(1), "TextVerticalAdjust"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMissingPath, "missing-path.docx")
