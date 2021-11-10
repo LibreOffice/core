@@ -48,6 +48,7 @@ class SvdrawTest : public test::BootstrapFixture, public unotest::MacrosTest, pu
 {
 protected:
     uno::Reference<lang::XComponent> mxComponent;
+    SdrPage* getFirstDrawPageWithAssert();
 
 public:
     virtual void setUp() override
@@ -66,6 +67,37 @@ public:
     }
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
+
+SdrPage* SvdrawTest::getFirstDrawPageWithAssert()
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPage.is());
+
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    return pDrawPage->GetSdrPage();
+}
+
+xmlDocUniquePtr lcl_dumpAndParseFirstObjectWithAssert(SdrPage* pSdrPage)
+{
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pSdrPage->GetObj(0) }, nullptr);
+    const auto& rDrawPageVOContact
+        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
+
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
+    CPPUNIT_ASSERT(pXmlDoc);
+    return pXmlDoc;
+}
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
 {
@@ -390,6 +422,75 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "color", "#ff0000");
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "specularIntensity",
                 "20");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
+{
+    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_metal.odp");
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // ODF specifies specular color as rgb(200,200,200) and adding 15 to specularity for metal=true
+    // without patch the specular color was #ffffff
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", "#c8c8c8");
+    // specularIntensity = 100 - (80 + 15), with nominal value 80 in the file
+    // without patch specularIntensity was 15
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "5");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
+{
+    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_phong.odp");
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The rendering method and normals kind were always 'Flat' without the patch.
+    assertXPath(pXmlDoc, "//scene", "shadeMode", "Phong");
+    assertXPath(pXmlDoc, "//object3Dattributes", "normalsKind", "Specific");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
+{
+    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_Matte_import.ppt");
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The preset 'matte' in the PPT user interface sets the specularity of material to 0. To get the
+    // same effect in LO, specular of the lights need to be false in addition. Without patch the
+    // lights 1, 2, 3 are used, with patch lights 2, 3, 4. Thereby light 4 has the same color and
+    // direction as light 1, but without being specular. The dump has in both cases three lights, but
+    // without number. So we test as ersatz, that the third of them has the color of light 1. Being
+    // not light 1, it is never specular in LO, so no need to test.
+    // 'color' was "#464646" without patch.
+    assertXPath(pXmlDoc, "(//light)[3]", "color", "#aaaaaa");
+    // 'specularIntensity' was "15" without patch. specularIntensity = 100 - specularity of material.
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "100");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
+{
+    OUString aURL
+        = m_directories.getURLFromSrc(u"svx/qa/unit/data/tdf140321_material_specular.odp");
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The material property 'draw:extrusion-specularity' was not applied to the object but to the
+    // scene. Without patch the object has always a default value 15 of specularIntensity. The file
+    // has specularity=77%. It should be specularIntensity = 100-77=23 with patch.
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "23");
 }
 }
 
