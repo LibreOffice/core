@@ -278,7 +278,12 @@ void SAL_CALL OSingleSelectQueryComposer::disposing()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
-IMPLEMENT_SERVICE_INFO1(OSingleSelectQueryComposer,"org.openoffice.comp.dba.OSingleSelectQueryComposer",SERVICE_NAME_SINGLESELECTQUERYCOMPOSER)
+IMPLEMENT_SERVICE_INFO_IMPLNAME(OSingleSelectQueryComposer, "org.openoffice.comp.dba.OSingleSelectQueryComposer")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OSingleSelectQueryComposer)
+css::uno::Sequence< OUString > SAL_CALL OSingleSelectQueryComposer::getSupportedServiceNames()
+{
+    return { SERVICE_NAME_SINGLESELECTQUERYCOMPOSER };
+}
 
 css::uno::Sequence<sal_Int8> OSingleSelectQueryComposer::getImplementationId()
 {
@@ -294,7 +299,22 @@ css::uno::Sequence< css::uno::Type > OSingleSelectQueryComposer::getTypes()
     );
 }
 
-IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
+css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OSingleSelectQueryComposer::getPropertySetInfo()
+{
+    Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+::cppu::IPropertyArrayHelper& OSingleSelectQueryComposer::getInfoHelper()
+{
+    return *OSingleSelectQueryComposer::getArrayHelper();
+}
+::cppu::IPropertyArrayHelper* OSingleSelectQueryComposer::createArrayHelper( ) const
+{
+    css::uno::Sequence< css::beans::Property > aProps;
+    describeProperties(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+
 
 // XSingleSelectQueryAnalyzer
 OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  )

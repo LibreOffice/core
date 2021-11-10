@@ -80,7 +80,21 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
         return css::uno::Sequence<sal_Int8>();
     }
 
-    IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
+    css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ComposerDialog::getPropertySetInfo()
+    {
+        Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+        return xInfo;
+    }
+    ::cppu::IPropertyArrayHelper& ComposerDialog::getInfoHelper()
+    {
+        return *ComposerDialog::getArrayHelper();
+    }
+    ::cppu::IPropertyArrayHelper* ComposerDialog::createArrayHelper( ) const
+    {
+        css::uno::Sequence< css::beans::Property > aProps;
+        describeProperties(aProps);
+        return new ::cppu::OPropertyArrayHelper(aProps);
+    }
 
     std::unique_ptr<weld::DialogController> ComposerDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {

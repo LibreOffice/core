@@ -47,7 +47,9 @@ namespace dbaui
 
         DECLARE_SERVICE_INFO();
 
-        DECLARE_PROPERTYCONTAINER_DEFAULTS( );
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     protected:
         // OGenericUnoDialog overridables

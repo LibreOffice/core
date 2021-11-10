@@ -802,9 +802,9 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
         DECL_PROP1(LAYOUTINFORMATION,           Sequence< PropertyValue >,  BOUND);
         DECL_PROP1(NAME,                        OUString,            READONLY);
-        DECL_PROP2_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY, TRANSIENT);
+        DECL_PROP_IMPL(NUMBERFORMATSSUPPLIER, cppu::UnoType<XNumberFormatsSupplier>::get()) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1(PASSWORD,                    OUString,            TRANSIENT);
-        DECL_PROP2_IFACE(SETTINGS,              XPropertySet,               BOUND, READONLY);
+        DECL_PROP_IMPL(SETTINGS, cppu::UnoType<XPropertySet>::get()) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY);
         DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
         DECL_PROP1(TABLEFILTER,                 Sequence< OUString >,BOUND);
         DECL_PROP1(TABLETYPEFILTER,             Sequence< OUString >,BOUND);

@@ -131,7 +131,12 @@ void OQueryContainer::disposing()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO2(OQueryContainer, "com.sun.star.sdb.dbaccess.OQueryContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDB_QUERIES)
+IMPLEMENT_SERVICE_INFO_IMPLNAME(OQueryContainer, "com.sun.star.sdb.dbaccess.OQueryContainer")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OQueryContainer)
+css::uno::Sequence< OUString > SAL_CALL OQueryContainer::getSupportedServiceNames()
+{
+    return { SERVICE_SDBCX_CONTAINER, SERVICE_SDB_QUERIES };
+}
 
 // XDataDescriptorFactory
 Reference< XPropertySet > SAL_CALL OQueryContainer::createDataDescriptor(  )

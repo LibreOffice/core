@@ -77,50 +77,6 @@ public:
     }   \
 
 
-
-#define IMPLEMENT_SERVICE_INFO1(classname, implasciiname, serviceasciiname) \
-    IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
-    {   \
-        return { serviceasciiname }; \
-    }   \
-
-
-#define IMPLEMENT_SERVICE_INFO2(classname, implasciiname, serviceasciiname1, serviceasciiname2) \
-    IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
-    {   \
-        return { serviceasciiname1, serviceasciiname2 };    \
-    }
-
-
-// helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
-#define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
-    virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override; \
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override; \
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override
-
-#define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname , baseclass1)  \
-    css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo()  \
-    {   \
-        Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );    \
-        return xInfo;   \
-    }   \
-    ::cppu::IPropertyArrayHelper& classname::getInfoHelper()    \
-    {   \
-    return *baseclass1::getArrayHelper();   \
-    }   \
-    ::cppu::IPropertyArrayHelper* classname::createArrayHelper( ) const \
-    {   \
-        css::uno::Sequence< css::beans::Property > aProps;    \
-        describeProperties(aProps); \
-        return new ::cppu::OPropertyArrayHelper(aProps);    \
-    }
-#define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( classname )   \
-    IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname, classname )
-
 // helper for implementing the createArrayHelper
 #define BEGIN_PROPERTY_SEQUENCE(count)  \
     css::uno::Sequence< css::beans::Property> aDescriptor(count); \
@@ -145,14 +101,8 @@ public:
 #define DECL_PROP1_BOOL(varname, attrib1)   \
     DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::attrib1)
 
-#define DECL_PROP2_IFACE(varname, iface, attrib1, attrib2)  \
-    DECL_PROP_IMPL(varname, cppu::UnoType<iface>::get()) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2)
-
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
     DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2)
-
-#define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
-    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3)
 
 #define END_PROPERTY_SEQUENCE()                             \
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");    \

@@ -55,7 +55,9 @@ namespace dbaui
     public:
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
-        DECLARE_PROPERTYCONTAINER_DEFAULTS( );
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     protected:
         // own overridables

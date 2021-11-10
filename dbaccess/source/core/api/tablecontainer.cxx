@@ -123,7 +123,13 @@ OUString OTableContainer::getTableTypeRestriction() const
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
+IMPLEMENT_SERVICE_INFO_IMPLNAME(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OTableContainer)
+css::uno::Sequence< OUString > SAL_CALL OTableContainer::getSupportedServiceNames()
+{
+    return { SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES };
+}
+
 
 namespace
 {
