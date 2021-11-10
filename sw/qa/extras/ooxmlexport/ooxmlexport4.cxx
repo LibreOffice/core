@@ -109,7 +109,7 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapeTextbox, "groupshape-textbox.docx")
     // The DML export does not, make sure it stays that way.
     CPPUNIT_ASSERT_EQUAL(OUString("first"), xShape->getString());
     // This was 16, i.e. inheriting doc default char height didn't work.
-    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(getParagraphOfText(1, xShape->getText()), "CharHeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapePicture, "groupshape-picture.docx")
