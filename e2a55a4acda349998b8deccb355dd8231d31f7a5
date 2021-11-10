@@ -52,6 +52,23 @@
       "parentUuid": "f743fca4_8386084f",
       "revId": "e2a55a4acda349998b8deccb355dd8231d31f7a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "253fdc42_e02479b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-10T16:10:53Z",
+      "side": 1,
+      "message": "Crash happens with kf5 in ctor of FontworkAlignmentWindow at mxWord-\u003econnect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl)); There is no radio button with the id \"word\" anymore.",
+      "revId": "e2a55a4acda349998b8deccb355dd8231d31f7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
