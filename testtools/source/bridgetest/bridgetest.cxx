@@ -67,10 +67,10 @@ using namespace com::sun::star::bridge;
 using namespace test::testtools::bridgetest;
 
 
-#define SERVICENAME     "com.sun.star.test.bridge.BridgeTest"
-#define IMPLNAME        "com.sun.star.comp.bridge.BridgeTest"
+constexpr OUStringLiteral SERVICENAME = u"com.sun.star.test.bridge.BridgeTest";
+constexpr OUStringLiteral IMPLNAME = u"com.sun.star.comp.bridge.BridgeTest";
 
-#define STRING_TEST_CONSTANT "\" paco\' chorizo\\\' \"\'"
+constexpr OUStringLiteral STRING_TEST_CONSTANT  = u"\" paco\' chorizo\\\' \"\'";
 
 namespace bridge_test
 {
@@ -1313,7 +1313,7 @@ SAL_DLLPUBLIC_EXPORT void * component_getFactory(
 {
     void * pRet = nullptr;
 
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
+    if (pServiceManager && OUString(IMPLNAME).equalsAscii(pImplName))
     {
         Reference< XInterface > xFactory(
             createSingleComponentFactory(
