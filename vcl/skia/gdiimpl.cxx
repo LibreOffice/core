@@ -680,10 +680,12 @@ void SkiaSalGraphicsImpl::applyXor()
         abort();
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is
-    SkCanvas canvas(surfaceBitmap);
     SkRect area = SkRect::Make(mXorRegion.getBounds());
-    canvas.drawImageRect(makeCheckedImageSnapshot(mSurface), area, area, SkSamplingOptions(),
-                         &paint, SkCanvas::kFast_SrcRectConstraint);
+    {
+        SkCanvas canvas(surfaceBitmap);
+        canvas.drawImageRect(makeCheckedImageSnapshot(mSurface), area, area, SkSamplingOptions(),
+                             &paint, SkCanvas::kFast_SrcRectConstraint);
+    }
     // xor to surfaceBitmap
     assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
     assert(mXorBitmap.info().alphaType() == kUnpremul_SkAlphaType);
