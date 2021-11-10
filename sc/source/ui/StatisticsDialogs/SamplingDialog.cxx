@@ -87,7 +87,9 @@ void ScSamplingDialog::Init()
     mxOutputRangeEdit->SetModifyHdl( aLink2);
 
     mxSampleSize->connect_value_changed( LINK( this, ScSamplingDialog, SamplingSizeValueModified ));
+    mxSampleSize->set_range(1, SAL_MAX_INT32);
     mxPeriod->connect_value_changed( LINK( this, ScSamplingDialog, PeriodValueModified ));
+    mxPeriod->set_range(1, SAL_MAX_INT32);
 
     mxPeriodicMethodRadio->connect_toggled( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
     mxRandomMethodRadio->connect_toggled( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
