@@ -62,6 +62,7 @@
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfframe.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 #define     XFDRAWOBJECT_FLAG_ROTATE    0X00000001
 #define     XFDRAWOBJECT_FLAG_TRANSLATE 0X00000002
@@ -89,7 +90,7 @@ public:
     void SetRotate(double degree)
     {
         m_nDrawFlag |= XFDRAWOBJECT_FLAG_ROTATE;
-        m_fRotate = degree*2*PI/360;
+        m_fRotate = basegfx::deg2rad(degree);
         m_aRotatePoint = XFPoint(0,0);
     }
 
