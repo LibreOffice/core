@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "553eea3c_76315312",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2021-11-10T22:57:22Z",
+      "side": 1,
+      "message": "cppcheck noticed an oddity that this ends up with a pair of ?:\u0027s in testDMLGroupShapeChildPosition with the same constant on either side of the :\n\n    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11331 : 11331), xChildGroup-\u003egetPosition().Y);\n",
+      "revId": "3262fc5ef3bde5b158909d11ccb008161ea95519",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
