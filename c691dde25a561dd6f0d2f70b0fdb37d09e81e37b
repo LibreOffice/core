@@ -34,6 +34,24 @@
       "parentUuid": "79913e19_7b60fd2b",
       "revId": "c691dde25a561dd6f0d2f70b0fdb37d09e81e37b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8775b0d0_df47a192",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-10T09:03:14Z",
+      "side": 1,
+      "message": "\u003e Possibly, but I think mst\u0027s patch is safer, in that it will prevent a bunch of other more subtle problems arising from mixing and matching rhino code from old and new versions.\n\nIs it a documented feature of Ant that adding OPT_JAR_LIST\u003dfoo will suppress \"reading the /etc/ant.d/* files\"?  What happens if \"foo\" is not just be \"a bogus non-empty value\" but happens to reference something that does exist on the machine?\n\nIMO, the only safe fix would be to get rid of the wildcard imports in workdir/UnpackedTarball/rhino/src/org/mozilla/javascript/optimizer/Codegen.java, and I consider the change I outlined above a better move in that direction than relying on some obscure(?) Ant hack to work around the issue.",
+      "parentUuid": "c0b92b39_bff17624",
+      "revId": "c691dde25a561dd6f0d2f70b0fdb37d09e81e37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
