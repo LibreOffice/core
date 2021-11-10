@@ -323,7 +323,7 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "ftp", "ftp://", true, true, false, true, true, true, true,
             false},
         SchemeInfo{
-            "http", "http://", true, false, false, false, true, true, true,
+            "http", "http://", true, true, false, true, true, true, true,
             true},
         SchemeInfo{
             "file", "file://", true, false, false, false, true, false, true,
@@ -341,7 +341,7 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "vnd.sun.star.help", "vnd.sun.star.help://", true, false, false,
             false, false, false, true, true},
         SchemeInfo{
-            "https", "https://", true, false, false, false, true, true,
+            "https", "https://", true, true, false, true, true, true,
             true, true},
         SchemeInfo{
             "slot", "slot:", false, false, false, false, false, false, false,

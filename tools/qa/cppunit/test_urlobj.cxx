@@ -246,6 +246,28 @@ namespace tools_urlobj
                 !INetURLObject("vnd.sun.star.pkg://example.org").isAnyKnownWebDAVScheme());
         }
 
+        void urlobjTest_httpUserPass(  )
+        {
+            INetURLObject url;
+            url = INetURLObject("http://user:pass@example.com/insecure.jpg");
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::Http, url.GetProtocol(  ) );
+            CPPUNIT_ASSERT_EQUAL(OUString("example.com"),
+                                 url.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("insecure.jpg"), url.getName());
+            CPPUNIT_ASSERT_EQUAL(OUString("user"), url.GetUser());
+
+            url = INetURLObject("https://user:pass@example.com/insecure.jpg");
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::Https, url.GetProtocol(  ) );
+            CPPUNIT_ASSERT_EQUAL(OUString("example.com"),
+                                 url.GetHost(INetURLObject::DecodeMechanism::NONE));
+            CPPUNIT_ASSERT_EQUAL(OUString("insecure.jpg"), url.getName());
+            CPPUNIT_ASSERT_EQUAL(OUString("user"), url.GetUser());
+
+            url = INetURLObject("https://justuser@example.com/insecure.jpg");
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::Https, url.GetProtocol(  ) );
+            CPPUNIT_ASSERT_EQUAL(OUString("justuser"), url.GetUser());
+        }
+
         void testSetName() {
             {
                 INetURLObject obj("file:///");
@@ -306,6 +328,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjTest_data );
         CPPUNIT_TEST( urlobjTest_isSchemeEqualTo );
         CPPUNIT_TEST( urlobjTest_isAnyKnownWebDAVScheme );
+        CPPUNIT_TEST( urlobjTest_httpUserPass );
         CPPUNIT_TEST( testSetName );
         CPPUNIT_TEST( testSetExtension );
         CPPUNIT_TEST_SUITE_END(  );
