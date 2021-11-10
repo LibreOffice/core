@@ -89,21 +89,6 @@ public:
 #define DECL_PROP_IMPL(varname, cpputype) \
     pDesc[nPos++] = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cpputype,
 
-#define DECL_PROP0(varname, type)   \
-    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) 0)
-
-#define DECL_PROP0_BOOL(varname)    \
-    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) 0)
-
-#define DECL_PROP1(varname, type, attrib1)  \
-    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) css::beans::PropertyAttribute::attrib1)
-
-#define DECL_PROP1_BOOL(varname, attrib1)   \
-    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::attrib1)
-
-#define DECL_PROP2(varname, type, attrib1, attrib2) \
-    DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2)
-
 #define END_PROPERTY_SEQUENCE()                             \
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");    \
 

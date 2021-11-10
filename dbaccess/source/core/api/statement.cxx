@@ -177,16 +177,16 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo()
 ::cppu::IPropertyArrayHelper* OStatementBase::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(10)
-        DECL_PROP0(CURSORNAME,              OUString);
-        DECL_PROP0_BOOL(ESCAPE_PROCESSING);
-        DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-        DECL_PROP0(FETCHSIZE,               sal_Int32);
-        DECL_PROP0(MAXFIELDSIZE,            sal_Int32);
-        DECL_PROP0(MAXROWS,                 sal_Int32);
-        DECL_PROP0(QUERYTIMEOUT,            sal_Int32);
-        DECL_PROP0(RESULTSETCONCURRENCY,    sal_Int32);
-        DECL_PROP0(RESULTSETTYPE,           sal_Int32);
-        DECL_PROP0_BOOL(USEBOOKMARKS);
+        DECL_PROP_IMPL(CURSORNAME, cppu::UnoType<OUString>::get()) 0);
+        DECL_PROP_IMPL(ESCAPE_PROCESSING, cppu::UnoType<bool>::get()) 0);
+        DECL_PROP_IMPL(FETCHDIRECTION, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(FETCHSIZE, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(MAXFIELDSIZE, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(MAXROWS, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(QUERYTIMEOUT, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(RESULTSETTYPE, cppu::UnoType<sal_Int32>::get()) 0);
+        DECL_PROP_IMPL(USEBOOKMARKS, cppu::UnoType<bool>::get()) 0);
     END_PROPERTY_HELPER();
 }
 
