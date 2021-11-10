@@ -20,45 +20,45 @@
 #include <svx/numinf.hxx>
 
 
-#define INIT(pNum,eVal,nDouble,rStr)    \
-    SfxPoolItem     ( nId ),            \
-                                        \
-    pFormatter      ( pNum ),           \
-    eValueType      ( eVal ),           \
-    aStringVal      ( rStr ),           \
-    nDoubleVal      ( nDouble )        \
-
 SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
-
-    INIT( nullptr, SvxNumberValueType::Undefined, 0, "" )
-
+    SfxPoolItem     ( nId ),
+    pFormatter      ( nullptr ),
+    eValueType      ( SvxNumberValueType::Undefined ),
+    aStringVal      ( "" ),
+    nDoubleVal      ( 0 )
 {
 }
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const sal_uInt16 nId ) :
-
-    INIT( pNumFormatter, SvxNumberValueType::Undefined, 0, "" )
-
+    SfxPoolItem     ( nId ),
+    pFormatter      ( pNumFormatter ),
+    eValueType      ( SvxNumberValueType::Undefined ),
+    aStringVal      ( "" ),
+    nDoubleVal      ( 0 )
 {
 }
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const OUString& rVal, const sal_uInt16 nId ) :
-
-    INIT( pNumFormatter, SvxNumberValueType::String, 0, rVal )
-
+    SfxPoolItem     ( nId ),
+    pFormatter      ( pNumFormatter ),
+    eValueType      ( SvxNumberValueType::String ),
+    aStringVal      ( rVal ),
+    nDoubleVal      ( 0 )
 {
 }
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const sal_uInt16 nId ) :
-
-    INIT( pNumFormatter, SvxNumberValueType::Number, rVal, "" )
-
+    SfxPoolItem     ( nId ),
+    pFormatter      ( pNumFormatter ),
+    eValueType      ( SvxNumberValueType::Number ),
+    aStringVal      ( "" ),
+    nDoubleVal      ( rVal )
 {
 }
 
@@ -66,13 +66,13 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const OUString& rValueStr,
                                       const sal_uInt16 nId ) :
-
-    INIT( pNumFormatter, SvxNumberValueType::Number, rVal, rValueStr )
-
+    SfxPoolItem     ( nId ),
+    pFormatter      ( pNumFormatter ),
+    eValueType      ( SvxNumberValueType::Number ),
+    aStringVal      ( rValueStr ),
+    nDoubleVal      ( rVal )
 {
 }
-
-#undef INIT
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
