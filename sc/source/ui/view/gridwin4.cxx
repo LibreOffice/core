@@ -1289,6 +1289,22 @@ namespace
         nBottomRightTileIndex = nEndIndex;
     }
 
+    void lcl_RTLAdjustTileColOffset(ScViewData& rViewData, sal_Int32& nTileColOffset,
+        tools::Long nTileEndPx, sal_Int32 nEndCol, SCTAB nTab,
+        const ScDocument& rDoc, double fPPTX)
+    {
+        auto GetColWidthPx = [&rDoc, nTab, fPPTX](SCCOL nCol) {
+            const sal_uInt16 nSize = rDoc.GetColWidth(nCol, nTab);
+            const tools::Long nSizePx = ScViewData::ToPixel(nSize, fPPTX);
+            return nSizePx;
+        };
+
+        ScPositionHelper rHelper = rViewData.GetLOKWidthHelper();
+        tools::Long nEndColPos = rHelper.computePosition(nEndCol, GetColWidthPx);
+
+        nTileColOffset += (nEndColPos - nTileEndPx - nTileColOffset);
+    }
+
     class ScLOKProxyObjectContact final : public sdr::contact::ObjectContactOfPageView
     {
     private:
@@ -1430,6 +1446,15 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     if (nBottomRightTileRow > MAXTILEDROW)
         nBottomRightTileRow = MAXTILEDROW;
+
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+
+    if (bLayoutRTL)
+    {
+        lcl_RTLAdjustTileColOffset(mrViewData, nTopLeftTileColOffset,
+            fTileRightPixel, nBottomRightTileCol, nTab,
+            rDoc, fPPTX);
+    }
 
     // size of the document including drawings, charts, etc.
     SCCOL nEndCol = 0;
