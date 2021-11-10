@@ -16,6 +16,24 @@
       "message": "It could be logically added here, because this is where we fallback to all products - inclusion of pre-release would fit :-)",
       "revId": "0aea45001b73d76fa9b3185ad60df1ac6d2d9b12",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31160ff3_c19d2e1f",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-10T17:52:01Z",
+      "side": 1,
+      "message": "feel free to add whatever improvements you see fit",
+      "parentUuid": "b6c9763c_b9103098",
+      "revId": "0aea45001b73d76fa9b3185ad60df1ac6d2d9b12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
