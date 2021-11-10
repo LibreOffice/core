@@ -105,4 +105,45 @@ class sampling(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog", close_button="cancel"):
                 pass
 
+    def test_tdf142986(self):
+        with self.ui_test.create_doc_in_start_center("calc") as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            #fill data
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A200"}))
+            with self.ui_test.execute_dialog_through_command(".uno:FillSeries") as xDialog:
+                xStartValue = xDialog.getChild("startValue")
+                xStartValue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xStartValue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xStartValue.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+
+                xIncrement = xDialog.getChild("increment")
+                xIncrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xIncrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xIncrement.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 199).getValue(), 200)
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog") as xDialog:
+                xInputRangeEdit = xDialog.getChild("input-range-edit")
+                xOutputRangeEdit = xDialog.getChild("output-range-edit")
+                xRandomMethodRadio = xDialog.getChild("random-method-radio")
+                xSampleSizeSpin = xDialog.getChild("sample-size-spin")
+
+                self.assertEqual("$Sheet1.$A$1:$A$200", get_state_as_dict(xInputRangeEdit)['Text'])
+
+                xOutputRangeEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xOutputRangeEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xOutputRangeEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$1"}))
+
+                xRandomMethodRadio.executeAction("CLICK", tuple())
+
+                xSampleSizeSpin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xSampleSizeSpin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xSampleSizeSpin.executeAction("TYPE", mkPropertyValues({"TEXT":"200"}))
+
+            for i in range(200):
+                self.assertTrue(get_cell_by_position(calc_doc, 0, 1, i).getValue() != 0.0,
+                        "Value in cell B" + str(i) + " shouldn't be equal to 0.0")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
