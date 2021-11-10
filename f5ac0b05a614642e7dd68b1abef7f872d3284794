@@ -16,6 +16,23 @@
       "message": "I guess this was some spurious reasoning on my part, because I can\u0027t reproduce it now",
       "revId": "f5ac0b05a614642e7dd68b1abef7f872d3284794",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3625049b_bc81d795",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-10T14:17:56Z",
+      "side": 1,
+      "message": "Ah, now I found it again.\n\nSo if you convert XML_LANG to\n\n  constexpr OStringLiteral XML_LANG \u003d \"xml-lang\";\n\nthen you get this:\n\n[CXX] sal/cppunittester/cppunittester.cxx\n/home/noel/libo2/l10ntools/source/xmlparse.cxx:254:42: error: instead of an \u0027rtl::OString\u0027 constructed from a \u0027const rtl::OStringLiteral\u003c9\u003e\u0027, pass a \u0027std::string_view\u0027 [loplugin:stringview]\n                        if (aAttrName !\u003d XML_LANG)\n                                         ^~~~~~~~\n/home/noel/libo2/l10ntools/source/xmlparse.cxx:349:29: error: instead of an \u0027rtl::OString\u0027 constructed from a \u0027const rtl::OStringLiteral\u003c9\u003e\u0027, pass a \u0027std::string_view\u0027 [loplugin:stringview]\n            if (sTempStr \u003d\u003d XML_LANG)\n                            ^~~~~~~~\n/home/noel/libo2/l10ntools/source/xmlparse.cxx:593:53: error: instead of an \u0027rtl::OString\u0027 constructed from a \u0027const rtl::OStringLiteral\u003c9\u003e\u0027, pass a \u0027std::string_view\u0027 [loplugin:stringview]\n            if ((*m_pAttributes)[ i ]-\u003eGetName() \u003d\u003d XML_LANG)\n                                                    ^~~~~~~~\n/home/noel/libo2/l10ntools/source/xmlparse.cxx:674:50: error: instead of an \u0027rtl::OString\u0027 constructed from a \u0027const rtl::OStringLiteral\u003c9\u003e\u0027, pass a \u0027std::string_view\u0027 [loplugin:stringview]\n                                if (aAttrName !\u003d XML_LANG)\n                                                 ^~~~~~~~\n",
+      "revId": "f5ac0b05a614642e7dd68b1abef7f872d3284794",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
