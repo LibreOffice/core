@@ -33,6 +33,24 @@
       "message": "How would those overloads be necessary (given the implicit conversion sequence from OStringLiteral\u003cN\u003e to OString, which should suffice here)?",
       "revId": "49c13b0db5c82f7759bf4fdaad3287370307f28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13c00240_502dc17c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-10T11:47:26Z",
+      "side": 1,
+      "message": "I think it was\n\n   OString \u003d\u003d OStringLiteral\n\nwhich required me to wrap the RHS in an OString functional cast.",
+      "parentUuid": "5fbb1e60_d2a8a24a",
+      "revId": "49c13b0db5c82f7759bf4fdaad3287370307f28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
