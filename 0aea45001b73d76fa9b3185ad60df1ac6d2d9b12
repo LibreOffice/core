@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6c9763c_b9103098",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-10T17:49:26Z",
+      "side": 1,
+      "message": "It could be logically added here, because this is where we fallback to all products - inclusion of pre-release would fit :-)",
+      "revId": "0aea45001b73d76fa9b3185ad60df1ac6d2d9b12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
