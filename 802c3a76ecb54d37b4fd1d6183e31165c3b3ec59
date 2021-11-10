@@ -50,6 +50,23 @@
       "message": "I do confirm the issue is fixed with this patch. Besides, I\u0027ve created a UItest for it in https://gerrit.libreoffice.org/c/core/+/124956",
       "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce36398_5743c1cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-10T11:33:16Z",
+      "side": 1,
+      "message": "Why do the spinners even have to have limits removed.. is that some 0..100% default guard? Anyway, the Period spin field suffers from the same limitation so should be corrected along.",
+      "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
