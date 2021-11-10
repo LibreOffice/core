@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41819de5_532aa757",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-10T07:33:54Z",
+      "side": 1,
+      "message": "Could someone help me, what\u0027s wrong with these compiling errors on Windows:\nhttps://ci.libreoffice.org/job/gerrit_windows/111317/consoleFull#353932829cbd6b0d4-2729-45f4-a019-828721d0af3e",
+      "revId": "fc2a1ca0c084fc8d881bdc0c95a4182678c2c870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
