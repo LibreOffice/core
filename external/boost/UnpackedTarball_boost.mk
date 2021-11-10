@@ -35,9 +35,6 @@ boost_patches += windows-no-utf8-locales.patch.0
 
 boost_patches += msvc2017.patch.0
 
-# From upstream develop branch:
-boost_patches += 0001-Fix-include-inside-boost-namespace.patch.2
-
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
