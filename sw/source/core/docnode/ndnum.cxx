@@ -40,7 +40,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 {
     SwTextNode * pTextNd = rNd.GetTextNode();
 
-    if (!(pTextNd && pTextNd->IsOutlineStateChanged()))
+    if (!pTextNd || !pTextNd->IsOutlineStateChanged())
         return;
 
     bool bFound = m_pOutlineNodes->find(pTextNd) != m_pOutlineNodes->end();
