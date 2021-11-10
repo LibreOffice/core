@@ -123,20 +123,6 @@ class textCase(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 0, 4).getString(), "")
             self.assertEqual(get_cell_by_position(document, 0, 0, 3).getString(), "Free suite")
 
-    def test_tdf119155_Capitalize_Every_Word(self):
-        #Bug 119155 - Freeze after command format->text->Capitalize Every Word
-        with self.ui_test.load_file(get_url_for_data_file("tdf119155.xlsx")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            #1. Open attached file
-            #2. Select cells from C2 to C14
-            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C2:C14"}))
-            #3. Go to menu: Format->Text->Capitalize Every Word
-            self.xUITest.executeCommand(".uno:ChangeCaseToTitleCase")
-            #Actual Results:Freezes LibreOffice
-            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 1).getString(), "Collagene Expert Targeted Wrinkle Corrector Unboxed 10 Ml")
-            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 13).getString(), "Vitamina Suractivee Hand Cream 400 Ml")
-
     def test_tdf119162_Cycle_Case(self):
         #Bug 119162 - Format > Text > Cycle Case on attached example file hangs Calc reproducibly
         with self.ui_test.load_file(get_url_for_data_file("tdf119162.xls")) as calc_doc:
