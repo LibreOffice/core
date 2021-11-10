@@ -42,11 +42,11 @@
 #include "gstwindow.hxx"
 
 #include <gst/video/videooverlay.h>
-#define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
-#define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer"
-
 #include <gst/pbutils/missing-plugins.h>
 #include <gst/pbutils/pbutils.h>
+
+constexpr OUStringLiteral AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Player_GStreamer";
+constexpr OUStringLiteral AVMEDIA_GST_PLAYER_SERVICENAME        = u"com.sun.star.media.Player_GStreamer";
 
 #define AVVERSION "gst 1.0: "
 
