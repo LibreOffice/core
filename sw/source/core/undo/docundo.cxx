@@ -41,6 +41,8 @@
 #include <sfx2/bindings.hxx>
 #include <osl/diagnose.h>
 
+#include <UndoInsert.hxx>
+
 using namespace ::com::sun::star;
 
 // the undo array should never grow beyond this limit:
@@ -352,6 +354,61 @@ UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
     return eUndoId;
 }
 
+/**
+ * Checks if the topmost undo action owned by pView is independent from the topmost action undo
+ * action.
+ */
+bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
+{
+    if (GetUndoActionCount() <= 1 || SdrUndoManager::GetRedoActionCount() > 0)
+    {
+        // Single or less undo, owned by an other view; or redo actions that might depend on the
+        // current undo order.
+        return false;
+    }
+
+    if (!pView)
+    {
+        return false;
+    }
+
+    // Last undo action that doesn't belong to the view.
+    const SfxUndoAction* pTopAction = GetUndoAction();
+
+    ViewShellId nViewId = pView->GetViewShellId();
+
+    // Earlier undo action that belongs to the view, but is not the top one.
+    const SfxUndoAction* pViewAction = nullptr;
+    const SfxUndoAction* pAction = GetUndoAction(1);
+    if (pAction->GetViewShellId() == nViewId)
+    {
+        pViewAction = pAction;
+    }
+
+    if (!pViewAction)
+    {
+        // Found no earlier undo action that belongs to the view.
+        return false;
+    }
+
+    auto pTopSwAction = dynamic_cast<const SwUndo*>(pTopAction);
+    if (!pTopSwAction || pTopSwAction->GetId() != SwUndoId::TYPING)
+    {
+        return false;
+    }
+
+    auto pViewSwAction = dynamic_cast<const SwUndo*>(pViewAction);
+    if (!pViewSwAction || pViewSwAction->GetId() != SwUndoId::TYPING)
+    {
+        return false;
+    }
+
+    const auto& rTopInsert = *static_cast<const SwUndoInsert*>(pTopSwAction);
+    const auto& rViewInsert = *static_cast<const SwUndoInsert*>(pViewSwAction);
+
+    return rViewInsert.IsIndependent(rTopInsert);
+}
+
 bool
 UndoManager::GetLastUndoInfo(
         OUString *const o_pStr, SwUndoId *const o_pId, const SwView* pView) const
@@ -369,7 +426,8 @@ UndoManager::GetLastUndoInfo(
     {
         // If another view created the undo action, prevent undoing it from this view.
         ViewShellId nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
-        if (pAction->GetViewShellId() != nViewShellId)
+        // Unless we know that the other view's undo action is independent from us.
+        if (pAction->GetViewShellId() != nViewShellId && !IsViewUndoActionIndependent(pView))
         {
             if (o_pId)
             {
@@ -572,7 +630,7 @@ private:
 
 }
 
-bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo)
+bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
 {
     SwDoc & rDoc(GetUndoNodes().GetDoc());
 
@@ -601,6 +659,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo)
     bool bRet(false);
 
     ::sw::UndoRedoContext context(rDoc, *pEditShell);
+    context.SetUndoOffset(nUndoOffset);
 
     // N.B. these may throw!
     if (UndoOrRedoType::Undo == undoOrRedo)
@@ -630,7 +689,9 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo)
     return bRet;
 }
 
-bool UndoManager::Undo()
+bool UndoManager::Undo() { return UndoWithOffset(0); }
+
+bool UndoManager::UndoWithOffset(size_t nUndoOffset)
 {
     if(isTextEditActive())
     {
@@ -638,7 +699,7 @@ bool UndoManager::Undo()
     }
     else
     {
-        return impl_DoUndoRedo(UndoOrRedoType::Undo);
+        return impl_DoUndoRedo(UndoOrRedoType::Undo, nUndoOffset);
     }
 }
 
@@ -650,7 +711,7 @@ bool UndoManager::Redo()
     }
     else
     {
-        return impl_DoUndoRedo(UndoOrRedoType::Redo);
+        return impl_DoUndoRedo(UndoOrRedoType::Redo, /*nUndoOffset=*/0);
     }
 }
 

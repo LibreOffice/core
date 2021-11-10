@@ -374,7 +374,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     enum class FieldDialogPressedButton { NONE, Previous, Next };
 
-    void    Do( DoType eDoType, sal_uInt16 nCnt = 1 );
+    void Do(DoType eDoType, sal_uInt16 nCnt = 1, sal_uInt16 nOffset = 0);
     OUString  GetDoString( DoType eDoType ) const;
     OUString  GetRepeatString() const;
     void    GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;

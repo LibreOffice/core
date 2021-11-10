@@ -602,7 +602,7 @@ public:
     /// should only be called by sw::UndoManager!
     void HandleUndoRedoContext(::sw::UndoRedoContext & rContext);
 
-    void Undo(sal_uInt16 const nCount = 1);
+    void Undo(sal_uInt16 const nCount = 1, sal_uInt16 nOffset = 0);
     void Redo(sal_uInt16 const nCount = 1);
     void Repeat(sal_uInt16 const nCount);
 

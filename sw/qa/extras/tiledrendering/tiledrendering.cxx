@@ -108,6 +108,7 @@ public:
     void testTextEditViewInvalidations();
     void testUndoInvalidations();
     void testUndoLimiting();
+    void testUndoReordering();
     void testUndoShapeLimiting();
     void testUndoDispatch();
     void testUndoRepairDispatch();
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testUndoInvalidations);
     CPPUNIT_TEST(testUndoLimiting);
+    CPPUNIT_TEST(testUndoReordering);
     CPPUNIT_TEST(testUndoShapeLimiting);
     CPPUNIT_TEST(testUndoDispatch);
     CPPUNIT_TEST(testUndoRepairDispatch);
@@ -1299,6 +1301,51 @@ void SwTiledRenderingTest::testUndoLimiting()
     CPPUNIT_ASSERT(!pWrtShell1->GetLastUndoInfo(nullptr, nullptr, &pWrtShell1->GetView()));
     CPPUNIT_ASSERT(pWrtShell2->GetLastUndoInfo(nullptr, nullptr, &pWrtShell2->GetView()));
 
+    SfxLokHelper::setView(nView1);
+    SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
+    SfxLokHelper::setView(nView2);
+    SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
+}
+
+void SwTiledRenderingTest::testUndoReordering()
+{
+    // Create two views and a document of 2 paragraphs.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    int nView1 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell2->SplitNode();
+    SfxLokHelper::setView(nView1);
+    pWrtShell1->SttEndDoc(/*bStt=*/true);
+    SwTextNode* pTextNode1 = pWrtShell1->GetCursor()->GetNode().GetTextNode();
+    // View 1 types into the first paragraph.
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
+    SfxLokHelper::setView(nView2);
+    pWrtShell2->SttEndDoc(/*bStt=*/false);
+    SwTextNode* pTextNode2 = pWrtShell2->GetCursor()->GetNode().GetTextNode();
+    // View 2 types into the second paragraph.
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'z', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'z', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), pTextNode1->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("z"), pTextNode2->GetText());
+
+    // When view 1 presses undo:
+    SfxLokHelper::setView(nView1);
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure view 1's last undo action is invoked, out of order:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expression: pTextNode1->GetText().isEmpty()
+    // i.e. the "a" in the first paragraph was not removed.
+    CPPUNIT_ASSERT(pTextNode1->GetText().isEmpty());
+    // Last undo action is not invoked, as it belongs to view 2.
+    CPPUNIT_ASSERT_EQUAL(OUString("z"), pTextNode2->GetText());
     SfxLokHelper::setView(nView1);
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
     SfxLokHelper::setView(nView2);

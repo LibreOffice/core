@@ -96,7 +96,7 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
     }
 }
 
-void SwEditShell::Undo(sal_uInt16 const nCount)
+void SwEditShell::Undo(sal_uInt16 const nCount, sal_uInt16 nOffset)
 {
     MakeAllOutlineContentTemporarilyVisible a(GetDoc());
 
@@ -132,8 +132,7 @@ void SwEditShell::Undo(sal_uInt16 const nCount)
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)
             {
-                bRet = GetDoc()->GetIDocumentUndoRedo().Undo()
-                    || bRet;
+                bRet = GetDoc()->GetIDocumentUndoRedo().UndoWithOffset(nOffset) || bRet;
             }
         } catch (const css::uno::Exception &) {
             TOOLS_WARN_EXCEPTION("sw.core", "SwEditShell::Undo()");
