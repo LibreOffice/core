@@ -362,7 +362,7 @@ bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
 {
     if (GetUndoActionCount() <= 1 || SdrUndoManager::GetRedoActionCount() > 0)
     {
-        // Single or less undo, owned by an other view; or redo actions that might depend on the
+        // Single or less undo, owned by another view; or redo actions that might depend on the
         // current undo order.
         return false;
     }
