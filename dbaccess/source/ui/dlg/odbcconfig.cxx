@@ -61,10 +61,6 @@ typedef SQLRETURN (SQL_API* TSQLSetEnvAttr) (SQLHENV EnvironmentHandle, SQLINTEG
 typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMALLINT   Direction, SQLCHAR* ServerName,
                                 SQLSMALLINT BufferLength1, SQLSMALLINT* NameLength1Ptr, SQLCHAR* Description, SQLSMALLINT BufferLength2, SQLSMALLINT* NameLength2Ptr);
 
-#define NSQLAllocHandle(a,b,c) (*reinterpret_cast<TSQLAllocHandle>(m_pAllocHandle))(a,b,c)
-#define NSQLFreeHandle(a,b) (*reinterpret_cast<TSQLFreeHandle>(m_pFreeHandle))(a,b)
-#define NSQLSetEnvAttr(a,b,c,d) (*reinterpret_cast<TSQLSetEnvAttr>(m_pSetEnvAttr))(a,b,c,d)
-#define NSQLDataSources(a,b,c,d,e,f,g,h) (*reinterpret_cast<TSQLDataSources>(m_pDataSources))(a,b,c,d,e,f,g,h)
 #endif
 
 // OOdbcLibWrapper
@@ -164,12 +160,12 @@ bool OOdbcEnumeration::allocEnv()
     if (m_pImpl->hEnvironment)
         // nothing to do
         return true;
-    SQLRETURN nResult = NSQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_pImpl->hEnvironment);
+    SQLRETURN nResult = (*reinterpret_cast<TSQLAllocHandle>(m_pAllocHandle))(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_pImpl->hEnvironment);
     if (SQL_SUCCESS != nResult)
         // can't do anything without environment
         return false;
 
-    NSQLSetEnvAttr(m_pImpl->hEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), SQL_IS_INTEGER);
+    (*reinterpret_cast<TSQLSetEnvAttr>(m_pSetEnvAttr))(m_pImpl->hEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3),SQL_IS_INTEGER);
     return true;
 #else
     return sal_False;
@@ -180,7 +176,7 @@ void OOdbcEnumeration::freeEnv()
 {
 #ifdef HAVE_ODBC_SUPPORT
     if (m_pImpl->hEnvironment)
-        NSQLFreeHandle(SQL_HANDLE_ENV, m_pImpl->hEnvironment);
+        (*reinterpret_cast<TSQLFreeHandle>(m_pFreeHandle))(SQL_HANDLE_ENV, m_pImpl->hEnvironment);
     m_pImpl->hEnvironment  = nullptr;
 #endif
 }
@@ -206,9 +202,11 @@ void OOdbcEnumeration::getDatasourceNames(std::set<OUString>& _rNames)
     SQLRETURN nResult = SQL_SUCCESS;
     rtl_TextEncoding nTextEncoding = osl_getThreadTextEncoding();
 
-    for (   nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_FIRST, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription);
+    for (   nResult = (*reinterpret_cast<TSQLDataSources>(m_pDataSources))(m_pImpl->hEnvironment, SQL_FETCH_FIRST, szDSN,
+                       sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription);
             ;
-            nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_NEXT, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription)
+            nResult = (*reinterpret_cast<TSQLDataSources>(m_pDataSources))(m_pImpl->hEnvironment, SQL_FETCH_NEXT, szDSN,
+                       sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription)
         )
     {
         if (nResult != SQL_SUCCESS)

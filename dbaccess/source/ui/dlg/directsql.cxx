@@ -111,13 +111,25 @@ namespace dbaui
 
     sal_Int32 DirectSQLDialog::getHistorySize() const
     {
-        CHECK_INVARIANTS("DirectSQLDialog::getHistorySize");
+        #ifdef DBG_UTIL
+        {
+            const char* pError = impl_CheckInvariants();
+            if (pError)
+                SAL_WARN("dbaccess.ui", "DirectSQLDialog::getHistorySize: " << pError);
+        }
+        #endif
         return m_aStatementHistory.size();
     }
 
     void DirectSQLDialog::implEnsureHistoryLimit()
     {
-        CHECK_INVARIANTS("DirectSQLDialog::implEnsureHistoryLimit");
+        #ifdef DBG_UTIL
+        {
+            const char* pError = impl_CheckInvariants();
+            if (pError)
+                SAL_WARN("dbaccess.ui", "DirectSQLDialog::implEnsureHistoryLimit: " << pError);
+        }
+        #endif
 
         if (getHistorySize() <= g_nHistoryLimit)
             // nothing to do
@@ -134,7 +146,13 @@ namespace dbaui
 
     void DirectSQLDialog::implAddToStatementHistory(const OUString& _rStatement)
     {
-        CHECK_INVARIANTS("DirectSQLDialog::implAddToStatementHistory");
+        #ifdef DBG_UTIL
+        {
+            const char* pError = impl_CheckInvariants();
+            if (pError)
+                SAL_WARN("dbaccess.ui", "DirectSQLDialog::implAddToStatementHistor: " << pError);
+        }
+        #endif
 
         // add the statement to the history
         m_aStatementHistory.push_back(_rStatement);
@@ -171,7 +189,13 @@ namespace dbaui
 
     void DirectSQLDialog::implExecuteStatement(const OUString& _rStatement)
     {
-        CHECK_INVARIANTS("DirectSQLDialog::implExecuteStatement");
+        #ifdef DBG_UTIL
+        {
+            const char* pError = impl_CheckInvariants();
+            if (pError)
+                SAL_WARN("dbaccess.ui", "DirectSQLDialog::implExecuteStatement: " << pError);
+        }
+        #endif
 
         ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -328,7 +352,13 @@ namespace dbaui
 
     void DirectSQLDialog::executeCurrent()
     {
-        CHECK_INVARIANTS("DirectSQLDialog::executeCurrent");
+        #ifdef DBG_UTIL
+        {
+            const char* pError = impl_CheckInvariants();
+            if (pError)
+                SAL_WARN("dbaccess.ui", "DirectSQLDialog::executeCurrent: " << pError);
+        }
+        #endif
 
         OUString sStatement = m_xSQL->GetText();
 
@@ -343,7 +373,13 @@ namespace dbaui
 
     void DirectSQLDialog::switchToHistory(sal_Int32 _nHistoryPos)
     {
-        CHECK_INVARIANTS("DirectSQLDialog::switchToHistory");
+        #ifdef DBG_UTIL
+        {
+            const char* pError = impl_CheckInvariants();
+            if (pError)
+                SAL_WARN("dbaccess.ui", "DirectSQLDialog::switchToHistory: " << pError);
+        }
+        #endif
 
         if ((_nHistoryPos >= 0) && (_nHistoryPos < getHistorySize()))
         {

@@ -569,13 +569,6 @@ bool ORTFImportExport::Read()
 const sal_Int16 OHTMLImportExport::nCellSpacing = 0;
 const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-// Macros for HTML-Export
-#define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
-#define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, false )
-#define OUT_LF()            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() )
-#define TAG_ON_LF( tag )    (TAG_ON( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
-#define TAG_OFF_LF( tag )   (TAG_OFF( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
-
 OHTMLImportExport::OHTMLImportExport(const svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,
                                      const Reference< css::util::XNumberFormatter >& _rxNumberF)
@@ -597,12 +590,12 @@ bool OHTMLImportExport::Write()
     if(m_xObject.is())
     {
         m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype5 ).WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( SAL_NEWLINE_STRING );
-        TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_html).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
         WriteHeader();
-        OUT_LF();
+        m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
         WriteBody();
-        OUT_LF();
-        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_html );
+        m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_html, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
         return ((*m_pStream).GetError() == ERRCODE_NONE);
     }
@@ -633,12 +626,15 @@ void OHTMLImportExport::WriteHeader()
         xDocProps->setTitle(m_sName);
     }
 
-    IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_head );
+    IncIndent(1);
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
     SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), OUString(),
         xDocProps, sIndent, osl_getThreadTextEncoding() );
-    OUT_LF();
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    IncIndent(-1);
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 }
 
 void OHTMLImportExport::WriteBody()
@@ -646,17 +642,20 @@ void OHTMLImportExport::WriteBody()
     IncIndent(1);
     m_pStream->WriteCharPtr( "<" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_style ).WriteCharPtr( " " ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_type ).WriteCharPtr( "=\"text/css\">" );
 
-    m_pStream->WriteCharPtr( "<!-- " ); OUT_LF();
+    m_pStream->WriteCharPtr( "<!-- " );
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( "font-family: " ).WriteChar( '"' ).WriteOString( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()) ).WriteChar( '\"' );
         // TODO : think about the encoding of the font name
     m_pStream->WriteCharPtr( "; " ).WriteCharPtr( "font-size: " );
     m_pStream->WriteInt32AsString(m_aFont.Height);
     m_pStream->WriteChar( '}' );
 
-    OUT_LF();
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
     m_pStream->WriteCharPtr( " -->" );
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
-    OUT_LF();
+    IncIndent(-1);
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_style, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
     // default Textcolour black
     m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_text ).WriteChar( '=' );
@@ -668,11 +667,12 @@ void OHTMLImportExport::WriteBody()
     m_pStream->WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=" );
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
-    m_pStream->WriteChar( '>' ); OUT_LF();
+    m_pStream->WriteChar( '>' );
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
     WriteTables();
 
-    TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_body );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_body, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 }
 
 void OHTMLImportExport::WriteTables()
@@ -719,27 +719,27 @@ void OHTMLImportExport::WriteTables()
             "=1";
 
     IncIndent(1);
-    TAG_ON( aStrOut.getStr() );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, aStrOut.getStr());
 
     FontOn();
 
-    TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
-    TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_caption);
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_bold);
 
     m_pStream->WriteOString( OUStringToOString(m_sName, osl_getThreadTextEncoding()) );
         // TODO : think about the encoding of the name
-    TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
-    TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_bold, false);
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_caption, false);
 
     FontOff();
-    OUT_LF();
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
     // </FONT>
 
     IncIndent(1);
-    TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_thead );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
     IncIndent(1);
-    TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
     if(m_xObject.is())
     {
@@ -783,11 +783,11 @@ void OHTMLImportExport::WriteTables()
         }
 
         IncIndent(-1);
-        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
-        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_thead );
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
         IncIndent(1);
-        TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
         // 2. and now the data
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
@@ -796,7 +796,7 @@ void OHTMLImportExport::WriteTables()
         while(m_xResultSet->next())
         {
             IncIndent(1);
-            TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
+            HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
             ++kk;
             for(sal_Int32 i=1;i<=aNames.getLength();++i)
@@ -821,21 +821,24 @@ void OHTMLImportExport::WriteTables()
                 }
                 WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
             }
-            TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
+            HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
         }
     }
     else
     {
         IncIndent(-1);
-        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
-        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_thead );
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
         IncIndent(1);
-        TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
     }
 
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tbody );
-    IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
+    IncIndent(-1);
+    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    IncIndent(-1);
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_table, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 }
 
 void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal_Int32 nHeightPixel, const char* pChar,
@@ -880,7 +883,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
         }
     }
 
-    TAG_ON( aStrTD.getStr() );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, aStrTD.getStr());
 
     FontOn();
 
@@ -889,24 +892,24 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
     bool bUnderline     = ( css::awt::FontUnderline::NONE  != m_aFont.Underline );
     bool bStrikeout     = ( css::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
-    if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
-    if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
-    if ( bUnderline )   TAG_ON( OOO_STRING_SVTOOLS_HTML_underline );
-    if ( bStrikeout )   TAG_ON( OOO_STRING_SVTOOLS_HTML_strike );
+    if ( bBold )        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_bold);
+    if ( bItalic )      HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_italic);
+    if ( bUnderline )   HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_underline);
+    if ( bStrikeout )   HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_strike);
 
     if ( rValue.isEmpty() )
-        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // no completely empty cell
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_linebreak);        // no completely empty cell
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
 
-    if ( bStrikeout )   TAG_OFF( OOO_STRING_SVTOOLS_HTML_strike );
-    if ( bUnderline )   TAG_OFF( OOO_STRING_SVTOOLS_HTML_underline );
-    if ( bItalic )      TAG_OFF( OOO_STRING_SVTOOLS_HTML_italic );
-    if ( bBold )        TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
+    if ( bStrikeout )   HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_strike, false);
+    if ( bUnderline )   HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_underline, false);
+    if ( bItalic )      HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_italic, false);
+    if ( bBold )        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_bold, false);
 
     FontOff();
 
-    TAG_OFF_LF( pHtmlTag );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, pHtmlTag, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 }
 
 void OHTMLImportExport::FontOn()
@@ -943,7 +946,7 @@ inline void OHTMLImportExport::FontOff()
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(m_bCheckFont,"No FontOn() called");
 #endif
-    TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_font, false);
 #if OSL_DEBUG_LEVEL > 0
     m_bCheckFont = false;
 #endif

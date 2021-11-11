@@ -193,12 +193,6 @@ bool OTableGrantControl::IsTabAllowed(bool bForward) const
     return EditBrowseBox::IsTabAllowed(bForward);
 }
 
-#define GRANT_REVOKE_RIGHT(what)                \
-    if (m_pCheckCell->GetBox().get_active())    \
-        xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,what);\
-    else                                        \
-        xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,what)
-
 bool OTableGrantControl::SaveModified()
 {
 
@@ -219,25 +213,46 @@ bool OTableGrantControl::SaveModified()
                 switch( GetCurColumnId() )
                 {
                     case COL_INSERT:
-                        GRANT_REVOKE_RIGHT(Privilege::INSERT);
+                        if (m_pCheckCell->GetBox().get_active())
+                            xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,Privilege::INSERT);
+                        else
+                            xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,Privilege::INSERT);
                         break;
                     case COL_DELETE:
-                        GRANT_REVOKE_RIGHT(Privilege::DELETE);
+                        if (m_pCheckCell->GetBox().get_active())
+                            xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,Privilege::DELETE);
+                        else
+                            xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,Privilege::DELETE);
                         break;
                     case COL_UPDATE:
-                        GRANT_REVOKE_RIGHT(Privilege::UPDATE);
+                        if (m_pCheckCell->GetBox().get_active())
+                            xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,Privilege::UPDATE);
+                        else
+                            xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,Privilege::UPDATE);
                         break;
                     case COL_ALTER:
-                        GRANT_REVOKE_RIGHT(Privilege::ALTER);
+                        if (m_pCheckCell->GetBox().get_active())
+                            xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,Privilege::ALTER);
+                        else
+                            xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,Privilege::ALTER);
                         break;
                     case COL_SELECT:
-                        GRANT_REVOKE_RIGHT(Privilege::SELECT);
+                        if (m_pCheckCell->GetBox().get_active())
+                            xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,Privilege::SELECT);
+                        else
+                            xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,Privilege::SELECT);
                         break;
                     case COL_REF:
-                        GRANT_REVOKE_RIGHT(Privilege::REFERENCE);
+                        if (m_pCheckCell->GetBox().get_active())
+                            xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,Privilege::REFERENCE);
+                        else
+                            xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,Privilege::REFERENCE);
                         break;
                     case COL_DROP:
-                        GRANT_REVOKE_RIGHT(Privilege::DROP);
+                        if (m_pCheckCell->GetBox().get_active())
+                            xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,Privilege::DROP);
+                        else
+                            xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,Privilege::DROP);
                         break;
                 }
                 fillPrivilege(nRow);

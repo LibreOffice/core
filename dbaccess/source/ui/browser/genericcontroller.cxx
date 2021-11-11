@@ -67,8 +67,6 @@ using namespace ::dbtools;
 using namespace ::comphelper;
 
 #define ALL_FEATURES                -1
-#define FIRST_USER_DEFINED_FEATURE  ( std::numeric_limits< sal_uInt16 >::max() - 1000 )
-#define LAST_USER_DEFINED_FEATURE   ( std::numeric_limits< sal_uInt16 >::max()        )
 
 typedef std::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 
@@ -763,7 +761,8 @@ void OGenericUnoController::implDescribeSupportedFeature( const char* _pAsciiCom
 #ifdef DBG_UTIL
     OSL_ENSURE( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
 #endif
-    OSL_PRECOND( _nFeatureId < FIRST_USER_DEFINED_FEATURE, "OGenericUnoController::implDescribeSupportedFeature: invalid feature id!" );
+    OSL_PRECOND( _nFeatureId < ( std::numeric_limits< sal_uInt16 >::max() - 1000 ), // FIRST_USER_DEFINED_FEATURE
+                "OGenericUnoController::implDescribeSupportedFeature: invalid feature id!" );
 
     ControllerFeature aFeature;
     aFeature.Command = OUString::createFromAscii( _pAsciiCommandURL );
@@ -841,7 +840,11 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 
 bool OGenericUnoController::isUserDefinedFeature( const sal_uInt16 _nFeatureId )
 {
-    return ( _nFeatureId >= FIRST_USER_DEFINED_FEATURE ) && ( _nFeatureId < LAST_USER_DEFINED_FEATURE );
+    return
+        (_nFeatureId >= ( std::numeric_limits< sal_uInt16 >::max() - 1000 )) // test if >= FIRST_USER_DEFINED_FEATURE
+        &&
+        ( _nFeatureId < (std::numeric_limits< sal_uInt16 >::max())) // test if < LAST_USER_DEFINED_FEATURE
+    ;
 }
 
 bool OGenericUnoController::isUserDefinedFeature( const OUString& _rFeatureURL ) const
