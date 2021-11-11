@@ -2010,6 +2010,9 @@ class SFDocuments:
                    width = ScriptForge.cstSymEmpty):
             return self.ExecMethod(self.vbMethod, 'Offset', range, rows, columns, height, width)
 
+        def Printf(self, inputstr, range, tokencharacter = '%'):
+            return self.ExecMethod(self.vbMethod, 'Printf', inputstr, range, tokencharacter)
+
         def PrintOut(self, sheetname = '~', pages = '', copies = 1):
             return self.ExecMethod(self.vbMethod, 'PrintOut', sheetname, pages, copies)
 

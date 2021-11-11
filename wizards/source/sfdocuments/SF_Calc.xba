@@ -337,7 +337,6 @@ Public Function A1Style(Optional ByVal Row1 As Variant _
 Dim sA1Style As String				&apos;	Return value
 Dim vSheetName As Variant			&apos;	Alias of SheetName - necessary see [Bug 145279]
 Dim lTemp As Long					&apos;	To switch 2 values
-Dim lInStr As Long					&apos;	Position of special character in sheet name
 Dim i As Long
 
 Const cstThisSub = &quot;SFDocuments.Calc.A1Style&quot;
@@ -375,13 +374,7 @@ Check:
 
 Try:
 	&apos;	Surround the sheet name with single quotes when required by the presence of special characters
-	If InStr(vSheetName, &quot;&apos;&quot;) &gt; 0 Then vSheetName = &quot;&apos;&quot; &amp; Replace(vSheetName, &quot;&apos;&quot;, &quot;&apos;&apos;&quot;) &amp; &quot;&apos;&quot;
-	For i = 1 To Len(cstSPECIALCHARS)
-		If InStr(vSheetName, Mid(cstSPECIALCHARS, i, 1)) &gt; 0 Then
-			vSheetName = &quot;&apos;&quot; &amp; vSheetName &amp; &quot;&apos;&quot;
-			Exit For
-		End If
-	Next i
+	vSheetName = _QuoteSheetName(vSheetName)
 	&apos;	Define the new range string
 	sA1Style = &quot;$&quot; &amp; vSheetName &amp; &quot;.&quot; _
 					&amp; &quot;$&quot; &amp; _GetColumnName(Column1) &amp; &quot;$&quot; &amp; CLng(Row1) _
@@ -1669,6 +1662,7 @@ Public Function Methods() As Variant
 					, &quot;MoveRange&quot; _
 					, &quot;MoveSheet&quot; _
 					, &quot;Offset&quot; _
+					, &quot;Printf&quot; _
 					, &quot;PrintOut&quot; _
 					, &quot;RemoveSheet&quot; _
 					, &quot;RenameSheet&quot; _
@@ -1866,6 +1860,103 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SF_Documents.SF_Calc.Offset
+
+REM -----------------------------------------------------------------------------
+Public Function Printf(Optional ByVal InputStr As Variant _
+								, Optional ByVal Range As Variant _
+								, Optional ByVal TokenCharacter As Variant _
+								) As String
+&apos;&apos;&apos;	Returns the input string after substitution of its tokens by
+&apos;&apos;&apos;	their values in the given range
+&apos;&apos;&apos;	This method is usually used in combination with SetFormula()
+&apos;&apos;&apos;	The accepted tokens are:
+&apos;&apos;&apos;		- %S	The sheet name containing the range, including single quotes when necessary
+&apos;&apos;&apos;		- %R1	The row number of the topleft part of the range
+&apos;&apos;&apos;		- %C1	The column letter of the topleft part of the range
+&apos;&apos;&apos;		- %R2	The row number of the bottomright part of the range
+&apos;&apos;&apos;		- %C2	The column letter of the bottomright part of the range
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		InputStr: usually a Calc formula or a part of a formula, but may be any string
+&apos;&apos;&apos;		Range: the range, as a string from which the values of the tokens are derived
+&apos;&apos;&apos;		TokenCharacter: the character identifying tokens. Default = &quot;%&quot;.
+&apos;&apos;&apos;			Double the TokenCharacter to not consider it as a token.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The input string after substitution of the contained tokens
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Assume we have in A1:E10 a matrix of numbers. To obtain the sum by row in F1:F10 ...
+&apos;&apos;&apos;			Dim range As String, formula As String
+&apos;&apos;&apos;				range = &quot;$A$1:$E$10&quot;)
+&apos;&apos;&apos;				formula = &quot;=SUM($%C1%R1:$%C2%R1)&quot;	&apos;	&quot;=SUM($A1:$E1)&quot;, note the relative references
+&apos;&apos;&apos;				oDoc.SetFormula(&quot;$F$1:$F$10&quot;, formula)
+&apos;&apos;&apos;					&apos;F1 will contain	=Sum($A1:$E1)
+&apos;&apos;&apos;					&apos;F2					=Sum($A2:$E2)
+&apos;&apos;&apos;					&apos;	...
+
+Dim sPrintf As String				&apos;	Return value
+Dim vSubstitute As Variants			&apos;	Array of strings representing the token values
+Dim oAddress As Object				&apos;	A range as an _Address object
+Dim sSheetName As String			&apos;	The %S token value
+Dim sC1 As String					&apos;	The %C1 token value
+Dim sR1 As String					&apos;	The %R1 token value
+Dim sC2 As String					&apos;	The %C2 token value
+Dim sR2 As String					&apos;	The %R2 token value
+Dim i As Long
+Const cstPseudoToken = &quot;@#@&quot;
+
+Const cstThisSub = &quot;SFDocuments.Calc.Printf&quot;
+Const cstSubArgs = &quot;InputStr, Range, TokenCharacter=&quot;&quot;%&quot;&quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sPrintf = &quot;&quot;
+
+Check:
+	If IsMissing(TokenCharacter) Or IsEmpty(TokenCharacter) Then TokenCharacter = &quot;%&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(InputStr, &quot;InputStr&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(TokenCharacter, &quot;TokenCharacter&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Define the token values
+	Set oAddress = _ParseAddress(Range)
+	With oAddress.XCellRange
+		sC1 = _GetColumnName(.RangeAddress.StartColumn + 1)
+		sR1 = CStr(.RangeAddress.StartRow + 1)
+		sC2 = _GetColumnName(.RangeAddress.EndColumn + 1)
+		sR2 = CStr(.RangeAddress.EndRow + 1)
+		sSheetName = _QuoteSheetName(oAddress.XSpreadsheet.Name)
+	End With
+
+	&apos;	Substitute tokens by their values
+	sPrintf = ScriptForge.SF_String.ReplaceStr(InputStr _
+					, Array(TokenCharacter &amp; TokenCharacter _
+							, TokenCharacter &amp; &quot;R1&quot; _
+							, TokenCharacter &amp; &quot;C1&quot; _
+							, TokenCharacter &amp; &quot;R2&quot; _
+							, TokenCharacter &amp; &quot;C2&quot; _
+							, TokenCharacter &amp; &quot;S&quot; _
+							, cstPseudoToken _
+							) _
+					, Array(cstPseudoToken _
+							, sR1 _
+							, sC1 _
+							, sR2 _
+							, sC2 _
+							, sSheetName _
+							, TokenCharacter _
+							) _
+					)
+
+Finally:
+	Printf = sPrintf
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Calc.Printf
 
 REM -----------------------------------------------------------------------------
 Public Function PrintOut(Optional ByVal SheetName As Variant _
@@ -3542,7 +3633,6 @@ Const cstSubArgs = &quot;&quot;
 					Select Case UCase(psProperty)
 						Case UCase(&quot;FirstCell&quot;)
 							_PropertyGet = A1Style(.RangeAddress.StartRow + 1, .RangeAddress.StartColumn + 1, , , oAddress.XSpreadsheet.Name)
-						Case UCase(&quot;FirstRow&quot;)		:	_PropertyGet = CLng(.RangeAddress.StartRow + 1)
 						Case UCase(&quot;FirstColumn&quot;)	:	_PropertyGet = CLng(.RangeAddress.StartColumn + 1)
 						Case UCase(&quot;FirstRow&quot;)		:	_PropertyGet = CLng(.RangeAddress.StartRow + 1)
 						Case UCase(&quot;LastCell&quot;)
@@ -3618,6 +3708,39 @@ Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 End Function	&apos;	SFDocuments.SF_Calc._PropertyGet
+
+REM -----------------------------------------------------------------------------
+Private Function _QuoteSheetName(ByVal psSheetName As String) As String
+&apos;&apos;&apos;	Return the given sheet name surrounded with single quotes
+&apos;&apos;&apos;	when required to insert the sheet name into a Calc formula
+&apos;&apos;&apos;	Enclosed single quotes are doubled
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psSheetName: the name to quote
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The quoted or unchanged sheet name
+
+Dim sSheetName As String			&apos;	Return value
+Dim i As Long
+
+Try:
+	&apos;	Surround the sheet name with single quotes when required by the presence of single quotes
+	If InStr(psSheetName, &quot;&apos;&quot;) &gt; 0 Then
+		sSheetName = &quot;&apos;&quot; &amp; Replace(psSheetName, &quot;&apos;&quot;, &quot;&apos;&apos;&quot;) &amp; &quot;&apos;&quot;
+	Else
+		&apos;	Surround the sheet name with single quotes when required by the presence of at least one of the special characters
+		sSheetName = psSheetName
+		For i = 1 To Len(cstSPECIALCHARS)
+			If InStr(sSheetName, Mid(cstSPECIALCHARS, i, 1)) &gt; 0 Then
+				sSheetName = &quot;&apos;&quot; &amp; sSheetName &amp; &quot;&apos;&quot;
+				Exit For
+			End If
+		Next i
+	End If
+
+Finally:
+	_QuoteSheetName = sSheetName
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Calc._QuoteSheetName
 
 REM -----------------------------------------------------------------------------
 Private Function _Repr() As String
