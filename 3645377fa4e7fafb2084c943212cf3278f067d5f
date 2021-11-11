@@ -33,6 +33,23 @@
       "message": "If you want to do a search\u0026replace, then you would have to use loadAndReload() as a replacement. When I do replacements, I try to look at the test code, and if it only asserts the output XML, then I go with loadAndSave(), which is faster (it makes us avoid one not necessary load).\n\nDoes that help?",
       "revId": "3645377fa4e7fafb2084c943212cf3278f067d5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c944832c_cbdf0feb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-11T12:45:09Z",
+      "side": 1,
+      "message": "I already have an assertion with \"loadAndSave\" so it seems no need to test with \"loadAndReload\".\nI think I was a bit too naive with this patch :-)\nLet\u0027s abandon this one",
+      "revId": "3645377fa4e7fafb2084c943212cf3278f067d5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
