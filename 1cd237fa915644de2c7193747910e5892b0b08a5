@@ -22,6 +22,30 @@
       },
       "revId": "1cd237fa915644de2c7193747910e5892b0b08a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e61d69b4_4a3a5e21",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2021-11-11T09:47:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4db21136_f39ac76e",
+      "range": {
+        "startLine": 1245,
+        "startChar": 37,
+        "endLine": 1245,
+        "endChar": 38
+      },
+      "revId": "1cd237fa915644de2c7193747910e5892b0b08a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
