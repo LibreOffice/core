@@ -774,6 +774,7 @@ static bool performTest(
             for (int j = 0; j != 3; ++j) {
                 Sequence< sal_Int32 > _arSeqLong[3];
                 for (int i = 0; i != 3; ++i) {
+                    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
                     _arSeqLong[i] = Sequence< sal_Int32 >(_arLong, 3);
                 }
                 _arSeqLong2[j] = Sequence< Sequence< sal_Int32 > >(

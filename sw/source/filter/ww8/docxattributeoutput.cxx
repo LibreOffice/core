@@ -1140,6 +1140,7 @@ void DocxAttributeOutput::InitCollectedParagraphProperties()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
+    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_InitCollectedParagraphProperties, comphelper::containerToSequence(aOrder));
 }
 
@@ -2538,6 +2539,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
+    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_InitCollectedRunProperties, comphelper::containerToSequence(aOrder));
 }
 
@@ -3930,6 +3932,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // postpone the output so that we can later []
     // prepend the properties before the run
+    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_TableDefinition, comphelper::containerToSequence(aOrder));
 
     tools::Long nPageSize = 0;
@@ -6848,6 +6851,7 @@ void DocxAttributeOutput::StartSection()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
+    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_StartSection, comphelper::containerToSequence(aOrder));
     m_bHadSectPr = true;
 }
