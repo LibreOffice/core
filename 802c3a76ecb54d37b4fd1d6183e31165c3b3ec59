@@ -67,6 +67,42 @@
       "message": "Why do the spinners even have to have limits removed.. is that some 0..100% default guard? Anyway, the Period spin field suffers from the same limitation so should be corrected along.",
       "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fbc4ba5_77aac1cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-11T10:53:14Z",
+      "side": 1,
+      "message": "I\u0027ve seen one instance of set_max, but set_range seems more common.",
+      "parentUuid": "f99b4ded_4f17e1ff",
+      "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cab4ade_80455316",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-11T10:53:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ce36398_5743c1cc",
+      "revId": "802c3a76ecb54d37b4fd1d6183e31165c3b3ec59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
