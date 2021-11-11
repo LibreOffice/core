@@ -1,0 +1,18 @@
+--- poppler/PSOutputDev.cc
++++ poppler/PSOutputDev.cc
+@@ -3111,6 +3111,8 @@
+ bool PSOutputDev::checkPageSlice(Page *page, double /*hDPI*/, double /*vDPI*/, int rotateA, bool useMediaBox, bool crop, int sliceX, int sliceY, int sliceW, int sliceH, bool printing, bool (*abortCheckCbk)(void *data),
+                                  void *abortCheckCbkData, bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data), void *annotDisplayDecideCbkData)
+ {
++    std::abort();
++#if 0
+     PreScanOutputDev *scan;
+     bool rasterize;
+     bool useFlate, useLZW;
+@@ -3593,5 +3595,6 @@
+ 
+     return false;
++#endif
+ }
+ 
+ void PSOutputDev::startPage(int pageNum, GfxState *state, XRef *xrefA)

@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,poppler))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,poppler,0))
+
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/disable-freetype.patch.1 \
 	external/poppler/gcc7-EntityInfo.patch.1 \
@@ -22,5 +24,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/clang-std-ranges.patch.1 \
 	external/poppler/poppler-config.patch.1 \
 ))
+
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,poppler, \
+    external/poppler/sanitizer.patch \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
