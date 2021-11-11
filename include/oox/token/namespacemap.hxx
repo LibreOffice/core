@@ -22,7 +22,6 @@
 
 #include <map>
 
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -41,8 +40,10 @@ struct NamespaceMap
 };
 
 /** Thread-save singleton of a map of all supported XML namespace URLs. */
-struct StaticNamespaceMap : public ::rtl::Static<NamespaceMap, StaticNamespaceMap>
+NamespaceMap& StaticNamespaceMap()
 {
+    static NamespaceMap SINGLETON;
+    return SINGLETON;
 };
 
 } // namespace oox

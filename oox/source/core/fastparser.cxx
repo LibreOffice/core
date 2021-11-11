@@ -62,7 +62,7 @@ InputStreamCloseGuard::~InputStreamCloseGuard()
 } // namespace
 
 FastParser::FastParser() :
-    mrNamespaceMap( StaticNamespaceMap::get() )
+    mrNamespaceMap( StaticNamespaceMap() )
 {
     // create a fast parser instance
     mxParser = new sax_fastparser::FastSaxParser;
