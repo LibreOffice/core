@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46154f2_082e4b78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-11T16:06:44Z",
+      "side": 1,
+      "message": "Taking a look at https://wiki.documentfoundation.org/ReleasePlan/7.2, perhaps we\u0027ll have some time to bring the fix in 7.2.3?",
+      "revId": "88015ddd3f8028280ebce43fe54398f72f8b7156",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
