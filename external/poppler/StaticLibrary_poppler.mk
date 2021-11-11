@@ -72,6 +72,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/fofi/FoFiType1C \
 	UnpackedTarball/poppler/fofi/FoFiIdentifier \
 	UnpackedTarball/poppler/poppler/Annot \
+	UnpackedTarball/poppler/poppler/AnnotStampImageHelper \
 	UnpackedTarball/poppler/poppler/Array \
 	UnpackedTarball/poppler/poppler/BBoxOutputDev \
 	UnpackedTarball/poppler/poppler/CachedFile \
@@ -136,6 +137,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/Movie \
 	UnpackedTarball/poppler/poppler/Rendition \
 	UnpackedTarball/poppler/poppler/DCTStream \
+	UnpackedTarball/poppler/splash/SplashBitmap \
 ))
 
 # vim: set noet sw=4 ts=4:
