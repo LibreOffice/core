@@ -1412,16 +1412,6 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     preDraw();
     SAL_INFO("vcl.skia.trace", "invert(" << this << "): " << rPoly << ":" << int(eFlags));
     assert(!mXorMode);
-    // Intel Vulkan drivers (up to current 0.401.3889) have a problem
-    // with SkBlendMode::kDifference(?) and surfaces wider than 1024 pixels, resulting
-    // in drawing errors. Work that around by fetching the relevant part of the surface
-    // and drawing using CPU.
-    bool rasterHack = (isGPU() && getVendor() == DriverBlocklist::VendorIntel && !mXorMode);
-    // BackendTest::testDrawInvertTrackFrameWithRectangle() also has a problem
-    // with SkBlendMode::kDifference on AMD, leading to crashes or even
-    // driver instability. Also work around by drawing using CPU.
-    if (isGPU() && getVendor() == DriverBlocklist::VendorAMD && !mXorMode)
-        rasterHack = true;
     SkPath aPath;
     aPath.incReserve(rPoly.count());
     addPolygonToPath(rPoly, aPath);
@@ -1429,6 +1419,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     addUpdateRegion(aPath.getBounds());
     SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
     SkPaint aPaint;
+    setBlendModeDifference(&aPaint);
     // TrackFrame just inverts a dashed path around the polygon
     if (eFlags == SalInvert::TrackFrame)
     {
@@ -1441,13 +1432,11 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         aPaint.setStyle(SkPaint::kStroke_Style);
         aPaint.setPathEffect(SkDashPathEffect::Make(intervals, SK_ARRAY_COUNT(intervals), 0));
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
-        aPaint.setBlendMode(SkBlendMode::kDifference);
     }
     else
     {
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setStyle(SkPaint::kFill_Style);
-        aPaint.setBlendMode(SkBlendMode::kDifference);
 
         // N50 inverts in checker pattern
         if (eFlags == SalInvert::N50)
@@ -1472,27 +1461,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
                 aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
         }
     }
-    if (!rasterHack)
-        getDrawCanvas()->drawPath(aPath, aPaint);
-    else
-    {
-        SkRect area;
-        aPath.getBounds().roundOut(&area);
-        SkRect size = SkRect::MakeWH(area.width(), area.height());
-        sk_sp<SkSurface> surface
-            = SkSurface::MakeRasterN32Premul(area.width(), area.height(), surfaceProps());
-        SkPaint copy;
-        copy.setBlendMode(SkBlendMode::kSrc);
-        flushDrawing();
-        surface->getCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface), area, size,
-                                            SkSamplingOptions(), &copy,
-                                            SkCanvas::kFast_SrcRectConstraint);
-        aPath.offset(-area.x(), -area.y());
-        surface->getCanvas()->drawPath(aPath, aPaint);
-        getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(surface), size, area,
-                                       SkSamplingOptions(), &copy,
-                                       SkCanvas::kFast_SrcRectConstraint);
-    }
+    getDrawCanvas()->drawPath(aPath, aPaint);
     postDraw();
 }
 
