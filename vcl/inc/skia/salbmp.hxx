@@ -147,6 +147,7 @@ private:
         // I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
         // E - has erase color
+        // B - has pixel buffer
         stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "x"
                << bitmap->GetBitCount();
         if (bitmap->GetBitCount() <= 8 && !bitmap->Palette().IsGreyPalette8Bit())
@@ -158,6 +159,8 @@ private:
             stream << (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a");
         if (bitmap->mEraseColorSet)
             stream << "E" << bitmap->mEraseColor;
+        if (bitmap->mBuffer)
+            stream << "B";
         return stream;
     }
 
