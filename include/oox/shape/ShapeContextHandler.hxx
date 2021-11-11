@@ -111,7 +111,9 @@ private:
 
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;
+
     bool m_bFullWPGSUpport;
+
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;
 

@@ -20,7 +20,8 @@ using namespace com::sun::star;
 
 namespace oox::shape
 {
-WpgContext::WpgContext(FragmentHandler2 const& rParent, oox::drawingml::ShapePtr pMaster)
+WpgContext::WpgContext(FragmentHandler2 const& rParent, oox::drawingml::ShapePtr pMaster,
+                       bool bFullWPGSupport)
     : FragmentHandler2(rParent)
     , m_bFullWPGSupport(false)
 {
