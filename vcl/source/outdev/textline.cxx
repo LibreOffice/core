@@ -969,7 +969,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
-void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, tools::Long nLineWidth)
+void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, tools::Long nLineWidth, tools::Long nWaveHeight)
 {
     assert(!is_double_buffered_window());
 
@@ -1007,8 +1007,6 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
         // un-rotate the end point
         aStartPt.RotateAround(nEndX, nEndY, Degree10(static_cast<sal_Int16>(-fOrientation * 10.0)));
     }
-
-    tools::Long nWaveHeight = 3;
 
     // Handle HiDPI
     float fScaleFactor = GetDPIScaleFactor();
