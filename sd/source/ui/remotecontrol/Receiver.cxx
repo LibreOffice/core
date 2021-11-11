@@ -69,7 +69,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_SET_THROW );
         uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
         xPresentation.set( xPS->getPresentation(), uno::UNO_QUERY_THROW);
-        // Throws an exception if now slideshow running
+        // Throws an exception if no slideshow running
         xSlideShowController.set( xPresentation->getController(), uno::UNO_SET_THROW );
         xSlideShow.set( xSlideShowController->getSlideShow(), uno::UNO_SET_THROW );
     }
