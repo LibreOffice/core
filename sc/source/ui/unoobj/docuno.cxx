@@ -607,11 +607,14 @@ OUString ScModelObj::getPartInfo( int nPart )
     const bool bIsVisible = pViewData->GetDocument().IsVisible(nPart);
     //FIXME: Implement IsSelected().
     const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
+    const bool bIsRTLLayout = pViewData->GetDocument().IsLayoutRTL(nPart);
 
     OUString aPartInfo = "{ \"visible\": \"" +
         OUString::number(static_cast<unsigned int>(bIsVisible)) +
         "\", \"selected\": \"" +
         OUString::number(static_cast<unsigned int>(bIsSelected)) +
+        "\", \"rtllayout\": \"" +
+        OUString::number(static_cast<unsigned int>(bIsRTLLayout)) +
         "\" }";
     return aPartInfo;
 }
