@@ -67,6 +67,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mId(0),
   mnDefine(0),
   mnToken(oox::XML_TOKEN_COUNT),
+  mbUseFullWPGSupport(true),
   mnMathJcVal(0),
   mbIsMathPara(false),
   mpStream(nullptr),
@@ -89,6 +90,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mId(0),
   mnDefine(0),
   mnToken(oox::XML_TOKEN_COUNT),
+  mbUseFullWPGSupport(pContext->mbUseFullWPGSupport),
   mnMathJcVal(pContext->mnMathJcVal),
   mbIsMathPara(pContext->mbIsMathPara),
   mpStream(pContext->mpStream),
@@ -1701,6 +1703,7 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
             mrShapeContext->setTheme(pThemePtr);
     }
 
+    mrShapeContext->setUseWPG(mbUseFullWPGSupport);
     mrShapeContext->setModel(getDocument()->getModel());
     uno::Reference<document::XDocumentPropertiesSupplier> xDocSupplier(getDocument()->getModel(), uno::UNO_QUERY_THROW);
     mrShapeContext->setDocumentProperties(xDocSupplier->getDocumentProperties());
@@ -1801,7 +1804,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 
     bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
     // drawingML version also counts as a group shape.
-    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
+    if (!mbUseFullWPGSupport)
+        bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
     mbIsVMLfound = (getNamespace(Element) == NMSP_vmlOffice) || (getNamespace(Element) == NMSP_vml);
     switch (oox::getNamespace(Element))
     {
@@ -1965,6 +1969,13 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 {
     if (mxWrappedContext.is())
         mxWrappedContext->startFastElement(Element, Attribs);
+
+    if (mbUseFullWPGSupport && mxShapeHandler->isDMLGroupShape()
+        && (Element == Token_t(NMSP_wps | XML_txbx)
+            || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
+    {
+        mpStream->startTextBoxContent();
+    }
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_endFastElement
@@ -1972,6 +1983,13 @@ void OOXMLFastContextHandlerWrapper::lcl_endFastElement
 {
     if (mxWrappedContext.is())
         mxWrappedContext->endFastElement(Element);
+
+    if (mbUseFullWPGSupport && mxShapeHandler->isDMLGroupShape()
+        && (Element == Token_t(NMSP_wps | XML_txbx)
+            || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
+    {
+        mpStream->endTextBoxContent();
+    }
 }
 
 uno::Reference< xml::sax::XFastContextHandler >

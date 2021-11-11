@@ -3182,6 +3182,7 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
 {
     assert(xShape.is());
 
+    m_pImpl->AttachTextBoxContentToShape(xShape);
     if (m_pImpl->GetTopContext())
     {
         // If there is a deferred page break, handle it now, so that the
@@ -3227,6 +3228,16 @@ void DomainMapper::lcl_endShape( )
     m_pImpl->PopShapeContext( );
     // A shape is always inside a paragraph (anchored or inline).
     m_pImpl->SetIsOutsideAParagraph(false);
+}
+
+void DomainMapper::lcl_startTextBoxContent()
+{
+    m_pImpl->PushTextBoxContent();
+}
+
+void DomainMapper::lcl_endTextBoxContent()
+{
+    m_pImpl->PopTextBoxContent();
 }
 
 void DomainMapper::PushStyleSheetProperties( const PropertyMapPtr& pStyleProperties, bool bAffectTableMngr )

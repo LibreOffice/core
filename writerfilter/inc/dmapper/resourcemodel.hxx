@@ -232,6 +232,13 @@ public:
     virtual void endShape() = 0;
 
     /**
+      Receives a text-box-content.
+     */
+    virtual void startTextBoxContent() = 0;
+
+    virtual void endTextBoxContent() = 0;
+
+    /**
        Receives 8-bit per character text.
 
        @param data  buffer containing the text
