@@ -2542,15 +2542,16 @@ void ScFiltersTest2::testShapeRotationImport()
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
         uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
         sal_Int32 nRot = nRotProp.get<sal_Int32>();
+        const OString sNote = "RotateAngle = " + OString::number(nRot);
 
         awt::Point aPosition = xShape->getPosition();
         awt::Size aSize = xShape->getSize();
 
-        CPPUNIT_ASSERT(aExpectedValues.find(nRot) != aExpectedValues.end());
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["x"], aPosition.X);
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["y"], aPosition.Y);
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["width"], aSize.Width);
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["height"], aSize.Height);
+        CPPUNIT_ASSERT_MESSAGE(sNote.getStr(), aExpectedValues.find(nRot) != aExpectedValues.end());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["x"], aPosition.X);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["y"], aPosition.Y);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["width"], aSize.Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["height"], aSize.Height);
     }
 }
 
