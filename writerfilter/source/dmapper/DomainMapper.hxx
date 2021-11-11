@@ -147,7 +147,8 @@ private:
     virtual void lcl_endCharacterGroup() override;
     virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
     virtual void lcl_endShape( ) override;
-
+    virtual void lcl_startTextBoxContent() override;
+    virtual void lcl_endTextBoxContent() override;
     virtual void lcl_text(const sal_uInt8 * data, size_t len) override;
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) override;
     virtual void lcl_positionOffset(const OUString& rText, bool bVertical) override;
