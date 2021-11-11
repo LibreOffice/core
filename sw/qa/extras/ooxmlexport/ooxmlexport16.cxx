@@ -228,6 +228,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(953), getProperty<sal_Int32>(xFrame, "LeftMargin"), 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
+{
+    // This bugdoc has a groupshape (WPG) with a table inside its each member shape.
+    // Before there was no table after import at all. From now, there must be 2 tables.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // This was 0 before:
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Where are the tables?!", static_cast<sal_Int32>(2),
+                                 xTables->getCount());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf142486_FrameShadow, "tdf142486_FrameShadow.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
