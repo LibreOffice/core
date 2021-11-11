@@ -20,11 +20,13 @@ using namespace com::sun::star;
 
 namespace oox::shape
 {
-WpgContext::WpgContext(FragmentHandler2 const& rParent, oox::drawingml::ShapePtr pMaster)
+WpgContext::WpgContext(FragmentHandler2 const& rParent, oox::drawingml::ShapePtr pMaster,
+                       bool bFullWPGSupport)
     : FragmentHandler2(rParent)
 {
     mpShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape");
     mpShape->setWps(true);
+    mbFullWPGSupport = bFullWPGSupport;
     if (pMaster)
         pMaster->addChild(mpShape);
 }
@@ -44,8 +46,11 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         {
             oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
                 "com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
-            return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(), mpShape,
-                                              pShape);
+            if (mbFullWPGSupport)
+                return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(), mpShape,
+                                                  pShape);
+            else
+                return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
         }
         case XML_pic:
             return new oox::drawingml::GraphicShapeContext(
@@ -53,7 +58,12 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
                 std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"));
         case XML_grpSp:
         {
-            return new oox::shape::WpgContext(*this, mpShape);
+            if (mbFullWPGSupport)
+                return new oox::shape::WpgContext(*this, mpShape, mbFullWPGSupport);
+            else
+                return new oox::drawingml::ShapeGroupContext(
+                    *this, mpShape,
+                    std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape"));
         }
         case XML_graphicFrame:
         {

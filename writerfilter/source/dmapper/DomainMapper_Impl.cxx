@@ -332,6 +332,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
+        m_bIsInTextBox(false),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
@@ -4391,6 +4392,62 @@ void DomainMapper_Impl::ChainTextFrames()
     catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+    }
+}
+
+void DomainMapper_Impl::PushTextBoxContent()
+{
+    if (m_bIsInTextBox)
+        return;
+
+    uno::Reference<text::XTextFrame> xTBoxFrame(
+        m_xTextFactory->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNamed>(xTBoxFrame, uno::UNO_QUERY_THROW)
+        ->setName("textbox" + OUString::number(m_xPendigTextBoxFrames.size() + 1));
+    appendTextContent(xTBoxFrame, beans::PropertyValues());
+    m_xPendigTextBoxFrames.push(xTBoxFrame);
+
+    appendTableHandler();
+    appendTableManager();
+    getTableManager().startLevel();
+
+    m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xTBoxFrame, uno::UNO_QUERY_THROW), {}));
+    m_bIsInTextBox = true;
+}
+
+void DomainMapper_Impl::PopTextBoxContent()
+{
+    if (!m_bIsInTextBox)
+        return;
+
+    if (uno::Reference<text::XTextFrame>(m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY_THROW).is())
+    {
+        m_aTextAppendStack.pop();
+        if (hasTableManager())
+        {
+            getTableManager().endLevel();
+            popTableManager();
+        }
+        m_bIsInTextBox = false;
+    }
+}
+
+void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::drawing::XShape> xShape)
+{
+    if (m_xPendigTextBoxFrames.empty() || !xShape)
+        return;
+
+    uno::Reference< drawing::XShapes >xGroup(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet >xProps(xShape, uno::UNO_QUERY);
+
+    if (xGroup)
+        for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
+            AttachTextBoxContentToShape(uno::Reference<drawing::XShape>(xGroup->getByIndex(i),uno::UNO_QUERY_THROW));
+
+    if (xProps->getPropertyValue("TextBox").get<bool>())
+    {
+        xProps->setPropertyValue("TextBoxContent", uno::Any(m_xPendigTextBoxFrames.front()));
+        m_xPendigTextBoxFrames.pop();
     }
 }
 
