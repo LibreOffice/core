@@ -91,27 +91,6 @@ using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::svt;
 
-#define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
-    try                                                                     \
-    {                                                                       \
-        successflag = false;                                                \
-        action;                                                             \
-        successflag = true;                                                 \
-    }                                                                       \
-    catch(SQLException& e)                                                  \
-    {                                                                       \
-        SQLException aError = ::dbtools::prependErrorInfo(e, *this, context); \
-        css::sdb::SQLErrorEvent aEvent;                        \
-        aEvent.Reason <<= aError;                                           \
-        errorOccured(aEvent);                                               \
-    }                                                                       \
-    catch(Exception&)                                                       \
-    {                                                                       \
-        DBG_UNHANDLED_EXCEPTION("dbaccess");                                          \
-    }                                                                       \
-
-#define DO_SAFE( action, message ) try { action; } catch(Exception&) { SAL_WARN("dbaccess.ui",message); } ;
-
 namespace dbaui
 {
 
@@ -1964,12 +1943,24 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
             const OUString sOldSort = xParser->getOrder();
             bool bParserSuccess = false;
-            HANDLE_SQL_ERRORS(
-                xParser->setOrder(OUString()); xParser->appendOrderByColumn(xField, bSortUp),
-                bParserSuccess,
-                DBA_RES(SBA_BROWSER_SETTING_ORDER),
-                "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
-            )
+            try
+            {
+                bParserSuccess = false;
+                xParser->setOrder(OUString());
+                xParser->appendOrderByColumn(xField, bSortUp);
+                bParserSuccess = true;
+            }
+            catch(SQLException& e)
+            {
+                SQLException aError = ::dbtools::prependErrorInfo(e, *this, DBA_RES(SBA_BROWSER_SETTING_ORDER));
+                css::sdb::SQLErrorEvent aEvent;
+                aEvent.Reason <<= aError;
+                errorOccured(aEvent);
+            }
+            catch(Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess", "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !");
+            }
 
             if (bParserSuccess)
                 applyParserOrder(sOldSort,xParser);
@@ -2001,8 +1992,22 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             // -> completely overwrite it, else append one
             if (!bApplied)
             {
-                DO_SAFE( xParser->setFilter(      OUString()), "SbaXDataBrowserController::Execute : caught an exception while resetting unapplied filter !" );
-                DO_SAFE( xParser->setHavingClause(OUString()), "SbaXDataBrowserController::Execute : caught an exception while resetting unapplied HAVING clause !" );
+                try
+                {
+                    xParser->setFilter(OUString());
+                }
+                catch(Exception&)
+                {
+                    SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::Execute : caught an exception while resetting unapplied filter !");
+                }
+                try
+                {
+                    xParser->setHavingClause(OUString());
+                }
+                catch(Exception&)
+                {
+                    SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::Execute : caught an exception while resetting unapplied HAVING clause !");
+                }
             }
 
             bool bParserSuccess = false;
@@ -2011,21 +2016,43 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
             if ( bHaving )
             {
-                HANDLE_SQL_ERRORS(
-                    xParser->appendHavingClauseByColumn(xField,true,nOp),
-                    bParserSuccess,
-                    DBA_RES(SBA_BROWSER_SETTING_FILTER),
-                    "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
-                )
+                try
+                {
+                    bParserSuccess = false;
+                    xParser->appendHavingClauseByColumn(xField,true,nOp);
+                    bParserSuccess = true;
+                }
+                catch(SQLException& e)
+                {
+                    SQLException aError = ::dbtools::prependErrorInfo(e, *this, DBA_RES(SBA_BROWSER_SETTING_FILTER));
+                    css::sdb::SQLErrorEvent aEvent;
+                    aEvent.Reason <<= aError;
+                    errorOccured(aEvent);
+                }
+                catch(Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("dbaccess", "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !");
+                }
             }
             else
             {
-                HANDLE_SQL_ERRORS(
-                    xParser->appendFilterByColumn(xField,true,nOp),
-                    bParserSuccess,
-                    DBA_RES(SBA_BROWSER_SETTING_FILTER),
-                    "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
-                )
+                try
+                {
+                    bParserSuccess = false;
+                    xParser->appendFilterByColumn(xField,true,nOp);
+                    bParserSuccess = true;
+                }
+                catch(SQLException& e)
+                {
+                    SQLException aError = ::dbtools::prependErrorInfo(e, *this, DBA_RES(SBA_BROWSER_SETTING_FILTER));
+                    css::sdb::SQLErrorEvent aEvent;
+                    aEvent.Reason <<= aError;
+                    errorOccured(aEvent);
+                }
+                catch(Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("dbaccess", "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !");
+                }
             }
 
             if (bParserSuccess)

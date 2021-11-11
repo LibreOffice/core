@@ -188,12 +188,12 @@ Reference< XPropertySetInfo > OResultSet::getPropertySetInfo()
     css::uno::Sequence< css::beans::Property> aDescriptor(6);
     css::beans::Property* pDesc = aDescriptor.getArray();
     sal_Int32 nPos = 0;
-        DECL_PROP_IMPL(CURSORNAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY);
-        DECL_PROP_IMPL(FETCHDIRECTION, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(FETCHSIZE, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(ISBOOKMARKABLE, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY);
-        DECL_PROP_IMPL(RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY);
-        DECL_PROP_IMPL(RESULTSETTYPE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_CURSORNAME, PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_FETCHDIRECTION, PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_FETCHSIZE, PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_ISBOOKMARKABLE, PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_RESULTSETTYPE, PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY);
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
     return new ::cppu::OPropertyArrayHelper(aDescriptor);
 }

@@ -179,16 +179,16 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo()
     css::uno::Sequence< css::beans::Property> aDescriptor(10);
     css::beans::Property* pDesc = aDescriptor.getArray();
     sal_Int32 nPos = 0;
-        DECL_PROP_IMPL(CURSORNAME, cppu::UnoType<OUString>::get()) 0);
-        DECL_PROP_IMPL(ESCAPE_PROCESSING, cppu::UnoType<bool>::get()) 0);
-        DECL_PROP_IMPL(FETCHDIRECTION, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(FETCHSIZE, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(MAXFIELDSIZE, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(MAXROWS, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(QUERYTIMEOUT, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(RESULTSETTYPE, cppu::UnoType<sal_Int32>::get()) 0);
-        DECL_PROP_IMPL(USEBOOKMARKS, cppu::UnoType<bool>::get()) 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_CURSORNAME, PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_ESCAPE_PROCESSING, PROPERTY_ID_ESCAPE_PROCESSING, cppu::UnoType<bool>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_FETCHDIRECTION, PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_FETCHSIZE, PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_MAXFIELDSIZE, PROPERTY_ID_MAXFIELDSIZE, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_MAXROWS, PROPERTY_ID_MAXROWS, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_QUERYTIMEOUT, PROPERTY_ID_QUERYTIMEOUT, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_RESULTSETTYPE, PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_USEBOOKMARKS, PROPERTY_ID_USEBOOKMARKS, cppu::UnoType<bool>::get(), 0);
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
     return new ::cppu::OPropertyArrayHelper(aDescriptor);
 }

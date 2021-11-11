@@ -37,8 +37,6 @@ namespace com::sun::star::awt   { class XWindow; }
 namespace com::sun::star::frame { class XFrame2; }
 namespace com::sun::star::io    { class XPersist; }
 
-#define ELEMENT_COUNT   size_t(E_ELEMENT_TYPE_COUNT)
-
 namespace dbaui
 {
     class OAppBorderWindow;
@@ -76,7 +74,7 @@ namespace dbaui
     // Combines general functionality.
     class OAppDetailPageHelper final : public OChildWindow
     {
-        std::unique_ptr<DBTreeViewBase> m_aLists[ELEMENT_COUNT];
+        std::unique_ptr<DBTreeViewBase> m_aLists[size_t(E_ELEMENT_TYPE_COUNT)];
         OAppBorderWindow&         m_rBorderWin;
         std::unique_ptr<weld::Container> m_xBox;
         std::unique_ptr<weld::Widget> m_xFL;

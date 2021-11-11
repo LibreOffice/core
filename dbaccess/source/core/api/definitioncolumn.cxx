@@ -448,41 +448,41 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
     css::beans::Property* pDesc = aDescriptor.getArray();
     sal_Int32 nPos = 0;
 
-    DECL_PROP_IMPL(ISAUTOINCREMENT, cppu::UnoType<bool>::get()) 0);
-    DECL_PROP_IMPL(ISCURRENCY, cppu::UnoType<bool>::get()) 0);
-    DECL_PROP_IMPL(ISNULLABLE, cppu::UnoType<sal_Int32       >::get()) 0);
-    DECL_PROP_IMPL(PRECISION, cppu::UnoType<sal_Int32       >::get()) 0);
-    DECL_PROP_IMPL(SCALE, cppu::UnoType<sal_Int32       >::get()) 0);
-    DECL_PROP_IMPL(TYPE, cppu::UnoType<sal_Int32       >::get()) 0);
-    DECL_PROP_IMPL(TYPENAME, cppu::UnoType<OUString >::get()) 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_ISAUTOINCREMENT, PROPERTY_ID_ISAUTOINCREMENT, cppu::UnoType<bool>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_ISCURRENCY, PROPERTY_ID_ISCURRENCY, cppu::UnoType<bool>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_ISNULLABLE, PROPERTY_ID_ISNULLABLE, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_PRECISION, PROPERTY_ID_PRECISION, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_SCALE, PROPERTY_ID_SCALE, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_TYPE, PROPERTY_ID_TYPE, cppu::UnoType<sal_Int32>::get(), 0);
+    pDesc[nPos++] = css::beans::Property(PROPERTY_TYPENAME, PROPERTY_ID_TYPENAME, cppu::UnoType<OUString >::get(), 0);
 
     if ( nId & HAS_AUTOINCREMENT_CREATION )
     {
-        DECL_PROP_IMPL(AUTOINCREMENTCREATION, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::MAYBEVOID );
+         pDesc[nPos++] = css::beans::Property(PROPERTY_AUTOINCREMENTCREATION, PROPERTY_ID_AUTOINCREMENTCREATION, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID );
     }
     if ( nId & HAS_DEFAULTVALUE )
     {
-        DECL_PROP_IMPL(DEFAULTVALUE, cppu::UnoType<OUString >::get()) 0);
+         pDesc[nPos++] = css::beans::Property(PROPERTY_DEFAULTVALUE, PROPERTY_ID_DEFAULTVALUE, cppu::UnoType<OUString >::get(), 0);
     }
     if ( nId & HAS_DESCRIPTION )
     {
-        DECL_PROP_IMPL(DESCRIPTION, cppu::UnoType<OUString >::get()) 0);
+         pDesc[nPos++] = css::beans::Property(PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, cppu::UnoType<OUString >::get(), 0);
     }
     if ( nId & HAS_ROWVERSION )
     {
-        DECL_PROP_IMPL(ISROWVERSION, cppu::UnoType<bool>::get()) 0);
+         pDesc[nPos++] = css::beans::Property(PROPERTY_ISROWVERSION, PROPERTY_ID_ISROWVERSION, cppu::UnoType<bool>::get(), 0);
     }
     if ( nId & HAS_CATALOGNAME )
     {
-        DECL_PROP_IMPL(CATALOGNAME, cppu::UnoType<OUString >::get()) 0);
+         pDesc[nPos++] = css::beans::Property(PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, cppu::UnoType<OUString >::get(), 0);
     }
     if ( nId & HAS_SCHEMANAME )
     {
-        DECL_PROP_IMPL(SCHEMANAME, cppu::UnoType<OUString >::get()) 0);
+         pDesc[nPos++] = css::beans::Property(PROPERTY_SCHEMANAME, PROPERTY_ID_SCHEMANAME, cppu::UnoType<OUString >::get(), 0);
     }
     if ( nId & HAS_TABLENAME )
     {
-        DECL_PROP_IMPL(TABLENAME, cppu::UnoType<OUString >::get()) 0);
+         pDesc[nPos++] = css::beans::Property(PROPERTY_TABLENAME, PROPERTY_ID_TABLENAME, cppu::UnoType<OUString >::get(), 0);
     }
 
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
