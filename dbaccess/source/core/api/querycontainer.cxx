@@ -131,8 +131,19 @@ void OQueryContainer::disposing()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO_IMPLNAME(OQueryContainer, "com.sun.star.sdb.dbaccess.OQueryContainer")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OQueryContainer)
+OUString SAL_CALL OQueryContainer::getImplementationName()
+    {
+        return "com.sun.star.sdb.dbaccess.OQueryContainer";
+    }
+sal_Bool SAL_CALL OQueryContainer::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OQueryContainer::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_CONTAINER, SERVICE_SDB_QUERIES };

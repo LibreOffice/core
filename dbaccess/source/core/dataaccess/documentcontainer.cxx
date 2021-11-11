@@ -123,8 +123,19 @@ css::uno::Sequence< css::uno::Type > ODocumentContainer::getTypes()
         ODocumentContainer_Base::getTypes( )
     );
 }
-IMPLEMENT_SERVICE_INFO_IMPLNAME(ODocumentContainer, "com.sun.star.comp.dba.ODocumentContainer");
-IMPLEMENT_SERVICE_INFO_SUPPORTS(ODocumentContainer);
+OUString SAL_CALL ODocumentContainer::getImplementationName()
+    {
+        return "com.sun.star.comp.dba.ODocumentContainer";
+    };
+sal_Bool SAL_CALL ODocumentContainer::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    };
 css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ODocumentContainer::getPropertySetInfo()
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );

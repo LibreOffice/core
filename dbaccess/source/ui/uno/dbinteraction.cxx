@@ -350,7 +350,15 @@ namespace dbaui
     {
         return "com.sun.star.comp.dbaccess.DatabaseInteractionHandler";
     }
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(SQLExceptionInteractionHandler)
+    sal_Bool SAL_CALL SQLExceptionInteractionHandler::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
     css::uno::Sequence< OUString > SAL_CALL SQLExceptionInteractionHandler::getSupportedServiceNames()
     {
         return { "com.sun.star.sdb.DatabaseInteractionHandler" };
@@ -361,7 +369,15 @@ namespace dbaui
     {
         return "com.sun.star.comp.dbaccess.LegacyInteractionHandler";
     }
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
+    sal_Bool SAL_CALL LegacyInteractionHandler::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
     css::uno::Sequence< OUString > SAL_CALL LegacyInteractionHandler::getSupportedServiceNames()
     {
         return { "com.sun.star.sdb.InteractionHandler" };

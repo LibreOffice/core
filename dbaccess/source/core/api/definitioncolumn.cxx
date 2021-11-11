@@ -444,7 +444,9 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
     // Which optional properties are contained?
     const sal_Int32 nHaveOptionally (std::bitset<7>(nId).count());
 
-    BEGIN_PROPERTY_SEQUENCE( nHaveAlways + nHaveOptionally )
+    css::uno::Sequence< css::beans::Property> aDescriptor(nHaveAlways + nHaveOptionally);
+    css::beans::Property* pDesc = aDescriptor.getArray();
+    sal_Int32 nPos = 0;
 
     DECL_PROP_IMPL(ISAUTOINCREMENT, cppu::UnoType<bool>::get()) 0);
     DECL_PROP_IMPL(ISCURRENCY, cppu::UnoType<bool>::get()) 0);
@@ -483,7 +485,7 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
         DECL_PROP_IMPL(TABLENAME, cppu::UnoType<OUString >::get()) 0);
     }
 
-    END_PROPERTY_SEQUENCE()
+    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
 
     if ( !m_bIsDescriptor )
     {

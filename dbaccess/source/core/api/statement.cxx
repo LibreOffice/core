@@ -176,7 +176,9 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* OStatementBase::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(10)
+    css::uno::Sequence< css::beans::Property> aDescriptor(10);
+    css::beans::Property* pDesc = aDescriptor.getArray();
+    sal_Int32 nPos = 0;
         DECL_PROP_IMPL(CURSORNAME, cppu::UnoType<OUString>::get()) 0);
         DECL_PROP_IMPL(ESCAPE_PROCESSING, cppu::UnoType<bool>::get()) 0);
         DECL_PROP_IMPL(FETCHDIRECTION, cppu::UnoType<sal_Int32>::get()) 0);
@@ -187,7 +189,8 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo()
         DECL_PROP_IMPL(RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get()) 0);
         DECL_PROP_IMPL(RESULTSETTYPE, cppu::UnoType<sal_Int32>::get()) 0);
         DECL_PROP_IMPL(USEBOOKMARKS, cppu::UnoType<bool>::get()) 0);
-    END_PROPERTY_HELPER();
+    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
+    return new ::cppu::OPropertyArrayHelper(aDescriptor);
 }
 
 // cppu::OPropertySetHelper

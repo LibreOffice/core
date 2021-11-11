@@ -55,46 +55,9 @@ public:
 
 };
 
-// helper for implementing the XServiceInfo interface
-
-// (internal - not to be used outside - usually)
-#define IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
-    OUString SAL_CALL classname::getImplementationName(  )   \
-    {   \
-        return implasciiname; \
-    }   \
-
-
-#define IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) \
-    {   \
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());  \
-        for (const OUString& s : aSupported)    \
-            if (s == _rServiceName)  \
-                return true;    \
-    \
-        return false;   \
-    }   \
-
-
 // helper for implementing the createArrayHelper
-#define BEGIN_PROPERTY_SEQUENCE(count)  \
-    css::uno::Sequence< css::beans::Property> aDescriptor(count); \
-    css::beans::Property* pDesc = aDescriptor.getArray();                  \
-    sal_Int32 nPos = 0;                                             \
-
-#define BEGIN_PROPERTY_HELPER(count)                            \
-    BEGIN_PROPERTY_SEQUENCE(count)
-
 #define DECL_PROP_IMPL(varname, cpputype) \
     pDesc[nPos++] = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cpputype,
-
-#define END_PROPERTY_SEQUENCE()                             \
-    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");    \
-
-#define END_PROPERTY_HELPER()                               \
-    END_PROPERTY_SEQUENCE() \
-    return new ::cppu::OPropertyArrayHelper(aDescriptor);
 
 #endif // INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
 

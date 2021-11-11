@@ -66,7 +66,15 @@ namespace dbaui
     {
         return "com.sun.star.comp.sdb.DirectSQLDialog";
     }
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)
+    sal_Bool SAL_CALL ODirectSQLDialog::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
     css::uno::Sequence< OUString > SAL_CALL ODirectSQLDialog::getSupportedServiceNames(  )
     {
         return { SERVICE_SDB_DIRECTSQLDIALOG };

@@ -131,7 +131,15 @@ OUString SAL_CALL OColumnControlModel::getImplementationName()
 {
     return "com.sun.star.comp.dbu.OColumnControlModel";
 }
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControlModel)
+sal_Bool SAL_CALL OColumnControlModel::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OColumnControlModel::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.UnoControlModel","com.sun.star.sdb.ColumnDescriptorControlModel" };

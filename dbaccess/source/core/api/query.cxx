@@ -212,8 +212,19 @@ void OQuery::rebuildColumns()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO_IMPLNAME(OQuery, "com.sun.star.sdb.dbaccess.OQuery")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OQuery)
+OUString SAL_CALL OQuery::getImplementationName()
+    {
+        return "com.sun.star.sdb.dbaccess.OQuery";
+    }
+sal_Bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OQuery::getSupportedServiceNames(  )
 {
     return { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, "com.sun.star.sdb.QueryDefinition" };

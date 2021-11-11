@@ -126,7 +126,15 @@ namespace dbaui
     {
         return "com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog";
     }
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(OTextConnectionSettingsDialog)
+    sal_Bool SAL_CALL OTextConnectionSettingsDialog::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
     css::uno::Sequence< OUString > SAL_CALL OTextConnectionSettingsDialog::getSupportedServiceNames()
     {
         return { "com.sun.star.sdb.TextConnectionSettings" };

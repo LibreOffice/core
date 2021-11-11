@@ -123,8 +123,19 @@ OUString OTableContainer::getTableTypeRestriction() const
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO_IMPLNAME(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OTableContainer)
+OUString SAL_CALL OTableContainer::getImplementationName()
+    {
+        return "com.sun.star.sdb.dbaccess.OTableContainer";
+    }
+sal_Bool SAL_CALL OTableContainer::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OTableContainer::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES };

@@ -124,7 +124,9 @@ void OResultColumn::disposing()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* OResultColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(21)
+    css::uno::Sequence< css::beans::Property> aDescriptor(21);
+    css::beans::Property* pDesc = aDescriptor.getArray();
+    sal_Int32 nPos = 0;
         DECL_PROP_IMPL(CATALOGNAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY);
         DECL_PROP_IMPL(DISPLAYSIZE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY);
         DECL_PROP_IMPL(ISAUTOINCREMENT, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY);
@@ -146,7 +148,8 @@ void OResultColumn::disposing()
         DECL_PROP_IMPL(TABLENAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY);
         DECL_PROP_IMPL(TYPE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY);
         DECL_PROP_IMPL(TYPENAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY);
-    END_PROPERTY_HELPER();
+    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
+    return new ::cppu::OPropertyArrayHelper(aDescriptor);
 }
 
 // cppu::OPropertySetHelper

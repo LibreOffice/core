@@ -278,8 +278,19 @@ void SAL_CALL OSingleSelectQueryComposer::disposing()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
-IMPLEMENT_SERVICE_INFO_IMPLNAME(OSingleSelectQueryComposer, "org.openoffice.comp.dba.OSingleSelectQueryComposer")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OSingleSelectQueryComposer)
+OUString SAL_CALL OSingleSelectQueryComposer::getImplementationName()
+    {
+        return "org.openoffice.comp.dba.OSingleSelectQueryComposer";
+    }
+sal_Bool SAL_CALL OSingleSelectQueryComposer::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OSingleSelectQueryComposer::getSupportedServiceNames()
 {
     return { SERVICE_NAME_SINGLESELECTQUERYCOMPOSER };

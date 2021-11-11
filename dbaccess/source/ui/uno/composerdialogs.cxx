@@ -155,7 +155,15 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
     {
         return "com.sun.star.uno.comp.sdb.RowsetFilterDialog";
     }
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetFilterDialog)
+    sal_Bool SAL_CALL RowsetFilterDialog::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
     css::uno::Sequence< OUString > SAL_CALL RowsetFilterDialog::getSupportedServiceNames()
     {
         return { "com.sun.star.sdb.FilterDialog" };
@@ -203,7 +211,15 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
     {
         return "com.sun.star.uno.comp.sdb.RowsetOrderDialog";
     }
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetOrderDialog)
+    sal_Bool SAL_CALL RowsetOrderDialog::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
     css::uno::Sequence< OUString > SAL_CALL RowsetOrderDialog::getSupportedServiceNames()
     {
         return { "com.sun.star.sdb.OrderDialog" };
