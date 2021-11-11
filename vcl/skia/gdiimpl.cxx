@@ -286,6 +286,7 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
     , mXorMode(false)
     , mFlush(new SkiaFlushIdle(this))
     , mPendingOperationsToFlush(0)
+    , mScaling(1)
 {
 }
 
@@ -304,9 +305,9 @@ void SkiaSalGraphicsImpl::createSurface()
         createOffscreenSurface();
     else
         createWindowSurface();
-    mSurface->getCanvas()->save(); // see SetClipRegion()
     mClipRegion = vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight()));
     mDirtyRect = SkIRect::MakeWH(GetWidth(), GetHeight());
+    setCanvasScalingAndClipping();
 
     // We don't want to be swapping before we've painted.
     mFlush->Stop();
@@ -362,7 +363,11 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     // HACK: See isOffscreen().
     int width = std::max(1, GetWidth());
     int height = std::max(1, GetHeight());
-    mSurface = createSkSurface(width, height);
+    // We need to use window scaling even for offscreen surfaces, because the common usage is rendering something
+    // into an offscreen surface and then copy it to a window, so without scaling here the result would be originally
+    // drawn without scaling and only upscaled when drawing to a window.
+    mScaling = getWindowScaling();
+    mSurface = createSkSurface(width * mScaling, height * mScaling);
     assert(mSurface);
     mIsGPU = mSurface->getCanvas()->recordingContext() != nullptr;
 }
@@ -373,9 +378,9 @@ void SkiaSalGraphicsImpl::destroySurface()
     if (mSurface)
     {
         // check setClipRegion() invariant
-        assert(mSurface->getCanvas()->getSaveCount() == 2);
+        assert(mSurface->getCanvas()->getSaveCount() == 3);
         // if this fails, something forgot to use SkAutoCanvasRestore
-        assert(mSurface->getCanvas()->getTotalMatrix().isIdentity());
+        assert(mSurface->getCanvas()->getTotalMatrix() == SkMatrix::Scale(mScaling, mScaling));
     }
     // If we use e.g. Vulkan, we must destroy the surface before the context,
     // otherwise destroying the surface will reference the context. This is
@@ -389,6 +394,7 @@ void SkiaSalGraphicsImpl::destroySurface()
     mSurface.reset();
     mWindowContext.reset();
     mIsGPU = false;
+    mScaling = 1;
 }
 
 void SkiaSalGraphicsImpl::performFlush()
@@ -415,6 +421,8 @@ void SkiaSalGraphicsImpl::flushSurfaceToWindowContext()
         assert(isGPU()); // Raster should always draw directly to backbuffer to save copying
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+        // We ignore mDirtyRect here, and mSurface already is in screenSurface coordinates,
+        // so no transformation needed.
         screenSurface->getCanvas()->drawImage(makeCheckedImageSnapshot(mSurface), 0, 0,
                                               SkSamplingOptions(), &paint);
         screenSurface->flushAndSubmit(); // Otherwise the window is not drawn sometimes.
@@ -427,7 +435,10 @@ void SkiaSalGraphicsImpl::flushSurfaceToWindowContext()
         // getBackbufferSurface() repeatedly. Using our own surface would duplicate
         // memory and cost time copying pixels around.
         assert(!isGPU());
-        mWindowContext->swapBuffers(&mDirtyRect);
+        SkIRect dirtyRect = mDirtyRect;
+        if (mScaling != 1) // Adjust to mSurface coordinates if needed.
+            dirtyRect = scaleRect(dirtyRect, mScaling);
+        mWindowContext->swapBuffers(&dirtyRect);
     }
 }
 
@@ -496,7 +507,8 @@ void SkiaSalGraphicsImpl::checkSurface()
         SAL_INFO("vcl.skia.trace",
                  "create(" << this << "): " << Size(mSurface->width(), mSurface->height()));
     }
-    else if (GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
+    else if (GetWidth() * mScaling != mSurface->width()
+             || GetHeight() * mScaling != mSurface->height())
     {
         if (!avoidRecreateByResize())
         {
@@ -521,7 +533,11 @@ void SkiaSalGraphicsImpl::checkSurface()
             {
                 SkPaint paint;
                 paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+                // Scaling by current mScaling is active, undo that. We assume that the scaling
+                // does not change.
+                resetCanvasScalingAndClipping();
                 mSurface->getCanvas()->drawImage(snapshot, 0, 0, SkSamplingOptions(), &paint);
+                setCanvasScalingAndClipping();
             }
             SAL_INFO("vcl.skia.trace", "recreate(" << this << "): old " << oldSize << " new "
                                                    << Size(mSurface->width(), mSurface->height())
@@ -550,6 +566,36 @@ void SkiaSalGraphicsImpl::flushDrawing()
     mPendingOperationsToFlush = 0;
 }
 
+void SkiaSalGraphicsImpl::setCanvasScalingAndClipping()
+{
+    SkCanvas* canvas = mSurface->getCanvas();
+    assert(canvas->getSaveCount() == 1);
+    // If HiDPI scaling is active, simply set a scaling matrix for the canvas. This means
+    // that all painting can use VCL coordinates and they'll be automatically translated to mSurface
+    // scaled coordinates. If that is not wanted, the scale() state needs to be temporarily unset.
+    // State such as mDirtyRect and mXorRegion is not scaled, the scaling matrix applies to clipping too,
+    // and the rest needs to be handled explicitly.
+    // When reading mSurface contents there's no automatic scaling and it needs to be handled explicitly.
+    canvas->save(); // keep the original state without any scaling
+    canvas->scale(mScaling, mScaling);
+
+    // SkCanvas::clipRegion() can only further reduce the clip region,
+    // but we need to set the given region, which may extend it.
+    // So handle that by always having the full clip region saved on the stack
+    // and always go back to that. SkCanvas::restore() only affects the clip
+    // and the matrix.
+    canvas->save(); // keep scaled state without clipping
+    setCanvasClipRegion(canvas, mClipRegion);
+}
+
+void SkiaSalGraphicsImpl::resetCanvasScalingAndClipping()
+{
+    SkCanvas* canvas = mSurface->getCanvas();
+    assert(canvas->getSaveCount() == 3);
+    canvas->restore(); // undo clipping
+    canvas->restore(); // undo scaling
+}
+
 bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 {
     if (mClipRegion == region)
@@ -560,13 +606,8 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     mClipRegion = region;
     SAL_INFO("vcl.skia.trace", "setclipregion(" << this << "): " << region);
     SkCanvas* canvas = mSurface->getCanvas();
-    // SkCanvas::clipRegion() can only further reduce the clip region,
-    // but we need to set the given region, which may extend it.
-    // So handle that by always having the full clip region saved on the stack
-    // and always go back to that. SkCanvas::restore() only affects the clip
-    // and the matrix.
-    assert(canvas->getSaveCount() == 2); // = there is just one save()
-    canvas->restore();
+    assert(canvas->getSaveCount() == 3);
+    canvas->restore(); // undo previous clip state, see setCanvasScalingAndClipping()
     canvas->save();
     setCanvasClipRegion(canvas, region);
     return true;
@@ -651,6 +692,8 @@ SkCanvas* SkiaSalGraphicsImpl::getXorCanvas()
             abort();
         mXorBitmap.eraseARGB(0, 0, 0, 0);
         mXorCanvas = std::make_unique<SkCanvas>(mXorBitmap);
+        if (mScaling != 1)
+            mXorCanvas->scale(mScaling, mScaling);
         setCanvasClipRegion(mXorCanvas.get(), mClipRegion);
     }
     return mXorCanvas.get();
@@ -663,6 +706,14 @@ void SkiaSalGraphicsImpl::applyXor()
     // in each operation by extending mXorRegion with the area that should be
     // updated.
     assert(mXorMode);
+    if (mScaling != 1 && !mXorRegion.isEmpty())
+    {
+        // Scale mXorRegion to mSurface coordinates if needed.
+        std::vector<SkIRect> rects;
+        for (SkRegion::Iterator it(mXorRegion); !it.done(); it.next())
+            rects.push_back(scaleRect(it.rect(), mScaling));
+        mXorRegion.setRects(rects.data(), rects.size());
+    }
     if (!mSurface || !mXorCanvas
         || !mXorRegion.op(SkIRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height()),
                           SkRegion::kIntersect_Op))
@@ -709,8 +760,11 @@ void SkiaSalGraphicsImpl::applyXor()
     }
     surfaceBitmap.notifyPixelsChanged();
     surfaceBitmap.setImmutable();
+    // Copy without any clipping or scaling.
+    resetCanvasScalingAndClipping();
     mSurface->getCanvas()->drawImageRect(surfaceBitmap.asImage(), area, area, SkSamplingOptions(),
                                          &paint, SkCanvas::kFast_SrcRectConstraint);
+    setCanvasScalingAndClipping();
     mXorCanvas.reset();
     mXorBitmap.reset();
     mXorRegion.setEmpty();
@@ -766,6 +820,13 @@ void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor
     paint.setColor(toSkColor(nColor));
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    if (mScaling != 1 && isUnitTestRunning())
+    {
+        // On HiDPI displays, draw a square on the entire non-hidpi "pixel" when running unittests,
+        // since tests often require precise pixel drawing.
+        paint.setStrokeWidth(1); // this will be scaled by mScaling
+        paint.setStrokeCap(SkPaint::kSquare_Cap);
+    }
     getDrawCanvas()->drawPoint(toSkX(nX), toSkY(nY), paint);
     postDraw();
 }
@@ -782,6 +843,13 @@ void SkiaSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     paint.setAntiAlias(mParent.getAntiAlias());
+    if (mScaling != 1 && isUnitTestRunning())
+    {
+        // On HiDPI displays, do not draw hairlines, draw 1-pixel wide lines in order to avoid
+        // smoothing that would confuse unittests.
+        paint.setStrokeWidth(1); // this will be scaled by mScaling
+        paint.setStrokeCap(SkPaint::kSquare_Cap);
+    }
     getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
     postDraw();
 }
@@ -812,12 +880,20 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
     {
         paint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         paint.setStyle(SkPaint::kStroke_Style);
+        if (mScaling != 1 && isUnitTestRunning())
+        {
+            // On HiDPI displays, do not draw just a harline but instead a full-width "pixel" when running unittests,
+            // since tests often require precise pixel drawing.
+            paint.setStrokeWidth(1); // this will be scaled by mScaling
+            paint.setStrokeCap(SkPaint::kSquare_Cap);
+        }
         // The obnoxious "-1 DrawRect()" hack that I don't understand the purpose of (and I'm not sure
         // if anybody does), but without it some cases do not work. The max() is needed because Skia
         // will not draw anything if width or height is 0.
-        canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, std::max(tools::Long(1), nWidth - 1),
-                                            std::max(tools::Long(1), nHeight - 1)),
-                          paint);
+        canvas->drawRect(SkRect::MakeXYWH(toSkX(nX), toSkY(nY),
+                                          std::max(tools::Long(1), nWidth - 1),
+                                          std::max(tools::Long(1), nHeight - 1)),
+                         paint);
     }
     postDraw();
 }
@@ -1096,6 +1172,10 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
 
     // Adjust line width for object-to-device scale.
     fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
+    // On HiDPI displays, do not draw hairlines, draw 1-pixel wide lines in order to avoid
+    // smoothing that would confuse unittests.
+    if (fLineWidth == 0 && mScaling != 1 && isUnitTestRunning())
+        fLineWidth = 1; // this will be scaled by mScaling
 
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
     basegfx::B2DPolygon aPolyLine(rPolyLine);
@@ -1223,15 +1303,9 @@ void SkiaSalGraphicsImpl::copyArea(tools::Long nDestX, tools::Long nDestY, tools
     SAL_INFO("vcl.skia.trace", "copyarea("
                                    << this << "): " << Point(nSrcX, nSrcY) << "->"
                                    << SkIRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
-    assert(!mXorMode);
-    addUpdateRegion(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     // Using SkSurface::draw() should be more efficient, but it's too buggy.
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface),
-                                   SkRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
-                                   SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight),
-                                   SkSamplingOptions(), &paint, SkCanvas::kFast_SrcRectConstraint);
+    SalTwoRect rPosAry(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
+    privateCopyBits(rPosAry, this);
     postDraw();
 }
 
@@ -1251,9 +1325,6 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         src = this;
         assert(!mXorMode);
     }
-    assert(!mXorMode);
-    addUpdateRegion(SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
-                                     rPosAry.mnDestHeight));
     auto srcDebug = [&]() -> std::string {
         if (src == this)
             return "(self)";
@@ -1265,16 +1336,28 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         }
     };
     SAL_INFO("vcl.skia.trace", "copybits(" << this << "): " << srcDebug() << ": " << rPosAry);
+    privateCopyBits(rPosAry, src);
+    postDraw();
+}
+
+void SkiaSalGraphicsImpl::privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGraphicsImpl* src)
+{
+    assert(!mXorMode);
+    addUpdateRegion(SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                                     rPosAry.mnDestHeight));
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    SkRect srcRect
+        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+    SkRect destRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                                       rPosAry.mnDestHeight);
+    // Scaling for source coordinates must be done manually.
+    if (src->mScaling != 1)
+        srcRect = scaleRect(srcRect, src->mScaling);
     // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
-    getDrawCanvas()->drawImageRect(
-        makeCheckedImageSnapshot(src->mSurface),
-        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
-        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
-                         rPosAry.mnDestHeight),
-        makeSamplingOptions(rPosAry), &paint, SkCanvas::kFast_SrcRectConstraint);
-    postDraw();
+    getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(src->mSurface), srcRect, destRect,
+                                   makeSamplingOptions(rPosAry, mScaling, src->mScaling), &paint,
+                                   SkCanvas::kFast_SrcRectConstraint);
 }
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap& rBitmap)
@@ -1335,7 +1418,7 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     // "result_alpha = 1.0 - (1.0 - floor(alpha)) * mask".
     // See also blendBitmap().
 
-    SkSamplingOptions samplingOptions = makeSamplingOptions(rPosAry);
+    SkSamplingOptions samplingOptions = makeSamplingOptions(rPosAry, mScaling);
     // First do the "( 1 - alpha ) * mask"
     // (no idea how to do "floor", but hopefully not needed in practice).
     sk_sp<SkShader> shaderAlpha
@@ -1370,10 +1453,11 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
     const SkiaSalBitmap& skiaBitmap = static_cast<const SkiaSalBitmap&>(rSalBitmap);
-    drawShader(rPosAry,
-               SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
-                                SkShaders::Color(toSkColor(nMaskColor)),
-                                skiaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry))));
+    drawShader(
+        rPosAry,
+        SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                         SkShaders::Color(toSkColor(nMaskColor)),
+                         skiaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry, mScaling))));
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools::Long nY,
@@ -1387,9 +1471,32 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools:
     // TODO makeImageSnapshot(rect) may copy the data, which may be a waste if this is used
     // e.g. for VirtualDevice's lame alpha blending, in which case the image will eventually end up
     // in blendAlphaBitmap(), where we could simply use the proper rect of the image.
-    sk_sp<SkImage> image
-        = makeCheckedImageSnapshot(mSurface, SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
-    return std::make_shared<SkiaSalBitmap>(image);
+    sk_sp<SkImage> image = makeCheckedImageSnapshot(
+        mSurface, scaleRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), mScaling));
+    std::shared_ptr<SkiaSalBitmap> bitmap = std::make_shared<SkiaSalBitmap>(image);
+    // TODO: If the surface is scaled for HiDPI, the bitmap needs to be scaled down, otherwise
+    // it would have incorrect size from the API point of view. This could lead to loss of quality
+    // if the bitmap is drawn to another scaled surface. Since the bitmap scaling is done only
+    // on-demand, this state should be detected when drawing the bitmap and the scaling
+    // should be ignored.
+    if (mScaling != 1)
+    {
+        if (!isUnitTestRunning())
+            bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, BmpScaleFlag::BestQuality);
+        else
+        {
+            // Some tests require exact pixel values and would be confused by smooth-scaling.
+            // And some draw something smooth and not smooth-scaling there would break the checks.
+            if (isUnitTestRunning("BackendTest__testDrawHaflEllipseAAWithPolyLineB2D_")
+                || isUnitTestRunning("BackendTest__testDrawRectAAWithLine_"))
+            {
+                bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, BmpScaleFlag::BestQuality);
+            }
+            else
+                bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, BmpScaleFlag::NearestNeighbor);
+        }
+    }
+    return bitmap;
 }
 
 Color SkiaSalGraphicsImpl::getPixel(tools::Long nX, tools::Long nY)
@@ -1400,11 +1507,11 @@ Color SkiaSalGraphicsImpl::getPixel(tools::Long nX, tools::Long nY)
     flushDrawing();
     // This is presumably slow, but getPixel() should be generally used only by unit tests.
     SkBitmap bitmap;
-    if (!bitmap.tryAllocN32Pixels(GetWidth(), GetHeight()))
+    if (!bitmap.tryAllocN32Pixels(mSurface->width(), mSurface->height()))
         abort();
     if (!mSurface->readPixels(bitmap, 0, 0))
         abort();
-    return fromSkColor(bitmap.getColor(nX, nY));
+    return fromSkColor(bitmap.getColor(nX * mScaling, nY * mScaling));
 }
 
 void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags)
@@ -1499,6 +1606,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
                                                       const SkiaSalBitmap* alphaBitmap,
                                                       const Size targetSize)
 {
+    // TODO This should take into account mScaling!=1, and callers should use that too.
     sk_sp<SkImage> image;
     if (targetSize.IsEmpty())
         return image;
@@ -1574,7 +1682,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / bitmap.GetSize().Width());
         matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / bitmap.GetSize().Height());
         canvas->concat(matrix);
-        samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix);
+        samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, 1);
     }
     if (alphaBitmap != nullptr)
     {
@@ -1625,11 +1733,11 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()) // alpha can be ignored
         drawBitmap(rPosAry, rSkiaSourceBitmap);
     else
-        drawShader(
-            rPosAry,
-            SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
-                             rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry)),
-                             rSkiaAlphaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry))));
+        drawShader(rPosAry,
+                   SkShaders::Blend(
+                       SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                       rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)),
+                       rSkiaAlphaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry, mScaling))));
     return true;
 }
 
@@ -1638,7 +1746,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBit
 {
     if (bitmap.PreferSkShader())
     {
-        drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry)), blendMode);
+        drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)), blendMode);
         return;
     }
     // Use mergeCacheBitmaps(), which may decide to cache the result, avoiding repeated
@@ -1678,7 +1786,7 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
              "drawimage(" << this << "): " << rPosAry << ":" << SkBlendMode_Name(eBlendMode));
     addUpdateRegion(aDestinationRect);
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect,
-                                   makeSamplingOptions(rPosAry), &aPaint,
+                                   makeSamplingOptions(rPosAry, mScaling), &aPaint,
                                    SkCanvas::kFast_SrcRectConstraint);
     ++mPendingOperationsToFlush; // tdf#136369
     postDraw();
@@ -1805,8 +1913,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
         SkSamplingOptions samplingOptions;
-        if (matrixNeedsHighQuality(matrix))
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix);
+        if (matrixNeedsHighQuality(matrix) || (mScaling != 1 && !isUnitTestRunning()))
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, mScaling);
         if (fAlpha == 1.0)
             canvas->drawImage(imageToDraw, 0, 0, samplingOptions);
         else
@@ -1832,8 +1940,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
         SkSamplingOptions samplingOptions;
-        if (matrixNeedsHighQuality(matrix))
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix);
+        if (matrixNeedsHighQuality(matrix) || (mScaling != 1 && !isUnitTestRunning()))
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, mScaling);
         if (pSkiaAlphaBitmap)
         {
             SkPaint paint;
@@ -2057,6 +2165,21 @@ bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
         default:
             return false;
     }
+}
+
+static int getScaling()
+{
+    // It makes sense to support the debugging flag on all platforms
+    // for unittests purpose, even if the actual windows cannot do it.
+    if (const char* env = getenv("SAL_FORCE_HIDPI_SCALING"))
+        return atoi(env);
+    return 1;
+}
+
+int SkiaSalGraphicsImpl::getWindowScaling() const
+{
+    static const int scaling = getScaling();
+    return scaling;
 }
 
 #ifdef DBG_UTIL

@@ -64,6 +64,11 @@ float getWindowScaling()
             }
             bWindowScaling = true;
         }
+        if( const char* env = getenv("SAL_FORCE_HIDPI_SCALING"))
+        {
+            fWindowScale = atof(env);
+            bWindowScaling = true;
+        }
     }
     return fWindowScale;
 }
