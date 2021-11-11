@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ebc76d8_4c2ab46d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-11-11T13:58:00Z",
+      "side": 1,
+      "message": "If there are no further comments, then I suggest that this patch be merged into master. ",
+      "revId": "0f20ee406fa325261beb58fe57d4fd38cbfae952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
