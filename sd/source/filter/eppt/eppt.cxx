@@ -506,6 +506,7 @@ void PPTWriter::ImplCreateDocumentSummaryInformation()
         'A',0,'1',0,'E',0,'F',0,'-',0,'0',0,'0',0,'6',0,'0',0,'9',0,
         '7',0,'D',0,'A',0,'5',0,'6',0,'8',0,'9',0,'}',0
     };
+    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     uno::Sequence<sal_Int8> aGuidSeq(aGuid, 0x52);
 
     SvMemoryStream  aHyperBlob;
