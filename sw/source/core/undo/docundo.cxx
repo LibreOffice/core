@@ -360,10 +360,9 @@ UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
  */
 bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
 {
-    if (GetUndoActionCount() <= 1 || SdrUndoManager::GetRedoActionCount() > 0)
+    if (GetUndoActionCount() <= 1)
     {
-        // Single or less undo, owned by another view; or redo actions that might depend on the
-        // current undo order.
+        // Single or less undo, owned by another view.
         return false;
     }
 
@@ -405,6 +404,22 @@ bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
 
     const auto& rTopInsert = *static_cast<const SwUndoInsert*>(pTopSwAction);
     const auto& rViewInsert = *static_cast<const SwUndoInsert*>(pViewSwAction);
+
+    for (size_t i = 0; i < GetRedoActionCount(); ++i)
+    {
+        auto pRedoAction = dynamic_cast<const SwUndo*>(GetRedoAction(i));
+        if (!pRedoAction || pViewSwAction->GetId() != SwUndoId::TYPING)
+        {
+            return false;
+        }
+
+        const auto& rRedoInsert = *static_cast<const SwUndoInsert*>(pRedoAction);
+        if (!rViewInsert.IsIndependent(rRedoInsert) && rRedoInsert.GetViewShellId() != nViewId)
+        {
+            // Dependent redo action and owned by an other view.
+            return false;
+        }
+    }
 
     return rViewInsert.IsIndependent(rTopInsert);
 }
