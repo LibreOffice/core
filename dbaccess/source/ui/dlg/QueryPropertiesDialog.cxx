@@ -11,9 +11,6 @@
 #include <strings.hrc>
 #include <core_resource.hxx>
 
-#define ALL_STRING DBA_RES(STR_QUERY_LIMIT_ALL)
-#define ALL_INT -1
-
 namespace dbaui
 {
 
@@ -27,7 +24,7 @@ QueryPropertiesDialog::QueryPropertiesDialog(
     m_xRB_Distinct->set_active(bDistinct);
     m_xRB_NonDistinct->set_active(!bDistinct);
 
-    m_xLB_Limit->append(OUString::number(ALL_INT), ALL_STRING);
+    m_xLB_Limit->append(OUString::number(-1), DBA_RES(STR_QUERY_LIMIT_ALL)); // ALL_INT and ALL_STRING
     /// Default values
     sal_Int64 const aDefLimitAry[] =
     {

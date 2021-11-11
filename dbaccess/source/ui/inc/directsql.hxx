@@ -109,17 +109,6 @@ namespace dbaui
 #endif
     };
 
-#ifdef DBG_UTIL
-#define CHECK_INVARIANTS(methodname)    \
-    {   \
-        const char* pError = impl_CheckInvariants();    \
-        if (pError) \
-            SAL_WARN("dbaccess.ui", methodname ": " << pError);   \
-    }
-#else
-#define CHECK_INVARIANTS(methodname)
-#endif
-
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
