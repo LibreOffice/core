@@ -801,17 +801,19 @@ static void lcl_DrawLineForWrongListData(
             SwWrongArea const*const wrongArea = pWList->GetWrongElement(nNextStart + rInf.GetIdx());
             if (wrongArea != nullptr)
             {
+                const SwViewShell* pShell = rInf.GetShell();
+                sal_uInt16 nZoom = pShell ? round(pShell->GetViewOptions()->GetZoom()/100) : 1;
                 if (WRONGAREA_WAVE == wrongArea->mLineType)
                 {
                     vcl::ScopedAntialiasing a(rInf.GetOut(), true);
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd, 1 );
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, 1 + nZoom, 3 + nZoom );
                 }
                 else if (WRONGAREA_BOLDWAVE == wrongArea->mLineType)
                 {
                     vcl::ScopedAntialiasing a(rInf.GetOut(), true);
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd, 2 );
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, 2 + nZoom, 4 + nZoom  );
                 }
                 else if (WRONGAREA_BOLD == wrongArea->mLineType)
                 {
