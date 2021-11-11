@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d8c9a1d_5198fdde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-11T09:23:04Z",
+      "side": 1,
+      "message": "jenkins build failed but the next one fixes it",
+      "revId": "0d3b970abe5484f7f1ca83cfe8b4bf210c6e8621",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
