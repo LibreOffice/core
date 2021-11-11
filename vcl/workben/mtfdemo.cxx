@@ -13,6 +13,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>
@@ -154,8 +155,21 @@ private:
 
             OUString sWorkingDir, sFileUrl;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
-            (void)osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
-            (void)osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
+            osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
+            if (rc == osl::FileBase::E_None)
+            {
+                rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
+                if (rc != osl::FileBase::E_None)
+                {
+                    std::cout << "Can not make absolute: " << aFilename << std::endl;
+                    std::exit(1);
+                }
+            }
+            else
+            {
+                std::cout << "Can not get file url from system path: " << sFileUrl << std::endl;
+                std::exit(1);
+            }
 
             uno::Reference<uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
@@ -171,9 +185,21 @@ private:
                 SvFileStream aFileStream(maFileName, StreamMode::READ);
                 ReadWindowMetafile(aFileStream, aMtf);
                 OUString sAbsoluteDumpUrl, sDumpUrl;
-                (void)osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
-                (void)osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
-
+                rc = osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
+                if (rc == osl::FileBase::E_None)
+                {
+                    rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
+                    if (rc != osl::FileBase::E_None)
+                    {
+                        std::cout << "Can not make absolute: metadump.xml" << std::endl;
+                        std::exit(1);
+                    }
+                }
+                else
+                {
+                    std::cout << "Can not get file url from system path: metadump.xml" << std::endl;
+                    std::exit(1);
+                }
                 aMtf.dumpAsXml(rtl::OUStringToOString(sAbsoluteDumpUrl, RTL_TEXTENCODING_UTF8).getStr());
                 std::cout << "Dumped metaactions as metadump.xml" << std::endl;
                 std::exit(0);
