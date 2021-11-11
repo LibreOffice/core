@@ -1372,7 +1372,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSpacingGroupShapeText)
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:spacing", "val", "40");
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:spacing", "val", "200");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf100581)
