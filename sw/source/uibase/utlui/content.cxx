@@ -417,12 +417,14 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         break;
         case ContentTypeId::FOOTNOTE:
         {
-            m_nMemberCount = 0;
             m_sTypeToken.clear();
             m_bEdit = true;
             m_bDelete = false;
             const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
             m_nMemberCount = rFootnoteIdxs.size();
+            // account for the separator line
+            if (m_nMemberCount > 0)
+                m_nMemberCount++;
         }
         break;
         case ContentTypeId::BOOKMARK:
