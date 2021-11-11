@@ -107,50 +107,6 @@ namespace dbaui
     {                                                                                       \
     }                                                                                       \
 
-    #define IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(classname, listenerclass, methodname, eventtype) \
-    void SAL_CALL classname::methodname(const eventtype& e) \
-    {                                                                                       \
-        eventtype aMulti(e);                                                                \
-        aMulti.Source = &m_rParent;                                                         \
-        ::comphelper::OInterfaceIteratorHelper2 aIt(*this);                                        \
-        while (aIt.hasMoreElements())                                                       \
-            static_cast< listenerclass*>(aIt.next())->methodname(aMulti);               \
-    }                                                                                       \
-
-    #define IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(classname, listenerclass, methodname, eventtype) \
-    sal_Bool SAL_CALL classname::methodname(const eventtype& e) \
-    {                                                                                       \
-        eventtype aMulti(e);                                                                \
-        aMulti.Source = &m_rParent;                                                         \
-        ::comphelper::OInterfaceIteratorHelper2 aIt(*this);                                        \
-        bool bResult = true;                                                        \
-        while (bResult && aIt.hasMoreElements())                                            \
-            bResult = static_cast< listenerclass*>(aIt.next())->methodname(aMulti);     \
-        return bResult;                                                                     \
-    }                                                                                       \
-
-    // helper for classes which do event multiplexing
-    #define IMPLEMENT_LISTENER_ADMINISTRATION(classname, listenernamespace, listenerdesc, multiplexer, broadcasterclass, broadcaster) \
-    void SAL_CALL classname::add##listenerdesc(const css::uno::Reference< css::listenernamespace::X##listenerdesc >& l)\
-    {                                                                                       \
-        multiplexer.addInterface(l);                                                            \
-        if (multiplexer.getLength() == 1)                                                   \
-        {                                                                                   \
-            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-            if (xBroadcaster.is())                                                          \
-                xBroadcaster->add##listenerdesc(&multiplexer);                              \
-        }                                                                                   \
-    }                                                                                       \
-    void SAL_CALL classname::remove##listenerdesc(const css::uno::Reference< css::listenernamespace::X##listenerdesc >& l)\
-    {                                                                                       \
-        if (multiplexer.getLength() == 1)                                                   \
-        {                                                                                   \
-            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-            if (xBroadcaster.is())                                                          \
-                xBroadcaster->remove##listenerdesc(&multiplexer);                           \
-        }                                                                                   \
-        multiplexer.removeInterface(l);                                                     \
-    }                                                                                       \
 
     #define STOP_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     if (multiplexer.getLength())                                                            \
@@ -167,144 +123,6 @@ namespace dbaui
         if (xBroadcaster.is())                                                          \
             xBroadcaster->add##listenerdesc(&multiplexer);                              \
     }                                                                                   \
-
-    // declaration of property listener multiplexers
-    // (with support for specialized and unspecialized property listeners)
-
-    #define DECLARE_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype)   \
-    class classname final                                                                   \
-            :public OSbaWeakSubObject                                                           \
-            ,public listenerclass                                                           \
-    {                                                                                       \
-        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar2<                              \
-                OUString >  ListenerContainerMap;   \
-        ListenerContainerMap    m_aListeners;                                               \
-                                                                                            \
-    public:                                                                                 \
-        classname( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );                    \
-        DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
-        virtual css::uno::Any  SAL_CALL queryInterface(                        \
-            const css::uno::Type& _rType) override; \
-                                                                                            \
-        /* css::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;  \
-                                                                                            \
-        virtual void SAL_CALL methodname(const eventtype& e) override;             \
-                                                                                            \
-        void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);    \
-        void removeInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener); \
-                                                                                            \
-        void disposeAndClear();                                                             \
-                                                                                            \
-        sal_Int32 getOverallLen() const;                                                    \
-                                                                                            \
-        ::comphelper::OInterfaceContainerHelper2* getContainer(const OUString& rName)       \
-            { return m_aListeners.getContainer(rName); }                                    \
-                                                                                            \
-    private:                                                                                \
-        void Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const eventtype& e);     \
-    };                                                                                      \
-
-    // implementation of property listener multiplexers
-    #define IMPLEMENT_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype) \
-    classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex)                \
-            :OSbaWeakSubObject(rSource)                                                     \
-            ,m_aListeners(rMutex)                                                           \
-    {                                                                                       \
-    }                                                                                       \
-                                                                                            \
-    css::uno::Any  SAL_CALL classname::queryInterface(                         \
-        const css::uno::Type& _rType) \
-    {                                                                                       \
-        css::uno::Any aReturn =                                                \
-            OSbaWeakSubObject::queryInterface(_rType);                                          \
-        if (!aReturn.hasValue())                                                            \
-            aReturn = ::cppu::queryInterface(_rType,                                        \
-                static_cast< listenerclass* >(this),                                        \
-                static_cast< css::lang::XEventListener* >(static_cast< listenerclass* >(this)) \
-            );                                                                              \
-                                                                                            \
-        return aReturn;                                                                     \
-    }                                                                                       \
-    void SAL_CALL classname::disposing(const css::lang::EventObject& )\
-    {                                                                                       \
-    }                                                                                       \
-                                                                                            \
-    void SAL_CALL classname::methodname(const eventtype& e)                \
-    {                                                                                       \
-        ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(e.PropertyName);  \
-        if (pListeners)                                                                     \
-            Notify(*pListeners, e);                                                         \
-                                                                                            \
-        /* do the notification for the unspecialized listeners, too */                      \
-        pListeners = m_aListeners.getContainer(OUString());                          \
-        if (pListeners)                                                                     \
-            Notify(*pListeners, e);                                                         \
-    }                                                                                       \
-                                                                                            \
-    void classname::addInterface(const OUString& rName,                              \
-            const css::uno::Reference< css::uno::XInterface > & rListener)    \
-    {                                                                                       \
-        m_aListeners.addInterface(rName, rListener);                                        \
-    }                                                                                       \
-                                                                                            \
-    void classname::removeInterface(const OUString& rName,                           \
-            const css::uno::Reference< css::uno::XInterface > & rListener)    \
-    {                                                                                       \
-        m_aListeners.removeInterface(rName, rListener);                                     \
-    }                                                                                       \
-                                                                                            \
-    void classname::disposeAndClear()                                                       \
-    {                                                                                       \
-        css::lang::EventObject aEvt(m_rParent);                                \
-        m_aListeners.disposeAndClear(aEvt);                                                             \
-    }                                                                                       \
-                                                                                            \
-    sal_Int32 classname::getOverallLen() const                                              \
-    {                                                                                       \
-        sal_Int32 nLen = 0;                                                                 \
-        const std::vector< OUString > aContained = m_aListeners.getContainedTypes(); \
-        for ( OUString const & s : aContained)                 \
-        {                                                                                   \
-            ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(s);  \
-            if (!pListeners)                                                                \
-                continue;                                                                   \
-            nLen += pListeners->getLength();                                                \
-        }                                                                                   \
-        return nLen;                                                                        \
-    }                                                                                       \
-                                                                                            \
-    void classname::Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const eventtype& e)   \
-    {                                                                                       \
-        eventtype aMulti(e);                                                                \
-        aMulti.Source = &m_rParent;                                                         \
-        ::comphelper::OInterfaceIteratorHelper2 aIt(rListeners);                                   \
-        while (aIt.hasMoreElements())                                                       \
-            static_cast< listenerclass*>(aIt.next())->methodname(aMulti);               \
-    }                                                                                       \
-
-    // helper for classes which do property event multiplexing
-    #define IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(classname, listenerdesc, multiplexer, broadcasterclass, broadcaster) \
-    void SAL_CALL classname::add##listenerdesc(const OUString& rName, const css::uno::Reference< css::beans::X##listenerdesc >& l )\
-    {                                                                                       \
-        multiplexer.addInterface(rName, l);                                                 \
-        if (multiplexer.getOverallLen() == 1)                                               \
-        {                                                                                   \
-            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-            if (xBroadcaster.is())                                                          \
-                xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                           \
-        }                                                                                   \
-    }                                                                                       \
-    void SAL_CALL classname::remove##listenerdesc(const OUString& rName, const css::uno::Reference< css::beans::X##listenerdesc >& l )\
-    {                                                                                       \
-        if (multiplexer.getOverallLen() == 1)                                               \
-        {                                                                                   \
-            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-            if (xBroadcaster.is())                                                          \
-                xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                        \
-        }                                                                                   \
-        multiplexer.removeInterface(rName, l);                                              \
-    }                                                                                       \
 
     #define STOP_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     if (multiplexer.getOverallLen())                                                        \
@@ -378,10 +196,68 @@ namespace dbaui
     END_DECLARE_LISTENER_MULTIPLEXER()
 
     // css::beans::XPropertyChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, css::beans::XPropertyChangeListener, propertyChange, css::beans::PropertyChangeEvent)
+    class SbaXPropertyChangeMultiplexer final
+            :public OSbaWeakSubObject
+            ,public css::beans::XPropertyChangeListener
+    {
+        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString >  ListenerContainerMap;
+        ListenerContainerMap    m_aListeners;
+
+    public:
+        SbaXPropertyChangeMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
+        DECLARE_UNO3_DEFAULTS(SbaXPropertyChangeMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+
+        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& e) override;
+
+        void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
+        void removeInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
+
+        void disposeAndClear();
+
+        sal_Int32 getOverallLen() const;
+
+        ::comphelper::OInterfaceContainerHelper2* getContainer(const OUString& rName)
+            { return m_aListeners.getContainer(rName); }
+
+    private:
+        void Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const css::beans::PropertyChangeEvent& e);
+    };
 
     // css::beans::XVetoableChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, css::beans::XVetoableChangeListener, vetoableChange, css::beans::PropertyChangeEvent)
+    class SbaXVetoableChangeMultiplexer final
+            :public OSbaWeakSubObject
+            ,public css::beans::XVetoableChangeListener
+    {
+        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString >  ListenerContainerMap;
+        ListenerContainerMap    m_aListeners;
+
+    public:
+        SbaXVetoableChangeMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
+        DECLARE_UNO3_DEFAULTS(SbaXVetoableChangeMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+
+        virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& e) override;
+
+        void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
+        void removeInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
+
+        void disposeAndClear();
+
+        sal_Int32 getOverallLen() const;
+
+        ::comphelper::OInterfaceContainerHelper2* getContainer(const OUString& rName)
+            { return m_aListeners.getContainer(rName); }
+
+    private:
+        void Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const css::beans::PropertyChangeEvent& e);
+    };
 
     // css::beans::XPropertiesChangeListener
     BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXPropertiesChangeMultiplexer, css::beans::XPropertiesChangeListener)
