@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de1a55de_3f158e8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-11T10:32:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this is ok or if it depends on the situation.\nI tried a make sw.check locally and had this:\ntestfdo83428::Load_Verify_Reload_Verify finished in: 2040ms\nxmltesttools.cxx:189:Assertion\nTest name: testEmptyAnnotationMark::TestBody\nequality assertion failed\n- Expected: 0\n- Actual  : 1\n- In \u003cfile:///tmp/libtest_sw_ooxmlexport.so5al70.tmp\u003e, XPath \u0027//w:commentRangeStart\u0027 number of nodes is incorrect\n\nFailures !!!\nRun: 82   Failure total: 1   Failures: 1   Errors: 0\n\nNow since I didn\u0027t change the tests themselves, I don\u0027t know if it\u0027s relevant or not.",
+      "revId": "3645377fa4e7fafb2084c943212cf3278f067d5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
