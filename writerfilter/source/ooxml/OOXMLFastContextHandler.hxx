@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <oox/token/namespaces.hxx>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/ref.hxx>
 #include "OOXMLParserState.hxx"
@@ -191,6 +192,7 @@ protected:
     Id mId;
     Id mnDefine;
     Token_t mnToken;
+    bool mbUseFullWPGSupport;
 
     // the formula insertion mode: inline/newline(left, center, right)
     sal_Int8 mnMathJcVal;
@@ -467,6 +469,8 @@ public:
 
     void sendShape( Token_t Element );
     bool isShapeSent( ) const { return m_bShapeSent; }
+
+    bool isDMLGroupShape() const { return mrShapeContext->getStartToken() == Token_t(oox::NMSP_wpg | oox::XML_wgp); };
 
 protected:
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;

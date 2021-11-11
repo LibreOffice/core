@@ -95,6 +95,8 @@ public:
     void setStartToken( sal_Int32 _starttoken );
 
     void setPosition(const css::awt::Point& rPosition);
+    void setUseWPG(bool bUse) { mbShouldWPGbeUsed = bUse; };
+    bool isWPGshouldBeUsed() { return mbShouldWPGbeUsed; };
 
     void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
     void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
@@ -110,6 +112,7 @@ private:
 
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;
+    bool mbShouldWPGbeUsed;
 
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;
