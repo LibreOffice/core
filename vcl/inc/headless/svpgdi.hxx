@@ -99,7 +99,6 @@ private:
     void applyColor(cairo_t *cr, Color rColor, double fTransparency = 0.0);
 
 protected:
-    vcl::Region                         m_aClipRegion;
     SvpCairoTextRender                  m_aTextRenderImpl;
     std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
@@ -129,9 +128,6 @@ public:
     virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-
-    virtual void            ResetClipRegion() override;
-    virtual bool            setClipRegion( const vcl::Region& ) override;
 
     virtual void            SetLineColor() override;
     virtual void            SetLineColor( Color nColor ) override;
