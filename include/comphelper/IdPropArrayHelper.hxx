@@ -21,16 +21,12 @@
 #include <sal/config.h>
 
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cassert>
 #include <unordered_map>
 
 namespace comphelper
 {
-
-    template <typename TYPE> struct OIdPropertyArrayUsageHelperMutex
-            : public rtl::Static< ::osl::Mutex, OIdPropertyArrayUsageHelperMutex<TYPE> > {};
 
     typedef std::unordered_map< sal_Int32, ::cppu::IPropertyArrayHelper* > OIdPropertyArrayMap;
     template <class TYPE>
@@ -40,7 +36,7 @@ namespace comphelper
         OIdPropertyArrayUsageHelper();
         virtual ~OIdPropertyArrayUsageHelper()
         {
-            ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
+            ::osl::MutexGuard aGuard(theMutex());
             assert(s_nRefCount > 0 && "OIdPropertyArrayUsageHelper::~OIdPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
             if (!--s_nRefCount)
             {
@@ -68,6 +64,11 @@ namespace comphelper
     private:
         static sal_Int32                        s_nRefCount;
         static OIdPropertyArrayMap*             s_pMap;
+        static osl::Mutex& theMutex()
+        {
+            static osl::Mutex SINGLETON;
+            return SINGLETON;
+        }
     };
 
     template<class TYPE>
@@ -79,7 +80,7 @@ namespace comphelper
     template <class TYPE>
     OIdPropertyArrayUsageHelper<TYPE>::OIdPropertyArrayUsageHelper()
     {
-        ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
+        ::osl::MutexGuard aGuard(theMutex());
         // create the map if necessary
         if (!s_pMap)
             s_pMap = new OIdPropertyArrayMap;
@@ -90,7 +91,7 @@ namespace comphelper
     ::cppu::IPropertyArrayHelper* OIdPropertyArrayUsageHelper<TYPE>::getArrayHelper(sal_Int32 nId)
     {
         assert(s_nRefCount && "OIdPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
-        ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
+        ::osl::MutexGuard aGuard(theMutex());
         // do we have the array already?
         auto& rEntry = (*s_pMap)[nId];
         if (!rEntry)
