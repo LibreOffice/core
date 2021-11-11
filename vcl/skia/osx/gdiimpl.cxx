@@ -58,13 +58,14 @@ void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     displayParams.fColorType = kN32_SkColorType;
     sk_app::window_context_factory::MacWindowInfo macWindow;
     macWindow.fMainView = mrShared.mpFrame->mpNSView;
+    mScaling = getWindowScaling();
     RenderMethod renderMethod = forceRaster ? RenderRaster : renderMethodToUse();
     switch (renderMethod)
     {
         case RenderRaster:
             // RasterWindowContext_mac uses OpenGL internally, which we don't want,
             // so use our own surface and do blitting to the screen ourselves.
-            mSurface = createSkSurface(GetWidth(), GetHeight());
+            mSurface = createSkSurface(GetWidth() * mScaling, GetHeight() * mScaling);
             break;
         case RenderMetal:
             mWindowContext
@@ -74,12 +75,18 @@ void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
             // it appears that Metal surfaces cannot be read from, which would break things
             // like copyArea().
             if (mWindowContext)
-                mSurface = createSkSurface(GetWidth(), GetHeight());
+                mSurface = createSkSurface(GetWidth() * mScaling, GetHeight() * mScaling);
             break;
         case RenderVulkan:
             abort();
             break;
     }
+}
+
+int AquaSkiaSalGraphicsImpl::getWindowScaling() const
+{
+    // The system function returns float, but only integer multiples realistically make sense.
+    return sal::aqua::getWindowScaling();
 }
 
 void AquaSkiaSalGraphicsImpl::Flush() { performFlush(); }
@@ -125,36 +132,54 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
     SkPixmap pixmap;
     if (!image->peekPixels(&pixmap))
         abort();
+    // If window scaling, then mDirtyRect is in VCL coordinates, mSurface has screen size (=points,HiDPI),
+    // maContextHolder has screen size but a scale matrix set so its inputs are in VCL coordinates (see
+    // its setup in AquaSharedAttributes::checkContext()).
     // This creates the bitmap context from the cropped part, writable_addr32() will get
     // the first pixel of mDirtyRect.topLeft(), and using pixmap.rowBytes() ensures the following
     // pixel lines will be read from correct positions.
     CGContextRef context = CGBitmapContextCreate(
-        pixmap.writable_addr32(mDirtyRect.x(), mDirtyRect.y()), mDirtyRect.width(),
-        mDirtyRect.height(), 8, pixmap.rowBytes(), GetSalData()->mxRGBSpace,
-        toCGBitmapType(image->colorType(), image->alphaType()));
-    assert(context); // TODO
+        pixmap.writable_addr32(mDirtyRect.x() * mScaling, mDirtyRect.y() * mScaling),
+        mDirtyRect.width() * mScaling, mDirtyRect.height() * mScaling, 8, pixmap.rowBytes(),
+        GetSalData()->mxRGBSpace, toCGBitmapType(image->colorType(), image->alphaType()));
+    if (!context)
+    {
+        SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate bitmap context");
+        return;
+    }
     CGImageRef screenImage = CGBitmapContextCreateImage(context);
-    assert(screenImage); // TODO
+    if (!screenImage)
+    {
+        CGContextRelease(context);
+        SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate screen image");
+        return;
+    }
+    mrShared.maContextHolder.saveState();
+    // Drawing to the actual window has scaling active, so use unscaled coordinates, the scaling matrix will scale them
+    // to the proper screen coordinates. Unless the scaling is fake for debugging, in which case scale them to draw
+    // at the scaled size.
+    int windowScaling = 1;
+    static const char* env = getenv("SAL_FORCE_HIDPI_SCALING");
+    if (env != nullptr)
+        windowScaling = atoi(env);
+    CGRect drawRect
+        = CGRectMake(mDirtyRect.x() * windowScaling, mDirtyRect.y() * windowScaling,
+                     mDirtyRect.width() * windowScaling, mDirtyRect.height() * windowScaling);
     if (mrShared.isFlipped())
     {
-        const CGRect screenRect
-            = CGRectMake(mDirtyRect.x(), GetHeight() - mDirtyRect.y() - mDirtyRect.height(),
-                         mDirtyRect.width(), mDirtyRect.height());
-        mrShared.maContextHolder.saveState();
-        CGContextTranslateCTM(mrShared.maContextHolder.get(), 0, pixmap.height());
+        // I don't understand why, but apparently it's needed to explicitly to flip the drawing, even though maContextHelper
+        // has this set up, so this unsets the flipping.
+        CGFloat invertedY = drawRect.origin.y + drawRect.size.height;
+        CGContextTranslateCTM(mrShared.maContextHolder.get(), 0, invertedY);
         CGContextScaleCTM(mrShared.maContextHolder.get(), 1, -1);
-        CGContextDrawImage(mrShared.maContextHolder.get(), screenRect, screenImage);
-        mrShared.maContextHolder.restoreState();
+        drawRect.origin.y = 0;
     }
-    else
-    {
-        const CGRect screenRect
-            = CGRectMake(mDirtyRect.x(), mDirtyRect.y(), mDirtyRect.width(), mDirtyRect.height());
-        CGContextDrawImage(mrShared.maContextHolder.get(), screenRect, screenImage);
-    }
+    CGContextDrawImage(mrShared.maContextHolder.get(), drawRect, screenImage);
+    mrShared.maContextHolder.restoreState();
 
     CGImageRelease(screenImage);
     CGContextRelease(context);
+    // This is also in VCL coordinates.
     mrShared.refreshRect(mDirtyRect.x(), mDirtyRect.y(), mDirtyRect.width(), mDirtyRect.height());
 }
 

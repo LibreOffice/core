@@ -239,6 +239,7 @@ protected:
 
     void privateDrawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                               tools::Long nHeight, double nTransparency, bool blockAA = false);
+    void privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGraphicsImpl* src);
 
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
@@ -256,6 +257,8 @@ protected:
     int GetWidth() const { return mProvider ? mProvider->GetWidth() : 1; }
     // get the height of the device
     int GetHeight() const { return mProvider ? mProvider->GetHeight() : 1; }
+    // Get the global HiDPI scaling factor.
+    virtual int getWindowScaling() const;
 
     SkCanvas* getXorCanvas();
     void applyXor();
@@ -277,6 +280,8 @@ protected:
         // and swapping to the screen is not _that_slow.
         mDirtyRect.join(addedRect);
     }
+    void setCanvasScalingAndClipping();
+    void resetCanvasScalingAndClipping();
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
     sk_sp<SkImage> mergeCacheBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
                                      const Size targetSize);
@@ -305,9 +310,12 @@ protected:
         if (graphics == nullptr)
             return stream << "(null)";
         // O - offscreen, G - GPU-based, R - raster
-        return stream << static_cast<const void*>(graphics) << " "
-                      << Size(graphics->GetWidth(), graphics->GetHeight())
-                      << (graphics->isGPU() ? "G" : "R") << (graphics->isOffscreen() ? "O" : "");
+        stream << static_cast<const void*>(graphics) << " "
+               << Size(graphics->GetWidth(), graphics->GetHeight());
+        if (graphics->mScaling != 1)
+            stream << "*" << graphics->mScaling;
+        stream << (graphics->isGPU() ? "G" : "R") << (graphics->isOffscreen() ? "O" : "");
+        return stream;
     }
 
     SalGraphics& mParent;
@@ -318,14 +326,15 @@ protected:
     // Note that mSurface may be a proxy surface and not the one from the window context.
     std::unique_ptr<sk_app::WindowContext> mWindowContext;
     bool mIsGPU; // whether the surface is GPU-backed
-    SkIRect mDirtyRect; // the area that has been changed since the last performFlush()
+    // Note that we generally use VCL coordinates, which is not mSurface coordinates if mScaling!=1.
+    SkIRect mDirtyRect; // The area that has been changed since the last performFlush().
     vcl::Region mClipRegion;
+    SkRegion mXorRegion; // The area that needs updating for the xor operation.
     Color mLineColor;
     Color mFillColor;
     bool mXorMode;
     SkBitmap mXorBitmap;
     std::unique_ptr<SkCanvas> mXorCanvas;
-    SkRegion mXorRegion; // the area that needs updating for the xor operation
     std::unique_ptr<SkiaFlushIdle> mFlush;
     // Info about pending polygons to draw (we try to merge adjacent polygons into one).
     struct LastPolyPolygonInfo
@@ -336,6 +345,7 @@ protected:
     };
     LastPolyPolygonInfo mLastPolyPolygonInfo;
     int mPendingOperationsToFlush;
+    int mScaling; // The scale factor for HiDPI screens.
 };
 
 #endif
