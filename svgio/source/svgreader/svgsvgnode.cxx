@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svgdocument.hxx>
 
 namespace svgio::svgreader
@@ -677,9 +678,8 @@ namespace svgio::svgreader
                             if(bEmbedInFinalTransformPxTo100ThMM)
                             {
                                 // embed in transform primitive to scale to 1/100th mm
-                                // where 1 inch == 25.4 mm to get from Svg coordinates (px) to
-                                // drawinglayer coordinates
-                                const double fScaleTo100thmm(25.4 * 100.0 / F_SVG_PIXEL_PER_INCH);
+                                // to get from Svg coordinates (px) to drawinglayer coordinates
+                                constexpr double fScaleTo100thmm(o3tl::convert(1.0, o3tl::Length::px, o3tl::Length::mm100));
                                 const basegfx::B2DHomMatrix aTransform(
                                     basegfx::utils::createScaleB2DHomMatrix(
                                         fScaleTo100thmm,

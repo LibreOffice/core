@@ -43,6 +43,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagehierarchyprimitive2d.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 const int nStyleDepthLimit = 1024;
 
@@ -2494,9 +2495,8 @@ namespace svgio::svgreader
 
         SvgNumber SvgStyleAttributes::getFontSizeNumber() const
         {
-            // default size is 'medium' or 16px, which is equal to the default PPI used in svgio ( 96.0 )
-            // converted to pixels
-            const double aDefaultSize = F_SVG_PIXEL_PER_INCH / 6.0;
+            // default size is 'medium', i.e. 12 pt, or 16px
+            constexpr double aDefaultSize = o3tl::convert(12.0, o3tl::Length::pt, o3tl::Length::px);
 
             if(maFontSizeNumber.isSet())
             {
