@@ -42,6 +42,7 @@ public:
     void testBitmapCopyOnWrite();
     void testMatrixQuality();
     void testDelayedScale();
+    void testDelayedScaleAlphaImage();
     void testTdf137329();
     void testTdf140848();
     void testTdf132367();
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testBitmapCopyOnWrite);
     CPPUNIT_TEST(testMatrixQuality);
     CPPUNIT_TEST(testDelayedScale);
+    CPPUNIT_TEST(testDelayedScaleAlphaImage);
     CPPUNIT_TEST(testTdf137329);
     CPPUNIT_TEST(testTdf140848);
     CPPUNIT_TEST(testTdf132367);
@@ -370,6 +372,61 @@ void SkiaTest::testDelayedScale()
     CPPUNIT_ASSERT_EQUAL(tools::Long(40), buffer2->mnWidth);
     CPPUNIT_ASSERT_EQUAL(tools::Long(60), buffer2->mnHeight);
     skiaBitmap2.ReleaseBuffer(buffer2, BitmapAccessMode::Read);
+}
+
+void SkiaTest::testDelayedScaleAlphaImage()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    auto bitmapTmp = std::make_unique<SkiaSalBitmap>();
+    CPPUNIT_ASSERT(bitmapTmp->Create(Size(10, 10), vcl::PixelFormat::N24_BPP, BitmapPalette()));
+    bitmapTmp->Erase(COL_RED);
+    // Create a bitmap that has only an image, not a pixel buffer.
+    SkiaSalBitmap bitmap(bitmapTmp->GetSkImage());
+    bitmapTmp.release();
+    CPPUNIT_ASSERT(!bitmap.unittestHasBuffer());
+    CPPUNIT_ASSERT(bitmap.unittestHasImage());
+    CPPUNIT_ASSERT(!bitmap.unittestHasAlphaImage());
+    // Set up pending scale.
+    CPPUNIT_ASSERT(bitmap.Scale(2.0, 2.0, BmpScaleFlag::Fast));
+    CPPUNIT_ASSERT(bitmap.unittestHasPendingScale());
+    CPPUNIT_ASSERT(bitmap.InterpretAs8Bit());
+    // Ask for SkImage and make sure it's scaled up.
+    sk_sp<SkImage> image = bitmap.GetSkImage();
+    CPPUNIT_ASSERT_EQUAL(20, image->width());
+    // Ask again, this time it should be cached.
+    sk_sp<SkImage> image2 = bitmap.GetSkImage();
+    CPPUNIT_ASSERT_EQUAL(image.get(), image2.get());
+    // Add another scale.
+    CPPUNIT_ASSERT(bitmap.Scale(3.0, 3.0, BmpScaleFlag::Fast));
+    // Ask for alpha SkImage and make sure it's scaled up.
+    sk_sp<SkImage> alphaImage = bitmap.GetAlphaSkImage();
+    CPPUNIT_ASSERT_EQUAL(60, alphaImage->width());
+    // Ask again, this time it should be cached.
+    sk_sp<SkImage> alphaImage2 = bitmap.GetAlphaSkImage();
+    CPPUNIT_ASSERT_EQUAL(alphaImage.get(), alphaImage2.get());
+    // Ask again for non-alpha image, it should be scaled again.
+    sk_sp<SkImage> image3 = bitmap.GetSkImage();
+    CPPUNIT_ASSERT_EQUAL(60, image3->width());
+    CPPUNIT_ASSERT(image3.get() != image2.get());
+    CPPUNIT_ASSERT(image3.get() != image.get());
+    // Create pixel buffer from the image (it should convert from alpha image because the bitmap is 8bpp
+    // and the alpha image size matches).
+    SkiaSalBitmap bitmapCopy;
+    bitmapCopy.Create(bitmap);
+    CPPUNIT_ASSERT(!bitmap.unittestHasBuffer());
+    BitmapBuffer* buffer1 = bitmap.AcquireBuffer(BitmapAccessMode::Read);
+    CPPUNIT_ASSERT(bitmap.unittestHasBuffer());
+    bitmap.ReleaseBuffer(buffer1, BitmapAccessMode::Read);
+    CPPUNIT_ASSERT_EQUAL(Size(60, 60), bitmap.GetSize());
+    // Scale the copy before the buffer was created (this time it should convert from non-alpha image
+    // because of the different size).
+    CPPUNIT_ASSERT(!bitmapCopy.unittestHasBuffer());
+    CPPUNIT_ASSERT(bitmapCopy.Scale(4.0, 4.0, BmpScaleFlag::Fast));
+    BitmapBuffer* buffer2 = bitmapCopy.AcquireBuffer(BitmapAccessMode::Read);
+    CPPUNIT_ASSERT(bitmapCopy.unittestHasBuffer());
+    bitmapCopy.ReleaseBuffer(buffer2, BitmapAccessMode::Read);
+    CPPUNIT_ASSERT_EQUAL(Size(240, 240), bitmapCopy.GetSize());
 }
 
 void SkiaTest::testTdf137329()
