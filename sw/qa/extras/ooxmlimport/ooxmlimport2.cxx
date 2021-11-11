@@ -661,10 +661,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
     // This failed with a NoSuchElementException, super/subscript property was
     // lost on import, so the whole paragraph was a single run.
     uno::Reference<text::XTextRange> xSecondRun = getRun(xFirstPara, 2);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14000),
                          getProperty<sal_Int32>(xSecondRun, "CharEscapement"));
     uno::Reference<text::XTextRange> xThirdRun = getRun(xFirstPara, 3);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-25),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-14000),
                          getProperty<sal_Int32>(xThirdRun, "CharEscapement"));
 }
 

@@ -60,6 +60,8 @@ public:
     void endCharacterGroup() override;
     void startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
     void endShape() override;
+    void startTextBoxContent() override;
+    void endTextBoxContent() override;
     void text(const sal_uInt8* data, size_t len) override;
     void utext(const sal_uInt8* data, size_t len) override;
     void positionOffset(const OUString& rText, bool bVertical) override;
@@ -81,6 +83,8 @@ protected:
     virtual void lcl_endCharacterGroup() = 0;
     virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) = 0;
     virtual void lcl_endShape() = 0;
+    virtual void lcl_startTextBoxContent() = 0;
+    virtual void lcl_endTextBoxContent() = 0;
     virtual void lcl_text(const sal_uInt8* data, size_t len) = 0;
     virtual void lcl_utext(const sal_uInt8* data, size_t len) = 0;
     virtual void lcl_positionOffset(const OUString& /*rText*/, bool /*bVertical*/) {}
