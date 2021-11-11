@@ -31,6 +31,13 @@ NamespaceMap::NamespaceMap()
 #include <namespaces-strictnames.inc>
     };
 }
+
+/** Thread-safe singleton of a map of all supported XML namespace URLs. */
+NamespaceMap& StaticNamespaceMap()
+{
+    static NamespaceMap SINGLETON;
+    return SINGLETON;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
