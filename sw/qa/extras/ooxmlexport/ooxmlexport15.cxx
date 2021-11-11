@@ -217,6 +217,28 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
     CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue("Resolved").get<bool>());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return; // initial import, no futher checks
+
+    // Ensure that we have <w:text w:multiLine="1"/>
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), getXPath(pXmlDoc, "/w:document/w:body/w:sdt[1]/w:sdtPr/w:text", "multiLine"));
+
+    // Ensure that we have <w:text w:multiLine="0"/>
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), getXPath(pXmlDoc, "/w:document/w:body/w:sdt[2]/w:sdtPr/w:text", "multiLine"));
+
+    // Ensure that we have <w:text/>
+    getXPath(pXmlDoc, "/w:document/w:body/w:sdt[3]/w:sdtPr/w:text", "");
+
+    // Ensure that we have no <w:text/> (not quite correct case, but to ensure import/export are okay)
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/w:document/w:body/w:sdt[4]/w:sdtPr/w:text");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                           static_cast<sal_Int32>(xmlXPathNodeSetGetLength(pXmlObj->nodesetval)));
+    xmlXPathFreeObject(pXmlObj);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
