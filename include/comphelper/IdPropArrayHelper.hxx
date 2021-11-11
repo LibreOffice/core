@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <cppuhelper/propshlp.hxx>
 #include <cassert>
 #include <unordered_map>
@@ -36,7 +36,7 @@ namespace comphelper
         OIdPropertyArrayUsageHelper();
         virtual ~OIdPropertyArrayUsageHelper()
         {
-            ::osl::MutexGuard aGuard(theMutex());
+            std::unique_lock aGuard(theMutex());
             assert(s_nRefCount > 0 && "OIdPropertyArrayUsageHelper::~OIdPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
             if (!--s_nRefCount)
             {
@@ -64,9 +64,9 @@ namespace comphelper
     private:
         static sal_Int32                        s_nRefCount;
         static OIdPropertyArrayMap*             s_pMap;
-        static osl::Mutex& theMutex()
+        static std::mutex& theMutex()
         {
-            static osl::Mutex SINGLETON;
+            static std::mutex SINGLETON;
             return SINGLETON;
         }
     };
@@ -80,7 +80,7 @@ namespace comphelper
     template <class TYPE>
     OIdPropertyArrayUsageHelper<TYPE>::OIdPropertyArrayUsageHelper()
     {
-        ::osl::MutexGuard aGuard(theMutex());
+        std::unique_lock aGuard(theMutex());
         // create the map if necessary
         if (!s_pMap)
             s_pMap = new OIdPropertyArrayMap;
@@ -91,7 +91,7 @@ namespace comphelper
     ::cppu::IPropertyArrayHelper* OIdPropertyArrayUsageHelper<TYPE>::getArrayHelper(sal_Int32 nId)
     {
         assert(s_nRefCount && "OIdPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
-        ::osl::MutexGuard aGuard(theMutex());
+        std::unique_lock aGuard(theMutex());
         // do we have the array already?
         auto& rEntry = (*s_pMap)[nId];
         if (!rEntry)
