@@ -368,12 +368,12 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11331 : 11331), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
 
     xGroup.set(xChildGroup, uno::UNO_QUERY);
     xChildGroup.set(xGroup->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1859), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11331 : 11331), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
 
     xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
