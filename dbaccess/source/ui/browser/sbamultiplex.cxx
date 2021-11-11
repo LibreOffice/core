@@ -36,46 +36,321 @@ void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStat
 
 // LoadListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXLoadMultiplexer, css::form::XLoadListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, loaded, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, unloaded, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, unloading, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, reloading, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, reloaded, css::lang::EventObject)
+void SAL_CALL SbaXLoadMultiplexer::loaded(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::form::XLoadListener*>(aIt.next())->loaded(aMulti);
+}
+void SAL_CALL SbaXLoadMultiplexer::unloaded(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::form::XLoadListener*>(aIt.next())->unloaded(aMulti);
+}
+
+void SAL_CALL SbaXLoadMultiplexer::unloading(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::form::XLoadListener*>(aIt.next())->unloading(aMulti);
+}
+
+void SAL_CALL SbaXLoadMultiplexer::reloading(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::form::XLoadListener*>(aIt.next())->reloading(aMulti);
+}
+
+void SAL_CALL SbaXLoadMultiplexer::reloaded(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::form::XLoadListener*>(aIt.next())->reloaded(aMulti);
+}
+
 
 // css::sdbc::XRowSetListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener, cursorMoved, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener, rowChanged, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener, rowSetChanged, css::lang::EventObject)
+void SAL_CALL SbaXRowSetMultiplexer::cursorMoved(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::sdbc::XRowSetListener*>(aIt.next())->cursorMoved(aMulti);
+}
+
+void SAL_CALL SbaXRowSetMultiplexer::rowChanged(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::sdbc::XRowSetListener*>(aIt.next())->rowChanged(aMulti);
+}
+
+void SAL_CALL SbaXRowSetMultiplexer::rowSetChanged(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::sdbc::XRowSetListener*>(aIt.next())->rowSetChanged(aMulti);
+}
 
 // css::sdb::XRowSetApproveListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener, approveCursorMove, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener, approveRowChange, css::sdb::RowChangeEvent)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener, approveRowSetChange, css::lang::EventObject)
+sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveCursorMove(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    bool bResult = true;
+    while (bResult && aIt.hasMoreElements())
+        bResult = static_cast< css::sdb::XRowSetApproveListener*>(aIt.next())->approveCursorMove(aMulti);
+    return bResult;
+}
+
+sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveRowChange(const css::sdb::RowChangeEvent& e)
+{
+    css::sdb::RowChangeEvent aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    bool bResult = true;
+    while (bResult && aIt.hasMoreElements())
+        bResult = static_cast< css::sdb::XRowSetApproveListener*>(aIt.next())->approveRowChange(aMulti);
+    return bResult;
+}
+
+sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveRowSetChange(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    bool bResult = true;
+    while (bResult && aIt.hasMoreElements())
+        bResult = static_cast< css::sdb::XRowSetApproveListener*>(aIt.next())->approveRowSetChange(aMulti);
+    return bResult;
+}
 
 // css::sdb::XSQLErrorListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSQLErrorMultiplexer, css::sdb::XSQLErrorListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXSQLErrorMultiplexer, css::sdb::XSQLErrorListener, errorOccured, css::sdb::SQLErrorEvent)
+void SAL_CALL SbaXSQLErrorMultiplexer::errorOccured(const css::sdb::SQLErrorEvent& e)
+{
+    css::sdb::SQLErrorEvent aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::sdb::XSQLErrorListener*>(aIt.next())->errorOccured(aMulti);
+}
 
 // css::form::XDatabaseParameterListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXParameterMultiplexer, css::form::XDatabaseParameterListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXParameterMultiplexer, css::form::XDatabaseParameterListener, approveParameter, css::form::DatabaseParameterEvent)
+sal_Bool SAL_CALL SbaXParameterMultiplexer::approveParameter(const css::form::DatabaseParameterEvent& e)
+{
+    css::form::DatabaseParameterEvent aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    bool bResult = true;
+    while (bResult && aIt.hasMoreElements())
+        bResult = static_cast< css::form::XDatabaseParameterListener*>(aIt.next())->approveParameter(aMulti);
+    return bResult;
+}
 
 // css::form::XSubmitListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSubmitMultiplexer, css::form::XSubmitListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXSubmitMultiplexer, css::form::XSubmitListener, approveSubmit, css::lang::EventObject)
+sal_Bool SAL_CALL SbaXSubmitMultiplexer::approveSubmit(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    bool bResult = true;
+    while (bResult && aIt.hasMoreElements())
+        bResult = static_cast< css::form::XSubmitListener*>(aIt.next())->approveSubmit(aMulti);
+    return bResult;
+}
 
 // css::form::XResetListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXResetMultiplexer, css::form::XResetListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXResetMultiplexer, css::form::XResetListener, approveReset, css::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXResetMultiplexer, css::form::XResetListener, resetted, css::lang::EventObject)
+sal_Bool SAL_CALL SbaXResetMultiplexer::approveReset(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    bool bResult = true;
+    while (bResult && aIt.hasMoreElements())
+        bResult = static_cast< css::form::XResetListener*>(aIt.next())->approveReset(aMulti);
+    return bResult;
+}
+
+void SAL_CALL SbaXResetMultiplexer::resetted(const css::lang::EventObject& e)
+{
+    css::lang::EventObject aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    while (aIt.hasMoreElements())
+        static_cast< css::form::XResetListener*>(aIt.next())->resetted(aMulti);
+}
 
 // css::beans::XPropertyChangeListener
-IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, css::beans::XPropertyChangeListener, propertyChange, css::beans::PropertyChangeEvent)
+SbaXPropertyChangeMultiplexer::SbaXPropertyChangeMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,m_aListeners(rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXPropertyChangeMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::beans::XPropertyChangeListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::beans::XPropertyChangeListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXPropertyChangeMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+void SAL_CALL SbaXPropertyChangeMultiplexer::propertyChange(const css::beans::PropertyChangeEvent& e)
+{
+    ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(e.PropertyName);
+    if (pListeners)
+        Notify(*pListeners, e);
+
+    /* do the notification for the unspecialized listeners, too */
+    pListeners = m_aListeners.getContainer(OUString());
+    if (pListeners)
+        Notify(*pListeners, e);
+}
+
+void SbaXPropertyChangeMultiplexer::addInterface(const OUString& rName,
+    const css::uno::Reference< css::uno::XInterface > & rListener)
+{
+    m_aListeners.addInterface(rName, rListener);
+}
+
+void SbaXPropertyChangeMultiplexer::removeInterface(const OUString& rName,
+    const css::uno::Reference< css::uno::XInterface > & rListener)
+{
+    m_aListeners.removeInterface(rName, rListener);
+}
+
+void SbaXPropertyChangeMultiplexer::disposeAndClear()
+{
+    css::lang::EventObject aEvt(m_rParent);
+    m_aListeners.disposeAndClear(aEvt);
+}
+
+sal_Int32 SbaXPropertyChangeMultiplexer::getOverallLen() const
+{
+    sal_Int32 nLen = 0;
+    const std::vector< OUString > aContained = m_aListeners.getContainedTypes();
+    for ( OUString const & s : aContained)
+    {
+        ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(s);
+        if (!pListeners)
+            continue;
+        nLen += pListeners->getLength();
+    }
+    return nLen;
+}
+
+void SbaXPropertyChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const css::beans::PropertyChangeEvent& e)
+{
+    css::beans::PropertyChangeEvent aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(rListeners);
+    while (aIt.hasMoreElements())
+        static_cast< css::beans::XPropertyChangeListener*>(aIt.next())->propertyChange(aMulti);
+}
 
 // css::beans::XVetoableChangeListener
-IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, css::beans::XVetoableChangeListener, vetoableChange, css::beans::PropertyChangeEvent)
+SbaXVetoableChangeMultiplexer::SbaXVetoableChangeMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,m_aListeners(rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXVetoableChangeMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::beans::XVetoableChangeListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::beans::XVetoableChangeListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXVetoableChangeMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+void SAL_CALL SbaXVetoableChangeMultiplexer::vetoableChange(const css::beans::PropertyChangeEvent& e)
+{
+    ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(e.PropertyName);
+    if (pListeners)
+        Notify(*pListeners, e);
+
+    /* do the notification for the unspecialized listeners, too */
+    pListeners = m_aListeners.getContainer(OUString());
+    if (pListeners)
+        Notify(*pListeners, e);
+}
+
+void SbaXVetoableChangeMultiplexer::addInterface(const OUString& rName,
+    const css::uno::Reference< css::uno::XInterface > & rListener)
+{
+    m_aListeners.addInterface(rName, rListener);
+}
+
+void SbaXVetoableChangeMultiplexer::removeInterface(const OUString& rName,
+    const css::uno::Reference< css::uno::XInterface > & rListener)
+{
+    m_aListeners.removeInterface(rName, rListener);
+}
+
+void SbaXVetoableChangeMultiplexer::disposeAndClear()
+{
+    css::lang::EventObject aEvt(m_rParent);
+    m_aListeners.disposeAndClear(aEvt);
+}
+
+sal_Int32 SbaXVetoableChangeMultiplexer::getOverallLen() const
+{
+    sal_Int32 nLen = 0;
+    const std::vector< OUString > aContained = m_aListeners.getContainedTypes();
+    for ( OUString const & s : aContained)
+    {
+        ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(s);
+        if (!pListeners)
+            continue;
+        nLen += pListeners->getLength();
+    }
+    return nLen;
+}
+
+void SbaXVetoableChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const css::beans::PropertyChangeEvent& e)
+{
+    css::beans::PropertyChangeEvent aMulti(e);
+    aMulti.Source = &m_rParent;
+    ::comphelper::OInterfaceIteratorHelper2 aIt(rListeners);
+    while (aIt.hasMoreElements())
+        static_cast< css::beans::XVetoableChangeListener*>(aIt.next())->vetoableChange(aMulti);
+}
 
 // css::beans::XPropertiesChangeListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXPropertiesChangeMultiplexer, css::beans::XPropertiesChangeListener);

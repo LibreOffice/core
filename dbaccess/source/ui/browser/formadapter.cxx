@@ -736,7 +736,26 @@ void SAL_CALL SbaXFormAdapter::execute()
         m_xMainForm->execute();
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdbc, RowSetListener, m_aRowSetListeners, css::sdbc::XRowSet, m_xMainForm)
+void SAL_CALL SbaXFormAdapter::addRowSetListener(const css::uno::Reference< css::sdbc::XRowSetListener >& l)
+{
+    m_aRowSetListeners.addInterface(l);
+    if (m_aRowSetListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::sdbc::XRowSet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addRowSetListener(&m_aRowSetListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removeRowSetListener(const css::uno::Reference< css::sdbc::XRowSetListener >& l)
+{
+    if (m_aRowSetListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::sdbc::XRowSet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeRowSetListener(&m_aRowSetListeners);
+    }
+    m_aRowSetListeners.removeInterface(l);
+}
 
 // css::sdbcx::XDeleteRows
 Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& rows)
@@ -764,10 +783,48 @@ void SAL_CALL SbaXFormAdapter::clearWarnings()
 }
 
 // css::sdb::XRowSetApproveBroadcaster
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, RowSetApproveListener, m_aRowSetApproveListeners, css::sdb::XRowSetApproveBroadcaster, m_xMainForm)
+void SAL_CALL SbaXFormAdapter::addRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener >& l)
+{
+    m_aRowSetApproveListeners.addInterface(l);
+    if (m_aRowSetApproveListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::sdb::XRowSetApproveBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addRowSetApproveListener(&m_aRowSetApproveListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removeRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener >& l)
+{
+    if (m_aRowSetApproveListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::sdb::XRowSetApproveBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeRowSetApproveListener(&m_aRowSetApproveListeners);
+    }
+    m_aRowSetApproveListeners.removeInterface(l);
+}
 
 // css::sdbc::XSQLErrorBroadcaster
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, SQLErrorListener, m_aErrorListeners, css::sdb::XSQLErrorBroadcaster, m_xMainForm)
+void SAL_CALL SbaXFormAdapter::addSQLErrorListener(const css::uno::Reference< css::sdb::XSQLErrorListener >& l)
+{
+    m_aErrorListeners.addInterface(l);
+    if (m_aErrorListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::sdb::XSQLErrorBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addSQLErrorListener(&m_aErrorListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removeSQLErrorListener(const css::uno::Reference< css::sdb::XSQLErrorListener >& l)
+{
+    if (m_aErrorListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::sdb::XSQLErrorBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeSQLErrorListener(&m_aErrorListeners);
+    }
+    m_aErrorListeners.removeInterface(l);
+}
 
 // css::sdb::XResultSetAccess
 Reference< css::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::createResultSet()
@@ -808,7 +865,26 @@ sal_Bool SAL_CALL SbaXFormAdapter::isLoaded()
     return false;
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm)
+void SAL_CALL SbaXFormAdapter::addLoadListener(const css::uno::Reference< css::form::XLoadListener>& l)
+{
+    m_aLoadListeners.addInterface(l);
+    if (m_aLoadListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::form::XLoadable > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addLoadListener(&m_aLoadListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removeLoadListener(const css::uno::Reference< css::form::XLoadListener >& l)
+{
+    if (m_aLoadListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::form::XLoadable > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeLoadListener(&m_aLoadListeners);
+    }
+    m_aLoadListeners.removeInterface(l);
+}
 
 // css::sdbc::XParameters
 void SAL_CALL SbaXFormAdapter::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType)
@@ -1014,7 +1090,26 @@ void SAL_CALL SbaXFormAdapter::submit(const Reference< css::awt::XControl >& aCo
         xSubmit->submit(aControl, aMouseEvt);
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, SubmitListener, m_aSubmitListeners, css::form::XSubmit, m_xMainForm)
+void SAL_CALL SbaXFormAdapter::addSubmitListener(const css::uno::Reference< css::form::XSubmitListener >& l)
+{
+    m_aSubmitListeners.addInterface(l);
+    if (m_aSubmitListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::form::XSubmit > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addSubmitListener(&m_aSubmitListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removeSubmitListener(const css::uno::Reference< css::form::XSubmitListener >& l)
+{
+    if (m_aSubmitListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::form::XSubmit > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeSubmitListener(&m_aSubmitListeners);
+    }
+    m_aSubmitListeners.removeInterface(l);
+}
 
 // css::awt::XTabControllerModel
 sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl()
@@ -1298,8 +1393,48 @@ Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName)
     return xSet->getPropertyValue(PropertyName);
 }
 
-IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, PropertyChangeListener, m_aPropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
-IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, VetoableChangeListener, m_aVetoablePropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
+void SAL_CALL SbaXFormAdapter::addPropertyChangeListener(const OUString& rName, const css::uno::Reference< css::beans::XPropertyChangeListener>& l )
+{
+    m_aPropertyChangeListeners.addInterface(rName, l);
+    if (m_aPropertyChangeListeners.getOverallLen() == 1)
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addPropertyChangeListener(OUString(), &m_aPropertyChangeListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removePropertyChangeListener(const OUString& rName, const css::uno::Reference< css::beans::XPropertyChangeListener>& l )
+{
+    if (m_aPropertyChangeListeners.getOverallLen() == 1)
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removePropertyChangeListener(OUString(), &m_aPropertyChangeListeners);
+    }
+    m_aPropertyChangeListeners.removeInterface(rName, l);
+}
+
+void SAL_CALL SbaXFormAdapter::addVetoableChangeListener(const OUString& rName, const css::uno::Reference< css::beans::XVetoableChangeListener>& l )
+{
+    m_aVetoablePropertyChangeListeners.addInterface(rName, l);
+    if (m_aVetoablePropertyChangeListeners.getOverallLen() == 1)
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addVetoableChangeListener(OUString(), &m_aVetoablePropertyChangeListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removeVetoableChangeListener(const OUString& rName, const css::uno::Reference< css::beans::XVetoableChangeListener>& l )
+{
+    if (m_aVetoablePropertyChangeListeners.getOverallLen() == 1)
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeVetoableChangeListener(OUString(), &m_aVetoablePropertyChangeListeners);
+    }
+    m_aVetoablePropertyChangeListeners.removeInterface(rName, l);
+}
+
 
 // css::util::XCancellable
 void SAL_CALL SbaXFormAdapter::cancel()
@@ -1355,7 +1490,26 @@ void SAL_CALL SbaXFormAdapter::reset()
         xReset->reset();
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, ResetListener, m_aResetListeners, css::form::XReset, m_xMainForm)
+void SAL_CALL SbaXFormAdapter::addResetListener(const css::uno::Reference< css::form::XResetListener >& l)
+{
+    m_aResetListeners.addInterface(l);
+    if (m_aResetListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::form::XReset > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addResetListener(&m_aResetListeners);
+    }
+}
+void SAL_CALL SbaXFormAdapter::removeResetListener(const css::uno::Reference< css::form::XResetListener >& l)
+{
+    if (m_aResetListeners.getLength() == 1)
+    {
+        css::uno::Reference< css::form::XReset > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeResetListener(&m_aResetListeners);
+    }
+    m_aResetListeners.removeInterface(l);
+}
 
 // css::container::XNameContainer
 void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OUString* pNewElName)
