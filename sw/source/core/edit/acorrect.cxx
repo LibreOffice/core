@@ -346,8 +346,11 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
         }
         sw::GotoPrevLayoutTextFrame(*pIdx, rEditSh.GetLayout());
     }
-    if (pFrame && 0 == pFrame->GetTextNodeForParaProps()->GetAttrOutlineLevel())
+    if (pFrame && !pFrame->GetText().isEmpty() &&
+        0 == pFrame->GetTextNodeForParaProps()->GetAttrOutlineLevel())
+    {
         pStr = & pFrame->GetText();
+    }
 
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
