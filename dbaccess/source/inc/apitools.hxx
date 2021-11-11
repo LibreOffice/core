@@ -55,10 +55,6 @@ public:
 
 };
 
-// helper for implementing the createArrayHelper
-#define DECL_PROP_IMPL(varname, cpputype) \
-    pDesc[nPos++] = css::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cpputype,
-
 #endif // INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

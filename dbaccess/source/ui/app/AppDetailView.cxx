@@ -313,7 +313,7 @@ void OApplicationDetailView::impl_fillTaskPaneData(ElementType _eType, TaskPaneD
 const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _eType )
 {
     if ( m_aTaskPaneData.empty() )
-        m_aTaskPaneData.resize( ELEMENT_COUNT );
+        m_aTaskPaneData.resize( size_t(E_ELEMENT_TYPE_COUNT) );
     OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
     TaskPaneData& rData = m_aTaskPaneData[ _eType ];
 
