@@ -583,12 +583,18 @@ static OString convertToOOXMLHoriOrientRel(sal_Int16 nOrientRel)
     }
 }
 
-static void lcl_deleteAndResetTheLists( rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren, rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
+static void lcl_deleteAndResetTheLists(
+    rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
+    rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
+    rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTextAttrs,
+    OUString& rSdtPrAlias)
 {
     if( pSdtPrTokenChildren.is() )
         pSdtPrTokenChildren.clear();
     if( pSdtPrDataBindingAttrs.is() )
         pSdtPrDataBindingAttrs.clear();
+    if (pSdtPrTextAttrs.is())
+        pSdtPrTextAttrs.clear();
     if (!rSdtPrAlias.isEmpty())
         rSdtPrAlias.clear();
 }
@@ -797,14 +803,14 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->endElementNS( XML_w, XML_p );
     // on export sdt blocks are never nested ATM
     if( !m_bAnchorLinkedToNode && !m_bStartedParaSdt )
-        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrTokenAttributes, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias, /*bPara=*/true );
+        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrTokenAttributes, m_pParagraphSdtPrDataBindingAttrs, m_pParagraphSdtPrTextAttrs, m_aParagraphSdtPrAlias, /*bPara=*/true );
     else
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_nParagraphSdtPrToken = 0;
         m_bParagraphSdtHasId = false;
-        lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias );
+        lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_pParagraphSdtPrTextAttrs, m_aParagraphSdtPrAlias );
     }
 
     m_pSerializer->mark(Tag_StartParagraph_2);
@@ -841,6 +847,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                          rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
                                          rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
                                          rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
+                                         rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTextAttrs,
                                          OUString& rSdtPrAlias,
                                          bool bPara )
 {
@@ -895,6 +902,12 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         m_pSerializer->singleElementNS(XML_w, XML_dataBinding, xAttrList);
     }
 
+    if (pSdtPrTextAttrs.is())
+    {
+        rtl::Reference<FastAttributeList> xAttrList = std::move(pSdtPrTextAttrs);
+        m_pSerializer->singleElementNS(XML_w, XML_text, xAttrList);
+    }
+
     if (!rSdtPrAlias.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val), rSdtPrAlias);
 
@@ -923,6 +936,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
     nSdtPrToken = 0;
     pSdtPrTokenChildren.clear();
     pSdtPrDataBindingAttrs.clear();
+    pSdtPrTextAttrs.clear();
     rSdtPrAlias.clear();
 
 }
@@ -1602,14 +1616,14 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
     {
         rtl::Reference<sax_fastparser::FastAttributeList> pRunSdtPrTokenAttributes;
-        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
+        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes, m_pRunSdtPrDataBindingAttrs, m_pRunSdtPrTextAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
     }
     else
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_nRunSdtPrToken = 0;
-        lcl_deleteAndResetTheLists( m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias );
+        lcl_deleteAndResetTheLists( m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, m_pRunSdtPrTextAttrs, m_aRunSdtPrAlias );
     }
 
     if (bCloseEarlierSDT)
@@ -9792,7 +9806,26 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
                     m_nParagraphSdtPrToken = FSNS( XML_w, XML_group );
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
-                    m_nParagraphSdtPrToken = FSNS(XML_w, XML_text);
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    if (aGrabBag.hasElements())
+                    {
+                        for (const auto& rProp : std::as_const(aGrabBag))
+                        {
+                            OUString sValue = rProp.Value.get<OUString>();
+                            if (rProp.Name == "ooxml:LN_CT_SdtText_multiLine")
+                                AddToAttrList(m_pParagraphSdtPrTextAttrs,
+                                    FSNS(XML_w, XML_multiLine),
+                                    OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+                        }
+                    }
+                    else
+                    {
+                        // We still have w:text, but no attrs
+                        m_nParagraphSdtPrToken = FSNS(XML_w, XML_text);
+                    }
+                }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pParagraphSdtPrDataBindingAttrs.is())
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
@@ -10006,6 +10039,19 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                             AddToAttrList( m_pRunSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_uncheckedState ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (const auto& rProp : std::as_const(aGrabBag))
+                    {
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:LN_CT_SdtText_multiLine")
+                            AddToAttrList(m_pRunSdtPrTextAttrs,
+                                FSNS(XML_w, XML_multiLine),
+                                OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pRunSdtPrDataBindingAttrs.is())
