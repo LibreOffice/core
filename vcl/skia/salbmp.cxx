@@ -831,7 +831,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     }
     if (mAlphaImage)
     {
-        assert(mSize == mPixelsSize); // data has already been scaled if needed
+        assert(imageSize(mAlphaImage) == mSize); // data has already been scaled if needed
         return mAlphaImage;
     }
     if (mImage)
