@@ -62,6 +62,7 @@ extern bool rtl_string_unittest_invalid_conversion;
 #define rtl rtlunittest
 #endif
 
+struct OUStringStatic;
 namespace rtl
 {
 
@@ -84,6 +85,7 @@ template<std::size_t N> class SAL_WARN_UNUSED OUStringLiteral {
     static_assert(N != 0);
     static_assert(N - 1 <= std::numeric_limits<sal_Int32>::max(), "literal too long");
     friend class OUString;
+    friend struct OUStringStatic;
 
 public:
 #if HAVE_CPP_CONSTEVAL
