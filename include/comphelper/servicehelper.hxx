@@ -21,7 +21,6 @@
 #define INCLUDED_COMPHELPER_SERVICEHELPER_HXX
 
 #include <rtl/uuid.h>
-#include <rtl/instance.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
