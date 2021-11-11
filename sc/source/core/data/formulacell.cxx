@@ -4652,15 +4652,6 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
         }
     }
 
-    // Guard against endless recursion of Interpret() calls, for this to work
-    // ScFormulaCell::InterpretFormulaGroup() must never be called through
-    // anything else than ScFormulaCell::Interpret(), same as
-    // ScFormulaCell::InterpretTail()
-    RecursionCounter aRecursionCounter( rRecursionHelper, this);
-
-    bool bDependencyComputed = false;
-    bool bDependencyCheckFailed = false;
-
     // Get rid of -1's in offsets (defaults) or any invalid offsets.
     SCROW nMaxOffset = mxGroup->mnLength - 1;
     nStartOffset = nStartOffset < 0 ? 0 : std::min(nStartOffset, nMaxOffset);
@@ -4671,6 +4662,18 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
         nStartOffset = 0;
         nEndOffset = nMaxOffset;
     }
+
+    if (nEndOffset == nStartOffset)
+        return false; // Do not use threads for a single row.
+
+    // Guard against endless recursion of Interpret() calls, for this to work
+    // ScFormulaCell::InterpretFormulaGroup() must never be called through
+    // anything else than ScFormulaCell::Interpret(), same as
+    // ScFormulaCell::InterpretTail()
+    RecursionCounter aRecursionCounter( rRecursionHelper, this);
+
+    bool bDependencyComputed = false;
+    bool bDependencyCheckFailed = false;
 
     // Preference order: First try OpenCL, then threading.
     // TODO: Do formula-group span computation for OCL too if nStartOffset/nEndOffset are non default.
