@@ -52,7 +52,6 @@
 #include <fmtsrnd.hxx>
 #include <ndtxt.hxx>
 #include <editeng/lrspitem.hxx>
-#include <o3tl/deleter.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <oox/ole/olehelper.hxx>
 
@@ -158,7 +157,7 @@ public:
     SwNumRule* GetNumRuleForActivation(sal_uInt16 nLFOPosition, const sal_uInt8 nLevel,
         std::vector<sal_uInt8> &rParaSprms, SwTextNode *pNode=nullptr);
     SwNumRule* CreateNextRule(bool bSimple);
-    ~WW8ListManager() COVERITY_NOEXCEPT_FALSE;
+    ~WW8ListManager();
     SwNumRule* GetNumRule(size_t i);
     size_t GetWW8LSTInfoNum() const{return maLSTInfos.size();}
     static SvxNumType GetSvxNumTypeFromMSONFC(sal_uInt16 nMSONFC);
@@ -1226,7 +1225,7 @@ private:
     std::shared_ptr<WW8Fib> m_xWwFib;
     std::unique_ptr<WW8Fonts> m_xFonts;
     std::unique_ptr<WW8Dop> m_xWDop;
-    std::unique_ptr<WW8ListManager, o3tl::default_delete<WW8ListManager>> m_xLstManager;
+    std::unique_ptr<WW8ListManager> m_xLstManager;
     std::unique_ptr<WW8ScannerBase> m_xSBase;
     std::shared_ptr<WW8PLCFMan> m_xPlcxMan;
     std::map<short, OUString> m_aLinkStringMap;
