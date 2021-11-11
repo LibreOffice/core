@@ -84,6 +84,7 @@ template<std::size_t N> class SAL_WARN_UNUSED OUStringLiteral {
     static_assert(N != 0);
     static_assert(N - 1 <= std::numeric_limits<sal_Int32>::max(), "literal too long");
     friend class OUString;
+    friend class OUStringStatic;
 
 public:
 #if HAVE_CPP_CONSTEVAL

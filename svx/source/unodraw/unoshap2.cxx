@@ -553,6 +553,43 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
 
+namespace rtl {
+class OUStringStatic
+{
+public:
+    template<std::size_t N> constexpr OUStringStatic(OUStringLiteral<N> const & literal):
+        pData(const_cast<rtl_uString *>(&literal.str)) {}
+    rtl_uString* pData;
+    operator OUString() const { return OUString::unacquired(&pData); }
+};
+}
+
+constexpr OUStringLiteral AAA = u"AAA";
+struct
+{
+    rtl::OUStringStatic msAPIName;
+    rtl::OUStringStatic msFormName;
+}
+constexpr SvxShapeControlPropertyMapping2[] =
+{
+    { AAA, AAA },
+    { AAA, AAA }
+};
+namespace
+{
+    bool lcl_convertPropertyName2( const OUString& rApiName, OUString& rInternalName )
+    {
+        for (const auto & rEntry : SvxShapeControlPropertyMapping2)
+        {
+            if( rApiName == rEntry.msAPIName )
+            {
+                rInternalName = rEntry.msFormName;
+            }
+        }
+        return !rInternalName.isEmpty();
+    }
+}
+
 struct
 {
     const char* mpAPIName;
