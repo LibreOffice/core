@@ -64,6 +64,7 @@ struct VCL_DLLPUBLIC CairoCommon
 {
     cairo_surface_t* m_pSurface;
     basegfx::B2IVector m_aFrameSize;
+    vcl::Region m_aClipRegion;
 
     CairoCommon()
         : m_pSurface(nullptr)

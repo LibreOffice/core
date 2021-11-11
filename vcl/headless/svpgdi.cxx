@@ -854,7 +854,7 @@ void SvpSalGraphics::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 
 void SvpSalGraphics::clipRegion(cairo_t* cr)
 {
-    SvpSalGraphics::clipRegion(cr, m_aClipRegion);
+    SvpSalGraphics::clipRegion(cr, m_aCairoCommon.m_aClipRegion);
 }
 
 bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
@@ -940,17 +940,6 @@ void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVec
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = rDPIY = 96;
-}
-
-void SvpSalGraphics::ResetClipRegion()
-{
-    m_aClipRegion.SetNull();
-}
-
-bool SvpSalGraphics::setClipRegion( const vcl::Region& i_rClip )
-{
-    m_aClipRegion = i_rClip;
-    return true;
 }
 
 void SvpSalGraphics::SetLineColor()
