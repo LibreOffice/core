@@ -661,10 +661,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
     // This failed with a NoSuchElementException, super/subscript property was
     // lost on import, so the whole paragraph was a single run.
     uno::Reference<text::XTextRange> xSecondRun = getRun(xFirstPara, 2);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14000),
                          getProperty<sal_Int32>(xSecondRun, "CharEscapement"));
     uno::Reference<text::XTextRange> xThirdRun = getRun(xFirstPara, 3);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-25),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-14000),
                          getProperty<sal_Int32>(xThirdRun, "CharEscapement"));
 }
 
@@ -902,8 +902,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
     }
 }
 
-#if 0
-// TODO: Link import in frames in groupshapes.
 CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
 {
     load(mpTestDocumentPath, "tdf126426.docx");
@@ -941,7 +939,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xRun, "CharColor"));
     }
 }
-#endif
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
