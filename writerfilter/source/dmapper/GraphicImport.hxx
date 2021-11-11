@@ -122,6 +122,8 @@ public:
                            writerfilter::Reference<Table>::Pointer_t ref) override;
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) override;
     virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
+    virtual void lcl_startTextBoxContent() override {};
+    virtual void lcl_endTextBoxContent() override {};
     virtual void lcl_endShape() override;
 
     void handleWrapTextValue(sal_uInt32 nVal);

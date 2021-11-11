@@ -3206,6 +3206,8 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
 
     m_pImpl->SetIsFirstParagraphInShape(true);
     mbWasShapeInPara = true;
+
+    m_pImpl->AttachTextBoxContentToShape(xShape);
 }
 
 void DomainMapper::lcl_endShape( )
@@ -3224,6 +3226,16 @@ void DomainMapper::lcl_endShape( )
     m_pImpl->PopShapeContext( );
     // A shape is always inside a paragraph (anchored or inline).
     m_pImpl->SetIsOutsideAParagraph(false);
+}
+
+void DomainMapper::lcl_startTextBoxContent()
+{
+    m_pImpl->PushTextBoxContent();
+}
+
+void DomainMapper::lcl_endTextBoxContent()
+{
+    m_pImpl->PopTextBoxContent();
 }
 
 void DomainMapper::PushStyleSheetProperties( const PropertyMapPtr& pStyleProperties, bool bAffectTableMngr )
