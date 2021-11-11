@@ -54,6 +54,7 @@
 #include <config_features.h>
 #include <config_mpl.h>
 #include <tools/json_writer.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <lib/init.hxx>
 #include <svx/svxids.hrc>
@@ -829,7 +830,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
-        nSize *= 15; /* TWIPS_PER_PIXEL */
+        nSize = o3tl::convert(nSize, o3tl::Length::px, o3tl::Length::twip);
         OString aText(rValue.second.get<std::string>("text").c_str());
 
         if (bFirstHeader)
@@ -858,7 +859,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
-        nSize *= 15; /* TWIPS_PER_PIXEL */
+        nSize = o3tl::convert(nSize, o3tl::Length::px, o3tl::Length::twip);
         OString aText(rValue.second.get<std::string>("text").c_str());
         if (bFirstHeader)
         {
