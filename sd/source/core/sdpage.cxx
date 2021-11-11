@@ -339,7 +339,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             Size aSize = aOutDev.PixelToLogic(aSizePix);
             Point aPnt (0, 0);
             ::tools::Rectangle aRect (aPnt, aSize);
-            pSdrObj = new SdrGrafObj(getSdrModelFromSdrPage(), aGraphic, aRect);
+            pSdrObj = new SdrGrafObj(getSdrModelFromSdrPage(), aGraphic, aRect, true);
             aOutDev.Pop();
         }
         break;

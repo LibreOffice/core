@@ -100,6 +100,7 @@ private:
     bool mbIsSignatureLineShowSignDate;
     bool mbIsSignatureLineCanAddComment;
     bool mbSignatureLineIsSigned;
+    bool mbPlaceholder;
     css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
     std::unique_ptr<css::drawing::BarCode> mpBarCode;
@@ -122,7 +123,8 @@ public:
     SdrGrafObj(
         SdrModel& rSdrModel,
         const Graphic& rGrf,
-        const tools::Rectangle& rRect);
+        const tools::Rectangle& rRect,
+        bool bPlaceholder = false);
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
@@ -141,6 +143,7 @@ public:
     // Keep ATM for SD.
     bool IsAnimated() const;
     bool IsEPS() const;
+    bool IsPlaceholderObj() const;
 
     MapMode          GetGrafPrefMapMode() const;
     Size             GetGrafPrefSize() const;

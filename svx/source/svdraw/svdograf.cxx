@@ -202,6 +202,8 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
+
+    mbPlaceholder = false;
 }
 
 SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
@@ -221,6 +223,8 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
+
+    mbPlaceholder = false;
 
     aFileName = rSource.aFileName;
     bMirrored = rSource.bMirrored;
@@ -261,7 +265,8 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
 SdrGrafObj::SdrGrafObj(
     SdrModel& rSdrModel,
     const Graphic& rGraphic,
-    const tools::Rectangle& rRect)
+    const tools::Rectangle& rRect,
+    bool bPlaceholder)
 :   SdrRectObj(rSdrModel, rRect)
     ,mpGraphicObject(new GraphicObject(rGraphic))
     ,pGraphicLink(nullptr)
@@ -270,6 +275,7 @@ SdrGrafObj::SdrGrafObj(
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
     ,mbSignatureLineIsSigned(false)
+    ,mbPlaceholder(bPlaceholder)
 {
     onGraphicChanged();
 
@@ -309,6 +315,8 @@ SdrGrafObj::SdrGrafObj(
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
+
+    mbPlaceholder = false;
 }
 
 SdrGrafObj::~SdrGrafObj()
@@ -449,6 +457,11 @@ bool SdrGrafObj::IsAnimated() const
 bool SdrGrafObj::IsEPS() const
 {
     return mpGraphicObject->IsEPS();
+}
+
+bool SdrGrafObj::IsPlaceholderObj() const
+{
+    return mbPlaceholder;
 }
 
 MapMode SdrGrafObj::GetGrafPrefMapMode() const
