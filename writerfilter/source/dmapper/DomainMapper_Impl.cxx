@@ -332,6 +332,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
+        m_bIsInTextBox(false),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
@@ -3460,7 +3461,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 try
                 {
-                    uno::Reference<beans::XPropertySet> xSyncedPropertySet(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    uno::Reference<text::XTextRange> xFrame(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    uno::Reference<beans::XPropertySet> xSyncedPropertySet(xFrame, uno::UNO_QUERY_THROW);
                     comphelper::SequenceAsHashMap aGrabBag( xSyncedPropertySet->getPropertyValue("CharInteropGrabBag") );
 
                     // only VML import has checked for style. Don't apply default parastyle properties to other imported shapes
@@ -4397,6 +4399,71 @@ void DomainMapper_Impl::ChainTextFrames()
     catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+    }
+}
+
+void DomainMapper_Impl::PushTextBoxContent()
+{
+    if (m_bIsInTextBox)
+        return;
+
+    try
+    {
+        uno::Reference<text::XTextFrame> xTBoxFrame(
+            m_xTextFactory->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNamed>(xTBoxFrame, uno::UNO_QUERY_THROW)
+            ->setName("textbox" + OUString::number(m_xPendigTextBoxFrames.size() + 1));
+        uno::Reference<text::XTextAppendAndConvert>(m_aTextAppendStack.top().xTextAppend,
+            uno::UNO_QUERY_THROW)
+            ->appendTextContent(xTBoxFrame, beans::PropertyValues());
+        m_xPendigTextBoxFrames.push(xTBoxFrame);
+
+        m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xTBoxFrame, uno::UNO_QUERY_THROW), {}));
+        m_bIsInTextBox = true;
+
+        appendTableManager();
+        appendTableHandler();
+        getTableManager().startLevel();
+    }
+    catch (uno::Exception& e)
+    {
+        SAL_WARN("writerfilter.dmapper", "Exception during creating textbox (" + e.Message + ")!");
+    }
+}
+
+void DomainMapper_Impl::PopTextBoxContent()
+{
+    if (!m_bIsInTextBox || m_xPendigTextBoxFrames.empty())
+        return;
+
+    if (uno::Reference<text::XTextFrame>(m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY).is())
+    {
+        if (hasTableManager())
+        {
+            getTableManager().endLevel();
+            popTableManager();
+        }
+        m_aTextAppendStack.pop();
+        m_bIsInTextBox = false;
+    }
+}
+
+void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::drawing::XShape> xShape)
+{
+    if (m_xPendigTextBoxFrames.empty() || !xShape)
+        return;
+
+    uno::Reference< drawing::XShapes >xGroup(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet >xProps(xShape, uno::UNO_QUERY);
+
+    if (xGroup)
+        for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
+            AttachTextBoxContentToShape(uno::Reference<drawing::XShape>(xGroup->getByIndex(i),uno::UNO_QUERY_THROW));
+
+    if (xProps->getPropertyValue("TextBox").get<bool>())
+    {
+        xProps->setPropertyValue("TextBoxContent", uno::Any(m_xPendigTextBoxFrames.front()));
+        m_xPendigTextBoxFrames.pop();
     }
 }
 

@@ -228,6 +228,29 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(953), getProperty<sal_Int32>(xFrame, "LeftMargin"), 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
+{
+    // This bugdoc has a groupshape (WPG) with a table inside its each member shape.
+    // Before there was no table after import at all. From now, there must be 2 tables.
+    int nTableCount = 0;
+    for (int n = 0; n < 2; ++n)
+    {
+        uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> xRange(xGroup->getByIndex(n), uno::UNO_QUERY_THROW);
+
+        for (int i = 1; i < 15; ++i)
+            if (auto xPara = getParagraphOrTable(i, xRange->getText()))
+            {
+                if (uno::Reference<text::XTextTable>(xPara, uno::UNO_QUERY).is())
+                    nTableCount++;
+            }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The table from the groupshape missing!", 2, nTableCount);
+    // Whithout the fix this will be:
+    // Expected: > 0
+    // Actual: 0
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf142486_FrameShadow, "tdf142486_FrameShadow.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
