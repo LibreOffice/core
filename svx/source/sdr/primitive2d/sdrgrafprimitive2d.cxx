@@ -21,8 +21,11 @@
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/outdev.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -48,10 +51,51 @@ void SdrGrafPrimitive2D::create2DDecomposition(
     // add graphic content
     if (0 != getGraphicAttr().GetAlpha())
     {
-        // standard graphic fill
-        const Primitive2DReference xGraphicContentPrimitive(
-            new GraphicPrimitive2D(getTransform(), getGraphicObject(), getGraphicAttr()));
-        aRetval.push_back(xGraphicContentPrimitive);
+        if (mpSdrGrafObj->IsPlaceholderObj()) // We won't scale the graphic content.
+        {
+            // get transformation atoms
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+
+            Graphic aGraphic = getGraphicObject().GetGraphic();
+
+            // get PrefSize from the graphic in 100th mm
+            Size aPrefSize(aGraphic.GetPrefSize());
+
+            if (MapUnit::MapPixel == aGraphic.GetPrefMapMode().GetMapUnit())
+                aPrefSize = Application::GetDefaultDevice()->PixelToLogic(
+                    aPrefSize, MapMode(MapUnit::Map100thMM));
+            else
+                aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(),
+                                                       MapMode(MapUnit::Map100thMM));
+
+            const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);
+            const double fOffsetY((aScale.getY() - aPrefSize.getHeight()) / 2.0);
+
+            if (basegfx::fTools::moreOrEqual(fOffsetX, 0.0)
+                && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
+            {
+                // if content fits into frame, create it
+                basegfx::B2DHomMatrix aInnerObjectMatrix(
+                    basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
+                aInnerObjectMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
+                                         fShearX, fRotate, aTranslate)
+                                     * aInnerObjectMatrix;
+
+                const Primitive2DReference xGraphicContentPrimitive(new GraphicPrimitive2D(
+                    aInnerObjectMatrix, getGraphicObject(), getGraphicAttr()));
+                aRetval.push_back(xGraphicContentPrimitive);
+            }
+        }
+        else
+        {
+            // standard graphic fill
+            const Primitive2DReference xGraphicContentPrimitive(
+                new GraphicPrimitive2D(getTransform(), getGraphicObject(), getGraphicAttr()));
+            aRetval.push_back(xGraphicContentPrimitive);
+        }
     }
 
     // add line
@@ -124,13 +168,14 @@ void SdrGrafPrimitive2D::create2DDecomposition(
 }
 
 SdrGrafPrimitive2D::SdrGrafPrimitive2D(
-    const basegfx::B2DHomMatrix& rTransform,
+    const SdrGrafObj& rSdrGrafObj, const basegfx::B2DHomMatrix& rTransform,
     const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
     const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr)
     : maTransform(rTransform)
     , maSdrLFSTAttribute(rSdrLFSTAttribute)
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)
+    , mpSdrGrafObj(const_cast<SdrGrafObj*>(&rSdrGrafObj))
 {
     // reset some values from GraphicAttr which are part of transformation already
     maGraphicAttr.SetRotation(0_deg10);

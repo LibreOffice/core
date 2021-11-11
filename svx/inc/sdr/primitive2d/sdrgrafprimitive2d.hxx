@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <sdr/attribute/sdrlinefilleffectstextattribute.hxx>
+#include <svx/svdograf.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -33,6 +34,7 @@ private:
     attribute::SdrLineFillEffectsTextAttribute maSdrLFSTAttribute;
     GraphicObject maGraphicObject;
     GraphicAttr maGraphicAttr;
+    tools::WeakReference<SdrGrafObj> mpSdrGrafObj;
 
     // local decomposition.
     virtual void
@@ -40,7 +42,7 @@ private:
                           const geometry::ViewInformation2D& aViewInformation) const override;
 
 public:
-    SdrGrafPrimitive2D(const ::basegfx::B2DHomMatrix& rTransform,
+    SdrGrafPrimitive2D(const SdrGrafObj& rSdrGrafObj, const ::basegfx::B2DHomMatrix& rTransform,
                        const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
                        const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr);
 

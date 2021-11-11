@@ -81,6 +81,7 @@ namespace sdr::contact
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
             const drawinglayer::primitive2d::Primitive2DReference xReferenceA(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                GetGrafObject(),
                 rObjectMatrix,
                 rAttribute,
                 aEmptyGraphicObject,
@@ -124,6 +125,7 @@ namespace sdr::contact
                 const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
                 const GraphicAttr aLocalGrafInfo;
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                    GetGrafObject(),
                     aSmallerMatrix,
                     drawinglayer::attribute::SdrLineFillEffectsTextAttribute(),
                     rGraphicObject,
@@ -145,6 +147,7 @@ namespace sdr::contact
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
             const drawinglayer::primitive2d::Primitive2DReference xReferenceA(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                GetGrafObject(),
                 rObjectMatrix,
                 rAttribute,
                 aEmptyGraphicObject,
@@ -373,6 +376,7 @@ namespace sdr::contact
                 // SdrGrafPrimitive2D constructor will force a full swap-in of the graphic
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                        GetGrafObject(),
                         aObjectMatrix,
                         aAttribute,
                         rGraphicObject,
