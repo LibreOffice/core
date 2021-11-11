@@ -979,7 +979,6 @@ static const char* lcl_GetType( XclExpChTrData* pData )
         break;
     case EXC_CHTR_TYPE_STRING:
         return "inlineStr";
-        break;
     default:
         break;
     }
