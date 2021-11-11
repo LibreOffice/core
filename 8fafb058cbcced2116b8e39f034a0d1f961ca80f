@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8b4d79_a9cd11d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-11T13:03:51Z",
+      "side": 1,
+      "message": "Let\u0027s get this comments-only change in so https://gerrit.libreoffice.org/c/core/+/125033/1 can be just picked on top of this. (an alternative would had been to resolve merge conflicts there but it\u0027s not really important in this case). So, (ab)using my reviewer power to approve my own change for a release branch ;-)",
+      "revId": "8fafb058cbcced2116b8e39f034a0d1f961ca80f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
