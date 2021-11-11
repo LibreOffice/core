@@ -416,7 +416,7 @@ bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
         const auto& rRedoInsert = *static_cast<const SwUndoInsert*>(pRedoAction);
         if (!rViewInsert.IsIndependent(rRedoInsert) && rRedoInsert.GetViewShellId() != nViewId)
         {
-            // Dependent redo action and owned by an other view.
+            // Dependent redo action and owned by another view.
             return false;
         }
     }
