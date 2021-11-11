@@ -539,41 +539,27 @@ void ScMacrosTest::testTdf142033()
         aParams, aRet, aOutParamIndex, aOutParam);
 
     // Export to ODS
-    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("calc8");
-    auto pTempFile = std::make_shared<utl::TempFile>();
-    pTempFile->EnableKillingFile();
-    xStorable->storeToURL(pTempFile->GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    xComponent->dispose();
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
 
-    xmlDocUniquePtr pContentXml = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
-    CPPUNIT_ASSERT(pContentXml);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
-    assertXPathContent(pContentXml,
-                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[1]/table:table-cell[1]/text:p", "string no newlines");
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
 
-    assertXPathContent(pContentXml,
-                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[1]/table:table-cell[2]/text:p[1]", "string with");
+    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), rDoc.GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("string no newlines"), rDoc.GetString(ScAddress(0,1,0)));
 
-    // Without the fix in place, this test would have failed here with
-    // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
-    assertXPathContent(pContentXml,
-                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[1]/table:table-cell[2]/text:p[2]", "newlines");
+    // Without the fix in place, this test would have failed with
+    // - Expected: string with
+    // newlines
+    // - Actual  : string withnewlines
+    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,1,0)));
 
-    assertXPathContent(pContentXml,
-                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[2]/table:table-cell[1]/text:p", "string no newlines");
-
-    assertXPathContent(pContentXml,
-                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[2]/table:table-cell[2]/text:p[1]", "string with");
-    assertXPathContent(pContentXml,
-                "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                "table:table-row[2]/table:table-cell[2]/text:p[2]", "newlines");
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void ScMacrosTest::testTdf131562()
