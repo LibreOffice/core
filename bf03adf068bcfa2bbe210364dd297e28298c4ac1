@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3068c639_5d42609e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-11T09:22:41Z",
+      "side": 1,
+      "message": "jenkins build failed on WNT but due to jenkins itself",
+      "revId": "bf03adf068bcfa2bbe210364dd297e28298c4ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
