@@ -837,10 +837,10 @@ sal_uInt16 XclExpNameManager::InsertMacroCall( const OUString& rMacroName, bool 
     return mxImpl->InsertMacroCall( rMacroName, bVBasic, bFunc, bHidden );
 }
 
-const OUString& XclExpNameManager::GetOrigName( sal_uInt16 nNameIdx ) const
+OUString XclExpNameManager::GetOrigName( sal_uInt16 nNameIdx ) const
 {
     const XclExpName* pName = mxImpl->GetName( nNameIdx );
-    return pName ? pName->GetOrigName() : EMPTY_OUSTRING;
+    return pName ? pName->GetOrigName() : OUString();
 }
 
 SCTAB XclExpNameManager::GetScTab( sal_uInt16 nNameIdx ) const

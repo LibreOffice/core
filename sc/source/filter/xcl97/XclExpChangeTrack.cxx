@@ -892,7 +892,7 @@ void XclExpChTrCellContent::GetCellData(
                 else
                 {
                     rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
-                        rRoot, EMPTY_OUSTRING, nullptr);
+                        rRoot, OUString(), nullptr);
                 }
             }
             rpData->pString.reset( new XclExpString( sCellStr, XclStrFlags::NONE, 32766 ) );

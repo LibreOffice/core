@@ -1480,7 +1480,7 @@ OUString ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab)
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetUpperCellString( nCol, nRow );
     else
-        return EMPTY_OUSTRING;
+        return OUString();
 }
 
 bool ScDocument::CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam )

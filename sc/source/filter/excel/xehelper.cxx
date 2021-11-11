@@ -356,7 +356,7 @@ XclExpStringRef lclCreateFormattedString(
 {
     /*  Create an empty Excel string object with correctly initialized BIFF mode,
         because this function only uses Append() functions that require this. */
-    XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, EMPTY_OUSTRING, nFlags, nMaxLen );
+    XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, OUString(), nFlags, nMaxLen );
 
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
@@ -424,7 +424,7 @@ XclExpStringRef lclCreateFormattedString(
 {
     /*  Create an empty Excel string object with correctly initialized BIFF mode,
         because this function only uses Append() functions that require this. */
-    XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, EMPTY_OUSTRING, nFlags, nMaxLen );
+    XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, OUString(), nFlags, nMaxLen );
 
     // font buffer and helper item set for edit engine -> Calc item conversion
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
@@ -537,7 +537,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    XclExpStringRef xString = CreateString( rRoot, EMPTY_OUSTRING, nFlags, nMaxLen );
+    XclExpStringRef xString = CreateString( rRoot, OUString(), nFlags, nMaxLen );
     AppendChar( *xString, rRoot, cChar );
     return xString;
 }
@@ -613,7 +613,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     {
         OSL_FAIL( "XclExpStringHelper::CreateString - textbox without para object" );
         // create BIFF dependent empty Excel string
-        xString = CreateString( rRoot, EMPTY_OUSTRING, nFlags );
+        xString = CreateString( rRoot, OUString(), nFlags );
     }
     return xString;
 }

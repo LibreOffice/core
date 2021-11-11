@@ -1883,7 +1883,7 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, sal_Int32 nD, sal_Int32 nH, sal_Int32 nL
     nDim( nD ),
     nHier( nH ),
     nLev( nL ),
-    aSortInfo( EMPTY_OUSTRING, true, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
+    aSortInfo( OUString(), true, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
     bShowEmpty( false ),

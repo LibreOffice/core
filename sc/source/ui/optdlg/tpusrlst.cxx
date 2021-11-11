@@ -469,7 +469,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
             mxLbLists->set_sensitive(false);
             mxFtEntries->set_sensitive(true);
             mxEdEntries->set_sensitive(true);
-            mxEdEntries->set_text( EMPTY_OUSTRING );
+            mxEdEntries->set_text( OUString() );
             mxEdEntries->grab_focus();
             mxBtnAdd->set_sensitive(false);
             mxBtnModify->set_sensitive(false);
@@ -498,7 +498,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
             {
                 mxFtEntries->set_sensitive(false);
                 mxEdEntries->set_sensitive(false);
-                mxEdEntries->set_text( EMPTY_OUSTRING );
+                mxEdEntries->set_text( OUString() );
                 mxBtnRemove->set_sensitive(false);
             }
             mxBtnAdd->set_sensitive(false);
@@ -620,7 +620,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
                     mxLbLists->set_sensitive(false);
                     mxFtEntries->set_sensitive(false);
                     mxEdEntries->set_sensitive(false);
-                    mxEdEntries->set_text( EMPTY_OUSTRING );
+                    mxEdEntries->set_text( OUString() );
                     mxBtnRemove->set_sensitive(false);
                 }
             }

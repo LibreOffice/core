@@ -455,8 +455,8 @@ public:
                                 const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument& rDocument, const ScAddress& rPos,
                                 const OUString& rStyle,
-                                const OUString& rExprNmsp1 = EMPTY_OUSTRING,
-                                const OUString& rExprNmsp2 = EMPTY_OUSTRING,
+                                const OUString& rExprNmsp1 = OUString(),
+                                const OUString& rExprNmsp2 = OUString(),
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 Type eType = Type::Condition);
@@ -580,7 +580,7 @@ public:
 
     const ScFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
-    const OUString& GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const;
+    OUString GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     ScCondFormatData GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 

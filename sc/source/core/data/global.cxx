@@ -87,7 +87,6 @@ std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pCaseTransliteration(nullptr);
 css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix;
-const OUString  ScGlobal::aEmptyOUString;
 OUString        ScGlobal::aStrClipDocName;
 OUString        ScGlobal::aStrErrorStringNoRef;
 

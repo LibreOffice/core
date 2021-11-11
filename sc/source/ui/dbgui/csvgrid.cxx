@@ -546,10 +546,10 @@ void ScCsvGrid::SetTypeNames( std::vector<OUString>&& rTypeNames )
     ::std::for_each( maColStates.begin(), maColStates.end(), Func_SetType( CSV_TYPE_DEFAULT ) );
 }
 
-const OUString& ScCsvGrid::GetColumnTypeName( sal_uInt32 nColIndex ) const
+OUString ScCsvGrid::GetColumnTypeName( sal_uInt32 nColIndex ) const
 {
     sal_uInt32 nTypeIx = static_cast< sal_uInt32 >( GetColumnType( nColIndex ) );
-    return (nTypeIx < maTypeNames.size()) ? maTypeNames[ nTypeIx ] : EMPTY_OUSTRING;
+    return (nTypeIx < maTypeNames.size()) ? maTypeNames[ nTypeIx ] : OUString();
 }
 
 static sal_uInt8 lcl_GetExtColumnType( sal_Int32 nIntType )
@@ -849,15 +849,15 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
     InvalidateGfx();
 }
 
-const OUString& ScCsvGrid::GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const
+OUString ScCsvGrid::GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const
 {
-    if( nLine < GetFirstVisLine() ) return EMPTY_OUSTRING;
+    if( nLine < GetFirstVisLine() ) return OUString();
 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
-    if( nLineIx >= maTexts.size() ) return EMPTY_OUSTRING;
+    if( nLineIx >= maTexts.size() ) return OUString();
 
     const std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
-    if( nColIndex >= rStrVec.size() ) return EMPTY_OUSTRING;
+    if( nColIndex >= rStrVec.size() ) return OUString();
 
     return rStrVec[ nColIndex ];
 }

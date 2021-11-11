@@ -162,7 +162,7 @@ void ScFunctionWin::UpdateLRUList()
 
 void ScFunctionWin::SetDescription()
 {
-    xFiFuncDesc->set_label(EMPTY_OUSTRING);
+    xFiFuncDesc->set_label(OUString());
     const ScFuncDesc* pDesc =
              reinterpret_cast<const ScFuncDesc*>(xFuncList->get_selected_id().toInt64());
     if (pDesc)

@@ -213,13 +213,13 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
 
         if(bRef)
         {
-            m_xEdAssign->SetRefString( EMPTY_OUSTRING );
-            m_xEdAssign2->SetRefString( EMPTY_OUSTRING );
+            m_xEdAssign->SetRefString( OUString() );
+            m_xEdAssign2->SetRefString( OUString() );
         }
         else
         {
-            m_xEdAssign->SetText( EMPTY_OUSTRING );
-            m_xEdAssign2->SetText( EMPTY_OUSTRING );
+            m_xEdAssign->SetText( OUString() );
+            m_xEdAssign2->SetText( OUString() );
         }
 
         m_xBtnColHead->set_sensitive(false);
@@ -339,7 +339,7 @@ void ScColRowNameRangesDlg::UpdateNames()
 
     m_xLbRange->clear();
     aRangeMap.clear();
-    m_xEdAssign->SetText( EMPTY_OUSTRING );
+    m_xEdAssign->SetText( OUString() );
 
     size_t nCount, j;
 
@@ -532,10 +532,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, weld::Button&, void)
         m_xEdAssign->GrabFocus();
         m_xBtnAdd->set_sensitive(false);
         m_xBtnRemove->set_sensitive(false);
-        m_xEdAssign->SetText( EMPTY_OUSTRING );
+        m_xEdAssign->SetText( OUString() );
         m_xBtnColHead->set_active(true);
         m_xBtnRowHead->set_active(false);
-        m_xEdAssign2->SetText( EMPTY_OUSTRING );
+        m_xEdAssign2->SetText( OUString() );
         theCurArea = ScRange();
         theCurData = theCurArea;
         Range1SelectHdl( *m_xLbRange );
@@ -598,11 +598,11 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, weld::Button&, void)
     m_xLbRange->grab_focus();
     m_xBtnAdd->set_sensitive(false);
     m_xBtnRemove->set_sensitive(false);
-    m_xEdAssign->SetText( EMPTY_OUSTRING );
+    m_xEdAssign->SetText( OUString() );
     theCurArea = theCurData = ScRange();
     m_xBtnColHead->set_active(true);
     m_xBtnRowHead->set_active(false);
-    m_xEdAssign2->SetText( EMPTY_OUSTRING );
+    m_xEdAssign2->SetText( OUString() );
     Range1SelectHdl( *m_xLbRange );
 }
 

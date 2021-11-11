@@ -107,7 +107,7 @@ public:
     /** @return the number of sheet codenames. */
     SCTAB               GetCodeNameCount() const;
     /** @return the specified codename (empty string = no codename). */
-    const OUString&     GetCodeName( SCTAB nTab ) const;
+    OUString     GetCodeName( SCTAB nTab ) const;
     /** Appends a codename for a sheet. */
     void                SetCodeName( SCTAB nTab, const OUString& rCodeName );
 

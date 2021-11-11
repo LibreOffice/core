@@ -73,10 +73,6 @@
 using ::std::vector;
 using namespace com::sun::star;
 
-// line ends are now created with an empty name.
-// The checkForUniqueItem method then finds a unique name for the item's value.
-#define SC_LINEEND_NAME     EMPTY_OUSTRING
-
 namespace {
 
 enum DetInsertResult {              // return-values for inserting in one level
@@ -147,7 +143,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     nMaxLevel(0)
 {
 
-    aBoxSet.Put( XLineColorItem( EMPTY_OUSTRING, ScDetectiveFunc::GetArrowColor() ) );
+    aBoxSet.Put( XLineColorItem( OUString(), ScDetectiveFunc::GetArrowColor() ) );
     aBoxSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     //  create default line endings (like XLineEndList::Create)
@@ -169,7 +165,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     basegfx::B2DPolygon aCircle(basegfx::utils::createPolygonFromEllipse(basegfx::B2DPoint(0.0, 0.0), 100.0, 100.0));
     aCircle.setClosed(true);
 
-    OUString aName = SC_LINEEND_NAME;
+    const OUString aName;
 
     aArrowSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aArrowSet.Put( XLineStartWidthItem( 200 ) );
@@ -206,9 +202,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
     aTriangle.setClosed(true);
 
-    OUString aName = SC_LINEEND_NAME;
-
-    aCaptionSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
+    aCaptionSet.Put( XLineStartItem( OUString(), basegfx::B2DPolyPolygon(aTriangle)));
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
     aCaptionSet.Put( XLineStartCenterItem( false ) );
     aCaptionSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
