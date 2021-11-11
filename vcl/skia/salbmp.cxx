@@ -422,6 +422,11 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
         case BmpScaleFlag::Fast:
             mScaleQuality = nScaleFlag;
             break;
+        case BmpScaleFlag::NearestNeighbor:
+            // We handle this the same way as Fast by mapping to Skia's nearest-neighbor,
+            // and it's needed for unittests (mScaling and testTdf132367()).
+            mScaleQuality = nScaleFlag;
+            break;
         case BmpScaleFlag::Default:
             if (mScaleQuality == BmpScaleFlag::BestQuality)
                 mScaleQuality = nScaleFlag;
@@ -781,7 +786,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
             paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
             surface->getCanvas()->drawImageRect(
                 mImage, SkRect::MakeWH(mSize.Width(), mSize.Height()),
-                makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize), &paint);
+                makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize, 1), &paint);
             SAL_INFO("vcl.skia.trace", "getskimage(" << this << "): image scaled "
                                                      << Size(mImage->width(), mImage->height())
                                                      << "->" << mSize << ":"
@@ -893,7 +898,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
         surface->getCanvas()->drawImageRect(
             mImage, SkRect::MakeWH(mSize.Width(), mSize.Height()),
-            scaling ? makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize)
+            scaling ? makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize, 1)
                     : SkSamplingOptions(),
             &paint);
         if (scaling)
@@ -1149,7 +1154,7 @@ void SkiaSalBitmap::EnsureBitmapData()
         if (imageSize(mImage) != mSize) // pending scaling?
         {
             canvas.drawImageRect(mImage, SkRect::MakeWH(mSize.getWidth(), mSize.getHeight()),
-                                 makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize),
+                                 makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize, 1),
                                  &paint);
             SAL_INFO("vcl.skia.trace",
                      "ensurebitmapdata(" << this << "): image scaled " << imageSize(mImage) << "->"

@@ -64,3 +64,7 @@ will be used to write the log under `instdir/uitest/`.
 ## Kf5
 
 * `SAL_VCL_KF5_USE_QFONT` - use `QFont` for text rendering (default for qt5, but not kf5)
+
+## Mac
+
+* `SAL_FORCE_HIDPI_SCALING` - set to 2 to fake HiDPI drawing (useful for unittests, windows may draw only top-left 1/4 of the content scaled)
