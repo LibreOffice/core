@@ -816,7 +816,8 @@ OUString PDFiumPageObjectImpl::getFontName()
     OUString sFontName;
     const int nFontName = 80 + 1;
     std::unique_ptr<char[]> pFontName(new char[nFontName]); // + terminating null
-    int nFontNameChars = FPDFTextObj_GetFontName(mpPageObject, pFontName.get(), nFontName);
+    FPDF_FONT pFontObject = FPDFTextObj_GetFont(mpPageObject);
+    int nFontNameChars = FPDFFont_GetFontName(pFontObject, pFontName.get(), nFontName);
     if (nFontName >= nFontNameChars)
     {
         sFontName = OUString::createFromAscii(pFontName.get());

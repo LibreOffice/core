@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_include,pdfium,\
     -I$(call gb_UnpackedTarball_get_dir,pdfium) \
     -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party \
     -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/agg23 \
+    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/abseil-cpp \
     $$(INCLUDE) \
 ))
 
@@ -72,6 +73,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fpdf_save \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_text \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_view \
+    UnpackedTarball/pdfium/fpdfsdk/ipdfsdk_annothandler \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_pauseadapter \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interactiveform \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_renderpage \
@@ -514,6 +516,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/agg23/agg_rasterizer_scanline_aa \
     UnpackedTarball/pdfium/third_party/agg23/agg_vcgen_dash \
     UnpackedTarball/pdfium/third_party/agg23/agg_vcgen_stroke \
+))
+
+# third_party/abseil-cpp
+$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
+    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/types/bad_optional_access \
 ))
 
 # third_party/fx_libopenjpeg
