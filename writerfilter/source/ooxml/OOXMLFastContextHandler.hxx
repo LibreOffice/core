@@ -469,6 +469,7 @@ public:
 
     void sendShape( Token_t Element );
     bool isShapeSent( ) const { return m_bShapeSent; }
+    bool isDMLGroupShape() const;
 
 protected:
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
