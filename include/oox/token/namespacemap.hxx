@@ -22,7 +22,6 @@
 
 #include <map>
 
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -40,10 +39,8 @@ struct NamespaceMap
     typedef std::map<sal_Int32, OUString>::const_iterator const_iterator;
 };
 
-/** Thread-save singleton of a map of all supported XML namespace URLs. */
-struct StaticNamespaceMap : public ::rtl::Static<NamespaceMap, StaticNamespaceMap>
-{
-};
+/** Thread-safe singleton of a map of all supported XML namespace URLs. */
+NamespaceMap& StaticNamespaceMap();
 
 } // namespace oox
 

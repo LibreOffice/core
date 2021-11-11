@@ -188,7 +188,7 @@ struct XmlFilterBaseImpl
 constexpr OUStringLiteral gaBinSuffix( u".bin" );
 
 XmlFilterBaseImpl::XmlFilterBaseImpl() :
-    mrNamespaceMap(StaticNamespaceMap::get())
+    mrNamespaceMap(StaticNamespaceMap())
 {
     // register XML namespaces
     registerNamespaces(maFastParser);
