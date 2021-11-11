@@ -640,6 +640,13 @@ void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
             nPercents++;
     }
     nInclUpperLevels = nPercents/2;
+    if (nInclUpperLevels < 1)
+    {
+        // There should be always at least one level. This will be not required
+        // in future (when we get rid of prefix/suffix), but nowadays there
+        // are too many conversions "list format" <-> "prefix/suffix/inclUpperLevel"
+        nInclUpperLevels = 1;
+    }
 }
 
 OUString SvxNumberFormat::GetListFormat(bool bIncludePrefixSuffix /*= true*/) const
