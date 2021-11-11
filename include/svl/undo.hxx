@@ -206,7 +206,7 @@ public:
     OUString                GetUndoActionsInfo() const;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     OUString                GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
-    SfxUndoAction*          GetRedoAction() const;
+    SfxUndoAction* GetRedoAction(size_t nNo = 0) const;
     /// Get info about all redo actions (comment, view shell id, etc.)
     OUString                GetRedoActionsInfo() const;
     virtual bool            Undo();
