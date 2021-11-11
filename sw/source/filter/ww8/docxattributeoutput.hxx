@@ -724,6 +724,7 @@ private:
                        rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
                        rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
                        rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
+                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTextAttrs,
                        OUString& rSdtPrAlias,
                        bool bPara);
     /// Closes a currently open SDT block.
@@ -995,12 +996,14 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenChildren;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenAttributes;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrDataBindingAttrs;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTextAttrs;
     /// members to control the existence of grabbagged SDT properties in the text run
     sal_Int32 m_nRunSdtPrToken;
     /// State of the Fly at current position
     FlyProcessingState m_nStateOfFlyFrame;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrTokenChildren;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrDataBindingAttrs;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrTextAttrs;
     /// Value of the <w:alias> paragraph SDT element.
     OUString m_aParagraphSdtPrAlias;
     /// Same as m_aParagraphSdtPrAlias, but its content is available till the SDT is closed.
