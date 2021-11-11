@@ -16,7 +16,7 @@ new file mode 100644
 index 0fbd336a..451213f8 100644
 --- /dev/null
 +++ b/config.h
-@@ -0,0 +1,221 @@
+@@ -0,0 +1,223 @@
 +/* config.h.  Generated from config.h.cmake by cmake.  */
 +
 +/* Build against libcurl. */
@@ -176,7 +176,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_NAME "poppler"
 +
 +/* Define to the full name and version of this package. */
-+#define PACKAGE_STRING "poppler 21.01.0"
++#define PACKAGE_STRING "poppler 21.11.0"
 +
 +/* Define to the one symbol short name of this package. */
 +#define PACKAGE_TARNAME "poppler"
@@ -185,7 +185,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_URL ""
 +
 +/* Define to the version of this package. */
-+#define PACKAGE_VERSION "21.01.0"
++#define PACKAGE_VERSION "21.11.0"
 +
 +/* Poppler data dir */
 +#define POPPLER_DATADIR "/usr/local/share/poppler"
@@ -203,7 +203,7 @@ index 0fbd336a..451213f8 100644
 +/* #undef USE_FLOAT */
 +
 +/* Version number of package */
-+#define VERSION "21.01.0"
++#define VERSION "21.11.0"
 +
 +#if defined(__APPLE__)
 +#elif defined (_WIN32)
@@ -228,6 +228,8 @@ index 0fbd336a..451213f8 100644
 +#if defined(_MSC_VER) || defined(__BORLANDC__)
 +#define popen _popen
 +#define pclose _pclose
++#define strncasecmp _strnicmp
++// error C4005: "strcasecmp": macro redefinition    #define strcasecmp _stricmp
 +#endif
 +
 +/* Number of bits in a file offset, on hosts where this is settable. */
@@ -243,7 +245,7 @@ new file mode 100644
 index 0fbd336a..451213f8 100644
 --- /dev/null
 +++ b/poppler/poppler-config.h
-@@ -0,0 +1,166 @@
+@@ -0,0 +1,161 @@
 +//================================================= -*- mode: c++ -*- ====
 +//
 +// poppler-config.h
@@ -282,7 +284,7 @@ index 0fbd336a..451213f8 100644
 +
 +/* Defines the poppler version. */
 +#ifndef POPPLER_VERSION
-+#define POPPLER_VERSION "21.01.0"
++#define POPPLER_VERSION "21.11.0"
 +#endif
 +
 +/* Use single precision arithmetic in the Splash backend */
@@ -369,11 +371,6 @@ index 0fbd336a..451213f8 100644
 +/* #undef USE_BOOST_HEADERS */
 +#endif
 +
-+/* Is splash backend available */
-+#ifndef HAVE_SPLASH
-+/* #undef HAVE_SPLASH */
-+#endif
-+
 +//------------------------------------------------------------------------
 +// version
 +//------------------------------------------------------------------------
@@ -439,9 +436,9 @@ index 0fbd336a..451213f8 100644
 +
 +#include "poppler-global.h"
 +
-+#define POPPLER_VERSION "21.01.0"
++#define POPPLER_VERSION "21.11.0"
 +#define POPPLER_VERSION_MAJOR 21
-+#define POPPLER_VERSION_MINOR 1
++#define POPPLER_VERSION_MINOR 11
 +#define POPPLER_VERSION_MICRO 0
 +
 +namespace poppler
@@ -455,3 +452,38 @@ index 0fbd336a..451213f8 100644
 +}
 +
 +#endif
+diff --git a/poppler_private_export.h b/poppler_private_export.h
+new file mode 100644
+index 0fbd336a..451213f8 100644
+--- /dev/null
++++ b/poppler_private_export.h
+@@ -0,0 +1,11 @@
++
++#ifndef POPPLER_PRIVATE_EXPORT_H
++#define POPPLER_PRIVATE_EXPORT_H
++
++#  define POPPLER_PRIVATE_EXPORT
++#  define POPPLER_PRIVATE_NO_EXPORT
++#  define POPPLER_PRIVATE_DEPRECATED
++#  define POPPLER_PRIVATE_DEPRECATED_EXPORT
++#  define POPPLER_PRIVATE_DEPRECATED_NO_EXPORT
++
++#endif /* POPPLER_PRIVATE_EXPORT_H */
+
+diff --git a/cpp/poppler_cpp_export.h b/cpp/poppler_cpp_export.h
+new file mode 100644
+index 0fbd336a..451213f8 100644
+--- /dev/null
++++ b/cpp/poppler_cpp_export.h
+@@ -0,0 +1,11 @@
++
++#ifndef POPPLER_CPP_EXPORT_H
++#define POPPLER_CPP_EXPORT_H
++
++#  define POPPLER_CPP_EXPORT
++#  define POPPLER_CPP_NO_EXPORT
++#  define POPPLER_CPP_DEPRECATED
++#  define POPPLER_CPP_DEPRECATED_EXPORT
++#  define POPPLER_CPP_DEPRECATED_NO_EXPORT
++
++#endif /* POPPLER_CPP_EXPORT_H */
