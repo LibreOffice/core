@@ -376,8 +376,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     CPPUNIT_ASSERT(aTocString.startsWithIgnoreAsciiCase( "15" ) );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo73389)
 {
+    loadAndSave("fdo73389.docx");
     // The width of the inner table was too large. The first fix still converted
     // the "auto" table width to a fixed one. The second fix used variable width.
     // The recent fix uses fixed width again, according to the fixed width cells.
