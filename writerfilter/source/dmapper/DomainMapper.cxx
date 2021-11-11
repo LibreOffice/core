@@ -1132,6 +1132,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_DataBinding_storeItemID:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_storeItemID", sStringValue);
             break;
+        case NS_ooxml::LN_CT_SdtText_multiLine:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:LN_CT_SdtText_multiLine", sStringValue);
+            break;
         case NS_ooxml::LN_CT_PTab_leader:
         case NS_ooxml::LN_CT_PTab_relativeTo:
         case NS_ooxml::LN_CT_PTab_alignment:
