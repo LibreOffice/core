@@ -19,6 +19,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <comphelper/lok.hxx>
 
 BitmapColor BitmapReadAccess::GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX, const ColorMask&)
 {
@@ -262,6 +263,8 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcBgrx(ConstScanline pScanline, t
     aBitmapColor.SetBlue( *pScanline++ );
     aBitmapColor.SetGreen( *pScanline++ );
     aBitmapColor.SetRed( *pScanline );
+    if (comphelper::LibreOfficeKit::isActive())
+        aBitmapColor.SetAlpha(0xFF - *(++pScanline));
 
     return aBitmapColor;
 }
@@ -283,7 +286,7 @@ void BitmapReadAccess::SetPixelForN32BitTcBgrx(Scanline pScanline, tools::Long n
     *pScanline++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline++ = rBitmapColor.GetRed();
-    *pScanline = 0xFF;
+    *pScanline = (comphelper::LibreOfficeKit::isActive()) ? 0xFF - rBitmapColor.GetAlpha() : 0xFF;
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcRgba(ConstScanline pScanline, tools::Long nX, const ColorMask&)
