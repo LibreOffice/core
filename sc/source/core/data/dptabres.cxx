@@ -1850,7 +1850,7 @@ OUString ScDPDataMember::GetName() const
     if (pResultMember)
         return pResultMember->GetName();
     else
-        return EMPTY_OUSTRING;
+        return OUString();
 }
 
 bool ScDPDataMember::IsVisible() const

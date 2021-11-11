@@ -1065,13 +1065,13 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     }
 }
 
-const OUString & ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bLocalFirst )
+OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bLocalFirst )
 {
     if (!bInitialized)
         Initialize();
 
     if (nFuncCount == 0)
-        return EMPTY_OUSTRING;
+        return OUString();
 
     if ( bLocalFirst )
     {
@@ -1097,7 +1097,7 @@ const OUString & ScUnoAddInCollection::FindFunction( const OUString& rUpperName,
             return iLook->second->GetOriginalName();
     }
 
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const OUString& rName, bool bComplete )
@@ -1588,7 +1588,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                             for (sal_Int32 nCol=nColCount; nCol<nMaxColCount; nCol++)
                             {
                                 xMatrix->PutString(
-                                    svl::SharedString(EMPTY_OUSTRING),
+                                    svl::SharedString(OUString()),
                                     static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
                             }
                         }

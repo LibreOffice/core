@@ -1274,12 +1274,12 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                         switch ( nType )
                         {
                             case ScContentId::TABLE:
-                                pScMod->SetDragLink( aDocName, aText, EMPTY_OUSTRING );
+                                pScMod->SetDragLink( aDocName, aText, OUString() );
                                 bDoLinkTrans = true;
                                 break;
                             case ScContentId::RANGENAME:
                             case ScContentId::DBAREA:
-                                pScMod->SetDragLink( aDocName, EMPTY_OUSTRING, aText );
+                                pScMod->SetDragLink( aDocName, OUString(), aText );
                                 bDoLinkTrans = true;
                                 break;
 

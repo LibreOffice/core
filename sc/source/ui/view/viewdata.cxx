@@ -3645,7 +3645,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                 Color aGridColor(rTabSett.maGridColor);
                 if (aGridColor == COL_AUTO)
                     aGridColor = SC_STD_GRIDCOLOR;
-                maOptions.SetGridColor(aGridColor, EMPTY_OUSTRING);
+                maOptions.SetGridColor(aGridColor, OUString());
 
                 // view mode and default zoom (for new sheets) from current sheet
                 if( rTabSett.mnNormalZoom )

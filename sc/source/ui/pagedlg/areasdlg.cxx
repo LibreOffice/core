@@ -529,7 +529,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, weld::ComboBox&, rLb, void )
 
     // fill edit field according to list box selection
     if( (nSelPos == 0) || (nSelPos == nAllSheetPos) )
-        pEd->SetText( EMPTY_OUSTRING );
+        pEd->SetText( OUString() );
     else if( nSelPos >= nFirstCustomPos )
         pEd->SetText(rLb.get_id(nSelPos));
 }

@@ -341,7 +341,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
             case FAMILY_MODERN:             ePitch = PITCH_FIXED;           break;
             default:                        break;
          }
-        SvxFontItem aFontItem( eFtFamily , maData.maName, EMPTY_OUSTRING, ePitch, eTempTextEnc, ATTR_FONT );
+        SvxFontItem aFontItem( eFtFamily , maData.maName, OUString(), ePitch, eTempTextEnc, ATTR_FONT );
 
         // set only for valid script types
         if( mbHasWstrn )

@@ -2613,15 +2613,15 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
     // col 5, formulas
     CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+60"), getFormula(5, 2, srcSheet));
     CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(5, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(5, 3, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(5, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(5, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(5, 4, srcSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+70"), getFormula(5, 5, srcSheet));
     CPPUNIT_ASSERT_EQUAL(74.0, m_pDoc->GetValue(5, 5, srcSheet));
     // col 6, formulas
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(B3:B6;\"<4\")"), getFormula(6, 2, srcSheet));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(6, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 3, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 4, srcSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=C$3+$B$5+80"), getFormula(6, 5, srcSheet));
     CPPUNIT_ASSERT_EQUAL(94.0, m_pDoc->GetValue(6, 5, srcSheet));
 
@@ -2902,8 +2902,8 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 3, destSheet));
     }
     else
     {
@@ -2921,8 +2921,8 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 3, destSheet));
     }
     else
     {
@@ -3255,7 +3255,7 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 5, destSheet));
     // col 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), getFormula(4, 2, destSheet));
@@ -3273,7 +3273,7 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(OUString("d"), m_pDoc->GetString(5, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 4, destSheet)); // repeated row 1
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(4, 5, destSheet));
     // col 6, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
@@ -3298,7 +3298,7 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     // formula is not adjusted due to filter row
     CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=D1+D3+70"), getFormula(7, 3, destSheet));
@@ -3314,7 +3314,7 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), getFormula(8, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1115.0, m_pDoc->GetValue(8, 3, destSheet));
@@ -3530,8 +3530,8 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 64.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(5, 5, destSheet));
     }
     else
     {
@@ -3551,8 +3551,8 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 6.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(5, 6, destSheet));
     }
     else
     {
@@ -4024,7 +4024,7 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 65.0,
                                  m_pDoc->GetValue(ScAddress(3, 5, destSheet)));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", OUString("=C2+E2+70"),
@@ -4045,7 +4045,7 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
                                  getFormula(3, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 5.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 6, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F7", OUString("=B$3+$B$5+80"),
@@ -4387,8 +4387,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 2, destSheet));
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 3, destSheet));
     }
     else
     {
@@ -4406,8 +4406,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 3, destSheet));
     }
     else
     {
@@ -4680,7 +4680,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 4, destSheet));
     // col 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), getFormula(4, 1, destSheet));
     // references over selection gaps are not adjusted
@@ -4691,7 +4691,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     // was originally 42, not adjusted by filtering
     CPPUNIT_ASSERT_EQUAL(41.0, m_pDoc->GetValue(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(4, 4, destSheet));
     // col 5, strings are not selected
     // col 5, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
@@ -4709,30 +4709,30 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 6, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(6, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+60"), getFormula(6, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(6, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=C1+C3+70"), getFormula(6, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(6, 3, destSheet)); // It was 74
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(6, 4, destSheet));
     // col 7, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(7, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(C2:C5;\"<4\")"), getFormula(7, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1083.0, m_pDoc->GetValue(7, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$B$5+80"), getFormula(7, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(7, 4, destSheet));
     // col 8, numbers
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(8, 1, destSheet));
@@ -5014,8 +5014,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", EMPTY_OUSTRING, m_pDoc->GetString(4, 4, destSheet));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", EMPTY_OUSTRING, m_pDoc->GetString(5, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString(), m_pDoc->GetString(4, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString(), m_pDoc->GetString(5, 4, destSheet));
     }
     else
     {
@@ -5033,8 +5033,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(5, 5, destSheet));
     }
     else
     {
@@ -5352,7 +5352,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+60"), getFormula(3, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(4, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(4, 4, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=C1+E1+70"), getFormula(5, 4, destSheet));
@@ -5366,7 +5366,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D1:G1;\"<4\")"), getFormula(3, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("=B$3+$B$5+80"), getFormula(5, 5, destSheet));
@@ -5672,8 +5672,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 3, destSheet));
     }
     else
     {
@@ -5691,8 +5691,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 3, destSheet));
     }
     else
     {
@@ -6043,7 +6043,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), getFormula(7, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(67.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(7, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("t"), m_pDoc->GetString(7, 3, destSheet));
@@ -6056,7 +6056,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), getFormula(8, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, m_pDoc->GetString(8, 2, destSheet));
+        CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString("u"), m_pDoc->GetString(8, 3, destSheet));
@@ -6395,8 +6395,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 64.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(5, 5, destSheet));
     }
     else
     {
@@ -6415,8 +6415,8 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 6.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(5, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(5, 6, destSheet));
     }
     else
     {
@@ -6762,7 +6762,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 67.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", EMPTY_OUSTRING, m_pDoc->GetString(4, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
     }
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
@@ -6777,7 +6777,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
                                  getFormula(3, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", -7.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", EMPTY_OUSTRING, m_pDoc->GetString(4, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", OUString(), m_pDoc->GetString(4, 6, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7", OUString("u"), m_pDoc->GetString(5, 6, destSheet));
@@ -7316,7 +7316,7 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
         for (int j = 0; j < 10; ++j)
         {
             CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(j, i, nSrcTab));
-            CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(j, i, nSrcTab));
+            CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(j, i, nSrcTab));
         }
 
     lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
@@ -8230,7 +8230,7 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
         for (int j = 0; j < 10; ++j)
         {
             CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(j, i, nSrcTab));
-            CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(j, i, nSrcTab));
+            CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(j, i, nSrcTab));
         }
 
     lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 1, 22, nSrcTab),
@@ -10637,7 +10637,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(0, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(0, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(1, 2, nTab)); // B3
     CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), getFormula(1, 2, nTab));
@@ -10646,7 +10646,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(3, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(3, 2, nTab));
 
     // Change A2:D2 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
@@ -10655,7 +10655,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     m_pDoc->SetValue(3, 1, nTab, 2.0); // D2
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(0, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(0, 2, nTab));
 
     // Without the fix in place, this would have failed with
     // - Expected: =102
@@ -10667,7 +10667,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(3, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(3, 2, nTab));
 
     // Scenario 3: Similar to scenario 2, but transposed
     m_pDoc->InsertTab(nTab, "Test");
@@ -10701,7 +10701,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 0, nTab)); // C1
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 0, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(2, 0, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 1, nTab)); // C2
     CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), getFormula(2, 1, nTab));
@@ -10710,7 +10710,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(2, 3, nTab));
 
     // Change B1:B4 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(1, 0, nTab, 2.0); // B1
@@ -10719,7 +10719,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     m_pDoc->SetValue(1, 3, nTab, 2.0); // B4
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 0, nTab)); // C1
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 0, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(2, 0, nTab));
 
     // Without the fix in place, this would have failed with
     // - Expected: =102
@@ -10731,7 +10731,7 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), getFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
-    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, getFormula(2, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getFormula(2, 3, nTab));
 
     m_pDoc->DeleteTab(nTab);
 }

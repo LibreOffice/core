@@ -267,9 +267,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(rViewData.GetDialogParent()));
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
-                pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
-                pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
-                pDlg->Insert( SotClipboardFormatId::RICHTEXT,    EMPTY_OUSTRING );
+                pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
+                pDlg->Insert( SotClipboardFormatId::RTF,    OUString() );
+                pDlg->Insert( SotClipboardFormatId::RICHTEXT,    OUString() );
                 // Do not offer SotClipboardFormatId::STRING_TSVC for
                 // in-cell paste.
 

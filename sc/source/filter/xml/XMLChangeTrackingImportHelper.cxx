@@ -587,7 +587,7 @@ void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAc
     if (rOldCell.isEmpty())
         return;
 
-    pPrevActContent->SetNewCell(rOldCell, &rDoc, EMPTY_OUSTRING);
+    pPrevActContent->SetNewCell(rOldCell, &rDoc, OUString());
 }
 
 void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction, ScDocument& rDoc)
@@ -667,7 +667,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
             if (aCell.meType != CELLTYPE_FORMULA)
             {
                 aNewCell = aCell;
-                pChangeActionContent->SetNewCell(aNewCell, &rDoc, EMPTY_OUSTRING);
+                pChangeActionContent->SetNewCell(aNewCell, &rDoc, OUString());
                 pChangeActionContent->SetNewValue(aCell, &rDoc);
             }
             else
@@ -702,7 +702,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
                     aNewCell.mpFormula->SetMatColsRows(nCols, nRows);
                 }
                 aNewCell.mpFormula->SetInChangeTrack(true);
-                pChangeActionContent->SetNewCell(aNewCell, &rDoc, EMPTY_OUSTRING);
+                pChangeActionContent->SetNewCell(aNewCell, &rDoc, OUString());
                 // #i40704# don't overwrite the formula string via SetNewValue()
             }
         }

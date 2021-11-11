@@ -2029,7 +2029,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula)
     ScTokenArray aTokenArray(getScDocument());
     (void)ScTokenConversion::ConvertToTokenArray( getScDocument(), aTokenArray, aTokens );
 
-    getScDocShell()->GetDocFunc().EnterMatrix( getScRangeList()[0], nullptr, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
+    getScDocShell()->GetDocFunc().EnterMatrix( getScRangeList()[0], nullptr, &aTokenArray, OUString(), true, true, OUString(), formula::FormulaGrammar::GRAM_API );
 }
 
 OUString

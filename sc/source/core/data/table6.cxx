@@ -1101,7 +1101,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                                 // TODO: I'm using a string cell with empty content to
                                 // trigger deletion of cell instance on undo.  Maybe I
                                 // should create a new cell type for this?
-                                pUndoDoc->SetString(ScAddress(nCol, i, nTab), EMPTY_OUSTRING);
+                                pUndoDoc->SetString(ScAddress(nCol, i, nTab), OUString());
                             }
                         }
                         rUndoStr.clear();
@@ -1136,7 +1136,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                         // TODO: I'm using a string cell with empty content to
                         // trigger deletion of cell instance on undo.  Maybe I
                         // should create a new cell type for this?
-                        pUndoDoc->SetString(ScAddress(nCol, nRow, nTab), EMPTY_OUSTRING);
+                        pUndoDoc->SetString(ScAddress(nCol, nRow, nTab), OUString());
                     }
                 }
             }

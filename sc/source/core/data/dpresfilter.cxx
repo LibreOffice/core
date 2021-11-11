@@ -186,7 +186,7 @@ bool ScDPResultTree::empty() const
 
 void ScDPResultTree::clear()
 {
-    maPrimaryDimName = EMPTY_OUSTRING;
+    maPrimaryDimName.clear();
     mpRoot.reset( new MemberNode );
 }
 

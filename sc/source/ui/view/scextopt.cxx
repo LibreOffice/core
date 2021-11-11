@@ -197,10 +197,10 @@ SCTAB ScExtDocOptions::GetCodeNameCount() const
     return static_cast< SCTAB >( mxImpl->maCodeNames.size() );
 }
 
-const OUString& ScExtDocOptions::GetCodeName( SCTAB nTab ) const
+OUString ScExtDocOptions::GetCodeName( SCTAB nTab ) const
 {
     OSL_ENSURE( (0 <= nTab) && (nTab < GetCodeNameCount()), "ScExtDocOptions::GetCodeName - invalid sheet index" );
-    return ((0 <= nTab) && (nTab < GetCodeNameCount())) ? mxImpl->maCodeNames[ static_cast< size_t >( nTab ) ] : EMPTY_OUSTRING;
+    return ((0 <= nTab) && (nTab < GetCodeNameCount())) ? mxImpl->maCodeNames[ static_cast< size_t >( nTab ) ] : OUString();
 }
 
 void ScExtDocOptions::SetCodeName( SCTAB nTab, const OUString& rCodeName )

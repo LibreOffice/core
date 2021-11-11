@@ -552,7 +552,7 @@ void ScTabPageSortOptions::Init()
         }
 
         m_xLbOutPos->set_active(0);
-        m_xEdOutPos->set_text(EMPTY_OUSTRING);
+        m_xEdOutPos->set_text(OUString());
 
         // Check whether the field that is passed on is a database field:
 
@@ -649,7 +649,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
         m_xBtnCopyResult->set_active( false );
         m_xLbOutPos->set_sensitive(false);
         m_xEdOutPos->set_sensitive(false);
-        m_xEdOutPos->set_text( EMPTY_OUSTRING );
+        m_xEdOutPos->set_text( OUString() );
     }
 }
 

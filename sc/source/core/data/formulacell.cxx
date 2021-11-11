@@ -2674,7 +2674,7 @@ void ScFormulaCell::SetHybridFormula( const OUString& r,
     aResult.SetHybridFormula( r); eTempGrammar = eGrammar;
 }
 
-const OUString& ScFormulaCell::GetHybridFormula() const
+OUString ScFormulaCell::GetHybridFormula() const
 {
     return aResult.GetHybridFormula();
 }

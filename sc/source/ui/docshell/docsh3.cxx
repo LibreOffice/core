@@ -1001,7 +1001,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     aValue = aValue.copy(1, aValue.getLength()-2); // remove the 1st and last characters.
                                     GetDocFunc().EnterMatrix( aSourceRange,
                                         nullptr, nullptr, aValue, false, false,
-                                        EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_DEFAULT );
+                                        OUString(), formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
                                 case ScMatrixMode::Reference :     // do nothing

@@ -2209,7 +2209,7 @@ static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
 {
     rEngine.SetUpdateLayout( false );
 
-    rEngine.SetText(EMPTY_OUSTRING);
+    rEngine.SetText(OUString());
     // do not keep any para-attributes
     const SfxItemSet& rPara = rEngine.GetParaAttribs(0);
     if (rPara.Count())

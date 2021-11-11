@@ -209,7 +209,7 @@ public:
 
     const OUString* GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
 
-    const OUString& GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
+    OUString GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
 
     /** Tries to decode the URL of the specified XTI entry to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.
@@ -217,7 +217,7 @@ public:
         @return  true = decoding was successful, returned strings are valid (not empty). */
     bool                GetLinkData( OUString& rApplic, OUString& rTopic, sal_uInt16 nXtiIndex ) const;
     /** Returns the specified macro name or an empty string on error. */
-    const OUString&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
+    OUString       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
 private:
     typedef ::std::unique_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;

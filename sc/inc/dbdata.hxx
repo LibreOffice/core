@@ -167,7 +167,7 @@ public:
 
     /** Returns table column name if nCol is within column range and name
         is stored, else empty string. */
-    const OUString& GetTableColumnName( SCCOL nCol ) const;
+    OUString GetTableColumnName( SCCOL nCol ) const;
 
     OUString GetSourceString() const;
     OUString GetOperations() const;

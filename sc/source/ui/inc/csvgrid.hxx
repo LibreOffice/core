@@ -180,7 +180,7 @@ public:
     /** Sets new UI data type names. */
     void                        SetTypeNames( std::vector<OUString>&& rTypeNames );
     /** Returns the UI type name of the specified column. */
-    const OUString&             GetColumnTypeName( sal_uInt32 nColIndex ) const;
+    OUString             GetColumnTypeName( sal_uInt32 nColIndex ) const;
 
     /** Fills the options object with column data for separators mode. */
     void                        FillColumnDataSep( ScAsciiOptions& rOptions ) const;
@@ -240,7 +240,7 @@ public:
     void                        ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine );
 
     /** Returns the text of the specified cell. */
-    const OUString&             GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const;
+    OUString             GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const;
 
     // event handling ---------------------------------------------------------
 protected:
