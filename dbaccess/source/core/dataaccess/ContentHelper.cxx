@@ -86,8 +86,19 @@ void SAL_CALL OContentHelper::disposing()
     m_xParentContainer = nullptr;
 }
 
-IMPLEMENT_SERVICE_INFO_IMPLNAME(OContentHelper, "com.sun.star.comp.sdb.Content")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OContentHelper)
+OUString SAL_CALL OContentHelper::getImplementationName()
+    {
+        return "com.sun.star.comp.sdb.Content";
+    }
+sal_Bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames()
 {
     return { "com.sun.star.ucb.Content" };

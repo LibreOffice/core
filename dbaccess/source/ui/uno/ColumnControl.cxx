@@ -47,7 +47,15 @@ OUString SAL_CALL OColumnControl::getImplementationName()
 {
         return SERVICE_CONTROLDEFAULT;
 }
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControl)
+sal_Bool SAL_CALL OColumnControl::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OColumnControl::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl" };

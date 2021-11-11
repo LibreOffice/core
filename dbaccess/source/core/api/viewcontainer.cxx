@@ -61,8 +61,19 @@ OViewContainer::~OViewContainer()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO_IMPLNAME(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OViewContainer)
+OUString SAL_CALL OViewContainer::getImplementationName()
+    {
+        return "com.sun.star.sdb.dbaccess.OViewContainer";
+    }
+sal_Bool SAL_CALL OViewContainer::supportsService(const OUString& _rServiceName)
+    {
+        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        for (const OUString& s : aSupported)
+            if (s == _rServiceName)
+                return true;
+
+        return false;
+    }
 css::uno::Sequence< OUString > SAL_CALL OViewContainer::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES };

@@ -63,8 +63,9 @@ ORowSetDataColumn::~ORowSetDataColumn()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_SEQUENCE(21)
-
+    css::uno::Sequence< css::beans::Property> aDescriptor(21);
+    css::beans::Property* pDesc = aDescriptor.getArray();
+    sal_Int32 nPos = 0;
     DECL_PROP_IMPL(CATALOGNAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
     DECL_PROP_IMPL(DISPLAYSIZE, cppu::UnoType<sal_Int32>::get()) css::beans::PropertyAttribute::READONLY );
     DECL_PROP_IMPL(ISAUTOINCREMENT, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY );
@@ -87,7 +88,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
     DECL_PROP_IMPL(TYPENAME, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::READONLY );
     DECL_PROP_IMPL(VALUE, cppu::UnoType<Any>::get()) css::beans::PropertyAttribute::BOUND );
 
-    END_PROPERTY_SEQUENCE()
+    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
 
     Sequence< Property > aRegisteredProperties;
     describeProperties( aRegisteredProperties );

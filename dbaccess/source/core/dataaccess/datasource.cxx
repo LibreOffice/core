@@ -796,7 +796,9 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(13)
+    css::uno::Sequence< css::beans::Property> aDescriptor(13);
+    css::beans::Property* pDesc = aDescriptor.getArray();
+    sal_Int32 nPos = 0;
         DECL_PROP_IMPL(INFO, cppu::UnoType<Sequence< PropertyValue >>::get()) css::beans::PropertyAttribute::BOUND);
         DECL_PROP_IMPL(ISPASSWORDREQUIRED, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::BOUND);
         DECL_PROP_IMPL(ISREADONLY, cppu::UnoType<bool>::get()) css::beans::PropertyAttribute::READONLY);
@@ -810,7 +812,8 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
         DECL_PROP_IMPL(TABLETYPEFILTER, cppu::UnoType<Sequence< OUString >>::get()) css::beans::PropertyAttribute::BOUND);
         DECL_PROP_IMPL(URL, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::BOUND);
         DECL_PROP_IMPL(USER, cppu::UnoType<OUString>::get()) css::beans::PropertyAttribute::BOUND);
-    END_PROPERTY_HELPER();
+    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
+    return new ::cppu::OPropertyArrayHelper(aDescriptor);
 }
 
 // cppu::OPropertySetHelper
