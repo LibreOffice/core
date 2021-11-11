@@ -11,9 +11,17 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,poppler))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,poppler,0))
+
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-config.patch.1 \
 	external/poppler/pch.patch.0 \
 ))
+
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,poppler, \
+    external/poppler/sanitizer.patch \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
