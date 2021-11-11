@@ -211,8 +211,6 @@ namespace o3tl {
 }
 
 
-#define EMPTY_OUSTRING ScGlobal::GetEmptyOUString()
-
 // Layer id's for drawing.
 // These are both id's and positions.
 constexpr SdrLayerID SC_LAYER_FRONT   (0);
@@ -508,7 +506,6 @@ class ScGlobal
     static std::atomic<LegacyFuncCollection*> pLegacyFuncCollection;
     static std::atomic<ScUnoAddInCollection*> pAddInCollection;
     static std::unique_ptr<ScUserList> xUserList;
-    static SC_DLLPUBLIC const OUString aEmptyOUString;
     static OUString         aStrClipDocName;
     static OUString         aStrErrorStringNoRef;
     static std::unique_ptr<SvxBrushItem> xEmptyBrushItem;
@@ -598,7 +595,6 @@ public:
     static void             InitTextHeight(const SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return xEmptyBrushItem.get(); }
     static SvxBrushItem*    GetButtonBrushItem();
-    static const OUString&  GetEmptyOUString() { return aEmptyOUString; }
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();

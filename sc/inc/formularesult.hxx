@@ -190,7 +190,7 @@ public:
     ScConstMatrixRef GetMatrix() const;
 
     /** Return formula string if type formula::svHybridCell, else empty string. */
-    const OUString& GetHybridFormula() const;
+    OUString GetHybridFormula() const;
 
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString(), or only SetHybridFormula() for

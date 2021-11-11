@@ -269,7 +269,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         }
         break;
         default:
-            SetTextCurrentDefaults(EMPTY_OUSTRING);
+            SetTextCurrentDefaults(OUString());
     }
 }
 

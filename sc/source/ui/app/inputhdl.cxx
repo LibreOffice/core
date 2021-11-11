@@ -623,7 +623,7 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
 
     // Dummy InsertText for Update and Paint
     // To do that we need to cancel the selection from above (before QuickInsertText)
-    pView->InsertText( EMPTY_OUSTRING );
+    pView->InsertText( OUString() );
 
     sal_Int32 nLen = pEngine->GetTextLen(0);
     ESelection aSel( 0, nLen, 0, nLen );
@@ -2168,7 +2168,7 @@ void ScInputHandler::UpdateParenthesis()
                         mpEditEngine->QuickSetAttribs( aSet, aSelOther );
 
                         // Dummy InsertText for Update and Paint (selection is empty)
-                        pTableView->InsertText( EMPTY_OUSTRING );
+                        pTableView->InsertText( OUString() );
 
                         bFound = true;
                     }
@@ -4311,11 +4311,11 @@ IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
         bInOwnChange = true; // disable ModifyHdl (reset below)
 
         pActiveViewSh = nullptr;
-        mpEditEngine->SetTextCurrentDefaults( EMPTY_OUSTRING );
+        mpEditEngine->SetTextCurrentDefaults( OUString() );
         if ( pInputWin )
         {
-            pInputWin->SetPosString( EMPTY_OUSTRING );
-            pInputWin->SetTextString( EMPTY_OUSTRING );
+            pInputWin->SetPosString( OUString() );
+            pInputWin->SetTextString( OUString() );
             pInputWin->Disable();
         }
 
@@ -4442,7 +4442,7 @@ EditView* ScInputHandler::GetFuncEditView()
             SetMode( SC_INPUT_TABLE );
             bCreatingFuncView = false;
             if ( pTableView )
-                pTableView->GetEditEngine()->SetText( EMPTY_OUSTRING );
+                pTableView->GetEditEngine()->SetText( OUString() );
         }
         pView = pTableView;
     }

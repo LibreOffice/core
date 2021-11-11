@@ -642,7 +642,7 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
     {
         tools::Long nLineWidth = 35 * ::std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
         rSdrObj.SetMergedItem( XLineWidthItem( nLineWidth ) );
-        rSdrObj.SetMergedItem( XLineColorItem( EMPTY_OUSTRING, GetPalette().GetColor( rLineData.mnColorIdx ) ) );
+        rSdrObj.SetMergedItem( XLineColorItem( OUString(), GetPalette().GetColor( rLineData.mnColorIdx ) ) );
         rSdrObj.SetMergedItem( XLineJointItem( css::drawing::LineJoint_MITER ) );
 
         sal_uLong nDotLen = ::std::max< sal_uLong >( 70 * rLineData.mnWidth, 35 );
@@ -657,19 +657,19 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
             break;
             case EXC_OBJ_LINE_DASH:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 0, nDotLen, 1, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 0, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DOT:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 1, nDotLen, 0, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 1, nDotLen, 0, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DASHDOT:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 1, nDotLen, 1, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 1, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DASHDOTDOT:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 2, nDotLen, 1, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 2, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_MEDTRANS:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_SOLID ) );
@@ -709,7 +709,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
         if( (rFillData.mnPattern == EXC_PATT_SOLID) || (aPattColor == aBackColor) )
         {
             rSdrObj.SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
-            rSdrObj.SetMergedItem( XFillColorItem( EMPTY_OUSTRING, aPattColor ) );
+            rSdrObj.SetMergedItem( XFillColorItem( OUString(), aPattColor ) );
         }
         else
         {
@@ -755,7 +755,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
             aBitmap = aXOBitmap.GetBitmap().GetBitmap();
 
             rSdrObj.SetMergedItem(XFillStyleItem(drawing::FillStyle_BITMAP));
-            rSdrObj.SetMergedItem(XFillBitmapItem(EMPTY_OUSTRING, Graphic(BitmapEx(aBitmap))));
+            rSdrObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(BitmapEx(aBitmap))));
         }
     }
 }
@@ -1182,13 +1182,13 @@ SdrObjectUniquePtr XclImpLineObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, 
         tools::Long nWidth = static_cast< tools::Long >( 125 * fArrowWidth );
         if( bLineStart )
         {
-            xSdrObj->SetMergedItem( XLineStartItem( EMPTY_OUSTRING, aArrowPolyPoly ) );
+            xSdrObj->SetMergedItem( XLineStartItem( OUString(), aArrowPolyPoly ) );
             xSdrObj->SetMergedItem( XLineStartWidthItem( nWidth ) );
             xSdrObj->SetMergedItem( XLineStartCenterItem( false ) );
         }
         if( bLineEnd )
         {
-            xSdrObj->SetMergedItem( XLineEndItem( EMPTY_OUSTRING, aArrowPolyPoly ) );
+            xSdrObj->SetMergedItem( XLineEndItem( OUString(), aArrowPolyPoly ) );
             xSdrObj->SetMergedItem( XLineEndWidthItem( nWidth ) );
             xSdrObj->SetMergedItem( XLineEndCenterItem( false ) );
         }
@@ -3669,7 +3669,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     {
         // filled without color -> set system window color
         if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
-            xSdrObj->SetMergedItem( XFillColorItem( EMPTY_OUSTRING, GetPalette().GetColor( EXC_COLOR_WINDOWBACK ) ) );
+            xSdrObj->SetMergedItem( XFillColorItem( OUString(), GetPalette().GetColor( EXC_COLOR_WINDOWBACK ) ) );
 
         // additional processing on the SdrObject
         xDrawObj->PreProcessSdrObject( *this, *xSdrObj );

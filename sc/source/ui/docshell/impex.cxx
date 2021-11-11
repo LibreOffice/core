@@ -1480,7 +1480,7 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
     if (nNext > nLen)
         nNext = nLen;
     if ( nNext <= nStart )
-        return EMPTY_OUSTRING;
+        return OUString();
 
     const sal_Unicode* pStr = rLine.getStr();
 
@@ -2178,7 +2178,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 ScMarkData aMark(rDoc.GetSheetLimits());
                                 aMark.SelectTable( aPos.Tab(), true );
                                 rDoc.InsertMatrixFormula( nCol, nRow, nRefCol,
-                                    nRefRow, aMark, EMPTY_OUSTRING, xCode.get() );
+                                    nRefRow, aMark, OUString(), xCode.get() );
                             }
                             else
                             {

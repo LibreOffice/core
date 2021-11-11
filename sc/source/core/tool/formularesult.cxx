@@ -541,14 +541,14 @@ ScConstMatrixRef ScFormulaResult::GetMatrix() const
     return nullptr;
 }
 
-const OUString& ScFormulaResult::GetHybridFormula() const
+OUString ScFormulaResult::GetHybridFormula() const
 {
     if (GetType() == formula::svHybridCell)
     {
         const ScHybridCellToken* p = static_cast<const ScHybridCellToken*>(mpToken);
         return p->GetFormula();
     }
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 void ScFormulaResult::SetHybridDouble( double f )

@@ -465,7 +465,7 @@ IMPL_LINK( ScConsolidateDlg, SelectCBHdl, weld::ComboBox&, rLb, void )
     }
     else
     {
-        pEd->SetText( EMPTY_OUSTRING );
+        pEd->SetText( OUString() );
         if ( pEd == m_xEdDataArea.get() )
             m_xBtnAdd->set_sensitive(true);
     }

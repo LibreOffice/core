@@ -180,7 +180,7 @@ OUString ScCellFormat::GetInputString(
 OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell )
 {
     if (rCell.isEmpty())
-        return EMPTY_OUSTRING;
+        return OUString();
 
     if (rCell.meType == CELLTYPE_EDIT)
     {
@@ -195,7 +195,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
         }
         //  also do not format EditCells as numbers
         //  (fitting to output)
-        return EMPTY_OUSTRING;
+        return OUString();
     }
     else
     {

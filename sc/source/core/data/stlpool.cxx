@@ -282,7 +282,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Header:
     // [empty][\sheet\][empty]
 
-    aEdEngine.SetTextCurrentDefaults(EMPTY_OUSTRING);
+    aEdEngine.SetTextCurrentDefaults(OUString());
     aEdEngine.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = aEdEngine.CreateTextObject();
     aHeaderItem.SetLeftArea  ( *pEmptyTxtObj );
