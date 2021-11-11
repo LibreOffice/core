@@ -4355,7 +4355,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         if ( pTokenArray )
         {
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_OUSTRING, pTokenArray, eGrammar);
+                    aMark, OUString(), pTokenArray, eGrammar);
         }
         else if ( rDoc.IsImportingXML() )
         {
@@ -4363,7 +4363,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             aCode.AssignXMLString( rString,
                     ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_OUSTRING, &aCode, eGrammar);
+                    aMark, OUString(), &aCode, eGrammar);
             rDoc.IncXMLImportedFormulaCount( rString.getLength() );
         }
         else if (bEnglish)
@@ -4371,7 +4371,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             ScCompiler aComp( rDoc, rRange.aStart, eGrammar);
             std::unique_ptr<ScTokenArray> pCode = aComp.CompileString( rString );
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_OUSTRING, pCode.get(), eGrammar);
+                    aMark, OUString(), pCode.get(), eGrammar);
         }
         else
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
@@ -5494,10 +5494,10 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, false/*bApi*/ ) )
     {
         // GRAM_API for API compatibility.
-        if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API ))
+        if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, OUString(), formula::FormulaGrammar::GRAM_API ))
         {
             // try to restore the previous state
-            EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
+            EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, OUString(), formula::FormulaGrammar::GRAM_API );
         }
     }
 

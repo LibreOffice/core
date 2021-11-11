@@ -1365,7 +1365,7 @@ void ScChangeActionContent::SetValueString(
     rCell.clear();
     if ( rStr.getLength() > 1 && rStr[0] == '=' )
     {
-        rValue = EMPTY_OUSTRING;
+        rValue.clear();
         rCell.meType = CELLTYPE_FORMULA;
         rCell.mpFormula = new ScFormulaCell(
             *pDoc, aBigRange.aStart.MakeAddress(), rStr,
@@ -1555,7 +1555,7 @@ OUString ScChangeActionContent::GetStringOfCell(
     const ScCellValue& rCell, const ScDocument* pDoc, sal_uLong nFormat )
 {
     if (!GetContentCellType(rCell))
-        return EMPTY_OUSTRING;
+        return OUString();
 
     switch (rCell.meType)
     {
@@ -1570,11 +1570,11 @@ OUString ScChangeActionContent::GetStringOfCell(
         case CELLTYPE_EDIT:
             if (rCell.mpEditText)
                 return ScEditUtil::GetString(*rCell.mpEditText, pDoc);
-            return EMPTY_OUSTRING;
+            return OUString();
         case CELLTYPE_FORMULA:
             return rCell.mpFormula->GetFormula();
         default:
-            return EMPTY_OUSTRING;
+            return OUString();
     }
 }
 
@@ -1794,7 +1794,7 @@ void ScChangeActionContent::PutValueToDoc(
             aDestMark.SetMarkArea( aRange );
             pDoc->InsertMatrixFormula( aPos.Col(), aPos.Row(),
                 aRange.aEnd.Col(), aRange.aEnd.Row(),
-                aDestMark, EMPTY_OUSTRING, rCell.mpFormula->GetCode());
+                aDestMark, OUString(), rCell.mpFormula->GetCode());
         }
         break;
         case SC_CACCT_MATREF :

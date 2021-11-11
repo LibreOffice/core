@@ -790,7 +790,7 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
     {
         ScDocShell* pDocSh = rData.GetDocShell();
         bool bSuccess = pDocSh->GetDocFunc().EnterMatrix(
-            aRange, &rMark, nullptr, rString, false, false, EMPTY_OUSTRING, eGram );
+            aRange, &rMark, nullptr, rString, false, false, OUString(), eGram );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
         else

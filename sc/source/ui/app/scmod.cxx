@@ -1454,7 +1454,7 @@ void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
         // Cancel
         if ( pWin )
         {
-            pWin->SetFuncString( EMPTY_OUSTRING, false );
+            pWin->SetFuncString( OUString(), false );
             // SetSumAssignMode due to sal_False no necessary
         }
         pHdl->CancelHandler();

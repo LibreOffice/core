@@ -279,8 +279,8 @@ void ScHFEditPage::SetSelectDefinedList()
                 aLeftEntry = pLeftObj->GetText(0);
                 aCenterEntry = pCenterObj->GetText(0);
                 aRightEntry = pRightObj->GetText(0);
-                if(aLeftEntry == EMPTY_OUSTRING && aCenterEntry == EMPTY_OUSTRING
-                    && aRightEntry == EMPTY_OUSTRING)
+                if(aLeftEntry.isEmpty() && aCenterEntry.isEmpty()
+                    && aRightEntry.isEmpty())
                 {
                     eSelectEntry = eNoneEntry;
                     bFound = true;
@@ -292,7 +292,7 @@ void ScHFEditPage::SetSelectDefinedList()
             {
                 aLeftEntry = pLeftObj->GetText(0);
                 aRightEntry = pRightObj->GetText(0);
-                if(aLeftEntry == EMPTY_OUSTRING && aRightEntry == EMPTY_OUSTRING)
+                if(aLeftEntry.isEmpty() && aRightEntry.isEmpty())
                 {
                     if(IsPageEntry(m_xWndCenter->GetEditEngine(), pCenterObj.get()))
                     {
@@ -313,7 +313,7 @@ void ScHFEditPage::SetSelectDefinedList()
             {
                 aLeftEntry = pLeftObj->GetText(0);
                 aRightEntry = pRightObj->GetText(0);
-                if(aLeftEntry == EMPTY_OUSTRING && aRightEntry == EMPTY_OUSTRING)
+                if(aLeftEntry.isEmpty() && aRightEntry.isEmpty())
                 {
                     if(pCenterObj->IsFieldObject())
                     {
@@ -356,8 +356,8 @@ void ScHFEditPage::SetSelectDefinedList()
             {
                 aLeftEntry = pLeftObj->GetText(0);
                 aRightEntry = pRightObj->GetText(0);
-                if(IsExtFileNameEntry(pCenterObj.get()) && aLeftEntry == EMPTY_OUSTRING
-                    && aRightEntry == EMPTY_OUSTRING)
+                if(IsExtFileNameEntry(pCenterObj.get()) && aLeftEntry.isEmpty()
+                    && aRightEntry.isEmpty())
                 {
                     eSelectEntry = eExtFileNameEntry;
                     bFound = true;
@@ -381,7 +381,7 @@ void ScHFEditPage::SetSelectDefinedList()
             {
                 aLeftEntry = pLeftObj->GetText(0);
                 if(IsPageEntry(m_xWndCenter->GetEditEngine(), pCenterObj.get()) &&
-                    IsExtFileNameEntry(pRightObj.get()) && aLeftEntry == EMPTY_OUSTRING)
+                    IsExtFileNameEntry(pRightObj.get()) && aLeftEntry.isEmpty())
                 {
                     eSelectEntry = ePageExtFileNameEntry;
                     bFound = true;
@@ -594,7 +594,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         case eExtFileNameEntry:
             ClearTextAreas();
             m_xWndCenter->InsertField( SvxFieldItem( SvxExtFileField(
-                EMPTY_OUSTRING, SvxFileType::Var, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
+                OUString(), SvxFileType::Var, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
             if(!bTravelling)
                 m_xWndCenter->GrabFocus();
         break;
@@ -647,7 +647,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             m_xWndCenter->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             m_xWndRight->InsertField( SvxFieldItem( SvxExtFileField(
-                EMPTY_OUSTRING, SvxFileType::Var, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
+                OUString(), SvxFileType::Var, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
             if(!bTravelling)
                 m_xWndRight->GrabFocus();
         }
@@ -689,11 +689,11 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 
 void ScHFEditPage::ClearTextAreas()
 {
-    m_xWndLeft->GetEditEngine()->SetTextCurrentDefaults(EMPTY_OUSTRING);
+    m_xWndLeft->GetEditEngine()->SetTextCurrentDefaults(OUString());
     m_xWndLeft->Invalidate();
-    m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(EMPTY_OUSTRING);
+    m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(OUString());
     m_xWndCenter->Invalidate();
-    m_xWndRight->GetEditEngine()->SetTextCurrentDefaults(EMPTY_OUSTRING);
+    m_xWndRight->GetEditEngine()->SetTextCurrentDefaults(OUString());
     m_xWndRight->Invalidate();
 }
 

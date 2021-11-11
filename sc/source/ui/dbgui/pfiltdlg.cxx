@@ -131,7 +131,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     }
     else
     {
-        m_xFtDbArea->set_label(EMPTY_OUSTRING);
+        m_xFtDbArea->set_label(OUString());
     }
 
     // Read the field lists and select the entries:
@@ -164,7 +164,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
             aFieldLbArr[i]->set_active( 0 ); // "none" selected
             aCondLbArr [i]->set_active( 0 ); // "=" selected
             UpdateValueList( static_cast<sal_uInt16>(i) );
-            aValueEdArr[i]->set_entry_text(EMPTY_OUSTRING);
+            aValueEdArr[i]->set_entry_text(OUString());
         }
         aValueEdArr[i]->connect_changed( LINK( this, ScPivotFilterDlg, ValModifyHdl ) );
     }
@@ -289,7 +289,7 @@ void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
         pValList->clear();
         pValList->append_text(aStrNotEmpty);
         pValList->append_text(aStrEmpty);
-        pValList->set_entry_text(EMPTY_OUSTRING);
+        pValList->set_entry_text(OUString());
     }
 }
 

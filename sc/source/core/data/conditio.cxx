@@ -1791,7 +1791,7 @@ const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
         return nullptr;
 }
 
-const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const
+OUString ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     for (const auto& rxEntry : maEntries)
     {
@@ -1810,7 +1810,7 @@ const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const 
         }
     }
 
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const

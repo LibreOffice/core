@@ -116,7 +116,7 @@ void ScFilterOptionsMgr::Init()
 
         pBtnDestPers->set_active(true);         // always on when called
         pLbCopyArea->set_active( 0 );
-        pEdCopyArea->SetText( EMPTY_OUSTRING );
+        pEdCopyArea->SetText( OUString() );
 
         /*
          * Check whether the transferred area is a database area:
@@ -173,7 +173,7 @@ void ScFilterOptionsMgr::Init()
         else
         {
             pBtnCopyResult->set_active( false );
-            pEdCopyArea->SetText( EMPTY_OUSTRING );
+            pEdCopyArea->SetText( OUString() );
             pLbCopyArea->set_sensitive(false);
             pEdCopyArea->GetWidget()->set_sensitive(false);
             pRbCopyArea->GetWidget()->set_sensitive(false);
@@ -181,7 +181,7 @@ void ScFilterOptionsMgr::Init()
         }
     }
     else
-        pEdCopyArea->SetText( EMPTY_OUSTRING );
+        pEdCopyArea->SetText( OUString() );
 }
 
 bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const

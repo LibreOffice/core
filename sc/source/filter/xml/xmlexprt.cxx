@@ -214,7 +214,7 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
     // return text/edit cell string content, with line feeds in edit cells
 
     if (!pDoc)
-        return EMPTY_OUSTRING;
+        return OUString();
 
     switch (rCell.meType)
     {
@@ -230,7 +230,7 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
         {
             const EditTextObject* pData = rCell.mpEditText;
             if (!pData)
-                return EMPTY_OUSTRING;
+                return OUString();
 
             EditEngine& rEngine = pDoc->GetEditEngine();
             rEngine.SetText(*pData);
@@ -241,7 +241,7 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
             ;
     }
 
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 } // anonymous namespace

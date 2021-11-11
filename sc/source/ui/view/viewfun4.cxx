@@ -530,7 +530,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     pEngine->SetControlWord( EEControlBits::USECHARATTRIBS );
     pEngine->EnableUndo( false );
     pEngine->SetPaperSize( aRect.GetSize() );
-    pEngine->SetTextCurrentDefaults( EMPTY_OUSTRING );
+    pEngine->SetTextCurrentDefaults( OUString() );
 
     // *** do the conversion *** ----------------------------------------------
 
@@ -639,7 +639,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         else
         {
             // #i76709# if bLink isn't set, pass empty URL/filter, so a non-linked image is inserted
-            return PasteGraphic( rPos, aGraphic, EMPTY_OUSTRING );
+            return PasteGraphic( rPos, aGraphic, OUString() );
         }
     }
 
@@ -673,7 +673,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
         // If an OLE object can't be created, insert a URL button
 
-        GetViewData().GetViewShell()->InsertURLButton( aStrURL, aStrURL, EMPTY_OUSTRING, &rPos );
+        GetViewData().GetViewShell()->InsertURLButton( aStrURL, aStrURL, OUString(), &rPos );
         return true;
     }
 }

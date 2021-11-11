@@ -2506,7 +2506,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(ScGlobal::GetErrorString(pToken->GetError()));
             break;
             default:
-                PushString(ScGlobal::GetEmptyOUString());
+                PushString(OUString());
         }
     }
     else if ( aInfoType == "TYPE" )
@@ -3223,7 +3223,7 @@ void ScInterpreter::ScT()
                 }
             }
             if ( bValue )
-                PushString(EMPTY_OUSTRING);
+                PushString(OUString());
             else
             {
                 // like GetString()
@@ -3249,7 +3249,7 @@ void ScInterpreter::ScT()
         case svDouble :
         {
             PopError();
-            PushString( EMPTY_OUSTRING );
+            PushString( OUString() );
         }
         break;
         case svString :
@@ -9732,7 +9732,7 @@ void ScInterpreter::ScRept()
         PushError( FormulaError::StringOverflow );
     }
     else if (nCnt == 0)
-        PushString( EMPTY_OUSTRING );
+        PushString( OUString() );
     else
     {
         const sal_Int32 nLen = aStr.getLength();

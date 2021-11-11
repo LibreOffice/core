@@ -553,7 +553,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             Graphic aGraphic;
             TypeSerializer aSerializer(*xStm);
             aSerializer.readGraphic(aGraphic);
-            bRet = PasteGraphic( aPos, aGraphic, EMPTY_OUSTRING );
+            bRet = PasteGraphic( aPos, aGraphic, OUString() );
         }
     }
     else if ( nFormatId == SotClipboardFormatId::DRAWING )

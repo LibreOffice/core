@@ -3518,13 +3518,13 @@ OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScInte
 {
     if (TableExists(nTab))
         return maTabs[nTab]->GetString(nCol, nRow, pContext);
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 OUString ScDocument::GetString( const ScAddress& rPos, const ScInterpreterContext* pContext ) const
 {
     if (!TableExists(rPos.Tab()))
-        return EMPTY_OUSTRING;
+        return OUString();
 
     return maTabs[rPos.Tab()]->GetString(rPos.Col(), rPos.Row(), pContext);
 }
@@ -3578,7 +3578,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
     ScRefCellValue aCell(*this, rPos);
     if (aCell.isEmpty())
     {
-        rString = EMPTY_OUSTRING;
+        rString.clear();
         return FormulaError::NONE;
     }
 
@@ -3732,7 +3732,7 @@ OUString ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetFormula( nCol, nRow );
 
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 const ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos ) const

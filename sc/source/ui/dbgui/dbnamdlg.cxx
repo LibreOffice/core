@@ -318,7 +318,7 @@ void ScDbNameDlg::UpdateNames()
     m_xEdName->freeze();
 
     m_xEdName->clear();
-    m_xEdAssign->SetText( EMPTY_OUSTRING );
+    m_xEdAssign->SetText( OUString() );
 
     if (!rDBs.empty())
     {
@@ -449,12 +449,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
 
             UpdateNames();
 
-            m_xEdName->set_entry_text( EMPTY_OUSTRING );
+            m_xEdName->set_entry_text( OUString() );
             m_xEdName->grab_focus();
             m_xBtnAdd->set_label( aStrAdd );
             m_xBtnAdd->set_sensitive(false);
             m_xBtnRemove->set_sensitive(false);
-            m_xEdAssign->SetText( EMPTY_OUSTRING );
+            m_xEdAssign->SetText( OUString() );
             m_xBtnHeader->set_active(true);             // Default: with column headers
             m_xBtnTotals->set_active( false );      // Default: without totals row
             m_xBtnDoSize->set_active( false );
@@ -528,12 +528,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, weld::Button&, void)
 
     UpdateNames();
 
-    m_xEdName->set_entry_text( EMPTY_OUSTRING );
+    m_xEdName->set_entry_text( OUString() );
     m_xEdName->grab_focus();
     m_xBtnAdd->set_label( aStrAdd );
     m_xBtnAdd->set_sensitive(false);
     m_xBtnRemove->set_sensitive(false);
-    m_xEdAssign->SetText( EMPTY_OUSTRING );
+    m_xEdAssign->SetText( OUString() );
     theCurArea = ScRange();
     m_xBtnHeader->set_active(true);             // Default: with column headers
     m_xBtnTotals->set_active( false );      // Default: without totals row

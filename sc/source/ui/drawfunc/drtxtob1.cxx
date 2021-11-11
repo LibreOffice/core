@@ -102,9 +102,9 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mrViewData.GetDialogParent()));
 
-    pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
-    pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
-    pDlg->Insert( SotClipboardFormatId::RICHTEXT,  EMPTY_OUSTRING );
+    pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
+    pDlg->Insert( SotClipboardFormatId::RTF,    OUString() );
+    pDlg->Insert( SotClipboardFormatId::RICHTEXT,  OUString() );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mrViewData.GetActiveWin() ) );
 
