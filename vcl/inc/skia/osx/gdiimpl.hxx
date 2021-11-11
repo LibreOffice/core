@@ -43,6 +43,9 @@ public:
     virtual void Flush() override;
     virtual void Flush(const tools::Rectangle&) override;
 
+protected:
+    virtual int getWindowScaling() const override;
+
 private:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
     virtual void flushSurfaceToWindowContext() override;

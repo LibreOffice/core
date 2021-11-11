@@ -1370,7 +1370,7 @@ TestResult OutputDeviceTestCommon::checkRadialGradient(Bitmap& bitmap)
     int nNumberOfErrors = 0;
     // The default VCL implementation is off-center in the direction to the top-left.
     // This means not all corners will be pure white => quirks.
-    checkValue(pAccess, 1, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 3);
+    checkValue(pAccess, 1, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 2);
     checkValue(pAccess, 1, 10, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
     checkValue(pAccess, 10, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
     checkValue(pAccess, 10, 10, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
