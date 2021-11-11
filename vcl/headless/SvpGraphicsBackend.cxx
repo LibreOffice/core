@@ -33,9 +33,13 @@ void SvpGraphicsBackend::Init() {}
 
 void SvpGraphicsBackend::freeResources() {}
 
-bool SvpGraphicsBackend::setClipRegion(const vcl::Region& /*i_rClip*/) { return false; }
+bool SvpGraphicsBackend::setClipRegion(const vcl::Region& i_rClip)
+{
+    m_rCairoCommon.m_aClipRegion = i_rClip;
+    return true;
+}
 
-void SvpGraphicsBackend::ResetClipRegion() {}
+void SvpGraphicsBackend::ResetClipRegion() { m_rCairoCommon.m_aClipRegion.SetNull(); }
 
 sal_uInt16 SvpGraphicsBackend::GetBitCount() const
 {
