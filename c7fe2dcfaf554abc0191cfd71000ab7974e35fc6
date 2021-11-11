@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "118ac72b_f655854d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-11T14:06:15Z",
+      "side": 1,
+      "message": "Michael, what do you think about this approach? Screenshot at the BZ ticket.",
+      "revId": "c7fe2dcfaf554abc0191cfd71000ab7974e35fc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
