@@ -13992,7 +13992,7 @@
             <ref name="CT_Empty"/>
           </element>
           <element name="text">
-            <ref name="CT_OnOff"/>
+            <ref name="CT_SdtText"/>
           </element>
           <element name="citation">
             <ref name="CT_OnOff"/>
@@ -18231,6 +18231,9 @@
     <resource name="CT_CalendarType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_CalendarType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
+    </resource>
+    <resource name="CT_SdtText" resource="Properties">
+      <attribute name="multiLine" tokenid="ooxml:CT_SdtText_multiLine"/>
     </resource>
     <resource name="CT_DataBinding" resource="Properties">
       <attribute name="prefixMappings" tokenid="ooxml:CT_DataBinding_prefixMappings"/>
