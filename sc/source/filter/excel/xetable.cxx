@@ -715,7 +715,7 @@ XclExpLabelCell::XclExpLabelCell(
             rRoot, *pEditText, pPattern, rLinkHelper, XclStrFlags::NONE, nMaxLen);
     else
         xText = XclExpStringHelper::CreateCellString(
-            rRoot, EMPTY_OUSTRING, pPattern, XclStrFlags::NONE, nMaxLen);
+            rRoot, OUString(), pPattern, XclStrFlags::NONE, nMaxLen);
 
     Init( rRoot, pPattern, xText );
 }

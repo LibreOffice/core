@@ -300,7 +300,7 @@ ScViewCfg::ScViewCfg() :
                     {
                         Color aColor;
                         if ( pValues[nProp] >>= aColor )
-                            SetGridColor( aColor, EMPTY_OUSTRING );
+                            SetGridColor( aColor, OUString() );
                         break;
                     }
                     case SCLAYOUTOPT_GRIDLINES:

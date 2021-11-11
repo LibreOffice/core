@@ -221,12 +221,6 @@ std::string ConstantParam::getCallValue(const Expr* arg)
         s = "\"\"";
     else if (s == "OString()")
         s = "\"\"";
-    else if (s == "aEmptyOUStr") //sw
-        s = "\"\"";
-    else if (s == "EMPTY_OUSTRING")//sc
-        s = "\"\"";
-    else if (s == "GetEmptyOUString()") //sc
-        s = "\"\"";
     return s;
 }
 

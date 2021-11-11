@@ -44,7 +44,7 @@ void ScScenarioWindow::UpdateEntries( const std::vector<OUString> &rNewEntryList
     {
         case 0:
             // no scenarios in current sheet
-            SetComment( EMPTY_OUSTRING );
+            SetComment( OUString() );
         break;
 
         case 1:
@@ -79,7 +79,7 @@ void ScScenarioWindow::UpdateEntries( const std::vector<OUString> &rNewEntryList
             }
             m_xLbScenario->thaw();
             m_xLbScenario->unselect_all();
-            SetComment(EMPTY_OUSTRING);
+            SetComment(OUString());
         }
     }
 }

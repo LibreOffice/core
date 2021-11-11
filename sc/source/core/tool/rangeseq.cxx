@@ -263,7 +263,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const 
 
             if (aCell.isEmpty())
             {
-                rElement <<= EMPTY_OUSTRING;
+                rElement <<= OUString();
                 continue;
             }
 

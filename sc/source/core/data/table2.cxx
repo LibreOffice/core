@@ -1792,7 +1792,7 @@ OUString ScTable::GetFormula( SCCOL nCol, SCROW nRow ) const
     if (ValidColRow(nCol, nRow) && nCol < GetAllocatedColumnsCount())
         return aCol[nCol].GetFormula( nRow );
     else
-        return EMPTY_OUSTRING;
+        return OUString();
 }
 
 const ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow ) const

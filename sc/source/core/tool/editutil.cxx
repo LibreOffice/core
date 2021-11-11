@@ -139,7 +139,7 @@ std::unique_ptr<EditTextObject> ScEditUtil::CreateURLObjectFromURL( ScDocument& 
 {
     SvxURLField aUrlField( rURL, rText, SvxURLFormat::AppDefault);
     EditEngine& rEE = rDoc.GetEditEngine();
-    rEE.SetText( EMPTY_OUSTRING );
+    rEE.SetText( OUString() );
     rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ),
             ESelection( EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT ) );
 

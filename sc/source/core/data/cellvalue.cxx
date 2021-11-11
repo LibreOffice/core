@@ -53,7 +53,7 @@ OUString getString( const T& rVal )
         return aRet.makeStringAndClear();
     }
 
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 bool equalsFormulaCells( const ScFormulaCell* p1, const ScFormulaCell* p2 )
@@ -176,7 +176,7 @@ OUString getStringImpl( const CellT& rCell, const ScDocument* pDoc )
         default:
             ;
     }
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 template<typename CellT>
@@ -197,7 +197,7 @@ OUString getRawStringImpl( const CellT& rCell, const ScDocument& rDoc )
         default:
             ;
     }
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 }

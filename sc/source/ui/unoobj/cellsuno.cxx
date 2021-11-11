@@ -1313,7 +1313,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
 {
     ScRefCellValue aCell(rDoc, rPos);
     if (aCell.isEmpty())
-        return EMPTY_OUSTRING;
+        return OUString();
 
     OUString aVal;
 
@@ -4790,7 +4790,7 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
 
     ScDocShell* pDocSh = GetDocShell();
     if (!pDocSh)
-        return EMPTY_OUSTRING;
+        return OUString();
 
     ScDocument& rDoc = pDocSh->GetDocument();
     ScRefCellValue aCell1(rDoc, aRange.aStart);
@@ -4807,7 +4807,7 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
                 return pFCell1->GetFormula();    // it doesn't matter from which cell
         }
     }
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
@@ -4900,7 +4900,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
         // Actually GRAM_API is a don't-care here because of the token
         // array being set, it fits with other API compatibility grammars
         // though.
-        pDocSh->GetDocFunc().EnterMatrix( aRange, nullptr, &aTokenArray, EMPTY_OUSTRING, true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
+        pDocSh->GetDocFunc().EnterMatrix( aRange, nullptr, &aTokenArray, OUString(), true, true, OUString(), formula::FormulaGrammar::GRAM_API );
     }
     else
     {

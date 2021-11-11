@@ -352,12 +352,6 @@ bool UnusedVarsGlobal::isSomeKindOfZero(const Expr* arg)
         return true;
     else if (s == "OString()")
         return true;
-    else if (s == "aEmptyOUStr") //sw
-        return true;
-    else if (s == "EMPTY_OUSTRING") //sc
-        return true;
-    else if (s == "GetEmptyOUString()") //sc
-        return true;
     return false;
 }
 

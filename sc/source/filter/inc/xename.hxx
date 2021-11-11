@@ -55,7 +55,7 @@ public:
     sal_uInt16          InsertMacroCall( const OUString& rMacroName, bool bVBasic, bool bFunc, bool bHidden = false );
 
     /** Returns the Calc sheet of a local defined name, or SCTAB_GLOBAL for global defined names. */
-    const OUString&     GetOrigName( sal_uInt16 nNameIdx ) const;
+    OUString     GetOrigName( sal_uInt16 nNameIdx ) const;
     /** Returns the Calc sheet of a local defined name, or SCTAB_GLOBAL for global defined names. */
     SCTAB               GetScTab( sal_uInt16 nNameIdx ) const;
     /** Returns true, if the specified defined name is volatile. */

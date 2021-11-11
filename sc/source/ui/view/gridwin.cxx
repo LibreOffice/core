@@ -4531,7 +4531,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         {
             ScViewFunc* pView = mrViewData.GetView();
             if ( !rData.aLinkTable.isEmpty() )
-                pView->InsertTableLink( rData.aLinkDoc, EMPTY_OUSTRING, EMPTY_OUSTRING,
+                pView->InsertTableLink( rData.aLinkDoc, OUString(), OUString(),
                                         rData.aLinkTable );
             else if ( !rData.aLinkArea.isEmpty() )
             {
@@ -4540,7 +4540,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                 pView->MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, false, false );
 
-                pView->InsertAreaLink( rData.aLinkDoc, EMPTY_OUSTRING, EMPTY_OUSTRING,
+                pView->InsertAreaLink( rData.aLinkDoc, OUString(), OUString(),
                                         rData.aLinkArea );
             }
             else

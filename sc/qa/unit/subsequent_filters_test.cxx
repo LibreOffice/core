@@ -1505,14 +1505,14 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     //create expected data validation entry
     ScValidationData aValData(
         rVDTParams.eValMode, rVDTParams.eCondOp, rVDTParams.aStrVal1,
-        rVDTParams.aStrVal2, rDoc, rVDTParams.aPosition, EMPTY_OUSTRING,
-        EMPTY_OUSTRING, rDoc.GetStorageGrammar(), rDoc.GetStorageGrammar()
+        rVDTParams.aStrVal2, rDoc, rVDTParams.aPosition, OUString(),
+        OUString(), rDoc.GetStorageGrammar(), rDoc.GetStorageGrammar()
     );
     aValData.SetIgnoreBlank( true );
     aValData.SetListType( 1 );
     aValData.ResetInput();
     aValData.SetError( rVDTParams.aErrorTitle, rVDTParams.aErrorMessage, rVDTParams.eErrorStyle );
-    aValData.SetSrcString( EMPTY_OUSTRING );
+    aValData.SetSrcString( OUString() );
 
     //get actual data validation entry from document
     const ScValidationData* pValDataTest = rDoc.GetValidationEntry( rVDTParams.nExpectedIndex );
@@ -1587,7 +1587,7 @@ void ScFiltersTest::testDataValidityODS()
 
     //sheet1's expected Data Validation Entry values
     ValDataTestParams aVDTParams1(
-        SC_VALID_DECIMAL, ScConditionMode::Greater, "3.14", EMPTY_OUSTRING, rDoc,
+        SC_VALID_DECIMAL, ScConditionMode::Greater, "3.14", OUString(), rDoc,
         aValBaseAddr1, "Too small",
         "The number you are trying to enter is not greater than 3.14! Are you sure you want to enter it anyway?",
         SC_VALERR_WARNING, 1
@@ -1601,7 +1601,7 @@ void ScFiltersTest::testDataValidityODS()
     );
     //sheet3's expected Data Validation Entry values
     ValDataTestParams aVDTParams3(
-        SC_VALID_CUSTOM, ScConditionMode::Direct, "ISTEXT(C3)", EMPTY_OUSTRING, rDoc,
+        SC_VALID_CUSTOM, ScConditionMode::Direct, "ISTEXT(C3)", OUString(), rDoc,
         aValBaseAddr3, "Error sheet 3",
         "Must not be a numerical value.",
         SC_VALERR_STOP, 3
