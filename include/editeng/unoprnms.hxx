@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_UNOPRNMS_HXX
 #define INCLUDED_EDITENG_UNOPRNMS_HXX
 
+#include <rtl/ustring.hxx>
 
 #define UNO_NAME_CHAR_COLOR                     "CharColor"
 #define UNO_NAME_CHAR_HEIGHT                    "CharHeight"
@@ -294,13 +295,13 @@
 #define UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES       "ParaIsForbiddenRules"
 #define UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT    "ParaFirstLineIndent"
 
-#define UNO_NAME_EDIT_CHAR_HEIGHT               "CharHeight"
-#define UNO_NAME_EDIT_CHAR_FONTNAME             "CharFontName"
-#define UNO_NAME_EDIT_CHAR_FONTSTYLENAME        "CharFontStyleName"
-#define UNO_NAME_EDIT_CHAR_FONTFAMILY           "CharFontFamily"
-#define UNO_NAME_EDIT_CHAR_FONTCHARSET          "CharFontCharSet"
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_HEIGHT = u"CharHeight";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTNAME = u"CharFontName";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTSTYLENAME = u"CharFontStyleName";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTFAMILY = u"CharFontFamily";
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_FONTCHARSET = u"CharFontCharSet";
 #define UNO_NAME_EDIT_CHAR_FONTPITCH            "CharFontPitch"
-#define UNO_NAME_EDIT_CHAR_POSTURE              "CharPosture"
+constexpr OUStringLiteral UNO_NAME_EDIT_CHAR_POSTURE = u"CharPosture";
 #define UNO_NAME_EDIT_CHAR_WEIGHT               "CharWeight"
 #define UNO_NAME_EDIT_CHAR_LOCALE               "CharLocale"
 

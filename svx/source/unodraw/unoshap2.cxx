@@ -553,10 +553,28 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
 
+namespace
+{
+    bool lcl_convertPropertyName2( const OUString& rApiName, OUString& rInternalName )
+    {
+        for (const auto & rEntry : SvxShapeControlPropertyMapping2)
+        {
+            if( rApiName == rEntry.msAPIName )
+            {
+                rInternalName = rEntry.msFormName;
+            }
+        }
+        return !rInternalName.isEmpty();
+    }
+}
+
+constexpr OUStringLiteral CONTROL_TYPE_IN_MSO = u"ControlTypeinMSO";
+constexpr OUStringLiteral OBJ_ID_IN_MSO = u"ObjIDinMSO";
+constexpr OUStringLiteral CHAR_CASE_MAP = u"CharCaseMap";
+
 struct
 {
-    const char* mpAPIName;
-    sal_uInt16  mnAPINameLen;
+    OUStringConstExpr msAPIName;
 
     const char* mpFormName;
     sal_uInt16  mnFormNameLen;
@@ -564,52 +582,50 @@ struct
 const SvxShapeControlPropertyMapping[] =
 {
     // Warning: The first entry must be FontSlant because the any needs to be converted
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_POSTURE), RTL_CONSTASCII_STRINGPARAM("FontSlant")  }, //  const sal_Int16 => css::awt::FontSlant
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTNAME), RTL_CONSTASCII_STRINGPARAM("FontName") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTSTYLENAME), RTL_CONSTASCII_STRINGPARAM("FontStyleName") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTFAMILY), RTL_CONSTASCII_STRINGPARAM("FontFamily") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTCHARSET), RTL_CONSTASCII_STRINGPARAM("FontCharset") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_HEIGHT), RTL_CONSTASCII_STRINGPARAM("FontHeight") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTPITCH), RTL_CONSTASCII_STRINGPARAM("FontPitch" ) },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_WEIGHT), RTL_CONSTASCII_STRINGPARAM("FontWeight" ) },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_UNDERLINE), RTL_CONSTASCII_STRINGPARAM("FontUnderline") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_STRIKEOUT), RTL_CONSTASCII_STRINGPARAM("FontStrikeout") },
-    { RTL_CONSTASCII_STRINGPARAM("CharKerning"), RTL_CONSTASCII_STRINGPARAM("FontKerning") },
-    { RTL_CONSTASCII_STRINGPARAM("CharWordMode"), RTL_CONSTASCII_STRINGPARAM("FontWordLineMode" ) },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_COLOR),   RTL_CONSTASCII_STRINGPARAM("TextColor") },
-    { RTL_CONSTASCII_STRINGPARAM("CharBackColor"), RTL_CONSTASCII_STRINGPARAM("CharBackColor") },
-    { RTL_CONSTASCII_STRINGPARAM("CharBackTransparent"), RTL_CONSTASCII_STRINGPARAM("CharBackTransparent") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_TEXT_CHAINNEXTNAME), RTL_CONSTASCII_STRINGPARAM(UNO_NAME_TEXT_CHAINNEXTNAME) },
-    { RTL_CONSTASCII_STRINGPARAM("CharRelief"),   RTL_CONSTASCII_STRINGPARAM("FontRelief") },
-    { RTL_CONSTASCII_STRINGPARAM("CharUnderlineColor"),   RTL_CONSTASCII_STRINGPARAM("TextLineColor") },
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_PARA_ADJUST), RTL_CONSTASCII_STRINGPARAM("Align") },
-    { RTL_CONSTASCII_STRINGPARAM("TextVerticalAdjust"), RTL_CONSTASCII_STRINGPARAM("VerticalAlign") },
-    { RTL_CONSTASCII_STRINGPARAM("ControlBackground"), RTL_CONSTASCII_STRINGPARAM("BackgroundColor") },
-    { RTL_CONSTASCII_STRINGPARAM("ControlSymbolColor"), RTL_CONSTASCII_STRINGPARAM("SymbolColor") },
-    { RTL_CONSTASCII_STRINGPARAM("ControlBorder"), RTL_CONSTASCII_STRINGPARAM("Border") },
-    { RTL_CONSTASCII_STRINGPARAM("ControlBorderColor"), RTL_CONSTASCII_STRINGPARAM("BorderColor") },
-    { RTL_CONSTASCII_STRINGPARAM("ControlTextEmphasis"),  RTL_CONSTASCII_STRINGPARAM("FontEmphasisMark") },
-    { RTL_CONSTASCII_STRINGPARAM("ImageScaleMode"),  RTL_CONSTASCII_STRINGPARAM("ScaleMode") },
-    { RTL_CONSTASCII_STRINGPARAM("ControlWritingMode"), RTL_CONSTASCII_STRINGPARAM("WritingMode") },
+    { UNO_NAME_EDIT_CHAR_POSTURE, RTL_CONSTASCII_STRINGPARAM("FontSlant")  }, //  const sal_Int16 => css::awt::FontSlant
+    { UNO_NAME_EDIT_CHAR_FONTNAME, RTL_CONSTASCII_STRINGPARAM("FontName") },
+    { UNO_NAME_EDIT_CHAR_FONTSTYLENAME, RTL_CONSTASCII_STRINGPARAM("FontStyleName") },
+    { UNO_NAME_EDIT_CHAR_FONTFAMILY, RTL_CONSTASCII_STRINGPARAM("FontFamily") },
+    { UNO_NAME_EDIT_CHAR_FONTCHARSET, RTL_CONSTASCII_STRINGPARAM("FontCharset") },
+    { UNO_NAME_EDIT_CHAR_HEIGHT, RTL_CONSTASCII_STRINGPARAM("FontHeight") },
+    { UNO_NAME_EDIT_CHAR_FONTPITCH, RTL_CONSTASCII_STRINGPARAM("FontPitch" ) },
+    { UNO_NAME_EDIT_CHAR_WEIGHT, RTL_CONSTASCII_STRINGPARAM("FontWeight" ) },
+    { UNO_NAME_EDIT_CHAR_UNDERLINE, RTL_CONSTASCII_STRINGPARAM("FontUnderline") },
+    { UNO_NAME_EDIT_CHAR_STRIKEOUT, RTL_CONSTASCII_STRINGPARAM("FontStrikeout") },
+    { UNO_NAME_EDIT_CHAR_KERNING, RTL_CONSTASCII_STRINGPARAM("FontKerning") },
+    { UNO_NAME_EDIT_CHAR_WORD_MODE, RTL_CONSTASCII_STRINGPARAM("FontWordLineMode" ) },
+    { UNO_NAME_EDIT_CHAR_COLOR,   RTL_CONSTASCII_STRINGPARAM("TextColor") },
+    { UNO_NAME_EDIT_CHAR_BACK_COLOR, RTL_CONSTASCII_STRINGPARAM("CharBackColor") },
+    { UNO_NAME_EDIT_CHAR_BACK_TRANSPARENT, RTL_CONSTASCII_STRINGPARAM("CharBackTransparent") },
+    { UNO_NAME_TEXT_CHAINNEXTNAME, RTL_CONSTASCII_STRINGPARAM(UNO_NAME_TEXT_CHAINNEXTNAME) },
+    { UNO_NAME_EDIT_CHAR_RELIEF,   RTL_CONSTASCII_STRINGPARAM("FontRelief") },
+    { UNO_NAME_EDIT_CHAR_UNDERLINE_COLOR,   RTL_CONSTASCII_STRINGPARAM("TextLineColor") },
+    { UNO_NAME_EDIT_PARA_ADJUST, RTL_CONSTASCII_STRINGPARAM("Align") },
+    { UNO_NAME_EDIT_TEXT_VERTICAL_ADJUST, RTL_CONSTASCII_STRINGPARAM("VerticalAlign") },
+    { UNO_NAME_EDIT_CONTROL_BACKGROUND, RTL_CONSTASCII_STRINGPARAM("BackgroundColor") },
+    { UNO_NAME_EDIT_CONTROL_SYMBOL_COLOR, RTL_CONSTASCII_STRINGPARAM("SymbolColor") },
+    { UNO_NAME_EDIT_CONTROL_BORDER, RTL_CONSTASCII_STRINGPARAM("Border") },
+    { UNO_NAME_EDIT_CONTROL_BORDER_COLOR, RTL_CONSTASCII_STRINGPARAM("BorderColor") },
+    { UNO_NAME_EDIT_CONTROL_TEXT_EMPHASIS,  RTL_CONSTASCII_STRINGPARAM("FontEmphasisMark") },
+    { UNO_NAME_EDIT_IMAGE_SCALE_MODE,  RTL_CONSTASCII_STRINGPARAM("ScaleMode") },
+    { UNO_NAME_EDIT_CONTROL_WRITING_MODE, RTL_CONSTASCII_STRINGPARAM("WritingMode") },
     //added for exporting OCX control
-    { RTL_CONSTASCII_STRINGPARAM("ControlTypeinMSO"), RTL_CONSTASCII_STRINGPARAM("ControlTypeinMSO") },
-    { RTL_CONSTASCII_STRINGPARAM("ObjIDinMSO"), RTL_CONSTASCII_STRINGPARAM("ObjIDinMSO") },
-    { RTL_CONSTASCII_STRINGPARAM("CharCaseMap"), RTL_CONSTASCII_STRINGPARAM("CharCaseMap") },
-    { nullptr,0, nullptr, 0 }
+    { CONTROL_TYPE_IN_MSO, RTL_CONSTASCII_STRINGPARAM("ControlTypeinMSO") },
+    { OBJ_ID_IN_MSO, RTL_CONSTASCII_STRINGPARAM("ObjIDinMSO") },
+    { CHAR_CASE_MAP, RTL_CONSTASCII_STRINGPARAM("CharCaseMap") },
 };
 
 namespace
 {
     bool lcl_convertPropertyName( const OUString& rApiName, OUString& rInternalName )
     {
-        sal_uInt16 i = 0;
-        while( SvxShapeControlPropertyMapping[i].mpAPIName )
+        for( const auto& rEntry : SvxShapeControlPropertyMapping )
         {
-            if( rApiName.reverseCompareToAsciiL( SvxShapeControlPropertyMapping[i].mpAPIName, SvxShapeControlPropertyMapping[i].mnAPINameLen ) == 0 )
+            if( rApiName == rEntry.msAPIName )
             {
-                rInternalName = OUString( SvxShapeControlPropertyMapping[i].mpFormName, SvxShapeControlPropertyMapping[i].mnFormNameLen, RTL_TEXTENCODING_ASCII_US );
+                rInternalName = OUString( rEntry.mpFormName, rEntry.mnFormNameLen, RTL_TEXTENCODING_ASCII_US );
+                break;
             }
-            ++i;
         }
         return !rInternalName.isEmpty();
     }
