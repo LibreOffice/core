@@ -213,10 +213,12 @@ void test::oustring::StringLiterals::checkOUStringLiteral()
     CPPUNIT_ASSERT(
         s1.endsWithIgnoreAsciiCase(rtlunittest::OUStringLiteral(u"EFDE"), &s2));
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("d"), s2);
-    CPPUNIT_ASSERT(bool(s1 == rtlunittest::OUStringLiteral(u"defde")));
-    CPPUNIT_ASSERT(bool(rtlunittest::OUStringLiteral(u"defde") == s1));
-    CPPUNIT_ASSERT(s1 != rtlunittest::OUStringLiteral(u"abc"));
-    CPPUNIT_ASSERT(rtlunittest::OUStringLiteral(u"abc") != s1);
+    static constexpr rtlunittest::OUStringLiteral defde(u"defde");
+    CPPUNIT_ASSERT(bool(s1 == defde));
+    CPPUNIT_ASSERT(bool(defde == s1));
+    static constexpr rtlunittest::OUStringLiteral abc(u"abc");
+    CPPUNIT_ASSERT(s1 != abc);
+    CPPUNIT_ASSERT(abc != s1);
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(3), s1.indexOf(rtlunittest::OUStringLiteral(u"de"), 1));
     CPPUNIT_ASSERT_EQUAL(
