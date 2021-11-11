@@ -16,6 +16,24 @@
       "message": "Hope there won\u0027t be much of this kind. If it\u0027s the case, perhaps there should be a global script to find them and make patch per module.",
       "revId": "231660313a0d8353622b70f358f8903de2e3fe64",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d33872d_914d84d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-11T23:27:38Z",
+      "side": 1,
+      "message": "Well, I didn\u0027t remember I put this kind of check in the mess of my automated scripts...\nAnyway, tomorrow I take a look and see.",
+      "parentUuid": "56849b60_fb45e7c1",
+      "revId": "231660313a0d8353622b70f358f8903de2e3fe64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
