@@ -16,6 +16,23 @@
       "message": "I\u0027m not sure if this is ok or if it depends on the situation.\nI tried a make sw.check locally and had this:\ntestfdo83428::Load_Verify_Reload_Verify finished in: 2040ms\nxmltesttools.cxx:189:Assertion\nTest name: testEmptyAnnotationMark::TestBody\nequality assertion failed\n- Expected: 0\n- Actual  : 1\n- In \u003cfile:///tmp/libtest_sw_ooxmlexport.so5al70.tmp\u003e, XPath \u0027//w:commentRangeStart\u0027 number of nodes is incorrect\n\nFailures !!!\nRun: 82   Failure total: 1   Failures: 1   Errors: 0\n\nNow since I didn\u0027t change the tests themselves, I don\u0027t know if it\u0027s relevant or not.",
       "revId": "3645377fa4e7fafb2084c943212cf3278f067d5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eddf516_50519526",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-11T12:34:07Z",
+      "side": 1,
+      "message": "If you want to do a search\u0026replace, then you would have to use loadAndReload() as a replacement. When I do replacements, I try to look at the test code, and if it only asserts the output XML, then I go with loadAndSave(), which is faster (it makes us avoid one not necessary load).\n\nDoes that help?",
+      "revId": "3645377fa4e7fafb2084c943212cf3278f067d5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
