@@ -139,10 +139,10 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     typelib_typedescription_release( pTD );
 
     OSL_ENSURE(xClass->getSuperclasses().getLength() == 1, "test_RegCoreReflection(): error 9");
-    OSL_ENSURE(xClass->getSuperclasses().getArray()[0]->getName() == "ModuleC.XInterfaceA"), "test_RegCoreReflection(): error 10";
+    OSL_ENSURE(xClass->getSuperclasses().getArray()[0]->getName() == "ModuleC.XInterfaceA", "test_RegCoreReflection(): error 10");
     OSL_ENSURE(xClass->getMethods().getLength() == 7, "test_RegCoreReflection(): error 11");
     OSL_ENSURE(xA->getMethods().getLength() == 7, "test_RegCoreReflection(): error 11a");
-    OSL_ENSURE(xClass->getMethods().getArray()[3]->getName() == "methodA"), "test_RegCoreReflection(): 12";
+    OSL_ENSURE(xClass->getMethods().getArray()[3]->getName() == "methodA", "test_RegCoreReflection(): 12");
     OSL_ENSURE(xClass->getMethods().getArray()[3]->getReturnType()->getTypeClass() == TypeClass_VOID, "test_RegCoreReflection(): error 13");
     OSL_ENSURE(xClass->getMethods().getArray()[3]->getParameterTypes().getLength() == 0, "test_RegCoreReflection(): error 14");
     OSL_ENSURE(xClass->getMethods().getArray()[3]->getExceptionTypes().getLength() == 0, "test_RegCoreReflection(): error 15");
