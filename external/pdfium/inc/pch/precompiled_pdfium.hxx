@@ -66,6 +66,7 @@
 #if PCH_LEVEL >= 2
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <absl/types/bad_optional_access.h>
 #include <build/build_config.h>
 #include <constants/access_permissions.h>
 #include <constants/annotation_common.h>
@@ -450,6 +451,7 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
+#include <third_party/abseil-cpp/absl/types/optional.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>
@@ -487,7 +489,6 @@
 #include <third_party/base/notreached.h>
 #include <third_party/base/numerics/safe_conversions.h>
 #include <third_party/base/numerics/safe_math.h>
-#include <third_party/base/optional.h>
 #include <third_party/base/ptr_util.h>
 #include <third_party/base/span.h>
 #include <third_party/skia_shared/SkFloatToDecimal.h>
