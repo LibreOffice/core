@@ -25,9 +25,6 @@
 namespace svgio::svgreader
 {
 
-// recommended value for this device dependent unit, see CSS2 section 4.3.2 Lengths
-constexpr const double F_SVG_PIXEL_PER_INCH = 96.0;
-
 enum class NumberType
 {
     xcoordinate,
@@ -52,11 +49,11 @@ enum class SvgUnit
     ex,        // relative to current x-height
 
     px,        // 'user unit'
-    pt,        // points, 1.25 px
-    pc,        // 15.0 px
-    cm,        // 35.43307 px
-    mm,        // 3.543307 px
-    in,        // 90 px
+    pt,        // points, 1/72 in
+    pc,        // 1/6 in
+    cm,
+    mm,
+    in,
 
     percent,   // relative to range
     none       // for stroke-miterlimit, which has no unit

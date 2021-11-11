@@ -18,6 +18,8 @@
  */
 
 #include <svgtools.hxx>
+
+#include <o3tl/unit_conversion.hxx>
 #include <sal/log.hxx>
 
 namespace svgio::svgreader
@@ -40,15 +42,15 @@ double SvgNumber::solveNonPercentage(const InfoProvider& rInfoProvider) const
         case SvgUnit::px:
             return mfNumber;
         case SvgUnit::pt:
-            return mfNumber * F_SVG_PIXEL_PER_INCH / 72.0;
+            return o3tl::convert(mfNumber, o3tl::Length::pt, o3tl::Length::px);
         case SvgUnit::pc:
-            return mfNumber * F_SVG_PIXEL_PER_INCH / 6.0;
+            return o3tl::convert(mfNumber, o3tl::Length::pc, o3tl::Length::px);
         case SvgUnit::cm:
-            return mfNumber * F_SVG_PIXEL_PER_INCH / 2.54;
+            return o3tl::convert(mfNumber, o3tl::Length::cm, o3tl::Length::px);
         case SvgUnit::mm:
-            return mfNumber * 0.1 * F_SVG_PIXEL_PER_INCH / 2.54;
+            return o3tl::convert(mfNumber, o3tl::Length::mm, o3tl::Length::px);
         case SvgUnit::in:
-            return mfNumber * F_SVG_PIXEL_PER_INCH;
+            return o3tl::convert(mfNumber, o3tl::Length::in, o3tl::Length::px);
         case SvgUnit::none:
         {
             SAL_WARN("svgio", "Design error, this case should have been handled in the caller");
@@ -84,8 +86,8 @@ double SvgNumber::solve(const InfoProvider& rInfoProvider, NumberType aNumberTyp
             aViewPort = basegfx::B2DRange(
                 0.0,
                 0.0,
-                210.0 * F_SVG_PIXEL_PER_INCH / 2.54,
-                297.0 * F_SVG_PIXEL_PER_INCH / 2.54);
+                o3tl::convert(210.0, o3tl::Length::cm, o3tl::Length::px), // should it be mm?
+                o3tl::convert(297.0, o3tl::Length::cm, o3tl::Length::px));
 
         }
 
