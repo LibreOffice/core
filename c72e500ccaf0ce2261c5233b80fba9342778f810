@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23fc003c_76c8f043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-11T08:53:59Z",
+      "side": 1,
+      "message": "Yes, \"typing\" is quite special as it\u0027s safe to re-order. Even just simple deletion would be more complex, as it may remove some anchored image which leads to node deletion, etc.\n\nTwo more steps where this can be extended is to allow multiple \"typing\" actions in the current view and also in the other view, but that\u0027s all I have in my head short-term. :-)",
+      "revId": "c72e500ccaf0ce2261c5233b80fba9342778f810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
