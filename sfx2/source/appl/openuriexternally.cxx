@@ -18,6 +18,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
@@ -95,7 +96,7 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
                     Application::CreateMessageDialog(
                         mpDialogParent, VclMessageType::Warning, VclButtonsType::OkCancel,
                         SfxResId(STR_DANGEROUS_TO_OPEN)));
-                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
+                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", INetURLObject::decode(msURI, INetURLObject::DecodeMechanism::Unambiguous)));
                 if (eb->run() == RET_OK) {
                     flags = 0;
                     continue;
@@ -104,7 +105,7 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
                 std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(mpDialogParent,
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
                                                                          SfxResId(STR_NO_ABS_URI_REF)));
-                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
+                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", INetURLObject::decode(msURI, INetURLObject::DecodeMechanism::Unambiguous)));
                 eb->run();
             }
         } catch (css::system::SystemShellExecuteException & e) {
