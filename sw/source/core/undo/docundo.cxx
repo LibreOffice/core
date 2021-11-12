@@ -40,6 +40,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/temporary.hxx>
 
 #include <UndoInsert.hxx>
 
@@ -358,7 +359,7 @@ UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
  * Checks if the topmost undo action owned by pView is independent from the topmost action undo
  * action.
  */
-bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
+bool UndoManager::IsViewUndoActionIndependent(const SwView* pView, sal_uInt16& rOffset) const
 {
     if (GetUndoActionCount() <= 1)
     {
@@ -378,10 +379,16 @@ bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
 
     // Earlier undo action that belongs to the view, but is not the top one.
     const SfxUndoAction* pViewAction = nullptr;
-    const SfxUndoAction* pAction = GetUndoAction(1);
-    if (pAction->GetViewShellId() == nViewId)
+    size_t nOffset = 0;
+    for (size_t i = 0; i < GetUndoActionCount(); ++i)
     {
-        pViewAction = pAction;
+        const SfxUndoAction* pAction = GetUndoAction(i);
+        if (pAction->GetViewShellId() == nViewId)
+        {
+            pViewAction = pAction;
+            nOffset = i;
+            break;
+        }
     }
 
     if (!pViewAction)
@@ -421,7 +428,13 @@ bool UndoManager::IsViewUndoActionIndependent(const SwView* pView) const
         }
     }
 
-    return rViewInsert.IsIndependent(rTopInsert);
+    if (!rViewInsert.IsIndependent(rTopInsert))
+    {
+        return false;
+    }
+
+    rOffset = nOffset;
+    return true;
 }
 
 bool
@@ -442,7 +455,8 @@ UndoManager::GetLastUndoInfo(
         // If another view created the undo action, prevent undoing it from this view.
         ViewShellId nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
         // Unless we know that the other view's undo action is independent from us.
-        if (pAction->GetViewShellId() != nViewShellId && !IsViewUndoActionIndependent(pView))
+        if (pAction->GetViewShellId() != nViewShellId
+            && !IsViewUndoActionIndependent(pView, o3tl::temporary(sal_uInt16())))
         {
             if (o_pId)
             {
