@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39985d5c_87d90824",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-12T12:18:33Z",
+      "side": 1,
+      "message": "Approve to get this submitted faster, master already doesn\u0027t build because of this anyway.\n",
+      "revId": "88eaed15ae2c39601f29a89af83ceffd1c7fa281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
