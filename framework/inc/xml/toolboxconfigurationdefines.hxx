@@ -52,14 +52,14 @@
 #define ATTRIBUTE_BOOLEAN_TRUE      "true"
 #define ATTRIBUTE_BOOLEAN_FALSE     "false"
 
-#define ATTRIBUTE_ITEMSTYLE_RADIO           "radio"
-#define ATTRIBUTE_ITEMSTYLE_AUTO            "auto"
-#define ATTRIBUTE_ITEMSTYLE_LEFT            "left"
-#define ATTRIBUTE_ITEMSTYLE_AUTOSIZE        "autosize"
-#define ATTRIBUTE_ITEMSTYLE_DROPDOWN        "dropdown"
-#define ATTRIBUTE_ITEMSTYLE_REPEAT          "repeat"
-#define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
-#define ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY    "dropdownonly"
-#define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_RADIO = u"radio";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTO = u"auto";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_LEFT = u"left";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTOSIZE = u"autosize";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWN = u"dropdown";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_REPEAT = u"repeat";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_TEXT = u"text";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY = u"dropdownonly";
+constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_IMAGE = u"image";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

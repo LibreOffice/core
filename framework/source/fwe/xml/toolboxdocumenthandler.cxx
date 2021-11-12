@@ -85,12 +85,12 @@ namespace {
 struct ToolboxStyleItem
 {
     sal_Int16 nBit;
-    const char* attrName;
+    rtl::OUStringConstExpr attrName;
 };
 
 }
 
-const ToolboxStyleItem Styles[ ] = {
+constexpr ToolboxStyleItem Styles[ ] = {
     { css::ui::ItemStyle::RADIO_CHECK,   ATTRIBUTE_ITEMSTYLE_RADIO },
     { css::ui::ItemStyle::ALIGN_LEFT,    ATTRIBUTE_ITEMSTYLE_LEFT },
     { css::ui::ItemStyle::AUTO_SIZE,     ATTRIBUTE_ITEMSTYLE_AUTO },
@@ -703,7 +703,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
             {
                 if ( !aValue.isEmpty() )
                     aValue.append(" ");
-                aValue.appendAscii( pStyle->attrName );
+                aValue.append( OUString(pStyle->attrName) );
             }
         }
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_ITEMSTYLE,
