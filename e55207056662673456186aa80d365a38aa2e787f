@@ -34,6 +34,24 @@
       "parentUuid": "88f9f349_afac51a3",
       "revId": "e55207056662673456186aa80d365a38aa2e787f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e12a731_aa026f7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-12T10:05:02Z",
+      "side": 1,
+      "message": "Yes, I know. It\u0027s only LOK_CALLBACK_TEXT_SELECTION_START/END that should be ignored. But looking at it, using empty string return value as both empty message and ignore flag is poor design. I\u0027ve fixed that in https://gerrit.libreoffice.org/c/core/+/125089 , which should fix this problem too.",
+      "parentUuid": "d2e82ad4_315afa2e",
+      "revId": "e55207056662673456186aa80d365a38aa2e787f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
