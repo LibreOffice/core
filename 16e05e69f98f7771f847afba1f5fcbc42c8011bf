@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18a2da33_76177bac",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-12T10:55:38Z",
+      "side": 1,
+      "message": "add a deleted overload taking OUStringLiteral\u003cN\u003e\u0026\u0026, to avoid misuses?",
+      "revId": "16e05e69f98f7771f847afba1f5fcbc42c8011bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
