@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -29,6 +30,7 @@
 #include <textboxhelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/json_writer.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sfx2/linkmgr.hxx>
 
@@ -1766,6 +1768,58 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130629)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145584)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("Hello World");
+
+    // Select 'World'
+    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+
+    // Save as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "Selection", uno::Any(true) } }));
+
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+          { "FilterData", uno::Any(aFilterData) },
+          { "URL", uno::Any(maTempFile.GetURL()) } }));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:ExportToPDF", aDescriptor);
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    int nChars = pPdfTextPage->countChars();
+    CPPUNIT_ASSERT_EQUAL(5, nChars);
+
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("World"), aActualText);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf116315)
