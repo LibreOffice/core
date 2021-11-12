@@ -24,6 +24,10 @@
 
  *************************************************************************/
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/storagehelper.hxx>
 
 #include "../inc/urihelper.hxx"
@@ -109,8 +113,8 @@ void PackageUri::init() const
         {
             m_aParam +=
                 ( !m_aParam.isEmpty()
-                  ? OUStringLiteral( u"&purezip" )
-                  : OUStringLiteral( u"?purezip" ) );
+                  ? std::u16string_view( u"&purezip" )
+                  : std::u16string_view( u"?purezip" ) );
         }
 
         aPureUri = aPureUri.replaceAt( 0,

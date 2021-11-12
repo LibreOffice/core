@@ -10,6 +10,7 @@
 #include "rtfdocumentimpl.hxx"
 #include <algorithm>
 #include <memory>
+#include <string_view>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -2454,9 +2455,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             OUString str(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             // dmapper expects this as a field, so let's fake something...
             auto const field((Destination::INDEXENTRY == rState.getDestination())
-                                 ? OUStringLiteral(u"XE")
-                                 : OUStringLiteral(u"TC"));
-            str = field + " \"" + str.replaceAll("\"", "\\\"") + "\"";
+                                 ? std::u16string_view(u"XE")
+                                 : std::u16string_view(u"TC"));
+            str = OUString::Concat(field) + " \"" + str.replaceAll("\"", "\\\"") + "\"";
             singleChar(cFieldStart);
             Mapper().utext(reinterpret_cast<sal_uInt8 const*>(str.getStr()), str.getLength());
             singleChar(cFieldSep);

@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <set>
+#include <string_view>
 
 #include <unotest/filters-test.hxx>
 #include <osl/file.hxx>
@@ -107,7 +108,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
         }
 
         OString aRes(
-            (bExport ? OStringLiteral("save") : OStringLiteral("load")) + " "
+            OString::Concat(bExport ? std::string_view("save") : std::string_view("load")) + " "
             + OUStringToOString(sURL, osl_getThreadTextEncoding()));
 
         OUString realUrl;

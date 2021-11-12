@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>
+#include <string_view>
 #include <vector>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -1060,7 +1061,7 @@ OUString SvtFileView::GetConfigString() const
     OUString sRet = OUString::number( mpImpl->mnSortColumn ) + ";";
 
     bool bUp = mpImpl->mbAscending;
-    sRet += (bUp ? OUStringLiteral(u"1") : OUStringLiteral(u"0")) + ";";
+    sRet += OUString::Concat(bUp ? std::u16string_view(u"1") : std::u16string_view(u"0")) + ";";
 
     weld::TreeView* pView = mpImpl->mxView->getWidget();
     sal_uInt16 nCount = mpImpl->mxView->TypeColumnVisible() ? 4 : 3;
