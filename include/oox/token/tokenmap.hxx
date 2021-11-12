@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/dllapi.h>
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
@@ -87,8 +86,7 @@ private:
 };
 
 
-struct StaticTokenMap : public ::rtl::Static< TokenMap, StaticTokenMap > {};
-
+TokenMap& StaticTokenMap();
 
 } // namespace oox
 

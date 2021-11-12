@@ -87,6 +87,12 @@ sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength )
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
+TokenMap& StaticTokenMap()
+{
+    static TokenMap SINGLETON;
+    return SINGLETON;
+}
+
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

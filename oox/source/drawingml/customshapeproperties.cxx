@@ -55,7 +55,7 @@ CustomShapeProperties::CustomShapeProperties()
 
 uno::Sequence< sal_Int8 > const & CustomShapeProperties::getShapePresetTypeName() const
 {
-    return StaticTokenMap::get().getUtf8TokenName( mnShapePresetType );
+    return StaticTokenMap().getUtf8TokenName( mnShapePresetType );
 }
 
 sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide )
