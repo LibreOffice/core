@@ -4392,7 +4392,28 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
     {
         const SwRedlineTable& aRedlineTable = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         const SwRangeRedline* pRedline = aRedlineTable[ nChange ];
-        const SwRedlineData& aRedlineData = pRedline->GetRedlineData();
+        SwTableRowRedline* pTableRowRedline = nullptr;
+        bool bIsInExtra = false;
+
+        // use the original DOCX redline data stored in ExtraRedlineTable,
+        // if it exists and its type wasn't changed
+        const SwExtraRedlineTable& aExtraRedlineTable = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
+        for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize(); ++nCurRedlinePos )
+        {
+            SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
+            pTableRowRedline = dynamic_cast<SwTableRowRedline*>(pExtraRedline);
+            if (pTableRowRedline && &pTableRowRedline->GetTableLine() == pTabLine)
+            {
+                bIsInExtra = true;
+                break;
+            }
+        }
+
+        const SwRedlineData& aRedlineData = bIsInExtra &&
+            // still the same type (an inserted row could become a tracked deleted one)
+            pTableRowRedline->GetRedlineData().GetType() == pRedline->GetRedlineData().GetType()
+                ? pTableRowRedline->GetRedlineData()
+                : pRedline->GetRedlineData();
 
         // Note: all redline ranges and table row redline (with the same author and timestamp)
         // use the same redline id in OOXML exported by MSO, but it seems, the recent solution
@@ -4413,49 +4434,6 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
                             FSNS( XML_w, XML_author ), aAuthor,
                             FSNS( XML_w, XML_date ), aDate );
         return;
-    }
-
-    // search next Redline (only deletion of empty rows and all insertions imported from a DOCX)
-    const SwExtraRedlineTable& aExtraRedlineTable = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
-    for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize(); ++nCurRedlinePos )
-    {
-        SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
-        const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
-        if (pTableRowRedline && &pTableRowRedline->GetTableLine() == pTabLine)
-        {
-            // Redline for this table row
-            const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
-            RedlineType nRedlineType = aRedlineData.GetType();
-            switch (nRedlineType)
-            {
-                case RedlineType::TableRowInsert:
-                case RedlineType::TableRowDelete:
-                {
-                    OString aId( OString::number( m_nRedlineId++ ) );
-                    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( aRedlineData.GetAuthor() ) );
-                    OString aAuthor( OUStringToOString( bRemovePersonalInfo
-                        ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
-                        : rAuthor, RTL_TEXTENCODING_UTF8 ) );
-
-                    OString aDate( DateTimeToOString( bRemovePersonalInfo
-                            ? DateTime(Date( 1, 1, 1970 )) // Epoch time
-                            : aRedlineData.GetTimeStamp() ) );
-
-                    if (nRedlineType == RedlineType::TableRowInsert)
-                        m_pSerializer->singleElementNS( XML_w, XML_ins,
-                            FSNS( XML_w, XML_id ), aId,
-                            FSNS( XML_w, XML_author ), aAuthor,
-                            FSNS( XML_w, XML_date ), aDate );
-                    else if (nRedlineType == RedlineType::TableRowDelete)
-                        m_pSerializer->singleElementNS( XML_w, XML_del,
-                            FSNS( XML_w, XML_id ), aId,
-                            FSNS( XML_w, XML_author ), aAuthor,
-                            FSNS( XML_w, XML_date ), aDate );
-                }
-                break;
-                default: break;
-            }
-        }
     }
 }
 

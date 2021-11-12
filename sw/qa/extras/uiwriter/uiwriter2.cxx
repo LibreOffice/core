@@ -4942,6 +4942,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145089_RedlineTableRowInsertionDOCX
     assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145091)
+{
+    // load a deleted table, reject them, and delete only its text and export to DOCX
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf145091.docx");
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // reject all redlines
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
+    while (pEditShell->GetRedlineCount() > 0)
+        pEditShell->RejectRedline(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
+
+    // delete only table text, but not table
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT(pEditShell->GetRedlineCount() > 0);
+
+    // save it to DOCX
+    reload("Office Open XML Text", "tdf145091.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    pViewShell->Reformat();
+    discardDumpedLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 3);
+
+    // accept all redlines
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    discardDumpedLayout();
+
+    pXmlDoc = parseLayoutDump();
+    // This was false (deleted table with accepting deletions)
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 3);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128603)
 {
     // Load the bugdoc, which has 3 textboxes.
