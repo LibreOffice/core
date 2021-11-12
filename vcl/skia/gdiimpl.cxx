@@ -1075,8 +1075,8 @@ void SkiaSalGraphicsImpl::checkPendingDrawing()
     {
         for (basegfx::B2DPolyPolygon& p : polygons)
             roundPolygonPoints(p);
-        performDrawPolyPolygon(basegfx::utils::mergeToSinglePolyPolygon(std::move(polygons)),
-                               transparency, true);
+        performDrawPolyPolygon(basegfx::utils::mergeToSinglePolyPolygon(polygons), transparency,
+                               true);
     }
 }
 

@@ -1067,81 +1067,77 @@ namespace basegfx::utils
             }
         }
 
-        B2DPolyPolygon mergeToSinglePolyPolygon(B2DPolyPolygonVector&& rInput)
+        B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput)
         {
-            B2DPolyPolygonVector aInput(std::move(rInput));
+            if(rInput.empty())
+                return B2DPolyPolygon();
 
             // first step: prepareForPolygonOperation and simple merge of non-overlapping
             // PolyPolygons for speedup; this is possible for the wanted OR-operation
-            if(!aInput.empty())
+            B2DPolyPolygonVector aResult;
+            aResult.reserve(rInput.size());
+
+            for(const basegfx::B2DPolyPolygon & a : rInput)
             {
-                B2DPolyPolygonVector aResult;
-                aResult.reserve(aInput.size());
+                const basegfx::B2DPolyPolygon aCandidate(prepareForPolygonOperation(a));
 
-                for(const basegfx::B2DPolyPolygon & a : aInput)
+                if(!aResult.empty())
                 {
-                    const basegfx::B2DPolyPolygon aCandidate(prepareForPolygonOperation(a));
+                    const B2DRange aCandidateRange(aCandidate.getB2DRange());
+                    bool bCouldMergeSimple(false);
 
-                    if(!aResult.empty())
+                    for(auto & b: aResult)
                     {
-                        const B2DRange aCandidateRange(aCandidate.getB2DRange());
-                        bool bCouldMergeSimple(false);
+                        basegfx::B2DPolyPolygon aTarget(b);
+                        const B2DRange aTargetRange(aTarget.getB2DRange());
 
-                        for(auto & b: aResult)
+                        if(!aCandidateRange.overlaps(aTargetRange))
                         {
-                            basegfx::B2DPolyPolygon aTarget(b);
-                            const B2DRange aTargetRange(aTarget.getB2DRange());
-
-                            if(!aCandidateRange.overlaps(aTargetRange))
-                            {
-                                aTarget.append(aCandidate);
-                                b = aTarget;
-                                bCouldMergeSimple = true;
-                                break;
-                            }
-                        }
-
-                        if(!bCouldMergeSimple)
-                        {
-                            aResult.push_back(aCandidate);
+                            aTarget.append(aCandidate);
+                            b = aTarget;
+                            bCouldMergeSimple = true;
+                            break;
                         }
                     }
-                    else
+
+                    if(!bCouldMergeSimple)
                     {
                         aResult.push_back(aCandidate);
                     }
                 }
-
-                aInput = aResult;
+                else
+                {
+                    aResult.push_back(aCandidate);
+                }
             }
 
             // second step: melt pairwise to a single PolyPolygon
-            while(aInput.size() > 1)
+            while(aResult.size() > 1)
             {
-                B2DPolyPolygonVector aResult;
-                aResult.reserve((aInput.size() / 2) + 1);
+                B2DPolyPolygonVector aResult2;
+                aResult2.reserve((aResult.size() / 2) + 1);
 
-                for(size_t a(0); a < aInput.size(); a += 2)
+                for(size_t a(0); a < aResult.size(); a += 2)
                 {
-                    if(a + 1 < aInput.size())
+                    if(a + 1 < aResult.size())
                     {
                         // a pair for processing
-                        aResult.push_back(solvePolygonOperationOr(aInput[a], aInput[a + 1]));
+                        aResult2.push_back(solvePolygonOperationOr(aResult[a], aResult[a + 1]));
                     }
                     else
                     {
                         // last single PolyPolygon; copy to target to not lose it
-                        aResult.push_back(aInput[a]);
+                        aResult2.push_back(aResult[a]);
                     }
                 }
 
-                aInput = aResult;
+                aResult = aResult2;
             }
 
             // third step: get result
-            if(aInput.size() == 1)
+            if(aResult.size() == 1)
             {
-                return aInput[0];
+                return aResult[0];
             }
 
             return B2DPolyPolygon();

@@ -148,7 +148,7 @@ namespace svgio::svgreader
                 if(nSize > 1)
                 {
                     // merge to single clipPolyPolygon
-                    aClipPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(std::vector(rResult));
+                    aClipPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(rResult);
                 }
                 else
                 {
