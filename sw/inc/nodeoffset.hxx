@@ -17,14 +17,16 @@ typedef o3tl::strong_int<sal_Int32, struct Tag_SwNodeOffset> SwNodeOffset;
 
 /* Just to make it easier to write arithmetic with these types */
 template <typename T>
-typename std::enable_if<std::is_signed<T>::value, SwNodeOffset>::type operator+(SwNodeOffset a, T n)
+inline typename std::enable_if<std::is_signed<T>::value, SwNodeOffset>::type
+operator+(SwNodeOffset a, T n)
 {
     return a + SwNodeOffset(n);
 }
 
 /* Just to make it easier to write arithmetic with these types */
 template <typename T>
-typename std::enable_if<std::is_signed<T>::value, SwNodeOffset>::type operator-(SwNodeOffset a, T n)
+inline typename std::enable_if<std::is_signed<T>::value, SwNodeOffset>::type
+operator-(SwNodeOffset a, T n)
 {
     return a - SwNodeOffset(n);
 }
