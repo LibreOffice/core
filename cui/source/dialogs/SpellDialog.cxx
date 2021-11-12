@@ -1527,9 +1527,9 @@ IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OString&, rCurItemId, void)
     }
     else if (rCurItemId == "insert")
     {
-        if (vcl::GetGetSpecialCharsFunction())
+        if (auto pImplFncGetSpecialChars = vcl::GetGetSpecialCharsFunction())
         {
-            OUString aChars = vcl::GetGetSpecialCharsFunction()(GetDrawingArea(), m_xEditEngine->GetStandardFont(0));
+            OUString aChars = pImplFncGetSpecialChars(GetDrawingArea(), m_xEditEngine->GetStandardFont(0));
             if (!aChars.isEmpty())
             {
                 ESelection aCurrentSelection(m_xEditView->GetSelection());
