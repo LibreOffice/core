@@ -16,6 +16,24 @@
       "message": "add a deleted overload taking OUStringLiteral\u003cN\u003e\u0026\u0026, to avoid misuses?",
       "revId": "16e05e69f98f7771f847afba1f5fcbc42c8011bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c44ad938_7d06431b",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-12T11:25:47Z",
+      "side": 1,
+      "message": "good idea, done",
+      "parentUuid": "18a2da33_76177bac",
+      "revId": "16e05e69f98f7771f847afba1f5fcbc42c8011bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
