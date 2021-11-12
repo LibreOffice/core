@@ -23,7 +23,27 @@ using namespace dbaui;
 // the listener multiplexers
 
 // XStatusListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXStatusMultiplexer, css::frame::XStatusListener)
+SbaXStatusMultiplexer::SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXStatusMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::frame::XStatusListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::frame::XStatusListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXStatusMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
 
 void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStateEvent& e)
 {
@@ -35,7 +55,27 @@ void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStat
 }
 
 // LoadListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXLoadMultiplexer, css::form::XLoadListener)
+SbaXLoadMultiplexer::SbaXLoadMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXLoadMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::form::XLoadListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::form::XLoadListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXLoadMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
 void SAL_CALL SbaXLoadMultiplexer::loaded(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
@@ -82,7 +122,27 @@ void SAL_CALL SbaXLoadMultiplexer::reloaded(const css::lang::EventObject& e)
 
 
 // css::sdbc::XRowSetListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener)
+SbaXRowSetMultiplexer::SbaXRowSetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXRowSetMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::sdbc::XRowSetListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::sdbc::XRowSetListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXRowSetMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
 void SAL_CALL SbaXRowSetMultiplexer::cursorMoved(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
@@ -111,7 +171,27 @@ void SAL_CALL SbaXRowSetMultiplexer::rowSetChanged(const css::lang::EventObject&
 }
 
 // css::sdb::XRowSetApproveListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener)
+SbaXRowSetApproveMultiplexer::SbaXRowSetApproveMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXRowSetApproveMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::sdb::XRowSetApproveListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::sdb::XRowSetApproveListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXRowSetApproveMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
 sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveCursorMove(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
@@ -146,7 +226,27 @@ sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveRowSetChange(const css::l
 }
 
 // css::sdb::XSQLErrorListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSQLErrorMultiplexer, css::sdb::XSQLErrorListener)
+SbaXSQLErrorMultiplexer::SbaXSQLErrorMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXSQLErrorMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::sdb::XSQLErrorListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::sdb::XSQLErrorListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXSQLErrorMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
 void SAL_CALL SbaXSQLErrorMultiplexer::errorOccured(const css::sdb::SQLErrorEvent& e)
 {
     css::sdb::SQLErrorEvent aMulti(e);
@@ -157,7 +257,27 @@ void SAL_CALL SbaXSQLErrorMultiplexer::errorOccured(const css::sdb::SQLErrorEven
 }
 
 // css::form::XDatabaseParameterListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXParameterMultiplexer, css::form::XDatabaseParameterListener)
+SbaXParameterMultiplexer::SbaXParameterMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXParameterMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::form::XDatabaseParameterListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::form::XDatabaseParameterListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXParameterMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
 sal_Bool SAL_CALL SbaXParameterMultiplexer::approveParameter(const css::form::DatabaseParameterEvent& e)
 {
     css::form::DatabaseParameterEvent aMulti(e);
@@ -170,7 +290,29 @@ sal_Bool SAL_CALL SbaXParameterMultiplexer::approveParameter(const css::form::Da
 }
 
 // css::form::XSubmitListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSubmitMultiplexer, css::form::XSubmitListener)
+SbaXSubmitMultiplexer::SbaXSubmitMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXSubmitMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::form::XSubmitListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::form::XSubmitListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXSubmitMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
+
+
 sal_Bool SAL_CALL SbaXSubmitMultiplexer::approveSubmit(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
@@ -183,7 +325,28 @@ sal_Bool SAL_CALL SbaXSubmitMultiplexer::approveSubmit(const css::lang::EventObj
 }
 
 // css::form::XResetListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXResetMultiplexer, css::form::XResetListener)
+SbaXResetMultiplexer::SbaXResetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXResetMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::form::XResetListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::form::XResetListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXResetMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
+
 sal_Bool SAL_CALL SbaXResetMultiplexer::approveReset(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
@@ -353,7 +516,27 @@ void SbaXVetoableChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelp
 }
 
 // css::beans::XPropertiesChangeListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXPropertiesChangeMultiplexer, css::beans::XPropertiesChangeListener);
+SbaXPropertiesChangeMultiplexer::SbaXPropertiesChangeMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
+    :OSbaWeakSubObject(rSource)
+    ,OInterfaceContainerHelper2(_rMutex)
+{
+}
+
+css::uno::Any  SAL_CALL SbaXPropertiesChangeMultiplexer::queryInterface(const css::uno::Type& _rType)
+{
+    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ::cppu::queryInterface(_rType,
+            static_cast< css::beans::XPropertiesChangeListener* >(this),
+            static_cast< css::lang::XEventListener* >(static_cast< css::beans::XPropertiesChangeListener* >(this))
+        );
+
+    return aReturn;
+}
+void SAL_CALL SbaXPropertiesChangeMultiplexer::disposing(const css::lang::EventObject& )
+{
+}
+
 void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& aEvts)
 {
     // the SbaXPropertiesChangeMultiplexer doesn't care about the property names a listener logs on for, it simply
