@@ -13,6 +13,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>
@@ -63,7 +64,7 @@ void DemoMtfWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     }
     else
     {
-        Application::Abort("Can't read metafile");
+        Application::Abort("Can't read metafile " + aFileStream.GetFileName());
     }
 
     aMtf.Play(*GetOutDev(), aMtf.GetActionSize());
@@ -154,8 +155,19 @@ private:
 
             OUString sWorkingDir, sFileUrl;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
-            (void)osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
-            (void)osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
+            osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
+            if (rc == osl::FileBase::E_None)
+            {
+                rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
+                if (rc != osl::FileBase::E_None)
+                {
+                    throw css::uno::RuntimeException("Can not make absolute: " + aFilename);
+                }
+            }
+            else
+            {
+                throw css::uno::RuntimeException("Can not get file url from system path: " + aFilename);
+            }
 
             uno::Reference<uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
@@ -169,10 +181,30 @@ private:
             {
                 GDIMetaFile aMtf;
                 SvFileStream aFileStream(maFileName, StreamMode::READ);
-                ReadWindowMetafile(aFileStream, aMtf);
+
+                if (aFileStream.IsOpen())
+                {
+                    ReadWindowMetafile(aFileStream, aMtf);
+                }
+                else
+                {
+                    throw css::uno::RuntimeException("Can't read metafile " + aFileStream.GetFileName());
+                }
+
                 OUString sAbsoluteDumpUrl, sDumpUrl;
-                (void)osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
-                (void)osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
+                rc = osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
+                if (rc == osl::FileBase::E_None)
+                {
+                    rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
+                    if (rc != osl::FileBase::E_None)
+                    {
+                        throw css::uno::RuntimeException("Can not make absolute: metadump.xml");
+                    }
+                }
+                else
+                {
+                    throw css::uno::RuntimeException("Can not get file url from system path: metadump.xml");
+                }
 
                 aMtf.dumpAsXml(rtl::OUStringToOString(sAbsoluteDumpUrl, RTL_TEXTENCODING_UTF8).getStr());
                 std::cout << "Dumped metaactions as metadump.xml" << std::endl;
