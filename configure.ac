@@ -7347,46 +7347,6 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
-AC_MSG_CHECKING([whether $CXX_BASE supports a working C++20 consteval])
-dnl ...that does not suffer from <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96994> "Missing code
-dnl from consteval constructor initializing const variable",
-dnl <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98752> "wrong 'error: ‘this’ is not a constant
-dnl expression' with consteval constructor", or <https://bugs.llvm.org/show_bug.cgi?id=50063> "code
-dnl using consteval: 'clang/lib/CodeGen/Address.h:38: llvm::Value*
-dnl clang::CodeGen::Address::getPointer() const: Assertion `isValid()' failed.'":
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_RUN_IFELSE([AC_LANG_PROGRAM([
-        struct S {
-            consteval S() { i = 1; }
-            int i = 0;
-        };
-        S const s;
-
-        struct S1 { consteval S1(int) {} };
-        struct S2 {
-            S1 x;
-            S2(): x(0) {}
-        };
-
-        struct S3 {
-            consteval S3() {}
-            union {
-                int a;
-                unsigned b = 0;
-            };
-        };
-        void f() { S3(); }
-    ], [
-        return (s.i == 1) ? 0 : 1;
-    ])], [
-        AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
-        AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])], [AC_MSG_RESULT([assumed no (cross compiling)])])
-CXXFLAGS=$save_CXXFLAGS
-AC_LANG_POP([C++])
-
 AC_MSG_CHECKING([whether $CXX_BASE supports C++2a constinit sorted vectors])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
@@ -14176,6 +14136,56 @@ if test "$build_os" = "cygwin"; then
 fi
 AC_SUBST(ILIB)
 AC_SUBST(ILIB_FOR_BUILD)
+
+AC_MSG_CHECKING([whether $CXX_BASE supports a working C++20 consteval])
+dnl ...that does not suffer from <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96994> "Missing code
+dnl from consteval constructor initializing const variable",
+dnl <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98752> "wrong 'error: ‘this’ is not a constant
+dnl expression' with consteval constructor", <https://bugs.llvm.org/show_bug.cgi?id=50063> "code
+dnl using consteval: 'clang/lib/CodeGen/Address.h:38: llvm::Value*
+dnl clang::CodeGen::Address::getPointer() const: Assertion `isValid()' failed.'", or
+dnl <https://developercommunity.visualstudio.com/t/1581879> "Bogus error C7595 with consteval
+dnl constructor in ternary expression (/std:c++latest)":
+AC_LANG_PUSH([C++])
+save_CXX=$CXX
+if test "$COM" = MSC && test "$COM_IS_CLANG" != TRUE; then
+    CXX="env LIB=$ILIB $CXX"
+fi
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_RUN_IFELSE([AC_LANG_PROGRAM([
+        struct S {
+            consteval S() { i = 1; }
+            int i = 0;
+        };
+        S const s;
+
+        struct S1 { consteval S1(int) {} };
+        struct S2 {
+            S1 x;
+            S2(): x(0) {}
+        };
+
+        struct S3 {
+            consteval S3() {}
+            union {
+                int a;
+                unsigned b = 0;
+            };
+        };
+        void f() { S3(); }
+
+        struct S4 { consteval S4() = default; };
+        void f4(bool b) { b ? S4() : S4(); }
+    ], [
+        return (s.i == 1) ? 0 : 1;
+    ])], [
+        AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])], [AC_MSG_RESULT([assumed no (cross compiling)])])
+CXX=$save_CXX
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
 
 # ===================================================================
 # Creating bigger shared library to link against
