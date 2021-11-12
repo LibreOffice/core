@@ -84,6 +84,7 @@ template<std::size_t N> class SAL_WARN_UNUSED OUStringLiteral {
     static_assert(N != 0);
     static_assert(N - 1 <= std::numeric_limits<sal_Int32>::max(), "literal too long");
     friend class OUString;
+    friend class OUStringConstExpr;
 
 public:
 #if HAVE_CPP_CONSTEVAL
@@ -137,6 +138,34 @@ template<std::size_t N> struct ExceptConstCharArrayDetector<OUStringLiteral<N>> 
 template<std::size_t N> struct ExceptCharArrayDetector<OUStringLiteral<N>> {};
 }
 #endif
+
+/**
+  This is intended to be used when declaring compile-time-constant structs or arrays
+  that can be initialised from named OUStringLiteral e.g.
+
+    constexpr OUStringLiteral AAA = u"aaa";
+    constexpr OUStringLiteral BBB = u"bbb";
+    constexpr OUStringConstExpr FOO[] { AAA, BBB };
+*/
+class OUString;
+class OUStringConstExpr
+{
+public:
+    template<std::size_t N> constexpr OUStringConstExpr(OUStringLiteral<N> const & literal):
+        pData(const_cast<rtl_uString *>(&literal.str)) {}
+    
+    // prevent mis-use
+    template<std::size_t N> constexpr OUStringConstExpr(OUStringLiteral<N> && literal)
+        = delete;
+
+    // no destructor necessary because we know we are pointing at a compile-time
+    // constant OUStringLiteral, which bypasses ref-counting.
+
+    inline operator OUString() const;
+
+private:
+    rtl_uString* pData;
+};
 
 /// @endcond
 #endif
@@ -3477,6 +3506,12 @@ struct hash<::rtl::OUString>
     { return std::size_t(s.hashCode()); }
 };
 
+}
+
+// Can only define this after we define OUString
+namespace rtl
+{
+inline OUStringConstExpr::operator OUString() const { return OUString::unacquired(&pData); }
 }
 
 #endif
