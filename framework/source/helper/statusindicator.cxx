@@ -40,7 +40,7 @@ void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
 
         comphelper::LibreOfficeKit::statusIndicatorStart(sText);
     }
-#if !defined(IOS) && !defined(ANDROID)
+#if !defined(IOS) && !defined(ANDROID) && !defined(EMSCRIPTEN)
     css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
@@ -58,7 +58,7 @@ void SAL_CALL StatusIndicator::end()
     {
         comphelper::LibreOfficeKit::statusIndicatorFinish();
     }
-#if !defined(IOS) && !defined(ANDROID)
+#if !defined(IOS) && !defined(ANDROID) && !defined(EMSCRIPTEN)
     css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
@@ -72,7 +72,7 @@ void SAL_CALL StatusIndicator::reset()
 {
     if (comphelper::LibreOfficeKit::isActive())
         return;
-#if !defined(IOS) && !defined(ANDROID)
+#if !defined(IOS) && !defined(ANDROID) && !defined(EMSCRIPTEN)
     css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
@@ -86,7 +86,7 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
 {
     if (comphelper::LibreOfficeKit::isActive())
         return;
-#if !defined(IOS) && !defined(ANDROID)
+#if !defined(IOS) && !defined(ANDROID) && !defined(EMSCRIPTEN)
     css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
@@ -113,7 +113,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
         }
         return;
     }
-#if !defined(IOS) && !defined(ANDROID)
+#if !defined(IOS) && !defined(ANDROID) && !defined(EMSCRIPTEN)
     css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {

@@ -482,6 +482,7 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
 bool Application::Reschedule( bool i_bAllEvents )
 {
 #ifdef EMSCRIPTEN
+    SAL_INFO("wasm", "Application::Reschedule(" << i_bAllEvents << ")");
     (void) i_bAllEvents;
     std::abort();
 #else
@@ -541,6 +542,7 @@ SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
 void Application::Yield()
 {
 #ifdef EMSCRIPTEN
+    SAL_INFO("wasm", "Application::Yield()");
     std::abort();
 #else
     ImplYield(true, false);

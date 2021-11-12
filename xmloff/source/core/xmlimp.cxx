@@ -1567,7 +1567,9 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     mxAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
+#ifndef ENABLE_WASM_STRIP_CHART
     GetChartImport()->SetAutoStylesContext( pAutoStyles );
+#endif
     GetFormImport()->setAutoStyleContext( pAutoStyles );
 }
 

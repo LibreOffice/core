@@ -838,6 +838,9 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
         rEntity.mxDocumentHandler->startDocument();
     }
 
+#ifdef EMSCRIPTEN
+    rEntity.mbEnableThreads = false;
+#else
     if (!getenv("SAX_DISABLE_THREADS") && !m_bDisableThreadedParser)
     {
         Reference<css::io::XSeekable> xSeekable(rEntity.maStructSource.aInputStream, UNO_QUERY);
@@ -845,6 +848,7 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
         rEntity.mbEnableThreads = (xSeekable.is() && xSeekable->getLength() > 10000)
                 || (rEntity.maStructSource.aInputStream->available() > 10000);
     }
+#endif
 
     if (rEntity.mbEnableThreads)
     {
