@@ -1833,6 +1833,7 @@ void CustomAnimationPane::onAdd()
         updateMotionPathTags();
     }
 
+    addUndo();
     mrBase.GetDocShell()->SetModified();
 
     updateControls();
@@ -2134,6 +2135,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, SelectionHandler, Timer*, void)
         pEffectSequence->replace( pEffect, pDescriptor, fDuration );
     }
 
+    addUndo();
     onPreview(false);
 }
 
