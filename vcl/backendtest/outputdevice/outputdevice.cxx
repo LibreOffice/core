@@ -27,6 +27,48 @@ Bitmap OutputDeviceTestAnotherOutDev::setupDrawOutDev()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+
+Bitmap OutputDeviceTestAnotherOutDev::setupDrawOutDevScaledClipped()
+{
+    ScopedVclPtrInstance<VirtualDevice> pSourceDev;
+    Size aSourceSize(18, 18);
+    pSourceDev->SetOutputSizePixel(aSourceSize);
+    pSourceDev->SetBackground(Wallpaper(constFillColor));
+    pSourceDev->Erase();
+
+    initialSetup(13, 13, constBackgroundColor);
+
+    tools::Rectangle rectangle = maVDRectangle;
+    rectangle.SetLeft(rectangle.GetWidth() / 2);
+    mpVirtualDevice->SetClipRegion(vcl::Region(rectangle));
+
+    mpVirtualDevice->DrawOutDev(Point(2, 2), aSourceSize / 2, Point(), aSourceSize, *pSourceDev);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestAnotherOutDev::setupDrawOutDevSelf()
+{
+    initialSetup(13, 13, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor();
+    mpVirtualDevice->SetFillColor(constFillColor);
+
+    tools::Rectangle aDrawRectangle(maVDRectangle);
+    aDrawRectangle.shrink(3);
+    aDrawRectangle.Move( 2, -2 );
+    mpVirtualDevice->DrawRect(aDrawRectangle);
+    mpVirtualDevice->SetLineColor(COL_YELLOW);
+    mpVirtualDevice->DrawPixel(aDrawRectangle.TopLeft() + Point(aDrawRectangle.GetWidth() - 1, 0));
+    mpVirtualDevice->DrawPixel(aDrawRectangle.TopLeft() + Point(0,aDrawRectangle.GetHeight() - 1));
+
+    // Intentionally overlap a bit.
+    mpVirtualDevice->DrawOutDev(Point(1, 5), aDrawRectangle.GetSize(),
+                                Point(5,1), aDrawRectangle.GetSize(), *mpVirtualDevice);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 Bitmap OutputDeviceTestAnotherOutDev::setupXOR()
 {
     initialSetup(13, 13, constBackgroundColor);
@@ -63,31 +105,6 @@ Bitmap OutputDeviceTestAnotherOutDev::setupXOR()
     mpVirtualDevice->DrawRect(aDrawRectangle);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
-}
-
-TestResult OutputDeviceTestAnotherOutDev::checkDrawOutDev(Bitmap& rBitmap)
-{
-    std::vector<Color> aExpected
-    {
-        constBackgroundColor, constBackgroundColor,
-        constFillColor, constFillColor, constFillColor, constFillColor, constFillColor
-    };
-    return checkRectangles(rBitmap, aExpected);
-}
-
-TestResult OutputDeviceTestAnotherOutDev::checkXOR(Bitmap& rBitmap)
-{
-    Color xorColor( constBackgroundColor.GetRed() ^ constFillColor.GetRed(),
-                    constBackgroundColor.GetGreen() ^ constFillColor.GetGreen(),
-                    constBackgroundColor.GetBlue() ^ constFillColor.GetBlue());
-    std::vector<Color> aExpected
-    {
-        constBackgroundColor, xorColor,
-        constBackgroundColor, constBackgroundColor,
-        constFillColor, constFillColor,
-        constFillColor
-    };
-    return checkRectangles(rBitmap, aExpected);
 }
 
 } // end namespace vcl::test

@@ -1506,6 +1506,79 @@ TestResult OutputDeviceTestCommon::checkLineJoin(Bitmap& rBitmap, basegfx::B2DLi
     return aResult;
 }
 
+TestResult OutputDeviceTestAnotherOutDev::checkDrawOutDev(Bitmap& rBitmap)
+{
+    std::vector<Color> aExpected
+    {
+        constBackgroundColor, constBackgroundColor,
+        constFillColor, constFillColor, constFillColor, constFillColor, constFillColor
+    };
+    return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestAnotherOutDev::checkDrawOutDevScaledClipped(Bitmap& rBitmap)
+{
+    TestResult aReturnValue = TestResult::Passed;
+    TestResult eResult;
+
+    eResult = checkRect(rBitmap, 0, constBackgroundColor); // outer line
+    checkResult(eResult, aReturnValue);
+    eResult = checkRect(rBitmap, 1, constBackgroundColor); // next outer line
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(2, 2), Size(4, 8)), constBackgroundColor);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(6, 2), Size(4, 8)), constFillColor);
+    checkResult(eResult, aReturnValue);
+
+    return aReturnValue;
+}
+
+TestResult OutputDeviceTestAnotherOutDev::checkDrawOutDevSelf(Bitmap& rBitmap)
+{
+    TestResult aReturnValue = TestResult::Passed;
+    TestResult eResult;
+
+    eResult = checkRect(rBitmap, 0, constBackgroundColor); // outer line
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(1, 1), Size(4, 4)), constBackgroundColor);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(8, 8), Size(4, 4)), constBackgroundColor);
+    checkResult(eResult, aReturnValue);
+
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(11, 1), Size(1, 1)), COL_YELLOW);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(7, 5), Size(1, 1)), COL_YELLOW);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(1, 11), Size(1, 1)), COL_YELLOW);
+    checkResult(eResult, aReturnValue);
+
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(1, 5), Size(6, 6)), constFillColor);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(2, 6), Size(6, 6)), constFillColor);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(5, 1), Size(6, 4)), constFillColor);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(8, 2), Size(4, 6)), constFillColor);
+    checkResult(eResult, aReturnValue);
+
+    return aReturnValue;
+}
+
+TestResult OutputDeviceTestAnotherOutDev::checkXOR(Bitmap& rBitmap)
+{
+    Color xorColor( constBackgroundColor.GetRed() ^ constFillColor.GetRed(),
+                    constBackgroundColor.GetGreen() ^ constFillColor.GetGreen(),
+                    constBackgroundColor.GetBlue() ^ constFillColor.GetBlue());
+    std::vector<Color> aExpected
+    {
+        constBackgroundColor, xorColor,
+        constBackgroundColor, constBackgroundColor,
+        constFillColor, constFillColor,
+        constFillColor
+    };
+    return checkRectangles(rBitmap, aExpected);
+}
+
 
 } // end namespace vcl::test
 

@@ -131,9 +131,13 @@ public:
     OutputDeviceTestAnotherOutDev() = default;
 
     Bitmap setupDrawOutDev();
+    Bitmap setupDrawOutDevScaledClipped();
+    Bitmap setupDrawOutDevSelf();
     Bitmap setupXOR();
 
     static TestResult checkDrawOutDev(Bitmap& rBitmap);
+    static TestResult checkDrawOutDevScaledClipped(Bitmap& rBitmap);
+    static TestResult checkDrawOutDevSelf(Bitmap& rBitmap);
     static TestResult checkXOR(Bitmap& rBitmap);
 };
 

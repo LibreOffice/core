@@ -712,6 +712,31 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawOutDevScaledClipped()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawOutDevScaledClipped();
+        auto eResult
+            = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevScaledClipped(aBitmap);
+        exportImage("10-02_draw_out_dev_scaled_clipped_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawOutDevSelf()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawOutDevSelf();
+        auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevSelf(aBitmap);
+        exportImage("10-03_draw_out_dev_self_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testDashedLine()
     {
         if (getDefaultDeviceBitCount() < 24)
@@ -1437,6 +1462,8 @@ public:
     CPPUNIT_TEST(testClipB2DPolyPolygon);
 
     CPPUNIT_TEST(testDrawOutDev);
+    CPPUNIT_TEST(testDrawOutDevScaledClipped);
+    CPPUNIT_TEST(testDrawOutDevSelf);
 
     CPPUNIT_TEST(testDashedLine);
 

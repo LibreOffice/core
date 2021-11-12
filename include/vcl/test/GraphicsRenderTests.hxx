@@ -99,6 +99,8 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testClipPolyPolygon();
     void testClipB2DPolyPolygon();
     void testDrawOutDev();
+    void testDrawOutDevScaledClipped();
+    void testDrawOutDevSelf();
     void testDashedLine();
     void testLinearGradient();
     void testLinearGradientAngled();
