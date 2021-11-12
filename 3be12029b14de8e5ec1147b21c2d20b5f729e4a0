@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94450f0e_3487ce50",
+        "filename": "vcl/workben/mtfdemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-12T05:51:47Z",
+      "side": 1,
+      "message": "I am not sure that std::exit is really good example here. You demonstrate error handling; the scenario (invalid URL) is absolutely normal in real life applications communicating with outer world; and handling that situation gracefully is important. Using std::exit on each and every exception is not something we want to show in our examples.",
+      "revId": "3be12029b14de8e5ec1147b21c2d20b5f729e4a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
