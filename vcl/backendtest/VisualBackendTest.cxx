@@ -764,7 +764,7 @@ public:
         }
         else if (mnTest % gnNumberOfTests == 10)
         {
-            std::vector<tools::Rectangle> aRegions = setupRegions(2, 1, nWidth, nHeight);
+            std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
             size_t index = 0;
 
             tools::Rectangle aRectangle = aRegions[index++];
@@ -772,6 +772,20 @@ public:
                 vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
                 Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
                 assertAndSetBackground(vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap), aRectangle, rRenderContext);
+                drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+            }
+            aRectangle = aRegions[index++];
+            {
+                vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+                Bitmap aBitmap = aOutDevTest.setupDrawOutDevScaledClipped();
+                assertAndSetBackground(vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevScaledClipped(aBitmap), aRectangle, rRenderContext);
+                drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+            }
+            aRectangle = aRegions[index++];
+            {
+                vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+                Bitmap aBitmap = aOutDevTest.setupDrawOutDevSelf();
+                assertAndSetBackground(vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevSelf(aBitmap), aRectangle, rRenderContext);
                 drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
             }
             aRectangle = aRegions[index++];

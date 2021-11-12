@@ -985,6 +985,48 @@ void GraphicsRenderTests::testDrawOutDev()
     }
 }
 
+void GraphicsRenderTests::testDrawOutDevScaledClipped()
+{
+    vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawOutDevScaledClipped();
+    OUString aTestName = "testDrawOutDevScaledClipped";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevScaledClipped(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawOutDevSelf()
+{
+    vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawOutDevSelf();
+    OUString aTestName = "testDrawOutDevSelf";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDevSelf(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::testDashedLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
@@ -2197,6 +2239,8 @@ void GraphicsRenderTests::runALLTests()
     testClipPolyPolygon();
     testClipB2DPolyPolygon();
     testDrawOutDev();
+    testDrawOutDevScaledClipped();
+    testDrawOutDevSelf();
     testDashedLine();
     testLinearGradient();
     testLinearGradientAngled();
