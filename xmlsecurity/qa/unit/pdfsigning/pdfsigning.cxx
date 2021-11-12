@@ -454,9 +454,8 @@ void PDFSigningTest::testBadCertP1()
     // - Expected: 0 (SecurityOperationStatus_UNKNOWN)
     // - Actual  : 1 (SecurityOperationStatus_OPERATION_SUCCEEDED)
     // i.e. annotation after a P1 signature was not considered as a bad modification.
-    // FIXME This fails for some reason...
-    //CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
-    //                     rInformation.nStatus);
+    CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
+                         rInformation.nStatus);
 }
 
 /// Test writing a PAdES signature.
