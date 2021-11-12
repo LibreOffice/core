@@ -217,6 +217,8 @@ public:
     */
     inline E const * end() const;
 
+// Non-const operator[] is not available in internal code. Consider explicit use
+// of getArray(), out of tight loops if possible to avoid unneeded COW overhead.
 #if !defined LIBO_INTERNAL_ONLY
     /** Non-const index operator: Obtains a reference to element indexed at
         given position.
