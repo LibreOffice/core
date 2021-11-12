@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c20be20_a8265076",
+        "filename": "include/xmloff/maptype.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-12T10:09:09Z",
+      "side": 1,
+      "message": "Or possibly we could use std::string_view, and rely on its ctors taking literals etc :-)",
+      "revId": "5fe5ded723b2bea0c88ebc7647284dc0ade97ee3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
