@@ -68,15 +68,15 @@ using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
-#define MAPV_(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
+#define MAP_(name,prefix,token,type,context)  { name, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
+#define MAPV_(name,prefix,token,type,context,version)  { name, prefix, token, type, context, version, false }
 #define GMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
 #define GMAP_D(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC|MID_FLAG_DEFAULT_ITEM_EXPORT,context)
 #define GMAPV(name,prefix,token,type,context,version) MAPV_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context,version)
 #define DPMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 #define PMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
-#define MAP_END() { nullptr, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_END() { nullptr, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFSVER_010, false }
 
 // entry list for graphic properties
 

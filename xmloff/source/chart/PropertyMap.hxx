@@ -85,17 +85,17 @@
 #define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SERIES   ( XML_SCH_CTF_START + 27 )
 #define XML_SCH_CONTEXT_SPECIAL_MOVING_AVERAGE_TYPE ( XML_SCH_CTF_START + 28 )
 
-#define MAP_FULL( ApiName, NameSpace, XMLTokenName, XMLType, ContextId, EarliestODFVersionForExport ) { ApiName, sizeof(ApiName)-1, XML_NAMESPACE_##NameSpace, xmloff::token::XMLTokenName, XMLType|XML_TYPE_PROP_CHART, ContextId, EarliestODFVersionForExport, false }
-#define MAP_ENTRY( a, ns, nm, t )            { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_010, false }
-#define MAP_ENTRY_ODF12( a, ns, nm, t )      { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_012, false }
-#define MAP_ENTRY_ODF13( a, ns, nm, t )      { a, sizeof(a)-1, ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_013, false }
-#define MAP_ENTRY_ODF_EXT( a, ns, nm, t )    { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false }
-#define MAP_ENTRY_ODF_EXT_IMPORT( a, ns, nm, t )    { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, true }
-#define MAP_CONTEXT( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, c, SvtSaveOptions::ODFSVER_010, false }
-#define MAP_SPECIAL( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_010, false }
-#define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_012, false }
-#define MAP_SPECIAL_ODF13( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_013, false }
-#define MAP_ENTRY_END { nullptr,0,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFSVER_010, false }
+#define MAP_FULL( ApiName, NameSpace, XMLTokenName, XMLType, ContextId, EarliestODFVersionForExport ) { ApiName, XML_NAMESPACE_##NameSpace, xmloff::token::XMLTokenName, XMLType|XML_TYPE_PROP_CHART, ContextId, EarliestODFVersionForExport, false }
+#define MAP_ENTRY( a, ns, nm, t )            { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_ENTRY_ODF12( a, ns, nm, t )      { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_012, false }
+#define MAP_ENTRY_ODF13( a, ns, nm, t )      { a, ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_013, false }
+#define MAP_ENTRY_ODF_EXT( a, ns, nm, t )    { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false }
+#define MAP_ENTRY_ODF_EXT_IMPORT( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, true }
+#define MAP_CONTEXT( a, ns, nm, t, c )       { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, c, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_SPECIAL( a, ns, nm, t, c )       { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_012, false }
+#define MAP_SPECIAL_ODF13( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_013, false }
+#define MAP_ENTRY_END { nullptr,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFSVER_010, false }
 
 // PropertyMap for Chart properties drawing- and
 // textproperties are added later using the chaining

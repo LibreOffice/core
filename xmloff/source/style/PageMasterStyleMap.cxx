@@ -23,7 +23,7 @@
 
 using namespace ::xmloff::token;
 
-#define MAP(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
+#define MAP(name,prefix,token,type,context,version)  { name, prefix, token, type, context, version, false }
 #define DPMAP(name,prefix,token,type,context) MAP(name, prefix, token, type|XML_TYPE_PROP_DRAWING_PAGE, context, SvtSaveOptions::ODFSVER_013)
 #define PLMAP(name,prefix,token,type,context) \
         MAP(name, prefix, token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_010)
@@ -270,7 +270,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterFillBitmapOffsetX",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_X ),
     HFMAP( "FooterFillBitmapOffsetY",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_Y ),
 
-    { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false } // index 190
+    { nullptr, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false } // index 190
 };
 
 XMLPropertyMapEntry const g_XMLPageMasterDrawingPageStyleMap[] =
@@ -299,7 +299,7 @@ XMLPropertyMapEntry const g_XMLPageMasterDrawingPageStyleMap[] =
     DPMAP("FillBitmapOffsetX",            XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_X),
     DPMAP("FillBitmapOffsetY",            XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_Y),
 
-    { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false }
+    { nullptr, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFSVER_010, false }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
