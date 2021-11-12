@@ -195,6 +195,7 @@ void SQLEditView::UpdateData()
     m_bInUpdate = true;
     EditEngine& rEditEngine = *GetEditEngine();
 
+    bool bModified = rEditEngine.IsModified();
     bool bUndoEnabled = rEditEngine.IsUndoEnabled();
     rEditEngine.EnableUndo(false);
 
@@ -225,7 +226,8 @@ void SQLEditView::UpdateData()
 
     rEditEngine.EnableUndo(bUndoEnabled);
 
-    m_aModifyLink.Call(nullptr);
+    if (bModified)
+        m_aModifyLink.Call(nullptr);
 
     Invalidate();
 }
