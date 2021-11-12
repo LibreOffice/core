@@ -459,9 +459,12 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
     bool bMoveToPageFrame = false;
     if (pSectframe)
     {
-        bool bNoBalance = pSectframe->GetSection()->GetFormat()->GetBalancedColumns().GetValue();
-        bool bFAtEnd = pSectframe->IsFootnoteAtEnd();
-        bMoveToPageFrame = !bFAtEnd && !bNoBalance;
+        SwSection* pSect = pSectframe->GetSection();
+        if (pSect) {
+            bool bNoBalance = pSect->GetFormat()->GetBalancedColumns().GetValue();
+            bool bFAtEnd = pSectframe->IsFootnoteAtEnd();
+            bMoveToPageFrame = !bFAtEnd && !bNoBalance;
+        }
     }
     while (pRet
            && ((!bMoveToPageFrame && !pRet->IsFootnoteBossFrame())
