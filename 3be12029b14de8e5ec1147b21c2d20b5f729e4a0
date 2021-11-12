@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b38403_16b408d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-12T05:55:09Z",
+      "side": 1,
+      "message": "Of course, one may argue that the path/URL here comes not from user/file, but from OS telling current work dir, but then why handle error at all? If you do, then at least show some handler, that would show something to user (e.g., \"there was some unexpected error converting path \"FOO\" to URL; please report this to Bugzilla!\") before termination.",
+      "revId": "3be12029b14de8e5ec1147b21c2d20b5f729e4a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94450f0e_3487ce50",
