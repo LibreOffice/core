@@ -16,6 +16,24 @@
       "message": "Or possibly we could use std::string_view, and rely on its ctors taking literals etc :-)",
       "revId": "5fe5ded723b2bea0c88ebc7647284dc0ade97ee3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1963eb3a_fda85451",
+        "filename": "include/xmloff/maptype.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-12T10:10:54Z",
+      "side": 1,
+      "message": "when you take string_view as a param, you are implying that you are not going to hold a reference to the data i.e. it is a temporary thing",
+      "parentUuid": "8c20be20_a8265076",
+      "revId": "5fe5ded723b2bea0c88ebc7647284dc0ade97ee3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
