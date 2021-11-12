@@ -484,6 +484,7 @@
           <object class="GtkFrame" id="frame4">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="margin-end">6</property>
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
@@ -563,6 +564,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-start">18</property>
+                    <property name="hexpand">True</property>
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
@@ -590,6 +592,7 @@
                       <object class="GtkComboBoxText" id="format">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="pdfgeneralpage|format">FDF</item>
                           <item translatable="yes" context="pdfgeneralpage|format">PDF</item>
@@ -676,11 +679,13 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="margin-start">18</property>
+                        <property name="hexpand">True</property>
                         <property name="column-spacing">14</property>
                         <child>
                           <object class="GtkComboBoxText" id="pdfaversion">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="hexpand">True</property>
                             <property name="active">3</property>
                             <items>
                               <item id="1" context="pdfgeneralpage|pdfaversion">PDF/A-1b</item>
@@ -705,6 +710,7 @@
                               <object class="GtkLabel" id="pdfaversionlabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="vexpand">True</property>
                                 <property name="label" translatable="yes" context="pdfgeneralpage|pdfaversion">PDF_/A version:</property>
