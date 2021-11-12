@@ -383,9 +383,10 @@ public:
     explicit DPFieldPopupOKAction(ScGridWindow* p) :
         mpGridWindow(p) {}
 
-    virtual void execute() override
+    virtual bool execute() override
     {
         mpGridWindow->UpdateDPFromFieldPopupMenu();
+        return true;
     }
 private:
     VclPtr<ScGridWindow> mpGridWindow;
@@ -405,7 +406,7 @@ public:
         , mpViewShell(pViewShell)
     {}
 
-    virtual void execute() override
+    virtual bool execute() override
     {
         switch (meType)
         {
@@ -421,6 +422,7 @@ public:
             default:
                 ;
         }
+        return true;
     }
 
 private:
