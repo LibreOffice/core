@@ -16,6 +16,23 @@
       "message": "I confirm it worked for me, thank you!",
       "revId": "2751f3cfac0a89e76d219be4098a6ebf53cadbe8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d973dd3_f23313ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-12T09:51:48Z",
+      "side": 1,
+      "message": "Thanks a lot of this, Julian also ran into it. Sounds like my local env \u0026 Jenkins is old enough that it didn\u0027t spot the problem or something like that.",
+      "revId": "2751f3cfac0a89e76d219be4098a6ebf53cadbe8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
