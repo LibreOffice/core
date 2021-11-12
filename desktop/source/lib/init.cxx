@@ -2191,8 +2191,9 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
 
 void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* viewShell, int viewId )
 {
-    OString payload = viewShell->getLOKPayload( type, viewId );
-    if(payload.isEmpty())
+    bool ignore = false;
+    OString payload = viewShell->getLOKPayload( type, viewId, &ignore );
+    if(ignore)
         return; // No actual payload to send.
     CallbackData callbackData(payload.getStr(), viewId);
     m_queue1.emplace_back(type);
