@@ -2550,12 +2550,13 @@ SAL_CALL VCLXToolkit::finishTrackingFontMappingUse()
     SolarMutexGuard aSolarGuard;
     OutputDevice::FontMappingUseData data = OutputDevice::FinishTrackingFontMappingUse();
     css::uno::Sequence<css::awt::XFontMappingUseItem> ret( data.size());
+    css::awt::XFontMappingUseItem* retData = ret.getArray();
     for( size_t i = 0; i < data.size(); ++i )
     {
-        ret[ i ].originalFont = data[ i ].mOriginalFont;
-        ret[ i ].usedFonts = comphelper::arrayToSequence<OUString,OUString>
+        retData[ i ].originalFont = data[ i ].mOriginalFont;
+        retData[ i ].usedFonts = comphelper::arrayToSequence<OUString,OUString>
             (data[ i ].mUsedFonts.data(), data[ i ].mUsedFonts.size());
-        ret[ i ].count = data[ i ].mCount;
+        retData[ i ].count = data[ i ].mCount;
     }
     return ret;
 }
