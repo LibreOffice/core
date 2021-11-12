@@ -304,7 +304,7 @@ namespace svgio::svgreader
 
                 if(!aTextFillVector.empty())
                 {
-                    aMergedArea = basegfx::utils::mergeToSinglePolyPolygon(std::move(aTextFillVector));
+                    aMergedArea = basegfx::utils::mergeToSinglePolyPolygon(aTextFillVector);
                 }
             }
 
@@ -763,7 +763,7 @@ namespace svgio::svgreader
                 {
                     const basegfx::B2DPolyPolygon aMergedArea(
                         basegfx::utils::mergeToSinglePolyPolygon(
-                            std::vector(rLineFillVector)));
+                            rLineFillVector));
 
                     if(aMergedArea.count())
                     {
