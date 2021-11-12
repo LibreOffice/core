@@ -2815,6 +2815,10 @@ endef
 
 else # !SYSTEM_POPPLER
 
+$(eval $(call gb_Helper_register_packages_for_install,pdfimport,\
+	poppler_data \
+))
+
 define gb_LinkTarget__use_poppler
 $(call gb_LinkTarget_use_external_project,$(1),poppler,full)
 $(call gb_LinkTarget_use_package,$(1),poppler_data)
@@ -2826,7 +2830,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),poppler)
-
 $(call gb_LinkTarget_use_external,$(1),libjpeg)
 
 ifeq ($(OS),MACOSX)
