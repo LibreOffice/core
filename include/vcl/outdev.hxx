@@ -1255,7 +1255,7 @@ public:
 
     /*
      These functions allow collecting information on how fonts are mapped when used, such as what
-     replacements are used when a requrested font is missing or which fonts are used as fallbacks
+     replacements are used when a requested font is missing or which fonts are used as fallbacks
      when a font doesn't provide all necessary glyphs.
      After StartTrackingFontMappingUse() is called, VCL starts collecting font usage for all
      text layout calls, FinishTrackingFontMappingUse() will stop collecting and providing
