@@ -34,6 +34,24 @@
       "parentUuid": "8c20be20_a8265076",
       "revId": "5fe5ded723b2bea0c88ebc7647284dc0ade97ee3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e8183e7_5ae92def",
+        "filename": "include/xmloff/maptype.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-12T10:14:46Z",
+      "side": 1,
+      "message": "Good point! Thanks!",
+      "parentUuid": "1963eb3a_fda85451",
+      "revId": "5fe5ded723b2bea0c88ebc7647284dc0ade97ee3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
