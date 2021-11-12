@@ -509,9 +509,12 @@ class AutoFilterAction : public ScCheckListMenuControl::Action
 public:
     AutoFilterAction(ScGridWindow* p, ScGridWindow::AutoFilterMode eMode) :
         mpWindow(p), meMode(eMode) {}
-    virtual void execute() override
+    virtual bool execute() override
     {
         mpWindow->UpdateAutoFilterFromMenu(meMode);
+        // RefreshAutoFilterButton manually closes the popup so return
+        // false to not attempt a second close
+        return false;
     }
 };
 
@@ -522,9 +525,10 @@ class AutoFilterPopupEndAction : public ScCheckListMenuControl::Action
 public:
     AutoFilterPopupEndAction(ScGridWindow* p, const ScAddress& rPos) :
         mpWindow(p), maPos(rPos) {}
-    virtual void execute() override
+    virtual bool execute() override
     {
         mpWindow->RefreshAutoFilterButton(maPos);
+        return false; // this is called after the popup has been closed
     }
 };
 

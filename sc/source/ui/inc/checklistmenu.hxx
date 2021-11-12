@@ -63,7 +63,8 @@ public:
     {
     public:
         virtual ~Action() {}
-        virtual void execute() = 0;
+        // return true to dismiss the popup
+        virtual bool execute() = 0;
     };
 
     struct ResultEntry
