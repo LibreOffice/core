@@ -13,8 +13,8 @@ dialogs = [
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
     {"command": ".uno:SaveAsTemplate", "closeButton": "cancel"},
     {"command": ".uno:SaveAsRemote", "closeButton": "cancel"},
-    {"command": ".uno:ExportToPDF", "closeButton": "cancel", "skipTestOK": True},
-        # export needs filesystem
+    # {"command": ".uno:ExportToPDF", "closeButton": "cancel", "skipTestOK": True},
+        # tested in sc/qa/uitest/calc_tests4/exportToPDF.py
     {"command": ".uno:Print", "closeButton": "cancel", "skipTestOK": True},
         # no printer in CI
     {"command": ".uno:PrinterSetup", "closeButton": "cancel"},
