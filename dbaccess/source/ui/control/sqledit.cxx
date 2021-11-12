@@ -90,7 +90,7 @@ void SQLEditView::SetItemPoolFont(SfxItemPool* pItemPool)
     OUString sFontName(officecfg::Office::Common::Font::SourceViewFont::FontName::get().value_or(OUString()));
     if (sFontName.isEmpty())
     {
-        vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), GetDefaultFontFlags::NONE));
+        vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), GetDefaultFontFlags::OnlyOne));
         sFontName = aTmpFont.GetFamilyName();
     }
 
