@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <helper.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -134,7 +137,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
                     bool bFolder = xRow->getBoolean(2);
                     OUString aRow = aTitle + "\t" +
                         xContentAccess->queryContentIdentifierString() + "\t" +
-                        (bFolder ? OUStringLiteral(u"1") : OUStringLiteral(u"0"));
+                        (bFolder ? std::u16string_view(u"1") : std::u16string_view(u"0"));
                     aProperties.push_back( aRow );
                 }
             }

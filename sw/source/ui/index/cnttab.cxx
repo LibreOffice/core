@@ -63,6 +63,7 @@
 
 #include <cmath>
 #include <memory>
+#include <string_view>
 #include <vector>
 #include <numeric>
 
@@ -3844,8 +3845,9 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
                          pEntry->sAlternative + ";" +
                          pEntry->sPrimKey  + ";" +
                          pEntry->sSecKey + ";" +
-                         (pEntry->bCase ? OUStringLiteral(u"1") : OUStringLiteral(u"0")) + ";" +
-                         (pEntry->bWord ? OUStringLiteral(u"1") : OUStringLiteral(u"0")) );
+                         (pEntry->bCase ? std::u16string_view(u"1") : std::u16string_view(u"0")) +
+                         ";" +
+                         (pEntry->bWord ? std::u16string_view(u"1") : std::u16string_view(u"0")) );
 
         if( sWrite.getLength() > 5 )
             rOutStr.WriteByteStringLine( sWrite, eTEnc );

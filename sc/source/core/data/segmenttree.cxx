@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <algorithm>
 #include <limits>
+#include <string_view>
 #include <global.hxx>
 
 using ::std::numeric_limits;
@@ -499,7 +500,7 @@ OString ScFlatBoolRowSegments::dumpAsString()
     while (getRangeData(nRow, aRange))
     {
         if (!nRow)
-            aSegment = (aRange.mbValue ? OStringLiteral("1") : OStringLiteral("0")) + OString::Concat(":");
+            aSegment = (aRange.mbValue ? std::string_view("1") : std::string_view("0")) + OString::Concat(":");
         else
             aSegment.clear();
 

@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <config_folders.h>
 
 #include <swtypes.hxx>
@@ -219,7 +220,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             case 1:
             {
                 rMeasure.clear();
-                rMeasure += rRec.m_bCont ? OUStringLiteral( u"C" ) : OUStringLiteral( u"S" );      rMeasure += sColon;
+                rMeasure += rRec.m_bCont ? std::u16string_view( u"C" ) : std::u16string_view( u"S" );      rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.m_nHDist ) );   rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.m_nVDist ) );   rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.m_nWidth ) );   rMeasure += sColon;

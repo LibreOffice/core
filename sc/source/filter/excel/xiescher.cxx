@@ -125,6 +125,7 @@
 #include <sfx2/docfile.hxx>
 #include <memory>
 #include <numeric>
+#include <string_view>
 #include <utility>
 
 using namespace com::sun::star;
@@ -2936,7 +2937,7 @@ OUString XclImpPictureObj::GetOleStorageName() const
     OUStringBuffer aStrgName;
     if( (mbEmbedded || mbLinked) && !mbControl && (mnStorageId > 0) )
     {
-        aStrgName = mbEmbedded ? OUStringLiteral(u"" EXC_STORAGE_OLE_EMBEDDED) : OUStringLiteral(u"" EXC_STORAGE_OLE_LINKED);
+        aStrgName = mbEmbedded ? std::u16string_view(u"" EXC_STORAGE_OLE_EMBEDDED) : std::u16string_view(u"" EXC_STORAGE_OLE_LINKED);
         static const char spcHexChars[] = "0123456789ABCDEF";
         for( sal_uInt8 nIndex = 32; nIndex > 0; nIndex -= 4 )
             aStrgName.append(OUStringChar( spcHexChars[ ::extract_value< sal_uInt8 >( mnStorageId, nIndex - 4, 4 ) ] ));

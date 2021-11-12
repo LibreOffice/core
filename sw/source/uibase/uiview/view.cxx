@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_features.h>
 
 #include <stdlib.h>
@@ -1158,7 +1162,7 @@ void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
     rUserData += OUString::number(
             static_cast<sal_uInt16>(m_pWrtShell->GetViewOptions()->GetZoomType()));//eZoom;
     rUserData += ";";
-    rUserData += FrameTypeFlags::NONE == m_pWrtShell->GetSelFrameType() ? OUStringLiteral(u"0") : OUStringLiteral(u"1");
+    rUserData += FrameTypeFlags::NONE == m_pWrtShell->GetSelFrameType() ? std::u16string_view(u"0") : std::u16string_view(u"1");
 }
 
 // Set CursorPos

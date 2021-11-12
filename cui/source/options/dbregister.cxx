@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <dbregister.hxx>
 #include "dbregistersettings.hxx"
 #include <o3tl/safeint.hxx>
@@ -188,7 +192,7 @@ void DbRegistrationOptionsPage::FillUserData()
 {
     OUString aUserData = OUString::number( m_xPathBox->get_column_width(COL_TYPE) ) + ";";
     bool bUp = m_xPathBox->get_sort_order();
-    aUserData += (bUp ? OUStringLiteral(u"1") : OUStringLiteral(u"0"));
+    aUserData += (bUp ? std::u16string_view(u"1") : std::u16string_view(u"0"));
     SetUserData( aUserData );
 }
 

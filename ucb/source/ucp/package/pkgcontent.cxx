@@ -22,6 +22,10 @@
                                 TODO
  **************************************************************************
  *************************************************************************/
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/diagnose.h>
 
 #include <rtl/ustring.hxx>
@@ -224,8 +228,8 @@ OUString Content::getContentType(
     return ( OUString::Concat("application/")
              + aScheme
              + ( bFolder
-                 ? OUStringLiteral(u"-folder")
-                 : OUStringLiteral(u"-stream") ) );
+                 ? std::u16string_view(u"-folder")
+                 : std::u16string_view(u"-stream") ) );
 }
 
 

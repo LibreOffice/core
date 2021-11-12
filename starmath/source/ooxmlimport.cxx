@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include "ooxmlimport.hxx"
 #include <types.hxx>
@@ -439,7 +442,8 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     if( limlowupp == LimLow && e.endsWith( " underbrace { }" ))
         return e.subView( 0, e.getLength() - 2 ) + lim + "}";
     return e
-        + ( limlowupp == LimLow ? OUStringLiteral( u" csub {" ) : OUStringLiteral( u" csup {" ))
+        + ( limlowupp == LimLow
+            ? std::u16string_view( u" csub {" ) : std::u16string_view( u" csup {" ))
         + lim + "}";
 }
 
