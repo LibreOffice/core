@@ -98,9 +98,9 @@ public:
 
     /**
      * Checks if the topmost undo action owned by pView is independent from the topmost action undo
-     * action.
+     * action. Sets rOffset to the offset of that independent undo action on success.
      */
-    bool IsViewUndoActionIndependent(const SwView* pView) const;
+    bool IsViewUndoActionIndependent(const SwView* pView, sal_uInt16& rOffset) const;
 
 private:
     virtual void EmptyActionsChanged() override;

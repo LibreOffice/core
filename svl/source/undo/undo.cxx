@@ -683,13 +683,21 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
         return false;
     }
 
-    if (i_contextOrNull && i_contextOrNull->GetUndoOffset() == 1)
+    if (i_contextOrNull && i_contextOrNull->GetUndoOffset() > 0)
     {
-        if (m_xData->pActUndoArray->nCurUndoAction >= 2)
+        size_t nCurrent = m_xData->pActUndoArray->nCurUndoAction;
+        size_t nOffset = i_contextOrNull->GetUndoOffset();
+        if (nCurrent >= nOffset + 1)
         {
-            std::swap(
-                m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction - 1],
-                m_xData->pActUndoArray->maUndoActions[m_xData->pActUndoArray->nCurUndoAction - 2]);
+            // Move out the action we want to execute.
+            MarkedUndoAction aAction
+                = std::move(m_xData->pActUndoArray->maUndoActions[nCurrent - 1 - nOffset]);
+            // Move the actions after aAction down by one.
+            std::move(m_xData->pActUndoArray->maUndoActions.data() + nCurrent - nOffset,
+                      m_xData->pActUndoArray->maUndoActions.data() + nCurrent,
+                      m_xData->pActUndoArray->maUndoActions.data() + nCurrent - nOffset - 1);
+            // Move aAction to the top.
+            m_xData->pActUndoArray->maUndoActions[nCurrent - 1] = std::move(aAction);
         }
     }
 
