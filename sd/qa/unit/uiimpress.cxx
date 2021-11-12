@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -64,7 +65,7 @@ public:
     virtual void tearDown() override;
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
-    void insertStringToObject(sal_uInt16 nObj, const std::string& rStr);
+    void insertStringToObject(sal_uInt16 nObj, const std::string& rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
 };
 
@@ -95,7 +96,8 @@ void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
     CPPUNIT_ASSERT_EQUAL(nNum, nPageNumber);
 }
 
-void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::string& rStr)
+void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::string& rStr,
+                                           bool bUseEscape)
 {
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
@@ -116,11 +118,14 @@ void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::string& r
 
     CPPUNIT_ASSERT(pView->IsTextEdit());
 
-    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
-    Scheduler::ProcessEventsToIdle();
+    if (bUseEscape)
+    {
+        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+        Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT(!pView->IsTextEdit());
+        CPPUNIT_ASSERT(!pView->IsTextEdit());
+    }
 }
 
 sd::slidesorter::SlideSorterViewShell* SdUiImpressTest::getSlideSorterViewShell()
@@ -373,6 +378,51 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Redo changes width", nUndoWidth, nRedoWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    dispatchCommand(mxComponent, ".uno:InsertPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    insertStringToObject(0, "Test", /*bUseEscape*/ false);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xText
+        = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());
+
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+
+    // Get first paragraph
+    uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+
+    sal_Int16 nWritingMode = 0;
+    xPropSet->getPropertyValue("WritingMode") >>= nWritingMode;
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:ParaRightToLeft", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xPropSet->getPropertyValue("WritingMode") >>= nWritingMode;
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nWritingMode);
+
+    dispatchCommand(mxComponent, ".uno:ParaLeftToRight", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xPropSet->getPropertyValue("WritingMode") >>= nWritingMode;
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
@@ -384,7 +434,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
 
-    insertStringToObject(0, "Test");
+    insertStringToObject(0, "Test", /*bUseEscape*/ true);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
