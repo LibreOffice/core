@@ -30,6 +30,7 @@
 #include "twain32shim.hxx"
 #include <tools/helpers.hxx>
 #include <twain/twain.h>
+#include <o3tl/unit_conversion.hxx>
 
 #define WM_TWAIN_FALLBACK (WM_SHIM_INTERNAL + 0)
 
@@ -421,10 +422,19 @@ void ImpTwain::ImplXfer()
                             {
                                 // set resolution of bitmap
                                 BITMAPINFOHEADER* pBIH = static_cast<BITMAPINFOHEADER*>(pBmpMem);
-                                static const double fFactor = 100.0 / 2.54;
 
-                                pBIH->biXPelsPerMeter = FRound(fFactor * nXRes);
-                                pBIH->biYPelsPerMeter = FRound(fFactor * nYRes);
+                                // Trying to map the bitmap into 1in x 1in
+                                // If 'nXRes pixels' ~ 1 in, ? pixels would be 1 meters?
+                                // biXPelsPerMeter is the X resolution, in pixels/meter, of the
+                                // target device for the bitmap
+                                pBIH->biXPelsPerMeter
+                                    = o3tl::convert(nXRes, o3tl::Length::m, o3tl::Length::in);
+
+                                // If 'nYRes pixels' ~ 1 in, ? pixels would be 1 meters?
+                                // biYPelsPerMeter is the Y resolution, in pixels/meter, of the
+                                // target device for the bitmap
+                                pBIH->biYPelsPerMeter
+                                    = o3tl::convert(nYRes, o3tl::Length::m, o3tl::Length::in);
                             }
 
                             HANDLE hMap = CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr,
