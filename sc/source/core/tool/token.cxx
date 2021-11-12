@@ -3501,126 +3501,138 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
 void ScTokenArray::MoveReferenceColReorder(
     const ScAddress& rPos, SCTAB nTab, SCROW nRow1, SCROW nRow2, const sc::ColRowReorderMapType& rColMap )
 {
-    FormulaToken** p = pCode.get();
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; pp != pEnd; ++pp)
         {
-            case svSingleRef:
+            FormulaToken* p = aPtrs.getHandledToken(j,pp);
+            if (!p)
+                continue;
+
+            switch (p->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rPos);
-
-                if (aAbs.Tab() == nTab && nRow1 <= aAbs.Row() && aAbs.Row() <= nRow2)
-                {
-                    // Inside reordered row range.
-                    sc::ColRowReorderMapType::const_iterator it = rColMap.find(aAbs.Col());
-                    if (it != rColMap.end())
+                case svSingleRef:
                     {
-                        // This column is reordered.
-                        SCCOL nNewCol = it->second;
-                        aAbs.SetCol(nNewCol);
-                        rRef.SetAddress(*mxSheetLimits, aAbs, rPos);
+                        ScSingleRefData& rRef = *p->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rPos);
+
+                        if (aAbs.Tab() == nTab && nRow1 <= aAbs.Row() && aAbs.Row() <= nRow2)
+                        {
+                            // Inside reordered row range.
+                            sc::ColRowReorderMapType::const_iterator it = rColMap.find(aAbs.Col());
+                            if (it != rColMap.end())
+                            {
+                                // This column is reordered.
+                                SCCOL nNewCol = it->second;
+                                aAbs.SetCol(nNewCol);
+                                rRef.SetAddress(*mxSheetLimits, aAbs, rPos);
+                            }
+                        }
                     }
-                }
-            }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(*mxSheetLimits, rPos);
-
-                if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
-                    // Must be a single-sheet reference.
-                    break;
-
-                if (aAbs.aStart.Col() != aAbs.aEnd.Col())
-                    // Whole range must fit in a single column.
-                    break;
-
-                if (aAbs.aStart.Tab() == nTab && nRow1 <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= nRow2)
-                {
-                    // Inside reordered row range.
-                    sc::ColRowReorderMapType::const_iterator it = rColMap.find(aAbs.aStart.Col());
-                    if (it != rColMap.end())
+                break;
+                case svDoubleRef:
                     {
-                        // This column is reordered.
-                        SCCOL nNewCol = it->second;
-                        aAbs.aStart.SetCol(nNewCol);
-                        aAbs.aEnd.SetCol(nNewCol);
-                        rRef.SetRange(*mxSheetLimits, aAbs, rPos);
+                        ScComplexRefData& rRef = *p->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(*mxSheetLimits, rPos);
+
+                        if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
+                            // Must be a single-sheet reference.
+                            break;
+
+                        if (aAbs.aStart.Col() != aAbs.aEnd.Col())
+                            // Whole range must fit in a single column.
+                            break;
+
+                        if (aAbs.aStart.Tab() == nTab && nRow1 <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= nRow2)
+                        {
+                            // Inside reordered row range.
+                            sc::ColRowReorderMapType::const_iterator it = rColMap.find(aAbs.aStart.Col());
+                            if (it != rColMap.end())
+                            {
+                                // This column is reordered.
+                                SCCOL nNewCol = it->second;
+                                aAbs.aStart.SetCol(nNewCol);
+                                aAbs.aEnd.SetCol(nNewCol);
+                                rRef.SetRange(*mxSheetLimits, aAbs, rPos);
+                            }
+                        }
                     }
-                }
+                break;
+                default:
+                    ;
             }
-            break;
-            default:
-                ;
         }
     }
 }
 
 void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, const sc::ColRowReorderMapType& rRowMap )
 {
-    FormulaToken** p = pCode.get();
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN);
+    for (size_t j=0; j<2; ++j)
     {
-        switch ((*p)->GetType())
+        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; pp != pEnd; ++pp)
         {
-            case svSingleRef:
+            FormulaToken* p = aPtrs.getHandledToken(j,pp);
+            if (!p)
+                continue;
+
+            switch (p->GetType())
             {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rPos);
-
-                if (aAbs.Tab() == nTab && nCol1 <= aAbs.Col() && aAbs.Col() <= nCol2)
-                {
-                    // Inside reordered column range.
-                    sc::ColRowReorderMapType::const_iterator it = rRowMap.find(aAbs.Row());
-                    if (it != rRowMap.end())
+                case svSingleRef:
                     {
-                        // This column is reordered.
-                        SCROW nNewRow = it->second;
-                        aAbs.SetRow(nNewRow);
-                        rRef.SetAddress(*mxSheetLimits, aAbs, rPos);
+                        ScSingleRefData& rRef = *p->GetSingleRef();
+                        ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rPos);
+
+                        if (aAbs.Tab() == nTab && nCol1 <= aAbs.Col() && aAbs.Col() <= nCol2)
+                        {
+                            // Inside reordered column range.
+                            sc::ColRowReorderMapType::const_iterator it = rRowMap.find(aAbs.Row());
+                            if (it != rRowMap.end())
+                            {
+                                // This column is reordered.
+                                SCROW nNewRow = it->second;
+                                aAbs.SetRow(nNewRow);
+                                rRef.SetAddress(*mxSheetLimits, aAbs, rPos);
+                            }
+                        }
                     }
-                }
-            }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(*mxSheetLimits, rPos);
-
-                if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
-                    // Must be a single-sheet reference.
-                    break;
-
-                if (aAbs.aStart.Row() != aAbs.aEnd.Row())
-                    // Whole range must fit in a single row.
-                    break;
-
-                if (aAbs.aStart.Tab() == nTab && nCol1 <= aAbs.aStart.Col() && aAbs.aEnd.Col() <= nCol2)
-                {
-                    // Inside reordered column range.
-                    sc::ColRowReorderMapType::const_iterator it = rRowMap.find(aAbs.aStart.Row());
-                    if (it != rRowMap.end())
+                break;
+                case svDoubleRef:
                     {
-                        // This row is reordered.
-                        SCROW nNewRow = it->second;
-                        aAbs.aStart.SetRow(nNewRow);
-                        aAbs.aEnd.SetRow(nNewRow);
-                        rRef.SetRange(*mxSheetLimits, aAbs, rPos);
+                        ScComplexRefData& rRef = *p->GetDoubleRef();
+                        ScRange aAbs = rRef.toAbs(*mxSheetLimits, rPos);
+
+                        if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
+                            // Must be a single-sheet reference.
+                            break;
+
+                        if (aAbs.aStart.Row() != aAbs.aEnd.Row())
+                            // Whole range must fit in a single row.
+                            break;
+
+                        if (aAbs.aStart.Tab() == nTab && nCol1 <= aAbs.aStart.Col() && aAbs.aEnd.Col() <= nCol2)
+                        {
+                            // Inside reordered column range.
+                            sc::ColRowReorderMapType::const_iterator it = rRowMap.find(aAbs.aStart.Row());
+                            if (it != rRowMap.end())
+                            {
+                                // This row is reordered.
+                                SCROW nNewRow = it->second;
+                                aAbs.aStart.SetRow(nNewRow);
+                                aAbs.aEnd.SetRow(nNewRow);
+                                rRef.SetRange(*mxSheetLimits, aAbs, rPos);
+                            }
+                        }
                     }
-                }
+                break;
+                default:
+                    ;
             }
-            break;
-            default:
-                ;
         }
     }
 }
