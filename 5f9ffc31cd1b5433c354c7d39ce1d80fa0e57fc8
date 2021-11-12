@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80a78598_98c6405e",
+        "filename": "sw/inc/nodeoffset.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-12T11:17:36Z",
+      "side": 1,
+      "message": "thanks, addressed here\n   https://gerrit.libreoffice.org/c/core/+/125097",
+      "parentUuid": "0d90735a_8e4a5964",
+      "revId": "5f9ffc31cd1b5433c354c7d39ce1d80fa0e57fc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "419f18ce_a8584572",
