@@ -61,7 +61,7 @@ public:
     void SetPosAndShow(SfxViewShell const * pViewShell);
     const vcl::Cursor& GetTextCursor() const;
 
-    OString getLOKPayload(int nType, int nViewId) const;
+    OString getLOKPayload(int nType, int nViewId, bool* ignore) const;
 };
 
 // From here classes/methods for selections.
@@ -115,7 +115,7 @@ public:
     static void Get1PixelInLogic( const SwViewShell& rSh,
                                     tools::Long* pX = nullptr, tools::Long* pY = nullptr );
 
-    OString getLOKPayload(int nType, int nViewId) const;
+    OString getLOKPayload(int nType, int nViewId, bool* ignore) const;
 };
 
 class SW_DLLPUBLIC SwShellCursor : public virtual SwCursor, public SwSelPaintRects
