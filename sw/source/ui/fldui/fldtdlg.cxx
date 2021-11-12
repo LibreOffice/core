@@ -40,6 +40,7 @@
 #include <view.hxx>
 #include <fldtdlg.hxx>
 #include <swmodule.hxx>
+#include <comphelper/lok.hxx>
 
 #include <globals.hrc>
 
@@ -93,6 +94,9 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pP
         RemoveTabPage("functions");
         RemoveTabPage("database");
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        RemoveTabPage("database");
 }
 
 SwFieldDlg::~SwFieldDlg()
