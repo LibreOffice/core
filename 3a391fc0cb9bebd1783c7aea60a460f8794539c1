@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64d4c9ee_d7578e0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-11-12T13:54:44Z",
+      "side": 1,
+      "message": "Check passes locally - seems intermittent Online CI -\u003e push anyway \u003d)",
+      "revId": "3a391fc0cb9bebd1783c7aea60a460f8794539c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
