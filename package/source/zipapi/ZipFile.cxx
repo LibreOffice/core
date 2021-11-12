@@ -651,11 +651,13 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
         return xSrcStream;
 
     uno::Reference<io::XInputStream> xBufStream;
+#ifndef EMSCRIPTEN
     static const sal_Int32 nThreadingThreshold = 10000;
 
     if( xSrcStream->available() > nThreadingThreshold )
         xBufStream = new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
     else
+#endif
         xBufStream = new XBufferedStream(xSrcStream);
 
     return xBufStream;
