@@ -99,16 +99,33 @@ struct XMLPropertyMapEntry
      */
     bool            mbImportOnly;
 
+    template< std::size_t N >
     XMLPropertyMapEntry(
-            const char*     sApiName,
-            sal_Int32       nApiNameLength_,
+            const char (&sApiName)[N],
             sal_uInt16      nNameSpace,
             enum ::xmloff::token::XMLTokenEnum eXMLName,
             sal_uInt32 nType,
             sal_Int16       nContextId,
             SvtSaveOptions::ODFSaneDefaultVersion nEarliestODFVersionForExport,
             bool            bImportOnly)
-        : msApiName(sApiName), nApiNameLength(nApiNameLength_),
+        :
+        msApiName(sApiName),
+        nApiNameLength(N-1),
+        meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
+        mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
+        mbImportOnly(bImportOnly)
+    {}
+    XMLPropertyMapEntry(
+            std::nullptr_t ,
+            sal_uInt16      nNameSpace,
+            enum ::xmloff::token::XMLTokenEnum eXMLName,
+            sal_uInt32 nType,
+            sal_Int16       nContextId,
+            SvtSaveOptions::ODFSaneDefaultVersion nEarliestODFVersionForExport,
+            bool            bImportOnly)
+        :
+        msApiName(nullptr),
+        nApiNameLength(0),
         meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
         mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
         mbImportOnly(bImportOnly)

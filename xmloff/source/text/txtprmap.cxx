@@ -32,13 +32,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 #define M_E_( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFSVER_010, false }
+    { a, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFSVER_010, false }
 
 #define M_EV_( a, p, l, t, c, v ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, v, false }
+    { a, XML_NAMESPACE_##p, XML_##l, t, c, v, false }
 
 #define M_ED_( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFSVER_010, false }
+    { a, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFSVER_010, false }
 
 // text properties
 #define MT_E( a, p, l, t, c ) \
@@ -74,17 +74,16 @@ using namespace ::xmloff::token;
 #define MC_E( a, p, l, t, c ) \
     M_E_( a, p, l, (t|XML_TYPE_PROP_TABLE_CELL), c )
 
-#define MAP_ODF13(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_013, false }
+#define MAP_ODF13(name,prefix,token,type,context)  { name, prefix, token, type, context, SvtSaveOptions::ODFSVER_013, false }
 
 // extensions import/export
-#define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false }
+#define MAP_EXT(name,prefix,token,type,context)  { name, prefix, token, type, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false }
 // extensions import only
-#define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, true }
+#define MAP_EXT_I(name,prefix,token,type,context)  { name, prefix, token, type, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, true }
 
-#define M_END() \
-    { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFSVER_010, false }
+#define M_END() { nullptr, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFSVER_010, false }
 
-#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_(name,prefix,token,type,context)  { name, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
 #define GMAP(name,prefix,token,type,context) MAP_(name,prefix,token,static_cast<sal_Int32>(type|XML_TYPE_PROP_GRAPHIC),context)
 
 XMLPropertyMapEntry const aXMLParaPropMap[] =
@@ -181,9 +180,9 @@ XMLPropertyMapEntry const aXMLParaPropMap[] =
     // RES_CHRATR_WEIGHT
     MT_E( "CharWeight",     FO,     FONT_WEIGHT,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_RSID
-    { "Rsid", sizeof("Rsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
+    { "Rsid", XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
     // RES_PARATR_RSID
-    { "ParRsid", sizeof("ParRsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
+    { "ParRsid", XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
     // RES_CHRATR_WORDLINEMODE
     MT_E( "CharWordMode",   STYLE,  TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MT_E( "CharWordMode",   STYLE,  TEXT_OVERLINE_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
@@ -525,9 +524,9 @@ XMLPropertyMapEntry const aXMLTextPropMap[] =
     // RES_CHRATR_WEIGHT
     MT_E( "CharWeight",     FO,     FONT_WEIGHT,        XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_RSID
-    { "Rsid", sizeof("Rsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
+    { "Rsid", XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
     // RES_PARATR_RSID
-    { "ParRsid", sizeof("ParRsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
+    { "ParRsid", XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
     // RES_CHRATR_WORDLINEMODE
     MT_E( "CharWordMode",   STYLE,  TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MT_E( "CharWordMode",   STYLE,  TEXT_OVERLINE_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
@@ -542,7 +541,7 @@ XMLPropertyMapEntry const aXMLTextPropMap[] =
     // RES_CHRATR_BACKGROUND
     MT_E( "CharBackColor",  FO, BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_CHAR_BACKGROUND ),
     MT_E( "CharBackTransparent",    FO, BACKGROUND_COLOR, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, CTF_CHAR_BACKGROUND_TRANSPARENCY),
-    { "CharShadingValue", sizeof("CharShadingValue")-1, XML_NAMESPACE_LO_EXT, XML_CHAR_SHADING_VALUE, XML_TYPE_NUMBER|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
+    { "CharShadingValue", XML_NAMESPACE_LO_EXT, XML_CHAR_SHADING_VALUE, XML_TYPE_NUMBER|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false },
     MT_E( "CharBackColor",  FO, TEXT_BACKGROUND_COLOR, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
     // RES_CHRATR_CJK_FONT
     MT_ED( "CharFontNameAsian", STYLE,  FONT_NAME_ASIAN,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),
