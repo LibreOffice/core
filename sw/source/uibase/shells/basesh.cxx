@@ -561,10 +561,10 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
                 {
                     sw::UndoManager& rManager = rWrtShell.GetDoc()->GetUndoManager();
                     const SfxUndoAction* pAction = rManager.GetUndoAction();
-                    SwView& rView = rWrtShell.GetView();
-                    ViewShellId nViewShellId = rView.GetViewShellId();
+                    SwView& rSwView = rWrtShell.GetView();
+                    ViewShellId nViewShellId = rSwView.GetViewShellId();
                     if (pAction->GetViewShellId() != nViewShellId
-                        && rManager.IsViewUndoActionIndependent(&rView))
+                        && rManager.IsViewUndoActionIndependent(&rSwView))
                     {
                         // Execute the undo with an offset: don't undo the top action, but an
                         // earlier one, since it's independent and that belongs to our view.
