@@ -44,6 +44,13 @@ $(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) :
 		mkdir -p $$(dir $$@) && \
 		echo "$$(call gb_PrecompiledHeader_get_target,$(1),$(3)) : $$(gb_Helper_PHONY)" > $$@)
 
+# keep the flags the PCH was built with in a separate file, update the file if and only if the flags
+# change, and make the PCH depend on it => the PCH will be rebuilt on any flags change
+.PHONY: force
+$(call gb_PrecompiledHeader_get_flags_file,$(1),$(3)) : force
+	echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) | cmp -s - $$@ \
+	|| echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) > $$@
+
 # despite this being only one .d file, need to run concat-deps on it to
 # re-write external headers from UnpackedTarball
 $(call gb_PrecompiledHeader_get_target,$(1),$(3)) :
@@ -52,7 +59,6 @@ $(call gb_PrecompiledHeader_get_target,$(1),$(3)) :
 	rm -f $$@
 	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(3),$(5))
 	$$(call gb_PrecompiledHeader__sum_command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(3))
-	echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) > $$(call gb_PrecompiledHeader_get_target,$(1),$(3)).flags
 ifeq ($(gb_FULLDEPS),$(true))
 	$$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,$$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(3))) && \
@@ -73,8 +79,8 @@ $(call gb_PrecompiledHeader_get_clean_target,$(1)) :
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(3)).obj \
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(3)).pdb \
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(3)).sum \
-			$$(call gb_PrecompiledHeader_get_target,$(1),$(3)).flags \
-			$$(call gb_PrecompiledHeader_get_target,$(1),$(3)).reuse \
+			$$(call gb_PrecompiledHeader_get_flags_file,$(1),$(3)) \
+			$$(call gb_PrecompiledHeader_get_for_reuse_target,$(1),$(3)) \
 			$$(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)))
 
 endef
@@ -85,12 +91,12 @@ endef
 # This complements the check in gb_CxxObject__set_pchflags.
 define gb_PrecompiledHeader_check_flags
 $$(call gb_Helper_abbreviate_dirs,\
-	$$(if $$(strip $$(call gb_PrecompiledHeader_check_flags_internal,$$(shell cat $(3).flags),$(4),$(2))),false,true) || ( \
+	$$(if $$(strip $$(call gb_PrecompiledHeader_check_flags_internal,$$(shell cat $(4)),$(5),$(2))),false,true) || ( \
 		echo Error reusing $(2) by $(1). >&2 && \
 		echo -n " precompiled header flags : ">&2 && \
-		cat $(3).flags >&2 && \
-		echo    "            object flags  : "$$(sort $(4)) >&2 && \
-		echo    " reason : $$(call gb_PrecompiledHeader_check_flags_internal,$$(shell cat $(3).flags),$(4),$(2))" >&2 && \
+		cat $(4) >&2 && \
+		echo    "            object flags  : "$$(sort $(5)) >&2 && \
+		echo    " reason : $$(call gb_PrecompiledHeader_check_flags_internal,$$(shell cat $(4)),$(5),$(2))" >&2 && \
 		echo Incorrect precompiled header setup or internal gbuild error. >&2 ; \
 		exit 1) \
 )

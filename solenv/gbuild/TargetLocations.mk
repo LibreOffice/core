@@ -157,6 +157,7 @@ gb_PackageInfo_get_target = $(WORKDIR)/PackageInfo
 gb_Postprocess_get_target = $(WORKDIR)/Postprocess/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT).d
 gb_PrecompiledHeader_get_dep_target_tmp = $(call gb_PrecompiledHeader_get_dep_target,$(1),$(2)).tmp
+gb_PrecompiledHeader_get_flags_file = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT).flags
 gb_PrecompiledHeader_get_for_reuse_target = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT).reuse
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT)
 gb_PropertiesTranslateTarget_get_target = $(WORKDIR)/PropertiesTranslateTarget/$(1).properties

@@ -1853,6 +1853,7 @@ define gb_LinkTarget__set_precompiled_header_impl
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
 $(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(call gb_CxxObject_get_source,$(SRCDIR),$(2))
 $(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(patsubst %.cxx,%.hxx,$(call gb_CxxObject_get_source,$(SRCDIR),$(2)))
+$(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(call gb_PrecompiledHeader_get_flags_file,$(3),$(4))
 
 $(call gb_PrecompiledHeader_get_target,$(3),$(4)) : $(call gb_LinkTarget_get_headers_target,$(1))
 
@@ -1912,7 +1913,9 @@ $(call gb_LinkTarget_get_pch_timestamp,$(4)) : $(call gb_LinkTarget_get_pch_reus
 # Depending directly on the PCH could cause that PCH to be built with this linktarget's flags.
 $(call gb_LinkTarget_get_pch_reuse_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_for_reuse_target,$(3),$(4))
 	$(call gb_PrecompiledHeader_check_flags,$(4),$(2),\
-		$(call gb_PrecompiledHeader_get_target,$(3),$(4)),$$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS))
+		$(call gb_PrecompiledHeader_get_target,$(3),$(4)),\
+		$(call gb_PrecompiledHeader_get_flags_file,$(3),$(4)),\
+		$$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS))
 	$$(call gb_PrecompiledHeader__copy_reuse_files,$(1),$(3),$(4))
 	mkdir -p $$(dir $$@) && touch $$@
 
