@@ -618,19 +618,34 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     else
         m_pVersionHelper  = std::make_unique<OEvoabVersion35Helper>();
 
-    #define REGISTER_PROP( id, member ) \
-        registerProperty( \
-            OMetaConnection::getPropMap().getNameByIndex( id ), \
-            id, \
-            PropertyAttribute::READONLY, \
-            &member, \
-            cppu::UnoType<decltype(member)>::get() \
-        );
-
-    REGISTER_PROP( PROPERTY_ID_FETCHSIZE, m_nFetchSize );
-    REGISTER_PROP( PROPERTY_ID_RESULTSETTYPE, m_nResultSetType );
-    REGISTER_PROP( PROPERTY_ID_FETCHDIRECTION, m_nFetchDirection );
-    REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+        PROPERTY_ID_FETCHSIZE,
+        PropertyAttribute::READONLY,
+        &m_nFetchSize,
+        cppu::UnoType<decltype(m_nFetchSize)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+        PROPERTY_ID_RESULTSETTYPE,
+        PropertyAttribute::READONLY,
+        &m_nResultSetType,
+        cppu::UnoType<decltype(m_nResultSetType)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+        PROPERTY_ID_FETCHDIRECTION,
+        PropertyAttribute::READONLY,
+        &m_nFetchDirection,
+        cppu::UnoType<decltype(m_nFetchDirection)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+        PROPERTY_ID_RESULTSETCONCURRENCY,
+        PropertyAttribute::READONLY,
+        &m_nResultSetConcurrency,
+        cppu::UnoType<decltype(m_nResultSetConcurrency)>::get()
+    );
 }
 
 OEvoabResultSet::~OEvoabResultSet()

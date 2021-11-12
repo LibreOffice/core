@@ -89,24 +89,69 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     , m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     , m_bEscapeProcessing(true)
 {
-#define REGISTER_PROP( id, member ) \
-    registerProperty( \
-        OMetaConnection::getPropMap().getNameByIndex( id ), \
-        id, \
-        0, \
-        &member, \
-        cppu::UnoType<decltype(member)>::get() \
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+        PROPERTY_ID_CURSORNAME,
+        0,
+        &m_aCursorName,
+        cppu::UnoType<decltype(m_aCursorName)>::get()
     );
-
-    REGISTER_PROP( PROPERTY_ID_CURSORNAME, m_aCursorName );
-    REGISTER_PROP( PROPERTY_ID_MAXFIELDSIZE, m_nMaxFieldSize );
-    REGISTER_PROP( PROPERTY_ID_MAXROWS, m_nMaxRows );
-    REGISTER_PROP( PROPERTY_ID_QUERYTIMEOUT, m_nQueryTimeOut );
-    REGISTER_PROP( PROPERTY_ID_FETCHSIZE, m_nFetchSize );
-    REGISTER_PROP( PROPERTY_ID_RESULTSETTYPE, m_nResultSetType );
-    REGISTER_PROP( PROPERTY_ID_FETCHDIRECTION, m_nFetchDirection );
-    REGISTER_PROP( PROPERTY_ID_ESCAPEPROCESSING, m_bEscapeProcessing );
-    REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXFIELDSIZE),
+        PROPERTY_ID_MAXFIELDSIZE,
+        0,
+        &m_nMaxFieldSize,
+        cppu::UnoType<decltype(m_nMaxFieldSize)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXROWS),
+        PROPERTY_ID_MAXROWS,
+        0,
+        &m_nMaxRows,
+        cppu::UnoType<decltype(m_nMaxRows)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_QUERYTIMEOUT),
+        PROPERTY_ID_QUERYTIMEOUT,
+        0,
+        &m_nQueryTimeOut,
+        cppu::UnoType<decltype(m_nQueryTimeOut)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+        PROPERTY_ID_FETCHSIZE,
+        0,
+        &m_nFetchSize,
+        cppu::UnoType<decltype(m_nFetchSize)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+        PROPERTY_ID_RESULTSETTYPE,
+        0,
+        &m_nResultSetType,
+        cppu::UnoType<decltype(m_nResultSetType)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+        PROPERTY_ID_FETCHDIRECTION,
+        0,
+        &m_nFetchDirection,
+        cppu::UnoType<decltype(m_nFetchDirection)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),
+        PROPERTY_ID_ESCAPEPROCESSING,
+        0,
+        &m_bEscapeProcessing,
+        cppu::UnoType<decltype(m_bEscapeProcessing)>::get()
+    );
+    registerProperty(
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+        PROPERTY_ID_RESULTSETCONCURRENCY,
+        0,
+        &m_nResultSetConcurrency,
+        cppu::UnoType<decltype(m_nResultSetConcurrency)>::get()
+    );
 }
 
 OCommonStatement::~OCommonStatement()
