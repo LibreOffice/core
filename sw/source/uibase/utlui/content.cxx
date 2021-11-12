@@ -2025,6 +2025,8 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
 
                     // add this node as a parent candidate for any following nodes at a higher outline level
                     aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
+
+                    bChild = true;
                 }
             }
         }
