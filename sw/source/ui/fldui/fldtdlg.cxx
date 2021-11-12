@@ -40,6 +40,7 @@
 #include <view.hxx>
 #include <fldtdlg.hxx>
 #include <swmodule.hxx>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -92,6 +93,9 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pP
         RemoveTabPage("functions");
         RemoveTabPage("database");
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        RemoveTabPage("database");
 }
 
 SwFieldDlg::~SwFieldDlg()
