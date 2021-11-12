@@ -30,7 +30,7 @@ namespace oox::core {
 using namespace ::com::sun::star::uno;
 
 FastTokenHandler::FastTokenHandler() :
-    mrTokenMap( StaticTokenMap::get() )
+    mrTokenMap( StaticTokenMap() )
 {
 }
 
