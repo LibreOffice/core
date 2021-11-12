@@ -13,8 +13,8 @@ dialogs = [
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
     {"command": ".uno:NewDoc", "closeButton": "close"},
     {"command": ".uno:SaveAsTemplate", "closeButton": "cancel"},
-    {"command": ".uno:ExportToPDF", "closeButton": "cancel", "skipTestOK": True},
-        # export needs filesystem
+    #{"command": ".uno:ExportToPDF", "closeButton": "cancel", "skipTestOK": True},
+        # tested in sw/qa/uitest/writer_tests4/exportToPDF.py
     {"command": ".uno:ExportToEPUB", "closeButton": "cancel", "skipTestOK": True},
         # export needs filesystem
     {"command": ".uno:Print", "closeButton": "cancel", "skipTestOK": True},
