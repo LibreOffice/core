@@ -346,8 +346,9 @@ public:
     virtual void libreOfficeKitViewUpdatedCallback(int nType) const override;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;
     // Returns current payload for nType, after libreOfficeKitViewUpdatedCallback() or
-    // libreOfficeKitViewUpdatedCallbackPerViewId() were called.
-    virtual OString getLOKPayload(int nType, int nViewId) const;
+    // libreOfficeKitViewUpdatedCallbackPerViewId() were called. If no payload should
+    // be generated, the ignore flag should be set.
+    virtual OString getLOKPayload(int nType, int nViewId, bool* ignore) const;
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);

@@ -1544,7 +1544,7 @@ void SfxViewShell::flushPendingLOKInvalidateTiles()
     // SfxViewShell itself does not delay any tile invalidations.
 }
 
-OString SfxViewShell::getLOKPayload(int nType, int /*nViewId*/) const
+OString SfxViewShell::getLOKPayload(int nType, int /*nViewId*/, bool* /*ignore*/) const
 {
     // SfxViewShell itself currently doesn't handle any updated-payload types.
     SAL_WARN("sfx.view", "SfxViewShell::getLOKPayload unhandled type " << lokCallbackTypeToString(nType));
