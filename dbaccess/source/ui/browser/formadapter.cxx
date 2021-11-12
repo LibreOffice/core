@@ -89,13 +89,42 @@ Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType)
 void SbaXFormAdapter::StopListening()
 {
     // log off all our multiplexers
-    STOP_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, css::sdbc::XRowSet, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, css::sdb::XRowSetApproveBroadcaster, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(SQLErrorListener, m_aErrorListeners, css::sdb::XSQLErrorBroadcaster, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(SubmitListener, m_aSubmitListeners, css::form::XSubmit, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(ResetListener, m_aResetListeners, css::form::XReset, m_xMainForm);
-
+    if (m_aLoadListeners.getLength())
+    {
+        css::uno::Reference< css::form::XLoadable > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeLoadListener(&m_aLoadListeners);
+    }
+    if (m_aRowSetListeners.getLength())
+    {
+        css::uno::Reference< css::sdbc::XRowSet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeRowSetListener(&m_aRowSetListeners);
+    }
+    if (m_aRowSetApproveListeners.getLength())
+    {
+        css::uno::Reference< css::sdb::XRowSetApproveBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeRowSetApproveListener(&m_aRowSetApproveListeners);
+    }
+    if (m_aErrorListeners.getLength())
+    {
+        css::uno::Reference< css::sdb::XSQLErrorBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeSQLErrorListener(&m_aErrorListeners);
+    }
+    if (m_aSubmitListeners.getLength())
+    {
+        css::uno::Reference< css::form::XSubmit > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeSubmitListener(&m_aSubmitListeners);
+    }
+    if (m_aResetListeners.getLength())
+    {
+        css::uno::Reference< css::form::XReset > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeResetListener(&m_aResetListeners);
+    }
     if (m_aParameterListeners.getLength())
     {
         Reference< css::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
@@ -103,8 +132,20 @@ void SbaXFormAdapter::StopListening()
             xBroadcaster->removeParameterListener(&m_aParameterListeners);
     }
 
-    STOP_PROPERTY_MULTIPLEXER_LISTENING(PropertyChangeListener, m_aPropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
-    STOP_PROPERTY_MULTIPLEXER_LISTENING(VetoableChangeListener, m_aVetoablePropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
+    if (m_aPropertyChangeListeners.getOverallLen())
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removePropertyChangeListener(OUString(), &m_aPropertyChangeListeners);
+    }
+
+    if (m_aVetoablePropertyChangeListeners.getOverallLen())
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeVetoableChangeListener(OUString(), &m_aVetoablePropertyChangeListeners);
+    }
+
     if (m_aPropertiesChangeListeners.getLength())
     {
         Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
@@ -121,12 +162,42 @@ void SbaXFormAdapter::StopListening()
 void SbaXFormAdapter::StartListening()
 {
     // log off all our multiplexers
-    START_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, css::sdbc::XRowSet, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, css::sdb::XRowSetApproveBroadcaster, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(SQLErrorListener, m_aErrorListeners, css::sdb::XSQLErrorBroadcaster, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(SubmitListener, m_aSubmitListeners, css::form::XSubmit, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(ResetListener, m_aResetListeners, css::form::XReset, m_xMainForm);
+    if (m_aLoadListeners.getLength())
+    {
+        css::uno::Reference< css::form::XLoadable > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addLoadListener(&m_aLoadListeners);
+    }
+    if (m_aRowSetListeners.getLength())
+    {
+        css::uno::Reference< css::sdbc::XRowSet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addRowSetListener(&m_aRowSetListeners);
+    }
+    if (m_aRowSetApproveListeners.getLength())
+    {
+        css::uno::Reference< css::sdb::XRowSetApproveBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addRowSetApproveListener(&m_aRowSetApproveListeners);
+    }
+    if (m_aErrorListeners.getLength())
+    {
+        css::uno::Reference< css::sdb::XSQLErrorBroadcaster > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addSQLErrorListener(&m_aErrorListeners);
+    }
+    if (m_aSubmitListeners.getLength())
+    {
+        css::uno::Reference< css::form::XSubmit > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addSubmitListener(&m_aSubmitListeners);
+    }
+    if (m_aResetListeners.getLength())
+    {
+        css::uno::Reference< css::form::XReset > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addResetListener(&m_aResetListeners);
+    }
 
     if (m_aParameterListeners.getLength())
     {
@@ -135,8 +206,20 @@ void SbaXFormAdapter::StartListening()
             xBroadcaster->addParameterListener(&m_aParameterListeners);
     }
 
-    START_PROPERTY_MULTIPLEXER_LISTENING(PropertyChangeListener, m_aPropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
-    START_PROPERTY_MULTIPLEXER_LISTENING(VetoableChangeListener, m_aVetoablePropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
+    if (m_aPropertyChangeListeners.getOverallLen())
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addPropertyChangeListener(OUString(), &m_aPropertyChangeListeners);
+    }
+
+    if (m_aVetoablePropertyChangeListeners.getOverallLen())
+    {
+        css::uno::Reference< css::beans::XPropertySet > xBroadcaster(m_xMainForm, css::uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addVetoableChangeListener(OUString(), &m_aVetoablePropertyChangeListeners);
+    }
+
     if (m_aPropertiesChangeListeners.getLength())
     {
         Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);

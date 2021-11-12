@@ -51,149 +51,174 @@ namespace dbaui
         virtual void SAL_CALL release() noexcept override { m_rParent.release(); }
     };
 
-    // declaration of a listener multiplexer class
-    #define BEGIN_DECLARE_LISTENER_MULTIPLEXER(classname, listenerclass)                    \
-    class classname                                                                         \
-            :public OSbaWeakSubObject                                                           \
-            ,public listenerclass                                                           \
-            ,public ::comphelper::OInterfaceContainerHelper2                                       \
-    {                                                                                       \
-    public:                                                                                 \
-        classname( ::cppu::OWeakObject& rSource,                                            \
-            ::osl::Mutex& rMutex);                                                          \
-        DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
-        virtual css::uno::Any  SAL_CALL queryInterface(                        \
-            const css::uno::Type& _rType) override; \
-                                                                                            \
-        /* css::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;  \
-
-    #define DECLARE_MULTIPLEXER_VOID_METHOD(methodname, eventtype)                          \
-        virtual void SAL_CALL methodname(const eventtype& e) override; \
-
-    #define DECLARE_MULTIPLEXER_BOOL_METHOD(methodname, eventtype)                          \
-        virtual sal_Bool SAL_CALL methodname(const eventtype& e) override;   \
-
-    #define END_DECLARE_LISTENER_MULTIPLEXER()                                               \
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */    \
-        using OSbaWeakSubObject::operator new;   \
-        using OSbaWeakSubObject::operator delete;    \
-    };                                                                                      \
-
-    // implementation of a listener multiplexer class
-
-    #define IMPLEMENT_LISTENER_MULTIPLEXER_CORE(classname, listenerclass)                   \
-                                                                                            \
-    classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)               \
-            :OSbaWeakSubObject(rSource)                                                     \
-            ,OInterfaceContainerHelper2(_rMutex)                                             \
-    {                                                                                       \
-    }                                                                                       \
-                                                                                            \
-    css::uno::Any  SAL_CALL classname::queryInterface(                         \
-        const css::uno::Type& _rType) \
-    {                                                                                       \
-        css::uno::Any aReturn =                                                \
-            OSbaWeakSubObject::queryInterface(_rType);                                          \
-        if (!aReturn.hasValue())                                                            \
-            aReturn = ::cppu::queryInterface(_rType,                                        \
-                static_cast< listenerclass* >(this),                                        \
-                static_cast< css::lang::XEventListener* >(static_cast< listenerclass* >(this)) \
-            );                                                                              \
-                                                                                            \
-        return aReturn;                                                                     \
-    }                                                                                       \
-    void SAL_CALL classname::disposing(const css::lang::EventObject& )\
-    {                                                                                       \
-    }                                                                                       \
-
-
-    #define STOP_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
-    if (multiplexer.getLength())                                                            \
-    {                                                                                   \
-        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-        if (xBroadcaster.is())                                                          \
-            xBroadcaster->remove##listenerdesc(&multiplexer);                           \
-    }                                                                                   \
-
-    #define START_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
-    if (multiplexer.getLength())                                                        \
-    {                                                                                   \
-        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-        if (xBroadcaster.is())                                                          \
-            xBroadcaster->add##listenerdesc(&multiplexer);                              \
-    }                                                                                   \
-
-    #define STOP_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
-    if (multiplexer.getOverallLen())                                                        \
-    {                                                                                       \
-        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-        if (xBroadcaster.is())                                                              \
-            xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                            \
-    }                                                                                       \
-
-    #define START_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
-    if (multiplexer.getOverallLen())                                                        \
-    {                                                                                       \
-        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
-        if (xBroadcaster.is())                                                              \
-            xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                               \
-    }                                                                                       \
-
     // some listener multiplexers
     // css::frame::XStatusListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXStatusMultiplexer, css::frame::XStatusListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(statusChanged, css::frame::FeatureStateEvent)
+    class SbaXStatusMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::frame::XStatusListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXStatusMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+
+        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& e) override;
 
     private:
         css::frame::FeatureStateEvent  m_aLastKnownStatus;
-    public:                                                                                 \
+    public:
         const css::frame::FeatureStateEvent& getLastEvent( ) const { return m_aLastKnownStatus; }
-    END_DECLARE_LISTENER_MULTIPLEXER()
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::form::XLoadListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXLoadMultiplexer, css::form::XLoadListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(loaded, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(unloaded, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(unloading, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(reloading, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(reloaded, css::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXLoadMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::form::XLoadListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXLoadMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXLoadMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+
+        virtual void SAL_CALL loaded(const css::lang::EventObject& e) override;
+        virtual void SAL_CALL unloaded(const css::lang::EventObject& e) override;
+        virtual void SAL_CALL unloading(const css::lang::EventObject& e) override;
+        virtual void SAL_CALL reloading(const css::lang::EventObject& e) override;
+        virtual void SAL_CALL reloaded(const css::lang::EventObject& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::form::XDatabaseParameterListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXParameterMultiplexer, css::form::XDatabaseParameterListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveParameter, css::form::DatabaseParameterEvent)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXParameterMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::form::XDatabaseParameterListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXParameterMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXParameterMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual sal_Bool SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::form::XSubmitListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXSubmitMultiplexer, css::form::XSubmitListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveSubmit, css::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXSubmitMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::form::XSubmitListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXSubmitMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXSubmitMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual sal_Bool SAL_CALL approveSubmit(const css::lang::EventObject& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::form::XResetListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXResetMultiplexer, css::form::XResetListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveReset, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(resetted, css::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXResetMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::form::XResetListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXResetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXResetMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual sal_Bool SAL_CALL approveReset(const css::lang::EventObject& e) override;
+        virtual void SAL_CALL resetted(const css::lang::EventObject& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::sdbc::XRowSetListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(cursorMoved, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(rowChanged, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(rowSetChanged, css::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXRowSetMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::sdbc::XRowSetListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXRowSetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXRowSetMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void SAL_CALL cursorMoved(const css::lang::EventObject& e) override;
+        virtual void SAL_CALL rowChanged(const css::lang::EventObject& e) override;
+        virtual void SAL_CALL rowSetChanged(const css::lang::EventObject& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::sdb::XRowSetApproveListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveCursorMove, css::lang::EventObject)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveRowChange, css::sdb::RowChangeEvent)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveRowSetChange, css::lang::EventObject)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXRowSetApproveMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::sdb::XRowSetApproveListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXRowSetApproveMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXRowSetApproveMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual sal_Bool SAL_CALL approveCursorMove(const css::lang::EventObject& e) override;
+        virtual sal_Bool SAL_CALL approveRowChange(const css::sdb::RowChangeEvent& e) override;
+        virtual sal_Bool SAL_CALL approveRowSetChange(const css::lang::EventObject& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::sdb::XSQLErrorListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXSQLErrorMultiplexer, css::sdb::XSQLErrorListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(errorOccured, css::sdb::SQLErrorEvent)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXSQLErrorMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::sdb::XSQLErrorListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXSQLErrorMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXSQLErrorMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void SAL_CALL errorOccured(const css::sdb::SQLErrorEvent& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
 
     // css::beans::XPropertyChangeListener
     class SbaXPropertyChangeMultiplexer final
@@ -260,9 +285,23 @@ namespace dbaui
     };
 
     // css::beans::XPropertiesChangeListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXPropertiesChangeMultiplexer, css::beans::XPropertiesChangeListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(propertiesChange, css::uno::Sequence< css::beans::PropertyChangeEvent >)
-    END_DECLARE_LISTENER_MULTIPLEXER()
+    class SbaXPropertiesChangeMultiplexer
+            :public OSbaWeakSubObject
+            ,public css::beans::XPropertiesChangeListener
+            ,public ::comphelper::OInterfaceContainerHelper2
+    {
+    public:
+        SbaXPropertiesChangeMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+        DECLARE_UNO3_DEFAULTS(SbaXPropertiesChangeMultiplexer, OSbaWeakSubObject)
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+
+        /* css::lang::XEventListener */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void SAL_CALL propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent >& e) override;
+        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
+        using OSbaWeakSubObject::operator new;
+        using OSbaWeakSubObject::operator delete;
+    };
     // the SbaXPropertiesChangeMultiplexer doesn't care about the property names a listener logs on for, it simply
     // forwards _all_ changes to _all_ listeners
 }
