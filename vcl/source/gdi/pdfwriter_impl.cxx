@@ -47,6 +47,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/digest.h>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
@@ -3280,6 +3281,7 @@ we check in the following sequence:
             bool    bTargetHasPDFExtension = false;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
             bool    bIsUNCPath = false;
+            bool    bUnparsedURI = false;
 
             // check if the protocol is a known one, or if there is no protocol at all (on target only)
             // if there is no protocol, make the target relative to the current document directory
@@ -3292,14 +3294,14 @@ we check in the following sequence:
                 }
                 else
                 {
-                    INetURLObject aNewBase( aDocumentURL );//duplicate document URL
-                    aNewBase.removeSegment(); //remove last segment from it, obtaining the base URL of the
-                                              //target document
-                    aNewBase.insertName( url );
-                    aTargetURL = aNewBase;//reassign the new target URL
+                    INetURLObject aNewURL(rtl::Uri::convertRelToAbs(m_aContext.BaseURL, url));
+                    aTargetURL = aNewURL; //reassign the new target URL
+
                     //recompute the target protocol, with the new URL
                     //normal URL processing resumes
                     eTargetProtocol = aTargetURL.GetProtocol();
+
+                    bUnparsedURI = eTargetProtocol == INetProtocol::NotValid;
                 }
             }
 
@@ -3415,7 +3417,9 @@ we check in the following sequence:
                         //substitute the fragment
                         aTargetURL.SetMark( OStringToOUString(aLineLoc.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US) );
                     }
-                    OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE );
+                    OUString aURL = bUnparsedURI ? url :
+                                                   aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset :
+                                                                                      INetURLObject::DecodeMechanism::NONE );
                     appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
                                                                                         INetURLObject::EncodeMechanism::WasEncoded,
                                                                                             bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE
