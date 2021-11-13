@@ -56,7 +56,7 @@ private:
     SwDoc& m_rDoc;
 
     mutable rtl::Reference<SwChartDataProvider> maChartDataProviderImplRef;
-    std::unique_ptr<SwChartLockController_Helper, o3tl::default_delete<SwChartLockController_Helper>> mpChartControllerHelper;
+    std::unique_ptr<SwChartLockController_Helper> mpChartControllerHelper;
 };
 
 }
