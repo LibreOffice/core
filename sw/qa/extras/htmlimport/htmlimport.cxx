@@ -377,6 +377,25 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)
+{
+    load(mpTestDocumentPath, "tdf142781.html");
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    Size aPixelSize(672, 480);
+    Size aExpected = pDevice->PixelToLogic(aPixelSize, MapMode(MapUnit::Map100thMM));
+    awt::Size aSize = getShape(1)->getSize();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 12700
+    // - Actual: 25400
+   // CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
+    aSize = getShape(2)->getSize();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 17780
+    // - Actual: 35560
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getWidth()), aSize.Width);
+}
+
+
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf122789)
 {
     load(mpTestDocumentPath, "tdf122789.html");

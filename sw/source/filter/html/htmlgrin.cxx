@@ -525,6 +525,11 @@ IMAGE_SETEVENT:
             nWidth = aPixelSize.Width();
         if (!bHeightProvided)
             nHeight = aPixelSize.Height();
+        // tdf#142781 - calculate the width/height keeping the aspect ratio
+        if (!bPercentWidth && bWidthProvided && !bHeightProvided)
+            nHeight = nWidth * aPixelSize.Height() / aPixelSize.Width();
+        else if (!bPercentHeight && !bWidthProvided && bHeightProvided)
+            nWidth = nHeight * aPixelSize.Width() / aPixelSize.Height();
     }
 
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
