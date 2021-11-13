@@ -21,6 +21,7 @@
 
 #include <oox/helper/attributelist.hxx>
 #include <drawingml/colorchoicecontext.hxx>
+#include <drawingml/linepropertiescontext.hxx>
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/textcharacterproperties.hxx>
 #include <drawingml/texteffectscontext.hxx>
@@ -113,9 +114,9 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
 
     switch( aElementToken )
     {
-// TODO unsupported yet
-//        case A_TOKEN( ln ):         // CT_LineProperties
-//            return new LinePropertiesContext( getHandler(), rAttribs, maTextOutlineProperties );
+        case A_TOKEN(ln): // CT_LineProperties
+            // TODO still largely unsupported
+            return new LinePropertiesContext(*this, rAttribs, mrTextCharacterProperties.moTextOutlineProperties.use());
         // EG_FillProperties
         case A_TOKEN( noFill ):
         case A_TOKEN( solidFill ):

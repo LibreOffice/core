@@ -26,6 +26,7 @@
 #include <drawingml/textfont.hxx>
 
 #include <drawingml/fillproperties.hxx>
+#include <drawingml/lineproperties.hxx>
 
 namespace oox { class PropertySet; }
 
@@ -57,6 +58,8 @@ struct TextCharacterProperties
     OptValue< bool >    moItalic;
     OptValue< bool >    moUnderlineLineFollowText;
     OptValue< bool >    moUnderlineFillFollowText;
+    OptValue<LineProperties> moTextOutlineProperties;
+
     FillProperties      maFillProperties;
     /// Set if there was a property set that alters run visually during import
     bool mbHasVisualRunProperties;

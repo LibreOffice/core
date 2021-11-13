@@ -65,6 +65,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moItalic.assignIfUsed( rSourceProps.moItalic );
     moUnderlineLineFollowText.assignIfUsed( rSourceProps.moUnderlineLineFollowText );
     moUnderlineFillFollowText.assignIfUsed( rSourceProps.moUnderlineFillFollowText );
+    moTextOutlineProperties.assignIfUsed(rSourceProps.moTextOutlineProperties);
 
     maTextEffectsProperties = rSourceProps.maTextEffectsProperties;
     maFillProperties.assignUsed( rSourceProps.maFillProperties );
@@ -110,6 +111,17 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if ( maFillProperties.moFillType.has() )
     {
         Color aColor = maFillProperties.getBestSolidColor();
+        // tdf#137438 Emulate text outline color/transparency.
+        // If the outline color dominates, then use it as the text color.
+        if (moTextOutlineProperties.has()
+            && moTextOutlineProperties.get().maLineFill.moFillType.has()
+            && moTextOutlineProperties.get().maLineFill.moFillType.get() != XML_noFill)
+        {
+            Color aLineColor = moTextOutlineProperties.get().maLineFill.getBestSolidColor();
+            sal_Int16 nLineTransparency = aLineColor.getTransparency();
+            if (nLineTransparency < aColor.getTransparency())
+                aColor = aLineColor;
+        }
         rPropMap.setProperty(PROP_CharColor, aColor.getColor(rFilter.getGraphicHelper()));
         // set color theme index
         rPropMap.setProperty(PROP_CharColorTheme, aColor.getSchemeColorIndex());
