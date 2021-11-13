@@ -3008,6 +3008,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
                      true,
                  },
                  {
+                     // tdf 143216
+                     "http://username:password@example.com",
+                     "http://username:password@example.com",
+                     true,
+                 },
+                 {
                      "file://localfile.odt/",
                      "file://localfile.odt/",
                      true,
