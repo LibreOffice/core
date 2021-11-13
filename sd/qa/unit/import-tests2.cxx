@@ -562,8 +562,8 @@ void SdImportTest2::testTdf129686()
     sal_Int16 nTransparency = 0;
     xPropSet->getPropertyValue("CharTransparence") >>= nTransparency;
 
-    // 100 = no transparency
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(100), nTransparency);
+    // 0 = no transparency, 100 (default) = completely transparent (unless COL_AUTO)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nTransparency);
 
     xDocShRef->DoClose();
 }

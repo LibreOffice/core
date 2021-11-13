@@ -1551,6 +1551,19 @@ void SdOOXMLExportTest3::testTdf119087()
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf119087.pptx"), PPTX);
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
     // This would fail both on export validation, and reloading the saved pptx file.
+
+    // Get first paragraph of the text
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+    // Get first run of the paragraph
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nColor = COL_AUTO;
+    xPropSet->getPropertyValue("CharColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x00B050), nColor);
+
+    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest3::testTdf131554()
