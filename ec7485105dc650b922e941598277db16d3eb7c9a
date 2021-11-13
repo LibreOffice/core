@@ -16,6 +16,23 @@
       "message": "Thank you. Looks good to me.",
       "revId": "ec7485105dc650b922e941598277db16d3eb7c9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62e173be_19368d4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-13T16:57:15Z",
+      "side": 1,
+      "message": "The commented tests are moved to another Gerrit submission.",
+      "revId": "ec7485105dc650b922e941598277db16d3eb7c9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

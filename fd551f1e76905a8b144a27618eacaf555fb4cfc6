@@ -34,6 +34,24 @@
       "parentUuid": "18f3dec8_6a7cbc3f",
       "revId": "fd551f1e76905a8b144a27618eacaf555fb4cfc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c867ebec_ffd1dbe6",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-13T16:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a3a743_7c0321e2",
+      "revId": "fd551f1e76905a8b144a27618eacaf555fb4cfc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
