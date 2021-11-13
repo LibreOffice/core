@@ -387,17 +387,15 @@ void ImpTwain::ImplXfer()
     {
         TW_IMAGEINFO aInfo;
         HANDLE hDIB = nullptr;
-        TW_INT32 nWidth, nHeight, nXRes, nYRes;
+        TW_INT32 nXRes, nYRes;
 
         if (m_pDSM(&m_aAppId, &m_aSrcId, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo) == TWRC_SUCCESS)
         {
-            nWidth = aInfo.ImageWidth;
-            nHeight = aInfo.ImageLength;
             nXRes = FixToInt32(aInfo.XResolution);
             nYRes = FixToInt32(aInfo.YResolution);
         }
         else
-            nWidth = nHeight = nXRes = nYRes = -1;
+            nXRes = nYRes = -1;
 
         switch (m_pDSM(&m_aAppId, &m_aSrcId, DG_IMAGE, DAT_IMAGENATIVEXFER, MSG_GET, &hDIB))
         {
@@ -417,7 +415,7 @@ void ImpTwain::ImplXfer()
                     {
                         if (LPVOID pBmpMem = GlobalLock(hGlob))
                         {
-                            if ((nXRes != -1) && (nYRes != -1) && (nWidth != -1) && (nHeight != -1))
+                            if ((nXRes != -1) && (nYRes != -1))
                             {
                                 // set resolution of bitmap
                                 BITMAPINFOHEADER* pBIH = static_cast<BITMAPINFOHEADER*>(pBmpMem);
