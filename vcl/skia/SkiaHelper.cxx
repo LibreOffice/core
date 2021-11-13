@@ -661,7 +661,7 @@ void setBlendModeDifference(SkPaint* paint)
     // so do that.
     if (!differenceBlender)
     {
-        const char* diff = R"(
+        const char* const diff = R"(
             vec4 main( vec4 src, vec4 dst )
             {
                 return vec4(abs( src.r - dst.r ), abs( src.g - dst.g ), abs( src.b - dst.b ), dst.a );
