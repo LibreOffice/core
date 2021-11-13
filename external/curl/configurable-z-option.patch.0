@@ -1,0 +1,20 @@
+--- winbuild/MakefileBuild.vc.sav	2021-11-13 11:43:40.756226600 +0000
++++ winbuild/MakefileBuild.vc	2021-11-13 11:52:08.921692300 +0000
+@@ -45,7 +45,7 @@
+ 
+ !IF "$(VC)"=="6"
+ CC_NODEBUG  = $(CC) /O2 /DNDEBUG
+-CC_DEBUG    = $(CC) /Od /Gm /Zi /D_DEBUG /GZ
++CC_DEBUG    = $(CC) /Od /Gm $(DEBUG_FLAGS_VALUE) /D_DEBUG /GZ
+ CFLAGS      = /I. /I../lib /I../include /nologo /W4 /GX /DWIN32 /YX /FD /c /DBUILDING_LIBCURL
+ !ELSE
+ CC_NODEBUG  = $(CC) /O2 /DNDEBUG
+@@ -62,7 +62,7 @@
+ # Instead of id: just create an archive, that contains all objects
+ LNKLIB     = lib.exe
+ 
+-CFLAGS_PDB = /Zi
++CFLAGS_PDB = $(DEBUG_FLAGS_VALUE)
+ LFLAGS_PDB = /incremental:no /opt:ref,icf /DEBUG
+ 
+ CFLAGS_LIBCURL_STATIC  = /DCURL_STATICLIB

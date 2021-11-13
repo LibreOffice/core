@@ -18,7 +18,8 @@ std::string getexe(std::string exename, bool maybeempty = false);
 
 void setupccenv();
 
-std::string processccargs(std::vector<std::string> rawargs, std::string& env_prefix, bool& verbose);
+std::string processccargs(const std::vector<std::string>& rawargs, std::string& env_prefix,
+                          bool& verbose);
 
 int startprocess(std::string command, std::string args, bool verbose);
 

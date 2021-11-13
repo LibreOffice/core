@@ -214,9 +214,17 @@ gb_LinkTarget_LDFLAGS += \
 	/ignore:4217 /ignore:4049
 
 
+ifeq ($(ENABLE_Z7_DEBUG),)
 gb_DEBUGINFO_FLAGS := \
 	-FS \
 	-Zi \
+
+else
+# ccache does not work with -Zi
+gb_DEBUGINFO_FLAGS := \
+	-Z7 \
+
+endif
 
 # See gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO
 gb_LINKER_DEBUGINFO_FLAGS :=
@@ -321,5 +329,10 @@ gb_WIN_GPG_platform_switches := --build=$(BUILD_PLATFORM) --host=$(subst cygwin,
 gb_WIN_GPG_cross_setup_exports = export REAL_BUILD_CC="$(filter-out -%,$(CC_FOR_BUILD))" REAL_BUILD_CC_FLAGS="$(filter -%,$(CC_FOR_BUILD))" \
     && export CC_FOR_BUILD="$(call gb_Executable_get_target_for_build,gcc-wrapper) --wrapper-env-prefix=REAL_BUILD_ $(SOLARINC) -L$(subst ;, -L,$(ILIB_FOR_BUILD))" \
     && export RC='windres -O COFF --target=$(gb_WIN_GPG_WINDRES_target) --preprocessor=$(call gb_Executable_get_target_for_build,cpp) --preprocessor-arg=-+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'
+
+ifneq ($(gb_ENABLE_PCH),)
+# Enable use of .sum files for PCHs.
+gb_COMPILER_SETUP += CCACHE_PCH_EXTSUM=1
+endif
 
 # vim: set noet sw=4:
