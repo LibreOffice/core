@@ -100,6 +100,7 @@ gb_PrecompiledHeader_EXT := .pch
 # MSVC PCH needs extra .obj created during the creation of the PCH file
 gb_PrecompiledHeader_get_objectfile = $(1).obj
 
+# $(call gb_PrecompiledHeader__command,pchfile,pchtarget,source,cxxflags,linktargetmakefilename)
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 	$(call gb_Trace_StartRange,$(2),PCH)
@@ -120,6 +121,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 # No ccache with MSVC, no need to create a checksum for it.
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,linktargetmakefilename)
 define gb_PrecompiledHeader__sum_command
 endef
 
