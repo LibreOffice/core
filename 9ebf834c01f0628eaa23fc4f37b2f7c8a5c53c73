@@ -16,6 +16,23 @@
       "message": "Looks suspicious. master and 7.2 are not diverged so far yet to produce such differences.\nWell, seems I should build 7.2 locally and take a look what the hell is going on.",
       "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c0dbbd_c8a6c440",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-11-13T16:29:10Z",
+      "side": 1,
+      "message": "Seems this unittest depends on changes from Justin Luth in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d141964\n\nThey are not backported to 7.2\n\nI see following ways:\n* backport tdf#141964 (i did not analyze it all, not sure if it should be ported)\n* simplify unittest: changes in outline dialog are not essential, bug is mostly about cross references and this is tested in unit test later. anyway right now in LO 7.2 test document outlines look weird.\n* abandon backport to 7.2, leave it for 7.3\n\n@Xisco, up to you to decide what to do here.",
+      "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
