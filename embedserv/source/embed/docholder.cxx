@@ -62,6 +62,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
@@ -1073,8 +1074,8 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
                 if ( aMapMode == embed::EmbedMapUnits::TWIP )
                 {
                     // conversion from ONE_100TH_MM
-                    aNewSize.Width = aNewSize.Width * 144 / 254;
-                    aNewSize.Height = aNewSize.Height * 144 / 254;
+                    aNewSize.Width = o3tl::toTwips(aNewSize.Width, o3tl::Length::mm100);
+                    aNewSize.Height = o3tl::toTwips(aNewSize.Height, o3tl::Length::mm100);
                 }
 
 
@@ -1107,8 +1108,8 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
                 if ( aMapMode == embed::EmbedMapUnits::TWIP )
                 {
                     // conversion to ONE_100TH_MM
-                    aDocSize.Width = aDocSize.Width * 254 / 144;
-                    aDocSize.Height = aDocSize.Height * 254 / 144;
+                    aDocSize.Width = o3tl::convert(aDocSize.Width, o3tl::Length::twip, o3tl::Length::mm100);
+                    aDocSize.Height = o3tl::convert(aDocSize.Height, o3tl::Length::twip, o3tl::Length::mm100);
                 }
 
                 pSize->cx = aDocSize.Width;

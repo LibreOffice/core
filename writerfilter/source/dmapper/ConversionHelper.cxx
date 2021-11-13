@@ -434,7 +434,7 @@ double convertTwipToMM100Double(sal_Int32 _t)
     // anything that's bigger than 32767 appears to be simply ignored.
     if( _t >= 0x8000 )
         return 0.0;
-    return _t * 254.0 / 144.0;
+    return o3tl::convert<double>(_t, o3tl::Length::twip, o3tl::Length::mm100);
 }
 
 sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)

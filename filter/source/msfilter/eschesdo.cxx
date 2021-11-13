@@ -23,7 +23,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
-#include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -51,9 +50,9 @@ using namespace ::com::sun::star::style;
 
 ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     : mpEscherEx(&rEx)
-    , maMapModeSrc(MapUnit::Map100thMM)
+    , meUnitsSrc(o3tl::Length::mm100)
     // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
-    , maMapModeDest( MapUnit::MapInch, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) )
+    , meUnitsDest(o3tl::Length::twip)
     , mpPicStrm(nullptr)
     , mpHostAppData(nullptr)
     , mbIsTitlePossible(false)
@@ -65,12 +64,12 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
 
 Point ImplEESdrWriter::ImplMapPoint( const Point& rPoint )
 {
-    return OutputDevice::LogicToLogic( rPoint, maMapModeSrc, maMapModeDest );
+    return o3tl::convert( rPoint, meUnitsSrc, meUnitsDest );
 }
 
 Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
 {
-    Size aRetSize( OutputDevice::LogicToLogic( rSize, maMapModeSrc, maMapModeDest ) );
+    Size aRetSize( o3tl::convert( rSize, meUnitsSrc, meUnitsDest ) );
 
     if ( !aRetSize.Width() )
         aRetSize.AdjustWidth( 1 );
