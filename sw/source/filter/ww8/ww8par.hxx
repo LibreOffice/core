@@ -187,6 +187,8 @@ private:
         WW8aCFormat& aCharFormat, bool& bNewCharFormatCreated,
         const OUString& aPrefix = OUString());
 
+    void ImplDestroy();
+
     WW8ListManager(const WW8ListManager&) = delete;
     WW8ListManager& operator=(const WW8ListManager&) = delete;
     sal_uInt16 nLastLFOPosition;

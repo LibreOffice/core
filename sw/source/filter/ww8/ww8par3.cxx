@@ -1480,7 +1480,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     rSt.Seek( nOriginalPos );
 }
 
-WW8ListManager::~WW8ListManager()
+void WW8ListManager::ImplDestroy()
 {
     /*
      named lists remain in document
@@ -1505,6 +1505,11 @@ WW8ListManager::~WW8ListManager()
             rDoc.DelNumRule( (*aIter)->pNumRule->GetName() );
         }
     }
+}
+
+WW8ListManager::~WW8ListManager()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 static bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
