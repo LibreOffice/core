@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acad2654_719754d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-13T06:39:38Z",
+      "side": 1,
+      "message": "LGTM, would just add 6px margin to the right edge (margins: end \u003d 6). See also https://wiki.documentfoundation.org/Design/Guidelines/PropertyDialog",
+      "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
