@@ -2213,12 +2213,10 @@ int SkiaSalGraphicsImpl::getWindowScaling() const
     return scaling;
 }
 
-#ifdef DBG_UTIL
 void SkiaSalGraphicsImpl::dump(const char* file) const
 {
     assert(mSurface.get());
     SkiaHelper::dump(mSurface, file);
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

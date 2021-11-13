@@ -194,10 +194,11 @@ inline SkIRect scaleRect(const SkIRect& rect, int scaling)
 
 #ifdef DBG_UTIL
 void prefillSurface(const sk_sp<SkSurface>& surface);
+#endif
+
 VCL_DLLPUBLIC void dump(const SkBitmap& bitmap, const char* file);
 VCL_DLLPUBLIC void dump(const sk_sp<SkImage>& image, const char* file);
 VCL_DLLPUBLIC void dump(const sk_sp<SkSurface>& surface, const char* file);
-#endif
 
 VCL_DLLPUBLIC extern uint32_t vendorId;
 

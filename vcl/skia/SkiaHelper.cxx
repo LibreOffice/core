@@ -704,6 +704,21 @@ void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createGpuWindowContext
     skiaSupportedByBackend = true;
 }
 
+void dump(const SkBitmap& bitmap, const char* file) { dump(SkImage::MakeFromBitmap(bitmap), file); }
+
+void dump(const sk_sp<SkSurface>& surface, const char* file)
+{
+    surface->getCanvas()->flush();
+    dump(makeCheckedImageSnapshot(surface), file);
+}
+
+void dump(const sk_sp<SkImage>& image, const char* file)
+{
+    sk_sp<SkData> data = image->encodeToData(SkEncodedImageFormat::kPNG, 1);
+    std::ofstream ostream(file, std::ios::binary);
+    ostream.write(static_cast<const char*>(data->data()), data->size());
+}
+
 #ifdef DBG_UTIL
 void prefillSurface(const sk_sp<SkSurface>& surface)
 {
@@ -724,22 +739,6 @@ void prefillSurface(const sk_sp<SkSurface>& surface)
         bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
     surface->getCanvas()->drawPaint(paint);
 }
-
-void dump(const SkBitmap& bitmap, const char* file) { dump(SkImage::MakeFromBitmap(bitmap), file); }
-
-void dump(const sk_sp<SkSurface>& surface, const char* file)
-{
-    surface->getCanvas()->flush();
-    dump(makeCheckedImageSnapshot(surface), file);
-}
-
-void dump(const sk_sp<SkImage>& image, const char* file)
-{
-    sk_sp<SkData> data = image->encodeToData(SkEncodedImageFormat::kPNG, 1);
-    std::ofstream ostream(file, std::ios::binary);
-    ostream.write(static_cast<const char*>(data->data()), data->size());
-}
-
 #endif
 
 } // namespace
