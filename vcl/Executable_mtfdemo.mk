@@ -15,8 +15,6 @@ $(eval $(call gb_Executable_use_api,mtfdemo,\
     udkapi \
 ))
 
-$(eval $(call gb_Executable_use_external,mtfdemo,boost_headers))
-
 $(eval $(call gb_Executable_set_include,mtfdemo,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \

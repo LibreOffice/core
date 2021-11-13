@@ -15,8 +15,6 @@ $(eval $(call gb_Executable_use_api,svpclient,\
     udkapi \
 ))
 
-$(eval $(call gb_Executable_use_external,svpclient,boost_headers))
-
 $(eval $(call gb_Executable_set_include,svpclient,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
