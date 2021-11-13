@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a9c97d8_fb00bb30",
+        "filename": "extensions/source/scanner/twain32shim.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-13T09:52:26Z",
+      "side": 1,
+      "message": "By the way, this FixToInt32 rounds the actual *fractional* resolution (represented as TW_FIX32, with 16-bit whole part + 16-bit fractional part) to an integer. We then convert the resulting integer from \"per inch\" to \"per m\", so the result loses precision.\n\nWe better change \u0027FixToInt32\u0027 to \u0027FixToDouble\u0027, then convert the double at lines 425+, and round the resulting value when assigning to pBIH-\u003ebi*PelsPerMeter.",
+      "revId": "56065a4c4d468317f31c240e478aab6e3b083038",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5e492650_d1564092",
         "filename": "extensions/source/scanner/twain32shim.cxx",
         "patchSetId": 3
