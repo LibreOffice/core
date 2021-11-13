@@ -521,10 +521,11 @@ IMAGE_SETEVENT:
     if (!nHeight || !nWidth)
     {
         Size aPixelSize = aGraphic.GetSizePixel(Application::GetDefaultDevice());
+        // tdf#142781 - calculate width/height keeping the aspect ratio
         if (!bWidthProvided)
-            nWidth = aPixelSize.Width();
+            nWidth = nHeight * aPixelSize.Width() / aPixelSize.Height();
         if (!bHeightProvided)
-            nHeight = aPixelSize.Height();
+            nHeight = nWidth * aPixelSize.Height() / aPixelSize.Width();
     }
 
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
