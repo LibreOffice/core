@@ -88,9 +88,8 @@ public:
     // Alpha type best suitable for the content.
     SkAlphaType alphaType() const;
 
-#ifdef DBG_UTIL
+    // Dump contents to a file for debugging.
     void dump(const char* file) const;
-#endif
 
     // These are to be used only by unittests.
     bool unittestHasBuffer() const { return mBuffer.get(); }

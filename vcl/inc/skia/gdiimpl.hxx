@@ -198,9 +198,8 @@ public:
 
     virtual bool supportsOperation(OutDevSupportType eType) const override;
 
-#ifdef DBG_UTIL
+    // Dump contents to a file for debugging.
     void dump(const char* file) const;
-#endif
 
     // Default blend mode for SkPaint is SkBlendMode::kSrcOver
     void drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,

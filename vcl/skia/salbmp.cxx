@@ -1339,7 +1339,6 @@ OString SkiaSalBitmap::GetAlphaImageKey() const
     return OString::Concat("I") + OString::number(GetAlphaSkImage()->uniqueID());
 }
 
-#ifdef DBG_UTIL
 void SkiaSalBitmap::dump(const char* file) const
 {
     // Use a copy, so that debugging doesn't affect this instance.
@@ -1348,6 +1347,7 @@ void SkiaSalBitmap::dump(const char* file) const
     SkiaHelper::dump(copy.GetSkImage(), file);
 }
 
+#ifdef DBG_UTIL
 void SkiaSalBitmap::verify() const
 {
     if (!mBuffer)
@@ -1356,7 +1356,6 @@ void SkiaSalBitmap::verify() const
     assert(memcmp(mBuffer.get() + mScanlineSize * mPixelsSize.Height(), CANARY, sizeof(CANARY))
            == 0);
 }
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,8 @@ Debugging:
 
 Both SkiaSalBitmap and SkiaSalGraphicsImpl have a dump() method that writes a PNG
 with the current contents. There is also SkiaHelper::dump() for dumping contents
-of SkBitmap, SkImage and SkSurface.
+of SkBitmap, SkImage and SkSurface. You can use these in a debugger too, for example
+'p SkiaHelper::dump(image, "/tmp/a.png")'.
 
 If there is a drawing problem, you can use something like the following piece of code
 to dump an image after each relevant operation (or do it in postDraw() if you don't
