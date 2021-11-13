@@ -33,6 +33,41 @@
       "message": "Seems this unittest depends on changes from Justin Luth in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d141964\n\nThey are not backported to 7.2\n\nI see following ways:\n* backport tdf#141964 (i did not analyze it all, not sure if it should be ported)\n* simplify unittest: changes in outline dialog are not essential, bug is mostly about cross references and this is tested in unit test later. anyway right now in LO 7.2 test document outlines look weird.\n* abandon backport to 7.2, leave it for 7.3\n\n@Xisco, up to you to decide what to do here.",
       "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d78a7b46_81eb9eaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-13T17:48:27Z",
+      "side": 1,
+      "message": "I\u0027d say just drop the unit test if the patch itself doesn\u0027t depend on my work.",
+      "parentUuid": "d5c0dbbd_c8a6c440",
+      "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7857c99a_87b51e76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-13T17:48:27Z",
+      "side": 1,
+      "message": "I very deliberated waited until 7.3 before pushing my patches, so I certainly would not be in favour of backporting them.",
+      "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
