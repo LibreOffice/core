@@ -24,6 +24,7 @@
 
 #include <math.h>
 #include <algorithm>
+#include <regex>
 #include <string_view>
 
 #include <lcms2.h>
@@ -3218,6 +3219,9 @@ bool PDFWriterImpl::emitScreenAnnotations()
 bool PDFWriterImpl::emitLinkAnnotations()
 {
     MARK("PDFWriterImpl::emitLinkAnnotations");
+    // Based on RFC3986 Appendix B but making the prefix unconditional
+    std::regex aURIRegEx("^(([^:/?#]+):)(//([^/?#]*))([^?#]*)(\\?([^#]*))?(#(.*))?", std::regex::extended);
+
     int nAnnots = m_aLinks.size();
     for( int i = 0; i < nAnnots; i++ )
     {
@@ -3280,6 +3284,7 @@ we check in the following sequence:
             bool    bTargetHasPDFExtension = false;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
             bool    bIsUNCPath = false;
+            bool    bUnparsedURI = false;
 
             // check if the protocol is a known one, or if there is no protocol at all (on target only)
             // if there is no protocol, make the target relative to the current document directory
@@ -3292,14 +3297,20 @@ we check in the following sequence:
                 }
                 else
                 {
-                    INetURLObject aNewBase( aDocumentURL );//duplicate document URL
-                    aNewBase.removeSegment(); //remove last segment from it, obtaining the base URL of the
-                                              //target document
-                    aNewBase.insertName( url );
-                    aTargetURL = aNewBase;//reassign the new target URL
-                    //recompute the target protocol, with the new URL
-                    //normal URL processing resumes
-                    eTargetProtocol = aTargetURL.GetProtocol();
+                    // If it doesn't look like a regex then treat it as a local file
+                    if (!std::regex_match(url.toUtf8().getStr(), aURIRegEx)) {
+                        INetURLObject aNewBase( aDocumentURL );//duplicate document URL
+                        aNewBase.removeSegment(); //remove last segment from it, obtaining the base URL of the
+                                                  //target document
+                        aNewBase.insertName( url );
+                        aTargetURL = aNewBase;//reassign the new target URL
+                        //recompute the target protocol, with the new URL
+                        //normal URL processing resumes
+                        eTargetProtocol = aTargetURL.GetProtocol();
+                    } else {
+                        // INetURLObject didn't like it, but it matches a URI shape by regex
+                        bUnparsedURI = true;
+                    }
                 }
             }
 
@@ -3415,7 +3426,8 @@ we check in the following sequence:
                         //substitute the fragment
                         aTargetURL.SetMark( OStringToOUString(aLineLoc.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US) );
                     }
-                    OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE );
+                    OUString aURL = bUnparsedURI ? url:
+                                                   aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE );
                     appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
                                                                                         INetURLObject::EncodeMechanism::WasEncoded,
                                                                                             bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE
