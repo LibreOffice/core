@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e492650_d1564092",
+        "filename": "extensions/source/scanner/twain32shim.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-13T08:54:11Z",
+      "side": 1,
+      "message": "This conversion, while giving correct number, is logically incorrect.\n\nWe convert px/in to px/m; so logically the conversion should be \"from \u0027in\u0027 in divisor to \u0027m\u0027 in divisor\".\n\nSince the unit is in divisor, the factor should be inverted. So to avoid reader\u0027s confusion, we should calculate the factor (in the logically *correct direction*) separately - getting *multiplier and divisor*, then use these two in opposite order on nXRes/nYRes.\n\n    static const auto [m, d] \u003d getConversionMulDiv(o3tl::Length::in, o3tl::Length::m);\n    pBIH-\u003ebiXPelsPerMeter \u003d o3tl::convert(nXRes, d, m);\n    pBIH-\u003ebiYPelsPerMeter \u003d o3tl::convert(nYRes, d, m);",
+      "revId": "56065a4c4d468317f31c240e478aab6e3b083038",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
