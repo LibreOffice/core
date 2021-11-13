@@ -90,7 +90,7 @@ SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
     m_aUnlockTimer.SetInvokeHandler( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
 }
 
-SwChartLockController_Helper::~SwChartLockController_Helper() COVERITY_NOEXCEPT_FALSE
+SwChartLockController_Helper::~SwChartLockController_Helper()
 {
     if (m_pDoc)   // still connected?
         Disconnect();
