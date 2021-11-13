@@ -314,7 +314,7 @@
                     <property name="margin-top">6</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbox-reduce-resolution">
-                        <property name="label" translatable="yes" context="compressgraphicdialog|checkbox-reduce-resolution">Reduce image resolution</property>
+                        <property name="label" translatable="yes" context="compressgraphicdialog|checkbox-reduce-resolution">Reduce image resolution to:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

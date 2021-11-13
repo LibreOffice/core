@@ -110,7 +110,7 @@
             <property name="margin-top">6</property>
             <child>
               <object class="GtkCheckButton" id="ignore">
-                <property name="label" translatable="yes" context="optcomparison|ignore">Ignore _pieces of length</property>
+                <property name="label" translatable="yes" context="optcomparison|ignore">Ignore _pieces of length:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
