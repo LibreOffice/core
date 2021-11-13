@@ -100,26 +100,28 @@ gb_PrecompiledHeader_EXT := .pch
 # MSVC PCH needs extra .obj created during the creation of the PCH file
 gb_PrecompiledHeader_get_objectfile = $(1).obj
 
+# $(call gb_PrecompiledHeader__command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 	$(call gb_Trace_StartRange,$(2),PCH)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
+	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(6))) && \
 	unset INCLUDE && \
-	$(call gb_CObject__compiler,$(4) $(5),$(3),$(8)) \
+	$(call gb_CObject__compiler,$(4),$(3),$(7)) \
 		$(call gb_Helper_remove_overridden_flags, \
-			$(4) $(5) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
+			$(4) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		-Fd$(PDBFILE) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(if $(filter YES,$(LIBRARY_X64)), ,$(gb_LTOFLAGS)) \
 		$(gb_COMPILERDEPFLAGS) \
-		$(6) \
+		$(5) \
 		-c $(3) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7)),$(1),$(3))
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(6)),$(1),$(3))
 	$(call gb_Trace_EndRange,$(2),PCH)
 endef
 
 # No ccache with MSVC, no need to create a checksum for it.
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename)
 define gb_PrecompiledHeader__sum_command
 endef
 

@@ -36,6 +36,12 @@ ifneq ($(gb_ENABLE_PCH),)
 # for $(1)'s and things that are constant.
 # The defines are needed to get the right version of gb_PrecompiledHeader__get_debugdir.
 
+# all cxxflags to use for compilation
+gb_PrecompiledHeader_cxxflags_includes := $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)
+# flags to save to the .flags file to check if they are the same as last time
+gb_PrecompiledHeader_flags_for_flags_file := $$(sort $(gb_PrecompiledHeader_cxxflags_includes)) \
+    $(if $(gb_PrecompiledHeader_ignore_flags_for_flags_file),| sed 's/$(gb_PrecompiledHeader_ignore_flags_for_flags_file)//')
+
 # $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktarget,linktargetmakefilename,pchcxxfile,compiler)
 define gb_PrecompiledHeader_generate_rules
 
@@ -48,8 +54,8 @@ $(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) :
 # change, and make the PCH depend on it => the PCH will be rebuilt on any flags change
 .PHONY: force
 $(call gb_PrecompiledHeader_get_flags_file,$(1),$(3)) : force
-	echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) | cmp -s - $$@ \
-	|| echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) > $$@
+	echo $(gb_PrecompiledHeader_flags_for_flags_file) | cmp -s - $$@ \
+	|| echo $(gb_PrecompiledHeader_flags_for_flags_file) > $$@
 
 # despite this being only one .d file, need to run concat-deps on it to
 # re-write external headers from UnpackedTarball
@@ -57,8 +63,8 @@ $(call gb_PrecompiledHeader_get_target,$(1),$(3)) :
 	test "$$(PCH_LINKTARGETMAKEFILENAME)" = "$(3)" \
 		 || ( echo "Error, PCH $(1) built by $$(PCH_LINKTARGETMAKEFILENAME) instead of $(3)" >&2; exit 1)
 	rm -f $$@
-	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(3),$(5))
-	$$(call gb_PrecompiledHeader__sum_command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(3))
+	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$(gb_PrecompiledHeader_cxxflags_includes),$$(INCLUDE),$(3),$(5))
+	$$(call gb_PrecompiledHeader__sum_command,$$@,$(1),$$<,$(gb_PrecompiledHeader_cxxflags_includes),$$(INCLUDE),$(3))
 ifeq ($(gb_FULLDEPS),$(true))
 	$$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,$$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(3))) && \
