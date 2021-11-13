@@ -66,9 +66,16 @@ SwNumFormat* SwNumRule::saLabelAlignmentBaseFormats[ RULE_END ][ MAXLEVEL ] = {
     {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr } };
 
 const sal_uInt16 SwNumRule::saDefNumIndents[ MAXLEVEL ] = {
-//inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
-        1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
-        1440*9/4, 1440*5/2
+    o3tl::toTwips(25, o3tl::Length::in100),
+    o3tl::toTwips(50, o3tl::Length::in100),
+    o3tl::toTwips(75, o3tl::Length::in100),
+    o3tl::toTwips(100, o3tl::Length::in100),
+    o3tl::toTwips(125, o3tl::Length::in100),
+    o3tl::toTwips(150, o3tl::Length::in100),
+    o3tl::toTwips(175, o3tl::Length::in100),
+    o3tl::toTwips(200, o3tl::Length::in100),
+    o3tl::toTwips(225, o3tl::Length::in100),
+    o3tl::toTwips(250, o3tl::Length::in100),
 };
 
 OUString SwNumRule::GetOutlineRuleName()
@@ -391,13 +398,20 @@ SwNumRule::SwNumRule( const OUString& rNm,
         }
         // position-and-space mode LABEL_ALIGNMENT
         // first line indent of general numbering in inch: -0,25 inch
-        const tools::Long cFirstLineIndent = -1440/4;
+        const tools::Long cFirstLineIndent = o3tl::toTwips(-0.25, o3tl::Length::in);
         // indent values of general numbering in inch:
-        //  0,5         0,75        1,0         1,25        1,5
-        //  1,75        2,0         2,25        2,5         2,75
         const tools::Long cIndentAt[ MAXLEVEL ] = {
-            1440/2,     1440*3/4,   1440,       1440*5/4,   1440*3/2,
-            1440*7/4,   1440*2,     1440*9/4,   1440*5/2,   1440*11/4 };
+            o3tl::toTwips(50, o3tl::Length::in100),
+            o3tl::toTwips(75, o3tl::Length::in100),
+            o3tl::toTwips(100, o3tl::Length::in100),
+            o3tl::toTwips(125, o3tl::Length::in100),
+            o3tl::toTwips(150, o3tl::Length::in100),
+            o3tl::toTwips(175, o3tl::Length::in100),
+            o3tl::toTwips(200, o3tl::Length::in100),
+            o3tl::toTwips(225, o3tl::Length::in100),
+            o3tl::toTwips(250, o3tl::Length::in100),
+            o3tl::toTwips(275, o3tl::Length::in100),
+        };
         for( n = 0; n < MAXLEVEL; ++n )
         {
             pFormat = new SwNumFormat;

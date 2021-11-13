@@ -20,6 +20,8 @@
 #include "gtv-lok-dialog.hxx"
 
 #include <com/sun/star/awt/Key.hpp>
+
+#include <o3tl/unit_conversion.hxx>
 #include <vcl/event.hxx>
 
 namespace {
@@ -82,20 +84,6 @@ getPrivate(GtvLokDialog* dialog)
 {
     return static_cast<GtvLokDialogPrivate*>(gtv_lok_dialog_get_instance_private(dialog));
 }
-
-static float
-pixelToTwip(float fInput)
-{
-    return (fInput / 96 / 1.0 /* zoom */) * 1440.0f;
-}
-
-#if 0
-static float
-twipToPixel(float fInput)
-{
-    return fInput / 1440.0f * 96 * 1.0 /* zoom */;
-}
-#endif
 
 static void
 gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
@@ -235,8 +223,8 @@ gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
 
     g_info("lok_dialog_signal_motion: %d, %d (in twips: %d, %d)",
            static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
-           static_cast<int>(pixelToTwip(pEvent->x)),
-           static_cast<int>(pixelToTwip(pEvent->y)));
+           static_cast<int>(o3tl::toTwips(pEvent->x, o3tl::Length::px)),
+           static_cast<int>(o3tl::toTwips(pEvent->y, o3tl::Length::px)));
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->dialogid,
@@ -531,8 +519,8 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
     g_info("lok_dialog_floating_win_signal_button (type: %s): %d, %d (in twips: %d, %d)",
            aEventType.c_str(),
            static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
-           static_cast<int>(pixelToTwip(pEvent->x)),
-           static_cast<int>(pixelToTwip(pEvent->y)));
+           static_cast<int>(o3tl::toTwips(pEvent->x, o3tl::Length::px)),
+           static_cast<int>(o3tl::toTwips(pEvent->y, o3tl::Length::px)));
 
     switch (pEvent->type)
     {
@@ -614,8 +602,8 @@ gtv_lok_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
 
     g_info("lok_dialog_floating_win_signal_motion: %d, %d (in twips: %d, %d)",
            static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
-           static_cast<int>(pixelToTwip(pEvent->x)),
-           static_cast<int>(pixelToTwip(pEvent->y)));
+           static_cast<int>(o3tl::toTwips(pEvent->x, o3tl::Length::px)),
+           static_cast<int>(o3tl::toTwips(pEvent->y, o3tl::Length::px)));
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->m_nChildId,

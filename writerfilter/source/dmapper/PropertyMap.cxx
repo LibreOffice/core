@@ -63,6 +63,7 @@
 #include <tools/diagnose_ex.h>
 #include "PropertyMapHelper.hxx"
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 using namespace com::sun::star;
 
@@ -411,13 +412,13 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_nPageNumber( -1 )
     , m_nPageNumberType( -1 )
     , m_nBreakType( -1 )
-    , m_nLeftMargin( 2540 )  // page left margin,  default 1 inch = 1440 twip -> 2540 1/100 mm
-    , m_nRightMargin( 2540 ) // page right margin,  default 1 inch = 1440 twip -> 2540 1/100 mm
+    , m_nLeftMargin( o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100) )
+    , m_nRightMargin( o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100) )
     , m_nGutterMargin(0)
-    , m_nTopMargin( 2540 )
-    , m_nBottomMargin( 2540 )
-    , m_nHeaderTop( 1270 )    // 720 twip
-    , m_nHeaderBottom( 1270 ) // 720 twip
+    , m_nTopMargin( o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100) )
+    , m_nBottomMargin( o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100) )
+    , m_nHeaderTop( o3tl::convert(0.5, o3tl::Length::in, o3tl::Length::mm100) )
+    , m_nHeaderBottom( o3tl::convert(0.5, o3tl::Length::in, o3tl::Length::mm100) )
     , m_nGridType( 0 )
     , m_nGridLinePitch( 1 )
     , m_nDxtCharSpace( 0 )
@@ -452,14 +453,14 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     Insert( PROP_HEIGHT, uno::makeAny( static_cast<sal_Int32>(aLetter.getHeight()) ) );
     // page width, 1/100mm
     Insert( PROP_WIDTH, uno::makeAny( static_cast<sal_Int32>(aLetter.getWidth()) ) );
-    // page left margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_LEFT_MARGIN, uno::makeAny( sal_Int32(2540) ) );
-    // page right margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_RIGHT_MARGIN, uno::makeAny( sal_Int32(2540) ) );
-    // page top margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_TOP_MARGIN, uno::makeAny( sal_Int32(2540) ) );
-    // page bottom margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_BOTTOM_MARGIN, uno::makeAny( sal_Int32(2540) ) );
+    // page left margin, 1/100 mm
+    Insert( PROP_LEFT_MARGIN, uno::makeAny( sal_Int32(o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100)) ) );
+    // page right margin, 1/100 mm
+    Insert( PROP_RIGHT_MARGIN, uno::makeAny( sal_Int32(o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100)) ) );
+    // page top margin, 1/100 mm
+    Insert( PROP_TOP_MARGIN, uno::makeAny( sal_Int32(o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100)) ) );
+    // page bottom margin, 1/100 mm
+    Insert( PROP_BOTTOM_MARGIN, uno::makeAny( sal_Int32(o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100)) ) );
     // page style layout
     Insert( PROP_PAGE_STYLE_LAYOUT, uno::makeAny( style::PageStyleLayout_ALL ) );
     uno::Any aFalse( uno::makeAny( false ) );

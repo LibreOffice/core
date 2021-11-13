@@ -40,6 +40,7 @@
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <systools/win32/comtools.hxx>
 #include <vcl/threadex.hxx>
 
@@ -1031,27 +1032,23 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
                 if ( pMF )
                 {
                     // the object uses 0.01 mm as unit, so the metafile size should be converted to object unit
-                    sal_Int64 nMult = 1;
-                    sal_Int64 nDiv = 1;
+                    o3tl::Length eFrom = o3tl::Length::mm100;
                     switch( pMF->mm )
                     {
                         case MM_HIENGLISH:
-                            nMult = 254;
-                            nDiv = 100;
+                            eFrom = o3tl::Length::in1000;
                             break;
 
                         case MM_LOENGLISH:
-                            nMult = 254;
-                            nDiv = 10;
+                            eFrom = o3tl::Length::in100;
                             break;
 
                         case MM_LOMETRIC:
-                            nMult = 10;
+                            eFrom = o3tl::Length::mm10;
                             break;
 
                         case MM_TWIPS:
-                            nMult = 254;
-                            nDiv = 144;
+                            eFrom = o3tl::Length::twip;
                             break;
 
                         case MM_ISOTROPIC:
@@ -1061,8 +1058,8 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
                             break;
                     }
 
-                    sal_Int64 nX = static_cast<sal_Int64>(abs( pMF->xExt )) * nMult / nDiv;
-                    sal_Int64 nY = static_cast<sal_Int64>(abs( pMF->yExt )) * nMult / nDiv;
+                    sal_Int64 nX = o3tl::convert(abs( pMF->xExt ), eFrom, o3tl::Length::mm100);
+                    sal_Int64 nY = o3tl::convert(abs( pMF->yExt ), eFrom, o3tl::Length::mm100);
                     if (  nX < SAL_MAX_INT32 && nY < SAL_MAX_INT32 )
                     {
                         aSize.Width = static_cast<sal_Int32>(nX);

@@ -22,6 +22,7 @@
 #include "FmtFilter.hxx"
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 
 #include <shobjidl.h>
@@ -79,33 +80,33 @@ Sequence< sal_Int8 > WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
         switch( pMFPict->mm )
         {
         case MM_TEXT:
-            nInch = 72;
+            nInch = o3tl::convert(1, o3tl::Length::in, o3tl::Length::pt);
             break;
 
         case MM_LOMETRIC:
-            nInch = 100;
+            nInch = o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm10);
             break;
 
         case MM_HIMETRIC:
-            nInch = 1000;
+            nInch = o3tl::convert(1, o3tl::Length::in, o3tl::Length::mm100);
             break;
 
         case MM_LOENGLISH:
-            nInch = 254;
+            nInch = o3tl::convert(1, o3tl::Length::in, o3tl::Length::in100);
             break;
 
         case MM_HIENGLISH:
         case MM_ISOTROPIC:
         case MM_ANISOTROPIC:
-            nInch = 2540;
+            nInch = o3tl::convert(1, o3tl::Length::in, o3tl::Length::in1000);
             break;
 
         case MM_TWIPS:
-            nInch = 1440;
+            nInch = o3tl::convert(1, o3tl::Length::in, o3tl::Length::twip);
             break;
 
         default:
-            nInch = 576;
+            nInch = o3tl::convert(1, o3tl::Length::in, o3tl::Length::master);
         }
 
         pMFHeader->key      = 0x9AC6CDD7L;

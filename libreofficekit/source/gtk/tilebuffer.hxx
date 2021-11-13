@@ -18,8 +18,6 @@
 
 #define LOK_TILEBUFFER_ERROR (LOKTileBufferErrorQuark())
 
-// We know that VirtualDevices use a DPI of 96.
-const int DPI = 96;
 // Lets use a square of side 256 pixels for each tile.
 const int nTileSizePixels = 256;
 
