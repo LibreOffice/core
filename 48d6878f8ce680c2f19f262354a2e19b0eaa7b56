@@ -16,6 +16,40 @@
       "message": "Could you please review this? This is the last undo change for now. Thanks!",
       "revId": "48d6878f8ce680c2f19f262354a2e19b0eaa7b56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b108ae77_67dbd11c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-13T09:35:23Z",
+      "side": 1,
+      "message": "I suppose that simplification of the algorithm should be done in master separately.",
+      "revId": "48d6878f8ce680c2f19f262354a2e19b0eaa7b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0b488d3_b5580f5c",
+        "filename": "svl/source/undo/undo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-13T09:35:23Z",
+      "side": 1,
+      "message": "These three actions should be done using std::rotate.",
+      "revId": "48d6878f8ce680c2f19f262354a2e19b0eaa7b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
