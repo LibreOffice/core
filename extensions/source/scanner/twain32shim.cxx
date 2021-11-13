@@ -169,26 +169,21 @@ HANDLE GetProcOfThread(HANDLE hThread)
 }
 
 ImpTwain::ImpTwain(HANDLE hParentThread)
-    : m_nParentThreadId(GetThreadId(hParentThread))
+    : m_aAppId{ /* Id              */ 0,
+                { /* Version.MajorNum */ 1,
+                  /* Version.MinorNum */ 0,
+                  /* Version.Language */ TWLG_USA,
+                  /* Version.Country  */ TWCY_USA,
+                  /* Version.Info     */ "8.0" },
+                /* ProtocolMajor   */ TWON_PROTOCOLMAJOR,
+                /* ProtocolMinor   */ TWON_PROTOCOLMINOR,
+                /* SupportedGroups */ DG_IMAGE | DG_CONTROL,
+                /* Manufacturer    */ "Sun Microsystems",
+                /* ProductFamily   */ "Office",
+                /* ProductName     */ "Office" }
+    , m_nParentThreadId(GetThreadId(hParentThread))
     , m_hProc(GetProcOfThread(hParentThread))
 {
-    m_aAppId.Id = 0;
-    m_aAppId.Version.MajorNum = 1;
-    m_aAppId.Version.MinorNum = 0;
-    m_aAppId.Version.Language = TWLG_USA;
-    m_aAppId.Version.Country = TWCY_USA;
-    m_aAppId.ProtocolMajor = TWON_PROTOCOLMAJOR;
-    m_aAppId.ProtocolMinor = TWON_PROTOCOLMINOR;
-    m_aAppId.SupportedGroups = DG_IMAGE | DG_CONTROL;
-    strncpy(m_aAppId.Version.Info, "8.0", 32);
-    m_aAppId.Version.Info[32] = m_aAppId.Version.Info[33] = 0;
-    strncpy(m_aAppId.Manufacturer, "Sun Microsystems", 32);
-    m_aAppId.Manufacturer[32] = m_aAppId.Manufacturer[33] = 0;
-    strncpy(m_aAppId.ProductFamily, "Office", 32);
-    m_aAppId.ProductFamily[32] = m_aAppId.ProductFamily[33] = 0;
-    strncpy(m_aAppId.ProductName, "Office", 32);
-    m_aAppId.ProductName[32] = m_aAppId.ProductName[33] = 0;
-
     WNDCLASSW aWc = { 0,       &WndProc, 0,       sizeof(WNDCLASSW), GetModuleHandleW(nullptr),
                       nullptr, nullptr,  nullptr, nullptr,           sTwainWndClass };
     if (!RegisterClassW(&aWc))
@@ -387,15 +382,17 @@ void ImpTwain::ImplXfer()
     {
         TW_IMAGEINFO aInfo;
         HANDLE hDIB = nullptr;
-        TW_INT32 nXRes, nYRes;
+        TW_INT32 nWidth, nHeight, nXRes, nYRes;
 
         if (m_pDSM(&m_aAppId, &m_aSrcId, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo) == TWRC_SUCCESS)
         {
+            nWidth = aInfo.ImageWidth;
+            nHeight = aInfo.ImageLength;
             nXRes = FixToInt32(aInfo.XResolution);
             nYRes = FixToInt32(aInfo.YResolution);
         }
         else
-            nXRes = nYRes = -1;
+            nWidth = nHeight = nXRes = nYRes = -1;
 
         switch (m_pDSM(&m_aAppId, &m_aSrcId, DG_IMAGE, DAT_IMAGENATIVEXFER, MSG_GET, &hDIB))
         {
@@ -415,7 +412,7 @@ void ImpTwain::ImplXfer()
                     {
                         if (LPVOID pBmpMem = GlobalLock(hGlob))
                         {
-                            if ((nXRes != -1) && (nYRes != -1))
+                            if ((nXRes != -1) && (nYRes != -1) && (nWidth != -1) && (nHeight != -1))
                             {
                                 // set resolution of bitmap
                                 BITMAPINFOHEADER* pBIH = static_cast<BITMAPINFOHEADER*>(pBmpMem);
