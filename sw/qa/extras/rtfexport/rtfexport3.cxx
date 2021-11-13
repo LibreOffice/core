@@ -57,7 +57,7 @@ DECLARE_RTFEXPORT_TEST(testTdf108949, "tdf108949_footnoteCharFormat.odt")
     // This was green (0x00A800), the character property of the footnote character, not the footnote text
     CPPUNIT_ASSERT_MESSAGE(
         "Footnote Text color",
-        sal_Int32(0x000000) >= getProperty<sal_Int32>(
+        COL_BLACK >= getProperty<sal_Int32>(
                                    getRun(getParagraphOfText(1, xFootnoteText), 1), "CharColor"));
 }
 

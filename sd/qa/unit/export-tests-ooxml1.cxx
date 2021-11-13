@@ -1269,7 +1269,7 @@ void SdOOXMLExportTest1::testTdf94238()
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x0), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x8B8B8B), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x8B8B8B), aGradient.EndColor);
 
     xDocShRef->DoClose();
 }
