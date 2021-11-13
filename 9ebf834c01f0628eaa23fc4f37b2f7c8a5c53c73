@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5319bfd5_449ef3cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-11-13T09:11:46Z",
+      "side": 1,
+      "message": "Looks suspicious. master and 7.2 are not diverged so far yet to produce such differences.\nWell, seems I should build 7.2 locally and take a look what the hell is going on.",
+      "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
