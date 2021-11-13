@@ -127,19 +127,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pDrawPage);
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
-    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
-    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
-                                                               { pSdrPage->GetObj(0) }, nullptr);
-    const sdr::contact::ViewObjectContact& rDrawPageVOContact
-        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
-    sdr::contact::DisplayInfo aDisplayInfo;
-    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
-    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
+    xmlDocUniquePtr pDocument = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
     // Make sure the text is semi-transparent.
-    drawinglayer::Primitive2dXmlDump aDumper;
-    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
-
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -401,19 +391,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
     CPPUNIT_ASSERT(pDrawPage);
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
-
-    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
-    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
-                                                               { pSdrPage->GetObj(0) }, nullptr);
-    const auto& rDrawPageVOContact
-        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
-    sdr::contact::DisplayInfo aDisplayInfo;
-    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
-    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
-
-    drawinglayer::Primitive2dXmlDump aDumper;
-    xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
-    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
     assertXPath(pXmlDoc, "/primitive2D", 1);
 
