@@ -2942,7 +2942,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
         OUString in;
         OString out;
     } URIs[] = {
-        {
+        { // tdf 143216
+            "http://username:password@example.com",
+            "http://username:password@example.com",
+        },{
             "http://example.com/",
             "http://example.com/",
         },{
