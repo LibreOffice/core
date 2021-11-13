@@ -3050,6 +3050,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
                 true,
             },
             {
+                // tdf 143216
+                "http://username:password@example.com",
+                "http://username:password@example.com",
+                true,
+            },
+            {
                 "git://git.example.org/project/example",
                 "git://git.example.org/project/example",
                 true,
