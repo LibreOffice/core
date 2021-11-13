@@ -19,7 +19,7 @@
 #pragma once
 #include <filter/msfilter/escherex.hxx>
 #include <o3tl/any.hxx>
-#include <vcl/mapmod.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 
 // fractions of Draw PPTWriter etc.
@@ -100,8 +100,8 @@ class EscherExHostAppData;
 class ImplEESdrWriter
 {
     EscherEx*           mpEscherEx;
-    MapMode             maMapModeSrc;
-    MapMode             maMapModeDest;
+    o3tl::Length        meUnitsSrc;
+    o3tl::Length        meUnitsDest;
     css::uno::Reference< css::drawing::XDrawPage >        mXDrawPage;
     css::uno::Reference< css::drawing::XShapes >          mXShapes;
     SvStream*           mpPicStrm;

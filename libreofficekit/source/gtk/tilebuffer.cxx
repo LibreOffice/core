@@ -9,19 +9,22 @@
 
 #include "tilebuffer.hxx"
 
+#include <o3tl/unit_conversion.hxx>
+
 
 /* ------------------
    Utility functions
    ------------------
 */
+// We know that VirtualDevices use a DPI of 96.
 float pixelToTwip(float fInput, float zoom)
 {
-    return (fInput / DPI / zoom) * 1440.0f;
+    return o3tl::toTwips(fInput / zoom, o3tl::Length::px);
 }
 
 float twipToPixel(float fInput, float zoom)
 {
-    return fInput / 1440.0f * DPI * zoom;
+    return o3tl::convert(fInput * zoom, o3tl::Length::twip, o3tl::Length::px);
 }
 
 /* ----------------------------

@@ -106,6 +106,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <paratr.hxx>
@@ -1475,7 +1476,8 @@ void SwUiWriterTest4::testTdf104425()
         = getXPath(pXmlDoc, "//page[2]/body/tab/row/infos/bounds", "height").toInt32();
     sal_Int32 nHeight3
         = getXPath(pXmlDoc, "//page[3]/body/tab/row/infos/bounds", "height").toInt32();
-    double fSumHeight_mm = (nHeight1 + nHeight2 + nHeight3) * 25.4 / 1440.0;
+    double fSumHeight_mm = o3tl::convert<double>(nHeight1 + nHeight2 + nHeight3, o3tl::Length::twip,
+                                                 o3tl::Length::mm);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(700.0, fSumHeight_mm, 0.05);
 }
 

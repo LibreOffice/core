@@ -698,11 +698,11 @@ SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
                                             SvxNumberFormat::LABEL_ALIGNMENT )
                 {
                     // first line indent of general numbering in inch: -0,25 inch
-                    const tools::Long cFirstLineIndent = -1440/4;
+                    constexpr tools::Long cFirstLineIndent = o3tl::toTwips(-0.25, o3tl::Length::in);
                     // indent values of general numbering in inch:
                     //  0,5         0,75        1,0         1,25        1,5
                     //  1,75        2,0         2,25        2,5         2,75
-                    const tools::Long cIndentAt = 1440/4;
+                    constexpr tools::Long cIndentAt = o3tl::toTwips(0.25, o3tl::Length::in);
                     aFmts[i]->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
                     aFmts[i]->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                     aFmts[i]->SetListtabPos( cIndentAt * (i+2) );

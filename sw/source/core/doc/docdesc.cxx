@@ -90,17 +90,17 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     sal_Int32 nMinTop, nMinBottom, nMinLeft, nMinRight;
     if( RES_POOLPAGE_HTML == nPoolFormatId )
     {
-        nMinRight = nMinTop = nMinBottom = o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip);
-        nMinLeft = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip);
+        nMinRight = nMinTop = nMinBottom = o3tl::toTwips(1, o3tl::Length::cm);
+        nMinLeft = o3tl::toTwips(2, o3tl::Length::cm);
     }
     else if (!utl::ConfigManager::IsFuzzing() && MeasurementSystem::Metric == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
     {
-        nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; // 2 centimeters
+        nMinTop = nMinBottom = nMinLeft = nMinRight = o3tl::toTwips(2, o3tl::Length::cm);
     }
     else
     {
-        nMinTop = nMinBottom = 1440;    // as in MS Word: 1 Inch
-        nMinLeft = nMinRight = 1800;    //                1,25 Inch
+        nMinTop = nMinBottom = o3tl::toTwips(1, o3tl::Length::in);    // as in MS Word
+        nMinLeft = nMinRight = o3tl::toTwips(1.25, o3tl::Length::in);
     }
 
     // set margins
