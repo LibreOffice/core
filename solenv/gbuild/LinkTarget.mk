@@ -1915,7 +1915,7 @@ $(call gb_LinkTarget_get_pch_reuse_timestamp,$(4)) : $(call gb_PrecompiledHeader
 	$(call gb_PrecompiledHeader_check_flags,$(4),$(2),\
 		$(call gb_PrecompiledHeader_get_target,$(3),$(4)),\
 		$(call gb_PrecompiledHeader_get_flags_file,$(3),$(4)),\
-		$$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS))
+		$(gb_PrecompiledHeader_cxxflags_includes))
 	$$(call gb_PrecompiledHeader__copy_reuse_files,$(1),$(3),$(4))
 	mkdir -p $$(dir $$@) && touch $$@
 

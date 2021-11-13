@@ -129,51 +129,53 @@ endif
 # This is for MSVC's object file built directly as a side-effect of building the PCH.
 gb_PrecompiledHeader_get_objectfile =
 
+# $(call gb_PrecompiledHeader__command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 	$(call gb_Trace_StartRange,$(2),PCH)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
+	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(6))) && \
 	cd $(BUILDDIR)/ && \
 	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
-	$(if $(8),$(8),$(gb_CXX)) \
+	$(if $(7),$(7),$(gb_CXX)) \
 		-x c++-header $(gb_PrecompiledHeader_emit_pch) \
-		$(4) \
-		$(if $(7), $(call gb_CObject__filter_out_clang_cflags,$(5)),$(5)) \
+		$(if $(7), $(call gb_CObject__filter_out_clang_cflags,$(4)),$(4)) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 		$(gb_COMPILERDEPFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		$(gb_NO_PCH_TIMESTAMP) \
 		$(gb_PrecompiledHeader_extra_pch_cxxflags) \
-		$(6) \
-		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7))) \
+		$(5) \
+		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(6))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
 		-o$(1) \
-		$(call gb_cxx_dep_copy,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7))) \
+		$(call gb_cxx_dep_copy,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(6))) \
 		)
 	$(call gb_Trace_EndRange,$(2),PCH)
 endef
 
 ifeq ($(COM_IS_CLANG),TRUE)
 # Clang has -fno-pch-timestamp, just checksum the file for CCACHE_PCH_EXTSUM
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename)
 define gb_PrecompiledHeader__sum_command
 	$(SHA256SUM) $(1) >$(1).sum
 endef
 else
 # GCC does not generate the same .gch for the same input, so checksum the (preprocessed) input
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename)
 define gb_PrecompiledHeader__sum_command
 $(call gb_Helper_abbreviate_dirs,\
 	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
 	$(gb_CXX) \
 		-x c++-header \
-		$(4) $(5) \
+		$(4) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 		$(gb_COMPILERDEPFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		$(gb_NO_PCH_TIMESTAMP) \
-		$(6) \
+		$(5) \
 		-E $(patsubst %.cxx,%.hxx,$(3)) \
 		-o- \
 		| $(SHA256SUM) >$(1).sum \
