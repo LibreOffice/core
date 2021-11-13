@@ -377,4 +377,22 @@ endif
 
 endef
 
+# Setup for ccache.
+ifneq ($(gb_ENABLE_PCH),)
+# CCACHE_SLOPPINESS should contain pch_defines,time_macros for PCHs.
+gb_CCACHE_SLOPPINESS :=
+ifeq ($(shell test -z "$$CCACHE_SLOPPINESS" && echo 1),1)
+gb_CCACHE_SLOPPINESS := CCACHE_SLOPPINESS=pch_defines,time_macros
+else
+ifeq ($(shell echo "$$CCACHE_SLOPPINESS" | grep -q pch_defines | grep -q time_macros && echo 1),1)
+gb_CCACHE_SLOPPINESS := CCACHE_SLOPPINESS=$CCACHE_SLOPPINESS:pch_defines,time_macros
+endif
+endif
+gb_COMPILER_SETUP += $(gb_CCACHE_SLOPPINESS)
+endif
+
+ifneq ($(CCACHE_DEPEND_MODE),)
+gb_COMPILER_SETUP += CCACHE_DEPEND=1
+endif
+
 # vim: set noet sw=4:

@@ -67,7 +67,7 @@ $(call gb_PrecompiledHeader_get_target,$(1),$(3)) :
 		 || ( echo "Error, PCH $(1) built by $$(PCH_LINKTARGETMAKEFILENAME) instead of $(3)" >&2; exit 1)
 	rm -f $$@
 	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$(gb_PrecompiledHeader_cxxflags_includes),$$(INCLUDE),$(3),$(5))
-	$$(call gb_PrecompiledHeader__sum_command,$$@,$(1),$$<,$(gb_PrecompiledHeader_cxxflags_includes),$$(INCLUDE),$(3))
+	$$(call gb_PrecompiledHeader__sum_command,$$@,$(1),$$<,$(gb_PrecompiledHeader_cxxflags_includes),$$(INCLUDE),$(3),$(5))
 ifeq ($(gb_FULLDEPS),$(true))
 	$$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,$$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(3))) && \

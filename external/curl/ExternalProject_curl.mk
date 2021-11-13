@@ -84,6 +84,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			VC=12 \
 			MACHINE=$(gb_MSBUILD_PLATFORM) \
 			GEN_PDB=$(if $(call gb_Module__symbols_enabled,curl),yes,no) \
+			$(if $(call gb_Module__symbols_enabled,curl),CFLAGS_PDB_VALUE="$(gb_DEBUGINFO_FLAGS)") \
 			DEBUG=$(if $(MSVC_USE_DEBUG_RUNTIME),yes,no) \
 			ENABLE_IPV6=yes \
 			ENABLE_SSPI=yes \

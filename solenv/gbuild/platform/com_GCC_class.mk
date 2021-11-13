@@ -157,17 +157,17 @@ endef
 
 ifeq ($(COM_IS_CLANG),TRUE)
 # Clang has -fno-pch-timestamp, just checksum the file for CCACHE_PCH_EXTSUM
-# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename)
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
 define gb_PrecompiledHeader__sum_command
 	$(SHA256SUM) $(1) >$(1).sum
 endef
 else
 # GCC does not generate the same .gch for the same input, so checksum the (preprocessed) input
-# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename)
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
 define gb_PrecompiledHeader__sum_command
 $(call gb_Helper_abbreviate_dirs,\
 	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
-	$(gb_CXX) \
+	$(if $(7),$(7),$(gb_CXX)) \
 		-x c++-header \
 		$(4) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \

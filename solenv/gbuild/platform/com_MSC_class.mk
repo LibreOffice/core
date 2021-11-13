@@ -65,6 +65,7 @@ define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
+	$(gb_COMPILER_SETUP) \
 	$(call gb_CObject__compiler,$(2),$(3),$(6)) \
 		$(call gb_Helper_remove_overridden_flags, \
 			$(DEFS) \
@@ -107,6 +108,7 @@ $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(6))) && \
 	unset INCLUDE && \
+	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
 	$(call gb_CObject__compiler,$(4),$(3),$(7)) \
 		$(call gb_Helper_remove_overridden_flags, \
 			$(4) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
@@ -120,9 +122,21 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Trace_EndRange,$(2),PCH)
 endef
 
-# No ccache with MSVC, no need to create a checksum for it.
-# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename)
+# MSVC does not generate the same .pch for the same input, so checksum the (preprocessed) input
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
 define gb_PrecompiledHeader__sum_command
+$(call gb_Helper_abbreviate_dirs,\
+	unset INCLUDE && \
+	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
+	$(call gb_CObject__compiler,$(4),$(3),$(7)) \
+		$(call gb_Helper_remove_overridden_flags, \
+			$(4)$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
+		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
+		$(gb_LTOFLAGS) \
+		$(5) \
+		-E $(3) \
+		2>&1 | $(SHA256SUM) >$(1).sum \
+		)
 endef
 
 # When building a PCH, MSVC also creates a .pdb file with debug info. So for reuse

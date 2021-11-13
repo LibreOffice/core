@@ -1758,13 +1758,19 @@ libo_FUZZ_ARG_ENABLE(cups,
 AC_ARG_ENABLE(ccache,
     AS_HELP_STRING([--disable-ccache],
         [Do not try to use ccache automatically.
-         By default, unless on Windows, we will try to detect if ccache is available; in that case if
+         By default we will try to detect if ccache is available; in that case if
          CC/CXX are not yet set, and --enable-icecream is not given, we
          attempt to use ccache. --disable-ccache disables ccache completely.
          Additionally ccache's depend mode is enabled if possible,
          use --enable-ccache=nodepend to enable ccache without depend mode.
 ]),
 ,)
+
+AC_ARG_ENABLE(z7-debug,
+    AS_HELP_STRING([--enable-z7-debug],
+        [Makes the MSVC compiler use -Z7 for debugging instead of the default -Zi. Using this option takes
+         more disk spaces but allows to use ccache. Final PDB files are created even with this option enabled.
+         Enabled by default if ccache is detected.]))
 
 libo_FUZZ_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
@@ -3029,26 +3035,6 @@ dnl ===================================================================
 CCACHE_DEPEND_MODE=
 if test "$enable_ccache" = "no"; then
     CCACHE=""
-elif test "$_os" = "WINNT"; then
-    # on windows/VC build do not use ccache - but perhaps sccache is around?
-    case "%$CC%$CXX%" in
-    # If $CC and/or $CXX already contain "sccache" (possibly suffixed with some version number etc),
-    # assume that's good then
-    *%sccache[[-_' ']]*|*/sccache[[-_' ']]*)
-        AC_MSG_NOTICE([sccache seems to be included in a pre-defined CC and/or CXX])
-        CCACHE_DEPEND_MODE=1
-        ;;
-    *)
-        # for sharing code below, reuse CCACHE env var
-        AC_PATH_PROG([CCACHE],[sccache],[not found])
-        if test "$CCACHE" = "not found"; then
-            CCACHE=""
-        else
-            CCACHE=`win_short_path_for_make "$CCACHE"`
-            CCACHE_DEPEND_MODE=1
-        fi
-        ;;
-    esac
 elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
     case "%$CC%$CXX%" in
     # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some version number etc),
@@ -3058,10 +3044,59 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
         CCACHE_DEPEND_MODE=1
         ;;
     *)
+        # try to use our own ccache if it is available and CCACHE was not already defined
+        if test -z "$CCACHE"; then
+            if test "$_os" = "WINNT"; then
+                ccache_ext=.exe # e.g. openssl build needs ccache.exe, not just ccache
+            fi
+            if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/ccache$ccache_ext" ; then
+                CCACHE="$LODE_HOME/opt/bin/ccache$ccache_ext"
+            elif test -x "/opt/lo/bin/ccache$ccache_ext"; then
+                CCACHE="/opt/lo/bin/ccache$ccache_ext"
+            fi
+        fi
         AC_PATH_PROG([CCACHE],[ccache],[not found])
+        if test "$CCACHE" != "not found" -a "$_os" = "WINNT"; then
+            CCACHE=`win_short_path_for_make "$CCACHE"`
+        fi
+        if test "$CCACHE" != "not found" -a "$COM" = MSC; then
+            # check that it has MSVC support (it should recognize it in CCACHE_COMPILERTYPE)
+            rm -f conftest.txt
+            AC_MSG_CHECKING([whether $CCACHE has MSVC support])
+            CCACHE_COMPILERTYPE=cl CCACHE_LOGFILE=conftest.txt $CCACHE echo >/dev/null 2>/dev/null
+            if grep -q 'Config: (environment) compiler_type = cl' conftest.txt; then
+                AC_MSG_RESULT(yes)
+            else
+                AC_MSG_RESULT(no)
+                CCACHE="not found"
+            fi
+            rm -f conftest.txt
+        fi
+        if test "$CCACHE" = "not found" -a "$_os" = "WINNT"; then
+            # on windows/VC perhaps sccache is around?
+            case "%$CC%$CXX%" in
+            # If $CC and/or $CXX already contain "sccache" (possibly suffixed with some version number etc),
+            # assume that's good then
+            *%sccache[[-_' ']]*|*/sccache[[-_' ']]*)
+                AC_MSG_NOTICE([sccache seems to be included in a pre-defined CC and/or CXX])
+                CCACHE_DEPEND_MODE=1
+                SCCACHE=1
+                ;;
+            *)
+                # for sharing code below, reuse CCACHE env var
+                AC_PATH_PROG([CCACHE],[sccache],[not found])
+                if test "$CCACHE" != "not found"; then
+                    CCACHE=`win_short_path_for_make "$CCACHE"`
+                    SCCACHE=1
+                    CCACHE_DEPEND_MODE=1
+                fi
+                ;;
+            esac
+        fi
         if test "$CCACHE" = "not found"; then
             CCACHE=""
-        else
+        fi
+        if test -n "$CCACHE" -a -z "$SCCACHE"; then
             CCACHE_DEPEND_MODE=1
             # Need to check for ccache version: otherwise prevents
             # caching of the results (like "-x objective-c++" for Mac)
@@ -3089,8 +3124,8 @@ if test "$enable_ccache" = "nodepend"; then
 fi
 AC_SUBST(CCACHE_DEPEND_MODE)
 
-# skip on windows - sccache defaults are good enough
-if test "$CCACHE" != "" -a "$_os" != "WINNT"; then
+# sccache defaults are good enough
+if test "$CCACHE" != "" -a -z "$SCCACHE"; then
     # e.g. (/home/rene/.config/ccache/ccache.conf) max_size = 20.0G
     # -p works with both 4.2 and 4.4
     ccache_size_msg=$([ccache -p | $AWK /max_size/'{ print $4 }' | sed -e 's/\.[0-9]*//'])
@@ -3118,6 +3153,17 @@ if test "$CCACHE" != "" -a "$_os" != "WINNT"; then
         fi
     fi
 fi
+
+ENABLE_Z7_DEBUG=
+if test "$enable_z7_debug" != no; then
+    if test "$enable_z7_debug" = yes -o -n "$CCACHE"; then
+        ENABLE_Z7_DEBUG=TRUE
+    fi
+else
+    AC_MSG_WARN([ccache will not work with --disable-z7-debug])
+    add_warning "ccache will not work with --disable-z7-debug"
+fi
+AC_SUBST(ENABLE_Z7_DEBUG)
 
 dnl ===================================================================
 dnl  Checks for C compiler,
@@ -4264,10 +4310,17 @@ if test "$CCACHE" != ""; then
     AC_LANG_PUSH([C])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS --ccache-skip -O2"
+    # msvc does not fail on unknown options, check stdout
+    if test "$COM" = MSC; then
+        CFLAGS="$CFLAGS -nologo"
+    fi
+    save_ac_c_werror_flag=$ac_c_werror_flag
+    ac_c_werror_flag=yes
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
     CFLAGS=$save_CFLAGS
+    ac_c_werror_flag=$save_ac_c_werror_flag
     if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
         AC_MSG_RESULT([yes])
     else
@@ -6752,6 +6805,12 @@ if test "$CCACHE" != ""; then
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+    # msvc does not fail on unknown options, check stdout
+    if test "$COM" = MSC; then
+        CXXFLAGS="$CXXFLAGS -nologo"
+    fi
+    save_ac_cxx_werror_flag=$ac_cxx_werror_flag
+    ac_cxx_werror_flag=yes
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
@@ -6763,6 +6822,7 @@ if test "$CCACHE" != ""; then
         AC_MSG_RESULT([no])
     fi
     CXXFLAGS=$save_CXXFLAGS
+    ac_cxx_werror_flag=$save_ac_cxx_werror_flag
     AC_LANG_POP([C++])
 fi
 
@@ -12284,7 +12344,7 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     save_CC="$CC"
     CC="$LO_CLANG_CC"
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS --ccache-skip -O2"
+    CFLAGS="$CFLAGS --ccache-skip -O2 -Werror"
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
@@ -12303,7 +12363,7 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     save_CXX="$CXX"
     CXX="$LO_CLANG_CXX"
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+    CXXFLAGS="$CXXFLAGS --ccache-skip -O2 -Werror"
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])

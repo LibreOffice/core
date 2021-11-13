@@ -82,7 +82,7 @@ void setupccenv() {
     }
 }
 
-std::string processccargs(std::vector<std::string> rawargs, std::string &env_prefix, bool &verbose)
+std::string processccargs(const std::vector<std::string>& rawargs, std::string &env_prefix, bool &verbose)
 {
     // default env var prefix
     env_prefix = "REAL_";
@@ -101,16 +101,16 @@ std::string processccargs(std::vector<std::string> rawargs, std::string &env_pre
     args.append(" -Gy");
     args.append(" -Ob1 -Oxs -Oy-");
 
-    // apparently these must be at the end
-    // otherwise configure tests may fail
-    // note: always use -debug so a PDB file is created
-    std::string linkargs(" -link -debug");
+    std::string linkargs;
+    bool block_linkargs = false;
 
     // instead of using synced PDB access (-FS), use individual PDB files based on output
     const char *const pEnvIndividualPDBs(getenv("MSVC_USE_INDIVIDUAL_PDBS"));
     const bool bIndividualPDBs = (pEnvIndividualPDBs && !strcmp(pEnvIndividualPDBs, "TRUE"));
+    const char *const pEnvEnableZ7Debug(getenv("ENABLE_Z7_DEBUG"));
+    const bool bEnableZ7Debug = (pEnvEnableZ7Debug && !strcmp(pEnvEnableZ7Debug, "TRUE"));
 
-    for(std::vector<std::string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
+    for(std::vector<std::string>::const_iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         if (env_prefix_next_arg)
         {
             env_prefix = *i;
@@ -150,7 +150,7 @@ std::string processccargs(std::vector<std::string> rawargs, std::string &env_pre
                 exit(1);
             }
 
-            if (bIndividualPDBs)
+            if (bIndividualPDBs && !bEnableZ7Debug)
             {
                 if (dot == std::string::npos)
                     args.append(" -Fd" + *i + ".pdb");
@@ -159,17 +159,26 @@ std::string processccargs(std::vector<std::string> rawargs, std::string &env_pre
             }
         }
         else if(*i == "-g" || !(*i).compare(0,5,"-ggdb")) {
-            args.append("-Zi");
-            if (!bIndividualPDBs)
-                args.append(" -FS");
+            if(!bEnableZ7Debug)
+            {
+                args.append("-Zi");
+                if (!bIndividualPDBs)
+                    args.append(" -FS");
+            }
+            else
+            {
+                // ccache doesn't work with -Zi, the -link -debug for linking will create a final PDB
+                args.append("-Z7");
+            }
         }
         else if(!(*i).compare(0,2,"-D")) {
             // need to re-escape strings for preprocessor
-            for(size_t pos=(*i).find("\""); pos!=std::string::npos; pos=(*i).find("\"",pos)) {
-                (*i).replace(pos,0,"\\");
+            std::string str = *i;
+            for(size_t pos=str.find("\""); pos!=std::string::npos; pos=str.find("\"",pos)) {
+                str.replace(pos,0,"\\");
                 pos+=2;
             }
-            args.append(*i);
+            args.append(str);
         }
         else if(!(*i).compare(0,2,"-L")) {
             linkargs.append(" -LIBPATH:"+(*i).substr(2));
@@ -187,6 +196,12 @@ std::string processccargs(std::vector<std::string> rawargs, std::string &env_pre
         }
         else if(!(*i).compare(0,4,"-Wl,")) {
             //TODO: drop other gcc-specific options
+        }
+        else if(*i == "-c") {
+            args.append("-c");
+            // If -c is specified, there will be no linking anyway,
+            // and passing -link with -c stops ccache from caching.
+            block_linkargs = true;
         }
         else if(*i == "-Werror")
             args.append("-WX");
@@ -219,7 +234,14 @@ std::string processccargs(std::vector<std::string> rawargs, std::string &env_pre
         exit(1);
     }
 
-    args.append(linkargs);
+    if(!block_linkargs) {
+        // apparently these must be at the end
+        // otherwise configure tests may fail
+        // note: always use -debug so a PDB file is created
+        args.append(" -link -debug ");
+        args.append(linkargs);
+    }
+
     return args;
 }
 
