@@ -686,7 +686,7 @@ DECLARE_RTFEXPORT_TEST(testDoDhgt, "do-dhgt.rtf")
     CPPUNIT_ASSERT_EQUAL(3, nShapes);
     for (int i = 0; i < nShapes; ++i)
     {
-        sal_Int32 nFillColor = getProperty<sal_Int32>(getShape(i + 1), "FillColor");
+        Color nFillColor = getProperty<Color>(getShape(i + 1), "FillColor");
         if (nFillColor == 0xc0504d) // red
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
         else if (nFillColor == 0x9bbb59) // green
