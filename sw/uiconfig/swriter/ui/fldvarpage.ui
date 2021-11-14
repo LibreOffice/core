@@ -584,6 +584,7 @@
                 <property name="tooltip_text" translatable="yes" context="fldvarpage|apply|tooltip_text">Apply</property>
                 <property name="valign">center</property>
                 <property name="image">image2</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="apply-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|apply">Adds the user-defined field to the Select list.</property>
@@ -603,6 +604,7 @@
                 <property name="tooltip_text" translatable="yes" context="fldvarpage|delete|tooltip_text">Delete</property>
                 <property name="valign">center</property>
                 <property name="image">image1</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="delete-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|delete">Removes the user-defined field from the select list. You can only remove fields that are not used in the current document.</property>

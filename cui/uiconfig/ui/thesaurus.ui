@@ -167,6 +167,7 @@
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="image">image1</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="left-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="thesaurus|extended_tip|left">Recalls the previous contents of the "Current word" text box.</property>

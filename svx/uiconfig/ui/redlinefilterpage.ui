@@ -357,6 +357,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="redlinefilterpage|startclock|tooltip_text">Set current time and date</property>
                 <property name="image">image1</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -415,6 +416,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="redlinefilterpage|endclock|tooltip_text">Set current time and date</property>
                 <property name="image">image2</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
