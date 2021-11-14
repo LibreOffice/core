@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1966f09_a9683fa1",
+        "filename": "svgio/source/svgreader/SvgNumber.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-14T07:01:26Z",
+      "side": 1,
+      "message": "Is this behavior change intentional? Previously, the \"if ( !aViewPort.isEmpty() )\" was basically a no-op, which would always give true, given that line 86 set aViewPort to a non-empty range. Now you exclude this \"Design error\" from handling here.",
+      "revId": "97fe9b1fa5c0f14a7b26e6f820763129a1252911",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
