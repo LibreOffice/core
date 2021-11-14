@@ -587,7 +587,7 @@ OUnoObject::OUnoObject(
 
 OUnoObject::OUnoObject(
     SdrModel& rSdrModel, OUnoObject const & rSource)
-:   SdrUnoObj(rSdrModel, rSource.getUnoControlModelTypeName())
+:   SdrUnoObj(rSdrModel, rSource)
     ,OObjectBase(rSource.getServiceName())
     ,m_nObjectType(rSource.m_nObjectType)
     // tdf#119067
