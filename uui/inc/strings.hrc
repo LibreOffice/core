@@ -84,9 +84,4 @@
 #define STR_RELOADEDITABLE_MSG                  NC_("STR_RELOADEDITABLE_MSG", "Document file '$(ARG1)' is now editable \n\nReload this document for editing?")
 #define STR_RELOADEDITABLE_BTN                  NC_("STR_RELOADEDITABLE_BTN", "~Reload")
 
-#define STR_READONLYOPEN_TITLE                  NC_("STR_READONLYOPEN_TITLE", "Document is read-only")
-#define STR_READONLYOPEN_MSG                    NC_("STR_READONLYOPEN_MSG", "Document file '$(ARG1)' is read-only.\n\nOpen read-only or select Notify to open read-only and get notified when the document becomes editable.")
-#define STR_READONLYOPEN_BTN                    NC_("STR_READONLYOPEN_BTN", "Open ~Read-Only")
-#define STR_READONLYOPEN_NOTIFY_BTN             NC_("STR_READONLYOPEN_NOTIFY_BTN", "~Notify")
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
