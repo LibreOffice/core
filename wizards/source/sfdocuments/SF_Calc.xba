@@ -1662,6 +1662,7 @@ Public Function Methods() As Variant
 					, &quot;MoveRange&quot; _
 					, &quot;MoveSheet&quot; _
 					, &quot;Offset&quot; _
+					, &quot;OpenRangeSelector&quot; _
 					, &quot;Printf&quot; _
 					, &quot;PrintOut&quot; _
 					, &quot;RemoveSheet&quot; _
@@ -1860,6 +1861,87 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SF_Documents.SF_Calc.Offset
+
+REM -----------------------------------------------------------------------------
+Public Function OpenRangeSelector(Optional ByVal Title As Variant _
+								, Optional ByVal Selection As Variant _
+								, Optional ByVal SingleCell As Variant _
+								, Optional ByVal CloseAfterSelect As Variant _
+								) As String
+&apos;&apos;&apos;	Activates the Calc document, opens a non-modal dialog with a text box,
+&apos;&apos;&apos;	let the user make a selection in the current or another sheet and
+&apos;&apos;&apos;	returns the selected area as a string.
+&apos;&apos;&apos;	This method does not change the current selection.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Title: the title to display on the top of the dialog
+&apos;&apos;&apos;		Selection: a default preselection as a String. When absent, the first element of the
+&apos;&apos;&apos;			current selection is preselected.
+&apos;&apos;&apos;		SingleCell: When True, only a single cell may be selected. Default = False
+&apos;&apos;&apos;		CloseAfterSelect: When True (default-, the dialog is closed immediately after
+&apos;&apos;&apos;			the selection. When False, the user may change his/her mind and must close
+&apos;&apos;&apos;			the dialog manually.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The selected range as a string, or the empty string when the user cancelled the request (close window button)
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim sSelect As String, vValues As Variant
+&apos;&apos;&apos;		sSelect = oDoc.OpenRangeSelector(&quot;Select a range ...&quot;)
+&apos;&apos;&apos;		If sSelect = &quot;&quot; Then Exit Function
+&apos;&apos;&apos;		vValues = oDoc.GetValue(sSelect)
+
+Dim sSelector As String				&apos;	Return value
+Dim vPropertyValues As Variant		&apos;	Array of com.sun.star.beans.PropertyValue
+Dim oSelection As Object			&apos;	The current selection before opening the selector
+Dim oAddress As Object				&apos;	Preselected address as _Address
+
+Const cstThisSub = &quot;SFDocuments.Calc.OpenRangeSelector&quot;
+Const cstSubArgs = &quot;[Title=&quot;&quot;&quot;&quot;], [Selection=&quot;&quot;~&quot;&quot;], [SingleCell=False], [CloseAfterSelect=True]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sSelector = &quot;&quot;
+
+Check:
+	If IsMissing(Title) Or IsEmpty(Title) Then Title = &quot;&quot;
+	If IsMissing(Selection) Or IsEmpty(Selection) Then Selection = &quot;~&quot;
+	If IsMissing(SingleCell) Or IsEmpty(SingleCell) Then SingleCell = False
+	If IsMissing(CloseAfterSelect) Or IsEmpty(CloseAfterSelect) Then CloseAfterSelect = True
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Title, &quot;Title&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Selection, &quot;Selection&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(SingleCell, &quot;SingleCell&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(CloseAfterSelect, &quot;CloseAfterSelect&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Save the current selections
+	Set oSelection = _Component.CurrentController.getSelection()
+
+	&apos;	Process preselection and select its containing sheet
+	Set oAddress = _ParseAddress(Selection)
+	Activate(oAddress.SheetName)
+
+	&apos;	Build arguments array and execute the dialog box
+	With ScriptForge.SF_Utils
+		vPropertyValues = Array( _
+				._MakePropertyValue(&quot;Title&quot;, Title) _
+				, ._MakePropertyValue(&quot;CloseOnMouseRelease&quot;, CloseAfterSelect) _
+				, ._MakePropertyValue(&quot;InitialValue&quot;, oAddress.XCellRange.AbsoluteName) _
+				, ._MakePropertyValue(&quot;SingleCellMode&quot;, SingleCell) _
+				)
+	End With
+	sSelector = SF_DocumentListener.RunRangeSelector(_Component, vPropertyValues)
+
+	&apos;	Restore the saved selections
+	_RestoreSelections(_Component, oSelection)
+
+Finally:
+	OpenRangeSelector = sSelector
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Calc.OpenRangeSelector
 
 REM -----------------------------------------------------------------------------
 Public Function Printf(Optional ByVal InputStr As Variant _
