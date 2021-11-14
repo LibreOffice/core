@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76fde628_729f9351",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-14T14:49:26Z",
+      "side": 1,
+      "message": "I like it! Great barebones app to show how to init and create a window. It was what vcldemo was at one point. Just add TheApplication to the anon namespace. ",
+      "revId": "7c623769a0323abb7cdf015e69293c5dda06d754",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf1fed4_f8b75b0c",
+        "filename": "vcl/workben/minvcl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-14T14:49:26Z",
+      "side": 1,
+      "message": "Put this in an unnamed namespace.",
+      "revId": "7c623769a0323abb7cdf015e69293c5dda06d754",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
