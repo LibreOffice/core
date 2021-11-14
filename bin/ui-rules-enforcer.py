@@ -513,6 +513,16 @@ def enforce_button_always_show_image(current):
     else:
       always_show_image.text = "True"
 
+def enforce_noshared_adjustments(current, adjustments):
+  for child in current:
+    enforce_noshared_adjustments(child, adjustments)
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "adjustment":
+        if child.text in adjustments:
+          raise Exception(sys.argv[1] + ': adjustment used more than once', child.text)
+        adjustments.add(child.text)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -549,6 +559,7 @@ remove_skip_pager_hint(root)
 remove_toolbutton_focus(root)
 enforce_toolbar_can_focus(root)
 enforce_button_always_show_image(root)
+enforce_noshared_adjustments(root, set())
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
