@@ -2978,6 +2978,102 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageHyperlink)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
+{
+    struct
+    {
+        OUString in;
+        OString out;
+    } URIs[] = { {
+                     "http://example.com/",
+                     "http://example.com/",
+                 },
+                 {
+                     "file://localfile.odt/",
+                     "file://localfile.odt/",
+                 },
+                 {
+                     "git://git.example.org/project/example",
+                     "git://git.example.org/project/example",
+                 },
+                 {
+                     // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
+                     "filebypath.odt",
+                     "filebypath.pdf",
+                 },
+                 {
+                     // This also gets made relative due to 'ExportLinksRelativeFsys'
+                     utl::TempFile::GetTempNameBaseDirectory() + "fileintempdir.odt",
+                     "fileintempdir.pdf",
+                 } };
+
+    // Create an empty document.
+    // Note: The test harness gets very upset if we try and create multiple
+    // documents, or recreate it; so reuse one instance for all the links
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "Test pdf", /*bAbsorb=*/false);
+
+    // Set the name so it can do relative name replacement
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    xModel->attachResource(maTempFile.GetURL(), xModel->getArgs());
+
+    // Test the filename rewriting
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportLinksRelativeFsys", uno::makeAny(true) },
+        { "ConvertOOoTargetToPDFTarget", uno::makeAny(true) },
+    }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+
+    for (unsigned int i = 0; i < (sizeof(URIs) / sizeof(URIs[0])); i++)
+    {
+        // Add a link (based on testNestedHyperlink in rtfexport3)
+        xCursor->gotoStart(/*bExpand=*/false);
+        xCursor->gotoEnd(/*bExpand=*/true);
+        uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+        xCursorProps->setPropertyValue("HyperLinkURL", uno::makeAny(URIs[i].in));
+
+        // Save as PDF.
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+        // Use the filter rather than the pdfium route, as per the tdf105093 test, it's
+        // easier to parse the annotations
+        vcl::filter::PDFDocument aDocument;
+
+        // Parse the export result.
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+        CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+        // The document has one page.
+        std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+        auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+        CPPUNIT_ASSERT(pAnnots);
+
+        // There should be one annotation
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+        auto pAnnotReference
+            = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+        CPPUNIT_ASSERT(pAnnotReference);
+        vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+        // We're expecting something like /Type /Annot /A << /Type /Action /S /URI /URI (path)
+        CPPUNIT_ASSERT_EQUAL(
+            OString("Annot"),
+            static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+        auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+        CPPUNIT_ASSERT(pAction);
+        auto pURIElem
+            = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pAction->LookupElement("URI"));
+        CPPUNIT_ASSERT(pURIElem);
+        // Check it matches
+        CPPUNIT_ASSERT_EQUAL(URIs[i].out, pURIElem->GetValue());
+    }
+}
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
