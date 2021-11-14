@@ -956,144 +956,245 @@ namespace dbtools
         m_aParametersVisited[ _nIndex - 1 ] = true;
     }
 
-#define VISIT_PARAMETER( method ) \
-        ::osl::MutexGuard aGuard( m_rMutex ); \
-        OSL_ENSURE( m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!" ); \
-        if ( !m_xInnerParamUpdate.is() ) \
-            return; \
-        m_xInnerParamUpdate->method; \
-        externalParameterVisited( _nIndex ) \
-
-
     void ParameterManager::setNull( sal_Int32 _nIndex, sal_Int32 sqlType )
     {
-        VISIT_PARAMETER( setNull( _nIndex, sqlType ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setNull(_nIndex, sqlType);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setObjectNull( sal_Int32 _nIndex, sal_Int32 sqlType, const OUString& typeName )
     {
-        VISIT_PARAMETER( setObjectNull( _nIndex, sqlType, typeName ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setObjectNull(_nIndex, sqlType, typeName);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setBoolean( sal_Int32 _nIndex, bool x )
     {
-        VISIT_PARAMETER( setBoolean( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setBoolean(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setByte( sal_Int32 _nIndex, sal_Int8 x )
     {
-        VISIT_PARAMETER( setByte( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setByte(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setShort( sal_Int32 _nIndex, sal_Int16 x )
     {
-        VISIT_PARAMETER( setShort( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setShort(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setInt( sal_Int32 _nIndex, sal_Int32 x )
     {
-        VISIT_PARAMETER( setInt( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setInt(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setLong( sal_Int32 _nIndex, sal_Int64 x )
     {
-        VISIT_PARAMETER( setLong( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setLong(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setFloat( sal_Int32 _nIndex, float x )
     {
-        VISIT_PARAMETER( setFloat( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setFloat(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setDouble( sal_Int32 _nIndex, double x )
     {
-        VISIT_PARAMETER( setDouble( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setDouble(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setString( sal_Int32 _nIndex, const OUString& x )
     {
-        VISIT_PARAMETER( setString( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setString(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setBytes( sal_Int32 _nIndex, const css::uno::Sequence< sal_Int8 >& x )
     {
-        VISIT_PARAMETER( setBytes( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setBytes(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setDate( sal_Int32 _nIndex, const css::util::Date& x )
     {
-        VISIT_PARAMETER( setDate( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setDate(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setTime( sal_Int32 _nIndex, const css::util::Time& x )
     {
-        VISIT_PARAMETER( setTime( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setTime(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setTimestamp( sal_Int32 _nIndex, const css::util::DateTime& x )
     {
-        VISIT_PARAMETER( setTimestamp( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setTimestamp(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setBinaryStream( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
     {
-        VISIT_PARAMETER( setBinaryStream( _nIndex, x, length ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setBinaryStream(_nIndex, x, length);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setCharacterStream( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
     {
-        VISIT_PARAMETER( setCharacterStream( _nIndex, x, length ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setCharacterStream(_nIndex, x, length);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setObject( sal_Int32 _nIndex, const css::uno::Any& x )
     {
-        VISIT_PARAMETER( setObject( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setObject(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setObjectWithInfo( sal_Int32 _nIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
     {
-        VISIT_PARAMETER( setObjectWithInfo( _nIndex, x, targetSqlType, scale ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setObjectWithInfo(_nIndex, x, targetSqlType, scale);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setRef( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XRef>& x )
     {
-        VISIT_PARAMETER( setRef( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setRef(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setBlob( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XBlob>& x )
     {
-        VISIT_PARAMETER( setBlob( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setBlob(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setClob( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XClob>& x )
     {
-        VISIT_PARAMETER( setClob( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setClob(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
     void ParameterManager::setArray( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XArray>& x )
     {
-        VISIT_PARAMETER( setArray( _nIndex, x ) );
+        ::osl::MutexGuard aGuard(m_rMutex);
+        OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
+        if (!m_xInnerParamUpdate.is())
+            return;
+        m_xInnerParamUpdate->setArray(_nIndex, x);
+        externalParameterVisited(_nIndex);
     }
 
 
