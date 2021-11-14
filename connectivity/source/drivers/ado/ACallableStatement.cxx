@@ -30,12 +30,6 @@ using namespace com::sun::star::container;
 
 IMPLEMENT_SERVICE_INFO(OCallableStatement,"com.sun.star.sdbcx.ACallableStatement","com.sun.star.sdbc.CallableStatement");
 
-#define GET_PARAM()                                                 \
-    ADOParameter* pParam = nullptr;                                 \
-    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);      \
-    if(pParam)                                                      \
-        pParam->get_Value(&m_aValue);
-
 //************ Class: java.sql.CallableStatement
 
 OCallableStatement::OCallableStatement( OConnection* _pConnection, const OUString& sql )
@@ -60,52 +54,76 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  )
 
 sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getBool();
 }
 
 sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getInt8();
 }
 
 Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getByteSequence();
 }
 
 css::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getDate();
 }
 
 double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getDouble();
 }
 
 
 float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getFloat();
 }
 
 
 sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getInt32();
 }
 
 
 sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return static_cast<sal_Int64>(m_aValue.getCurrency().int64);
 }
 
@@ -119,28 +137,40 @@ Any SAL_CALL OCallableStatement::getObject( sal_Int32 /*columnIndex*/, const Ref
 
 sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getInt16();
 }
 
 
 OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getString();
 }
 
 
  css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getTime();
 }
 
 
  css::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnIndex )
 {
-    GET_PARAM()
+    ADOParameter* pParam = nullptr;
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
+    if(pParam)
+        pParam->get_Value(&m_aValue);
     return m_aValue.getDateTime();
 }
 
