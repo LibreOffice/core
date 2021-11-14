@@ -60,14 +60,26 @@ typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
+enum class PaintMode
+{
+    Over,
+    Xor
+};
+
 struct VCL_DLLPUBLIC CairoCommon
 {
     cairo_surface_t* m_pSurface;
     basegfx::B2IVector m_aFrameSize;
     vcl::Region m_aClipRegion;
+    Color m_aLineColor;
+    Color m_aFillColor;
+    PaintMode m_ePaintMode;
 
     CairoCommon()
         : m_pSurface(nullptr)
+        , m_aLineColor(Color(0x00, 0x00, 0x00))
+        , m_aFillColor(Color(0xFF, 0xFF, 0XFF))
+        , m_ePaintMode(PaintMode::Over)
     {
     }
 
