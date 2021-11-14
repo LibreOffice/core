@@ -33,6 +33,24 @@
       "message": "Ah cool, the -Z7 tweak should help with sccache, too. Does direct mode work meanwhile for ccache on Windows?",
       "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcccfb73_ed28612c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-14T15:40:15Z",
+      "side": 1,
+      "message": "I don\u0027t know what you mean with \"meanwhile\", AFAICT both depend mode and direct mode work fine.",
+      "parentUuid": "b1d704ca_51a1c9f4",
+      "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
