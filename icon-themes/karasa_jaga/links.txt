@@ -404,6 +404,7 @@ cmd/32/questionanswers.png cmd/32/webhtml.png
 cmd/32/rect.png cmd/32/basicshapes.rectangle.png
 cmd/32/rect_rounded.png cmd/32/basicshapes.round-rectangle.png
 cmd/32/rectangletoolbox.png cmd/32/basicshapes.rectangle.png
+cmd/32/redactionpreviewexport.png cmd/32/exportdirecttopdf.png
 cmd/32/refresh.png cmd/32/reload.png
 cmd/32/rejecttracedchange.png cmd/32/rejecttrackedchange.png
 cmd/32/removefilter.png cmd/32/removefiltersort.png
@@ -1011,6 +1012,7 @@ cmd/lc_questionanswers.png cmd/lc_webhtml.png
 cmd/lc_rect.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_rect_rounded.png cmd/lc_basicshapes.round-rectangle.png
 cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
+cmd/lc_redactionpreviewexport.png cmd/lc_exportdirecttopdf.png
 cmd/lc_refresh.png cmd/lc_reload.png
 cmd/lc_rejecttracedchange.png cmd/lc_rejecttrackedchange.png
 cmd/lc_removefilter.png cmd/lc_removefiltersort.png
@@ -1415,6 +1417,7 @@ cmd/sc_questionanswers.png cmd/sc_webhtml.png
 cmd/sc_rect.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_rect_rounded.png cmd/sc_basicshapes.round-rectangle.png
 cmd/sc_rectangletoolbox.png cmd/sc_basicshapes.rectangle.png
+cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
 cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_rejecttracedchange.png cmd/sc_rejecttrackedchange.png
 cmd/sc_removefilter.png cmd/sc_removefiltersort.png
