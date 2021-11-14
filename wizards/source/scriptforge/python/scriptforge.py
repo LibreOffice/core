@@ -2010,6 +2010,9 @@ class SFDocuments:
                    width = ScriptForge.cstSymEmpty):
             return self.ExecMethod(self.vbMethod, 'Offset', range, rows, columns, height, width)
 
+        def OpenRangeSelector(self, title = '', selection = '~', singlecell = False, closeafterselect = True):
+            return self.ExecMethod(self.vbMethod, 'OpenRangeSelector', title, selection, singlecell, closeafterselect)
+
         def Printf(self, inputstr, range, tokencharacter = '%'):
             return self.ExecMethod(self.vbMethod, 'Printf', inputstr, range, tokencharacter)
 
