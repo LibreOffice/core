@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,icontest))
 
-$(eval $(call gb_Executable_use_externals,icontest,\
-    boost_headers \
-	glm_headers \
-))
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Executable_use_externals,icontest,\
     epoxy \

@@ -20,8 +20,6 @@
 
 #include <math.h>
 
-#include <glm/gtx/bit.hpp>
-
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

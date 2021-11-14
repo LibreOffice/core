@@ -15,8 +15,6 @@ $(eval $(call gb_Executable_use_api,fftester,\
     udkapi \
 ))
 
-$(eval $(call gb_Executable_use_external,fftester,boost_headers))
-
 $(eval $(call gb_Executable_set_include,fftester,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
