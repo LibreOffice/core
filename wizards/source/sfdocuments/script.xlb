@@ -10,4 +10,5 @@
  <library:element library:name="SF_FormControl"/>
  <library:element library:name="SF_Writer"/>
  <library:element library:name="SF_Chart"/>
+ <library:element library:name="SF_DocumentListener"/>
 </library:library>
