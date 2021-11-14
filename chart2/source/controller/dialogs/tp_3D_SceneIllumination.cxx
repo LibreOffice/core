@@ -433,20 +433,20 @@ IMPL_LINK(ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, weld::But
     bool bIsChecked = pInfo->pButton->get_prev_active();
 
     ControllerLockGuardUNO aGuard( m_xChartModel );
-    for( nL=0; nL<8; nL++)
+    for (sal_Int32 i = 0; i < 8; ++i)
     {
-        LightButton* pLightButton = m_pLightSourceInfoList[nL].pButton;
+        LightButton* pLightButton = m_pLightSourceInfoList[i].pButton;
         if (pLightButton == pButton)
         {
             pLightButton->set_active(true);
             if (!pLightButton->get_widget()->has_focus())
                 pLightButton->get_widget()->grab_focus();
-            m_pLightSourceInfoList[nL].pButton->set_prev_active(true);
+            m_pLightSourceInfoList[i].pButton->set_prev_active(true);
         }
         else
         {
             pLightButton->set_active(false);
-            m_pLightSourceInfoList[nL].pButton->set_prev_active(false);
+            m_pLightSourceInfoList[i].pButton->set_prev_active(false);
         }
     }
 
