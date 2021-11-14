@@ -37,8 +37,6 @@ static const char *eBookLibNames[] = {
 
 typedef void (*SymbolFunc) ();
 
-#define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
-
 namespace {
 
 struct ApiMap
@@ -51,69 +49,67 @@ struct ApiMap
 
 const ApiMap aCommonApiMap[] =
 {
-    SYM_MAP( eds_check_version ),
-    SYM_MAP( e_contact_field_name ),
-    SYM_MAP( e_contact_get ),
-    SYM_MAP( e_contact_get_type ),
-    SYM_MAP( e_contact_field_id ),
-    SYM_MAP( e_book_new ),
-    SYM_MAP( e_book_open ),
-    SYM_MAP( e_book_get_source ),
-    SYM_MAP( e_book_get_contacts ),
-    SYM_MAP( e_book_query_field_test ),
-    SYM_MAP( e_book_query_and ),
-    SYM_MAP( e_book_query_or ),
-    SYM_MAP( e_book_query_not ),
-    SYM_MAP( e_book_query_ref ),
-    SYM_MAP( e_book_query_unref ),
-    SYM_MAP( e_book_query_from_string ),
-    SYM_MAP( e_book_query_to_string ),
-    SYM_MAP( e_book_query_field_exists )
+    { "eds_check_version", reinterpret_cast<SymbolFunc *>(&eds_check_version) },
+    { "e_contact_field_name", reinterpret_cast<SymbolFunc *>(&e_contact_field_name) },
+    { "e_contact_get", reinterpret_cast<SymbolFunc *>(&e_contact_get) },
+    { "e_contact_get_type", reinterpret_cast<SymbolFunc *>(&e_contact_get_type) },
+    { "e_contact_field_id", reinterpret_cast<SymbolFunc *>(&e_contact_field_id) },
+    { "e_book_new", reinterpret_cast<SymbolFunc *>(&e_book_new) },
+    { "e_book_open", reinterpret_cast<SymbolFunc *>(&e_book_open) },
+    { "e_book_get_source", reinterpret_cast<SymbolFunc *>(&e_book_get_source) },
+    { "e_book_get_contacts", reinterpret_cast<SymbolFunc *>(&e_book_get_contacts) },
+    { "e_book_query_field_test", reinterpret_cast<SymbolFunc *>(&e_book_query_field_test) },
+    { "e_book_query_and", reinterpret_cast<SymbolFunc *>(&e_book_query_and) },
+    { "e_book_query_or", reinterpret_cast<SymbolFunc *>(&e_book_query_or) },
+    { "e_book_query_not", reinterpret_cast<SymbolFunc *>(&e_book_query_not) },
+    { "e_book_query_ref", reinterpret_cast<SymbolFunc *>(&e_book_query_ref) },
+    { "e_book_query_unref", reinterpret_cast<SymbolFunc *>(&e_book_query_unref) },
+    { "e_book_query_from_string", reinterpret_cast<SymbolFunc *>(&e_book_query_from_string) },
+    { "e_book_query_to_string", reinterpret_cast<SymbolFunc *>(&e_book_query_to_string) },
+    { "e_book_query_field_exists", reinterpret_cast<SymbolFunc *>(&e_book_query_field_exists) }
 };
 
 //< 3.6 api
 const ApiMap aOldApiMap[] =
 {
-    SYM_MAP( e_book_get_addressbooks ),
-    SYM_MAP( e_book_get_uri ),
-    SYM_MAP( e_book_authenticate_user ),
-    SYM_MAP( e_source_group_peek_base_uri),
-    SYM_MAP( e_source_peek_name ),
-    SYM_MAP( e_source_get_property ),
-    SYM_MAP( e_source_list_peek_groups ),
-    SYM_MAP( e_source_group_peek_sources )
+    { "e_book_get_addressbooks", reinterpret_cast<SymbolFunc *>(&e_book_get_addressbooks) },
+    { "e_book_get_uri", reinterpret_cast<SymbolFunc *>(&e_book_get_uri) },
+    { "e_book_authenticate_user", reinterpret_cast<SymbolFunc *>(&e_book_authenticate_user) },
+    { "e_source_group_peek_base_uri", reinterpret_cast<SymbolFunc *>(&e_source_group_peek_base_uri) },
+    { "e_source_peek_name", reinterpret_cast<SymbolFunc *>(&e_source_peek_name) },
+    { "e_source_get_property", reinterpret_cast<SymbolFunc *>(&e_source_get_property) },
+    { "e_source_list_peek_groups", reinterpret_cast<SymbolFunc *>(&e_source_list_peek_groups) },
+    { "e_source_group_peek_sources", reinterpret_cast<SymbolFunc *>(&e_source_group_peek_sources) }
 };
 
 //>= 3.6 api
 const ApiMap aNewApiMap[] =
 {
-    SYM_MAP( e_source_registry_list_sources ),
-    SYM_MAP( e_source_registry_new_sync ),
-    SYM_MAP( e_source_has_extension ),
-    SYM_MAP( e_source_get_extension ),
-    SYM_MAP( e_source_backend_get_backend_name ),
-    SYM_MAP( e_source_get_display_name ),
-    SYM_MAP( e_source_get_uid ),
-    SYM_MAP( e_source_registry_ref_source),
-    SYM_MAP( e_client_open_sync ),
-    SYM_MAP( e_client_get_source ),
-    SYM_MAP( e_book_client_get_contacts_sync ),
-    SYM_MAP( e_client_util_free_object_slist )
+    { "e_source_registry_list_sources", reinterpret_cast<SymbolFunc *>(&e_source_registry_list_sources) },
+    { "e_source_registry_new_sync", reinterpret_cast<SymbolFunc *>(&e_source_registry_new_sync) },
+    { "e_source_has_extension", reinterpret_cast<SymbolFunc *>(&e_source_has_extension) },
+    { "e_source_get_extension", reinterpret_cast<SymbolFunc *>(&e_source_get_extension) },
+    { "e_source_backend_get_backend_name", reinterpret_cast<SymbolFunc *>(&e_source_backend_get_backend_name) },
+    { "e_source_get_display_name", reinterpret_cast<SymbolFunc *>(&e_source_get_display_name) },
+    { "e_source_get_uid", reinterpret_cast<SymbolFunc *>(&e_source_get_uid) },
+    { "e_source_registry_ref_source", reinterpret_cast<SymbolFunc *>(&e_source_registry_ref_source) },
+    { "e_client_open_sync", reinterpret_cast<SymbolFunc *>(&e_client_open_sync) },
+    { "e_client_get_source", reinterpret_cast<SymbolFunc *>(&e_client_get_source) },
+    { "e_book_client_get_contacts_sync", reinterpret_cast<SymbolFunc *>(&e_book_client_get_contacts_sync) },
+    { "e_client_util_free_object_slist", reinterpret_cast<SymbolFunc *>(&e_client_util_free_object_slist) }
 };
 
 //== indirect read access (3.6 only)
 const ApiMap aClientApiMap36[] =
 {
-    SYM_MAP( e_book_client_new )
+    { "e_book_client_new", reinterpret_cast<SymbolFunc *>(&e_book_client_new) }
 };
 
 //>= direct read access API (>= 3.8)
 const ApiMap aClientApiMap38[] =
 {
-    SYM_MAP( e_book_client_connect_direct_sync )
+    { "e_book_client_connect_direct_sync", reinterpret_cast<SymbolFunc *>(&e_book_client_connect_direct_sync) }
 };
-
-#undef SYM_MAP
 
 template<size_t N> static bool
 tryLink( osl::Module &rModule, const char *pName, const ApiMap (&pMap)[N])
