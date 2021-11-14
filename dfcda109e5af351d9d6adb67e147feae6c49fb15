@@ -16,6 +16,23 @@
       "message": "For whoever wants to try this, it currently works only with patched ccache, such as https://github.com/llunak/ccache/tree/msvc (https://people.collabora.com/~llunak/download/ccache.exe , sha256 14bf8ac3a2e944a99cb7467d26d684e3d319ad0f4958e593e13874e05ddd6a86).\n",
       "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d704ca_51a1c9f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-11-14T15:31:49Z",
+      "side": 1,
+      "message": "Ah cool, the -Z7 tweak should help with sccache, too. Does direct mode work meanwhile for ccache on Windows?",
+      "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
