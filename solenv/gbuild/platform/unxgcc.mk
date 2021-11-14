@@ -124,7 +124,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--soname=$(notdir $(1)) \
 			-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT)) \
 		$(subst \d,$$,$(RPATH)) \
-		$(T_USE_LD) $(T_LDFLAGS) \
+		$(T_USE_LD) $(T_LDFLAGS) $(foreach pre_js,$(T_PREJS), --pre-js $(pre_js)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \

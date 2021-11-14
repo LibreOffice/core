@@ -900,7 +900,7 @@ define gb_LinkTarget__static_dep_x_template
 define gb_LinkTarget__command_dep_$(1)
 $$(call gb_Output_announce,LNK:$$(2).d.$(1),$$(true),DEP,1)
 mkdir -p $$(dir $$(1)) && \
-TEMPFILE=$$(call var2file,$$(shell $$(gb_MKTEMP)),200,\
+TEMPFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,\
 	$$(call gb_LinkTarget__get_all_$(1),$$(2))) && \
 	$$(call gb_Helper_replace_if_different_and_touch,$$$${TEMPFILE},$$(1))
 
@@ -1066,6 +1066,7 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CC :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(USE_LD)
 $(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(gb_LTOFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_PREJS :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
@@ -2257,5 +2258,13 @@ endef
 
 # call gb_LinkTarget__set_plugin_for_nodep,linktarget,loader
 gb_LinkTarget__set_plugin_for_nodep = $(call gb_LinkTarget__set_plugin_for,$(1),$(2),$(true))
+
+define gb_LinkTarget_add_prejs
+ifeq (EMSCRIPTEN,$(OS))
+$(call gb_LinkTarget_get_target,$(1)) : T_PREJS += $(SRCDIR)/$(2)
+$(call gb_LinkTarget_get_target,$(1)) : $(SRCDIR)/$(2)
+endif
+
+endef
 
 # vim: set noet sw=4:

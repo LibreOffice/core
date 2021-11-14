@@ -22,7 +22,7 @@ $(postprocess_WORKDIR)/services_componentfiles.list: \
     $(call gb_Rdb_get_target,ure/services) \
     | $(postprocess_WORKDIR)/.dir
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,2)
-	TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),1, \
+	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1, \
             $(foreach comp,$(sort $(gb_ComponentTarget__ALLCOMPONENTS)),$(call gb_ComponentTarget_get_source,$(comp)))) && \
             mv $$TEMPFILE $@
 

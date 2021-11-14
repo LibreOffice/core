@@ -1121,6 +1121,7 @@ gb_wasm_image_filelist := \
     $(INSTROOT)/share/config/soffice.cfg/sfx/ui/templatepanel.ui \
     $(INSTROOT)/share/config/soffice.cfg/sfx/ui/floatingrecord.ui \
     $(INSTROOT)/share/config/images_breeze.zip \
+    $(SRCDIR)/android/default-document/example.odt \
 
 wasm_fs_image_WORKDIR := $(call gb_CustomTarget_get_workdir,static/wasm_fs_image)
 
@@ -1137,7 +1138,7 @@ $(wasm_fs_image_WORKDIR)/soffice.data.js.link: $(wasm_fs_image_WORKDIR)/soffice.
 	$(call gb_Helper_replace_if_different_and_touch,$^.tmp,$@)
 
 $(wasm_fs_image_WORKDIR)/soffice.data.filelist: $(gb_wasm_image_filelist) | $(wasm_fs_image_WORKDIR)/.dir
-	TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),1,$(subst $(BUILDDIR)/,,$^)) && \
+	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$^))) && \
 	    mv $$TEMPFILE $@.tmp
 	$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@)
 

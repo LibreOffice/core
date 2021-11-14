@@ -112,7 +112,6 @@ enum class CommandLineEvent {
 // If no event argument is explicitly set in command line,
 // then it returns updated command line event,
 // according to Office URI command.
-#ifndef ENABLE_WASM_STRIP
 CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent curEvt)
 {
     // 1. Strip the scheme name
@@ -246,7 +245,6 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
 
     return curEvt;
 }
-#endif
 
 } // namespace
 
@@ -279,8 +277,6 @@ CommandLineArgs::CommandLineArgs( Supplier& supplier )
 void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
 #ifdef ENABLE_WASM_STRIP
-    (void) supplier;
-
     // use hard-coded init-params for wasm '-nolockcheck -norestore -nologo -writer'
     // no restore tries
     m_norestore = true;
@@ -293,10 +289,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
     // start with writer only
     m_writer = true;
     m_bDocumentArgs = true;
-
-    m_bEmpty = false;
-
-#else
+#endif
 
     m_cwdUrl = supplier.getCwdUrl();
     CommandLineEvent eCurrentEvent = CommandLineEvent::Open;
@@ -670,6 +663,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 case CommandLineEvent::Open:
                     m_openlist.push_back(aArg);
                     m_bDocumentArgs = true;
+#ifdef ENABLE_WASM_STRIP
+                    m_writer = false;
+#endif
                     break;
                 case CommandLineEvent::View:
                     m_viewlist.push_back(aArg);
@@ -709,7 +705,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
         }
     }
-#endif
 }
 
 void CommandLineArgs::InitParamValues()
