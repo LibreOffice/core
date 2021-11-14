@@ -233,9 +233,6 @@ private:
     bool handleReloadEditableRequest(
         css::uno::Reference<css::task::XInteractionRequest> const& rRequest);
 
-    bool
-    handleReadOnlyOpenRequest(css::uno::Reference<css::task::XInteractionRequest> const& rRequest);
-
     bool handleCustomRequest(
                 const css::uno::Reference< css::task::XInteractionRequest >& i_rRequest,
                 const OUString& i_rServiceName
