@@ -3642,24 +3642,40 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getParagraphText ()
     SolarMutexGuard aGuard;
 
     uno::Reference<datatransfer::XTransferable> xTransferable;
-
+    //SuppressLOKMessages
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
-    if (SdrView* pSdrView = pWrtShell ? pWrtShell->GetDrawView() : nullptr)
-    {
-        if (pSdrView->GetTextEditObject())
-        {
-            // Editing shape text
-            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+    Point cursorPosition = pWrtShell->GetCursorDocPos();
+    //pWrtShell->SelPara(&cursorPosition);
 
-            const Point cursorDocpos = rEditView.GetCursor()->GetPos();
-            sal_Int32 paragraphIndex = rEditView.GetEditEngine()->FindParagraph(cursorDocpos.getY());
-            sal_Int32 paragraphLength = rEditView.GetEditEngine()->GetTextLen(paragraphIndex);
-            //OUString content = rEditView.GetEditEngine()->GetText(paragraphIndex);
-            //ESelection selection = ESelection(paragraphIndex, 0);
-            ESelection selection = ESelection(paragraphIndex, 0, paragraphIndex, paragraphLength);
-            xTransferable = rEditView.GetEditEngine()->CreateTransferable(selection);
-        }
+    //xTransferable = this->getSelection();
+    //this->resetSelection();
+
+    //pWrtShell->GetDrawView()->GetTextEditOutlinerView()->GetEditView().SuppressLOKMessages(false);
+
+    m_pDocShell->GetObjectShell()->GetPool();
+    EditEngine e = EditEngine(&m_pDocShell->GetObjectShell()->GetPool());
+    ESelection sel = ESelection(0, 0, 0, 3);
+    xTransferable = e.CreateTransferable(sel);
+
+    SdrObject* obj = pWrtShell->GetObjAt(cursorPosition);
+
+    if (obj)
+    {
+        EditEngine ee = EditEngine(&obj->GetObjectItemPool());
+        ESelection sel = ESelection(0, 0, 0, 3);
+        xTransferable = ee.CreateTransferable(sel);
     }
+
+    //pWrtShell->m_nCurrentNode;
+
+    //ContentNode* t2 = static_cast<ContentNode>pWrtShell->GetNodes()[pWrtShell->m_nCurrentNode];
+
+    //OUString aTmpStr = EditDoc::GetParaAsString( t2, 0, 5);
+    //OUString aTmpStr = EditDoc::GetParaAsString(pWrtShell->m_nCurrentNode);
+
+
+    //EditEngine ee = EditEngine(pWrtShell->GetTextCollFromPool())
+
 
     if (!xTransferable.is())
         xTransferable = new SwTransferable(*pWrtShell);
