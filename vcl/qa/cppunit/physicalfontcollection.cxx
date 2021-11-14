@@ -449,7 +449,7 @@ void VclPhysicalFontCollectionTest::testShouldMatchDecorativeFamily()
         = aFontCollection.FindOrCreateFontFamily("decorative");
 
     FontAttributes aFontAttr;
-    aFontAttr.SetFamilyName("decoractive");
+    aFontAttr.SetFamilyName("decorative");
     aFontAttr.SetFamilyType(FAMILY_DECORATIVE);
     aFontAttr.SetWeight(WEIGHT_MEDIUM);
     TestFontFace* pFontFace = new TestFontFace(aFontAttr, FONTID);
