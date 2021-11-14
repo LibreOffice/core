@@ -33,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
@@ -312,18 +311,17 @@ void ConvDicNameContainer::AddConvDics(
 
 namespace
 {
-    struct StaticConvDicList : public rtl::StaticWithInit<
-        rtl::Reference<ConvDicList>, StaticConvDicList> {
-        rtl::Reference<ConvDicList> operator () () {
-            return new ConvDicList;
-        }
+    rtl::Reference<ConvDicList>& StaticConvDicList()
+    {
+        static rtl::Reference<ConvDicList> SINGLETON = new ConvDicList;
+        return SINGLETON;
     };
 }
 
 void ConvDicList::MyAppExitListener::AtExit()
 {
     rMyDicList.FlushDics();
-    StaticConvDicList::get().clear();
+    StaticConvDicList().clear();
 }
 
 ConvDicList::ConvDicList() :
@@ -535,7 +533,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_ConvDicList_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(StaticConvDicList::get().get());
+    return cppu::acquire(StaticConvDicList().get());
 }
 
 
