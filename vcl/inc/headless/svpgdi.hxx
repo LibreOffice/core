@@ -45,8 +45,6 @@ class FreetypeFont;
 VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t *surface, double x_scale, double y_scale);
 VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t *surface, double *x_scale, double *y_scale);
 
-enum class PaintMode { Over, Xor };
-
 typedef void (*damageHandler)(void* handle,
                               sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                               sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight);
@@ -61,9 +59,6 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     CairoCommon m_aCairoCommon;
     double                         m_fScale;
-    Color                          m_aLineColor;
-    Color                          m_aFillColor;
-    PaintMode                      m_ePaintMode;
 
 public:
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
@@ -128,16 +123,6 @@ public:
     virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-
-    virtual void            SetLineColor() override;
-    virtual void            SetLineColor( Color nColor ) override;
-    virtual void            SetFillColor() override;
-    virtual void            SetFillColor( Color nColor ) override;
-
-    virtual void            SetXORMode( bool bSet, bool ) override;
-
-    virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
-    virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
 
     virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
