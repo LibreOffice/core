@@ -33,7 +33,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
@@ -407,8 +406,11 @@ struct FundamentalIniData
     FundamentalIniData& operator=(const FundamentalIniData&) = delete;
 };
 
-struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
-{};
+FundamentalIniData& FundamentalIni()
+{
+    static FundamentalIniData SINGLETON;
+    return SINGLETON;
+}
 
 }
 
@@ -511,7 +513,7 @@ bool Bootstrap_Impl::getValue(
 
     if (mode == LOOKUP_MODE_NORMAL)
     {
-        FundamentalIniData const & d = FundamentalIni::get();
+        FundamentalIniData const & d = FundamentalIni();
         Bootstrap_Impl const * b = static_cast<Bootstrap_Impl const *>(d.ini);
         if (b != nullptr && b != this && b->getDirectValue(key, value, mode, requestStack))
             return true;

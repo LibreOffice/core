@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/instance.hxx>
-
 #include <rtllifecycle.h>
 
 namespace
@@ -34,13 +32,16 @@ namespace
             rtl_cache_fini();
         }
     };
-    class theCacheSingleton
-        : public rtl::Static<rtlCacheSingleton, theCacheSingleton>{};
+    rtlCacheSingleton& theCacheSingleton()
+    {
+        static rtlCacheSingleton SINGLETON;
+        return SINGLETON;
+    }
 }
 
 void ensureCacheSingleton()
 {
-    theCacheSingleton::get();
+    theCacheSingleton();
 }
 
 namespace
@@ -56,13 +57,16 @@ namespace
             rtl_arena_fini();
         }
     };
-    class theArenaSingleton
-        : public rtl::Static<rtlArenaSingleton, theArenaSingleton>{};
+    rtlArenaSingleton& theArenaSingleton()
+    {
+        static rtlArenaSingleton SINGLETON;
+        return SINGLETON;
+    }
 }
 
 void ensureArenaSingleton()
 {
-    theArenaSingleton::get();
+    theArenaSingleton();
 }
 
 namespace
@@ -78,13 +82,16 @@ namespace
             rtl_locale_fini();
         }
     };
-    class theLocaleSingleton
-        : public rtl::Static<rtlLocaleSingleton, theLocaleSingleton>{};
+    rtlLocaleSingleton& theLocaleSingleton()
+    {
+        static rtlLocaleSingleton SINGLETON;
+        return SINGLETON;
+    }
 }
 
 void ensureLocaleSingleton()
 {
-    theLocaleSingleton::get();
+    theLocaleSingleton();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
