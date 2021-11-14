@@ -810,9 +810,6 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleReloadEditableRequest( rRequest ) )
                 return true;
 
-            if ( handleReadOnlyOpenRequest( rRequest ) )
-                return true;
-
             task::DocumentMacroConfirmationRequest aMacroConfirmRequest;
             if (aAnyRequest >>= aMacroConfirmRequest)
             {

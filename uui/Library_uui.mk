@@ -62,7 +62,6 @@ $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/openlocked \
 	uui/source/passwordcontainer \
 	uui/source/passworddlg \
-	uui/source/readonlyopen \
 	uui/source/reloadeditable \
 	uui/source/requeststringresolver \
 	uui/source/secmacrowarnings \

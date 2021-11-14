@@ -4782,9 +4782,6 @@ module com {
      const short HIGH_RESOLUTION = 3;
      const short LOW_RESOLUTION = 2;
     };
-    published exception ReadOnlyOpenRequest: ::com::sun::star::uno::Exception {
-     string DocumentURL;
-    };
     published constants RedlineDisplayType {
      const short INSERTED = 1;
      const short INSERTED_AND_REMOVED = 2;

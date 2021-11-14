@@ -38,7 +38,6 @@
 #include <com/sun/star/document/LockFileIgnoreRequest.hpp>
 #include <com/sun/star/document/LockFileCorruptRequest.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
-#include <com/sun/star/document/ReadOnlyOpenRequest.hpp>
 #include <com/sun/star/document/ReloadEditableRequest.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1176,42 +1175,6 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
     }
 
     return nResult;
-}
-
-bool SfxMedium::ShowReadOnlyOpenDialog()
-{
-    uno::Reference<task::XInteractionHandler> xHandler = GetInteractionHandler();
-    if (xHandler.is())
-    {
-        OUString aDocumentURL
-            = GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
-        ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl
-            = new ::ucbhelper::InteractionRequest(uno::makeAny(document::ReadOnlyOpenRequest(
-                OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
-        if (xInteractionRequestImpl != nullptr)
-        {
-            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{
-                new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get()),
-                new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get())
-            };
-            xInteractionRequestImpl->setContinuations(aContinuations);
-            xHandler->handle(xInteractionRequestImpl);
-            ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
-                = xInteractionRequestImpl->getSelection();
-            if (uno::Reference<task::XInteractionAbort>(xSelected.get(), uno::UNO_QUERY).is())
-            {
-                SetError(ERRCODE_ABORT);
-                return false;
-            }
-            else if (!uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY)
-                         .is())
-                // user selected "Notify"
-                pImpl->m_bNotifyWhenEditable = true;
-
-            return true;
-        }
-    }
-    return false;
 }
 
 bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
@@ -3019,11 +2982,7 @@ void SfxMedium::Init_Impl()
         if (item.getFileStatus(stat) == osl::FileBase::E_None
             && stat.isValid(osl_FileStatus_Mask_Attributes))
         {
-            if ((stat.getAttributes() & osl_File_Attribute_ReadOnly) != 0
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                && ShowReadOnlyOpenDialog()
-#endif
-                )
+            if ((stat.getAttributes() & osl_File_Attribute_ReadOnly) != 0)
             {
                 pImpl->m_bOriginallyReadOnly = true;
             }
