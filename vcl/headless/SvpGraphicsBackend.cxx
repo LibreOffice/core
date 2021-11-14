@@ -53,19 +53,50 @@ tools::Long SvpGraphicsBackend::GetGraphicsWidth() const
     return m_rCairoCommon.m_pSurface ? m_rCairoCommon.m_aFrameSize.getX() : 0;
 }
 
-void SvpGraphicsBackend::SetLineColor() {}
+void SvpGraphicsBackend::SetLineColor() { m_rCairoCommon.m_aLineColor = SALCOLOR_NONE; }
 
-void SvpGraphicsBackend::SetLineColor(Color /*nColor*/) {}
+void SvpGraphicsBackend::SetLineColor(Color nColor) { m_rCairoCommon.m_aLineColor = nColor; }
 
-void SvpGraphicsBackend::SetFillColor() {}
+void SvpGraphicsBackend::SetFillColor() { m_rCairoCommon.m_aFillColor = SALCOLOR_NONE; }
 
-void SvpGraphicsBackend::SetFillColor(Color /*nColor*/) {}
+void SvpGraphicsBackend::SetFillColor(Color nColor) { m_rCairoCommon.m_aFillColor = nColor; }
 
-void SvpGraphicsBackend::SetXORMode(bool /*bSet*/, bool /*bInvertOnly*/) {}
+void SvpGraphicsBackend::SetXORMode(bool bSet, bool /*bInvertOnly*/)
+{
+    m_rCairoCommon.m_ePaintMode = bSet ? PaintMode::Xor : PaintMode::Over;
+}
 
-void SvpGraphicsBackend::SetROPLineColor(SalROPColor /*nROPColor*/) {}
+void SvpGraphicsBackend::SetROPLineColor(SalROPColor nROPColor)
+{
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            m_rCairoCommon.m_aLineColor = Color(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            m_rCairoCommon.m_aLineColor = Color(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            m_rCairoCommon.m_aLineColor = Color(0xff, 0xff, 0xff);
+            break;
+    }
+}
 
-void SvpGraphicsBackend::SetROPFillColor(SalROPColor /*nROPColor*/) {}
+void SvpGraphicsBackend::SetROPFillColor(SalROPColor nROPColor)
+{
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            m_rCairoCommon.m_aFillColor = Color(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            m_rCairoCommon.m_aFillColor = Color(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            m_rCairoCommon.m_aFillColor = Color(0xff, 0xff, 0xff);
+            break;
+    }
+}
 
 void SvpGraphicsBackend::drawPixel(tools::Long /*nX*/, tools::Long /*nY*/) {}
 
