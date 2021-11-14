@@ -2754,3 +2754,8 @@ cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
 
 cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
 cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
+
+# Draw/Redaction Toolbar
+cmd/32/redactionpreviewexport.png cmd/32/exportdirecttopdf.png
+cmd/lc_redactionpreviewexport.png cmd/lc_exportdirecttopdf.png
+cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
