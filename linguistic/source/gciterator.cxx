@@ -272,13 +272,19 @@ css::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 }
 
 
+osl::Mutex& GrammarCheckingIterator::MyMutex()
+{
+    static osl::Mutex SINGLETON;
+    return SINGLETON;
+}
+
 GrammarCheckingIterator::GrammarCheckingIterator() :
     m_bEnd( false ),
     m_bGCServicesChecked( false ),
     m_nDocIdCounter( 0 ),
     m_thread(nullptr),
-    m_aEventListeners( MyMutex::get() ),
-    m_aNotifyListeners( MyMutex::get() )
+    m_aEventListeners( MyMutex() ),
+    m_aNotifyListeners( MyMutex() )
 {
 }
 
@@ -292,7 +298,7 @@ void GrammarCheckingIterator::TerminateThread()
 {
     oslThread t;
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
         t = m_thread;
         m_thread = nullptr;
         m_bEnd = true;
@@ -307,7 +313,7 @@ void GrammarCheckingIterator::TerminateThread()
 
 sal_Int32 GrammarCheckingIterator::NextDocId()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
     m_nDocIdCounter += 1;
     return m_nDocIdCounter;
 }
@@ -359,7 +365,7 @@ void GrammarCheckingIterator::AddEntry(
     aNewFPEntry.m_bAutomatic    = bAutomatic;
 
     // add new entry to the end of this queue
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
     if (!m_thread)
         m_thread = osl_createThread( lcl_workerfunc, this );
     m_aFPEntriesQueue.push_back( aNewFPEntry );
@@ -488,7 +494,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
     uno::Reference< linguistic2::XProofreader > xRes;
 
     // ---- THREAD SAFE START ----
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
     // check supported locales for each grammarchecker if not already done
     if (!m_bGCServicesChecked)
@@ -562,7 +568,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
         // ---- THREAD SAFE START ----
         bool bQueueEmpty = false;
         {
-            ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+            ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
             if (m_bEnd)
             {
                 break;
@@ -579,7 +585,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
             OUString aCurDocId;
             // ---- THREAD SAFE START ----
             {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
                 aFPEntryItem        = m_aFPEntriesQueue.front();
                 xFPIterator         = aFPEntryItem.m_xParaIterator;
                 xFlatPara           = aFPEntryItem.m_xPara;
@@ -604,7 +610,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
                         // ---- THREAD SAFE START ----
                         {
-                            osl::ClearableMutexGuard aGuard(MyMutex::get());
+                            osl::ClearableMutexGuard aGuard(MyMutex());
 
                             sal_Int32 nStartPos = aFPEntryItem.m_nStartIndex;
                             sal_Int32 nSuggestedEnd
@@ -674,7 +680,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
             // ---- THREAD SAFE START ----
             {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
                 m_aCurCheckedDocId.clear();
             }
             // ---- THREAD SAFE END ----
@@ -683,7 +689,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
         {
             // ---- THREAD SAFE START ----
             {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
                 if (m_bEnd)
                 {
                     break;
@@ -717,7 +723,7 @@ void SAL_CALL GrammarCheckingIterator::startProofreading(
     uno::Reference< lang::XComponent > xComponent( xDoc, uno::UNO_QUERY );
 
     // ---- THREAD SAFE START ----
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
     if (xPara.is() && xComponent.is())
     {
         OUString aDocId = GetOrCreateDocId( xComponent );
@@ -760,7 +766,7 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
 
             // ---- THREAD SAFE START ----
             {
-                ::osl::ClearableGuard< ::osl::Mutex > aGuard( MyMutex::get() );
+                ::osl::ClearableGuard< ::osl::Mutex > aGuard( MyMutex() );
                 aDocId = GetOrCreateDocId( xComponent );
                 nSuggestedEndOfSentencePos = GetSuggestedEndOfSentence( rText, nStartPos, aCurLocale );
                 DBG_ASSERT( nSuggestedEndOfSentencePos > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
@@ -872,7 +878,7 @@ sal_Bool SAL_CALL GrammarCheckingIterator::isProofreading(
     const uno::Reference< uno::XInterface >& xDoc )
 {
     // ---- THREAD SAFE START ----
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
     bool bRes = false;
 
@@ -970,7 +976,7 @@ void SAL_CALL GrammarCheckingIterator::dispose()
 
     // ---- THREAD SAFE START ----
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
         // release all UNO references
 
@@ -1022,7 +1028,7 @@ void SAL_CALL GrammarCheckingIterator::disposing( const lang::EventObject &rSour
     if (xDoc.is())
     {
         // ---- THREAD SAFE START ----
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
         m_aDocIdMap.erase( xDoc.get() );
         // ---- THREAD SAFE END ----
     }
@@ -1097,7 +1103,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
 
     {
         // ---- THREAD SAFE START ----
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
         m_aGCImplNamesByLang     = aTmpGCImplNamesByLang;
         // ---- THREAD SAFE END ----
     }
@@ -1127,7 +1133,7 @@ void GrammarCheckingIterator::SetServiceList(
     const lang::Locale &rLocale,
     const uno::Sequence< OUString > &rSvcImplNames )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
     LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     OUString aImplName;
@@ -1147,7 +1153,7 @@ void GrammarCheckingIterator::SetServiceList(
 uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
     const lang::Locale &rLocale ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
     OUString aImplName;     // there is only one grammar checker per language
     LanguageType nLang  = LinguLocaleToLanguage( rLocale );

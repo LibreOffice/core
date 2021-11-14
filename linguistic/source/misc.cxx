@@ -42,8 +42,6 @@
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>
 
-#include <rtl/instance.hxx>
-
 #include <linguistic/misc.hxx>
 #include <linguistic/hyphdta.hxx>
 #include <mutex>
@@ -59,18 +57,11 @@ using namespace com::sun::star::linguistic2;
 namespace linguistic
 {
 
-namespace {
-
 //!! multi-thread safe mutex for all platforms !!
-struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
+osl::Mutex & GetLinguMutex()
 {
-};
-
-}
-
-osl::Mutex &    GetLinguMutex()
-{
-    return LinguMutex::get();
+    static osl::Mutex SINGLETON;
+    return SINGLETON;
 }
 
 const LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang )
