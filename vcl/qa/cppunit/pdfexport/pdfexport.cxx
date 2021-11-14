@@ -3032,6 +3032,53 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
+{
+    std::set<OString> aExpectedURIs = {
+        OString("http://username:password@example.com"),
+        OString("http://example.com/"),
+        OString("file://localfile.odt/"),
+        OString("git://git.example.org/project/example"),
+        OString("filebypath.odt"),
+    };
+
+    // Use the filter rather than the pdfium route, as per the tdf105093 test, it's
+    // easier to parse the annotations
+    vcl::filter::PDFDocument aDocument;
+    load(u"links.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+
+    // Walk through all the annotations and check the URIs
+    size_t nAnnCount = pAnnots->GetElements().size();
+    for (size_t aAnn = 0; aAnn < nAnnCount; aAnn++)
+    {
+        auto pAnnotReference
+            = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[aAnn]);
+        CPPUNIT_ASSERT(pAnnotReference);
+        vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+        // We're expecting something like /Type /Annot /A << /Type /Action /S /URI /URI (path)
+        CPPUNIT_ASSERT_EQUAL(
+            OString("Annot"),
+            static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+        auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+        CPPUNIT_ASSERT(pAction);
+        auto pURIElem
+            = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pAction->LookupElement("URI"));
+        CPPUNIT_ASSERT(pURIElem);
+        OString sURI = pURIElem->GetValue();
+        // Check it's one of the URIs we expect and remove it from the list so
+        // we trigger on dupes
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aExpectedURIs.erase(sURI));
+    }
+    // Gotta Catch 'Em all
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aExpectedURIs.size());
+}
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
