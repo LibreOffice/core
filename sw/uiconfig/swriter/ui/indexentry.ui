@@ -195,6 +195,7 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="indexentry|new|tooltip_text">New User-defined Index</property>
                         <property name="image">image1</property>
+                        <property name="always-show-image">True</property>
                         <accessibility>
                           <relation type="member-of" target="label1"/>
                         </accessibility>
@@ -411,6 +412,7 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="indexentry|sync|tooltip_text">Update entry from selection</property>
                         <property name="image">image6</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -533,6 +535,7 @@
                             <property name="halign">center</property>
                             <property name="valign">center</property>
                             <property name="image">image2</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="previous-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|previous">Jumps to the previous index entry of the same type in the document.</property>
@@ -552,6 +555,7 @@
                             <property name="halign">center</property>
                             <property name="valign">center</property>
                             <property name="image">image3</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="next-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|next">Jumps to the next index entry of the same type in the document.</property>
@@ -571,6 +575,7 @@
                             <property name="halign">center</property>
                             <property name="valign">center</property>
                             <property name="image">image4</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="first-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|first">Jumps to the first index entry of the same type in the document.</property>
@@ -590,6 +595,7 @@
                             <property name="halign">center</property>
                             <property name="valign">center</property>
                             <property name="image">image5</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="last-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|last">Jumps to the last index entry of the same type in the document.</property>

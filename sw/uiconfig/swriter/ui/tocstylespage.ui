@@ -214,6 +214,7 @@
                 <property name="halign">center</property>
                 <property name="valign">start</property>
                 <property name="image">image1</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="assign-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|assign">Formats the selected index level with the selected paragraph style.</property>

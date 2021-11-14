@@ -1155,6 +1155,7 @@
                         <property name="image">lefti</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1173,6 +1174,7 @@
                         <property name="image">centeri</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1191,6 +1193,7 @@
                         <property name="image">righti</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1222,6 +1225,7 @@
                         <property name="image">boldi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1240,6 +1244,7 @@
                         <property name="image">italicsi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1378,6 +1383,7 @@
                         <property name="image">bulletsi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1397,6 +1403,7 @@
                         <property name="image">numberingi</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1760,6 +1767,7 @@
                         <property name="image">tablestylei</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1783,6 +1791,7 @@
                             <property name="image">tablerowsi</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
+                            <property name="always-show-image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1802,6 +1811,7 @@
                             <property name="image">tablecolumnsi</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
+                            <property name="always-show-image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2040,6 +2050,7 @@
                         <property name="image">paragraphstylei</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2084,6 +2095,7 @@
                             <property name="image">reseti</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
+                            <property name="always-show-image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2131,6 +2143,7 @@
                             <property name="image">wrapi</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
+                            <property name="always-show-image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2149,6 +2162,7 @@
                             <property name="image">locki</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
+                            <property name="always-show-image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>

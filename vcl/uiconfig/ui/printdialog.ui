@@ -234,6 +234,7 @@
                             <property name="receives-default">True</property>
                             <property name="tooltip-text" translatable="yes" context="printdialog|firstpage">First page</property>
                             <property name="image">imgFirst</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="btnFirst-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|btnFirst">Shows preview of the first page.</property>
@@ -253,6 +254,7 @@
                             <property name="receives-default">True</property>
                             <property name="tooltip-text" translatable="yes" context="printdialog|backward">Previous page</property>
                             <property name="image">imgBack</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="backward-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|backward">Shows preview of the previous page.</property>
@@ -303,6 +305,7 @@
                             <property name="receives-default">True</property>
                             <property name="tooltip-text" translatable="yes" context="printdialog|forward">Next page</property>
                             <property name="image">imgForward</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="forward-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|forward">Shows preview of the next page.</property>
@@ -322,6 +325,7 @@
                             <property name="receives-default">True</property>
                             <property name="tooltip-text" translatable="yes" context="printdialog|lastpage">Last page</property>
                             <property name="image">imgLast</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="btnLast-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|btnLast">Shows preview of the last page.</property>

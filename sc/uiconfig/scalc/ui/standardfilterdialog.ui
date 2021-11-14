@@ -569,6 +569,7 @@
                                 <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove1|tooltip_text">Remove</property>
                                 <property name="margin-end">8</property>
                                 <property name="image">image1</property>
+                                <property name="always-show-image">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">4</property>
@@ -583,6 +584,7 @@
                                 <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove2|tooltip_text">Remove</property>
                                 <property name="margin-end">8</property>
                                 <property name="image">image2</property>
+                                <property name="always-show-image">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">4</property>
@@ -597,6 +599,7 @@
                                 <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove3|tooltip_text">Remove</property>
                                 <property name="margin-end">8</property>
                                 <property name="image">image3</property>
+                                <property name="always-show-image">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">4</property>
@@ -611,6 +614,7 @@
                                 <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove4|tooltip_text">Remove</property>
                                 <property name="margin-end">8</property>
                                 <property name="image">image4</property>
+                                <property name="always-show-image">True</property>
                               </object>
                               <packing>
                                 <property name="left-attach">4</property>
