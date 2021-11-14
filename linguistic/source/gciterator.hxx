@@ -34,7 +34,6 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.h>
-#include <rtl/instance.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -113,7 +112,7 @@ class GrammarCheckingIterator:
     oslThread       m_thread;
 
     //! beware of initialization order!
-    struct MyMutex : public rtl::Static< osl::Mutex, MyMutex > {};
+    static osl::Mutex& MyMutex();
     comphelper::OInterfaceContainerHelper2     m_aEventListeners;
     comphelper::OInterfaceContainerHelper2     m_aNotifyListeners;
 
