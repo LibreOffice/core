@@ -486,6 +486,33 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
       idcolumn.text = "1"
       current.insert(insertpos, idcolumn)
 
+def enforce_button_always_show_image(current):
+  image = None
+  always_show_image = None
+  isbutton = current.get('class') == "GtkButton"
+  insertpos = 0
+  for child in current:
+    enforce_button_always_show_image(child)
+    if not isbutton:
+        continue
+    if child.tag == "property":
+      insertpos = insertpos + 1;
+      attributes = child.attrib
+      if attributes.get("name") == "always_show_image" or attributes.get("name") == "always-show-image":
+        always_show_image = child
+      elif attributes.get("name") == "image":
+        image = child
+
+  if isbutton and image is not None:
+    if always_show_image == None:
+      always_show_image = etree.Element("property")
+      attributes = always_show_image.attrib
+      attributes["name"] = "always-show-image"
+      always_show_image.text = "True"
+      current.insert(insertpos, always_show_image)
+    else:
+      always_show_image.text = "True"
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -521,6 +548,7 @@ remove_double_buffered(root)
 remove_skip_pager_hint(root)
 remove_toolbutton_focus(root)
 enforce_toolbar_can_focus(root)
+enforce_button_always_show_image(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters

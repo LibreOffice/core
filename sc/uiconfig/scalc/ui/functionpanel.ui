@@ -62,6 +62,7 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="functionpanel|insert|tooltip_text">Insert Function into calculation sheet</property>
                         <property name="image">image1</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

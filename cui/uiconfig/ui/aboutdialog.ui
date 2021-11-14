@@ -428,6 +428,7 @@
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes" context="aboutdialog|btnCopyVersionTooltip">Copy all version information in English</property>
                     <property name="image">imCopy</property>
+                    <property name="always-show-image">True</property>
                     <accelerator key="c" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                   </object>
                   <packing>

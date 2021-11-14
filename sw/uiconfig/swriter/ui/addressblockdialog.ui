@@ -212,6 +212,7 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|up|tooltip_text">Move up</property>
                     <property name="image">image3</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="up-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|up">Select an item in the list and click an arrow button to move the item.</property>
@@ -230,6 +231,7 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|left|tooltip_text">Move left</property>
                     <property name="image">image2</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="left-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|left">Select an item in the list and click an arrow button to move the item.</property>
@@ -248,6 +250,7 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|right|tooltip_text">Move right</property>
                     <property name="image">image1</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="right-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|right">Select an item in the list and click an arrow button to move the item.</property>
@@ -266,6 +269,7 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|down|tooltip_text">Move down</property>
                     <property name="image">image4</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="down-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|down">Select an item in the list and click an arrow button to move the item.</property>
@@ -431,6 +435,7 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|fromaddr|tooltip_text">Remove from address</property>
                     <property name="image">image6</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="fromaddr-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|fromaddr">Removes the selected field from the other list.</property>
@@ -448,6 +453,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image5</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="toaddr-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|toaddr">Adds the selected field from the list of salutation elements to the other list. You can add a field more than once.</property>
