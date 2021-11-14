@@ -859,8 +859,8 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
 
 bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
 {
-    const bool bHasFill(m_aFillColor != SALCOLOR_NONE);
-    const bool bHasLine(m_aLineColor != SALCOLOR_NONE);
+    const bool bHasFill(m_aCairoCommon.m_aFillColor != SALCOLOR_NONE);
+    const bool bHasLine(m_aCairoCommon.m_aLineColor != SALCOLOR_NONE);
 
     if(!(bHasFill || bHasLine))
     {
@@ -879,7 +879,7 @@ bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long n
     {
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, m_aFillColor, fTransparency);
+        applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
 
         // set FillDamage
         extents = getClippedFillDamage(cr);
@@ -897,7 +897,7 @@ bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long n
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, m_aLineColor, fTransparency);
+        applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
@@ -914,9 +914,6 @@ bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long n
 
 SvpSalGraphics::SvpSalGraphics()
     : m_fScale(1.0)
-    , m_aLineColor(Color(0x00, 0x00, 0x00))
-    , m_aFillColor(Color(0xFF, 0xFF, 0XFF))
-    , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
     , m_pBackend(new SvpGraphicsBackend(m_aCairoCommon))
 {
@@ -942,68 +939,11 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-void SvpSalGraphics::SetLineColor()
-{
-    m_aLineColor = SALCOLOR_NONE;
-}
-
-void SvpSalGraphics::SetLineColor( Color nColor )
-{
-    m_aLineColor = nColor;
-}
-
-void SvpSalGraphics::SetFillColor()
-{
-    m_aFillColor = SALCOLOR_NONE;
-}
-
-void SvpSalGraphics::SetFillColor( Color nColor )
-{
-    m_aFillColor = nColor;
-}
-
-void SvpSalGraphics::SetXORMode(bool bSet, bool )
-{
-    m_ePaintMode = bSet ? PaintMode::Xor : PaintMode::Over;
-}
-
-void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )
-{
-    switch( nROPColor )
-    {
-        case SalROPColor::N0:
-            m_aLineColor = Color(0, 0, 0);
-            break;
-        case SalROPColor::N1:
-            m_aLineColor = Color(0xff, 0xff, 0xff);
-            break;
-        case SalROPColor::Invert:
-            m_aLineColor = Color(0xff, 0xff, 0xff);
-            break;
-    }
-}
-
-void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
-{
-    switch( nROPColor )
-    {
-        case SalROPColor::N0:
-            m_aFillColor = Color(0, 0, 0);
-            break;
-        case SalROPColor::N1:
-            m_aFillColor = Color(0xff, 0xff, 0xff);
-            break;
-        case SalROPColor::Invert:
-            m_aFillColor = Color(0xff, 0xff, 0xff);
-            break;
-    }
-}
-
 void SvpSalGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
-    if (m_aLineColor != SALCOLOR_NONE)
+    if (m_aCairoCommon.m_aLineColor != SALCOLOR_NONE)
     {
-        drawPixel(nX, nY, m_aLineColor);
+        drawPixel(nX, nY, m_aCairoCommon.m_aLineColor);
     }
 }
 
@@ -1023,40 +963,40 @@ void SvpSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color aColor )
 void SvpSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     // because of the -1 hack we have to do fill and draw separately
-    Color aOrigFillColor = m_aFillColor;
-    Color aOrigLineColor = m_aLineColor;
-    m_aFillColor = SALCOLOR_NONE;
-    m_aLineColor = SALCOLOR_NONE;
+    Color aOrigFillColor = m_aCairoCommon.m_aFillColor;
+    Color aOrigLineColor = m_aCairoCommon.m_aLineColor;
+    m_aCairoCommon.m_aFillColor = SALCOLOR_NONE;
+    m_aCairoCommon.m_aLineColor = SALCOLOR_NONE;
 
     if (aOrigFillColor != SALCOLOR_NONE)
     {
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
-        m_aFillColor = aOrigFillColor;
+        m_aCairoCommon.m_aFillColor = aOrigFillColor;
 
         drawPolyPolygon(
             basegfx::B2DHomMatrix(),
             basegfx::B2DPolyPolygon(aRect),
             0.0);
 
-        m_aFillColor = SALCOLOR_NONE;
+        m_aCairoCommon.m_aFillColor = SALCOLOR_NONE;
     }
 
     if (aOrigLineColor != SALCOLOR_NONE)
     {
         // need same -1 hack as X11SalGraphicsImpl::drawRect
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
-        m_aLineColor = aOrigLineColor;
+        m_aCairoCommon.m_aLineColor = aOrigLineColor;
 
         drawPolyPolygon(
             basegfx::B2DHomMatrix(),
             basegfx::B2DPolyPolygon(aRect),
             0.0);
 
-        m_aLineColor = SALCOLOR_NONE;
+        m_aCairoCommon.m_aLineColor = SALCOLOR_NONE;
     }
 
-    m_aFillColor = aOrigFillColor;
-    m_aLineColor = aOrigLineColor;
+    m_aCairoCommon.m_aFillColor = aOrigFillColor;
+    m_aCairoCommon.m_aLineColor = aOrigLineColor;
 }
 
 void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
@@ -1332,7 +1272,7 @@ void SvpSalGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2
         !getAntiAlias(),
         false);
 
-    applyColor(cr, m_aLineColor);
+    applyColor(cr, m_aCairoCommon.m_aLineColor);
 
     basegfx::B2DRange extents = getClippedStrokeDamage(cr);
     extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
@@ -1461,7 +1401,7 @@ bool SvpSalGraphics::drawPolyLine(
         drawPolyLine(
             cr,
             &aExtents,
-            m_aLineColor,
+            m_aCairoCommon.m_aLineColor,
             getAntiAlias(),
             rObjectToDevice,
             rPolyLine,
@@ -1820,8 +1760,8 @@ bool SvpSalGraphics::drawPolyPolygon(
     const basegfx::B2DPolyPolygon& rPolyPolygon,
     double fTransparency)
 {
-    const bool bHasFill(m_aFillColor != SALCOLOR_NONE);
-    const bool bHasLine(m_aLineColor != SALCOLOR_NONE);
+    const bool bHasFill(m_aCairoCommon.m_aFillColor != SALCOLOR_NONE);
+    const bool bHasLine(m_aCairoCommon.m_aLineColor != SALCOLOR_NONE);
 
     if(0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0 || fTransparency >= 1.0)
     {
@@ -1854,7 +1794,7 @@ bool SvpSalGraphics::drawPolyPolygon(
     {
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
-        applyColor(cr, m_aFillColor, fTransparency);
+        applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
@@ -1870,7 +1810,7 @@ bool SvpSalGraphics::drawPolyPolygon(
 
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
-        applyColor(cr, m_aLineColor, fTransparency);
+        applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
@@ -2475,7 +2415,7 @@ cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext() const
 cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
 {
     cairo_t* cr;
-    if (m_ePaintMode == PaintMode::Xor && bXorModeAllowed)
+    if (m_aCairoCommon.m_ePaintMode == PaintMode::Xor && bXorModeAllowed)
         cr = createTmpCompatibleCairoContext();
     else
         cr = cairo_create(m_aCairoCommon.m_pSurface);
@@ -2499,7 +2439,7 @@ cairo_user_data_key_t* SvpSalGraphics::getDamageKey()
 
 void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
 {
-    const bool bXoring = (m_ePaintMode == PaintMode::Xor && bXorModeAllowed);
+    const bool bXoring = (m_aCairoCommon.m_ePaintMode == PaintMode::Xor && bXorModeAllowed);
 
     if (rExtents.isEmpty())
     {
