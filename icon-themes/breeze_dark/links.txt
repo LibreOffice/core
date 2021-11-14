@@ -335,6 +335,7 @@ cmd/32/textalign.png cmd/32/alignblock.png
 cmd/32/formatbulletsmenu.png cmd/32/defaultbullet.png
 cmd/32/formatimagemenu.png cmd/32/graphicdialog.png
 cmd/32/formatframemenu.png cmd/32/framedialog.png
+cmd/32/spacepara115.png cmd/32/spacepara1.png
 cmd/32/objectmenu.png cmd/32/insertobject.png
 
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
@@ -345,6 +346,7 @@ cmd/lc_textalign.png cmd/lc_alignblock.png
 cmd/lc_formatbulletsmenu.png cmd/lc_defaultbullet.png
 cmd/lc_formatimagemenu.png cmd/lc_graphicdialog.png
 cmd/lc_formatframemenu.png cmd/lc_framedialog.png
+cmd/lc_spacepara115.png cmd/lc_spacepara1.png
 cmd/lc_objectmenu.png cmd/lc_insertobject.png
 
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
@@ -355,6 +357,7 @@ cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatimagemenu.png cmd/sc_graphicdialog.png
 cmd/sc_formatframemenu.png cmd/sc_framedialog.png
+cmd/sc_spacepara115.png cmd/sc_spacepara1.png
 cmd/sc_objectmenu.png cmd/sc_insertobject.png
 
 # Url
