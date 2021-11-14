@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0faf8c4d_7824457a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2021-11-14T16:35:48Z",
+      "side": 1,
+      "message": "Note this is a 2nd try after https://gerrit.libreoffice.org/c/core/+/124987  where the consensus was we didn\u0027t want to enable that in the core URL code.",
+      "revId": "e3b73578a08332750f230adf6c406854c5103de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
