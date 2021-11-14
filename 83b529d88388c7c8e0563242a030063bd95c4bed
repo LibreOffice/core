@@ -34,6 +34,24 @@
       "parentUuid": "a1879247_1c7bea0e",
       "revId": "83b529d88388c7c8e0563242a030063bd95c4bed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25978993_5ce3f35b",
+        "filename": "odk/examples/cpp/Convertor/Convertor.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-14T21:04:27Z",
+      "side": 1,
+      "message": "This is the fixed license:\nhttps://gerrit.libreoffice.org/c/core/+/125128",
+      "parentUuid": "42d93f80_908a422e",
+      "revId": "83b529d88388c7c8e0563242a030063bd95c4bed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
