@@ -317,6 +317,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TEXT|tooltip_text">Text Attributes</property>
                 <property name="image">imageBTN_TEXT</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="buttonBTN_TEXT-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_TEXT">Opens a dialog to assign formats to new or selected text.</property>
@@ -359,6 +360,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TABLE|tooltip_text">Sheet Name</property>
                 <property name="image">imageBTN_TABLE</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="buttonBTN_TABLE-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_TABLE">Inserts a placeholder in the selected header/footer area, which is replaced by the sheet name in the header/footer of the actual document.</property>
@@ -378,6 +380,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGE|tooltip_text">Page</property>
                 <property name="image">imageBTN_PAGE</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="buttonBTN_PAGE-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_PAGE">Inserts a placeholder in the selected header/footer area, which is replaced by page numbering. This allows continuous page numbering in a document.</property>
@@ -397,6 +400,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGES|tooltip_text">Pages</property>
                 <property name="image">imageBTN_PAGES</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="buttonBTN_PAGES-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_PAGES">Inserts a placeholder in the selected header/footer area, which is replaced by the total number of pages in the document.</property>
@@ -416,6 +420,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_DATE|tooltip_text">Date</property>
                 <property name="image">imageBTN_DATE</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="buttonBTN_DATE-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_DATE">Inserts a placeholder in the selected header/footer area, which is replaced by the current date which will be repeated in the header/footer on each page of the document.</property>
@@ -435,6 +440,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TIME|tooltip_text">Time</property>
                 <property name="image">imageBTN_TIME</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="buttonBTN_TIME-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_TIME">Inserts a placeholder in the selected header/footer area, which is replaced by the current time in the header/footer on each page of the document.</property>
