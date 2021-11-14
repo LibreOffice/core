@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "858e277d_455a4526",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-14T06:34:24Z",
+      "side": 1,
+      "message": "As discussed via email, please amend this to be about something else as the gradient values are not of type Color.",
+      "revId": "1058604e55452352b358cf352563578ae2719b54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
