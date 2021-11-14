@@ -859,6 +859,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="menuassignpage|moveupbtn">Move up</property>
                 <property name="image">image1</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="up-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|up">Click on the Up or Down arrows on the right to move the selected command upward or downward in the list of displayed menu commands.</property>
@@ -877,6 +878,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="menuassignpage|movedownbtn">Move down</property>
                 <property name="image">image2</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="down-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|down">Click on the Up or Down arrows on the right to move the selected command upward or downward in the list of displayed menu commands.</property>

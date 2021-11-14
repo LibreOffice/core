@@ -722,6 +722,7 @@
                         <property name="receives-default">True</property>
                         <property name="tooltip-text" translatable="yes" context="docking3deffects|to3d|tooltip_text">Convert to 3D</property>
                         <property name="image">image14</property>
+                        <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="to3d-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|to3d">Use this icon to convert a selected 2D object to a 3D object.</property>
@@ -740,6 +741,7 @@
                         <property name="receives-default">True</property>
                         <property name="tooltip-text" translatable="yes" context="docking3deffects|tolathe|tooltip_text">Convert to Rotation Object</property>
                         <property name="image">image15</property>
+                        <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="tolathe-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|tolathe">Click here to convert a selected 2D object to a 3D rotation object.</property>
@@ -1209,6 +1211,7 @@
                     <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton1|tooltip_text">Colors Dialog</property>
                     <property name="valign">start</property>
                     <property name="image">image19</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="colorbutton1-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|colorbutton1">Select a color for the ambient light.</property>
@@ -1251,6 +1254,7 @@
                     <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton2|tooltip_text">Colors Dialog</property>
                     <property name="valign">center</property>
                     <property name="image">image18</property>
+                    <property name="always-show-image">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -2160,6 +2164,7 @@
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton3|tooltip_text">Colors Dialog</property>
                     <property name="image">image39</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="colorbutton3-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|colorbutton3">Select the color to illuminate the object.</property>
@@ -2178,6 +2183,7 @@
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton4|tooltip_text">Colors Dialog</property>
                     <property name="image">image40</property>
+                    <property name="always-show-image">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -2276,6 +2282,7 @@
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton5|tooltip_text">Colors Dialog</property>
                     <property name="image">image41</property>
+                    <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="colorbutton5-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|colorbutton5">Enter the intensity of the specular effect.</property>
@@ -2336,6 +2343,7 @@
                 <property name="receives-default">True</property>
                 <property name="tooltip-text" translatable="yes" context="docking3deffects|assign|tooltip_text">Assign</property>
                 <property name="image">image7</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="left-attach">6</property>

@@ -101,6 +101,7 @@
                 <property name="tooltip_text" translatable="yes" context="numberingformatpage|add|tooltip_text">Add</property>
                 <property name="valign">center</property>
                 <property name="image">image2</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="add-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|add">Adds the number format code that you entered to the user-defined category.</property>
@@ -120,6 +121,7 @@
                 <property name="tooltip_text" translatable="yes" context="numberingformatpage|edit|tooltip_text">Edit Comment</property>
                 <property name="valign">center</property>
                 <property name="image">image3</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="edit-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|edit">Enter a comment for the selected number format, and then click outside this box.</property>
@@ -139,6 +141,7 @@
                 <property name="tooltip_text" translatable="yes" context="numberingformatpage|delete|tooltip_text">Remove</property>
                 <property name="valign">center</property>
                 <property name="image">image1</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="delete-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|delete">Deletes the selected number format.</property>

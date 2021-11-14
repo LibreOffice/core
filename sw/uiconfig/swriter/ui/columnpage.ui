@@ -344,6 +344,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image7</property>
+                    <property name="always-show-image">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="columnft"/>
                     </accessibility>
@@ -364,6 +365,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image8</property>
+                    <property name="always-show-image">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="columnft"/>
                     </accessibility>

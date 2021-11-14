@@ -82,6 +82,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="tp_RangeChooser|IB_RANGE|tooltip_text">Select data range</property>
                 <property name="image">imageIB_RANGE</property>
+                <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="IB_RANGE-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|IB_RANGE">Enter the data range that you want to include in your chart. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>

@@ -187,6 +187,7 @@
             <property name="focus_on_click">False</property>
             <property name="receives_default">True</property>
             <property name="image">image1</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -338,6 +339,7 @@
             <property name="receives_default">True</property>
             <property name="valign">start</property>
             <property name="image">image2</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>

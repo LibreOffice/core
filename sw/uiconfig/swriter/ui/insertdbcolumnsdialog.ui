@@ -289,6 +289,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="image">image1</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="allright-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allright">Moves all listed database fields into the Table column(s) list box.</property>
@@ -307,6 +308,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="image">image2</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="oneright-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneright">Moves the selected database field into the Table column(s) list box.</property>
@@ -325,6 +327,7 @@
                             <property name="receives_default">True</property>
                             <property name="no_show_all">True</property>
                             <property name="image">image5</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="toedit-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|toedit">Moves the fields that you selected in the Database columns list box into the selection field.</property>
@@ -343,6 +346,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="image">image3</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="oneleft-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneleft">Removes the selected database field from the Table column(s) list box</property>
@@ -362,6 +366,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="image">image4</property>
+                            <property name="always-show-image">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="allleft-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allleft">Removes all database fields from the Table column(s) list box.</property>

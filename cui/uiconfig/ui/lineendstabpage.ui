@@ -214,6 +214,7 @@
                         <property name="tooltip_text" translatable="yes" context="lineendstabpage|BTN_LOAD|tooltip_text">Load arrow styles</property>
                         <property name="halign">center</property>
                         <property name="image">image1</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -228,6 +229,7 @@
                         <property name="tooltip_text" translatable="yes" context="lineendstabpage|BTN_SAVE|tooltip_text">Save arrow styles</property>
                         <property name="halign">center</property>
                         <property name="image">image2</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

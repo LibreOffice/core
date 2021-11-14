@@ -350,6 +350,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image">imageIMB_RANGE_MAIN</property>
+                        <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="IMB_RANGE_MAIN-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|IMB_RANGE_MAIN">Shows the source range address from the second column of the Data Range list box. You can change the range in the text box or by dragging in the document. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
@@ -437,6 +438,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="image">imageIMB_RANGE_CAT</property>
+                        <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="IMB_RANGE_CAT-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tp_DataSource|extended_tip|IMB_RANGE_CAT">Shows the source range address of the categories (the texts you can see on the x-axis of a category chart). For an XY-chart, the text box contains the source range of the data labels which are displayed for the data points. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
