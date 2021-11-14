@@ -2365,16 +2365,15 @@ void SwContentTree::Display( bool bActive )
     std::unique_ptr<weld::TreeIter> xOldSelEntry(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_selected(xOldSelEntry.get()))
         xOldSelEntry.reset();
-    OUString sEntryName;  // Name of the entry
+    OUString sOldSelEntryId;
     size_t nEntryRelPos = 0; // relative position to their parent
     size_t nOldEntryCount = GetEntryCount();
     sal_Int32 nOldScrollPos = 0;
     if (xOldSelEntry)
     {
         UpdateLastSelType();
-
+        sOldSelEntryId = m_xTreeView->get_id(*xOldSelEntry);
         nOldScrollPos = m_xTreeView->vadjustment_get_value();
-        sEntryName = m_xTreeView->get_text(*xOldSelEntry);
         std::unique_ptr<weld::TreeIter> xParentEntry = m_xTreeView->make_iterator(xOldSelEntry.get());
         while (m_xTreeView->get_iter_depth(*xParentEntry))
             m_xTreeView->iter_parent(*xParentEntry);
@@ -2447,40 +2446,44 @@ void SwContentTree::Display( bool bActive )
             for (const auto& rNode : aNodesToExpand)
                 m_xTreeView->expand_row(*rNode);
 
-            (void)m_xTreeView->get_iter_first(*xEntry);
-            for (ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>())
+            // reselect the old selected entry if it is available, else select the entry that is at
+            // the position of the old selected entry
+            if (xOldSelEntry)
             {
-                sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
-                                            ? m_nHiddenBlock
-                                            : m_nActiveBlock;
-                if (nExpandOptions & (1 << static_cast<int>(nCntType)))
+                (void)m_xTreeView->get_iter_first(*xEntry);
+                for (ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>())
                 {
-                    if (nEntryRelPos && nCntType == m_nLastSelType)
+                    if (nCntType == m_nLastSelType)
                     {
-                        // reselect the entry
-                        std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xEntry.get()));
-                        std::unique_ptr<weld::TreeIter> xTemp;
-                        sal_uLong nPos = 1;
-                        while (m_xTreeView->iter_next(*xChild))
+                        // nEntryRelPos == 0 means the old selected entry was a content type
+                        if (nEntryRelPos)
                         {
-                            // The old text will be slightly favored
-                            if (sEntryName == m_xTreeView->get_text(*xChild) ||
-                                nPos == nEntryRelPos)
+                            std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator(xEntry.get()));
+                            std::unique_ptr<weld::TreeIter> xTemp(m_xTreeView->make_iterator(xIter.get()));
+                            sal_uLong nPos = 1;
+                            while (m_xTreeView->iter_next(*xIter) &&
+                                   lcl_IsContent(*xIter, *m_xTreeView))
                             {
-                                m_xTreeView->copy_iterator(*xChild, *xSelEntry);
-                                break;
+                                if (m_xTreeView->get_id(*xIter) == sOldSelEntryId ||
+                                        nPos == nEntryRelPos)
+                                {
+                                    m_xTreeView->copy_iterator(*xIter, *xSelEntry);
+                                    break;
+                                }
+                                xTemp = m_xTreeView->make_iterator(xIter.get()); // note previous entry
+                                nPos++;
                             }
-                            xTemp = m_xTreeView->make_iterator(xChild.get());
-                            nPos++;
+                            if (!xSelEntry || lcl_IsContentType(*xSelEntry, *m_xTreeView))
+                                xSelEntry = std::move(xTemp);
                         }
-                        if (!xSelEntry || lcl_IsContentType(*xSelEntry, *m_xTreeView))
-                            xSelEntry = std::move(xTemp);
+                        else
+                            m_xTreeView->copy_iterator(*xEntry, *xSelEntry);
+                        break;
                     }
+                    (void)m_xTreeView->iter_next_sibling(*xEntry);
                 }
-
-                (void)m_xTreeView->iter_next_sibling(*xEntry);
             }
-
+            // select the first entry in the tree when there is no selected entry
             if (!xSelEntry)
             {
                 nOldScrollPos = 0;
@@ -2488,7 +2491,6 @@ void SwContentTree::Display( bool bActive )
                 if (!m_xTreeView->get_iter_first(*xSelEntry))
                     xSelEntry.reset();
             }
-
             if (xSelEntry)
             {
                 m_xTreeView->set_cursor(*xSelEntry);
@@ -2552,15 +2554,15 @@ void SwContentTree::Display( bool bActive )
             else
                 m_xTreeView->expand_row(*xEntry);
 
-            // reselect the entry
+            // reselect the old selected entry if it is available, else select the entry that is at
+            // the position of the old selected entry
             if (nEntryRelPos)
             {
                 std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xEntry.get()));
                 sal_uLong nPos = 1;
                 while (m_xTreeView->iter_next(*xChild))
                 {
-                    // The old text will be slightly favored
-                    if (sEntryName == m_xTreeView->get_text(*xChild) || nPos == nEntryRelPos)
+                    if (m_xTreeView->get_id(*xChild) == sOldSelEntryId || nPos == nEntryRelPos)
                     {
                         xSelEntry = std::move(xChild);
                         break;
@@ -2569,7 +2571,8 @@ void SwContentTree::Display( bool bActive )
                 }
                 if (xSelEntry)
                 {
-                    m_xTreeView->set_cursor(*xSelEntry); // unselect all entries, make pSelEntry visible, and select
+                    // set_cursor unselects all entries, makes passed entry visible, and selects it
+                    m_xTreeView->set_cursor(*xSelEntry);
                     Select();
                 }
             }
@@ -3689,15 +3692,24 @@ void SwContentTree::UpdateTracking()
         {
         // graphic, frame, and ole
         OUString aContentTypeName;
-        if (m_bImageTracking && m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
+        if (m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::GRAPHIC))
+        {
+            if (!m_bImageTracking) return;
             aContentTypeName = SwResId(STR_CONTENT_TYPE_GRAPHIC);
-        else if (m_bFrameTracking && m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
+        }
+        else if (m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
                  !(m_bIsRoot && m_nRootType != ContentTypeId::FRAME))
+        {
+            if (!m_bFrameTracking) return;
             aContentTypeName = SwResId(STR_CONTENT_TYPE_FRAME);
-        else if (m_bOLEobjectTracking && m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
+        }
+        else if (m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
                  !(m_bIsRoot && m_nRootType != ContentTypeId::OLE))
+        {
+            if (!m_bOLEobjectTracking) return;
             aContentTypeName = SwResId(STR_CONTENT_TYPE_OLE);
+        }
         if (!aContentTypeName.isEmpty())
         {
             OUString aName(m_pActiveShell->GetFlyName());
@@ -3706,16 +3718,17 @@ void SwContentTree::UpdateTracking()
         }
         }
         // footnotes and endnotes
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn); m_bFootnoteTracking &&
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
         {
-            lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
-                                              aContentAtPos.pFndTextAttr);
+            if (m_bFootnoteTracking)
+                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
+                                                  aContentAtPos.pFndTextAttr);
             return;
         }
         // bookmarks - track first bookmark at cursor
-        if (m_bBookmarkTracking && m_pActiveShell->GetSelectionType() & SelectionType::Text)
+        if (m_pActiveShell->GetSelectionType() & SelectionType::Text)
         {
             SwDoc* pDoc = m_pActiveShell->GetDoc();
             uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDoc->GetDocShell()->GetBaseModel(),
@@ -3725,6 +3738,7 @@ void SwContentTree::UpdateTracking()
             sal_Int32 nBookmarkCount = xBookmarks->getCount();
             if (nBookmarkCount && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
             {
+                if (!m_bBookmarkTracking) return;
                 SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
                 uno::Reference<text::XTextRange> xRange(
                             SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
@@ -3755,18 +3769,21 @@ void SwContentTree::UpdateTracking()
             }
         }
         // references
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark); m_bReferenceTracking &&
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
                 aContentAtPos.pFndTextAttr &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
         {
-            const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
-            lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
-                                           rRefMark.GetRefName());
+            if (m_bReferenceTracking)
+            {
+                const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
+                lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
+                                               rRefMark.GetRefName());
+            }
             return;
         }
         // hyperlinks
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr); m_bHyperlinkTracking &&
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
         {
@@ -3774,57 +3791,63 @@ void SwContentTree::UpdateTracking()
             // in the tree by name may result in incorrect selection. Find the item in the tree by
             // comparing the SwTextINetFormat pointer at the document cursor position to that stored
             // in the item SwURLFieldContent.
-            lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
-                                              aContentAtPos.pFndTextAttr);
+            if (m_bHyperlinkTracking)
+                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
+                                                  aContentAtPos.pFndTextAttr);
             return;
         }
         // fields
-        if (SwField* pField = m_pActiveShell->GetCurField(); m_bFieldTracking && pField &&
+        if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::TEXTFIELD))
         {
-            ContentTypeId nContentTypeId =
-                    pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
-                                                                      ContentTypeId::TEXTFIELD;
-            lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
+            if (m_bFieldTracking)
+            {
+                ContentTypeId nContentTypeId =
+                        pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
+                                                                          ContentTypeId::TEXTFIELD;
+                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
+            }
             return;
         }
         // drawing
-        if (m_bDrawingObjectTracking && (m_pActiveShell->GetSelectionType() &
-                                         (SelectionType::DrawObject |
-                                          SelectionType::DrawObjectEditMode |
-                                          SelectionType::DbForm)) &&
+        if ((m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
+                                                   SelectionType::DrawObjectEditMode |
+                                                   SelectionType::DbForm)) &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
         {
-            // Multiple selection is possible when in root content navigation view so unselect all
-            // selected entries before reselecting. This causes a bit of an annoyance when the treeview
-            // scroll bar is used and focus is in the document by causing the last selected entry to
-            // scroll back into view.
-            if (m_bIsRoot)
-                m_xTreeView->unselect_all();
-            SdrView* pSdrView = m_pActiveShell->GetDrawView();
-            if (pSdrView)
+            if (m_bDrawingObjectTracking)
             {
-                for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
+                // Multiple selection is possible when in root content navigation view so unselect all
+                // selected entries before reselecting. This causes a bit of an annoyance when the treeview
+                // scroll bar is used and focus is in the document by causing the last selected entry to
+                // scroll back into view.
+                if (m_bIsRoot)
+                    m_xTreeView->unselect_all();
+                SdrView* pSdrView = m_pActiveShell->GetDrawView();
+                if (pSdrView)
                 {
-                    SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
-                    OUString aName(pSelected->GetName());
-                    if (!aName.isEmpty())
-                        lcl_SelectDrawObjectByName(*m_xTreeView, aName);
+                    for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
+                    {
+                        SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
+                        OUString aName(pSelected->GetName());
+                        if (!aName.isEmpty())
+                            lcl_SelectDrawObjectByName(*m_xTreeView, aName);
+                    }
                 }
+                else
+                {
+                    // clear treeview selections
+                    m_xTreeView->unselect_all();
+                }
+                Select();
             }
-            else
-            {
-                // clear treeview selections
-                m_xTreeView->unselect_all();
-            }
-            Select();
             return;
         }
         // table
-        if (m_bTableTracking && m_pActiveShell->IsCursorInTable() &&
+        if (m_pActiveShell->IsCursorInTable() &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
         {
-            if(m_pActiveShell->GetTableFormat())
+            if(m_bTableTracking && m_pActiveShell->GetTableFormat())
             {
                 OUString aName = m_pActiveShell->GetTableFormat()->GetName();
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_TABLE),
@@ -3833,27 +3856,30 @@ void SwContentTree::UpdateTracking()
             return;
         }
         // indexes
-        if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); m_bIndexTracking && pTOX &&
+        if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); pTOX &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::INDEX))
         {
-            lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
-                                           pTOX->GetTOXName());
+            if (m_bIndexTracking)
+                lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
+                                               pTOX->GetTOXName());
             return;
         }
         // section
-        if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); m_bSectionTracking &&
-                pSection && !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
+        if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); pSection &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
         {
-            lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
-                                           pSection->GetSectionName());
+            if (m_bSectionTracking)
+                lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
+                                               pSection->GetSectionName());
             return;
         }
     }
     // outline
+    if (m_nOutlineTracking == 3)
+        return;
     // find out where the cursor is
     const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
-    if (!((m_bIsRoot && m_nRootType != ContentTypeId::OUTLINE) ||
-          m_nOutlineTracking == 3 || nActPos == SwOutlineNodes::npos))
+    if (!((m_bIsRoot && m_nRootType != ContentTypeId::OUTLINE) || nActPos == SwOutlineNodes::npos))
     {
         // assure outline content type is expanded
         // this assumes outline content type is first in treeview
