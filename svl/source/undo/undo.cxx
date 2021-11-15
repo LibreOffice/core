@@ -689,15 +689,13 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
         size_t nOffset = i_contextOrNull->GetUndoOffset();
         if (nCurrent >= nOffset + 1)
         {
-            // Move out the action we want to execute.
-            MarkedUndoAction aAction
-                = std::move(m_xData->pActUndoArray->maUndoActions[nCurrent - 1 - nOffset]);
-            // Move the actions after aAction down by one.
-            std::move(m_xData->pActUndoArray->maUndoActions.data() + nCurrent - nOffset,
-                      m_xData->pActUndoArray->maUndoActions.data() + nCurrent,
-                      m_xData->pActUndoArray->maUndoActions.data() + nCurrent - nOffset - 1);
-            // Move aAction to the top.
-            m_xData->pActUndoArray->maUndoActions[nCurrent - 1] = std::move(aAction);
+            // Move the action we want to execute to the top of the undo stack.
+            // data() + nCurrent - nOffset - 1 is the start, data() + nCurrent - nOffset is what we
+            // want to move to the top, maUndoActions.data() + nCurrent is past the end/top of the
+            // undo stack.
+            std::rotate(m_xData->pActUndoArray->maUndoActions.data() + nCurrent - nOffset - 1,
+                        m_xData->pActUndoArray->maUndoActions.data() + nCurrent - nOffset,
+                        m_xData->pActUndoArray->maUndoActions.data() + nCurrent);
         }
     }
 
