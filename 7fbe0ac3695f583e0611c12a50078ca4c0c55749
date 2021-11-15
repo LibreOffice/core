@@ -52,6 +52,24 @@
       "parentUuid": "3eb06910_c20d5215",
       "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0f8d918_fe18d8ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-15T08:27:13Z",
+      "side": 1,
+      "message": "Sorry, I\u0027m still not sure what exactly to do. Thinking about it again and trying it out, changing the \"spacing\" attribute of the parent (e.g. \"pdfagrid\", or any other one further up in the hierarchy) just changes the space between children (e.g. the label and the dropdown), but doesn\u0027t increase the margin at the end.\n\nSo it seems to me like either the dropdown or any of its parents would actually have to have an explicit value set in the \"margin\" attribute.\n\nI already see a small margin between the dropdown and the border of the surrounding frame when running this with the gen, gtk3 or kf5 VCL plugins (but almost none when running with ui-previever), s. the screenshot attached in Bugzilla: https://bug-attachments.documentfoundation.org/attachment.cgi?id\u003d176256\n\nIf that\u0027s not enough and the underlying idea is to explicitly have a margin after the right edge of the combobox, should that be added directly to the dropdown after all (rather than any of its parents)? I\u0027m happy to add this wherever it\u0027s best, but currently can\u0027t really figure out where that is...",
+      "parentUuid": "28cbdbcb_866f130e",
+      "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
