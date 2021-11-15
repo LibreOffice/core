@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecdb70f8_c1911299",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 2829,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-15T13:40:10Z",
+      "side": 1,
+      "message": "this should be outside of gb_LinkTarget__use_poppler",
+      "revId": "905fc5331998c8b754baee2b5586175d406096cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
