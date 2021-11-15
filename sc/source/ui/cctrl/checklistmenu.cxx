@@ -300,7 +300,7 @@ void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
     rSubMenuControl.GrabFocus();
 
     if (comphelper::LibreOfficeKit::isActive())
-        jsdialog::SendFullUpdate(pSubMenu->GetLOKWindowId(), "toggle_all");
+        jsdialog::SendFullUpdate(std::to_string(pSubMenu->GetLOKWindowId()), "toggle_all");
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PostPopdownHdl, void*, void)
