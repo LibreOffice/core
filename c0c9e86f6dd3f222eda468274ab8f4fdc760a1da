@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d38c64a0_62b6b137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-11-15T07:55:30Z",
+      "side": 1,
+      "message": "Thanks for this patch!\n\nPlease note that the collection object is not restricted to VBA compatibility mode. Therefore a unit test for LibO Basic may also be of interest.",
+      "revId": "c0c9e86f6dd3f222eda468274ab8f4fdc760a1da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
