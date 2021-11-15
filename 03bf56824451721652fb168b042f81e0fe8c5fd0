@@ -16,6 +16,23 @@
       "message": "I\u0027m not sure if there is supposed to be some machinery to sync removing a SwTextNode from m_pOutlineNodes if the conditions for a true SwTextNode::IsOutline() no longer hold? It\u0027s definitely the case that the paragraph is in m_pOutlineNodes with a SwTextNode::IsOutline() of false at this point and this straight-forward approach seems to solve the immediate problem.\n\nsmall reproducer at: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d121546#c13",
       "revId": "03bf56824451721652fb168b042f81e0fe8c5fd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed391da1_128f7059",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-15T16:51:33Z",
+      "side": 1,
+      "message": "SwNodes::UpdateOutlineNode should ensure these are consistent? ... oh the deleted one is in the undo-array, why does that even have outline-nodes...",
+      "revId": "03bf56824451721652fb168b042f81e0fe8c5fd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
