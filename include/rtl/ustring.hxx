@@ -161,7 +161,7 @@ public:
     // no destructor necessary because we know we are pointing at a compile-time
     // constant OUStringLiteral, which bypasses ref-counting.
 
-    inline operator OUString() const;
+    inline operator const OUString&() const;
 
 private:
     rtl_uString* pData;
@@ -3299,7 +3299,7 @@ private:
 
 #if defined LIBO_INTERNAL_ONLY
 // Can only define this after we define OUString
-inline OUStringConstExpr::operator OUString() const { return OUString::unacquired(&pData); }
+inline OUStringConstExpr::operator const OUString &() const { return OUString::unacquired(&pData); }
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
