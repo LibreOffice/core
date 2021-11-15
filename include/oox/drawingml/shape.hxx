@@ -107,7 +107,9 @@ public:
 
     explicit Shape( const char* pServiceType = nullptr, bool bDefaultHeight = true );
     explicit Shape( const ShapePtr& pSourceShape );
+    Shape(Shape const &) = default;
     virtual ~Shape();
+    Shape & operator =(Shape const &) = default;
 
     OUString&                  getServiceName(){ return msServiceName; }
     void                            setServiceName( const char* pServiceName );
