@@ -1921,14 +1921,22 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 rFilter.importFragment( pChartSpaceFragment );
                 ::oox::ppt::PowerPointImport *pPowerPointImport =
                     dynamic_cast< ::oox::ppt::PowerPointImport* >(&rFilter);
+
+                // The original theme.
+                ThemePtr pTheme;
+
                 if (!aThemeOverrideFragmentPath.isEmpty() && pPowerPointImport)
                 {
+                    // Handle theme override.
                     uno::Reference< xml::sax::XFastSAXSerializable > xDoc(
                             rFilter.importFragment(aThemeOverrideFragmentPath), uno::UNO_QUERY_THROW);
-                    ThemePtr pTheme = pPowerPointImport->getActualSlidePersist()->getTheme();
-                    rFilter.importFragment(new ThemeOverrideFragmentHandler(
-                                rFilter, aThemeOverrideFragmentPath, *pTheme), xDoc);
-                    pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
+                    pTheme = pPowerPointImport->getActualSlidePersist()->getTheme();
+                    auto pThemeOverride = std::make_shared<Theme>(*pTheme);
+                    rFilter.importFragment(
+                        new ThemeOverrideFragmentHandler(rFilter, aThemeOverrideFragmentPath,
+                                                         *pThemeOverride),
+                        xDoc);
+                    pPowerPointImport->getActualSlidePersist()->setTheme(pThemeOverride);
                 }
 
                 // convert imported chart model to chart document
@@ -1951,6 +1959,12 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         }
                     }
 
+                }
+
+                if (!aThemeOverrideFragmentPath.isEmpty() && pPowerPointImport)
+                {
+                    // Restore the original theme.
+                    pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
                 }
             }
             catch( Exception& )
