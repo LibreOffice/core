@@ -355,6 +355,42 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145640)
+{
+    ScModelObj* pModelObj = createDoc("tdf145640.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Enable sorting with update reference
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetSortRefUpdate();
+    aInputOption.SetSortRefUpdate(true);
+    pMod->SetInputOptions(aInputOption);
+
+    goToCell("A2:F17");
+
+    dispatchCommand(mxComponent, ".uno:SortDescending", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A15:B15:C15:D15:E15:F15)"), pDoc->GetFormula(6, 3, 0));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 10
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(6, 3, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A4:B4:C4:D4:E4:F4)"), pDoc->GetFormula(6, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(6, 3, 0)));
+
+    // Restore previous status
+    aInputOption.SetSortRefUpdate(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)
 {
     ScModelObj* pModelObj = createDoc("tdf97215.ods");
