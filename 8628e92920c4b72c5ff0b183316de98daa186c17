@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ada23b1_21a4632a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-11-15T19:19:21Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand where \n\n\n\n\u003echecking for BUILD platform configuration... \n    Running CONF-FOR-BUILD/configure --build\u003d --disable-cairo-canvas --disable-cups --disable-firebird-sdbc --disable-gpgmepp --disable-gstreamer-1-0 --disable-gtk3 --disable-gtk4 --disable-mariadb-sdbc --disable-nss --disable-online-update --disable-opencl --disable-pdfimport --disable-postgresql-sdbc --disable-skia --enable-icecream\u003d --without-doxygen --without-webdav --with-parallelism\u003d --with-theme\u003dcolibre --with-tls\u003dopenssl --without-junit --with-jdk-home\u003d/etc/alternatives/java_sdk_11 --with-galleries\u003dno --disable-database-connectivity --disable-extensions --enable-wasm-strip --srcdir\u003d.\n\n\"--disable-pdfimport\" in https://ci.libreoffice.org/job/gerrit_android_arm/11392/consoleFull came from.",
+      "revId": "8628e92920c4b72c5ff0b183316de98daa186c17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
