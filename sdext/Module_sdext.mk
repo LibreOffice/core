@@ -18,23 +18,23 @@ $(eval $(call gb_Module_add_targets,sdext,\
 ))
 
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
+ifeq ($(ENABLE_POPPLER),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
     CustomTarget_pdfimport \
     Library_pdfimport \
 ))
 
-ifeq ($(ENABLE_POPPLER),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
     Executable_xpdfimport \
     Package_pdfimport_xpdfimport \
 ))
-endif
 
 $(eval $(call gb_Module_add_check_targets,sdext,\
     CppunitTest_sdext_pdfimport \
     Executable_pdf2xml \
     Executable_pdfunzip \
 ))
+endif
 endif
 
 # vim:set noet sw=4 ts=4:
