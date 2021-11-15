@@ -5985,29 +5985,24 @@ public:
 
 namespace
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     Point get_csd_offset(GtkWidget* pTopLevel)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // try and omit drawing CSD under wayland
         GtkWidget* pChild = widget_get_first_child(pTopLevel);
 
         gtk_coord x, y;
         gtk_widget_translate_coordinates(pChild, pTopLevel, 0, 0, &x, &y);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild));
         int outerborder = gtk_container_get_border_width(GTK_CONTAINER(pTopLevel));
         int totalborder = outerborder + innerborder;
         x -= totalborder;
         y -= totalborder;
+#endif
 
         return Point(x, y);
-#else
-        (void)pTopLevel;
-        return Point(0, 0);
-#endif
     }
-#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void do_collect_screenshot_data(GtkWidget* pItem, gpointer data)
@@ -6311,24 +6306,29 @@ public:
 
     virtual VclPtr<VirtualDevice> screenshot() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // detect if we have to manually setup its size
         bool bAlreadyRealized = gtk_widget_get_realized(GTK_WIDGET(m_pWindow));
         // has to be visible for draw to work
         bool bAlreadyVisible = gtk_widget_get_visible(GTK_WIDGET(m_pWindow));
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!bAlreadyVisible)
         {
             if (GTK_IS_DIALOG(m_pWindow))
                 sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pWindow))));
             gtk_widget_show(GTK_WIDGET(m_pWindow));
         }
+#endif
 
         if (!bAlreadyRealized)
         {
             GtkAllocation allocation;
             gtk_widget_realize(GTK_WIDGET(m_pWindow));
             gtk_widget_get_allocation(GTK_WIDGET(m_pWindow), &allocation);
+#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_widget_size_allocate(GTK_WIDGET(m_pWindow), &allocation);
+#else
+            gtk_widget_size_allocate(GTK_WIDGET(m_pWindow), &allocation, 0);
+#endif
         }
 
         VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
@@ -6340,7 +6340,16 @@ public:
 
         cairo_translate(cr, -aOffset.X(), -aOffset.Y());
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_draw(GTK_WIDGET(m_pWindow), cr);
+#else
+        GtkSnapshot* pSnapshot = gtk_snapshot_new();
+        GtkWidgetClass* pWidgetClass = GTK_WIDGET_GET_CLASS(GTK_WIDGET(m_pWindow));
+        pWidgetClass->snapshot(GTK_WIDGET(m_pWindow), pSnapshot);
+        GskRenderNode* pNode = gtk_snapshot_free_to_node(pSnapshot);
+        gsk_render_node_draw(pNode, cr);
+        gsk_render_node_unref(pNode);
+#endif
 
         cairo_destroy(cr);
 
@@ -6350,9 +6359,6 @@ public:
             gtk_widget_unrealize(GTK_WIDGET(m_pWindow));
 
         return xOutput;
-#else
-        return nullptr;
-#endif
     }
 
     virtual weld::ScreenShotCollection collect_screenshot_data() override
