@@ -234,6 +234,25 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             SCCOL nCol = itrCol->second.toUInt32();
             mxGridWindow->LaunchAutoFilterMenu(nCol, nRow);
         }
+        else if ( rParameters.find("PIVOTTABLE") != rParameters.end())
+        {
+            auto itrCol = rParameters.find("COL");
+            if (itrCol == rParameters.end())
+            {
+                SAL_WARN("sc.uitest", "missing COL parameter");
+                return;
+            }
+
+            auto itrRow = rParameters.find("ROW");
+            if (itrRow == rParameters.end())
+            {
+                SAL_WARN("sc.uitest", "missing ROW parameter");
+                return;
+            }
+            SCROW nRow = itrRow->second.toUInt32();
+            SCCOL nCol = itrCol->second.toUInt32();
+            mxGridWindow->LaunchDPFieldMenu(nCol, nRow);
+        }
         else if ( rParameters.find("SELECTMENU") != rParameters.end())
         {
             auto itrCol = rParameters.find("COL");
