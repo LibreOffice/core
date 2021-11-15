@@ -4094,22 +4094,22 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
     if (aMap.find("id") == aMap.end())
         return;
 
-    sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-
     try
     {
         OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
-        bool bFoundWeldedControl = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
+        bool bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nWindowId), sControlId, aMap);
         if (!bFoundWeldedControl)
-            bFoundWeldedControl = jsdialog::ExecuteAction(nCurrentShellId, sControlId, aMap);
+            bFoundWeldedControl = jsdialog::ExecuteAction("sidebar", sControlId, aMap);
+        if (!bFoundWeldedControl)
+            bFoundWeldedControl = jsdialog::ExecuteAction("notebookbar", sControlId, aMap);
 
         if (bFoundWeldedControl)
             return;
 
         // force resend - used in mobile-wizard
-        jsdialog::SendFullUpdate(nCurrentShellId, "Panel");
+        jsdialog::SendFullUpdate("sidebar", "Panel");
 
     } catch(...) {}
 }

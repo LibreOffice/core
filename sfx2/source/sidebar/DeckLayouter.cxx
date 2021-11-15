@@ -312,7 +312,7 @@ sal_Int32 PlacePanels (
     }
 
     if (comphelper::LibreOfficeKit::isActive())
-        jsdialog::SendFullUpdate(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()), "Panel");
+        jsdialog::SendFullUpdate("sidebar", "Panel");
 
     return nY;
 }

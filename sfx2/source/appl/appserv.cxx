@@ -933,10 +933,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Sidebar
                     pViewFrame->ShowChildWindow( SID_SIDEBAR );
 
-                    if (comphelper::LibreOfficeKit::isActive())
-                        aSidebarMode = "Opened";
-
-                    sfx2::sidebar::SidebarController* pSidebar =
+                    // in LOK case don't touch sidebar mode
+                    sfx2::sidebar::SidebarController* pSidebar = comphelper::LibreOfficeKit::isActive() ? nullptr :
                             sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );
                     if ( pSidebar )
                     {
