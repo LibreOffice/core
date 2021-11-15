@@ -34,6 +34,24 @@
       "parentUuid": "acad2654_719754d1",
       "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28cbdbcb_866f130e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-15T07:17:53Z",
+      "side": 1,
+      "message": "The dropdown control should have some margins at the end. And you are right, it\u0027s better to set a spacing on the parent, eg. the grid.",
+      "parentUuid": "3eb06910_c20d5215",
+      "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
