@@ -51,6 +51,13 @@ protected:
 
     virtual void Layout();
 
+    // unclip a "SysObj" which is a native window element hosted in a vcl::Window
+    // if the SysObj is logically "visible" in the vcl::Window::IsVisible sense but
+    // is partially or wholly clipped out due to being overlapped or scrolled out
+    // of view. The clip state is flagged as dirty after this and vcl will restore
+    // the clip state the next time it evaluates the clip status
+    void UnclipVisibleSysObj();
+
     std::unique_ptr<weld::Builder> m_xBuilder;
     VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
