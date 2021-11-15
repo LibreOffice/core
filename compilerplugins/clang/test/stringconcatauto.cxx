@@ -14,17 +14,17 @@
 void foo()
 {
     auto str1 = "str1" + OUString::number(10);
-    // expected-error-re@-1 {{creating a variable of type 'rtl::OUStringConcat<{{.*}}>' will make it reference temporaries}}
+    // expected-error-re@-1 {{creating a variable of type {{.+}} will make it reference temporaries}}
     // expected-note@-2 {{use OUString instead}}
     OUString str2 = "str2" + OUString::number(20) + "ing";
     const auto& str3 = "str3" + OUString::number(30);
-    // expected-error-re@-1 {{creating a variable of type 'const rtl::OUStringConcat<{{.*}}> &' will make it reference temporaries}}
+    // expected-error-re@-1 {{creating a variable of type {{.+}} will make it reference temporaries}}
     // expected-note@-2 {{use OUString instead}}
     const auto str4 = "str4" + OString::number(40);
-    // expected-error-re@-1 {{creating a variable of type 'const rtl::OStringConcat<{{.*}}>' will make it reference temporaries}}
+    // expected-error-re@-1 {{creating a variable of type {{.+}} will make it reference temporaries}}
     // expected-note@-2 {{use OString instead}}
     auto str5 = OUString::number(50);
-    // expected-error-re@-1 {{creating a variable of type 'rtl::OUStringNumber<{{.*}}>' will make it reference temporaries}}
+    // expected-error-re@-1 {{creating a variable of type '{{(rtl::)?}}OUStringNumber<{{.*}}>' will make it reference temporaries}}
     // expected-note@-2 {{use OUString instead}}
     (void)str1;
     (void)str2;
@@ -36,13 +36,13 @@ void foo()
 struct A
 {
     auto bar()
-    // expected-error-re@-1 {{returning a variable of type 'rtl::OStringConcat<{{.*}}>' will make it reference temporaries}}
+    // expected-error-re@-1 {{returning a variable of type {{.+}} will make it reference temporaries}}
     // expected-note@-2 {{use OString instead}}
     {
         return "bar" + OString::number(110);
     }
     auto baz()
-    // expected-error-re@-1 {{returning a variable of type 'rtl::OStringNumber<{{.*}}>' will make it reference temporaries}}
+    // expected-error-re@-1 {{returning a variable of type '{{(rtl::)?}}OStringNumber<{{.*}}>' will make it reference temporaries}}
     // expected-note@-2 {{use OString instead}}
     {
         return OString::number(120);
