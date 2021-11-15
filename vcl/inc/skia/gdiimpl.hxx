@@ -206,7 +206,7 @@ public:
     void drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,
                     SkBlendMode blendMode = SkBlendMode::kSrcOver);
 
-    void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
+    void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage, int srcScaling = 1,
                    SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
     void drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader,
@@ -284,7 +284,7 @@ protected:
     void resetCanvasScalingAndClipping();
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
     sk_sp<SkImage> mergeCacheBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
-                                     const Size targetSize);
+                                     const Size& targetSize);
 
     // Skia uses floating point coordinates, so when we use integer coordinates, sometimes
     // rounding results in off-by-one errors (down), especially when drawing using GPU,
