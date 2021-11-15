@@ -10,7 +10,7 @@
 $(eval $(call gb_Executable_Executable,gbuildtojson))
 
 $(eval $(call gb_Executable_add_exception_objects,gbuildtojson,\
-	solenv/gbuildtojson/gbuildtojson \
+	solenv/gbuildtojson/gbuildtojson, $(gb_COMPILEROPTFLAGS) \
 ))
 
 # vim:set noet sw=4 ts=4:

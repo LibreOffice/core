@@ -10,7 +10,7 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,wrapper))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,wrapper,\
-	solenv/gcc-wrappers/wrapper \
+	solenv/gcc-wrappers/wrapper, $(gb_COMPILEROPTFLAGS) \
 ))
 
 # vim:set noet sw=4 ts=4:
