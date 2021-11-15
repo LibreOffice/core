@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "757e0aae_4d4172b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-15T06:29:17Z",
+      "side": 1,
+      "message": "Note that there\u0027s also 1/57.29577951308 \u003d 0.01745329251994... - for a follow-up :-)",
+      "revId": "db7f79b472bbb641ca2920b246ae6f8533d9d83e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
