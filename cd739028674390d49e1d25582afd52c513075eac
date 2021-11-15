@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "75173eba_6c9cd6d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-15T13:17:05Z",
+      "side": 1,
+      "message": "A good commit summary states what is done, this here is very generic and doesn\u0027t tell anything. So, something like\n\n  change display precision of row height / column width",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "80e5ea58_2a3a9e2d",
