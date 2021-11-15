@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49cfea9d_00eb00f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-15T15:24:36Z",
+      "side": 1,
+      "message": "test crashed on shutdown on WNT: CppunitTest/sw_core_unocore\n\nbut unrelated",
+      "revId": "32d39bb4af8984c61eeeb5847d7cfd9043db980d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
