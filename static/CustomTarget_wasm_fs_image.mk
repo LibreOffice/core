@@ -1121,7 +1121,10 @@ gb_wasm_image_filelist := \
     $(INSTROOT)/share/config/soffice.cfg/sfx/ui/templatepanel.ui \
     $(INSTROOT)/share/config/soffice.cfg/sfx/ui/floatingrecord.ui \
     $(INSTROOT)/share/config/images_breeze.zip \
-    $(SRCDIR)/android/default-document/example.odt \
+    $(INSTROOT)/share/gallery/fontwork.sdg \
+    $(INSTROOT)/share/gallery/fontwork.sdv \
+    $(INSTROOT)/share/gallery/fontwork.thm \
+    $(SRCDIR)/android/default-document/example2.odt \
 
 wasm_fs_image_WORKDIR := $(call gb_CustomTarget_get_workdir,static/wasm_fs_image)
 

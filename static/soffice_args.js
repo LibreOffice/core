@@ -1,1 +1,1 @@
-Module['arguments'] = ['/android/default-document/example.odt'];
+Module['arguments'] = ['/android/default-document/example2.odt'];
