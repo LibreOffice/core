@@ -7208,11 +7208,17 @@ private:
         GtkAllocation allocation;
 
         int nPageIndex = 0;
-#if !GTK_CHECK_VERSION(4, 0, 0)
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (GtkWidget* pWidget = gtk_widget_get_first_child(m_pSidebar);
+             pWidget; pWidget = gtk_widget_get_next_sibling(pChild))
+        {
+#else
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pSidebar));
         for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
         {
             GtkWidget* pWidget = static_cast<GtkWidget*>(pChild->data);
+#endif
             if (!gtk_widget_get_visible(pWidget))
                 continue;
 
@@ -7243,6 +7249,7 @@ private:
 
             ++nPageIndex;
         }
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_list_free(pChildren);
 #endif
 
