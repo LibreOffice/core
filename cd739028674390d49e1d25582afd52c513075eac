@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d8bcf2ff_45f66ae6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-15T14:40:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75173eba_6c9cd6d2",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "80e5ea58_2a3a9e2d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -52,6 +70,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a14b9d7d_db352070",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-15T14:40:41Z",
+      "side": 1,
+      "message": "Thanks for the review. Indeed much easier to read ;-)",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "778b8aad_d7a68910",
@@ -69,6 +104,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6aa1b14_a98b6992",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-15T14:40:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "778b8aad_d7a68910",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91f40f02_9fe0359c",
@@ -82,6 +135,24 @@
       "writtenOn": "2021-11-15T13:13:12Z",
       "side": 1,
       "message": "Same here,\n\n  (nCurHeight \u003d\u003d STD_COL_WIDTH ? 2 : 4)",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "159e2aea_714d9c44",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-15T14:40:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91f40f02_9fe0359c",
       "revId": "cd739028674390d49e1d25582afd52c513075eac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
