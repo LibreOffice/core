@@ -4680,7 +4680,7 @@ static char* doc_getParagraphText(LibreOfficeKitDocument* pThis, const char* pMi
         pType = "text/plain;charset=utf-8";
 
     OString aRet;
-    bool bSuccess = getFromTransferrable(xTransferable, OString(pType), aRet);
+    bool bSuccess = xTransferable.is() ? getFromTransferrable(xTransferable, OString(pType), aRet): false;
     if (!bSuccess)
         return nullptr;
 

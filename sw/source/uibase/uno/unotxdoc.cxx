@@ -3640,45 +3640,18 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
 
 uno::Reference<datatransfer::XTransferable> SwXTextDocument::getParagraphText () {
     SolarMutexGuard aGuard;
-
     uno::Reference<datatransfer::XTransferable> xTransferable;
-    //SuppressLOKMessages
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     Point cursorPosition = pWrtShell->GetCursorDocPos();
-    //pWrtShell->SelPara(&cursorPosition);
-
-    //xTransferable = this->getSelection();
-    //this->resetSelection();
-
-    //pWrtShell->GetDrawView()->GetTextEditOutlinerView()->GetEditView().SuppressLOKMessages(false);
-
     m_pDocShell->GetObjectShell()->GetPool();
     EditEngine e = EditEngine(&m_pDocShell->GetObjectShell()->GetPool());
-    ESelection sel = ESelection(0, 0, 0, 3);
-    xTransferable = e.CreateTransferable(sel);
 
-    SdrObject* obj = pWrtShell->GetObjAt(cursorPosition);
-
-    if (obj)
+    auto t = e.FindDocPosition(cursorPosition);
+    if (t.nIndex != EE_INDEX_NOT_FOUND)
     {
-        EditEngine ee = EditEngine(&obj->GetObjectItemPool());
-        ESelection sel = ESelection(0, 0, 0, 3);
-        xTransferable = ee.CreateTransferable(sel);
+        ESelection sel = ESelection(t.nIndex, 0, t.nIndex, 3);
+        xTransferable = e.CreateTransferable(sel);
     }
-
-    //pWrtShell->m_nCurrentNode;
-
-    //ContentNode* t2 = static_cast<ContentNode>pWrtShell->GetNodes()[pWrtShell->m_nCurrentNode];
-
-    //OUString aTmpStr = EditDoc::GetParaAsString( t2, 0, 5);
-    //OUString aTmpStr = EditDoc::GetParaAsString(pWrtShell->m_nCurrentNode);
-
-
-    //EditEngine ee = EditEngine(pWrtShell->GetTextCollFromPool())
-
-
-    if (!xTransferable.is())
-        xTransferable = new SwTransferable(*pWrtShell);
 
     return xTransferable;
 }
