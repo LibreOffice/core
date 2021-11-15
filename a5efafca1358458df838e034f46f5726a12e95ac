@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04d0a049_bca5db26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-15T16:33:32Z",
+      "side": 1,
+      "message": "test crashed on shutdown on WNT: CppunitTest/sw_odfimport\n\nbut 3 later builds were successful, probably unrelated",
+      "revId": "a5efafca1358458df838e034f46f5726a12e95ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
