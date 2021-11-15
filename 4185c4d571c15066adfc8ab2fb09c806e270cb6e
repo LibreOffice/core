@@ -50,6 +50,23 @@
       "message": "It is fine from a pdfium point of view. pdfium currently focuses on high-fidelity render result, while poppler focuses on mapping the content to ODF (hybrid or not) and produce something nicely editable. So there is no real conflict there.\n\nI\u0027m happy with the change as long as Jenkins is happy.",
       "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8864714_088155d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-15T10:32:50Z",
+      "side": 1,
+      "message": "The current build failer on Android seems to be the --without-poppler setting. How can I deal with this in the gbuild makefile?",
+      "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
