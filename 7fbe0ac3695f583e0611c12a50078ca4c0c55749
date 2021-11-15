@@ -16,6 +16,24 @@
       "message": "LGTM, would just add 6px margin to the right edge (margins: end \u003d 6). See also https://wiki.documentfoundation.org/Design/Guidelines/PropertyDialog",
       "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eb06910_c20d5215",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-15T06:48:06Z",
+      "side": 1,
+      "message": "Thanks, for which element(s) exactly should the margin be added?\nhttps://wiki.documentfoundation.org/Design/Guidelines/PropertyDialog says:\n\"Do not add margins to controls; use the spacing of containers.\"\n\nIs this then the GtkBox for the whole right-hand content (\"box2\") or the single GtkGrids (\"frame4\", \"frame7\") or on a lower level (either GtkGrid \"grid10\" or even \"pdfagrid\" and \"formsframe\")?",
+      "parentUuid": "acad2654_719754d1",
+      "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
