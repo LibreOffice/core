@@ -67,6 +67,24 @@
       "message": "The current build failer on Android seems to be the --without-poppler setting. How can I deal with this in the gbuild makefile?",
       "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f9f6d19_ed2a87d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-15T10:39:50Z",
+      "side": 1,
+      "message": "Look at sdext/Module_sdext.mk for an example on how to make something conditional on ENABLE_POPPLER. Perhaps doing the same here would help?",
+      "parentUuid": "a8864714_088155d6",
+      "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
