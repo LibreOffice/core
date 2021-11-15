@@ -149,7 +149,7 @@ struct CurlOption
 #if SAL_TYPES_SIZEOFLONG == 4
     // According to mst this might get used "if one of the options to set stream size like
     // CURLOPT_INFILESIZE_LARGE were used but it's not the case currently", so keep this ctor
-    // around as deleted in case it would ever becomes necessary to extend Value with a curl_off_t
+    // around as deleted in case it would ever become necessary to extend Value with a curl_off_t
     // case:
     CurlOption(CURLoption, curl_off_t, char const*) = delete;
 #endif
