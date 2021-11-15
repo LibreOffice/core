@@ -53,7 +53,7 @@ public:
                           SwFlyFrame const* _pKeepThisFlyFrame = nullptr);
 
     /** calls <SwFlyFrameFormat::MakeFrames>, if re-creation of fly frames is necessary. */
-    ~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE;
+    ~SwHandleAnchorNodeChg();
 
 private:
     // fly frame format, which is tracked for an anchor node change.
@@ -66,6 +66,8 @@ private:
     std::unique_ptr<SwPosition> mpCommentAnchor;
 
     SwWrtShell* mpWrtShell;
+
+    void ImplDestroy();
 
     SwHandleAnchorNodeChg(const SwHandleAnchorNodeChg&) = delete;
     void operator=(const SwHandleAnchorNodeChg) = delete;

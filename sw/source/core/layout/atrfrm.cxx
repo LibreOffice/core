@@ -3374,7 +3374,7 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
     }
 }
 
-SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE
+void SwHandleAnchorNodeChg::ImplDestroy()
 {
     if ( mbAnchorNodeChanged )
     {
@@ -3428,6 +3428,11 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE
     mpWrtShell->Delete();
 
     mpWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+}
+
+SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 namespace sw
