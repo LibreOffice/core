@@ -16,6 +16,23 @@
       "message": "This Android build fail does not seem to be a real fail?",
       "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72fb46ae_114edee4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-15T09:46:22Z",
+      "side": 1,
+      "message": "Miklos: could you please take a look, if this aligns well with existing/potential uses of PDFium? Thanks.",
+      "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
