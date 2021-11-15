@@ -16,6 +16,24 @@
       "message": "I rely on the change being tested by you and by CI; anyway, it\u0027s trivial to re-introduce the dependencies if they turn out to be required. Thus, I don\u0027t see a problem merging this, even though I didn\u0027t thoroughly test it myself.",
       "revId": "f64e64c3b511e7e1f734a5e959a0c52ff35ea656",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31242de5_e08cb88e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-15T22:10:39Z",
+      "side": 1,
+      "message": "There were not any instances of using the headers related to \u0027boost\u0027, \u0027glm\u0027 or \u0027harfbuzz\u0027 in the \u0027vcl/workben\u0027 folder, except the one in \u0027vcl/workben/icontest.cxx\u0027 that turned out to be superfluous.\n\n$ git grep -i boost vcl/workben\n$ git grep -i glm vcl/workben\n$ git grep -i harf vcl/workben\n\nAll the associated binaries were built and could be executed after a complete clean and make, without any (link or other) problem.\n\n./bin/run fftester\n./bin/run icontest\n./bin/run mtfdemo\n./bin/run svdemo\n./bin/run svpclient\n./bin/run svptest\n./bin/run vcldemo\n./bin/run visualbackendtest\n./instdir/program/ui-previewer\n./instdir/program/lo_kde5filepicker\n\nSo, I think it should be fine.",
+      "parentUuid": "6c7d7050_a15bc553",
+      "revId": "f64e64c3b511e7e1f734a5e959a0c52ff35ea656",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
