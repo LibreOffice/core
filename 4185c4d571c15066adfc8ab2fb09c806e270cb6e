@@ -33,6 +33,23 @@
       "message": "Miklos: could you please take a look, if this aligns well with existing/potential uses of PDFium? Thanks.",
       "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f253e5a1_a2abe6c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-15T10:08:08Z",
+      "side": 1,
+      "message": "It is fine from a pdfium point of view. pdfium currently focuses on high-fidelity render result, while poppler focuses on mapping the content to ODF (hybrid or not) and produce something nicely editable. So there is no real conflict there.\n\nI\u0027m happy with the change as long as Jenkins is happy.",
+      "revId": "4185c4d571c15066adfc8ab2fb09c806e270cb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
