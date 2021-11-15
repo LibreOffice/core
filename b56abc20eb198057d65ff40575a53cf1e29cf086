@@ -46,6 +46,30 @@
       },
       "revId": "b56abc20eb198057d65ff40575a53cf1e29cf086",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aa37ec1_9acbdbe7",
+        "filename": "odk/examples/cpp/counter/counter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-15T08:57:56Z",
+      "side": 1,
+      "message": "Additionally, I\u0027d argue that it\u0027s better to use something \"standard\" in examples, especially when showing something not related directly to LibreOffice, and let users to think about optimization of their IO themselves.",
+      "parentUuid": "73bb1702_e0a6b2e9",
+      "range": {
+        "startLine": 80,
+        "startChar": 58,
+        "endLine": 80,
+        "endChar": 67
+      },
+      "revId": "b56abc20eb198057d65ff40575a53cf1e29cf086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
