@@ -93,7 +93,7 @@ SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
 SwChartLockController_Helper::~SwChartLockController_Helper()
 {
     if (m_pDoc)   // still connected?
-        Disconnect();
+        suppress_fun_call_w_exception(Disconnect());
 }
 
 void SwChartLockController_Helper::StartOrContinueLocking()
