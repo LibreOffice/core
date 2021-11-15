@@ -16,6 +16,57 @@
       "message": "hi all,\nany update on this ?",
       "revId": "cd739028674390d49e1d25582afd52c513075eac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "969b2cd4_2b80aa01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-15T13:13:12Z",
+      "side": 1,
+      "message": "Looks viable, but see inline comments.",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "778b8aad_d7a68910",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-15T13:13:12Z",
+      "side": 1,
+      "message": "For clarity I\u0027d rather write this as\n\n  (nCurHeight \u003d\u003d ScGlobal::nStdRowHeight ? 2 : 4)",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91f40f02_9fe0359c",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-15T13:13:12Z",
+      "side": 1,
+      "message": "Same here,\n\n  (nCurHeight \u003d\u003d STD_COL_WIDTH ? 2 : 4)",
+      "revId": "cd739028674390d49e1d25582afd52c513075eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
