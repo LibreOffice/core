@@ -110,6 +110,16 @@ SwNodes::~SwNodes()
     m_pEndOfContent.reset();
 }
 
+static bool IsInsertOutline(SwNodes const& rNodes, sal_uLong const nIndex)
+{
+    if (!rNodes.IsDocNodes())
+    {
+        return false;
+    }
+    return nIndex < rNodes.GetEndOfRedlines().StartOfSectionNode()->GetIndex()
+        || rNodes.GetEndOfRedlines().GetIndex() < nIndex;
+}
+
 void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
                         SwNodeIndex& rInsPos, bool bNewFrames )
 {
@@ -125,9 +135,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
 
     // NEVER include nodes from the RedLineArea
     sal_uLong nNd = rInsPos.GetIndex();
-    bool bInsOutlineIdx = (
-            rNds.GetEndOfRedlines().StartOfSectionNode()->GetIndex() >= nNd ||
-            nNd >= rNds.GetEndOfRedlines().GetIndex() );
+    bool const bInsOutlineIdx = IsInsertOutline(rNds, nNd);
 
     if( &rNds == this ) // if in the same node array -> move
     {
@@ -484,9 +492,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     // NEVER include nodes from the RedLineArea
                     sal_uLong nNd = aIdx.GetIndex();
-                    bool bInsOutlineIdx = ( rNodes.GetEndOfRedlines().
-                            StartOfSectionNode()->GetIndex() >= nNd ||
-                            nNd >= rNodes.GetEndOfRedlines().GetIndex() );
+                    bool const bInsOutlineIdx = IsInsertOutline(rNodes, nNd);
 
                     if( bNewFrames )
                         // delete all frames
