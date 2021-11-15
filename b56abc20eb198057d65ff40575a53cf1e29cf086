@@ -22,6 +22,30 @@
       },
       "revId": "b56abc20eb198057d65ff40575a53cf1e29cf086",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73bb1702_e0a6b2e9",
+        "filename": "odk/examples/cpp/counter/counter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-15T08:56:19Z",
+      "side": 1,
+      "message": "Is \\n reliable in view of Windows/Linux line ending difference? I mean, on Windows, the console may be a native one, or cygwin\u0027s, or WSL\u0027s, or something else - do they all behave consistently wrt simple \\n?",
+      "parentUuid": "5e3c973c_0e402504",
+      "range": {
+        "startLine": 80,
+        "startChar": 58,
+        "endLine": 80,
+        "endChar": 67
+      },
+      "revId": "b56abc20eb198057d65ff40575a53cf1e29cf086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
