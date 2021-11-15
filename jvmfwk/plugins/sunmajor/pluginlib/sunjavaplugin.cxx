@@ -48,7 +48,6 @@
 #include <osl/process.h>
 #include <osl/thread.hxx>
 #include <osl/file.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <setjmp.h>
@@ -99,8 +98,6 @@ using namespace jfw_plugin;
 
 
 namespace {
-
-struct PluginMutex: public ::rtl::Static<osl::Mutex, PluginMutex> {};
 
 #if defined(UNX) && !defined(ANDROID)
 OString getPluginJarPath(
@@ -616,10 +613,11 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JavaVM ** ppVm,
     JNIEnv ** ppEnv)
 {
+    static osl::Mutex aPluginMutex;
     assert(pInfo != nullptr);
     assert(ppVm != nullptr);
     assert(ppEnv != nullptr);
-    osl::MutexGuard guard(PluginMutex::get());
+    osl::MutexGuard guard(aPluginMutex);
     javaPluginError errorcode = javaPluginError::NONE;
 #ifdef MACOSX
     rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath( pInfo->sLocation );

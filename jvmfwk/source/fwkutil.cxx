@@ -41,6 +41,34 @@ using namespace osl;
 namespace jfw
 {
 
+/** provides a bootstrap class which already knows the values from the
+    jvmfkwrc file.
+*/
+const rtl::Bootstrap* Bootstrap()
+{
+    static const rtl::Bootstrap* SINGLETON = []()
+        {
+            OUString sIni = getLibraryLocation() +
+#ifdef MACOSX
+                // For some reason the jvmfwk3rc file is traditionally in
+                // LIBO_URE_ETC_FOLDER
+                "/../" LIBO_URE_ETC_FOLDER
+#endif
+                SAL_CONFIGFILE("/jvmfwk3");
+            ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
+            SAL_INFO("jfw.level2", "Using configuration file " << sIni);
+            return bootstrap;
+        }();
+    return SINGLETON;
+};
+
+osl::Mutex& FwkMutex()
+{
+    static osl::Mutex SINGLETON;
+    return SINGLETON;
+}
+
+
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
 {
     static const char EncodingTable[] =

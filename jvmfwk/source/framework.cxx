@@ -58,7 +58,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
     assert(pparInfo != nullptr);
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
 
         jfw::VendorSettings aVendorSettings;
         std::vector<std::unique_ptr<JavaInfo>> vecInfo;
@@ -137,7 +137,7 @@ javaFrameworkError jfw_startVM(
 
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
 
         //We keep this pointer so we can determine if a VM has already
         //been created.
@@ -298,7 +298,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         std::unique_ptr<JavaInfo> aCurrentInfo;
@@ -436,7 +436,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
 
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
         {
@@ -480,7 +480,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
 
 bool jfw_isVMRunning()
 {
-    osl::MutexGuard guard(jfw::FwkMutex::get());
+    osl::MutexGuard guard(jfw::FwkMutex());
     return g_pJavaVM != nullptr;
 }
 
@@ -490,7 +490,7 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
 
         jfw::VendorSettings aVendorSettings;
 
@@ -526,7 +526,7 @@ javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         //check if pInfo is the selected JRE
@@ -556,7 +556,7 @@ javaFrameworkError jfw_setEnabled(bool bEnabled)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
@@ -592,7 +592,7 @@ javaFrameworkError jfw_getEnabled(bool *pbEnabled)
     {
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         jfw::MergedSettings settings;
         *pbEnabled = settings.getEnabled();
     }
@@ -610,7 +610,7 @@ javaFrameworkError jfw_setVMParameters(std::vector<OUString> const & arOptions)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
@@ -631,7 +631,7 @@ javaFrameworkError jfw_getVMParameters(std::vector<OUString> * parOptions)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
@@ -651,7 +651,7 @@ javaFrameworkError jfw_setUserClassPath(OUString const & pCp)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
@@ -672,7 +672,7 @@ javaFrameworkError jfw_getUserClassPath(OUString * ppCP)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         const jfw::MergedSettings settings;
@@ -691,7 +691,7 @@ javaFrameworkError jfw_addJRELocation(OUString const & sLocation)
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
+        osl::MutexGuard guard(jfw::FwkMutex());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
@@ -730,12 +730,12 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist)
 
 void jfw_lock()
 {
-    jfw::FwkMutex::get().acquire();
+    jfw::FwkMutex().acquire();
 }
 
 void jfw_unlock()
 {
-    jfw::FwkMutex::get().release();
+    jfw::FwkMutex().release();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

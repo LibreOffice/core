@@ -961,7 +961,7 @@ void MergedSettings::getVmParametersArray(std::vector<OUString> * parParams)
     const
 {
     assert(parParams != nullptr);
-    osl::MutexGuard guard(FwkMutex::get());
+    osl::MutexGuard guard(FwkMutex());
 
     *parParams = m_vmParams;
 }
