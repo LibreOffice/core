@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eb78a4d_34cb3a83",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-15T08:40:04Z",
+      "side": 1,
+      "message": "I\u0027m wondering whether this is the place the reporter was actually talking about, or rather the one in filter/uiconfig/ui/pdfgeneralpage.ui (which needs \u0027git grep \u0027Reduce ima_ge resolution` to be found). It might make sense to change both places. :)\n\nI\u0027m wondering whether the \"Reduce image resolution to:\" variant would be more straighforward, since it might be more clearer what the checkbox is for when the \"Reduce ...\" part is still there?",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 153
+      },
+      "revId": "875b92a4b87a412f70d025db617d33e2736aab62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
