@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "364b35ab_fa054ab0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-15T14:48:04Z",
+      "side": 1,
+      "message": "should it be tdf#139444 instead ?",
+      "revId": "375ecb3ba3860ff93a1416b19afaf623b048e34f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
