@@ -56,9 +56,6 @@ class TextFont;
 class OOX_DLLPUBLIC Theme
 {
 public:
-                        Theme();
-                        ~Theme();
-
     void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
 
     ClrScheme&               getClrScheme() { return maClrScheme; }
