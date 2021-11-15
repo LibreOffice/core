@@ -163,6 +163,8 @@
 
 #include <SearchResultLocator.hxx>
 
+#include <txtfrm.hxx>
+
 #define TWIPS_PER_PIXEL 15
 
 using namespace ::com::sun::star;
@@ -3642,15 +3644,33 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getParagraphText ()
     SolarMutexGuard aGuard;
     uno::Reference<datatransfer::XTransferable> xTransferable;
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
-    Point cursorPosition = pWrtShell->GetCursorDocPos();
-    m_pDocShell->GetObjectShell()->GetPool();
     EditEngine e = EditEngine(&m_pDocShell->GetObjectShell()->GetPool());
+    SwPaM* pCursor = pWrtShell->GetCursor();
 
-    auto t = e.FindDocPosition(cursorPosition);
-    if (t.nIndex != EE_INDEX_NOT_FOUND)
+    if (pCursor)
     {
-        ESelection sel = ESelection(t.nIndex, 0, t.nIndex, 3);
-        xTransferable = e.CreateTransferable(sel);
+        const SwTextNode *const pTextNd = sw::GetParaPropsNode(*pWrtShell->GetLayout(), pCursor->GetPoint()->nNode);
+        if (pTextNd)
+        {
+            //Point cursorPosition = pWrtShell->GetCursorDocPos();
+            //sal_Int32 paragraphIndex = e.FindParagraph(cursorPosition.getY());
+            //sal_uLong paragraphIndex = pCursor->GetPoint()->nNode.GetIndex();
+
+            auto p1 = pWrtShell->GetCursor()->Start()->nNode.GetNode().GetTextNode()->GetIndex();
+            auto p2 = pCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetIndex();
+            auto p3 = pCursor->GetPoint()->nNode.GetIndex();
+            auto p4 = e.FindParagraph(pWrtShell->GetCursorDocPos().getY());
+            auto p5 = pCursor->GetPoint()->nNode.GetNode().GetContentNode()->GetIndex();
+            auto p6 = pCursor->GetPoint()->nNode.GetNode().GetIndex();
+            auto p7 = pTextNd->GetIndex();
+            auto p8 = pTextNd->GetContentNode()->GetIndex();
+
+            if (p1 && p2 && p3 && p4)
+            {
+                ESelection sel = ESelection(0, 0, 0, 3);
+                xTransferable = e.CreateTransferable(sel);
+            }
+        }
     }
 
     return xTransferable;
