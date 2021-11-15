@@ -2233,36 +2233,6 @@ namespace
         return pWidget;
     }
 
-    void container_remove(GtkWidget* pContainer, GtkWidget* pChild)
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_container_remove(GTK_CONTAINER(pContainer), pChild);
-#else
-        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer) || GTK_IS_POPOVER(pContainer));
-        if (GTK_IS_BOX(pContainer))
-            gtk_box_remove(GTK_BOX(pContainer), pChild);
-        else if (GTK_IS_GRID(pContainer))
-            gtk_grid_remove(GTK_GRID(pContainer), pChild);
-        else if (GTK_IS_POPOVER(pContainer))
-            gtk_popover_set_child(GTK_POPOVER(pContainer), nullptr);
-#endif
-    }
-
-    void container_add(GtkWidget* pContainer, GtkWidget* pChild)
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_container_add(GTK_CONTAINER(pContainer), pChild);
-#else
-        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer) || GTK_IS_POPOVER(pContainer));
-        if (GTK_IS_BOX(pContainer))
-            gtk_box_append(GTK_BOX(pContainer), pChild);
-        else if (GTK_IS_GRID(pContainer))
-            gtk_grid_attach(GTK_GRID(pContainer), pChild, 0, 0, 1, 1);
-        else if (GTK_IS_POPOVER(pContainer))
-            gtk_popover_set_child(GTK_POPOVER(pContainer), pChild);
-#endif
-    }
-
     void replaceWidget(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
         // remove the widget and replace it with pReplacement
@@ -5847,7 +5817,6 @@ public:
 
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // This will cause a GtkSalFrame to be created. With WB_SYSTEMCHILDWINDOW set it
         // will create a toplevel GtkEventBox window
         auto xEmbedWindow = VclPtr<ChildFrame>::Create(ImplGetDefaultWindow(), WB_SYSTEMCHILDWINDOW | WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
@@ -5861,9 +5830,11 @@ public:
         GtkWidget* pParent = gtk_widget_get_parent(pWindow);
 
         g_object_ref(pWindow);
-        gtk_container_remove(GTK_CONTAINER(pParent), pWindow);
-        gtk_container_add(m_pContainer, pWindow);
+        container_remove(pParent, pWindow);
+        container_add(GTK_WIDGET(m_pContainer), pWindow);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_child_set(m_pContainer, pWindow, "expand", true, "fill", true, nullptr);
+#endif
         gtk_widget_set_hexpand(pWindow, true);
         gtk_widget_set_vexpand(pWindow, true);
         gtk_widget_realize(pWindow);
@@ -5874,9 +5845,6 @@ public:
         xEmbedWindow->Show(true, ShowFlags::NoActivate);
         css::uno::Reference<css::awt::XWindow> xWindow(xEmbedWindow->GetComponentInterface(), css::uno::UNO_QUERY);
         return xWindow;
-#else
-        return nullptr;
-#endif
     }
 
     virtual ~GtkInstanceContainer() override
