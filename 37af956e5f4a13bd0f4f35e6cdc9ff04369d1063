@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80a6a872_7528211a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-15T16:17:38Z",
+      "side": 1,
+      "message": "seeing that this change was mostly fine, I took the liberty to restore it and do a little tweaking (incl. a revert of needless changes in initializer form, keeping the diff small)",
+      "revId": "37af956e5f4a13bd0f4f35e6cdc9ff04369d1063",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
