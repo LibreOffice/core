@@ -50,6 +50,24 @@
       "message": "These three actions should be done using std::rotate.",
       "revId": "48d6878f8ce680c2f19f262354a2e19b0eaa7b56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8960f63a_b9be06e7",
+        "filename": "svl/source/undo/undo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-15T08:42:48Z",
+      "side": 1,
+      "message": "Good idea, I wasn\u0027t aware of std::rotate(). Done in https://gerrit.libreoffice.org/c/core/+/125219 \"svl: use std::rotate() in SfxUndoManager::ImplUndo()\".",
+      "parentUuid": "b0b488d3_b5580f5c",
+      "revId": "48d6878f8ce680c2f19f262354a2e19b0eaa7b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
