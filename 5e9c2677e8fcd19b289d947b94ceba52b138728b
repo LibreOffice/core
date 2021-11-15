@@ -34,6 +34,24 @@
       "parentUuid": "bc0a2a5a_c04da182",
       "revId": "5e9c2677e8fcd19b289d947b94ceba52b138728b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb07ee4e_1ca00f88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-15T13:52:38Z",
+      "side": 1,
+      "message": "Actually, the code path does what it does because of tdf#139612, so you may be right. This wasn\u0027t that important commit, so I\u0027ll revert. I don\u0027t have time for the actual bugreport though.",
+      "parentUuid": "ca383a41_fddb39ed",
+      "revId": "5e9c2677e8fcd19b289d947b94ceba52b138728b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
