@@ -153,6 +153,10 @@ void SwAnnotationWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint
 
 void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
 {
+    // tdf#143511 unclip SysObj so get_extents_relative_to of children
+    // of the SysObj can provide meaningful results
+    UnclipVisibleSysObj();
+
     pDev->Push();
 
     pDev->SetFillColor(mColorDark);
@@ -164,6 +168,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     pDev->SetFont(aFont);
 
     Size aSz = PixelToLogic(GetSizePixel());
+
     pDev->DrawRect(tools::Rectangle(rPt, aSz));
 
     if (mxMetadataAuthor->get_visible())
