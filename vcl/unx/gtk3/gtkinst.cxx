@@ -6040,16 +6040,18 @@ namespace
 
     tools::Rectangle get_monitor_workarea(GtkWidget* pWindow)
     {
+        GdkRectangle aRect;
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GdkScreen* pScreen = gtk_widget_get_screen(pWindow);
         gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, widget_get_surface(pWindow));
-        GdkRectangle aRect;
         gdk_screen_get_monitor_workarea(pScreen, nMonitor, &aRect);
-        return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
 #else
-        (void)pWindow;
-        return tools::Rectangle();
+        GdkDisplay* pDisplay = gtk_widget_get_display(pWindow);
+        GdkSurface* gdkWindow = widget_get_surface(pWindow);
+        GdkMonitor* pMonitor = gdk_display_get_monitor_at_surface(pDisplay, gdkWindow);
+        gdk_monitor_get_geometry(pMonitor, &aRect);
 #endif
+        return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
     }
 
 
