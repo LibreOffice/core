@@ -2938,6 +2938,33 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         bool bFullSheetPreview = sFullSheetPreview == "true";
 
+        // Select a pdf version if specified a valid one.
+        // If not specified then ignore. If invalid then fail.
+        sal_Int32 pdfVer = 0;
+        if ((aIndex = aFilterOptions.indexOf(",PDFVer=")) >= 0)
+        {
+            int bIndex = aFilterOptions.indexOf("PDFVEREND");
+            OUString sPdfVer;
+            sPdfVer = aFilterOptions.subView(aIndex+8, bIndex-(aIndex+8));
+            aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex)) + aFilterOptions.subView(bIndex+9);
+
+            if (sPdfVer.equalsIgnoreAsciiCase("PDF/A-1b"))
+                pdfVer = 1;
+            else if (sPdfVer.equalsIgnoreAsciiCase("PDF/A-2b"))
+                pdfVer = 2;
+            else if (sPdfVer.equalsIgnoreAsciiCase("PDF/A-3b"))
+                pdfVer = 3;
+            else if (sPdfVer.equalsIgnoreAsciiCase("PDF-1.5"))
+                pdfVer = 15;
+            else if (sPdfVer.equalsIgnoreAsciiCase("PDF-1.6"))
+                pdfVer = 16;
+            else
+            {
+                SetLastExceptionMsg("wrong PDF version");
+                return false;
+            }
+        }
+
         // 'TakeOwnership' == this is a 'real' SaveAs (that is, the document
         // gets a new name).  When this is not provided, the meaning of
         // saveAs() is more like save-a-copy, which allows saving to any
@@ -2973,6 +3000,9 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         if (bFullSheetPreview)
             aFilterDataMap["SinglePageSheets"] <<= true;
+
+        if (pdfVer)
+            aFilterDataMap["SelectPdfVersion"] <<= pdfVer;
 
         if (!aFilterDataMap.empty())
         {
