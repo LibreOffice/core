@@ -671,6 +671,7 @@ OCopyTableWizard::~OCopyTableWizard()
     m_aTypeInfoIndex.clear();
     m_aTypeInfo.clear();
     m_aDestTypeInfoIndex.clear();
+    m_aDestTypeInfo.clear();
 }
 
 IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl, weld::Button&, void)
