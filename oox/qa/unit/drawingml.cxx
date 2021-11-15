@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -366,6 +367,34 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4601), aBoundRect.Height, 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7699), aBoundRect.X, 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5699), aBoundRect.Y, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
+{
+    // Given a document with 2 slides, slide1 has a chart with a theme override and slide2 has a
+    // shape:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "chart-theme-override.pptx";
+
+    // When loading that document:
+    load(aURL);
+
+    // Then make sure that the slide 2 shape's text color is blue, not red:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+    sal_Int32 nActual{ 0 };
+    xPortion->getPropertyValue("CharColor") >>= nActual;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4485828 (0x4472c4)
+    // - Actual  : 16711680 (0xff0000)
+    // i.e. the text color was red, not blue.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472C4), nActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
