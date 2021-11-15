@@ -1611,6 +1611,9 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         return image;
     if (alphaBitmap && alphaBitmap->IsFullyOpaqueAsAlpha())
         alphaBitmap = nullptr; // the alpha can be ignored
+    if (bitmap.PreferSkShader() && (!alphaBitmap || alphaBitmap->PreferSkShader()))
+        return image;
+
     // Probably not much point in caching of just doing a copy.
     if (alphaBitmap == nullptr && targetSize == bitmap.GetSize())
         return image;
@@ -1730,7 +1733,8 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
         = mergeCacheBitmaps(rSkiaSourceBitmap, &rSkiaAlphaBitmap, imageSize * mScaling);
     if (image)
         drawImage(imagePosAry, image, mScaling);
-    else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()) // alpha can be ignored
+    else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()
+             && !rSkiaSourceBitmap.PreferSkShader()) // alpha can be ignored
         drawBitmap(rPosAry, rSkiaSourceBitmap);
     else
         drawShader(rPosAry,
@@ -1744,11 +1748,6 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,
                                      SkBlendMode blendMode)
 {
-    if (bitmap.PreferSkShader())
-    {
-        drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)), blendMode);
-        return;
-    }
     // Use mergeCacheBitmaps(), which may decide to cache the result, avoiding repeated
     // scaling.
     SalTwoRect imagePosAry(rPosAry);
@@ -1766,6 +1765,8 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBit
     sk_sp<SkImage> image = mergeCacheBitmaps(bitmap, nullptr, imageSize * mScaling);
     if (image)
         drawImage(imagePosAry, image, mScaling, blendMode);
+    else if (bitmap.PreferSkShader())
+        drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)), blendMode);
     else
         drawImage(rPosAry, bitmap.GetSkImage(), 1, blendMode);
 }
