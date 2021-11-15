@@ -16,6 +16,24 @@
       "message": "I haven\u0027t tested, but it /seems/ related to tdf#139612, and to HOST-SEARCH-CRITERIA-MUST-APPLY-TO-WHOLE-CELL from OpenFormula [1].\n\n[1] https://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part4-formula.html#__RefHeading__1017868_715980110",
       "revId": "5e9c2677e8fcd19b289d947b94ceba52b138728b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca383a41_fddb39ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-15T12:39:34Z",
+      "side": 1,
+      "message": "I don\u0027t think so. According to my reading of the code, it old path did compare the whole content cell anyway, this just chooses a slightly faster path that does in practice the same. That bugreport mentions a couple of unittests for that, I\u0027d expect this change would\u0027ve triggered there if I got this wrong.",
+      "parentUuid": "bc0a2a5a_c04da182",
+      "revId": "5e9c2677e8fcd19b289d947b94ceba52b138728b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
