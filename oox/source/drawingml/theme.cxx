@@ -23,14 +23,6 @@
 
 namespace oox::drawingml {
 
-Theme::Theme()
-{
-}
-
-Theme::~Theme()
-{
-}
-
 namespace {
 
 template< typename Type >
