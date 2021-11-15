@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "387131c1_abe33e3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-15T11:39:51Z",
+      "side": 1,
+      "message": "still reproducible in\n\nVersion: 7.3.0.0.alpha1+ / LibreOffice Community\nBuild ID: e6968f0485cfb2f6c941d11c438386e14a47095d\nCPU threads: 4; OS: Linux 5.10; UI render: default; VCL: gtk3\nLocale: en-US (en_US.UTF-8); UI: en-US\nCalc: threaded",
+      "revId": "366a7f6b2de6a1a555f3a3471e03f5a263d9a854",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
