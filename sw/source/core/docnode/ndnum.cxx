@@ -38,6 +38,8 @@ bool SwOutlineNodes::Seek_Entry(SwNode* rP, size_type* pnPos) const
 
 void SwNodes::UpdateOutlineNode(SwNode & rNd)
 {
+    assert(IsDocNodes()); // no point in m_pOutlineNodes for undo nodes
+
     SwTextNode * pTextNd = rNd.GetTextNode();
 
     if (!pTextNd || !pTextNd->IsOutlineStateChanged())
