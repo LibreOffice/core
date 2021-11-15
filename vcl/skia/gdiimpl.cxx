@@ -1604,9 +1604,8 @@ bool SkiaSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::
 // Especially in raster mode scaling and alpha blending may be expensive if done repeatedly.
 sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitmap,
                                                       const SkiaSalBitmap* alphaBitmap,
-                                                      const Size targetSize)
+                                                      const Size& targetSize)
 {
-    // TODO This should take into account mScaling!=1, and callers should use that too.
     sk_sp<SkImage> image;
     if (targetSize.IsEmpty())
         return image;
@@ -1631,7 +1630,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // In some cases (tdf#134237) the target size may be very large. In that case it's
     // better to rely on Skia to clip and draw only the necessary, rather than prepare
     // a very large image only to not use most of it.
-    const Size drawAreaSize = mClipRegion.GetBoundRect().GetSize();
+    const Size drawAreaSize = mClipRegion.GetBoundRect().GetSize() * mScaling;
     if (targetSize.Width() > drawAreaSize.Width() || targetSize.Height() > drawAreaSize.Height())
     {
         // This is a bit tricky. The condition above just checks that at least a part of the resulting
@@ -1727,9 +1726,10 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
         imagePosAry.mnSrcHeight = imagePosAry.mnDestHeight;
         imageSize = Size(imagePosAry.mnSrcWidth, imagePosAry.mnSrcHeight);
     }
-    sk_sp<SkImage> image = mergeCacheBitmaps(rSkiaSourceBitmap, &rSkiaAlphaBitmap, imageSize);
+    sk_sp<SkImage> image
+        = mergeCacheBitmaps(rSkiaSourceBitmap, &rSkiaAlphaBitmap, imageSize * mScaling);
     if (image)
-        drawImage(imagePosAry, image);
+        drawImage(imagePosAry, image, mScaling);
     else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()) // alpha can be ignored
         drawBitmap(rPosAry, rSkiaSourceBitmap);
     else
@@ -1763,18 +1763,20 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBit
         imagePosAry.mnSrcHeight = imagePosAry.mnDestHeight;
         imageSize = Size(imagePosAry.mnSrcWidth, imagePosAry.mnSrcHeight);
     }
-    sk_sp<SkImage> image = mergeCacheBitmaps(bitmap, nullptr, imageSize);
+    sk_sp<SkImage> image = mergeCacheBitmaps(bitmap, nullptr, imageSize * mScaling);
     if (image)
-        drawImage(imagePosAry, image, blendMode);
+        drawImage(imagePosAry, image, mScaling, blendMode);
     else
-        drawImage(rPosAry, bitmap.GetSkImage(), blendMode);
+        drawImage(rPosAry, bitmap.GetSkImage(), 1, blendMode);
 }
 
 void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
-                                    SkBlendMode eBlendMode)
+                                    int srcScaling, SkBlendMode eBlendMode)
 {
     SkRect aSourceRect
         = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+    if (srcScaling != 1)
+        aSourceRect = scaleRect(aSourceRect, srcScaling);
     SkRect aDestinationRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
                                                rPosAry.mnDestWidth, rPosAry.mnDestHeight);
 
@@ -1786,7 +1788,7 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
              "drawimage(" << this << "): " << rPosAry << ":" << SkBlendMode_Name(eBlendMode));
     addUpdateRegion(aDestinationRect);
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect,
-                                   makeSamplingOptions(rPosAry, mScaling), &aPaint,
+                                   makeSamplingOptions(rPosAry, mScaling, srcScaling), &aPaint,
                                    SkCanvas::kFast_SrcRectConstraint);
     ++mPendingOperationsToFlush; // tdf#136369
     postDraw();
@@ -1894,8 +1896,11 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     // alpha blending or scaling.
     // The extra fAlpha blending is not cached, with the assumption that it usually gradually changes
     // for each invocation.
-    sk_sp<SkImage> imageToDraw = mergeCacheBitmaps(
-        rSkiaBitmap, pSkiaAlphaBitmap, Size(round(aXRel.getLength()), round(aYRel.getLength())));
+    // Pass size * mScaling to mergeCacheBitmaps() so that it prepares the size that will be needed
+    // after the mScaling-scaling matrix, but otherwise calculate everything else using the VCL coordinates.
+    Size imageSize(round(aXRel.getLength()), round(aYRel.getLength()));
+    sk_sp<SkImage> imageToDraw
+        = mergeCacheBitmaps(rSkiaBitmap, pSkiaAlphaBitmap, imageSize * mScaling);
     if (imageToDraw)
     {
         SkMatrix matrix;
@@ -1903,27 +1908,37 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         // trigger unnecessary scaling. Image has already been scaled
         // by mergeCacheBitmaps() and we shouldn't scale here again
         // unless the drawing is also skewed.
-        matrix.set(SkMatrix::kMScaleX, round(aXRel.getX()) / imageToDraw->width());
-        matrix.set(SkMatrix::kMScaleY, round(aYRel.getY()) / imageToDraw->height());
-        matrix.set(SkMatrix::kMSkewY, aXRel.getY() / imageToDraw->width());
-        matrix.set(SkMatrix::kMSkewX, aYRel.getX() / imageToDraw->height());
+        matrix.set(SkMatrix::kMScaleX, round(aXRel.getX()) / imageSize.Width());
+        matrix.set(SkMatrix::kMScaleY, round(aYRel.getY()) / imageSize.Height());
+        matrix.set(SkMatrix::kMSkewY, aXRel.getY() / imageSize.Width());
+        matrix.set(SkMatrix::kMSkewX, aYRel.getX() / imageSize.Height());
         matrix.set(SkMatrix::kMTransX, rNull.getX());
         matrix.set(SkMatrix::kMTransY, rNull.getY());
         SkCanvas* canvas = getDrawCanvas();
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
         SkSamplingOptions samplingOptions;
-        if (matrixNeedsHighQuality(matrix) || (mScaling != 1 && !isUnitTestRunning()))
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, mScaling);
+        // If the matrix changes geometry, we need to smooth-scale. If there's mScaling,
+        // that's already been handled by mergeCacheBitmaps().
+        if (matrixNeedsHighQuality(matrix))
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, 1);
         if (fAlpha == 1.0)
-            canvas->drawImage(imageToDraw, 0, 0, samplingOptions);
+        {
+            // Specify sizes to scale the image size back if needed (because of mScaling).
+            SkRect dstRect = SkRect::MakeWH(imageSize.Width(), imageSize.Height());
+            SkRect srcRect = SkRect::MakeWH(imageToDraw->width(), imageToDraw->height());
+            canvas->drawImageRect(imageToDraw, srcRect, dstRect, samplingOptions, nullptr,
+                                  SkCanvas::kFast_SrcRectConstraint);
+        }
         else
         {
             SkPaint paint;
-            paint.setShader(
-                SkShaders::Blend(SkBlendMode::kDstIn, imageToDraw->makeShader(samplingOptions),
-                                 SkShaders::Color(SkColorSetARGB(fAlpha * 255, 0, 0, 0))));
-            canvas->drawRect(SkRect::MakeWH(imageToDraw->width(), imageToDraw->height()), paint);
+            // Scale the image size back if needed.
+            SkMatrix scale = SkMatrix::Scale(1.0 / mScaling, 1.0 / mScaling);
+            paint.setShader(SkShaders::Blend(
+                SkBlendMode::kDstIn, imageToDraw->makeShader(samplingOptions, &scale),
+                SkShaders::Color(SkColorSetARGB(fAlpha * 255, 0, 0, 0))));
+            canvas->drawRect(SkRect::MakeWH(imageSize.Width(), imageSize.Height()), paint);
         }
     }
     else
