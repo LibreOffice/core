@@ -16,6 +16,24 @@
       "message": "I think the shadow behind the “L” angle of the cross should be a diagonal line; right now it looks blocky, or pixel-like",
       "revId": "48b61fca5984c4397705075f60a9fe5113b1477f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18d6d754_460c5ea3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2021-11-15T04:15:56Z",
+      "side": 1,
+      "message": "Do you mean just like Sukapura variation here: https://t.me/LibreOfficeDesign/55972 (the patch hasn\u0027t been uploaded yet)",
+      "parentUuid": "1402449a_1ba690c6",
+      "revId": "48b61fca5984c4397705075f60a9fe5113b1477f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
