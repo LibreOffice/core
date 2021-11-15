@@ -4428,6 +4428,13 @@ public:
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_draw(m_pWidget, cr);
+#else
+        GtkSnapshot* pSnapshot = gtk_snapshot_new();
+        GtkWidgetClass* pWidgetClass = GTK_WIDGET_GET_CLASS(m_pWidget);
+        pWidgetClass->snapshot(m_pWidget, pSnapshot);
+        GskRenderNode* pNode = gtk_snapshot_free_to_node(pSnapshot);
+        gsk_render_node_draw(pNode, cr);
+        gsk_render_node_unref(pNode);
 #endif
 
         cairo_destroy(cr);
