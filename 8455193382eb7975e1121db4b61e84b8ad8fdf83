@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37f87dec_a84b269b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-15T14:28:22Z",
+      "side": 1,
+      "message": "[overriding spurious Jenkins check failures to get this in fast-track to unbreak various people\u0027s and bot\u0027s builds]",
+      "revId": "8455193382eb7975e1121db4b61e84b8ad8fdf83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
