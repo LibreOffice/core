@@ -88,6 +88,24 @@
       "parentUuid": "d0f8d918_fe18d8ff",
       "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a2fb4f6_8a971c14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-15T09:00:34Z",
+      "side": 1,
+      "message": "Added in patch set 2. Thanks a lot for answering my beginner questions! 😊",
+      "parentUuid": "dfa69f9b_a703b1db",
+      "revId": "7fbe0ac3695f583e0611c12a50078ca4c0c55749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
