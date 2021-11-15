@@ -4031,15 +4031,23 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
-        bool bFoundWeldedControl = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
+        bool bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nWindowId), sControlId, aMap);
         if (!bFoundWeldedControl)
-            bFoundWeldedControl = jsdialog::ExecuteAction(nCurrentShellId, sControlId, aMap);
+            bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "sidebar", sControlId, aMap);
+        if (!bFoundWeldedControl)
+            bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "notebookbar", sControlId, aMap);
+        if (!bFoundWeldedControl && !SfxViewShell::Current())
+        {
+            // this is needed for dialogs shown before document is loaded: MacroWarning dialog, etc...
+            // these dialogs are created with WindowId "0"
+            bFoundWeldedControl = jsdialog::ExecuteAction("0", sControlId, aMap);
+        }
 
         if (bFoundWeldedControl)
             return;
 
         // force resend - used in mobile-wizard
-        jsdialog::SendFullUpdate(nCurrentShellId, "Panel");
+        jsdialog::SendFullUpdate(std::to_string(nCurrentShellId) + "sidebar", "Panel");
 
     } catch(...) {}
 }
