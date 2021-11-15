@@ -16,6 +16,24 @@
       "message": "This patch fixes tdf#127512. Nice!",
       "revId": "e6968f0485cfb2f6c941d11c438386e14a47095d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37a824e8_d8053bc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-15T10:18:07Z",
+      "side": 1,
+      "message": "Thanks, will use the bug number in the backport to libreoffice-7-2-.",
+      "parentUuid": "d28d44cf_2b64780b",
+      "revId": "e6968f0485cfb2f6c941d11c438386e14a47095d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
