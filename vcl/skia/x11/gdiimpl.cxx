@@ -46,9 +46,10 @@ void X11SkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     assert(!mSurface);
     assert(mX11Parent.GetDrawable() != None);
     RenderMethod renderMethod = forceRaster ? RenderRaster : renderMethodToUse();
+    mScaling = getWindowScaling();
     mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
-                                         &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
-                                         renderMethod, false);
+                                         &mX11Parent.GetVisual(), GetWidth() * mScaling,
+                                         GetHeight() * mScaling, renderMethod, false);
     if (mWindowContext)
     {
         // See flushSurfaceToWindowContext().
