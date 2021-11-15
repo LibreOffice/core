@@ -10,7 +10,7 @@
 $(eval $(call gb_Executable_Executable,gcc-wrapper))
 
 $(eval $(call gb_Executable_add_exception_objects,gcc-wrapper,\
-	solenv/gcc-wrappers/gcc \
+	solenv/gcc-wrappers/gcc, $(gb_COMPILEROPTFLAGS) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,gcc-wrapper,\
