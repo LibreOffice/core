@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c7d7050_a15bc553",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-15T09:03:09Z",
+      "side": 1,
+      "message": "I rely on the change being tested by you and by CI; anyway, it\u0027s trivial to re-introduce the dependencies if they turn out to be required. Thus, I don\u0027t see a problem merging this, even though I didn\u0027t thoroughly test it myself.",
+      "revId": "f64e64c3b511e7e1f734a5e959a0c52ff35ea656",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
