@@ -209,15 +209,17 @@ class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
     /// When LOKNotifier is set by jsdialogs code we need to release it
     VclPtr<vcl::Window> m_aWindowToRelease;
 
-    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
-                                                      StringMap& rData);
-    friend VCL_DLLPUBLIC void jsdialog::SendFullUpdate(sal_uInt64 nWindowId,
+    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(const std::string& nWindowId,
+                                                      const OString& rWidget, StringMap& rData);
+    friend VCL_DLLPUBLIC void jsdialog::SendFullUpdate(const std::string& nWindowId,
                                                        const OString& rWidget);
 
-    static std::map<sal_uInt64, WidgetMap>& GetLOKWeldWidgetsMap();
-    static void InsertWindowToMap(sal_uInt64 nWindowId);
+    static std::map<std::string, WidgetMap>& GetLOKWeldWidgetsMap();
+    static void InsertWindowToMap(const std::string& nWindowId);
     void RememberWidget(const OString& id, weld::Widget* pWidget);
-    static weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget);
+    static weld::Widget* FindWeldWidgetsMap(const std::string& nWindowId, const OString& rWidget);
+
+    std::string getMapIdFromWindowId() const;
 
     /// used for dialogs or popups
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
@@ -281,8 +283,9 @@ public:
                                                     VclButtonsType eButtonType,
                                                     const OUString& rPrimaryMessage);
 
-    static void AddChildWidget(sal_uInt64 nWindowId, const OString& id, weld::Widget* pWidget);
-    static void RemoveWindowWidget(sal_uInt64 nWindowId);
+    static void AddChildWidget(const std::string& nWindowId, const OString& id,
+                               weld::Widget* pWidget);
+    static void RemoveWindowWidget(const std::string& nWindowId);
 
 private:
     const std::string& GetTypeOfJSON();
