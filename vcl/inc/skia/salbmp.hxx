@@ -139,8 +139,8 @@ private:
 #endif
 
     template <typename charT, typename traits>
-    friend inline std::basic_ostream<charT, traits>&
-    operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalBitmap* bitmap)
+    friend std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                         const SkiaSalBitmap* bitmap)
     {
         if (bitmap == nullptr)
             return stream << "(null)";
@@ -149,19 +149,32 @@ private:
         // A/a - has alpha SkImage (on GPU/CPU)
         // E - has erase color
         // B - has pixel buffer
+        // (wxh) - has pending scaling (after each item)
         stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "x"
                << bitmap->GetBitCount();
         if (bitmap->GetBitCount() <= 8 && !bitmap->Palette().IsGreyPalette8Bit())
             stream << "p";
         stream << "/";
         if (bitmap->mImage)
+        {
             stream << (bitmap->mImage->isTextureBacked() ? "I" : "i");
+            if (SkiaHelper::imageSize(bitmap->mImage) != bitmap->mSize)
+                stream << "(" << SkiaHelper::imageSize(bitmap->mImage) << ")";
+        }
         if (bitmap->mAlphaImage)
+        {
             stream << (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a");
+            if (SkiaHelper::imageSize(bitmap->mAlphaImage) != bitmap->mSize)
+                stream << "(" << SkiaHelper::imageSize(bitmap->mAlphaImage) << ")";
+        }
         if (bitmap->mEraseColorSet)
             stream << "E" << bitmap->mEraseColor;
         if (bitmap->mBuffer)
+        {
             stream << "B";
+            if (bitmap->mSize != bitmap->mPixelsSize)
+                stream << "(" << bitmap->mPixelsSize << ")";
+        }
         return stream;
     }
 
