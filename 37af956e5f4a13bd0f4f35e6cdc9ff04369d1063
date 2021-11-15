@@ -16,6 +16,23 @@
       "message": "seeing that this change was mostly fine, I took the liberty to restore it and do a little tweaking (incl. a revert of needless changes in initializer form, keeping the diff small)",
       "revId": "37af956e5f4a13bd0f4f35e6cdc9ff04369d1063",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9d21d7_879aec78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-15T16:44:34Z",
+      "side": 1,
+      "message": "No pb of course! Thank you for your help! :-)",
+      "revId": "37af956e5f4a13bd0f4f35e6cdc9ff04369d1063",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
