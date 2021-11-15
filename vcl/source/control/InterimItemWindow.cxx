@@ -9,6 +9,8 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/layout.hxx>
+#include <salobj.hxx>
+#include <window.h>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
                                      const OString& rID, bool bAllowCycleFocusOut,
@@ -68,6 +70,24 @@ void InterimItemWindow::queue_resize(StateChangedType eReason)
 }
 
 void InterimItemWindow::Resize() { Layout(); }
+
+void InterimItemWindow::UnclipVisibleSysObj()
+{
+    if (!IsVisible())
+        return;
+    vcl::Window* pChild = m_xVclContentArea->GetWindow(GetWindowType::FirstChild);
+    if (!pChild)
+        return;
+    WindowImpl* pWindowImpl = pChild->ImplGetWindowImpl();
+    if (!pWindowImpl)
+        return;
+    if (!pWindowImpl->mpSysObj)
+        return;
+    pWindowImpl->mpSysObj->Show(true);
+    pWindowImpl->mpSysObj->ResetClipRegion();
+    // flag that sysobj clip is dirty and needs to be recalculated on next use
+    pWindowImpl->mbInitWinClipRegion = true;
+}
 
 IMPL_LINK_NOARG(InterimItemWindow, DoLayout, Timer*, void) { Layout(); }
 
