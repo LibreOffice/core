@@ -47,16 +47,16 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
     Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     try
     {
-        xDesktop = frame::Desktop::create(xContext);
-        xDesktop->addTerminateListener( this );
+        m_xDesktop = frame::Desktop::create(xContext);
+        m_xDesktop->addTerminateListener( this );
 
-        xLngSvcMgr = LinguServiceManager::create(xContext);
-        xLngSvcMgr->addLinguServiceManagerListener( static_cast<XLinguServiceEventListener *>(this) );
+        m_xLngSvcMgr = LinguServiceManager::create(xContext);
+        m_xLngSvcMgr->addLinguServiceManagerListener( static_cast<XLinguServiceEventListener *>(this) );
 
         if (SvtLinguConfig().HasGrammarChecker())
         {
-            xGCIterator = sw::proofreadingiterator::get(xContext);
-            Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
+            m_xGCIterator = sw::proofreadingiterator::get(xContext);
+            Reference< XLinguServiceEventBroadcaster > xBC( m_xGCIterator, UNO_QUERY );
             if (xBC.is())
                 xBC->addLinguServiceEventListener( static_cast<XLinguServiceEventListener *>(this) );
         }
@@ -105,10 +105,10 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
 {
     SolarMutexGuard aGuard;
 
-    if (xLngSvcMgr.is() && rEventObj.Source == xLngSvcMgr)
-        xLngSvcMgr = nullptr;
-    if (xLngSvcMgr.is() && rEventObj.Source == xGCIterator)
-        xGCIterator = nullptr;
+    if (m_xLngSvcMgr.is() && rEventObj.Source == m_xLngSvcMgr)
+        m_xLngSvcMgr = nullptr;
+    if (m_xLngSvcMgr.is() && rEventObj.Source == m_xGCIterator)
+        m_xGCIterator = nullptr;
 }
 
 void SAL_CALL SwLinguServiceEventListener::queryTermination(
@@ -121,13 +121,13 @@ void SAL_CALL SwLinguServiceEventListener::notifyTermination(
 {
     SolarMutexGuard aGuard;
 
-    if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
+    if (m_xDesktop.is()  &&  rEventObj.Source == m_xDesktop)
     {
-        if (xLngSvcMgr.is())
-            xLngSvcMgr = nullptr;
-        if (xGCIterator.is())
-            xGCIterator = nullptr;
-        xDesktop = nullptr;
+        if (m_xLngSvcMgr.is())
+            m_xLngSvcMgr = nullptr;
+        if (m_xGCIterator.is())
+            m_xGCIterator = nullptr;
+        m_xDesktop = nullptr;
     }
 }
 

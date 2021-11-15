@@ -27,7 +27,7 @@ class SwWrtShell;
 
 class SwInsertIdxMarkWrapper final : public SfxChildWindow
 {
-    ScopedVclPtr<AbstractMarkFloatDlg> xAbstDlg;
+    ScopedVclPtr<AbstractMarkFloatDlg> m_xAbstDlg;
 
 public:
     SwInsertIdxMarkWrapper(vcl::Window *pParentWindow,

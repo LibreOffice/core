@@ -54,8 +54,8 @@ void SwTemplateControl::StateChangedAtStatusBarControl(
     const SfxStringItem* pItem = nullptr;
     if (SfxItemState::DEFAULT == eState && (pItem = dynamic_cast<const SfxStringItem*>(pState)))
     {
-        sTemplate = pItem->GetValue();
-        GetStatusBar().SetItemText(GetId(), sTemplate);
+        m_sTemplate = pItem->GetValue();
+        GetStatusBar().SetItemText(GetId(), m_sTemplate);
         GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_TMPLCTRL_HINT));
     }
     else
