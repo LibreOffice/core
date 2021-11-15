@@ -15037,7 +15037,7 @@ public:
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         GtkTreeIter tmp;
-        auto ret = gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &rGtkIter.iter);
+        bool ret = gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &rGtkIter.iter);
         rGtkIter.iter = tmp;
         return ret;
     }
