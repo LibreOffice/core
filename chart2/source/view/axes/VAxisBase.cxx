@@ -159,7 +159,7 @@ void VAxisBase::setExplicitScaleAndIncrement(
 void VAxisBase::createAllTickInfos( TickInfoArraysType& rAllTickInfos )
 {
     std::unique_ptr< TickFactory > apTickFactory( createTickFactory() );
-    if( m_aScale.ShiftedCategoryPosition )
+    if( m_aScale.m_bShiftedCategoryPosition )
         apTickFactory->getAllTicksShifted( rAllTickInfos );
     else
         apTickFactory->getAllTicks( rAllTickInfos );

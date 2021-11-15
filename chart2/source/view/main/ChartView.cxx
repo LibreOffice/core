@@ -1688,7 +1688,7 @@ bool ChartView::getExplicitValuesForAxis(
     {
         rExplicitScale = pVCooSys->getExplicitScale(nDimensionIndex,nAxisIndex);
         rExplicitIncrement = pVCooSys->getExplicitIncrement(nDimensionIndex,nAxisIndex);
-        if( rExplicitScale.ShiftedCategoryPosition )
+        if( rExplicitScale.m_bShiftedCategoryPosition )
         {
             //remove 'one' from max
             if( rExplicitScale.AxisType == css::chart2::AxisType::DATE )
