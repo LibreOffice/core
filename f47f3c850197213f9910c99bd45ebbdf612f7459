@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e32ac001_79d1b119",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-15T13:43:55Z",
+      "side": 1,
+      "message": "it looks like this file is part of an ancient test that has never been converted to the new build system, perhaps it would make sense to do so but if you don\u0027t do that first it doesn\u0027t make a whole lot of sense to patch it...",
+      "revId": "f47f3c850197213f9910c99bd45ebbdf612f7459",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
