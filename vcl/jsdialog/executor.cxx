@@ -34,7 +34,7 @@ StringMap jsonToStringMap(const char* pJSON)
     return aArgs;
 }
 
-void SendFullUpdate(sal_uInt64 nWindowId, const OString& rWidget)
+void SendFullUpdate(const std::string& nWindowId, const OString& rWidget)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
 
@@ -45,7 +45,7 @@ void SendFullUpdate(sal_uInt64 nWindowId, const OString& rWidget)
     }
 }
 
-bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData)
+bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringMap& rData)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
 
