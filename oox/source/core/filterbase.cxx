@@ -33,7 +33,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
 #include <memory>
 #include <mutex>
@@ -72,7 +71,11 @@ struct UrlPool
     ::std::set< OUString > maUrls;
 };
 
-struct StaticUrlPool : public ::rtl::Static< UrlPool, StaticUrlPool > {};
+UrlPool& StaticUrlPool()
+{
+    static UrlPool SINGLETON;
+    return SINGLETON;
+}
 
 /** This guard prevents recursive loading/saving of the same document. */
 class DocumentOpenedGuard
@@ -92,7 +95,7 @@ private:
 
 DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl )
 {
-    UrlPool& rUrlPool = StaticUrlPool::get();
+    UrlPool& rUrlPool = StaticUrlPool();
     std::scoped_lock aGuard( rUrlPool.maMutex );
     mbValid = rUrl.isEmpty() || (rUrlPool.maUrls.count( rUrl ) == 0);
     if( mbValid && !rUrl.isEmpty() )
@@ -104,7 +107,7 @@ DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl )
 
 DocumentOpenedGuard::~DocumentOpenedGuard()
 {
-    UrlPool& rUrlPool = StaticUrlPool::get();
+    UrlPool& rUrlPool = StaticUrlPool();
     std::scoped_lock aGuard( rUrlPool.maMutex );
     if( !maUrl.isEmpty() )
         rUrlPool.maUrls.erase( maUrl );

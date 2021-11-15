@@ -36,7 +36,6 @@
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -92,13 +91,10 @@ using ::sax_fastparser::FastSerializerHelper;
 
 namespace {
 
-struct NamespaceIds: public rtl::StaticWithInit<
-    Sequence< beans::Pair< OUString, sal_Int32 > >,
-    NamespaceIds>
+const Sequence< beans::Pair< OUString, sal_Int32 > >& NamespaceIds()
 {
-    Sequence< beans::Pair< OUString, sal_Int32 > > operator()()
-    {
-        return css::uno::Sequence<css::beans::Pair<OUString, sal_Int32>>{
+    static const Sequence< beans::Pair< OUString, sal_Int32 > > SINGLETON
+        {
             {"http://www.w3.org/XML/1998/namespace", NMSP_xml},
             {"http://schemas.openxmlformats.org/package/2006/relationships",
              NMSP_packageRel},
@@ -151,12 +147,12 @@ struct NamespaceIds: public rtl::StaticWithInit<
             {"http://schemas.microsoft.com/office/drawing/2012/chart",
              NMSP_c15},
         };
-    }
+    return SINGLETON;
 };
 
 void registerNamespaces( FastParser& rParser )
 {
-    const Sequence< beans::Pair<OUString, sal_Int32> >& ids = NamespaceIds::get();
+    const Sequence< beans::Pair<OUString, sal_Int32> >& ids = NamespaceIds();
 
     // Filter out duplicates: a namespace can have multiple URLs, think of
     // strict vs transitional.
@@ -467,7 +463,7 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         rxSerializer->fastSerialize( rxHandler,
                                      mxImpl->maFastParser.getTokenHandler(),
                                      Sequence< StringPair >(),
-                                     NamespaceIds::get() );
+                                     NamespaceIds() );
         return true;
     }
     catch( Exception& )
