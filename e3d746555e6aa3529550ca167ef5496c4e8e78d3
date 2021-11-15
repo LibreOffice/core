@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f946352_e1f6c141",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3313,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-15T12:23:13Z",
+      "side": 1,
+      "message": "There is rtl::Uri::convertRelToAbs(rBaseUriRef,rRelUriRef) in include/rtl/uri.hxx, which (unlike INetURLObject) works solely on generic URI syntax, doing the following:\n* if rRelUriRef already is an absolute URI, it returns it unchanged;\n* otherwise, it makes rRelUriRef absolute relative to rBaseUriRef (i.e., what that original hacky removeSegment/insertName code apparently tried to attempt, too).\nI would suggest using that here and getting rid of the regex_match again.",
+      "revId": "e3d746555e6aa3529550ca167ef5496c4e8e78d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
