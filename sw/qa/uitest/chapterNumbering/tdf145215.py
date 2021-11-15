@@ -27,6 +27,7 @@ class Tdf145215(UITestCase):
 
             # Check field value (there is only one field)
             textfields = writer_doc.getTextFields()
+            textfields.refresh()
             for textfield in textfields:
                 self.assertTrue(textfield.supportsService("com.sun.star.text.TextField.GetReference"))
                 self.assertEqual(textfield.CurrentPresentation, "1.2.1(i)")
