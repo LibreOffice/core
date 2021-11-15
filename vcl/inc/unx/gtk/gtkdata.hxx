@@ -195,6 +195,9 @@ inline GdkGLContext* surface_create_gl_context(GdkSurface* pSurface)
 void set_buildable_id(GtkBuildable* pWidget, const OString& rId);
 OString get_buildable_id(GtkBuildable* pWidget);
 
+void container_remove(GtkWidget* pContainer, GtkWidget* pChild);
+void container_add(GtkWidget* pContainer, GtkWidget* pChild);
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 typedef GtkClipboard GdkClipboard;
 #endif

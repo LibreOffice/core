@@ -735,7 +735,10 @@ GtkSalFrame::~GtkSalFrame()
 #if !GTK_CHECK_VERSION(4,0,0)
             gtk_widget_destroy( m_pWindow );
 #else
-            gtk_window_destroy(GTK_WINDOW(m_pWindow));
+            if (GTK_IS_WINDOW(m_pWindow))
+                gtk_window_destroy(GTK_WINDOW(m_pWindow));
+            else
+                g_clear_pointer(&m_pWindow, gtk_widget_unparent);
 #endif
         }
     }
@@ -906,17 +909,15 @@ void GtkSalFrame::InitCommon()
 #endif
 
     m_pTopLevelGrid = GTK_GRID(gtk_grid_new());
-#if !GTK_CHECK_VERSION(4,0,0)
-    gtk_container_add(GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pTopLevelGrid));
+    container_add(m_pWindow, GTK_WIDGET(m_pTopLevelGrid));
 
+#if !GTK_CHECK_VERSION(4,0,0)
     m_pEventBox = GTK_EVENT_BOX(gtk_event_box_new());
     gtk_widget_add_events( GTK_WIDGET(m_pEventBox),
                            GDK_ALL_EVENTS_MASK );
     gtk_widget_set_vexpand(GTK_WIDGET(m_pEventBox), true);
     gtk_widget_set_hexpand(GTK_WIDGET(m_pEventBox), true);
     gtk_grid_attach(m_pTopLevelGrid, GTK_WIDGET(m_pEventBox), 0, 0, 1, 1);
-#else
-    gtk_window_set_child(GTK_WINDOW(m_pWindow),  GTK_WIDGET(m_pTopLevelGrid));
 #endif
 
     // add the fixed container child,
@@ -1064,7 +1065,8 @@ void GtkSalFrame::InitCommon()
 #else
     g_signal_connect( G_OBJECT(m_pWindow), "map", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap", G_CALLBACK(signalUnmap), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "close-request", G_CALLBACK(signalDelete), this );
+    if (GTK_IS_WINDOW(m_pWindow))
+        g_signal_connect( G_OBJECT(m_pWindow), "close-request", G_CALLBACK(signalDelete), this );
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
@@ -1122,12 +1124,15 @@ void GtkSalFrame::InitCommon()
     // realize the window, we need an XWindow id
     gtk_widget_realize( m_pWindow );
 
+    if (GTK_IS_WINDOW(m_pWindow))
+    {
 #if !GTK_CHECK_VERSION(4,0,0)
-    g_signal_connect(G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this);
+        g_signal_connect(G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this);
 #else
-    GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
-    g_signal_connect(G_OBJECT(gdkWindow), "notify::state", G_CALLBACK(signalWindowState), this);
+        GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
+        g_signal_connect(G_OBJECT(gdkWindow), "notify::state", G_CALLBACK(signalWindowState), this);
 #endif
+    }
 
     //system data
     m_aSystemData.SetWindowHandle(GetNativeWindowHandle(m_pWindow));
@@ -1263,13 +1268,15 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     {
 #if !GTK_CHECK_VERSION(4,0,0)
         m_pWindow = gtk_event_box_new();
+#else
+        m_pWindow = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+#endif
         if( m_pParent )
         {
             // insert into container
             gtk_fixed_put( m_pParent->getFixedContainer(),
                            m_pWindow, 0, 0 );
         }
-#endif
     }
     else
     {
