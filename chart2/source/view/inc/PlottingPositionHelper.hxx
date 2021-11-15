@@ -281,9 +281,9 @@ bool PlottingPositionHelper::isStrongLowerRequested( sal_Int32 nDimensionIndex )
     if( m_aScales.empty() )
         return false;
     if( 0==nDimensionIndex )
-        return m_bAllowShiftXAxisPos && m_aScales[nDimensionIndex].ShiftedCategoryPosition;
+        return m_bAllowShiftXAxisPos && m_aScales[nDimensionIndex].m_bShiftedCategoryPosition;
     else if( 2==nDimensionIndex )
-        return m_bAllowShiftZAxisPos && m_aScales[nDimensionIndex].ShiftedCategoryPosition;
+        return m_bAllowShiftZAxisPos && m_aScales[nDimensionIndex].m_bShiftedCategoryPosition;
     return false;
 }
 
@@ -301,7 +301,7 @@ void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ 
     {
         if( m_aScales[0].Scaling.is())
             *pX = m_aScales[0].Scaling->doScaling(*pX);
-        if( m_bAllowShiftXAxisPos && m_aScales[0].ShiftedCategoryPosition )
+        if( m_bAllowShiftXAxisPos && m_aScales[0].m_bShiftedCategoryPosition )
             (*pX) += m_fScaledCategoryWidth/2.0;
     }
     if(pY && m_aScales[1].Scaling.is())
@@ -310,7 +310,7 @@ void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ 
     {
         if( m_aScales[2].Scaling.is())
             *pZ = m_aScales[2].Scaling->doScaling(*pZ);
-        if( m_bAllowShiftZAxisPos && m_aScales[2].ShiftedCategoryPosition)
+        if( m_bAllowShiftZAxisPos && m_aScales[2].m_bShiftedCategoryPosition)
             (*pZ) += 0.5;
     }
 }

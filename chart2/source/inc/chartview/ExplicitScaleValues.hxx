@@ -48,7 +48,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitScaleData
     css::uno::Reference<css::chart2::XScaling> Scaling;
 
     sal_Int32 AxisType; //see css::chart2::AxisType
-    bool ShiftedCategoryPosition;
+    bool m_bShiftedCategoryPosition;
     sal_Int32 TimeResolution; //constant of type <type>css::chart::TimeUnit</type>
     Date NullDate;
 };

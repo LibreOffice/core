@@ -1912,13 +1912,13 @@ void VCartesianAxis::createShapes()
         //create normal ticks for major and minor intervals
         {
             TickInfoArraysType aUnshiftedTickInfos;
-            if( m_aScale.ShiftedCategoryPosition )// if ShiftedCategoryPosition==true the tickmarks in m_aAllTickInfos are shifted
+            if( m_aScale.m_bShiftedCategoryPosition )// if m_bShiftedCategoryPosition==true the tickmarks in m_aAllTickInfos are shifted
             {
                 pTickFactory2D->getAllTicks( aUnshiftedTickInfos );
                 pTickFactory2D->updateScreenValues( aUnshiftedTickInfos );
                 hideIdenticalScreenValues( aUnshiftedTickInfos );
             }
-            TickInfoArraysType& rAllTickInfos = m_aScale.ShiftedCategoryPosition ? aUnshiftedTickInfos : m_aAllTickInfos;
+            TickInfoArraysType& rAllTickInfos = m_aScale.m_bShiftedCategoryPosition ? aUnshiftedTickInfos : m_aAllTickInfos;
 
             if (rAllTickInfos.empty())
                 return;

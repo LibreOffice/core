@@ -65,7 +65,7 @@ ExplicitScaleData::ExplicitScaleData()
     , Origin(0.0)
     , Orientation(css::chart2::AxisOrientation_MATHEMATICAL)
     , AxisType(css::chart2::AxisType::REALNUMBER)
-    , ShiftedCategoryPosition(false)
+    , m_bShiftedCategoryPosition(false)
     , TimeResolution(css::chart::TimeUnit::DAY)
     , NullDate(30,12,1899)
 {
@@ -202,7 +202,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
 
     //fill explicit increment
 
-    rExplicitScale.ShiftedCategoryPosition = m_aSourceScale.ShiftedCategoryPosition;
+    rExplicitScale.m_bShiftedCategoryPosition = m_aSourceScale.ShiftedCategoryPosition;
     bool bIsLogarithm = false;
 
     //minimum and maximum of the ExplicitScaleData may be changed if allowed
@@ -242,7 +242,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
     // no scaling for categories
     rExplicitScale.Scaling.clear();
 
-    if( rExplicitScale.ShiftedCategoryPosition )
+    if( rExplicitScale.m_bShiftedCategoryPosition )
         rExplicitScale.Maximum += 1.0;
 
     // ensure that at least one category is visible
@@ -565,13 +565,13 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
     switch( rExplicitScale.TimeResolution )
     {
     case DAY:
-        if( rExplicitScale.ShiftedCategoryPosition )
+        if( rExplicitScale.m_bShiftedCategoryPosition )
             ++aMaxDate; //for explicit scales we need one interval more (maximum excluded)
         break;
     case MONTH:
         aMinDate.SetDay(1);
         aMaxDate.SetDay(1);
-        if( rExplicitScale.ShiftedCategoryPosition )
+        if( rExplicitScale.m_bShiftedCategoryPosition )
             aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,1);//for explicit scales we need one interval more (maximum excluded)
         if( DateHelper::IsLessThanOneMonthAway( aMinDate, aMaxDate ) )
         {
@@ -586,7 +586,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         aMinDate.SetMonth(1);
         aMaxDate.SetDay(1);
         aMaxDate.SetMonth(1);
-        if( rExplicitScale.ShiftedCategoryPosition )
+        if( rExplicitScale.m_bShiftedCategoryPosition )
             aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate,1);//for explicit scales we need one interval more (maximum excluded)
         if( DateHelper::IsLessThanOneYearAway( aMinDate, aMaxDate ) )
         {
