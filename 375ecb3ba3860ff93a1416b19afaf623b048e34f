@@ -16,6 +16,24 @@
       "message": "should it be tdf#139444 instead ?",
       "revId": "375ecb3ba3860ff93a1416b19afaf623b048e34f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a68b1f09_6d56739f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-15T15:23:21Z",
+      "side": 1,
+      "message": "Not really, it\u0027s more important for the bugreport I used.",
+      "parentUuid": "364b35ab_fa054ab0",
+      "revId": "375ecb3ba3860ff93a1416b19afaf623b048e34f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
