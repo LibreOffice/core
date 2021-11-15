@@ -69,6 +69,24 @@
       "parentUuid": "fcccfb73_ed28612c",
       "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99e0d181_d2558153",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-15T23:55:25Z",
+      "side": 1,
+      "message": "\u003e That said - the speedup relative to PCH builds is negligible (I\u0027m getting less than 10% faster builds, with fully hot ccache, vs. a plain PCH build).\n\nNot here. A randomly chosen \u0027time make starmath\u0027 after \u0027make starmath.clean\u0027 is down 50% (~36s-\u003e~18s) and like 10s of that is not compiling .cxx files.\n \n\u003e Is the added complexity really worth it?\n\nGiven that there\u0027s not that much of added complexity, I say yes. Does sccache perform that much better for you that you do find it worth the added complexity?",
+      "parentUuid": "036b272f_f33ed98a",
+      "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
