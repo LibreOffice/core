@@ -5851,25 +5851,28 @@ enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
 /// Wrapper around pOut->DrawBitmapEx.
 static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoint, const Size& aSize, const BitmapEx& rBitmapEx, PaintArea eArea)
 {
-    // The problem is that if we get called multiple times and the color is
-    // partly transparent, then the result will get darker and darker. To avoid
-    // this, always paint the background color before doing the real paint.
-    tools::Rectangle aRect(aPoint, aSize);
-
-    if (!aRect.IsEmpty())
+    if(!comphelper::LibreOfficeKit::isActive())
     {
-        switch (eArea)
-        {
-        case LEFT: aRect.SetLeft( aRect.Right() - 1 ); break;
-        case RIGHT: aRect.SetRight( aRect.Left() + 1 ); break;
-        case TOP: aRect.SetTop( aRect.Bottom() - 1 ); break;
-        case BOTTOM: aRect.SetBottom( aRect.Top() + 1 ); break;
-        }
-    }
+        // The problem is that if we get called multiple times and the color is
+        // partly transparent, then the result will get darker and darker. To avoid
+        // this, always paint the background color before doing the real paint.
+        tools::Rectangle aRect(aPoint, aSize);
 
-    pOut->SetFillColor(SwViewOption::GetAppBackgroundColor());
-    pOut->SetLineColor();
-    pOut->DrawRect(pOut->PixelToLogic(aRect));
+        if (!aRect.IsEmpty())
+        {
+            switch (eArea)
+            {
+            case LEFT: aRect.SetLeft( aRect.Right() - 1 ); break;
+            case RIGHT: aRect.SetRight( aRect.Left() + 1 ); break;
+            case TOP: aRect.SetTop( aRect.Bottom() - 1 ); break;
+            case BOTTOM: aRect.SetBottom( aRect.Top() + 1 ); break;
+            }
+        }
+
+        pOut->SetFillColor(SwViewOption::GetAppBackgroundColor());
+        pOut->SetLineColor();
+        pOut->DrawRect(pOut->PixelToLogic(aRect));
+    }
 
     // Tiled render if necessary
     tools::Rectangle aComplete(aPoint, aSize);
