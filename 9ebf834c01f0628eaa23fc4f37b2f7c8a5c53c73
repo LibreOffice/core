@@ -85,6 +85,24 @@
       "message": "There is nothing in DOCX that has anything to do with Chapter Numbering. That is strictly a LO thing. Vasily\u0027s patch also has nothing to do with Chapter Numbering, so any use of CN is incidental to the issue.\n\nIt seems like any change to the document (like adding a new, empty paragraph earlier in the list) should trigger the reference change (to only i), so the test could be simplified to remove any CN elements. On the other hand, it is already in master, so any breaking changes should be caught by master anyway. So just removing the test in the backport should also be fine.",
       "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b507b22_03e9f456",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-15T05:18:25Z",
+      "side": 1,
+      "message": "s/deliberated/deliberately/",
+      "parentUuid": "7857c99a_87b51e76",
+      "revId": "9ebf834c01f0628eaa23fc4f37b2f7c8a5c53c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
