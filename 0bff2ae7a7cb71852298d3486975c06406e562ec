@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26155406_29e2e786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-15T12:22:29Z",
+      "side": 1,
+      "message": "Oops, sorry for the double resume, I was the second one.",
+      "revId": "0bff2ae7a7cb71852298d3486975c06406e562ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
