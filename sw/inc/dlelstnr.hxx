@@ -46,9 +46,9 @@ class SwLinguServiceEventListener final :
         css::frame::XTerminateListener
     >
 {
-    css::uno::Reference<css::frame::XDesktop2 >                      xDesktop;
-    css::uno::Reference<css::linguistic2::XLinguServiceManager2 >    xLngSvcMgr;
-    css::uno::Reference<css::linguistic2::XProofreadingIterator >    xGCIterator;
+    css::uno::Reference<css::frame::XDesktop2 >                      m_xDesktop;
+    css::uno::Reference<css::linguistic2::XLinguServiceManager2 >    m_xLngSvcMgr;
+    css::uno::Reference<css::linguistic2::XProofreadingIterator >    m_xGCIterator;
 
     SwLinguServiceEventListener(const SwLinguServiceEventListener &) = delete;
     SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &) = delete;

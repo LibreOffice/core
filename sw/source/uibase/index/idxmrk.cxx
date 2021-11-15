@@ -30,8 +30,8 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( vcl::Window *pParentWindow,
         SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    xAbstDlg = pFact->CreateIndexMarkFloatDlg(pBindings, this, pParentWindow->GetFrameWeld(), pInfo);
-    SetController(xAbstDlg->GetController());
+    m_xAbstDlg = pFact->CreateIndexMarkFloatDlg(pBindings, this, pParentWindow->GetFrameWeld(), pInfo);
+    SetController(m_xAbstDlg->GetController());
 }
 
 SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
@@ -43,7 +43,7 @@ SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
 
 void SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    xAbstDlg->ReInitDlg(rWrtShell);
+    m_xAbstDlg->ReInitDlg(rWrtShell);
 }
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwInsertAuthMarkWrapper, FN_INSERT_AUTH_ENTRY_DLG)

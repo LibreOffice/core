@@ -36,7 +36,7 @@ public:
     virtual ~SwTemplateControl() override;
 
 private:
-    OUString sTemplate;
+    OUString m_sTemplate;
 };
 
 #endif

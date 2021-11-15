@@ -61,13 +61,13 @@ enum class RegionMode
 //mini rtti
 class SwTypeNumber
 {
-    sal_uInt8 nTypeId;
+    sal_uInt8 m_nTypeId;
 
     public:
-        SwTypeNumber(sal_uInt8 nId) :nTypeId(nId){}
+        SwTypeNumber(sal_uInt8 nId) :m_nTypeId(nId){}
         virtual ~SwTypeNumber();
 
-        sal_uInt8 GetTypeId() const { return nTypeId;}
+        sal_uInt8 GetTypeId() const { return m_nTypeId;}
 };
 
 class SwContent : public SwTypeNumber
