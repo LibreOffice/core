@@ -5979,7 +5979,6 @@ namespace
         return Point(x, y);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     void do_collect_screenshot_data(GtkWidget* pItem, gpointer data)
     {
         GtkWidget* pTopLevel = widget_get_toplevel(pItem);
@@ -6001,12 +6000,17 @@ namespace
             pCollection->emplace_back(::get_help_id(pItem), aCurrentRange);
         }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (GtkWidget* pChild = gtk_widget_get_first_child(pItem);
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            do_collect_screenshot_data(pChild, data);
+        }
+#else
         if (GTK_IS_CONTAINER(pItem))
             gtk_container_forall(GTK_CONTAINER(pItem), do_collect_screenshot_data, data);
 #endif
     }
-#endif
 
     tools::Rectangle get_monitor_workarea(GtkWidget* pWindow)
     {
@@ -6340,7 +6344,13 @@ public:
     {
         weld::ScreenShotCollection aRet;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (GtkWidget* pChild = gtk_widget_get_first_child(GTK_WIDGET(m_pWindow));
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            do_collect_screenshot_data(pChild, &aRet);
+        }
+#else
         gtk_container_foreach(GTK_CONTAINER(m_pWindow), do_collect_screenshot_data, &aRet);
 #endif
 
