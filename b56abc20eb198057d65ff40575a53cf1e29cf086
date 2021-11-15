@@ -70,6 +70,30 @@
       },
       "revId": "b56abc20eb198057d65ff40575a53cf1e29cf086",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be89475a_1ac6c979",
+        "filename": "odk/examples/cpp/counter/counter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-15T10:12:32Z",
+      "side": 1,
+      "message": "* \"Is \\n reliable...\":  You mean, does it cover the Unix LF vs. Windows CRLF difference?  Yes, of course.\n\n* \"use something \u0027standard\u0027\":  \\n *is* the standard way of outputting a line end, whereas std::endl is a very special, rarely needed tool.",
+      "parentUuid": "6aa37ec1_9acbdbe7",
+      "range": {
+        "startLine": 80,
+        "startChar": 58,
+        "endLine": 80,
+        "endChar": 67
+      },
+      "revId": "b56abc20eb198057d65ff40575a53cf1e29cf086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
