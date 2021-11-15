@@ -210,7 +210,7 @@ public:
     }
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
     {
-        static const OUString sFieldId = aOOOAttrFooterField;
+        static constexpr OUStringLiteral sFieldId = aOOOAttrFooterField;
         implGrowCharSet( aTextFieldCharSets, text, sFieldId );
     }
 };
@@ -2649,9 +2649,9 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
             }
             bool bHasCharSetMap = mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) != mTextFieldCharSets.end();
 
-            static const OUString aHeaderId( NSPREFIX "header-field" );
-            static const OUString aFooterId( aOOOAttrFooterField );
-            static const OUString aDateTimeId( aOOOAttrDateTimeField );
+            static constexpr OUStringLiteral aHeaderId( NSPREFIX "header-field" );
+            static constexpr OUStringLiteral aFooterId( aOOOAttrFooterField );
+            static constexpr OUStringLiteral aDateTimeId( aOOOAttrDateTimeField );
             static const OUString aVariableDateTimeId( aOOOAttrDateTimeField + "-variable" );
 
             const UCharSet * pCharSet = nullptr;
