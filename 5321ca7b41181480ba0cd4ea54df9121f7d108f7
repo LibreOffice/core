@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "050c767d_1046b8a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-11-15T09:24:04Z",
+      "side": 1,
+      "message": "I\u0027ve stripped down testcase: checking stuff in \"Chapter Numbering\" dialog is not essential to verify this bug fixed. Since we do not port tdf#141964 these tests aren\u0027t working well in 7.2.\n\nRight now usage of UI test (instead of ooxmlexport) is a bit redundant: no UI stuff is checked here anymore. But I hope it is not so critical.",
+      "revId": "5321ca7b41181480ba0cd4ea54df9121f7d108f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
