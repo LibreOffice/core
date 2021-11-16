@@ -2593,11 +2593,6 @@ public:
 
                         if (nIndex < 0)
                             nStrPos = -1;
-                        else if (rEntry.eOp == SC_EQUAL ||
-                                 rEntry.eOp == SC_NOT_EQUAL)
-                        {
-                            nStrPos = pCellStr == pQuer ? 0 : -1;
-                        }
                         else
                         { // OUString::indexOf
                             nStrPos = rtl_ustr_indexOfStr_WithLength(
@@ -2629,14 +2624,10 @@ public:
                     switch (rEntry.eOp)
                     {
                     case SC_EQUAL:
-                        bOk = ( nStrPos == 0 );
-                        break;
                     case SC_CONTAINS:
                         bOk = ( nStrPos != -1 );
                         break;
                     case SC_NOT_EQUAL:
-                        bOk = ( nStrPos != 0 );
-                        break;
                     case SC_DOES_NOT_CONTAIN:
                         bOk = ( nStrPos == -1 );
                         break;
