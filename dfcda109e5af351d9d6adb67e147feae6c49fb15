@@ -87,6 +87,24 @@
       "parentUuid": "036b272f_f33ed98a",
       "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ebe4004_00402d10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-11-16T00:36:36Z",
+      "side": 1,
+      "message": "Full rebuild here (no tests run), 32m24s hot ccache, vs 35m03s pch-only. But sure, if it solves a problem for you...\n\nThe size of this change (plus the related, earlier changes) is clearly an order of magnitude larger compared to the bit of configury added for sccache.",
+      "parentUuid": "99e0d181_d2558153",
+      "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
