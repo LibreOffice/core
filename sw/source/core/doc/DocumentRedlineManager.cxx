@@ -1320,7 +1320,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             switch( pRedl->GetType() )
             {
             case RedlineType::Insert:
-                if( pRedl->IsOwnRedline( *pNewRedl ) )
+                if( pRedl->IsOwnRedline( *pNewRedl ) &&
+                    // don't join inserted characters with moved text
+                    !pRedl->IsMoved() )
                 {
                     bool bDelete = false;
 
@@ -1395,6 +1397,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         delete pNewRedl;
                         pNewRedl = nullptr;
                         bCompress = true;
+
+                        // set IsMoved checking nearby redlines
+                        maRedlineTable.isMoved(n);
                     }
                 }
                 else if( SwComparePosition::Inside == eCmpPos )

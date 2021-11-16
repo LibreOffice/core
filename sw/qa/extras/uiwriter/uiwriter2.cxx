@@ -3663,6 +3663,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf125916_redline_restart_numbering)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf125916.docx");
 
+    // moveFrom/moveTo are imported as separated redlines from fixing tdf#145718.
+    // Accept the first inline moveFrom redline before accepting the remaining ones
+    // to leave a paragraph long deletion to test the fix for tdf#125916.
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell->GetRedlineCount() > 0);
+    pEditShell->AcceptRedline(0);
+
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.AcceptAllRedline(true);
 
