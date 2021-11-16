@@ -1580,6 +1580,87 @@ TestResult OutputDeviceTestAnotherOutDev::checkXOR(Bitmap& rBitmap)
 }
 
 
+TestResult OutputDeviceTestBitmap::checkTransformedBitmap(Bitmap& rBitmap)
+{
+    std::vector<Color> aExpected
+    {
+        constBackgroundColor, constBackgroundColor,
+        COL_YELLOW, constFillColor, COL_YELLOW, constFillColor, constFillColor
+    };
+    return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestBitmap::checkComplexTransformedBitmap(Bitmap& rBitmap)
+{
+    TestResult aReturnValue = TestResult::Passed;
+    TestResult eResult;
+    eResult = checkRectangle(rBitmap, 0, constBackgroundColor); // outer line not affected
+    checkResult(eResult, aReturnValue);
+    // empty "corners" should not be affected
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(1, 11), Size(2, 2)), constBackgroundColor);
+    checkResult(eResult, aReturnValue);
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(14, 1), Size(2, 2)), constBackgroundColor);
+    // check the middle
+    eResult = checkFilled(rBitmap, tools::Rectangle(Point(4, 3), Size(9, 8)), constFillColor);
+    checkResult(eResult, aReturnValue);
+    checkResult(eResult, aReturnValue);
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+    BitmapScopedWriteAccess pAccess(rBitmap);
+    // starting and ending corner, headless draws with AA, so be lenient
+    checkValue(pAccess, 1, 1, constFillColor, nNumberOfQuirks, nNumberOfErrors, 0, 192);
+    checkValue(pAccess, 2, 2, constFillColor, nNumberOfQuirks, nNumberOfErrors, 0, 16);
+    checkValue(pAccess, 14, 11, constFillColor, nNumberOfQuirks, nNumberOfErrors, 0, 16);
+    checkValue(pAccess, 15, 12, constFillColor, nNumberOfQuirks, nNumberOfErrors, 0, 192);
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aReturnValue);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aReturnValue);
+    return aReturnValue;
+}
+
+TestResult OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(Bitmap& rBitmap)
+{
+    std::vector<Color> aExpected
+    {
+        Color(0xC0,0xC0,0xC0), Color(0xC0,0xC0,0xC0),
+        Color(0xE2,0xE2,0xE2), Color(0xE,0xE,0xE), Color(0xE2,0xE2,0xE2), Color(0xE,0xE,0xE), Color(0xE,0xE,0xE)
+    };
+    return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestBitmap::checkBitmapExWithAlpha(Bitmap& rBitmap)
+{
+    const Color aBlendedColor(0xEE, 0xEE, 0x33);
+
+    std::vector<Color> aExpected
+    {
+        constBackgroundColor, constBackgroundColor,
+        aBlendedColor, constBackgroundColor, constBackgroundColor,
+        aBlendedColor, constBackgroundColor
+    };
+    return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestBitmap::checkMask(Bitmap& rBitmap)
+{
+    return checkRectangle(rBitmap);
+}
+
+TestResult OutputDeviceTestBitmap::checkBlend(const BitmapEx& rBitmapEx)
+{
+    const Color aBlendedColor(0xEE, 0xEE, 0x33);
+
+    std::vector<Color> aExpected
+    {
+        COL_WHITE, COL_WHITE, COL_YELLOW, constBackgroundColor,
+        constBackgroundColor, aBlendedColor, constBackgroundColor
+    };
+    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    return checkRectangles(aBitmap, aExpected);
+}
+
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
