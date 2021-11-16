@@ -2406,8 +2406,7 @@ bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
 bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew)
 {
     bool bRet = false;
-    SvStringsISortDtor* pExceptList = LoadWrdSttExceptList();
-    if( !rNew.isEmpty() && pExceptList && pExceptList->insert( rNew ).second )
+    if( !rNew.isEmpty() && GetWrdSttExceptList()->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
         tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
