@@ -33,6 +33,24 @@
       "message": "I am getting this error when trying to use file open dialog (pressing ctrl+o):\n\n...\nwarn:vcl.gtk:141465:141465:vcl/unx/gtk4/fpicker/../../gtk3/fpicker/SalGtkFilePicker.cxx:953: no parent widget set\n\n(soffice:141465): GLib-GIO-ERROR **: 14:45:20.815: Settings schema \u0027org.gtk.gtk4.Settings.FileChooser\u0027 is not installed\n\n\nFatal exception: Signal 5\n...",
       "revId": "f223e23481d23bd8e0c7801c884a53abbff69ee0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af949b0b_70e46de9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-16T12:09:57Z",
+      "side": 1,
+      "message": "no idea what that might be, maybe try gtk4-demo and run the \"Application Class\" demo and use its \"Application, Open\" menu entry which launches the gtk file dialog and see if its also affected and so have a generic problem not specific to libreoffice",
+      "parentUuid": "35ce82c9_256153db",
+      "revId": "f223e23481d23bd8e0c7801c884a53abbff69ee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
