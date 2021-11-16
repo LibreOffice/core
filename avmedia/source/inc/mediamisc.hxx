@@ -33,7 +33,7 @@
 #endif
 
 // Mime types
-#define AVMEDIA_MIMETYPE_COMMON "application/vnd.sun.star.media"
+inline constexpr OUStringLiteral AVMEDIA_MIMETYPE_COMMON = u"application/vnd.sun.star.media";
 
 inline OUString AvmResId(TranslateId aId)
 {
