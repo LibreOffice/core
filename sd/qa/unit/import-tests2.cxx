@@ -118,6 +118,7 @@ public:
     void testTdf103792();
     void testTdf103876();
     void testTdf79007();
+    void testTdf118776();
     void testTdf129686();
     void testTdf104015();
     void testTdf104201();
@@ -183,6 +184,7 @@ public:
     CPPUNIT_TEST(testTdf103792);
     CPPUNIT_TEST(testTdf103876);
     CPPUNIT_TEST(testTdf79007);
+    CPPUNIT_TEST(testTdf118776);
     CPPUNIT_TEST(testTdf129686);
     CPPUNIT_TEST(testTdf104015);
     CPPUNIT_TEST(testTdf104201);
@@ -543,6 +545,27 @@ void SdImportTest2::testTdf79007()
     sal_Int16 nLuminance3;
     xShape3->getPropertyValue("AdjustLuminance") >>= nLuminance3;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nLuminance3);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf118776()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf118776.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+
+    // Get first paragraph of the text
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+
+    // Get first run of the paragraph
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+    sal_Int16 nTransparency = 0;
+    xPropSet->getPropertyValue("CharTransparence") >>= nTransparency;
+
+    // Import noFill color as 99% transparency
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(99), nTransparency);
 
     xDocShRef->DoClose();
 }

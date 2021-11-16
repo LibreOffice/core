@@ -111,6 +111,11 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if ( maFillProperties.moFillType.has() )
     {
         Color aColor = maFillProperties.getBestSolidColor();
+
+        // noFill doesn't exist for characters. Map noFill to 99% transparency
+        if (maFillProperties.moFillType.get() == XML_noFill)
+            aColor.addTransformation(XML_alpha, 1000);
+
         // tdf#137438 Emulate text outline color/transparency.
         // If the outline color dominates, then use it as the text color.
         if (moTextOutlineProperties.has()
