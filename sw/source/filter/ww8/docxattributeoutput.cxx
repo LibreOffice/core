@@ -587,7 +587,7 @@ static void lcl_deleteAndResetTheLists(
     rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
     rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
     rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTextAttrs,
-    OUString& rSdtPrAlias)
+    OUString& rSdtPrAlias, OUString& rSdtPrPlaceholderDocPart, OUString& rColor)
 {
     if( pSdtPrTokenChildren.is() )
         pSdtPrTokenChildren.clear();
@@ -597,6 +597,10 @@ static void lcl_deleteAndResetTheLists(
         pSdtPrTextAttrs.clear();
     if (!rSdtPrAlias.isEmpty())
         rSdtPrAlias.clear();
+    if (!rSdtPrPlaceholderDocPart.isEmpty())
+        rSdtPrPlaceholderDocPart.clear();
+    if (!rColor.isEmpty())
+        rColor.clear();
 }
 
 void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFormat, const Size& rSize)
@@ -803,14 +807,20 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->endElementNS( XML_w, XML_p );
     // on export sdt blocks are never nested ATM
     if( !m_bAnchorLinkedToNode && !m_bStartedParaSdt )
-        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrTokenAttributes, m_pParagraphSdtPrDataBindingAttrs, m_pParagraphSdtPrTextAttrs, m_aParagraphSdtPrAlias, /*bPara=*/true );
+        WriteSdtBlock(m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren,
+                      m_pParagraphSdtPrTokenAttributes, m_pParagraphSdtPrDataBindingAttrs,
+                      m_pParagraphSdtPrTextAttrs, m_aParagraphSdtPrAlias,
+                      m_aParagraphSdtPrPlaceHolderDocPart, m_aParagraphSdtPrColor, /*bPara=*/true);
     else
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_nParagraphSdtPrToken = 0;
         m_bParagraphSdtHasId = false;
-        lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_pParagraphSdtPrTextAttrs, m_aParagraphSdtPrAlias );
+        lcl_deleteAndResetTheLists(m_pParagraphSdtPrTokenChildren,
+                                   m_pParagraphSdtPrDataBindingAttrs, m_pParagraphSdtPrTextAttrs,
+                                   m_aParagraphSdtPrAlias, m_aParagraphSdtPrPlaceHolderDocPart,
+                                   m_aParagraphSdtPrColor);
     }
 
     m_pSerializer->mark(Tag_StartParagraph_2);
@@ -849,9 +859,11 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                          rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                                          rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTextAttrs,
                                          OUString& rSdtPrAlias,
+                                         OUString& rSdtPrPlaceholderDocPart,
+                                         OUString& rColor,
                                          bool bPara )
 {
-    if( nSdtPrToken <= 0 && !pSdtPrDataBindingAttrs.is() )
+    if( nSdtPrToken <= 0 && !pSdtPrDataBindingAttrs.is() && !m_bParagraphSdtHasId)
         return;
 
     // sdt start mark
@@ -908,6 +920,17 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         m_pSerializer->singleElementNS(XML_w, XML_text, xAttrList);
     }
 
+    if (!rSdtPrPlaceholderDocPart.isEmpty())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_placeholder);
+        m_pSerializer->singleElementNS(XML_w, XML_docPart, FSNS(XML_w, XML_val), rSdtPrPlaceholderDocPart);
+        m_pSerializer->endElementNS(XML_w, XML_placeholder);
+    }
+    if (!rColor.isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w15, XML_color, FSNS(XML_w, XML_val), rColor);
+    }
+
     if (!rSdtPrAlias.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val), rSdtPrAlias);
 
@@ -938,7 +961,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
     pSdtPrDataBindingAttrs.clear();
     pSdtPrTextAttrs.clear();
     rSdtPrAlias.clear();
-
+    m_bParagraphSdtHasId = false;
 }
 
 void DocxAttributeOutput::EndSdtBlock()
@@ -1616,14 +1639,18 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
     {
         rtl::Reference<sax_fastparser::FastAttributeList> pRunSdtPrTokenAttributes;
-        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes, m_pRunSdtPrDataBindingAttrs, m_pRunSdtPrTextAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
+        WriteSdtBlock(m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes,
+                      m_pRunSdtPrDataBindingAttrs, m_pRunSdtPrTextAttrs, m_aRunSdtPrAlias,
+                      m_aRunSdtPrPlaceHolderDocPart, m_aRunSdtPrColor, /*bPara=*/false);
     }
     else
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_nRunSdtPrToken = 0;
-        lcl_deleteAndResetTheLists( m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, m_pRunSdtPrTextAttrs, m_aRunSdtPrAlias );
+        lcl_deleteAndResetTheLists(m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs,
+                                   m_pRunSdtPrTextAttrs, m_aRunSdtPrAlias,
+                                   m_aRunSdtPrPlaceHolderDocPart, m_aRunSdtPrColor);
     }
 
     if (bCloseEarlierSDT)
@@ -9836,7 +9863,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                         for (const auto& rProp : std::as_const(aGrabBag))
                         {
                             OUString sValue = rProp.Value.get<OUString>();
-                            if (rProp.Name == "ooxml:LN_CT_SdtText_multiLine")
+                            if (rProp.Name == "ooxml:CT_SdtText_multiLine")
                                 AddToAttrList(m_pParagraphSdtPrTextAttrs,
                                     FSNS(XML_w, XML_multiLine),
                                     OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
@@ -9867,6 +9894,28 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                             AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_storeItemID ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPlaceholder_docPart")
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (const auto& rProp : std::as_const(aGrabBag))
+                    {
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_SdtPlaceholder_docPart_val")
+                            m_aParagraphSdtPrPlaceHolderDocPart = sValue;
+                    }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_color")
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (const auto& rProp : std::as_const(aGrabBag))
+                    {
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_SdtColor_val")
+                            m_aParagraphSdtPrColor = sValue;
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_alias" && m_aParagraphSdtPrAlias.isEmpty())
@@ -10070,7 +10119,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                     for (const auto& rProp : std::as_const(aGrabBag))
                     {
                         OUString sValue = rProp.Value.get<OUString>();
-                        if (rProp.Name == "ooxml:LN_CT_SdtText_multiLine")
+                        if (rProp.Name == "ooxml:CT_SdtText_multiLine")
                             AddToAttrList(m_pRunSdtPrTextAttrs,
                                 FSNS(XML_w, XML_multiLine),
                                 OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
@@ -10095,6 +10144,28 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                             AddToAttrList( m_pRunSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_storeItemID ),
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPlaceholder_docPart")
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (const auto& rProp : std::as_const(aGrabBag))
+                    {
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_SdtPlaceholder_docPart_val")
+                            m_aRunSdtPrPlaceHolderDocPart = sValue;
+                    }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_color")
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (const auto& rProp : std::as_const(aGrabBag))
+                    {
+                        OUString sValue = rProp.Value.get<OUString>();
+                        if (rProp.Name == "ooxml:CT_SdtColor_val")
+                            m_aRunSdtPrColor = sValue;
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_alias" && m_aRunSdtPrAlias.isEmpty())

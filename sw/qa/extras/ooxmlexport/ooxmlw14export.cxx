@@ -248,7 +248,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_McIgnorable, "TextEffects_StylisticSets
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
-    assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14");
+    assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14 w15");
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
 
