@@ -41,6 +41,7 @@ writerfilter_OOXMLNAMESPACES= \
 	vml-wordprocessingDrawing \
 	wp14 \
 	w14 \
+	w15 \
 	a14 \
 	wml
 
