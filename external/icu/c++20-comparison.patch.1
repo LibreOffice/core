@@ -1,0 +1,82 @@
+diff -ur icu.org/source/i18n/unicode/rbtz.h icu/source/i18n/unicode/rbtz.h
+--- icu.org/source/i18n/unicode/rbtz.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/unicode/rbtz.h	2021-11-15 18:56:24.364137609 +0100
+@@ -87,6 +87,7 @@
+      * @stable ICU 3.8
+      */
+     virtual bool operator!=(const TimeZone& that) const;
++    bool operator!=(const RuleBasedTimeZone& that) const {return !operator==(that);}
+ 
+     /**
+      * Adds the `TimeZoneRule` which represents time transitions.
+diff -ur icu.org/source/i18n/unicode/simpletz.h icu/source/i18n/unicode/simpletz.h
+--- icu.org/source/i18n/unicode/simpletz.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/unicode/simpletz.h	2021-11-15 19:01:41.774487719 +0100
+@@ -112,6 +112,7 @@
+      * @stable ICU 2.0
+      */
+     virtual bool operator==(const TimeZone& that) const override;
++    bool operator!=(const SimpleTimeZone& that) const {return !operator==(that);}
+ 
+     /**
+      * Constructs a SimpleTimeZone with the given raw GMT offset and time zone ID,
+diff -ur icu.org/source/i18n/unicode/smpdtfmt.h icu/source/i18n/unicode/smpdtfmt.h
+--- icu.org/source/i18n/unicode/smpdtfmt.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/unicode/smpdtfmt.h	2021-11-15 19:02:47.382353381 +0100
+@@ -877,6 +877,7 @@
+      * @stable ICU 2.0
+      */
+     virtual bool operator==(const Format& other) const override;
++    bool operator!=(const SimpleDateFormat& that) const {return !operator==(that);}
+ 
+ 
+     using DateFormat::format;
+diff -ur icu.org/source/i18n/unicode/stsearch.h icu/source/i18n/unicode/stsearch.h
+--- icu.org/source/i18n/unicode/stsearch.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/unicode/stsearch.h	2021-11-15 19:03:27.014272230 +0100
+@@ -298,6 +298,7 @@
+      * @stable ICU 2.0
+      */
+     virtual bool operator==(const SearchIterator &that) const override;
++    bool operator!=(const StringSearch &that) const {return !operator==(that);}
+ 
+     // public get and set methods ----------------------------------------
+ 
+diff -ur icu.org/source/i18n/unicode/tzrule.h icu/source/i18n/unicode/tzrule.h
+--- icu.org/source/i18n/unicode/tzrule.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/unicode/tzrule.h	2021-11-15 19:14:52.191331967 +0100
+@@ -257,6 +257,7 @@
+      * @stable ICU 3.8
+      */
+     virtual bool operator!=(const TimeZoneRule& that) const override;
++    bool operator!=(const InitialTimeZoneRule& that) const {return !operator==(that);}
+ 
+     /**
+      * Gets the time when this rule takes effect in the given year.
+@@ -468,6 +469,7 @@
+      * @stable ICU 3.8
+      */
+     virtual bool operator!=(const TimeZoneRule& that) const override;
++    bool operator!=(const AnnualTimeZoneRule& that) const {return !operator==(that);}
+ 
+     /**
+      * Gets the start date/time rule used by this rule.
+@@ -684,6 +686,7 @@
+      * @stable ICU 3.8
+      */
+     virtual bool operator!=(const TimeZoneRule& that) const override;
++    bool operator!=(const TimeArrayTimeZoneRule& that) const {return !operator==(that);}
+ 
+     /**
+      * Gets the time type of the start times used by this rule.  The return value
+diff -ur icu.org/source/i18n/unicode/vtzone.h icu/source/i18n/unicode/vtzone.h
+--- icu.org/source/i18n/unicode/vtzone.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/unicode/vtzone.h	2021-11-15 19:16:07.461130004 +0100
+@@ -83,6 +83,7 @@
+      * @stable ICU 3.8
+      */
+     virtual bool operator!=(const TimeZone& that) const;
++    bool operator!=(const VTimeZone& that) const {return !operator==(that);}
+ 
+     /**
+      * Create a <code>VTimeZone</code> instance by the time zone ID.

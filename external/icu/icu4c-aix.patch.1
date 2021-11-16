@@ -1,6 +1,6 @@
 diff -ur icu.org/source/config/mh-aix-gcc icu/source/config/mh-aix-gcc
---- icu.org/source/config/mh-aix-gcc	2016-06-15 20:58:17.000000000 +0200
-+++ icu/source/config/mh-aix-gcc	2017-04-21 21:58:49.731432198 +0200
+--- icu.org/source/config/mh-aix-gcc	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/config/mh-aix-gcc	2021-11-15 18:35:48.737774348 +0100
 @@ -18,84 +18,29 @@
  GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
  GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
@@ -15,8 +15,8 @@ diff -ur icu.org/source/config/mh-aix-gcc icu/source/config/mh-aix-gcc
 -LD_SOOPTIONS= -Wl,-bsymbolic
 -
 -## Commands to make a shared library
--SHLIB.c=    $(AIX_PREDELETE) $(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_SOOPTIONS)
--SHLIB.cc=   $(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_SOOPTIONS)
+-SHLIB.c=    $(AIX_PREDELETE) $(CC) $(CFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
+-SHLIB.cc=   $(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 -
 -## Compiler switch to embed a runtime search path
 -LD_RPATH=	-I
@@ -114,9 +114,9 @@ diff -ur icu.org/source/config/mh-aix-gcc icu/source/config/mh-aix-gcc
  
  ## BIR  - bind with internal references [so app data and icu data doesn't collide]
 diff -ur icu.org/source/tools/pkgdata/pkgdata.cpp icu/source/tools/pkgdata/pkgdata.cpp
---- icu.org/source/tools/pkgdata/pkgdata.cpp	2017-03-21 02:03:49.000000000 +0100
-+++ icu/source/tools/pkgdata/pkgdata.cpp	2017-04-21 21:58:49.732432195 +0200
-@@ -934,7 +934,7 @@
+--- icu.org/source/tools/pkgdata/pkgdata.cpp	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/tools/pkgdata/pkgdata.cpp	2021-11-15 18:28:38.342143852 +0100
+@@ -959,7 +959,7 @@
  
          uprv_strcat(pkgDataFlags[SO_EXT], ".");
          uprv_strcat(pkgDataFlags[SO_EXT], pkgDataFlags[A_EXT]);
@@ -125,7 +125,7 @@ diff -ur icu.org/source/tools/pkgdata/pkgdata.cpp icu/source/tools/pkgdata/pkgda
          sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s",
                  libFileNames[LIB_FILE],
                  FILE_EXTENSION_SEP,
-@@ -1407,15 +1407,6 @@
+@@ -1439,15 +1439,6 @@
                  pkgDataFlags[LDICUDTFLAGS],
                  targetDir,
                  libFileNames[LIB_FILE_CYGWIN_VERSION],

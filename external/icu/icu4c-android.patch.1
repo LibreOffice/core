@@ -1,8 +1,8 @@
 diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/platform.h
---- icu.org/source/common/unicode/platform.h	2019-10-03 13:16:41.000000000 +0200
-+++ icu/source/common/unicode/platform.h	2019-10-29 22:58:26.881221287 +0100
+--- icu.org/source/common/unicode/platform.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/common/unicode/platform.h	2021-11-15 21:03:11.474638494 +0100
 @@ -818,7 +818,7 @@
-                             UPRV_HAS_DECLSPEC_ATTRIBUTE(dllimport))
+                             UPRV_HAS_DECLSPEC_ATTRIBUTE(__dllimport__))
  #   define U_EXPORT __declspec(dllexport)
  #elif defined(__GNUC__)
 -#   define U_EXPORT __attribute__((visibility("default")))
@@ -11,8 +11,8 @@ diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/plat
     || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
  #   define U_EXPORT __global
 diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
---- icu.org/source/config/mh-linux	2018-09-29 02:34:41.000000000 +0200
-+++ icu/source/config/mh-linux	2018-10-20 00:33:36.558130876 +0200
+--- icu.org/source/config/mh-linux	2021-11-15 20:56:39.460705065 +0100
++++ icu/source/config/mh-linux	2021-11-15 21:03:11.474638494 +0100
 @@ -27,7 +27,7 @@
  
  ## Compiler switch to embed a library name
@@ -23,9 +23,9 @@ diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
  #SH# LD_SONAME=
  
 diff -ur icu.org/source/configure icu/source/configure
---- icu.org/source/configure	2018-10-02 00:39:56.000000000 +0200
-+++ icu/source/configure	2018-10-20 00:33:36.559130874 +0200
-@@ -5207,7 +5207,7 @@
+--- icu.org/source/configure	2021-11-15 20:56:39.875703936 +0100
++++ icu/source/configure	2021-11-15 21:03:11.475638491 +0100
+@@ -5272,7 +5273,7 @@
  	else
  		icu_cv_host_frag=mh-linux-va
  	fi ;;
@@ -34,7 +34,7 @@ diff -ur icu.org/source/configure icu/source/configure
  i[34567]86-*-cygwin)
  	if test "$GCC" = yes; then
  		icu_cv_host_frag=mh-cygwin
-@@ -6400,6 +6400,10 @@
+@@ -6472,6 +6466,10 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
  case "${host}" in
@@ -45,7 +45,7 @@ diff -ur icu.org/source/configure icu/source/configure
  *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
      if test "$GCC" = yes; then
          # We're using gcc, and the simple -a gcc command line works for genccode
-@@ -7499,6 +7503,10 @@
+@@ -7594,6 +7592,10 @@
      # wchar_t can be used
      CHECK_UTF16_STRING_RESULT="available"
      ;;
@@ -57,8 +57,8 @@ diff -ur icu.org/source/configure icu/source/configure
      ;;
  esac
 diff -ur icu.org/source/i18n/decimfmt.cpp icu/source/i18n/decimfmt.cpp
---- icu.org/source/i18n/decimfmt.cpp	2018-10-02 00:39:56.000000000 +0200
-+++ icu/source/i18n/decimfmt.cpp	2018-10-20 00:33:36.560130873 +0200
+--- icu.org/source/i18n/decimfmt.cpp	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/decimfmt.cpp	2021-11-15 21:03:11.476638489 +0100
 @@ -9,6 +9,13 @@
  // Helpful in toString methods and elsewhere.
  #define UNISTR_FROM_STRING_EXPLICIT

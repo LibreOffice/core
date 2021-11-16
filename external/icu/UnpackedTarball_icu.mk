@@ -33,7 +33,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-rtti.patch.1 \
 	external/icu/icu4c-clang-cl.patch.1 \
 	external/icu/gcc9.patch \
-	external/icu/c++20-comparison.patch \
+	external/icu/c++20-comparison.patch.1 \
 	external/icu/ubsan.patch.1 \
 	external/icu/Wdeprecated-copy-dtor.patch \
 	external/icu/strict_ansi.patch \
@@ -42,7 +42,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
-	external/icu/e450fa50fc242282551f56b941dc93b9a8a0bcbb.patch.2 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
