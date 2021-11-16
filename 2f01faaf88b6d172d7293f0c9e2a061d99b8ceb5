@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5848e9_c037f347",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-16T10:59:50Z",
+      "side": 1,
+      "message": "why is this reset inside the loop?\n\ndoesnt this mean that this loop will crash after the first iteration?",
+      "revId": "2f01faaf88b6d172d7293f0c9e2a061d99b8ceb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
