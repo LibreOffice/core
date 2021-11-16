@@ -38,8 +38,9 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123621, "tdf123621.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123621)
 {
+    loadAndSave("tdf123621.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
@@ -132,8 +133,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137850_compat15ZOrder, "tdf137850_compat15ZOrder
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in the foreground", true, getProperty<bool>(xShape, "Opaque"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118701, "tdf118701.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf118701)
 {
+    loadAndSave("tdf118701.docx");
     // This was 6, related to moving inline images after the page breaks
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 
@@ -721,15 +723,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131561_necessaryBorder, "tdf131561_necessaryBord
     CPPUNIT_ASSERT_MESSAGE("Border between A3 and B3", (aBorderR.LineWidth + aBorderL.LineWidth) > 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135655, "tdf135655.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf135655)
 {
+    loadAndSave("tdf135655.odt");
     const xmlDocUniquePtr pExpDoc = parseExport();
     const OUString sXFillColVal = getXPath(pExpDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "fillcolor");
     CPPUNIT_ASSERT_EQUAL(OUString("#00A933"), sXFillColVal);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138374, "tdf138374.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138374)
 {
+    loadAndSave("tdf138374.odt");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "fillcolor", "#ffd320");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "coordsize", "1315,6116");
@@ -764,8 +768,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135329_lostImage, "tdf135329_lostImage.odt")
     uno::Reference<beans::XPropertySet> xImageProps(getShape(2), uno::UNO_QUERY_THROW);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136441_commentInFootnote, "tdf136441_commentInFootnote.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf136441_commentInFootnote)
 {
+    loadAndSave("tdf136441_commentInFootnote.odt");
     // failed to load without error if footnote contained a comment.
     // (MS Word's UI doesn't allow adding comments to a footnote.)
 }
@@ -802,8 +807,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125268, "tdf125268.odt")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_BLACK), getProperty<sal_Int32>(xRun,"CharBackColor"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138345_numberingHighlight, "tdf138345_numberingHighlight.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138345_numberingHighlight)
 {
+    loadAndSave("tdf138345_numberingHighlight.docx");
     // Before the fix, the highlight was completely lost.
     xmlDocUniquePtr pXmlStyles = parseExport("word/numbering.xml");
     if (pXmlStyles)
@@ -852,8 +858,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135665, "tdf135665.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE tight wrap setting not imported correctly", false, bSurroundContour2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testAtPageShapeRelOrientation)
 {
+    loadAndSave("rotated_shape.fodt");
     // invalid combination of at-page anchor and horizontal-rel="paragraph"
     // caused relativeFrom="column" instead of relativeFrom="page"
 
@@ -887,8 +894,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAtPageShapeRelOrientation, "rotated_shap
     CPPUNIT_ASSERT(style.indexOf("v-text-anchor:middle") != -1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLallowincell, "shape-atpage-in-table.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testVMLallowincell)
 {
+    loadAndSave("shape-atpage-in-table.fodt");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     // VML o:allowincell, apparently the default is "t"
@@ -898,9 +906,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLallowincell, "shape-atpage-in-table.f
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor", "layoutInCell", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
-                         "tdf133070_testRelativeAnchorHeightFromBottomMarginHasFooter.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromBottomMarginHasFooter)
 {
+    loadAndSave("tdf133070_testRelativeAnchorHeightFromBottomMarginHasFooter.docx");
     // tdf#133070 The height was set relative to page print area bottom,
     // but this was handled relative to page height.
     // Note: page print area bottom = margin + footer height.
@@ -922,8 +930,9 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
         text::RelOrientation::PAGE_FRAME , nHRelPos);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(TestTdf143028, "fail_bracePair.odt")
+CPPUNIT_TEST_FIXTURE(Test, TestTdf143028)
 {
+    loadAndSave("fail_bracePair.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto pExportXml = parseExport();
@@ -934,9 +943,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(TestTdf143028, "fail_bracePair.odt")
 
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginNoFooter,
-                         "tdf133070_testRelativeAnchorHeightFromBottomMarginNoFooter.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromBottomMarginNoFooter)
 {
+    loadAndSave("tdf133070_testRelativeAnchorHeightFromBottomMarginNoFooter.docx");
     // tdf#133070 The height was set relative to page print area bottom,
     // but this was handled relative to page height.
     // Note: page print area bottom = margin + footer height.
@@ -945,14 +954,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginNoFo
     assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "height", "1147");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133702, "tdf133702.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf133702)
 {
+    loadAndSave("tdf133702.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135667, "tdf135667.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf135667)
 {
+    loadAndSave("tdf135667.odt");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     // This was missing.
@@ -968,8 +979,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135667, "tdf135667.odt")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:stroke", "dashstyle", "Dash");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testImageSpaceSettings)
 {
+    loadAndSave("tdf135047_ImageSpaceSettings.fodt");
     // tdf#135047 The spaces of image were not saved.
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distT", "90170");
@@ -1007,8 +1019,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135660, "tdf135660.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom wrap distance is wrong", static_cast<sal_Int32>(199), nWrapDistanceBottom);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136814, "tdf136814.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf136814)
 {
+    loadAndSave("tdf136814.odt");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     // Padding in this document is 0.10 cm which should translate to 3 pt (approx. 1.0583mm)
