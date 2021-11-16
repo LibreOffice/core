@@ -275,7 +275,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject const * p3DOb
     {
         case SID_3D_CUBE:
         {
-            aTransformation.rotate(DEG2RAD(20), 0.0, 0.0);
+            aTransformation.rotate(basegfx::deg2rad(20), 0.0, 0.0);
         }
         break;
 
@@ -287,7 +287,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject const * p3DOb
         case SID_3D_SHELL:
         case SID_3D_HALF_SPHERE:
         {
-            aTransformation.rotate(DEG2RAD(200), 0.0, 0.0);
+            aTransformation.rotate(basegfx::deg2rad(200), 0.0, 0.0);
         }
         break;
 
@@ -300,7 +300,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject const * p3DOb
 
         case SID_3D_TORUS:
         {
-            aTransformation.rotate(DEG2RAD(90), 0.0, 0.0);
+            aTransformation.rotate(basegfx::deg2rad(90), 0.0, 0.0);
         }
         break;
 

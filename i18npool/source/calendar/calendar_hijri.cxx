@@ -24,6 +24,7 @@
 
 #include <calendar_hijri.hxx>
 #include <tools/long.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -35,9 +36,6 @@ namespace i18npool {
 
 // not used
 //static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
-
-// radians per degree (pi/180)
-const double Calendar_hijri::RadPerDeg      = 0.01745329251994329577;
 
 // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
 const double Calendar_hijri::SynPeriod      = 29.53058868;
@@ -128,22 +126,22 @@ Calendar_hijri::NewMoon(sal_Int32 n)
         + SynPeriod * k
         - 0.0001178 * t2
         - 0.000000155 * t3
-        + 0.00033 * sin(RadPerDeg * (166.56 + 132.87 * t - 0.009173 * t2));
+        + 0.00033 * sin(basegfx::deg2rad(166.56 + 132.87 * t - 0.009173 * t2));
 
     // Sun's mean anomaly in radian
-    sa =  RadPerDeg * (359.2242
+    sa =  basegfx::deg2rad(359.2242
                 + 29.10535608 * k
                 - 0.0000333 * t2
                 - 0.00000347 * t3);
 
     // Moon's mean anomaly
-    ma =  RadPerDeg * (306.0253
+    ma =  basegfx::deg2rad(306.0253
                 + 385.81691806 * k
                 + 0.0107306 * t2
                 + 0.00001236 * t3);
 
     // Moon's argument of latitude
-    tf = RadPerDeg * 2.0 * (21.2964
+    tf = 2.0 * basegfx::deg2rad(21.2964
                 + 390.67050646 * k
                 - 0.0016528 * t2
                 - 0.00000239 * t3);

@@ -977,7 +977,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         // Set default rotation
         {
             basegfx::B3DHomMatrix aRotate;
-            aRotate.rotate(DEG2RAD(20.0), 0.0, 0.0);
+            aRotate.rotate(basegfx::deg2rad(20.0), 0.0, 0.0);
             // E3DModifySceneSnapRectUpdater updates the 2D representation of the scene.
             // It prepares things in ctor and acts in dtor.
             E3DModifySceneSnapRectUpdater aUpdater(pScene->getSdrObjectFromSdrObjList());
