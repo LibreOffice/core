@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22e658fd_6b7f321f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-16T20:19:13Z",
+      "side": 1,
+      "message": "this is a uitest, only executed on linux. the mac failure is not related. pushing",
+      "revId": "f23e2b766b43efa83a78eb93241663b219691e2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
