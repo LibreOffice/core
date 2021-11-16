@@ -26,6 +26,7 @@
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:v="urn:schemas-microsoft-com:vml"
   xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+  xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml"
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
   xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
@@ -5352,6 +5353,13 @@
     <resource name="cntxtAlts" resource="Properties">
       <element name="cntxtAlts" tokenid="ooxml:cntxtAlts_cntxtAlts"/>
     </resource>
+  </namespace>
+  <namespace name="w15">
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2012/wordml">
+      <define name="ST_LongHexNumber">
+        <data type="hexBinary"/>
+      </define>
+    </grammar>
   </namespace>
   <namespace name="a14">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawing/2010/main">
@@ -13853,9 +13861,14 @@
           <data type="string"/>
         </attribute>
       </define>
-      <define name="CT_Placeholder">
+      <define name="CT_SdtPlaceholderDocPart">
+        <attribute name="val">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="CT_SdtPlaceholder">
         <element name="docPart">
-          <ref name="CT_String"/>
+          <ref name="CT_SdtPlaceholderDocPart"/>
         </element>
       </define>
       <define name="CT_SdtText">
@@ -13874,6 +13887,11 @@
           <data type="string"/>
         </attribute>
       </define>
+      <define name="CT_SdtColor">
+        <attribute name="val">
+          <data type="string"/>
+        </attribute>
+      </define>
       <define name="CT_SdtPr">
         <choice>
           <element name="rPr">
@@ -13886,7 +13904,7 @@
             <ref name="CT_Lock"/>
           </element>
           <element name="placeholder">
-            <ref name="CT_Placeholder"/>
+            <ref name="CT_SdtPlaceholder"/>
           </element>
           <element name="showingPlcHdr">
             <ref name="CT_OnOff"/>
@@ -13941,6 +13959,9 @@
           </element>
           <element name="bibliography">
             <ref name="CT_Empty"/>
+          </element>
+          <element name="w15:color">
+            <ref name="CT_SdtColor"/>
           </element>
         </choice>
       </define>
@@ -18153,10 +18174,16 @@
     <resource name="CT_SdtText" resource="Properties">
       <attribute name="multiLine" tokenid="ooxml:CT_SdtText_multiLine"/>
     </resource>
+    <resource name="CT_SdtPlaceholder" resource="Properties">
+      <attribute name="docPart" tokenid="ooxml:CT_SdtPlaceholder_docPart"/>
+    </resource>
     <resource name="CT_DataBinding" resource="Properties">
       <attribute name="prefixMappings" tokenid="ooxml:CT_DataBinding_prefixMappings"/>
       <attribute name="xpath" tokenid="ooxml:CT_DataBinding_xpath"/>
       <attribute name="storeItemID" tokenid="ooxml:CT_DataBinding_storeItemID"/>
+    </resource>
+    <resource name="CT_SdtColor" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_SdtColor_val"/>
     </resource>
     <resource name="CT_SdtPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtPr_rPr"/>
@@ -18181,6 +18208,7 @@
       <element name="citation" tokenid="ooxml:CT_SdtPr_citation"/>
       <element name="group" tokenid="ooxml:CT_SdtPr_group"/>
       <element name="bibliography" tokenid="ooxml:CT_SdtPr_bibliography"/>
+      <element name="w15:color" tokenid="ooxml:CT_SdtPr_color"/>
     </resource>
     <resource name="CT_SdtEndPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtEndPr_rPr"/>
@@ -18244,6 +18272,9 @@
     <resource name="CT_SdtListItem" resource="Properties">
       <attribute name="displayText" tokenid="ooxml:CT_SdtListItem_displayText"/>
       <attribute name="value" tokenid="ooxml:CT_SdtListItem_value"/>
+    </resource>
+    <resource name="CT_SdtPlaceholderDocPart" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_SdtPlaceholder_docPart_val"/>
     </resource>
     <resource name="CT_Attr" resource="Properties">
       <attribute name="uri" tokenid="ooxml:CT_Attr_uri"/>
