@@ -535,12 +535,12 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
     xmlDocPtr pXmlFootNotes = parseExport("word/footnotes.xml");
     if (!pXmlFootNotes)
         return;
-    assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", "w14 wp14");
+    assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", "w14 wp14 w15");
 
     xmlDocPtr pXmlEndNotes = parseExport("word/endnotes.xml");
     if (!pXmlEndNotes)
         return;
-    assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14");
+    assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14 w15");
 
     //tdf#93121 don't add fake tabs in front of extra footnote paragraphs
     uno::Reference<text::XFootnotesSupplier> xFootnoteSupp(mxComponent, uno::UNO_QUERY);
