@@ -233,7 +233,7 @@ public:
     void            SetName( const OUString& aName ) { m_aName = aName; }
 
     virtual void OnNewDocument ();
-    virtual char const* GetHid () const = 0;
+    virtual OString GetHid () const = 0;
     virtual ItemType GetType () const = 0;
     void InsertLibInfo () const;
     bool Is (ScriptDocument const&, std::u16string_view, std::u16string_view, ItemType, bool bFindSuspended);

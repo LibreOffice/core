@@ -26,20 +26,20 @@ namespace basctl
 
 // control properties
 #define DLGED_PROP_BACKGROUNDCOLOR   "BackgroundColor"
-#define DLGED_PROP_DROPDOWN          "Dropdown"
-#define DLGED_PROP_FORMATSSUPPLIER   "FormatsSupplier"
-#define DLGED_PROP_HEIGHT            "Height"
-#define DLGED_PROP_LABEL             "Label"
-#define DLGED_PROP_NAME              "Name"
-#define DLGED_PROP_ORIENTATION       "Orientation"
-#define DLGED_PROP_POSITIONX         "PositionX"
-#define DLGED_PROP_POSITIONY         "PositionY"
-#define DLGED_PROP_STEP              "Step"
-#define DLGED_PROP_TABINDEX          "TabIndex"
+constexpr OUStringLiteral DLGED_PROP_DROPDOWN = u"Dropdown";
+constexpr OUStringLiteral DLGED_PROP_FORMATSSUPPLIER = u"FormatsSupplier";
+constexpr OUStringLiteral DLGED_PROP_HEIGHT = u"Height";
+constexpr OUStringLiteral DLGED_PROP_LABEL = u"Label";
+constexpr OUStringLiteral DLGED_PROP_NAME = u"Name";
+constexpr OUStringLiteral DLGED_PROP_ORIENTATION = u"Orientation";
+constexpr OUStringLiteral DLGED_PROP_POSITIONX = u"PositionX";
+constexpr OUStringLiteral DLGED_PROP_POSITIONY = u"PositionY";
+constexpr OUStringLiteral DLGED_PROP_STEP = u"Step";
+constexpr OUStringLiteral DLGED_PROP_TABINDEX = u"TabIndex";
 #define DLGED_PROP_TEXTCOLOR         "TextColor"
 #define DLGED_PROP_TEXTLINECOLOR     "TextLineColor"
-#define DLGED_PROP_WIDTH             "Width"
-#define DLGED_PROP_DECORATION        "Decoration"
+constexpr OUStringLiteral DLGED_PROP_WIDTH = u"Width";
+constexpr OUStringLiteral DLGED_PROP_DECORATION = u"Decoration";
 
 
 } // namespace basctl
