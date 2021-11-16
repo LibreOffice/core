@@ -260,7 +260,7 @@ DECLARE_OOXMLEXPORT_TEST(Test_McIgnorable, "TextEffects_StylisticSets_CntxtAlts.
     if (!pXmlDocument)
         return;
 
-    assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14");
+    assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14 w15");
 
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
     if (!pXmlStyles)
