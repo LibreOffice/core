@@ -330,6 +330,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
     assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf104797.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // This was 2 (moveFrom and moveTo joined other redlines)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(6), pEditShell->GetRedlineCount());
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // text colors show moved text
+    // These were 0 (other color, not COL_GREEN, color of the tracked text movement)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 6);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertion)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf42748.fodt");
