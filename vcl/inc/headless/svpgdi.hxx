@@ -42,28 +42,17 @@
 struct BitmapBuffer;
 class FreetypeFont;
 
-VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t *surface, double x_scale, double y_scale);
-VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t *surface, double *x_scale, double *y_scale);
-
-typedef void (*damageHandler)(void* handle,
-                              sal_Int32 nExtentsX, sal_Int32 nExtentsY,
-                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight);
-
-struct VCL_DLLPUBLIC DamageHandler
-{
-    void *handle;
-    damageHandler damaged;
-};
-
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     CairoCommon m_aCairoCommon;
-    double                         m_fScale;
 
 public:
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
     cairo_surface_t* getSurface() const { return m_aCairoCommon.m_pSurface; }
-    static cairo_user_data_key_t* getDamageKey();
+    static cairo_user_data_key_t* getDamageKey()
+    {
+        return CairoCommon::getDamageKey();
+    }
 
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
 
@@ -227,8 +216,16 @@ public:
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
 #endif // ENABLE_CAIRO_CANVAS
 
-    cairo_t*                getCairoContext(bool bXorModeAllowed) const;
-    void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const;
+    cairo_t* getCairoContext(bool bXorModeAllowed) const
+    {
+        return m_aCairoCommon.getCairoContext(bXorModeAllowed, getAntiAlias());
+    }
+
+    void releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
+    {
+        return m_aCairoCommon.releaseCairoContext(cr, bXorModeAllowed, rExtents);
+    }
+
     static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
     void                    clipRegion(cairo_t* cr);
 };
