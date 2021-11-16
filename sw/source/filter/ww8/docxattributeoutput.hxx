@@ -121,6 +121,36 @@ struct TableReference
     }
 };
 
+class SdtBlockHelper
+{
+public:
+    SdtBlockHelper()
+        : m_bHasId(false)
+        , m_bStartedSdt(false)
+        , m_nSdtPrToken(0)
+    {}
+
+    bool m_bHasId;
+    bool m_bStartedSdt;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenChildren;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenAttributes;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pTextAttrs;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pDataBindingAttrs;
+    OUString m_aColor;
+    OUString m_aPlaceHolderDocPart;
+    OUString m_aAlias;
+    sal_Int32 m_nSdtPrToken;
+
+    void DeleteAndResetTheLists();
+
+    void WriteSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing);
+
+    /// Closes a currently open SDT block.
+    void EndSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer);
+
+    void GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
+};
+
 /// The class that has handlers for various resource types when exporting as DOCX.
 class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport, public oox::drawingml::DMLTextExport
 {
@@ -720,18 +750,6 @@ private:
     void WritePostponedCustomShape();
     void WriteFlyFrame(const ww8::Frame& rFrame);
 
-    void WriteSdtBlock(sal_Int32& nSdtPrToken,
-                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
-                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
-                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
-                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTextAttrs,
-                       OUString& rSdtPrAlias,
-                       OUString& rSdtPrPlaceholderDocPart,
-                       OUString& rColor,
-                       bool bPara);
-    /// Closes a currently open SDT block.
-    void EndSdtBlock();
-
     void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang);
     void WriteSdtDropDownStart(std::u16string_view rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtDropDownEnd(OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
@@ -744,9 +762,6 @@ private:
     void EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos );
     void DoWriteFieldRunProperties( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteCombChars = false );
 
-    static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const char* sAttrValue );
-    static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
-
     rtl::Reference<sax_fastparser::FastAttributeList> m_pFontsAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pCharLangAttrList;
@@ -755,10 +770,6 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
     /// If the current SDT around runs should be ended before the current run.
     bool m_bEndCharSdt;
-    /// If an SDT around runs is currently open.
-    bool m_bStartedCharSdt;
-    /// If an SDT around paragraphs is currently open.
-    bool m_bStartedParaSdt;
     /// Attributes of the run color
     rtl::Reference<sax_fastparser::FastAttributeList> m_pColorAttrList;
     sal_uInt8 m_nCharTransparence = 0;
@@ -993,30 +1004,14 @@ private:
     /// RelId <-> BitmapChecksum cache, similar to m_aRelIdCache, but used for non-Writer graphics, handled in oox.
     std::stack< std::map<BitmapChecksum, std::pair<OUString, OUString>> > m_aSdrRelIdCache;
 
-    /// members to control the existence of grabbagged SDT properties in the paragraph
-    sal_Int32 m_nParagraphSdtPrToken;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenChildren;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenAttributes;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrDataBindingAttrs;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTextAttrs;
-    /// members to control the existence of grabbagged SDT properties in the text run
-    sal_Int32 m_nRunSdtPrToken;
+    SdtBlockHelper m_aParagraphSdt;
+    SdtBlockHelper m_aRunSdt;
+
     /// State of the Fly at current position
     FlyProcessingState m_nStateOfFlyFrame;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrTokenChildren;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrDataBindingAttrs;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrTextAttrs;
-    /// Value of the <w:alias> paragraph SDT element.
-    OUString m_aParagraphSdtPrAlias;
-    OUString m_aParagraphSdtPrPlaceHolderDocPart;
-    OUString m_aParagraphSdtPrColor;
+
     /// Same as m_aParagraphSdtPrAlias, but its content is available till the SDT is closed.
     OUString m_aStartedParagraphSdtPrAlias;
-    OUString m_aRunSdtPrAlias;
-    OUString m_aRunSdtPrPlaceHolderDocPart;
-    OUString m_aRunSdtPrColor;
-    /// Currently paragraph SDT has a <w:id> child element.
-    bool m_bParagraphSdtHasId;
 
     std::vector<std::map<SvxBoxItemLine, css::table::BorderLine2>> m_aTableStyleConfs;
 
