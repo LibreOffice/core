@@ -1075,16 +1075,7 @@ XMLShapeImportHelper* SvXMLImport::CreateShapeImport()
 
 SchXMLImportHelper* SvXMLImport::CreateChartImport()
 {
-// WASM_CHART change
-// TODO: Instead of importing the ChartModel an alternative may be
-// added to convert not to Chart/OLE SdrObejct, but to GraphicObject
-// with the Chart visualization. There should be a preiew available
-// in the imported chart data
-#ifndef ENABLE_WASM_STRIP_CHART
     return new SchXMLImportHelper();
-#else
-    return nullptr;
-#endif
 }
 
 ::xmloff::OFormLayerXMLImport* SvXMLImport::CreateFormImport()
@@ -1567,9 +1558,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     mxAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
-#ifndef ENABLE_WASM_STRIP_CHART
     GetChartImport()->SetAutoStylesContext( pAutoStyles );
-#endif
     GetFormImport()->setAutoStyleContext( pAutoStyles );
 }
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
 #include <ChartWindow.hxx>
 #include <ChartController.hxx>
 #include <helpids.h>
@@ -181,10 +182,14 @@ void ChartWindow::KeyInput( const KeyEvent& rKEvt )
 
 uno::Reference< css::accessibility::XAccessible > ChartWindow::CreateAccessible()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( m_pWindowController )
         return m_pWindowController->CreateAccessible();
     else
         return Window::CreateAccessible();
+#else
+    return uno::Reference< css::accessibility::XAccessible >();
+#endif
 }
 
 void ChartWindow::DataChanged( const DataChangedEvent& rDCEvt )

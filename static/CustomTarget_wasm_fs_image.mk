@@ -1124,7 +1124,7 @@ gb_wasm_image_filelist := \
     $(INSTROOT)/share/gallery/fontwork.sdg \
     $(INSTROOT)/share/gallery/fontwork.sdv \
     $(INSTROOT)/share/gallery/fontwork.thm \
-    $(SRCDIR)/android/default-document/example2.odt \
+    $(SRCDIR)/android/default-document/example3.odt \
 
 wasm_fs_image_WORKDIR := $(call gb_CustomTarget_get_workdir,static/wasm_fs_image)
 

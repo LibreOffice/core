@@ -83,8 +83,6 @@ endif
 
 $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))
 
-# WASM_CHART change
-ifeq (,$(ENABLE_WASM_STRIP_CHART))
 $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/export/chartexport \
     oox/source/drawingml/chart/axiscontext \
@@ -115,7 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/chart/typegroupconverter \
     oox/source/drawingml/chart/typegroupmodel \
 ))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/binarycodec \

@@ -1554,12 +1554,10 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
         return new XMLControlOOoTransformerContext( *this, rQName );
     case XML_ETACTION_FORM_PROPERTY:
         return new XMLFormPropOOoTransformerContext( *this, rQName );
-#ifndef ENABLE_WASM_STRIP_CHART
     case XML_ETACTION_CHART:
         return new XMLChartOOoTransformerContext( *this, rQName );
     case XML_ETACTION_CHART_PLOT_AREA:
         return new XMLChartPlotAreaOOoTContext( *this, rQName );
-#endif
     case XML_ETACTION_TRACKED_CHANGES:
         return new XMLTrackedChangesOOoTContext_Impl( *this, rQName,
                                rAction.GetQNamePrefixFromParam1(),

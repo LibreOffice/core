@@ -77,14 +77,11 @@ $(eval $(call gb_Rdb_add_components,services,\
 
 ifeq ($(gb_Side),host)
 
-# WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
 	chart2/source/controller/chartcontroller \
 	chart2/source/chartcore \
 	writerperfect/source/calc/wpftcalc \
 ))
-endif
 
 ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\

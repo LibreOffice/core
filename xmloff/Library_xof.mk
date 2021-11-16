@@ -21,10 +21,7 @@ $(eval $(call gb_Library_Library,xof))
 
 $(eval $(call gb_Library_set_componentfile,xof,xmloff/source/transform/xof))
 
-# WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Library_set_componentfile,xof,xmloff/source/transform/xof.extended))
-endif
 
 $(eval $(call gb_Library_set_include,xof,\
     -I$(SRCDIR)/xmloff/inc \
@@ -52,15 +49,12 @@ $(eval $(call gb_Library_use_libraries,xof,\
     xo \
 ))
 
-# WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/ChartOASISTContext \
     xmloff/source/transform/ChartOOoTContext \
     xmloff/source/transform/ChartPlotAreaOASISTContext \
     xmloff/source/transform/ChartPlotAreaOOoTContext \
 ))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/OOo2Oasis \

@@ -1914,15 +1914,6 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
 
                 // load the chart data from the XML fragment
-#ifdef ENABLE_WASM_STRIP_CHART
-                (void) rFilter;
-                (void) rxShapes;
-#else
-                // WASM_CHART change
-                // TODO: Instead of using convertFromModel an alternative may be
-                // added to convert not to Chart/OLE SdrObejct, but to GraphicObject
-                // with the Chart visualization. There should be a preiew available
-                // in the imported chart data
                 bool bMSO2007Doc = rFilter.isMSO2007Document();
                 chart::ChartSpaceModel aModel(bMSO2007Doc);
                 rtl::Reference<chart::ChartSpaceFragment> pChartSpaceFragment = new chart::ChartSpaceFragment(
@@ -1963,7 +1954,6 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                     }
 
                 }
-#endif
             }
             catch( Exception& )
             {
