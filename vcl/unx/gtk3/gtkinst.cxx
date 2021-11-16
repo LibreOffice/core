@@ -17687,7 +17687,8 @@ void GtkInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectang
 #if !GTK_CHECK_VERSION(4, 0, 0)
 static gboolean signalEntryInsertSpecialCharKeyPress(GtkEntry* pEntry, GdkEventKey* pEvent, gpointer)
 {
-    if ((pEvent->keyval == GDK_KEY_S || pEvent->keyval == GDK_KEY_s) && pEvent->state == static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK))
+    if ((pEvent->keyval == GDK_KEY_S || pEvent->keyval == GDK_KEY_s) &&
+        (pEvent->state & GDK_MODIFIER_MASK) == static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK))
     {
         if (auto pImplFncGetSpecialChars = vcl::GetGetSpecialCharsFunction())
         {
