@@ -20,12 +20,13 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTLINKSADMINISTRATION_HXX
 #define INCLUDED_SW_INC_IDOCUMENTLINKSADMINISTRATION_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 
 namespace com::sun::star::uno { class Any; }
 namespace sfx2 { class SvLinkSource;  class LinkManager; }
-namespace rtl { class OUString; }
-using rtl::OUString;
 
 
  /** Document links administration interface

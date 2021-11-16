@@ -31,11 +31,6 @@
 namespace com::sun::star {
   namespace datatransfer { class XTransferable; }
 }
-namespace rtl {
-    class OUString;
-};
-using ::rtl::OUString;
-
 
 class OutlinerParaObject;
 class Outliner;
