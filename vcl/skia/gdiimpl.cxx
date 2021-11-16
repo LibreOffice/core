@@ -884,7 +884,7 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
         paint.setStyle(SkPaint::kStroke_Style);
         if (mScaling != 1 && isUnitTestRunning())
         {
-            // On HiDPI displays, do not draw just a harline but instead a full-width "pixel" when running unittests,
+            // On HiDPI displays, do not draw just a hairline but instead a full-width "pixel" when running unittests,
             // since tests often require precise pixel drawing.
             paint.setStrokeWidth(1); // this will be scaled by mScaling
             paint.setStrokeCap(SkPaint::kSquare_Cap);

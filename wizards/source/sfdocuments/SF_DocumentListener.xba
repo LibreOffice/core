@@ -64,7 +64,7 @@ Try:
 	_RangeSelectionFinished = False
 	oController.startRangeSelection(pvPropertyValues)
 
-	&apos;	Dummy thread synchonization
+	&apos;	Dummy thread synchronization
 	lCountLoops = 0
 	Do While Not _RangeSelectionFinished And lCountLoops &lt; cstMaxSleep
 		Wait(cstSleep)
