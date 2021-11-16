@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d07dabd_4ca4351c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-11-16T13:01:30Z",
+      "side": 1,
+      "message": "A Linux build failed, irrelevant, ignoring.",
+      "revId": "c750c8f7cb774d81f7e2043efe89a3e8a8c654a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
