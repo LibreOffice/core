@@ -47,7 +47,7 @@ sub make_absolute_filename_to_relative_filename
 
     if ( $installer::globals::isunix )
     {
-        if ( $$longfilenameref =~ /^.*\/(\S.+\S?)/ )
+        if ( $$longfilenameref =~ /^.*\/(?=\S)([^\/]+)(?<=\S)/ )
         {
             $$longfilenameref = $1;
         }
@@ -56,7 +56,7 @@ sub make_absolute_filename_to_relative_filename
     if ( $installer::globals::iswin )
     {
         # Either '/' or '\'. It would be possible to use $installer::globals::separator.
-        if ( $$longfilenameref =~ /^.*[\/\\](\S.+\S?)/ )
+        if ( $$longfilenameref =~ /^.*[\/\\](?=\S)([^\/\\]+)(?<=\S)/ )
         {
             $$longfilenameref = $1;
         }
