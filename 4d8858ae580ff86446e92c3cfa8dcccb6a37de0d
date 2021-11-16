@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31cd92fb_3aa047fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-16T14:57:23Z",
+      "side": 1,
+      "message": "looks like this breaks Android build:\n\n/home/tdf/lode/jenkins/workspace/android_x86/solenv/gbuild/ComponentTarget.mk:49: *** No LIBFILENAME set at component target: /home/tdf/lode/jenkins/workspace/android_x86/workdir/ComponentTarget/sdext/source/pdfimport/pdfimport.component.  Stop.",
+      "revId": "4d8858ae580ff86446e92c3cfa8dcccb6a37de0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
