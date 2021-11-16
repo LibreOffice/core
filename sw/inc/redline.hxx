@@ -155,6 +155,7 @@ class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
     SwNodeIndex* m_pContentSect;
     bool m_bDelLastPara : 1;
     bool m_bIsVisible : 1;
+    bool m_bIsMoved : 1;
     sal_uInt32 m_nId;
 
     std::optional<tools::Long> m_oLOKLastNodeTop;
@@ -174,7 +175,7 @@ public:
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
         SwPaM( rPos ), m_pRedlineData( pData ), m_pContentSect( nullptr ),
-        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_nId( s_nLastId++ )
+        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_bIsMoved( false ), m_nId( s_nLastId++ )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;
@@ -261,6 +262,9 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     void MaybeNotifyRedlinePositionModification(tools::Long nTop);
+
+    void SetMoved() { m_bIsMoved = true; }
+    bool IsMoved() const { return m_bIsMoved; }
 };
 
 void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc);
