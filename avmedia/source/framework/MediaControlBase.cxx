@@ -25,8 +25,6 @@
 #include <helpids.h>
 #include <mediamisc.hxx>
 
-using ::rtl::OUString;
-
 constexpr sal_Int32 AVMEDIA_DB_RANGE = -40;
 #define AVMEDIA_LINEINCREMENT       1.0
 #define AVMEDIA_PAGEINCREMENT       10.0

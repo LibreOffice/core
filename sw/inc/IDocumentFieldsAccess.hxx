@@ -43,7 +43,6 @@ class SwRootFrame;
 class IDocumentRedlineAccess;
 
 namespace rtl { class OUString; }
-using rtl::OUString;
 namespace com::sun::star::uno { class Any; }
 
  /** Document fields related interfaces
@@ -57,7 +56,7 @@ namespace com::sun::star::uno { class Any; }
 
     virtual SwFieldType *GetSysFieldType( const SwFieldIds eWhich ) const = 0;
 
-    virtual SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
+    virtual SwFieldType* GetFieldType(SwFieldIds nResId, const rtl::OUString& rName, bool bDbFieldMatching) const = 0;
 
     virtual void RemoveFieldType(size_t nField) = 0;
 
