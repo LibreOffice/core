@@ -28,6 +28,9 @@
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
 
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2irange.hxx>
+
 //Using formats that match cairo's formats. For android we patch cairo,
 //which is internal in that case, to swap the rgb components so that
 //cairo then matches the OpenGL GL_RGBA format so we can use it there
@@ -60,10 +63,24 @@ typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
+VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale,
+                                                     double y_scale);
+VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t* surface, double* x_scale,
+                                                     double* y_scale);
+
 enum class PaintMode
 {
     Over,
     Xor
+};
+
+typedef void (*damageHandler)(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
+                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight);
+
+struct VCL_DLLPUBLIC DamageHandler
+{
+    void* handle;
+    damageHandler damaged;
 };
 
 struct VCL_DLLPUBLIC CairoCommon
@@ -74,16 +91,25 @@ struct VCL_DLLPUBLIC CairoCommon
     Color m_aLineColor;
     Color m_aFillColor;
     PaintMode m_ePaintMode;
+    double m_fScale;
 
     CairoCommon()
         : m_pSurface(nullptr)
         , m_aLineColor(Color(0x00, 0x00, 0x00))
         , m_aFillColor(Color(0xFF, 0xFF, 0XFF))
         , m_ePaintMode(PaintMode::Over)
+        , m_fScale(1.0)
     {
     }
 
+    static cairo_user_data_key_t* getDamageKey();
+
     cairo_surface_t* getSurface() const { return m_pSurface; }
+
+    cairo_t* getCairoContext(bool bXorModeAllowed, bool bAntiAlias) const;
+    void releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
+                             const basegfx::B2DRange& rExtents) const;
+    cairo_t* createTmpCompatibleCairoContext() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
