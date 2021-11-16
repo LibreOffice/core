@@ -34,6 +34,24 @@
       "parentUuid": "bb5848e9_c037f347",
       "revId": "2f01faaf88b6d172d7293f0c9e2a061d99b8ceb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "105932f2_39ce60c9",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-16T11:16:42Z",
+      "side": 1,
+      "message": "yeah, a \"monday morning\" style commit",
+      "parentUuid": "f194e667_4c8ae034",
+      "revId": "2f01faaf88b6d172d7293f0c9e2a061d99b8ceb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
