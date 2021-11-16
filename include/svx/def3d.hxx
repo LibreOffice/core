@@ -22,10 +22,6 @@
 
 #include <o3tl/typed_flags_set.hxx>
 
-const double fPiDiv180 = 0.01745329251994;
-
-#define DEG2RAD(fAngle) (fPiDiv180 * (fAngle))
-
 // 3D helper functions
 
 enum class E3dDragConstraint

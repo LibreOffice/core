@@ -234,7 +234,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         nX = rDesc.mnQ.X - rDesc.mnR.X;
         nY = rDesc.mnQ.Y - rDesc.mnR.Y;
 
-        double fAngle = 0.01745329251994 * ( 360 - rDesc.mnOrientation );
+        double fAngle = basegfx::deg2rad( 360 - rDesc.mnOrientation );
         double fSin = sin(fAngle);
         double fCos = cos(fAngle);
         nX = fCos * nX + fSin * nY;

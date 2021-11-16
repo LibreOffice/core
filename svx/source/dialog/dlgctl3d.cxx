@@ -115,8 +115,8 @@ void Svx3DPreviewControl::Construct()
     mxFmPage->InsertObject( mpScene );
 
     basegfx::B3DHomMatrix aRotation;
-    aRotation.rotate(DEG2RAD( 25 ), 0.0, 0.0);
-    aRotation.rotate(0.0, DEG2RAD( 40 ), 0.0);
+    aRotation.rotate(basegfx::deg2rad( 25 ), 0.0, 0.0);
+    aRotation.rotate(0.0, basegfx::deg2rad( 40 ), 0.0);
     mpScene->SetTransform(aRotation * mpScene->GetTransform());
 
     // invalidate SnapRects of objects
