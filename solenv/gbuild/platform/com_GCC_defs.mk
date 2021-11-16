@@ -218,7 +218,7 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 # We turn on and off this one depending on whether icecream and/or ccache are used,
 # and changing cxxflags cause PCH rebuilds, so e.g. a plain temporary 'CCACHE_DISABLE=1'
 # would cause a rebuild. Ignore the flag there, it's irrelevant for PCH use anyway.
-gb_PrecompiledHeader_ignore_flags_for_flags_file := $(gb_SPACE)-Wunused-macros
+gb_PrecompiledHeader_ignore_flags_for_flags_file := -Wunused-macros
 
 # optimization level
 gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow

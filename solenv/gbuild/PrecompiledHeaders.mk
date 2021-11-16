@@ -39,8 +39,9 @@ ifneq ($(gb_ENABLE_PCH),)
 # all cxxflags to use for compilation
 gb_PrecompiledHeader_cxxflags_includes := $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)
 # flags to save to the .flags file to check if they are the same as last time
+# (note: the leading space in sed is important, to remove the option and its separating space)
 gb_PrecompiledHeader_flags_for_flags_file := $$(sort $(gb_PrecompiledHeader_cxxflags_includes)) \
-    $(if $(gb_PrecompiledHeader_ignore_flags_for_flags_file),| sed 's/$(gb_PrecompiledHeader_ignore_flags_for_flags_file)//')
+    $(if $(gb_PrecompiledHeader_ignore_flags_for_flags_file),| sed 's/ $(gb_PrecompiledHeader_ignore_flags_for_flags_file)//')
 
 # $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktarget,linktargetmakefilename,pchcxxfile,compiler)
 define gb_PrecompiledHeader_generate_rules
