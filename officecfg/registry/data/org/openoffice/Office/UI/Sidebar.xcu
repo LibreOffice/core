@@ -630,6 +630,9 @@
             DrawImpress,    Draw,       hidden  ;
             DrawImpress,    Graphic,    hidden  ;
             WriterVariants, Draw,       hidden  ;
+            Calc,    DrawFontwork, visible ;
+            DrawImpress,    DrawFontwork, visible ;
+            WriterVariants,    DrawFontwork, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
