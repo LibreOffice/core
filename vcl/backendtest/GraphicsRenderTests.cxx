@@ -804,6 +804,27 @@ void GraphicsRenderTests::testDrawTransformedBitmap24bpp()
     }
 }
 
+void GraphicsRenderTests::testComplexDrawTransformedBitmap24bpp()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupComplexDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
+    OUString aTestName = "testComplexDrawTransformedBitmap24bpp";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestBitmap::checkComplexTransformedBitmap(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::testDrawBitmapExWithAlpha24bpp()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
@@ -2230,6 +2251,7 @@ void GraphicsRenderTests::runALLTests()
     testDrawBezierAAWithPolylineB2D();
     testDrawBitmap24bpp();
     testDrawTransformedBitmap24bpp();
+    testComplexDrawTransformedBitmap24bpp();
     testDrawBitmapExWithAlpha24bpp();
     testDrawMask24bpp();
     testDrawBlend24bpp();

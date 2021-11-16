@@ -492,6 +492,13 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupComplexDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
+            assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkComplexTransformedBitmap(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestBitmap aOutDevTest;
             Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N24_BPP);
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);

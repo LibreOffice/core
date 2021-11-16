@@ -83,6 +83,7 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testDrawDropShapeAAWithPolygon();
     void testDrawBitmap24bpp();
     void testDrawTransformedBitmap24bpp();
+    void testComplexDrawTransformedBitmap24bpp();
     void testDrawBitmapExWithAlpha24bpp();
     void testDrawMask24bpp();
     void testDrawBlend24bpp();

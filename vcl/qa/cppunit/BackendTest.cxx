@@ -478,6 +478,18 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testComplexDrawTransformedBitmap24bpp()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupComplexDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkComplexTransformedBitmap(aBitmap);
+        exportImage("08-03_transformed_bitmap_test_24bpp.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testDrawBitmapExWithAlpha24bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
@@ -485,7 +497,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
-        exportImage("08-03_bitmapex_with_alpha_test_24bpp.png", aBitmap);
+        exportImage("08-04_bitmapex_with_alpha_test_24bpp.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -497,7 +509,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
-        exportImage("08-04_mask_test_24bpp.png", aBitmap);
+        exportImage("08-05_mask_test_24bpp.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -509,7 +521,7 @@ public:
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-        exportImage("08-05_blend_test_24bpp.png", aBitmapEx);
+        exportImage("08-06_blend_test_24bpp.png", aBitmapEx);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1439,6 +1451,7 @@ public:
 
     CPPUNIT_TEST(testDrawBitmap24bpp);
     CPPUNIT_TEST(testDrawTransformedBitmap24bpp);
+    CPPUNIT_TEST(testComplexDrawTransformedBitmap24bpp);
     CPPUNIT_TEST(testDrawBitmapExWithAlpha24bpp);
     CPPUNIT_TEST(testDrawMask24bpp);
     CPPUNIT_TEST(testDrawBlend24bpp);

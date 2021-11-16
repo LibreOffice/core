@@ -43,6 +43,28 @@ Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap(vcl::PixelFormat aBitm
 }
 
 
+Bitmap OutputDeviceTestBitmap::setupComplexDrawTransformedBitmap(vcl::PixelFormat aBitmapFormat,bool isBitmapGreyScale)
+{
+    Size aBitmapSize(6, 6);
+    Bitmap aBitmap(aBitmapSize, aBitmapFormat);
+    aBitmap.Erase(constFillColor);
+
+    if (isBitmapGreyScale)
+        aBitmap.Convert(BmpConversion::N8BitGreys);
+
+    initialSetup(17, 14, constBackgroundColor);
+
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.shearX(0.25);
+    aTransform.scale(aBitmapSize.Width() * 2, aBitmapSize.Height() * 2);
+    aTransform.translate(1, 1);
+
+    mpVirtualDevice->DrawTransformedBitmapEx(aTransform, BitmapEx(aBitmap));
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+
 Bitmap OutputDeviceTestBitmap::setupDrawBitmap(vcl::PixelFormat aBitmapFormat,bool isBitmapGreyScale)
 {
     Size aBitmapSize(9, 9);
@@ -151,57 +173,6 @@ BitmapEx OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
     mpVirtualDevice->DrawBitmapEx(aPoint, BitmapEx(aBitmap, aAlpha));
 
     return mpVirtualDevice->GetBitmapEx(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
-}
-
-TestResult OutputDeviceTestBitmap::checkTransformedBitmap(Bitmap& rBitmap)
-{
-    std::vector<Color> aExpected
-    {
-        constBackgroundColor, constBackgroundColor,
-        COL_YELLOW, constFillColor, COL_YELLOW, constFillColor, constFillColor
-    };
-    return checkRectangles(rBitmap, aExpected);
-}
-
-TestResult OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(Bitmap& rBitmap)
-{
-    std::vector<Color> aExpected
-    {
-        Color(0xC0,0xC0,0xC0), Color(0xC0,0xC0,0xC0),
-        Color(0xE2,0xE2,0xE2), Color(0xE,0xE,0xE), Color(0xE2,0xE2,0xE2), Color(0xE,0xE,0xE), Color(0xE,0xE,0xE)
-    };
-    return checkRectangles(rBitmap, aExpected);
-}
-
-TestResult OutputDeviceTestBitmap::checkBitmapExWithAlpha(Bitmap& rBitmap)
-{
-    const Color aBlendedColor(0xEE, 0xEE, 0x33);
-
-    std::vector<Color> aExpected
-    {
-        constBackgroundColor, constBackgroundColor,
-        aBlendedColor, constBackgroundColor, constBackgroundColor,
-        aBlendedColor, constBackgroundColor
-    };
-    return checkRectangles(rBitmap, aExpected);
-}
-
-TestResult OutputDeviceTestBitmap::checkMask(Bitmap& rBitmap)
-{
-    return checkRectangle(rBitmap);
-}
-
-TestResult OutputDeviceTestBitmap::checkBlend(const BitmapEx& rBitmapEx)
-{
-    const Color aBlendedColor(0xEE, 0xEE, 0x33);
-
-    std::vector<Color> aExpected
-    {
-        COL_WHITE, COL_WHITE, COL_YELLOW, constBackgroundColor,
-        constBackgroundColor, aBlendedColor, constBackgroundColor
-    };
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
-    return checkRectangles(aBitmap, aExpected);
 }
 
 } // end namespace vcl::test
