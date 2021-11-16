@@ -248,7 +248,7 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<SwTOXTypes>        mpTOXTypes;              //< Tables/indices
     std::unique_ptr<SwDefTOXBase_Impl> mpDefTOXBases;           //< defaults of SwTOXBase's
 
-    std::unique_ptr<SwDBManager, o3tl::default_delete<SwDBManager>> m_pOwnDBManager; //< own DBManager
+    std::unique_ptr<SwDBManager> m_pOwnDBManager; //< own DBManager
     SwDBManager * m_pDBManager; //< DBManager for evaluation of DB-fields.
 
     SwNumRule       *mpOutlineRule;

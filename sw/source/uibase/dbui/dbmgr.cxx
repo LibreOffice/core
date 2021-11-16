@@ -704,7 +704,7 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
 {
 }
 
-SwDBManager::~SwDBManager() COVERITY_NOEXCEPT_FALSE
+void SwDBManager::ImplDestroy()
 {
     RevokeLastRegistrations();
 
@@ -730,6 +730,11 @@ SwDBManager::~SwDBManager() COVERITY_NOEXCEPT_FALSE
             //may be disposed already since multiple entries may have used the same connection
         }
     }
+}
+
+SwDBManager::~SwDBManager()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
