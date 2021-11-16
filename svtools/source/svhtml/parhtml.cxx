@@ -1069,6 +1069,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             aToken += sTmpBuffer.makeStringAndClear();
                         nNextCh = GetNextChar();
                     } while( '>' != nNextCh && '/' != nNextCh && !rtl::isAsciiWhiteSpace( nNextCh ) &&
+                            !linguistic::IsControlChar(nNextCh) &&
                              IsParserWorking() && !rInput.eof() );
 
                     if( !sTmpBuffer.isEmpty() )
@@ -1141,8 +1142,11 @@ HtmlTokenId HTMLParser::GetNextToken_()
                                 if( !bDone )
                                 aToken += OUString(&nNextCh,1);
                             }
-                            else
-                                aToken += OUString(&nNextCh,1);
+                            else if (!linguistic::IsControlChar(nNextCh)
+                                || nNextCh == '\r' || nNextCh == '\n' || nNextCh == '\t')
+                            {
+                                aToken += OUString(&nNextCh, 1);
+                            }
                             if( !bDone )
                                 nNextCh = GetNextChar();
                         }
