@@ -731,7 +731,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             if (sName == "draw-indicator")
             {
                 assert(toBool(xChild->getFirstChild()->getNodeValue()));
-                if (GetParentObjectType(xChild) == "GtkMenuButton")
+                if (GetParentObjectType(xChild) == "GtkMenuButton" && gtk_get_minor_version() >= 4)
                 {
                     auto xDoc = xChild->getOwnerDocument();
                     auto xAlwaysShowArrow = CreateProperty(xDoc, "always-show-arrow", "True");
@@ -1140,8 +1140,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             else if (sClass == "GtkMenuToolButton")
             {
                 xClass->setNodeValue("GtkMenuButton");
-                auto xAlwaysShowArrow = CreateProperty(xDoc, "always-show-arrow", "True");
-                insertAsFirstChild(xChild, xAlwaysShowArrow);
+                if (gtk_get_minor_version() >= 4)
+                {
+                    auto xAlwaysShowArrow = CreateProperty(xDoc, "always-show-arrow", "True");
+                    insertAsFirstChild(xChild, xAlwaysShowArrow);
+                }
             }
             else if (sClass == "GtkRadioToolButton")
             {
