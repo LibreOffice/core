@@ -43,6 +43,7 @@ public:
     void testMatrixQuality();
     void testDelayedScale();
     void testDelayedScaleAlphaImage();
+    void testDrawDelayedScaleImage();
     void testTdf137329();
     void testTdf140848();
     void testTdf132367();
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testMatrixQuality);
     CPPUNIT_TEST(testDelayedScale);
     CPPUNIT_TEST(testDelayedScaleAlphaImage);
+    CPPUNIT_TEST(testDrawDelayedScaleImage);
     CPPUNIT_TEST(testTdf137329);
     CPPUNIT_TEST(testTdf140848);
     CPPUNIT_TEST(testTdf132367);
@@ -427,6 +429,41 @@ void SkiaTest::testDelayedScaleAlphaImage()
     CPPUNIT_ASSERT(bitmapCopy.unittestHasBuffer());
     bitmapCopy.ReleaseBuffer(buffer2, BitmapAccessMode::Read);
     CPPUNIT_ASSERT_EQUAL(Size(240, 240), bitmapCopy.GetSize());
+}
+
+void SkiaTest::testDrawDelayedScaleImage()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(10, 10));
+    device->SetBackground(Wallpaper(COL_WHITE));
+    device->Erase();
+    Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    bitmap.Erase(COL_RED);
+    // Set a pixel to create pixel data.
+    BitmapWriteAccess(bitmap).SetPixel(0, 0, COL_BLUE);
+    SkiaSalBitmap* skiaBitmap1 = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    // Force creating of image.
+    sk_sp<SkImage> image1 = skiaBitmap1->GetSkImage();
+    CPPUNIT_ASSERT(skiaBitmap1->unittestHasImage());
+    CPPUNIT_ASSERT(bitmap.Scale(Size(5, 5)));
+    // Make sure delayed scaling has not changed the image.
+    SkiaSalBitmap* skiaBitmap2 = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    CPPUNIT_ASSERT(skiaBitmap2->unittestHasImage());
+    sk_sp<SkImage> image2 = skiaBitmap2->GetSkImage(SkiaHelper::DirectImage::Yes);
+    CPPUNIT_ASSERT_EQUAL(image1, image2);
+    CPPUNIT_ASSERT_EQUAL(Size(5, 5), bitmap.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Size(10, 10), SkiaHelper::imageSize(image2));
+    // Draw the bitmap scaled to size 10x10 and check that the 10x10 image was used (and kept),
+    // even though technically the bitmap is 5x5.
+    device->DrawBitmap(Point(0, 0), Size(10, 10), bitmap);
+    SkiaSalBitmap* skiaBitmap3 = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    CPPUNIT_ASSERT(skiaBitmap3->unittestHasImage());
+    sk_sp<SkImage> image3 = skiaBitmap3->GetSkImage(SkiaHelper::DirectImage::Yes);
+    CPPUNIT_ASSERT_EQUAL(image1, image3);
+    CPPUNIT_ASSERT_EQUAL(Size(5, 5), bitmap.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Size(10, 10), SkiaHelper::imageSize(image3));
 }
 
 void SkiaTest::testTdf137329()

@@ -284,6 +284,10 @@ protected:
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
     sk_sp<SkImage> mergeCacheBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
                                      const Size& targetSize);
+    using DirectImage = SkiaHelper::DirectImage;
+    static OString makeCachedImageKey(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
+                                      const Size& targetSize, DirectImage bitmapType,
+                                      DirectImage alphaBitmapType);
 
     // Skia uses floating point coordinates, so when we use integer coordinates, sometimes
     // rounding results in off-by-one errors (down), especially when drawing using GPU,

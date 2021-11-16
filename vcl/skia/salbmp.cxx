@@ -736,11 +736,13 @@ bool SkiaSalBitmap::ConserveMemory() const
            && (mBitCount > 8 || (mBitCount == 8 && mPalette.IsGreyPalette8Bit()));
 }
 
-const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
+const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage(DirectImage direct) const
 {
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+    if (direct == DirectImage::Yes)
+        return mImage;
     if (mEraseColorSet)
     {
         if (mImage)
@@ -812,11 +814,13 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     return mImage;
 }
 
-const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
+const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage(DirectImage direct) const
 {
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+    if (direct == DirectImage::Yes)
+        return mAlphaImage;
     if (mEraseColorSet)
     {
         if (mAlphaImage)
@@ -836,8 +840,8 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     }
     if (mAlphaImage)
     {
-        assert(imageSize(mAlphaImage) == mSize); // data has already been scaled if needed
-        return mAlphaImage;
+        if (imageSize(mAlphaImage) == mSize)
+            return mAlphaImage;
     }
     if (mImage)
     {
@@ -967,22 +971,41 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     return mAlphaImage;
 }
 
+void SkiaSalBitmap::TryDirectConvertToAlphaNoScaling()
+{
+    // This is a bit of a hack. Because of the VCL alpha hack where alpha is stored
+    // separately, we often convert mImage to mAlphaImage to represent the alpha
+    // channel. If code finds out that there is mImage but no mAlphaImage,
+    // this will create it from it, without checking for delayed scaling (i.e.
+    // it is "direct").
+    assert(mImage);
+    assert(!mAlphaImage);
+    // Set wanted size, trigger conversion.
+    Size savedSize = mSize;
+    mSize = imageSize(mImage);
+    GetAlphaSkImage();
+    assert(mAlphaImage);
+    mSize = savedSize;
+}
+
 // If the bitmap is to be erased, SkShader with the color set is more efficient
 // than creating an image filled with the color.
 bool SkiaSalBitmap::PreferSkShader() const { return mEraseColorSet; }
 
-sk_sp<SkShader> SkiaSalBitmap::GetSkShader(const SkSamplingOptions& samplingOptions) const
+sk_sp<SkShader> SkiaSalBitmap::GetSkShader(const SkSamplingOptions& samplingOptions,
+                                           DirectImage direct) const
 {
     if (mEraseColorSet)
         return SkShaders::Color(toSkColor(mEraseColor));
-    return GetSkImage()->makeShader(samplingOptions);
+    return GetSkImage(direct)->makeShader(samplingOptions);
 }
 
-sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader(const SkSamplingOptions& samplingOptions) const
+sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader(const SkSamplingOptions& samplingOptions,
+                                                DirectImage direct) const
 {
     if (mEraseColorSet)
         return SkShaders::Color(fromEraseColorToAlphaImageColor(mEraseColor));
-    return GetAlphaSkImage()->makeShader(samplingOptions);
+    return GetAlphaSkImage(direct)->makeShader(samplingOptions);
 }
 
 bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
@@ -1314,7 +1337,7 @@ void SkiaSalBitmap::ResetPendingScaling()
         mAlphaImage.reset();
 }
 
-OString SkiaSalBitmap::GetImageKey() const
+OString SkiaSalBitmap::GetImageKey(DirectImage direct) const
 {
     if (mEraseColorSet)
     {
@@ -1324,10 +1347,11 @@ OString SkiaSalBitmap::GetImageKey() const
            << static_cast<int>(mEraseColor.GetAlpha());
         return OString::Concat("E") + ss.str().c_str();
     }
-    return OString::Concat("I") + OString::number(GetSkImage()->uniqueID());
+    assert(direct == DirectImage::No || mImage);
+    return OString::Concat("I") + OString::number(GetSkImage(direct)->uniqueID());
 }
 
-OString SkiaSalBitmap::GetAlphaImageKey() const
+OString SkiaSalBitmap::GetAlphaImageKey(DirectImage direct) const
 {
     if (mEraseColorSet)
     {
@@ -1336,7 +1360,8 @@ OString SkiaSalBitmap::GetAlphaImageKey() const
            << static_cast<int>(255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
         return OString::Concat("E") + ss.str().c_str();
     }
-    return OString::Concat("I") + OString::number(GetAlphaSkImage()->uniqueID());
+    assert(direct == DirectImage::No || mAlphaImage);
+    return OString::Concat("I") + OString::number(GetAlphaSkImage(direct)->uniqueID());
 }
 
 void SkiaSalBitmap::dump(const char* file) const

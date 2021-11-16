@@ -1489,11 +1489,10 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools:
     sk_sp<SkImage> image = makeCheckedImageSnapshot(
         mSurface, scaleRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), mScaling));
     std::shared_ptr<SkiaSalBitmap> bitmap = std::make_shared<SkiaSalBitmap>(image);
-    // TODO: If the surface is scaled for HiDPI, the bitmap needs to be scaled down, otherwise
-    // it would have incorrect size from the API point of view. This could lead to loss of quality
-    // if the bitmap is drawn to another scaled surface. Since the bitmap scaling is done only
-    // on-demand, this state should be detected when drawing the bitmap and the scaling
-    // should be ignored.
+    // If the surface is scaled for HiDPI, the bitmap needs to be scaled down, otherwise
+    // it would have incorrect size from the API point of view. The DirectImage::Yes handling
+    // in mergeCacheBitmaps() should access the original unscaled bitmap data to avoid
+    // pointless scaling back and forth.
     if (mScaling != 1)
     {
         if (!isUnitTestRunning())
@@ -1621,20 +1620,68 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
                                                       const SkiaSalBitmap* alphaBitmap,
                                                       const Size& targetSize)
 {
-    sk_sp<SkImage> image;
+    if (alphaBitmap)
+        assert(bitmap.GetSize() == alphaBitmap->GetSize());
+
     if (targetSize.IsEmpty())
-        return image;
+        return {};
     if (alphaBitmap && alphaBitmap->IsFullyOpaqueAsAlpha())
         alphaBitmap = nullptr; // the alpha can be ignored
     if (bitmap.PreferSkShader() && (!alphaBitmap || alphaBitmap->PreferSkShader()))
-        return image;
+        return {};
+
+    // If the bitmap has SkImage that matches the required size, try to use it, even
+    // if it doesn't match bitmap.GetSize(). This can happen with delayed scaling.
+    // This will catch cases such as some code pre-scaling the bitmap, which would make GetSkImage()
+    // scale, changing GetImageKey() in the process so we'd have to re-cache, and then we'd need
+    // to scale again in this function.
+    bool bitmapReady = false;
+    bool alphaBitmapReady = false;
+    if (const sk_sp<SkImage>& image = bitmap.GetSkImage(DirectImage::Yes))
+    {
+        assert(!bitmap.PreferSkShader());
+        if (imageSize(image) == targetSize)
+            bitmapReady = true;
+    }
+    // If the image usable and there's no alpha, then it matches exactly what's wanted.
+    if (bitmapReady && !alphaBitmap)
+        return bitmap.GetSkImage(DirectImage::Yes);
+    if (alphaBitmap)
+    {
+        if (!alphaBitmap->GetAlphaSkImage(DirectImage::Yes)
+            && alphaBitmap->GetSkImage(DirectImage::Yes)
+            && imageSize(alphaBitmap->GetSkImage(DirectImage::Yes)) == targetSize)
+        {
+            // There's a usable non-alpha image, try to convert it to alpha.
+            assert(!alphaBitmap->PreferSkShader());
+            const_cast<SkiaSalBitmap*>(alphaBitmap)->TryDirectConvertToAlphaNoScaling();
+        }
+        if (const sk_sp<SkImage>& image = alphaBitmap->GetAlphaSkImage(DirectImage::Yes))
+        {
+            assert(!alphaBitmap->PreferSkShader());
+            if (imageSize(image) == targetSize)
+                alphaBitmapReady = true;
+        }
+    }
+
+    if (bitmapReady && (!alphaBitmap || alphaBitmapReady))
+    {
+        // Try to find a cached image based on the already existing images.
+        OString key = makeCachedImageKey(bitmap, alphaBitmap, targetSize, DirectImage::Yes,
+                                         DirectImage::Yes);
+        if (sk_sp<SkImage> image = findCachedImage(key))
+        {
+            assert(imageSize(image) == targetSize);
+            return image;
+        }
+    }
 
     // Probably not much point in caching of just doing a copy.
     if (alphaBitmap == nullptr && targetSize == bitmap.GetSize())
-        return image;
+        return {};
     // Image too small to be worth caching if not scaling.
     if (targetSize == bitmap.GetSize() && targetSize.Width() < 100 && targetSize.Height() < 100)
-        return image;
+        return {};
     // GPU-accelerated drawing with SkShader should be fast enough to not need caching.
     if (isGPU())
     {
@@ -1643,7 +1690,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         int reduceRatio = bitmap.GetSize().Width() * bitmap.GetSize().Height() / targetSize.Width()
                           / targetSize.Height();
         if (reduceRatio < 10)
-            return image;
+            return {};
     }
     // In some cases (tdf#134237) the target size may be very large. In that case it's
     // better to rely on Skia to clip and draw only the necessary, rather than prepare
@@ -1669,22 +1716,45 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
                                            << this << "): not caching, ratio:" << ratio << ", "
                                            << bitmap.GetSize() << "->" << targetSize << " in "
                                            << drawAreaSize);
-            return image;
+            return {};
         }
     }
     // Do not cache the result if it would take most of the cache and thus get evicted soon.
     if (targetSize.Width() * targetSize.Height() * 4 > maxImageCacheSize() * 0.7)
-        return image;
-    OString key = OString::number(targetSize.Width()) + "x" + OString::number(targetSize.Height())
-                  + "_" + bitmap.GetImageKey();
-    if (alphaBitmap)
-        key += "_" + alphaBitmap->GetAlphaImageKey();
-    image = findCachedImage(key);
-    if (image)
+        return {};
+
+    // Use ready direct image if they are both available, now even the size doesn't matter
+    // (we'll scale as necessary and it's better to scale from the original). Require only
+    // that they are the same size, or that one prefers a shader or doesn't exist
+    // (i.e. avoid two images of different size).
+    bitmapReady = bitmap.GetSkImage(DirectImage::Yes) != nullptr;
+    alphaBitmapReady
+        = alphaBitmap ? alphaBitmap->GetAlphaSkImage(DirectImage::Yes) != nullptr : false;
+    if (bitmapReady && alphaBitmap && !alphaBitmapReady && !alphaBitmap->PreferSkShader())
+        bitmapReady = false;
+    if (alphaBitmapReady && !bitmapReady && bitmap.PreferSkShader())
+        alphaBitmapReady = false;
+
+    DirectImage bitmapType = bitmapReady ? DirectImage::Yes : DirectImage::No;
+    DirectImage alphaBitmapType = alphaBitmapReady ? DirectImage::Yes : DirectImage::No;
+
+    // Try to find a cached result, this time after possible delayed scaling.
+    OString key = makeCachedImageKey(bitmap, alphaBitmap, targetSize, bitmapType, alphaBitmapType);
+    if (sk_sp<SkImage> image = findCachedImage(key))
     {
-        assert(image->width() == targetSize.Width() && image->height() == targetSize.Height());
+        assert(imageSize(image) == targetSize);
         return image;
     }
+
+    Size sourceSize;
+    if (bitmapReady)
+        sourceSize = imageSize(bitmap.GetSkImage(DirectImage::Yes));
+    else if (alphaBitmapReady)
+        sourceSize = imageSize(alphaBitmap->GetAlphaSkImage(DirectImage::Yes));
+    else
+        sourceSize = bitmap.GetSize();
+
+    // Generate a new result and cache it.
     sk_sp<SkSurface> tmpSurface
         = createSkSurface(targetSize, alphaBitmap ? kPremul_SkAlphaType : bitmap.alphaType());
     if (!tmpSurface)
@@ -1693,34 +1763,47 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     SkAutoCanvasRestore autoRestore(canvas, true);
     SkPaint paint;
     SkSamplingOptions samplingOptions;
-    if (targetSize != bitmap.GetSize())
+    if (targetSize != sourceSize)
     {
         SkMatrix matrix;
-        matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / bitmap.GetSize().Width());
-        matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / bitmap.GetSize().Height());
+        matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / sourceSize.Width());
+        matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / sourceSize.Height());
         canvas->concat(matrix);
         samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, 1);
     }
     if (alphaBitmap != nullptr)
     {
         canvas->clear(SK_ColorTRANSPARENT);
-        paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, bitmap.GetSkShader(samplingOptions),
-                                         alphaBitmap->GetAlphaSkShader(samplingOptions)));
+        paint.setShader(
+            SkShaders::Blend(SkBlendMode::kDstOut, bitmap.GetSkShader(samplingOptions, bitmapType),
+                             alphaBitmap->GetAlphaSkShader(samplingOptions, alphaBitmapType)));
         canvas->drawPaint(paint);
     }
     else if (bitmap.PreferSkShader())
     {
-        paint.setShader(bitmap.GetSkShader(samplingOptions));
+        paint.setShader(bitmap.GetSkShader(samplingOptions, bitmapType));
         canvas->drawPaint(paint);
     }
     else
-        canvas->drawImage(bitmap.GetSkImage(), 0, 0, samplingOptions, &paint);
+        canvas->drawImage(bitmap.GetSkImage(bitmapType), 0, 0, samplingOptions, &paint);
     if (isGPU())
         SAL_INFO("vcl.skia.trace", "mergecachebitmaps(" << this << "): caching GPU downscaling:"
                                                         << bitmap.GetSize() << "->" << targetSize);
-    image = makeCheckedImageSnapshot(tmpSurface);
+    sk_sp<SkImage> image = makeCheckedImageSnapshot(tmpSurface);
     addCachedImage(key, image);
     return image;
+}
+
+OString SkiaSalGraphicsImpl::makeCachedImageKey(const SkiaSalBitmap& bitmap,
+                                                const SkiaSalBitmap* alphaBitmap,
+                                                const Size& targetSize, DirectImage bitmapType,
+                                                DirectImage alphaBitmapType)
+{
+    OString key = OString::number(targetSize.Width()) + "x" + OString::number(targetSize.Height())
+                  + "_" + bitmap.GetImageKey(bitmapType);
+    if (alphaBitmap)
+        key += "_" + alphaBitmap->GetAlphaImageKey(alphaBitmapType);
+    return key;
 }
 
 bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
