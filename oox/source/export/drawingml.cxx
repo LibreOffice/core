@@ -121,6 +121,7 @@
 #include <editeng/unonames.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/unoapi.hxx>
@@ -2065,6 +2066,20 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     {
         sal_uInt32 nCharEscapementHeight = 0;
         mAny >>= nCharEscapementHeight;
+        if (DFLT_ESC_AUTO_SUPER == nCharEscapement)
+        {
+            // Raised by the differences between the ascenders (ascent = baseline to top of highest letter).
+            // The ascent is generally about 80% of the total font height.
+            // That is why DFLT_ESC_PROP (58) leads to 33% (DFLT_ESC_SUPER)
+            nCharEscapement = .8 * (100 - nCharEscapementHeight);
+        }
+        else if (DFLT_ESC_AUTO_SUB == nCharEscapement)
+        {
+            // Lowered by the differences between the descenders (descent = baseline to bottom of lowest letter).
+            // The descent is generally about 20% of the total font height.
+            // That is why DFLT_ESC_PROP (58) leads to 8% (DFLT_ESC_SUB)
+            nCharEscapement = (-.2) * (100 - nCharEscapementHeight);
+        }
         nSize = (nSize * nCharEscapementHeight) / 100;
         // MSO uses default ~58% size
         nSize = (nSize / 0.58);
