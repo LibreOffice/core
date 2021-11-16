@@ -572,11 +572,11 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_MANDAEAN: /* Aliased to USCRIPT_MANDAIC in icu 4.6. */
             sRet = "mic";
             break;
-        case USCRIPT_NABATAEAN: //no language with an assigned code yet
-            sRet = "mis";
+        case USCRIPT_NABATAEAN:
+            sRet = "mis-Nbat";  // Uncoded with script
             break;
-        case USCRIPT_PALMYRENE: //no language with an assigned code yet
-            sRet = "mis";
+        case USCRIPT_PALMYRENE:
+            sRet = "mis-Palm";  // Uncoded with script
             break;
         case USCRIPT_BAMUM:
             sRet = "bax";
@@ -633,8 +633,8 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_MRO:
             sRet = "cmr";
             break;
-        case USCRIPT_NUSHU: //no language with an assigned code yet
-            sRet = "mis";
+        case USCRIPT_NUSHU:
+            sRet = "mis-Nshu";  // Uncoded with script
             break;
         case USCRIPT_SHARADA:
             sRet = "sa";
@@ -693,10 +693,10 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
 #endif
 #if (U_ICU_VERSION_MAJOR_NUM >= 58)
         case USCRIPT_ADLAM:
-            sRet = "mis";   // Adlm - Adlam for Fulani, no language code
+            sRet = "mis-Adlm";   // Adlam for Fulani, no language code
             break;
         case USCRIPT_BHAIKSUKI:
-            sRet = "mis";   // Bhks - Bhaiksuki for some Buddhist texts, no language code
+            sRet = "mis-Bhks";   // Bhaiksuki for some Buddhist texts, no language code
             break;
         case USCRIPT_MARCHEN:
             sRet = "bo-Marc";
@@ -708,13 +708,13 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "osa-Osge";
             break;
         case USCRIPT_HAN_WITH_BOPOMOFO:
-            sRet = "mis";   // Hanb - Han with Bopomofo, zh-Hanb ?
+            sRet = "mis-Hanb";   // Han with Bopomofo, zh-Hanb ?
             break;
         case USCRIPT_JAMO:
             sRet = "ko";   // Jamo - elements of Hangul Syllables
             break;
         case USCRIPT_SYMBOLS_EMOJI:
-            sRet = "mis";   // Zsye - Emoji variant
+            sRet = "mis-Zsye";   // Emoji variant
             break;
 #endif
 #if (U_ICU_VERSION_MAJOR_NUM >= 60)
@@ -739,7 +739,7 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "mak";
             break;
         case USCRIPT_MEDEFAIDRIN:
-            sRet = "mis-Medf";  // Uncoded with script
+            sRet = "dmf-Medf";
             break;
         case USCRIPT_HANIFI_ROHINGYA:
             sRet = "rhg";
