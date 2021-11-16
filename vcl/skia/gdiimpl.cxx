@@ -1769,7 +1769,8 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / sourceSize.Width());
         matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / sourceSize.Height());
         canvas->concat(matrix);
-        samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, 1);
+        if (!isUnitTestRunning()) // unittests want exact pixel values
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, 1);
     }
     if (alphaBitmap != nullptr)
     {
