@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9b276be_5b37c9a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-16T16:02:38Z",
+      "side": 1,
+      "message": "Take your time, I do the same...\nI opted to remove the old calculation with January 4 and to simply check if the day of the week of start and finish cross the week border of the night between Sunday and Monday.\nAlso, to keep just one calculation, I used the definition that WEEKS(d2;d1;m) \u003d -WEEKS(d1;d2;m).",
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
