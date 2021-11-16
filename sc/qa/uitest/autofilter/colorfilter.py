@@ -34,9 +34,9 @@ class ColorFilterTest(UITestCase):
                 xCond1 = xDialog.getChild("cond1")
 
                 # tdf#143103: Without the fix in place, this test would have failed with
-                # AssertionError: 'Text color' != ''
-                self.assertEqual("Text color", get_state_as_dict(xField1)['DisplayText'])
-                self.assertEqual("Text color", get_state_as_dict(xCond1)['DisplayText'])
+                # AssertionError: 'Text Color' != ''
+                self.assertEqual("Text Color", get_state_as_dict(xField1)['DisplayText'])
+                self.assertEqual("Text Color", get_state_as_dict(xCond1)['DisplayText'])
 
                 xColor1 = xDialog.getChild("color1")
 
@@ -80,7 +80,7 @@ class ColorFilterTest(UITestCase):
                 # tdf#143103: Without the fix in place, this test would have failed with
                 # AssertionError: 'aaa' != ''
                 self.assertEqual("aaa", get_state_as_dict(xField1)['DisplayText'])
-                self.assertEqual("Background color", get_state_as_dict(xCond1)['DisplayText'])
+                self.assertEqual("Background Color", get_state_as_dict(xCond1)['DisplayText'])
 
                 xColor1 = xDialog.getChild("color1")
 
@@ -115,10 +115,10 @@ class ColorFilterTest(UITestCase):
 
                 self.assertEqual("Another", get_state_as_dict(xField1)['DisplayText'])
 
-                props = {"TEXT": "Background color"}
+                props = {"TEXT": "Background Color"}
                 actionProps = mkPropertyValues(props)
                 xCond1.executeAction("SELECT", actionProps)
-                self.assertEqual("Background color", get_state_as_dict(xCond1)['DisplayText'])
+                self.assertEqual("Background Color", get_state_as_dict(xCond1)['DisplayText'])
 
                 xColor1 = xDialog.getChild("color1")
 
