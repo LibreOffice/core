@@ -559,10 +559,8 @@ namespace sw
                         }
                         case CH_TXT_ATR_FIELDSTART:
                         {
-                            if (auto const pFieldMark = rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)))
-                                startedFields.emplace(pFieldMark, false, 0, 0);
-                            else
-                                SAL_WARN("sw.core", "CH_TXT_ATR_FIELDSTART field mark missing");
+                            auto const pFieldMark(rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
+                            startedFields.emplace(pFieldMark, false, 0, 0);
                             break;
                         }
                         case CH_TXT_ATR_FIELDSEP:
