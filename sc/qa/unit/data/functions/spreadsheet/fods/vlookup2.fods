@@ -1017,14 +1017,14 @@
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>VLOOKUP tests that ensure there is no partial matching of cell contents</text:p>
+      <text:p>VLOOKUP tests that ensure there is partial matching of cell contents</text:p>
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell/>
      <table:table-cell table:style-name="ce8"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>even though the document option of “search on whole cell” is turned off.</text:p>
+      <text:p>when the document option of “search on whole cell” is turned off.</text:p>
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="29">
@@ -1095,10 +1095,10 @@
      <table:table-cell table:style-name="ce22" table:formula="of:=VLOOKUP(&quot;ABC&quot;;[.$L$2:.$M$5];2;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ISERROR([.A2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce25" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce13" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=VLOOKUP(&quot;ABC&quot;,$L$2:$M$5,2,0)" calcext:value-type="string">
@@ -1122,10 +1122,10 @@
      <table:table-cell table:formula="of:=VLOOKUP(&quot;BCD&quot;;[.$L$2:.$M$5];2;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ISERROR([.A3])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce25" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce13" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=VLOOKUP(&quot;BCD&quot;,$L$2:$M$5,2,0)" calcext:value-type="string">
@@ -1149,10 +1149,10 @@
      <table:table-cell table:formula="of:=VLOOKUP(&quot;BC&quot;;[.$L$2:.$M$5];2;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#N/A</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ISERROR([.A4])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce25" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce13" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=VLOOKUP(&quot;BC&quot;,$L$2:$M$5,2,0)" calcext:value-type="string">
