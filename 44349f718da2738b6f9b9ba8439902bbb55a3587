@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a07303d_19bc42d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-16T09:24:24Z",
+      "side": 1,
+      "message": "CppunitTest_sc_statistical_functions_test failed on WNT\n\nbut 4 later builds succeeded so unrelated",
+      "revId": "44349f718da2738b6f9b9ba8439902bbb55a3587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
