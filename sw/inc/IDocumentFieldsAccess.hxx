@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTFIELDSACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTFIELDSACCESS_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/solar.h>
 #include "nodeoffset.hxx"
@@ -42,8 +45,6 @@ struct HashStr;
 class SwRootFrame;
 class IDocumentRedlineAccess;
 
-namespace rtl { class OUString; }
-using rtl::OUString;
 namespace com::sun::star::uno { class Any; }
 
  /** Document fields related interfaces
