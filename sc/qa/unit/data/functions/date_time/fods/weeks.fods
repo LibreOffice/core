@@ -1056,6 +1056,143 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.WEEKS(DATE(2022;1;2);DATE(2022;1;9);1)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>ONWAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=WEEKS(DATE(2022;1;2);DATE(2022;1;9);1)" calcext:value-type="string">
+      <text:p>=WEEKS(DATE(2022;1;2);DATE(2022;1;9);1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#145578</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="float" office:value="17" calcext:value-type="float">
+      <text:p>17</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.WEEKS(DATE(2022;1;3);DATE(2022;1;10);1)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=WEEKS(DATE(2022;1;3);DATE(2022;1;10);1)" calcext:value-type="string">
+      <text:p>=WEEKS(DATE(2022;1;3);DATE(2022;1;10);1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#145578</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:style-name="ce29" office:value-type="date" office:date-value="2001-12-01" calcext:value-type="date">
+      <text:p>01-12-2001</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.WEEKS(DATE(2022;1;9);DATE(2022;1;2);1)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="-1" calcext:value-type="float">
+      <text:p>-1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>ONWAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=WEEKS(DATE(2022;1;9);DATE(2022;1;2);1)" calcext:value-type="string">
+      <text:p>=WEEKS(DATE(2022;1;9);DATE(2022;1;2);1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#145578</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="9"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.WEEKS(DATE(2021;11;14);DATE(2021;11;15);1)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=WEEKS(DATE(2021;11;14);DATE(2021;11;15);1)" calcext:value-type="string">
+      <text:p>=WEEKS(DATE(2021;11;14);DATE(2021;11;15);1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#145587</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="9"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.WEEKS(DATE(2021;11;14);DATE(2021;11;15);0)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=WEEKS(DATE(2021;11;14);DATE(2021;11;15);0)" calcext:value-type="string">
+      <text:p>=WEEKS(DATE(2021;11;14);DATE(2021;11;15);0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#145587</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce27" table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.WEEKS(DATE(2010;01;01);DATE(2011;01;01);1)" office:value-type="float" office:value="52" calcext:value-type="float">
+      <text:p>52</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="52" calcext:value-type="float">
+      <text:p>52</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=WEEKS(DATE(2010;01;01);DATE(2011;01;01);1)" calcext:value-type="string">
+      <text:p>=WEEKS(DATE(2010;01;01);DATE(2011;01;01);1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#145578</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="9"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.WEEKS(DATE(2011;01;01);DATE(2010;01;01);1)" office:value-type="float" office:value="-52" calcext:value-type="float">
+      <text:p>-52</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="-52" calcext:value-type="float">
+      <text:p>-52</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=WEEKS(DATE(2011;01;01);DATE(2010;01;01);1)" calcext:value-type="string">
+      <text:p>=WEEKS(DATE(2011;01;01);DATE(2010;01;01);1)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#145578</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="9"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce19"/>
      <table:table-cell table:number-columns-repeated="7"/>
@@ -1150,7 +1287,7 @@
      <table:table-cell table:number-columns-repeated="14"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C29:Sheet2.C100 Sheet2.C20:Sheet2.C27 Sheet2.C2:Sheet2.C3 Sheet2.C14:Sheet2.C15 Sheet2.C18:Sheet2.C18">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C100">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
