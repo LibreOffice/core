@@ -39,7 +39,7 @@ namespace linguistic
 
     inline bool IsControlChar(sal_Unicode cChar)
     {
-        // TODO: why doesn't this include 0x0F DEL?
+        // TODO: why doesn't this include 0x7F DEL?
         return cChar < u' ';
     }
 
