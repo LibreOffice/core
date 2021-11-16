@@ -285,13 +285,14 @@ class SW_DLLPUBLIC SwDBManager
 
     SAL_DLLPRIVATE bool ToNextMergeRecord();
     SAL_DLLPRIVATE bool IsValidMergeRecord() const;
+    SAL_DLLPRIVATE void ImplDestroy();
 
     SwDBManager(SwDBManager const&) = delete;
     SwDBManager& operator=(SwDBManager const&) = delete;
 
 public:
     SwDBManager(SwDoc* pDoc);
-    ~SwDBManager() COVERITY_NOEXCEPT_FALSE;
+    ~SwDBManager();
 
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return m_pMergeEvtSrc; }
