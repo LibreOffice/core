@@ -37,9 +37,6 @@ private:
     void mapToGregorian() override;
     void mapFromGregorian() override;
 
-    // radians per degree (pi/180)
-    static const double RadPerDeg;
-
     // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
     static const double SynPeriod;
 
