@@ -131,7 +131,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes" context="optcalculatepage|match|tooltip_text">Enable this for interoperability with Microsoft Excel</property>
+                <property name="tooltip_text" translatable="yes" context="optcalculatepage|match|tooltip_text">Keep this enabled for interoperability with Microsoft Excel or for better performance</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
