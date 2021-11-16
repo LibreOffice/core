@@ -16,6 +16,24 @@
       "message": "why is this reset inside the loop?\n\ndoesnt this mean that this loop will crash after the first iteration?",
       "revId": "2f01faaf88b6d172d7293f0c9e2a061d99b8ceb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f194e667_4c8ae034",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-16T11:02:01Z",
+      "side": 1,
+      "message": "... ah i see, commit 4ed359093c991291216c39cffe14a60e607ec551 fixed it already, didnt find it while searching for the commit hash",
+      "parentUuid": "bb5848e9_c037f347",
+      "revId": "2f01faaf88b6d172d7293f0c9e2a061d99b8ceb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
