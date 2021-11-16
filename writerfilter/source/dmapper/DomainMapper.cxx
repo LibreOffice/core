@@ -1133,8 +1133,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_DataBinding_storeItemID:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_storeItemID", sStringValue);
             break;
+        case NS_ooxml::LN_CT_SdtPlaceholder_docPart_val:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtPlaceholder_docPart_val", sStringValue);
+            break;
+        case NS_ooxml::LN_CT_SdtColor_val:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtColor_val", sStringValue);
+            break;
         case NS_ooxml::LN_CT_SdtText_multiLine:
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:LN_CT_SdtText_multiLine", sStringValue);
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtText_multiLine", sStringValue);
             break;
         case NS_ooxml::LN_CT_PTab_leader:
         case NS_ooxml::LN_CT_PTab_relativeTo:
@@ -2645,6 +2651,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pProperties->resolve(*this);
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_placeholder:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties)
+            pProperties->resolve(*this);
+    }
+    break;
+    break;
     case NS_ooxml::LN_CT_SdtPr_date:
     {
         resolveSprmProps(*this, rSprm);
@@ -2680,6 +2694,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_text:
     case NS_ooxml::LN_CT_SdtPr_id:
     case NS_ooxml::LN_CT_SdtPr_alias:
+    case NS_ooxml::LN_CT_SdtPlaceholder_docPart:
+    case NS_ooxml::LN_CT_SdtPr_color:
     {
         // this is an unsupported SDT property, create a grab bag for it
         OUString sName;
@@ -2696,6 +2712,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPr_text:        sName = "ooxml:CT_SdtPr_text"; break;
             case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
             case NS_ooxml::LN_CT_SdtPr_alias:       sName = "ooxml:CT_SdtPr_alias"; break;
+            case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
+            case NS_ooxml::LN_CT_SdtPr_color:       sName = "ooxml:CT_SdtPr_color"; break;
             default: assert(false);
         };
         enableInteropGrabBag(sName);

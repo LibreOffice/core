@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(Test, Test_McIgnorable)
     loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
-    assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14");
+    assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14 w15");
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
 

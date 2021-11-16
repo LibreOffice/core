@@ -65,6 +65,21 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
     assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Mystyle']/w:pPr/w:numPr/w:ilvl", "val", "1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return; // initial import, no futher checks
+
+    // Ensure that we have <w:placeholder><w:docPart v:val="xxxx"/></w:placeholder>
+    OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:placeholder/w:docPart", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("DefaultPlaceholder_-1854013440"), sDocPart);
+
+    // Ensure that we have <w15:color v:val="xxxx"/>
+    OUString sColor = getXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w15:color", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("FF0000"), sColor);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
 {
     // Given a document that lacks builtin styles, and addition of them is disabled:
