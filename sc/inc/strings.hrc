@@ -37,7 +37,7 @@
 #define SCSTR_FILTER_NOTEMPTY                       NC_("SCSTR_FILTER_NOTEMPTY", "Not Empty")
 #define SCSTR_FILTER_TEXT_COLOR                     NC_("SCSTR_FILTER_TEXT_COLOR", "Text color")
 #define SCSTR_FILTER_BACKGROUND_COLOR               NC_("SCSTR_FILTER_BACKGROUND_COLOR", "Background color")
-#define SCSTR_FILTER_NO_FILL                        NC_("SCSTR_FILTER_NO_FILL", "No fill")
+#define SCSTR_FILTER_NO_FILL                        NC_("SCSTR_FILTER_NO_FILL", "No Fill")
 #define SCSTR_FILTER_AUTOMATIC_COLOR                NC_("SCSTR_FILTER_AUTOMATIC_COLOR", "Automatic")
 #define SCSTR_NONAME                                NC_("SCSTR_NONAME", "unnamed")
 #define SCSTR_INSERT_RTL                            NC_("SCSTR_INSERT_RTL", "Shift cells left")
