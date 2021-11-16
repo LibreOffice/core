@@ -435,6 +435,10 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p)
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_type nP = rv.first - begin();
         LOKRedlineNotification(RedlineNotification::Add, p);
+
+        // set IsMoved checking nearby redlines
+        isMoved(nP);
+
         p->CallDisplayFunc(nP);
         if (rv.second)
             CheckOverlapping(rv.first);
@@ -769,7 +773,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
 bool SwRedlineTable::isMoved( size_type rPos ) const
 {
     auto constexpr nLookahead = 20;
-    const SwRangeRedline* pRedline = (*this)[ rPos ];
+    SwRangeRedline* pRedline = (*this)[ rPos ];
 
     // set redline type of the searched pair
     RedlineType nPairType = pRedline->GetType();
@@ -800,7 +804,7 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
     rPos = rPos > nLookahead ? rPos - nLookahead : 0;
     for ( ; rPos < nEnd ; ++rPos )
     {
-        const SwRangeRedline* pPair = (*this)[ rPos ];
+        SwRangeRedline* pPair = (*this)[ rPos ];
         // TODO handle also Show Changes in Margin mode
         if ( pPair->HasMark() && pPair->IsVisible() )
         {
@@ -810,6 +814,9 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
                 abs(pRedline->GetText().getLength() - pPair->GetText().getLength()) <= 2 &&
                 sTrimmed == pPair->GetText().trim() )
             {
+                pRedline->SetMoved();
+                pPair->SetMoved();
+                pPair->InvalidateRange(SwRangeRedline::Invalidation::Remove);
                 return true;
             }
         }
@@ -1073,6 +1080,7 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
+    m_bIsMoved = false;
     if( !rPam.HasMark() )
         DeleteMark();
 }
@@ -1085,6 +1093,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
+    m_bIsMoved = false;
     if( !rPam.HasMark() )
         DeleteMark();
 }
@@ -1097,6 +1106,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
+    m_bIsMoved = false;
 }
 
 SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
@@ -1107,6 +1117,9 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
+    // inserting characters within a moved text must keep
+    // IsMoved bit in the second part of the split redline
+    m_bIsMoved = rCpy.IsMoved();
     if( !rCpy.HasMark() )
         DeleteMark();
 }
@@ -1827,7 +1840,8 @@ void SwRangeRedline::SetContentIdx( const SwNodeIndex* pIdx )
 bool SwRangeRedline::CanCombine( const SwRangeRedline& rRedl ) const
 {
     return  IsVisible() && rRedl.IsVisible() &&
-            m_pRedlineData->CanCombine( *rRedl.m_pRedlineData );
+            m_pRedlineData->CanCombine( *rRedl.m_pRedlineData ) &&
+            !IsMoved() && !rRedl.IsMoved();
 }
 
 void SwRangeRedline::PushData( const SwRangeRedline& rRedl, bool bOwnAsNext )

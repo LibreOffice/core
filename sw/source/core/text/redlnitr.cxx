@@ -735,7 +735,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     SfxWhichIter aIter( *m_pSet );
 
                     // moved text: dark green with double underline or strikethrough
-                    if ( rTable.isMoved( m_nAct ) )
+                    if ( pRed->IsMoved() )
                     {
                         m_pSet->Put(SvxColorItem( COL_GREEN, RES_CHRATR_COLOR ));
                         if (SfxItemState::SET == m_pSet->GetItemState(RES_CHRATR_CROSSEDOUT, true))
