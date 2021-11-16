@@ -28,6 +28,7 @@
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <algorithm>
+#include <cmath>
 #include "deffuncname.hxx"
 
 using namespace ::com::sun::star;
@@ -444,49 +445,19 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  * new Weeks(date1,date2,mode) function for StarCalc
  *
  * Two modes of operation are provided.
- * The first is just a simple division by 7 calculation.
+ * mode 0 is just a simple division by 7 calculation.
  *
- * The second calculates the difference by week of year.
+ * mode 1 calculates the difference by week adhering to ISO8601.
  *
- * The International Standard IS-8601 has decreed that Monday
- * shall be the first day of the week.
+ * The International Standard IS-8601 states that Monday is the first
+ * day of the week. The Gregorian Calender is used for all dates,
+ * proleptic in case of dates before 1582-10-15.
  *
- * A week that lies partly in one year and partly in another
- * is assigned a number in the year in which most of its days lie.
+ * The (consecutive) week number of a date is
+ * std::floor( (date + NullDate - 1), 7.0 ),
+ * with weeks starting on Monday.
  *
- * That means that week 1 of any year is the week that contains the 4. January
- *
- * The internal representation of a Date used in the Addin is the number of days based on 01/01/0001
- *
- * A WeekDay can be then calculated by subtracting 1 and calculating the rest of
- * a division by 7, which gives a 0 - 6 value for Monday - Sunday
- *
- * Using the 4. January rule explained above the formula
- *
- *  nWeek1= ( nDays1 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
- *
- * calculates a number between 0-53 for each day which is in the same year as nJan4
- * where 0 means that this week belonged to the year before.
- *
- * If a day in the same or another year is used in this formula this calculates
- * a calendar week offset from a given 4. January
- *
- *  nWeek2 = ( nDays2 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
- *
- * The 4.January of first Date Argument can thus be used to calculate
- * the week difference by calendar weeks which is then nWeek = nWeek2 - nWeek1
- *
- * which can be optimized to
- *
- * nWeek = ( (nDays2-nJan4+((nJan4-1)%7))/7 ) - ( (nDays1-nJan4+((nJan4-1)%7))/7 )
- *
- * Note: All calculations are operating on the long integer data type
- * % is the modulo operator in C which calculates the rest of an Integer division
- *
- *
- * mode 0 is the interval between the dates in month, that is days / 7
- *
- * mode 1 is the difference by week of year
+ * Weeks(d2,d1,m) is defined as -Weeks(d1,d2,m).
  *
  */
 
@@ -498,26 +469,18 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
     if (nMode != 0 && nMode != 1)
         throw lang::IllegalArgumentException();
 
-    sal_Int32 nNullDate = GetNullDate( xOptions );
-
-    sal_Int32 nDays1 = nStartDate + nNullDate;
-    sal_Int32 nDays2 = nEndDate + nNullDate;
-
-    sal_Int32 nRet;
-
-    if ( nMode == 1 )
+    if ( nMode  == 0 )
     {
-        sal_uInt16 nDay,nMonth,nYear;
-        DaysToDate( nDays1, nDay, nMonth, nYear );
-        sal_Int32 nJan4 = DateToDays( 4, 1, nYear );
-
-        nRet = ( (nDays2-nJan4+((nJan4-1)%7))/7 ) - ( (nDays1-nJan4+((nJan4-1)%7))/7 );
+        return ( nEndDate - nStartDate ) / 7;
     }
     else
     {
-        nRet = (nDays2 - nDays1) / 7;
+        sal_Int32 nNullDate = GetNullDate( xOptions );
+        sal_Int32 nDays1 = nStartDate + nNullDate - 1;
+        sal_Int32 nDays2 = nEndDate + nNullDate - 1;
+
+        return ( std::floor( nDays2 / 7.0 ) - std::floor( nDays1 / 7.0 ) );
     }
-    return nRet;
 }
 
 /**
