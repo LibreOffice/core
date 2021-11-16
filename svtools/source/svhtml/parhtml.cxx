@@ -651,11 +651,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             {
                 bContinue = false;
             }
-            else
-            {
-                sTmpBuffer.appendUtf32( nNextCh );
-            }
-
+            // else: ignore, not a valid code point
             break;
 
         case '<':
@@ -967,7 +963,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                 }
                 break;
             }
-            [[fallthrough]];
+            break;
         default:
             if (!linguistic::IsControlChar(nNextCh) || nNextCh == '\t')
             {
