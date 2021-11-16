@@ -49,6 +49,7 @@
 #include <AnnotationWin.hxx>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <vcl/TypeSerializer.hxx>
 
 #include <svx/svdpage.hxx>
@@ -224,6 +225,7 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf142157();
+    void testTdf116640();
     void testTdf108524();
     void testRhbz1810732();
     void testTableInSection();
@@ -341,6 +343,7 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf142157);
+    CPPUNIT_TEST(testTdf116640);
     CPPUNIT_TEST(testTdf108524);
     CPPUNIT_TEST(testRhbz1810732);
     CPPUNIT_TEST(testTableInSection);
@@ -2077,6 +2080,43 @@ void SwUiWriterTest4::testTdf142157()
     // - Expected: 1
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+}
+
+void SwUiWriterTest4::testTdf116640()
+{
+    createSwDoc();
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Columns", uno::makeAny(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
+                                                      uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextSection(xSections->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    uno::Reference<text::XTextColumns> xTextColumns
+        = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
 }
 
 void SwUiWriterTest4::testTdf108524()
