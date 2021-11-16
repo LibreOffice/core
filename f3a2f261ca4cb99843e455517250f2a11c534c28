@@ -16,6 +16,46 @@
       "message": "Take your time, I do the same...\nI opted to remove the old calculation with January 4 and to simply check if the day of the week of start and finish cross the week border of the night between Sunday and Monday.\nAlso, to keep just one calculation, I used the definition that WEEKS(d2;d1;m) \u003d -WEEKS(d1;d2;m).",
       "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26279714_6bc5f2e7",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-16T19:01:26Z",
+      "side": 1,
+      "message": "I don\u0027t think that week number is used here. What is the difference between week number 42 in year X and week number 3 in year Y? I suppose that \"by ISO8601 weeks\" is more correct.",
+      "range": {
+        "startLine": 449,
+        "startChar": 39,
+        "endLine": 449,
+        "endChar": 49
+      },
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9539312_acff8043",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-16T19:01:26Z",
+      "side": 1,
+      "message": "I feel that trying to keep only integral computations, it brings much complexity. But dividing by 7.0 instead of 7, and then using std::floor on result, would give you uniform computation suitable for both positive and negative differences.",
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
