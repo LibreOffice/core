@@ -517,6 +517,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
     CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, set.GetItemState(RES_BOX, false));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139922)
+{
+    SwDoc* const pDoc = createDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("this _is_ a SEntence. this _is_ a SEntence.");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("this _is_ a SEntence. this _is_ a SEntence."),
+                         getParagraph(2)->getString());
+
+    //apply autocorrect StartAutoCorrect
+    lcl_dispatchCommand(mxComponent, ".uno:AutoFormatApply", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: This is a Sentence. This is a Sentence.
+    // - Actual  : this is a Sentence. This is a Sentence.
+    CPPUNIT_ASSERT_EQUAL(OUString("This is a Sentence. This is a Sentence."),
+                         getParagraph(2)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
 {
     load(DATA_DIRECTORY, "tdf132236.odt");
