@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eee51fc_4765b38e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-16T14:54:27Z",
+      "side": 1,
+      "message": "Even though I find it weird that basegfx is used in i18npool, and I\u0027d suppose that deg2rad/rad2deg is better moved to \u003crtl/math.h\u003e, this change makes sense anyway.",
+      "revId": "517b3ae4dba07f62ea1470590e58d2ce7c03deb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
