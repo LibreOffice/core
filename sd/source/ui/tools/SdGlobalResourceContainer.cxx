@@ -26,7 +26,6 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
@@ -53,7 +52,11 @@ public:
 
 namespace {
 
-struct theSdGlobalResourceContainerInstance : public rtl::Static<SdGlobalResourceContainerInstance, theSdGlobalResourceContainerInstance> {};
+SdGlobalResourceContainerInstance& theSdGlobalResourceContainerInstance()
+{
+    static SdGlobalResourceContainerInstance SINGLETON;
+    return SINGLETON;
+}
 
 } // namespace
 
@@ -81,7 +84,7 @@ private:
 // static
 SdGlobalResourceContainer& SdGlobalResourceContainer::Instance()
 {
-    SdGlobalResourceContainer *const pRet(theSdGlobalResourceContainerInstance::get().get());
+    SdGlobalResourceContainer *const pRet(theSdGlobalResourceContainerInstance().get());
     assert(pRet); // error if it has been deleted and is null
     return *pRet;
 }

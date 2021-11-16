@@ -57,7 +57,6 @@
 #include "vbafiledialog.hxx"
 
 #include <osl/file.hxx>
-#include <rtl/instance.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -117,7 +116,11 @@ ScVbaAppSettings::ScVbaAppSettings() :
 
 namespace {
 
-struct ScVbaStaticAppSettings : public ::rtl::Static< ScVbaAppSettings, ScVbaStaticAppSettings > {};
+ScVbaAppSettings& ScVbaStaticAppSettings()
+{
+    static ScVbaAppSettings SINGLETON;
+    return SINGLETON;
+}
 
 class ScVbaApplicationOutgoingConnectionPoint : public cppu::WeakImplHelper<XConnectionPoint>
 {
@@ -158,7 +161,7 @@ ScVbaApplication::RemoveSink( sal_uInt32 nNumber )
 
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
-    mrAppSettings( ScVbaStaticAppSettings::get() ),
+    mrAppSettings( ScVbaStaticAppSettings() ),
     m_nDialogType(0)
 {
 }
@@ -169,7 +172,7 @@ ScVbaApplication::~ScVbaApplication()
 
 /*static*/ bool ScVbaApplication::getDocumentEventsEnabled()
 {
-    return ScVbaStaticAppSettings::get().mbEnableEvents;
+    return ScVbaStaticAppSettings().mbEnableEvents;
 }
 
 OUString SAL_CALL
