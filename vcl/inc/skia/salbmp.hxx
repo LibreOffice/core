@@ -70,23 +70,30 @@ public:
     // True if GetSkShader() should be preferred to GetSkImage() (or the Alpha variants).
     bool PreferSkShader() const;
 
+    // Direct image means direct access to the stored SkImage, without checking
+    // if its size is up to date. This should be used only in special cases with care.
+    using DirectImage = SkiaHelper::DirectImage;
     // Returns the contents as SkImage (possibly GPU-backed).
-    const sk_sp<SkImage>& GetSkImage() const;
-    sk_sp<SkShader> GetSkShader(const SkSamplingOptions& samplingOptions) const;
-
+    const sk_sp<SkImage>& GetSkImage(DirectImage direct = DirectImage::No) const;
+    sk_sp<SkShader> GetSkShader(const SkSamplingOptions& samplingOptions,
+                                DirectImage direct = DirectImage::No) const;
     // Returns the contents as alpha SkImage (possibly GPU-backed)
-    const sk_sp<SkImage>& GetAlphaSkImage() const;
-    sk_sp<SkShader> GetAlphaSkShader(const SkSamplingOptions& samplingOptions) const;
+    const sk_sp<SkImage>& GetAlphaSkImage(DirectImage direct = DirectImage::No) const;
+    sk_sp<SkShader> GetAlphaSkShader(const SkSamplingOptions& samplingOptions,
+                                     DirectImage direct = DirectImage::No) const;
 
     // Key for caching/hashing.
-    OString GetImageKey() const;
-    OString GetAlphaImageKey() const;
+    OString GetImageKey(DirectImage direct = DirectImage::No) const;
+    OString GetAlphaImageKey(DirectImage direct = DirectImage::No) const;
 
     // Returns true if it is known that this bitmap can be ignored if it's to be used
     // as an alpha bitmap. An optimization, not guaranteed to return true for all such cases.
     bool IsFullyOpaqueAsAlpha() const;
     // Alpha type best suitable for the content.
     SkAlphaType alphaType() const;
+
+    // Tries to create direct GetAlphaSkImage() from direct GetSkImage().
+    void TryDirectConvertToAlphaNoScaling();
 
     // Dump contents to a file for debugging.
     void dump(const char* file) const;

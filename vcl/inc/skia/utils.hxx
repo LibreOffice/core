@@ -73,6 +73,14 @@ VCL_DLLPUBLIC sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface,
 
 inline Size imageSize(const sk_sp<SkImage>& image) { return Size(image->width(), image->height()); }
 
+// Whether to use GetSkImage() that checks for delayed scaling or whether to access
+// the stored image directly without checks.
+enum DirectImage
+{
+    Yes,
+    No
+};
+
 // Do 'paint->setBlendMode(SkBlendMode::kDifference)' (workaround for buggy drivers).
 void setBlendModeDifference(SkPaint* paint);
 
