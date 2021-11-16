@@ -34,6 +34,23 @@
       "parentUuid": "31cd92fb_3aa047fa",
       "revId": "4d8858ae580ff86446e92c3cfa8dcccb6a37de0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2b1b8a4_76f59dd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-16T17:26:10Z",
+      "side": 1,
+      "message": "well, i don\u0027t know, maybe it\u0027s possible that there is a reason there are 2 different variables ENABLE_PDFIMPORT and ENABLE_POPPLER?\n\nperhaps looking at \"git log -p -S ENABLE_PDFIMPORT\" and \"git log -p -S ENABLE_POPPLER\" would be informative?\n\ni don\u0027t remember having added either of these variables.",
+      "revId": "4d8858ae580ff86446e92c3cfa8dcccb6a37de0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
