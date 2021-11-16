@@ -54,8 +54,6 @@ public:
         return CairoCommon::getDamageKey();
     }
 
-    static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
-
     // need this static version of ::drawPolyLine for usage from
     // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
     // ::drawPolyLine with some added parameters (see there)
@@ -80,7 +78,6 @@ public:
 
 private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
-    void applyColor(cairo_t *cr, Color rColor, double fTransparency = 0.0);
 
 protected:
     SvpCairoTextRender                  m_aTextRenderImpl;
@@ -227,7 +224,10 @@ public:
     }
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
-    void                    clipRegion(cairo_t* cr);
+    void clipRegion(cairo_t* cr)
+    {
+        m_aCairoCommon.clipRegion(cr);
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

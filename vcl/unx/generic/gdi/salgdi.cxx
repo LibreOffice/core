@@ -57,6 +57,10 @@
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
 
+#if ENABLE_CAIRO_CANVAS
+#include <headless/CairoCommon.hxx>
+#endif
+
 X11SalGraphics::X11SalGraphics():
     m_pFrame(nullptr),
     m_pVDev(nullptr),
@@ -692,7 +696,7 @@ bool X11SalGraphics::drawPolyPolygon(
 #if ENABLE_CAIRO_CANVAS
 void X11SalGraphics::clipRegion(cairo_t* cr)
 {
-    SvpSalGraphics::clipRegion(cr, maClipRegion);
+    CairoCommon::clipRegion(cr, maClipRegion);
 }
 #endif // ENABLE_CAIRO_CANVAS
 

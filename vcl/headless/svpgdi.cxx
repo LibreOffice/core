@@ -835,28 +835,6 @@ bool SvpSalGraphics::hasFastDrawTransformedBitmap() const
     return false;
 }
 
-void SvpSalGraphics::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
-{
-    RectangleVector aRectangles;
-    if (!rClipRegion.IsEmpty())
-    {
-        rClipRegion.GetRegionRectangles(aRectangles);
-    }
-    if (!aRectangles.empty())
-    {
-        for (auto const& rectangle : aRectangles)
-        {
-            cairo_rectangle(cr, rectangle.Left(), rectangle.Top(), rectangle.GetWidth(), rectangle.GetHeight());
-        }
-        cairo_clip(cr);
-    }
-}
-
-void SvpSalGraphics::clipRegion(cairo_t* cr)
-{
-    SvpSalGraphics::clipRegion(cr, m_aCairoCommon.m_aClipRegion);
-}
-
 bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
 {
     const bool bHasFill(m_aCairoCommon.m_aFillColor != SALCOLOR_NONE);
@@ -879,7 +857,7 @@ bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long n
     {
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
+        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
 
         // set FillDamage
         extents = getClippedFillDamage(cr);
@@ -897,7 +875,7 @@ bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long n
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
+        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
@@ -952,7 +930,7 @@ void SvpSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color aColor )
     clipRegion(cr);
 
     cairo_rectangle(cr, nX, nY, 1, 1);
-    applyColor(cr, aColor, 0.0);
+    m_aCairoCommon.applyColor(cr, aColor, 0.0);
     cairo_fill(cr);
 
     basegfx::B2DRange extents = getClippedFillDamage(cr);
@@ -1271,7 +1249,7 @@ void SvpSalGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2
         !getAntiAlias(),
         false);
 
-    applyColor(cr, m_aCairoCommon.m_aLineColor);
+    m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aLineColor);
 
     basegfx::B2DRange extents = getClippedStrokeDamage(cr);
     extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
@@ -1793,7 +1771,7 @@ bool SvpSalGraphics::drawPolyPolygon(
     {
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
-        applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
+        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
         extents = getClippedFillDamage(cr);
 
@@ -1809,7 +1787,7 @@ bool SvpSalGraphics::drawPolyPolygon(
 
         add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
-        applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
+        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
@@ -1938,23 +1916,6 @@ bool SvpSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolyg
     m_aCairoCommon.releaseCairoContext(cr, true, extents);
 
     return true;
-}
-
-void SvpSalGraphics::applyColor(cairo_t *cr, Color aColor, double fTransparency)
-{
-    if (cairo_surface_get_content(m_aCairoCommon.m_pSurface) == CAIRO_CONTENT_COLOR_ALPHA)
-    {
-        cairo_set_source_rgba(cr, aColor.GetRed()/255.0,
-                                  aColor.GetGreen()/255.0,
-                                  aColor.GetBlue()/255.0,
-                                  1.0 - fTransparency);
-    }
-    else
-    {
-        double fSet = aColor == COL_BLACK ? 1.0 : 0.0;
-        cairo_set_source_rgba(cr, 1, 1, 1, fSet);
-        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-    }
 }
 
 void SvpSalGraphics::copyArea( tools::Long nDestX,

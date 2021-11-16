@@ -223,4 +223,39 @@ cairo_t* CairoCommon::createTmpCompatibleCairoContext() const
     return cairo_create(target);
 }
 
+void CairoCommon::applyColor(cairo_t* cr, Color aColor, double fTransparency)
+{
+    if (cairo_surface_get_content(m_pSurface) == CAIRO_CONTENT_COLOR_ALPHA)
+    {
+        cairo_set_source_rgba(cr, aColor.GetRed() / 255.0, aColor.GetGreen() / 255.0,
+                              aColor.GetBlue() / 255.0, 1.0 - fTransparency);
+    }
+    else
+    {
+        double fSet = aColor == COL_BLACK ? 1.0 : 0.0;
+        cairo_set_source_rgba(cr, 1, 1, 1, fSet);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    }
+}
+
+void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
+{
+    RectangleVector aRectangles;
+    if (!rClipRegion.IsEmpty())
+    {
+        rClipRegion.GetRegionRectangles(aRectangles);
+    }
+    if (!aRectangles.empty())
+    {
+        for (auto const& rectangle : aRectangles)
+        {
+            cairo_rectangle(cr, rectangle.Left(), rectangle.Top(), rectangle.GetWidth(),
+                            rectangle.GetHeight());
+        }
+        cairo_clip(cr);
+    }
+}
+
+void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
