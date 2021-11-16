@@ -48,7 +48,7 @@ sub make_absolute_filename_to_relative_filename
 
     if ( $pre2par::globals::isunix )
     {
-        if ( $$longfilenameref =~ /^.*\/(\S.+\S?)/ )
+        if ( $$longfilenameref =~ /^.*\/(?=\S)([^\/]+)(?<=\S)/ )
         {
             $$longfilenameref = $1;
         }
@@ -56,7 +56,8 @@ sub make_absolute_filename_to_relative_filename
 
     if ( $pre2par::globals::iswin )
     {
-        if ( $$longfilenameref =~ /^.*\\(\S.+\S?)/ )
+        # Either '/' or '\'.
+        if ( $$longfilenameref =~ /^.*[\/\\](?=\S)([^\/\\]+)(?<=\S)/ )
         {
             $$longfilenameref = $1;
         }
