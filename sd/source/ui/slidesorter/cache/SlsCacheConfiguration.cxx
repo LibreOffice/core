@@ -18,7 +18,6 @@
  */
 
 #include "SlsCacheConfiguration.hxx"
-#include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -36,8 +35,11 @@ namespace sd::slidesorter::cache {
 namespace
 {
     typedef std::shared_ptr<CacheConfiguration> CacheConfigSharedPtr;
-    class theInstance :
-        public rtl::Static<CacheConfigSharedPtr, theInstance> {};
+    CacheConfigSharedPtr& theInstance()
+    {
+        static CacheConfigSharedPtr SINGLETON;
+        return SINGLETON;
+    }
 }
 
 std::weak_ptr<CacheConfiguration> CacheConfiguration::mpWeakInstance;
@@ -45,7 +47,7 @@ std::weak_ptr<CacheConfiguration> CacheConfiguration::mpWeakInstance;
 std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
 {
     SolarMutexGuard aSolarGuard;
-    CacheConfigSharedPtr &rInstancePtr = theInstance::get();
+    CacheConfigSharedPtr &rInstancePtr = theInstance();
     if (!rInstancePtr)
     {
         // Maybe somebody else kept a previously created instance alive.
@@ -123,7 +125,7 @@ Any CacheConfiguration::GetValue (const OUString& rName)
 
 IMPL_STATIC_LINK_NOARG(CacheConfiguration, TimerCallback, Timer *, void)
 {
-    CacheConfigSharedPtr &rInstancePtr = theInstance::get();
+    CacheConfigSharedPtr &rInstancePtr = theInstance();
     // Release our reference to the instance.
     rInstancePtr.reset();
     // note: if there are no other references to the instance, m_ReleaseTimer
@@ -132,7 +134,7 @@ IMPL_STATIC_LINK_NOARG(CacheConfiguration, TimerCallback, Timer *, void)
 
 void CacheConfiguration::Shutdown()
 {
-    CacheConfigSharedPtr &rInstancePtr = theInstance::get();
+    CacheConfigSharedPtr &rInstancePtr = theInstance();
     rInstancePtr.reset();
     assert(mpWeakInstance.expired()); // ensure m_ReleaseTimer is destroyed
 }

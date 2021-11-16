@@ -21,7 +21,6 @@
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 
 #include <mutex>
 
