@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05da242_7cdebda2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-16T13:50:18Z",
+      "side": 1,
+      "message": "calc/alignment_options_spec.js failed, resume.",
+      "revId": "3c7e49958672e0fe5ceeab0abf8db8e6720294bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
