@@ -1367,6 +1367,12 @@ void makeRedline( SwPaM const & rPaM,
     }
 
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );
+
+    // set IsMoved bit of the redline to show and handle moved text
+    bool bIsMoved;
+    if( (aPropMap.getValue("RedlineMoved") >>= bIsMoved) && bIsMoved )
+        pRedline->SetMoved();
+
     RedlineFlags nPrevMode = rRedlineAccess.GetRedlineFlags( );
     // xRedlineExtraData is copied here
     pRedline->SetExtraData( xRedlineExtraData.get() );

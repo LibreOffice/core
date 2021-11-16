@@ -3039,6 +3039,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
     if ( !pRedline )
         return;
 
+    bool bRedlineMoved = false;
     try
     {
         OUString sType;
@@ -3048,10 +3049,13 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             sType = getPropertyName( PROP_FORMAT );
             break;
         case XML_moveTo:
+            bRedlineMoved = true;
+            [[fallthrough]];
         case XML_ins:
             sType = getPropertyName( PROP_INSERT );
             break;
         case XML_moveFrom:
+            bRedlineMoved = true;
             m_pParaMarkerRedlineMoveFrom = pRedline.get();
             [[fallthrough]];
         case XML_del:
@@ -3063,7 +3067,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         default:
             throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
         }
-        beans::PropertyValues aRedlineProperties( 3 );
+        beans::PropertyValues aRedlineProperties( 4 );
         beans::PropertyValue * pRedlineProperties = aRedlineProperties.getArray(  );
         pRedlineProperties[0].Name = getPropertyName( PROP_REDLINE_AUTHOR );
         pRedlineProperties[0].Value <<= pRedline->m_sAuthor;
@@ -3071,6 +3075,9 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         pRedlineProperties[1].Value <<= ConversionHelper::ConvertDateStringToDateTime( pRedline->m_sDate );
         pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
         pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
+        pRedlineProperties[3].Name = "RedlineMoved";
+        pRedlineProperties[3].Value <<= bRedlineMoved;
+
         if (!m_bIsActualParagraphFramed)
         {
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );

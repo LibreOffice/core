@@ -46,6 +46,7 @@ published interface XRedline
                 [readonly, property] string RedlineAuthor;
                 [readonly, property] com::sun::star::util::DateTime RedlineDateTime;
                 [readonly, property] string RedlineComment;
+                [readonly, optional, property] boolean RedlineMoved;
         */
         void makeRedline( [in]string RedlineType, [in] com::sun::star::beans::PropertyValues  RedlineProperties)
                         raises( com::sun::star::lang::IllegalArgumentException );
