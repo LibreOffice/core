@@ -1347,17 +1347,32 @@ void SkiaSalGraphicsImpl::privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGrap
                                      rPosAry.mnDestHeight));
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    SkRect srcRect
-        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+    SkIRect srcRect = SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth,
+                                        rPosAry.mnSrcHeight);
     SkRect destRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                                        rPosAry.mnDestHeight);
     // Scaling for source coordinates must be done manually.
     if (src->mScaling != 1)
         srcRect = scaleRect(srcRect, src->mScaling);
-    // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
-    getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(src->mSurface), srcRect, destRect,
-                                   makeSamplingOptions(rPosAry, mScaling, src->mScaling), &paint,
-                                   SkCanvas::kFast_SrcRectConstraint);
+    if (src == this)
+    {
+        // Copy-to-self means that we'd take a snapshot, which would refcount the data,
+        // and then drawing would result in copy in write, copying the entire surface.
+        // Try to copy less by making a snapshot of only what is needed.
+        sk_sp<SkImage> image = makeCheckedImageSnapshot(src->mSurface, srcRect);
+        srcRect.offset(-srcRect.x(), -srcRect.y());
+        getDrawCanvas()->drawImageRect(image, SkRect::Make(srcRect), destRect,
+                                       makeSamplingOptions(rPosAry, mScaling, src->mScaling),
+                                       &paint, SkCanvas::kFast_SrcRectConstraint);
+    }
+    else
+    {
+        // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
+        getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(src->mSurface),
+                                       SkRect::Make(srcRect), destRect,
+                                       makeSamplingOptions(rPosAry, mScaling, src->mScaling),
+                                       &paint, SkCanvas::kFast_SrcRectConstraint);
+    }
 }
 
 bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap& rBitmap)
