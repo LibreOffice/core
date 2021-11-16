@@ -554,7 +554,7 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                 if( pRStt->nNode <= nNdIdx && pREnd->nNode > nNdIdx )
                 {
-                    bIsMoved = rTable.isMoved(nRedlPos);
+                    bIsMoved = pTmp->IsMoved();
                     return pTmp;
                 }
             }
