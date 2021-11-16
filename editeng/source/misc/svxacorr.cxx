@@ -1680,7 +1680,7 @@ bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
 }
 
 // Adds a single word. The list will immediately be written to the file!
-bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
+bool SvxAutoCorrect::AddWrdSttException( const OUString& rNew,
                                          LanguageType eLang )
 {
     SvxAutoCorrectLanguageLists* pLists = nullptr;

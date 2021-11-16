@@ -392,7 +392,7 @@ public:
     const SvStringsISortDtor* GetWrdSttExceptList( LanguageType eLang )
         {   return GetLanguageList_( eLang ).GetWrdSttExceptList(); }
     // Adds a single word. The list will be immediately written to the file!
-    bool AddWrtSttException( const OUString& rNew, LanguageType eLang);
+    bool AddWrdSttException( const OUString& rNew, LanguageType eLang);
 
     // Search through the Languages for the entry
     bool FindInWrdSttExceptList( LanguageType eLang, const OUString& sWord );
