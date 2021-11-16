@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bcfd848_266a3920",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-16T09:23:48Z",
+      "side": 1,
+      "message": "CppunitTest_sw_mailmerge crashed on shutdown on WNT\n\nbut that happened before and later 2 builds succeeded so looks unrelated",
+      "revId": "bcc61301ee4f985a04a920863fca4b6fc70ed72b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
