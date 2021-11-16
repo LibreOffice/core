@@ -1769,7 +1769,8 @@ rtl::Reference<FastAttributeList> DocxExport::MainXmlNamespaces()
     pAttr->add( FSNS( XML_xmlns, XML_mc ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_xmlns, XML_wp14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wp14)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_xmlns, XML_w14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(w14)), RTL_TEXTENCODING_UTF8) );
-    pAttr->add( FSNS( XML_mc, XML_Ignorable ), "w14 wp14" );
+    pAttr->add( FSNS( XML_xmlns, XML_w15 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(w15)), RTL_TEXTENCODING_UTF8));
+    pAttr->add( FSNS( XML_mc, XML_Ignorable ), "w14 wp14 w15" );
     return pAttr;
 }
 

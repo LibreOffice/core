@@ -726,6 +726,8 @@ private:
                        rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                        rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTextAttrs,
                        OUString& rSdtPrAlias,
+                       OUString& rSdtPrPlaceholderDocPart,
+                       OUString& rColor,
                        bool bPara);
     /// Closes a currently open SDT block.
     void EndSdtBlock();
@@ -1006,9 +1008,13 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrTextAttrs;
     /// Value of the <w:alias> paragraph SDT element.
     OUString m_aParagraphSdtPrAlias;
+    OUString m_aParagraphSdtPrPlaceHolderDocPart;
+    OUString m_aParagraphSdtPrColor;
     /// Same as m_aParagraphSdtPrAlias, but its content is available till the SDT is closed.
     OUString m_aStartedParagraphSdtPrAlias;
     OUString m_aRunSdtPrAlias;
+    OUString m_aRunSdtPrPlaceHolderDocPart;
+    OUString m_aRunSdtPrColor;
     /// Currently paragraph SDT has a <w:id> child element.
     bool m_bParagraphSdtHasId;
 
