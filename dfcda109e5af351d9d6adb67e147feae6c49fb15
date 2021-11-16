@@ -105,6 +105,24 @@
       "parentUuid": "99e0d181_d2558153",
       "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bd356dc_3e9df5f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-16T01:04:56Z",
+      "side": 1,
+      "message": "\u003e Full rebuild here (no tests run), 32m24s hot ccache, vs 35m03s pch-only. But sure, if it solves a problem for you...\n\nMy machine doesn\u0027t do a full rebuild that fast even on Linux, let alone on Windows. Presumably you have some 16+-core machine, and then it may make sense that the rubbish I/O performance on Windows is much more of a bottleneck for you than for me.\n\n\u003e The size of this change (plus the related, earlier changes) is clearly an order of magnitude larger compared to the bit of configury added for sccache.\n\nThat is true, but the sccache changes didn\u0027t even include handling -Zi or PCHs, so the effect of this change is an order of magnitude larger as well :).",
+      "parentUuid": "6ebe4004_00402d10",
+      "revId": "dfcda109e5af351d9d6adb67e147feae6c49fb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
