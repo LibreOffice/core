@@ -779,6 +779,23 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "kmr-Yezi";
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 70)
+        case USCRIPT_CYPRO_MINOAN:
+            sRet = "mis-Cpmn";  // Uncoded with script
+            break;
+        case USCRIPT_OLD_UYGHUR:
+            sRet = "oui-Ougr";
+            break;
+        case USCRIPT_TANGSA:
+            sRet = "nst-Tnsa";
+            break;
+        case USCRIPT_TOTO:
+            sRet = "txo-Toto";
+            break;
+        case USCRIPT_VITHKUQI:
+            sRet = "sq-Vith";   // macrolanguage code
+            break;
+#endif
     }
     return sRet;
 }

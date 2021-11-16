@@ -1,6 +1,6 @@
 diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
---- icu.org/source/common/dictbe.cpp	2021-04-08 02:10:27.000000000 +0200
-+++ icu/source/common/dictbe.cpp	2021-05-11 22:41:25.504455054 +0200
+--- icu.org/source/common/dictbe.cpp	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/common/dictbe.cpp	2021-11-15 20:39:03.710870385 +0100
 @@ -32,7 +32,19 @@
   ******************************************************************
   */
@@ -22,7 +22,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  }
  
  DictionaryBreakEngine::~DictionaryBreakEngine() {
-@@ -79,6 +91,169 @@
+@@ -81,6 +93,169 @@
      fSet.compact();
  }
  
@@ -192,7 +192,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  /*
   ******************************************************************
   * PossibleWord
-@@ -108,7 +283,7 @@
+@@ -110,7 +285,7 @@
      ~PossibleWord() {}
    
      // Fill the list of candidates if needed, select the longest, and return the number found
@@ -201,7 +201,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
    
      // Select the currently marked candidate, point after it in the text, and invalidate self
      int32_t   acceptMarked( UText *text );
-@@ -129,12 +304,12 @@
+@@ -131,12 +306,12 @@
  };
  
  
@@ -216,7 +216,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
          // Dictionary leaves text after longest prefix, not longest word. Back up.
          if (count <= 0) {
              utext_setNativeIndex(text, start);
-@@ -803,53 +978,30 @@
+@@ -808,53 +983,30 @@
   * KhmerBreakEngine
   */
  
@@ -282,22 +282,13 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
      UTRACE_EXIT_STATUS(status);
  }
  
-@@ -862,176 +1014,204 @@
-                                                 int32_t rangeStart,
-                                                 int32_t rangeEnd,
-                                                 UVector32 &foundBreaks ) const {
+@@ -869,175 +1021,204 @@
+                                                 UVector32 &foundBreaks,
+                                                 UErrorCode& status ) const {
+     if (U_FAILURE(status)) return 0;
 -    if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
 -        return 0;       // Not enough characters for two words
--    }
--
--    uint32_t wordsFound = 0;
--    int32_t cpWordLength = 0;
--    int32_t cuWordLength = 0;
--    int32_t current;
 +    uint32_t wordsFound = foundBreaks.size();
-     UErrorCode status = U_ZERO_ERROR;
--    PossibleWord words[KHMER_LOOKAHEAD];
--
 +    int32_t before = 0;
 +    int32_t after = 0;
 +    int32_t finalBefore = 0;
@@ -312,7 +303,14 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +    if (rangeStart > 0) {
 +        --scanStart;
 +        startZwsp = scanBeforeStart(text, scanStart, breakStart);
-+    }
+     }
+-
+-    uint32_t wordsFound = 0;
+-    int32_t cpWordLength = 0;
+-    int32_t cuWordLength = 0;
+-    int32_t current;
+-    PossibleWord words[KHMER_LOOKAHEAD];
+-
      utext_setNativeIndex(text, rangeStart);
 +    scanFwdClusters(text, rangeEnd, initAfter);
 +    bool endZwsp = scanAfterEnd(text, utext_nativeLength(text), scanEnd, breakEnd);
@@ -628,15 +626,15 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
          (void) foundBreaks.popi();
 -        wordsFound -= 1;
      }
--
+ 
 -    return wordsFound;
 +    return foundBreaks.size() - wordsFound;
  }
  
  #if !UCONFIG_NO_NORMALIZATION
 diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
---- icu.org/source/common/dictbe.h	2021-04-08 02:10:27.000000000 +0200
-+++ icu/source/common/dictbe.h	2021-05-11 22:37:49.753857647 +0200
+--- icu.org/source/common/dictbe.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/common/dictbe.h	2021-11-15 20:41:53.052317579 +0100
 @@ -34,7 +34,8 @@
   * threads without synchronization.</p>
   */
@@ -733,28 +731,25 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
     * <p>Virtual destructor.</p>
     */
    virtual ~DictionaryBreakEngine();
-@@ -293,11 +364,13 @@
-      */ 
-  
-   UnicodeSet                fKhmerWordSet; 
--  UnicodeSet                fEndWordSet; 
--  UnicodeSet                fBeginWordSet; 
--  UnicodeSet                fMarkSet; 
--  DictionaryMatcher  *fDictionary; 
-- 
-+  UnicodeSet                fBeginWordSet;
+@@ -303,10 +374,12 @@
+      */
+ 
+   UnicodeSet                fKhmerWordSet;
+-  UnicodeSet                fEndWordSet;
+   UnicodeSet                fBeginWordSet;
+-  UnicodeSet                fMarkSet;
+-  DictionaryMatcher  *fDictionary;
 +  UnicodeSet                fPuncSet;
 +  DictionaryMatcher        *fDictionary;
 +
 +  const uint32_t BADSNLP = 256 * 20;
 +  const uint32_t kuint32max = 0x7FFFFFFF;
-+
-  public: 
-  
-   /** 
+ 
+  public:
+ 
 diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
---- icu.org/source/common/dictionarydata.cpp	2021-04-08 02:10:27.000000000 +0200
-+++ icu/source/common/dictionarydata.cpp	2021-05-11 22:37:49.754857645 +0200
+--- icu.org/source/common/dictionarydata.cpp	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/common/dictionarydata.cpp	2021-11-15 19:25:00.583694898 +0100
 @@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
@@ -802,8 +797,8 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
                  if (values != NULL) {
                      values[wordCount] = bt.getValue();
 diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata.h
---- icu.org/source/common/dictionarydata.h	2021-04-08 02:10:27.000000000 +0200
-+++ icu/source/common/dictionarydata.h	2021-05-11 22:37:49.754857645 +0200
+--- icu.org/source/common/dictionarydata.h	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/common/dictionarydata.h	2021-11-15 20:44:34.484790590 +0100
 @@ -21,6 +21,7 @@
  #include "unicode/utext.h"
  #include "unicode/udata.h"
@@ -825,17 +820,17 @@ diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata
      virtual ~UCharsDictionaryMatcher();
      virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
                              int32_t *lengths, int32_t *cpLengths, int32_t *values,
--                            int32_t *prefix) const;
-+                            int32_t *prefix, UnicodeSet const* ignoreSet = NULL, int32_t minLength = 0) const;
-     virtual int32_t getType() const;
+-                            int32_t *prefix) const override;
++                            int32_t *prefix, UnicodeSet const* ignoreSet = NULL, int32_t minLength = 0) const override;
+     virtual int32_t getType() const override;
  private:
      const UChar *characters;
 @@ -125,7 +126,7 @@
      virtual ~BytesDictionaryMatcher();
      virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
                              int32_t *lengths, int32_t *cpLengths, int32_t *values,
--                            int32_t *prefix) const;
-+                            int32_t *prefix, UnicodeSet const* ignoreSet = NULL, int32_t minLength = 0) const;
-     virtual int32_t getType() const;
+-                            int32_t *prefix) const override;
++                            int32_t *prefix, UnicodeSet const* ignoreSet = NULL, int32_t minLength = 0) const override;
+     virtual int32_t getType() const override;
  private:
      UChar32 transform(UChar32 c) const;

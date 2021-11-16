@@ -1819,10 +1819,48 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x1FB00, 0x1FBFF, SvxResId(RID_SUBSETSTR_SYMBOLS_FOR_LEGACY_COMPUTING) );
                     break;
                 case UBLOCK_TANGUT_SUPPLEMENT:
-                    aAllSubsets.emplace_back( 0x18D00, 0x18D8F, SvxResId(RID_SUBSETSTR_TANGUT_SUPPLEMENT) );
+                    aAllSubsets.emplace_back( 0x18D00, 0x18D7F, SvxResId(RID_SUBSETSTR_TANGUT_SUPPLEMENT) );
                     break;
                 case UBLOCK_YEZIDI:
                     aAllSubsets.emplace_back( 0x10E80, 0x10EBF, SvxResId(RID_SUBSETSTR_YEZIDI) );
+                    break;
+#endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 70)
+                case UBLOCK_ARABIC_EXTENDED_B:
+                    aAllSubsets.emplace_back( 0x0870, 0x089F, SvxResId(RID_SUBSETSTR_ARABIC_EXTENDED_B) );
+                    break;
+                case UBLOCK_CYPRO_MINOAN:
+                    aAllSubsets.emplace_back( 0x12F90, 0x12FFF, SvxResId(RID_SUBSETSTR_CYPRO_MINOAN) );
+                    break;
+                case UBLOCK_ETHIOPIC_EXTENDED_B:
+                    aAllSubsets.emplace_back( 0x1E7E0, 0x1E7FF, SvxResId(RID_SUBSETSTR_ETHIOPIC_EXTENDED_B) );
+                    break;
+                case UBLOCK_KANA_EXTENDED_B:
+                    aAllSubsets.emplace_back( 0x1AFF0, 0x1AFFF, SvxResId(RID_SUBSETSTR_KANA_EXTENDED_B) );
+                    break;
+                case UBLOCK_LATIN_EXTENDED_F:
+                    aAllSubsets.emplace_back( 0x10780, 0x107BF, SvxResId(RID_SUBSETSTR_LATIN_EXTENDED_F) );
+                    break;
+                case UBLOCK_LATIN_EXTENDED_G:
+                    aAllSubsets.emplace_back( 0x1DF00, 0x1DFFF, SvxResId(RID_SUBSETSTR_LATIN_EXTENDED_G) );
+                    break;
+                case UBLOCK_OLD_UYGHUR:
+                    aAllSubsets.emplace_back( 0x10F70, 0x10FAF, SvxResId(RID_SUBSETSTR_OLD_UYGHUR) );
+                    break;
+                case UBLOCK_TANGSA:
+                    aAllSubsets.emplace_back( 0x16A70, 0x16ACF, SvxResId(RID_SUBSETSTR_TANGSA) );
+                    break;
+                case UBLOCK_TOTO:
+                    aAllSubsets.emplace_back( 0x1E290, 0x1E2BF, SvxResId(RID_SUBSETSTR_TOTO) );
+                    break;
+                case UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A:
+                    aAllSubsets.emplace_back( 0x11AB0, 0x11ABF, SvxResId(RID_SUBSETSTR_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A) );
+                    break;
+                case UBLOCK_VITHKUQI:
+                    aAllSubsets.emplace_back( 0x10570, 0x105BF, SvxResId(RID_SUBSETSTR_VITHKUQI) );
+                    break;
+                case UBLOCK_ZNAMENNY_MUSICAL_NOTATION:
+                    aAllSubsets.emplace_back( 0x1CF00, 0x1CFCF, SvxResId(RID_SUBSETSTR_ZNAMENNY_MUSICAL_NOTATION) );
                     break;
 #endif
 
