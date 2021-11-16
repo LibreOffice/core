@@ -16,6 +16,23 @@
       "message": "Thanks. This is now working fine for me on Ubuntu 20.04 with GTK 4.3.0.\nWithout this fix, I was getting this error:\n\n...\nwarn:vcl.gtk:133535:133535:vcl/unx/gtk4/convert3to4.cxx:1488: GtkInstanceBuilder: error when calling gtk_builder_add_from_string: .:112:61 Invalid property: GtkMenuButton.always-show-arrow\nsoffice.bin: /home/hossein/Projects/libreoffice/core/vcl/unx/gtk4/convert3to4.cxx:1493: void builder_add_from_gtk3_file(GtkBuilder*, const rtl::OUString\u0026): Assertion `rc \u0026\u0026 \"could not load UI file\"\u0027 failed.\nUnspecified Application Error\n\n\nFatal exception: Signal 6\n...",
       "revId": "f223e23481d23bd8e0c7801c884a53abbff69ee0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ce82c9_256153db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-16T11:20:20Z",
+      "side": 1,
+      "message": "I am getting this error when trying to use file open dialog (pressing ctrl+o):\n\n...\nwarn:vcl.gtk:141465:141465:vcl/unx/gtk4/fpicker/../../gtk3/fpicker/SalGtkFilePicker.cxx:953: no parent widget set\n\n(soffice:141465): GLib-GIO-ERROR **: 14:45:20.815: Settings schema \u0027org.gtk.gtk4.Settings.FileChooser\u0027 is not installed\n\n\nFatal exception: Signal 5\n...",
+      "revId": "f223e23481d23bd8e0c7801c884a53abbff69ee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
