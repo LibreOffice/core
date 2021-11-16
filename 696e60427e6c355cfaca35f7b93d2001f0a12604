@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed6dde99_1ba01885",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-16T21:47:51Z",
+      "side": 1,
+      "message": "Oh, come on :( . I\u0027ve already said what I think about this. This does nothing other than enforce a useless rule.\n",
+      "revId": "696e60427e6c355cfaca35f7b93d2001f0a12604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
