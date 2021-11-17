@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fcd2b90_24f089e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-17T19:53:26Z",
+      "side": 1,
+      "message": "There are several problems here.\nIf you look carefully to the other tests in this .cxx file, you can implement it just like what others did, and possibly in ~10 lines of code.",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "796323ad_f4e65bcf",
+        "filename": "sw/qa/extras/txtimport/data/longtext.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-17T19:53:26Z",
+      "side": 1,
+      "message": "If you want to follow Mike\u0027s advice and create arbitrary size text file, you should remove this file.",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c975c1f3_d2366793",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-17T19:53:26Z",
+      "side": 1,
+      "message": "Why do you load this file? If you want to create arbitrary size text file, you should not load this file.",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d2ffcc1_322e324c",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-17T19:53:26Z",
+      "side": 1,
+      "message": "Take a look at what others did in this .cxx file for similar situations.",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b47d031d_e8cec717",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-17T19:53:26Z",
+      "side": 1,
+      "message": "Why do you repeat this each time?",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2d68e00_4f204d54",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-17T19:53:26Z",
+      "side": 1,
+      "message": "You should insert an OUString.",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
