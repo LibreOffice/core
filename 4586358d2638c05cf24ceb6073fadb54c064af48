@@ -48,6 +48,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "90746df6_0d678457",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-17T13:43:04Z",
+      "side": 1,
+      "message": "Using the controls in the \"Media Playback\" section of the Impress sidebar also doesn\u0027t work really well for me, just tested on X11. (Just got to know those, didn\u0027t know about them yet.) It works better for gtk3, but also not really reliable (e.g. after pausing the video, there\u0027s no more sound any more after pressing \"play\" again.)",
+      "parentUuid": "d3edf5ba_ffe0c937",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "4586358d2638c05cf24ceb6073fadb54c064af48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a748df0e_3d7e6db2",
