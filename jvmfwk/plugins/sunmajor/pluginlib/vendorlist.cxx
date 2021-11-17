@@ -37,7 +37,6 @@ VendorSupportMapEntry const gVendorMap[] ={
 #endif
     VENDOR_MAP_ENTRY<SunInfo>("Sun Microsystems Inc."),
     VENDOR_MAP_ENTRY<SunInfo>("Oracle Corporation"),
-    VENDOR_MAP_ENTRY<SunInfo>("AdoptOpenJdk"),
     VENDOR_MAP_ENTRY<SunInfo>("Amazon.com Inc."),
     VENDOR_MAP_ENTRY<SunInfo>("Azul Systems, Inc."),
 #ifndef MACOSX
