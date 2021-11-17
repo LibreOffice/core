@@ -175,10 +175,12 @@ bool VendorBase::isValidArch() const
     // It is not defined what the exact values are.
     // Oracle JRE 8 has "x86" and "amd64", the others were found at http://lopica.sourceforge.net/os.html .
     // There might still be missing some options; we need to extend the check once we find out.
-#if defined _WIN64
+#if defined _WIN64 || (defined MACOSX && defined __x86_64__)
     return m_sArch == "amd64" || m_sArch == "x86_64";
 #elif defined _WIN32
     return m_sArch == "x86" || m_sArch == "i386" || m_sArch == "i686";
+#elif defined MACOSX && defined __aarch64__
+    return m_sArch == "aarch64";
 #else
     (void)this;
     return true;
