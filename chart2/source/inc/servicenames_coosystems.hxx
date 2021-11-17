@@ -18,12 +18,7 @@
  */
 #pragma once
 
-namespace chart
-{
-
-#define CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME "com.sun.star.chart2.CoordinateSystems.CartesianView"
-#define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME "com.sun.star.chart2.CoordinateSystems.PolarView"
-
-} //namespace chart
+constexpr OUStringLiteral CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME = u"com.sun.star.chart2.CoordinateSystems.CartesianView";
+constexpr OUStringLiteral CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME = u"com.sun.star.chart2.CoordinateSystems.PolarView";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
