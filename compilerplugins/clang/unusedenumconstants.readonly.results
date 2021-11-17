@@ -512,8 +512,6 @@ include/vcl/keycodes.hxx:175
     enum ModKeyFlags Mod2Msk
 include/vcl/menu.hxx:78
     enum PopupMenuFlags ExecuteUp
-include/vcl/menu.hxx:86
-    enum PopupMenuFlags NoHorzPlacement
 include/vcl/pdf/PDFAnnotationSubType.hxx:17
     enum vcl::pdf::PDFAnnotationSubType Unknown
 include/vcl/pdf/PDFAnnotationSubType.hxx:26
