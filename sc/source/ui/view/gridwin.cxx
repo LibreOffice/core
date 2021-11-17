@@ -43,6 +43,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
@@ -928,7 +929,10 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 ScFilterEntries aFilterEntries;
                 rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries);
 
-                VclPtr<PopupMenu> pColorMenu = VclPtr<PopupMenu>::Create();
+                weld::Window* pPopupParent = mpAutoFilterPopup->GetFrameWeld();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/colormenu.ui"));
+                std::unique_ptr<weld::Menu> xColorMenu(xBuilder->weld_menu("menu"));
+
                 std::set<Color> aColors = eMode == AutoFilterMode::TextColor
                                               ? aFilterEntries.getTextColors()
                                               : aFilterEntries.getBackgroundColors();
@@ -942,12 +946,17 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                         OUString sText = eMode == AutoFilterMode::TextColor
                                              ? ScResId(SCSTR_FILTER_AUTOMATIC_COLOR)
                                              : ScResId(SCSTR_FILTER_NO_FILL);
-                        pColorMenu->InsertItem(i, sText, MenuItemBits::CHECKABLE);
+                        xColorMenu->append_check(OUString::number(i), sText);
                     }
                     else
                     {
-                        pColorMenu->InsertItem(i, OUString(), MenuItemBits::CHECKABLE);
-                        pColorMenu->SetItemColor(i, rColor);
+                        ScopedVclPtr<VirtualDevice> xDev(pPopupParent->create_virtual_device());
+                        xDev->SetOutputSize(Application::GetSettings().GetStyleSettings().GetToolbarIconSizePixel());
+                        xDev->SetBackground(rColor);
+                        xDev->Erase();
+
+                        xColorMenu->insert(-1, OUString::number(i), OUString(),
+                                           nullptr, xDev.get(), nullptr, TRISTATE_TRUE);
                     }
                     auto aItem = pEntry->GetQueryItem();
                     if (aItem.maColor == rColor
@@ -957,14 +966,14 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                                 && aItem.meType == ScQueryEntry::ByBackgroundColor)))
                     {
                         nActive = i;
-                        pColorMenu->CheckItem(i, true);
+                        xColorMenu->set_active(OString::number(i), true);
                     }
                     i++;
                 }
 
                 tools::Rectangle aRect = rControl.GetSubMenuParentRect();
-                sal_uInt16 nSelected = pColorMenu->Execute(mpAutoFilterPopup, aRect, PopupMenuFlags::ExecuteRight);
-                pColorMenu.disposeAndClear();
+                sal_Int32 nSelected = xColorMenu->popup_at_rect(pPopupParent, aRect, weld::Placement::End).toInt32();
+                xColorMenu.reset();
                 rControl.terminateAllPopupMenus();
 
                 if (nSelected == 0)
