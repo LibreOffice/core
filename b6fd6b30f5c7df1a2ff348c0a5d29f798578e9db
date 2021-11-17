@@ -33,6 +33,24 @@
       "message": "rather move this into /store please",
       "revId": "b6fd6b30f5c7df1a2ff348c0a5d29f798578e9db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dad933a_d75614d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-17T09:11:16Z",
+      "side": 1,
+      "message": "feel free to remove loplugin:finalprotect then, I\u0027d say (we had that discussion before, I\u0027m mildly in favor of the plugin because YAGNI, but am also not too happy with how it messes with classes\u0027 potentially carefully designed protected interfaces)",
+      "parentUuid": "92948fea_298b8c7c",
+      "revId": "b6fd6b30f5c7df1a2ff348c0a5d29f798578e9db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
