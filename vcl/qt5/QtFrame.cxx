@@ -184,8 +184,6 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     }
 
     FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
-    if (m_aSystemData.platform != SystemEnvData::Platform::Wayland)
-        m_aSystemData.SetWindowHandle(m_pQWidget->winId());
 
     SetIcon(SV_ICON_ID_OFFICE);
 
@@ -1342,6 +1340,14 @@ void QtFrame::SetApplicationID(const OUString& rWMClass)
 #else
     (void)rWMClass;
 #endif
+}
+
+void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
+{
+    if (!rData.pWidget)
+        return;
+    if (rData.platform != SystemEnvData::Platform::Wayland)
+        rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());
 }
 
 // Drag'n'drop foo
