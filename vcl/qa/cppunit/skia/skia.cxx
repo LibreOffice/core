@@ -435,6 +435,8 @@ void SkiaTest::testDrawDelayedScaleImage()
 {
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
+    if (SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
+        return; // This test tests caching that's done only in raster mode.
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
     device->SetOutputSizePixel(Size(10, 10));
     device->SetBackground(Wallpaper(COL_WHITE));
