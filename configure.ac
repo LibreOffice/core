@@ -4557,8 +4557,16 @@ AC_SUBST(LD_GC_SECTIONS)
 
 HAVE_GSPLIT_DWARF=
 if test "$enable_split_debug" != no; then
+    use_split_debug=
+    if test -n "$ENABLE_LTO"; then
+        true # Inherently incompatible, since no debug info is created while compiling, GCC complains.
+    elif test "$enable_split_debug" = yes; then
+        use_split_debug=1
     dnl Currently by default enabled only on Linux, feel free to set test_split_debug above also for other platforms.
-    if test "$enable_split_debug" = yes -o \( "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
+    elif test "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+        use_split_debug=1
+    fi
+    if test -n "$use_split_debug"; then
         AC_MSG_CHECKING([whether $CC_BASE supports -gsplit-dwarf])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -gsplit-dwarf"
@@ -4574,7 +4582,7 @@ if test "$enable_split_debug" != no; then
             fi
         fi
     fi
-    if test -z "$HAVE_GCC_SPLIT_DWARF" -a "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+    if test -z "$HAVE_GCC_SPLIT_DWARF" -a "$test_split_debug" = "yes" -a -n "$use_split_debug"; then
         AC_MSG_WARN([Compiler is not capable of creating split debug info, linking will require more time and disk space.])
         add_warning "Compiler is not capable of creating split debug info, linking will require more time and disk space."
     fi
