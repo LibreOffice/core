@@ -450,6 +450,7 @@ void SwView::SelectShell()
                                         InputContextFlags( InputContextFlags::Text |
                                             InputContextFlags::ExtText )) );
             GetEditWin().SetInputContext( aCntxt );
+            GetWrtShell().Edit();
         }
 
         // Show Mail Merge toolbar initially for documents with Database fields
