@@ -4072,6 +4072,11 @@ void SbRtl_RGB(StarBASIC *, SbxArray & rPar, bool)
 
     SbiInstance* pInst = GetSbData()->pInst;
     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+    // See discussion in tdf#145725, here's the quotation from a link indicated in the bugtracker
+    // which explains why we need to manage RGB differently according to VB compatibility
+    // "In other words, the individual color components are stored in the opposite order one would expect.
+    //  VB stores the red color component in the low-order byte of the long integer's low-order word,
+    //  the green color in the high-order byte of the low-order word, and the blue color in the low-order byte of the high-order word"
     if( bCompatibility )
     {
         nRGB   = (nBlue << 16) | (nGreen << 8) | nRed;
