@@ -31,8 +31,7 @@ class SC_DLLPUBLIC ScMultiSel
 {
 
 private:
-    typedef std::vector<ScMarkArray> MapType;
-    MapType aMultiSelContainer;
+    std::vector<ScMarkArray> aMultiSelContainer;
     ScMarkArray aRowSel;
     const ScSheetLimits& mrSheetLimits;
 
