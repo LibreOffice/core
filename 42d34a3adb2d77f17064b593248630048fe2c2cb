@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec7af4e2_90988191",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-17T12:43:22Z",
+      "side": 1,
+      "message": "Xisco: for the context: we have our Windows installer completely broken after the commit mentioned here in the message; though not strictly a regression from that commit (it uncovered a pre-existing code flaw), it\u0027s almost critical because it simply prevents LO from installing at all. That\u0027s why we should merge it ASAP to allow people continue testing dailies :-)",
+      "revId": "42d34a3adb2d77f17064b593248630048fe2c2cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
