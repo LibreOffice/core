@@ -1243,6 +1243,8 @@
 #define STR_REDLINE_TABLE_ROW_DELETE            NC_("STR_REDLINE_TABLE_ROW_DELETE", "Row Deleted")
 #define STR_REDLINE_TABLE_CELL_INSERT           NC_("STR_REDLINE_TABLE_CELL_INSERT", "Cell Inserted")
 #define STR_REDLINE_TABLE_CELL_DELETE           NC_("STR_REDLINE_TABLE_CELL_DELETE", "Cell Deleted")
+#define STR_REDLINE_INSERT_MOVED                NC_("STR_REDLINE_INSERT_MOVED", "Moved (insertion)")
+#define STR_REDLINE_DELETE_MOVED                NC_("STR_REDLINE_DELETE_MOVED", "Moved (deletion)")
 #define STR_ENDNOTE                             NC_("STR_ENDNOTE", "Endnote: ")
 #define STR_FTNNOTE                             NC_("STR_FTNNOTE", "Footnote: ")
 #define STR_SMARTTAG_CLICK                      NC_("STR_SMARTTAG_CLICK", "%s-click to open Smart Tag menu")
