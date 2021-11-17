@@ -1323,6 +1323,12 @@ public:
     */
     static void                 EndAllPopups();
 
+    /** Returns true, if the VCL plugin runs on the system event loop.
+     *
+     *  AKA the VCL plugin can't handle nested event loops, like WASM or mobile.
+     */
+    static bool IsOnSystemEventLoop();
+
     ///@}
 
     // For vclbootstrapprotector:
