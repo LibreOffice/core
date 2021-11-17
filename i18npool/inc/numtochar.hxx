@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
-#define INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
+#pragma once
 
 #include "transliteration_Numeric.hxx"
 
@@ -50,7 +49,5 @@ TRANSLITERATION_NUMTOCHAR(Halfwidth)
 #undef TRANSLITERATION_NUMTOCHAR
 
 }
-
-#endif // INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
