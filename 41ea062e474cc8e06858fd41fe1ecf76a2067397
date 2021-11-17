@@ -58,6 +58,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01121115_cc5a265a",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9200a2f1_500822c5",
+      "range": {
+        "startLine": 191,
+        "startChar": 34,
+        "endLine": 191,
+        "endChar": 46
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "610290e8_f8e9241d",
@@ -81,6 +105,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8814aebe_81627da2",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "610290e8_f8e9241d",
+      "range": {
+        "startLine": 204,
+        "startChar": 52,
+        "endLine": 204,
+        "endChar": 59
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5267cdef_a4e9bbc4",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-11-17T11:59:16Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 205,
+        "startChar": 37,
+        "endLine": 205,
+        "endChar": 49
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae628047_15a332a1",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5267cdef_a4e9bbc4",
       "range": {
         "startLine": 205,
         "startChar": 37,
@@ -150,6 +222,54 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25eddc7a_f9061dfd",
+        "filename": "sw/source/core/doc/DocumentLayoutManager.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed6b9f71_681b870c",
+      "range": {
+        "startLine": 505,
+        "startChar": 33,
+        "endLine": 505,
+        "endChar": 40
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a25f273b_cd8f5b6a",
+        "filename": "sw/source/core/doc/DocumentLayoutManager.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec93b8f9_c24d1a34",
+      "range": {
+        "startLine": 505,
+        "startChar": 54,
+        "endLine": 505,
+        "endChar": 86
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df36d5c0_45ce3fff",
@@ -173,6 +293,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b57e2ac4_b7f82b88",
+        "filename": "sw/source/core/doc/docdraw.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df36d5c0_45ce3fff",
+      "range": {
+        "startLine": 307,
+        "startChar": 92,
+        "endLine": 307,
+        "endChar": 99
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "462c447a_a430db93",
@@ -186,6 +330,30 @@
       "writtenOn": "2021-11-17T11:59:16Z",
       "side": 1,
       "message": "pTextBoxNode (see explanation)",
+      "range": {
+        "startLine": 224,
+        "startChar": 13,
+        "endLine": 224,
+        "endChar": 20
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50336cae_ac543056",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "462c447a_a430db93",
       "range": {
         "startLine": 224,
         "startChar": 13,
@@ -232,6 +400,30 @@
       "writtenOn": "2021-11-17T11:59:16Z",
       "side": 1,
       "message": "needed",
+      "range": {
+        "startLine": 1427,
+        "startChar": 91,
+        "endLine": 1427,
+        "endChar": 100
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c5d67d7_e8aa953c",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d2a38db_ee23e756",
       "range": {
         "startLine": 1427,
         "startChar": 91,
