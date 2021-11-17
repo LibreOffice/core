@@ -55,8 +55,10 @@ $(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) :
 # change, and make the PCH depend on it => the PCH will be rebuilt on any flags change
 .PHONY: force
 $(call gb_PrecompiledHeader_get_flags_file,$(1),$(3)) : force
-	echo $(gb_PrecompiledHeader_flags_for_flags_file) | cmp -s - $$@ \
-	|| echo $(gb_PrecompiledHeader_flags_for_flags_file) > $$@
+	$$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $$(dir $$@) && \
+		echo $(gb_PrecompiledHeader_flags_for_flags_file) | cmp -s - $$@ \
+		|| echo $(gb_PrecompiledHeader_flags_for_flags_file) > $$@)
 
 # despite this being only one .d file, need to run concat-deps on it to
 # re-write external headers from UnpackedTarball
