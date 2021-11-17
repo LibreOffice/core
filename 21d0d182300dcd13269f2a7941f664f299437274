@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f3c2d1_2f2ed032",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-17T12:37:24Z",
+      "side": 1,
+      "message": "Just as a side not: In case of using GStreamer\u0027s waylandsink for qt6 video playback on Wayland, it may become necessary to re-add the commented out Wayland code to set aWindow and pDisplay, but that\u0027s nothing that needs to be kept here as is for now, and would go to a different place anyway. (Maybe it makes sense to take a look whether implementing an own XPlayer using Qt\u0027s own video/media framework [1] makes sense, which uses GStreamer internally, at least in the long run. The waylandsink approach also has the drawback that Qt private API is needed to get a handle to the Wayland surface...)\n\n[1] https://doc.qt.io/qt-5/videooverview.html",
+      "revId": "21d0d182300dcd13269f2a7941f664f299437274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ff27906_47568489",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-17T12:37:24Z",
+      "side": 1,
+      "message": "That could be just \"qt\", since it\u0027s used for qt6 as well, but I\u0027ll leave it up to you.",
+      "range": {
+        "startLine": 205,
+        "startChar": 30,
+        "endLine": 205,
+        "endChar": 33
+      },
+      "revId": "21d0d182300dcd13269f2a7941f664f299437274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
