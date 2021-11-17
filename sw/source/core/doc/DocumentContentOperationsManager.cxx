@@ -5103,8 +5103,11 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     //  and not the source has the page break
     if (rDoc.IsClipBoard() && (rPam.GetPageNum(pStt == rPam.GetPoint()) == 1) && !bCopyPageSource)
     {
-        pDestTextNd->ResetAttr(RES_BREAK);        // remove the page-break
-        pDestTextNd->ResetAttr(RES_PAGEDESC);
+        if (pDestTextNd)
+        {
+            pDestTextNd->ResetAttr(RES_BREAK);        // remove the page-break
+            pDestTextNd->ResetAttr(RES_PAGEDESC);
+        }
     }
 
 
