@@ -1524,7 +1524,6 @@ compilerplugins/clang/sfxpoolitem.cxx
 compilerplugins/clang/sharedvisitor/analyzer.cxx
 compilerplugins/clang/sharedvisitor/dummyplugin.hxx
 compilerplugins/clang/sharedvisitor/generator.cxx
-compilerplugins/clang/simplifybool.cxx
 compilerplugins/clang/singlevalfields.cxx
 compilerplugins/clang/staticaccess.cxx
 compilerplugins/clang/staticmethods.cxx
@@ -1557,6 +1556,7 @@ compilerplugins/clang/store/returnunique.cxx
 compilerplugins/clang/store/revisibility.cxx
 compilerplugins/clang/store/rtlconstasciimacro.cxx
 compilerplugins/clang/store/sfxitemsetrewrite.cxx
+compilerplugins/clang/store/simplifybool.cxx
 compilerplugins/clang/store/stdexception.cxx
 compilerplugins/clang/store/stylepolice.cxx
 compilerplugins/clang/store/svstreamoutputoperators.cxx
