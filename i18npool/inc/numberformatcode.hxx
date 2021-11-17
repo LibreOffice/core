@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_INC_NUMBERFORMATCODE_HXX
-#define INCLUDED_I18NPOOL_INC_NUMBERFORMATCODE_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 
@@ -67,8 +66,5 @@ private:
     static OUString mapElementUsageShortToString(sal_Int16 formatUsage);
     static sal_Int16 mapElementUsageStringToShort(std::u16string_view formatUsage);
 };
-
-
-#endif // INCLUDED_I18NPOOL_INC_NUMBERFORMATCODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
