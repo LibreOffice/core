@@ -177,15 +177,13 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
-        QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
-        QWindow* pChildWindow = asChild()->window()->windowHandle();
+        QWindow* pParentWindow = pParent->windowHandle();
+        QWindow* pChildWindow = windowHandle();
         if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
             pChildWindow->setTransientParent(pParentWindow);
     }
 
     FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
-    if (m_aSystemData.platform != SystemEnvData::Platform::Wayland)
-        m_aSystemData.SetWindowHandle(m_pQWidget->winId());
 
     SetIcon(SV_ICON_ID_OFFICE);
 
@@ -348,13 +346,7 @@ qreal QtFrame::devicePixelRatioF() const { return asChild()->devicePixelRatioF()
 
 bool QtFrame::isWindow() const { return asChild()->isWindow(); }
 
-QWindow* QtFrame::windowHandle() const
-{
-    // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
-    QWidget* pChild = asChild();
-    pChild->setAttribute(Qt::WA_NativeWindow);
-    return pChild->windowHandle();
-}
+QWindow* QtFrame::windowHandle() const { return asChild()->window()->windowHandle(); }
 
 QScreen* QtFrame::screen() const
 {
@@ -431,21 +423,25 @@ void QtFrame::modalReparent(bool bVisible)
 
     if (!bVisible)
     {
-        m_pQWidget->setParent(m_pParent ? m_pParent->asChild() : nullptr,
-                              m_pQWidget->windowFlags());
+        QWidget* pNewParent = m_pParent ? m_pParent->asChild() : nullptr;
+        if (pNewParent != m_pQWidget->parent())
+            m_pQWidget->setParent(pNewParent, m_pQWidget->windowFlags());
         return;
     }
 
     if (!QGuiApplication::modalWindow())
         return;
 
+    if (m_pParent->windowHandle() == QGuiApplication::modalWindow())
+        return;
+
     QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
     for (auto* pFrame : pInst->getFrames())
     {
-        QWidget* pQWidget = static_cast<QtFrame*>(pFrame)->asChild();
-        if (pQWidget->windowHandle() == QGuiApplication::modalWindow())
+        QtFrame* pQtFrame = static_cast<QtFrame*>(pFrame);
+        if (pQtFrame->windowHandle() == QGuiApplication::modalWindow())
         {
-            m_pQWidget->setParent(pQWidget, m_pQWidget->windowFlags());
+            m_pQWidget->setParent(pQtFrame->asChild(), m_pQWidget->windowFlags());
             break;
         }
     }
@@ -781,14 +777,14 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
         m_nRestoreScreen = maGeometry.nDisplayScreenNumber;
         SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
         if (!m_bFullScreenSpanAll)
-            windowHandle()->showFullScreen();
+            asChild()->window()->showFullScreen();
         else
-            windowHandle()->showNormal();
+            asChild()->window()->showNormal();
     }
     else
     {
         SetScreenNumber(m_nRestoreScreen);
-        windowHandle()->showNormal();
+        asChild()->window()->showNormal();
         m_pTopLevel->setGeometry(m_aRestoreGeometry);
     }
 }
@@ -1342,6 +1338,14 @@ void QtFrame::SetApplicationID(const OUString& rWMClass)
 #else
     (void)rWMClass;
 #endif
+}
+
+void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
+{
+    if (!rData.pWidget)
+        return;
+    if (rData.platform != SystemEnvData::Platform::Wayland)
+        rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());
 }
 
 // Drag'n'drop foo
