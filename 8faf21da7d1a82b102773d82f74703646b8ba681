@@ -16,6 +16,23 @@
       "message": "Looks very good code-wise, but breaks dual screen Impress presentation for me. Both full-screen windows now open on the same screen on X11.",
       "revId": "8faf21da7d1a82b102773d82f74703646b8ba681",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9f771c3_0d04a1d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-17T12:59:39Z",
+      "side": 1,
+      "message": "And possibly the comment about missing mouseMoveEvents in QtFrame::screen can also be adapted now, if the problem is gone? (I haven\u0027t explicitly tested yet.)",
+      "revId": "8faf21da7d1a82b102773d82f74703646b8ba681",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
