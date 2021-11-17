@@ -132,7 +132,8 @@ public:
 #endif
     void ReturnFocus();
 
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags,
+                                     const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* = nullptr) override;
     virtual void ShowCloseButton(bool bShow) override;
     virtual bool AddMenuBarButton( const SalMenuButtonItem& rNewItem ) override;
     virtual void RemoveMenuBarButton( sal_uInt16 nId ) override;

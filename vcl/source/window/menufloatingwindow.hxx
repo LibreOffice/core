@@ -46,6 +46,7 @@ private:
     sal_uInt16 nScrollerHeight;
     sal_uInt16 nFirstEntry;
     sal_uInt16 nPosInParent;
+    css::uno::Reference<css::ui::dialogs::XDialogClosedListener> m_xListener;
 
     bool bInExecute : 1;
     bool bScrollMenu : 1;
@@ -67,6 +68,7 @@ private:
 
     void Start();
     void End();
+    static void Finish();
 
 protected:
     vcl::Region ImplCalcClipRegion() const;
@@ -106,6 +108,8 @@ public:
     void EnableScrollMenu( bool b );
     bool IsScrollMenu() const        { return bScrollMenu; }
     sal_uInt16 GetScrollerHeight() const   { return nScrollerHeight; }
+
+    void Popup(const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener = nullptr);
 
     void Execute();
     void StopExecute();

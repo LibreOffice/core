@@ -40,7 +40,7 @@ class QtFrame;
 class QtMenu : public QObject, public SalMenu
 {
     Q_OBJECT
-private:
+
     std::vector<QtMenuItem*> maItems;
     VclPtr<Menu> mpVCLMenu;
     QtMenu* mpParentSalMenu;
@@ -55,6 +55,9 @@ private:
 
     // help ID of currently/last selected item
     static OUString m_sCurrentHelpId;
+
+    css::uno::Reference<css::ui::dialogs::XDialogClosedListener> m_xListener;
+    FloatingWindow* m_pWin;
 
     void DoFullMenuUpdate(Menu* pMenuBar);
     static void NativeItemText(OUString& rItemText);
@@ -81,8 +84,9 @@ public:
     virtual void SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos) override;
     virtual void SetFrame(const SalFrame* pFrame) override;
     virtual void ShowMenuBar(bool bVisible) override;
-    virtual bool ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
-                                     FloatWinPopupFlags nFlags) override;
+    virtual bool ShowNativePopupMenu(
+        FloatingWindow*, const tools::Rectangle&, FloatWinPopupFlags,
+        const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* = nullptr) override;
     QtMenu* GetTopLevel();
     virtual void SetItemBits(unsigned nPos, MenuItemBits nBits) override;
     virtual void CheckItem(unsigned nPos, bool bCheck) override;

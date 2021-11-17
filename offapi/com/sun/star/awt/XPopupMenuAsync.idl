@@ -1,0 +1,51 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+#ifndef __com_sun_star_awt_XPopupMenuAsync_idl__
+#define __com_sun_star_awt_XPopupMenuAsync_idl__
+
+#include <com/sun/star/awt/XPopupMenu.idl>
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.idl>
+
+module com {  module sun {  module star {  module awt {
+
+/** shows a pop-up menu without blocking.
+ */
+interface XPopupMenuAsync: XPopupMenu
+{
+    /** just shows the popup menu without blocking and calls the
+        XDialogClosedListener when closed,
+
+        @param Parent
+            the parent window.
+
+        @param Position
+            a Rectangle representing the coordinates system
+            where the popup menu should be executed.
+
+        @param Direction
+            the direction in which a popup menu will grow, as specified
+            by one of the PopupMenuDirection constants.
+
+        @param xListener
+            notified, if the popup is closed.
+
+        @return
+            returns true, if the popup has started to run async.
+            May fail, if the native backend doesn't implement async popups.
+    */
+    boolean popup([in] XWindowPeer Parent, [in] Rectangle Position, [in] short Direction,
+                  [in] ::com::sun::star::ui::dialogs::XDialogClosedListener xListener);
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

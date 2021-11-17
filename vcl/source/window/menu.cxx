@@ -2690,6 +2690,7 @@ MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
 }
 
 PopupMenu::PopupMenu()
+    : m_pState(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 }
@@ -2702,6 +2703,7 @@ PopupMenu::PopupMenu( const PopupMenu& rMenu )
 
 PopupMenu::~PopupMenu()
 {
+    assert(!m_pState);
     disposeOnce();
 }
 
@@ -2797,6 +2799,36 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const tools::Rectangle&
 {
     ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
     return ImplExecute( pExecWindow, rRect, lcl_TranslateFlags(nFlags), nullptr, false );
+}
+
+struct PopupMenuFinishState final
+{
+    VclPtr<PopupMenu> pSelf;
+    VclPtr<vcl::Window> pParentWin;
+    VclPtr<MenuFloatingWindow> pWin;
+    bool bRealExecute;
+    bool bIsNativeMenu;
+
+    void clean()
+    {
+        pWin = nullptr;
+        pParentWin = nullptr;
+        pSelf = nullptr;
+    }
+};
+
+bool PopupMenu::Popup(vcl::Window* pExecWindow, const Point& rPopupPos,
+                            const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& listener)
+{
+    return Popup(pExecWindow, tools::Rectangle(rPopupPos, rPopupPos), listener, PopupMenuFlags::ExecuteDown);
+}
+
+bool PopupMenu::Popup(vcl::Window* pExecWindow, const tools::Rectangle& rRect,
+                      const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& listener, PopupMenuFlags nFlags)
+{
+    assert(!m_pState);
+    ENSURE_OR_RETURN(pExecWindow, "PopupMenu::Popup: need a non-NULL window!", false);
+    return ImplPopup(pExecWindow, rRect, lcl_TranslateFlags(nFlags), nullptr, false, listener);
 }
 
 void PopupMenu::ImplFlushPendingSelect()
@@ -2954,7 +2986,7 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
     if (pStartedFrom && pStartedFrom->IsMenuBar())
         nMaxHeight -= pParentWin->GetSizePixel().Height();
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    pWindow->GetBorder( nLeft, nTop, nRight, nBottom );
+    pWindow->GetBorder(nLeft, nTop, nRight, nBottom);
     nMaxHeight -= nTop+nBottom;
     if ( aSz.Height() > nMaxHeight )
     {
@@ -2970,10 +3002,11 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
 }
 
 bool PopupMenu::Run(const VclPtr<MenuFloatingWindow>& pWin, const bool bRealExecute, const bool bPreSelectFirst,
-                    const FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, const tools::Rectangle& rRect)
+                    const FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, const tools::Rectangle& rRect,
+                    const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* xListener)
 {
     SalMenu* pMenu = ImplGetSalMenu();
-    if (pMenu && bRealExecute && pMenu->ShowNativePopupMenu(pWin, rRect, nPopupModeFlags))
+    if (pMenu && bRealExecute && pMenu->ShowNativePopupMenu(pWin, rRect, nPopupModeFlags, xListener))
         return true;
 
     pWin->StartPopupMode(rRect, nPopupModeFlags);
@@ -3009,7 +3042,12 @@ bool PopupMenu::Run(const VclPtr<MenuFloatingWindow>& pWin, const bool bRealExec
     }
 
     if (bRealExecute)
-        pWin->Execute();
+    {
+        if (!xListener)
+            pWin->Execute();
+        else
+            pWin->Popup(*xListener);
+    }
 
     return false;
 }
@@ -3054,9 +3092,40 @@ sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const t
     VclPtr<MenuFloatingWindow> pWin;
     if (!PrepareRun(pParentWin, aRect, nPopupModeFlags, pSFrom, bRealExecute, pWin))
         return 0;
-    const bool bNative = Run(pWin, bRealExecute, bPreSelectFirst, nPopupModeFlags, pSFrom, aRect);
+    const bool bNative = Run(pWin, bRealExecute, bPreSelectFirst, nPopupModeFlags, pSFrom, aRect, nullptr);
     FinishRun(pWin, pParentWin, bRealExecute, bNative);
     return nSelectedId;
+}
+
+bool PopupMenu::ImplPopup(const VclPtr<vcl::Window>& pParentWin, const tools::Rectangle& rRect,
+                          FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst,
+                          const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener)
+{
+    // tdf#126054 hold this until after function completes
+    VclPtr<PopupMenu> xThis(this);
+    bool bRealExecute = false;
+    tools::Rectangle aRect(rRect);
+    VclPtr<MenuFloatingWindow> pWin;
+    if (!PrepareRun(pParentWin, aRect, nPopupModeFlags, pSFrom, bRealExecute, pWin))
+        return false;
+    assert(!m_pState);
+    m_pState = new PopupMenuFinishState;
+    m_pState->bIsNativeMenu = Run(pWin, bRealExecute, bPreSelectFirst, nPopupModeFlags, pSFrom, aRect, &xListener);
+    m_pState->pWin = pWin;
+    m_pState->pParentWin = pParentWin;
+    m_pState->bRealExecute = bRealExecute;
+    m_pState->pSelf = xThis;
+    return true;
+}
+
+void PopupMenu::Finish()
+{
+    if (!m_pState)
+        return;
+    FinishRun(m_pState->pWin, m_pState->pParentWin, m_pState->bRealExecute, m_pState->bIsNativeMenu);
+    m_pState->clean();
+    delete m_pState;
+    m_pState = nullptr;
 }
 
 sal_uInt16 PopupMenu::ImplCalcVisEntries( tools::Long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible ) const

@@ -117,6 +117,16 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
             mpOwnedQMenu.reset(new QMenu);
             mpQMenu = mpOwnedQMenu.get();
             connectHelpSignalSlots(mpQMenu, pSalMenuItem);
+
+            connect(mpQMenu, &QMenu::aboutToHide, this, [this] {
+                if (m_pWin && m_xListener.is())
+                {
+                    QMenu* pMenu = mpOwnedQMenu.release();
+                    css::ui::dialogs::DialogClosedEvent aEvent(m_pWin->GetComponentInterface(), 0);
+                    m_xListener->dialogClosed(aEvent);
+                    pMenu->deleteLater();
+                }
+            });
         }
 
         if (pSalMenuItem->mpSubMenu)
@@ -869,7 +879,8 @@ void QtMenu::ShowCloseButton(bool bShow)
 }
 
 bool QtMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
-                                 FloatWinPopupFlags nFlags)
+                                 FloatWinPopupFlags nFlags,
+                                 const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* pListener)
 {
     assert(mpQMenu);
     DoFullMenuUpdate(mpVCLMenu);
@@ -884,7 +895,19 @@ bool QtMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& r
     aFloatRect.SetPosY(aFloatRect.getY() + pFrame->menuBarOffset());
 
     const QRect aRect = toQRect(aFloatRect, 1 / pFrame->devicePixelRatioF());
-    mpQMenu->exec(aRect.bottomLeft());
+
+    if (pListener)
+    {
+        m_xListener = *pListener;
+        m_pWin = pWin;
+        mpQMenu->popup(aRect.bottomLeft());
+    }
+    else
+    {
+        m_xListener = nullptr;
+        m_pWin = nullptr;
+        mpQMenu->exec(aRect.bottomLeft());
+    }
 
     return true;
 }
