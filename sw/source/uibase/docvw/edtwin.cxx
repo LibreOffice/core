@@ -5280,6 +5280,7 @@ void SwEditWin::GetFocus()
         m_rView.GotFocus();
         Window::GetFocus();
         m_rView.GetWrtShell().InvalidateAccessibleFocus();
+        m_rView.GetWrtShell().Edit();
     }
 }
 
