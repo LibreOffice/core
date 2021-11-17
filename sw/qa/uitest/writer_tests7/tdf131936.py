@@ -4,8 +4,6 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from uitest.config import DEFAULT_SLEEP
-import time
 
 class tdf131936(UITestCase):
 
@@ -13,7 +11,6 @@ class tdf131936(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf131936.docx")):
 
             with self.ui_test.execute_dialog_through_command(".uno:SaveAs", close_button="cancel") as xDialog:
-                time.sleep(DEFAULT_SLEEP)
                 xFileTypeCombo = xDialog.getChild("file_type")
                 state = get_state_as_dict(xFileTypeCombo)
                 self.assertEqual(state["SelectEntryText"], "Office Open XML Text (Transitional) (.docx)")
