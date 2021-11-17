@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1591b259_1c13c41d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-17T12:57:29Z",
+      "side": 1,
+      "message": "Looks very good code-wise, but breaks dual screen Impress presentation for me. Both full-screen windows now open on the same screen on X11.",
+      "revId": "8faf21da7d1a82b102773d82f74703646b8ba681",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
