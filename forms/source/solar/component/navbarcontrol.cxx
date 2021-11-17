@@ -180,7 +180,7 @@ namespace frm
         Reference< XDispatchProviderInterception > xTypedPeer(getPeer(), UNO_QUERY);
         if (xTypedPeer.is())
         {
-            xTypedPeer->registerDispatchProviderInterceptor(_rxInterceptor);
+            xTypedPeer->releaseDispatchProviderInterceptor(_rxInterceptor);
         }
     }
 
