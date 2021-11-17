@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "983c2752_d19ed401",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-17T16:44:29Z",
+      "side": 1,
+      "message": "gerrit_windows faiing is not related to this patch. it\u0027s only executed on linux",
+      "revId": "07ce3dbeb1ff3d9df97d73f74f209c885b140abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
