@@ -22,6 +22,30 @@
       },
       "revId": "b6e58f1109b3e2faf08e01fc213596021c313591",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "590209ae_4fd97c47",
+        "filename": "sw/inc/hintids.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-11-17T11:49:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6b89ea7_e903c97b",
+      "range": {
+        "startLine": 342,
+        "startChar": 36,
+        "endLine": 342,
+        "endChar": 48
+      },
+      "revId": "b6e58f1109b3e2faf08e01fc213596021c313591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
