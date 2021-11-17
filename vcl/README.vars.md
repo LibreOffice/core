@@ -9,6 +9,7 @@ These are the general environment variables used in the VCL:
 * `SAL_NO_NWF` - disable native widgets
 * `SAL_FORCEDPI` - force a specific DPI (gtk3 & qt5/kf5 plugins only)
 * `SAL_FORCE_HC` - force high-contrast mode
+* `SAL_USE_SYSTEM_LOOP` - calls std::abort on nested event loop calls. Currently just for Qt with many crashes. WIP.
 
 * `SAL_NO_FONT_LOOKUP` - disable font search and fallback and always use a hard-coded font name (for some unit tests)
 

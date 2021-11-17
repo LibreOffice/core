@@ -133,6 +133,7 @@ typedef std::pair<VclPtr<vcl::Window>, ImplPostEventData *> ImplPostEventPair;
 
 struct ImplSVAppData
 {
+    ImplSVAppData();
     ~ImplSVAppData();
 
     std::optional<AllSettings> mxSettings;           // Application settings
@@ -159,6 +160,7 @@ struct ImplSVAppData
     bool                    mbSettingsInit = false;         // true: Settings are initialized
     DialogCancelMode meDialogCancel = DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
     bool mbRenderToBitmaps = false; // set via svp / headless plugin
+    bool m_bUseSystemLoop = false;
 
     SvFileStream*       mpEventTestInput = nullptr;
     Idle*               mpEventTestingIdle = nullptr;

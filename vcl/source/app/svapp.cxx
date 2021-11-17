@@ -443,6 +443,11 @@ void Application::Execute()
     int nExitCode = 0;
     if (!pSVData->mpDefInst->DoExecute(nExitCode))
     {
+        if (Application::IsOnSystemEventLoop())
+        {
+            SAL_WARN("vcl.schedule", "Can't omit DoExecute when running on system event loop!");
+            std::abort();
+        }
         while (!pSVData->maAppData.mbAppQuit)
             Application::Yield();
     }
@@ -452,7 +457,6 @@ void Application::Execute()
     GetpApp()->Shutdown();
 }
 
-#ifndef EMSCRIPTEN
 static bool ImplYield(bool i_bWait, bool i_bAllEvents)
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -477,23 +481,27 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
     SAL_INFO("vcl.schedule", "Leave ImplYield with return " << bProcessedEvent );
     return bProcessedEvent;
 }
-#endif
 
 bool Application::Reschedule( bool i_bAllEvents )
 {
-#ifdef EMSCRIPTEN
-    SAL_WARN("wasm", "Application::Reschedule(" << i_bAllEvents << ")");
-    (void) i_bAllEvents;
-    std::abort();
-#else
+    static const bool bAbort = Application::IsOnSystemEventLoop();
+    if (bAbort)
+    {
+        SAL_WARN("vcl.schedule", "Application::Reschedule(" << i_bAllEvents << ")");
+        std::abort();
+    }
     return ImplYield(false, i_bAllEvents);
-#endif
+}
+
+bool Application::IsOnSystemEventLoop()
+{
+    return ImplGetSVData()->maAppData.m_bUseSystemLoop;
 }
 
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1;
-    while( Application::Reschedule( true ) )
+    while (ImplYield(false, true))
     {
         if (0 == ++nSanity % 1000)
         {
@@ -541,17 +549,19 @@ SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
 
 void Application::Yield()
 {
-#ifdef EMSCRIPTEN
-    SAL_WARN("wasm", "Application::Yield()");
-    std::abort();
-#else
+    static const bool bAbort = Application::IsOnSystemEventLoop();
+    if (bAbort)
+    {
+        SAL_WARN("vcl.schedule", "Application::Yield()");
+        std::abort();
+    }
     ImplYield(true, false);
-#endif
 }
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg, void*, void )
 {
     assert(ImplGetSVData()->maAppData.mbAppQuit);
+    ImplGetSVData()->mpDefInst->DoQuit();
 }
 
 void Application::Quit()

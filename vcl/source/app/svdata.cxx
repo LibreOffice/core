@@ -474,6 +474,13 @@ ImplSVHelpData& ImplGetSVHelpData()
 }
 
 ImplSVData::~ImplSVData() {}
+
+ImplSVAppData::ImplSVAppData()
+{
+    m_bUseSystemLoop = getenv("SAL_USE_SYSTEM_LOOP") != nullptr;
+    SAL_WARN_IF(m_bUseSystemLoop, "vcl.schedule", "Overriding to run LO on system event loop!");
+}
+
 ImplSVAppData::~ImplSVAppData() {}
 ImplSVGDIData::~ImplSVGDIData() {}
 ImplSVFrameData::~ImplSVFrameData() {}
