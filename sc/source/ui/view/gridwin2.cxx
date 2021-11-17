@@ -19,6 +19,7 @@
 
 #include <scitems.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>
 
 #include <gridwin.hxx>
@@ -379,8 +380,9 @@ struct DPFieldPopupData : public ScCheckListMenuControl::ExtendedData
 class DPFieldPopupOKAction : public ScCheckListMenuControl::Action
 {
 public:
-    explicit DPFieldPopupOKAction(ScGridWindow* p) :
-        mpGridWindow(p) {}
+    explicit DPFieldPopupOKAction(ScGridWindow* p)
+        : mpGridWindow(p)
+    {}
 
     virtual bool execute() override
     {
@@ -394,44 +396,74 @@ private:
 class PopupSortAction : public ScCheckListMenuControl::Action
 {
 public:
-    enum SortType { ASCENDING, DESCENDING, CUSTOM };
-
-    explicit PopupSortAction(ScDPObject* pDPObject, tools::Long nDimIndex, SortType eType,
-                             sal_uInt16 nUserListIndex, ScTabViewShell* pViewShell)
-        : mpDPObject(pDPObject)
-        , mnDimIndex(nDimIndex)
+    explicit PopupSortAction(ScGridWindow* p, ScGridWindow::DataPilotSortMode eType)
+        : mpGridWindow(p)
         , meType(eType)
-        , mnUserListIndex(nUserListIndex)
-        , mpViewShell(pViewShell)
     {}
 
     virtual bool execute() override
     {
-        switch (meType)
-        {
-            case ASCENDING:
-                mpViewShell->DataPilotSort(mpDPObject, mnDimIndex, true);
-            break;
-            case DESCENDING:
-                mpViewShell->DataPilotSort(mpDPObject, mnDimIndex, false);
-            break;
-            case CUSTOM:
-                mpViewShell->DataPilotSort(mpDPObject, mnDimIndex, true, &mnUserListIndex);
-            break;
-            default:
-                ;
-        }
-        return true;
+        mpGridWindow->UpdateDPSortFromMenu(meType);
+        return false;
     }
 
 private:
-    ScDPObject*     mpDPObject;
-    tools::Long            mnDimIndex;
-    SortType        meType;
-    sal_uInt16      mnUserListIndex;
-    ScTabViewShell* mpViewShell;
+    VclPtr<ScGridWindow> mpGridWindow;
+    ScGridWindow::DataPilotSortMode meType;
 };
 
+}
+
+void ScGridWindow::UpdateDPSortFromMenu(DataPilotSortMode eType)
+{
+    if (!mpDPFieldPopup)
+        return;
+
+    ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
+
+    DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(rControl.getExtendedData());
+    if (!pDPData)
+        return;
+
+    ScDPObject* pDPObj = pDPData->mpDPObj;
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+
+    switch (eType)
+    {
+        case DataPilotSortMode::SortAscending:
+            pViewShell->DataPilotSort(pDPObj, pDPData->mnDim, true);
+        break;
+        case DataPilotSortMode::SortDescending:
+            pViewShell->DataPilotSort(pDPObj, pDPData->mnDim, false);
+        break;
+        case DataPilotSortMode::Custom:
+            if (const ScUserList* pUserList = ScGlobal::GetUserList())
+            {
+                weld::Window* pPopupParent = mpDPFieldPopup->GetFrameWeld();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/emptymenu.ui"));
+                std::unique_ptr<weld::Menu> xSortMenu(xBuilder->weld_menu("menu"));
+
+                for (size_t i = 0, n = pUserList->size(); i < n; ++i)
+                {
+                    const ScUserListData& rData = (*pUserList)[i];
+                    xSortMenu->append(OUString::number(i+1), rData.GetString());
+                }
+
+                sal_Int32 nSelected = rControl.ExecuteMenu(*xSortMenu);
+                xSortMenu.reset();
+
+                if (nSelected == 0)
+                    return;
+
+                rControl.terminateAllPopupMenus();
+
+                sal_uInt16 nUserListIndex = nSelected - 1;
+                pViewShell->DataPilotSort(pDPObj, pDPData->mnDim, true, &nUserListIndex);
+            }
+        break;
+        default:
+            ;
+    }
 }
 
 void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Size& rScreenSize,
@@ -498,40 +530,16 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     if (bDimOrientNotPage)
     {
-        vector<OUString> aUserSortNames;
-        ScUserList* pUserList = ScGlobal::GetUserList();
-        if (pUserList)
-        {
-            size_t n = pUserList->size();
-            aUserSortNames.reserve(n);
-            for (size_t i = 0; i < n; ++i)
-            {
-                const ScUserListData& rData = (*pUserList)[i];
-                aUserSortNames.push_back(rData.GetString());
-            }
-        }
-
         // Populate the menus.
-        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         rControl.addMenuItem(
             ScResId(STR_MENU_SORT_ASC),
-            new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::ASCENDING, 0, pViewShell));
+            new PopupSortAction(this, DataPilotSortMode::SortAscending));
         rControl.addMenuItem(
             ScResId(STR_MENU_SORT_DESC),
-            new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::DESCENDING, 0, pViewShell));
-
-        ScCheckListMenuWindow* pSubMenu = rControl.addSubMenuItem(ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
-        if (pSubMenu)
-        {
-            ScCheckListMenuControl& rSubMenu = pSubMenu->get_widget();
-            size_t n = aUserSortNames.size();
-            for (size_t i = 0; i < n; ++i)
-            {
-                rSubMenu.addMenuItem(aUserSortNames[i],
-                                     new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::CUSTOM, sal_uInt16(i), pViewShell));
-            }
-            rSubMenu.resizeToFitMenuItems();
-        }
+            new PopupSortAction(this, DataPilotSortMode::SortDescending));
+        rControl.addMenuItem(
+            ScResId(STR_MENU_SORT_CUSTOM),
+            new PopupSortAction(this, DataPilotSortMode::Custom));
     }
 
     rControl.initMembers();
