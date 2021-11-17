@@ -46,10 +46,12 @@ dialogs = [
         # tested in sc/qa/uitest/calc_tests/formatCells.py
     # {"command": ".uno:RowHeight", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests/rows.py
-    {"command": ".uno:SetOptimalRowHeight", "closeButton": "cancel"},
+    # {"command": ".uno:SetOptimalRowHeight", "closeButton": "cancel"},
+        # tested in sc/qa/uitest/calc_tests9/tdf126673.py
     # {"command": ".uno:ColumnWidth", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests/columns.py
-    {"command": ".uno:SetOptimalColumnWidth", "closeButton": "cancel"},
+    # {"command": ".uno:SetOptimalColumnWidth", "closeButton": "cancel"},
+        # tested in sc/qa/uitest/textToColumns/tdf89907.py
     # {"command": ".uno:PageFormatDialog", "closeButton": "cancel"},
         # tested in sc/qa/uitest/pageFormat/tdf123508.py
     {"command": ".uno:EditPrintArea", "closeButton": "cancel", "skipTestOK": True},
