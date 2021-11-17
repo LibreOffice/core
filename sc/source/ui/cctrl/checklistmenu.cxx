@@ -623,8 +623,11 @@ void ScCheckListMenuControl::prepWindow()
 {
     mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height() + 2);
     mnSelectedMenu = 0;
-    mxMenu->set_cursor(mnSelectedMenu);
-    mxMenu->unselect_all();
+    if (mxMenu->n_children())
+    {
+        mxMenu->set_cursor(mnSelectedMenu);
+        mxMenu->unselect_all();
+    }
 
     mnWndWidth = mxContainer->get_preferred_size().Width() + mxFrame->get_border_width() * 2 + 4;
 }
