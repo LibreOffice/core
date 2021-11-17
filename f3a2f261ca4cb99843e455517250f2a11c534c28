@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e8f68493_ce808855",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-17T13:23:43Z",
+      "side": 1,
+      "message": "Thanks for your comments, please see my replies below.",
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26279714_6bc5f2e7",
         "filename": "scaddins/source/datefunc/datefunc.cxx",
         "patchSetId": 1
@@ -43,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69c6b931_4c0f0c07",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-17T13:23:43Z",
+      "side": 1,
+      "message": "That looks like a more correct reading indeed. I\u0027ll wait for comment from Eike before submitting a revised patch.",
+      "parentUuid": "26279714_6bc5f2e7",
+      "range": {
+        "startLine": 449,
+        "startChar": 39,
+        "endLine": 449,
+        "endChar": 49
+      },
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b9539312_acff8043",
         "filename": "scaddins/source/datefunc/datefunc.cxx",
         "patchSetId": 1
@@ -54,6 +95,24 @@
       "writtenOn": "2021-11-16T19:01:26Z",
       "side": 1,
       "message": "I feel that trying to keep only integral computations, it brings much complexity. But dividing by 7.0 instead of 7, and then using std::floor on result, would give you uniform computation suitable for both positive and negative differences.",
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "550d98ca_508d98fd",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-17T13:23:43Z",
+      "side": 1,
+      "message": "With mode 1, it is not if the number of weeks lies between n.00001 and n.99999, but how many \u0027week crossings\u0027 have taken place (see link to documentation in my comment 1).\nSo any call to weeks with startdate on a Sunday and enddate on a Monday will have 1 more week than the int division by 7. And any call with startdate on a Monday and enddate ion a Sunday will just have the int division by 7 as result, even if there are more days between startdate and enddate.\nTo avoid using week numbers and difficult calculations when crossing years, I simply remove the whole weeks between startdate and enddate, leaving just the comparison of the day of week.\n\nAnd to avoid different comparisons for startdate\u003c\u003denddate and startdate\u003eenddate, I calculate only with startdate\u003c\u003denddate and correct to negative value if the WEEKS argument have startdate\u003eenddate.\n\nI hope all this rambling is clear...",
+      "parentUuid": "b9539312_acff8043",
       "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
