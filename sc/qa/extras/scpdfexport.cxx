@@ -28,6 +28,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 #if USE_TLS_NSS
 #include <nss.h>
 #endif
@@ -67,12 +69,14 @@ public:
     void testExportFitToPage_Tdf103516();
     void testUnoCommands_Tdf120161();
     void testTdf64703_hiddenPageBreak();
+    void testTdf143978();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
     CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
+    CPPUNIT_TEST(testTdf143978);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -449,6 +453,53 @@ void ScPDFExportTest::testTdf64703_hiddenPageBreak()
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 4>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
     }
+}
+
+void ScPDFExportTest::testTdf143978()
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf143978.ods",
+                                  "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:A2
+    ScRange range1(0, 0, 0, 0, 1, 0);
+    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+    // Parse the export result with pdfium.
+    SvFileStream aFile(pPDFFile->GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(2, nPageObjectCount);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Dies ist viel zu viel Text
+    // - Actual  : Dies ist vie
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject1 = pPdfPage->getObject(0);
+    OUString sText1 = pPageObject1->getText(pTextPage);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dies ist viel zu viel Text"), sText1);
+
+    // and it would also have failed with
+    // - Expected: 2021-11-17
+    // - Actual  : ###
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject2 = pPdfPage->getObject(1);
+    OUString sText2 = pPageObject2->getText(pTextPage);
+    CPPUNIT_ASSERT_EQUAL(OUString("2021-11-17"), sText2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);

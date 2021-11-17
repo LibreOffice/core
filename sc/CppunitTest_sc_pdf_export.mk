@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_pdf_export, \
     tl \
     unotest \
     utl \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_pdf_export,\
