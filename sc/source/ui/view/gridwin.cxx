@@ -930,7 +930,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries);
 
                 weld::Window* pPopupParent = mpAutoFilterPopup->GetFrameWeld();
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/colormenu.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/emptymenu.ui"));
                 std::unique_ptr<weld::Menu> xColorMenu(xBuilder->weld_menu("menu"));
 
                 std::set<Color> aColors = eMode == AutoFilterMode::TextColor
@@ -939,7 +939,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
                 sal_Int32 i = 1;
                 sal_Int32 nActive = -1;
-                for (auto& rColor : aColors)
+                for (const auto& rColor : aColors)
                 {
                     if (rColor == COL_AUTO)
                     {

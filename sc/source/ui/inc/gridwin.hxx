@@ -342,6 +342,13 @@ public:
         Clear
     };
 
+    enum class DataPilotSortMode
+    {
+        Custom,
+        SortAscending,
+        SortDescending
+    };
+
     ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow() override;
     virtual void dispose() override;
@@ -408,6 +415,7 @@ public:
 
     void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
     void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
+    void            UpdateDPSortFromMenu(DataPilotSortMode eMode);
 
     css::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 

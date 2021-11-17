@@ -94,7 +94,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/chardialog \
 	sc/uiconfig/scalc/ui/checkwarningdialog \
 	sc/uiconfig/scalc/ui/chisquaretestdialog \
-	sc/uiconfig/scalc/ui/colormenu \
 	sc/uiconfig/scalc/ui/colorrowdialog \
 	sc/uiconfig/scalc/ui/colwidthdialog \
 	sc/uiconfig/scalc/ui/condformatmanager \
@@ -122,6 +121,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/descriptivestatisticsdialog \
 	sc/uiconfig/scalc/ui/dropmenu \
 	sc/uiconfig/scalc/ui/doubledialog \
+	sc/uiconfig/scalc/ui/emptymenu \
 	sc/uiconfig/scalc/ui/erroralerttabpage \
 	sc/uiconfig/scalc/ui/erroralerttabpage-mobile \
 	sc/uiconfig/scalc/ui/externaldata \
