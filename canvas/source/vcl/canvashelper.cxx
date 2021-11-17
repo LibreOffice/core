@@ -41,6 +41,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapAlphaClampFilter.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -707,7 +708,7 @@ namespace vclcanvas
                     // actually what mp2ndOutDev is...  well, here we do &
                     // assume a 1bpp target - everything beyond 97%
                     // transparency is fully transparent
-                    if( aBmpEx.IsAlpha() )
+                    if( aBmpEx.IsAlpha() && !SkiaHelper::isVCLSkiaEnabled())
                     {
                         BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
                     }
@@ -734,7 +735,7 @@ namespace vclcanvas
                     // actually what mp2ndOutDev is...  well, here we do &
                     // assume a 1bpp target - everything beyond 97%
                     // transparency is fully transparent
-                    if( aBmpEx.IsAlpha() )
+                    if( aBmpEx.IsAlpha() && !SkiaHelper::isVCLSkiaEnabled())
                     {
                         BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
                     }
