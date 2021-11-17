@@ -961,7 +961,6 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                     aEndToken.clear();
                     nToken = HtmlTokenId::NONE;
                 }
-                break;
             }
             break;
         default:
