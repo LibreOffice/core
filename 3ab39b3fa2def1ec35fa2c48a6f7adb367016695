@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9488d8ed_5633a930",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-17T18:58:31Z",
+      "side": 1,
+      "message": "Just wonder why there\u0027s no build in progress",
+      "revId": "3ab39b3fa2def1ec35fa2c48a6f7adb367016695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
