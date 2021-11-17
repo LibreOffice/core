@@ -431,7 +431,7 @@ inline bool isValidArcArg(double d)
     return fabs(d)
         <= (static_cast< double >(static_cast< unsigned long >(0x80000000))
             * static_cast< double >(static_cast< unsigned long >(0x80000000))
-            * 2);
+            * 4);
 }
 
 /** Safe sin(), returns NAN if not valid.
