@@ -42,8 +42,6 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
         m_pQWidget->show();
 
     QtFrame::FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
-    if (m_aSystemData.platform != SystemEnvData::Platform::Wayland)
-        m_aSystemData.SetWindowHandle(m_pQWidget->winId());
 }
 
 QtObject::~QtObject()
