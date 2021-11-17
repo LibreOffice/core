@@ -70,6 +70,7 @@ public:
     void testUnoCommands_Tdf120161();
     void testTdf64703_hiddenPageBreak();
     void testTdf143978();
+    void testTdf84012();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
     CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
     CPPUNIT_TEST(testTdf143978);
+    CPPUNIT_TEST(testTdf84012);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -500,6 +502,47 @@ void ScPDFExportTest::testTdf143978()
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject2 = pPdfPage->getObject(1);
     OUString sText2 = pPageObject2->getText(pTextPage);
     CPPUNIT_ASSERT_EQUAL(OUString("2021-11-17"), sText2);
+}
+
+void ScPDFExportTest::testTdf84012()
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf84012.ods",
+                                  "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1
+    ScRange range1(0, 0, 0, 0, 0, 0);
+    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+    // Parse the export result with pdfium.
+    SvFileStream aFile(pPDFFile->GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+
+    int nChars = pTextPage->countChars();
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Blah blah (blah, blah)
+    // - Actual  : Blah blah
+    CPPUNIT_ASSERT_EQUAL(OUString("Blah blah (blah, blah)"), aActualText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);
