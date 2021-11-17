@@ -145,7 +145,8 @@ private:
 
 public:
     SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership);
-    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override;
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                  weld::Placement ePlace = weld::Placement::Under) override;
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) override;
     virtual bool get_sensitive(const OString& rIdent) const override;
     virtual void set_active(const OString& rIdent, bool bActive) override;

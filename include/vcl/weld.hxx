@@ -2277,6 +2277,12 @@ private:
     virtual void click(const Point& rPos) = 0;
 };
 
+enum class Placement
+{
+    Under,
+    End
+};
+
 class VCL_DLLPUBLIC Menu
 {
 protected:
@@ -2285,7 +2291,9 @@ protected:
     void signal_activate(const OString& rIdent) { m_aActivateHdl.Call(rIdent); }
 
 public:
-    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                  Placement ePlace = Placement::Under)
+        = 0;
 
     void connect_activate(const Link<const OString&, void>& rLink) { m_aActivateHdl = rLink; }
 

@@ -10718,7 +10718,7 @@ public:
 #endif
     }
 
-    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect, weld::Placement ePlace) override
     {
         m_sActivated.clear();
 
@@ -10743,6 +10743,15 @@ public:
         GtkWidget* pOrigParent = gtk_widget_get_parent(GTK_WIDGET(m_pMenu));
         gtk_widget_set_parent(GTK_WIDGET(m_pMenu), pWidget);
         gtk_popover_set_pointing_to(GTK_POPOVER(m_pMenu), &aRect);
+        if (ePlace == weld::Placement::Under)
+            gtk_popover_set_position(GTK_POPOVER(m_pMenu), GTK_POS_BOTTOM);
+        else
+        {
+            if (SwapForRTL(pWidget))
+                gtk_popover_set_position(GTK_POPOVER(m_pMenu), GTK_POS_LEFT);
+            else
+                gtk_popover_set_position(GTK_POPOVER(m_pMenu), GTK_POS_RIGHT);
+        }
         gtk_popover_popup(GTK_POPOVER(m_pMenu));
 #else
         gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
@@ -10765,7 +10774,15 @@ public:
             if (!pTriggerEvent)
                 pTriggerEvent = pKeyEvent;
 
-            gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            if (ePlace == weld::Placement::Under)
+                gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            else
+            {
+                if (SwapForRTL(pWidget))
+                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_EAST, pTriggerEvent);
+                else
+                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_EAST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            }
 
             gdk_event_free(pKeyEvent);
         }
