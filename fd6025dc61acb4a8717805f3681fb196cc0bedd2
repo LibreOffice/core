@@ -33,6 +33,24 @@
       "message": "I think we want to backport the fix, but for that the UI string change should be in a separate change.",
       "revId": "fd6025dc61acb4a8717805f3681fb196cc0bedd2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ac5a6ad_34fe5c48",
+        "filename": "sc/uiconfig/scalc/ui/optcalculatepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-17T07:38:04Z",
+      "side": 1,
+      "message": "\u003e I think we want to backport the fix, but for that the UI string change should be in a separate change.\n\nI\u0027ll do that once I push this. We\u0027re still discussing with Michael why the original change was done.",
+      "parentUuid": "6e5bf10c_350a9080",
+      "revId": "fd6025dc61acb4a8717805f3681fb196cc0bedd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
