@@ -502,7 +502,7 @@ public:
     virtual bool execute() override
     {
         mpWindow->UpdateAutoFilterFromMenu(meMode);
-        // RefreshAutoFilterButton manually closes the popup so return
+        // UpdateAutoFilterFromMenu manually closes the popup so return
         // false to not attempt a second close
         return false;
     }
