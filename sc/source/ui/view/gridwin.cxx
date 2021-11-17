@@ -950,10 +950,15 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     }
                     else
                     {
+                        // ColorListBox::ShowPreview is similar
                         ScopedVclPtr<VirtualDevice> xDev(pPopupParent->create_virtual_device());
-                        xDev->SetOutputSize(Application::GetSettings().GetStyleSettings().GetToolbarIconSizePixel());
-                        xDev->SetBackground(rColor);
-                        xDev->Erase();
+                        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                        Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+                        xDev->SetOutputSize(aImageSize);
+                        const tools::Rectangle aRect(Point(0, 0), aImageSize);
+                        xDev->SetFillColor(rColor);
+                        xDev->SetLineColor(rStyleSettings.GetDisableColor());
+                        xDev->DrawRect(aRect);
 
                         xColorMenu->insert(-1, OUString::number(i), OUString(),
                                            nullptr, xDev.get(), nullptr, TRISTATE_TRUE);

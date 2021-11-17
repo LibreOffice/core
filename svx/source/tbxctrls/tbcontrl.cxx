@@ -4021,6 +4021,7 @@ void ColorListBox::LockWidthRequest()
 
 void ColorListBox::ShowPreview(const NamedColor &rColor)
 {
+    // ScGridWindow::UpdateAutoFilterFromMenu is similar
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
 
