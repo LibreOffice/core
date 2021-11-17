@@ -21,7 +21,8 @@ LineNumberWindow::LineNumberWindow(vcl::Window* pParent, ModulWindow* pModulWind
     , m_pModulWindow(pModulWindow)
     , m_nCurYOffset(0)
 {
-    SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
+    SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetWindowColor()));
+    m_FontColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     m_nBaseWidth = GetTextWidth("8");
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
@@ -78,6 +79,7 @@ void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     }
 
     sal_Int64 y = (nStartLine - 1) * static_cast<sal_Int64>(nLineHeight);
+    rRenderContext.SetTextColor(m_FontColor);
     for (sal_uInt32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
         rRenderContext.DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
 }
