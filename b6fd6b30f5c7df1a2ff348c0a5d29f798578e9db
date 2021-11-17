@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92948fea_298b8c7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-17T07:13:40Z",
+      "side": 1,
+      "message": "FYI I\u0027m rather angry about you changing my new maintained code based on arbitrary rules from plugins, without ever announcing the rule or even CC-ing me on the change. This is the 3rd time in a week. Should I next time simply add OUStringView without telling anyone and start converting code to it because I think it\u0027s a good idea?\n\n",
+      "revId": "b6fd6b30f5c7df1a2ff348c0a5d29f798578e9db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
