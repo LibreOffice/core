@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fdf7dc1_3812fd4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-17T08:47:05Z",
+      "side": 1,
+      "message": "this should be [API CHANGE] ?",
+      "revId": "ba455a162968bcd724bbcfff503a2f964c5ebfdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
