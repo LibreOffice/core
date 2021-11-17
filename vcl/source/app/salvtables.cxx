@@ -142,6 +142,20 @@ bool SalInstance::CallEventCallback(void const* pEvent, int nBytes)
     return m_pEventInst.is() && m_pEventInst->dispatchEvent(pEvent, nBytes);
 }
 
+bool SalInstance::DoExecute(int&)
+{
+    // can't run on system event loop without implementing DoExecute and DoQuit
+    if (Application::IsOnSystemEventLoop())
+        std::abort();
+    return false;
+}
+
+void SalInstance::DoQuit()
+{
+    if (Application::IsOnSystemEventLoop())
+        std::abort();
+}
+
 SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE {}
 
 void SalBitmap::DropScaledCache()

@@ -259,6 +259,8 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
 
 #ifndef EMSCRIPTEN
     m_bSupportsOpenGL = true;
+#else
+    ImplGetSVData()->maAppData.m_bUseSystemLoop = true;
 #endif
 }
 
@@ -726,13 +728,16 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** 
 
 bool QtInstance::DoExecute(int& nExitCode)
 {
-#ifdef EMSCRIPTEN
-    nExitCode = m_pQApplication->exec();
-    return true;
-#else
-    (void)nExitCode;
-    return false;
-#endif
+    const bool bIsOnSystemEventLoop = Application::IsOnSystemEventLoop();
+    if (bIsOnSystemEventLoop)
+        nExitCode = QApplication::exec();
+    return bIsOnSystemEventLoop;
+}
+
+void QtInstance::DoQuit()
+{
+    if (Application::IsOnSystemEventLoop())
+        QApplication::quit();
 }
 
 extern "C" {
