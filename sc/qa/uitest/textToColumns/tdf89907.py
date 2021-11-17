@@ -9,6 +9,7 @@ from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import change_measurement_unit
 #Bug 89907 - Text to columns only affects first line when width is auto set
 
 class tdf89907(UITestCase):
@@ -16,6 +17,8 @@ class tdf89907(UITestCase):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
+
+            change_measurement_unit(self, "Centimeter")
 
             #Add data
             enter_text_to_cell(gridwin, "A1", "afasdfs.fdfasd.fsadf.fasd")
@@ -26,7 +29,10 @@ class tdf89907(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             self.xUITest.executeCommand(".uno:SelectColumn")
             #Optimal Width
-            self.xUITest.executeCommand(".uno:SetOptimalColumnWidthDirect")
+            with self.ui_test.execute_dialog_through_command(".uno:SetOptimalColumnWidth") as xDialog:
+                xvalue = xDialog.getChild("value")
+                self.assertEqual("0.20 cm", get_state_as_dict(xvalue)["Text"])
+
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
                 xother = xDialog.getChild("other")

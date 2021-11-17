@@ -26,15 +26,14 @@ class tdf126673(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
             #optimal row height
             with self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight") as xDialog:
-                pass
+                xvalue = xDialog.getChild("value")
+                self.assertEqual("0.00 cm", get_state_as_dict(xvalue)["Text"])
 
             #select A2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
             #row height
             with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
                 xvalue = xDialog.getChild("value")
-                heightStrOrig = get_state_as_dict(xvalue)["Text"]
-                heightVal = heightStrOrig[:4]  #default 0.45 cm,
-                self.assertEqual(heightVal > '0.45', True)  #new value is bigger then default
+                self.assertEqual("1.2365 cm", get_state_as_dict(xvalue)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
