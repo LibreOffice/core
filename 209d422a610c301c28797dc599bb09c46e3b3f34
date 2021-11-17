@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "383141fc_cad3ea86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-17T01:15:17Z",
+      "side": 1,
+      "message": "This WFM with Qt, but the generic VCL code needs additional fixes in either PopupMenu or MenuFloatingWindow. I have seen various references to LOK, but that seems blocking code.\n\nAlso see the comment. Totally not tested with UI or unit tests, so failures at this state expected. At least LO doesn\u0027t crash here anymore.\n\n@mmeeks: I\u0027m not sure this is interesting for LOK, but just to get some input from any LOK dev on this.",
+      "revId": "209d422a610c301c28797dc599bb09c46e3b3f34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
