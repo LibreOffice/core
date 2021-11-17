@@ -101,6 +101,8 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                     continue;
                 if (plerr == javaPluginError::FailedVersion)
                     continue;
+                if (plerr == javaPluginError::WrongArch)
+                    continue;
                 else if (plerr != javaPluginError::NONE)
                     return JFW_E_ERROR;
 
