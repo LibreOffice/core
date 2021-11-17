@@ -42,11 +42,12 @@ QtTimer::QtTimer()
 void QtTimer::timeoutActivated()
 {
     SolarMutexGuard aGuard;
-#ifdef EMSCRIPTEN
-    const ImplSVData* pSVData = ImplGetSVData();
-    assert(pSVData->mpDefInst);
-    static_cast<QtInstance*>(pSVData->mpDefInst)->DispatchUserEvents(true);
-#endif
+    if (Application::IsOnSystemEventLoop())
+    {
+        const ImplSVData* pSVData = ImplGetSVData();
+        assert(pSVData && pSVData->mpDefInst);
+        static_cast<QtInstance*>(pSVData->mpDefInst)->DispatchUserEvents(true);
+    }
     CallCallback();
 }
 

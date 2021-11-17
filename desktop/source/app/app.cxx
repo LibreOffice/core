@@ -2020,6 +2020,7 @@ void Desktop::OpenClients()
         bool bExistsSessionData  = false;
         bool const bDisableRecovery
             = getenv("OOO_DISABLE_RECOVERY") != nullptr
+              || IsOnSystemEventLoop()
               || !officecfg::Office::Recovery::RecoveryInfo::Enabled::get();
 
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);

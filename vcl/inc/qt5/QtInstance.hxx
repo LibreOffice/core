@@ -176,6 +176,7 @@ public:
     void* CreateGStreamerSink(const SystemChildWindow*) override;
 
     bool DoExecute(int& nExitCode) override;
+    void DoQuit() override;
 };
 
 inline QtInstance* GetQtInstance() { return static_cast<QtInstance*>(GetSalInstance()); }
