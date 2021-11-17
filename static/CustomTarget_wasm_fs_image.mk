@@ -271,6 +271,60 @@ gb_wasm_image_filelist := \
     $(INSTROOT)/share/config/soffice.cfg/filter/ui/warnpdfdialog.ui \
     $(INSTROOT)/share/config/soffice.cfg/filter/ui/pdfoptionsdialog.ui \
     $(INSTROOT)/share/config/soffice.cfg/filter/ui/pdfsignpage.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/menubar/menubar.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/popupmenu/drawtext.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/popupmenu/draw.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/statusbar/statusbar.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/arrowshapes.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/basicshapes.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/calloutshapes.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/drawbar.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/flowchartshapes.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/standardbar.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/starshapes.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/symbolshapes.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/toolbar/toolbar.xml \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/3dviewdialog.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/combobox.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/insertaxisdlg.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/sidebarerrorbar.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_3D_SceneAppearance.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_DataLabel.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_RangeChooser.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/attributedialog.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/datarangedialog.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/insertgriddlg.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/sidebarseries.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_3D_SceneGeometry.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_DataPointOption.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_Scale.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/chardialog.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/dlg_DataLabel.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/inserttitledlg.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/sidebartype.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_3D_SceneIllumination.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_DataSource.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_SeriesToAxis.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/chartdatadialog.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/dlg_InsertErrorBars.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/paradialog.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/smoothlinesdlg.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_axisLabel.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_ErrorBars.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_Trendline.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/charttypedialog.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/dlg_InsertLegend.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/sidebaraxis.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/steppedlinesdlg.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_AxisPositions.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_LegendPosition.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/wizelementspage.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/columnfragment.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/imagefragment.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/sidebarelements.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/titlerotationtabpage.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_ChartType.ui \
+    $(INSTROOT)/share/config/soffice.cfg/modules/schart/ui/tp_PolarOptions.ui \
     $(INSTROOT)/share/config/soffice.cfg/modules/swform/toolbar/drawingobjectbar.xml \
     $(INSTROOT)/share/config/soffice.cfg/modules/swform/toolbar/fullscreenbar.xml \
     $(INSTROOT)/share/config/soffice.cfg/modules/swform/toolbar/drawbar.xml \
