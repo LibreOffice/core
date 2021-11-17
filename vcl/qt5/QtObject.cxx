@@ -41,28 +41,9 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
     if (bShow)
         m_pQWidget->show();
 
-    m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
-    //m_aSystemData.pSalFrame = this;
-    m_aSystemData.pWidget = m_pQWidget;
-    //m_aSystemData.nScreen = m_nXScreen.getXScreen();
-    m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt;
-    m_aSystemData.platform = SystemEnvData::Platform::Xcb;
-    const bool bWayland = QGuiApplication::platformName() == "wayland";
-    if (!bWayland)
-    {
-        m_aSystemData.platform = SystemEnvData::Platform::Xcb;
-        m_aSystemData.SetWindowHandle(m_pQWindow->winId()); // ID of the embedded window
-    }
-    else
-    {
-        m_aSystemData.platform = SystemEnvData::Platform::Wayland;
-        // TODO implement as needed for Wayland,
-        // s.a. commit c0d4f3ad3307c which did this for gtk3
-        // QPlatformNativeInterface* native = QGuiApplication::platformNativeInterface();
-        // m_aSystemData.pDisplay = native->nativeResourceForWindow("display", nullptr);
-        // m_aSystemData.aWindow = reinterpret_cast<unsigned long>(
-        //     native->nativeResourceForWindow("surface", m_pQWidget->windowHandle()));
-    }
+    QtFrame::FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
+    if (m_aSystemData.platform != SystemEnvData::Platform::Wayland)
+        m_aSystemData.SetWindowHandle(m_pQWidget->winId());
 }
 
 QtObject::~QtObject()
