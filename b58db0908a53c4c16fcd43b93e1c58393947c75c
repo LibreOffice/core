@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdf632c9_959cec82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-17T09:35:25Z",
+      "side": 1,
+      "message": "I don\u0027t understand what it means to \"remove functionality from a bug\".  Do you mean it removes functionality introduced with a commit that fixed a bug?  If so, I think it would be better to mention that commit rather than the bug here.  (Plus, when referencing a bug, the tdf#47065 syntax is useful, as it makes it clear which bug tracker you are talking about, and e.g. automatically creates a link on this Gerrit change\u0027s Web UI overview page.  Also, when referencing entities like bugs or git commits, it\u0027s useful to also quote their titles, both to provide context to the reader and to make it easier to still find the referenced entity if the link goes stale, e.g. if we ever switch from git to some other version control system, as has happened multiple times over the history of the LO code base.)",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 49
+      },
+      "revId": "b58db0908a53c4c16fcd43b93e1c58393947c75c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2eceb528_a748747b",
@@ -14,6 +37,24 @@
       "writtenOn": "2021-11-17T08:48:44Z",
       "side": 1,
       "message": "Tested it, and it was fine - it works as expected for locked case (suggests to notify, notifies when unlocked), and restores old behavior for read-only files. Thank you!\n\nStephan: it removes a recently added public interface (exception) - should it be [API CHANGE] and mentioned in release notes? It needs to be backported to 7-2.",
+      "revId": "b58db0908a53c4c16fcd43b93e1c58393947c75c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "429d4ad7_84591a6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-17T09:35:25Z",
+      "side": 1,
+      "message": "\u003e Stephan: it removes a recently added public interface (exception) - should it be [API CHANGE] and mentioned in release notes? It needs to be backported to 7-2.\n\nYeah, I think it\u0027s fine to \"sweep it under the carpet\" in this specific case.",
+      "parentUuid": "2eceb528_a748747b",
       "revId": "b58db0908a53c4c16fcd43b93e1c58393947c75c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
