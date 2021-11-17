@@ -59,6 +59,7 @@
 #include <svl/eitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
+#include <svtools/dialogclosedlistener.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
@@ -136,7 +137,11 @@ struct SfxDispatcher_Impl
     SfxDisableFlags      nDisableFlags;
     bool                 bFlushed;
     std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
+
+    static css::uno::Reference<css::frame::XPopupMenuController>* m_pActivePopupController;
 };
+
+css::uno::Reference<css::frame::XPopupMenuController>* SfxDispatcher_Impl::m_pActivePopupController = nullptr;
 
 /** This method checks if the stack of the SfxDispatchers is flushed, or if
     push- or pop- commands are pending.
@@ -1684,7 +1689,48 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
     return false;
 }
 
-void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
+namespace {
+
+struct SfxDispatcherPopupFinish final
+{
+    css::uno::Reference<css::frame::XPopupMenuController> m_xPopupController;
+    std::function<void(sal_Int16)> m_aCloseFunc;
+    rtl::Reference<::svt::DialogClosedListener> m_xDialogListener;
+    VclPtr<PopupMenu> m_pPopupMenu;
+
+    DECL_LINK(PopupClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
+
+    SfxDispatcherPopupFinish(css::uno::Reference<css::frame::XPopupMenuController> xPopupController,
+                             const std::function<void(sal_Int16)>& rCloseFunc, PopupMenu& rVCLMenu)
+        : m_xPopupController(xPopupController)
+        , m_aCloseFunc(rCloseFunc)
+        , m_xDialogListener(new ::svt::DialogClosedListener())
+        , m_pPopupMenu(&rVCLMenu)
+    {
+        m_xDialogListener->SetDialogClosedLink(LINK(this, SfxDispatcherPopupFinish, PopupClosedHdl));
+    }
+};
+
+IMPL_LINK(SfxDispatcherPopupFinish, PopupClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void)
+{
+    assert(m_xPopupController.is());
+    if (!comphelper::LibreOfficeKit::isActive())
+        assert(SfxDispatcher_Impl::m_pActivePopupController == &m_xPopupController);
+    if (m_aCloseFunc)
+        m_aCloseFunc(pEvt ? pEvt->DialogResult : 0);
+    css::uno::Reference<css::lang::XComponent> xComponent(m_xPopupController, css::uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+    m_pPopupMenu->Finish();
+    m_pPopupMenu.disposeAndClear();
+    SfxDispatcher_Impl::m_pActivePopupController = nullptr;
+    delete this;
+}
+
+} // anon namespace
+
+void SfxDispatcher::ExecutePopup(vcl::Window *pWin, const Point *pPos,
+    const std::function<void(sal_Int16)>& rCloseFunc)
 {
     SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
@@ -1698,13 +1744,14 @@ void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
         const OUString& rResName = pSh->GetInterface()->GetPopupMenuName();
         if ( !rResName.isEmpty() )
         {
-            rDisp.ExecutePopup( rResName, pWin, pPos );
+            rDisp.ExecutePopup(rResName, pWin, pPos, rCloseFunc);
             return;
         }
     }
 }
 
-void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos )
+void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos,
+    const std::function<void(sal_Int16)>& rCloseFunc)
 {
     css::uno::Sequence< css::uno::Any > aArgs{
         css::uno::Any(comphelper::makePropertyValue( "Value", rResName )),
@@ -1713,16 +1760,30 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     };
 
     css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
+
+    if (!comphelper::LibreOfficeKit::isActive())
+        assert(!xImp->m_pActivePopupController);
+    if (!comphelper::LibreOfficeKit::isActive() && xImp->m_pActivePopupController)
+        return;
+
+    css::uno::Reference<css::frame::XPopupMenuController> xPopupController =
+        css::uno::Reference<css::frame::XPopupMenuController>(
+            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
+    if (!xPopupController.is())
+        return;
 
     css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( xContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.awt.PopupMenu", xContext ), css::uno::UNO_QUERY );
-
-    if ( !xPopupController.is() || !xPopupMenu.is() )
+    if (!xPopupMenu.is())
+    {
+        css::uno::Reference<css::lang::XComponent> xComponent(xPopupController, css::uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
         return;
+    }
 
+    struct SfxDispatcherPopupFinish* pFin = nullptr;
     vcl::Window* pWindow = pWin ? pWin : xImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     Point aPos = pPos ? *pPos : pWindow->GetPointerPosPixel();
 
@@ -1731,7 +1792,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     aEvent.ExecutePosition.X = aPos.X();
     aEvent.ExecutePosition.Y = aPos.Y();
 
-    xPopupController->setPopupMenu( xPopupMenu );
+    xPopupController->setPopupMenu(xPopupMenu);
     VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( xPopupMenu );
     PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
     if (comphelper::LibreOfficeKit::isActive())
@@ -1750,13 +1811,24 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
         OUString aMenuURL = "private:resource/popupmenu/" + rResName;
         if (pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception(*pVCLMenu, aMenuURL, aEvent))
         {
-            pVCLMenu->Execute(pWindow, aPos);
+            pFin = new SfxDispatcherPopupFinish(xPopupController, rCloseFunc, *pVCLMenu);
+            SfxDispatcher_Impl::m_pActivePopupController = &pFin->m_xPopupController;
+            if (!rCloseFunc || !pVCLMenu->Popup(pWindow, aPos, pFin->m_xDialogListener))
+            {
+                css::uno::Reference<css::uno::XInterface> xInterface(*pAwtMenu, css::uno::UNO_QUERY);
+                css::ui::dialogs::DialogClosedEvent aEvt(xInterface, pVCLMenu->Execute(pWindow, aPos));
+                pFin->m_xDialogListener->dialogClosed(aEvt);
+            }
         }
     }
 
-    css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
-    if ( xComponent.is() )
-        xComponent->dispose();
+    if (!pFin)
+    {
+        SfxDispatcher_Impl::m_pActivePopupController = nullptr;
+        css::uno::Reference<css::lang::XComponent> xComponent(xPopupController, css::uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
 }
 
 /** With this method the SfxDispatcher can be locked and released. A locked

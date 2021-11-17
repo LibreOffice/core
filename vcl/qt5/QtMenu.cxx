@@ -93,6 +93,16 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
             // no QMenu set, instantiate own one
             mpOwnedQMenu.reset(new QMenu);
             mpQMenu = mpOwnedQMenu.get();
+
+            connect(mpQMenu, &QMenu::aboutToHide, this, [this] {
+                if (m_pWin && m_xListener.is())
+                {
+                    QMenu* pMenu = mpOwnedQMenu.release();
+                    css::ui::dialogs::DialogClosedEvent aEvent(m_pWin->GetComponentInterface(), 0);
+                    m_xListener->dialogClosed(aEvent);
+                    pMenu->deleteLater();
+                }
+            });
         }
 
         if (pSalMenuItem->mpSubMenu)
@@ -672,15 +682,27 @@ void QtMenu::ShowCloseButton(bool bShow)
         pButton->hide();
 }
 
-bool QtMenu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&,
-                                 FloatWinPopupFlags nFlags)
+bool QtMenu::ShowNativePopupMenu(
+    FloatingWindow* pWin, const tools::Rectangle&, FloatWinPopupFlags nFlags,
+    const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* pListener)
 {
     assert(mpQMenu);
     DoFullMenuUpdate(mpVCLMenu);
     mpQMenu->setTearOffEnabled(bool(nFlags & FloatWinPopupFlags::AllowTearOff));
 
     const QPoint aPos = QCursor::pos();
-    mpQMenu->exec(aPos);
+    if (pListener)
+    {
+        m_xListener = *pListener;
+        m_pWin = pWin;
+        mpQMenu->popup(aPos);
+    }
+    else
+    {
+        m_xListener = nullptr;
+        m_pWin = nullptr;
+        mpQMenu->exec(aPos);
+    }
 
     return true;
 }

@@ -191,7 +191,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
     }
 }
 
-css::uno::Reference<css::awt::XPopupMenu> UnoWrapper::CreateMenuInterface( PopupMenu* pPopupMenu )
+css::uno::Reference<css::awt::XPopupMenuAsync> UnoWrapper::CreateMenuInterface(PopupMenu* pPopupMenu)
 {
     return new VCLXPopupMenu(pPopupMenu);
 }

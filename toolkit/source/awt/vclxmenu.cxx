@@ -36,6 +36,7 @@
 #include <vcl/window.hxx>
 
 #include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
 
 VCLXMenu::VCLXMenu()
     : maMenuListeners( *this )
@@ -490,6 +491,33 @@ sal_Int16 VCLXMenu::execute(
     return nRet;
 }
 
+sal_Bool VCLXMenu::popup(
+    const css::uno::Reference< css::awt::XWindowPeer >& rxWindowPeer,
+    const css::awt::Rectangle& rPos, sal_Int16 nFlags,
+    const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener)
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::Guard< ::osl::Mutex > aGuard(GetMutex());
+
+    if (!mpMenu || !IsPopupMenu())
+        return false;
+
+    return static_cast<PopupMenu*>(mpMenu.get())->Popup(VCLUnoHelper::GetWindow(rxWindowPeer),
+                                   VCLRectangle(rPos), xListener.is() ? xListener : this,
+                                   static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose);
+}
+
+void SAL_CALL VCLXMenu::dialogClosed(const css::ui::dialogs::DialogClosedEvent&)
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::Guard< ::osl::Mutex > aGuard(GetMutex());
+
+    assert(mpMenu && IsPopupMenu());
+    if (mpMenu && IsPopupMenu())
+        static_cast<PopupMenu*>(mpMenu.get())->Finish();
+}
+
+void SAL_CALL VCLXMenu::disposing(css::lang::EventObject const&) {}
 
 void SAL_CALL VCLXMenu::setCommand(
     sal_Int16 nItemId,

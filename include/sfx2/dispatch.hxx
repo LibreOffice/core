@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_DISPATCH_HXX
 
 #include <memory>
+#include <functional>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/toolbarids.hxx>
@@ -42,6 +43,7 @@ class Point;
 struct SfxDispatcher_Impl;
 
 namespace vcl { class Window; }
+namespace com::sun::star::ui::dialogs { class DialogClosedEvent; }
 
 enum class SfxDispatcherPopFlags
 {
@@ -136,8 +138,14 @@ public:
     SfxViewFrame*       GetFrame() const;
     SfxModule*          GetModule() const;
 
-    void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr );
-    static void         ExecutePopup( vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
+    /**
+     * @param rCloseFunc
+     *     If this is !nullptr, the popup will be just shown / run async and rCloseFunc will be called on close.
+     */
+    void ExecutePopup(const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr,
+                      const std::function<void(sal_Int16)>& rCloseFunc = nullptr);
+    static void ExecutePopup(vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr,
+                             const std::function<void(sal_Int16)>& rCloseFunc = nullptr);
 
     bool                IsAppDispatcher() const;
     bool                IsFlushed() const;

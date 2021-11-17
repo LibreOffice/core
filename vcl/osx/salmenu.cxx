@@ -281,8 +281,13 @@ AquaSalMenu::~AquaSalMenu()
     }
 }
 
-bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags)
+bool AquaSalMenu::ShowNativePopupMenu(
+    FloatingWindow* pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags,
+    const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* pListener)
 {
+    if (pListener)
+        return false;
+
     // set offsets for positioning
     const float offset = 9.0;
 

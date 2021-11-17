@@ -13,6 +13,7 @@
 #include <managedmenubutton.hxx>
 #include <vcl/menu.hxx>
 
+#include <com/sun/star/awt/XPopupMenuAsync.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/theDesktop.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>

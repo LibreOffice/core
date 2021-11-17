@@ -34,7 +34,7 @@ class OutputDevice;
 class PopupMenu;
 namespace com::sun::star::awt {
     class XGraphics;
-    class XPopupMenu;
+    class XPopupMenuAsync;
     class XToolkit;
     class XWindow;
     class XWindowPeer;
@@ -61,7 +61,7 @@ public:
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) = 0;
 
     // PopupMenu
-    virtual css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface( PopupMenu* pPopupMenu ) = 0;
+    virtual css::uno::Reference<css::awt::XPopupMenuAsync> CreateMenuInterface( PopupMenu* pPopupMenu ) = 0;
 
     virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;
 

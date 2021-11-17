@@ -308,8 +308,15 @@ IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
             pMenu->pStartedFrom->ClosePopup(pMenu);
     }
 
-    if ( pM )
+    if (pM)
+    {
         pM->pStartedFrom = nullptr;
+        if (m_xListener.is())
+        {
+            css::ui::dialogs::DialogClosedEvent aEvent(GetComponentInterface(), pM->GetCurItemId());
+            m_xListener->dialogClosed(aEvent);
+        }
+    }
 }
 
 IMPL_LINK_NOARG(MenuFloatingWindow, AutoScroll, Timer *, void)
@@ -443,21 +450,31 @@ void MenuFloatingWindow::End()
         Window::EndSaveFocus(xFocusId);
     }
 
+    Finish();
+
     bInExecute = false;
+}
+
+void MenuFloatingWindow::Popup(const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu.get());
+    m_xListener = xListener;
+    Start();
+}
+
+void MenuFloatingWindow::Finish()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mpActivePopupMenu = nullptr;
 }
 
 void MenuFloatingWindow::Execute()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
-    pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu.get());
-
-    Start();
-
+    Popup();
     while (bInExecute && !Application::IsQuit())
         Application::Yield();
-
-    pSVData->maAppData.mpActivePopupMenu = nullptr;
+    Finish();
 }
 
 void MenuFloatingWindow::StopExecute()
@@ -474,6 +491,7 @@ void MenuFloatingWindow::StopExecute()
     // notify parent, needed for accessibility
     if( pMenu && pMenu->pStartedFrom )
         pMenu->pStartedFrom->ImplCallEventListeners( VclEventId::MenuSubmenuDeactivate, nPosInParent );
+    Finish();
 }
 
 void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
@@ -502,6 +520,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 
         PaintImmediately();
     }
+    pPopup->Finish();
 }
 
 void MenuFloatingWindow::EndExecute()

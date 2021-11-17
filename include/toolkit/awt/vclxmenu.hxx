@@ -25,10 +25,11 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <com/sun/star/awt/XMenuBar.hpp>
-#include <com/sun/star/awt/XPopupMenu.hpp>
+#include <com/sun/star/awt/XPopupMenuAsync.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/weak.hxx>
@@ -39,6 +40,7 @@
 
 #include <vector>
 
+struct DialogClosedEvent;
 class Menu;
 class MenuBar;
 class PopupMenu;
@@ -48,14 +50,12 @@ typedef ::std::vector<
     css::uno::Reference< css::awt::XPopupMenu >
 > PopupMenuRefList;
 
-
-
-
 class TOOLKIT_DLLPUBLIC VCLXMenu :  public css::awt::XMenuBar,
-                                    public css::awt::XPopupMenu,
+                                    public css::awt::XPopupMenuAsync,
                                     public css::lang::XServiceInfo,
                                     public css::lang::XTypeProvider,
                                     public css::lang::XUnoTunnel,
+                                    public css::ui::dialogs::XDialogClosedListener,
                                     public ::cppu::OWeakObject
 {
 private:
@@ -77,7 +77,6 @@ public:
     VCLXMenu();
     VCLXMenu( Menu* pMenu );
     virtual ~VCLXMenu() override;
-
 
     Menu*    GetMenu() const { return mpMenu; }
     bool IsPopupMenu() const;
@@ -137,10 +136,20 @@ public:
     virtual void SAL_CALL setItemImage( ::sal_Int16 nItemId, const css::uno::Reference< css::graphic::XGraphic >& xGraphic, sal_Bool bScale ) override;
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getItemImage( ::sal_Int16 nItemId ) override;
 
+    // css::awt::XPopupMenuAsync
+    virtual sal_Bool SAL_CALL popup(const css::uno::Reference< css::awt::XWindowPeer >& Parent, const css::awt::Rectangle& Position,
+                                    ::sal_Int16 Direction, const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener) override;
+
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+
+    // css::ui::dialogs::XDialogClosedListener
+    virtual void SAL_CALL dialogClosed(const css::ui::dialogs::DialogClosedEvent& aEvent) override;
+
+    // XEventListener (base of XDialogClosedListener)
+    virtual void SAL_CALL disposing(css::lang::EventObject const & Source) override;
 };
 
 class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXMenuBar final : public VCLXMenu
