@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98e47bb9_84cd555d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T13:04:37Z",
+      "side": 1,
+      "message": "Sorry, i did not paid attention enough. :)\nFrom now it is really ready.",
+      "revId": "d27cb84bac4e7a59a7f2bb0ab6c25d0dc6c143dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
