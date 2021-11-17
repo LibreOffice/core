@@ -10,9 +10,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.calc import enter_text_to_cell
 
-import time
-import unittest
-
 class CalcChartUIDemo(UITestCase):
 
     def fill_spreadsheet(self):
@@ -77,8 +74,6 @@ class CalcChartUIDemo(UITestCase):
                 pass
 
             xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
-
-            time.sleep(2)
 
 
     def test_activate_chart(self):
