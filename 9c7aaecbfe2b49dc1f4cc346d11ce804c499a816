@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8230b2c0_e5348c0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-17T12:23:29Z",
+      "side": 1,
+      "message": "I have somehow missed tdf#139609. So this now also just fetches the winId, if it\u0027s actually needed by the Overlay playback (I should update the commit message … no, I\u0027ll split the patch).\n",
+      "revId": "9c7aaecbfe2b49dc1f4cc346d11ce804c499a816",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3edf5ba_ffe0c937",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-17T12:23:29Z",
+      "side": 1,
+      "message": "I should have been more precise. Fullscreen playback works, but playback in either Writer or Impress is broken, as selecting the video frame and start playback.",
+      "parentUuid": "415d5885_856df42a",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "4586358d2638c05cf24ceb6073fadb54c064af48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a748df0e_3d7e6db2",
