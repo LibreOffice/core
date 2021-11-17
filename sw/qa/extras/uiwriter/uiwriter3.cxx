@@ -1839,14 +1839,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145584)
     std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
     CPPUNIT_ASSERT(pPdfTextPage);
 
-    int nChars = pPdfTextPage->countChars();
-    CPPUNIT_ASSERT_EQUAL(5, nChars);
-
-    std::vector<sal_uInt32> aChars(nChars);
-    for (int i = 0; i < nChars; i++)
-        aChars[i] = pPdfTextPage->getUnicode(i);
-    OUString aActualText(aChars.data(), aChars.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("World"), aActualText);
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+    OUString sText = pPageObject->getText(pPdfTextPage);
+    CPPUNIT_ASSERT_EQUAL(OUString("World"), sText);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf116315)
