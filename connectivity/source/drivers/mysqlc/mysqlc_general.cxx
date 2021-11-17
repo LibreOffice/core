@@ -125,7 +125,7 @@ sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
     switch (eType)
     {
         case MYSQL_TYPE_BIT:
-            return css::sdbc::DataType::VARCHAR;
+            return css::sdbc::DataType::BIT;
 
         case MYSQL_TYPE_TINY:
             return css::sdbc::DataType::TINYINT;
@@ -226,8 +226,9 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::REAL;
     if (sType.equalsIgnoreAsciiCase("double"))
         return css::sdbc::DataType::DOUBLE;
-    if (sType.equalsIgnoreAsciiCase("bit") || sType.equalsIgnoreAsciiCase("bool")
-        || sType.equalsIgnoreAsciiCase("boolean"))
+    if (sType.equalsIgnoreAsciiCase("bit"))
+        return css::sdbc::DataType::BIT;
+    if (sType.equalsIgnoreAsciiCase("bool") || sType.equalsIgnoreAsciiCase("boolean"))
         return css::sdbc::DataType::BOOLEAN;
     OSL_FAIL("Unknown type name from string, failing back to varchar.");
     return css::sdbc::DataType::VARCHAR;
