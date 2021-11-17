@@ -114,9 +114,9 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPoint aStart(0.0, 0.0);
             const basegfx::B2DPoint aEnd(1.0, 0.0);
 
-            for(size_t a(0); a < aMatrices.size(); a++)
+            for (const auto &a : aMatrices)
             {
-                const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
+                const basegfx::B2DHomMatrix& rMatrix = a;
                 basegfx::B2DPolygon aNewLine;
 
                 aNewLine.append(rMatrix * aStart);
