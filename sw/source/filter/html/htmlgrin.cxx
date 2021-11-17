@@ -526,9 +526,9 @@ IMAGE_SETEVENT:
         if (!bHeightProvided)
             nHeight = aPixelSize.Height();
         // tdf#142781 - calculate the width/height keeping the aspect ratio
-        if (!bPercentWidth && bWidthProvided && !bHeightProvided)
+        if (!bPercentWidth && bWidthProvided && !bHeightProvided && aPixelSize.Width())
             nHeight = nWidth * aPixelSize.Height() / aPixelSize.Width();
-        else if (!bPercentHeight && !bWidthProvided && bHeightProvided)
+        else if (!bPercentHeight && !bWidthProvided && bHeightProvided && aPixelSize.Height())
             nWidth = nHeight * aPixelSize.Width() / aPixelSize.Height();
     }
 
