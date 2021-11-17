@@ -16,6 +16,276 @@
       "message": "ready for review",
       "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a624cfb3_60eee029",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "@Attila: very nice work! I\u0027ve found only the following typos and small problems.",
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9200a2f1_500822c5",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 191,
+        "startChar": 34,
+        "endLine": 191,
+        "endChar": 46
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610290e8_f8e9241d",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "is supposed",
+      "range": {
+        "startLine": 204,
+        "startChar": 52,
+        "endLine": 204,
+        "endChar": 59
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5267cdef_a4e9bbc4",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 205,
+        "startChar": 37,
+        "endLine": 205,
+        "endChar": 49
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed6b9f71_681b870c",
+        "filename": "sw/source/core/doc/DocumentLayoutManager.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 505,
+        "startChar": 33,
+        "endLine": 505,
+        "endChar": 40
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec93b8f9_c24d1a34",
+        "filename": "sw/source/core/doc/DocumentLayoutManager.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "lcl_CopyTextBoxes()",
+      "range": {
+        "startLine": 505,
+        "startChar": 54,
+        "endLine": 505,
+        "endChar": 86
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df36d5c0_45ce3fff",
+        "filename": "sw/source/core/doc/docdraw.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "pTextBoxNode\n\n(Since 2002, there is a policy in OpenOffice.org/LibreOffice development to avoid \"hacker-style\" abbreviations. Most of these names were fixed by batch conversion that time. Java Style Guide-like readable names are more friendly and familiar for recent and future LibreOffice developers.)",
+      "range": {
+        "startLine": 307,
+        "startChar": 92,
+        "endLine": 307,
+        "endChar": 99
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "462c447a_a430db93",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "pTextBoxNode (see explanation)",
+      "range": {
+        "startLine": 224,
+        "startChar": 13,
+        "endLine": 224,
+        "endChar": 20
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59306ae_75b727b1",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "This adds debug strings to production builds, see https://wiki.documentfoundation.org/Development/How_to_debug#Macros_Controlling_Debug_Code",
+      "range": {
+        "startLine": 1352,
+        "startChar": 4,
+        "endLine": 1355,
+        "endChar": 72
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d2a38db_ee23e756",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "needed",
+      "range": {
+        "startLine": 1427,
+        "startChar": 91,
+        "endLine": 1427,
+        "endChar": 100
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "565ec3b9_2c7e8406",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "This adds debug strings to production builds, see https://wiki.documentfoundation.org/Development/How_to_debug#Macros_Controlling_Debug_Code",
+      "range": {
+        "startLine": 1591,
+        "startChar": 1,
+        "endLine": 1604,
+        "endChar": 17
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20048e65_8d0584a9",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-17T11:59:16Z",
+      "side": 1,
+      "message": "This adds debug strings to plain production builds, see https://wiki.documentfoundation.org/Development/How_to_debug#Macros_Controlling_Debug_Code",
+      "range": {
+        "startLine": 1653,
+        "startChar": 8,
+        "endLine": 1659,
+        "endChar": 81
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
