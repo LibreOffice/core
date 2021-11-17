@@ -60,8 +60,14 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
     TranslateId pResId;
     switch( rRedl.GetType() )
     {
-    case RedlineType::Insert:   pResId = STR_REDLINE_INSERT; break;
-    case RedlineType::Delete:   pResId = STR_REDLINE_DELETE; break;
+    case RedlineType::Insert:   pResId = rRedl.IsMoved()
+        ? STR_REDLINE_INSERT_MOVED
+        : STR_REDLINE_INSERT;
+        break;
+    case RedlineType::Delete:   pResId = rRedl.IsMoved()
+        ? STR_REDLINE_DELETE_MOVED
+        : STR_REDLINE_DELETE;
+        break;
     case RedlineType::Format:   pResId = STR_REDLINE_FORMAT; break;
     case RedlineType::Table:    pResId = STR_REDLINE_TABLE; break;
     case RedlineType::FmtColl:  pResId = STR_REDLINE_FMTCOLL; break;
