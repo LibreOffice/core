@@ -16,6 +16,24 @@
       "message": "just noting that the unit tests are likely to be significantly slower with this",
       "revId": "471d5925881cedfb5239e3e3d8fa53f57a64bbd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2817fb2_14265279",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-17T13:11:43Z",
+      "side": 1,
+      "message": "I think most of the dbgutil slowness comes from libstdc++ debug, which doesn\u0027t apply to Mac or Windows.\nBut even if it did, is it worse than not having those checks? Given that this is primarily used for tinderboxes, I think it\u0027s better if they catch it rather than have a possible problem go undetected until somebody runs into it personally.",
+      "parentUuid": "d1b8ba02_889a9569",
+      "revId": "471d5925881cedfb5239e3e3d8fa53f57a64bbd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
