@@ -33,6 +33,24 @@
       "message": "Ah, we\u0027ve had this for months? I wonder how my patch got past gerrit.\n",
       "revId": "696e60427e6c355cfaca35f7b93d2001f0a12604",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd988315_4046e4b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-17T09:16:51Z",
+      "side": 1,
+      "message": "\u003e This does nothing other than enforce a useless rule.\n\nit fixed my macOS --enable-compiler-plugins --enable-werror build\n\n\u003e I wonder how my patch got past gerrit.\n\napparently no manual review caught it, and the one Gerrit Jenkins bot that uses --enable-compiler-plugins (gerrit_linux_clang_dbgutil) implicitly uses --disable-skia",
+      "parentUuid": "8bdf97ae_d0505017",
+      "revId": "696e60427e6c355cfaca35f7b93d2001f0a12604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
