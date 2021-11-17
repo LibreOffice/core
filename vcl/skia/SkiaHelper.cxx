@@ -47,9 +47,7 @@ bool isVCLSkiaEnabled() { return false; }
 #include <skia_opts.hxx>
 #include <tools/sk_app/VulkanWindowContext.h>
 #include <tools/sk_app/MetalWindowContext.h>
-#ifdef DBG_UTIL
 #include <fstream>
-#endif
 
 namespace SkiaHelper
 {
