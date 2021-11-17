@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_I18NPOOL_INC_TEXTCONVERSIONIMPL_HXX
-#define INCLUDED_I18NPOOL_INC_TEXTCONVERSIONIMPL_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
@@ -72,8 +71,5 @@ private:
 };
 
 } // i18npool
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
