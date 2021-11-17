@@ -178,6 +178,11 @@ public:
      */
     void terminateAllPopupMenus();
 
+    /**
+     * Get the area of the active row. Suitable as the parent rectangle
+     * argument for Executing a popup
+    */
+    tools::Rectangle GetSubMenuParentRect();
 private:
 
     std::vector<MenuItemData>         maMenuItems;
