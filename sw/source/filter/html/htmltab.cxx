@@ -1069,19 +1069,15 @@ bool SwHTMLParser::IsReqIF() const
 }
 
 // if any m_pResizeDrawObjects members are deleted during parse, remove them
-// from m_pResizeDrawObjects and m_xDrawObjectPercentWidths
+// from m_pResizeDrawObjects and m_pDrawObjectPrcWidths
 void HTMLTable::ObjectInDestruction(const SdrObject& rObject)
 {
     auto it = std::find(m_pResizeDrawObjects->begin(), m_pResizeDrawObjects->end(), &rObject);
     assert(it != m_pResizeDrawObjects->end());
-#if 0
     auto nIndex = std::distance(m_pResizeDrawObjects->begin(), it);
-#endif
     m_pResizeDrawObjects->erase(it);
-#if 0
-    auto otherit = m_xDrawObjectPercentWidths->begin() + nIndex * 3;
-    m_xDrawObjectPercentWidths->erase(otherit, otherit + 3);
-#endif
+    auto otherit = m_pDrawObjectPrcWidths->begin() + nIndex * 3;
+    m_pDrawObjectPrcWidths->erase(otherit, otherit + 3);
 }
 
 HTMLTable::~HTMLTable()
