@@ -420,18 +420,18 @@
                                   <item>&lt;=</item>
                                   <item>&gt;=</item>
                                   <item>&lt;&gt;</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Largest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Smallest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Largest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Smallest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Contains</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Does not contain</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Begins with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Does not begin with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Ends with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Text color</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond1">Background color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <accessibility>
                                   <relation type="labelled-by" target="label4"/>
@@ -459,18 +459,18 @@
                                   <item>&lt;=</item>
                                   <item>&gt;=</item>
                                   <item>&lt;&gt;</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Largest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Smallest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Largest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Smallest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Contains</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Does not contain</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Begins with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Does not begin with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Ends with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Text color</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond2">Background color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <accessibility>
                                   <relation type="labelled-by" target="label4"/>
@@ -498,18 +498,18 @@
                                   <item>&lt;=</item>
                                   <item>&gt;=</item>
                                   <item>&lt;&gt;</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Largest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Smallest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Largest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Smallest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Contains</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Does not contain</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Begins with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Does not begin with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Ends with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Text color</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond3">Background color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <accessibility>
                                   <relation type="labelled-by" target="label4"/>
@@ -537,18 +537,18 @@
                                   <item>&lt;=</item>
                                   <item>&gt;=</item>
                                   <item>&lt;&gt;</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Largest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Smallest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Largest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Smallest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Contains</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Does not contain</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Begins with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Does not begin with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Ends with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Text color</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond4">Background color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="cond4-atkobject">

@@ -60,8 +60,8 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , aStrEmpty(ScResId(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(ScResId(SCSTR_FILTER_NOTEMPTY))
     , aStrColumn(ScResId(SCSTR_COLUMN))
-    , aStrTextColor(ScResId(SCSTR_FILTER_TEXT_COLOR))
-    , aStrBackgroundColor(ScResId(SCSTR_FILTER_BACKGROUND_COLOR))
+    , aStrTextColor(ScResId(SCSTR_FILTER_TEXT_COLOR_COND))
+    , aStrBackgroundColor(ScResId(SCSTR_FILTER_BACKGROUND_COLOR_COND))
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
     , pViewData(nullptr)
@@ -113,6 +113,9 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     m_xExpander->connect_expanded(LINK(this, ScFilterDlg, MoreExpandedHdl));
     m_xEdCopyArea->SetReferences(this, m_xFtDbAreaLabel.get());
     m_xRbCopyArea->SetReferences(this, m_xEdCopyArea.get());
+
+    assert(m_xLbCond1->find_text(aStrTextColor) != -1);
+    assert(m_xLbCond1->find_text(aStrBackgroundColor) != -1);
 
     Init( rArgSet );
 
