@@ -387,6 +387,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c2949d5_3d7d81d1",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c59306ae_75b727b1",
+      "range": {
+        "startLine": 1352,
+        "startChar": 4,
+        "endLine": 1355,
+        "endChar": 72
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d2a38db_ee23e756",
@@ -457,6 +481,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a22f01c6_c61a2b4e",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "565ec3b9_2c7e8406",
+      "range": {
+        "startLine": 1591,
+        "startChar": 1,
+        "endLine": 1604,
+        "endChar": 17
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20048e65_8d0584a9",
@@ -470,6 +518,30 @@
       "writtenOn": "2021-11-17T11:59:16Z",
       "side": 1,
       "message": "This adds debug strings to plain production builds, see https://wiki.documentfoundation.org/Development/How_to_debug#Macros_Controlling_Debug_Code",
+      "range": {
+        "startLine": 1653,
+        "startChar": 8,
+        "endLine": 1659,
+        "endChar": 81
+      },
+      "revId": "41ea062e474cc8e06858fd41fe1ecf76a2067397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f7527b9_95b585dd",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-17T12:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20048e65_8d0584a9",
       "range": {
         "startLine": 1653,
         "startChar": 8,
