@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf2a30a_44bd8ee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-17T12:48:45Z",
+      "side": 1,
+      "message": "Feel free to open an enhancement bug report :-)",
+      "parentUuid": "f9f3c2d1_2f2ed032",
+      "revId": "21d0d182300dcd13269f2a7941f664f299437274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ff27906_47568489",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-11-17T12:37:24Z",
       "side": 1,
       "message": "That could be just \"qt\", since it\u0027s used for qt6 as well, but I\u0027ll leave it up to you.",
+      "range": {
+        "startLine": 205,
+        "startChar": 30,
+        "endLine": 205,
+        "endChar": 33
+      },
+      "revId": "21d0d182300dcd13269f2a7941f664f299437274",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4925f952_391e83d2",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-17T12:48:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ff27906_47568489",
       "range": {
         "startLine": 205,
         "startChar": 30,
