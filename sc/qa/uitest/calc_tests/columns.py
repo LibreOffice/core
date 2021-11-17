@@ -24,15 +24,16 @@ class CalcColumns(UITestCase):
                 xvalue = xDialog.getChild("value")
                 xdefault = xDialog.getChild("default")
                 self.assertEqual(get_state_as_dict(xdefault)["Selected"], "true")  #default selected
-                heightStrOrig = get_state_as_dict(xvalue)["Text"]
-                heightVal = heightStrOrig[:4]  #default 2.26 cm
-                xvalue.executeAction("UP", tuple())  #2.36 cm
-                heightStr = get_state_as_dict(xvalue)["Text"]
-                heightValNew = heightStr[:4]
+
+                # tdf#144247: Without the fix in place, this test would have failed with
+                # AssertionError: '2.26 cm' != '2.2578 cm'
+                self.assertEqual("2.26 cm", get_state_as_dict(xvalue)["Text"])
+                xvalue.executeAction("UP", tuple())
+                self.assertEqual("2.30 cm", get_state_as_dict(xvalue)["Text"])
                 self.assertEqual(get_state_as_dict(xdefault)["Selected"], "false")  #default not selected
-                self.assertEqual(heightValNew > heightVal, True)  #new value is bigger
                 xdefault.executeAction("CLICK", tuple())  #click default
-                self.assertEqual(get_state_as_dict(xvalue)["Text"] == heightStrOrig, True)  #default value set
+                self.assertEqual("2.26 cm", get_state_as_dict(xvalue)["Text"])
+
                 #write your own value
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
