@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_ASIAN_HXX
-#define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_ASIAN_HXX
+#pragma once;
+
 
 #include "indexentrysupplier_common.hxx"
 #include <osl/module.h>
@@ -44,13 +44,11 @@ public:
             const css::lang::Locale& rLocale2 ) override;
     OUString SAL_CALL getPhoneticCandidate( const OUString& rIndexEntry,
             const css::lang::Locale& rLocale ) override;
-#ifndef DISABLE_DYNLOADING
+#pragma once;
 private:
     oslModule hModule;
-#endif
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
