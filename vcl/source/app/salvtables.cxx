@@ -772,12 +772,17 @@ SalInstanceMenu::SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership)
     m_nLastId = nCount ? pMenu->GetItemId(nCount - 1) : 0;
     m_xMenu->SetSelectHdl(LINK(this, SalInstanceMenu, SelectMenuHdl));
 }
-OString SalInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect)
+OString SalInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                       weld::Placement ePlace)
 {
     SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
     assert(pVclWidget);
-    m_xMenu->Execute(pVclWidget->getWidget(), rRect,
-                     PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose);
+    PopupMenuFlags eFlags = PopupMenuFlags::NoMouseUpClose;
+    if (ePlace == weld::Placement::Under)
+        eFlags = eFlags | PopupMenuFlags::ExecuteDown;
+    else
+        eFlags = eFlags | PopupMenuFlags::ExecuteRight;
+    m_xMenu->Execute(pVclWidget->getWidget(), rRect, eFlags);
     return m_xMenu->GetCurItemIdent();
 }
 void SalInstanceMenu::set_sensitive(const OString& rIdent, bool bSensitive)
