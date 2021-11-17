@@ -24,20 +24,20 @@ class CalcRows(UITestCase):
                 xvalue = xDialog.getChild("value")
                 xdefault = xDialog.getChild("default")
                 self.assertEqual(get_state_as_dict(xdefault)["Selected"], "true")  #default selected
-                heightStrOrig = get_state_as_dict(xvalue)["Text"]
-                heightVal = heightStrOrig[:4]  #default 0.45 cm
+                heightVal = get_state_as_dict(xvalue)["Value"]
                 xvalue.executeAction("UP", tuple())  #0.50 cm
-                heightStr = get_state_as_dict(xvalue)["Text"]
-                heightValNew = heightStr[:4]
+                heightValNew = get_state_as_dict(xvalue)["Value"]
+
                 self.assertEqual(get_state_as_dict(xdefault)["Selected"], "false")  #default not selected
-                self.assertEqual(heightValNew > heightVal, True)  #new value is bigger
+                self.assertTrue(heightValNew > heightVal)  #new value is bigger
                 xdefault.executeAction("CLICK", tuple())  #click default
-                self.assertEqual(get_state_as_dict(xvalue)["Text"] == heightStrOrig, True)  #default value set
+                self.assertTrue(get_state_as_dict(xvalue)["Value"] == heightVal)  #default value set
                 #write your own value
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                 xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
                 # Click Ok
+
             #verify
             with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
                 xvalue = xDialog.getChild("value")
@@ -62,6 +62,7 @@ class CalcRows(UITestCase):
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                 xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
                 # Click Ok
+
             #verify
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:

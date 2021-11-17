@@ -24,15 +24,13 @@ class CalcColumns(UITestCase):
                 xvalue = xDialog.getChild("value")
                 xdefault = xDialog.getChild("default")
                 self.assertEqual(get_state_as_dict(xdefault)["Selected"], "true")  #default selected
-                heightStrOrig = get_state_as_dict(xvalue)["Text"]
-                heightVal = heightStrOrig[:4]  #default 2.26 cm
+                widthVal = get_state_as_dict(xvalue)["Value"]
                 xvalue.executeAction("UP", tuple())  #2.36 cm
-                heightStr = get_state_as_dict(xvalue)["Text"]
-                heightValNew = heightStr[:4]
+                widthValNew = get_state_as_dict(xvalue)["Value"]
                 self.assertEqual(get_state_as_dict(xdefault)["Selected"], "false")  #default not selected
-                self.assertEqual(heightValNew > heightVal, True)  #new value is bigger
+                self.assertTrue(widthValNew > widthVal)  #new value is bigger
                 xdefault.executeAction("CLICK", tuple())  #click default
-                self.assertEqual(get_state_as_dict(xvalue)["Text"] == heightStrOrig, True)  #default value set
+                self.assertTrue(get_state_as_dict(xvalue)["Value"] == widthVal)  #default value set
                 #write your own value
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

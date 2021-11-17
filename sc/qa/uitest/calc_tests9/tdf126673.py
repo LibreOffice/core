@@ -33,8 +33,7 @@ class tdf126673(UITestCase):
             #row height
             with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
                 xvalue = xDialog.getChild("value")
-                heightStrOrig = get_state_as_dict(xvalue)["Text"]
-                heightVal = heightStrOrig[:4]  #default 0.45 cm,
-                self.assertEqual(heightVal > '0.45', True)  #new value is bigger then default
+                heightVal = get_state_as_dict(xvalue)["Text"]
+                self.assertTrue(heightVal > '0.45')  #new value is bigger then default
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
