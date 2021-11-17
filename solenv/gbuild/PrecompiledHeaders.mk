@@ -160,6 +160,7 @@ gb_PrecompiledHeader_ignore_flags_system := \
 -DVCL_INTERNALS \
 -DZLIB_CONST \
 -include $(SRCDIR)/pch/inc/clangfix.hxx \
+$(gb_PrecompiledHeader_ignore_flags_for_flags_file) \
 
 # Probably also update pch/inc/clangfix.hxx if you extend the list.
 
