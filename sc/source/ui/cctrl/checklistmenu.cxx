@@ -283,6 +283,13 @@ void ScCheckListMenuControl::queueCloseSubMenu()
     maCloseTimer.maTimer.Start();
 }
 
+tools::Rectangle ScCheckListMenuControl::GetSubMenuParentRect()
+{
+    if (!mxMenu->get_selected(mxScratchIter.get()))
+        return tools::Rectangle();
+    return mxMenu->get_row_area(*mxScratchIter);
+}
+
 void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
 {
     ScCheckListMenuWindow* pSubMenu = maOpenTimer.mpSubMenu;
@@ -292,7 +299,7 @@ void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
     if (!mxMenu->get_selected(mxScratchIter.get()))
         return;
 
-    tools::Rectangle aRect = mxMenu->get_row_area(*mxScratchIter);
+    tools::Rectangle aRect = GetSubMenuParentRect();
     ScCheckListMenuControl& rSubMenuControl = pSubMenu->get_widget();
     rSubMenuControl.StartPopupMode(aRect, FloatWinPopupFlags::Right);
     if (bSetMenuPos)
