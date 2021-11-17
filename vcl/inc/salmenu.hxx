@@ -22,6 +22,7 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 
 struct SystemMenuData;
 class FloatingWindow;
@@ -75,7 +76,8 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) = 0;
     virtual void GetSystemMenuData( SystemMenuData* pData ) = 0;
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags);
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags,
+                                     const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* = nullptr);
     virtual void ShowCloseButton(bool bShow);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );

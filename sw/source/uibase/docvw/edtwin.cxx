@@ -5393,7 +5393,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         }
                     }
                     else if ( !m_rView.ExecSpellPopup( aDocPos ) )
-                        SfxDispatcher::ExecutePopup(this, &aPixPos);
+                    {
+                        const css::uno::Reference<css::ui::dialogs::XDialogClosedListener> ref;
+                        SfxDispatcher::ExecutePopup(this, &aPixPos, &ref);
+                    }
                 }
                 else if (m_pApplyTempl->nUndo < rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount())
                 {

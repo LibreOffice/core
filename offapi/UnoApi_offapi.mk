@@ -1857,6 +1857,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XPatternField \
 	XPointer \
 	XPopupMenu \
+	XPopupMenuAsync \
 	XPrinter \
 	XPrinterPropertySet \
 	XPrinterServer \

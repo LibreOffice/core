@@ -45,6 +45,7 @@ class Menu;
 class MenuItemList;
 class Image;
 class PopupMenu;
+struct PopupMenuFinishState;
 class KeyEvent;
 class MenuFloatingWindow;
 class SalMenu;
@@ -54,7 +55,8 @@ struct SystemMenuData;
 enum class FloatWinPopupFlags;
 enum class VclEventId;
 
-namespace com::sun::star::awt { class XPopupMenu; }
+namespace com::sun::star::awt { class XPopupMenuAsync; }
+namespace com::sun::star::ui::dialogs { class XDialogClosedListener; }
 namespace com::sun::star::accessibility { class XAccessible;  }
 namespace com::sun::star::frame { class XFrame; }
 
@@ -504,8 +506,16 @@ class VCL_DLLPUBLIC PopupMenu final : public Menu
     friend struct MenuItemData;
 
 private:
+    struct PopupMenuFinishState* m_pState;
+
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
-    SAL_DLLPRIVATE sal_uInt16 ImplExecute( const VclPtr<vcl::Window>& pW, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst );
+    SAL_DLLPRIVATE bool PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectangle& rRect, FloatWinPopupFlags& nPopupModeFlags, Menu* pSFrom, bool& bRealExecute, VclPtr<MenuFloatingWindow>&);
+    SAL_DLLPRIVATE bool Run(const VclPtr<MenuFloatingWindow>&, bool bRealExecute, bool bPreSelectFirst, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, const tools::Rectangle& rRect,
+                            const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* xListener);
+    SAL_DLLPRIVATE void FinishRun(const VclPtr<MenuFloatingWindow>&, const VclPtr<vcl::Window>& pParentWin, bool bRealExecute, bool bIsNativeMenu);
+    SAL_DLLPRIVATE sal_uInt16 ImplExecute(const VclPtr<vcl::Window>& pParentWin, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst);
+    SAL_DLLPRIVATE bool ImplPopup(const VclPtr<vcl::Window>& pParentWin, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst,
+                                  const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>&);
     SAL_DLLPRIVATE void ImplFlushPendingSelect();
     SAL_DLLPRIVATE tools::Long ImplCalcHeight( sal_uInt16 nEntries ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( tools::Long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible = nullptr ) const;
@@ -528,12 +538,18 @@ public:
     sal_uInt16 Execute( vcl::Window* pWindow, const Point& rPopupPos );
     sal_uInt16 Execute( vcl::Window* pWindow, const tools::Rectangle& rRect, PopupMenuFlags nFlags = PopupMenuFlags::NONE );
 
+    bool Popup(vcl::Window* pParentWin, const Point& rPopupPos,
+               const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>&);
+    bool Popup(vcl::Window* pParentWin, const tools::Rectangle& rRect,
+               const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>&, PopupMenuFlags = PopupMenuFlags::NONE);
+    void Finish();
+
     // for the TestTool
     void EndExecute();
     virtual void SelectItem(sal_uInt16 nId) override;
     void SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
 
-    css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface();
+    css::uno::Reference<css::awt::XPopupMenuAsync> CreateMenuInterface();
 
     static bool IsInExecute();
     static PopupMenu* GetActivePopupMenu();

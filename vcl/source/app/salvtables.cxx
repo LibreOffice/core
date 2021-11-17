@@ -176,7 +176,9 @@ SalObject::~SalObject() {}
 
 SalMenu::~SalMenu() {}
 
-bool SalMenu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&, FloatWinPopupFlags)
+bool SalMenu::ShowNativePopupMenu(
+    FloatingWindow*, const tools::Rectangle&, FloatWinPopupFlags,
+    const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>*)
 {
     return false;
 }

@@ -443,21 +443,33 @@ void MenuFloatingWindow::End()
         Window::EndSaveFocus(xFocusId);
     }
 
+    if (!pMenu->IsMenuBar())
+    Finish();
+
     bInExecute = false;
 }
 
-void MenuFloatingWindow::Execute()
+void MenuFloatingWindow::Popup()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu.get());
 
     Start();
+}
 
+void MenuFloatingWindow::Finish()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mpActivePopupMenu = nullptr;
+}
+
+void MenuFloatingWindow::Execute()
+{
+    Popup();
     while (bInExecute && !Application::IsQuit())
         Application::Yield();
-
-    pSVData->maAppData.mpActivePopupMenu = nullptr;
+    Finish();
 }
 
 void MenuFloatingWindow::StopExecute()
@@ -474,6 +486,7 @@ void MenuFloatingWindow::StopExecute()
     // notify parent, needed for accessibility
     if( pMenu && pMenu->pStartedFrom )
         pMenu->pStartedFrom->ImplCallEventListeners( VclEventId::MenuSubmenuDeactivate, nPosInParent );
+    Finish();
 }
 
 void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
@@ -502,6 +515,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 
         PaintImmediately();
     }
+    pPopup->Finish();
 }
 
 void MenuFloatingWindow::EndExecute()

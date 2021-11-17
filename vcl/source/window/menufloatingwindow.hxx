@@ -107,6 +107,9 @@ public:
     bool IsScrollMenu() const        { return bScrollMenu; }
     sal_uInt16 GetScrollerHeight() const   { return nScrollerHeight; }
 
+    void Popup();
+    void Finish();
+
     void Execute();
     void StopExecute();
     void EndExecute();

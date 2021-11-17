@@ -423,8 +423,12 @@ static void MenuClosed(GtkPopover* pWidget, GMainLoop* pLoop)
 }
 
 bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
-                                     FloatWinPopupFlags nFlags)
+                                     FloatWinPopupFlags nFlags,
+                                     const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>* listener)
 {
+    if (listener)
+        return false;
+
     VclPtr<vcl::Window> xParent = pWin->ImplGetWindowImpl()->mpRealParent;
     mpFrame = static_cast<GtkSalFrame*>(xParent->ImplGetFrame());
 
