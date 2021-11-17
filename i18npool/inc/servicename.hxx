@@ -61,5 +61,4 @@ Implementation Name
 #define TRLT_IMPLNAME_PREFIX "com.sun.star.i18n.Transliteration."
 //                1...5...901...5...901...5...901..4  --> 34
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

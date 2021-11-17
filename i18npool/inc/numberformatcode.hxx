@@ -67,7 +67,4 @@ private:
     static sal_Int16 mapElementUsageStringToShort(std::u16string_view formatUsage);
 };
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

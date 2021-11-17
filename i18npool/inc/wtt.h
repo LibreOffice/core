@@ -62,5 +62,4 @@ const sal_uInt16 thaiCT[128] = {     // Thai character type
 
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

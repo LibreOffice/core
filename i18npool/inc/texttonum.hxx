@@ -47,5 +47,4 @@ TRANSLITERATION_TEXTTONUM(KanjiLongTraditional_ja_JP)
 
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
