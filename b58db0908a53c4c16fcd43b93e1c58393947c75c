@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eceb528_a748747b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-17T08:48:44Z",
+      "side": 1,
+      "message": "Tested it, and it was fine - it works as expected for locked case (suggests to notify, notifies when unlocked), and restores old behavior for read-only files. Thank you!\n\nStephan: it removes a recently added public interface (exception) - should it be [API CHANGE] and mentioned in release notes? It needs to be backported to 7-2.",
+      "revId": "b58db0908a53c4c16fcd43b93e1c58393947c75c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
