@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b3bed7_9fcbb812",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-17T09:26:53Z",
+      "side": 1,
+      "message": "jenkins WNT, CppunitTest_sw_mailmerge crashed on shutdown, not a new problem",
+      "revId": "198ff805b9edbff78653bf2dab9e8933d3c0e9fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
