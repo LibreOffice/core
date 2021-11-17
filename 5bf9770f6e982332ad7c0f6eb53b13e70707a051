@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb31a198_3ef45422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-17T10:23:57Z",
+      "side": 1,
+      "message": "This works on Wayland with Video for me. Have to check if X11 is still broken. Seems the QWidget behind window() generates the required handle on demand.",
+      "revId": "5bf9770f6e982332ad7c0f6eb53b13e70707a051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
