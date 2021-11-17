@@ -115,6 +115,24 @@
       "parentUuid": "b9539312_acff8043",
       "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51b44253_289d952b",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-17T14:08:54Z",
+      "side": 1,
+      "message": "It\u0027s better to think not about number of \"week crossings\", but about substracting week numbers of the dates - where week numbers are taken from *any* given week treated as 0. The only important part here is calculating the correct week numbers.\nAnd it\u0027s very interesting to note, that 0001-01-01 was *Monday*. So given that in the code, date 0001-01-01 is 0, it\u0027s really trivial to count week number based on that date (call that week of 0001-01-01 \"week 0\") - it then doesn\u0027t need *any* \"zero date\" calculated/added to the two dates. Any your date\u0027s week number is simply std::floor(date/7.0). This is true for both date \u003e\u003d 0 and date \u003c 0: floor makes -0.01 round to -1.",
+      "parentUuid": "550d98ca_508d98fd",
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
