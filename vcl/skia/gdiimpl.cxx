@@ -55,33 +55,28 @@ namespace
 // bottom-most line of pixels of the bounding rectangle (see
 // https://lists.freedesktop.org/archives/libreoffice/2019-November/083709.html).
 // So be careful with rectangle->polygon conversions (generally avoid them).
-void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath,
-                      bool* hasOnlyOrthogonal = nullptr)
+void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath, sal_uInt32 nFirstIndex,
+                      sal_uInt32 nLastIndex, const sal_uInt32 nPointCount, const bool bClosePath,
+                      const bool bHasCurves, bool* hasOnlyOrthogonal = nullptr)
 {
-    const sal_uInt32 nPointCount(rPolygon.count());
+    assert(nFirstIndex < nPointCount);
+    assert(nLastIndex <= nPointCount);
 
     if (nPointCount <= 1)
         return;
 
-    const bool bClosePath(rPolygon.isClosed());
-    const bool bHasCurves(rPolygon.areControlPointsUsed());
-
     bool bFirst = true;
+    sal_uInt32 nPreviousIndex = nFirstIndex == 0 ? nPointCount - 1 : nFirstIndex - 1;
+    basegfx::B2DPoint aPreviousPoint = rPolygon.getB2DPoint(nPreviousIndex);
 
-    sal_uInt32 nCurrentIndex = 0;
-    sal_uInt32 nPreviousIndex = nPointCount - 1;
-
-    basegfx::B2DPoint aCurrentPoint;
-    basegfx::B2DPoint aPreviousPoint;
-
-    for (sal_uInt32 nIndex = 0; nIndex <= nPointCount; nIndex++)
+    for (sal_uInt32 nIndex = nFirstIndex; nIndex <= nLastIndex; nIndex++)
     {
         if (nIndex == nPointCount && !bClosePath)
             continue;
 
         // Make sure we loop the last point to first point
-        nCurrentIndex = nIndex % nPointCount;
-        aCurrentPoint = rPolygon.getB2DPoint(nCurrentIndex);
+        sal_uInt32 nCurrentIndex = nIndex % nPointCount;
+        basegfx::B2DPoint aCurrentPoint = rPolygon.getB2DPoint(nCurrentIndex);
 
         if (bFirst)
         {
@@ -132,10 +127,17 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath,
         aPreviousPoint = aCurrentPoint;
         nPreviousIndex = nCurrentIndex;
     }
-    if (bClosePath)
+    if (bClosePath && nFirstIndex == 0 && nLastIndex == nPointCount)
     {
         rPath.close();
     }
+}
+
+void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath,
+                      bool* hasOnlyOrthogonal = nullptr)
+{
+    addPolygonToPath(rPolygon, rPath, 0, rPolygon.count(), rPolygon.count(), rPolygon.isClosed(),
+                     rPolygon.areControlPointsUsed(), hasOnlyOrthogonal);
 }
 
 void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& rPath,
@@ -1246,7 +1248,6 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     {
         SkPath aPath;
         aPath.incReserve(aPolyLine.count() * 3); // because cubicTo is 3 elements
-        aPath.setFillType(SkPathFillType::kEvenOdd);
         addPolygonToPath(aPolyLine, aPath);
         aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
         addUpdateRegion(aPath.getBounds());
@@ -1256,16 +1257,12 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     {
         sal_uInt32 nPoints = aPolyLine.count();
         bool bClosed = aPolyLine.isClosed();
-        for (sal_uInt32 j = 0; j < (bClosed ? nPoints : nPoints - 1); ++j)
+        bool bHasCurves = aPolyLine.areControlPointsUsed();
+        for (sal_uInt32 j = 0; j < nPoints; ++j)
         {
-            sal_uInt32 index1 = (j + 0) % nPoints;
-            sal_uInt32 index2 = (j + 1) % nPoints;
             SkPath aPath;
-            aPath.moveTo(aPolyLine.getB2DPoint(index1).getX(),
-                         aPolyLine.getB2DPoint(index1).getY());
-            aPath.lineTo(aPolyLine.getB2DPoint(index2).getX(),
-                         aPolyLine.getB2DPoint(index2).getY());
-
+            aPath.incReserve(2 * 3); // because cubicTo is 3 elements
+            addPolygonToPath(aPolyLine, aPath, j, j + 1, nPoints, bClosed, bHasCurves);
             aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
             addUpdateRegion(aPath.getBounds());
             getDrawCanvas()->drawPath(aPath, aPaint);
