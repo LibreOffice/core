@@ -2772,10 +2772,13 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
 
     if (mrDoc.IsLayoutRTL(nForTab))
     {
-        //  mirror horizontal position
-        if (pView)
-            aScrSize.setWidth( pView->GetGridWidth(eHWhich) );
-        nClickX = aScrSize.Width() - 1 - nClickX;
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            //  mirror horizontal position
+            if (pView)
+                aScrSize.setWidth( pView->GetGridWidth(eHWhich) );
+            nClickX = aScrSize.Width() - 1 - nClickX;
+        }
     }
 
     SCCOL nStartPosX = GetPosX(eHWhich, nForTab);
