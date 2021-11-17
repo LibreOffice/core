@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 #include "itemholder2.hxx"
 
 using namespace ::com::sun::star;
@@ -84,8 +83,11 @@ public:
 };
 namespace
 {
-    struct PropertyNames
-        : public rtl::Static< Sequence< OUString >, PropertyNames > {};
+    Sequence<OUString> & PropertyNames()
+    {
+        static Sequence<OUString> SINGLETON;
+        return SINGLETON;
+    }
 }
 bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
 {
@@ -135,7 +137,7 @@ void SvtCTLOptions_Impl::Notify( const Sequence< OUString >& )
 
 void SvtCTLOptions_Impl::ImplCommit()
 {
-    Sequence< OUString > &rPropertyNames = PropertyNames::get();
+    Sequence< OUString > &rPropertyNames = PropertyNames();
     OUString* pOrgNames = rPropertyNames.getArray();
     sal_Int32 nOrgCount = rPropertyNames.getLength();
 
@@ -225,17 +227,16 @@ void SvtCTLOptions_Impl::ImplCommit()
 
 void SvtCTLOptions_Impl::Load()
 {
-    Sequence< OUString >& rPropertyNames = PropertyNames::get();
+    Sequence< OUString >& rPropertyNames = PropertyNames();
     if ( !rPropertyNames.hasElements() )
     {
-        rPropertyNames.realloc(6);
-        OUString* pNames = rPropertyNames.getArray();
-        pNames[0] = "CTLFont";
-        pNames[1] = "CTLSequenceChecking";
-        pNames[2] = "CTLCursorMovement";
-        pNames[3] = "CTLTextNumerals";
-        pNames[4] = "CTLSequenceCheckingRestricted";
-        pNames[5] = "CTLSequenceCheckingTypeAndReplace";
+        rPropertyNames = {
+            "CTLFont",
+            "CTLSequenceChecking",
+            "CTLCursorMovement",
+            "CTLTextNumerals",
+            "CTLSequenceCheckingRestricted",
+            "CTLSequenceCheckingTypeAndReplace" };
         EnableNotification( rPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( rPropertyNames );

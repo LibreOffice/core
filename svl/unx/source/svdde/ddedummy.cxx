@@ -18,7 +18,6 @@
  */
 
 #include <svl/svdde.hxx>
-#include <rtl/instance.hxx>
 #include <tools/long.hxx>
 
 struct Conversation
@@ -250,15 +249,10 @@ OUString DdeService::GetName() const
     return OUString();
 }
 
-namespace
-{
-    struct theDdeServices
-        : public rtl::Static< DdeServices, theDdeServices > {};
-}
-
 DdeServices& DdeService::GetServices()
 {
-  return theDdeServices::get();
+    static DdeServices SINGLETON;
+    return SINGLETON;
 }
 
 DdeItem::DdeItem( SAL_UNUSED_PARAMETER const OUString& )

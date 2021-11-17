@@ -44,7 +44,6 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

@@ -48,7 +48,6 @@
 
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/digitgroupingiterator.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 
@@ -248,11 +247,17 @@ SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
 volatile bool SvNumberFormatter::bCurrencyTableInitialized = false;
 namespace
 {
-    struct theCurrencyTable :
-        public rtl::Static< NfCurrencyTable, theCurrencyTable > {};
+    NfCurrencyTable& theCurrencyTable()
+    {
+        static NfCurrencyTable SINGLETON;
+        return SINGLETON;
+    }
 
-    struct theLegacyOnlyCurrencyTable :
-        public rtl::Static< NfCurrencyTable, theLegacyOnlyCurrencyTable > {};
+    NfCurrencyTable& theLegacyOnlyCurrencyTable()
+    {
+        static NfCurrencyTable SINGLETON;
+        return SINGLETON;
+    }
 
     /** THE set of installed locales. */
     std::set< LanguageType > theInstalledLocales;
@@ -3633,7 +3638,7 @@ const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
 {
     while ( !bCurrencyTableInitialized )
         ImpInitCurrencyTable();
-    return theCurrencyTable::get();
+    return theCurrencyTable();
 }
 
 
@@ -3692,7 +3697,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( std::u16st
                                                                       std::u16string_view rAbbrev )
 {
     GetTheCurrencyTable();      // just for initialization
-    const NfCurrencyTable& rTable = theLegacyOnlyCurrencyTable::get();
+    const NfCurrencyTable& rTable = theLegacyOnlyCurrencyTable();
     sal_uInt16 nCount = rTable.size();
     for ( sal_uInt16 j = 0; j < nCount; j++ )
     {
@@ -4144,16 +4149,16 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     sal_uInt16 nMatchingSystemCurrencyPosition = 0;
 
     // First entry is SYSTEM:
-    theCurrencyTable::get().insert(
-        theCurrencyTable::get().begin(),
+    auto& rCurrencyTable = theCurrencyTable();
+    rCurrencyTable.insert(
+        rCurrencyTable.begin(),
         NfCurrencyEntry(*pLocaleData, LANGUAGE_SYSTEM));
     sal_uInt16 nCurrencyPos = 1;
 
     const css::uno::Sequence< css::lang::Locale > xLoc = LocaleDataWrapper::getInstalledLocaleNames();
     sal_Int32 nLocaleCount = xLoc.getLength();
     SAL_INFO( "svl.numbers", "number of locales: \"" << nLocaleCount << "\"" );
-    NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
-    NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
+    NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable();
     sal_uInt16 nLegacyOnlyCurrencyPos = 0;
     for ( css::lang::Locale const & rLocale : xLoc )
     {
