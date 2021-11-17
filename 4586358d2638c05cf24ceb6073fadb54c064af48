@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "415d5885_856df42a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-17T06:55:58Z",
+      "side": 1,
+      "message": "Is that on X11 or Wayland? Video playback works fine for me in a dual screen setup on Debian testing with the sample doc from tdf#120452 with master as of b40877d31e8d7d0102ac7dedc67eb6e91067d27d.\n(On Wayland, you need qtgstreamer-plugins-qt5 which provides GStreamer\u0027s qwidget5videosink, otherwise GStreamer creates it\u0027s own windows for the video. I have a WIP branch to support waylandsink as well, in particular for qt6, but that runs into issues on KWin/KDE side currently, like https://bugs.kde.org/show_bug.cgi?id\u003d445346 - which is fixed, but it still doesn\u0027t work for the LO qt6 case, I\u0027ll create a follow-up bug report.)",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "4586358d2638c05cf24ceb6073fadb54c064af48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a748df0e_3d7e6db2",
@@ -14,6 +37,23 @@
       "writtenOn": "2021-11-17T01:26:26Z",
       "side": 1,
       "message": "Any obvious idea, why this may not work?",
+      "revId": "4586358d2638c05cf24ceb6073fadb54c064af48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a09a85ce_8a458f14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-11-17T06:55:58Z",
+      "side": 1,
+      "message": "Generally, avoiding to create platform-native windows sounds like a good idea.\n\n\nAs is, this crashes in QtFrame::ShowFullScreen for me when starting the slideshow on Wayland for the doc from tdf#120452 which contains a video, since \u0027windowHandle()\u0027 is a nullptr in\n\n        if (!m_bFullScreenSpanAll)\n            windowHandle()-\u003eshowFullScreen();\n\nAdding\n\n--- a/vcl/qt5/QtObject.cxx\n+++ b/vcl/qt5/QtObject.cxx\n@@ -55,6 +55,7 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)\n     }\n     else\n     {\n+        m_pQWidget-\u003ewinId();\n         m_aSystemData.platform \u003d SystemEnvData::Platform::Wayland;\n         // TODO implement as needed for Wayland,\n         // s.a. commit c0d4f3ad3307c which did this for gtk3\n\nto force a native window to be created for QtObject\u0027s \u0027m_pQWidget\u0027 didn\u0027t make a difference, but I didn\u0027t investigate further.\n\nFYI, wrt avoiding the creating of platform-native windows, for gtk3, there\u0027s also\n\n    commit df788fcc308bbf8950ad8a22a1f8290681b64f0d\n    Author: Caolán McNamara \u003ccaolanm@redhat.com\u003e\n    Date:   Tue Jan 26 10:03:37 2021 +0000\n    \n        tdf#139609 avoid fetching unnecessary xid under gtk3\n\nwhich my WIP approach for the GStreamer waylandsink approach extends for Qt (and SystemEnvData::pDisplay), primarily to avoid the issues described in tdf#122293 when creating a native window at least for the widget that the video rendering should go to.",
       "revId": "4586358d2638c05cf24ceb6073fadb54c064af48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
