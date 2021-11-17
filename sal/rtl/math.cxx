@@ -1130,7 +1130,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     // make sense, do not even try to multiply/divide and introduce inaccuracy.
     // For same reasons, do not attempt to round integers to decimals.
     if (nDecPlaces >= 0
-            && (fValue >= (static_cast<sal_Int64>(1) << 52)
+            && (fValue >= 0x1p52
                 || isRepresentableInteger(fValue)))
         return fOrigValue;
 
@@ -1181,7 +1181,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     // Round only if not already in distance precision gaps of integers, where
     // for [2^52,2^53) adding 0.5 would even yield the next representable
     // integer.
-    if (fValue < (static_cast<sal_Int64>(1) << 52))
+    if (fValue < 0x1p52)
     {
         switch ( eMode )
         {
@@ -1276,7 +1276,7 @@ double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 {
-    const double fBigInt = 2199023255552.0; // 2^41 -> only 11 bits left for fractional part, fine as decimal
+    const double fBigInt = 0x1p41; // 2^41 -> only 11 bits left for fractional part, fine as decimal
     if (fValue == 0.0 || fValue == HUGE_VAL || !std::isfinite( fValue) || fValue > fBigInt)
     {
         // We don't handle these conditions.  Bail out.
@@ -1325,8 +1325,8 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
 bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
 {
-    static const double e48 = 1.0 / (16777216.0 * 16777216.0);
-    static const double e44 = e48 * 16.0;
+    static const double e48 = 0x1p-48;
+    static const double e44 = 0x1p-44;
 
     if (a == b)
         return true;
