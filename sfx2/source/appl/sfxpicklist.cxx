@@ -40,19 +40,10 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <rtl/instance.hxx>
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-
-
-namespace
-{
-    class thePickListMutex
-        : public rtl::Static<osl::Mutex, thePickListMutex> {};
-}
 
 class SfxPickListImpl : public SfxListener
 {

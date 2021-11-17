@@ -54,7 +54,6 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <unotools/viewoptions.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
 #include <framework/sfxhelperfunctions.hxx>
@@ -69,12 +68,6 @@ static SfxApplication* g_pSfxApplication = nullptr;
 #if HAVE_FEATURE_XMLHELP
 static SfxHelp*        pSfxHelp = nullptr;
 #endif
-
-namespace
-{
-    class theApplicationMutex
-        : public rtl::Static<osl::Mutex, theApplicationMutex> {};
-}
 
 SfxApplication* SfxApplication::Get()
 {
@@ -107,8 +100,10 @@ namespace {
 
 SfxApplication* SfxApplication::GetOrCreate()
 {
+    static osl::Mutex theApplicationMutex;
+
     // SFX on demand
-    ::osl::MutexGuard aGuard(theApplicationMutex::get());
+    ::osl::MutexGuard aGuard(theApplicationMutex);
     if (!g_pSfxApplication)
     {
         SAL_INFO( "sfx.appl", "SfxApplication::SetApp" );

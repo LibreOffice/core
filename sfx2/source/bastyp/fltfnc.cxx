@@ -47,8 +47,6 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
 
-#include <rtl/instance.hxx>
-
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 
@@ -72,11 +70,6 @@ unsigned SfxStack::nLevel = 0;
 
 using namespace com::sun::star;
 
-namespace
-{
-    class theSfxFilterListener : public rtl::Static<SfxFilterListener, theSfxFilterListener> {};
-}
-
 static SfxFilterList_Impl* pFilterArr = nullptr;
 static bool bFirstRead = true;
 
@@ -84,7 +77,7 @@ static void CreateFilterArr()
 {
     static SfxFilterList_Impl theSfxFilterArray;
     pFilterArr = &theSfxFilterArray;
-    theSfxFilterListener::get();
+    static SfxFilterListener theSfxFilterListener;
 }
 
 static OUString ToUpper_Impl( const OUString &rStr )
