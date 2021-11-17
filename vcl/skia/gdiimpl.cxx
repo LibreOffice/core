@@ -1728,8 +1728,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // that they are the same size, or that one prefers a shader or doesn't exist
     // (i.e. avoid two images of different size).
     bitmapReady = bitmap.GetSkImage(DirectImage::Yes) != nullptr;
-    alphaBitmapReady
-        = alphaBitmap ? alphaBitmap->GetAlphaSkImage(DirectImage::Yes) != nullptr : false;
+    alphaBitmapReady = alphaBitmap && alphaBitmap->GetAlphaSkImage(DirectImage::Yes) != nullptr;
     if (bitmapReady && alphaBitmap && !alphaBitmapReady && !alphaBitmap->PreferSkShader())
         bitmapReady = false;
     if (alphaBitmapReady && !bitmapReady && bitmap.PreferSkShader())
