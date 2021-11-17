@@ -1627,15 +1627,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         case SwKeyState::CheckKey:
             eKeyState = SwKeyState::KeyToView;       // default forward to View
 
-#if OSL_DEBUG_LEVEL > 1
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // for switching cursor behaviour in ReadOnly regions
-            if( 0x7210 == rKeyCode.GetFullCode() )
-                rSh.SetReadOnlyAvailable( !rSh.IsReadOnlyAvailable() );
-            else
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#endif
-
             if (!comphelper::LibreOfficeKit::isActive() &&
                 !rKeyCode.IsMod2() && '=' == aCh &&
                 !rSh.IsTableMode() && rSh.GetTableFormat() &&
