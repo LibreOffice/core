@@ -2798,9 +2798,6 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const tools::Rectangle&
     if (nFlags & PopupMenuFlags::NoMouseUpClose )                      // allow popup menus to stay open on mouse button up
         nPopupModeFlags |= FloatWinPopupFlags::NoMouseUpClose;    // useful if the menu was opened on mousebutton down (eg toolbox configuration)
 
-    if (nFlags & PopupMenuFlags::NoHorzPlacement)
-        nPopupModeFlags |= FloatWinPopupFlags::NoHorzPlacement;
-
     return ImplExecute( pExecWindow, rRect, nPopupModeFlags, nullptr, false );
 }
 

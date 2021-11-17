@@ -77,17 +77,11 @@ enum class PopupMenuFlags
     ExecuteUp       = 0x0002,
     ExecuteRight    = 0x0008,
     NoMouseUpClose  = 0x0010,
-//If there isn't enough space to put the menu where it wants
-//to go, then they will be autoplaced. Toggle this bit
-//on to force menus to be placed either above or below
-//the starting rectangle and shrunk to fit and then scroll rather than place
-//the menu beside that rectangle
-    NoHorzPlacement = 0x0020,
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<PopupMenuFlags> : is_typed_flags<PopupMenuFlags, 0x003b> {};
+    template<> struct typed_flags<PopupMenuFlags> : is_typed_flags<PopupMenuFlags, 0x001b> {};
 }
 
 enum class MenuFlags
