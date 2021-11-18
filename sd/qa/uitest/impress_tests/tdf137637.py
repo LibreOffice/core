@@ -33,10 +33,12 @@ class Tdf137637(UITestCase):
             # AttributeError: 'NoneType' object has no attribute 'getImplementationName'
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
+            xAnimationList = xImpressDoc.getChild("custom_animation_list")
+            self.assertEqual('0', get_state_as_dict(xAnimationList)['Children'])
+
             xAddBtn = xImpressDoc.getChild("add_effect")
             xAddBtn.executeAction("CLICK", tuple())
 
-            xAnimationList = xImpressDoc.getChild("custom_animation_list")
             self.assertEqual('1', get_state_as_dict(xAnimationList)['Children'])
 
             self.xUITest.executeCommand(".uno:Undo")
@@ -44,8 +46,4 @@ class Tdf137637(UITestCase):
             # tdf#135033: Without the fix in place, this test would have failed with
             # AssertionError: '0' != '1'
             self.assertEqual('0', get_state_as_dict(xAnimationList)['Children'])
-
-            self.xUITest.executeCommand(".uno:Redo")
-
-            self.assertEqual('1', get_state_as_dict(xAnimationList)['Children'])
 
