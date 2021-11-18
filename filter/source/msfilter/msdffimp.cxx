@@ -4689,7 +4689,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 nAngle = 36000_deg100 - nAngle;
                             if ( nSpFlags & ShapeFlag::FlipV )
                                 nAngle = -nAngle;
-                            double a = nAngle.get() * F_PI18000;
+                            double a = toRadians(nAngle);
                             double ss = sin( a );
                             double cc = cos( a );
                             Point aP1( aOldBoundRect.TopLeft() );
@@ -4764,7 +4764,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // pay attention to the rotations
                         if ( nObjectRotation )
                         {
-                            double a = nObjectRotation.get() * F_PI18000;
+                            double a = toRadians(nObjectRotation);
                             Point aCenter( aObjData.aBoundRect.Center() );
                             double ss = sin(a);
                             double cc = cos(a);
@@ -5441,7 +5441,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // rotate text with shape?
             if ( mnFix16Angle )
             {
-                double a = mnFix16Angle.get() * F_PI18000;
+                double a = toRadians(mnFix16Angle);
                 pTextObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
                     sin( a ), cos( a ) );
             }

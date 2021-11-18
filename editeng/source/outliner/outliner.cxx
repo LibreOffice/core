@@ -940,7 +940,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
             {
                 // Both TopLeft and bottom left is not quite correct,
                 // since in EditEngine baseline ...
-                double nRealOrientation = nOrientation.get() * F_PI1800;
+                double nRealOrientation = toRadians(nOrientation);
                 double nCos = cos( nRealOrientation );
                 double nSin = sin( nRealOrientation );
                 Point aRotatedPos;

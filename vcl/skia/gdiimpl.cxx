@@ -2205,7 +2205,7 @@ bool SkiaSalGraphicsImpl::implDrawGradient(const basegfx::B2DPolyPolygon& rPolyP
     return true;
 }
 
-static double toRadian(Degree10 degree10th) { return (3600 - degree10th.get()) * M_PI / 1800.0; }
+static double toRadian(Degree10 degree10th) { return toRadians(3600_deg10 - degree10th); }
 static double toCos(Degree10 degree10th) { return SkScalarCos(toRadian(degree10th)); }
 static double toSin(Degree10 degree10th) { return SkScalarSin(toRadian(degree10th)); }
 

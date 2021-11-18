@@ -852,8 +852,8 @@ void VclPixelProcessor2D::processFillHatchPrimitive2D(
         const basegfx::B2DVector aDiscreteDistance(
             maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
         const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
-        const sal_uInt16 nAngle10(
-            static_cast<sal_uInt16>(basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800)));
+        const sal_uInt32 nAngle10(
+            basegfx::rad2deg<10>(basegfx::fround(rFillHatchAttributes.getAngle())));
         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance,
                           Degree10(nAngle10));
 
@@ -1216,7 +1216,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
                        Color(rFillGradient.getEndColor()));
 
-    aGradient.SetAngle(Degree10(static_cast<int>(rFillGradient.getAngle() / F_PI1800)));
+    aGradient.SetAngle(Degree10(static_cast<int>(basegfx::rad2deg<10>(rFillGradient.getAngle()))));
     aGradient.SetBorder(rFillGradient.getBorder() * 100);
     aGradient.SetOfsX(rFillGradient.getOffsetX() * 100.0);
     aGradient.SetOfsY(rFillGradient.getOffsetY() * 100.0);

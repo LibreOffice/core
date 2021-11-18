@@ -825,7 +825,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
 
     GDIMetaFile     aMtf;
     ScopedVclPtrInstance< VirtualDevice > aMapVDev;
-    const double    fAngle = F_PI1800 * nAngle10.get();
+    const double    fAngle = toRadians(nAngle10);
     const double    fSin = sin( fAngle );
     const double    fCos = cos( fAngle );
     tools::Rectangle aRect( Point(), GetPrefSize() );

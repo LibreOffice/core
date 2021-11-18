@@ -2316,7 +2316,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
             {
                 Degree100 nRotVal = pPattern->
                         GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue();
-                double nRealOrient = nRotVal.get() * F_PI18000;   // 1/100 degree
+                double nRealOrient = toRadians(nRotVal);
                 double nCos = cos( nRealOrient );
                 double nSin = sin( nRealOrient );
                 //TODO: limit !!!

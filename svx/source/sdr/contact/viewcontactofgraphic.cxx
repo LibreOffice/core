@@ -341,7 +341,7 @@ namespace sdr::contact
 
             // fill object matrix
             const double fShearX(-rGeoStat.mfTanShearAngle);
-            const double fRotate(nRotationAngle ? (36000 - nRotationAngle.get()) * F_PI18000 : 0.0);
+            const double fRotate(nRotationAngle ? toRadians(36000_deg100 - nRotationAngle) : 0.0);
             const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),
                 fShearX, fRotate,

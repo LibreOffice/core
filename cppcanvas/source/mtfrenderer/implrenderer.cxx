@@ -764,11 +764,11 @@ namespace cppcanvas::internal
 
             // setup state-local text transformation,
             // if the font be rotated
-            const short nFontAngle( rFont.GetOrientation() );
-            if( nFontAngle != 0 )
+            const auto nFontAngle( rFont.GetOrientation() );
+            if( nFontAngle )
             {
                 // set to unity transform rotated by font angle
-                const double nAngle( nFontAngle * (M_PI / 1800.0) );
+                const double nAngle( toRadians(nFontAngle) );
                 o_rFontRotation = -nAngle;
             }
             else

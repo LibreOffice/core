@@ -5152,8 +5152,8 @@ void Test::testAnchoredRotatedShape()
         pPage->InsertObject(pObj);
         Point aRef1(pObj->GetSnapRect().Center());
         Degree100 nAngle = 9000_deg100; //90 deg.
-        double nSin = sin(nAngle.get() * F_PI18000);
-        double nCos = cos(nAngle.get() * F_PI18000);
+        double nSin = 1.0; // sin(90 deg)
+        double nCos = 0.0; // cos(90 deg)
         pObj->Rotate(aRef1,nAngle,nSin,nCos);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, true);

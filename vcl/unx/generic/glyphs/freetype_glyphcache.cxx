@@ -418,7 +418,7 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::share
 
     if( rFSD.mnOrientation )
     {
-        const double dRad = rFSD.mnOrientation.get() * ( 2 * M_PI / 3600.0 );
+        const double dRad = toRadians(rFSD.mnOrientation);
         mnCos = static_cast<tools::Long>( 0x10000 * cos( dRad ) + 0.5 );
         mnSin = static_cast<tools::Long>( 0x10000 * sin( dRad ) + 0.5 );
     }

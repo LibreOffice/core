@@ -7138,7 +7138,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, tools::Long nWidth, FontStr
     aLine.append( "q " );
 
     // rotate and translate matrix
-    double fAngle = static_cast<double>(m_aCurrentPDFState.m_aFont.GetOrientation().get()) * M_PI / 1800.0;
+    double fAngle = toRadians(m_aCurrentPDFState.m_aFont.GetOrientation());
     Matrix3 aMat;
     aMat.rotate( fAngle );
     aMat.translate( aPos.X(), aPos.Y() );
