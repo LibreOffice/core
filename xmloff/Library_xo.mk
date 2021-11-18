@@ -22,8 +22,8 @@ $(eval $(call gb_Library_Library,xo))
 $(eval $(call gb_Library_set_componentfiles,xo, \
         xmloff/util/xo \
         xmloff/util/xo.chart \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
         xmloff/util/xo.draw \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
         xmloff/util/xo.impress \
         xmloff/util/xo.writer \
     ) \

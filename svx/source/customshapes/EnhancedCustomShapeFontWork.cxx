@@ -376,6 +376,46 @@ static void GetTextAreaOutline(
                 {
                     rParagraph.vCharacters.push_back( aCharacterData );
                 }
+                else
+                {
+                    // GetTextOutlines failed what usually means that it is
+                    // not implemented. To make FontWork not fail (it is
+                    // dependent of graphic content to get a Range) create
+                    // a rectangle substitution for now
+                    pVirDev->GetTextArray( rText, &aDXArry);
+                    aCharacterData.vOutlines.clear();
+
+                    if(aDXArry.size())
+                    {
+                        for(size_t a(0); a < aDXArry.size(); a++)
+                        {
+                            const basegfx::B2DPolygon aPolygon(
+                                basegfx::utils::createPolygonFromRect(
+                                basegfx::B2DRange(
+                                    0 == a ? 0 : aDXArry[a - 1],
+                                    0,
+                                    aDXArry[a],
+                                    aFont.GetFontHeight()
+                                )));
+                            aCharacterData.vOutlines.push_back(tools::PolyPolygon(tools::Polygon(aPolygon)));
+                        }
+                    }
+                    else
+                    {
+                        const basegfx::B2DPolygon aPolygon(
+                            basegfx::utils::createPolygonFromRect(
+                            basegfx::B2DRange(
+                                0,
+                                0,
+                                aDXArry.empty() ? 10 : aDXArry.back(),
+                                aFont.GetFontHeight()
+                            )));
+                        aCharacterData.vOutlines.push_back(tools::PolyPolygon(tools::Polygon(aPolygon)));
+                    }
+
+
+                    rParagraph.vCharacters.push_back( aCharacterData );
+                }
             }
 
             // vertical alignment
