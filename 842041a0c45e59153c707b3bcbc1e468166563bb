@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b41336a_bae4b527",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-11-18T18:08:24Z",
+      "side": 1,
+      "message": "Yes, this is consistent with these types of objects tab key behavior. Thanks for the comments!",
+      "parentUuid": "b5893beb_f444b82b",
+      "revId": "842041a0c45e59153c707b3bcbc1e468166563bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90b078fb_52941b1c",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-18T15:02:58Z",
       "side": 1,
       "message": "This is not indented properly (8 spaces instead of 4)",
+      "revId": "842041a0c45e59153c707b3bcbc1e468166563bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8da721f0_0b8a1804",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-11-18T18:08:24Z",
+      "side": 1,
+      "message": "Corrected it in patch set 2 along with moving the objects block to before the table block for shift tab handling which makes shift tab work as expected in this case as well.",
+      "parentUuid": "90b078fb_52941b1c",
       "revId": "842041a0c45e59153c707b3bcbc1e468166563bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
