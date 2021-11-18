@@ -19,12 +19,12 @@
 
 #pragma once
 
-#define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
-#define HID_SCH_ERROR_BARS_FROM_DATA                        "CHART2_SCH_ERROR_BARS_FROM_DATA"
+inline constexpr OStringLiteral HID_SCH_WIN_DOCUMENT = "CHART2_HID_SCH_WIN_DOCUMENT";
+inline constexpr OStringLiteral HID_SCH_ERROR_BARS_FROM_DATA = "CHART2_SCH_ERROR_BARS_FROM_DATA";
 
 
 
-#define HID_SCH_WIZARD_ROADMAP                              "CHART2_HID_SCH_WIZARD_ROADMAP"
-#define HID_SCH_DATA_SERIES_LABEL                           "CHART2_HID_SCH_DATA_SERIES_LABEL"
+inline constexpr OStringLiteral HID_SCH_WIZARD_ROADMAP = "CHART2_HID_SCH_WIZARD_ROADMAP";
+inline constexpr OStringLiteral HID_SCH_DATA_SERIES_LABEL = "CHART2_HID_SCH_DATA_SERIES_LABEL";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,125 +9,125 @@
 
 #pragma once
 
-#define BMP_TYPE_COLUMN                 "chart2/res/typecolumn_16.png"
-#define BMP_TYPE_BAR                    "chart2/res/typebar_16.png"
-#define BMP_TYPE_PIE                    "chart2/res/typepie_16.png"
-#define BMP_TYPE_LINE                   "chart2/res/typepointline_16.png"
-#define BMP_TYPE_XY                     "chart2/res/typexy_16.png"
-#define BMP_TYPE_AREA                   "chart2/res/typearea_16.png"
-#define BMP_TYPE_NET                    "chart2/res/typenet_16.png"
-#define BMP_TYPE_STOCK                  "chart2/res/typestock_16.png"
-#define BMP_TYPE_COLUMN_LINE            "chart2/res/typecolumnline_16.png"
-#define BMP_TYPE_BUBBLE                 "chart2/res/typebubble_16.png"
-#define BMP_BUBBLE_1                    "chart2/res/bubble_52x60.png"
-#define BMP_AREAS_2D                    "chart2/res/areas_52x60.png"
-#define BMP_AREAS_2D_1                  "chart2/res/areaspiled_52x60.png"
-#define BMP_AREAS_2D_3                  "chart2/res/areasfull_52x60.png"
-#define BMP_AREAS_3D                    "chart2/res/areaspiled3d_52x60.png"
-#define BMP_AREAS_3D_1                  "chart2/res/areas3d_52x60.png"
-#define BMP_AREAS_3D_2                  "chart2/res/areasfull3d_52x60.png"
-#define BMP_BARS_2D_1                   "chart2/res/bar_52x60.png"
-#define BMP_BARS_2D_2                   "chart2/res/barstack_52x60.png"
-#define BMP_BARS_2D_3                   "chart2/res/barpercent_52x60.png"
-#define BMP_BARS_3D                     "chart2/res/bar3ddeep_52x60.png"
-#define BMP_BARS_3D_1                   "chart2/res/bar3d_52x60.png"
-#define BMP_BARS_3D_2                   "chart2/res/barstack3d_52x60.png"
-#define BMP_BARS_3D_3                   "chart2/res/barpercent3d_52x60.png"
-#define BMP_CIRCLES_2D                  "chart2/res/pie_52x60.png"
-#define BMP_CIRCLES_2D_EXPLODED         "chart2/res/pieexploded_52x60.png"
-#define BMP_CIRCLES_3D                  "chart2/res/pie3d_52x60.png"
-#define BMP_CIRCLES_3D_EXPLODED         "chart2/res/pie3dexploded_52x60.png"
-#define BMP_DONUT_2D                    "chart2/res/donut_52x60.png"
-#define BMP_DONUT_2D_EXPLODED           "chart2/res/donutexploded_52x60.png"
-#define BMP_DONUT_3D                    "chart2/res/donut3d_52x60.png"
-#define BMP_DONUT_3D_EXPLODED           "chart2/res/donut3dexploded_52x60.png"
-#define BMP_COLUMNS_2D_1                "chart2/res/columns_52x60.png"
-#define BMP_COLUMNS_2D_2                "chart2/res/columnstack_52x60.png"
-#define BMP_COLUMNS_2D_3                "chart2/res/columnpercent_52x60.png"
-#define BMP_COLUMN_LINE                 "chart2/res/columnline_52x60.png"
-#define BMP_COLUMN_LINE_STACKED         "chart2/res/columnstackline_52x60.png"
-#define BMP_COLUMNS_3D                  "chart2/res/columns3ddeep_52x60.png"
-#define BMP_COLUMNS_3D_1                "chart2/res/columns3d_52x60.png"
-#define BMP_COLUMNS_3D_2                "chart2/res/columnstack3d_52x60.png"
-#define BMP_COLUMNS_3D_3                "chart2/res/columnpercent3d_52x60.png"
-#define BMP_KEGELQ_3D_1                 "chart2/res/conehori_52x60.png"
-#define BMP_KEGELQ_3D_2                 "chart2/res/conehoristack_52x60.png"
-#define BMP_KEGELQ_3D_3                 "chart2/res/conehoripercent_52x60.png"
-#define BMP_KEGELQ_3D_4                 "chart2/res/conehorideep_52x60.png"
-#define BMP_KEGEL_3D_1                  "chart2/res/cone_52x60.png"
-#define BMP_KEGEL_3D_2                  "chart2/res/conestack_52x60.png"
-#define BMP_KEGEL_3D_3                  "chart2/res/conepercent_52x60.png"
-#define BMP_KEGEL_3D_4                  "chart2/res/conedeep_52x60.png"
-#define BMP_POINTS_XVALUES              "chart2/res/valueaxisdirectpoints_52x60.png"
-#define BMP_POINTS_XCATEGORY            "chart2/res/nostackdirectpoints_52x60.png"
-#define BMP_POINTS_STACKED              "chart2/res/stackdirectpoints_52x60.png"
-#define BMP_LINE_P_XVALUES              "chart2/res/valueaxisdirectboth_52x60.png"
-#define BMP_LINE_O_XVALUES              "chart2/res/valueaxisdirectlines_52x60.png"
-#define BMP_LINE3D_XVALUES              "chart2/res/valueaxisdirect3d_52x60.png"
-#define BMP_LINE_P_XCATEGORY            "chart2/res/nostackdirectboth_52x60.png"
-#define BMP_LINE_O_XCATEGORY            "chart2/res/nostackdirectlines_52x60.png"
-#define BMP_LINE3D_XCATEGORY            "chart2/res/nostackdirect3d_52x60.png"
-#define BMP_LINE_P_STACKED              "chart2/res/stackdirectboth_52x60.png"
-#define BMP_LINE_O_STACKED              "chart2/res/stackdirectlines_52x60.png"
-#define BMP_LINE3D_STACKED              "chart2/res/stackdirect3d_52x60.png"
-#define BMP_LINE_P_XVALUES_SMOOTH       "chart2/res/valueaxissmoothboth_52x60.png"
-#define BMP_LINE_O_XVALUES_SMOOTH       "chart2/res/valueaxissmoothlines_52x60.png"
-#define BMP_LINE3D_XVALUES_SMOOTH       "chart2/res/valueaxissmooth3d_52x60.png"
-#define BMP_LINE_P_XCATEGORY_SMOOTH     "chart2/res/nostacksmoothboth_52x60.png"
-#define BMP_LINE_O_XCATEGORY_SMOOTH     "chart2/res/nostacksmoothlines_52x60.png"
-#define BMP_LINE3D_XCATEGORY_SMOOTH     "chart2/res/nostacksmooth3d_52x60.png"
-#define BMP_LINE_P_STACKED_SMOOTH       "chart2/res/stacksmoothboth_52x60.png"
-#define BMP_LINE_O_STACKED_SMOOTH       "chart2/res/stacksmoothlines_52x60.png"
-#define BMP_LINE3D_STACKED_SMOOTH       "chart2/res/stacksmooth3d_52x60.png"
-#define BMP_LINE_P_XVALUES_STEPPED      "chart2/res/valueaxissteppedboth_52x60.png"
-#define BMP_LINE_O_XVALUES_STEPPED      "chart2/res/valueaxissteppedlines_52x60.png"
-#define BMP_LINE3D_XVALUES_STEPPED      "chart2/res/valueaxisstepped3d_52x60.png"
-#define BMP_LINE_P_XCATEGORY_STEPPED    "chart2/res/nostacksteppedboth_52x60.png"
-#define BMP_LINE_O_XCATEGORY_STEPPED    "chart2/res/nostacksteppedlines_52x60.png"
-#define BMP_LINE3D_XCATEGORY_STEPPED    "chart2/res/nostackstepped3d_52x60.png"
-#define BMP_LINE_P_STACKED_STEPPED      "chart2/res/stacksteppedboth_52x60.png"
-#define BMP_LINE_O_STACKED_STEPPED      "chart2/res/stacksteppedlines_52x60.png"
-#define BMP_LINE3D_STACKED_STEPPED      "chart2/res/stackstepped3d_52x60.png"
-#define BMP_NET                         "chart2/res/net_52x60.png"
-#define BMP_NET_STACK                   "chart2/res/netstack_52x60.png"
-#define BMP_NET_SYMB                    "chart2/res/netpoint_52x60.png"
-#define BMP_NET_SYMB_STACK              "chart2/res/netpointstack_52x60.png"
-#define BMP_NET_LINESYMB                "chart2/res/netlinepoint_52x60.png"
-#define BMP_NET_LINESYMB_STACK          "chart2/res/netlinepointstack_52x60.png"
-#define BMP_NET_FILL                    "chart2/res/netfill_52x60.png"
-#define BMP_NET_FILL_STACK              "chart2/res/netstackfill_52x60.png"
-#define BMP_PYRAMIDQ_3D_1               "chart2/res/pyramindhori_52x60.png"
-#define BMP_PYRAMIDQ_3D_2               "chart2/res/pyramindhoristack_52x60.png"
-#define BMP_PYRAMIDQ_3D_3               "chart2/res/pyramindhoripercent_52x60.png"
-#define BMP_PYRAMIDQ_3D_4               "chart2/res/pyramindhorideep_52x60.png"
-#define BMP_PYRAMID_3D_1                "chart2/res/pyramind_52x60.png"
-#define BMP_PYRAMID_3D_2                "chart2/res/pyramindstack_52x60.png"
-#define BMP_PYRAMID_3D_3                "chart2/res/pyramindpercent_52x60.png"
-#define BMP_PYRAMID_3D_4                "chart2/res/pyraminddeep_52x60.png"
-#define BMP_ROEHRE_3D_1                 "chart2/res/cylinderhori_52x60.png"
-#define BMP_ROEHRE_3D_2                 "chart2/res/cylinderhoristack_52x60.png"
-#define BMP_ROEHRE_3D_3                 "chart2/res/cylinderhoriprocent_52x60.png"
-#define BMP_ROEHRE_3D_4                 "chart2/res/cylinderhorideep_52x60.png"
-#define BMP_SAEULE_3D_1                 "chart2/res/cylinder_52x60.png"
-#define BMP_SAEULE_3D_2                 "chart2/res/cylinderstack_52x60.png"
-#define BMP_SAEULE_3D_3                 "chart2/res/cylinderpercent_52x60.png"
-#define BMP_SAEULE_3D_4                 "chart2/res/cylinderdeep_52x60.png"
-#define BMP_STOCK_1                     "chart2/res/stock_52x60.png"
-#define BMP_STOCK_2                     "chart2/res/stockblock_52x60.png"
-#define BMP_STOCK_3                     "chart2/res/stockcolumns_52x60.png"
-#define BMP_STOCK_4                     "chart2/res/stockcolumnsattach_52x60.png"
-#define BMP_INDICATE_BOTH_VERTI         "chart2/res/errorbothverti_30.png"
-#define BMP_INDICATE_DOWN               "chart2/res/errordown_30.png"
-#define BMP_INDICATE_UP                 "chart2/res/errorup_30.png"
-#define BMP_INDICATE_BOTH_HORI          "chart2/res/errorbothhori_30.png"
-#define BMP_INDICATE_RIGHT              "chart2/res/errorright_30.png"
-#define BMP_INDICATE_LEFT               "chart2/res/errorleft_30.png"
-#define BMP_REGRESSION_LINEAR           "chart2/res/reglin.png"
-#define BMP_REGRESSION_LOG              "chart2/res/reglog.png"
-#define BMP_REGRESSION_EXP              "chart2/res/regexp.png"
-#define BMP_REGRESSION_POWER            "chart2/res/regpow.png"
-#define BMP_REGRESSION_POLYNOMIAL       "chart2/res/regpoly.png"
-#define BMP_REGRESSION_MOVING_AVERAGE   "chart2/res/regavg.png"
+inline constexpr OUStringLiteral BMP_TYPE_COLUMN = u"chart2/res/typecolumn_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_BAR = u"chart2/res/typebar_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_PIE = u"chart2/res/typepie_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_LINE = u"chart2/res/typepointline_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_XY = u"chart2/res/typexy_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_AREA = u"chart2/res/typearea_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_NET = u"chart2/res/typenet_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_STOCK = u"chart2/res/typestock_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_COLUMN_LINE = u"chart2/res/typecolumnline_16.png";
+inline constexpr OUStringLiteral BMP_TYPE_BUBBLE = u"chart2/res/typebubble_16.png";
+inline constexpr OUStringLiteral BMP_BUBBLE_1 = u"chart2/res/bubble_52x60.png";
+inline constexpr OUStringLiteral BMP_AREAS_2D = u"chart2/res/areas_52x60.png";
+inline constexpr OUStringLiteral BMP_AREAS_2D_1 = u"chart2/res/areaspiled_52x60.png";
+inline constexpr OUStringLiteral BMP_AREAS_2D_3 = u"chart2/res/areasfull_52x60.png";
+inline constexpr OUStringLiteral BMP_AREAS_3D = u"chart2/res/areaspiled3d_52x60.png";
+inline constexpr OUStringLiteral BMP_AREAS_3D_1 = u"chart2/res/areas3d_52x60.png";
+inline constexpr OUStringLiteral BMP_AREAS_3D_2 = u"chart2/res/areasfull3d_52x60.png";
+inline constexpr OUStringLiteral BMP_BARS_2D_1 = u"chart2/res/bar_52x60.png";
+inline constexpr OUStringLiteral BMP_BARS_2D_2 = u"chart2/res/barstack_52x60.png";
+inline constexpr OUStringLiteral BMP_BARS_2D_3 = u"chart2/res/barpercent_52x60.png";
+inline constexpr OUStringLiteral BMP_BARS_3D = u"chart2/res/bar3ddeep_52x60.png";
+inline constexpr OUStringLiteral BMP_BARS_3D_1 = u"chart2/res/bar3d_52x60.png";
+inline constexpr OUStringLiteral BMP_BARS_3D_2 = u"chart2/res/barstack3d_52x60.png";
+inline constexpr OUStringLiteral BMP_BARS_3D_3 = u"chart2/res/barpercent3d_52x60.png";
+inline constexpr OUStringLiteral BMP_CIRCLES_2D = u"chart2/res/pie_52x60.png";
+inline constexpr OUStringLiteral BMP_CIRCLES_2D_EXPLODED = u"chart2/res/pieexploded_52x60.png";
+inline constexpr OUStringLiteral BMP_CIRCLES_3D = u"chart2/res/pie3d_52x60.png";
+inline constexpr OUStringLiteral BMP_CIRCLES_3D_EXPLODED = u"chart2/res/pie3dexploded_52x60.png";
+inline constexpr OUStringLiteral BMP_DONUT_2D = u"chart2/res/donut_52x60.png";
+inline constexpr OUStringLiteral BMP_DONUT_2D_EXPLODED = u"chart2/res/donutexploded_52x60.png";
+inline constexpr OUStringLiteral BMP_DONUT_3D = u"chart2/res/donut3d_52x60.png";
+inline constexpr OUStringLiteral BMP_DONUT_3D_EXPLODED = u"chart2/res/donut3dexploded_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMNS_2D_1 = u"chart2/res/columns_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMNS_2D_2 = u"chart2/res/columnstack_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMNS_2D_3 = u"chart2/res/columnpercent_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMN_LINE = u"chart2/res/columnline_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMN_LINE_STACKED = u"chart2/res/columnstackline_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMNS_3D = u"chart2/res/columns3ddeep_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMNS_3D_1 = u"chart2/res/columns3d_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMNS_3D_2 = u"chart2/res/columnstack3d_52x60.png";
+inline constexpr OUStringLiteral BMP_COLUMNS_3D_3 = u"chart2/res/columnpercent3d_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGELQ_3D_1 = u"chart2/res/conehori_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGELQ_3D_2 = u"chart2/res/conehoristack_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGELQ_3D_3 = u"chart2/res/conehoripercent_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGELQ_3D_4 = u"chart2/res/conehorideep_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGEL_3D_1 = u"chart2/res/cone_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGEL_3D_2 = u"chart2/res/conestack_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGEL_3D_3 = u"chart2/res/conepercent_52x60.png";
+inline constexpr OUStringLiteral BMP_KEGEL_3D_4 = u"chart2/res/conedeep_52x60.png";
+inline constexpr OUStringLiteral BMP_POINTS_XVALUES = u"chart2/res/valueaxisdirectpoints_52x60.png";
+inline constexpr OUStringLiteral BMP_POINTS_XCATEGORY = u"chart2/res/nostackdirectpoints_52x60.png";
+inline constexpr OUStringLiteral BMP_POINTS_STACKED = u"chart2/res/stackdirectpoints_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_XVALUES = u"chart2/res/valueaxisdirectboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_XVALUES = u"chart2/res/valueaxisdirectlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_XVALUES = u"chart2/res/valueaxisdirect3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_XCATEGORY = u"chart2/res/nostackdirectboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_XCATEGORY = u"chart2/res/nostackdirectlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_XCATEGORY = u"chart2/res/nostackdirect3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_STACKED = u"chart2/res/stackdirectboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_STACKED = u"chart2/res/stackdirectlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_STACKED = u"chart2/res/stackdirect3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_XVALUES_SMOOTH = u"chart2/res/valueaxissmoothboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_XVALUES_SMOOTH = u"chart2/res/valueaxissmoothlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_XVALUES_SMOOTH = u"chart2/res/valueaxissmooth3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_XCATEGORY_SMOOTH = u"chart2/res/nostacksmoothboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_XCATEGORY_SMOOTH = u"chart2/res/nostacksmoothlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_XCATEGORY_SMOOTH = u"chart2/res/nostacksmooth3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_STACKED_SMOOTH = u"chart2/res/stacksmoothboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_STACKED_SMOOTH = u"chart2/res/stacksmoothlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_STACKED_SMOOTH = u"chart2/res/stacksmooth3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_XVALUES_STEPPED = u"chart2/res/valueaxissteppedboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_XVALUES_STEPPED = u"chart2/res/valueaxissteppedlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_XVALUES_STEPPED = u"chart2/res/valueaxisstepped3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_XCATEGORY_STEPPED = u"chart2/res/nostacksteppedboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_XCATEGORY_STEPPED = u"chart2/res/nostacksteppedlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_XCATEGORY_STEPPED = u"chart2/res/nostackstepped3d_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_P_STACKED_STEPPED = u"chart2/res/stacksteppedboth_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE_O_STACKED_STEPPED = u"chart2/res/stacksteppedlines_52x60.png";
+inline constexpr OUStringLiteral BMP_LINE3D_STACKED_STEPPED = u"chart2/res/stackstepped3d_52x60.png";
+inline constexpr OUStringLiteral BMP_NET = u"chart2/res/net_52x60.png";
+inline constexpr OUStringLiteral BMP_NET_STACK = u"chart2/res/netstack_52x60.png";
+inline constexpr OUStringLiteral BMP_NET_SYMB = u"chart2/res/netpoint_52x60.png";
+inline constexpr OUStringLiteral BMP_NET_SYMB_STACK = u"chart2/res/netpointstack_52x60.png";
+inline constexpr OUStringLiteral BMP_NET_LINESYMB = u"chart2/res/netlinepoint_52x60.png";
+inline constexpr OUStringLiteral BMP_NET_LINESYMB_STACK = u"chart2/res/netlinepointstack_52x60.png";
+inline constexpr OUStringLiteral BMP_NET_FILL = u"chart2/res/netfill_52x60.png";
+inline constexpr OUStringLiteral BMP_NET_FILL_STACK = u"chart2/res/netstackfill_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMIDQ_3D_1 = u"chart2/res/pyramindhori_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMIDQ_3D_2 = u"chart2/res/pyramindhoristack_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMIDQ_3D_3 = u"chart2/res/pyramindhoripercent_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMIDQ_3D_4 = u"chart2/res/pyramindhorideep_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMID_3D_1 = u"chart2/res/pyramind_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMID_3D_2 = u"chart2/res/pyramindstack_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMID_3D_3 = u"chart2/res/pyramindpercent_52x60.png";
+inline constexpr OUStringLiteral BMP_PYRAMID_3D_4 = u"chart2/res/pyraminddeep_52x60.png";
+inline constexpr OUStringLiteral BMP_ROEHRE_3D_1 = u"chart2/res/cylinderhori_52x60.png";
+inline constexpr OUStringLiteral BMP_ROEHRE_3D_2 = u"chart2/res/cylinderhoristack_52x60.png";
+inline constexpr OUStringLiteral BMP_ROEHRE_3D_3 = u"chart2/res/cylinderhoriprocent_52x60.png";
+inline constexpr OUStringLiteral BMP_ROEHRE_3D_4 = u"chart2/res/cylinderhorideep_52x60.png";
+inline constexpr OUStringLiteral BMP_SAEULE_3D_1 = u"chart2/res/cylinder_52x60.png";
+inline constexpr OUStringLiteral BMP_SAEULE_3D_2 = u"chart2/res/cylinderstack_52x60.png";
+inline constexpr OUStringLiteral BMP_SAEULE_3D_3 = u"chart2/res/cylinderpercent_52x60.png";
+inline constexpr OUStringLiteral BMP_SAEULE_3D_4 = u"chart2/res/cylinderdeep_52x60.png";
+inline constexpr OUStringLiteral BMP_STOCK_1 = u"chart2/res/stock_52x60.png";
+inline constexpr OUStringLiteral BMP_STOCK_2 = u"chart2/res/stockblock_52x60.png";
+inline constexpr OUStringLiteral BMP_STOCK_3 = u"chart2/res/stockcolumns_52x60.png";
+inline constexpr OUStringLiteral BMP_STOCK_4 = u"chart2/res/stockcolumnsattach_52x60.png";
+inline constexpr OUStringLiteral BMP_INDICATE_BOTH_VERTI = u"chart2/res/errorbothverti_30.png";
+inline constexpr OUStringLiteral BMP_INDICATE_DOWN = u"chart2/res/errordown_30.png";
+inline constexpr OUStringLiteral BMP_INDICATE_UP = u"chart2/res/errorup_30.png";
+inline constexpr OUStringLiteral BMP_INDICATE_BOTH_HORI = u"chart2/res/errorbothhori_30.png";
+inline constexpr OUStringLiteral BMP_INDICATE_RIGHT = u"chart2/res/errorright_30.png";
+inline constexpr OUStringLiteral BMP_INDICATE_LEFT = u"chart2/res/errorleft_30.png";
+inline constexpr OUStringLiteral BMP_REGRESSION_LINEAR = u"chart2/res/reglin.png";
+inline constexpr OUStringLiteral BMP_REGRESSION_LOG = u"chart2/res/reglog.png";
+inline constexpr OUStringLiteral BMP_REGRESSION_EXP = u"chart2/res/regexp.png";
+inline constexpr OUStringLiteral BMP_REGRESSION_POWER = u"chart2/res/regpow.png";
+inline constexpr OUStringLiteral BMP_REGRESSION_POLYNOMIAL = u"chart2/res/regpoly.png";
+inline constexpr OUStringLiteral BMP_REGRESSION_MOVING_AVERAGE = u"chart2/res/regavg.png";
 
 #define RID_SVXBMP_LAMP_ON              "svx/res/lighton.png"
 #define RID_SVXBMP_LAMP_OFF             "svx/res/light.png"
