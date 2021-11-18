@@ -2373,10 +2373,11 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             continue;
 
         bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
-        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+        tools::Long nLayoutSign = (!bIsTiledRendering && bLayoutRTL) ? -1 : 1;
 
         Point aStart = aViewData.GetScrPos( nCol1, nRow1, static_cast<ScSplitPos>(i) );
         Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, static_cast<ScSplitPos>(i) );
+
         if ( eMode == ScUpdateMode::All )
         {
             if (bIsTiledRendering)
@@ -2388,11 +2389,11 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                 // Remember that wsd expects int and that aEnd.X() is
                 // in pixels and will be converted in twips, before performing
                 // the lok callback, so we need to avoid that an overflow occurs.
-                aEnd.setX( bLayoutRTL ? 0 : std::numeric_limits<int>::max() / 1000 );
+                aEnd.setX( (!bIsTiledRendering && bLayoutRTL) ? 0 : std::numeric_limits<int>::max() / 1000 );
             }
             else
             {
-                aEnd.setX( bLayoutRTL ? 0 : pGridWin[i]->GetOutputSizePixel().Width() );
+                aEnd.setX( (!bIsTiledRendering && bLayoutRTL) ? 0 : pGridWin[i]->GetOutputSizePixel().Width() );
             }
         }
         aEnd.AdjustX( -nLayoutSign );
