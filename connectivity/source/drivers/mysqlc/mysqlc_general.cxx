@@ -195,7 +195,8 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::TINYINT;
     if (sType.equalsIgnoreAsciiCase("smallint"))
         return css::sdbc::DataType::SMALLINT;
-    if (sType.equalsIgnoreAsciiCase("longtext"))
+    if (sType.equalsIgnoreAsciiCase("tinytext") || sType.equalsIgnoreAsciiCase("mediumtext")
+        || sType.equalsIgnoreAsciiCase("longtext"))
         return css::sdbc::DataType::LONGVARCHAR;
     if (sType.equalsIgnoreAsciiCase("int") || sType.equalsIgnoreAsciiCase("mediumint"))
         return css::sdbc::DataType::INTEGER;
@@ -204,7 +205,8 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::VARCHAR;
     if (sType.equalsIgnoreAsciiCase("bigint"))
         return css::sdbc::DataType::BIGINT;
-    if (sType.equalsIgnoreAsciiCase("blob") || sType.equalsIgnoreAsciiCase("longblob"))
+    if (sType.equalsIgnoreAsciiCase("blob") || sType.equalsIgnoreAsciiCase("longblob")
+        || sType.equalsIgnoreAsciiCase("tinyblob") || sType.equalsIgnoreAsciiCase("mediumblob"))
         return css::sdbc::DataType::BLOB;
     if (sType.equalsIgnoreAsciiCase("varbinary"))
         return css::sdbc::DataType::VARBINARY;
