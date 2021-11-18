@@ -48,6 +48,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledN
     CPPUNIT_ASSERT_EQUAL(OUString("i"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135906, "tdf135906.docx")
+{
+    // just test round-tripping. The document was exported as corrupt and didn't re-load.
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
 {
     loadAndSave("para-style-num-level.docx");
