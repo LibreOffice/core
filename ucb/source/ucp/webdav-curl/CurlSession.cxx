@@ -782,7 +782,7 @@ auto CurlProcessor::URIReferenceToURI(CurlSession& rSession, OUString const& rUR
     }
     else
     {
-        assert(rURIReference.startsWith("/") && !rURIReference.startsWith("//"));
+        assert(rURIReference.startsWith("/"));
         return rSession.m_URI.CloneWithRelativeRefPathAbsolute(rURIReference);
     }
 }
