@@ -979,10 +979,11 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 tools::Rectangle aRect = rControl.GetSubMenuParentRect();
                 sal_Int32 nSelected = xColorMenu->popup_at_rect(pPopupParent, aRect, weld::Placement::End).toInt32();
                 xColorMenu.reset();
-                rControl.terminateAllPopupMenus();
 
                 if (nSelected == 0)
                     return;
+
+                rControl.terminateAllPopupMenus();
 
                 // Disable color filter when active color was selected
                 if (nSelected == nActive)
