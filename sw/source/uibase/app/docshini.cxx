@@ -289,6 +289,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         // value 'false' in the SwDoc c-tor)
         m_xDoc->getIDocumentSettingAccess().set( DocumentSettingId::MATH_BASELINE_ALIGNMENT,
                 SW_MOD()->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
+        m_xDoc->getIDocumentSettingAccess().set( DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND, true);
     }
 
     /* #106748# If the default frame direction of a document is RTL
