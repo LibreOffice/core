@@ -165,12 +165,6 @@ public:
     int GetTextWidth(const OUString& rsName) const;
     int IncreaseWindowWidthToFitText(int nMaxTextWidth);
 
-    /**
-     * Dismiss all visible popup menus and set focus back to the application
-     * window.  This method is called e.g. when a menu action is fired.
-     */
-    void terminateAllPopupMenus();
-
     sal_Int32 ExecuteMenu(weld::Menu& rMenu);
 private:
 

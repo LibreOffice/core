@@ -781,7 +781,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     // Terminate autofilter popup now when there is no further user input needed
     bool bColorMode = eMode == AutoFilterMode::TextColor || eMode == AutoFilterMode::BackgroundColor;
     if (!bColorMode)
-        rControl.terminateAllPopupMenus();
+        rControl.EndPopupMode();
 
     const AutoFilterData* pData =
         static_cast<const AutoFilterData*>(rControl.getExtendedData());
@@ -982,7 +982,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 if (nSelected == 0)
                     return;
 
-                rControl.terminateAllPopupMenus();
+                rControl.EndPopupMode();
 
                 // Disable color filter when active color was selected
                 if (nSelected == nActive)

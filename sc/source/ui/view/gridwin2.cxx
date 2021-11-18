@@ -455,7 +455,7 @@ void ScGridWindow::UpdateDPSortFromMenu(DataPilotSortMode eType)
                 if (nSelected == 0)
                     return;
 
-                rControl.terminateAllPopupMenus();
+                rControl.EndPopupMode();
 
                 sal_uInt16 nUserListIndex = nSelected - 1;
                 pViewShell->DataPilotSort(pDPObj, pDPData->mnDim, true, &nUserListIndex);

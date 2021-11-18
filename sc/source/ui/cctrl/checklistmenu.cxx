@@ -113,7 +113,7 @@ void ScCheckListMenuControl::executeMenuItem(size_t nPos)
 
     const bool bClosePopup = maMenuItems[nPos].mxAction->execute();
     if (bClosePopup)
-        terminateAllPopupMenus();
+        EndPopupMode();
 }
 
 void ScCheckListMenuControl::setSelectedMenuItem(size_t nPos)
@@ -160,6 +160,8 @@ void ScCheckListMenuControl::clearSelectedMenuItem()
 
 void ScCheckListMenuControl::EndPopupMode()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        NotifyCloseLOK();
     vcl::Window::GetDockingManager()->EndPopupMode(mxFrame);
     mxFrame->EnableDocking(false);
 }
@@ -170,14 +172,6 @@ void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect, Float
     DockingManager* pDockingManager = vcl::Window::GetDockingManager();
     pDockingManager->SetPopupModeEndHdl(mxFrame, LINK(this, ScCheckListMenuControl, PopupModeEndHdl));
     pDockingManager->StartPopupMode(mxFrame, rRect, (eFlags | FloatWinPopupFlags::GrabFocus));
-}
-
-void ScCheckListMenuControl::terminateAllPopupMenus()
-{
-    if (comphelper::LibreOfficeKit::isActive())
-        NotifyCloseLOK();
-
-    EndPopupMode();
 }
 
 ScCheckListMenuControl::Config::Config() :
