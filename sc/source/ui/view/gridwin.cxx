@@ -978,10 +978,11 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
                 sal_Int32 nSelected = rControl.ExecuteMenu(*xColorMenu);
                 xColorMenu.reset();
-                rControl.terminateAllPopupMenus();
 
                 if (nSelected == 0)
                     return;
+
+                rControl.terminateAllPopupMenus();
 
                 // Disable color filter when active color was selected
                 if (nSelected == nActive)
