@@ -2877,8 +2877,11 @@ bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     bool bHasLinespacing = false;
     LineSpacing aLineSpacing;
     if (GetPropertyAndState(rXPropSet, rXPropState, "ParaLineSpacing", eState)
-        && eState == beans::PropertyState_DIRECT_VALUE)
-        bHasLinespacing = ( mAny >>= aLineSpacing );
+        && (mAny >>= aLineSpacing)
+        && (eState == beans::PropertyState_DIRECT_VALUE ||
+            // only export if it differs from the default 100% line spacing
+            aLineSpacing.Mode != LineSpacingMode::PROP || aLineSpacing.Height != 100))
+        bHasLinespacing = true;
 
     bool bRtl = false;
     if (GetProperty(rXPropSet, "WritingMode"))
