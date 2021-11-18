@@ -34,7 +34,6 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

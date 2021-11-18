@@ -17,6 +17,12 @@
 
 namespace vcl::font
 {
+OpenTypeFeatureDefinitionListPrivate& OpenTypeFeatureDefinitionList()
+{
+    static OpenTypeFeatureDefinitionListPrivate SINGLETON;
+    return SINGLETON;
+};
+
 OpenTypeFeatureDefinitionListPrivate::OpenTypeFeatureDefinitionListPrivate() { init(); }
 
 void OpenTypeFeatureDefinitionListPrivate::init()

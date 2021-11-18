@@ -95,15 +95,14 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
 
     for (hb_tag_t aFeatureTag : aFeatureTags)
     {
-        if (OpenTypeFeatureDefinitionList::get().isRequired(aFeatureTag))
+        if (OpenTypeFeatureDefinitionList().isRequired(aFeatureTag))
             continue;
 
         m_rFontFeatures.emplace_back();
         vcl::font::Feature& rFeature = m_rFontFeatures.back();
         rFeature.m_aID = { aFeatureTag, aScriptTag, aLanguageTag };
 
-        FeatureDefinition aDefinition
-            = OpenTypeFeatureDefinitionList::get().getDefinition(aFeatureTag);
+        FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(aFeatureTag);
         if (aDefinition)
         {
             rFeature.m_aDefinition = aDefinition;

@@ -42,7 +42,7 @@ AquaA11yFocusListener::AquaA11yFocusListener() : m_focusedObject(nil)
 id AquaA11yFocusListener::getFocusedUIElement()
 {
     if ( nil == m_focusedObject ) {
-        Reference< XAccessible > xAccessible( TheAquaA11yFocusTracker::get().getFocusedObject() );
+        Reference< XAccessible > xAccessible( TheAquaA11yFocusTracker().getFocusedObject() );
         try {
             if( xAccessible.is() ) {
                 Reference< XAccessibleContext > xContext(xAccessible->getAccessibleContext());

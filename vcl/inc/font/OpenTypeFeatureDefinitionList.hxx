@@ -11,7 +11,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/font/Feature.hxx>
-#include <rtl/instance.hxx>
 #include <vector>
 #include <unordered_map>
 
@@ -35,10 +34,7 @@ public:
     bool isRequired(sal_uInt32 nFeatureCode);
 };
 
-class VCL_DLLPUBLIC OpenTypeFeatureDefinitionList
-    : public rtl::Static<OpenTypeFeatureDefinitionListPrivate, OpenTypeFeatureDefinitionList>
-{
-};
+VCL_DLLPUBLIC OpenTypeFeatureDefinitionListPrivate& OpenTypeFeatureDefinitionList();
 
 } // namespace vcl::font
 
