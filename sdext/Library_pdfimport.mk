@@ -51,6 +51,10 @@ $(eval $(call gb_Library_add_exception_objects,pdfimport,\
     sdext/source/pdfimport/filterdet \
     sdext/source/pdfimport/misc/pdfihelper \
     sdext/source/pdfimport/misc/pwdinteract \
+))
+
+ifeq ($(ENABLE_POPPLER),TRUE)
+$(eval $(call gb_Library_add_exception_objects,pdfimport,\
     sdext/source/pdfimport/odf/odfemitter \
     sdext/source/pdfimport/pdfiadaptor \
     sdext/source/pdfimport/pdfparse/pdfentries \
@@ -66,5 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,pdfimport,\
     sdext/source/pdfimport/tree/writertreevisiting \
     sdext/source/pdfimport/wrapper/wrapper \
 ))
+endif
 
 # vim:set noet sw=4 ts=4:
