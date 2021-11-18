@@ -80,7 +80,7 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent )
             if( m_role != AccessibleRole::LIST ) {
                 Reference< XAccessible > xAccessible;
                 if( aEvent.NewValue >>= xAccessible )
-                    TheAquaA11yFocusTracker::get().setFocusedObject( xAccessible );
+                    TheAquaA11yFocusTracker().setFocusedObject( xAccessible );
             }
             break;
 
