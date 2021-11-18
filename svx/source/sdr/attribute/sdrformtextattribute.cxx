@@ -45,7 +45,6 @@
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <rtl/instance.hxx>
 
 
 // helper to get line, stroke and transparence attributes from SfxItemSet
@@ -251,8 +250,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrFormTextAttribute::ImplType, theGlobalDefault > {};
+            SdrFormTextAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrFormTextAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrFormTextAttribute::SdrFormTextAttribute(const SfxItemSet& rSet)
@@ -261,7 +263,7 @@ namespace drawinglayer::attribute
         }
 
         SdrFormTextAttribute::SdrFormTextAttribute()
-        :   mpSdrFormTextAttribute(theGlobalDefault::get())
+        :   mpSdrFormTextAttribute(theGlobalDefault())
         {
         }
 
@@ -281,7 +283,7 @@ namespace drawinglayer::attribute
 
         bool SdrFormTextAttribute::isDefault() const
         {
-            return mpSdrFormTextAttribute.same_object(theGlobalDefault::get());
+            return mpSdrFormTextAttribute.same_object(theGlobalDefault());
         }
 
         SdrFormTextAttribute& SdrFormTextAttribute::operator=(const SdrFormTextAttribute& rCandidate)

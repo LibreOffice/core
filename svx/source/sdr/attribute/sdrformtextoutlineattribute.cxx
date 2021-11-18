@@ -21,7 +21,6 @@
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -65,8 +64,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrFormTextOutlineAttribute::ImplType, theGlobalDefault > {};
+            SdrFormTextOutlineAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrFormTextOutlineAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(
@@ -80,7 +82,7 @@ namespace drawinglayer::attribute
         }
 
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute()
-        :   mpSdrFormTextOutlineAttribute(theGlobalDefault::get())
+        :   mpSdrFormTextOutlineAttribute(theGlobalDefault())
         {
         }
 
@@ -95,7 +97,7 @@ namespace drawinglayer::attribute
 
         bool SdrFormTextOutlineAttribute::isDefault() const
         {
-            return mpSdrFormTextOutlineAttribute.same_object(theGlobalDefault::get());
+            return mpSdrFormTextOutlineAttribute.same_object(theGlobalDefault());
         }
 
         SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(const SdrFormTextOutlineAttribute& rCandidate)
