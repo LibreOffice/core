@@ -51,6 +51,24 @@
       "message": "well, i don\u0027t know, maybe it\u0027s possible that there is a reason there are 2 different variables ENABLE_PDFIMPORT and ENABLE_POPPLER?\n\nperhaps looking at \"git log -p -S ENABLE_PDFIMPORT\" and \"git log -p -S ENABLE_POPPLER\" would be informative?\n\ni don\u0027t remember having added either of these variables.",
       "revId": "4d8858ae580ff86446e92c3cfa8dcccb6a37de0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "999d8985_c19c3c67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-18T02:38:51Z",
+      "side": 1,
+      "message": "I think now O know why. Some of the code in sdext/source/pdfimport is shared by a --disable-poppler build (i.e. the one using pdfium to generate images).\n\nAnyway, there are still unneeded poppler related files included in the --disable-poppler build.",
+      "parentUuid": "d2b1b8a4_76f59dd2",
+      "revId": "4d8858ae580ff86446e92c3cfa8dcccb6a37de0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
