@@ -6,6 +6,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import get_state_as_dict
 
 class Tdf137637(UITestCase):
 
@@ -31,4 +32,20 @@ class Tdf137637(UITestCase):
             # Without the fix in place, this test would have failed with
             # AttributeError: 'NoneType' object has no attribute 'getImplementationName'
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
+            xAddBtn = xImpressDoc.getChild("add_effect")
+            xAddBtn.executeAction("CLICK", tuple())
+
+            xAnimationList = xImpressDoc.getChild("custom_animation_list")
+            self.assertEqual('1', get_state_as_dict(xAnimationList)['Children'])
+
+            self.xUITest.executeCommand(".uno:Undo")
+
+            # tdf#135033: Without the fix in place, this test would have failed with
+            # AssertionError: '0' != '1'
+            self.assertEqual('0', get_state_as_dict(xAnimationList)['Children'])
+
+            self.xUITest.executeCommand(".uno:Redo")
+
+            self.assertEqual('1', get_state_as_dict(xAnimationList)['Children'])
 
