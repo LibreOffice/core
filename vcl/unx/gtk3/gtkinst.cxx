@@ -9639,19 +9639,19 @@ void do_ungrab(GtkWidget* pWidget)
     gdk_seat_ungrab(pSeat);
 }
 
-GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
+GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor)
 {
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_toplevel(pMenuButton);
     gtk_coord x, y, absx, absy;
-    gtk_widget_translate_coordinates(pMenuButton, pToplevel, 0, 0, &x, &y);
+    gtk_widget_translate_coordinates(pMenuButton, pToplevel, rAnchor.x, rAnchor.y, &x, &y);
     GdkSurface* pWindow = widget_get_surface(pToplevel);
     gdk_window_get_position(pWindow, &absx, &absy);
 
     x += absx;
     y += absy;
 
-    gint nButtonHeight = gtk_widget_get_allocated_height(pMenuButton);
+    gint nButtonHeight = rAnchor.height;
     y += nButtonHeight;
 
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
@@ -9673,7 +9673,7 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
     bool bSwapForRTL = SwapForRTL(pMenuButton);
     if (bSwapForRTL)
     {
-        gint nButtonWidth = gtk_widget_get_allocated_width(pMenuButton);
+        gint nButtonWidth = rAnchor.width;
         x += nButtonWidth;
         x -= nMenuWidth;
     }
@@ -9722,7 +9722,7 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
     return ePosUsed;
 }
 
-bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
+bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectangle &rAnchor)
 {
     static auto window_move_to_rect = reinterpret_cast<void (*) (GdkWindow*, const GdkRectangle*, GdkGravity,
                                                                  GdkGravity, GdkAnchorHints, gint, gint)>(
@@ -9741,20 +9741,17 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_toplevel(pComboBox);
     gtk_coord x, y;
-    gtk_widget_translate_coordinates(pComboBox, pToplevel, 0, 0, &x, &y);
+    gtk_widget_translate_coordinates(pComboBox, pToplevel, rAnchor.x, rAnchor.y, &x, &y);
 
     gtk_widget_realize(GTK_WIDGET(pMenu));
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
     gtk_window_set_transient_for(pMenu, GTK_WINDOW(pToplevel));
 
-    gint nComboWidth = gtk_widget_get_allocated_width(pComboBox);
-    gint nComboHeight = gtk_widget_get_allocated_height(pComboBox);
-
     bool bSwapForRTL = SwapForRTL(GTK_WIDGET(pComboBox));
 
     GdkGravity rect_anchor = !bSwapForRTL ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
     GdkGravity menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
-    GdkRectangle rect {x, y, nComboWidth, nComboHeight };
+    GdkRectangle rect {x, y, rAnchor.width, rAnchor.height};
     GdkSurface* toplevel = widget_get_surface(GTK_WIDGET(pMenu));
 
     window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor,
@@ -9765,7 +9762,7 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
     return true;
 }
 
-GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
+GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor)
 {
     // we only use ePosUsed in the replacement-for-X-popover case of a
     // MenuButton, so we only need it when show_menu_older_gtk is used
@@ -9786,8 +9783,8 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
     }
 
     // try with gdk_window_move_to_rect, but if that's not available, try without
-    if (!show_menu_newer_gtk(pMenuButton, pMenu))
-        ePosUsed = show_menu_older_gtk(pMenuButton, pMenu);
+    if (!show_menu_newer_gtk(pMenuButton, pMenu, rAnchor))
+        ePosUsed = show_menu_older_gtk(pMenuButton, pMenu, rAnchor);
     gtk_widget_show_all(GTK_WIDGET(pMenu));
     gtk_widget_grab_focus(GTK_WIDGET(pMenu));
     do_grab(GTK_WIDGET(pMenu));
@@ -9825,6 +9822,46 @@ bool button_release_is_outside(GtkWidget* pWidget, GtkWidget* pMenuHack, GdkEven
 
     return true;
 }
+
+GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMenuHack, GtkWidget* pAnchor, const GdkRectangle& rAnchor)
+{
+    //set border width
+    gtk_container_set_border_width(GTK_CONTAINER(pMenuHack), gtk_container_get_border_width(GTK_CONTAINER(pPopover)));
+
+    //steal popover contents and smuggle into toplevel display window
+    GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(pPopover));
+    g_object_ref(pChild);
+    gtk_container_remove(GTK_CONTAINER(pPopover), pChild);
+    gtk_container_add(GTK_CONTAINER(pMenuHack), pChild);
+    g_object_unref(pChild);
+
+    return show_menu(pAnchor, pMenuHack, rAnchor);
+}
+
+void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkWidget* pAnchor)
+{
+    do_ungrab(GTK_WIDGET(pMenuHack));
+
+    gtk_widget_hide(GTK_WIDGET(pMenuHack));
+    //put contents back from where the came from
+    GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(pMenuHack));
+    g_object_ref(pChild);
+    gtk_container_remove(GTK_CONTAINER(pMenuHack), pChild);
+    gtk_container_add(GTK_CONTAINER(pPopover), pChild);
+    g_object_unref(pChild);
+
+    // so gdk_window_move_to_rect will work again the next time
+    gtk_widget_unrealize(GTK_WIDGET(pMenuHack));
+
+    gtk_widget_set_size_request(GTK_WIDGET(pMenuHack), -1, -1);
+
+    // undo show_menu tooltip blocking
+    GtkWidget* pParent = widget_get_toplevel(pAnchor);
+    GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
+    if (pFrame)
+        pFrame->UnblockTooltip();
+}
+
 #endif
 
 /* four types of uses of this
@@ -9855,6 +9892,7 @@ private:
     GtkWindow* m_pMenuHack;
     //when doing so, if it's a toolbar menubutton align the menu to the full toolitem
     GtkWidget* m_pMenuHackAlign;
+    bool m_nButtonPressSeen;
     gulong m_nSignalId;
 #endif
     GtkWidget* m_pPopover;
@@ -9880,40 +9918,14 @@ private:
             return;
         if (!get_active())
         {
-            do_ungrab(GTK_WIDGET(m_pMenuHack));
-
-            gtk_widget_hide(GTK_WIDGET(m_pMenuHack));
-            //put contents back from where the came from
-            GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pMenuHack));
-            g_object_ref(pChild);
-            gtk_container_remove(GTK_CONTAINER(m_pMenuHack), pChild);
-            gtk_container_add(GTK_CONTAINER(m_pPopover), pChild);
-            g_object_unref(pChild);
-
-            // so gdk_window_move_to_rect will work again the next time
-            gtk_widget_unrealize(GTK_WIDGET(m_pMenuHack));
-
-            gtk_widget_set_size_request(GTK_WIDGET(m_pMenuHack), -1, -1);
-
-            // undo show_menu tooltip blocking
-            GtkWidget* pParent = widget_get_toplevel(GTK_WIDGET(m_pMenuButton));
-            GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
-            if (pFrame)
-                pFrame->UnblockTooltip();
+            m_nButtonPressSeen = false;
+            MoveWindowContentsToPopover(m_pMenuHack, m_pPopover, GTK_WIDGET(m_pMenuButton));
         }
         else
         {
-            //set border width
-            gtk_container_set_border_width(GTK_CONTAINER(m_pMenuHack), gtk_container_get_border_width(GTK_CONTAINER(m_pPopover)));
-
-            //steal popover contents and smuggle into toplevel display window
-            GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pPopover));
-            g_object_ref(pChild);
-            gtk_container_remove(GTK_CONTAINER(m_pPopover), pChild);
-            gtk_container_add(GTK_CONTAINER(m_pMenuHack), pChild);
-            g_object_unref(pChild);
-
-            GtkPositionType ePosUsed = show_menu(m_pMenuHackAlign ? m_pMenuHackAlign : GTK_WIDGET(m_pMenuButton), m_pMenuHack);
+            GtkWidget* pAnchor = m_pMenuHackAlign ? m_pMenuHackAlign : GTK_WIDGET(m_pMenuButton);
+            GdkRectangle aAnchor {0, 0, gtk_widget_get_allocated_width(pAnchor), gtk_widget_get_allocated_height(pAnchor) };
+            GtkPositionType ePosUsed = MovePopoverContentsToWindow(m_pPopover, m_pMenuHack, pAnchor, aAnchor);
             // tdf#132540 keep the placeholder popover on this same side as the replacement menu
             gtk_popover_set_position(gtk_menu_button_get_popover(m_pMenuButton), ePosUsed);
         }
@@ -9942,10 +9954,17 @@ private:
         }
     }
 
+    static gboolean signalButtonPress(GtkWidget* /*pWidget*/, GdkEventButton* /*pEvent*/, gpointer widget)
+    {
+        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        pThis->m_nButtonPressSeen = true;
+        return false;
+    }
+
     static gboolean signalButtonRelease(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
-        if (button_release_is_outside(pWidget, GTK_WIDGET(pThis->m_pMenuHack), pEvent))
+        if (pThis->m_nButtonPressSeen && button_release_is_outside(pWidget, GTK_WIDGET(pThis->m_pMenuHack), pEvent))
             pThis->set_active(false);
         return false;
     }
@@ -10017,6 +10036,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         , m_pMenuHack(nullptr)
         , m_pMenuHackAlign(pMenuAlign)
+        , m_nButtonPressSeen(true)
         , m_nSignalId(0)
 #endif
         , m_pPopover(nullptr)
@@ -10220,22 +10240,33 @@ public:
         return;
 #else
 
+        if (!m_pPopover)
+        {
+            gtk_menu_button_set_popover(m_pMenuButton, nullptr);
+            return;
+        }
+
 #if defined(GDK_WINDOWING_X11)
         if (!m_pMenuHack)
         {
             //under wayland a Popover will work to "escape" the parent dialog, not
             //so under X, so come up with this hack to use a raw GtkWindow
             GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-            if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+            if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay) && gtk_popover_get_constrain_to(GTK_POPOVER(m_pPopover)) == GTK_POPOVER_CONSTRAINT_NONE)
             {
                 m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
                 gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-                gtk_window_set_modal(m_pMenuHack, m_pPopover ? gtk_popover_get_modal(GTK_POPOVER(m_pPopover)) : true);
+                bool bModal = gtk_popover_get_modal(GTK_POPOVER(m_pPopover));
+                gtk_window_set_modal(m_pMenuHack, bModal);
                 gtk_window_set_resizable(m_pMenuHack, false);
                 m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalMenuButtonToggled), this);
-                g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-                g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
                 g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+                if (bModal)
+                {
+                    g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+                    g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
+                    g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+                }
             }
         }
 #endif
@@ -10258,10 +10289,7 @@ public:
         else
         {
             gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
-            if (m_pPopover)
-            {
-                gtk_widget_show_all(m_pPopover);
-            }
+            gtk_widget_show_all(m_pPopover);
         }
 #endif
     }
@@ -19810,7 +19838,8 @@ private:
             if (m_nMaxMRUCount)
                 tree_view_set_cursor(0);
 
-            show_menu(pComboBox, m_pMenuWindow);
+            GdkRectangle aAnchor {0, 0, gtk_widget_get_allocated_width(pComboBox), gtk_widget_get_allocated_height(pComboBox) };
+            show_menu(pComboBox, m_pMenuWindow, aAnchor);
         }
     }
 
@@ -21854,6 +21883,11 @@ namespace {
 class GtkInstancePopover : public GtkInstanceContainer, public virtual weld::Popover
 {
 private:
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    //popover cannot escape dialog under X so we might need to stick up own window instead
+    GtkWindow* m_pMenuHack;
+    bool m_nButtonPressSeen;
+#endif
     GtkPopover* m_pPopover;
     gulong m_nSignalId;
     ImplSVEvent* m_pClosedEvent;
@@ -21875,10 +21909,67 @@ private:
         m_pClosedEvent = Application::PostUserEvent(LINK(this, GtkInstancePopover, async_signal_closed));
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    static gboolean keyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        return pThis->key_press(pEvent);
+    }
+
+    bool key_press(const GdkEventKey* pEvent)
+    {
+        if (pEvent->keyval == GDK_KEY_Escape)
+        {
+            popdown();
+            return true;
+        }
+        return false;
+    }
+
+    static gboolean signalButtonPress(GtkWidget* /*pWidget*/, GdkEventButton* /*pEvent*/, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        pThis->m_nButtonPressSeen = true;
+        return false;
+    }
+
+    static gboolean signalButtonRelease(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        if (pThis->m_nButtonPressSeen && button_release_is_outside(pWidget, GTK_WIDGET(pThis->m_pMenuHack), pEvent))
+            pThis->popdown();
+        return false;
+    }
+
+    static void signalGrabBroken(GtkWidget*, GdkEventGrabBroken *pEvent, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        pThis->grab_broken(pEvent);
+    }
+
+    void grab_broken(const GdkEventGrabBroken *event)
+    {
+        if (event->grab_window == nullptr)
+        {
+            popdown();
+        }
+        else
+        {
+            //try and regrab, so when we lose the grab to the menu of the color palette
+            //combobox we regain it so the color palette doesn't itself disappear on next
+            //click on the color palette combobox
+            do_grab(GTK_WIDGET(m_pMenuHack));
+        }
+    }
+
+#endif
+
 public:
     GtkInstancePopover(GtkPopover* pPopover, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
 #if !GTK_CHECK_VERSION(4, 0, 0)
         : GtkInstanceContainer(GTK_CONTAINER(pPopover), pBuilder, bTakeOwnership)
+        , m_pMenuHack(nullptr)
+        , m_nButtonPressSeen(false)
 #else
         : GtkInstanceContainer(GTK_WIDGET(pPopover), pBuilder, bTakeOwnership)
 #endif
@@ -21904,16 +21995,65 @@ public:
         gtk_popover_set_relative_to(m_pPopover, pWidget);
 #endif
         gtk_popover_set_pointing_to(m_pPopover, &aRect);
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+#if defined(GDK_WINDOWING_X11)
+        //under wayland a Popover will work to "escape" the parent dialog, not
+        //so under X, so come up with this hack to use a raw GtkWindow
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay) && gtk_popover_get_constrain_to(m_pPopover) == GTK_POPOVER_CONSTRAINT_NONE)
+        {
+            if (!m_pMenuHack)
+            {
+                m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+                gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
+                bool bModal = gtk_popover_get_modal(m_pPopover);
+                gtk_window_set_modal(m_pMenuHack, bModal);
+                gtk_window_set_resizable(m_pMenuHack, false);
+                g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+                if (bModal)
+                {
+                     g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+                     g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
+                     g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+                }
+            }
+
+            MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect);
+            return;
+        }
+#endif
+#endif
+
         gtk_popover_popup(m_pPopover);
     }
 
     virtual void popdown() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+#if defined(GDK_WINDOWING_X11)
+        //under wayland a Popover will work to "escape" the parent dialog, not
+        //so under X, so come up with this hack to use a raw GtkWindow
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+        {
+            m_nButtonPressSeen = false;
+            MoveWindowContentsToPopover(m_pMenuHack, GTK_WIDGET(m_pPopover), gtk_popover_get_relative_to(m_pPopover));
+            signal_closed();
+            return;
+        }
+#endif
+#endif
+
         gtk_popover_popdown(m_pPopover);
     }
 
     virtual ~GtkInstancePopover() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (m_pMenuHack)
+            gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
+#endif
         if (m_pClosedEvent)
             Application::RemoveUserEvent(m_pClosedEvent);
         g_signal_handler_disconnect(m_pPopover, m_nSignalId);
