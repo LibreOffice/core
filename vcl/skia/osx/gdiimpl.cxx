@@ -187,21 +187,27 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
                                                 const tools::Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue)
 {
-    const tools::Long width = rControlRegion.GetWidth();
-    const tools::Long height = rControlRegion.GetHeight();
+    // Do a scaled bitmap in HiDPI in order not to lose precision.
+    const tools::Long width = rControlRegion.GetWidth() * mScaling;
+    const tools::Long height = rControlRegion.GetHeight() * mScaling;
     const size_t bytes = width * height * 4;
     std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[bytes]);
     memset(data.get(), 0, bytes);
     CGContextRef context = CGBitmapContextCreate(
         data.get(), width, height, 8, width * 4, GetSalData()->mxRGBSpace,
         toCGBitmapType(mSurface->imageInfo().colorType(), kPremul_SkAlphaType));
-    assert(context); // TODO
-    // Flip upside down.
+    if (!context)
+    {
+        SAL_WARN("vcl.skia", "drawNativeControl(): Failed to allocate bitmap context");
+        return false;
+    }
+    // Adjust for our drawn-to coordinates in the bitmap.
+    tools::Rectangle movedRegion(Point(0, 0), rControlRegion.GetSize());
+    // Flip drawing upside down.
     CGContextTranslateCTM(context, 0, height);
     CGContextScaleCTM(context, 1, -1);
-    // Adjust for our drawn-to coordinates in the bitmap.
-    tools::Rectangle movedRegion = rControlRegion;
-    movedRegion.SetPos(Point(0, 0));
+    // And possibly scale the native drawing.
+    CGContextScaleCTM(context, mScaling, mScaling);
     bool bOK = performDrawNativeControl(nType, nPart, movedRegion, nState, aValue, context,
                                         mrShared.mpFrame);
     CGContextRelease(context);
@@ -224,7 +230,10 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
             updateRect.Intersection(mClipRegion.GetBoundRect());
         addUpdateRegion(SkRect::MakeXYWH(updateRect.getX(), updateRect.getY(),
                                          updateRect.GetWidth(), updateRect.GetHeight()));
-        getDrawCanvas()->drawImage(bitmap.asImage(), rControlRegion.getX(), rControlRegion.getY());
+        SkRect drawRect = SkRect::MakeXYWH(rControlRegion.getX(), rControlRegion.getY(),
+                                           rControlRegion.GetWidth(), rControlRegion.GetHeight());
+        assert(drawRect.width() * mScaling == bitmap.width()); // no scaling should be needed
+        getDrawCanvas()->drawImageRect(bitmap.asImage(), drawRect, SkSamplingOptions());
         ++mPendingOperationsToFlush; // tdf#136369
         postDraw();
     }
