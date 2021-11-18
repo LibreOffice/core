@@ -3733,6 +3733,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf139336_ColumnsWithFootnoteDoNotOccup
     assertXPath(pXmlDoc, "/root/page", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage)
+{
+    // Old odt files should keep their original layout, as it was before Tdf139336 fix.
+    // The new odt file is only 1 page long, while the old odt file (with the same content)
+    // was more then 1 page long.
+    // Note: Somewhy this test miscalculates the layout of the old odt file.
+    // It will be 4 pages long, while opened in Writer it is 5 pages long.
+    SwDoc* pDoc
+        = createSwDoc(DATA_DIRECTORY, "tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_Old.odt");
+    CPPUNIT_ASSERT(pDoc);
+    Scheduler::ProcessEventsToIdle();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_GREATER(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
+
+    discardDumpedLayout();
+    pDoc = createSwDoc(DATA_DIRECTORY, "tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_New.odt");
+    CPPUNIT_ASSERT(pDoc);
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
