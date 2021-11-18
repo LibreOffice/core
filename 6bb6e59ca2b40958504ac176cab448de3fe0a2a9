@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "719e5811_00431057",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-18T11:10:24Z",
+      "side": 1,
+      "message": "Thank you Lionel for the review! :-)\n\nI cherry-picked the patch for 7.2 branch, it\u0027s not essential but the patch is quite simple and short (see https://gerrit.libreoffice.org/c/core/+/125447)",
+      "revId": "6bb6e59ca2b40958504ac176cab448de3fe0a2a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
