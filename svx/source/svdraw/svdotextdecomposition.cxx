@@ -176,7 +176,7 @@ namespace
         // apply font rotate
         if(rInfo.mrFont.GetOrientation())
         {
-            aNewTransform.rotate(-rInfo.mrFont.GetOrientation().get() * F_PI1800);
+            aNewTransform.rotate(-toRadians(rInfo.mrFont.GetOrientation()));
         }
 
         // look for escapement, if necessary, translate accordingly

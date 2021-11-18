@@ -577,7 +577,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
     if(maGeo.nRotationAngle)
     {
         // Unrotate!
-        aMatrix.rotate(-maGeo.nRotationAngle.get() * F_PI18000);
+        aMatrix.rotate(-toRadians(maGeo.nRotationAngle));
     }
 
     aXorPolyPolygon.transform(aMatrix);
@@ -1649,7 +1649,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
-        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg(atan(fShearX)) * 100.0));
+        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
@@ -1662,7 +1662,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is matematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-fRotate / F_PI18000)));
+        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }

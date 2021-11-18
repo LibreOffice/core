@@ -158,7 +158,7 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetXOffset()) * 0.01,
             static_cast<double>(rGradient.GetYOffset()) * 0.01,
-            static_cast<double>(rGradient.GetAngle().get()) * F_PI1800,
+            toRadians(rGradient.GetAngle()),
             aStart,
             aEnd);
 

@@ -107,7 +107,7 @@ struct TabInfo
 
 Point Rotate( const Point& rPoint, Degree10 nOrientation, const Point& rOrigin )
 {
-    double nRealOrientation = nOrientation.get() * F_PI1800;
+    double nRealOrientation = toRadians(nOrientation);
     double nCos = cos( nRealOrientation );
     double nSin = sin( nRealOrientation );
 
@@ -3108,7 +3108,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
     double nCos = 0.0, nSin = 0.0;
     if ( nOrientation )
     {
-        double nRealOrientation = nOrientation.get()*F_PI1800;
+        double nRealOrientation = toRadians(nOrientation);
         nCos = cos( nRealOrientation );
         nSin = sin( nRealOrientation );
     }

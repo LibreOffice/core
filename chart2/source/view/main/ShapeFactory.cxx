@@ -426,7 +426,7 @@ uno::Reference<drawing::XShape>
             //Matrix for position
             basegfx::B3DHomMatrix aHomMatrix;
             if (nRotateZAngleHundredthDegree != 0)
-                aHomMatrix.rotate(0.0, 0.0, -nRotateZAngleHundredthDegree / 18000.00 * M_PI);
+                aHomMatrix.rotate(0.0, 0.0, -basegfx::deg2rad<100>(nRotateZAngleHundredthDegree));
             aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY,
                                  rPosition.PositionZ - (fDepth / 2.0));
 
@@ -669,7 +669,7 @@ uno::Reference<drawing::XShape>
             //Matrix for position
             basegfx::B3DHomMatrix aHomMatrix;
             if (nRotateZAngleHundredthDegree != 0)
-                aHomMatrix.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*M_PI);
+                aHomMatrix.rotate(0.0,0.0,-basegfx::deg2rad<100>(nRotateZAngleHundredthDegree));
             //stretch the symmetric objects to given depth
             aHomMatrix.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
             aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);

@@ -1404,7 +1404,7 @@ void Polygon::Rotate( const Point& rCenter, Degree10 nAngle10 )
 
     if( nAngle10 )
     {
-        const double fAngle = F_PI1800 * nAngle10.get();
+        const double fAngle = toRadians(nAngle10);
         Rotate( rCenter, sin( fAngle ), cos( fAngle ) );
     }
 }

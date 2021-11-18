@@ -798,7 +798,7 @@ namespace vclcanvas
                         // degrees with the orientation reversed: [0,2Pi) ->
                         // (3600,0].  Note that the original angle may have
                         // values outside the [0,2Pi) interval.
-                        const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
+                        const double nAngleInTenthOfDegrees (3600.0 - basegfx::rad2deg<10>(nRotate));
                         aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
                         pGrfObj = std::make_shared<GraphicObject>( aBmpEx );

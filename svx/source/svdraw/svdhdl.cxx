@@ -1831,7 +1831,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                     fTransparence,
                     3.0,
                     3.0,
-                    nRotationAngle.get() * -F_PI18000,
+                    -toRadians(nRotationAngle),
                     true)); // allow animation; the Handle is not shown at text edit time
 
                 pNewOverlayObject->setHittable(false);
