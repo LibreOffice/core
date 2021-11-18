@@ -26,7 +26,6 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
-#include <rtl/instance.hxx>
 
 using namespace ::utl;
 using namespace ::osl;
@@ -418,15 +417,10 @@ void SvtSlideSorterBarOptions::SetVisibleDrawView(bool bVisible)
     m_pImpl->SetVisibleDrawView( bVisible );
 }
 
-namespace
-{
-    class theSvtSlideSorterBarOptionsMutex :
-        public rtl::Static< osl::Mutex, theSvtSlideSorterBarOptionsMutex > {};
-}
-
 Mutex & SvtSlideSorterBarOptions::GetInitMutex()
 {
-    return theSvtSlideSorterBarOptionsMutex::get();
+    static osl::Mutex theSvtSlideSorterBarOptionsMutex;
+    return theSvtSlideSorterBarOptionsMutex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

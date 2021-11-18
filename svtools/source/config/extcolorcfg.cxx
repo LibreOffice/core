@@ -38,7 +38,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
-#include <rtl/instance.hxx>
 
 
 using namespace utl;
@@ -51,8 +50,11 @@ namespace svtools
 static sal_Int32            nExtendedColorRefCount_Impl = 0;
 namespace
 {
-    struct ColorMutex_Impl
-        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
+    ::osl::Mutex& ColorMutex_Impl()
+    {
+        static ::osl::Mutex SINGLETON;
+        return SINGLETON;
+    }
 }
 
 ExtendedColorConfig_Impl*    ExtendedColorConfig::m_pImpl = nullptr;
@@ -506,7 +508,7 @@ IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, 
 
 ExtendedColorConfig::ExtendedColorConfig()
 {
-    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
+    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
     if ( !m_pImpl )
         m_pImpl = new ExtendedColorConfig_Impl;
     ++nExtendedColorRefCount_Impl;
@@ -515,7 +517,7 @@ ExtendedColorConfig::ExtendedColorConfig()
 
 ExtendedColorConfig::~ExtendedColorConfig()
 {
-    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
+    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
     EndListening( *m_pImpl);
     if(!--nExtendedColorRefCount_Impl)
     {
