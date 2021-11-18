@@ -3869,9 +3869,21 @@ void SwContentTree::UpdateTracking()
                 !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
         {
             if (m_bSectionTracking)
+            {
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
                                                pSection->GetSectionName());
-            return;
+                return;
+            }
+            else
+            {
+                // prevent fall thru to outline tracking when section tracking is off and the last
+                // GotoContent is the current section
+                if (m_nLastSelType == ContentTypeId::REGION &&
+                        m_xTreeView->get_selected_text() == pSection->GetSectionName())
+                    return;
+            }
+            // fall thru to outline tracking when section tracking is off and the last GotoContent
+            // is not the current section
         }
     }
     // outline
@@ -5163,7 +5175,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
 {
     m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
     lcl_AssureStdModeAtShell(m_pActiveShell);
-    switch(pCnt->GetParent()->GetType())
+    switch(m_nLastSelType = pCnt->GetParent()->GetType())
     {
         case ContentTypeId::TEXTFIELD:
         {
