@@ -2041,6 +2041,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             }
                         }
                     }
+                    else if (rSh.GetSelectionType() &
+                             (SelectionType::Graphic |
+                              SelectionType::Frame |
+                              SelectionType::Ole |
+                              SelectionType::DrawObject |
+                              SelectionType::DbForm))
+                    {
+                        eKeyState = SwKeyState::NextObject;
+                    }
                     else if ( rSh.GetTableFormat() )
                     {
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
@@ -2051,14 +2060,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eNextKeyState = SwKeyState::NextCell;
                         }
                     }
-                    else if ( rSh.GetSelectionType() &
-                                (SelectionType::Graphic |
-                                    SelectionType::Frame |
-                                    SelectionType::Ole |
-                                    SelectionType::DrawObject |
-                                    SelectionType::DbForm))
-
-                            eKeyState = SwKeyState::NextObject;
                     else
                     {
                         eKeyState = SwKeyState::InsTab;
@@ -2096,6 +2097,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else
                             eKeyState = SwKeyState::NumUp;
                     }
+                    else if (rSh.GetSelectionType() &
+                             (SelectionType::Graphic |
+                              SelectionType::Frame |
+                              SelectionType::Ole |
+                              SelectionType::DrawObject |
+                              SelectionType::DbForm))
+                    {
+                        eKeyState = SwKeyState::PrevObject;
+                    }
                     else if ( rSh.GetTableFormat() )
                     {
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
@@ -2106,14 +2116,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eNextKeyState = SwKeyState::PrevCell;
                         }
                     }
-                    else if ( rSh.GetSelectionType() &
-                                (SelectionType::Graphic |
-                                    SelectionType::Frame |
-                                    SelectionType::Ole |
-                                    SelectionType::DrawObject |
-                                    SelectionType::DbForm))
-
-                            eKeyState = SwKeyState::PrevObject;
                     else
                     {
                         eKeyState = SwKeyState::End;
