@@ -667,10 +667,8 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
-#if OSL_DEBUG_LEVEL > 1
             else
-                OSL_FAIL( "Recursive change tracking" );
-#endif
+                SAL_WARN("sw", "Recursive change tracking");
         }
 
         // set redline mode (without doing the associated book-keeping)
