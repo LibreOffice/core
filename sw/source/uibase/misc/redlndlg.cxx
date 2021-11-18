@@ -305,8 +305,12 @@ OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uI
 {
     switch (rRedln.GetType(nStack))
     {
-        case RedlineType::Insert:  return BMP_REDLINE_INSERTED;
-        case RedlineType::Delete:  return BMP_REDLINE_DELETED;
+        case RedlineType::Insert:  return rRedln.IsMoved()
+            ? OUString(BMP_REDLINE_MOVED_INSERTION)
+            : OUString(BMP_REDLINE_INSERTED);
+        case RedlineType::Delete:  return rRedln.IsMoved()
+            ? OUString(BMP_REDLINE_MOVED_DELETION)
+            : OUString(BMP_REDLINE_DELETED);
         case RedlineType::Format:  return BMP_REDLINE_FORMATTED;
         case RedlineType::ParagraphFormat: return BMP_REDLINE_FORMATTED;
         case RedlineType::Table:   return BMP_REDLINE_TABLECHG;
