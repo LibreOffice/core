@@ -3717,6 +3717,40 @@ void SwContentTree::UpdateTracking()
             return;
         }
         }
+        // drawing
+        if ((m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
+                                                   SelectionType::DrawObjectEditMode |
+                                                   SelectionType::DbForm)) &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
+        {
+            if (m_bDrawingObjectTracking)
+            {
+                // Multiple selection is possible when in root content navigation view so unselect all
+                // selected entries before reselecting. This causes a bit of an annoyance when the treeview
+                // scroll bar is used and focus is in the document by causing the last selected entry to
+                // scroll back into view.
+                if (m_bIsRoot)
+                    m_xTreeView->unselect_all();
+                SdrView* pSdrView = m_pActiveShell->GetDrawView();
+                if (pSdrView)
+                {
+                    for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
+                    {
+                        SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
+                        OUString aName(pSelected->GetName());
+                        if (!aName.isEmpty())
+                            lcl_SelectDrawObjectByName(*m_xTreeView, aName);
+                    }
+                }
+                else
+                {
+                    // clear treeview selections
+                    m_xTreeView->unselect_all();
+                }
+                Select();
+            }
+            return;
+        }
         // footnotes and endnotes
         if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
@@ -3806,40 +3840,6 @@ void SwContentTree::UpdateTracking()
                         pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
                                                                           ContentTypeId::TEXTFIELD;
                 lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
-            }
-            return;
-        }
-        // drawing
-        if ((m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
-                                                   SelectionType::DrawObjectEditMode |
-                                                   SelectionType::DbForm)) &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
-        {
-            if (m_bDrawingObjectTracking)
-            {
-                // Multiple selection is possible when in root content navigation view so unselect all
-                // selected entries before reselecting. This causes a bit of an annoyance when the treeview
-                // scroll bar is used and focus is in the document by causing the last selected entry to
-                // scroll back into view.
-                if (m_bIsRoot)
-                    m_xTreeView->unselect_all();
-                SdrView* pSdrView = m_pActiveShell->GetDrawView();
-                if (pSdrView)
-                {
-                    for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
-                    {
-                        SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
-                        OUString aName(pSelected->GetName());
-                        if (!aName.isEmpty())
-                            lcl_SelectDrawObjectByName(*m_xTreeView, aName);
-                    }
-                }
-                else
-                {
-                    // clear treeview selections
-                    m_xTreeView->unselect_all();
-                }
-                Select();
             }
             return;
         }
