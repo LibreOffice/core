@@ -196,6 +196,9 @@ void SdtHelper::createDateContentControl()
                     sFullDate = sFullDate.copy(0, nTimeSep);
                 xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sFullDate));
             }
+
+            // Store all unused sdt parameters from grabbag
+            xNameCont->insertByName("SdtParams", uno::makeAny(getInteropGrabBagAndClear()));
         }
     }
 

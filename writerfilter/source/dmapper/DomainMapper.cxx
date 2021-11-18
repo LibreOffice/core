@@ -1104,12 +1104,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_DataBinding_prefixMappings:
+            m_pImpl->m_pSdtHelper->setDataBindingPrefixMapping(sStringValue);
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_prefixMappings", sStringValue);
             break;
         case NS_ooxml::LN_CT_DataBinding_xpath:
+            m_pImpl->m_pSdtHelper->setDataBindingXPath(sStringValue);
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_xpath", sStringValue);
             break;
         case NS_ooxml::LN_CT_DataBinding_storeItemID:
+            m_pImpl->m_pSdtHelper->setDataBindingStoreItemID(sStringValue);
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_storeItemID", sStringValue);
             break;
         case NS_ooxml::LN_CT_SdtPlaceholder_docPart_val:
