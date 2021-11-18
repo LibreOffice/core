@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f452cb0d_e6fd37db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-18T07:55:54Z",
+      "side": 1,
+      "message": "Thanks :-) FWIW if you later want to add more SDT support or proper SDT support, then I think the date picker is the only type that we support natively, without a grab-bag. So given resources, it would be good to migrate all grab-bag to the date-picker-like approach. At least if we get the opportunity to work on this (on the Collabora side), then that\u0027s what we plan to do.\n\nHopefully that aligns with your plans.",
+      "revId": "75a49947c2eeb831a8e02192f1c4856eac62a743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
