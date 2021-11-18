@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8db21ad9_ede0a7d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-18T12:11:15Z",
+      "side": 1,
+      "message": "I let aside YEAR (see https://mariadb.com/kb/en/year-data-type/) because it seems there\u0027s no LO Datatype which could correspond in https://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/sdbc/DataType.idl?r\u003d2b383d19",
+      "revId": "36850728d098da77dc9cd60611ed100746f9259a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
