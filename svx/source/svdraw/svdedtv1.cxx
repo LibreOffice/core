@@ -310,8 +310,8 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCop
     if (bCopy)
         CopyMarkedObj();
 
-    double nSin = sin(nAngle.get() * F_PI18000);
-    double nCos = cos(nAngle.get() * F_PI18000);
+    double nSin = sin(toRadians(nAngle));
+    double nCos = cos(toRadians(nAngle));
     const size_t nMarkCount(GetMarkedObjectCount());
 
     if(nMarkCount)
@@ -468,7 +468,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, Degree100 nAngle, bool bVShe
     if (bCopy)
         CopyMarkedObj();
 
-    double nTan = tan(nAngle.get() * F_PI18000);
+    double nTan = tan(toRadians(nAngle));
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
@@ -559,7 +559,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
     aCtr1 -= aCtr0;
 
     if(bRotOk)
-        pO->Rotate(aCtr0, Degree100(FRound(nAngle / F_PI18000)), nSin, nCos);
+        pO->Rotate(aCtr0, Degree100(FRound(basegfx::rad2deg<100>(nAngle))), nSin, nCos);
 
     pO->Move(Size(aCtr1.X(),aCtr1.Y()));
 }
@@ -1643,10 +1643,10 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
             } else {
                 if (nNewShearAngle!=0_deg100 && nOldShearAngle!=0_deg100) {
                     // bug fix
-                    double nOld = tan(static_cast<double>(nOldShearAngle.get()) * F_PI18000);
-                    double nNew = tan(static_cast<double>(nNewShearAngle.get()) * F_PI18000);
+                    double nOld = tan(toRadians(nOldShearAngle));
+                    double nNew = tan(toRadians(nNewShearAngle));
                     nNew-=nOld;
-                    nNew = atan(nNew) / F_PI18000;
+                    nNew = basegfx::rad2deg<100>(atan(nNew));
                     nShearAngle=Degree100(FRound(nNew));
                 } else {
                     nShearAngle=nNewShearAngle-nOldShearAngle;

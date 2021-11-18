@@ -277,7 +277,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         Degree100 nObjectRotation(rSdrObjCustomShape.GetRotateAngle());
         if ( nObjectRotation )
         {
-            double a = (36000 - nObjectRotation.get()) * F_PI18000;
+            double a = toRadians(36000_deg100 - nObjectRotation);
             tools::Long dx = aSnapRect.Right() - aSnapRect.Left();
             tools::Long dy = aSnapRect.Bottom()- aSnapRect.Top();
             Point aP( aSnapRect.TopLeft() );

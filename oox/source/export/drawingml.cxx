@@ -1802,8 +1802,8 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         {
             int faccos=bFlipV ? -1 : 1;
             int facsin=bFlipH ? -1 : 1;
-            aPos.X-=(1-faccos*cos(nRotation.get()*F_PI18000))*aSize.Width/2-facsin*sin(nRotation.get()*F_PI18000)*aSize.Height/2;
-            aPos.Y-=(1-faccos*cos(nRotation.get()*F_PI18000))*aSize.Height/2+facsin*sin(nRotation.get()*F_PI18000)*aSize.Width/2;
+            aPos.X-=(1-faccos*cos(toRadians(nRotation)))*aSize.Width/2-facsin*sin(toRadians(nRotation))*aSize.Height/2;
+            aPos.Y-=(1-faccos*cos(toRadians(nRotation)))*aSize.Height/2+facsin*sin(toRadians(nRotation))*aSize.Width/2;
         }
         else  if (m_xParent.is() && nRotation != 0_deg100)
         {

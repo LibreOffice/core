@@ -301,7 +301,7 @@ tools::Long ScColumn::GetNeededSize(
             {
                 //TODO: take different X/Y scaling into consideration
 
-                double nRealOrient = nRotate.get() * F_PI18000;   // nRotate is in 1/100 Grad
+                double nRealOrient = toRadians(nRotate);
                 double nCosAbs = fabs( cos( nRealOrient ) );
                 double nSinAbs = fabs( sin( nRealOrient ) );
                 tools::Long nHeight = static_cast<tools::Long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
@@ -482,7 +482,7 @@ tools::Long ScColumn::GetNeededSize(
             //TODO: take different X/Y scaling into consideration
 
             Size aSize( pEngine->CalcTextWidth(), pEngine->GetTextHeight() );
-            double nRealOrient = nRotate.get() * F_PI18000;   // nRotate is in 1/100 Grad
+            double nRealOrient = toRadians(nRotate);
             double nCosAbs = fabs( cos( nRealOrient ) );
             double nSinAbs = fabs( sin( nRealOrient ) );
             tools::Long nHeight = static_cast<tools::Long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );

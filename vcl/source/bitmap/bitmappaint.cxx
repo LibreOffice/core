@@ -363,8 +363,8 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
                 if (pWriteAcc)
                 {
                     const BitmapColor aFillColor(pWriteAcc->GetBestMatchingColor(rFillColor));
-                    const double fCosAngle = cos(nAngle10.get() * F_PI1800);
-                    const double fSinAngle = sin(nAngle10.get() * F_PI1800);
+                    const double fCosAngle = cos(toRadians(nAngle10));
+                    const double fSinAngle = sin(toRadians(nAngle10));
                     const double fXMin = aNewBound.Left();
                     const double fYMin = aNewBound.Top();
                     const tools::Long nWidth = aSizePix.Width();

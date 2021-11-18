@@ -272,7 +272,7 @@ void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
     }
 
     o_rVCLGradient.SetAngle(
-        Degree10(static_cast<sal_uInt16>(rFiGrAtt.getAngle() * (1.0 / F_PI1800))));
+        Degree10(static_cast<sal_uInt32>(basegfx::rad2deg<100>(rFiGrAtt.getAngle()))));
     o_rVCLGradient.SetBorder(static_cast<sal_uInt16>(rFiGrAtt.getBorder() * 100.0));
     o_rVCLGradient.SetOfsX(static_cast<sal_uInt16>(rFiGrAtt.getOffsetX() * 100.0));
     o_rVCLGradient.SetOfsY(static_cast<sal_uInt16>(rFiGrAtt.getOffsetY() * 100.0));
@@ -1904,7 +1904,7 @@ void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(
         Hatch(aHatchStyle,
               Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
               basegfx::fround(rFillHatchAttribute.getDistance()),
-              Degree10(basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800))));
+              Degree10(basegfx::fround(basegfx::rad2deg<10>(rFillHatchAttribute.getAngle())))));
 
     impEndSvtGraphicFill(pSvtGraphicFill.get());
 }

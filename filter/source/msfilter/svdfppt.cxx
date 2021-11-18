@@ -1185,8 +1185,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     {
                         if ( rObjData.nSpFlags & ShapeFlag::FlipV )
                         {
-                            double a = 18000 * F_PI18000;
-                            pTObj->Rotate( rTextRect.Center(), 18000_deg100, sin( a ), cos( a ) );
+                            pTObj->Rotate( rTextRect.Center(), 18000_deg100, 0.0, -1.0 );
                         }
                         if ( rObjData.nSpFlags & ShapeFlag::FlipH )
                             nAngle = 36000_deg100 - nAngle;

@@ -1461,7 +1461,7 @@ void SdrObject::NbcRotate(const Point& rRef, Degree100 nAngle)
 {
     if (nAngle)
     {
-        double a = nAngle.get() * F_PI18000;
+        double a = toRadians(nAngle);
         NbcRotate( rRef, nAngle, sin( a ), cos( a ) );
     }
 }
@@ -2079,7 +2079,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         Degree100 n=static_cast<const SdrShearAngleItem*>(pPoolItem)->GetValue();
         n-=GetShearAngle();
         if (n) {
-            double nTan = tan(n.get() * F_PI18000);
+            double nTan = tan(toRadians(n));
             NbcShear(aRef1,n,nTan,false);
         }
     }
@@ -2096,12 +2096,12 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
         Degree100 n=static_cast<const SdrHorzShearOneItem*>(pPoolItem)->GetValue();
-        double nTan = tan(n.get() * F_PI18000);
+        double nTan = tan(toRadians(n));
         NbcShear(aRef1,n,nTan,false);
     }
     if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
         Degree100 n=static_cast<const SdrVertShearOneItem*>(pPoolItem)->GetValue();
-        double nTan = tan(n.get() * F_PI18000);
+        double nTan = tan(toRadians(n));
         NbcShear(aRef1,n,nTan,true);
     }
 

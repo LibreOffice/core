@@ -41,11 +41,6 @@
 #include <sallayout.hxx>
 #include <hb-coretext.h>
 
-static double toRadian(int nDegree)
-{
-    return nDegree * (M_PI / 1800.0);
-}
-
 CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
@@ -56,7 +51,7 @@ CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl:
     double fScaledFontHeight = rFSP.mfExactHeight;
 
     // convert font rotation to radian
-    mfFontRotation = toRadian(rFSP.mnOrientation.get());
+    mfFontRotation = toRadians(rFSP.mnOrientation);
 
     // dummy matrix so we can use CGAffineTransformConcat() below
     CGAffineTransform aMatrix = CGAffineTransformMakeTranslation(0, 0);
@@ -90,7 +85,7 @@ CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl:
          (rFSP.GetItalic() == ITALIC_OBLIQUE)) &&
         (rPFF.GetItalic() == ITALIC_NONE))
     {
-        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
+        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, basegfx::deg2rad(12), 1, 0, 0));
     }
 
     CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>(rPFF.GetFontId());

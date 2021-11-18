@@ -128,7 +128,7 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
         rPnt-=rRef1;
         Degree100 nPntAngle=GetAngle(rPnt);
         Degree100 nAngle=2_deg100*(nRefAngle-nPntAngle);
-        double a = nAngle.get() * F_PI18000;
+        double a = toRadians(nAngle);
         double nSin=sin(a);
         double nCos=cos(a);
         RotatePoint(rPnt,Point(),nSin,nCos);
@@ -393,8 +393,7 @@ Degree100 GetAngle(const Point& rPnt)
         if (rPnt.Y()>0) a=-9000_deg100;
         else a=9000_deg100;
     } else {
-        a = Degree100(FRound(atan2(static_cast<double>(-rPnt.Y()), static_cast<double>(rPnt.X()))
-                   / F_PI18000));
+        a = Degree100(FRound(basegfx::rad2deg<100>(atan2(static_cast<double>(-rPnt.Y()), static_cast<double>(rPnt.X())))));
     }
     return a;
 }
@@ -456,7 +455,7 @@ void GeoStat::RecalcSinCos()
         mfSinRotationAngle=0.0;
         mfCosRotationAngle=1.0;
     } else {
-        double a = nRotationAngle.get() * F_PI18000;
+        double a = toRadians(nRotationAngle);
         mfSinRotationAngle=sin(a);
         mfCosRotationAngle=cos(a);
     }
@@ -467,7 +466,7 @@ void GeoStat::RecalcTan()
     if (nShearAngle==0_deg100) {
         mfTanShearAngle=0.0;
     } else {
-        double a = nShearAngle.get() * F_PI18000;
+        double a = toRadians(nShearAngle);
         mfTanShearAngle=tan(a);
     }
 }

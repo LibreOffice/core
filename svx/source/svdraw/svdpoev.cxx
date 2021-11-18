@@ -642,8 +642,8 @@ void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, Degree100 nAngle)
     ForceUndirtyMrkPnt();
     OUString aStr(SvxResId(STR_EditResize));
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SdrRepeatFunc::Rotate);
-    double nSin = sin(nAngle.get() * F_PI18000);
-    double nCos = cos(nAngle.get() * F_PI18000);
+    double nSin = sin(toRadians(nAngle));
+    double nCos = cos(toRadians(nAngle));
     ImpTransformMarkedPoints(ImpRotate,&rRef,&nAngle,&nSin,&nCos);
     EndUndo();
     AdjustMarkHdl();

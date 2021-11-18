@@ -759,7 +759,7 @@ void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
     {
         tools::Long nXAdd = nWidth - nDistX;
         if( mpFontInstance->mnOrientation )
-            nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation.get() * F_PI1800 ) );
+            nXAdd = FRound( nXAdd * cos( toRadians(mpFontInstance->mnOrientation) ) );
 
         nX += nXAdd - 1;
     }
@@ -831,7 +831,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                     if( mpFontInstance->mnOrientation )
                     {
                         const tools::Long nDY = aPos.Y() - aStartPt.Y();
-                        const double fRad = mpFontInstance->mnOrientation.get() * F_PI1800;
+                        const double fRad = toRadians(mpFontInstance->mnOrientation);
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
                 }
