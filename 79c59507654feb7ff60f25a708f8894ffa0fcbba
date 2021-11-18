@@ -16,6 +16,24 @@
       "message": "Actually I don\u0027t see the need to move those definitions to hxx; in fact, I don\u0027t see why they need to be in the class definition at all.\n\nThey would be best just standalone constants in the CXX, removed from the hxx completely, because they are not used elsewhere.",
       "revId": "79c59507654feb7ff60f25a708f8894ffa0fcbba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e033076_9e31c2f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-18T11:35:57Z",
+      "side": 1,
+      "message": "Some of these definitions are not even used right now in the .cxx file, but they seem to be useful.\nFor example, consider \"LeapYear\". It is possible to define a method for checking if some year is a leap year or not, but it is not currently used. Do you think defining this method now and using it later would be good?",
+      "parentUuid": "9920161b_6f362a2f",
+      "revId": "79c59507654feb7ff60f25a708f8894ffa0fcbba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
