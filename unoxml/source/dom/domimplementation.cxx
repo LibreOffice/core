@@ -19,25 +19,21 @@
 
 #include "domimplementation.hxx"
 
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 
 using namespace css::uno;
 using namespace css::xml::dom;
 
 namespace DOM
 {
-    // why the heck is this thing static?
-    // perhaps it would be helpful to know what the implementation should
-    // do to answer this question...
-    namespace {
-        struct DOMImplementation
-            : public ::rtl::Static<CDOMImplementation, DOMImplementation> {};
-    }
-
     CDOMImplementation* CDOMImplementation::get()
     {
-        return & DOMImplementation::get();
+        // why the heck is this thing static?
+        // perhaps it would be helpful to know what the implementation should
+        // do to answer this question...
+        static rtl::Reference<CDOMImplementation> xDOMImplementation = new CDOMImplementation;
+        return &*xDOMImplementation;
     }
 
     // there is just 1 static instance, so these must not delete it!
