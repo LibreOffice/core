@@ -9,19 +9,19 @@
 
 #pragma once
 
-#define RID_BMP_BRKENABLED      "res/im30838.png"
-#define RID_BMP_BRKDISABLED     "res/im30839.png"
-#define RID_BMP_STEPMARKER      "res/im30840.png"
-#define RID_BMP_ERRORMARKER     "res/im30841.png"
-#define RID_BMP_LOCKED          "res/lock.png"
-#define RID_BMP_INSTALLATION    "res/harddisk_16.png"
-#define RID_BMP_DOCUMENT        "res/im30826.png"
-#define RID_BMP_MODLIB          "res/im30820.png"
-#define RID_BMP_MODLIBNOTLOADED "res/im30827.png"
-#define RID_BMP_MODULE          "res/im30821.png"
-#define RID_BMP_MACRO           "res/im30822.png"
-#define RID_BMP_DLGLIB          "res/dialogfolder_16.png"
-#define RID_BMP_DLGLIBNOTLOADED "res/dialogfoldernot_16.png"
-#define RID_BMP_DIALOG          "res/im30823.png"
+inline constexpr OUStringLiteral RID_BMP_BRKENABLED = u"res/im30838.png";
+inline constexpr OUStringLiteral RID_BMP_BRKDISABLED = u"res/im30839.png";
+inline constexpr OUStringLiteral RID_BMP_STEPMARKER = u"res/im30840.png";
+inline constexpr OUStringLiteral RID_BMP_ERRORMARKER = u"res/im30841.png";
+inline constexpr OUStringLiteral RID_BMP_LOCKED = u"res/lock.png";
+inline constexpr OUStringLiteral RID_BMP_INSTALLATION = u"res/harddisk_16.png";
+inline constexpr OUStringLiteral RID_BMP_DOCUMENT = u"res/im30826.png";
+inline constexpr OUStringLiteral RID_BMP_MODLIB = u"res/im30820.png";
+inline constexpr OUStringLiteral RID_BMP_MODLIBNOTLOADED = u"res/im30827.png";
+inline constexpr OUStringLiteral RID_BMP_MODULE = u"res/im30821.png";
+inline constexpr OUStringLiteral RID_BMP_MACRO = u"res/im30822.png";
+inline constexpr OUStringLiteral RID_BMP_DLGLIB = u"res/dialogfolder_16.png";
+inline constexpr OUStringLiteral RID_BMP_DLGLIBNOTLOADED = u"res/dialogfoldernot_16.png";
+inline constexpr OUStringLiteral RID_BMP_DIALOG = u"res/im30823.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

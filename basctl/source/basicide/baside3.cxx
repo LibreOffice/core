@@ -1244,7 +1244,7 @@ css::uno::Reference< css::accessibility::XAccessible > DialogWindow::CreateAcces
     return new AccessibleDialogWindow(this);
 }
 
-char const* DialogWindow::GetHid () const
+OString DialogWindow::GetHid () const
 {
     return HID_BASICIDE_DIALOGWINDOW;
 }
