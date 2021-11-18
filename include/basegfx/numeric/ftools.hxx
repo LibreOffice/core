@@ -27,14 +27,6 @@
 #include <algorithm>
 
 
-#ifndef F_PI1800
-#define F_PI1800    (M_PI/1800.0)
-#endif
-#ifndef F_PI18000
-#define F_PI18000   (M_PI/18000.0)
-#endif
-
-
 // fTools defines
 
 namespace basegfx
@@ -83,20 +75,20 @@ namespace basegfx
 
     /** Convert value from degrees to radians
      */
-    constexpr double deg2rad( double v )
+    template <int DegMultiple = 1> constexpr double deg2rad( double v )
     {
         // divide first, to get exact values for v being a multiple of
         // 90 degrees
-        return v / 90.0 * M_PI_2;
+        return v / (90.0 * DegMultiple) * M_PI_2;
     }
 
     /** Convert value radians to degrees
      */
-    constexpr double rad2deg( double v )
+    template <int DegMultiple = 1> constexpr double rad2deg( double v )
     {
         // divide first, to get exact values for v being a multiple of
         // pi/2
-        return v / M_PI_2 * 90.0;
+        return v / M_PI_2 * (90.0 * DegMultiple);
     }
 
     /** Snap v to nearest multiple of fStep, from negative and

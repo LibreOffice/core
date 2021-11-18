@@ -201,7 +201,7 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
 
     if( GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial )
     {
-        const double    fAngle = nAngle.get() * F_PI1800;
+        const double    fAngle = toRadians(nAngle);
         const double    fWidth = aRect.GetWidth();
         const double    fHeight = aRect.GetHeight();
         double  fDX     = fWidth  * fabs( cos( fAngle ) ) +
@@ -222,7 +222,7 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     {
         if( GetStyle() == GradientStyle::Square || GetStyle() == GradientStyle::Rect )
         {
-            const double    fAngle = nAngle.get() * F_PI1800;
+            const double    fAngle = toRadians(nAngle);
             const double    fWidth = aRect.GetWidth();
             const double    fHeight = aRect.GetHeight();
             double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );

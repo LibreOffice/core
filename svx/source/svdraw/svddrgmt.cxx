@@ -1067,7 +1067,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 nNewAngle/=nSA;
                 nNewAngle*=nSA;
                 nNewAngle=NormAngle36000(nNewAngle);
-                double a=(nNewAngle-nAngle).get()*F_PI18000;
+                double a=toRadians(nNewAngle-nAngle);
                 double nSin=sin(a);
                 double nCos=cos(a);
                 RotatePoint(aPnt,aRef,nSin,nCos);
@@ -2141,7 +2141,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
         bRight=false;
 
     nAngle=nNewAngle;
-    double a = nAngle.get() * F_PI18000;
+    double a = toRadians(nAngle);
     double nSin1=sin(a); // calculate now, so as little time as possible
     double nCos1=cos(a); // passes between Hide() and Show()
     Hide();
@@ -2356,7 +2356,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         if (bUpSideDown) nNewAngle -= 18000_deg100;
         if (bNeg) nTmpAngle=-nTmpAngle;
         bResize=true;
-        aNewFract = cos(nTmpAngle.get() * F_PI18000);
+        aNewFract = cos(toRadians(nTmpAngle));
         aFact.ReduceInaccurate(10); // three decimals should be enough
     }
 
@@ -2370,7 +2370,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     {
         nAngle=nNewAngle;
         aFact=aNewFract;
-        double a = nAngle.get() * F_PI18000;
+        double a = toRadians(nAngle);
         double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
         Hide();
         nTan=nTan1;

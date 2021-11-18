@@ -86,7 +86,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         ::basegfx::B2DHomMatrix aM;
-        aM.rotate( -m_fRotationAngleDegree*M_PI/180.0 );//#i78696#->#i80521#
+        aM.rotate( basegfx::deg2rad(-m_fRotationAngleDegree) );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos);
         xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }

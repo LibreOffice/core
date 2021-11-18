@@ -89,7 +89,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     while ( nAngle > 9000 )
         nAngle = ( 18000 - ( nAngle % 18000 ) );
 
-    double fVal = static_cast<double>(nAngle) * F_PI18000;
+    double fVal = basegfx::deg2rad<100>(nAngle);
     double  fCos = cos( fVal );
     double  fSin = sin( fVal );
 
@@ -368,10 +368,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 nEndAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
 
                 Point aStart, aEnd, aCenter;
-                aStart.setX( static_cast<sal_Int32>( cos( nStartAngle * F_PI18000 ) * 100.0 ) );
-                aStart.setY( - static_cast<sal_Int32>( sin( nStartAngle * F_PI18000 ) * 100.0 ) );
-                aEnd.setX( static_cast<sal_Int32>( cos( nEndAngle * F_PI18000 ) * 100.0 ) );
-                aEnd.setY( - static_cast<sal_Int32>( sin( nEndAngle * F_PI18000 ) * 100.0 ) );
+                aStart.setX( static_cast<sal_Int32>( cos( basegfx::deg2rad<100>(nStartAngle) ) * 100.0 ) );
+                aStart.setY( - static_cast<sal_Int32>( sin( basegfx::deg2rad<100>(nStartAngle) ) * 100.0 ) );
+                aEnd.setX( static_cast<sal_Int32>( cos( basegfx::deg2rad<100>(nEndAngle) ) * 100.0 ) );
+                aEnd.setY( - static_cast<sal_Int32>( sin( basegfx::deg2rad<100>(nEndAngle) ) * 100.0 ) );
                 const tools::Rectangle& rRect = aRect100thmm;
                 aCenter.setX( rRect.Left() + ( rRect.GetWidth() / 2 ) );
                 aCenter.setY( rRect.Top() + ( rRect.GetHeight() / 2 ) );

@@ -29,19 +29,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 
-// The DrawingEngine's angles are specified in 1/100th degrees
-// We need to convert these angles to radians, in order to be able
-// to process them with trigonometric functions.
-// This is done, using the constant F_PI18000.
-//
-// Example usage:
-// nAngle ... is an angle in 1/100 Deg
-//
-// Which is converted, by this:
-//   double nSin=sin(nAngle*F_PI18000);
-//
-// To convert it back, we use division.
-
 // That maximum shear angle
 constexpr Degree100 SDRMAXSHEAR(8900);
 

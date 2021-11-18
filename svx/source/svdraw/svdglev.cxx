@@ -390,8 +390,8 @@ void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, Degree100 nAngle
     if (bCopy) aStr+=SvxResId(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SdrRepeatFunc::Rotate);
     if (bCopy) ImpCopyMarkedGluePoints();
-    double nSin = sin(nAngle.get() * F_PI18000);
-    double nCos = cos(nAngle.get() * F_PI18000);
+    double nSin = sin(toRadians(nAngle));
+    double nCos = cos(toRadians(nAngle));
     ImpTransformMarkedGluePoints(ImpRotate,&rRef,&nAngle,&nSin,&nCos);
     EndUndo();
     AdjustMarkHdl();

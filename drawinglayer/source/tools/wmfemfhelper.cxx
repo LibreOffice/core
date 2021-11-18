@@ -737,7 +737,7 @@ namespace wmfemfhelper
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetOfsX()) * 0.01,
             static_cast<double>(rGradient.GetOfsY()) * 0.01,
-            static_cast<double>(rGradient.GetAngle().get()) * F_PI1800,
+            toRadians(rGradient.GetAngle()),
             aStart,
             aEnd,
             rGradient.GetSteps());
@@ -772,7 +772,7 @@ namespace wmfemfhelper
         return drawinglayer::attribute::FillHatchAttribute(
             aHatchStyle,
             static_cast<double>(rHatch.GetDistance()),
-            static_cast<double>(rHatch.GetAngle().get()) * F_PI1800,
+            toRadians(rHatch.GetAngle()),
             rHatch.GetColor().getBColor(),
             3, // same default as VCL, a minimum of three discrete units (pixels) offset
             false);
@@ -1086,7 +1086,7 @@ namespace wmfemfhelper
         // add FontRotation (if used)
         if(rFont.GetOrientation())
         {
-            rTextTransform.rotate(-rFont.GetOrientation().get() * F_PI1800);
+            rTextTransform.rotate(-toRadians(rFont.GetOrientation()));
         }
     }
 
@@ -1249,7 +1249,7 @@ namespace wmfemfhelper
 
                 if(rFont.GetOrientation())
                 {
-                    aTextTransform.rotate(-rFont.GetOrientation().get() * F_PI1800);
+                    aTextTransform.rotate(-toRadians(rFont.GetOrientation()));
                 }
 
                 aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());

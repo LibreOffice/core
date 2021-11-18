@@ -2326,8 +2326,8 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             nAngle -= GetSdrObject()->GetRotateAngle();
             if (nAngle)
             {
-                double nSin = sin(nAngle.get() * F_PI18000);
-                double nCos = cos(nAngle.get() * F_PI18000);
+                double nSin = sin(toRadians(nAngle));
+                double nCos = cos(toRadians(nAngle));
                 GetSdrObject()->Rotate(aRef1,nAngle,nSin,nCos);
             }
             return true;
@@ -2346,7 +2346,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             if(nShear)
             {
                 Point aRef1(GetSdrObject()->GetSnapRect().Center());
-                double nTan = tan(nShear.get() * F_PI18000);
+                double nTan = tan(toRadians(nShear));
                 GetSdrObject()->Shear(aRef1,nShear,nTan,false);
                 return true;
             }

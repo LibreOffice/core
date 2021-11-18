@@ -322,20 +322,20 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     bool bRet=nTmpAngle!=9000_deg100 && nTmpAngle!=27000_deg100;
     tools::Long nRad=0;
     if (bRet) {
-        double cs = cos(nTmpAngle.get() * F_PI18000);
+        double cs = cos(toRadians(nTmpAngle));
         double nR=static_cast<double>(GetLen(Point(dx,dy)))/cs/2;
         nRad=std::abs(FRound(nR));
     }
     if (dAngle<18000_deg100) {
         nCircStAngle=NormAngle36000(nTangAngle-9000_deg100);
         nCircRelAngle=NormAngle36000(2_deg100*dAngle);
-        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle.get() + 9000) * F_PI18000)));
-        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle.get() + 9000) * F_PI18000))));
+        aCircCenter.AdjustX(FRound(nRad * cos(toRadians(nTangAngle + 9000_deg100))));
+        aCircCenter.AdjustY(-(FRound(nRad * sin(toRadians(nTangAngle + 9000_deg100)))));
     } else {
         nCircStAngle=NormAngle36000(nTangAngle+9000_deg100);
         nCircRelAngle=-NormAngle36000(36000_deg100-2_deg100*dAngle);
-        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle.get() - 9000) * F_PI18000)));
-        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle.get() - 9000) * F_PI18000))));
+        aCircCenter.AdjustX(FRound(nRad * cos(toRadians(nTangAngle - 9000_deg100))));
+        aCircCenter.AdjustY(-(FRound(nRad * sin(toRadians(nTangAngle - 9000_deg100)))));
     }
     bAngleSnap=pView!=nullptr && pView->IsAngleSnapEnabled();
     if (bAngleSnap) {
@@ -453,7 +453,7 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
         tools::Long nHypLen=aTmpPt.Y()-y;
         Degree100 nTangAngle=-GetAngle(rDir);
         // sin=g/h, g=h*sin
-        double a = nTangAngle.get() * F_PI18000;
+        double a = toRadians(nTangAngle);
         double sn=sin(a);
         double cs=cos(a);
         double nGKathLen=nHypLen*sn;
@@ -2305,7 +2305,7 @@ void SdrPathObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, doubl
 {
     // Thank JOE, the angles are defined mirrored to the mathematical meanings
     const basegfx::B2DHomMatrix aTrans(
-        basegfx::utils::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle.get() * F_PI18000));
+        basegfx::utils::createRotateAroundPoint(rRef.X(), rRef.Y(), -toRadians(nAngle)));
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
@@ -2819,14 +2819,14 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
             if(maGeo.nShearAngle || maGeo.nRotationAngle)
             {
                 // get rotate and shear in drawingLayer notation
-                fRotate = maGeo.nRotationAngle.get() * F_PI18000;
-                fShearX = maGeo.nShearAngle.get() * F_PI18000;
+                fRotate = toRadians(maGeo.nRotationAngle);
+                fShearX = toRadians(maGeo.nShearAngle);
 
                 // build mathematically correct (negative shear and rotate) object transform
                 // containing shear and rotate to extract unsheared, unrotated polygon
                 basegfx::B2DHomMatrix aObjectMatrix;
                 aObjectMatrix.shearX(-maGeo.mfTanShearAngle);
-                aObjectMatrix.rotate((36000 - maGeo.nRotationAngle.get()) * F_PI18000);
+                aObjectMatrix.rotate(toRadians(36000_deg100 - maGeo.nRotationAngle));
 
                 // create inverse from it and back-transform polygon
                 basegfx::B2DHomMatrix aInvObjectMatrix(aObjectMatrix);
@@ -2962,7 +2962,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         aTransform.shearX(tan(-atan(fShearX)));
-        maGeo.nShearAngle = Degree100(FRound(atan(fShearX) / F_PI18000));
+        maGeo.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
         maGeo.RecalcTan();
     }
 
@@ -2976,7 +2976,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        maGeo.nRotationAngle = NormAngle36000(Degree100(FRound(-fRotate / F_PI18000)));
+        maGeo.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
         maGeo.RecalcSinCos();
     }
 

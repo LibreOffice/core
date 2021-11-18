@@ -8,6 +8,9 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <basegfx/numeric/ftools.hxx>
 #include <sal/types.h>
 #include <o3tl/strong_int.hxx>
 #include <cstdlib>
@@ -35,11 +38,11 @@ constexpr Degree100 operator""_deg100(unsigned long long n) { return Degree100{ 
 /** conversion functions */
 
 inline Degree100 toDegree100(Degree10 x) { return Degree100(x.get() * 10); }
-inline double toRadians(Degree10 x) { return x.get() * (M_PI / 1800.0); }
+inline double toRadians(Degree10 x) { return basegfx::deg2rad<10>(x.get()); }
 inline double toDegrees(Degree10 x) { return x.get() / 10.0; }
 
 inline Degree10 toDegree10(Degree100 x) { return Degree10((x.get() + 5) / 10); }
-inline double toRadians(Degree100 x) { return x.get() * (M_PI / 18000.0); }
+inline double toRadians(Degree100 x) { return basegfx::deg2rad<100>(x.get()); }
 inline double toDegrees(Degree100 x) { return x.get() / 100.0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

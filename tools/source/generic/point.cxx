@@ -70,7 +70,7 @@ void Point::RotateAround( tools::Long& rX, tools::Long& rY,
     }
     else
     {
-        double nRealOrientation = nOrientation.get() * F_PI1800;
+        double nRealOrientation = toRadians(nOrientation);
         double nCos = cos( nRealOrientation );
         double nSin = sin( nRealOrientation );
 

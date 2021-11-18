@@ -110,16 +110,15 @@ void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, Degree100 
     // Use nRotation in [0;9000], for to have only one and not four cases.
     if (nRotation100 == 0_deg100)
         return;
-    sal_Int64 nRotation = nRotation100.get();
-    if (nRotation < 0)
-        nRotation = (36000 + nRotation) % 36000;
-    if (nRotation % 18000 == 0)
-        nRotation = 0; // prevents endless loop
-    while (nRotation > 9000)
-        nRotation = (18000 - (nRotation % 18000));
+    if (nRotation100 < 0_deg100)
+        nRotation100 = (36000_deg100 + nRotation100) % 36000_deg100;
+    if (nRotation100 % 18000_deg100 == 0_deg100)
+        nRotation100 = 0_deg100; // prevents endless loop
+    while (nRotation100 > 9000_deg100)
+        nRotation100 = 18000_deg100 - (nRotation100 % 18000_deg100);
 
-    double fVal = static_cast<double>(nRotation) * F_PI18000;
-    double fCos = (nRotation == 9000) ? 0.0 : cos(fVal);
+    double fVal = toRadians(nRotation100);
+    double fCos = (nRotation100 == 9000_deg100) ? 0.0 : cos(fVal);
     double fSin = sin(fVal);
 
     double fWidthHalf = static_cast<double>(rSize.Width()) / 2.0;
