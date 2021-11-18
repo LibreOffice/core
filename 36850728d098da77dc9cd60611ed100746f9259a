@@ -51,6 +51,24 @@
       "parentUuid": "5c862a4a_4a61be77",
       "revId": "36850728d098da77dc9cd60611ed100746f9259a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92dec3ae_e3f6b721",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-11-18T16:50:53Z",
+      "side": 1,
+      "message": "We could just make it an integer type.",
+      "parentUuid": "8db21ad9_ede0a7d9",
+      "revId": "36850728d098da77dc9cd60611ed100746f9259a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
