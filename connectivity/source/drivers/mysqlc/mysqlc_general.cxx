@@ -43,6 +43,7 @@ void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize)
             *mem = malloc(sizeof(sal_Int32));
             break;
         case MYSQL_TYPE_SHORT:
+        case MYSQL_TYPE_YEAR:
             *mem = malloc(sizeof(sal_Int16));
             break;
         case MYSQL_TYPE_BIT:
@@ -62,7 +63,6 @@ void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize)
         case MYSQL_TYPE_TIME:
         case MYSQL_TYPE_DATETIME:
         case MYSQL_TYPE_TIMESTAMP:
-        case MYSQL_TYPE_YEAR: // FIXME below
         case MYSQL_TYPE_NEWDATE:
         case MYSQL_TYPE_ENUM:
         case MYSQL_TYPE_SET:
@@ -131,6 +131,7 @@ sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
             return css::sdbc::DataType::TINYINT;
 
         case MYSQL_TYPE_SHORT:
+        case MYSQL_TYPE_YEAR:
             return css::sdbc::DataType::SMALLINT;
 
         case MYSQL_TYPE_INT24:
@@ -193,10 +194,8 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
     // TODO other types.
     if (sType.equalsIgnoreAsciiCase("tiny") || sType.equalsIgnoreAsciiCase("tinyint"))
         return css::sdbc::DataType::TINYINT;
-    if (sType.equalsIgnoreAsciiCase("smallint"))
+    if (sType.equalsIgnoreAsciiCase("smallint") || sType.equalsIgnoreAsciiCase("year"))
         return css::sdbc::DataType::SMALLINT;
-    if (sType.equalsIgnoreAsciiCase("longtext"))
-        return css::sdbc::DataType::LONGVARCHAR;
     if (sType.equalsIgnoreAsciiCase("int") || sType.equalsIgnoreAsciiCase("mediumint"))
         return css::sdbc::DataType::INTEGER;
     if (sType.equalsIgnoreAsciiCase("varchar") || sType.equalsIgnoreAsciiCase("set")
@@ -204,13 +203,18 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::VARCHAR;
     if (sType.equalsIgnoreAsciiCase("bigint"))
         return css::sdbc::DataType::BIGINT;
-    if (sType.equalsIgnoreAsciiCase("blob") || sType.equalsIgnoreAsciiCase("longblob"))
+    if (sType.equalsIgnoreAsciiCase("blob") || sType.equalsIgnoreAsciiCase("longblob")
+        || sType.equalsIgnoreAsciiCase("tinyblob") || sType.equalsIgnoreAsciiCase("mediumblob"))
         return css::sdbc::DataType::BLOB;
     if (sType.equalsIgnoreAsciiCase("varbinary"))
         return css::sdbc::DataType::VARBINARY;
     if (sType.equalsIgnoreAsciiCase("char"))
         return css::sdbc::DataType::CHAR;
+    if (sType.equalsIgnoreAsciiCase("tinytext"))
+        return css::sdbc::DataType::VARCHAR;
     if (sType.equalsIgnoreAsciiCase("text"))
+        return css::sdbc::DataType::LONGVARCHAR;
+    if (sType.equalsIgnoreAsciiCase("mediumtext") || sType.equalsIgnoreAsciiCase("longtext"))
         return css::sdbc::DataType::CLOB;
     if (sType.equalsIgnoreAsciiCase("binary"))
         return css::sdbc::DataType::BINARY;

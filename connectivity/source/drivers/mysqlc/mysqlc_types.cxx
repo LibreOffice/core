@@ -673,6 +673,27 @@ TypeInfoDef const mysqlc_types[] = {
     },
 
     // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
+
+    // ----------- MySQL-Type: YEAR SDBC-Type: INTEGER  ----------
+    {
+        "YEAR", // Typename
+        com::sun::star::sdbc::DataType::SMALLINT, // sdbc-type
+        10, // Precision
+        "", // Literal prefix
+        "", // Literal suffix
+        "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
+        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        false, // case sensitive
+        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        true, // unsignable
+        false, // fixed_prec_scale
+        true, // auto_increment
+        "YEAR", // local type name
+        0, // minimum scale
+        0 // maximum scale
+    },
+
+    // ----------- MySQL-Type: YEAR SDBC-Type: INTEGER  ----------
     { nullptr, 0, 0, nullptr, nullptr, nullptr, 0, false, 0, false, false, false, nullptr, 0, 0 }
 };
 
