@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9920161b_6f362a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-18T10:33:19Z",
+      "side": 1,
+      "message": "Actually I don\u0027t see the need to move those definitions to hxx; in fact, I don\u0027t see why they need to be in the class definition at all.\n\nThey would be best just standalone constants in the CXX, removed from the hxx completely, because they are not used elsewhere.",
+      "revId": "79c59507654feb7ff60f25a708f8894ffa0fcbba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
