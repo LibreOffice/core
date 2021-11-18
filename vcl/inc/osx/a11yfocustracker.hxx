@@ -23,8 +23,6 @@
 
 #include "keyboardfocuslistener.hxx"
 
-#include <rtl/instance.hxx>
-
 #include <tools/link.hxx>
 #include <vcl/vclevent.hxx>
 #include <set>
@@ -93,9 +91,7 @@ private:
     const rtl::Reference< DocumentFocusListener > m_xDocumentFocusListener;
 };
 
-struct TheAquaA11yFocusTracker:
-    rtl::Static<AquaA11yFocusTracker, TheAquaA11yFocusTracker>
-{};
+AquaA11yFocusTracker& TheAquaA11yFocusTracker();
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

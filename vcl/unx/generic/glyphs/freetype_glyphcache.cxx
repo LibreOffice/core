@@ -48,8 +48,6 @@
 #include FT_SYNTHESIS_H
 #include FT_TRUETYPE_TABLES_H
 
-#include <rtl/instance.hxx>
-
 #include <vector>
 
 // TODO: move file mapping stuff to OSL

@@ -27,25 +27,22 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
-
-#include <rtl/instance.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <window.h>
 
 namespace
 {
-    struct ImplBlackWall
-        : public rtl::StaticWithInit<Wallpaper, ImplBlackWall> {
-        Wallpaper operator () () {
-            return Wallpaper(COL_BLACK);
-        }
-    };
-    struct ImplWhiteWall
-        : public rtl::StaticWithInit<Wallpaper, ImplWhiteWall> {
-        Wallpaper operator () () {
-            return Wallpaper(COL_LIGHTGRAY);
-        }
-    };
+    Wallpaper& ImplBlackWall()
+    {
+        static vcl::DeleteOnDeinit< Wallpaper > SINGLETON(COL_BLACK);
+        return *SINGLETON.get();
+    }
+    Wallpaper& ImplWhiteWall()
+    {
+        static vcl::DeleteOnDeinit< Wallpaper > SINGLETON(COL_LIGHTGRAY);
+        return *SINGLETON.get();
+    }
 }
 
 // Should only be called from an ImplInit method for initialization or
@@ -81,9 +78,9 @@ void Splitter::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
     ImplInitHorVer(nWinStyle & WB_HSCROLL);
 
     if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
-        SetBackground( ImplWhiteWall::get() );
+        SetBackground( ImplWhiteWall() );
     else
-        SetBackground( ImplBlackWall::get() );
+        SetBackground( ImplBlackWall() );
 
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
     pTList->AddWindow( this );
@@ -662,9 +659,9 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
     if( oldFaceColor.IsDark() != newFaceColor.IsDark() )
     {
         if( newFaceColor.IsDark() )
-            SetBackground( ImplWhiteWall::get() );
+            SetBackground( ImplWhiteWall() );
         else
-            SetBackground( ImplBlackWall::get() );
+            SetBackground( ImplBlackWall() );
     }
 }
 
