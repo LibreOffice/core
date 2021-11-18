@@ -196,6 +196,9 @@ void SdtHelper::createDateContentControl()
     }
 
     setControlType(SdtControlType::unknown);
+
+    // Store all unused sdt parameters from grabbag
+    xNameCont->insertByName("SdtParams", uno::makeAny(getInteropGrabBagAndClear()));
 }
 
 void SdtHelper::createControlShape(awt::Size aSize,

@@ -663,12 +663,36 @@ void SdtBlockHelper::WriteSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer, b
         }
     }
 
+    WriteExtraParams(pSerializer);
+
+    pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+    // sdt contents start tag
+    pSerializer->startElementNS(XML_w, XML_sdtContent);
+
+    // prepend the tags since the sdt start mark before the paragraph
+    pSerializer->mergeTopMarks(Tag_WriteSdtBlock, sax_fastparser::MergeMarks::PREPEND);
+
+    // write the ending tags after the paragraph
+    m_bStartedSdt = true;
+
+    // clear sdt status
+    m_nSdtPrToken = 0;
+    m_pTokenChildren.clear();
+    m_pDataBindingAttrs.clear();
+    m_pTextAttrs.clear();
+    m_aAlias.clear();
+    m_bHasId = false;
+}
+
+void SdtBlockHelper::WriteExtraParams(::sax_fastparser::FSHelperPtr& pSerializer)
+{
     if (m_nSdtPrToken == FSNS(XML_w, XML_id) || m_bHasId)
         //Word won't open a document with an empty id tag, we fill it with a random number
         pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
             OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())));
 
-    if (m_pDataBindingAttrs.is() && !bParagraphHasDrawing)
+    if (m_pDataBindingAttrs.is())
     {
         rtl::Reference<FastAttributeList> xAttrList = std::move(m_pDataBindingAttrs);
         pSerializer->singleElementNS(XML_w, XML_dataBinding, xAttrList);
@@ -693,25 +717,6 @@ void SdtBlockHelper::WriteSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer, b
 
     if (!m_aAlias.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val), m_aAlias);
-
-    pSerializer->endElementNS(XML_w, XML_sdtPr);
-
-    // sdt contents start tag
-    pSerializer->startElementNS(XML_w, XML_sdtContent);
-
-    // prepend the tags since the sdt start mark before the paragraph
-    pSerializer->mergeTopMarks(Tag_WriteSdtBlock, sax_fastparser::MergeMarks::PREPEND);
-
-    // write the ending tags after the paragraph
-    m_bStartedSdt = true;
-
-    // clear sdt status
-    m_nSdtPrToken = 0;
-    m_pTokenChildren.clear();
-    m_pDataBindingAttrs.clear();
-    m_pTextAttrs.clear();
-    m_aAlias.clear();
-    m_bHasId = false;
 }
 
 void SdtBlockHelper::EndSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer)
@@ -2152,7 +2157,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
 }
 
-void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang)
+void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
 {
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
@@ -2172,8 +2177,16 @@ void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OU
                                    FSNS(XML_w, XML_val), "dateTime");
     m_pSerializer->singleElementNS(XML_w, XML_calendar,
                                    FSNS(XML_w, XML_val), "gregorian");
-
     m_pSerializer->endElementNS(XML_w, XML_date);
+
+    if (aGrabBagSdt.hasElements())
+    {
+        // There are some extra sdt parameters came from grab bag
+        SdtBlockHelper aSdtBlock;
+        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt);
+        aSdtBlock.WriteExtraParams(m_pSerializer);
+    }
+
     m_pSerializer->endElementNS(XML_w, XML_sdtPr);
 
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
@@ -2276,7 +2289,10 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         OUString sLang;
         params.extractParam( ODF_FORMDATE_DATEFORMAT_LANGUAGE, sLang );
 
-        WriteFormDateStart( sFullDate, sDateFormat, sLang );
+        uno::Sequence<beans::PropertyValue> aSdtParams;
+        params.extractParam("SdtParams", aSdtParams);
+
+        WriteFormDateStart( sFullDate, sDateFormat, sLang, aSdtParams);
     }
     else if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
     {

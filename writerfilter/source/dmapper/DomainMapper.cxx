@@ -1132,12 +1132,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_DataBinding_prefixMappings:
+            m_pImpl->m_pSdtHelper->setDataBindingPrefixMapping(sStringValue);
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_prefixMappings", sStringValue);
             break;
         case NS_ooxml::LN_CT_DataBinding_xpath:
+            m_pImpl->m_pSdtHelper->setDataBindingXPath(sStringValue);
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_xpath", sStringValue);
             break;
         case NS_ooxml::LN_CT_DataBinding_storeItemID:
+            m_pImpl->m_pSdtHelper->setDataBindingStoreItemID(sStringValue);
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_storeItemID", sStringValue);
             break;
         case NS_ooxml::LN_CT_SdtPlaceholder_docPart_val:
@@ -3539,11 +3542,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     }
     else if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::datePicker)
     {
-        if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
-        {
-            m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-        }
-        else if (IsInHeaderFooter() && m_pImpl->IsDiscardHeaderFooter())
+        if (IsInHeaderFooter() && m_pImpl->IsDiscardHeaderFooter())
         {
             m_pImpl->m_pSdtHelper->getDateFormat().truncate();
             m_pImpl->m_pSdtHelper->getLocale().truncate();

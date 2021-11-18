@@ -718,6 +718,31 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142464_ampm, "tdf142464_ampm.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST( testSdtDatePicker, "test_sdt_datepicker.docx" )
+{
+    // Check that roundtrip for date picker field does not lose essential data
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return; // initial import, no futher checks
+
+    // Placeholder is here
+    OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:placeholder/w:docPart", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("DefaultPlaceholder_-1854013437"), sDocPart);
+
+    // Ensure that we have data binding stuff
+    OUString sDBprefix = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "prefixMappings");
+    CPPUNIT_ASSERT_EQUAL(OUString("xmlns:ns0='http://schemas.microsoft.com/vsto/samples' "), sDBprefix);
+
+    OUString sDBxpath = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "xpath");
+    CPPUNIT_ASSERT_EQUAL(OUString("/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]"), sDBxpath);
+
+    OUString sDBstoreid = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "storeItemID");
+    CPPUNIT_ASSERT_EQUAL(OUString("{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"), sDBstoreid);
+
+    OUString sColor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w15:color", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("008000"), sColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
