@@ -171,6 +171,7 @@ class DocumentSettingManager final :
     bool mbFrameAutowidthWithMorePara; //tdf#124423
     /// Gutter position: false means left (not a compatibility setting).
     bool mbGutterAtTop;
+    bool mbFootnoteInColumnToPageEnd;
 
 public:
 

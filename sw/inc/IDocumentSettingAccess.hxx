@@ -114,6 +114,9 @@ enum class DocumentSettingId
     HEADER_SPACING_BELOW_LAST_PARA,
     FRAME_AUTOWIDTH_WITH_MORE_PARA,
     GUTTER_AT_TOP,
+    // footnoteContainer default position is the page end instead of the column end
+    // only if "evenly distributed" is set, and "collected at the end" is not set
+    FOOTNOTE_IN_COLUMN_TO_PAGEEND,
 };
 
 /** Provides access to settings of a document
