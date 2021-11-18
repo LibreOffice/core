@@ -1245,6 +1245,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     Size aSize(sdrObject->GetSnapRect().GetWidth(), sdrObject->GetSnapRect().GetHeight());
     startDMLAnchorInline(&rFrameFormat, aSize);
 
+    m_pImpl->getDrawingML()->SetFS(m_pImpl->getSerializer());
     m_pImpl->getDrawingML()->WriteDiagram(xShape, nDiagramId);
 
     endDMLAnchorInline(&rFrameFormat);
