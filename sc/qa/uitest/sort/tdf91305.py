@@ -17,28 +17,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf91305(UITestCase):
 
-    def test_tdf91305_sort_text_cells_rows(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-            #In column A enter texts
-            enter_text_to_cell(gridwin, "A1", "cc")
-            enter_text_to_cell(gridwin, "A2", "ff")
-            enter_text_to_cell(gridwin, "A3", "aa")
-
-            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
-            #Press toolbarbutton for ascending sorting .uno:SortAsc
-            self.xUITest.executeCommand(".uno:SortAscending")
-            #verify
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "aa")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "cc")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "ff")
-            #Press toolbarbutton for descending sorting .uno:SortDescending
-            self.xUITest.executeCommand(".uno:SortDescending")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "ff")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "cc")
-            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "aa")
-
     def test_tdf91305_sort_text_cells_columns(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
