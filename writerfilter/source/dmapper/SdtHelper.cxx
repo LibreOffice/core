@@ -67,7 +67,7 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
 
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl)
     : m_rDM_Impl(rDM_Impl)
-    , m_bInsideDropDownControl(false)
+    , m_aControlType(SdtControlType::unknown)
     , m_bHasElements(false)
     , m_bOutsideAParagraph(false)
 {
@@ -77,7 +77,7 @@ SdtHelper::~SdtHelper() = default;
 
 void SdtHelper::createDropDownControl()
 {
-    assert(m_bInsideDropDownControl);
+    assert(getControlType() == SdtControlType::dropDown);
 
     const bool bDropDown
         = officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::get();
@@ -132,12 +132,7 @@ void SdtHelper::createDropDownControl()
 
     // clean up
     m_aDropDownItems.clear();
-    m_bInsideDropDownControl = false;
-}
-
-bool SdtHelper::validateDateFormat()
-{
-    return !m_sDateFormat.toString().isEmpty() && !m_sLocale.toString().isEmpty();
+    setControlType(SdtControlType::unknown);
 }
 
 void SdtHelper::createDateContentControl()
@@ -199,6 +194,8 @@ void SdtHelper::createDateContentControl()
             sFullDate = sFullDate.copy(0, nTimeSep);
         xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sFullDate));
     }
+
+    setControlType(SdtControlType::unknown);
 }
 
 void SdtHelper::createControlShape(awt::Size aSize,
