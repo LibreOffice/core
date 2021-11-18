@@ -34,23 +34,6 @@ using namespace ::com::sun::star::i18n;
 
 namespace i18npool {
 
-// Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
-const double Calendar_hijri::SynPeriod      = 29.53058868;
-const double Calendar_hijri::SynMonth       = 365.25/29.53058868;   // Solar days in a year/SynPeriod
-
-// Julian day on Jan 1, 1900
-const double Calendar_hijri::jd1900     = 2415020.75933;
-
-// Reference point: March 26, 2001 == 1422 Hijri == 1252 Synodial month from 1900
-const sal_Int32 Calendar_hijri::SynRef      = 1252;
-const sal_Int32 Calendar_hijri::GregRef     = 1422;
-
-const double Calendar_hijri::EveningPeriod  = 6.0;
-
-const sal_Int32 Calendar_hijri::LeapYear[] = {
-    2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29
-};
-
 Calendar_hijri::Calendar_hijri()
 {
     cCalendar = "com.sun.star.i18n.Calendar_hijri";
