@@ -48,33 +48,33 @@
 #define RID_SVXBMP_SHADOW_TOP_LEFT      "svx/res/sh05.png"
 #define RID_SVXBMP_SHADOW_TOP_LEFT_32   "svx/res/shadow_top_left_32.png"
 
-#define RID_SVXBMP_BOTTOMLOCK           "svx/res/lo01.png"
-#define RID_SVXBMP_TOPLOCK              "svx/res/lo02.png"
-#define RID_SVXBMP_CELLLOCK             "svx/res/lo03.png"
+inline constexpr OUStringLiteral RID_SVXBMP_BOTTOMLOCK = u"svx/res/lo01.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TOPLOCK = u"svx/res/lo02.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELLLOCK = u"svx/res/lo03.png";
 
-#define RID_SVXBMP_LOCK                 "res/lock.png"
+inline constexpr OUStringLiteral RID_SVXBMP_LOCK = u"res/lock.png";
 
-#define RID_SVXBMP_THEME_NORMAL_BIG     "svx/res/galnorl.png"
-#define RID_SVXBMP_THEME_READONLY_BIG   "svx/res/galrdol.png"
-#define RID_SVXBMP_THEME_DEFAULT_BIG    "svx/res/galdefl.png"
+inline constexpr OUStringLiteral RID_SVXBMP_THEME_NORMAL_BIG = u"svx/res/galnorl.png";
+inline constexpr OUStringLiteral RID_SVXBMP_THEME_READONLY_BIG = u"svx/res/galrdol.png";
+inline constexpr OUStringLiteral RID_SVXBMP_THEME_DEFAULT_BIG = u"svx/res/galdefl.png";
 
-#define RID_CUIBMP_HARDDISK             "res/harddisk_16.png"
-#define RID_CUIBMP_LIB                  "res/im30820.png"
-#define RID_CUIBMP_MACRO                "res/im30821.png"
-#define RID_CUIBMP_DOC                  "res/im30826.png"
+inline constexpr OUStringLiteral RID_CUIBMP_HARDDISK = u"res/harddisk_16.png";
+inline constexpr OUStringLiteral RID_CUIBMP_LIB = u"res/im30820.png";
+inline constexpr OUStringLiteral RID_CUIBMP_MACRO = u"res/im30821.png";
+inline constexpr OUStringLiteral RID_CUIBMP_DOC = u"res/im30826.png";
 #define RID_CUIBMP_COLLAPSED            "res/plus.png"
 #define RID_CUIBMP_EXPANDED             "res/minus.png"
 
-#define RID_SVXBMP_SCRIPT               "res/script.png"
+inline constexpr OUStringLiteral RID_SVXBMP_SCRIPT = u"res/script.png";
 
 #define RID_SVXBMP_COLLAPSEDNODE        "res/sx18002.png"
 #define RID_SVXBMP_EXPANDEDNODE         "res/sx18003.png"
 
-#define RID_SVXBMP_LEGTYP1              "svx/res/legtyp1.png"
-#define RID_SVXBMP_LEGTYP2              "svx/res/legtyp2.png"
-#define RID_SVXBMP_LEGTYP3              "svx/res/legtyp3.png"
+inline constexpr OUStringLiteral RID_SVXBMP_LEGTYP1 = u"svx/res/legtyp1.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LEGTYP2 = u"svx/res/legtyp2.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LEGTYP3 = u"svx/res/legtyp3.png";
 
-#define RID_SVXBMP_COMPONENT            "res/component_16.png"
-#define RID_SVXBMP_MACRO                "svx/res/id018.png"
+inline constexpr OUStringLiteral RID_SVXBMP_COMPONENT = u"res/component_16.png";
+inline constexpr OUStringLiteral RID_SVXBMP_MACRO = u"svx/res/id018.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
