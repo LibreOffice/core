@@ -95,7 +95,7 @@ namespace
 
     double toRadian(Degree10 nDegree10th)
     {
-        return (3600_deg10 - nDegree10th).get() * M_PI / 1800.0;
+        return toRadians(3600_deg10 - nDegree10th);
     }
 
     cairo_t* syncCairoContext(cairo_t* cr)

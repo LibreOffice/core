@@ -1585,17 +1585,17 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double s
     maGeo.nRotationAngle = 0_deg100;                                             // resetting aGeo data
     maGeo.RecalcSinCos();
 
-    tools::Long nW = static_cast<tools::Long>( fObjectRotation * 100 );                      // applying our object rotation
+    Degree100 nW(static_cast<sal_Int32>( fObjectRotation * 100 ));                      // applying our object rotation
     if ( bMirroredX )
-        nW = 36000 - nW;
+        nW = 36000_deg100 - nW;
     if ( bMirroredY )
-        nW = 18000 - nW;
-    nW = nW % 36000;
-    if ( nW < 0 )
-        nW = 36000 + nW;
-    SdrTextObj::NbcRotate( maRect.TopLeft(), Degree100(nW),                     // applying text rotation
-                            sin( nW * F_PI18000 ),
-                            cos( nW * F_PI18000 ) );
+        nW = 18000_deg100 - nW;
+    nW = nW % 36000_deg100;
+    if ( nW < 0_deg100 )
+        nW = 36000_deg100 + nW;
+    SdrTextObj::NbcRotate( maRect.TopLeft(), nW,                     // applying text rotation
+                            sin( toRadians(nW) ),
+                            cos( toRadians(nW) ) );
 
     int nSwap = 0;
     if ( bMirroredX )
@@ -3034,7 +3034,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i123181# The fix for #121932# here was wrong, the trunk version does not correct the
         // mirrored shear values, neither at the object level, nor on the API or XML level. Taking
         // back the mirroring of the shear angle
-        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg(atan(fShearX)) * 100.0));
+        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
@@ -3047,7 +3047,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-fRotate / F_PI18000)));
+        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }

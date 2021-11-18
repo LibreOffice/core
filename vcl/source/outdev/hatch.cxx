@@ -236,7 +236,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     }
     else if( nAngle >= Degree10(-450) && nAngle <= 450_deg10 )
     {
-        const double    fAngle = F_PI1800 * std::abs( nAngle.get() );
+        const double    fAngle = std::abs( toRadians(nAngle) );
         const double    fTan = tan( fAngle );
         const tools::Long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
         tools::Long            nPY;
@@ -269,7 +269,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     }
     else
     {
-        const double fAngle = F_PI1800 * std::abs( nAngle.get() );
+        const double fAngle = std::abs( toRadians(nAngle) );
         const double fTan = tan( fAngle );
         const tools::Long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
         tools::Long         nPX;

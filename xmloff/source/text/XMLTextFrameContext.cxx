@@ -1030,7 +1030,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         // CAUTION-II: due to tdf#115782 it is better for current ODF to indeed use it
                         // with the wrong orientation as in all other cases - ARGH! We will need to
                         // correct this in future ODF ASAP! For now, mirror the rotation here AGAIN
-                        const double fRotate(aDecomposedTransform.getRotate() * (-1800.0/M_PI));
+                        const double fRotate(-basegfx::rad2deg<10>(aDecomposedTransform.getRotate()));
                         nRotation = static_cast< sal_Int16 >(basegfx::fround(fRotate) % 3600);
 
                         // tdf#115529 may be negative, with the above modulo maximal -3599, so

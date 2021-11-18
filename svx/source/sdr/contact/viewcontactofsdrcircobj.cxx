@@ -57,7 +57,7 @@ namespace sdr::contact
                 basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     aObjectRange.getWidth(), aObjectRange.getHeight(),
                     -rGeoStat.mfTanShearAngle,
-                    rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle.get()) * F_PI18000 : 0.0,
+                    rGeoStat.nRotationAngle ? toRadians(36000_deg100 - rGeoStat.nRotationAngle) : 0.0,
                     aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // create primitive data
@@ -77,10 +77,10 @@ namespace sdr::contact
             }
             else
             {
-                const sal_Int32 nNewStart(rItemSet.Get(SDRATTR_CIRCSTARTANGLE).GetValue());
-                const sal_Int32 nNewEnd(rItemSet.Get(SDRATTR_CIRCENDANGLE).GetValue());
-                const double fStart(((36000 - nNewEnd) % 36000) * F_PI18000);
-                const double fEnd(((36000 - nNewStart) % 36000) * F_PI18000);
+                const auto nNewStart(rItemSet.Get(SDRATTR_CIRCSTARTANGLE).GetValue());
+                const auto nNewEnd(rItemSet.Get(SDRATTR_CIRCENDANGLE).GetValue());
+                const double fStart(toRadians((36000_deg100 - nNewEnd) % 36000_deg100));
+                const double fEnd(toRadians((36000_deg100 - nNewStart) % 36000_deg100));
                 const bool bCloseSegment(OBJ_CARC != nIdentifier);
                 const bool bCloseUsingCenter(OBJ_SECT == nIdentifier);
 

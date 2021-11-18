@@ -119,7 +119,7 @@ BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
         const drawinglayer::attribute::FillHatchAttribute aFillHatch(
             aHatchStyle,
             static_cast<double>(rHatch.GetDistance()) * fScaleValue,
-            static_cast<double>(rHatch.GetAngle().get()) * F_PI1800,
+            toRadians(rHatch.GetAngle()),
             rHatch.GetColor().getBColor(),
             3, // same default as VCL, a minimum of three discrete units (pixels) offset
             false);

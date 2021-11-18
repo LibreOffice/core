@@ -56,7 +56,7 @@ static Point GetAnglePnt(const tools::Rectangle& rR, Degree100 nAngle)
     tools::Long nWdt=rR.Right()-rR.Left();
     tools::Long nHgt=rR.Bottom()-rR.Top();
     tools::Long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
-    double a = nAngle.get() * F_PI18000;
+    double a = toRadians(nAngle);
     Point aRetval(FRound(cos(a)*nMaxRad),-FRound(sin(a)*nMaxRad));
     if (nWdt==0) aRetval.setX(0 );
     if (nHgt==0) aRetval.setY(0 );
@@ -261,9 +261,8 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, 
     else
     {
         // mirror start, end for geometry creation since model coordinate system is mirrored in Y
-        // #i111715# increase numerical correctness by first dividing and not using F_PI1800
-        const double fStart((((36000 - nEnd.get()) % 36000) / 18000.0) * M_PI);
-        const double fEnd((((36000 - nStart.get()) % 36000) / 18000.0) * M_PI);
+        const double fStart(toRadians((36000_deg100 - nEnd) % 36000_deg100));
+        const double fEnd(toRadians((36000_deg100 - nStart) % 36000_deg100));
 
         // create circle segment. This is not closed by default
         aCircPolygon = basegfx::utils::createPolygonFromEllipseSegment(
@@ -301,7 +300,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, 
         // shear, rotate and back to top left (if needed)
         aMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
             -maGeo.mfTanShearAngle,
-            maGeo.nRotationAngle ? (36000_deg100 - maGeo.nRotationAngle).get() * F_PI18000 : 0.0,
+            maGeo.nRotationAngle ? toRadians(36000_deg100 - maGeo.nRotationAngle) : 0.0,
             aTopLeft) * aMatrix;
 
         // apply transformation
@@ -885,15 +884,14 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         tools::Long nWdt=maRect.GetWidth()-1;
         tools::Long nHgt=maRect.GetHeight()-1;
         tools::Long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
-        double a;
         // starting point
-        a = nStartAngle.get() * F_PI18000;
+        double a = toRadians(nStartAngle);
         aTmpPt1=Point(FRound(cos(a)*nMaxRad),-FRound(sin(a)*nMaxRad));
         if (nWdt==0) aTmpPt1.setX(0 );
         if (nHgt==0) aTmpPt1.setY(0 );
         aTmpPt1+=aCenter;
         // finishing point
-        a = nEndAngle.get() * F_PI18000;
+        a = toRadians(nEndAngle);
         aTmpPt2=Point(FRound(cos(a)*nMaxRad),-FRound(sin(a)*nMaxRad));
         if (nWdt==0) aTmpPt2.setX(0 );
         if (nHgt==0) aTmpPt2.setY(0 );

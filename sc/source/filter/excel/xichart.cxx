@@ -1204,7 +1204,7 @@ void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
         css::awt::Size aTitleSize = xTitleShape->getSize();
         // rotated titles need special handling...
         Degree100 nScRot = XclTools::GetScRotation( GetRotation(), 0_deg100 );
-        double fRad = nScRot.get() * F_PI18000;
+        double fRad = toRadians(nScRot);
         double fSin = fabs( sin( fRad ) );
         // calculate the title position from the values in the CHTEXT record
         css::awt::Point aTitlePos(

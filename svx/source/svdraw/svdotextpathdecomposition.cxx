@@ -379,7 +379,7 @@ namespace
                             else // XFormTextShadow::Slant
                             {
                                 double fScaleValue(maSdrFormTextAttribute.getFormTextShdwYVal() / 100.0);
-                                double fShearValue(-maSdrFormTextAttribute.getFormTextShdwXVal() * F_PI1800);
+                                double fShearValue(-basegfx::deg2rad<10>(maSdrFormTextAttribute.getFormTextShdwXVal()));
 
                                 aNewShadowTransform.scale(1.0, fScaleValue);
                                 aNewShadowTransform.shearX(sin(fShearValue));

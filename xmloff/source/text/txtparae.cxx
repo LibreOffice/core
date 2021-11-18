@@ -3080,7 +3080,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         // in XMLTextFrameContext_Impl::XMLTextFrameContext_Impl and #i78696#
         // CAUTION-II: due to tdf#115782 it is better for current ODF to indeed write it with the wrong
         // orientation as in all other cases - ARGH! We will need to correct this in future ODF ASAP!
-        const double fRotate(static_cast< double >(nRotation) * (M_PI/1800.0));
+        const double fRotate(basegfx::deg2rad<10>(nRotation));
 
         // transform to rotation center which is the object's center
         aSdXMLImExTransform2D.AddTranslate(-aCenter);
