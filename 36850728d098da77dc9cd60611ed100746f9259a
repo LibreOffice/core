@@ -16,6 +16,23 @@
       "message": "I let aside YEAR (see https://mariadb.com/kb/en/year-data-type/) because it seems there\u0027s no LO Datatype which could correspond in https://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/sdbc/DataType.idl?r\u003d2b383d19",
       "revId": "36850728d098da77dc9cd60611ed100746f9259a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c862a4a_4a61be77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-11-18T12:53:29Z",
+      "side": 1,
+      "message": "It doesn\u0027t make sense that mysql text is sdbc CLOB, but mysql longtext is sdbc LONGVARCHAR; my understanding is that LONGVARCHAR is meant to be smaller that CLOB :-|\n\nAnyway:\n * TINYTEXT (max 255 chars) should probably be VARCHAR\n * TEXT (max 65,535 chars) should probably be.... LONGVARCHAR\n * MEDIUMTEXT (max 16,777,215)... CLOB, I think\n * LONGTEXT (max 4,294,967,295 bytes: CLOB for sure",
+      "revId": "36850728d098da77dc9cd60611ed100746f9259a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
