@@ -976,8 +976,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     i++;
                 }
 
-                tools::Rectangle aRect = rControl.GetSubMenuParentRect();
-                sal_Int32 nSelected = xColorMenu->popup_at_rect(pPopupParent, aRect, weld::Placement::End).toInt32();
+                sal_Int32 nSelected = rControl.ExecuteMenu(*xColorMenu);
                 xColorMenu.reset();
                 rControl.terminateAllPopupMenus();
 

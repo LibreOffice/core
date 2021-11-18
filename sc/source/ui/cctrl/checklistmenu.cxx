@@ -290,6 +290,11 @@ tools::Rectangle ScCheckListMenuControl::GetSubMenuParentRect()
     return mxMenu->get_row_area(*mxScratchIter);
 }
 
+sal_Int32 ScCheckListMenuControl::ExecuteMenu(weld::Menu& rMenu)
+{
+    return rMenu.popup_at_rect(mxMenu.get(), GetSubMenuParentRect(), weld::Placement::End).toInt32();
+}
+
 void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
 {
     ScCheckListMenuWindow* pSubMenu = maOpenTimer.mpSubMenu;

@@ -182,6 +182,7 @@ public:
      * argument for Executing a popup
     */
     tools::Rectangle GetSubMenuParentRect();
+    sal_Int32 ExecuteMenu(weld::Menu& rMenu);
 private:
 
     std::vector<MenuItemData>         maMenuItems;
