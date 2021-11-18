@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <rtl/instance.hxx>
 
 
 using namespace utl;
@@ -54,8 +53,11 @@ namespace svtools
 static sal_Int32            nColorRefCount_Impl = 0;
 namespace
 {
-    struct ColorMutex_Impl
-        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
+    ::osl::Mutex& ColorMutex_Impl()
+    {
+        static ::osl::Mutex SINGLETON;
+        return SINGLETON;
+    }
 }
 
 ColorConfig_Impl*    ColorConfig::m_pImpl = nullptr;
@@ -376,7 +378,7 @@ ColorConfig::ColorConfig()
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
+    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
     if ( !m_pImpl )
     {
         m_pImpl = new ColorConfig_Impl;
@@ -390,7 +392,7 @@ ColorConfig::~ColorConfig()
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
+    ::osl::MutexGuard aGuard( ColorMutex_Impl() );
     m_pImpl->RemoveListener(this);
     if(!--nColorRefCount_Impl)
     {

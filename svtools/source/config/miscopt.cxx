@@ -26,7 +26,6 @@
 #include <tools/link.hxx>
 #include <osl/diagnose.h>
 
-#include <rtl/instance.hxx>
 #include "itemholder2.hxx"
 
 #include <svtools/imgdef.hxx>
@@ -429,15 +428,10 @@ void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
     m_pImpl->SetIconTheme(iconTheme, SvtMiscOptions_Impl::SetModifiedFlag::SET);
 }
 
-namespace
-{
-    class theSvtMiscOptionsMutex :
-        public rtl::Static< osl::Mutex, theSvtMiscOptionsMutex > {};
-}
-
 Mutex & SvtMiscOptions::GetInitMutex()
 {
-    return theSvtMiscOptionsMutex::get();
+    static osl::Mutex theSvtMiscOptionsMutex;
+    return theSvtMiscOptionsMutex;
 }
 
 void SvtMiscOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )

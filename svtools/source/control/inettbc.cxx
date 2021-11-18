@@ -39,7 +39,6 @@
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <rtl/instance.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/debug.hxx>
 #include <osl/file.hxx>
@@ -114,8 +113,11 @@ public:
 
 namespace
 {
-    struct theSvtMatchContextMutex
-        : public rtl::Static< ::osl::Mutex, theSvtMatchContextMutex > {};
+    ::osl::Mutex& theSvtMatchContextMutex()
+    {
+        static ::osl::Mutex SINGLETON;
+        return SINGLETON;
+    }
 }
 
 SvtMatchContext_Impl::SvtMatchContext_Impl(SvtURLBox* pBoxP, const OUString& rText)
@@ -400,7 +402,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 
 void SvtMatchContext_Impl::doExecute()
 {
-    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex() );
     {
         // have we been stopped while we were waiting for the mutex?
         std::scoped_lock g(mutex_);
@@ -987,7 +989,7 @@ void SvtURLBox::SetNoURLSelection( bool bSet )
 OUString SvtURLBox::GetURL()
 {
     // wait for end of autocompletion
-    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex() );
 
     OUString aText(m_xWidget->get_active_text());
     if (MatchesPlaceHolder(aText))
@@ -1062,7 +1064,7 @@ OUString SvtURLBox::GetURL()
 
 void SvtURLBox::SetBaseURL( const OUString& rURL )
 {
-    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex() );
 
     // Reset match lists
     pImpl->aCompletions.clear();
