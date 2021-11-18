@@ -201,6 +201,15 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         SAL_WARN("vcl.skia", "drawNativeControl(): Failed to allocate bitmap context");
         return false;
     }
+    // Setup context state for drawing (performDrawNativeControl() e.g. fills background in some cases).
+    CGContextSetFillColorSpace(context, GetSalData()->mxRGBSpace);
+    CGContextSetStrokeColorSpace(context, GetSalData()->mxRGBSpace);
+    RGBAColor lineColor = RGBAColor(mLineColor);
+    CGContextSetRGBStrokeColor(context, lineColor.GetRed(), lineColor.GetGreen(),
+                               lineColor.GetBlue(), lineColor.GetAlpha());
+    RGBAColor fillColor = RGBAColor(mFillColor);
+    CGContextSetRGBFillColor(context, fillColor.GetRed(), fillColor.GetGreen(), fillColor.GetBlue(),
+                             fillColor.GetAlpha());
     // Adjust for our drawn-to coordinates in the bitmap.
     tools::Rectangle movedRegion(Point(0, 0), rControlRegion.GetSize());
     // Flip drawing upside down.
