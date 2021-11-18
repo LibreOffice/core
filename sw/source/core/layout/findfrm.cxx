@@ -39,6 +39,7 @@
 #include <ndtxt.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 
 /// Searches the first ContentFrame in BodyText below the page.
@@ -457,7 +458,10 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
     //         similar case can be reached with a page break + FootnoteAtEnd setting
     SwSectionFrame* pSectframe = pRet->FindSctFrame();
     bool bMoveToPageFrame = false;
-    if (pSectframe)
+    // tdf54465: compatibility flag to make old odt files keep these full page sections.
+    if (pSectframe
+        && pSectframe->GetFormat()->getIDocumentSettingAccess().get(
+            DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND))
     {
         SwSection* pSect = pSectframe->GetSection();
         if (pSect) {

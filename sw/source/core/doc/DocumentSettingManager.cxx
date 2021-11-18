@@ -102,7 +102,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbProtectFields(false),
     mbHeaderSpacingBelowLastPara(false),
     mbFrameAutowidthWithMorePara(false),
-    mbGutterAtTop(false)
+    mbGutterAtTop(false),
+    mbFootnoteInColumnToPageEnd(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -238,6 +239,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA: return mbFrameAutowidthWithMorePara;
         case DocumentSettingId::GUTTER_AT_TOP:
             return mbGutterAtTop;
+        case DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND: return mbFootnoteInColumnToPageEnd;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -503,6 +505,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::GUTTER_AT_TOP:
             mbGutterAtTop = value;
             break;
+        case DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND:
+            mbFootnoteInColumnToPageEnd = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -679,6 +684,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbProtectFields: this is false by default everywhere
     mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
     mbFrameAutowidthWithMorePara = rSource.mbFrameAutowidthWithMorePara;
+    mbFootnoteInColumnToPageEnd = rSource.mbFootnoteInColumnToPageEnd;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -990,12 +996,17 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbFrameAutowidthWithMorePara"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
-        BAD_CAST(OString::boolean(mbFrameAutowidthWithMorePara).getStr()));
+                                BAD_CAST(OString::boolean(mbFrameAutowidthWithMorePara).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbGutterAtTop"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbGutterAtTop).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbFootnoteInColumnToPageEnd"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbFootnoteInColumnToPageEnd).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
