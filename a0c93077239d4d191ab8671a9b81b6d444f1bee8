@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f61dbf0_eb412674",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-18T19:37:37Z",
+      "side": 1,
+      "message": "I added YEAR and it displays now.\nI just wonder if min scale and max scale could help to behave a bit more like https://mariadb.com/kb/en/year-data-type/ described.",
+      "revId": "a0c93077239d4d191ab8671a9b81b6d444f1bee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
