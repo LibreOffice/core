@@ -831,7 +831,7 @@ double EnhancedCustomShape2d::GetEnumFunc( const ExpressionFunct eFunc ) const
     double fRet = 0.0;
     switch( eFunc )
     {
-        case ExpressionFunct::EnumPi :         fRet = F_PI; break;
+        case ExpressionFunct::EnumPi :         fRet = M_PI; break;
         case ExpressionFunct::EnumLeft :       fRet = static_cast<double>(nCoordLeft); break;
         case ExpressionFunct::EnumTop :        fRet = static_cast<double>(nCoordTop); break;
         case ExpressionFunct::EnumRight :      fRet = (static_cast<double>(nCoordLeft) + static_cast<double>(nCoordWidth)) * fXRatio; break;
@@ -1760,8 +1760,8 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                         if (ftmpX != 0.0 || ftmpY != 0.0)
                             faA = atan2(ftmpY, ftmpX); // range ]-pi..pi], here -pi < faA < -pi/2
                         // screen 270 deg = mathematic coordinate system -pi/2
-                        double fha(-F_PI2 - faA); // positive circle angle difference to 270 deg
-                        if (abs(fha) == F_PI2) // should not happen, but ensure no tan(90deg)
+                        double fha(-M_PI_2 - faA); // positive circle angle difference to 270 deg
+                        if (abs(fha) == M_PI_2) // should not happen, but ensure no tan(90deg)
                             fha = 0.12; // dummy value
                         double flFD(2 * std::min(frw, frh) * tan(fha) - fth);
                         if (fss != 0.0)
@@ -2477,11 +2477,11 @@ void EnhancedCustomShape2d::CreateSubPath(
                                 {
                                     if (aEnd.getY()<aStart.getY()) // left, up
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI2, F_PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, M_PI_2, M_PI);
                                     }
                                     else // left, down
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI, 1.5*F_PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, M_PI, 1.5*M_PI);
                                         aArc.flip();
                                     }
                                 }
@@ -2489,12 +2489,12 @@ void EnhancedCustomShape2d::CreateSubPath(
                                 {
                                     if (aEnd.getY()<aStart.getY()) // right, up
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 0.0, F_PI2);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 0.0, M_PI_2);
                                         aArc.flip();
                                     }
                                     else // right, down
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*F_PI, F_2PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*M_PI, F_2PI);
                                     }
                                 }
                             }
@@ -2505,23 +2505,23 @@ void EnhancedCustomShape2d::CreateSubPath(
                                 {
                                     if (aEnd.getY()<aStart.getY()) // up, left
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*F_PI, F_2PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*M_PI, F_2PI);
                                         aArc.flip();
                                     }
                                     else // down, left
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 0.0, F_PI2);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 0.0, M_PI_2);
                                     }
                                 }
                                 else // aEnd.getX()>=aStart.getX()
                                 {
                                     if (aEnd.getY()<aStart.getY()) // up, right
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI, 1.5*F_PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, M_PI, 1.5*M_PI);
                                     }
                                     else // down, right
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI2, F_PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, M_PI_2, M_PI);
                                         aArc.flip();
                                     }
                                 }

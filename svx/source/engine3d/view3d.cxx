@@ -864,7 +864,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             // Rotation around control point #1 with set angle
             // for 3D coordinates
             basegfx::B2DPoint aDiff(rPnt1 - rPnt2);
-            fRot3D = atan2(aDiff.getY(), aDiff.getX()) - F_PI2;
+            fRot3D = atan2(aDiff.getY(), aDiff.getX()) - M_PI_2;
 
             if(basegfx::fTools::equalZero(fabs(fRot3D)))
                 fRot3D = 0.0;

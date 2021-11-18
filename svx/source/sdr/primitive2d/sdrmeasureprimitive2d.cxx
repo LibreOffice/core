@@ -100,10 +100,10 @@ namespace drawinglayer::primitive2d
 
                 if(getTextRotation())
                 {
-                    aTextMatrix.rotate(-F_PI2);
-                    fTestAngle -= (F_PI2);
+                    aTextMatrix.rotate(-M_PI_2);
+                    fTestAngle -= (M_PI_2);
 
-                    if(getTextAutoAngle() && fTestAngle < -F_PI)
+                    if(getTextAutoAngle() && fTestAngle < -M_PI)
                     {
                         fTestAngle += F_2PI;
                     }
@@ -111,7 +111,7 @@ namespace drawinglayer::primitive2d
 
                 if(getTextAutoAngle())
                 {
-                    if(fTestAngle > (F_PI / 4.0) || fTestAngle < (-F_PI * (3.0 / 4.0)))
+                    if(fTestAngle > (M_PI / 4.0) || fTestAngle < (-M_PI * (3.0 / 4.0)))
                     {
                         bAutoUpsideDown = true;
                     }
@@ -403,7 +403,7 @@ namespace drawinglayer::primitive2d
                 // handle auto text rotation
                 if(bAutoUpsideDown)
                 {
-                    aChange.rotate(F_PI);
+                    aChange.rotate(M_PI);
                 }
 
                 // move from aTextRange.TopLeft to fTextX, fTextY

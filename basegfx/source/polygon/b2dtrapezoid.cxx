@@ -91,7 +91,7 @@ namespace basegfx::trapezoidhelper
 
                 // get radiant; has to be in the range ]0.0 .. pi[, thus scale to full
                 // sal_uInt32 range for maximum precision
-                const double fRadiant(atan2(getDeltaY(), getDeltaX()) * (SAL_MAX_UINT32 / F_PI));
+                const double fRadiant(atan2(getDeltaY(), getDeltaX()) * (SAL_MAX_UINT32 / M_PI));
 
                 // convert to sal_uInt32 value
                 const_cast< TrDeEdgeEntry* >(this)->mnSortValue = sal_uInt32(fRadiant);

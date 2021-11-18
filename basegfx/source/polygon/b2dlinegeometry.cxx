@@ -103,7 +103,7 @@ namespace basegfx::utils
 
                 // from that vector, take the needed rotation and add rotate for arrow to transformation
                 const B2DVector aTargetDirection(aHead - aTail);
-                const double fRotation(atan2(aTargetDirection.getY(), aTargetDirection.getX()) + F_PI2);
+                const double fRotation(atan2(aTargetDirection.getY(), aTargetDirection.getX()) + M_PI_2);
 
                 // rotate around docking position
                 aArrowTransform.rotate(fRotation);
@@ -389,7 +389,7 @@ namespace basegfx
                             utils::createScaleShearXRotateTranslateB2DHomMatrix(
                                 fHalfLineWidth, fHalfLineWidth,
                                 0.0,
-                                atan2(aTangentA.getY(), aTangentA.getX()) + F_PI2,
+                                atan2(aTangentA.getY(), aTangentA.getX()) + M_PI_2,
                                 rEdge.getStartPoint().getX(), rEdge.getStartPoint().getY()));
                         aBezierPolygon.append(aStartPolygon);
                     }
@@ -452,7 +452,7 @@ namespace basegfx
                             utils::createScaleShearXRotateTranslateB2DHomMatrix(
                                 fHalfLineWidth, fHalfLineWidth,
                                 0.0,
-                                atan2(aTangentB.getY(), aTangentB.getX()) - F_PI2,
+                                atan2(aTangentB.getY(), aTangentB.getX()) - M_PI_2,
                                 rEdge.getEndPoint().getX(), rEdge.getEndPoint().getY()));
                         aBezierPolygon.append(aEndPolygon);
                     }
@@ -604,7 +604,7 @@ namespace basegfx
                         utils::createScaleShearXRotateTranslateB2DHomMatrix(
                             fHalfLineWidth, fHalfLineWidth,
                             0.0,
-                            fAngle + F_PI2,
+                            fAngle + M_PI_2,
                             rEdge.getStartPoint().getX(), rEdge.getStartPoint().getY()));
                 }
                 else
@@ -642,7 +642,7 @@ namespace basegfx
                         utils::createScaleShearXRotateTranslateB2DHomMatrix(
                             fHalfLineWidth, fHalfLineWidth,
                             0.0,
-                            fAngle - F_PI2,
+                            fAngle - M_PI_2,
                             rEdge.getEndPoint().getX(), rEdge.getEndPoint().getY()));
                     aEdgePolygon.append(aEndPolygon);
                 }
@@ -710,7 +710,7 @@ namespace basegfx
             {
                 const double fAngle(fabs(rPerpendPrev.angle(rPerpendEdge)));
 
-                if((F_PI - fAngle) < fMiterMinimumAngle)
+                if((M_PI - fAngle) < fMiterMinimumAngle)
                 {
                     // fallback to bevel
                     eJoin = B2DLineJoin::Bevel;
@@ -851,13 +851,13 @@ namespace basegfx
             double fMiterMinimumAngle,
             basegfx::triangulator::B2DTriangleVector* pTriangles)
         {
-            if(fMaxAllowedAngle > F_PI2)
+            if(fMaxAllowedAngle > M_PI_2)
             {
-                fMaxAllowedAngle = F_PI2;
+                fMaxAllowedAngle = M_PI_2;
             }
-            else if(fMaxAllowedAngle < 0.01 * F_PI2)
+            else if(fMaxAllowedAngle < 0.01 * M_PI_2)
             {
-                fMaxAllowedAngle = 0.01 * F_PI2;
+                fMaxAllowedAngle = 0.01 * M_PI_2;
             }
 
             if(fMaxPartOfEdge > 1.0)
@@ -869,13 +869,13 @@ namespace basegfx
                 fMaxPartOfEdge = 0.01;
             }
 
-            if(fMiterMinimumAngle > F_PI)
+            if(fMiterMinimumAngle > M_PI)
             {
-                fMiterMinimumAngle = F_PI;
+                fMiterMinimumAngle = M_PI;
             }
-            else if(fMiterMinimumAngle < 0.01 * F_PI)
+            else if(fMiterMinimumAngle < 0.01 * M_PI)
             {
-                fMiterMinimumAngle = 0.01 * F_PI;
+                fMiterMinimumAngle = 0.01 * M_PI;
             }
 
             B2DPolygon aCandidate(rCandidate);
@@ -935,7 +935,7 @@ namespace basegfx
                                 {
                                     const double fAngle(fabs(aTangentPrev.angle(aTangentEdge)));
 
-                                    if(fTools::equal(fAngle, F_PI))
+                                    if(fTools::equal(fAngle, M_PI))
                                     {
                                         // for half-circle production, fallback to positive
                                         // orientation

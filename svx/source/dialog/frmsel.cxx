@@ -425,7 +425,7 @@ void FrameSelectorImpl::InitBorderGeometry()
                 basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
                 basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
             const double fHorDiagAngle(atan2(fabs(aCellRange.getHeight()), fabs(aCellRange.getWidth())));
-            const double fVerDiagAngle(fHorDiagAngle > 0.0 ? F_PI2 - fHorDiagAngle : 0.0);
+            const double fVerDiagAngle(fHorDiagAngle > 0.0 ? M_PI_2 - fHorDiagAngle : 0.0);
             const tools::Long nDiagFocusOffsX(basegfx::fround(-mnFocusOffs / tan(fHorDiagAngle) + mnFocusOffs / sin(fHorDiagAngle)));
             const tools::Long nDiagFocusOffsY(basegfx::fround(-mnFocusOffs / tan(fVerDiagAngle) + mnFocusOffs / sin(fVerDiagAngle)));
 

@@ -2488,7 +2488,7 @@ void translateRotationToMirroring(basegfx::B2DVector & scale, double * rotate) {
     // with getSmallValue here, the original which uses rtl::math::approxEqual
     // is too correct here. Maybe this changes with enhanced precision in aw080
     // to the better so that this can be reduced to the more precise call again
-    if(basegfx::fTools::equal(fabs(*rotate), F_PI, 0.000000001))
+    if(basegfx::fTools::equal(fabs(*rotate), M_PI, 0.000000001))
     {
         scale.setX(scale.getX() * -1.0);
         scale.setY(scale.getY() * -1.0);

@@ -130,7 +130,7 @@ void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI2;
+        double beta = fAnglePi-M_PI_2;
         rfXCorrection = -aSize.Width *std::sin( beta )
             -aSize.Height *std::cos( beta )/2.0;
         if( bRotateAroundCenter )
@@ -140,7 +140,7 @@ void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = fAnglePi - F_PI;
+        double beta = fAnglePi - M_PI;
         rfXCorrection = -aSize.Width *std::cos( beta )
             -aSize.Height*std::sin( beta )/2.0;
         if( bRotateAroundCenter )
@@ -150,7 +150,7 @@ void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
     }
     else
     {
-        double beta = 2*F_PI - fAnglePi;
+        double beta = 2*M_PI - fAnglePi;
         rfXCorrection = -aSize.Height*std::sin( beta )/2.0;
         if( bRotateAroundCenter )
             rfYCorrection = aSize.Width*std::sin( beta )/2.0;
@@ -173,7 +173,7 @@ void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = F_PI - fAnglePi;
+        double beta = M_PI - fAnglePi;
         rfXCorrection = aSize.Width *std::cos( beta )
             + aSize.Height*std::sin( beta )/2.0;
         if( bRotateAroundCenter )
@@ -183,7 +183,7 @@ void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI2 - fAnglePi;
+        double beta = 3*M_PI_2 - fAnglePi;
         rfXCorrection = aSize.Width *std::sin( beta )
                     +aSize.Height*std::cos( beta )/2.0;
         if( bRotateAroundCenter )
@@ -193,9 +193,9 @@ void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
     }
     else
     {
-        rfXCorrection  = aSize.Height*std::sin( 2*F_PI - fAnglePi )/2.0;
+        rfXCorrection  = aSize.Height*std::sin( 2*M_PI - fAnglePi )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = -aSize.Width*std::sin( 2*F_PI - fAnglePi )/2.0;
+            rfYCorrection = -aSize.Width*std::sin( 2*M_PI - fAnglePi )/2.0;
     }
 }
 
@@ -216,7 +216,7 @@ void lcl_correctRotation_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi - F_PI2;
+        double beta = fAnglePi - M_PI_2;
         rfXCorrection = aSize.Height*std::cos( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection -= aSize.Width*std::sin( beta )/2.0;
@@ -225,7 +225,7 @@ void lcl_correctRotation_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = fAnglePi - F_PI;
+        double beta = fAnglePi - M_PI;
         rfXCorrection = -aSize.Height *std::sin( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection += aSize.Width *std::cos( beta )/2.0;
@@ -258,7 +258,7 @@ void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI2;
+        double beta = fAnglePi-M_PI_2;
         rfXCorrection = -aSize.Height*std::cos( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection += aSize.Width *std::sin( beta )/2.0;
@@ -267,7 +267,7 @@ void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI2 - fAnglePi;
+        double beta = 3*M_PI_2 - fAnglePi;
         rfXCorrection = aSize.Height*std::cos( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection -= aSize.Width *std::sin( beta )/2.0;
@@ -276,7 +276,7 @@ void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
     }
     else
     {
-        double beta = 2*F_PI - fAnglePi;
+        double beta = 2*M_PI - fAnglePi;
         rfXCorrection = aSize.Height*std::sin( beta )/2.0;
         if( !bRotateAroundCenter )
             rfXCorrection += aSize.Width*std::cos( beta )/2.0;
@@ -298,14 +298,14 @@ void lcl_correctRotation_Left_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI2;
+        double beta = fAnglePi-M_PI_2;
         rfXCorrection = -aSize.Width*std::sin( beta );
         rfYCorrection = -aSize.Height*std::sin( beta )
                         -aSize.Width*std::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI2 - fAnglePi;
+        double beta = 3*M_PI_2 - fAnglePi;
         rfXCorrection = -aSize.Height*std::cos( beta )
                         -aSize.Width*std::sin( beta );
         rfYCorrection = -aSize.Height*std::sin( beta );
@@ -330,14 +330,14 @@ void lcl_correctRotation_Left_Bottom( double& rfXCorrection, double& rfYCorrecti
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI2;
+        double beta = fAnglePi-M_PI_2;
         rfXCorrection = -aSize.Width*std::sin( beta )
                         -aSize.Height*std::cos( beta );
         rfYCorrection = aSize.Height*std::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI2 - fAnglePi;
+        double beta = 3*M_PI_2 - fAnglePi;
         rfXCorrection = -aSize.Width*std::sin( beta );
         rfYCorrection = aSize.Width*std::cos( beta )
                         +aSize.Height*std::sin( beta );
@@ -362,14 +362,14 @@ void lcl_correctRotation_Right_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI2;
+        double beta = fAnglePi-M_PI_2;
         rfXCorrection = aSize.Width*std::sin( beta )
                         +aSize.Height*std::cos( beta );
         rfYCorrection = -aSize.Height*std::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI2 - fAnglePi;
+        double beta = 3*M_PI_2 - fAnglePi;
         rfXCorrection = aSize.Width*std::sin( beta );
         rfYCorrection = -aSize.Width*std::cos( beta )
                         -aSize.Height*std::sin( beta );
@@ -394,14 +394,14 @@ void lcl_correctRotation_Right_Bottom( double& rfXCorrection, double& rfYCorrect
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = fAnglePi-F_PI2;
+        double beta = fAnglePi-M_PI_2;
         rfXCorrection = aSize.Width*std::sin( beta );
         rfYCorrection = aSize.Height*std::sin( beta )
                         +aSize.Width*std::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI2 - fAnglePi;
+        double beta = 3*M_PI_2 - fAnglePi;
         rfXCorrection = aSize.Height*std::cos( beta )
                         +aSize.Width*std::sin( beta );
         rfYCorrection = aSize.Height*std::sin( beta );

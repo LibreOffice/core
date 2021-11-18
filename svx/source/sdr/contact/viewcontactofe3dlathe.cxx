@@ -64,7 +64,7 @@ namespace sdr::contact
 
             const basegfx::B2DRange aPolyPolygonRange(basegfx::utils::getRange(aPolyPolygon));
             const basegfx::B2DVector aTextureSize(
-                F_PI * fabs(aPolyPolygonRange.getCenter().getX()), // PI * d
+                M_PI * fabs(aPolyPolygonRange.getCenter().getX()), // PI * d
                 fPolygonMaxLength);
 
             // get more data
@@ -72,7 +72,7 @@ namespace sdr::contact
             const sal_uInt32 nVerticalSegments(GetE3dLatheObj().GetVerticalSegments());
             const double fDiagonal(static_cast<double>(GetE3dLatheObj().GetPercentDiagonal()) / 100.0);
             const double fBackScale(static_cast<double>(GetE3dLatheObj().GetBackScale()) / 100.0);
-            const double fRotation((static_cast<double>(GetE3dLatheObj().GetEndAngle()) / 1800.0) * F_PI);
+            const double fRotation((static_cast<double>(GetE3dLatheObj().GetEndAngle()) / 1800.0) * M_PI);
             const bool bSmoothNormals(GetE3dLatheObj().GetSmoothNormals()); // Plane itself
             const bool bSmoothLids(GetE3dLatheObj().GetSmoothLids()); // Front/back
             const bool bCharacterMode(GetE3dLatheObj().GetCharacterMode());

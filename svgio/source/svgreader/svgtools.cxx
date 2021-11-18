@@ -456,7 +456,7 @@ namespace svgio::svgreader
                 else if (DegreeType::grad == aType)
                 {
                     // looks like 100 grad is 90 degrees
-                    fAngle *= F_PI / 200.0;
+                    fAngle *= M_PI / 200.0;
                 }
 
                 return true;

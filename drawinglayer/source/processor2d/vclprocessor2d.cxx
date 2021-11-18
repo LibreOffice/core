@@ -119,7 +119,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             // be expressed as rotation by PI. Use this since the Font rendering will not
             // apply the negative scales in any form
             aFontScaling = basegfx::absolute(aFontScaling);
-            fRotate += F_PI;
+            fRotate += M_PI;
         }
 
         if (basegfx::fTools::more(aFontScaling.getX(), 0.0)

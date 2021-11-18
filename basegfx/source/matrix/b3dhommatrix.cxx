@@ -507,13 +507,13 @@ namespace basegfx
             if( ::basegfx::fTools::equal( aCol0.getZ(), 1.0 )
                 || aCol0.getZ() > 1.0 )
             {
-                fy = -F_PI/2.0;
+                fy = -M_PI/2.0;
                 cy = 0.0;
             }
             else if( ::basegfx::fTools::equal( aCol0.getZ(), -1.0 )
                 || aCol0.getZ() < -1.0 )
             {
-                fy = F_PI/2.0;
+                fy = M_PI/2.0;
                 cy = 0.0;
             }
             else

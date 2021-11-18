@@ -180,7 +180,7 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
         if (!bOverflow)
         {
             nPoints = static_cast<sal_uInt16>(MinMax(
-                ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
+                ( M_PI * ( 1.5 * ( nRadX + nRadY ) -
                            sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
                 32, 256 ));
         }
@@ -200,7 +200,7 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
         sal_uInt16 nPoints2 = nPoints >> 1;
         sal_uInt16 nPoints4 = nPoints >> 2;
         double nAngle;
-        double nAngleStep = F_PI2 / ( nPoints4 - 1 );
+        double nAngleStep = M_PI_2 / ( nPoints4 - 1 );
 
         for( i=0, nAngle = 0.0; i < nPoints4; i++, nAngle += nAngleStep )
         {
@@ -246,7 +246,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         if (!bOverflow)
         {
             nPoints = static_cast<sal_uInt16>(MinMax(
-                ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
+                ( M_PI * ( 1.5 * ( nRadX + nRadY ) -
                            sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
                 32, 256 ));
         }

@@ -101,7 +101,7 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
     if (basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
     {
         aScale = basegfx::absolute(aScale);
-        fRotate += F_PI;
+        fRotate += M_PI;
     }
 
     // for the TextLayouterDevice, it is necessary to have a scaling representing

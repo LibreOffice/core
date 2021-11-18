@@ -395,7 +395,7 @@ vcl::Font getVclFontFromFontAttribute(const attribute::FontAttribute& rFontAttri
     // handle FontRotation (if defined)
     if (!basegfx::fTools::equalZero(fFontRotation))
     {
-        sal_Int16 aRotate10th(static_cast<sal_Int16>(fFontRotation * (-1800.0 / F_PI)));
+        sal_Int16 aRotate10th(static_cast<sal_Int16>(fFontRotation * (-1800.0 / M_PI)));
         aRetval.SetOrientation(Degree10(aRotate10th % 3600));
     }
 

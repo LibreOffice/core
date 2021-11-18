@@ -376,7 +376,7 @@ namespace vclcanvas
                     double fMiterMinimumAngle;
                     if (strokeAttributes.MiterLimit <= 1.0)
                     {
-                        fMiterMinimumAngle = F_PI2;
+                        fMiterMinimumAngle = M_PI_2;
                     }
                     else
                     {

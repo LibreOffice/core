@@ -262,8 +262,8 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, 
     {
         // mirror start, end for geometry creation since model coordinate system is mirrored in Y
         // #i111715# increase numerical correctness by first dividing and not using F_PI1800
-        const double fStart((((36000 - nEnd.get()) % 36000) / 18000.0) * F_PI);
-        const double fEnd((((36000 - nStart.get()) % 36000) / 18000.0) * F_PI);
+        const double fStart((((36000 - nEnd.get()) % 36000) / 18000.0) * M_PI);
+        const double fEnd((((36000 - nStart.get()) % 36000) / 18000.0) * M_PI);
 
         // create circle segment. This is not closed by default
         aCircPolygon = basegfx::utils::createPolygonFromEllipseSegment(

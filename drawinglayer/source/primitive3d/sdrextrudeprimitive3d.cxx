@@ -234,7 +234,7 @@ namespace drawinglayer::primitive3d
                                     // take each angle which deviates more than 10% from going straight as
                                     // special edge. This will detect the two outer edges of pie segments,
                                     // but not always the center one (think about a near 180 degree pie)
-                                    if(F_PI - fabs(fAngle) > F_PI * 0.1)
+                                    if(M_PI - fabs(fAngle) > M_PI * 0.1)
                                     {
                                         if(nPointCount == nIndexA)
                                         {

@@ -234,7 +234,7 @@ namespace drawinglayer::primitive3d
                                 nSegments,
                                 nVerSeg,
                                 true,
-                                F_PI2, 0.0,
+                                M_PI_2, 0.0,
                                 0.0, F_2PI));
                         const sal_uInt32 nCount(aSphere.count());
 
@@ -244,7 +244,7 @@ namespace drawinglayer::primitive3d
                             // forget to transform normals, too
                             basegfx::B3DHomMatrix aSphereTrans;
 
-                            aSphereTrans.rotate(0.0, 0.0, F_PI2);
+                            aSphereTrans.rotate(0.0, 0.0, M_PI_2);
                             aSphere.transform(aSphereTrans);
                             aSphere.transformNormals(aSphereTrans);
 
@@ -301,7 +301,7 @@ namespace drawinglayer::primitive3d
                         if(nHorSeg)
                         {
                             // create half-sphere
-                            const basegfx::B3DPolyPolygon aSphere(basegfx::utils::createUnitSphereFillPolyPolygon(nHorSeg, nVerSeg, true, F_PI2, -F_PI2, 0.0, fAngle));
+                            const basegfx::B3DPolyPolygon aSphere(basegfx::utils::createUnitSphereFillPolyPolygon(nHorSeg, nVerSeg, true, M_PI_2, -M_PI_2, 0.0, fAngle));
 
                             for(sal_uInt32 a(0); a < aSphere.count(); a++)
                             {
@@ -331,13 +331,13 @@ namespace drawinglayer::primitive3d
                             }
                         }
 
-                        const double fInc(F_PI / static_cast<double>(nVerSeg));
+                        const double fInc(M_PI / static_cast<double>(nVerSeg));
                         const double fSin(sin(-fAngle));
                         const double fCos(cos(-fAngle));
                         const bool bMiter(basegfx::B2DLineJoin::Miter == aLineJoin);
                         const double fMiterSin(bMiter ? sin(-(fAngle/2.0)) : 0.0);
                         const double fMiterCos(bMiter ? cos(-(fAngle/2.0)) : 0.0);
-                        double fPos(-F_PI2);
+                        double fPos(-M_PI_2);
                         basegfx::B3DPoint aPointOnXY, aPointRotY, aNextPointOnXY, aNextPointRotY;
                         basegfx::B3DPoint aCurrMiter, aNextMiter;
                         basegfx::B3DPolygon aNewPolygon, aMiterPolygon;
@@ -611,7 +611,7 @@ using namespace com::sun::star;
                                 if(!basegfx::fTools::equalZero(fCross))
                                 {
                                     // line connect non-parallel, aBack, aForw, use getLineJoin()
-                                    const double fAngle(acos(aBack.scalar(aForw) / (fForwLen * aBack.getLength()))); // 0.0 .. F_PI2
+                                    const double fAngle(acos(aBack.scalar(aForw) / (fForwLen * aBack.getLength()))); // 0.0 .. M_PI_2
                                     Primitive3DContainer aNewList(
                                         getLineJoinSegments(
                                             nSegments,
@@ -629,8 +629,8 @@ using namespace com::sun::star;
                                     // create trans by rotating unit sphere with angle 90 degrees around Y, then 180-fRot in X.
                                     // Also apply usual scaling and translation
                                     basegfx::B3DHomMatrix aSphereTrans;
-                                    aSphereTrans.rotate(0.0, F_PI2, 0.0);
-                                    aSphereTrans.rotate(F_PI - fRotInYZ, 0.0, 0.0);
+                                    aSphereTrans.rotate(0.0, M_PI_2, 0.0);
+                                    aSphereTrans.rotate(M_PI - fRotInYZ, 0.0, 0.0);
                                     aSphereTrans *= aRotVector;
                                     aSphereTrans.scale(getRadius(), getRadius(), getRadius());
                                     aSphereTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
@@ -655,7 +655,7 @@ using namespace com::sun::star;
                                 basegfx::B3DHomMatrix aBackCapTrans;
 
                                 // Mirror (line end) and radius scale
-                                aBackCapTrans.rotate(0.0, F_PI, 0.0);
+                                aBackCapTrans.rotate(0.0, M_PI, 0.0);
                                 aBackCapTrans.scale(getRadius(), getRadius(), getRadius());
 
                                 if(bLineCapSquare && bLast)

@@ -26,7 +26,7 @@ namespace basegfx::utils
 {
         void createSinCosOrthogonal(double& o_rSin, double& o_rCos, double fRadiant)
         {
-            if( fTools::equalZero( fmod( fRadiant, F_PI2 ) ) )
+            if( fTools::equalZero( fmod( fRadiant, M_PI_2 ) ) )
             {
                 // determine quadrant
                 const sal_Int32 nQuad(

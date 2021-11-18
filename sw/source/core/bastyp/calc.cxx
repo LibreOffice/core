@@ -323,7 +323,7 @@ SwCalc::SwCalc( SwDoc& rD )
 
     m_aVarTable[ aHashValue[ 0 ] ]->nValue.PutBool( false );
     m_aVarTable[ aHashValue[ 1 ] ]->nValue.PutBool( true );
-    m_aVarTable[ aHashValue[ 2 ] ]->nValue.PutDouble( F_PI );
+    m_aVarTable[ aHashValue[ 2 ] ]->nValue.PutDouble( M_PI );
     m_aVarTable[ aHashValue[ 3 ] ]->nValue.PutDouble( 2.7182818284590452354 );
 
     for( n = 0; n < 3; ++n )
