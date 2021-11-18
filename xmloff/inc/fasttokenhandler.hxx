@@ -14,7 +14,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <sax/fastattribs.hxx>
 #include <xmloff/token/tokens.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <xmloff/dllapi.h>
 
@@ -66,7 +65,7 @@ private:
     static const OUString EMPTY_STRING;
 };
 
-struct StaticTokenMap : public rtl::Static< TokenMap, StaticTokenMap > {};
+TokenMap& StaticTokenMap();
 
 class FastTokenHandler final :
     public sax_fastparser::FastTokenHandlerBase

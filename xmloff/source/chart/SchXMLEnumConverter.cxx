@@ -21,7 +21,6 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include "SchXMLEnumConverter.hxx"
 #include <xmloff/xmlement.hxx>
-#include <rtl/instance.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
@@ -45,10 +44,6 @@ public:
         : XMLEnumPropertyHdl( aXMLLegendPositionEnumMap) {}
 };
 
-struct TheLegendPositionPropertyHdl : public rtl::Static< XMLLegendPositionPropertyHdl, TheLegendPositionPropertyHdl >
-{
-};
-
 const SvXMLEnumMapEntry<chart::ChartLegendExpansion> aXMLLegendExpansionEnumMap[] =
 {
     { XML_WIDE,        chart::ChartLegendExpansion_WIDE },
@@ -65,19 +60,17 @@ public:
         : XMLEnumPropertyHdl( aXMLLegendExpansionEnumMap) {}
 };
 
-struct TheLegendExpansionPropertyHdl : public rtl::Static< XMLLegendExpansionPropertyHdl, TheLegendExpansionPropertyHdl >
-{
-};
-
 }//end anonymous namespace
 
 XMLEnumPropertyHdl& SchXMLEnumConverter::getLegendPositionConverter()
 {
-    return TheLegendPositionPropertyHdl::get();
+    static XMLLegendPositionPropertyHdl SINGLETON;
+    return SINGLETON;
 }
 XMLEnumPropertyHdl& SchXMLEnumConverter::getLegendExpansionConverter()
 {
-    return TheLegendExpansionPropertyHdl::get();
+    static XMLLegendExpansionPropertyHdl SINGLETON;
+    return SINGLETON;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

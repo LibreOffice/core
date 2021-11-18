@@ -32,6 +32,12 @@ namespace token {
 
 using namespace css;
 
+TokenMap& StaticTokenMap()
+{
+    static TokenMap SINGLETON;
+    return SINGLETON;
+}
+
 const css::uno::Sequence< sal_Int8 > TokenMap::EMPTY_BYTE_SEQ;
 const OUString TokenMap::EMPTY_STRING;
 
@@ -68,7 +74,7 @@ sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength )
 }
 
 FastTokenHandler::FastTokenHandler() :
-    mrTokenMap( StaticTokenMap::get() )
+    mrTokenMap( StaticTokenMap() )
 {
 }
 
