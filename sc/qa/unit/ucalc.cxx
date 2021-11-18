@@ -169,6 +169,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testAutoFilterTimeValue();
+    void testTdf76836();
     void testTdf76441();
     void testTdf142186();
     void testTdf137063();
@@ -292,6 +293,7 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testAutoFilterTimeValue);
+    CPPUNIT_TEST(testTdf76836);
     CPPUNIT_TEST(testTdf76441);
     CPPUNIT_TEST(testTdf142186);
     CPPUNIT_TEST(testTdf137063);
@@ -3575,6 +3577,36 @@ void Test::testTdf76441()
         // - Actual  : 20:00
         CPPUNIT_ASSERT_EQUAL(OUString("01:20"), m_pDoc->GetString(ScAddress(0,1,0)));
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf76836()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    OUString aCode = "\"192.168.0.\"@";
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
+
+    ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+
+    m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
+    m_pDoc->SetValue(0,0,0, 10.0);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 10
+    // - Actual  : 192.168.0.10
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), m_pDoc->GetString(ScAddress(0,0,0)));
+
+    m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);
+    m_pDoc->SetString(ScAddress(0,1,0), "10");
+    CPPUNIT_ASSERT_EQUAL(OUString("192.168.0.10"), m_pDoc->GetString(ScAddress(0,1,0)));
 
     m_pDoc->DeleteTab(0);
 }
