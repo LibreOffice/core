@@ -36,9 +36,6 @@
 #ifndef F_PI4
 #define F_PI4       M_PI_4
 #endif
-#ifndef F_PI180
-#define F_PI180     (M_PI/180.0)
-#endif
 #ifndef F_PI1800
 #define F_PI1800    (M_PI/1800.0)
 #endif
