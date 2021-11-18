@@ -62,7 +62,7 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
     : InspectorTextPanel(pParent)
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
-    m_pShell = pDocSh->GetWrtShell();
+    m_pShell = pDocSh ? pDocSh->GetWrtShell() : nullptr;
     if (m_pShell)
     {
         m_oldLink = m_pShell->GetChgLnk();
@@ -71,7 +71,7 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
 
     // Update panel on start
     std::vector<svx::sidebar::TreeNode> aStore;
-    if (pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
+    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
         UpdateTree(pDocSh, aStore);
     updateEntries(aStore);
 }
