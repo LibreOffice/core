@@ -2225,7 +2225,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     rHTMLWrt.OutBookmarks();
 
     // now it's a good opportunity again for an LF - if it is still allowed
-    if( rHTMLWrt.m_bLFPossible &&
+    if( rHTMLWrt.m_bLFPossible && rHTMLWrt.m_nWishLineLen >= 0 &&
         rHTMLWrt.GetLineLen() >= rHTMLWrt.m_nWishLineLen )
     {
         rHTMLWrt.OutNewLine();
@@ -2463,8 +2463,9 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         nWordLen = nEnd;
                     nWordLen -= nStrPos;
 
-                    if( nLineLen >= rHTMLWrt.m_nWishLineLen ||
-                        (nLineLen+nWordLen) >= rHTMLWrt.m_nWishLineLen )
+                    if( rHTMLWrt.m_nWishLineLen >= 0 &&
+                        (nLineLen >= rHTMLWrt.m_nWishLineLen ||
+                        (nLineLen+nWordLen) >= rHTMLWrt.m_nWishLineLen ) )
                     {
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
                         rHTMLWrt.OutNewLine();
