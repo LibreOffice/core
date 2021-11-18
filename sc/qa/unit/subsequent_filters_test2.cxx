@@ -203,6 +203,7 @@ public:
     void testDrawCircleInMergeCells();
     void testDeleteCirclesInRowAndCol();
     void testTdf129940();
+    void testTdf139612();
     void testTdf144740();
     void testTdf139763ShapeAnchor();
     void testAutofilterNamedRangesXLSX();
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testDrawCircleInMergeCells);
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
     CPPUNIT_TEST(testTdf129940);
+    CPPUNIT_TEST(testTdf139612);
     CPPUNIT_TEST(testTdf144740);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
@@ -2832,6 +2834,22 @@ void ScFiltersTest2::testTdf129940()
     // Multiple text:span within text:ruby-base
     aStr = rDoc.GetString(ScAddress(2, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString(u"注音符號"), aStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf139612()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf139612.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf139612.ods", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    xDocSh->DoHardRecalc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(1, 15, 0)));
 
     xDocSh->DoClose();
 }
