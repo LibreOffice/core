@@ -38,25 +38,25 @@ private:
     void mapFromGregorian() override;
 
     // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
-    static const double SynPeriod;
+    inline static constexpr double SynPeriod = 29.53058868;
 
-    static const double SynMonth;           // Solar days in a year/SynPeriod
+    inline static constexpr double SynMonth = 365.25/29.53058868;           // Solar days in a year/SynPeriod
 
     // Julian day on Jan 1, 1900
-    static const double jd1900;
+    inline static constexpr double jd1900 = 2415020.75933;
 
     // Reference point: September 1984 25d 3h 10m UT. == 1405 Hijri == 1048 Synodial month from 1900
-    static const sal_Int32 SynRef;
-    static const sal_Int32 GregRef;
-
-    // Local time (Saudi Arabia)
-    static const double SA_TimeZone;        // Time Zone
+    inline static constexpr sal_Int32 SynRef = 1252;
+    inline static constexpr sal_Int32 GregRef = 1422;
 
     // Period between 1.30pm - 6:30pm
-    static const double EveningPeriod;
+    inline static constexpr double EveningPeriod = 6.0;
 
     // "Leap" years
-    static const sal_Int32 LeapYear[];
+    static constexpr sal_Int32 LeapYear[] = {
+        2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29
+    };
+
 
 private:
     static double NewMoon(sal_Int32 n);
