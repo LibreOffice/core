@@ -18,19 +18,25 @@
  */
 #pragma once
 
-namespace chart
-{
-#define CHART2_SERVICE_NAME_CHARTTYPE_AREA "com.sun.star.chart2.AreaChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_BAR "com.sun.star.chart2.BarChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_COLUMN "com.sun.star.chart2.ColumnChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_LINE "com.sun.star.chart2.LineChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_SCATTER "com.sun.star.chart2.ScatterChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_PIE "com.sun.star.chart2.PieChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_NET "com.sun.star.chart2.NetChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET "com.sun.star.chart2.FilledNetChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK "com.sun.star.chart2.CandleStickChartType"
-#define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE "com.sun.star.chart2.BubbleChartType"
-
-} //namespace chart
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_AREA
+    = u"com.sun.star.chart2.AreaChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_BAR
+    = u"com.sun.star.chart2.BarChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_COLUMN
+    = u"com.sun.star.chart2.ColumnChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_LINE
+    = u"com.sun.star.chart2.LineChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_SCATTER
+    = u"com.sun.star.chart2.ScatterChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_PIE
+    = u"com.sun.star.chart2.PieChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_NET
+    = u"com.sun.star.chart2.NetChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET
+    = u"com.sun.star.chart2.FilledNetChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK
+    = u"com.sun.star.chart2.CandleStickChartType";
+inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE
+    = u"com.sun.star.chart2.BubbleChartType";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
