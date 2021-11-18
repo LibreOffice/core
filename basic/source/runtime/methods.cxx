@@ -389,11 +389,8 @@ extern "C" void invalidParameterHandler(
 
 #endif
 
-void SbRtl_CurDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
+void SbRtl_CurDir(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // #57064 Although this function doesn't work with DirEntry, it isn't touched
     // by the adjustment to virtual URLs, as, using the DirEntry-functionality,
     // there's no possibility to detect the current one in a way that a virtual URL
@@ -1651,11 +1648,8 @@ void SbRtl_UCase(StarBASIC *, SbxArray & rPar, bool)
 }
 
 
-void SbRtl_Val(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
+void SbRtl_Val(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     if (rPar.Count() < 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -2920,11 +2914,8 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
 }
 
 
-void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
+void SbRtl_GetAttr(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     if (rPar.Count() == 2)
     {
         sal_Int16 nFlags = 0;
