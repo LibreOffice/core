@@ -129,7 +129,4 @@ inline constexpr OUStringLiteral BMP_REGRESSION_POWER = u"chart2/res/regpow.png"
 inline constexpr OUStringLiteral BMP_REGRESSION_POLYNOMIAL = u"chart2/res/regpoly.png";
 inline constexpr OUStringLiteral BMP_REGRESSION_MOVING_AVERAGE = u"chart2/res/regavg.png";
 
-#define RID_SVXBMP_LAMP_ON              "svx/res/lighton.png"
-#define RID_SVXBMP_LAMP_OFF             "svx/res/light.png"
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
