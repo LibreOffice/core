@@ -161,6 +161,8 @@ public:
     // no destructor necessary because we know we are pointing at a compile-time
     // constant OUStringLiteral, which bypasses ref-counting.
 
+    constexpr operator std::u16string_view() const { return {pData->buffer, pData->length}; }
+
     inline operator const OUString&() const;
 
 private:
