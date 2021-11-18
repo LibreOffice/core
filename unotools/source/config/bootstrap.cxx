@@ -32,7 +32,6 @@
 #include <osl/diagnose.h>
 
 #include <rtl/bootstrap.hxx>
-#include <rtl/instance.hxx>
 #include <osl/process.h>
 
 // #define this to true, if remembering defaults is not supported properly
@@ -112,12 +111,16 @@ private: // implementation
 
 namespace
 {
-    class theImpl : public rtl::Static<Bootstrap::Impl, theImpl> {};
+    Bootstrap::Impl& theImpl()
+    {
+        static Bootstrap::Impl SINGLETON;
+        return SINGLETON;
+    }
 }
 
 const Bootstrap::Impl& Bootstrap::data()
 {
-    return theImpl::get();
+    return theImpl();
 }
 
 bool Bootstrap::getProcessWorkingDir(OUString &rUrl)
@@ -146,7 +149,7 @@ bool Bootstrap::getProcessWorkingDir(OUString &rUrl)
 
 void Bootstrap::reloadData()
 {
-    theImpl::get().initialize();
+    theImpl().initialize();
 }
 
 // helper

@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -41,8 +40,7 @@ using namespace com::sun::star::lang;
 namespace
 {
     std::weak_ptr<SvtSysLocaleOptions_Impl> g_pSysLocaleOptions;
-    struct CurrencyChangeLink
-        : public rtl::Static<Link<LinkParamNone*,void>, CurrencyChangeLink> {};
+    Link<LinkParamNone*,void> g_CurrencyChangeLink;
 
 Mutex& GetMutex()
 {
@@ -669,15 +667,15 @@ OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
 void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link<LinkParamNone*,void>& rLink )
 {
     MutexGuard aGuard( GetMutex() );
-    DBG_ASSERT( !CurrencyChangeLink::get().IsSet(), "SvtSysLocaleOptions::SetCurrencyChangeLink: already set" );
-    CurrencyChangeLink::get() = rLink;
+    DBG_ASSERT( !g_CurrencyChangeLink.IsSet(), "SvtSysLocaleOptions::SetCurrencyChangeLink: already set" );
+    g_CurrencyChangeLink = rLink;
 }
 
 // static
 const Link<LinkParamNone*,void>& SvtSysLocaleOptions::GetCurrencyChangeLink()
 {
     MutexGuard aGuard( GetMutex() );
-    return CurrencyChangeLink::get();
+    return g_CurrencyChangeLink;
 }
 
 void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p, ConfigurationHints nHint  )

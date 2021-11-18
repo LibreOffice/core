@@ -31,7 +31,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <sal/log.hxx>
@@ -83,18 +82,10 @@ static const char* getKeyType( DefaultFontType nKeyType )
     }
 }
 
-namespace
-{
-    class theDefaultFontConfiguration
-        : public rtl::Static<DefaultFontConfiguration,
-            theDefaultFontConfiguration>
-    {
-    };
-}
-
 DefaultFontConfiguration& DefaultFontConfiguration::get()
 {
-    return theDefaultFontConfiguration::get();
+    static DefaultFontConfiguration theDefaultFontConfiguration;
+    return theDefaultFontConfiguration;
 }
 
 DefaultFontConfiguration::DefaultFontConfiguration()
@@ -297,17 +288,10 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
  *  FontSubstConfigItem::get
  */
 
-namespace
-{
-    class theFontSubstConfiguration
-        : public rtl::Static<FontSubstConfiguration, theFontSubstConfiguration>
-    {
-    };
-}
-
 FontSubstConfiguration& FontSubstConfiguration::get()
 {
-    return theFontSubstConfiguration::get();
+    static FontSubstConfiguration theFontSubstConfiguration;
+    return theFontSubstConfiguration;
 }
 
 /*

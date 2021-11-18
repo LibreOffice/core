@@ -28,7 +28,6 @@
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/enumarray.hxx>
-#include <rtl/instance.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

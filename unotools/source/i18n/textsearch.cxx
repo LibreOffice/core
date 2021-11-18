@@ -32,7 +32,6 @@
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/textsearch.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <mutex>
