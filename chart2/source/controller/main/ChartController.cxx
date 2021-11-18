@@ -20,6 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
+#include <config_wasm_strip.h>
 #include <ChartController.hxx>
 #include <servicenames.hxx>
 #include <ResId.hxx>
@@ -42,7 +43,9 @@
 #include "ChartDropTargetHelper.hxx"
 
 #include <dlg_ChartType.hxx>
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
 #include <AccessibleChartView.hxx>
+#endif
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 #include "UndoActions.hxx"
@@ -1422,8 +1425,13 @@ uno::Reference< uno::XInterface > SAL_CALL
 {
     uno::Reference< uno::XInterface > xResult;
 
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if( aServiceSpecifier == CHART_ACCESSIBLE_TEXT_SERVICE_NAME )
         xResult.set( impl_createAccessibleTextContext());
+#else
+    (void)aServiceSpecifier;
+#endif
+
     return xResult;
 }
 
@@ -1537,9 +1545,13 @@ void ChartController::SetAndApplySelection(const Reference<drawing::XShape>& rxS
 
 uno::Reference< XAccessible > ChartController::CreateAccessible()
 {
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     uno::Reference< XAccessible > xResult = new AccessibleChartView( GetDrawViewWrapper() );
     impl_initializeAccessible( uno::Reference< lang::XInitialization >( xResult, uno::UNO_QUERY ) );
     return xResult;
+#else
+    return uno::Reference< XAccessible >();
+#endif
 }
 
 void ChartController::impl_invalidateAccessible()

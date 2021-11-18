@@ -29,7 +29,9 @@
 #include <TitleHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ControllerLockGuard.hxx>
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
 #include <AccessibleTextHelper.hxx>
+#endif
 #include <strings.hrc>
 #include <chartview/DrawModelWrapper.hxx>
 #include <osl/diagnose.h>
@@ -218,10 +220,14 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
 uno::Reference< css::accessibility::XAccessibleContext >
     ChartController::impl_createAccessibleTextContext()
 {
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     uno::Reference< css::accessibility::XAccessibleContext > xResult(
         new AccessibleTextHelper( m_pDrawViewWrapper.get() ));
 
     return xResult;
+#else
+    return uno::Reference< css::accessibility::XAccessibleContext >();
+#endif
 }
 
 } //namespace chart
