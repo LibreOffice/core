@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <basegfx/numeric/ftools.hxx>
+
 #include <unx/cairotextrender.hxx>
 
 #include <unx/fc_fontoptions.hxx>
@@ -95,7 +97,7 @@ namespace
 
     double toRadian(Degree10 nDegree10th)
     {
-        return (3600_deg10 - nDegree10th).get() * M_PI / 1800.0;
+        return (3600_deg10 - nDegree10th).get() * F_PI1800;
     }
 
     cairo_t* syncCairoContext(cairo_t* cr)

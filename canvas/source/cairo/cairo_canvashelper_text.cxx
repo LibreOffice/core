@@ -99,7 +99,7 @@ namespace cairocanvas
             io_rVCLFont.SetFontHeight( ::basegfx::fround(nFontHeight * aScale.getY()) );
         }
 
-        io_rVCLFont.SetOrientation( Degree10(static_cast< sal_Int16 >( ::basegfx::fround(-fmod(nRotate, 2*M_PI)*(1800.0/M_PI)) )) );
+        io_rVCLFont.SetOrientation( Degree10(static_cast< sal_Int16 >( ::basegfx::fround(-fmod(nRotate, 2*M_PI)/F_PI1800) )) );
 
         // TODO(F2): Missing functionality in VCL: shearing
         o_rPoint.setX( ::basegfx::fround(aTranslate.getX()) );

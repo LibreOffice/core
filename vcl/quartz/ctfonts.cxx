@@ -43,7 +43,7 @@
 
 static double toRadian(int nDegree)
 {
-    return nDegree * (M_PI / 1800.0);
+    return nDegree * F_PI1800;
 }
 
 CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)

@@ -1929,8 +1929,8 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                   twipToPixel(rRectangle.m_aRectangle.x + rRectangle.m_aRectangle.width, priv->m_fZoom) - 15,
                   twipToPixel(rRectangle.m_aRectangle.y + rRectangle.m_aRectangle.height, priv->m_fZoom) - 15,
                   5,
-                  180.0 * (M_PI/180.0),
-                  360.0 * (M_PI/180.0));
+                  M_PI,
+                  2 * M_PI);
         cairo_stroke(pCairo);
     }
 
