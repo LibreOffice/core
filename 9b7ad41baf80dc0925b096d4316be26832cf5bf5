@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29bc690a_808bf628",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-18T10:55:39Z",
+      "side": 1,
+      "message": "(backporting this to go with the backported \u003chttps://gerrit.libreoffice.org/c/core/+/125363\u003e \"tdf#144695 VendorBase::isValidArch also for macOS\")",
+      "revId": "9b7ad41baf80dc0925b096d4316be26832cf5bf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
