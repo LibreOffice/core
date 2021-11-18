@@ -35,6 +35,12 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
+AquaA11yFocusTracker& TheAquaA11yFocusTracker()
+{
+    static AquaA11yFocusTracker SINGLETON;
+    return SINGLETON;
+}
+
 static vcl::Window *
 getWindow(const ::VclSimpleEvent *pEvent)
 {
