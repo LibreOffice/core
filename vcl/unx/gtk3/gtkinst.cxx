@@ -9800,6 +9800,33 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
 
 namespace {
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+bool button_release_is_outside(GtkWidget* pWidget, GtkWidget* pMenuHack, GdkEventButton* pEvent)
+{
+    //we want to pop down if the button was released outside our popup
+    gdouble x = pEvent->x_root;
+    gdouble y = pEvent->y_root;
+    gint xoffset, yoffset;
+    gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
+
+    GtkAllocation alloc;
+    gtk_widget_get_allocation(pWidget, &alloc);
+    xoffset += alloc.x;
+    yoffset += alloc.y;
+
+    gtk_widget_get_allocation(pMenuHack, &alloc);
+    gint x1 = alloc.x + xoffset;
+    gint y1 = alloc.y + yoffset;
+    gint x2 = x1 + alloc.width;
+    gint y2 = y1 + alloc.height;
+
+    if (x > x1 && x < x2 && y > y1 && y < y2)
+        return false;
+
+    return true;
+}
+#endif
+
 /* four types of uses of this
    a) textual menubutton, always with pan-down symbol, e.g. math, format, font, modify
    b) image + text, always with additional pan-down symbol, e.g. writer, format, watermark
@@ -9918,33 +9945,8 @@ private:
     static gboolean signalButtonRelease(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
-        return pThis->button_release(pWidget, pEvent);
-    }
-
-    bool button_release(GtkWidget* pWidget, GdkEventButton* pEvent)
-    {
-        //we want to pop down if the button was released outside our popup
-        gdouble x = pEvent->x_root;
-        gdouble y = pEvent->y_root;
-        gint xoffset, yoffset;
-        gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
-
-        GtkAllocation alloc;
-        gtk_widget_get_allocation(pWidget, &alloc);
-        xoffset += alloc.x;
-        yoffset += alloc.y;
-
-        gtk_widget_get_allocation(GTK_WIDGET(m_pMenuHack), &alloc);
-        gint x1 = alloc.x + xoffset;
-        gint y1 = alloc.y + yoffset;
-        gint x2 = x1 + alloc.width;
-        gint y2 = y1 + alloc.height;
-
-        if (x > x1 && x < x2 && y > y1 && y < y2)
-            return false;
-
-        set_active(false);
-
+        if (button_release_is_outside(pWidget, GTK_WIDGET(pThis->m_pMenuHack), pEvent))
+            pThis->set_active(false);
         return false;
     }
 
