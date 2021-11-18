@@ -94,7 +94,6 @@ public:
     {
         bool     mbEnabled:1;
         std::shared_ptr<Action> mxAction;
-        VclPtr<ScCheckListMenuWindow> mxSubMenuWin;
 
         MenuItemData();
     };
@@ -125,11 +124,9 @@ public:
 
     void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
-    ScCheckListMenuWindow* addSubMenuItem(const OUString& rText, bool bEnabled);
     void resizeToFitMenuItems();
 
-    void selectMenuItem(size_t nPos, bool bSubMenuTimer);
-    void queueLaunchSubMenu(size_t nPos, ScCheckListMenuWindow* pMenu);
+    void selectMenuItem(size_t nPos);
 
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
@@ -146,9 +143,6 @@ public:
     void StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags eFlags);
     void EndPopupMode();
 
-    size_t getSubMenuPos(const ScCheckListMenuControl* pSubMenu);
-    void setSubMenuFocused(const ScCheckListMenuControl* pSubMenu);
-    void queueCloseSubMenu();
     void clearSelectedMenuItem();
 
     /**
@@ -177,11 +171,6 @@ public:
      */
     void terminateAllPopupMenus();
 
-    /**
-     * Get the area of the active row. Suitable as the parent rectangle
-     * argument for Executing a popup
-    */
-    tools::Rectangle GetSubMenuParentRect();
     sal_Int32 ExecuteMenu(weld::Menu& rMenu);
 private:
 
@@ -204,23 +193,21 @@ private:
     int GetCheckedEntryCount() const;
     void CheckAllChildren(const weld::TreeIter& rEntry, bool bCheck);
 
-    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer);
+    void setSelectedMenuItem(size_t nPos);
 
     std::unique_ptr<weld::TreeIter> FindEntry(const weld::TreeIter* pParent, std::u16string_view sNode);
 
     void executeMenuItem(size_t nPos);
 
-    void endSubMenu(ScCheckListMenuControl& rSubMenu);
-
-    struct SubMenuItemData;
-
-    void handleMenuTimeout(const SubMenuItemData* pTimer);
-
-    void launchSubMenu(bool bSetMenuPos);
-
     void CreateDropDown();
 
     void NotifyCloseLOK();
+
+    /**
+     * Get the area of the active row. Suitable as the parent rectangle
+     * argument for Executing a popup
+    */
+    tools::Rectangle GetSubMenuParentRect();
 
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(TriStateHdl, weld::Toggleable&, void);
@@ -239,7 +226,6 @@ private:
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(TreeSizeAllocHdl, const Size&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(MenuKeyInputHdl, const KeyEvent&, bool);
 
     DECL_LINK(PostPopdownHdl, void*, void);
 
@@ -282,28 +268,8 @@ private:
 
     ScDocument* mpDoc;
 
-    ImplSVEvent* mnAsyncPostPopdownId;
-
     bool mbHasDates;
     bool mbCanHaveSubMenu;
-
-    struct SubMenuItemData
-    {
-        Timer                   maTimer;
-        VclPtr<ScCheckListMenuWindow>   mpSubMenu;
-        size_t                  mnMenuPos;
-
-        DECL_LINK( TimeoutHdl, Timer*, void );
-
-        SubMenuItemData(ScCheckListMenuControl* pParent);
-        void reset();
-
-    private:
-        ScCheckListMenuControl* mpParent;
-    };
-
-    SubMenuItemData   maOpenTimer;
-    SubMenuItemData   maCloseTimer;
 };
 
 /**
@@ -314,19 +280,15 @@ class ScCheckListMenuWindow : public DropdownDockingWindow
 public:
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,
                                    bool bCanHaveSubMenu, bool bTreeMode, int nWidth = -1,
-                                   ScCheckListMenuWindow* pParentMenu = nullptr,
                                    const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
     virtual void dispose() override;
     virtual ~ScCheckListMenuWindow() override;
 
     virtual void GetFocus() override;
-    virtual bool EventNotify(NotifyEvent& rNEvt) override;
 
-    ScCheckListMenuWindow* GetParentMenu() { return mxParentMenu; }
     ScCheckListMenuControl& get_widget() { return *mxControl; }
 
 private:
-    VclPtr<ScCheckListMenuWindow> mxParentMenu;
     std::unique_ptr<ScCheckListMenuControl, o3tl::default_delete<ScCheckListMenuControl>> mxControl;
 };
 

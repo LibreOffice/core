@@ -595,7 +595,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), mrViewData.GetPPTX());
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, false,
                                                                   aFilterEntries.mbHasDates, nColWidth,
-                                                                  nullptr, pNotifier));
+                                                                  pNotifier));
     ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
     int nMaxTextWidth = 0;

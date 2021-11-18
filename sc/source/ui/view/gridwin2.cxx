@@ -507,7 +507,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &mrViewData.GetDocument(),
                                                                bDimOrientNotPage, false, -1,
-                                                               nullptr, pNotifier));
+                                                               pNotifier));
 
     ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
     rControl.setExtendedData(std::move(pDPData));
