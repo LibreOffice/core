@@ -24,6 +24,7 @@
 
 #include <QtGui/QFont>
 #include <QtGui/QRawFont>
+#include <QtGui/QPainterPath>
 
 static inline void applyWeight(QtFont& rFont, FontWeight eWeight)
 {
@@ -151,7 +152,61 @@ hb_font_t* QtFont::ImplInitHbFont()
     return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
 }
 
-bool QtFont::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const { return false; }
+bool QtFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyPoly, bool) const
+{
+    rB2DPolyPoly.clear();
+    basegfx::B2DPolygon aPart;
+    QRawFont aRawFont(QRawFont::fromFont(*this));
+    QPainterPath aQPath = aRawFont.pathForGlyph(nId);
+
+    for (int a(0); a < aQPath.elementCount(); a++)
+    {
+        const QPainterPath::Element aQElement = aQPath.elementAt(a);
+
+        switch (aQElement.type)
+        {
+            case QPainterPath::MoveToElement:
+            {
+                if (aPart.count())
+                {
+                    aPart.setClosed(true);
+                    rB2DPolyPoly.append(aPart);
+                    aPart.clear();
+                }
+
+                aPart.append(basegfx::B2DPoint(aQElement.x, aQElement.y));
+                break;
+            }
+            case QPainterPath::LineToElement:
+            {
+                aPart.append(basegfx::B2DPoint(aQElement.x, aQElement.y));
+                break;
+            }
+            case QPainterPath::CurveToElement:
+            {
+                const QPainterPath::Element aQ2 = aQPath.elementAt(++a);
+                const QPainterPath::Element aQ3 = aQPath.elementAt(++a);
+                aPart.appendBezierSegment(basegfx::B2DPoint(aQElement.x, aQElement.y),
+                                          basegfx::B2DPoint(aQ2.x, aQ2.y),
+                                          basegfx::B2DPoint(aQ3.x, aQ3.y));
+                break;
+            }
+            case QPainterPath::CurveToDataElement:
+            {
+                break;
+            }
+        }
+    }
+
+    if (aPart.count())
+    {
+        aPart.setClosed(true);
+        rB2DPolyPoly.append(aPart);
+        aPart.clear();
+    }
+
+    return true;
+}
 
 bool QtFont::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
 {
