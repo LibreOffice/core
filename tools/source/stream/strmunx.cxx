@@ -30,7 +30,6 @@
 
 #include <osl/file.hxx>
 #include <osl/detail/file.h>
-#include <rtl/instance.hxx>
 
 using namespace osl;
 
@@ -38,7 +37,11 @@ using namespace osl;
 
 namespace {
 
-struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {};
+osl::Mutex& LockMutex()
+{
+    static osl::Mutex SINGLETON;
+    return SINGLETON;
+}
 
 std::map<SvFileStream const *, osl::DirectoryItem> gLocks;
 
@@ -60,7 +63,7 @@ bool lockFile( const SvFileStream* pStream )
     if( aStatus.getFileType() == osl::FileStatus::Directory )
         return true;
 
-    osl::MutexGuard aGuard( LockMutex::get() );
+    osl::MutexGuard aGuard( LockMutex() );
     for( const auto& [rLockStream, rLockItem] : gLocks )
     {
         if( aItem.isIdenticalTo( rLockItem ) )
@@ -83,7 +86,7 @@ bool lockFile( const SvFileStream* pStream )
 
 void unlockFile( SvFileStream const * pStream )
 {
-    osl::MutexGuard aGuard( LockMutex::get() );
+    osl::MutexGuard aGuard( LockMutex() );
     gLocks.erase(pStream);
 }
 
