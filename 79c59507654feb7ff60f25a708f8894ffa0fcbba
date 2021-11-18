@@ -34,6 +34,24 @@
       "parentUuid": "9920161b_6f362a2f",
       "revId": "79c59507654feb7ff60f25a708f8894ffa0fcbba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f652b42_22652da7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-18T12:05:19Z",
+      "side": 1,
+      "message": "Just drop those unused things. If needed, there\u0027s git history, and this info is not a secret anyway. We don\u0027t keep unused stuff just because it might possibly become useful later (except for commits that introduce something that is used by the commit already being prepared).",
+      "parentUuid": "8e033076_9e31c2f1",
+      "revId": "79c59507654feb7ff60f25a708f8894ffa0fcbba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
