@@ -57,9 +57,12 @@ std::type_index getTypeFromMysqlType(enum_field_types type)
 {
     switch (type)
     {
+        case MYSQL_TYPE_BIT:
+            return std::type_index(typeid(bool));
         case MYSQL_TYPE_TINY:
             return std::type_index(typeid(sal_Int8));
         case MYSQL_TYPE_SHORT:
+        case MYSQL_TYPE_YEAR:
             return std::type_index(typeid(sal_Int16));
         case MYSQL_TYPE_LONG:
         case MYSQL_TYPE_INT24:
@@ -83,8 +86,6 @@ std::type_index getTypeFromMysqlType(enum_field_types type)
         case MYSQL_TYPE_NEWDECIMAL:
             return std::type_index(typeid(OUString));
         case MYSQL_TYPE_BLOB:
-        case MYSQL_TYPE_YEAR:
-        case MYSQL_TYPE_BIT:
         case MYSQL_TYPE_SET:
         case MYSQL_TYPE_ENUM:
         case MYSQL_TYPE_GEOMETRY:
@@ -318,10 +319,13 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_TINY:
             return getByte(nColumnIndex);
         case MYSQL_TYPE_SHORT:
+        case MYSQL_TYPE_YEAR:
             return getShort(nColumnIndex);
         case MYSQL_TYPE_LONG:
         case MYSQL_TYPE_INT24:
             return getInt(nColumnIndex);
+        case MYSQL_TYPE_BIT:
+            return ORowSetValue(bool(getBoolean(nColumnIndex)));
         case MYSQL_TYPE_LONGLONG:
             return getLong(nColumnIndex);
         case MYSQL_TYPE_FLOAT:
