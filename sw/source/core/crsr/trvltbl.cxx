@@ -35,9 +35,14 @@
 #include <osl/diagnose.h>
 #include <svx/srchdlg.hxx>
 
+#include <wrtsh.hxx>
+
 /// set cursor into next/previous cell
 bool SwCursorShell::GoNextCell( bool bAppendLine )
 {
+    SwWrtShell* pWrtShell = GetDoc()->GetDocShell()->GetWrtShell();
+    pWrtShell->AssureStdModeAtShell();
+
     bool bRet = false;
     const SwTableNode* pTableNd = nullptr;
 

@@ -41,6 +41,8 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
+#include <svx/svdview.hxx>
+
 namespace com::sun::star::util {
     struct SearchOptions2;
 }
@@ -544,6 +546,20 @@ void SwWrtShell::ExtSelLn(const Point *pPt, bool )
         SwCursorShell::GoStartSentence();
     else
         SwCursorShell::GoEndSentence();
+}
+
+void SwWrtShell::AssureStdModeAtShell()
+{
+    if (HasDrawView() && GetDrawView()->IsTextEdit())
+    {
+        bool bLockView = IsViewLocked();
+        LockView(true);
+        EndTextEdit();
+        LockView(bLockView);
+    }
+    if (IsObjSelected())
+        GetView().LeaveDrawCreate();
+    EnterStdMode();
 }
 
 // Back into the standard mode: no mode, no selections.

@@ -145,6 +145,8 @@ public:
                                         IsMultiSelection() || IsSelFrameMode() || IsObjSelected(); }
     bool    Pop(SwCursorShell::PopMode = SwCursorShell::PopMode::DeleteStack);
 
+    void AssureStdModeAtShell();
+
     void    EnterStdMode();
     bool    IsStdMode() const { return !m_bExtMode && !m_bAddMode && !m_bBlockMode; }
 
