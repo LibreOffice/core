@@ -254,11 +254,8 @@ void SbRtl_CCur(StarBASIC *, SbxArray & rPar, bool)
     rPar.Get(0)->PutCurrency(nCur);
 }
 
-void SbRtl_CDec(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
+void SbRtl_CDec(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
 #ifdef _WIN32
     SbxDecimal* pDec = nullptr;
     if (rPar.Count() == 2)
@@ -458,11 +455,8 @@ void SbRtl_GetSystemType(StarBASIC *, SbxArray & rPar, bool)
     }
 }
 
-void SbRtl_GetGUIType(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
+void SbRtl_GetGUIType(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     if (rPar.Count() != 1)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
