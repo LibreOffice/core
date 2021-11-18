@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f16d5c37_3762e1c5",
+        "filename": "i18npool/inc/breakiterator_cjk.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-18T17:47:10Z",
+      "side": 1,
+      "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00587163_a4d1ba3e",
+        "filename": "i18npool/inc/characterclassificationImpl.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-18T17:47:10Z",
+      "side": 1,
+      "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aadd2d0a_b4edc8c3",
+        "filename": "i18npool/inc/collator_unicode.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-18T17:47:10Z",
+      "side": 1,
+      "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "741f1427_9a336bd2",
+        "filename": "i18npool/inc/transliteration_Ignore.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-18T17:47:10Z",
+      "side": 1,
+      "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24ac50d_067ae047",
+        "filename": "i18npool/inc/transliteration_caseignore.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-18T17:47:10Z",
+      "side": 1,
+      "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd7139e7_4aea3fd9",
+        "filename": "i18npool/inc/transliteration_commonclass.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-18T17:47:10Z",
+      "side": 1,
+      "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
