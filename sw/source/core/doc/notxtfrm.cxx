@@ -641,7 +641,7 @@ double SwNoTextFrame::getLocalFrameRotation() const
             const SwRotationGrf& rSwRotationGrf(rSwAttrSet.GetRotationGrf());
             const double fRotate = -toRadians(rSwRotationGrf.GetValue());
 
-            return basegfx::normalizeToRange(fRotate, F_2PI);
+            return basegfx::normalizeToRange(fRotate, 2 * M_PI);
         }
     }
 
@@ -1440,7 +1440,7 @@ bool SwNoTextFrame::IsTransparent() const
     if(isTransformableSwFrame())
     {
         // we can be more specific - rotations of multiples of
-        // 90 degrees will leave no gaps. Go from [0.0 .. F_2PI]
+        // 90 degrees will leave no gaps. Go from [0.0 .. 2PI]
         // to [0 .. 360] and check modulo 90
         const tools::Long nRot(static_cast<tools::Long>(basegfx::rad2deg(getLocalFrameRotation())));
         const bool bMultipleOf90(0 == (nRot % 90));

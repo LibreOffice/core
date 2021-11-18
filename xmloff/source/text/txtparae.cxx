@@ -3087,7 +3087,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
         // add rotation itself
         // tdf#115529 but correct value modulo 2PI to have it positive and in the range of [0.0 .. 2PI[
-        aSdXMLImExTransform2D.AddRotate(basegfx::normalizeToRange(fRotate, F_2PI));
+        aSdXMLImExTransform2D.AddRotate(basegfx::normalizeToRange(fRotate, 2 * M_PI));
 
         // back-transform after rotation
         aSdXMLImExTransform2D.AddTranslate(aCenter);

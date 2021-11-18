@@ -1260,7 +1260,7 @@ public:
                         break;
                     default:
                         aTransform.translate(-aSize.Width()/2, -aSize.Height()/2);
-                        aTransform.rotate(2 * F_2PI * i / nToRender);
+                        aTransform.rotate(2 * 2 * M_PI * i / nToRender);
                         aTransform.translate(aSize.Width()/2,  aSize.Height()/2);
                         break;
                     }

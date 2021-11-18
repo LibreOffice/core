@@ -200,7 +200,7 @@ namespace basegfx::utils
         }
 
         // helper for getting the 3D Point from given cartesian coordinates. fHor is defined from
-        // [M_PI_2 .. -M_PI_2], fVer from [0.0 .. F_2PI]
+        // [M_PI_2 .. -M_PI_2], fVer from [0.0 .. 2PI]
         static B3DPoint getPointFromCartesian(double fHor, double fVer)
         {
             const double fCosVer(cos(fVer));
@@ -217,7 +217,7 @@ namespace basegfx::utils
 
             if(!nHorSeg)
             {
-                nHorSeg = fround(fabs(fHorStop - fHorStart) / (F_2PI / 24.0));
+                nHorSeg = fround(fabs(fHorStop - fHorStart) / (M_PI / 12.0));
             }
 
             // min/max limitations
@@ -225,7 +225,7 @@ namespace basegfx::utils
 
             if(!nVerSeg)
             {
-                nVerSeg = fround(fabs(fVerStop - fVerStart) / (F_2PI / 24.0));
+                nVerSeg = fround(fabs(fVerStop - fVerStart) / (M_PI / 12.0));
             }
 
             // min/max limitations
@@ -234,7 +234,7 @@ namespace basegfx::utils
             // create constants
             const double fVerDiffPerStep((fVerStop - fVerStart) / static_cast<double>(nVerSeg));
             const double fHorDiffPerStep((fHorStop - fHorStart) / static_cast<double>(nHorSeg));
-            bool bHorClosed(fTools::equal(fHorStop - fHorStart, F_2PI));
+            bool bHorClosed(fTools::equal(fHorStop - fHorStart, 2 * M_PI));
             bool bVerFromTop(fTools::equal(fVerStart, M_PI_2));
             bool bVerToBottom(fTools::equal(fVerStop, -M_PI_2));
 
@@ -316,7 +316,7 @@ namespace basegfx::utils
 
             if(!nHorSeg)
             {
-                nHorSeg = fround(fabs(fHorStop - fHorStart) / (F_2PI / 24.0));
+                nHorSeg = fround(fabs(fHorStop - fHorStart) / (M_PI / 12.0));
             }
 
             // min/max limitations
@@ -324,7 +324,7 @@ namespace basegfx::utils
 
             if(!nVerSeg)
             {
-                nVerSeg = fround(fabs(fVerStop - fVerStart) / (F_2PI / 24.0));
+                nVerSeg = fround(fabs(fVerStop - fVerStart) / (M_PI / 12.0));
             }
 
             // min/max limitations

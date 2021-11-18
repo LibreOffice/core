@@ -401,7 +401,7 @@ namespace basegfx::utils
                 // transitions which value to choose
                 const B3DRange aPlaneRange(getRange(rCandidate));
                 const B3DPoint aPlaneCenter(aPlaneRange.getCenter() - rCenter);
-                const double fXCenter(fOne - ((atan2(aPlaneCenter.getZ(), aPlaneCenter.getX()) + M_PI) / F_2PI));
+                const double fXCenter(fOne - ((atan2(aPlaneCenter.getZ(), aPlaneCenter.getX()) + M_PI) / (2 * M_PI)));
 
                 for(a = 0; a < nPointCount; a++)
                 {
@@ -438,7 +438,7 @@ namespace basegfx::utils
                     }
                     else
                     {
-                        double fX(fOne - ((atan2(aVector.getZ(), aVector.getX()) + M_PI) / F_2PI));
+                        double fX(fOne - ((atan2(aVector.getZ(), aVector.getX()) + M_PI) / (2 * M_PI)));
 
                         // correct cartesian point coordinate dependent from center value
                         if(fX > fXCenter + 0.5)

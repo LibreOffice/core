@@ -62,7 +62,7 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitSpherePolyPolygon(
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
-            double fHorStart = 0.0, double fHorStop = F_2PI);
+            double fHorStart = 0.0, double fHorStop = 2 * M_PI);
 
         /** Create a 3D line polyPolygon from a B3DRange which defines a sphere with the given count of hor and ver segments.
             If nHorSeg == 0 and/or nVerSeg == 0, a default will be calculated to have a step at least each 15 degrees.
@@ -72,7 +72,7 @@ namespace basegfx::utils
             const B3DRange& rRange,
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
-            double fHorStart = 0.0, double fHorStop = F_2PI);
+            double fHorStart = 0.0, double fHorStop = 2 * M_PI);
 
         /** same as createUnitSpherePolyPolygon, but creates filled polygons (closed and oriented)
             There is one extra, the bool bNormals defines if normals will be set, default is false
@@ -81,7 +81,7 @@ namespace basegfx::utils
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             bool bNormals = false,
             double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
-            double fHorStart = 0.0, double fHorStop = F_2PI);
+            double fHorStart = 0.0, double fHorStop = 2 * M_PI);
 
         /** same as createSpherePolyPolygonFromB3DRange, but creates filled polygons (closed and oriented)
             There is one extra, the bool bNormals defines if normals will be set, default is false
@@ -91,7 +91,7 @@ namespace basegfx::utils
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             bool bNormals = false,
             double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
-            double fHorStart = 0.0, double fHorStop = F_2PI);
+            double fHorStart = 0.0, double fHorStop = 2 * M_PI);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.
             rCandidate: the 3d geometry to change

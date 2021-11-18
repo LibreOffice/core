@@ -171,17 +171,17 @@ namespace PictReaderShape {
     tools::Long const Y[2] = { arc.Top(), arc.Bottom() };
     B2DPoint center(0.5*(X[1]+X[0]), 0.5*(Y[1]+Y[0]));
 
-    // We must have angl1 between 0 and F_2PI
-    while (angl1 < 0.0) { angl1 += F_2PI; angl2 += F_2PI; }
-    while (angl1 >= F_2PI) { angl1  -= F_2PI; angl2 -= F_2PI; }
+    // We must have angl1 between 0 and 2PI
+    while (angl1 < 0.0) { angl1 += 2 * M_PI; angl2 += 2 * M_PI; }
+    while (angl1 >= 2 * M_PI) { angl1  -= 2 * M_PI; angl2 -= 2 * M_PI; }
 
     // if this happen, we want a complete circle
     // so we set angl2 slightly less than angl1
-    if (angl2 >= angl1+F_2PI) angl2 = angl1-0.001;
+    if (angl2 >= angl1 + 2 * M_PI) angl2 = angl1-0.001;
 
-    // We must have angl2 between 0 and F_2PI
-    while (angl2 < 0.0) angl2 += F_2PI;
-    while (angl2 >= F_2PI) angl2 -= F_2PI;
+    // We must have angl2 between 0 and 2PI
+    while (angl2 < 0.0) angl2 += 2 * M_PI;
+    while (angl2 >= 2 * M_PI) angl2 -= 2 * M_PI;
 
     B2DPolygon poly = basegfx::utils::createPolygonFromEllipseSegment(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]), angl1, angl2);
     if (drawFrame)

@@ -30,7 +30,7 @@ namespace basegfx::utils
             {
                 // determine quadrant
                 const sal_Int32 nQuad(
-                    (4 + fround( 4/F_2PI*fmod( fRadiant, F_2PI ) )) % 4 );
+                    (4 + fround( M_2_PI*fmod( fRadiant, 2 * M_PI ) )) % 4 );
                 switch( nQuad )
                 {
                     case 0: // -2pi,0,2pi
