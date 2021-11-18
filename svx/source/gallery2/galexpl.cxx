@@ -18,7 +18,6 @@
  */
 
 
-#include <rtl/instance.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery.hxx>
@@ -26,7 +25,11 @@
 
 namespace
 {
-    class theLockListener : public rtl::Static< SfxListener, theLockListener > {};
+    SfxListener& theLockListener()
+    {
+        static SfxListener SINGLETON;
+        return SINGLETON;
+    }
 }
 
 
@@ -240,7 +243,7 @@ bool GalleryExplorer::BeginLocking( std::u16string_view rThemeName )
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, theLockListener::get() );
+        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, theLockListener() );
 
         if( pTheme )
         {
@@ -278,7 +281,7 @@ bool GalleryExplorer::EndLocking( std::u16string_view rThemeName )
             if( bReleaseLockedTheme )
             {
                 // release locked theme
-                pGal->ReleaseTheme( pTheme, theLockListener::get() );
+                pGal->ReleaseTheme( pTheme, theLockListener() );
                 bRet = true;
             }
         }

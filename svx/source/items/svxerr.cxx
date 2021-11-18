@@ -19,7 +19,6 @@
 
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
-#include <rtl/instance.hxx>
 #include <svxerr.hrc>
 
 SvxErrorHandler::SvxErrorHandler() :
@@ -28,16 +27,10 @@ SvxErrorHandler::SvxErrorHandler() :
 {
 }
 
-namespace
-{
-    class theSvxErrorHandler
-        : public rtl::Static<SvxErrorHandler, theSvxErrorHandler> {};
-}
-
 void SvxErrorHandler::ensure()
 {
+    static SvxErrorHandler SINGLETON;
     // coverity[side_effect_free : FALSE] - not actually side-effect-free
-    theSvxErrorHandler::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

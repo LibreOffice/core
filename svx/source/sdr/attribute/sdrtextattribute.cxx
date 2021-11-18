@@ -23,7 +23,6 @@
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdr/properties/properties.hxx>
-#include <rtl/instance.hxx>
 
 
 namespace drawinglayer::attribute
@@ -229,8 +228,11 @@ namespace drawinglayer::attribute
 
         namespace
         {
-            struct theGlobalDefault :
-                public rtl::Static< SdrTextAttribute::ImplType, theGlobalDefault > {};
+            SdrTextAttribute::ImplType& theGlobalDefault()
+            {
+                static SdrTextAttribute::ImplType SINGLETON;
+                return SINGLETON;
+            }
         }
 
         SdrTextAttribute::SdrTextAttribute(
@@ -264,7 +266,7 @@ namespace drawinglayer::attribute
         }
 
         SdrTextAttribute::SdrTextAttribute()
-            :   mpSdrTextAttribute(theGlobalDefault::get())
+            :   mpSdrTextAttribute(theGlobalDefault())
         {
         }
 
@@ -284,7 +286,7 @@ namespace drawinglayer::attribute
 
         bool SdrTextAttribute::isDefault() const
         {
-            return mpSdrTextAttribute.same_object(theGlobalDefault::get());
+            return mpSdrTextAttribute.same_object(theGlobalDefault());
         }
 
         SdrTextAttribute& SdrTextAttribute::operator=(const SdrTextAttribute& rCandidate)
