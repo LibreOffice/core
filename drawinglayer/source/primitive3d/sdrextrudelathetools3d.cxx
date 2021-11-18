@@ -360,7 +360,7 @@ namespace drawinglayer::primitive3d
             else
             {
                 const bool bBackScale(!basegfx::fTools::equal(fBackScale, 1.0));
-                const bool bClosedRotation(!bBackScale && basegfx::fTools::equal(fRotation, F_2PI));
+                const bool bClosedRotation(!bBackScale && basegfx::fTools::equal(fRotation, 2 * M_PI));
                 basegfx::B2DPolyPolygon aFront(rSource);
                 basegfx::B2DPolyPolygon aBack(rSource);
                 basegfx::B3DHomMatrix aTransformBack;

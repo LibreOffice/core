@@ -69,7 +69,7 @@ namespace drawinglayer::primitive3d
                         basegfx::B3DPoint aLastLeft(0.0, 1.0, 0.0);
                         basegfx::B3DPoint aLastRight(1.0, 1.0, 0.0);
                         basegfx::B3DHomMatrix aRot;
-                        aRot.rotate(F_2PI / static_cast<double>(m_nLineTubeSegments), 0.0, 0.0);
+                        aRot.rotate(2 * M_PI / static_cast<double>(m_nLineTubeSegments), 0.0, 0.0);
                         m_aLineTubeList.resize(m_nLineTubeSegments);
 
                         for(sal_uInt32 a = 0; a < m_nLineTubeSegments; ++a)
@@ -148,7 +148,7 @@ namespace drawinglayer::primitive3d
                         const basegfx::B3DPoint aNull(0.0, 0.0, 0.0);
                         basegfx::B3DPoint aLast(0.0, 1.0, 0.0);
                         basegfx::B3DHomMatrix aRot;
-                        aRot.rotate(F_2PI / static_cast<double>(m_nLineCapSegments), 0.0, 0.0);
+                        aRot.rotate(2 * M_PI / static_cast<double>(m_nLineCapSegments), 0.0, 0.0);
                         m_aLineCapList.resize(m_nLineCapSegments);
 
                         for(sal_uInt32 a = 0; a < m_nLineCapSegments; ++a)
@@ -235,7 +235,7 @@ namespace drawinglayer::primitive3d
                                 nVerSeg,
                                 true,
                                 M_PI_2, 0.0,
-                                0.0, F_2PI));
+                                0.0, 2 * M_PI));
                         const sal_uInt32 nCount(aSphere.count());
 
                         if (nCount)
@@ -296,7 +296,7 @@ namespace drawinglayer::primitive3d
                     if(basegfx::B2DLineJoin::Round == aLineJoin)
                     {
                         // calculate new horizontal segments
-                        const sal_uInt32 nHorSeg(basegfx::fround((fAngle / F_2PI) * static_cast<double>(nSegments)));
+                        const sal_uInt32 nHorSeg(basegfx::fround((fAngle / (2 * M_PI)) * static_cast<double>(nSegments)));
 
                         if(nHorSeg)
                         {

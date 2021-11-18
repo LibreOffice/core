@@ -83,7 +83,7 @@ namespace drawinglayer::primitive3d
                         // different from forced to sphere texture coordinates,
                         // create a old version from it by rotating to old state before applying
                         // the texture coordinates to emulate old behaviour
-                        fRelativeAngle = F_2PI * (static_cast<double>((getHorizontalSegments() >> 1)  - 1) / static_cast<double>(getHorizontalSegments()));
+                        fRelativeAngle = 2 * M_PI * (static_cast<double>((getHorizontalSegments() >> 1)  - 1) / static_cast<double>(getHorizontalSegments()));
                         basegfx::B3DHomMatrix aRot;
                         aRot.rotate(0.0, fRelativeAngle, 0.0);
                         aFill.transform(aRot);

@@ -105,7 +105,7 @@ namespace drawinglayer::primitive2d
 
                     if(getTextAutoAngle() && fTestAngle < -M_PI)
                     {
-                        fTestAngle += F_2PI;
+                        fTestAngle += 2 * M_PI;
                     }
                 }
 

@@ -660,10 +660,10 @@ void OutputDevice::DrawTransformedBitmapEx(
     else
     {
         // Just rotation, can do that directly.
-        fFullRotate = fmod(fFullRotate * -1, F_2PI);
+        fFullRotate = fmod(fFullRotate * -1, 2 * M_PI);
         if (fFullRotate < 0)
         {
-            fFullRotate += F_2PI;
+            fFullRotate += 2 * M_PI;
         }
         Degree10 nAngle10(basegfx::fround(basegfx::rad2deg(fFullRotate) * 10));
         aTransformed.Rotate(nAngle10, COL_TRANSPARENT);

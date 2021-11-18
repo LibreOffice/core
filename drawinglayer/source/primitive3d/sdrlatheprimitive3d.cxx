@@ -43,7 +43,7 @@ namespace drawinglayer::primitive3d
             if(!rSliceVector.empty())
             {
                 const bool bBackScale(!basegfx::fTools::equal(getBackScale(), 1.0));
-                const bool bClosedRotation(!bBackScale && getHorizontalSegments() && basegfx::fTools::equal(getRotation(), F_2PI));
+                const bool bClosedRotation(!bBackScale && getHorizontalSegments() && basegfx::fTools::equal(getRotation(), 2 * M_PI));
                 sal_uInt32 a;
 
                 // decide what to create

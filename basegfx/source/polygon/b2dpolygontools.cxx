@@ -1822,14 +1822,14 @@ namespace basegfx::utils
         {
             B2DPolygon aRetval;
 
-            // truncate fStart, fEnd to a range of [0.0 .. F_2PI[ where F_2PI
+            // truncate fStart, fEnd to a range of [0.0 .. 2PI[ where 2PI
             // falls back to 0.0 to ensure a unique definition
             if(fTools::less(fStart, 0.0))
             {
                 fStart = 0.0;
             }
 
-            if(fTools::moreOrEqual(fStart, F_2PI))
+            if(fTools::moreOrEqual(fStart, 2 * M_PI))
             {
                 fStart = 0.0;
             }
@@ -1839,7 +1839,7 @@ namespace basegfx::utils
                 fEnd = 0.0;
             }
 
-            if(fTools::moreOrEqual(fEnd, F_2PI))
+            if(fTools::moreOrEqual(fEnd, 2 * M_PI))
             {
                 fEnd = 0.0;
             }

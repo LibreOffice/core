@@ -727,10 +727,10 @@ namespace
             return true;
         }
 
-        fRotate = fmod( fRotate, F_2PI );
+        fRotate = fmod( fRotate, 2 * M_PI );
         if (fRotate < 0)
         {
-            fRotate += F_2PI;
+            fRotate += 2 * M_PI;
         }
         if (!rtl::math::approxEqual(fRotate, 0)
             && !rtl::math::approxEqual(fRotate, M_PI_2)

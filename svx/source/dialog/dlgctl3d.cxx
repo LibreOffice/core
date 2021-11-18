@@ -314,7 +314,7 @@ void Svx3DLightControl::Construct2()
         a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, 0.0));
         a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, -RADIUS_LAMP_PREVIEW_SIZE));
         a2DHalfCircle.append(basegfx::utils::createPolygonFromEllipseSegment(
-            basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE, RADIUS_LAMP_PREVIEW_SIZE, F_2PI - M_PI_2, M_PI_2));
+            basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE, RADIUS_LAMP_PREVIEW_SIZE, 2 * M_PI - M_PI_2, M_PI_2));
         basegfx::B3DPolygon a3DHalfCircle(basegfx::utils::createB3DPolygonFromB2DPolygon(a2DHalfCircle));
 
         // create object for it
@@ -600,12 +600,12 @@ bool Svx3DLightControl::MouseMove(const MouseEvent& rMEvt)
             // cut horizontal
             while(fNewRotY < 0.0)
             {
-                fNewRotY += F_2PI;
+                fNewRotY += 2 * M_PI;
             }
 
-            while(fNewRotY >= F_2PI)
+            while(fNewRotY >= 2 * M_PI)
             {
-                fNewRotY -= F_2PI;
+                fNewRotY -= 2 * M_PI;
             }
 
             // cut vertical

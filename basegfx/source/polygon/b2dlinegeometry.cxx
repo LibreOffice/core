@@ -771,12 +771,12 @@ namespace basegfx
                     // atan2 results are [-PI .. PI], consolidate to [0.0 .. 2PI]
                     if(fAngleStart < 0.0)
                     {
-                        fAngleStart += F_2PI;
+                        fAngleStart += 2 * M_PI;
                     }
 
                     if(fAngleEnd < 0.0)
                     {
-                        fAngleEnd += F_2PI;
+                        fAngleEnd += 2 * M_PI;
                     }
 
                     const B2DPolygon aBow(utils::createPolygonFromEllipseSegment(rPoint, fHalfLineWidth, fHalfLineWidth, fAngleStart, fAngleEnd));

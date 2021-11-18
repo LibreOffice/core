@@ -2008,7 +2008,7 @@ static double lcl_getNormalizedCircleAngleRad(const double fWR, const double fHR
     {
         fRet = atan2(fY, fX);
         if (fRet < 0.0)
-            fRet += F_2PI;
+            fRet += 2 * M_PI;
     }
     return fRet;
 }
@@ -2494,7 +2494,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                                     }
                                     else // right, down
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*M_PI, F_2PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*M_PI, 2*M_PI);
                                     }
                                 }
                             }
@@ -2505,7 +2505,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                                 {
                                     if (aEnd.getY()<aStart.getY()) // up, left
                                     {
-                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*M_PI, F_2PI);
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*M_PI, 2*M_PI);
                                         aArc.flip();
                                     }
                                     else // down, left

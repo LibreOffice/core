@@ -33,9 +33,6 @@
 #ifndef F_PI18000
 #define F_PI18000   (M_PI/18000.0)
 #endif
-#ifndef F_2PI
-#define F_2PI       (2.0*M_PI)
-#endif
 
 
 // fTools defines
