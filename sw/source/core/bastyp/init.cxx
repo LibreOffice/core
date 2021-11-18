@@ -114,7 +114,6 @@
 #include <paratr.hxx>
 #include <proofreadingiterator.hxx>
 #include <editeng/editids.hrc>
-#include <rtl/instance.hxx>
 #include <svl/macitem.hxx>
 #include <svx/sdtaitm.hxx>
 #include <swcalwrp.hxx>
@@ -779,13 +778,12 @@ namespace
             return *m_xTransWrp;
         }
     };
-
-    class theTransWrp : public rtl::Static<TransWrp, theTransWrp> {};
 }
 
 const ::utl::TransliterationWrapper& GetAppCmpStrIgnore()
 {
-    return theTransWrp::get().getTransliterationWrapper();
+    static TransWrp theTransWrp;
+    return theTransWrp.getTransliterationWrapper();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

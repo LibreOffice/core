@@ -21,7 +21,6 @@
 #include <com/sun/star/util/JobManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 
 // Testing
 
@@ -29,16 +28,13 @@ using namespace ::com::sun::star;
 
 namespace
 {
-class theJoinerMutex : public rtl::Static<osl::Mutex, theJoinerMutex>
-{
-};
-
 uno::Reference<util::XJobManager> pThreadJoiner;
 }
 
 uno::Reference<util::XJobManager>& SwThreadJoiner::GetThreadJoiner()
 {
-    osl::MutexGuard aGuard(theJoinerMutex::get());
+    static osl::Mutex theJoinerMutex;
+    osl::MutexGuard aGuard(theJoinerMutex);
 
     if (!pThreadJoiner.is())
     {
