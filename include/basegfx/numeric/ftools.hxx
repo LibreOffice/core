@@ -26,7 +26,6 @@
 #include <limits>
 #include <algorithm>
 
-// standard PI defines from solar.h, but we do not want to link against tools
 
 #ifndef F_PI
 #define F_PI        M_PI
