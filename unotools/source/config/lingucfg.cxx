@@ -25,7 +25,6 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
@@ -47,8 +46,11 @@ constexpr OUStringLiteral FILE_PROTOCOL = u"file:///";
 
 namespace
 {
-    class theSvtLinguConfigItemMutex :
-        public rtl::Static< osl::Mutex, theSvtLinguConfigItemMutex > {};
+    osl::Mutex& theSvtLinguConfigItemMutex()
+    {
+        static osl::Mutex SINGLETON;
+        return SINGLETON;
+    }
 }
 
 static bool lcl_SetLocale( LanguageType &rLanguage, const uno::Any &rVal )
@@ -319,7 +321,7 @@ bool SvtLinguConfigItem::GetHdlByName(
 
 uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     sal_Int32 nHdl;
     return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : uno::Any();
@@ -327,7 +329,7 @@ uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
 
 uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     uno::Any aRes;
 
@@ -409,7 +411,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 
 bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     bool bSucc = false;
     sal_Int32 nHdl;
@@ -420,7 +422,7 @@ bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::
 
 bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     bool bSucc = false;
     if (!rValue.hasValue())
@@ -559,13 +561,13 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
 
 const SvtLinguOptions& SvtLinguConfigItem::GetOptions() const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
     return aOpt;
 }
 
 void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     bool bRes = false;
 
@@ -684,7 +686,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     if (!IsModified())
         return true;
 
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     bool bRet = false;
 
@@ -746,7 +748,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
 
 bool SvtLinguConfigItem::IsReadOnly( const OUString &rPropertyName ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     bool bReadOnly = false;
     sal_Int32 nHdl;
@@ -757,7 +759,7 @@ bool SvtLinguConfigItem::IsReadOnly( const OUString &rPropertyName ) const
 
 bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     bool bReadOnly = false;
 
@@ -808,13 +810,13 @@ constexpr OUStringLiteral aG_Dictionaries = u"Dictionaries";
 SvtLinguConfig::SvtLinguConfig()
 {
     // Global access, must be guarded (multithreading)
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
     ++nCfgItemRefCount;
 }
 
 SvtLinguConfig::~SvtLinguConfig()
 {
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
     if (pCfgItem && pCfgItem->IsModified())
         pCfgItem->Commit();
@@ -829,7 +831,7 @@ SvtLinguConfig::~SvtLinguConfig()
 SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
 {
     // Global access, must be guarded (multithreading)
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
+    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
     if (!pCfgItem)
     {
         pCfgItem = new SvtLinguConfigItem;

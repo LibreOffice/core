@@ -24,7 +24,7 @@
 
 #include <unotools/tempfile.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/instance.hxx>
+#include <osl/mutex.hxx>
 #include <osl/detail/file.h>
 #include <osl/file.hxx>
 #include <tools/time.hxx>

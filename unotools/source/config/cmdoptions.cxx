@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <rtl/instance.hxx>
 
 #include "itemholder1.hxx"
 
@@ -340,16 +339,12 @@ void SvtCommandOptions::EstablishFrameCallback(const css::uno::Reference< css::f
     m_pImpl->EstablishFrameCallback(xFrame);
 }
 
-namespace
-{
-    class theCommandOptionsMutex : public rtl::Static<osl::Mutex, theCommandOptionsMutex>{};
-}
-
 //  private method
 
 Mutex& SvtCommandOptions::GetOwnStaticMutex()
 {
-    return theCommandOptionsMutex::get();
+    static osl::Mutex theCommandOptionsMutex;
+    return theCommandOptionsMutex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

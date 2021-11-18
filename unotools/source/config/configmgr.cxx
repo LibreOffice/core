@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <officecfg/Setup.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <unotools/configitem.hxx>
@@ -66,10 +65,6 @@ css::uno::Reference< css::lang::XMultiServiceFactory >
 getConfigurationProvider() {
     return css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
 }
-
-struct theConfigManager:
-    public rtl::Static< utl::ConfigManager, theConfigManager >
-{};
 
 }
 
@@ -114,7 +109,8 @@ void utl::ConfigManager::storeConfigItems() {
 }
 
 utl::ConfigManager & utl::ConfigManager::getConfigManager() {
-    return theConfigManager::get();
+    static utl::ConfigManager theConfigManager;
+    return theConfigManager;
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >

@@ -37,7 +37,6 @@
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
-#include <rtl/instance.hxx>
 #include <o3tl/enumarray.hxx>
 
 #include "itemholder1.hxx"
@@ -433,12 +432,19 @@ SvtPathOptions_Impl::SvtPathOptions_Impl()
 
 // class SvtPathOptions --------------------------------------------------
 
-namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
+namespace
+{
+    ::osl::Mutex& lclMutex()
+    {
+        static ::osl::Mutex SINGLETON;
+        return SINGLETON;
+    }
+}
 
 SvtPathOptions::SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    ::osl::MutexGuard aGuard( lclMutex() );
     pImpl = g_pOptions.lock();
     if ( !pImpl )
     {
@@ -451,7 +457,7 @@ SvtPathOptions::SvtPathOptions()
 SvtPathOptions::~SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    ::osl::MutexGuard aGuard( lclMutex() );
 
     pImpl.reset();
 }
