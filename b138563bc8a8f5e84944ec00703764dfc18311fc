@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4afe849_859be1b4",
+        "filename": "sc/uiconfig/scalc/ui/optcalculatepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-18T08:48:52Z",
+      "side": 1,
+      "message": "Would it be possible to not backport this UI String change? string freeze of libreoffice-7-2 was long ago",
+      "revId": "b138563bc8a8f5e84944ec00703764dfc18311fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
