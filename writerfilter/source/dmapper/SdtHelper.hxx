@@ -39,6 +39,13 @@ namespace dmapper
 {
 class DomainMapper_Impl;
 
+enum class SdtControlType
+{
+    datePicker,
+    dropDown,
+    unknown
+};
+
 /**
  * Helper to create form controls from w:sdt tokens.
  *
@@ -51,8 +58,8 @@ class SdtHelper final : public virtual SvRefBase
 
     /// Items of the drop-down control.
     std::vector<OUString> m_aDropDownItems;
-    /// Indicator of a drop-down control
-    bool m_bInsideDropDownControl;
+    /// Type of sdt control
+    SdtControlType m_aControlType;
     /// Pieces of the default text -- currently used only by the dropdown control.
     OUStringBuffer m_aSdtTexts;
     /// Date ISO string contained in the w:date element, used by the date control.
@@ -91,9 +98,6 @@ public:
         m_xDateFieldStartRange = xStartRange;
     }
 
-    /// Decides if we have enough information to create a date control.
-    bool validateDateFormat();
-
     OUStringBuffer& getLocale() { return m_sLocale; }
     /// If createControlShape() was ever called.
     bool hasElements() const { return m_bHasElements; }
@@ -105,8 +109,8 @@ public:
 
     bool isOutsideAParagraph() const { return m_bOutsideAParagraph; }
 
-    bool isInsideDropDownControl() const { return m_bInsideDropDownControl; }
-    void setInsideDropDownControl(bool bInside) { m_bInsideDropDownControl = bInside; }
+    SdtControlType getControlType() { return m_aControlType; }
+    void setControlType(SdtControlType aType) { m_aControlType = aType; }
 
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();
