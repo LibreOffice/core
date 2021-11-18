@@ -49,9 +49,6 @@ private:
     static const sal_Int32 SynRef;
     static const sal_Int32 GregRef;
 
-    // Local time (Saudi Arabia)
-    static const double SA_TimeZone;        // Time Zone
-
     // Period between 1.30pm - 6:30pm
     static const double EveningPeriod;
 

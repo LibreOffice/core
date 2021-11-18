@@ -34,9 +34,6 @@ using namespace ::com::sun::star::i18n;
 
 namespace i18npool {
 
-// not used
-//static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
-
 // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
 const double Calendar_hijri::SynPeriod      = 29.53058868;
 const double Calendar_hijri::SynMonth       = 365.25/29.53058868;   // Solar days in a year/SynPeriod
@@ -47,9 +44,6 @@ const double Calendar_hijri::jd1900     = 2415020.75933;
 // Reference point: March 26, 2001 == 1422 Hijri == 1252 Synodial month from 1900
 const sal_Int32 Calendar_hijri::SynRef      = 1252;
 const sal_Int32 Calendar_hijri::GregRef     = 1422;
-
-// Local time specific to Saudi Arabia
-const double Calendar_hijri::SA_TimeZone    = 3.0;
 
 const double Calendar_hijri::EveningPeriod  = 6.0;
 
@@ -173,7 +167,6 @@ void
 Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 {
     double prevday;
-//  double dayfraction;
     sal_Int32 syndiff;
     sal_Int32 newsyn;
     double newjd;
@@ -221,9 +214,7 @@ void
 Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 {
     sal_Int32 nmonth;
-//    double dayfraction;
     double jday;
-//    sal_Int32 dayint;
 
     if ( *year < 0 ) (*year)++;
 
