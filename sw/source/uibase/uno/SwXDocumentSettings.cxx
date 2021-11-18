@@ -149,6 +149,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_HEADER_SPACING_BELOW_LAST_PARA,
     HANDLE_FRAME_AUTOWIDTH_WITH_MORE_PARA,
     HANDLE_GUTTER_AT_TOP,
+    HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND,
 };
 
 }
@@ -244,6 +245,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("HeaderSpacingBelowLastPara"), HANDLE_HEADER_SPACING_BELOW_LAST_PARA, cppu::UnoType<bool>::get(), 0 },
         { OUString("FrameAutowidthWithMorePara"), HANDLE_FRAME_AUTOWIDTH_WITH_MORE_PARA, cppu::UnoType<bool>::get(), 0 },
         { OUString("GutterAtTop"), HANDLE_GUTTER_AT_TOP, cppu::UnoType<bool>::get(), 0 },
+        { OUString("FootnoteInColumnToPageEnd"), HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1016,6 +1018,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND, bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1520,6 +1532,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_GUTTER_AT_TOP:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP);
+        }
+        break;
+        case HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND);
         }
         break;
         default:
