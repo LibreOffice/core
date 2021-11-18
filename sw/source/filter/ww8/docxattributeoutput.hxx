@@ -144,6 +144,7 @@ public:
     void DeleteAndResetTheLists();
 
     void WriteSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing);
+    void WriteExtraParams(::sax_fastparser::FSHelperPtr& pSerializer);
 
     /// Closes a currently open SDT block.
     void EndSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer);
@@ -750,7 +751,7 @@ private:
     void WritePostponedCustomShape();
     void WriteFlyFrame(const ww8::Frame& rFrame);
 
-    void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang);
+    void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
     void WriteSdtDropDownStart(std::u16string_view rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtDropDownEnd(OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtEnd();

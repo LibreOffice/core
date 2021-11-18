@@ -54,6 +54,14 @@ class SdtHelper final : public virtual SvRefBase
     OUStringBuffer m_sDate;
     /// Date format string as it comes from the ooxml document.
     OUStringBuffer m_sDateFormat;
+
+    /// <w:dataBinding w:prefixMappings="">
+    OUString m_sDataBindingPrefixMapping;
+    /// <w:dataBinding w:xpath="">
+    OUString m_sDataBindingXPath;
+    /// <w:dataBinding w:storeItemID="">
+    OUString m_sDataBindingStoreItemID;
+
     /// Start range of the date field
     css::uno::Reference<css::text::XTextRange> m_xDateFieldStartRange;
     /// Locale string as it comes from the ooxml document.
@@ -80,6 +88,13 @@ public:
     OUStringBuffer& getDate() { return m_sDate; }
 
     OUStringBuffer& getDateFormat() { return m_sDateFormat; }
+
+    void setDataBindingPrefixMapping(const OUString& sValue)
+    {
+        m_sDataBindingPrefixMapping = sValue;
+    }
+    void setDataBindingXPath(const OUString& sValue) { m_sDataBindingXPath = sValue; }
+    void setDataBindingStoreItemID(const OUString& sValue) { m_sDataBindingStoreItemID = sValue; }
 
     void setDateFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
     {
