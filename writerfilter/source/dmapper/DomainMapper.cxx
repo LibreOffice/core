@@ -1078,10 +1078,17 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             else
                 m_pImpl->setSdtEndDeferred(true);
 
-            if (m_pImpl->m_pSdtHelper->isInsideDropDownControl())
-                m_pImpl->m_pSdtHelper->createDropDownControl();
-            else if (m_pImpl->m_pSdtHelper->validateDateFormat())
-                m_pImpl->m_pSdtHelper->createDateContentControl();
+            switch (m_pImpl->m_pSdtHelper->getControlType())
+            {
+                case SdtControlType::dropDown:
+                    m_pImpl->m_pSdtHelper->createDropDownControl();
+                    break;
+                case SdtControlType::datePicker:
+                    m_pImpl->m_pSdtHelper->createDateContentControl();
+                    break;
+                case SdtControlType::unknown:
+                default:;
+            }
         break;
         case NS_ooxml::LN_CT_SdtListItem_displayText:
             // TODO handle when this is != value
@@ -2638,7 +2645,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_dropDownList:
     case NS_ooxml::LN_CT_SdtPr_comboBox:
     {
-        m_pImpl->m_pSdtHelper->setInsideDropDownControl(true);
+        m_pImpl->m_pSdtHelper->setControlType(SdtControlType::dropDown);
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties)
             pProperties->resolve(*this);
@@ -2661,6 +2668,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_CT_SdtPr_date:
     {
+        m_pImpl->m_pSdtHelper->setControlType(SdtControlType::datePicker);
         resolveSprmProps(*this, rSprm);
         m_pImpl->m_pSdtHelper->setDateFieldStartRange(GetCurrentTextRange()->getEnd());
     }
@@ -3518,7 +3526,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     }
 
     bool bNewLine = len == 1 && (sText[0] == 0x0d || sText[0] == 0x07);
-    if (m_pImpl->m_pSdtHelper->isInsideDropDownControl())
+    if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::dropDown)
     {
         if (bNewLine)
             // Dropdown control has single-line texts, so in case of newline, create the control.
@@ -3529,43 +3537,47 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             return;
         }
     }
-    else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
+    else if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::datePicker)
     {
-         // Ignore grabbag when we have a date field, it can conflict during export
-        if(m_pImpl->m_pSdtHelper->validateDateFormat())
+        if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
         {
             m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
         }
-        else
+        else if (IsInHeaderFooter() && m_pImpl->IsDiscardHeaderFooter())
         {
-
-            // there are unsupported SDT properties in the document
-            // save them in the paragraph interop grab bag
-            if (m_pImpl->IsDiscardHeaderFooter())
-            {
-                // Unless we're supposed to ignore this header/footer.
-                m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-                return;
-            }
-            if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
-                    m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
-                    m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
-                    m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_citation") ||
-                    (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
-                            m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
-            {
-                PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER);
-
-                if (m_pImpl->IsOpenField())
-                    // We have a field, insert the SDT properties to the field's grab-bag, so they won't be lost.
-                    pContext = m_pImpl->GetTopFieldContext()->getProperties();
-
-                pContext->Insert(PROP_SDTPR, uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, CHAR_GRAB_BAG);
-            }
-            else
-                m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
-                        uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, PARA_GRAB_BAG);
+            m_pImpl->m_pSdtHelper->getDateFormat().truncate();
+            m_pImpl->m_pSdtHelper->getLocale().truncate();
+            return;
         }
+    }
+    else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
+    {
+        // there are unsupported SDT properties in the document
+        // save them in the paragraph interop grab bag
+        if (m_pImpl->IsDiscardHeaderFooter())
+        {
+            // Unless we're supposed to ignore this header/footer.
+            m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+            return;
+        }
+        if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
+                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
+                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
+                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_citation") ||
+                (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
+                        m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
+        {
+            PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER);
+
+            if (m_pImpl->IsOpenField())
+                // We have a field, insert the SDT properties to the field's grab-bag, so they won't be lost.
+                pContext = m_pImpl->GetTopFieldContext()->getProperties();
+
+            pContext->Insert(PROP_SDTPR, uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, CHAR_GRAB_BAG);
+        }
+        else
+            m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
+                    uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, PARA_GRAB_BAG);
     }
     else if (len == 1 && sText[0] == 0x03)
     {
@@ -3588,15 +3600,6 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         if ( m_pImpl->m_bIgnoreNextTab )
         {
             m_pImpl->m_bIgnoreNextTab = false;
-            return;
-        }
-    }
-    else if (m_pImpl->m_pSdtHelper->validateDateFormat())
-    {
-        if(IsInHeaderFooter() && m_pImpl->IsDiscardHeaderFooter())
-        {
-            m_pImpl->m_pSdtHelper->getDateFormat().truncate();
-            m_pImpl->m_pSdtHelper->getLocale().truncate();
             return;
         }
     }
@@ -4186,7 +4189,7 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
 
 void DomainMapper::finishParagraph(const bool bRemove, const bool bNoNumbering)
 {
-    if (m_pImpl->m_pSdtHelper->validateDateFormat())
+    if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::datePicker)
         m_pImpl->m_pSdtHelper->createDateContentControl();
     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove, bNoNumbering);
 }
