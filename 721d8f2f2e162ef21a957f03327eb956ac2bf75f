@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0b529cd_701e0925",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-18T12:02:09Z",
+      "side": 1,
+      "message": "no existing unit tests hit this condition. [assert GetSerializer() \u003d\u003d drawingML.getFS);]",
+      "revId": "721d8f2f2e162ef21a957f03327eb956ac2bf75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
