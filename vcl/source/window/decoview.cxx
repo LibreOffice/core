@@ -72,86 +72,98 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
     switch ( eType )
     {
         case SymbolType::ARROW_UP:
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
-            for ( tools::Long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustTop( 1 );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
-                                Point( aCenter.X()+i, nRect.Top() ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top() ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top() ) );
-            }
-            pDev->DrawRect( tools::Rectangle( aCenter.X()-n8, nRect.Top()+1,
-                                       aCenter.X()+n8, nRect.Bottom() ) );
+        {
+            tools::Polygon arrow(7);
+            arrow.SetPoint( Point( aCenter.X(), nRect.Top()), 0 );
+            arrow.SetPoint( Point( aCenter.X() - n2, nRect.Top() + n2 ), 1 );
+            arrow.SetPoint( Point( aCenter.X() - n8, nRect.Top() + n2 ), 2 );
+            arrow.SetPoint( Point( aCenter.X() - n8, nRect.Bottom()), 3 );
+            arrow.SetPoint( Point( aCenter.X() + n8, nRect.Bottom()), 4 );
+            arrow.SetPoint( Point( aCenter.X() + n8, nRect.Top() + n2 ), 5 );
+            arrow.SetPoint( Point( aCenter.X() + n2, nRect.Top() + n2 ), 6 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( arrow );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::ARROW_DOWN:
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom() ) );
-            for ( tools::Long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustBottom( -1 );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
-                                Point( aCenter.X()+i, nRect.Bottom() ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom() ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom() ) );
-            }
-            pDev->DrawRect( tools::Rectangle( aCenter.X()-n8, nRect.Top(),
-                                       aCenter.X()+n8, nRect.Bottom()-1 ) );
+        {
+            tools::Polygon arrow(7);
+            arrow.SetPoint( Point( aCenter.X(), nRect.Bottom()), 0 );
+            arrow.SetPoint( Point( aCenter.X() - n2, nRect.Bottom() - n2 ), 1 );
+            arrow.SetPoint( Point( aCenter.X() - n8, nRect.Bottom() - n2 ), 2 );
+            arrow.SetPoint( Point( aCenter.X() - n8, nRect.Top()), 3 );
+            arrow.SetPoint( Point( aCenter.X() + n8, nRect.Top()), 4 );
+            arrow.SetPoint( Point( aCenter.X() + n8, nRect.Bottom() - n2 ), 5 );
+            arrow.SetPoint( Point( aCenter.X() + n2, nRect.Bottom() - n2 ), 6 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( arrow );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::ARROW_LEFT:
-            pDev->DrawPixel( Point( nRect.Left(), aCenter.Y() ) );
-            for ( tools::Long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustLeft( 1 );
-                pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
-                                Point( nRect.Left(), aCenter.Y()+i ) );
-                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()-i ) );
-                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()+i ) );
-            }
-            pDev->DrawRect( tools::Rectangle( nRect.Left()+1, aCenter.Y()-n8,
-                                       nRect.Right(), aCenter.Y()+n8 ) );
+        {
+            tools::Polygon arrow(7);
+            arrow.SetPoint( Point( nRect.Left(), aCenter.Y()), 0 );
+            arrow.SetPoint( Point( nRect.Left() + n2, aCenter.Y() - n2 ), 1 );
+            arrow.SetPoint( Point( nRect.Left() + n2, aCenter.Y() - n8 ), 2 );
+            arrow.SetPoint( Point( nRect.Right(), aCenter.Y() - n8 ), 3 );
+            arrow.SetPoint( Point( nRect.Right(), aCenter.Y() + n8 ), 4 );
+            arrow.SetPoint( Point( nRect.Left() + n2, aCenter.Y() + n8 ), 5 );
+            arrow.SetPoint( Point( nRect.Left() + n2, aCenter.Y() + n2 ), 6 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( arrow );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::ARROW_RIGHT:
-            pDev->DrawPixel( Point( nRect.Right(), aCenter.Y() ) );
-            for ( tools::Long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustRight( -1 );
-                pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
-                                Point( nRect.Right(), aCenter.Y()+i ) );
-                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()-i ) );
-                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()+i ) );
-            }
-            pDev->DrawRect( tools::Rectangle( nRect.Left(), aCenter.Y()-n8,
-                                       nRect.Right()-1, aCenter.Y()+n8 ) );
+        {
+            tools::Polygon arrow(7);
+            arrow.SetPoint( Point( nRect.Right(), aCenter.Y()), 0 );
+            arrow.SetPoint( Point( nRect.Right() - n2, aCenter.Y() - n2 ), 1 );
+            arrow.SetPoint( Point( nRect.Right() - n2, aCenter.Y() - n8 ), 2 );
+            arrow.SetPoint( Point( nRect.Left(), aCenter.Y() - n8 ), 3 );
+            arrow.SetPoint( Point( nRect.Left(), aCenter.Y() + n8 ), 4 );
+            arrow.SetPoint( Point( nRect.Right() - n2, aCenter.Y() + n8 ), 5 );
+            arrow.SetPoint( Point( nRect.Right() - n2, aCenter.Y() + n2 ), 6 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( arrow );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::SPIN_UP:
-            nRect.AdjustTop(n4 );
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
-            for ( tools::Long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustTop( 1 );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
-                                Point( aCenter.X()+i, nRect.Top() ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top() ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top() ) );
-            }
+        {
+            tools::Polygon triangle( 3 );
+            triangle.SetPoint( Point( aCenter.X(), nRect.Top() + n4 ), 0 );
+            triangle.SetPoint( Point( aCenter.X() - n2, nRect.Top() + n4 + n2 ), 1 );
+            triangle.SetPoint( Point( aCenter.X() + n2, nRect.Top() + n4 + n2 ), 2 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( triangle );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::SPIN_DOWN:
-            nRect.AdjustBottom( -n4 );
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom() ) );
-            for ( tools::Long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustBottom( -1 );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
-                                Point( aCenter.X()+i, nRect.Bottom() ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom() ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom() ) );
-            }
+        {
+            tools::Polygon triangle( 3 );
+            triangle.SetPoint( Point( aCenter.X(), nRect.Bottom() - n4 ), 0 );
+            triangle.SetPoint( Point( aCenter.X() - n2, nRect.Bottom() - n4 - n2 ), 1 );
+            triangle.SetPoint( Point( aCenter.X() + n2, nRect.Bottom() - n4 - n2 ), 2 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( triangle );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::SPIN_LEFT:
         case SymbolType::FIRST:
@@ -204,127 +216,97 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
         }
 
         case SymbolType::PAGEUP:
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Top()+n2 ) );
-            for ( tools::Long i=1; i < n2; ++i )
-            {
-                nRect.AdjustTop( 1 );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
-                                Point( aCenter.X()+i, nRect.Top() ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top() ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top() ) );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Top()+n2 ),
-                                Point( aCenter.X()+i, nRect.Top()+n2 ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Top()+n2 ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Top()+n2 ) );
-            }
+        {
+            tools::Polygon triangle( 3 );
+            triangle.SetPoint( Point( aCenter.X(), nRect.Top()), 0 );
+            triangle.SetPoint( Point( aCenter.X() - n2, nRect.Top() + n2 ), 1 );
+            triangle.SetPoint( Point( aCenter.X() + n2, nRect.Top() + n2 ), 2 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( triangle );
+            triangle.Move( 0, n2 );
+            pDev->DrawPolygon( triangle );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::PAGEDOWN:
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom() ) );
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom()-n2 ) );
-            for ( tools::Long i=1; i < n2; ++i )
-            {
-                nRect.AdjustBottom( -1 );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
-                                Point( aCenter.X()+i, nRect.Bottom() ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom() ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom() ) );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom()-n2 ),
-                                Point( aCenter.X()+i, nRect.Bottom()-n2 ) );
-                pDev->DrawPixel( Point( aCenter.X()-i, nRect.Bottom()-n2 ) );
-                pDev->DrawPixel( Point( aCenter.X()+i, nRect.Bottom()-n2 ) );
-            }
+        {
+            tools::Polygon triangle( 3 );
+            triangle.SetPoint( Point( aCenter.X(), nRect.Bottom()), 0 );
+            triangle.SetPoint( Point( aCenter.X() - n2, nRect.Bottom() - n2 ), 1 );
+            triangle.SetPoint( Point( aCenter.X() + n2, nRect.Bottom() - n2 ), 2 );
+            pDev->Push(vcl::PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon( triangle );
+            triangle.Move( 0, -n2 );
+            pDev->DrawPolygon( triangle );
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::RADIOCHECKMARK:
-            {
-                // Midpoint circle algorithm
-                tools::Long x = 0;
-                tools::Long y = n2;
-                tools::Long p = 1 - n2;
-                // Draw central line
-                pDev->DrawLine( Point( aCenter.X(), aCenter.Y()-y ),
-                                Point( aCenter.X(), aCenter.Y()+y ) );
-                while ( x<y )
-                {
-                    if ( p>=0 )
-                    {
-                        // Draw vertical lines close to sides
-                        pDev->DrawLine( Point( aCenter.X()+y, aCenter.Y()-x ),
-                                        Point( aCenter.X()+y, aCenter.Y()+x ) );
-                        pDev->DrawLine( Point( aCenter.X()-y, aCenter.Y()-x ),
-                                        Point( aCenter.X()-y, aCenter.Y()+x ) );
-                        --y;
-                        p -= 2*y;
-                    }
-                    ++x;
-                    p += 2*x+1;
-                    // Draw vertical lines close to center
-                    pDev->DrawLine( Point( aCenter.X()-x, aCenter.Y()-y ),
-                                    Point( aCenter.X()-x, aCenter.Y()+y ) );
-                    pDev->DrawLine( Point( aCenter.X()+x, aCenter.Y()-y ),
-                                    Point( aCenter.X()+x, aCenter.Y()+y ) );
-                }
-            }
+        {
+            pDev->DrawEllipse(nRect);
             break;
+        }
 
         case SymbolType::STOP:
             pDev->DrawRect( nRect );
             break;
 
         case SymbolType::CLOSE:
-            pDev->DrawLine( Point( nRect.Left(), nRect.Top() ),
-                            Point( nRect.Right(), nRect.Bottom() ) );
-            pDev->DrawLine( Point( nRect.Left(), nRect.Bottom() ),
-                            Point( nRect.Right(), nRect.Top() ) );
-            for ( tools::Long i=1; i<n8; ++i )
-            {
-                pDev->DrawLine( Point( nRect.Left()+i, nRect.Top() ),
-                                Point( nRect.Right(), nRect.Bottom()-i ) );
-                pDev->DrawLine( Point( nRect.Left(), nRect.Top()+i ),
-                                Point( nRect.Right()-i, nRect.Bottom() ) );
-                pDev->DrawLine( Point( nRect.Left()+i, nRect.Bottom() ),
-                                Point( nRect.Right(), nRect.Top()+i ) );
-                pDev->DrawLine( Point( nRect.Left(), nRect.Bottom()-i ),
-                                Point( nRect.Right()-i, nRect.Top() ) );
-            }
+        {
+            const tools::Long diff = std::max<tools::Long>( 0, n8 - 1 );
+            tools::Polygon cross( 16 );
+            cross.SetPoint( Point( nRect.Left(), nRect.Top()), 0 );
+            cross.SetPoint( Point( nRect.Left(), nRect.Top() + diff ), 1 );
+            cross.SetPoint( Point( aCenter.X() - diff, aCenter.Y()), 2 );
+            cross.SetPoint( Point( nRect.Left(), nRect.Bottom() - diff ), 3 );
+            cross.SetPoint( Point( nRect.Left(), nRect.Bottom()), 4 );
+            cross.SetPoint( Point( nRect.Left() + diff, nRect.Bottom()), 5 );
+            cross.SetPoint( Point( aCenter.X(), aCenter.Y() + diff ), 6 );
+            cross.SetPoint( Point( nRect.Right() - diff, nRect.Bottom()), 7 );
+            cross.SetPoint( Point( nRect.Right(), nRect.Bottom()), 8 );
+            cross.SetPoint( Point( nRect.Right(), nRect.Bottom() - diff ), 9 );
+            cross.SetPoint( Point( aCenter.X() + diff, aCenter.Y()), 10 );
+            cross.SetPoint( Point( nRect.Right(), nRect.Top() + diff ), 11 );
+            cross.SetPoint( Point( nRect.Right(), nRect.Top()), 12 );
+            cross.SetPoint( Point( nRect.Right() - diff, nRect.Top()), 13 );
+            cross.SetPoint( Point( aCenter.X(), aCenter.Y() - diff ), 14 );
+            cross.SetPoint( Point( nRect.Left() + diff, nRect.Top()), 15 );
+            pDev->DrawPolygon( cross );
             break;
+        }
 
         case SymbolType::CHECKMARK:
             {
                 tools::Long n3 = nSide/3;
                 nRect.AdjustTop( -(n3/2) );
                 nRect.AdjustBottom( -(n3/2) );
+                tools::Polygon checkmark(6);
                 // #106953# never mirror checkmarks
                 if ( pDev->HasMirroredGraphics() && pDev->IsRTLEnabled() )
                 {
                     // Draw a mirrored checkmark so that it looks "normal" in a
                     // mirrored graphics device (double mirroring!)
-                    pDev->DrawLine( Point( nRect.Right(), nRect.Bottom()-n3 ),
-                                    Point( nRect.Right()-n3, nRect.Bottom() ) );
-                    pDev->DrawLine( Point( nRect.Right()-n3, nRect.Bottom() ),
-                                    Point( nRect.Left(), nRect.Top()+n3 ) );
-                    nRect.AdjustTop( 1 );
-                    nRect.AdjustBottom( 1 );
-                    pDev->DrawLine( Point( nRect.Right(), nRect.Bottom()-n3 ),
-                                    Point( nRect.Right()-n3, nRect.Bottom() ) );
-                    pDev->DrawLine( Point( nRect.Right()-n3, nRect.Bottom() ),
-                                    Point( nRect.Left(), nRect.Top()+n3 ) );
+                    checkmark.SetPoint( Point( nRect.Right(), nRect.Bottom()-n3 ), 0 );
+                    checkmark.SetPoint( Point( nRect.Right()-n3, nRect.Bottom()), 1 );
+                    checkmark.SetPoint( Point( nRect.Left(), nRect.Top()+n3 ), 2 );
+                    checkmark.SetPoint( Point( nRect.Left(), nRect.Top()+n3 + 1 ), 3 );
+                    checkmark.SetPoint( Point( nRect.Right()-n3, nRect.Bottom() + 1 ), 4 );
+                    checkmark.SetPoint( Point( nRect.Right(), nRect.Bottom()-n3 + 1 ), 5 );
                 }
                 else
                 {
-                    pDev->DrawLine( Point( nRect.Left(), nRect.Bottom()-n3 ),
-                                    Point( nRect.Left()+n3, nRect.Bottom() ) );
-                    pDev->DrawLine( Point( nRect.Left()+n3, nRect.Bottom() ),
-                                    Point( nRect.Right(), nRect.Top()+n3 ) );
-                    nRect.AdjustTop( 1 );
-                    nRect.AdjustBottom( 1 );
-                    pDev->DrawLine( Point( nRect.Left(), nRect.Bottom()-n3 ),
-                                    Point( nRect.Left()+n3, nRect.Bottom() ) );
-                    pDev->DrawLine( Point( nRect.Left()+n3, nRect.Bottom() ),
-                                    Point( nRect.Right(), nRect.Top()+n3 ) );
+                    checkmark.SetPoint( Point( nRect.Left(), nRect.Bottom()-n3 ), 0 );
+                    checkmark.SetPoint( Point( nRect.Left()+n3, nRect.Bottom()), 1 );
+                    checkmark.SetPoint( Point( nRect.Right(), nRect.Top()+n3 ), 2 );
+                    checkmark.SetPoint( Point( nRect.Right(), nRect.Top()+n3 + 1 ), 3 );
+                    checkmark.SetPoint( Point( nRect.Left()+n3, nRect.Bottom() + 1 ), 4 );
+                    checkmark.SetPoint( Point( nRect.Left(), nRect.Bottom()-n3 + 1 ), 5 );
                 }
+                pDev->DrawPolygon( checkmark );
             }
             break;
 
