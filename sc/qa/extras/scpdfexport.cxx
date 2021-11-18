@@ -71,6 +71,7 @@ public:
     void testTdf64703_hiddenPageBreak();
     void testTdf143978();
     void testTdf84012();
+    void testTdf78897();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
     CPPUNIT_TEST(testTdf143978);
     CPPUNIT_TEST(testTdf84012);
+    CPPUNIT_TEST(testTdf78897);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -543,6 +545,47 @@ void ScPDFExportTest::testTdf84012()
     // - Expected: Blah blah (blah, blah)
     // - Actual  : Blah blah
     CPPUNIT_ASSERT_EQUAL(OUString("Blah blah (blah, blah)"), aActualText);
+}
+
+void ScPDFExportTest::testTdf78897()
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf78897.xls",
+                                  "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // C3:D3
+    ScRange range1(2, 2, 0, 3, 2, 0);
+    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+    // Parse the export result with pdfium.
+    SvFileStream aFile(pPDFFile->GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+
+    int nChars = pTextPage->countChars();
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected:  11.00 11.00
+    // - Actual  :  11.00 ###
+    CPPUNIT_ASSERT_EQUAL(OUString(" 11.00 11.00 "), aActualText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);
