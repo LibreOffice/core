@@ -187,9 +187,19 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
                                                 const tools::Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue)
 {
+    // rControlRegion is not the whole area that the control should be painted to (e.g. highlight
+    // around focused lineedit is outside of it). Since we draw to a temporary bitmap, we need tofind out
+    // the real size. Using getNativeControlRegion() might seem like the function to call, but we need
+    // the other direction - what is called rControlRegion here is rNativeContentRegion in that function
+    // what's called rControlRegion there is what we need here. Moreover getNativeControlRegion()
+    // in some cases returns a fixed size that does not depend on its input, so we have no way to
+    // actually find out what the original size was (or maybe the function is kind of broken, I don't know).
+    // So, add a generous margin and hope it's enough.
+    tools::Rectangle boundingRegion(rControlRegion);
+    boundingRegion.expand(50 * mScaling);
     // Do a scaled bitmap in HiDPI in order not to lose precision.
-    const tools::Long width = rControlRegion.GetWidth() * mScaling;
-    const tools::Long height = rControlRegion.GetHeight() * mScaling;
+    const tools::Long width = boundingRegion.GetWidth() * mScaling;
+    const tools::Long height = boundingRegion.GetHeight() * mScaling;
     const size_t bytes = width * height * 4;
     std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[bytes]);
     memset(data.get(), 0, bytes);
@@ -211,7 +221,9 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     CGContextSetRGBFillColor(context, fillColor.GetRed(), fillColor.GetGreen(), fillColor.GetBlue(),
                              fillColor.GetAlpha());
     // Adjust for our drawn-to coordinates in the bitmap.
-    tools::Rectangle movedRegion(Point(0, 0), rControlRegion.GetSize());
+    tools::Rectangle movedRegion(Point(rControlRegion.getX() - boundingRegion.getX(),
+                                       rControlRegion.getY() - boundingRegion.getY()),
+                                 rControlRegion.GetSize());
     // Flip drawing upside down.
     CGContextTranslateCTM(context, 0, height);
     CGContextScaleCTM(context, 1, -1);
@@ -232,15 +244,15 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         preDraw();
         SAL_INFO("vcl.skia.trace", "drawnativecontrol(" << this << "): " << rControlRegion << ":"
                                                         << int(nType) << "/" << int(nPart));
-        tools::Rectangle updateRect = rControlRegion;
+        tools::Rectangle updateRect = boundingRegion;
         // For background update only part that is not clipped, the same
         // as in AquaGraphicsBackend::drawNativeControl().
         if (nType == ControlType::WindowBackground)
             updateRect.Intersection(mClipRegion.GetBoundRect());
         addUpdateRegion(SkRect::MakeXYWH(updateRect.getX(), updateRect.getY(),
                                          updateRect.GetWidth(), updateRect.GetHeight()));
-        SkRect drawRect = SkRect::MakeXYWH(rControlRegion.getX(), rControlRegion.getY(),
-                                           rControlRegion.GetWidth(), rControlRegion.GetHeight());
+        SkRect drawRect = SkRect::MakeXYWH(boundingRegion.getX(), boundingRegion.getY(),
+                                           boundingRegion.GetWidth(), boundingRegion.GetHeight());
         assert(drawRect.width() * mScaling == bitmap.width()); // no scaling should be needed
         getDrawCanvas()->drawImageRect(bitmap.asImage(), drawRect, SkSamplingOptions());
         ++mPendingOperationsToFlush; // tdf#136369
