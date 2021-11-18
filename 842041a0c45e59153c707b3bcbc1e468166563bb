@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5893beb_f444b82b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-18T15:02:58Z",
+      "side": 1,
+      "message": "I\u0027d vote for this solution :-)",
+      "revId": "842041a0c45e59153c707b3bcbc1e468166563bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90b078fb_52941b1c",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-18T15:02:58Z",
+      "side": 1,
+      "message": "This is not indented properly (8 spaces instead of 4)",
+      "revId": "842041a0c45e59153c707b3bcbc1e468166563bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
