@@ -135,6 +135,7 @@ sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
 
         case MYSQL_TYPE_INT24:
         case MYSQL_TYPE_LONG:
+        case MYSQL_TYPE_YEAR:
             return css::sdbc::DataType::INTEGER;
 
         case MYSQL_TYPE_LONGLONG:
@@ -195,8 +196,6 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::TINYINT;
     if (sType.equalsIgnoreAsciiCase("smallint"))
         return css::sdbc::DataType::SMALLINT;
-    if (sType.equalsIgnoreAsciiCase("longtext"))
-        return css::sdbc::DataType::LONGVARCHAR;
     if (sType.equalsIgnoreAsciiCase("int") || sType.equalsIgnoreAsciiCase("mediumint"))
         return css::sdbc::DataType::INTEGER;
     if (sType.equalsIgnoreAsciiCase("varchar") || sType.equalsIgnoreAsciiCase("set")
@@ -204,13 +203,18 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::VARCHAR;
     if (sType.equalsIgnoreAsciiCase("bigint"))
         return css::sdbc::DataType::BIGINT;
-    if (sType.equalsIgnoreAsciiCase("blob") || sType.equalsIgnoreAsciiCase("longblob"))
+    if (sType.equalsIgnoreAsciiCase("blob") || sType.equalsIgnoreAsciiCase("longblob")
+        || sType.equalsIgnoreAsciiCase("tinyblob") || sType.equalsIgnoreAsciiCase("mediumblob"))
         return css::sdbc::DataType::BLOB;
     if (sType.equalsIgnoreAsciiCase("varbinary"))
         return css::sdbc::DataType::VARBINARY;
     if (sType.equalsIgnoreAsciiCase("char"))
         return css::sdbc::DataType::CHAR;
+    if (sType.equalsIgnoreAsciiCase("tinytext"))
+        return css::sdbc::DataType::VARCHAR;
     if (sType.equalsIgnoreAsciiCase("text"))
+        return css::sdbc::DataType::LONGVARCHAR;
+    if (sType.equalsIgnoreAsciiCase("mediumtext") || sType.equalsIgnoreAsciiCase("longtext"))
         return css::sdbc::DataType::CLOB;
     if (sType.equalsIgnoreAsciiCase("binary"))
         return css::sdbc::DataType::BINARY;
@@ -230,6 +234,8 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
         return css::sdbc::DataType::BIT;
     if (sType.equalsIgnoreAsciiCase("bool") || sType.equalsIgnoreAsciiCase("boolean"))
         return css::sdbc::DataType::BOOLEAN;
+    if (sType.equalsIgnoreAsciiCase("year"))
+        return css::sdbc::DataType::INTEGER;
     OSL_FAIL("Unknown type name from string, failing back to varchar.");
     return css::sdbc::DataType::VARCHAR;
 }
