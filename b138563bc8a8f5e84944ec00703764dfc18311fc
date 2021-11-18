@@ -16,6 +16,24 @@
       "message": "Would it be possible to not backport this UI String change? string freeze of libreoffice-7-2 was long ago",
       "revId": "b138563bc8a8f5e84944ec00703764dfc18311fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5205b93b_17b44ecf",
+        "filename": "sc/uiconfig/scalc/ui/optcalculatepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-18T08:50:08Z",
+      "side": 1,
+      "message": "Sorry for this comment, I wrote it yesterday for the first patch, I think it was stored in cache and sent when I gave the +2. lol",
+      "parentUuid": "b4afe849_859be1b4",
+      "revId": "b138563bc8a8f5e84944ec00703764dfc18311fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
