@@ -285,7 +285,7 @@ namespace drawinglayer::texture
                     aOutlineRange,
                     aOutlineRange,
                     rHatch.getDistance(),
-                    fAngleA + F_PI2) );
+                    fAngleA + M_PI_2) );
             }
 
             if(attribute::HatchStyle::Triple == rHatch.getStyle())
@@ -294,7 +294,7 @@ namespace drawinglayer::texture
                     aOutlineRange,
                     aOutlineRange,
                     rHatch.getDistance(),
-                    fAngleA + F_PI4) );
+                    fAngleA + M_PI_4) );
             }
         }
 

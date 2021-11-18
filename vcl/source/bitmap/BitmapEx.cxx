@@ -733,9 +733,9 @@ namespace
             fRotate += F_2PI;
         }
         if (!rtl::math::approxEqual(fRotate, 0)
-            && !rtl::math::approxEqual(fRotate, F_PI2)
-            && !rtl::math::approxEqual(fRotate, F_PI)
-            && !rtl::math::approxEqual(fRotate, 3 * F_PI2))
+            && !rtl::math::approxEqual(fRotate, M_PI_2)
+            && !rtl::math::approxEqual(fRotate, M_PI)
+            && !rtl::math::approxEqual(fRotate, 3 * M_PI_2))
         {
             return true;
         }

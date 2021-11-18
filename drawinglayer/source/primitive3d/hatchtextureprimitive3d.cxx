@@ -142,7 +142,7 @@ namespace drawinglayer::primitive3d
                                                     aOutlineRange,
                                                     aOutlineRange,
                                                     getHatch().getDistance(),
-                                                    fAngle - F_PI4);
+                                                    fAngle - M_PI_4);
 
                                                 aHatch.appendTransformations(aMatrices);
 
@@ -155,7 +155,7 @@ namespace drawinglayer::primitive3d
                                                     aOutlineRange,
                                                     aOutlineRange,
                                                     getHatch().getDistance(),
-                                                    fAngle - F_PI2);
+                                                    fAngle - M_PI_2);
 
                                                 aHatch.appendTransformations(aMatrices);
 

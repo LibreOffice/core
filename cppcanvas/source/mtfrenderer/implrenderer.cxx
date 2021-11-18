@@ -768,7 +768,7 @@ namespace cppcanvas::internal
             if( nFontAngle != 0 )
             {
                 // set to unity transform rotated by font angle
-                const double nAngle( nFontAngle * (F_PI / 1800.0) );
+                const double nAngle( nFontAngle * (M_PI / 1800.0) );
                 o_rFontRotation = -nAngle;
             }
             else

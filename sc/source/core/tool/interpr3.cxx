@@ -585,7 +585,7 @@ static double lcl_GetLogGammaHelper(double fZ)
 /** You must ensure non integer arguments for fZ<1 */
 double ScInterpreter::GetGamma(double fZ)
 {
-    const double fLogPi = log(F_PI);
+    const double fLogPi = log(M_PI);
     const double fLogDblMax = log( ::std::numeric_limits<double>::max());
 
     if (fZ > fMaxGammaArgument)
@@ -612,7 +612,7 @@ double ScInterpreter::GetGamma(double fZ)
     }
     // fZ<-0.5
     // Use Euler's reflection formula: gamma(x)= pi/ ( gamma(1-x)*sin(pi*x) )
-    double fLogDivisor = lcl_GetLogGammaHelper(1-fZ) + log( std::abs( ::rtl::math::sin( F_PI*fZ)));
+    double fLogDivisor = lcl_GetLogGammaHelper(1-fZ) + log( std::abs( ::rtl::math::sin( M_PI*fZ)));
     if (fLogDivisor - fLogPi >= fLogDblMax)     // underflow
         return 0.0;
 
@@ -623,7 +623,7 @@ double ScInterpreter::GetGamma(double fZ)
             return HUGE_VAL;
         }
 
-    return exp( fLogPi - fLogDivisor) * ((::rtl::math::sin( F_PI*fZ) < 0.0) ? -1.0 : 1.0);
+    return exp( fLogPi - fLogDivisor) * ((::rtl::math::sin( M_PI*fZ) < 0.0) ? -1.0 : 1.0);
 }
 
 /** You must ensure fZ>0 */
@@ -709,7 +709,7 @@ double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
         }
         else
         {
-            fValue = 1/sqrt(fX*2*F_PI);
+            fValue = 1/sqrt(fX*2*M_PI);
             fCount = 1.0;
         }
         while ( fCount < fDF)
@@ -1610,7 +1610,7 @@ void ScInterpreter::ScStdNormDist_MS()
     if ( bCumulative )
         PushDouble( integralPhi( x ) );
     else
-        PushDouble( exp( - pow( x, 2 ) / 2 ) / sqrt( 2 * F_PI ) );
+        PushDouble( exp( - pow( x, 2 ) / 2 ) / sqrt( 2 * M_PI ) );
 }
 
 void ScInterpreter::ScExpDist()
@@ -4849,7 +4849,7 @@ void ScTwiddleFactors::Compute()
     mfWReal.resize(mnN);
     mfWImag.resize(mnN);
 
-    double nW = (mbInverse ? 2 : -2)*F_PI/static_cast<double>(mnN);
+    double nW = (mbInverse ? 2 : -2)*M_PI/static_cast<double>(mnN);
 
     if (mnN == 1)
     {
@@ -5189,7 +5189,7 @@ void ScComplexBluesteinFFT::Compute()
 {
     std::vector<double> aRealScalars(mnPoints);
     std::vector<double> aImagScalars(mnPoints);
-    double fW = (mbInverse ? 2 : -2)*F_PI/static_cast<double>(mnPoints);
+    double fW = (mbInverse ? 2 : -2)*M_PI/static_cast<double>(mnPoints);
     for (SCSIZE nIdx = 0; nIdx < mnPoints; ++nIdx)
     {
         double fAngle = 0.5*fW*static_cast<double>(nIdx*nIdx);

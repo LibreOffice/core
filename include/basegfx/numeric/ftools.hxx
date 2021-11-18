@@ -27,15 +27,6 @@
 #include <algorithm>
 
 
-#ifndef F_PI
-#define F_PI        M_PI
-#endif
-#ifndef F_PI2
-#define F_PI2       M_PI_2
-#endif
-#ifndef F_PI4
-#define F_PI4       M_PI_4
-#endif
 #ifndef F_PI1800
 #define F_PI1800    (M_PI/1800.0)
 #endif

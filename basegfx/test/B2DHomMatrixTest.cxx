@@ -159,7 +159,7 @@ public:
     void rotate()
     {
         B2DHomMatrix mat;
-        mat.rotate(F_PI2);
+        mat.rotate(M_PI_2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate pi/2 yields exact matrix", 0.0, mat.get(0, 0),
                                              1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate pi/2 yields exact matrix", -1.0, mat.get(0, 1),
@@ -172,7 +172,7 @@ public:
                                              1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate pi/2 yields exact matrix", 0.0, mat.get(1, 2),
                                              1E-12);
-        mat.rotate(F_PI2);
+        mat.rotate(M_PI_2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate pi yields exact matrix", -1.0, mat.get(0, 0),
                                              1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate pi yields exact matrix", 0.0, mat.get(0, 1),
@@ -185,7 +185,7 @@ public:
                                              1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate pi yields exact matrix", 0.0, mat.get(1, 2),
                                              1E-12);
-        mat.rotate(F_PI2);
+        mat.rotate(M_PI_2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate 3/2 pi yields exact matrix", 0.0,
                                              mat.get(0, 0), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate 3/2 pi yields exact matrix", 1.0,
@@ -198,7 +198,7 @@ public:
                                              mat.get(1, 1), 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate 3/2 pi yields exact matrix", 0.0,
                                              mat.get(1, 2), 1E-12);
-        mat.rotate(F_PI2);
+        mat.rotate(M_PI_2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate 2 pi yields exact matrix", 1.0, mat.get(0, 0),
                                              1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("rotate 2 pi yields exact matrix", 0.0, mat.get(0, 1),
@@ -334,7 +334,7 @@ public:
         // are just the two rightmost values and uncritical
         static const double fSX(10.0);
         static const double fSY(12.0);
-        static const double fR(F_PI4);
+        static const double fR(M_PI_4);
         static const double fS(deg2rad(15.0));
 
         // check all possible scaling combinations
@@ -429,7 +429,7 @@ public:
 
         // cover special case of 180 degree rotation
         B2DHomMatrix aTest
-            = utils::createScaleShearXRotateTranslateB2DHomMatrix(6425, 3938, 0, F_PI, 10482, 4921);
+            = utils::createScaleShearXRotateTranslateB2DHomMatrix(6425, 3938, 0, M_PI, 10482, 4921);
         // decompose that matrix
         B2DTuple aDScale;
         B2DTuple aDTrans;
@@ -442,7 +442,7 @@ public:
                                              1E-12);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("decompose: error test J1", 10482.0, aDTrans.getX());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("decompose: error test J1", 4921.0, aDTrans.getY());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", F_PI, fDRot, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", M_PI, fDRot, 1E-12);
     }
 
     void testCreate_abcdef()

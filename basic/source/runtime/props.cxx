@@ -65,7 +65,7 @@ void SbRtl_Null(StarBASIC *, SbxArray & rPar, bool)
     rPar.Get(0)->PutNull();
 }
 
-void SbRtl_PI(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutDouble(F_PI); }
+void SbRtl_PI(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutDouble(M_PI); }
 
 void SbRtl_True(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutBool(true); }
 

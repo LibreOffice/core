@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
                         getDefinitionRange(),
                         getOutputRange(),
                         fDistance,
-                        fAngle - F_PI4);
+                        fAngle - M_PI_4);
 
                     aHatch.appendTransformations(aMatrices);
 
@@ -78,7 +78,7 @@ namespace drawinglayer::primitive2d
                         getDefinitionRange(),
                         getOutputRange(),
                         fDistance,
-                        fAngle - F_PI2);
+                        fAngle - M_PI_2);
 
                     aHatch.appendTransformations(aMatrices);
 

@@ -1725,7 +1725,7 @@ void ScInterpreter::ScBitRshift()
 
 void ScInterpreter::ScPi()
 {
-    PushDouble(F_PI);
+    PushDouble(M_PI);
 }
 
 void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, double fLast )>& RandomFunc,
@@ -1869,7 +1869,7 @@ void ScInterpreter::ScArcTan()
 
 void ScInterpreter::ScArcCot()
 {
-    PushDouble((F_PI2) - atan(GetDouble()));
+    PushDouble((M_PI_2) - atan(GetDouble()));
 }
 
 void ScInterpreter::ScSinHyp()

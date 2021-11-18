@@ -1453,7 +1453,7 @@ void XclExpFmlaCompImpl::PrepareFunction( const XclExpFuncData& rFuncData )
             AppendIntToken( 1 );
             break;
         case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
-            AppendNumToken( F_PI2 );
+            AppendNumToken( M_PI_2 );
             break;
         default:;
     }

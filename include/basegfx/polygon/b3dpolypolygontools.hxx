@@ -61,7 +61,7 @@ namespace basegfx::utils
          */
         BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitSpherePolyPolygon(
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
-            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
 
         /** Create a 3D line polyPolygon from a B3DRange which defines a sphere with the given count of hor and ver segments.
@@ -71,7 +71,7 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC B3DPolyPolygon createSpherePolyPolygonFromB3DRange(
             const B3DRange& rRange,
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
-            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
 
         /** same as createUnitSpherePolyPolygon, but creates filled polygons (closed and oriented)
@@ -80,7 +80,7 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC B3DPolyPolygon createUnitSphereFillPolyPolygon(
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             bool bNormals = false,
-            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
 
         /** same as createSpherePolyPolygonFromB3DRange, but creates filled polygons (closed and oriented)
@@ -90,7 +90,7 @@ namespace basegfx::utils
             const B3DRange& rRange,
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             bool bNormals = false,
-            double fVerStart = F_PI2, double fVerStop = -F_PI2,
+            double fVerStart = M_PI_2, double fVerStop = -M_PI_2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.

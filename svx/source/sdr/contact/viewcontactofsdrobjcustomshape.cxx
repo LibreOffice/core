@@ -94,7 +94,7 @@ namespace sdr::contact
                 if(GetCustomShapeObj().IsMirroredY())
                 {
                     basegfx::B2DHomMatrix aRotMatrix(basegfx::utils::createRotateAroundPoint(
-                        aObjectRange.getCenterX(), aObjectRange.getCenterY(), F_PI));
+                        aObjectRange.getCenterX(), aObjectRange.getCenterY(), M_PI));
                     aTextRange.transform(aRotMatrix);
                 }
             }

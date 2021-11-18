@@ -106,7 +106,7 @@ namespace basegfx::utils
             Allows to hand over the maximum allowed angle between an edge and
             it's control vectors. The smaller, the more subdivisions will be
             needed to create the filled geometry. Allowed range is cropped to
-            [F_PI2 .. 0.01 * F_PI2].
+            [M_PI_2 .. 0.01 * M_PI_2].
 
             @param fMaxPartOfEdge
             Allows to influence from with relative length of a control vector
@@ -118,7 +118,7 @@ namespace basegfx::utils
             The minimum wanted angle between two edges when edge rounding
             is using miter. When an edge is smaller than this (tighter)
             the usual fallback to bevel is used. Allowed range is cropped
-            to [F_PI .. 0.01 * F_PI].
+            to [M_PI .. 0.01 * M_PI].
 
             Commit 51b5b93092d6231615de470c62494c24e54828a1 needs
             revert, we need the triangulation for X11 fat line drawing

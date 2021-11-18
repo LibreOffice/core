@@ -66,7 +66,7 @@ namespace basegfx
 
                 const double fCurrentAngle(aLeft.angle(aRight));
 
-                if(fabs(fCurrentAngle) > (F_PI - fAngleBound))
+                if(fabs(fCurrentAngle) > (M_PI - fAngleBound))
                 {
                     // end recursion
                     nMaxRecursionDepth = 0;
@@ -203,7 +203,7 @@ namespace basegfx
                     const B2DVector aLeftLeft(bLeftEqualZero ? aS2L - aS1L : aS1L - rfPA); // #i72104#
                     const B2DVector aRightLeft(aS2L - aS3C);
                     const double fCurrentAngleLeft(aLeftLeft.angle(aRightLeft));
-                    bAngleIsSmallerLeft = (fabs(fCurrentAngleLeft) > (F_PI - rfAngleBound));
+                    bAngleIsSmallerLeft = (fabs(fCurrentAngleLeft) > (M_PI - rfAngleBound));
                 }
 
                 // test right
@@ -213,7 +213,7 @@ namespace basegfx
                     const B2DVector aLeftRight(aS2R - aS3C);
                     const B2DVector aRightRight(bRightEqualZero ? aS2R - aS1R : aS1R - rfPB); // #i72104#
                     const double fCurrentAngleRight(aLeftRight.angle(aRightRight));
-                    bAngleIsSmallerRight = (fabs(fCurrentAngleRight) > (F_PI - rfAngleBound));
+                    bAngleIsSmallerRight = (fabs(fCurrentAngleRight) > (M_PI - rfAngleBound));
                 }
 
                 if(bAngleIsSmallerLeft && bAngleIsSmallerRight)

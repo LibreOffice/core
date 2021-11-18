@@ -2907,7 +2907,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     {
         aScale.setX(fabs(aScale.getX()));
         aScale.setY(fabs(aScale.getY()));
-        fRotate = fmod(fRotate + F_PI, F_2PI);
+        fRotate = fmod(fRotate + M_PI, F_2PI);
     }
 
     // copy poly

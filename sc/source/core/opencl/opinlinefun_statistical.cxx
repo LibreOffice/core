@@ -10,7 +10,7 @@
 #ifndef SC_OPENCL_OPINLINFUN_statistical
 #define SC_OPENCL_OPINLINFUN_statistical
 std::string MinDecl = "#define Min 2.22507e-308\n";
-std::string F_PIDecl="#define F_PI 3.1415926\n";
+std::string F_PIDecl="#define M_PI 3.1415926\n";
 std::string fBigInvDecl ="#define fBigInv  2.22045e-016\n";
 std::string fMachEpsDecl ="#define fMachEps  2.22045e-016\n";
 std::string fLogDblMaxDecl ="#define fLogDblMax  log(1.79769e+308)\n";
@@ -406,7 +406,7 @@ std::string GetChiSqDistPDF =
 "       }\n"
 "       else\n"
 "       {\n"
-"           fValue = pow(sqrt(fX*2*F_PI),-1.0);\n"
+"           fValue = pow(sqrt(fX*2*M_PI),-1.0);\n"
 "           fCount = 1.0;\n"
 "       }\n"
 "       while ( fCount < fDF)\n"

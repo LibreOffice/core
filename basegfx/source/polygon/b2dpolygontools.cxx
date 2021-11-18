@@ -1572,8 +1572,8 @@ namespace basegfx::utils
         // and alternatives read document "ApproxCircleInfo.odt", attachment of bug tdf#121425.
         static double impDistanceBezierPointToControl(double fAngle)
         {
-            SAL_WARN_IF(fAngle < 0 || fAngle > F_PI2,"basegfx","angle not suitable for approximate circle");
-            if (0 <= fAngle && fAngle <= F_PI2)
+            SAL_WARN_IF(fAngle < 0 || fAngle > M_PI_2,"basegfx","angle not suitable for approximate circle");
+            if (0 <= fAngle && fAngle <= M_PI_2)
             {
                 return 4.0/3.0 * ( tan(fAngle/4.0));
             }
@@ -1624,7 +1624,7 @@ namespace basegfx::utils
                 B2DPolygon aRetval;
                 const double fBowX((rRect.getWidth() / 2.0) * fRadiusX);
                 const double fBowY((rRect.getHeight() / 2.0) * fRadiusY);
-                const double fKappa(impDistanceBezierPointToControl(F_PI2));
+                const double fKappa(impDistanceBezierPointToControl(M_PI_2));
 
                 // create start point at bottom center
                 if(!rtl::math::approxEqual(fOne, fRadiusX))
@@ -1723,8 +1723,8 @@ namespace basegfx::utils
         static B2DPolygon impCreateUnitCircle(sal_uInt32 nStartQuadrant)
         {
             B2DPolygon aUnitCircle;
-            const double fSegmentKappa = impDistanceBezierPointToControl(F_PI2 / STEPSPERQUARTER);
-            const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
+            const double fSegmentKappa = impDistanceBezierPointToControl(M_PI_2 / STEPSPERQUARTER);
+            const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(M_PI_2 / STEPSPERQUARTER));
 
             B2DPoint aPoint(1.0, 0.0);
             B2DPoint aForward(1.0, fSegmentKappa);
@@ -1732,7 +1732,7 @@ namespace basegfx::utils
 
             if(nStartQuadrant != 0)
             {
-                const B2DHomMatrix aQuadrantMatrix(createRotateB2DHomMatrix(F_PI2 * (nStartQuadrant % 4)));
+                const B2DHomMatrix aQuadrantMatrix(createRotateB2DHomMatrix(M_PI_2 * (nStartQuadrant % 4)));
                 aPoint *= aQuadrantMatrix;
                 aBackward *= aQuadrantMatrix;
                 aForward *= aQuadrantMatrix;
@@ -1758,8 +1758,8 @@ namespace basegfx::utils
         {
             static auto const singleton = [] {
                     B2DPolygon aUnitHalfCircle;
-                    const double fSegmentKappa(impDistanceBezierPointToControl(F_PI2 / STEPSPERQUARTER));
-                    const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
+                    const double fSegmentKappa(impDistanceBezierPointToControl(M_PI_2 / STEPSPERQUARTER));
+                    const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(M_PI_2 / STEPSPERQUARTER));
                     B2DPoint aPoint(1.0, 0.0);
                     B2DPoint aForward(1.0, fSegmentKappa);
                     B2DPoint aBackward(1.0, -fSegmentKappa);
@@ -1852,7 +1852,7 @@ namespace basegfx::utils
             else
             {
                 const sal_uInt32 nSegments(STEPSPERQUARTER * 4);
-                const double fAnglePerSegment(F_PI2 / STEPSPERQUARTER);
+                const double fAnglePerSegment(M_PI_2 / STEPSPERQUARTER);
                 const sal_uInt32 nStartSegment(sal_uInt32(fStart / fAnglePerSegment) % nSegments);
                 const sal_uInt32 nEndSegment(sal_uInt32(fEnd / fAnglePerSegment) % nSegments);
                 const double fSegmentKappa(impDistanceBezierPointToControl(fAnglePerSegment));

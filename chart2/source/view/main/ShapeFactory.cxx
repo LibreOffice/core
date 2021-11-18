@@ -426,7 +426,7 @@ uno::Reference<drawing::XShape>
             //Matrix for position
             basegfx::B3DHomMatrix aHomMatrix;
             if (nRotateZAngleHundredthDegree != 0)
-                aHomMatrix.rotate(0.0, 0.0, -nRotateZAngleHundredthDegree / 18000.00 * F_PI);
+                aHomMatrix.rotate(0.0, 0.0, -nRotateZAngleHundredthDegree / 18000.00 * M_PI);
             aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY,
                                  rPosition.PositionZ - (fDepth / 2.0));
 
@@ -669,7 +669,7 @@ uno::Reference<drawing::XShape>
             //Matrix for position
             basegfx::B3DHomMatrix aHomMatrix;
             if (nRotateZAngleHundredthDegree != 0)
-                aHomMatrix.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*F_PI);
+                aHomMatrix.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*M_PI);
             //stretch the symmetric objects to given depth
             aHomMatrix.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
             aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
@@ -895,7 +895,7 @@ uno::Reference< drawing::XShape >
             ::basegfx::B2DHomMatrix aTransformationFromUnitCircle( IgnoreZ( HomogenMatrixToB3DHomMatrix(rUnitCircleToScene) ) );
             aTransformationFromUnitCircle.translate(rOffset.DirectionX,rOffset.DirectionY);
 
-            const double fAngleSubdivisionRadian = F_PI/10.0;
+            const double fAngleSubdivisionRadian = M_PI/10.0;
 
             drawing::PolyPolygonBezierCoords aCoords
                 = getRingBezierCoords(fUnitCircleInnerRadius, fUnitCircleOuterRadius,
@@ -948,7 +948,7 @@ uno::Reference< drawing::XShape >
             ::basegfx::B2DHomMatrix aTransformationFromUnitCircle( IgnoreZ( HomogenMatrixToB3DHomMatrix(rUnitCircleToScene) ) );
             aTransformationFromUnitCircle.translate(rOffset.DirectionX,rOffset.DirectionY);
 
-            const double fAngleSubdivisionRadian = F_PI/32.0;
+            const double fAngleSubdivisionRadian = M_PI/32.0;
 
             drawing::PolyPolygonBezierCoords aCoords
                 = getRingBezierCoords(fUnitCircleInnerRadius, fUnitCircleOuterRadius,

@@ -299,7 +299,7 @@ void Svx3DLightControl::Construct2()
         basegfx::B3DPolygon a3DCircle(basegfx::utils::createB3DPolygonFromB2DPolygon(a2DCircle));
         basegfx::B3DHomMatrix aTransform;
 
-        aTransform.rotate(F_PI2, 0.0, 0.0);
+        aTransform.rotate(M_PI_2, 0.0, 0.0);
         aTransform.translate(0.0, -RADIUS_LAMP_PREVIEW_SIZE, 0.0);
         a3DCircle.transform(aTransform);
 
@@ -314,7 +314,7 @@ void Svx3DLightControl::Construct2()
         a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, 0.0));
         a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, -RADIUS_LAMP_PREVIEW_SIZE));
         a2DHalfCircle.append(basegfx::utils::createPolygonFromEllipseSegment(
-            basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE, RADIUS_LAMP_PREVIEW_SIZE, F_2PI - F_PI2, F_PI2));
+            basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE, RADIUS_LAMP_PREVIEW_SIZE, F_2PI - M_PI_2, M_PI_2));
         basegfx::B3DPolygon a3DHalfCircle(basegfx::utils::createB3DPolygonFromB2DPolygon(a2DHalfCircle));
 
         // create object for it
@@ -609,14 +609,14 @@ bool Svx3DLightControl::MouseMove(const MouseEvent& rMEvt)
             }
 
             // cut vertical
-            if(fNewRotX < -F_PI2)
+            if(fNewRotX < -M_PI_2)
             {
-                fNewRotX = -F_PI2;
+                fNewRotX = -M_PI_2;
             }
 
-            if(fNewRotX > F_PI2)
+            if(fNewRotX > M_PI_2)
             {
-                fNewRotX = F_PI2;
+                fNewRotX = M_PI_2;
             }
 
             SetRotation(fNewRotX, fNewRotY, mfSaveActionStartRotZ);
@@ -712,7 +712,7 @@ void Svx3DLightControl::GetPosition(double& rHor, double& rVer)
     {
         basegfx::B3DVector aDirection(GetLightDirection(maSelectedLight));
         aDirection.normalize();
-        rHor = basegfx::rad2deg(atan2(-aDirection.getX(), -aDirection.getZ()) + F_PI); // 0..360.0
+        rHor = basegfx::rad2deg(atan2(-aDirection.getX(), -aDirection.getZ()) + M_PI); // 0..360.0
         rVer = basegfx::rad2deg(atan2(aDirection.getY(), aDirection.getXZLength())); // -90.0..90.0
     }
     if(IsGeometrySelected())
@@ -727,7 +727,7 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
     if(IsSelectionValid())
     {
         // set selected light's direction
-        fHor = basegfx::deg2rad(fHor) - F_PI; // -PI..PI
+        fHor = basegfx::deg2rad(fHor) - M_PI; // -PI..PI
         fVer = basegfx::deg2rad(fVer); // -PI2..PI2
         basegfx::B3DVector aDirection(cos(fVer) * -sin(fHor), sin(fVer), cos(fVer) * -cos(fHor));
         aDirection.normalize();

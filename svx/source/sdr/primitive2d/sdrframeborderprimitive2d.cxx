@@ -209,8 +209,8 @@ namespace
                 return;
 
             // create angle between both. angle() needs vectors pointing away from the same point,
-            // so take the mirrored one. Add F_PI to get from -pi..+pi to [0..F_PI2] for sorting
-            const double fAngle(basegfx::B2DVector(-rMyVector.getX(), -rMyVector.getY()).angle(rOtherVector) + F_PI);
+            // so take the mirrored one. Add M_PI to get from -pi..+pi to [0..M_PI_2] for sorting
+            const double fAngle(basegfx::B2DVector(-rMyVector.getX(), -rMyVector.getY()).angle(rOtherVector) + M_PI);
             maEntries.emplace_back(
                 rStyle,
                 rOtherVector,
@@ -433,7 +433,7 @@ namespace
                     {
                         // sort: min to start, max to end
                         std::sort(aCutSets.begin(), aCutSets.end());
-                        const bool bOtherUpper(rStyleCandidate.getAngle() > F_PI);
+                        const bool bOtherUpper(rStyleCandidate.getAngle() > M_PI);
 
                         // check if we need min or max
                         //  bUpper      bOtherUpper        MinMax

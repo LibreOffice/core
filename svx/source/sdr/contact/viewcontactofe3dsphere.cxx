@@ -63,8 +63,8 @@ namespace sdr::contact
             // calculate texture size, use radii for (2 * PI * r) to get a perfect
             // mapping on the sphere
             const basegfx::B2DVector aTextureSize(
-                F_PI * ((aSphereSize.getX() + aSphereSize.getZ()) / 2.0), // PI * d
-                F_PI2 * aSphereSize.getY()); // half outline, (PI * d)/2 -> PI/2 * d
+                M_PI * ((aSphereSize.getX() + aSphereSize.getZ()) / 2.0), // PI * d
+                M_PI_2 * aSphereSize.getY()); // half outline, (PI * d)/2 -> PI/2 * d
 
             // create primitive and add
             const drawinglayer::primitive3d::Primitive3DReference xReference(

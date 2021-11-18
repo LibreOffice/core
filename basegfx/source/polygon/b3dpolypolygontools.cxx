@@ -200,7 +200,7 @@ namespace basegfx::utils
         }
 
         // helper for getting the 3D Point from given cartesian coordinates. fHor is defined from
-        // [F_PI2 .. -F_PI2], fVer from [0.0 .. F_2PI]
+        // [M_PI_2 .. -M_PI_2], fVer from [0.0 .. F_2PI]
         static B3DPoint getPointFromCartesian(double fHor, double fVer)
         {
             const double fCosVer(cos(fVer));
@@ -235,8 +235,8 @@ namespace basegfx::utils
             const double fVerDiffPerStep((fVerStop - fVerStart) / static_cast<double>(nVerSeg));
             const double fHorDiffPerStep((fHorStop - fHorStart) / static_cast<double>(nHorSeg));
             bool bHorClosed(fTools::equal(fHorStop - fHorStart, F_2PI));
-            bool bVerFromTop(fTools::equal(fVerStart, F_PI2));
-            bool bVerToBottom(fTools::equal(fVerStop, -F_PI2));
+            bool bVerFromTop(fTools::equal(fVerStart, M_PI_2));
+            bool bVerToBottom(fTools::equal(fVerStop, -M_PI_2));
 
             // create horizontal rings
             const sal_uInt32 nLoopVerInit(bVerFromTop ? 1 : 0);

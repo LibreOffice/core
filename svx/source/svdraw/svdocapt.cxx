@@ -710,7 +710,7 @@ void handleNegativeScale(basegfx::B2DTuple & scale, double * rotate) {
     {
         scale.setX(fabs(scale.getX()));
         scale.setY(fabs(scale.getY()));
-        *rotate = fmod(*rotate + F_PI, F_2PI);
+        *rotate = fmod(*rotate + M_PI, F_2PI);
     }
 }
 
