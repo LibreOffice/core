@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f02c2a1_ba6b51db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-18T10:56:21Z",
+      "side": 1,
+      "message": "(in which case, better also backport \u003chttps://gerrit.libreoffice.org/c/core/+/125366\u003e \"Don\u0027t fail jfw_findAllJREs for just one JRE of WrongArch\")",
+      "revId": "d32b60abb4bc1136ba191f6c7b6f606956c378cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
