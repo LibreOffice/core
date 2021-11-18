@@ -556,7 +556,6 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
                 //  displayed document
                 std::unique_ptr<weld::Menu> xDocMenu(xBuilder->weld_menu("displaymenu"));
-//TODO                aDocMenu->SetMenuFlags( aDocMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
                 sal_uInt16 i=0;
                 OUString sActive;
                 OUString sId;
