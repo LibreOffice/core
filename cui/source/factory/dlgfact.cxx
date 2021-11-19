@@ -1477,8 +1477,8 @@ VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialo
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(
-        std::make_unique<AboutDialog>(pParent));
+    return VclPtr<CuiAbstractControllerAsync_Impl>::Create(
+        std::make_shared<AboutDialog>(pParent));
 }
 
 VclPtr<VclAbstractDialog>
