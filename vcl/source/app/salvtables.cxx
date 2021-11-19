@@ -6698,7 +6698,8 @@ SalInstancePopover::SalInstancePopover(DockingWindow* pPopover, SalInstanceBuild
 
 SalInstancePopover::~SalInstancePopover() { signal_closed(); }
 
-void SalInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect)
+void SalInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                       weld::Placement ePlace)
 {
     SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
     assert(pVclWidget);
@@ -6712,8 +6713,12 @@ void SalInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Recta
     aRect.SetRight(aPt.X());
     aRect.SetBottom(aPt.Y());
 
-    FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus
-                                | FloatWinPopupFlags::NoMouseUpClose;
+    FloatWinPopupFlags nFlags = FloatWinPopupFlags::GrabFocus | FloatWinPopupFlags::NoMouseUpClose;
+    if (ePlace == weld::Placement::Under)
+        nFlags = nFlags | FloatWinPopupFlags::Down;
+    else
+        nFlags = nFlags | FloatWinPopupFlags::Right;
+
     m_xPopover->EnableDocking();
     DockingManager* pDockingManager = vcl::Window::GetDockingManager();
     pDockingManager->SetPopupModeEndHdl(m_xPopover,

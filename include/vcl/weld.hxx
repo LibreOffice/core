@@ -2358,7 +2358,9 @@ protected:
     void signal_closed() { m_aCloseHdl.Call(*this); }
 
 public:
-    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                               Placement ePlace = Placement::Under)
+        = 0;
     virtual void popdown() = 0;
 
     void connect_closed(const Link<weld::Popover&, void>& rLink) { m_aCloseHdl = rLink; }
