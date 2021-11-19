@@ -465,6 +465,8 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     {
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
 
+        rStream.setDocumentReference(this);
+
         OOXMLFastDocumentHandler * pDocHandler =
                     new OOXMLFastDocumentHandler(xContext, &rStream, this, mnXNoteId);
         pDocHandler->setIsSubstream( mbIsSubstream );
