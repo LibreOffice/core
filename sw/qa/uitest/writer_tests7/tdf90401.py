@@ -120,16 +120,16 @@ class tdf90401(UITestCase):
                         xOkBtn.executeAction('CLICK', tuple())
 
                 # Save Copy as
-                with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="open") as xDialog:
+                with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="") as xDialog:
                     xFileName = xDialog.getChild('file_name')
                     xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
                     xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
                     xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
-                # DOCX confirmation dialog is displayed
-                xWarnDialog = self.xUITest.getTopFocusWindow()
-                xOK = xWarnDialog.getChild("save")
-                self.ui_test.close_dialog_through_button(xOK)
+                    xOpen = xDialog.getChild("open")
+                    # DOCX confirmation dialog is displayed
+                    with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="save"):
+                        pass
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as writer_doc2:
 
