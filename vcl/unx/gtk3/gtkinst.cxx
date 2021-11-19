@@ -22119,16 +22119,11 @@ public:
                 {
                     m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
                     gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-                    bool bModal = gtk_popover_get_modal(m_pPopover);
-                    gtk_window_set_modal(m_pMenuHack, bModal);
                     gtk_window_set_resizable(m_pMenuHack, false);
                     g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
-                    if (bModal)
-                    {
-                         g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-                         g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
-                         g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
-                    }
+                    g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+                    g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
+                    g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
                 }
 
                 MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect, ePlace);
