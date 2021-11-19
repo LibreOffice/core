@@ -51,6 +51,7 @@
 class SdOOXMLExportTest3 : public SdModelTestBaseXML
 {
 public:
+    void testTdf129430();
     void testTdf114848();
     void testTdf68759();
     void testTdf127901();
@@ -126,6 +127,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
+    CPPUNIT_TEST(testTdf129430);
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf68759);
     CPPUNIT_TEST(testTdf127901);
@@ -204,6 +206,19 @@ public:
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
+
+void SdOOXMLExportTest3::testTdf129430()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf129430.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:pPr/a:lnSpc/a:spcPct",
+                "val", "100000");
+}
 
 void SdOOXMLExportTest3::testTdf114848()
 {
