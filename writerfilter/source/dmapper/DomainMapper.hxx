@@ -24,7 +24,6 @@
 #include "SettingsTable.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
-
 #include <map>
 #include <vector>
 #include <memory>
@@ -79,6 +78,8 @@ public:
                  SourceDocumentType eDocumentType,
                  utl::MediaDescriptor const & rMediaDesc);
     virtual ~DomainMapper() override;
+
+    virtual void setDocumentReference(void* pDocument) override;
 
     // Stream
     virtual void markLastParagraphInSection() override;

@@ -43,6 +43,7 @@ enum class SdtControlType
 class SdtHelper final : public virtual SvRefBase
 {
     DomainMapper_Impl& m_rDM_Impl;
+    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
 
     /// Items of the drop-down control.
     std::vector<OUString> m_aDropDownItems;
@@ -78,8 +79,11 @@ class SdtHelper final : public virtual SvRefBase
                             css::uno::Reference<css::awt::XControlModel> const& xControlModel,
                             const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 
+    std::optional<OUString> getValueFromDataBinding();
+
 public:
-    explicit SdtHelper(DomainMapper_Impl& rDM_Impl);
+    explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
+                       css::uno::Reference<css::uno::XComponentContext> const& xContext);
     ~SdtHelper() override;
 
     std::vector<OUString>& getDropDownItems() { return m_aDropDownItems; }

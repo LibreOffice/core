@@ -72,6 +72,8 @@ public:
     void startGlossaryEntry() override;
     void endGlossaryEntry() override;
 
+    virtual void setDocumentReference(void* /*pDocument*/) override{};
+
 protected:
     virtual void lcl_startSectionGroup() = 0;
     virtual void lcl_endSectionGroup() = 0;

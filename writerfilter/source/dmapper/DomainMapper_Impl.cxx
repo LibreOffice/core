@@ -275,6 +275,7 @@ DomainMapper_Impl::DomainMapper_Impl(
             utl::MediaDescriptor const & rMediaDesc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
+        m_pOOXMLDocument(nullptr),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext( xContext ),
@@ -378,7 +379,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).startLevel();
     m_bUsingEnhancedFields = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get(m_xComponentContext);
 
-    m_pSdtHelper = new SdtHelper(*this);
+    m_pSdtHelper = new SdtHelper(*this, m_xComponentContext);
 
     m_aRedlines.push(std::vector<RedlineParamsPtr>());
 
@@ -400,6 +401,11 @@ DomainMapper_Impl::~DomainMapper_Impl()
         getTableManager().endLevel();
         popTableManager();
     }
+}
+
+writerfilter::ooxml::OOXMLDocument* DomainMapper_Impl::getDocumentReference() const
+{
+    return static_cast<writerfilter::ooxml::OOXMLDocument*>(m_pOOXMLDocument);
 }
 
 uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
