@@ -31,7 +31,7 @@ namespace
 
 struct MediaTypeEntry
 {
-    char const *    m_pTypeName;
+    OUString    m_pTypeName;
     INetContentType m_eTypeID;
 };
 
@@ -230,8 +230,7 @@ MediaTypeEntry const * seekEntry(OUString const & rTypeName,
 #if defined DBG_UTIL
     for (std::size_t i = 0; i < nSize - 1; ++i)
         DBG_ASSERT(
-            rtl_str_compare(
-                pMap[i].m_pTypeName, pMap[i + 1].m_pTypeName) < 0,
+            pMap[i].m_pTypeName < pMap[i + 1].m_pTypeName,
             "seekEntry(): Bad map");
 #endif
 
@@ -241,7 +240,7 @@ MediaTypeEntry const * seekEntry(OUString const & rTypeName,
     {
         std::size_t nMiddle = (nLow + nHigh) / 2;
         MediaTypeEntry const * pEntry = pMap + nMiddle;
-        sal_Int32 nCmp = rTypeName.compareToIgnoreAsciiCaseAscii(pEntry->m_pTypeName);
+        sal_Int32 nCmp = rTypeName.compareToIgnoreAsciiCase(pEntry->m_pTypeName);
         if (nCmp < 0)
             nHigh = nMiddle;
         else if (nCmp == 0)
@@ -276,18 +275,18 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
 //static
 OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 {
-    static std::array<char const *, CONTENT_TYPE_LAST + 1> aMap = []()
+    static std::array<OUString, CONTENT_TYPE_LAST + 1> aMap = []()
     {
-        std::array<char const *, CONTENT_TYPE_LAST + 1> tmp;
+        std::array<OUString, CONTENT_TYPE_LAST + 1> tmp;
         for (std::size_t i = 0; i <= CONTENT_TYPE_LAST; ++i)
             tmp[aStaticTypeNameMap[i].m_eTypeID] = aStaticTypeNameMap[i].m_pTypeName;
         tmp[CONTENT_TYPE_UNKNOWN] = CONTENT_TYPE_STR_APP_OCTSTREAM;
-        tmp[CONTENT_TYPE_TEXT_PLAIN] = CONTENT_TYPE_STR_TEXT_PLAIN
+        tmp[CONTENT_TYPE_TEXT_PLAIN] = CONTENT_TYPE_STR_TEXT_PLAIN +
                                         "; charset=iso-8859-1";
         return tmp;
     }();
 
-    OUString aTypeName = eTypeID <= CONTENT_TYPE_LAST ? OUString::createFromAscii(aMap[eTypeID])
+    OUString aTypeName = eTypeID <= CONTENT_TYPE_LAST ? aMap[eTypeID]
                                                       : OUString();
     if (aTypeName.isEmpty())
     {
