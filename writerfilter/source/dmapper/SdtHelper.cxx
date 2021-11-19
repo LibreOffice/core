@@ -21,9 +21,17 @@
 #include "StyleSheetTable.hxx"
 #include <officecfg/Office/Writer.hxx>
 
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+
+#include <ooxml/OOXMLDocument.hxx>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/dom/XNode.hpp>
+
 namespace writerfilter::dmapper
 {
 using namespace ::com::sun::star;
+using namespace ::css::xml::xpath;
 
 /// w:sdt's w:dropDownList doesn't have width, so guess the size based on the longest string.
 static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
@@ -65,8 +73,10 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
     return { nWidth + nBorder + nHeight, nHeight + nBorder };
 }
 
-SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl)
+SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
+                     css::uno::Reference<css::uno::XComponentContext> const& xContext)
     : m_rDM_Impl(rDM_Impl)
+    , m_xComponentContext(xContext)
     , m_aControlType(SdtControlType::unknown)
     , m_bHasElements(false)
     , m_bOutsideAParagraph(false)
@@ -74,6 +84,37 @@ SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl)
 }
 
 SdtHelper::~SdtHelper() = default;
+
+std::optional<OUString> SdtHelper::getValueFromDataBinding()
+{
+    // No xpath - nothing to do
+    if (m_sDataBindingXPath.isEmpty())
+        return {};
+
+    writerfilter::ooxml::OOXMLDocument* pDocument = m_rDM_Impl.getDocumentReference();
+    assert(pDocument);
+    if (!pDocument)
+        return {};
+
+    // Iterate all custom xmls documents and evaluate xpath to get value
+    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmls
+        = pDocument->getCustomXmlDomList();
+    for (const auto& xCustomXml : aCustomXmls)
+    {
+        uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
+
+        //xXpathAPI->registerNS("ns0", m_sDataBindingPrefixMapping);
+        xXpathAPI->registerNS("ns0", "http://schemas.microsoft.com/vsto/samples");
+        uno::Reference<XXPathObject> xResult = xXpathAPI->eval(xCustomXml, m_sDataBindingXPath);
+
+        if (xResult.is())
+        {
+            return xResult->getString();
+        }
+    }
+
+    return {};
+}
 
 void SdtHelper::createDropDownControl()
 {
@@ -180,6 +221,7 @@ void SdtHelper::createDateContentControl()
     if (xNameCont.is())
     {
         OUString sDateFormat = m_sDateFormat.makeStringAndClear();
+
         // Replace quotation mark used for marking static strings in date format
         sDateFormat = sDateFormat.replaceAll("'", "\"");
         xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(sDateFormat));
@@ -187,6 +229,11 @@ void SdtHelper::createDateContentControl()
                                 uno::makeAny(m_sLocale.makeStringAndClear()));
     }
     OUString sFullDate = m_sDate.makeStringAndClear();
+
+    std::optional<OUString> oData = getValueFromDataBinding();
+    if (oData.has_value())
+        sFullDate = *oData;
+
     if (!sFullDate.isEmpty())
     {
         sal_Int32 nTimeSep = sFullDate.indexOf("T");
@@ -194,6 +241,12 @@ void SdtHelper::createDateContentControl()
             sFullDate = sFullDate.copy(0, nTimeSep);
         xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sFullDate));
     }
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(m_rDM_Impl.GetTextDocument(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<util::XRefreshable> xRefreshable(xTextFieldsSupplier->getTextFields(),
+                                                    uno::UNO_QUERY);
+    xRefreshable->refresh();
 
     setControlType(SdtControlType::unknown);
 
