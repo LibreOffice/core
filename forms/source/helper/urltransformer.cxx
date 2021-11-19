@@ -71,10 +71,10 @@ namespace frm
     }
 
 
-    void UrlTransformer::parseSmartWithAsciiProtocol( css::util::URL& _rURL, const char* _pAsciiURL ) const
+    void UrlTransformer::parseSmartWithAsciiProtocol( css::util::URL& _rURL, const OUString& _rAsciiURL ) const
     {
         if ( implEnsureTransformer() )
-            m_xTransformer->parseSmart( _rURL, OUString::createFromAscii( _pAsciiURL ) );
+            m_xTransformer->parseSmart( _rURL, _rAsciiURL );
     }
 
 

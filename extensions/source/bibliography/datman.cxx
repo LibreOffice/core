@@ -1119,7 +1119,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
         if (xPropInfo->hasPropertyByName(uProp))
         {
             xPropSet->setPropertyValue(
-                uProp, makeAny<OUString>(INET_HID_SCHEME HID_BIB_DB_GRIDCTRL));
+                uProp, makeAny<OUString>(INET_HID_SCHEME + HID_BIB_DB_GRIDCTRL));
         }
     }
     catch (const Exception&)
