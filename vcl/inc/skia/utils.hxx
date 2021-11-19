@@ -73,6 +73,28 @@ VCL_DLLPUBLIC sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface,
 
 inline Size imageSize(const sk_sp<SkImage>& image) { return Size(image->width(), image->height()); }
 
+inline SkColor toSkColor(Color color)
+{
+    return SkColorSetARGB(color.GetAlpha(), color.GetRed(), color.GetGreen(), color.GetBlue());
+}
+
+inline SkColor toSkColorWithTransparency(Color aColor, double fTransparency)
+{
+    return SkColorSetA(toSkColor(aColor), 255 * (1.0 - fTransparency));
+}
+
+inline SkColor toSkColorWithIntensity(Color color, int intensity)
+{
+    return SkColorSetARGB(color.GetAlpha(), color.GetRed() * intensity / 100,
+                          color.GetGreen() * intensity / 100, color.GetBlue() * intensity / 100);
+}
+
+inline Color fromSkColor(SkColor color)
+{
+    return Color(ColorAlpha, SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
+                 SkColorGetB(color));
+}
+
 // Whether to use GetSkImage() that checks for delayed scaling or whether to access
 // the stored image directly without checks.
 enum DirectImage

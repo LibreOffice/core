@@ -207,28 +207,6 @@ bool polygonContainsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
     return false; // no straight line found
 }
 
-SkColor toSkColor(Color color)
-{
-    return SkColorSetARGB(color.GetAlpha(), color.GetRed(), color.GetGreen(), color.GetBlue());
-}
-
-SkColor toSkColorWithTransparency(Color aColor, double fTransparency)
-{
-    return SkColorSetA(toSkColor(aColor), 255 * (1.0 - fTransparency));
-}
-
-SkColor toSkColorWithIntensity(Color color, int intensity)
-{
-    return SkColorSetARGB(color.GetAlpha(), color.GetRed() * intensity / 100,
-                          color.GetGreen() * intensity / 100, color.GetBlue() * intensity / 100);
-}
-
-Color fromSkColor(SkColor color)
-{
-    return Color(ColorAlpha, SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
-                 SkColorGetB(color));
-}
-
 // returns true if the source or destination rectangles are invalid
 bool checkInvalidSourceOrDestination(SalTwoRect const& rPosAry)
 {
@@ -842,8 +820,7 @@ void SkiaSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long
     SAL_INFO("vcl.skia.trace", "drawline(" << this << "): " << Point(nX1, nY1) << "->"
                                            << Point(nX2, nY2) << ":" << mLineColor);
     addUpdateRegion(SkRect::MakeLTRB(nX1, nY1, nX2, nY2).makeSorted());
-    SkPaint paint;
-    paint.setColor(toSkColor(mLineColor));
+    SkPaint paint = makeLinePaint();
     paint.setAntiAlias(mParent.getAntiAlias());
     if (mScaling != 1 && isUnitTestRunning())
     {
@@ -866,12 +843,10 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
                                 << ":" << mLineColor << ":" << mFillColor << ":" << fTransparency);
     addUpdateRegion(SkRect::MakeXYWH(nX, nY, nWidth, nHeight));
     SkCanvas* canvas = getDrawCanvas();
-    SkPaint paint;
-    paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
     if (mFillColor != SALCOLOR_NONE)
     {
-        paint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
-        paint.setStyle(SkPaint::kFill_Style);
+        SkPaint paint = makeFillPaint(fTransparency);
+        paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
         if (mLineColor == SALCOLOR_NONE && SkSize::Make(nWidth, nHeight).isEmpty())
@@ -880,8 +855,8 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        paint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
-        paint.setStyle(SkPaint::kStroke_Style);
+        SkPaint paint = makeLinePaint(fTransparency);
+        paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
         if (mScaling != 1 && isUnitTestRunning())
         {
             // On HiDPI displays, do not draw just a hairline but instead a full-width "pixel" when running unittests,
@@ -989,9 +964,6 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     polygonPath.setFillType(SkPathFillType::kEvenOdd);
     addUpdateRegion(polygonPath.getBounds());
 
-    SkPaint aPaint;
-    aPaint.setAntiAlias(useAA);
-
     // For lines we use toSkX()/toSkY() in order to pass centers of pixels to Skia,
     // as that leads to better results with floating-point coordinates
     // (e.g. https://bugs.chromium.org/p/skia/issues/detail?id=9611).
@@ -1012,8 +984,8 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     }
     if (mFillColor != SALCOLOR_NONE)
     {
-        aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
-        aPaint.setStyle(SkPaint::kFill_Style);
+        SkPaint aPaint = makeFillPaint(fTransparency);
+        aPaint.setAntiAlias(useAA);
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
         if (mLineColor == SALCOLOR_NONE && polygonPath.getBounds().isEmpty())
@@ -1022,8 +994,8 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
-        aPaint.setStyle(SkPaint::kStroke_Style);
+        SkPaint aPaint = makeLinePaint(fTransparency);
+        aPaint.setAntiAlias(useAA);
         getDrawCanvas()->drawPath(polygonPath, aPaint);
     }
     postDraw();
@@ -1222,11 +1194,9 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
             break;
     }
 
-    SkPaint aPaint;
-    aPaint.setStyle(SkPaint::kStroke_Style);
+    SkPaint aPaint = makeLinePaint(fTransparency);
     aPaint.setStrokeCap(eSkLineCap);
     aPaint.setStrokeJoin(eSkLineJoin);
-    aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
     aPaint.setStrokeMiter(fMiterLimit);
     aPaint.setStrokeWidth(fLineWidth);
     aPaint.setAntiAlias(mParent.getAntiAlias());
