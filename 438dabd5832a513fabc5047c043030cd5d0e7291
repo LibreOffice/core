@@ -16,6 +16,23 @@
       "message": "Miklos raised a question on the master. I don\u0027t think it is a problem, but in case I\u0027m wrong, it would be a bit too late to find/fix in 7.2 branch. So I wasn\u0027t going to backport.\n\nThis is a rather obscure bug - some drawingML needs to be in a different file, and then a diagram needs to exist elsewhere. That combination would be an extremely rare case, so little incentive to risk anything.  (On the other hand, it also mean very little risk doing it as well - so I have no real objection either.)",
       "revId": "438dabd5832a513fabc5047c043030cd5d0e7291",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9fa3e2d_1f26cb32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-19T16:08:02Z",
+      "side": 1,
+      "message": "It\u0027s fine to backport this, I think.",
+      "revId": "438dabd5832a513fabc5047c043030cd5d0e7291",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
