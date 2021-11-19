@@ -181,6 +181,7 @@ void QtGraphicsBackend::ResetClipRegion()
 void QtGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY)
 {
     QtPainter aPainter(*this);
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawPoint(nX, nY);
     aPainter.update(nX, nY, 1, 1);
 }
@@ -188,6 +189,7 @@ void QtGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY)
 void QtGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY, Color nColor)
 {
     QtPainter aPainter(*this);
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.setPen(toQColor(nColor));
     aPainter.setPen(Qt::SolidLine);
     aPainter.drawPoint(nX, nY);
@@ -197,6 +199,7 @@ void QtGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY, Color nColor)
 void QtGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
 {
     QtPainter aPainter(*this);
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawLine(nX1, nY1, nX2, nY2);
 
     tools::Long tmp;
@@ -222,6 +225,7 @@ void QtGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nWi
         return;
 
     QtPainter aPainter(*this, true);
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     if (SALCOLOR_NONE != m_aFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
     if (SALCOLOR_NONE != m_aLineColor)
@@ -250,6 +254,7 @@ void QtGraphicsBackend::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
         if (pPtAry->getY() > aBottomRight.y())
             aBottomRight.setY(pPtAry->getY());
     }
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawPolyline(pPoints, nPoints);
     delete[] pPoints;
     aPainter.update(QRect(aTopLeft, aBottomRight));
@@ -261,6 +266,7 @@ void QtGraphicsBackend::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
     QPolygon aPolygon(nPoints);
     for (sal_uInt32 i = 0; i < nPoints; ++i, ++pPtAry)
         aPolygon.setPoint(i, pPtAry->getX(), pPtAry->getY());
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawPolygon(aPolygon);
     aPainter.update(aPolygon.boundingRect());
 }
@@ -288,6 +294,7 @@ void QtGraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32*
     }
 
     QtPainter aPainter(*this, true);
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawPath(aPath);
     aPainter.update(aPath.boundingRect());
 }
@@ -312,6 +319,7 @@ bool QtGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDe
         return true;
 
     QtPainter aPainter(*this, true, 255 * (1.0 - fTransparency));
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawPath(aPath);
     aPainter.update(aPath.boundingRect());
     return true;
@@ -435,6 +443,7 @@ bool QtGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevic
     }
 
     aPainter.setPen(aPen);
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawPath(aPath);
     aPainter.update(aPath.boundingRect());
     return true;
@@ -457,6 +466,7 @@ void QtGraphicsBackend::drawScaledImage(const SalTwoRect& rPosAry, const QImage&
     QtPainter aPainter(*this);
     QRect aSrcRect(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
     QRect aDestRect(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawImage(aDestRect, rImage, aSrcRect);
     aPainter.update(aDestRect);
 }
@@ -676,6 +686,7 @@ bool QtGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     aPainter.setTransform(QTransform(aXRel.getX() / aImage.width(), aXRel.getY() / aImage.width(),
                                      aYRel.getX() / aImage.height(), aYRel.getY() / aImage.height(),
                                      rNull.getX(), rNull.getY()));
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     aPainter.drawImage(QPoint(0, 0), aImage);
     aPainter.update(aImage.rect());
     return true;
@@ -692,6 +703,7 @@ bool QtGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Lon
     if (nTransparency > 100)
         nTransparency = 100;
     QtPainter aPainter(*this, true, (100 - nTransparency) * (255.0 / 100));
+    aPainter.setRenderHint(QPainter::Antialiasing, getAntiAlias());
     if (SALCOLOR_NONE != m_aFillColor)
         aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
     if (SALCOLOR_NONE != m_aLineColor)
