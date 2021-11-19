@@ -853,7 +853,7 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
             paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), paint);
     }
-    if (mLineColor != SALCOLOR_NONE)
+    if (mLineColor != SALCOLOR_NONE && mLineColor != mFillColor) // otherwise handled by fill
     {
         SkPaint paint = makeLinePaint(fTransparency);
         paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
@@ -992,7 +992,7 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
             aPaint.setStyle(SkPaint::kStroke_Style);
         getDrawCanvas()->drawPath(polygonPath, aPaint);
     }
-    if (mLineColor != SALCOLOR_NONE)
+    if (mLineColor != SALCOLOR_NONE && mLineColor != mFillColor) // otherwise handled by fill
     {
         SkPaint aPaint = makeLinePaint(fTransparency);
         aPaint.setAntiAlias(useAA);
