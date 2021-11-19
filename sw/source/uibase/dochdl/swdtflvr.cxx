@@ -786,7 +786,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
     case SWTRANSFER_OBJECTTYPE_HTML:
     {
         // LOK is interested in getting images embedded for copy/paste support.
-        GetHTMLWriter( comphelper::LibreOfficeKit::isActive() ? OUString("EmbedImages") : OUString(), OUString(), xWrt );
+        GetHTMLWriter( comphelper::LibreOfficeKit::isActive() ? OUString("EmbedImages;NoLineLimit") : OUString(), OUString(), xWrt );
         break;
     }
 
