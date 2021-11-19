@@ -434,8 +434,8 @@ void ScGridWindow::dispose()
 
     mpFilterBox.reset();
     mpNoteMarker.reset();
-    mpAutoFilterPopup.disposeAndClear();
-    mpDPFieldPopup.disposeAndClear();
+    mpAutoFilterPopup.reset();
+    mpDPFieldPopup.reset();
     aComboButton.SetOutputDevice(nullptr);
 
     if (mpSpellCheckCxt)
@@ -458,8 +458,8 @@ void ScGridWindow::ClickExtern()
 
     if (mpDPFieldPopup)
     {
-        mpDPFieldPopup->get_widget().close(false);
-        mpDPFieldPopup.disposeAndClear();
+        mpDPFieldPopup->close(false);
+        mpDPFieldPopup.reset();
     }
 }
 
@@ -582,60 +582,13 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScDocument& rDoc = mrViewData.GetDocument();
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
-    mpAutoFilterPopup.disposeAndClear();
+    mpAutoFilterPopup.reset();
 
     // Estimate the width (in pixels) of the longest text in the list
     ScFilterEntries aFilterEntries;
     rDoc.GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
-    vcl::ILibreOfficeKitNotifier* pNotifier = nullptr;
-    if (bLOKActive)
-        pNotifier = SfxViewShell::Current();
-
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), mrViewData.GetPPTX());
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, false,
-                                                                  aFilterEntries.mbHasDates, nColWidth,
-                                                                  nullptr, pNotifier));
-    ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
-
-    int nMaxTextWidth = 0;
-    if (aFilterEntries.size() <= 10)
-    {
-        // do pixel calculation for all elements of short lists
-        for (const auto& rEntry : aFilterEntries)
-        {
-            const OUString& aText = rEntry.GetString();
-            nMaxTextWidth = std::max<int>(nMaxTextWidth, rControl.GetTextWidth(aText) + aText.getLength() * 2);
-        }
-    }
-    else
-    {
-        // find the longest string, probably it will be the longest rendered text, too
-        // (performance optimization for long lists)
-        auto itMax = aFilterEntries.begin();
-        for (auto it = itMax; it != aFilterEntries.end(); ++it)
-        {
-            int nTextWidth = it->GetString().getLength();
-            if (nMaxTextWidth < nTextWidth)
-            {
-                nMaxTextWidth = nTextWidth;
-                itMax = it;
-            }
-        }
-        nMaxTextWidth = rControl.GetTextWidth(itMax->GetString()) + nMaxTextWidth * 2;
-    }
-
-    // window should be at least as wide as the column, or the longest text + checkbox, scrollbar ... (it is estimated with 70 pixel now)
-    // window should be maximum 1024 pixel wide.
-    int nWindowWidth = std::min<int>(1024, nMaxTextWidth + 70);
-    nWindowWidth = rControl.IncreaseWindowWidthToFitText(nWindowWidth);
-    nMaxTextWidth = std::max<int>(nMaxTextWidth, nWindowWidth - 70);
-
-    rControl.setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
-    rControl.setPopupEndAction(
-        new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
-    std::unique_ptr<AutoFilterData> pData(new AutoFilterData);
-    pData->maPos = ScAddress(nCol, nRow, nTab);
 
     Point aPos = mrViewData.GetScrPos(nCol, nRow, eWhich);
     tools::Long nSizeX  = 0;
@@ -655,12 +608,56 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     }
     tools::Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
 
+//    weld::Window* pPopupParent = weld::GetPopupParent(*this, aCellRect);
+    weld::Window* pPopupParent = GetFrameWeld();
+    mpAutoFilterPopup.reset(new ScCheckListMenuControl(pPopupParent, &rDoc, false,
+                                                       aFilterEntries.mbHasDates, nColWidth));
+
+    int nMaxTextWidth = 0;
+    if (aFilterEntries.size() <= 10)
+    {
+        // do pixel calculation for all elements of short lists
+        for (const auto& rEntry : aFilterEntries)
+        {
+            const OUString& aText = rEntry.GetString();
+            nMaxTextWidth = std::max<int>(nMaxTextWidth, mpAutoFilterPopup->GetTextWidth(aText) + aText.getLength() * 2);
+        }
+    }
+    else
+    {
+        // find the longest string, probably it will be the longest rendered text, too
+        // (performance optimization for long lists)
+        auto itMax = aFilterEntries.begin();
+        for (auto it = itMax; it != aFilterEntries.end(); ++it)
+        {
+            int nTextWidth = it->GetString().getLength();
+            if (nMaxTextWidth < nTextWidth)
+            {
+                nMaxTextWidth = nTextWidth;
+                itMax = it;
+            }
+        }
+        nMaxTextWidth = mpAutoFilterPopup->GetTextWidth(itMax->GetString()) + nMaxTextWidth * 2;
+    }
+
+    // window should be at least as wide as the column, or the longest text + checkbox, scrollbar ... (it is estimated with 70 pixel now)
+    // window should be maximum 1024 pixel wide.
+    int nWindowWidth = std::min<int>(1024, nMaxTextWidth + 70);
+    nWindowWidth = mpAutoFilterPopup->IncreaseWindowWidthToFitText(nWindowWidth);
+    nMaxTextWidth = std::max<int>(nMaxTextWidth, nWindowWidth - 70);
+
+    mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
+    mpAutoFilterPopup->setPopupEndAction(
+        new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
+    std::unique_ptr<AutoFilterData> pData(new AutoFilterData);
+    pData->maPos = ScAddress(nCol, nRow, nTab);
+
     ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
     if (!pDBData)
         return;
 
     pData->mpData = pDBData;
-    rControl.setExtendedData(std::move(pData));
+    mpAutoFilterPopup->setExtendedData(std::move(pData));
 
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
@@ -682,7 +679,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     }
 
     // Populate the check box list.
-    rControl.setMemberSize(aFilterEntries.size());
+    mpAutoFilterPopup->setMemberSize(aFilterEntries.size());
     for (auto it = aFilterEntries.begin(); it != aFilterEntries.end(); ++it)
     {
         // tdf#140745 show (empty) entry on top of the checkbox list
@@ -695,7 +692,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
                 bSelected = aSelectedString.count(aStringVal) > 0;
             else if (bQueryByNonEmpty)
                 bSelected = false;
-            rControl.addMember(aStringVal, aDoubleVal, bSelected);
+            mpAutoFilterPopup->addMember(aStringVal, aDoubleVal, bSelected);
             aFilterEntries.maStrData.erase(it);
             break;
         }
@@ -716,49 +713,49 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         }
 
         if ( rEntry.IsDate() )
-            rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
+            mpAutoFilterPopup->addDateMember( aStringVal, rEntry.GetValue(), bSelected );
         else
-            rControl.addMember( aStringVal, aRDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value );
+            mpAutoFilterPopup->addMember( aStringVal, aRDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value );
     }
 
     // Populate the menu.
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addMenuItem(
         ScResId(STR_MENU_SORT_ASC),
         new AutoFilterAction(this, AutoFilterMode::SortAscending));
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addMenuItem(
         ScResId(STR_MENU_SORT_DESC),
         new AutoFilterAction(this, AutoFilterMode::SortDescending));
-    rControl.addSeparator();
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addSeparator();
+    mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, AutoFilterMode::Top10));
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
-    rControl.addSeparator();
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addSeparator();
+    mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor));
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor));
-    rControl.addSeparator();
-    rControl.addMenuItem(
+    mpAutoFilterPopup->addSeparator();
+    mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
     if (aEntries.size())
-        rControl.addMenuItem(
+        mpAutoFilterPopup->addMenuItem(
             ScResId(SCSTR_CLEAR_FILTER), new AutoFilterAction(this, AutoFilterMode::Clear));
 
-    rControl.initMembers(nMaxTextWidth + 20); // 20 pixel estimated for the checkbox
+    mpAutoFilterPopup->initMembers(nMaxTextWidth + 20); // 20 pixel estimated for the checkbox
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
     aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo());
-    rControl.setConfig(aConfig);
+    mpAutoFilterPopup->setConfig(aConfig);
     if (IsMouseCaptured())
         ReleaseMouse();
-    rControl.launch(aCellRect);
+    mpAutoFilterPopup->launch(pPopupParent, aCellRect);
 
     // remember filter rules before modification
-    rControl.getResult(aSaveAutoFilterResult);
+    mpAutoFilterPopup->getResult(aSaveAutoFilterResult);
 
     collectUIInformation(OUString::number(nRow), OUString::number(nCol),"AUTOFILTER");
 }
@@ -776,15 +773,13 @@ void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
 
 void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 {
-    ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
-
     // Terminate autofilter popup now when there is no further user input needed
     bool bColorMode = eMode == AutoFilterMode::TextColor || eMode == AutoFilterMode::BackgroundColor;
     if (!bColorMode)
-        rControl.terminateAllPopupMenus();
+        mpAutoFilterPopup->terminateAllPopupMenus();
 
     const AutoFilterData* pData =
-        static_cast<const AutoFilterData*>(rControl.getExtendedData());
+        static_cast<const AutoFilterData*>(mpAutoFilterPopup->getExtendedData());
 
     if (!pData)
         return;
@@ -848,13 +843,13 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     {
         // Do not recreate autofilter rules if there are no changes from the user
         ScCheckListMenuControl::ResultType aResult;
-        rControl.getResult(aResult);
+        mpAutoFilterPopup->getResult(aResult);
 
         if (aResult == aSaveAutoFilterResult)
         {
             SAL_INFO("sc.ui", "Apply autofilter to data when entries are the same");
 
-            if (!rControl.isAllSelected())
+            if (!mpAutoFilterPopup->isAllSelected())
             {
                 // Apply autofilter to data
                 ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
@@ -882,7 +877,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     }
 
     if (eMode != AutoFilterMode::Clear
-        && !(eMode == AutoFilterMode::Normal && rControl.isAllSelected()))
+        && !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected()))
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
@@ -905,7 +900,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 pEntry->eOp = SC_EQUAL;
 
                 ScCheckListMenuControl::ResultType aResult;
-                rControl.getResult(aResult);
+                mpAutoFilterPopup->getResult(aResult);
 
                 ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
                 rItems.clear();
@@ -929,8 +924,8 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 ScFilterEntries aFilterEntries;
                 rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries);
 
-                weld::Window* pPopupParent = mpAutoFilterPopup->GetFrameWeld();
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/colormenu.ui"));
+                weld::Window* pWindow = GetFrameWeld();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow, "modules/scalc/ui/colormenu.ui"));
                 std::unique_ptr<weld::Menu> xColorMenu(xBuilder->weld_menu("menu"));
 
                 std::set<Color> aColors = eMode == AutoFilterMode::TextColor
@@ -951,7 +946,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     else
                     {
                         // ColorListBox::ShowPreview is similar
-                        ScopedVclPtr<VirtualDevice> xDev(pPopupParent->create_virtual_device());
+                        ScopedVclPtr<VirtualDevice> xDev(pWindow->create_virtual_device());
                         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                         Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
                         xDev->SetOutputSize(aImageSize);
@@ -976,13 +971,13 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     i++;
                 }
 
-                sal_Int32 nSelected = rControl.ExecuteMenu(*xColorMenu);
+                sal_Int32 nSelected = mpAutoFilterPopup->ExecuteMenu(*xColorMenu);
                 xColorMenu.reset();
 
                 if (nSelected == 0)
                     return;
 
-                rControl.terminateAllPopupMenus();
+                mpAutoFilterPopup->terminateAllPopupMenus();
 
                 // Disable color filter when active color was selected
                 if (nSelected == nActive)
