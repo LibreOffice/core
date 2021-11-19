@@ -1129,6 +1129,18 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eWhich );
 
+        if (bIsTiledRendering && bLayoutRTL)
+        {
+            // Transform the cell range X coordinates such that the edit cell area is
+            // horizontally mirrored w.r.t the (combined-)tile.
+            tools::Long nStartTileX = -aOriginalMode.GetOrigin().X() / TWIPS_PER_PIXEL;
+            // Note: nStartTileX is scaled by 2 only to offset for the addition of
+            // the -ve of the same qty (and nScrX) few lines below.
+            tools::Long nMirrorX = 2 * nStartTileX + aOutputData.GetScrW();
+            aStart.setX(nMirrorX - 1 - aStart.X());
+            aEnd.setX(nMirrorX - 1 - aEnd.X());
+        }
+
         // don't overwrite grid
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
         aEnd.AdjustX( -(2 * nLayoutSign) );
@@ -1136,7 +1148,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         // set the correct mapmode
         tools::Rectangle aBackground(aStart, aEnd);
-        tools::Rectangle aBGAbs(aStart, aEnd);
+        if (bIsTiledRendering && bLayoutRTL)
+            aBackground.Justify();
+        tools::Rectangle aBGAbs(aBackground);
 
         if (bIsTiledRendering)
         {
