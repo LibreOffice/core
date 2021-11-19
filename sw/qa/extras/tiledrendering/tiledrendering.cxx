@@ -425,6 +425,46 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionLineLimit)
     CPPUNIT_ASSERT(sHtmlText.match(sExpectedHtml, nStart));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionMultiLine)
+{
+    // Test will check if correct number of new line marks / paragraphs is generated
+    const char sOriginalText[] = u8"Heading\n\
+Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:\n\
+\n\
+\n\
+\n\
+\n\
+\n\
+And this is all for Writer shape objects\n\
+Heading on second page";
+
+    const char sExpectedHtml[] = u8"Heading</h2>\n\
+<p>Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:</p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<h1 class=\"western\">And this is all for Writer shape objects</h1>\n\
+<h2 class=\"western\">Heading on second page</h2>";
+
+    SwXTextDocument* pXTextDocument = createDoc("multiline.odt");
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Create a selection.
+    pWrtShell->SelAll();
+
+    OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8");
+
+    CPPUNIT_ASSERT_EQUAL(OString(sOriginalText), sPlainText.trim());
+
+    OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html");
+
+    int nStart = sHtmlText.indexOf(u8"Heading");
+
+    CPPUNIT_ASSERT(sHtmlText.match(sExpectedHtml, nStart));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)
 {
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
