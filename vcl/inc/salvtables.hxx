@@ -1903,7 +1903,8 @@ public:
 
     ~SalInstancePopover();
 
-    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override;
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                               weld::Placement ePlace = weld::Placement::Under) override;
 
     virtual void popdown() override;
 };
