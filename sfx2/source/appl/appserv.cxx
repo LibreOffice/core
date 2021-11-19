@@ -632,7 +632,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialog(rReq.GetFrameWeld()));
-            pDlg->Execute();
+            pDlg->StartExecuteAsync(nullptr);
             bDone = true;
             break;
         }
