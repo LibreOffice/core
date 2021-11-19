@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e412a10_a673340f",
+        "filename": "oox/source/drawingml/textcharacterpropertiescontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-19T09:13:09Z",
+      "side": 1,
+      "message": "This looked like another potential case of the same thing happening.\n\nHowever, I added this uLn to my unit test, but it never affected anything. I didn\u0027t see uLn in the documentation either, and MS Word 2016 seemed to ignore it as well and didn\u0027t round-trip it.",
+      "range": {
+        "startLine": 141,
+        "startChar": 14,
+        "endLine": 141,
+        "endChar": 46
+      },
+      "revId": "64be884a27d1f7de529dca2afe96e7c184365f82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
