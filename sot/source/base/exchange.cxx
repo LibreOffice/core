@@ -43,7 +43,7 @@ namespace {
  */
 struct DataFlavorRepresentation
 {
-    const char*            pMimeType;
+    OUString               pMimeType;
     const char*            pName;
     const css::uno::Type*  pType;
 };
@@ -261,11 +261,11 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
     // test the default first - name
     for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
-        if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
     for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-        if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
     // then in the dynamic list
@@ -320,7 +320,7 @@ bool SotExchange::GetFormatDataFlavor( SotClipboardFormatId nFormat, DataFlavor&
     if( SotClipboardFormatId::USER_END >= nFormat )
     {
         const DataFlavorRepresentation& rData = FormatArray_Impl()[static_cast<int>(nFormat)];
-        rFlavor.MimeType = OUString::createFromAscii( rData.pMimeType );
+        rFlavor.MimeType = rData.pMimeType;
         rFlavor.HumanPresentableName = OUString::createFromAscii( rData.pName );
         rFlavor.DataType = *rData.pType;
 
@@ -359,7 +359,7 @@ OUString SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
 {
     OUString sMimeType;
     if( SotClipboardFormatId::USER_END >= nFormat )
-        sMimeType = OUString::createFromAscii( FormatArray_Impl()[static_cast<int>(nFormat)].pMimeType );
+        sMimeType = FormatArray_Impl()[static_cast<int>(nFormat)].pMimeType;
     else
     {
         tDataFlavorList& rL = InitFormats_Impl();
@@ -385,14 +385,14 @@ SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( const OUString& rMime
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
     for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
-        if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
     // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
     // The registry only contains the entry for the 42 format id.
     for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-        if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? SotClipboardFormatId::STARCHART_50
                      : i );
@@ -423,7 +423,7 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
 
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
     for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
-        if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
@@ -431,9 +431,9 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
     // The registry only contains the entry for the 42 format id.
     for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
     {
-        const char* const pFormatMimeType = pFormatArray_Impl[ static_cast<int>(i) ].pMimeType;
-        const sal_Int32 nFormatMimeTypeLen = rtl_str_getLength( pFormatMimeType );
-        if( rMimeType.matchAsciiL( pFormatMimeType, nFormatMimeTypeLen ) &&
+        const OUString& pFormatMimeType = pFormatArray_Impl[ static_cast<int>(i) ].pMimeType;
+        const sal_Int32 nFormatMimeTypeLen = pFormatMimeType.getLength();
+        if( rMimeType.match( pFormatMimeType ) &&
             ( rMimeType.getLength() == nFormatMimeTypeLen ||
               rMimeType[ nFormatMimeTypeLen ] == ';' ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)

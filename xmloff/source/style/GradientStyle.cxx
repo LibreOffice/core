@@ -115,7 +115,7 @@ void XMLGradientStyleImport::importXML(
             break;
         case XML_ELEMENT(DRAW, XML_GRADIENT_ANGLE):
             {
-                auto const cmp12(rImport.GetODFVersion().compareTo(u"" ODFVER_012_TEXT));
+                auto const cmp12(rImport.GetODFVersion().compareTo(ODFVER_012_TEXT));
                 bool const bSuccess =
                     ::sax::Converter::convertAngle(aGradient.Angle, aIter.toView(),
                         // tdf#89475 try to detect borked OOo angles
