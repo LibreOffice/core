@@ -16,6 +16,24 @@
       "message": "I am not familiar with this calendar, and there might be a reason for your change; but I find the new comment not clear - *especially* for me as not familiar one: previously the numbers in the comment corresponded to the constants, and I could see what they are about, and now there is no resemblance - so the comment simply tells me nothing.",
       "revId": "de67e35eb66a39d277d6e7a462f9480d63776103",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40f6fe16_8c45281c",
+        "filename": "i18npool/source/calendar/calendar_hijri.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-19T08:38:08Z",
+      "side": 1,
+      "message": "This comment was actually from the .hxx file, and probably described some older version of the constants that was here before. The constant itself is pointing to some specific date and time in the past, in which we know the exact date in different calendars. It is a reference point.\nI reverted this comment back to what it was before,",
+      "parentUuid": "fe371e46_49a1331a",
+      "revId": "de67e35eb66a39d277d6e7a462f9480d63776103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
