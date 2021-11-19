@@ -769,6 +769,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     if( rInfo.bInNumberBulletList && bNumberedForListItem )
     {
         HtmlWriter html(rWrt.Strm(), rHWrt.maNamespace);
+        html.prettyPrint(rHWrt.m_bPrettyPrint);
         html.start(OOO_STRING_SVTOOLS_HTML_li);
         if (!bNumbered)
         {
@@ -1010,7 +1011,7 @@ static void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& r
 
     if( rInfo.ShouldOutputToken() )
     {
-        if (rHWrt.IsLFPossible())
+        if (rHWrt.m_bPrettyPrint && rHWrt.IsLFPossible())
             rHWrt.OutNewLine( true );
 
         // if necessary, for BLOCKQUOTE, ADDRESS and DD another paragraph token
@@ -2061,6 +2062,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         rHTMLWrt.SetLFPossible(true);
 
         HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+        aHtml.prettyPrint(rHTMLWrt.m_bPrettyPrint);
         aHtml.start(OOO_STRING_SVTOOLS_HTML_horzrule);
 
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
@@ -2253,8 +2255,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     // now it's a good opportunity again for an LF - if it is still allowed
     // FIXME: for LOK case we set rHTMLWrt.m_nWishLineLen as -1, for now keep old flow
     // when LOK side will be fixed - don't insert new line at the beginning
-    if( rHTMLWrt.IsLFPossible() &&
-        rHTMLWrt.GetLineLen() >= (rHTMLWrt.m_nWishLineLen >= 0 ? rHTMLWrt.m_nWishLineLen : 70 ) )
+    if( rHTMLWrt.IsLFPossible() && rHTMLWrt.m_bPrettyPrint && rHTMLWrt.m_nWishLineLen >= 0 &&
+        rHTMLWrt.GetLineLen() >= rHTMLWrt.m_nWishLineLen )
     {
         rHTMLWrt.OutNewLine();
     }
@@ -2492,7 +2494,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         nWordLen = nEnd;
                     nWordLen -= nStrPos;
 
-                    if( rHTMLWrt.m_nWishLineLen >= 0 &&
+                    if( rHTMLWrt.m_bPrettyPrint && rHTMLWrt.m_nWishLineLen >= 0 &&
                         (nLineLen >= rHTMLWrt.m_nWishLineLen ||
                         (nLineLen+nWordLen) >= rHTMLWrt.m_nWishLineLen ) )
                     {
@@ -2508,6 +2510,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                     {
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
                         HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+                        aHtml.prettyPrint(rHTMLWrt.m_bPrettyPrint);
                         aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
                     }
                     else if (c == CH_TXT_ATR_FORMELEMENT)
@@ -2586,6 +2589,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         else
         {
             HtmlWriter aHtml(rHTMLWrt.Strm(), rHTMLWrt.maNamespace);
+            aHtml.prettyPrint(rHTMLWrt.m_bPrettyPrint);
             aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
             const SvxULSpaceItem& rULSpace = pNd->GetSwAttrSet().Get(RES_UL_SPACE);
             if (rULSpace.GetLower() > 0 && !bEndOfCell)
@@ -2612,6 +2616,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         }
 
         HtmlWriter aHtml(rHTMLWrt.Strm(), rHTMLWrt.maNamespace);
+        aHtml.prettyPrint(rHTMLWrt.m_bPrettyPrint);
         aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pString);
         aHtml.end();
