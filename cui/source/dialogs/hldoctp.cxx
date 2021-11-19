@@ -26,7 +26,6 @@
 #include <hlmarkwn_def.hxx>
 
 char const sHash[]          = "#";
-char const sFileScheme[]    = INET_FILE_SCHEME;
 
 /*************************************************************************
 |*
@@ -135,7 +134,7 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
     // get data from standard-fields
     rStrURL = GetCurrentURL();
 
-    if( rStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
+    if( rStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
          rStrURL.clear();
 
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
@@ -174,7 +173,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, weld::Button&, void)
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE,
         mpDialog->getDialog() );
     OUString aOldURL( GetCurrentURL() );
-    if( aOldURL.startsWithIgnoreAsciiCase( sFileScheme ) )
+    if( aOldURL.startsWithIgnoreAsciiCase( INET_FILE_SCHEME ) )
     {
         OUString aPath;
         osl::FileBase::getSystemPathFromFileURL(aOldURL, aPath);
@@ -210,14 +209,14 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, weld::Button&, void)
 
     if ( GetPathType ( maStrURL ) == EPathType::ExistsFile  ||
          maStrURL.isEmpty() ||
-         maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ||
+         maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) ||
          maStrURL.startsWith( sHash ) )
     {
         mxMarkWnd->SetError( LERR_NOERROR );
 
         weld::WaitObject aWait(mpDialog->getDialog());
 
-        if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
+        if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
             mxMarkWnd->RefreshTree ( "" );
         else
             mxMarkWnd->RefreshTree ( maStrURL );
@@ -250,11 +249,11 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
 {
     if ( IsMarkWndVisible() && ( GetPathType( maStrURL )== EPathType::ExistsFile ||
                                   maStrURL.isEmpty() ||
-                                  maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ) )
+                                  maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) ) )
     {
         weld::WaitObject aWait(mpDialog->getDialog());
 
-        if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
+        if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
             mxMarkWnd->RefreshTree ( "" );
         else
             mxMarkWnd->RefreshTree ( maStrURL );
