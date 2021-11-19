@@ -76,7 +76,7 @@ class pivotTable(UITestCase):
 
             gridwin.executeAction("LAUNCH", mkPropertyValues({"PIVOTTABLE": "", "COL": "3", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
 
             xTreeList = xCheckListMenu.getChild("check_list_box")
             xFirstEntry = xTreeList.getChild("0")

@@ -9665,6 +9665,8 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
     else
         x += nButtonWidth;
 
+    gtk_window_set_attached_to(pMenu, pMenuButton);
+
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
     gtk_window_set_transient_for(pMenu, GTK_WINDOW(pToplevel));
 
@@ -9783,18 +9785,18 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectan
     if (!window_move_to_rect)
         return false;
 
-#if defined(GDK_WINDOWING_X11)
     // under wayland gdk_window_move_to_rect works great for me, but in my current
     // gtk 3.24 under X it leaves part of long menus outside the work area
     GdkDisplay *pDisplay = gtk_widget_get_display(pComboBox);
     if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
         return false;
-#endif
 
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_toplevel(pComboBox);
     gtk_coord x, y;
     gtk_widget_translate_coordinates(pComboBox, pToplevel, rAnchor.x, rAnchor.y, &x, &y);
+
+    gtk_window_set_attached_to(pMenu, pComboBox);
 
     gtk_widget_realize(GTK_WIDGET(pMenu));
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
@@ -9903,6 +9905,8 @@ GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMen
 
     GtkPositionType eRet = show_menu(pAnchor, pMenuHack, rAnchor, ePlace);
 
+    gtk_grab_add(GTK_WIDGET(pMenuHack));
+
     GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(pMenuHack));
     g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopup", GINT_TO_POINTER(true));
 
@@ -9914,6 +9918,8 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
     bool bHadFocus = gtk_window_has_toplevel_focus(pMenuHack);
 
     do_ungrab(GTK_WIDGET(pMenuHack));
+
+    gtk_grab_remove(GTK_WIDGET(pMenuHack));
 
     gtk_widget_hide(GTK_WIDGET(pMenuHack));
     //put contents back from where the came from
@@ -9938,13 +9944,7 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
         pFrame->UnblockTooltip();
 
     if (bHadFocus)
-    {
-        GdkSurface* pParentSurface = pParent ? widget_get_surface(pParent) : nullptr;
-        void* pParentIsPopover = pParentSurface ? g_object_get_data(G_OBJECT(pParentSurface), "g-lo-InstancePopup") : nullptr;
-        if (pParentIsPopover)
-            do_grab(pAnchor);
         gtk_widget_grab_focus(pAnchor);
-    }
 }
 
 #endif
@@ -22047,6 +22047,34 @@ private:
         return false;
     }
 
+    bool forward_event_if_popup_under_mouse(GdkEvent* pEvent)
+    {
+        GtkWidget* pEventWidget = gtk_get_event_widget(pEvent);
+        GtkWidget* pTopLevel = widget_get_toplevel(pEventWidget);
+
+        if (pTopLevel == GTK_WIDGET(m_pMenuHack))
+            return false;
+
+        GdkSurface* pSurface = widget_get_surface(pTopLevel);
+        void* pMouseEnteredAnotherPopup = g_object_get_data(G_OBJECT(pSurface), "g-lo-InstancePopup");
+        if (!pMouseEnteredAnotherPopup)
+            return false;
+
+        return gtk_widget_event(pEventWidget, reinterpret_cast<GdkEvent*>(pEvent));
+    }
+
+    static gboolean signalButtonCrossing(GtkWidget*, GdkEvent* pEvent, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        return pThis->forward_event_if_popup_under_mouse(pEvent);
+    }
+
+    static gboolean signalMotion(GtkWidget*, GdkEvent* pEvent, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        return pThis->forward_event_if_popup_under_mouse(pEvent);
+    }
+
     static void signalGrabBroken(GtkWidget*, GdkEventGrabBroken *pEvent, gpointer widget)
     {
         GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
@@ -22098,6 +22126,14 @@ public:
             g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
             g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
             g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+            // to emulate a modeless popover we forward the leave/enter/motion events to the widgets
+            // they would have gone to a if we were really modeless
+            if (!gtk_popover_get_modal(m_pPopover))
+            {
+                g_signal_connect(m_pMenuHack, "leave-notify-event", G_CALLBACK(signalButtonCrossing), this);
+                g_signal_connect(m_pMenuHack, "enter-notify-event", G_CALLBACK(signalButtonCrossing), this);
+                g_signal_connect(m_pMenuHack, "motion-notify-event", G_CALLBACK(signalMotion), this);
+            }
         }
 #endif
 #endif

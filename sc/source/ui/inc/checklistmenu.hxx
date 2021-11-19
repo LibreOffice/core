@@ -48,7 +48,11 @@ struct ScCheckListMember
 };
 
 class ScCheckListMenuWindow;
+class ScListSubMenuControl;
 
+/**
+ * This class implements a popup window for the auto filter dropdown.
+ */
 class ScCheckListMenuControl final
 {
 public:
@@ -94,7 +98,7 @@ public:
     {
         bool     mbEnabled:1;
         std::shared_ptr<Action> mxAction;
-        VclPtr<ScCheckListMenuWindow> mxSubMenuWin;
+        std::unique_ptr<ScListSubMenuControl> mxSubMenuWin;
 
         MenuItemData();
     };
@@ -119,17 +123,18 @@ public:
         Config();
     };
 
-    ScCheckListMenuControl(ScCheckListMenuWindow* pParent, vcl::Window* pContainer, ScDocument* pDoc,
-                           bool bCanHaveSubMenu, bool bTreeMode, int nWidth);
+    ScCheckListMenuControl(weld::Widget* pParent, ScDocument* pDoc,
+                           bool bCanHaveSubMenu, bool bTreeMode, int nWidth,
+                           vcl::ILibreOfficeKitNotifier* pNotifier);
     ~ScCheckListMenuControl();
 
     void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
-    ScCheckListMenuWindow* addSubMenuItem(const OUString& rText, bool bEnabled);
+    ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled);
     void resizeToFitMenuItems();
 
     void selectMenuItem(size_t nPos, bool bSubMenuTimer);
-    void queueLaunchSubMenu(size_t nPos, ScCheckListMenuWindow* pMenu);
+    void queueLaunchSubMenu(size_t nPos, ScListSubMenuControl* pMenu);
 
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
@@ -140,14 +145,14 @@ public:
 
     bool isAllSelected() const;
     void getResult(ResultType& rResult);
-    void launch(const tools::Rectangle& rRect);
+    void launch(weld::Widget* pWidget, const tools::Rectangle& rRect);
     void close(bool bOK);
 
-    void StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags eFlags);
+    void StartPopupMode(weld::Widget* pParent, const tools::Rectangle& rRect);
     void EndPopupMode();
 
-    size_t getSubMenuPos(const ScCheckListMenuControl* pSubMenu);
-    void setSubMenuFocused(const ScCheckListMenuControl* pSubMenu);
+    size_t getSubMenuPos(const ScListSubMenuControl* pSubMenu);
+    void setSubMenuFocused(const ScListSubMenuControl* pSubMenu);
     void queueCloseSubMenu();
     void clearSelectedMenuItem();
 
@@ -177,12 +182,9 @@ public:
      */
     void terminateAllPopupMenus();
 
-    /**
-     * Get the area of the active row. Suitable as the parent rectangle
-     * argument for Executing a popup
-    */
-    tools::Rectangle GetSubMenuParentRect();
     sal_Int32 ExecuteMenu(weld::Menu& rMenu);
+
+    void endSubMenu(ScListSubMenuControl& rSubMenu);
 private:
 
     std::vector<MenuItemData>         maMenuItems;
@@ -210,13 +212,17 @@ private:
 
     void executeMenuItem(size_t nPos);
 
-    void endSubMenu(ScCheckListMenuControl& rSubMenu);
+    /**
+     * Get the area of the active row. Suitable as the parent rectangle
+     * argument for Executing a popup
+    */
+    tools::Rectangle GetSubMenuParentRect();
 
     struct SubMenuItemData;
 
     void handleMenuTimeout(const SubMenuItemData* pTimer);
 
-    void launchSubMenu(bool bSetMenuPos);
+    void launchSubMenu();
 
     void CreateDropDown();
 
@@ -229,26 +235,27 @@ private:
 
     DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
-    DECL_LINK(PopupModeEndHdl, FloatingWindow*, void);
+    DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
 
     DECL_LINK(EdModifyHdl, weld::Entry&, void);
     DECL_LINK(EdActivateHdl, weld::Entry&, bool);
 
-    DECL_LINK(FocusHdl, weld::Widget&, void);
     DECL_LINK(RowActivatedHdl, weld::TreeView& rMEvt, bool);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(TreeSizeAllocHdl, const Size&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(MenuKeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(MouseEnterHdl, const MouseEvent&, bool);
 
     DECL_LINK(PostPopdownHdl, void*, void);
 
 private:
-    VclPtr<ScCheckListMenuWindow> mxFrame;
     std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Popover> mxPopover;
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<weld::TreeView> mxMenu;
     std::unique_ptr<weld::TreeIter> mxScratchIter;
+    std::unique_ptr<weld::Widget> mxNonMenu;
     std::unique_ptr<weld::Entry> mxEdSearch;
     std::unique_ptr<weld::Widget> mxBox;
     std::unique_ptr<weld::TreeView> mxListChecks;
@@ -283,6 +290,7 @@ private:
     ScDocument* mpDoc;
 
     ImplSVEvent* mnAsyncPostPopdownId;
+    vcl::ILibreOfficeKitNotifier* mpNotifier;
 
     bool mbHasDates;
     bool mbCanHaveSubMenu;
@@ -290,7 +298,7 @@ private:
     struct SubMenuItemData
     {
         Timer                   maTimer;
-        VclPtr<ScCheckListMenuWindow>   mpSubMenu;
+        ScListSubMenuControl*   mpSubMenu;
         size_t                  mnMenuPos;
 
         DECL_LINK( TimeoutHdl, Timer*, void );
@@ -306,28 +314,43 @@ private:
     SubMenuItemData   maCloseTimer;
 };
 
-/**
- * This class implements a popup window for the auto filter dropdown.
- */
-class ScCheckListMenuWindow : public DropdownDockingWindow
+class ScListSubMenuControl final
 {
 public:
-    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,
-                                   bool bCanHaveSubMenu, bool bTreeMode, int nWidth = -1,
-                                   ScCheckListMenuWindow* pParentMenu = nullptr,
-                                   const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
-    virtual void dispose() override;
-    virtual ~ScCheckListMenuWindow() override;
+    ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, vcl::ILibreOfficeKitNotifier* pNotifier);
 
-    virtual void GetFocus() override;
-    virtual bool EventNotify(NotifyEvent& rNEvt) override;
+    void GrabFocus();
+    bool IsVisible() const;
 
-    ScCheckListMenuWindow* GetParentMenu() { return mxParentMenu; }
-    ScCheckListMenuControl& get_widget() { return *mxControl; }
+    void StartPopupMode(weld::Widget* pParent, const tools::Rectangle& rRect);
+    void EndPopupMode();
+
+    void addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction);
+    void resizeToFitMenuItems();
+
+    void setSelectedMenuItem(size_t nPos);
+
+    /**
+     * Dismiss all visible popup menus and set focus back to the application
+     * window.  This method is called e.g. when a menu action is fired.
+     */
+    void terminateAllPopupMenus();
 
 private:
-    VclPtr<ScCheckListMenuWindow> mxParentMenu;
-    std::unique_ptr<ScCheckListMenuControl, o3tl::default_delete<ScCheckListMenuControl>> mxControl;
+    std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Popover> mxPopover;
+    std::unique_ptr<weld::Container> mxContainer;
+    std::unique_ptr<weld::TreeView> mxMenu;
+    std::unique_ptr<weld::TreeIter> mxScratchIter;
+    std::vector<ScCheckListMenuControl::MenuItemData> maMenuItems;
+    ScCheckListMenuControl& mrParentControl;
+    vcl::ILibreOfficeKitNotifier* mpNotifier;
+
+    DECL_LINK(RowActivatedHdl, weld::TreeView& rMEvt, bool);
+    DECL_LINK(MenuKeyInputHdl, const KeyEvent&, bool);
+
+    void NotifyCloseLOK();
+    void executeMenuItem(size_t nPos);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
