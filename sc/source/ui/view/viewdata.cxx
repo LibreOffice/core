@@ -1648,6 +1648,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         //  (existing or started) with default alignment extend to the right.
         bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
         bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
+        bool bLOKRTLInvert = (bLOKActive && bLayoutRTL);
         if ( bAsianVertical )
             bGrowCentered = bGrowToLeft = false;   // keep old behavior for asian mode
 
@@ -1691,7 +1692,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                     nSizeXPTwips = aPTwipsRect.GetWidth() + 2 * std::min(nLeftPTwips, nRightPTwips);
                 }
             }
-            else if ( bGrowToLeft )
+            else if ( (bGrowToLeft && !bLOKRTLInvert) || (!bGrowToLeft && bLOKRTLInvert) )
             {
                 nSizeXPix = aPixRect.Right();   // space that's available in the window when growing to the left
                 if (bLOKPrintTwips)
@@ -1928,12 +1929,12 @@ void ScViewData::EditGrowX()
                     nLogicRightPTwips = nColWidth;
             }
 
-            aArea.AdjustLeft( -(bLayoutRTL ? nLogicRight : nLogicLeft) );
-            aArea.AdjustRight(bLayoutRTL ? nLogicLeft : nLogicRight );
+            aArea.AdjustLeft( -((bLayoutRTL && !bLOKActive) ? nLogicRight : nLogicLeft) );
+            aArea.AdjustRight((bLayoutRTL && !bLOKActive) ? nLogicLeft : nLogicRight );
             if (bLOKPrintTwips)
             {
-                aAreaPTwips.AdjustLeft( -(bLayoutRTL ? nLogicRightPTwips : nLogicLeftPTwips) );
-                aAreaPTwips.AdjustRight(bLayoutRTL ? nLogicLeftPTwips : nLogicRightPTwips );
+                aAreaPTwips.AdjustLeft( -((bLayoutRTL && !bLOKActive) ? nLogicRightPTwips : nLogicLeftPTwips) );
+                aAreaPTwips.AdjustRight((bLayoutRTL && !bLOKActive) ? nLogicLeftPTwips : nLogicRightPTwips );
             }
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
@@ -1967,7 +1968,7 @@ void ScViewData::EditGrowX()
             tools::Long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             tools::Long& nLogicWidthPTwips = nColWidth;
 
-            if ( !bLayoutRTL )
+            if ( !bLayoutRTL || bLOKActive )
             {
                 aArea.AdjustLeft( -nLogicWidth );
                 if (bLOKPrintTwips)
@@ -1982,7 +1983,7 @@ void ScViewData::EditGrowX()
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
-                if ( !bLayoutRTL )
+                if ( !bLayoutRTL || bLOKActive )
                 {
                     aArea.SetLeft( aArea.Right() - aSize.Width() + 1 );
                     if (bLOKPrintTwips)
@@ -2008,7 +2009,7 @@ void ScViewData::EditGrowX()
             tools::Long nPix = ToPixel( nColWidth, nPPTX );
             tools::Long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             tools::Long& nLogicWidthPTwips = nColWidth;
-            if ( bLayoutRTL )
+            if ( bLayoutRTL && !bLOKActive )
             {
                 aArea.AdjustLeft( -nLogicWidth );
                 if (bLOKPrintTwips)
@@ -2023,7 +2024,7 @@ void ScViewData::EditGrowX()
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
-                if ( bLayoutRTL )
+                if ( bLayoutRTL && !bLOKActive )
                 {
                     aArea.SetLeft( aArea.Right() - aSize.Width() + 1 );
                     if (bLOKPrintTwips)
@@ -2516,7 +2517,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         }
     }
 
-    if (mrDoc.IsLayoutRTL(nForTab))
+    if (mrDoc.IsLayoutRTL(nForTab) && !bIsTiledRendering)
     {
         //  mirror horizontal position
         nScrPosX = aScrSize.Width() - 1 - nScrPosX;
