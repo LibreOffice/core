@@ -21952,6 +21952,7 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     //popover cannot escape dialog under X so we might need to stick up own window instead
     GtkWindow* m_pMenuHack;
+    bool m_bMenuPoppedUp;
     bool m_nButtonPressSeen;
 #endif
     GtkPopover* m_pPopover;
@@ -22035,6 +22036,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         : GtkInstanceContainer(GTK_CONTAINER(pPopover), pBuilder, bTakeOwnership)
         , m_pMenuHack(nullptr)
+        , m_bMenuPoppedUp(false)
         , m_nButtonPressSeen(false)
 #else
         : GtkInstanceContainer(GTK_WIDGET(pPopover), pBuilder, bTakeOwnership)
@@ -22079,23 +22081,27 @@ public:
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
         if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay) && gtk_popover_get_constrain_to(m_pPopover) == GTK_POPOVER_CONSTRAINT_NONE)
         {
-            if (!m_pMenuHack)
+            if (!m_bMenuPoppedUp)
             {
-                m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
-                gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-                bool bModal = gtk_popover_get_modal(m_pPopover);
-                gtk_window_set_modal(m_pMenuHack, bModal);
-                gtk_window_set_resizable(m_pMenuHack, false);
-                g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
-                if (bModal)
+                if (!m_pMenuHack)
                 {
-                     g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-                     g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
-                     g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+                    m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+                    gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
+                    bool bModal = gtk_popover_get_modal(m_pPopover);
+                    gtk_window_set_modal(m_pMenuHack, bModal);
+                    gtk_window_set_resizable(m_pMenuHack, false);
+                    g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+                    if (bModal)
+                    {
+                         g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+                         g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
+                         g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+                    }
                 }
-            }
 
-            MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect, ePlace);
+                MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect, ePlace);
+                m_bMenuPoppedUp = true;
+            }
             return;
         }
 #endif
@@ -22113,9 +22119,13 @@ public:
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
         if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
         {
-            m_nButtonPressSeen = false;
-            MoveWindowContentsToPopover(m_pMenuHack, GTK_WIDGET(m_pPopover), gtk_popover_get_relative_to(m_pPopover));
-            signal_closed();
+            if (m_bMenuPoppedUp)
+            {
+                m_nButtonPressSeen = false;
+                MoveWindowContentsToPopover(m_pMenuHack, GTK_WIDGET(m_pPopover), gtk_popover_get_relative_to(m_pPopover));
+                m_bMenuPoppedUp = false;
+                signal_closed();
+            }
             return;
         }
 #endif
