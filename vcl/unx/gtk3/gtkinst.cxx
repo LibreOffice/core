@@ -21898,7 +21898,9 @@ public:
         GdkRectangle aRect;
         pWidget = getPopupRect(pWidget, rRect, aRect);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_set_parent(GTK_WIDGET(m_pPopover), pWidget);
+#else
         gtk_popover_set_relative_to(m_pPopover, pWidget);
 #endif
         gtk_popover_set_pointing_to(m_pPopover, &aRect);
