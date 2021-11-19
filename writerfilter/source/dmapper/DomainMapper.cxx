@@ -187,6 +187,11 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     catch( const uno::Exception& ) {}
 }
 
+void DomainMapper::setDocumentReference(void* pDocument)
+{
+    m_pImpl->setDocumentReference(pDocument);
+}
+
 DomainMapper::~DomainMapper()
 {
     try
