@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbf573b6_f764c642",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-19T00:06:04Z",
+      "side": 1,
+      "message": "Not sure about the code. Just for testing purpose, this patch works on Fedora 34 linux.",
+      "revId": "1b68ed3a6dfcf3ad8b352dac16283e76ea3c9219",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
