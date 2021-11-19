@@ -27,6 +27,8 @@
 
 #include <skia/utils.hxx>
 
+#include <SkPaint.h>
+
 class SkiaFlushIdle;
 class GenericSalLayout;
 class SkFont;
@@ -305,6 +307,29 @@ protected:
     bool delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency);
     void performDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency,
                                 bool useAA);
+
+    // Create SkPaint set up for drawing lines (using mLineColor etc.).
+    SkPaint makeLinePaint(double transparency = 0) const
+    {
+        assert(mLineColor != SALCOLOR_NONE);
+        SkPaint paint;
+        paint.setColor(transparency == 0
+                           ? SkiaHelper::toSkColor(mLineColor)
+                           : SkiaHelper::toSkColorWithTransparency(mLineColor, transparency));
+        paint.setStyle(SkPaint::kStroke_Style);
+        return paint;
+    }
+    // Create SkPaint set up for filling (using mFillColor etc.).
+    SkPaint makeFillPaint(double transparency = 0) const
+    {
+        assert(mFillColor != SALCOLOR_NONE);
+        SkPaint paint;
+        paint.setColor(transparency == 0
+                           ? SkiaHelper::toSkColor(mFillColor)
+                           : SkiaHelper::toSkColorWithTransparency(mFillColor, transparency));
+        paint.setStyle(SkPaint::kFill_Style);
+        return paint;
+    }
 
     template <typename charT, typename traits>
     friend inline std::basic_ostream<charT, traits>&

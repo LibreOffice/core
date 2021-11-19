@@ -698,11 +698,6 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
     return bitmap;
 }
 
-static SkColor toSkColor(Color color)
-{
-    return SkColorSetARGB(color.GetAlpha(), color.GetRed(), color.GetGreen(), color.GetBlue());
-}
-
 // If mEraseColor is set, this is the color to use when the bitmap is used as alpha bitmap.
 // E.g. COL_BLACK actually means fully opaque and COL_WHITE means fully transparent.
 // This is because the alpha value is set as the color itself, not the alpha of the color.
