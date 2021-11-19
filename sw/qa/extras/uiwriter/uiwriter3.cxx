@@ -3254,6 +3254,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf103612)
                 "Text after section");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf97899)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
+
+    // Create an Ordered List
+    rIDCO.InsertString(*pCursor, "a");
+    pWrtShell->SplitNode();
+    rIDCO.InsertString(*pCursor, "b");
+    pWrtShell->SplitNode();
+    rIDCO.InsertString(*pCursor, "c");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+
+    // Save it as DOCX & load it again
+    reload("Office Open XML Text", "tdf97899-tmp.docx");
+    uno::Reference<container::XIndexAccess> xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+    CPPUNIT_ASSERT(xNumberingRules->getCount());
+    uno::Sequence<beans::PropertyValue> aNumbering;
+    xNumberingRules->getByIndex(0) >>= aNumbering;
+    OUString sCharStyleName;
+    for (const auto& prop : aNumbering)
+    {
+        if (prop.Name == "CharStyleName")
+        {
+            prop.Value >>= sCharStyleName;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(!sCharStyleName.isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
