@@ -39,9 +39,9 @@ namespace {
 //! TODO: this limit may change, is there a way to obtain it via API?
 const sal_Int16 API_MAXTAB          = MAXTAB;
 
-const sal_Int32 OOX_MAXCOL          = static_cast< sal_Int32 >( (1 << 14) - 1 );
-const sal_Int32 OOX_MAXROW          = static_cast< sal_Int32 >( (1 << 20) - 1 );
-const sal_Int16 OOX_MAXTAB          = static_cast< sal_Int16 >( (1 << 15) - 1 );
+const sal_Int32 OOX_MAXCOL          = 0x1p14 - 1;
+const sal_Int32 OOX_MAXROW          = 0x1p20 - 1;
+const sal_Int16 OOX_MAXTAB          = 0x1p15 - 1;
 
 } // namespace
 
