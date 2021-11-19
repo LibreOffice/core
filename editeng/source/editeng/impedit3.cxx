@@ -2616,6 +2616,8 @@ void ImpEditEngine::SetVertical( bool bVertical)
 
 void ImpEditEngine::SetRotation(TextRotation nRotation)
 {
+    if (GetEditDoc().GetRotation() == nRotation)
+        return; // not modified
     GetEditDoc().SetRotation(nRotation);
     bool bUseCharAttribs = bool(aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
     GetEditDoc().CreateDefFont( bUseCharAttribs );
