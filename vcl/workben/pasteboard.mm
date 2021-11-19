@@ -10,12 +10,13 @@
 
 // List the contents of the macOS pasteboard
 
-// Build with: clang++ -Wall -o pasteboard vcl/workben/pasteboard.mm -framework AppKit
+// Build with: clang++ -g -Wall -o pasteboard pasteboard.mm -framework AppKit -framework UniformTypeIdentifiers
 
 #import <unistd.h>
 
 #import <iostream>
 #import <AppKit/AppKit.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 static void usage()
 {
@@ -31,7 +32,7 @@ static void usage()
 
 int main(int argc, char** argv)
 {
-    NSString* requestedType;
+    NSString* requestedType = @"";
 
     int ch;
 
@@ -108,14 +109,14 @@ int main(int argc, char** argv)
         NSArray<NSPasteboardType>* types = [items[i] types];
         for (unsigned j = 0; j < [types count]; j++)
         {
-            std::cout << "    " << j << ": " << [types[j] UTF8String];
+            std::cout << "    " << j << ": " << [types[j] UTF8String] << std::flush;
 
-            if ([types[j] isEqualToString:(NSString*)kUTTypePlainText] ||
-                [types[j] isEqualToString:(NSString*)kUTTypeUTF8PlainText] ||
-                [types[j] isEqualToString:(NSString*)kUTTypeText] ||
-                [types[j] isEqualToString:(NSString*)kUTTypeHTML] ||
-                [types[j] isEqualToString:(NSString*)kUTTypeRTF] ||
-                [types[j] isEqualToString:(NSString*)kUTTypeUTF16ExternalPlainText])
+            if ([types[j] isEqualToString:[UTTypePlainText identifier]] ||
+                [types[j] isEqualToString:[UTTypeUTF8PlainText identifier]] ||
+                [types[j] isEqualToString:[UTTypeText identifier]] ||
+                [types[j] isEqualToString:[UTTypeHTML identifier]] ||
+                [types[j] isEqualToString:[UTTypeRTF identifier]] ||
+                [types[j] isEqualToString:[UTTypeUTF16ExternalPlainText identifier]])
             {
                 NSString* string = [items[i] stringForType:NSPasteboardTypeString];
                 if ([string length] > 500)
