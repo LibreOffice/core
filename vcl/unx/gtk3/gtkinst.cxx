@@ -9628,6 +9628,7 @@ void do_grab(GtkWidget* pWidget)
 {
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
     GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+
     gdk_seat_grab(pSeat, widget_get_surface(pWidget),
                   GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
 }
@@ -9894,11 +9895,18 @@ GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMen
     gtk_container_add(GTK_CONTAINER(pMenuHack), pChild);
     g_object_unref(pChild);
 
-    return show_menu(pAnchor, pMenuHack, rAnchor, ePlace);
+    GtkPositionType eRet = show_menu(pAnchor, pMenuHack, rAnchor, ePlace);
+
+    GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(pMenuHack));
+    g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopover", GINT_TO_POINTER(true));
+
+    return eRet;
 }
 
 void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkWidget* pAnchor)
 {
+    bool bHadFocus = gtk_window_has_toplevel_focus(pMenuHack);
+
     do_ungrab(GTK_WIDGET(pMenuHack));
 
     gtk_widget_hide(GTK_WIDGET(pMenuHack));
@@ -9908,6 +9916,9 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
     gtk_container_remove(GTK_CONTAINER(pMenuHack), pChild);
     gtk_container_add(GTK_CONTAINER(pPopover), pChild);
     g_object_unref(pChild);
+
+    GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(pMenuHack));
+    g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopover", GINT_TO_POINTER(false));
 
     // so gdk_window_move_to_rect will work again the next time
     gtk_widget_unrealize(GTK_WIDGET(pMenuHack));
@@ -9919,6 +9930,16 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
     GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
     if (pFrame)
         pFrame->UnblockTooltip();
+
+    if (bHadFocus)
+    {
+        GdkSurface* pParentSurface = pParent ? widget_get_surface(pParent) : nullptr;
+        void* pParentIsPopover = pParentSurface ? g_object_get_data(G_OBJECT(pParentSurface), "g-lo-InstancePopover") : nullptr;
+        fprintf(stderr, "had focus %p\n", pParentIsPopover);
+        if (pParentIsPopover)
+            do_grab(pAnchor);
+        gtk_widget_grab_focus(pAnchor);
+    }
 }
 
 #endif
@@ -10004,7 +10025,7 @@ private:
         {
             set_active(false);
         }
-        else
+        else if (!g_object_get_data(G_OBJECT(event->grab_window), "g-lo-InstancePopover")) // another LibreOffice popover took a grab
         {
             //try and regrab, so when we lose the grab to the menu of the color palette
             //combobox we regain it so the color palette doesn't itself disappear on next
@@ -10315,17 +10336,14 @@ public:
             {
                 m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
                 gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-                bool bModal = gtk_popover_get_modal(GTK_POPOVER(m_pPopover));
-                gtk_window_set_modal(m_pMenuHack, bModal);
+                // See writer "format, watermark" for true here. Can't interact with the replacement popover otherwise.
+                gtk_window_set_modal(m_pMenuHack, true);
                 gtk_window_set_resizable(m_pMenuHack, false);
                 m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalMenuButtonToggled), this);
                 g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
-                if (bModal)
-                {
-                    g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-                    g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
-                    g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
-                }
+                g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+                g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
+                g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
             }
         }
 #endif
@@ -22020,7 +22038,7 @@ private:
         {
             popdown();
         }
-        else
+        else if (!g_object_get_data(G_OBJECT(event->grab_window), "g-lo-InstancePopover")) // another LibreOffice popover took a grab
         {
             //try and regrab, so when we lose the grab to the menu of the color palette
             //combobox we regain it so the color palette doesn't itself disappear on next
@@ -22087,16 +22105,11 @@ public:
                 {
                     m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
                     gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-                    bool bModal = gtk_popover_get_modal(m_pPopover);
-                    gtk_window_set_modal(m_pMenuHack, bModal);
                     gtk_window_set_resizable(m_pMenuHack, false);
                     g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
-                    if (bModal)
-                    {
-                         g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-                         g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
-                         g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
-                    }
+                    g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+                    g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
+                    g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
                 }
 
                 MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect, ePlace);

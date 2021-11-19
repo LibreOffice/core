@@ -152,8 +152,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     std::unique_ptr<ScNoteMarker, o3tl::default_delete<ScNoteMarker>> mpNoteMarker;
 
     std::shared_ptr<ScFilterListBox> mpFilterBox;
-    VclPtr<ScCheckListMenuWindow>    mpAutoFilterPopup;
-    VclPtr<ScCheckListMenuWindow>    mpDPFieldPopup;
+    std::unique_ptr<ScCheckListMenuControl> mpAutoFilterPopup;
+    std::unique_ptr<ScCheckListMenuControl> mpDPFieldPopup;
     std::unique_ptr<ScDPFieldButton> mpFilterButton;
 
     ScCheckListMenuControl::ResultType aSaveAutoFilterResult;
