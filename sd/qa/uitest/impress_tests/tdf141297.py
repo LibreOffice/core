@@ -23,7 +23,7 @@ class tdf141297(UITestCase):
                 xCancelBtn = xTemplateDlg.getChild("close")
                 self.ui_test.close_dialog_through_button(xCancelBtn)
 
-                with self.ui_test.execute_dialog_through_command(".uno:InsertGraphic", close_button="open") as xOpenDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:InsertGraphic", close_button="") as xOpenDialog:
 
                     xFileName = xOpenDialog.getChild("file_name")
                     xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("LibreOffice.jpg")}))
@@ -33,10 +33,10 @@ class tdf141297(UITestCase):
 
                     xLink.executeAction("CLICK", tuple())
 
-                #Confirmation dialog is displayed
-                xWarnDialog = self.xUITest.getTopFocusWindow()
-                xOK = xWarnDialog.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOK)
+                    xOpen = xOpenDialog.getChild("open")
+                    #Confirmation dialog is displayed
+                    with self.ui_test.execute_dialog_through_action(xOpen, "CLICK"):
+                        pass
 
                 with self.ui_test.execute_dialog_through_command(".uno:ManageLinks", close_button="close") as xDialog:
 

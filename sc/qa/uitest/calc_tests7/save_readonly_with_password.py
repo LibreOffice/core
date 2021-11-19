@@ -31,7 +31,7 @@ class save_readonly_with_password(UITestCase):
                     xPasswordCheckButton.executeAction("CLICK", tuple())
                     xOpen = xSaveDialog.getChild("open")
 
-                    with self.ui_test.execute_dialog_through_action(xOpen, "CLICK") as xPasswordDialog:
+                    with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="") as xPasswordDialog:
                         xReadonly = xPasswordDialog.getChild("readonly")
                         xReadonly.executeAction("CLICK", tuple())
                         xNewPassword = xPasswordDialog.getChild("newpassroEntry")
@@ -39,10 +39,10 @@ class save_readonly_with_password(UITestCase):
                         xConfirmPassword = xPasswordDialog.getChild("confirmropassEntry")
                         xConfirmPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
 
-                # XLSX confirmation dialog is displayed
-                xWarnDialog = self.xUITest.getTopFocusWindow()
-                xSave = xWarnDialog.getChild("save")
-                self.ui_test.close_dialog_through_button(xSave)
+                        xOk = xPasswordDialog.getChild("ok")
+                        # XLSX confirmation dialog is displayed
+                        with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="save"):
+                            pass
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
