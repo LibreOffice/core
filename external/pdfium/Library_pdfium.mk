@@ -19,7 +19,8 @@ $(eval $(call gb_Library_set_include,pdfium,\
     -I$(call gb_UnpackedTarball_get_dir,pdfium) \
     -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party \
     -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/agg23 \
-    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/abseil-cpp \
+    $(if $(filter TRUE,$(SYSTEM_ABSEIL)),$(ABSEIL_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/abseil-cpp) \
+    $(if $(filter TRUE,$(SYSTEM_OPENJPEG2)),$(OPENJPEG2_CFLAGS)) \
     $$(INCLUDE) \
 ))
 
@@ -34,6 +35,12 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DWIN32_LEAN_AND_MEAN \
     -DCOMPONENT_BUILD \
 ))
+ifeq ($(SYSTEM_OPENJPEG2),TRUE)
+$(eval $(call gb_Library_add_defs,pdfium,\
+    -DUSE_SYSTEM_LIBOPENJPEG2 \
+))
+endif
+
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,pdfium,cpp))
 
@@ -518,11 +525,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/agg23/agg_vcgen_stroke \
 ))
 
+ifneq ($(SYSTEM_ABSEIL),TRUE)
 # third_party/abseil-cpp
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/abseil-cpp/absl/types/bad_optional_access \
 ))
+endif
 
+ifneq ($(SYSTEM_OPENJPEG2),TRUE)
 # third_party/fx_libopenjpeg
 $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/libopenjpeg20/bio \
@@ -550,6 +560,7 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/libopenjpeg20/opj_malloc \
 ))
+endif
 
 # pdfium_base
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
@@ -585,6 +596,18 @@ $(eval $(call gb_Library_add_libs,pdfium,\
     -ldl \
     -lrt \
 ))
+
+ifeq ($(SYSTEM_OPENJPEG2),TRUE)
+$(eval $(call gb_Library_add_libs,pdfium,\
+    $(OPENJPEG2_LIBS) \
+))
+endif
+
+ifeq ($(SYSTEM_ABSEIL),TRUE)
+$(eval $(call gb_Library_add_libs,pdfium,\
+    $(ABSEIL_LIBS) \
+))
+endif
 
 $(eval $(call gb_Library_use_external,pdfium,freetype))
 $(eval $(call gb_Library_add_defs,pdfium,\
