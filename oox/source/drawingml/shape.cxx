@@ -661,7 +661,7 @@ void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation,sal_Int32 nMSORot
 {
     if (nMSORotationAngle == 0)
         return;
-    double fRad = basegfx::deg2rad(nMSORotationAngle / 60000.0);
+    double fRad = basegfx::deg2rad<60000>(nMSORotationAngle);
     basegfx::B2DPoint aCenter(0.5, 0.5);
     aCenter *= aTransformation;
     aTransformation.translate(-aCenter);
@@ -771,7 +771,7 @@ Reference< XShape > const & Shape::createAndInsert(
     if (bUseRotationTransform && mnDiagramRotation != 0)
     {
         aTransformation.translate(-0.5, -0.5);
-        aTransformation.rotate(basegfx::deg2rad(mnDiagramRotation / 60000.0));
+        aTransformation.rotate(basegfx::deg2rad<60000>(mnDiagramRotation));
         aTransformation.translate(0.5, 0.5);
     }
 

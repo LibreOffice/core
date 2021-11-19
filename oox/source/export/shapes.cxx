@@ -689,9 +689,9 @@ static sal_Int32 lcl_CircleAngle2CustomShapeEllipseAngleOOX(const sal_Int32 nInt
 {
     if (nWidth != 0 || nHeight != 0)
     {
-        double fAngle = basegfx::deg2rad(nInternAngle / 100.0); // intern 1/100 deg to degree to rad
+        double fAngle = basegfx::deg2rad<100>(nInternAngle); // intern 1/100 deg to rad
         fAngle = atan2(nHeight * sin(fAngle), nWidth * cos(fAngle)); // circle to ellipse
-        fAngle = basegfx::rad2deg(fAngle) * 60000.0; // rad to degree to OOXML angle unit
+        fAngle = basegfx::rad2deg<60000>(fAngle); // rad to OOXML angle unit
         sal_Int32 nAngle = basegfx::fround(fAngle); // normalize
         nAngle = nAngle % 21600000;
         return nAngle < 0 ? (nAngle + 21600000) : nAngle;

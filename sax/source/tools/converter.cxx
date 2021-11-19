@@ -748,7 +748,7 @@ bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
     }
     else if (std::u16string_view::npos != rString.find(u"rad"))
     {
-        nValue = basegfx::rad2deg(fValue) * 10.0;
+        nValue = basegfx::rad2deg<10>(fValue);
     }
     else // no explicit unit
     {
@@ -798,7 +798,7 @@ bool Converter::convertAngle(sal_Int16& rAngle, std::string_view rString,
     }
     else if (std::string_view::npos != rString.find("rad"))
     {
-        nValue = basegfx::rad2deg(fValue) * 10.0;
+        nValue = basegfx::rad2deg<10>(fValue);
     }
     else // no explicit unit
     {

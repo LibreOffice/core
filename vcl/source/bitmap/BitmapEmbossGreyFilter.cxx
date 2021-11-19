@@ -46,8 +46,8 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                 sal_Int32 nGrey11, nGrey12, nGrey13;
                 sal_Int32 nGrey21, nGrey22, nGrey23;
                 sal_Int32 nGrey31, nGrey32, nGrey33;
-                double fAzim = basegfx::deg2rad(mnAzimuthAngle100 * 0.01);
-                double fElev = basegfx::deg2rad(mnElevationAngle100 * 0.01);
+                double fAzim = basegfx::deg2rad<100>(mnAzimuthAngle100);
+                double fElev = basegfx::deg2rad<100>(mnElevationAngle100);
                 std::unique_ptr<sal_Int32[]> pHMap(new sal_Int32[nWidth + 2]);
                 std::unique_ptr<sal_Int32[]> pVMap(new sal_Int32[nHeight + 2]);
                 sal_Int32 nX, nY, nNx, nNy, nDotL;

@@ -1122,7 +1122,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             {
                                 aMatrix = basegfx::utils::createRotateAroundPoint(
                                     aImportSize.Width / 2.0, aImportSize.Height / 2.0,
-                                    basegfx::deg2rad( nOOXAngle / 60000.0));
+                                    basegfx::deg2rad<60000>(nOOXAngle));
                                 aB2DWrapPolyPolygon.transform(aMatrix);
                             }
                             basegfx::B2DRange aB2DWrapRange = aB2DWrapPolyPolygon.getB2DRange();
@@ -1149,7 +1149,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 if (nOOXAngle != 0)
                                 {
                                     aMatrix = basegfx::utils::createRotateB2DHomMatrix(
-                                        basegfx::deg2rad(nOOXAngle / 60000.0));
+                                        basegfx::deg2rad<60000>(nOOXAngle));
                                     aShapeRange.transform(aMatrix);
                                 }
                             }
