@@ -33,6 +33,24 @@
       "message": "Looks good -- do we need to set the serializer back to the body text at the end? Or is that already done?",
       "revId": "721d8f2f2e162ef21a957f03327eb956ac2bf75f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81abe8f4_2d75587f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-19T08:49:35Z",
+      "side": 1,
+      "message": "The example I saw was DocxSdrExport::writeVMLDrawing, and it didn\u0027t try to save/restore the value. Most other uses of drawingML-\u003eSetFS don\u0027t reset either.\nIt is only the drawingML module that is being changed, not the main docx body text serializer. [In this case the main serializer had change from the header to the body, but the drawingML module still held the header pointer, so we had to update to the current body pointer.]\n\nSo if I understand this correctly, it would only be the next drawingML call that doesn\u0027t initialize itself that could write to this wrong spot. I don\u0027t think it would mess up a stacked drawingML call because it is just setting the current serializer which is being used to open/end the drawing.",
+      "parentUuid": "66af04bb_a5f1409a",
+      "revId": "721d8f2f2e162ef21a957f03327eb956ac2bf75f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
