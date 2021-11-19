@@ -42,7 +42,7 @@ class SVL_DLLPUBLIC INetURLHistory final : public SfxBroadcaster
     SAL_DLLPRIVATE static void NormalizeUrl_Impl (INetURLObject &rUrl);
 
     void PutUrl_Impl   (const INetURLObject &rUrl);
-    bool QueryUrl_Impl (const INetURLObject &rUrl) const;
+    bool QueryUrl_Impl (INetURLObject && rUrl) const;
 
     /** Not implemented.
     */
@@ -69,20 +69,12 @@ public:
     bool QueryUrl (const INetURLObject &rUrl) const
     {
         if (QueryProtocol (rUrl.GetProtocol()))
-            return QueryUrl_Impl (rUrl);
+            return QueryUrl_Impl (INetURLObject(rUrl));
         else
             return false;
     }
 
-    bool QueryUrl (const OUString &rUrl) const
-    {
-        INetProtocol eProto =
-            INetURLObject::CompareProtocolScheme (rUrl);
-        if (QueryProtocol (eProto))
-            return QueryUrl_Impl (INetURLObject (rUrl));
-        else
-            return false;
-    }
+    bool QueryUrl (const OUString &rUrl) const;
 
     /** PutUrl.
     */
