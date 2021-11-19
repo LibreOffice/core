@@ -327,7 +327,10 @@ protected:
         paint.setColor(transparency == 0
                            ? SkiaHelper::toSkColor(mFillColor)
                            : SkiaHelper::toSkColorWithTransparency(mFillColor, transparency));
-        paint.setStyle(SkPaint::kFill_Style);
+        if (mLineColor == mFillColor)
+            paint.setStyle(SkPaint::kStrokeAndFill_Style);
+        else
+            paint.setStyle(SkPaint::kFill_Style);
         return paint;
     }
 
