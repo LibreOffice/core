@@ -20,7 +20,7 @@ class AutofilterTest(UITestCase):
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
 
             xTreeList = xCheckListMenu.getChild("check_tree_box")
             xFirstEntry = xTreeList.getChild("0")
@@ -42,7 +42,7 @@ class AutofilterTest(UITestCase):
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
 
             xTreeList = xCheckListMenu.getChild("check_list_box")
             xFirstEntry = xTreeList.getChild("1")
@@ -64,7 +64,7 @@ class AutofilterTest(UITestCase):
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "3"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             size1 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -72,7 +72,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "3"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             size2 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -80,7 +80,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "3", "ROW": "3"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             size3 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -88,7 +88,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "4", "ROW": "3"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             size4 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
 
@@ -107,7 +107,7 @@ class AutofilterTest(UITestCase):
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
 
             xTreeList = xCheckListMenu.getChild("check_tree_box")
 
@@ -141,7 +141,7 @@ class AutofilterTest(UITestCase):
 
             xFloatWindow = self.xUITest.getFloatWindow()
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
 
             xList = xCheckListMenu.getChild("check_list_box")
 
@@ -166,7 +166,7 @@ class AutofilterTest(UITestCase):
 
             xFloatWindow = self.xUITest.getFloatWindow()
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
 
             xList = xCheckListMenu.getChild("check_list_box")
 
@@ -206,7 +206,7 @@ class AutofilterTest(UITestCase):
 
             xFloatWindow = self.xUITest.getFloatWindow()
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
 
             xList = xCheckListMenu.getChild("check_list_box")
 
@@ -225,7 +225,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_tree_box")
             self.assertEqual(3, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -233,7 +233,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(5, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -241,7 +241,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(3, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -254,7 +254,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(9, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -267,7 +267,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_tree_box")
             self.assertEqual(3, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -275,7 +275,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(3, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -283,7 +283,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(4, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -296,7 +296,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(3, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -309,7 +309,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(5, len(xTreeList.getChildren()))
             self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
@@ -322,7 +322,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(2, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
@@ -335,7 +335,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(5, len(xTreeList.getChildren()))
             self.assertEqual("0.000", get_state_as_dict(xTreeList.getChild('0'))['Text'])
@@ -383,7 +383,7 @@ class AutofilterTest(UITestCase):
 
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xList = xCheckListMenu.getChild("check_list_box")
 
             # tdf140745 show (empty) entry on top of the checkbox list
@@ -404,7 +404,7 @@ class AutofilterTest(UITestCase):
 
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(3, len(xList.getChildren()))
             self.assertEqual('false', get_state_as_dict(xList.getChild('0'))['IsChecked'])
@@ -512,7 +512,7 @@ class AutofilterTest(UITestCase):
 
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "4", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(2, len(xTreeList.getChildren()))
             self.assertEqual("65.43", get_state_as_dict(xTreeList.getChild('0'))['Text'])

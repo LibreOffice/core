@@ -2750,8 +2750,15 @@ protected:
         }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        if (!(m_pMouseEventBox && m_pMouseEventBox != m_pWidget))
+        if (!m_pMouseEventBox || m_pMouseEventBox == m_pWidget)
             return;
+
+        // GtkWindow replacement for GtkPopover case
+        if (!GTK_IS_EVENT_BOX(m_pMouseEventBox))
+        {
+            m_pMouseEventBox = nullptr;
+            return;
+        }
 
         // put things back they way we found them
         GtkWidget* pParent = gtk_widget_get_parent(m_pMouseEventBox);
@@ -3136,6 +3143,12 @@ private:
     static gboolean signalCrossing(GtkWidget*, GdkEventCrossing* pEvent, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        //if (pEvent->mode != GDK_CROSSING_NORMAL)
+        //    return false;
+        if (pEvent->type != GDK_ENTER_NOTIFY)
+            return false;
+        fprintf(stderr, "GtkInstanceWidget %p enter: %d, windows are %p %p %d %d\n", pThis, pEvent->type == GDK_ENTER_NOTIFY, pEvent->window, pEvent->subwindow,
+                pEvent->mode, pEvent->detail);
         MouseEventModifiers eMouseEventModifiers = pEvent->type == GDK_ENTER_NOTIFY ? MouseEventModifiers::ENTERWINDOW : MouseEventModifiers::LEAVEWINDOW;
         SolarMutexGuard aGuard;
         return pThis->signal_crossing(pEvent->x, pEvent->y, pEvent->state, eMouseEventModifiers);
@@ -22077,6 +22090,23 @@ public:
         , m_nSignalId(g_signal_connect(m_pPopover, "closed", G_CALLBACK(signalClosed), this))
         , m_pClosedEvent(nullptr)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+#if defined(GDK_WINDOWING_X11)
+        //under wayland a Popover will work to "escape" the parent dialog, not
+        //so under X, so come up with this hack to use a raw GtkWindow
+        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay) && gtk_popover_get_constrain_to(m_pPopover) == GTK_POPOVER_CONSTRAINT_NONE)
+        {
+            m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+            gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
+            gtk_window_set_resizable(m_pMenuHack, false);
+            g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+            g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+            g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
+            g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+        }
+#endif
+#endif
     }
 
     virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect, weld::Placement ePlace) override
@@ -22115,22 +22145,6 @@ public:
         {
             if (!m_bMenuPoppedUp)
             {
-                if (!m_pMenuHack)
-                {
-                    m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
-                    gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-                    bool bModal = gtk_popover_get_modal(m_pPopover);
-                    gtk_window_set_modal(m_pMenuHack, bModal);
-                    gtk_window_set_resizable(m_pMenuHack, false);
-                    g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
-                    if (bModal)
-                    {
-                         g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-                         g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
-                         g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
-                    }
-                }
-
                 MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect, ePlace);
                 m_bMenuPoppedUp = true;
             }
@@ -22149,6 +22163,16 @@ public:
         if (m_pMenuHack)
             return gtk_widget_get_visible(GTK_WIDGET(m_pMenuHack));
         return gtk_widget_get_visible(m_pWidget);
+    }
+
+    virtual void ensureMouseEventWidget() override
+    {
+        if (!m_pMouseEventBox && m_pMenuHack)
+        {
+            m_pMouseEventBox = GTK_WIDGET(m_pMenuHack);
+            return;
+        }
+        GtkInstanceContainer::ensureMouseEventWidget();
     }
 #endif
 #endif
@@ -22179,6 +22203,7 @@ public:
 
     virtual ~GtkInstancePopover() override
     {
+        DisconnectMouseEvents();
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pMenuHack)
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));

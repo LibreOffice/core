@@ -42,7 +42,7 @@ class tdf140754(UITestCase):
             xAll = xFloatWindow.getChild("toggle_all")
             xAll.executeAction("CLICK", tuple())
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(25, len(xList.getChildren()))
 
@@ -61,7 +61,7 @@ class tdf140754(UITestCase):
             xAll = xFloatWindow.getChild("toggle_all")
             xAll.executeAction("CLICK", tuple())
 
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(10, len(xList.getChildren()))
 
