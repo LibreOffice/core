@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "598ba874_ab7bfd48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-19T16:07:14Z",
+      "side": 1,
+      "message": "Thanks a lot, I don\u0027t see anything obviously problematic with this patch. Feel free to submit to master if Jenkins is happy. I\u0027m sure you tested the --with-system-libs case already. :-)",
+      "revId": "7f48d1adbd9fe2c4b22c420bbbdbd2fcf62bbc0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
