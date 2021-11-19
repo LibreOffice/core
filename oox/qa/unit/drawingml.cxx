@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <unotools/mediadescriptor.hxx>
@@ -395,6 +396,40 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
     // - Actual  : 16711680 (0xff0000)
     // i.e. the text color was red, not blue.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472C4), nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
+{
+    // Given a PPTX file with a slide -> master slide -> theme:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "theme.pptx";
+
+    // When importing the document:
+    load(aURL);
+
+    // Then make sure the theme + referring to that theme is imported:
+    // Check the imported theme of the master page:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap(xMasterpage->getPropertyValue("Theme"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), aMap["Name"].get<OUString>());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Cannot extract an Any(void) to string!
+    // i.e. the name of the color scheme was lost on import.
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), aMap["ColorSchemeName"].get<OUString>());
+
+    // Check the reference to that theme:
+    uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+    // 4 is accent1, see oox::drawingml::Color::getSchemeColorIndex().
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4),
+                         xPortion->getPropertyValue("CharColorTheme").get<sal_Int32>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

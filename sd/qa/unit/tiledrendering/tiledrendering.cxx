@@ -393,7 +393,9 @@ xmlDocUniquePtr SdTiledRenderingTest::parseXmlDump()
     (void)xmlTextWriterEndDocument(pXmlWriter);
     xmlFreeTextWriter(pXmlWriter);
 
-    return xmlDocUniquePtr(xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(m_pXmlBuffer)), xmlBufferLength(m_pXmlBuffer)));
+    auto pCharBuffer = reinterpret_cast<const xmlChar*>(xmlBufferContent(m_pXmlBuffer));
+    SAL_INFO("test", "SdTiledRenderingTest::parseXmlDump: pCharBuffer is '" << pCharBuffer << "'");
+    return xmlDocUniquePtr(xmlParseDoc(pCharBuffer));
 }
 
 void SdTiledRenderingTest::testCreateDestroy()
@@ -861,7 +863,7 @@ void SdTiledRenderingTest::testResizeTableColumn()
 
     // Remember the original cell widths.
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
-    OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl/TableLayouter/columns/";
+    OString aPrefix = "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl/TableLayouter/columns/";
     sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
     sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     pXmlDoc = nullptr;
@@ -1704,7 +1706,7 @@ void SdTiledRenderingTest::testTdf104405()
         OUString("2"),
         getXPath(
             pXmlDoc,
-            "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
+            "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
                 "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem",
             "value"));
 }

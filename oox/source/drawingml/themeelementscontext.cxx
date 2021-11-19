@@ -214,6 +214,10 @@ ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, con
     switch( nElement )
     {
         case A_TOKEN( clrScheme ):  // CT_ColorScheme
+            if (rAttribs.hasAttribute(XML_name))
+            {
+                mrTheme.getClrScheme().SetName(rAttribs.getString(XML_name).get());
+            }
             return new clrSchemeContext( *this, mrTheme.getClrScheme() );
         case A_TOKEN( fontScheme ): // CT_FontScheme
             return new FontSchemeContext( *this, mrTheme.getFontScheme() );
