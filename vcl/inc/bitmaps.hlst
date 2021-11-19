@@ -6,9 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#ifndef INCLUDED_VCL_INC_BITMAPS_HRC
-#define INCLUDED_VCL_INC_BITMAPS_HRC
+#pragma once
 
 inline constexpr OUStringLiteral SV_RESID_BITMAP_CHECK1 = u"vcl/res/check1.png";
 inline constexpr OUStringLiteral SV_RESID_BITMAP_CHECK2 = u"vcl/res/check2.png";
@@ -96,41 +94,6 @@ inline constexpr OUStringLiteral ODM_16_8 = u"res/odm_16_8.png";
 inline constexpr OUStringLiteral ODB_16_8 = u"res/odb_16_8.png";
 inline constexpr OUStringLiteral ODF_16_8 = u"res/odf_16_8.png";
 
-//start, Throbber::getDefaultImageURLs
-#define SPINNER_16_01                                "vcl/res/spinner-16-01.png"
-#define SPINNER_16_02                                "vcl/res/spinner-16-02.png"
-#define SPINNER_16_03                                "vcl/res/spinner-16-03.png"
-#define SPINNER_16_04                                "vcl/res/spinner-16-04.png"
-#define SPINNER_16_05                                "vcl/res/spinner-16-05.png"
-#define SPINNER_16_06                                "vcl/res/spinner-16-06.png"
-
-#define SPINNER_32_01                                "vcl/res/spinner-32-01.png"
-#define SPINNER_32_02                                "vcl/res/spinner-32-02.png"
-#define SPINNER_32_03                                "vcl/res/spinner-32-03.png"
-#define SPINNER_32_04                                "vcl/res/spinner-32-04.png"
-#define SPINNER_32_05                                "vcl/res/spinner-32-05.png"
-#define SPINNER_32_06                                "vcl/res/spinner-32-06.png"
-#define SPINNER_32_07                                "vcl/res/spinner-32-07.png"
-#define SPINNER_32_08                                "vcl/res/spinner-32-08.png"
-#define SPINNER_32_09                                "vcl/res/spinner-32-09.png"
-#define SPINNER_32_10                                "vcl/res/spinner-32-10.png"
-#define SPINNER_32_11                                "vcl/res/spinner-32-11.png"
-#define SPINNER_32_12                                "vcl/res/spinner-32-12.png"
-
-#define SPINNER_64_01                                "vcl/res/spinner-64-01.png"
-#define SPINNER_64_02                                "vcl/res/spinner-64-02.png"
-#define SPINNER_64_03                                "vcl/res/spinner-64-03.png"
-#define SPINNER_64_04                                "vcl/res/spinner-64-04.png"
-#define SPINNER_64_05                                "vcl/res/spinner-64-05.png"
-#define SPINNER_64_06                                "vcl/res/spinner-64-06.png"
-#define SPINNER_64_07                                "vcl/res/spinner-64-07.png"
-#define SPINNER_64_08                                "vcl/res/spinner-64-08.png"
-#define SPINNER_64_09                                "vcl/res/spinner-64-09.png"
-#define SPINNER_64_10                                "vcl/res/spinner-64-10.png"
-#define SPINNER_64_11                                "vcl/res/spinner-64-11.png"
-#define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
-//end, Throbber::getDefaultImageURLs
-
 inline constexpr OUStringLiteral IMG_WARN = u"dbaccess/res/exwarning.png";
 inline constexpr OUStringLiteral IMG_ERROR = u"dbaccess/res/exerror.png";
 inline constexpr OUStringLiteral IMG_INFO = u"dbaccess/res/exinfo.png";
@@ -192,10 +155,8 @@ inline constexpr OUStringLiteral RID_CURSOR_MOVE_FILE = u"vcl/res/move_file.png"
 inline constexpr OUStringLiteral RID_CURSOR_MOVE_FILES = u"vcl/res/move_files.png";
 inline constexpr OUStringLiteral RID_CURSOR_MOVE_FILE_LINK = u"vcl/res/move_file_link.png";
 inline constexpr OUStringLiteral RID_CURSOR_MOVE_POINT = u"vcl/res/move_point.png";
-#define RID_CURSOR_NESWSIZE          "vcl/res/neswsize.png"
 inline constexpr OUStringLiteral RID_CURSOR_NOT_ALLOWED = u"vcl/res/not_allowed.png";
 inline constexpr OUStringLiteral RID_CURSOR_NULL = u"vcl/res/null.png";
-#define RID_CURSOR_NWSESIZE          "vcl/res/nwsesize.png"
 #define RID_CURSOR_PEN               "vcl/res/pen.png"
 inline constexpr OUStringLiteral RID_CURSOR_PIVOT_COLUMN = u"vcl/res/pivot_column.png";
 inline constexpr OUStringLiteral RID_CURSOR_PIVOT_DELETE = u"vcl/res/pivot_delete.png";
@@ -226,7 +187,5 @@ inline constexpr OUStringLiteral CHEVRON = u"sfx2/res/chevron.png";
 
 inline constexpr OUStringLiteral RID_UPDATE_AVAILABLE_16 = u"extensions/res/update/ui/onlineupdate_16.png";
 inline constexpr OUStringLiteral RID_UPDATE_AVAILABLE_26 = u"extensions/res/update/ui/onlineupdate_26.png";
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
