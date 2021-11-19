@@ -740,7 +740,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
         return;
 
     uno::Sequence< beans::PropertyValue >   aFilterDataSeq;
-    const char*                             pFilterShortName = nullptr;
+    OUString sFilterShortName;
 
     for( const auto& rMediaProperty : rMediaProperties )
     {
@@ -758,45 +758,45 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             aValue >>= aMimeType;
 
             if (aMimeType == MIMETYPE_BMP)
-                pFilterShortName = "bmp";
+                sFilterShortName = "bmp";
             else if (aMimeType == MIMETYPE_EPS)
-                pFilterShortName = "eps";
+                sFilterShortName = "eps";
             else if (aMimeType == MIMETYPE_GIF)
-                pFilterShortName = "gif";
+                sFilterShortName = "gif";
             else if (aMimeType == MIMETYPE_JPG)
-                pFilterShortName = "jpg";
+                sFilterShortName = "jpg";
             else if (aMimeType == MIMETYPE_MET)
-                pFilterShortName = "met";
+                sFilterShortName = "met";
             else if (aMimeType == MIMETYPE_PNG)
-                pFilterShortName = "png";
+                sFilterShortName = "png";
             else if (aMimeType == MIMETYPE_PCT)
-                pFilterShortName = "pct";
+                sFilterShortName = "pct";
             else if (aMimeType == MIMETYPE_PBM)
-                pFilterShortName = "pbm";
+                sFilterShortName = "pbm";
             else if (aMimeType == MIMETYPE_PGM)
-                pFilterShortName = "pgm";
+                sFilterShortName = "pgm";
             else if (aMimeType == MIMETYPE_PPM)
-                pFilterShortName = "ppm";
+                sFilterShortName = "ppm";
             else if (aMimeType == MIMETYPE_RAS)
-                pFilterShortName = "ras";
+                sFilterShortName = "ras";
             else if (aMimeType == MIMETYPE_SVM)
-                pFilterShortName = "svm";
+                sFilterShortName = "svm";
             else if (aMimeType == MIMETYPE_TIF)
-                pFilterShortName = "tif";
+                sFilterShortName = "tif";
             else if (aMimeType == MIMETYPE_EMF)
-                pFilterShortName = "emf";
+                sFilterShortName = "emf";
             else if (aMimeType == MIMETYPE_WMF)
-                pFilterShortName = "wmf";
+                sFilterShortName = "wmf";
             else if (aMimeType == MIMETYPE_XPM)
-                pFilterShortName = "xpm";
+                sFilterShortName = "xpm";
             else if (aMimeType == MIMETYPE_SVG)
-                pFilterShortName = "svg";
+                sFilterShortName = "svg";
             else if (aMimeType == MIMETYPE_VCLGRAPHIC)
-                pFilterShortName = MIMETYPE_VCLGRAPHIC;
+                sFilterShortName = MIMETYPE_VCLGRAPHIC;
         }
     }
 
-    if( !pFilterShortName )
+    if( sFilterShortName.isEmpty() )
         return;
 
     ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
@@ -814,7 +814,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                stream end (which leads to an invalid argument exception then). */
             SvMemoryStream aMemStrm;
             aMemStrm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-            if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
+            if( sFilterShortName == MIMETYPE_VCLGRAPHIC )
             {
                 TypeSerializer aSerializer(aMemStrm);
                 aSerializer.writeGraphic(aGraphic);
@@ -822,7 +822,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             else
             {
                 rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
-                                        rFilter.GetExportFormatNumberForShortName( OUString::createFromAscii( pFilterShortName ) ),
+                                        rFilter.GetExportFormatNumberForShortName( sFilterShortName ),
                                             ( aFilterDataSeq.hasElements() ? &aFilterDataSeq : nullptr ) );
             }
             pOStm->WriteBytes( aMemStrm.GetData(), aMemStrm.TellEnd() );

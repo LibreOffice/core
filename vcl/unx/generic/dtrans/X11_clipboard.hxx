@@ -24,7 +24,7 @@
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <cppuhelper/compbase.hxx>
 
-#define X11_CLIPBOARD_IMPLEMENTATION_NAME "com.sun.star.datatransfer.X11ClipboardSupport"
+inline constexpr OUStringLiteral X11_CLIPBOARD_IMPLEMENTATION_NAME  = u"com.sun.star.datatransfer.X11ClipboardSupport";
 
 namespace x11 {
 

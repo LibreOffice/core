@@ -103,18 +103,18 @@ namespace o3tl
 #define EXP_GIF                 "SVEGIF"
 
 
-#define BMP_SHORTNAME           u"BMP"
-#define GIF_SHORTNAME           u"GIF"
-#define JPG_SHORTNAME           u"JPG"
-#define MET_SHORTNAME           u"MET"
-#define PCT_SHORTNAME           u"PCT"
-#define PNG_SHORTNAME           u"PNG"
-#define SVM_SHORTNAME           u"SVM"
-#define TIF_SHORTNAME           u"TIF"
-#define WMF_SHORTNAME           u"WMF"
-#define EMF_SHORTNAME           u"EMF"
-#define SVG_SHORTNAME           u"SVG"
-#define PDF_SHORTNAME           u"PDF"
+inline constexpr OUStringLiteral BMP_SHORTNAME = u"BMP";
+inline constexpr OUStringLiteral GIF_SHORTNAME = u"GIF";
+inline constexpr OUStringLiteral JPG_SHORTNAME = u"JPG";
+inline constexpr OUStringLiteral MET_SHORTNAME = u"MET";
+inline constexpr OUStringLiteral PCT_SHORTNAME = u"PCT";
+inline constexpr OUStringLiteral PNG_SHORTNAME = u"PNG";
+inline constexpr OUStringLiteral SVM_SHORTNAME = u"SVM";
+inline constexpr OUStringLiteral TIF_SHORTNAME = u"TIF";
+inline constexpr OUStringLiteral WMF_SHORTNAME = u"WMF";
+inline constexpr OUStringLiteral EMF_SHORTNAME = u"EMF";
+inline constexpr OUStringLiteral SVG_SHORTNAME = u"SVG";
+inline constexpr OUStringLiteral PDF_SHORTNAME = u"PDF";
 
 //  Info class for all supported file formats
 
