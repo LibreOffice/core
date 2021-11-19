@@ -133,6 +133,24 @@
       "parentUuid": "550d98ca_508d98fd",
       "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9d0012e_8be941c9",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-19T14:50:56Z",
+      "side": 1,
+      "message": "It looks as if we have two subjects we discuss:\n-the functional specification\n-the actual coding\nFor me (int)/ and % and Floor are roughly equivalent, my preference goes to understandable code.\n\nWRT the functional spec, the documentation referred to by me in earlier comments states \u0027If Type is 1, WEEKS calculates the Monday-to-Sunday week that StartDate and EndDate each lie in, and returns the difference between those week numbers.\u0027. Therefore we need to know the dow for start date and end date. And therefore it is essential to use nullDate.\n\nThe code in my patch can be shortened by not using IsNormalOrder (which I introduced to keep the calculation itself clear). I don\u0027t think using Floor instead of (int)/ and % will result in shorter, understandable code. Knowing that there is a partial week between start date and end date is not enough; we need to establish if the partial week contains a week border crossing.\n\nAs I am not entirely happy with the patch because my code is longer than the original code, I will try if I can preserve the understandable property whilst reducing the lines by not using IsNormalOrder.",
+      "parentUuid": "51b44253_289d952b",
+      "revId": "f3a2f261ca4cb99843e455517250f2a11c534c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
