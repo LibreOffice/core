@@ -178,43 +178,43 @@ const char* const aFileExt[] = { ".vor",
                            ".sxw", ".sxc", ".sxi", ".sxd", ".sxg", ".sxm",
                            ".ott", ".otg", ".otp", ".ots", ".otf",
                            ".odt", ".oth", ".odm", ".odg", ".odp", ".ods", ".odf"};
-const char* const aMimeType[] = {
-                          "application/vnd.stardivision.writer",
+const sal_Unicode* const aMimeType[] = {
+                          u"application/vnd.stardivision.writer",
 
-                          "application/vnd.stardivision.chart",
-                          "application/vnd.stardivision.draw",
-                          "application/vnd.stardivision.impress",
-                          "application/vnd.stardivision.impress-packed",
-                          "application/vnd.stardivision.calc",
-                          "application/vnd.stardivision.writer",
-                          "application/vnd.stardivision.math",
+                          u"application/vnd.stardivision.chart",
+                          u"application/vnd.stardivision.draw",
+                          u"application/vnd.stardivision.impress",
+                          u"application/vnd.stardivision.impress-packed",
+                          u"application/vnd.stardivision.calc",
+                          u"application/vnd.stardivision.writer",
+                          u"application/vnd.stardivision.math",
 
-                          MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII,
-                          MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII,
-                          MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII,
-                          MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII,
+                          MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII.getStr(),
 
-                          MIMETYPE_VND_SUN_XML_WRITER_ASCII,
-                          MIMETYPE_VND_SUN_XML_CALC_ASCII,
-                          MIMETYPE_VND_SUN_XML_IMPRESS_ASCII,
-                          MIMETYPE_VND_SUN_XML_DRAW_ASCII,
-                          MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII,
-                          MIMETYPE_VND_SUN_XML_MATH_ASCII,
+                          MIMETYPE_VND_SUN_XML_WRITER_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_CALC_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_IMPRESS_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_DRAW_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII.getStr(),
+                          MIMETYPE_VND_SUN_XML_MATH_ASCII.getStr(),
 
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII.getStr(),
 
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII,
-                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII };
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII.getStr(),
+                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII.getStr() };
 
 const int nForModes[] = { 16,
                            1,  2,  4,  4,  8, 16, 32,
@@ -423,7 +423,7 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, bool bForAllUsers, REGSA
         {
             if (nForModes[ind] & nMode)
             {
-                wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind]);
+                wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%ls", aPrefix, aMimeType[ind]);
                 HRegKey hkey;
                 s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
                                       aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
@@ -495,7 +495,7 @@ static HRESULT DllUnregisterServerNative_Impl( int nMode, bool bForAllUsers, REG
         if( nForModes[ind] & nMode )
         {
             DWORD nSubKeys = 0, nValues = 0;
-            wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind]);
+            wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%ls", aPrefix, aMimeType[ind]);
             Status s1(false); // no throw
             {
                 HRegKey hkey;
