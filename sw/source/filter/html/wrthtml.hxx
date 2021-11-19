@@ -416,7 +416,8 @@ public:
 #define sCSS2_P_CLASS_leaders "leaders"
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
     bool m_bParaDotLeaders : 1;       // for TOC dot leaders
-    // 25
+    bool m_bPrettyPrint : 1;          // Allows to add new lines to make it more readable
+    // 26
 
     /// Tracks which text portion attributes are currently open: a which id -> open count map.
     std::map<sal_uInt16, int> maStartedAttributes;
