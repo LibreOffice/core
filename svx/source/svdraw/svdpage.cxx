@@ -1291,6 +1291,19 @@ void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme) { mpTheme =
 
 svx::Theme* SdrPageProperties::GetTheme() { return mpTheme.get(); }
 
+void SdrPageProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPageProperties"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    if (mpTheme)
+    {
+        mpTheme->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
 :   mrSdrModelFromSdrPage(rModel),
     mnWidth(10),
@@ -1815,6 +1828,19 @@ bool SdrPage::checkVisibility(
 {
     // this will be handled in the application if needed
     return true;
+}
+
+void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPage"));
+    SdrObjList::dumpAsXml(pWriter);
+
+    if (mpSdrPageProperties)
+    {
+        mpSdrPageProperties->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // DrawContact support: Methods for handling Page changes

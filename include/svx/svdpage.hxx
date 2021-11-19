@@ -344,6 +344,8 @@ public:
 
     void SetTheme(std::unique_ptr<svx::Theme> pTheme);
     svx::Theme* GetTheme();
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 
@@ -535,6 +537,8 @@ public:
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

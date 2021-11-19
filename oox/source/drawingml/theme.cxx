@@ -107,6 +107,7 @@ void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPa
 {
     beans::PropertyValues aValues = {
         comphelper::makePropertyValue("Name", maThemeName),
+        comphelper::makePropertyValue("ColorSchemeName", maClrScheme.GetName()),
     };
     uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("Theme", uno::makeAny(aValues));

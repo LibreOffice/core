@@ -147,7 +147,9 @@ void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentInfo"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("style"), BAD_CAST(aStyle.toUtf8().getStr()));
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("text"));
-    (void)xmlTextWriterWriteString(pWriter, BAD_CAST(GetText().toUtf8().getStr()));
+    OUString aText = GetText();
+    // TODO share code with sax_fastparser::FastSaxSerializer::write().
+    (void)xmlTextWriterWriteString(pWriter, BAD_CAST(aText.replaceAll("", "&#9;").toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
     aParaAttribs.dumpAsXml(pWriter);
     for (size_t i=0; i<maCharAttribs.size(); ++i)

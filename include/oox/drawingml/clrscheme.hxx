@@ -80,6 +80,7 @@ typedef std::shared_ptr< ClrMap > ClrMapPtr;
 class OOX_DLLPUBLIC ClrScheme
 {
     std::vector< std::pair<sal_Int32, ::Color> > maClrScheme;
+    OUString maName;
 
 public:
 
@@ -88,6 +89,9 @@ public:
 
     bool     getColorByIndex(size_t nIndex,
             ::Color& rColor) const;
+
+    void SetName(const OUString& rName) { maName = rName; }
+    const OUString& GetName() const { return maName; }
 };
 
 }

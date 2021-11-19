@@ -1874,12 +1874,25 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrModel"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
-    sal_uInt16 nPageCount = GetPageCount();
-    for (sal_uInt16 i = 0; i < nPageCount; ++i)
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("maMasterPages"));
+    for (size_t i = 0; i < maMasterPages.size(); ++i)
     {
-        if (const SdrPage* pPage = GetPage(i))
+        if (const SdrPage* pPage = maMasterPages[i].get())
+        {
             pPage->dumpAsXml(pWriter);
+        }
     }
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("maPages"));
+    for (size_t i = 0; i < maPages.size(); ++i)
+    {
+        if (const SdrPage* pPage = maPages[i].get())
+        {
+            pPage->dumpAsXml(pWriter);
+        }
+    }
+    (void)xmlTextWriterEndElement(pWriter);
 
     if (mpImpl->mpTheme)
     {

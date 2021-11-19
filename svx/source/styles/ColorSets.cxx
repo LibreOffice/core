@@ -164,11 +164,15 @@ void Theme::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void Theme::ToAny(css::uno::Any& rVal) const
 {
-    beans::PropertyValues aValues = {
-        comphelper::makePropertyValue("Name", maName)
-    };
+    comphelper::SequenceAsHashMap aMap;
+    aMap["Name"] <<= maName;
 
-    rVal <<= aValues;
+    if (mpColorSet)
+    {
+        aMap["ColorSchemeName"] <<= mpColorSet->getName();
+    }
+
+    rVal <<= aMap.getAsConstPropertyValueList();
 }
 
 std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
@@ -182,6 +186,15 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
         OUString aName;
         it->second >>= aName;
         pTheme = std::make_unique<Theme>(aName);
+    }
+
+    it = aMap.find("ColorSchemeName");
+    if (it != aMap.end() && pTheme)
+    {
+        OUString aName;
+        it->second >>= aName;
+        auto pColorSet = std::make_unique<ColorSet>(aName);
+        pTheme->SetColorSet(std::move(pColorSet));
     }
 
     return pTheme;
