@@ -197,9 +197,9 @@ namespace drawinglayer::animation
 
             if(pCompare && mfDuration == pCompare->mfDuration)
             {
-                for(size_t a(0); a < maEntries.size(); a++)
+                for(const auto& a : maEntries)
                 {
-                    if(!(*maEntries[a] == *pCompare->maEntries[a]))
+                    if(!(*a == *pCompare->a]))
                     {
                         return false;
                     }
