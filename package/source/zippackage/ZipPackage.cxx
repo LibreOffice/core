@@ -424,7 +424,7 @@ void ZipPackage::parseManifest()
 
     m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams( std::u16string_view() );
 
-    bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( u"" ODFVER_012_TEXT ) >= 0 );
+    bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
     if ( !m_bForceRecovery && bODF12AndNewer )
     {
         if ( m_bInconsistent )
