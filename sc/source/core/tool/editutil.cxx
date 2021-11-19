@@ -32,6 +32,7 @@
 #include <svl/numformat.hxx>
 #include <svl/inethist.hxx>
 #include <sfx2/objsh.hxx>
+#include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -327,9 +328,10 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         pPattern = pDoc->GetPattern( nCol, nRow, nTab );
 
     Point aStartPos = aCellPos;
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = (bLayoutRTL && !bIsTiledRendering) ? -1 : 1;
 
     const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
     tools::Long nCellX = pDoc->GetColWidth(nCol,nTab);
@@ -428,7 +430,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     aStartPos.AdjustY(nDifY );
     nCellY      -= nDifY;
 
-    if ( bLayoutRTL )
+    if ( bLayoutRTL && !bIsTiledRendering )
         aStartPos.AdjustX( -(nCellX - 2) );    // excluding grid on both sides
 
                                                         //  -1 -> don't overwrite grid
