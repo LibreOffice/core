@@ -30,6 +30,7 @@
 #include "twain32shim.hxx"
 #include <tools/helpers.hxx>
 #include <twain/twain.h>
+#include <o3tl/unit_conversion.hxx>
 
 #define WM_TWAIN_FALLBACK (WM_SHIM_INTERNAL + 0)
 
@@ -37,7 +38,7 @@ namespace
 {
 TW_INT32 FixToInt32(const TW_FIX32& rFix)
 {
-    return static_cast<TW_INT32>(floor(rFix.Whole + rFix.Frac / 65536. + 0.5));
+    return static_cast<TW_INT32>(floor(rFix.Whole + rFix.Frac * 0x1p-16 + 0.5));
 }
 
 const wchar_t sTwainWndClass[] = L"TwainClass";
@@ -416,10 +417,11 @@ void ImpTwain::ImplXfer()
                             {
                                 // set resolution of bitmap
                                 BITMAPINFOHEADER* pBIH = static_cast<BITMAPINFOHEADER*>(pBmpMem);
-                                static const double fFactor = 100.0 / 2.54;
 
-                                pBIH->biXPelsPerMeter = FRound(fFactor * nXRes);
-                                pBIH->biYPelsPerMeter = FRound(fFactor * nYRes);
+                                static const auto[m, d]
+                                    = getConversionMulDiv(o3tl::Length::in, o3tl::Length::m);
+                                pBIH->biXPelsPerMeter = o3tl::convert(nXRes, d, m);
+                                pBIH->biYPelsPerMeter = o3tl::convert(nYRes, d, m);
                             }
 
                             HANDLE hMap = CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr,
