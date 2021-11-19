@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace0ee82_109fb551",
+        "filename": "drawinglayer/source/primitive2d/textlayoutdevice.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-19T12:08:49Z",
+      "side": 0,
+      "message": "Here it is!",
+      "range": {
+        "startLine": 398,
+        "startChar": 70,
+        "endLine": 398,
+        "endChar": 71
+      },
+      "revId": "96d19777abfdf74c9776470e39ee3ec7e1b2e256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
