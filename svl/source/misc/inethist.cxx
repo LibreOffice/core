@@ -346,15 +346,23 @@ void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
     }
 }
 
-bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl) const
+bool INetURLHistory::QueryUrl(const OUString &rUrl) const
+{
+    INetProtocol eProto = INetURLObject::CompareProtocolScheme (rUrl);
+    if (!QueryProtocol (eProto))
+        return false;
+    return QueryUrl_Impl( INetURLObject(rUrl) );
+}
+
+
+bool INetURLHistory::QueryUrl_Impl (INetURLObject rUrl) const
 {
     DBG_ASSERT (m_pImpl, "QueryUrl_Impl(): no Implementation");
     if (m_pImpl)
     {
-        INetURLObject aHistUrl (rUrl);
-        NormalizeUrl_Impl (aHistUrl);
+        NormalizeUrl_Impl (rUrl);
 
-        return m_pImpl->queryUrl (aHistUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        return m_pImpl->queryUrl (rUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     }
     return false;
 }
