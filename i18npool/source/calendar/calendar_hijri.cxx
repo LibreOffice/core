@@ -30,26 +30,17 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 
-#define GREGORIAN_CROSSOVER 2299161
-
 namespace i18npool {
 
 // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
-const double Calendar_hijri::SynPeriod      = 29.53058868;
-const double Calendar_hijri::SynMonth       = 365.25/29.53058868;   // Solar days in a year/SynPeriod
+constexpr double SynPeriod = 29.53058868;
 
 // Julian day on Jan 1, 1900
-const double Calendar_hijri::jd1900     = 2415020.75933;
+constexpr double jd1900 = 2415020.75933;
 
 // Reference point: March 26, 2001 == 1422 Hijri == 1252 Synodial month from 1900
-const sal_Int32 Calendar_hijri::SynRef      = 1252;
-const sal_Int32 Calendar_hijri::GregRef     = 1422;
-
-const double Calendar_hijri::EveningPeriod  = 6.0;
-
-const sal_Int32 Calendar_hijri::LeapYear[] = {
-    2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29
-};
+constexpr sal_Int32 SynRef = 1252;
+constexpr sal_Int32 GregRef = 1422;
 
 Calendar_hijri::Calendar_hijri()
 {
@@ -248,6 +239,8 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
 {
     /* working variables */
     tools::Long lFactorA, lFactorB, lFactorC, lFactorD, lFactorE;
+
+    constexpr sal_Int32 GREGORIAN_CROSSOVER = 2299161;
 
     /* test whether to adjust for the Gregorian calendar crossover */
     if (lJulianDay >= GREGORIAN_CROSSOVER) {
