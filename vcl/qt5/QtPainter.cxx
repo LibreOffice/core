@@ -54,4 +54,5 @@ QtPainter::QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush, sal_uInt8
         setBrush(aColor);
     }
     setCompositionMode(rGraphics.m_eCompositionMode);
+    setRenderHint(QPainter::Antialiasing, m_rGraphics.getAntiAlias());
 }
