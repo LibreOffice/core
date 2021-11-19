@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ae2cde7_11271423",
+        "filename": "extensions/source/scanner/twain32shim.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-19T20:49:57Z",
+      "side": 1,
+      "message": "This is not idiomatic. The division reflects conversion of unsigned 16-bit integer; and for those integers, 65536 is telling for any programmer, while 0x1p-16 is cryptic. Please don\u0027t do it. Thanks!",
+      "range": {
+        "startLine": 41,
+        "startChar": 64,
+        "endLine": 41,
+        "endChar": 71
+      },
+      "revId": "541d5ba62aad5f598042073d131abbe4f665d462",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
