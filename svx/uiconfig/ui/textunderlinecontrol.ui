@@ -61,6 +61,7 @@
     <property name="can-focus">False</property>
     <property name="no-show-all">True</property>
     <property name="border-width">4</property>
+    <property name="constrain-to">none</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
