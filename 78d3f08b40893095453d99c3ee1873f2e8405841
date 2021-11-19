@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a74a78b1_4a2b6a90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-11-19T15:44:06Z",
+      "side": 1,
+      "message": "Thanks Lubos \u003d)",
+      "revId": "78d3f08b40893095453d99c3ee1873f2e8405841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
