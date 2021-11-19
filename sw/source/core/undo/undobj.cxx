@@ -1367,6 +1367,7 @@ SwRedlineSaveData::SwRedlineSaveData(
 
 #if OSL_DEBUG_LEVEL > 0
     m_nRedlineCount = rSttPos.nNode.GetNode().GetDoc().getIDocumentRedlineAccess().GetRedlineTable().size();
+    m_bRedlineMoved = rRedl.IsMoved();
 #endif
 }
 
@@ -1481,7 +1482,8 @@ void SwUndo::SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData )
 
 #if OSL_DEBUG_LEVEL > 0
     // check redline count against count saved in RedlineSaveData object
-    assert(rSData.empty() ||
+    // except in the case of moved redlines
+    assert(rSData.empty() || rSData[0].m_bRedlineMoved ||
            (rSData[0].m_nRedlineCount == rDoc.getIDocumentRedlineAccess().GetRedlineTable().size()));
             // "redline count not restored properly"
 #endif

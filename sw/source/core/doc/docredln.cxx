@@ -772,6 +772,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
 
 bool SwRedlineTable::isMoved( size_type rPos ) const
 {
+    bool bRet = false;
     auto constexpr nLookahead = 20;
     SwRangeRedline* pRedline = (*this)[ rPos ];
 
@@ -785,43 +786,79 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
         // only deleted or inserted text can be moved
         return false;
 
-    // Skip terminating white spaces of the redline, a workaround
-    // for a typical difference resulted by e.g. Writer UX:
-    // selecting a sentence or a word, and moving it with
-    // the mouse, Writer removes a space at the deletion
-    // to avoid double spaces, also inserts a space at
-    // the insertion point automatically. Because the result
-    // can be different (space before and space after the
-    // moved text), compare the redlines without terminating spaces
-    const OUString sTrimmed = pRedline->GetText().trim();
+    bool bDeletePaM = false;
+    SwPaM* pPaM;
+
+    // if this redline is visible the content is in this PaM
+    if ( nullptr == pRedline->GetContentIdx() )
+    {
+        pPaM = pRedline;
+    }
+    else // otherwise it is saved in pContentSect, e.g. during ODT import
+    {
+        SwNodeIndex aTmpIdx( *pRedline->GetContentIdx()->GetNode().EndOfSectionNode() );
+        pPaM = new SwPaM(*pRedline->GetContentIdx(), aTmpIdx );
+        bDeletePaM = true;
+    }
+
+    const OUString sTrimmed = pPaM->GetText().trim();
     if ( sTrimmed.isEmpty() )
+    {
+        if ( bDeletePaM )
+            delete pPaM;
         return false;
+    }
 
     // search pair around the actual redline
     size_type nEnd = rPos + nLookahead < size()
         ? rPos + nLookahead
         : size();
     rPos = rPos > nLookahead ? rPos - nLookahead : 0;
-    for ( ; rPos < nEnd ; ++rPos )
+    for ( ; rPos < nEnd && !bRet ; ++rPos )
     {
         SwRangeRedline* pPair = (*this)[ rPos ];
-        // TODO handle also Show Changes in Margin mode
-        if ( pPair->HasMark() && pPair->IsVisible() )
+
+        // redline must be the requested type and from the same author
+        if ( nPairType != pPair->GetType() ||
+             pRedline->GetAuthor() != pPair->GetAuthor() )
         {
-            // pair at tracked moving: same text from the same author, but with opposite type
-            if ( nPairType == pPair->GetType() &&
-                pRedline->GetAuthor() == pPair->GetAuthor() &&
-                abs(pRedline->GetText().getLength() - pPair->GetText().getLength()) <= 2 &&
-                sTrimmed == pPair->GetText().trim() )
-            {
-                pRedline->SetMoved();
-                pPair->SetMoved();
-                pPair->InvalidateRange(SwRangeRedline::Invalidation::Remove);
-                return true;
-            }
+            continue;
         }
+
+        bool bDeletePairPaM = false;
+        SwPaM* pPairPaM;
+
+        // if this redline is visible the content is in this PaM
+        if ( nullptr == pPair->GetContentIdx() )
+        {
+            pPairPaM = pPair;
+        }
+        else // otherwise it is saved in pContentSect, e.g. during ODT import
+        {
+            // saved in pContentSect, e.g. during ODT import
+            SwNodeIndex aTmpIdx( *pPair->GetContentIdx()->GetNode().EndOfSectionNode() );
+            pPairPaM = new SwPaM(*pPair->GetContentIdx(), aTmpIdx );
+            bDeletePairPaM = true;
+        }
+
+        // pair at tracked moving: same text by trimming terminatin white spaces
+        if ( abs(pPaM->GetText().getLength() - pPairPaM->GetText().getLength()) <= 2 &&
+            sTrimmed == pPairPaM->GetText().trim() )
+        {
+            pRedline->SetMoved();
+            pPair->SetMoved();
+            pPair->InvalidateRange(SwRangeRedline::Invalidation::Remove);
+            bRet = true;
+        }
+
+        if ( bDeletePairPaM )
+            delete pPairPaM;
     }
-    return false;
+
+    if ( bDeletePaM )
+        delete pPaM;
+
+    return bRet;
 }
 
 void SwRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -987,7 +1024,7 @@ bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) c
 SwRedlineData::SwRedlineData( RedlineType eT, std::size_t nAut )
     : m_pNext( nullptr ), m_pExtraData( nullptr ),
     m_aStamp( DateTime::SYSTEM ),
-    m_nAuthor( nAut ), m_eType( eT ), m_nSeqNo( 0 ), m_bAutoFormat(false)
+    m_nAuthor( nAut ), m_eType( eT ), m_nSeqNo( 0 ), m_bAutoFormat(false), m_bMoved(false)
 {
     m_aStamp.SetNanoSec( 0 );
 }
@@ -1003,6 +1040,7 @@ SwRedlineData::SwRedlineData(
     , m_eType( rCpy.m_eType )
     , m_nSeqNo( rCpy.m_nSeqNo )
     , m_bAutoFormat(false)
+    , m_bMoved( rCpy.m_bMoved )
 {
 }
 
@@ -1010,7 +1048,7 @@ SwRedlineData::SwRedlineData(
 SwRedlineData::SwRedlineData(RedlineType eT, std::size_t nAut, const DateTime& rDT,
     const OUString& rCmnt, SwRedlineData *pNxt)
     : m_pNext(pNxt), m_pExtraData(nullptr), m_sComment(rCmnt), m_aStamp(rDT),
-    m_nAuthor(nAut), m_eType(eT), m_nSeqNo(0), m_bAutoFormat(false)
+    m_nAuthor(nAut), m_eType(eT), m_nSeqNo(0), m_bAutoFormat(false), m_bMoved(false)
 {
 }
 
@@ -1030,6 +1068,7 @@ bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
             m_eType == rCmp.m_eType &&
             m_sComment == rCmp.m_sComment &&
             aTime == aCompareTime &&
+            m_bMoved == rCmp.m_bMoved &&
             (( !m_pNext && !rCmp.m_pNext ) ||
                 ( m_pNext && rCmp.m_pNext &&
                 m_pNext->CanCombine( *rCmp.m_pNext ))) &&
@@ -1080,7 +1119,6 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
-    m_bIsMoved = false;
     if( !rPam.HasMark() )
         DeleteMark();
 }
@@ -1093,7 +1131,6 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
-    m_bIsMoved = false;
     if( !rPam.HasMark() )
         DeleteMark();
 }
@@ -1106,7 +1143,6 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
-    m_bIsMoved = false;
 }
 
 SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
@@ -1117,9 +1153,6 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
-    // inserting characters within a moved text must keep
-    // IsMoved bit in the second part of the split redline
-    m_bIsMoved = rCpy.IsMoved();
     if( !rCpy.HasMark() )
         DeleteMark();
 }
@@ -1840,8 +1873,7 @@ void SwRangeRedline::SetContentIdx( const SwNodeIndex* pIdx )
 bool SwRangeRedline::CanCombine( const SwRangeRedline& rRedl ) const
 {
     return  IsVisible() && rRedl.IsVisible() &&
-            m_pRedlineData->CanCombine( *rRedl.m_pRedlineData ) &&
-            !IsMoved() && !rRedl.IsMoved();
+            m_pRedlineData->CanCombine( *rRedl.m_pRedlineData );
 }
 
 void SwRangeRedline::PushData( const SwRangeRedline& rRedl, bool bOwnAsNext )
