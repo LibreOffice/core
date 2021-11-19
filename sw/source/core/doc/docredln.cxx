@@ -772,6 +772,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
 
 bool SwRedlineTable::isMoved( size_type rPos ) const
 {
+    bool bRet = false;
     auto constexpr nLookahead = 20;
     SwRangeRedline* pRedline = (*this)[ rPos ];
 
@@ -785,43 +786,79 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
         // only deleted or inserted text can be moved
         return false;
 
-    // Skip terminating white spaces of the redline, a workaround
-    // for a typical difference resulted by e.g. Writer UX:
-    // selecting a sentence or a word, and moving it with
-    // the mouse, Writer removes a space at the deletion
-    // to avoid double spaces, also inserts a space at
-    // the insertion point automatically. Because the result
-    // can be different (space before and space after the
-    // moved text), compare the redlines without terminating spaces
-    const OUString sTrimmed = pRedline->GetText().trim();
+    bool bDeletePaM = false;
+    SwPaM* pPaM;
+
+    // if this redline is visible the content is in this PaM
+    if ( nullptr == pRedline->GetContentIdx() )
+    {
+        pPaM = pRedline;
+    }
+    else // otherwise it is saved in pContentSect, e.g. during ODT import
+    {
+        SwNodeIndex aTmpIdx( *pRedline->GetContentIdx()->GetNode().EndOfSectionNode() );
+        pPaM = new SwPaM(*pRedline->GetContentIdx(), aTmpIdx );
+        bDeletePaM = true;
+    }
+
+    const OUString sTrimmed = pPaM->GetText().trim();
     if ( sTrimmed.isEmpty() )
+    {
+        if ( bDeletePaM )
+            delete pPaM;
         return false;
+    }
 
     // search pair around the actual redline
     size_type nEnd = rPos + nLookahead < size()
         ? rPos + nLookahead
         : size();
     rPos = rPos > nLookahead ? rPos - nLookahead : 0;
-    for ( ; rPos < nEnd ; ++rPos )
+    for ( ; rPos < nEnd && !bRet ; ++rPos )
     {
         SwRangeRedline* pPair = (*this)[ rPos ];
-        // TODO handle also Show Changes in Margin mode
-        if ( pPair->HasMark() && pPair->IsVisible() )
+
+        // redline must be the requested type and from the same author
+        if ( nPairType != pPair->GetType() ||
+             pRedline->GetAuthor() != pPair->GetAuthor() )
         {
-            // pair at tracked moving: same text from the same author, but with opposite type
-            if ( nPairType == pPair->GetType() &&
-                pRedline->GetAuthor() == pPair->GetAuthor() &&
-                abs(pRedline->GetText().getLength() - pPair->GetText().getLength()) <= 2 &&
-                sTrimmed == pPair->GetText().trim() )
-            {
-                pRedline->SetMoved();
-                pPair->SetMoved();
-                pPair->InvalidateRange(SwRangeRedline::Invalidation::Remove);
-                return true;
-            }
+            continue;
         }
+
+        bool bDeletePairPaM = false;
+        SwPaM* pPairPaM;
+
+        // if this redline is visible the content is in this PaM
+        if ( nullptr == pPair->GetContentIdx() )
+        {
+            pPairPaM = pPair;
+        }
+        else // otherwise it is saved in pContentSect, e.g. during ODT import
+        {
+            // saved in pContentSect, e.g. during ODT import
+            SwNodeIndex aTmpIdx( *pPair->GetContentIdx()->GetNode().EndOfSectionNode() );
+            pPairPaM = new SwPaM(*pPair->GetContentIdx(), aTmpIdx );
+            bDeletePairPaM = true;
+        }
+
+        // pair at tracked moving: same text by trimming terminatin white spaces
+        if ( abs(pPaM->GetText().getLength() - pPairPaM->GetText().getLength()) <= 2 &&
+            sTrimmed == pPairPaM->GetText().trim() )
+        {
+            pRedline->SetMoved();
+            pPair->SetMoved();
+            pPair->InvalidateRange(SwRangeRedline::Invalidation::Remove);
+            bRet = true;
+        }
+
+        if ( bDeletePairPaM )
+            delete pPairPaM;
     }
-    return false;
+
+    if ( bDeletePaM )
+        delete pPaM;
+
+    return bRet;
 }
 
 void SwRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
