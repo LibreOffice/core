@@ -75,6 +75,11 @@ namespace com{ namespace sun{ namespace star{
 }}}
 
 namespace writerfilter {
+
+namespace ooxml {
+    class OOXMLDocument;
+}
+
 namespace dmapper {
 
 class SdtHelper;
@@ -436,6 +441,7 @@ public:
 private:
     SourceDocumentType const                                                        m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
+    void* m_pOOXMLDocument;
     OUString m_aBaseUrl;
     css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
     css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
@@ -601,6 +607,9 @@ public:
             SourceDocumentType eDocumentType,
             utl::MediaDescriptor const & rMediaDesc);
     ~DomainMapper_Impl();
+
+    void setDocumentReference(void* pDocument) { m_pOOXMLDocument = pDocument; };
+    writerfilter::ooxml::OOXMLDocument* getDocumentReference() const;
 
     SectionPropertyMap* GetLastSectionContext( )
     {
