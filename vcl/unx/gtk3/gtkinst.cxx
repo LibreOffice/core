@@ -9639,7 +9639,7 @@ void do_ungrab(GtkWidget* pWidget)
     gdk_seat_ungrab(pSeat);
 }
 
-GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor)
+GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor, weld::Placement ePlace)
 {
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_toplevel(pMenuButton);
@@ -9652,7 +9652,11 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
     y += absy;
 
     gint nButtonHeight = rAnchor.height;
-    y += nButtonHeight;
+    gint nButtonWidth = rAnchor.width;
+    if (ePlace == weld::Placement::Under)
+        y += nButtonHeight;
+    else
+        x += nButtonWidth;
 
     gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), pMenu);
     gtk_window_set_transient_for(pMenu, GTK_WINDOW(pToplevel));
@@ -9673,8 +9677,10 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
     bool bSwapForRTL = SwapForRTL(pMenuButton);
     if (bSwapForRTL)
     {
-        gint nButtonWidth = rAnchor.width;
-        x += nButtonWidth;
+        if (ePlace == weld::Placement::Under)
+            x += nButtonWidth;
+        else
+            x -= nButtonWidth;
         x -= nMenuWidth;
     }
 
@@ -9684,36 +9690,76 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
     // long menu to know the menu is fully on screen
     aWorkArea.AdjustTop(8);
     aWorkArea.AdjustBottom(-8);
-    gint endx = x + nMenuWidth;
-    if (endx > aWorkArea.Right())
-        x -= endx - aWorkArea.Right();
-    if (x < 0)
-        x = 0;
+    aWorkArea.AdjustLeft(8);
+    aWorkArea.AdjustRight(-8);
 
-    GtkPositionType ePosUsed = GTK_POS_BOTTOM;
+    GtkPositionType ePosUsed;
 
-    gint endy = y + nMenuHeight;
-    gint nMissingBelow = endy - aWorkArea.Bottom();
-    if (nMissingBelow > 0)
+    if (ePlace == weld::Placement::Under)
     {
-        gint nNewY = y - (nButtonHeight + nMenuHeight);
-        if (nNewY < aWorkArea.Top())
+        gint endx = x + nMenuWidth;
+        if (endx > aWorkArea.Right())
+            x -= endx - aWorkArea.Right();
+        if (x < 0)
+            x = 0;
+
+        ePosUsed = GTK_POS_BOTTOM;
+        gint endy = y + nMenuHeight;
+        gint nMissingBelow = endy - aWorkArea.Bottom();
+        if (nMissingBelow > 0)
         {
-            gint nMissingAbove = aWorkArea.Top() - nNewY;
-            if (nMissingBelow <= nMissingAbove)
-                nMenuHeight -= nMissingBelow;
+            gint nNewY = y - (nButtonHeight + nMenuHeight);
+            if (nNewY < aWorkArea.Top())
+            {
+                gint nMissingAbove = aWorkArea.Top() - nNewY;
+                if (nMissingBelow <= nMissingAbove)
+                    nMenuHeight -= nMissingBelow;
+                else
+                {
+                    nMenuHeight -= nMissingAbove;
+                    y = aWorkArea.Top();
+                    ePosUsed = GTK_POS_TOP;
+                }
+                gtk_widget_set_size_request(GTK_WIDGET(pMenu), nMenuWidth, nMenuHeight);
+            }
             else
             {
-                nMenuHeight -= nMissingAbove;
-                y = aWorkArea.Top();
+                y = nNewY;
                 ePosUsed = GTK_POS_TOP;
             }
-            gtk_widget_set_size_request(GTK_WIDGET(pMenu), nMenuWidth, nMenuHeight);
+        }
+    }
+    else
+    {
+        if (!bSwapForRTL)
+        {
+            ePosUsed = GTK_POS_RIGHT;
+            gint endx = x + nMenuWidth;
+            gint nMissingAfter = endx - aWorkArea.Right();
+            if (nMissingAfter > 0)
+            {
+                gint nNewX = x - (nButtonWidth + nMenuWidth);
+                if (nNewX >= aWorkArea.Left())
+                {
+                    x = nNewX;
+                    ePosUsed = GTK_POS_LEFT;
+                }
+            }
         }
         else
         {
-            y = nNewY;
-            ePosUsed = GTK_POS_TOP;
+            ePosUsed = GTK_POS_LEFT;
+            gint startx = x;
+            gint nMissingBefore = aWorkArea.Left() - startx;
+            if (nMissingBefore > 0)
+            {
+                gint nNewX = x + (nButtonWidth + nMenuWidth);
+                if (nNewX + nMenuWidth < aWorkArea.Right())
+                {
+                    x = nNewX;
+                    ePosUsed = GTK_POS_RIGHT;
+                }
+            }
         }
     }
 
@@ -9722,7 +9768,7 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
     return ePosUsed;
 }
 
-bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectangle &rAnchor)
+bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectangle &rAnchor, weld::Placement ePlace)
 {
     static auto window_move_to_rect = reinterpret_cast<void (*) (GdkWindow*, const GdkRectangle*, GdkGravity,
                                                                  GdkGravity, GdkAnchorHints, gint, gint)>(
@@ -9749,20 +9795,32 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectan
 
     bool bSwapForRTL = SwapForRTL(GTK_WIDGET(pComboBox));
 
-    GdkGravity rect_anchor = !bSwapForRTL ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
-    GdkGravity menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+    GdkGravity rect_anchor;
+    GdkGravity menu_anchor;
+
+    if (ePlace == weld::Placement::Under)
+    {
+        rect_anchor = !bSwapForRTL ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
+        menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+    }
+    else
+    {
+        rect_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
+        menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+    }
+
     GdkRectangle rect {x, y, rAnchor.width, rAnchor.height};
     GdkSurface* toplevel = widget_get_surface(GTK_WIDGET(pMenu));
 
-    window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor,
-                        static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_Y |
-                                                    GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_RESIZE_X),
+    window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor, static_cast<GdkAnchorHints>(0),
+                        /*static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_Y |
+                                                    GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_RESIZE_X),*/
                         0, 0);
 
     return true;
 }
 
-GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor)
+GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor, weld::Placement ePlace)
 {
     // we only use ePosUsed in the replacement-for-X-popover case of a
     // MenuButton, so we only need it when show_menu_older_gtk is used
@@ -9783,8 +9841,8 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRec
     }
 
     // try with gdk_window_move_to_rect, but if that's not available, try without
-    if (!show_menu_newer_gtk(pMenuButton, pMenu, rAnchor))
-        ePosUsed = show_menu_older_gtk(pMenuButton, pMenu, rAnchor);
+    if (!show_menu_newer_gtk(pMenuButton, pMenu, rAnchor, ePlace))
+        ePosUsed = show_menu_older_gtk(pMenuButton, pMenu, rAnchor, ePlace);
     gtk_widget_show_all(GTK_WIDGET(pMenu));
     gtk_widget_grab_focus(GTK_WIDGET(pMenu));
     do_grab(GTK_WIDGET(pMenu));
@@ -9823,7 +9881,8 @@ bool button_release_is_outside(GtkWidget* pWidget, GtkWidget* pMenuHack, GdkEven
     return true;
 }
 
-GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMenuHack, GtkWidget* pAnchor, const GdkRectangle& rAnchor)
+GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMenuHack, GtkWidget* pAnchor,
+                                            const GdkRectangle& rAnchor, weld::Placement ePlace)
 {
     //set border width
     gtk_container_set_border_width(GTK_CONTAINER(pMenuHack), gtk_container_get_border_width(GTK_CONTAINER(pPopover)));
@@ -9835,7 +9894,7 @@ GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMen
     gtk_container_add(GTK_CONTAINER(pMenuHack), pChild);
     g_object_unref(pChild);
 
-    return show_menu(pAnchor, pMenuHack, rAnchor);
+    return show_menu(pAnchor, pMenuHack, rAnchor, ePlace);
 }
 
 void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkWidget* pAnchor)
@@ -9925,7 +9984,7 @@ private:
         {
             GtkWidget* pAnchor = m_pMenuHackAlign ? m_pMenuHackAlign : GTK_WIDGET(m_pMenuButton);
             GdkRectangle aAnchor {0, 0, gtk_widget_get_allocated_width(pAnchor), gtk_widget_get_allocated_height(pAnchor) };
-            GtkPositionType ePosUsed = MovePopoverContentsToWindow(m_pPopover, m_pMenuHack, pAnchor, aAnchor);
+            GtkPositionType ePosUsed = MovePopoverContentsToWindow(m_pPopover, m_pMenuHack, pAnchor, aAnchor, weld::Placement::Under);
             // tdf#132540 keep the placeholder popover on this same side as the replacement menu
             gtk_popover_set_position(gtk_menu_button_get_popover(m_pMenuButton), ePosUsed);
         }
@@ -10748,7 +10807,7 @@ public:
 #endif
     }
 
-    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect, weld::Placement ePlace) override
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect, weld::Placement ePlace) override
     {
         m_sActivated.clear();
 
@@ -10804,11 +10863,18 @@ public:
             if (!pTriggerEvent)
                 pTriggerEvent = pKeyEvent;
 
+            bool bSwapForRTL = SwapForRTL(pWidget);
+
             if (ePlace == weld::Placement::Under)
-                gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            {
+                if (bSwapForRTL)
+                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_EAST, GDK_GRAVITY_NORTH_EAST, pTriggerEvent);
+                else
+                    gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            }
             else
             {
-                if (SwapForRTL(pWidget))
+                if (bSwapForRTL)
                     gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_EAST, pTriggerEvent);
                 else
                     gtk_menu_popup_at_rect(m_pMenu, widget_get_surface(pWidget), &aRect, GDK_GRAVITY_NORTH_EAST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
@@ -19839,7 +19905,7 @@ private:
                 tree_view_set_cursor(0);
 
             GdkRectangle aAnchor {0, 0, gtk_widget_get_allocated_width(pComboBox), gtk_widget_get_allocated_height(pComboBox) };
-            show_menu(pComboBox, m_pMenuWindow, aAnchor);
+            show_menu(pComboBox, m_pMenuWindow, aAnchor, weld::Placement::Under);
         }
     }
 
@@ -21979,7 +22045,7 @@ public:
     {
     }
 
-    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect, weld::Placement ePlace) override
     {
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
         assert(pGtkWidget);
@@ -21995,6 +22061,16 @@ public:
         gtk_popover_set_relative_to(m_pPopover, pWidget);
 #endif
         gtk_popover_set_pointing_to(m_pPopover, &aRect);
+
+        if (ePlace == weld::Placement::Under)
+            gtk_popover_set_position(m_pPopover, GTK_POS_BOTTOM);
+        else
+        {
+            if (::SwapForRTL(pWidget))
+                gtk_popover_set_position(m_pPopover, GTK_POS_LEFT);
+            else
+                gtk_popover_set_position(m_pPopover, GTK_POS_RIGHT);
+        }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
 #if defined(GDK_WINDOWING_X11)
@@ -22019,7 +22095,7 @@ public:
                 }
             }
 
-            MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect);
+            MovePopoverContentsToWindow(GTK_WIDGET(m_pPopover), m_pMenuHack, pWidget, aRect, ePlace);
             return;
         }
 #endif
