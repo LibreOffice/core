@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a729f50_7ebd69cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-19T17:25:04Z",
+      "side": 1,
+      "message": "This patch is only executed in gerrit_linux_clang_dbgutil, which passed. Pushing",
+      "revId": "a4fc34efcbfa180517d3b3da966c50391d9dcff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
