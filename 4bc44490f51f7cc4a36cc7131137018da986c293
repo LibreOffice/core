@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1c86a80_d5e1eb98",
+        "filename": "forms/source/inc/urltransformer.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-19T13:02:33Z",
+      "side": 1,
+      "message": "the \"Ascii\" in the function and parameter names is rather confusing now",
+      "revId": "4bc44490f51f7cc4a36cc7131137018da986c293",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
