@@ -1391,7 +1391,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     }
 
     // Parse <path>
-    OUStringBuffer aSynPath;
+    OUStringBuffer aSynPath(256);
     if (!parsePath(m_eScheme, &pPos, pEnd, eMechanism, eCharset,
                    bSkippedInitialSlash, nSegmentDelimiter,
                    nAltSegmentDelimiter,
@@ -2880,7 +2880,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
     DBG_ASSERT(pBegin, "INetURLObject::parsePath(): Null output param");
 
     sal_Unicode const * pPos = *pBegin;
-    OUStringBuffer aTheSynPath(256);
 
     switch (eScheme)
     {
@@ -2895,11 +2894,11 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                appendUCS4(rSynPath, nUTF32, eEscapeType,
                            PART_HTTP_PATH, eCharset, true);
             }
-            if (aTheSynPath.isEmpty())
-                aTheSynPath.append('/');
+            if (rSynPath.isEmpty())
+                rSynPath.append('/');
             break;
 
         case INetProtocol::Http:
@@ -2915,17 +2914,17 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                appendUCS4(rSynPath, nUTF32, eEscapeType,
                            PART_HTTP_PATH, eCharset, true);
             }
-            if (aTheSynPath.isEmpty())
-                aTheSynPath.append('/');
+            if (rSynPath.isEmpty())
+                rSynPath.append('/');
             break;
 
         case INetProtocol::File:
         {
             if (bSkippedInitialSlash)
-                aTheSynPath.append('/');
+                rSynPath.append('/');
             else if (pPos < pEnd
                      && *pPos != nSegmentDelimiter
                      && *pPos != nAltSegmentDelimiter)
@@ -2940,7 +2939,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     if (nUTF32 == nSegmentDelimiter
                         || nUTF32 == nAltSegmentDelimiter)
                     {
-                        aTheSynPath.append('/');
+                        rSynPath.append('/');
                         continue;
                     }
                     else if (nUTF32 == '|'
@@ -2948,20 +2947,20 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                  || *pPos == nFragmentDelimiter
                                  || *pPos == nSegmentDelimiter
                                  || *pPos == nAltSegmentDelimiter)
-                             && aTheSynPath.getLength() == 2
-                             && rtl::isAsciiAlpha(aTheSynPath[1]))
+                             && rSynPath.getLength() == 2
+                             && rtl::isAsciiAlpha(rSynPath[1]))
                     {
                         // A first segment of <ALPHA "|"> is translated to
                         // <ALPHA ":">:
-                        aTheSynPath.append(':');
+                        rSynPath.append(':');
                         continue;
                     }
                 }
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                appendUCS4(rSynPath, nUTF32, eEscapeType,
                            PART_PCHAR, eCharset, true);
             }
-            if (aTheSynPath.isEmpty())
-                aTheSynPath.append('/');
+            if (rSynPath.isEmpty())
+                rSynPath.append('/');
             break;
         }
 
@@ -2972,7 +2971,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                appendUCS4(rSynPath, nUTF32, eEscapeType,
                            PART_MAILTO, eCharset, true);
             }
             break;
@@ -2991,7 +2990,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                appendUCS4(rSynPath, nUTF32, eEscapeType,
                            PART_PATH_BEFORE_QUERY, eCharset, true);
             }
             break;
@@ -3000,7 +2999,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             if (pPos == pEnd
                 || *pPos == nQueryDelimiter
                 || *pPos == nFragmentDelimiter)
-                aTheSynPath.append('/');
+                rSynPath.append('/');
             else
             {
                 if (*pPos != '/')
@@ -3012,7 +3011,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     sal_uInt32 nUTF32 = getUTF32(pPos, pEnd,
                                                  eMechanism,
                                                  eCharset, eEscapeType);
-                    appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                    appendUCS4(rSynPath, nUTF32, eEscapeType,
                                PART_HTTP_PATH, eCharset, true);
                 }
             }
@@ -3027,7 +3026,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                appendUCS4(rSynPath, nUTF32, eEscapeType,
                            PART_URIC, eCharset, true);
             }
             break;
@@ -3044,13 +3043,13 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == EscapeType::NONE && nUTF32 == '/')
-                    aTheSynPath.append('/');
+                    rSynPath.append('/');
                 else
-                    appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                    appendUCS4(rSynPath, nUTF32, eEscapeType,
                                PART_PCHAR, eCharset, false);
             }
-            if (aTheSynPath.isEmpty())
-                aTheSynPath.append('/');
+            if (rSynPath.isEmpty())
+                rSynPath.append('/');
             break;
 
         case INetProtocol::VndSunStarCmd:
@@ -3064,7 +3063,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType, ePart,
+                appendUCS4(rSynPath, nUTF32, eEscapeType, ePart,
                            eCharset, true);
                 ePart = PART_URIC;
             }
@@ -3078,7 +3077,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     return false;
                 ++pPos;
             }
-            aTheSynPath.append('/');
+            rSynPath.append('/');
             break;
 
         case INetProtocol::VndSunStarTdoc:
@@ -3090,9 +3089,9 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == EscapeType::NONE && nUTF32 == '/')
-                    aTheSynPath.append('/');
+                    rSynPath.append('/');
                 else
-                    appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                    appendUCS4(rSynPath, nUTF32, eEscapeType,
                                PART_PCHAR, eCharset, false);
             }
             break;
@@ -3104,10 +3103,10 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, eMechanism,
                                              eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType,
+                appendUCS4(rSynPath, nUTF32, eEscapeType,
                            PART_URIC, eCharset, true);
             }
-            if (aTheSynPath.isEmpty())
+            if (rSynPath.isEmpty())
                 return false;
             break;
         default:
@@ -3116,7 +3115,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
     }
 
     *pBegin = pPos;
-    rSynPath = aTheSynPath;
     return true;
 }
 
@@ -3124,7 +3122,7 @@ bool INetURLObject::setPath(OUString const & rThePath,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
-    OUStringBuffer aSynPath;
+    OUStringBuffer aSynPath(256);
     sal_Unicode const * p = rThePath.getStr();
     sal_Unicode const * pEnd = p + rThePath.getLength();
     if (!parsePath(m_eScheme, &p, pEnd, eMechanism, eCharset, false,
@@ -3805,7 +3803,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             return false;
         }
     }
-    OUStringBuffer aSynPath;
+    OUStringBuffer aSynPath(256);
     sal_Unicode const * p = rThePath.getStr();
     sal_Unicode const * pEnd = p + rThePath.getLength();
     if (!parsePath(m_eScheme, &p, pEnd, EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, false, '/',
