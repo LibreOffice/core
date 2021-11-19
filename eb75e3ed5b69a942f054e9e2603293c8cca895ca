@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d6115d_bc2e26f7",
+        "filename": "xmloff/source/text/XMLTextFrameContext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-19T09:54:57Z",
+      "side": 0,
+      "message": "Forgot this minus :-(",
+      "range": {
+        "startLine": 1033,
+        "startChar": 81,
+        "endLine": 1033,
+        "endChar": 82
+      },
+      "revId": "eb75e3ed5b69a942f054e9e2603293c8cca895ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
