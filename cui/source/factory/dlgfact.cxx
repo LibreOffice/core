@@ -100,218 +100,48 @@ using namespace ::com::sun::star::container;
 using ::com::sun::star::uno::Reference;
 
 using namespace svx;
-// AbstractTabDialog implementations just forwards everything to the dialog
 
-short CuiAbstractController_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short CuiAbstractTipController_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool CuiAbstractTipController_Impl::StartExecuteAsync(AsyncContext& rCtx)
-{
-    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short CuiAbstractSingleTabController_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractHangulHanjaConversionDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractFmShowColsDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractHyphenWordDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractThesaurusDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool AbstractThesaurusDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short AbstractSvxZoomDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractTitleDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool AbstractScriptSelectorDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short AbstractScriptSelectorDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractGalleryIdDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractURLDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxSearchSimilarityDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxTransformTabDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool AbstractSvxTransformTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short AbstractSvxCaptionDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool AbstractSvxCaptionDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short AbstractSvxJSearchOptionsDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractFmInputRecordNoDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxNewDictionaryDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxNameDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-// #i68101#
-short AbstractSvxObjectNameDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxObjectTitleDescDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxMultiPathDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxPathSelectDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxHpLinkDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractFmSearchDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractGraphicFilterDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxAreaTabDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool AbstractSvxAreaTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short AbstractPasteDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool AbstractPasteDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short AbstractInsertObjectDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractLinksDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSpellDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool AbstractSpellDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-short AbstractSvxPostItDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractPasswordToOpenModifyDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxCharacterMapDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
+IMPL_ABSTDLG_CLASS(AbstractAdditionsDialog)
+IMPL_ABSTDLG_CLASS(AbstractDiagramDialog)
+IMPL_ABSTDLG_CLASS(AbstractFmInputRecordNoDialog)
+IMPL_ABSTDLG_CLASS(AbstractFmSearchDialog)
+IMPL_ABSTDLG_CLASS(AbstractFmShowColsDialog)
+IMPL_ABSTDLG_CLASS(AbstractGalleryIdDialog)
+IMPL_ABSTDLG_CLASS(AbstractGraphicFilterDialog)
+IMPL_ABSTDLG_CLASS(AbstractHangulHanjaConversionDialog)
+IMPL_ABSTDLG_CLASS(AbstractHyphenWordDialog)
+IMPL_ABSTDLG_CLASS(AbstractInsertObjectDialog)
+IMPL_ABSTDLG_CLASS(AbstractLinksDialog)
+IMPL_ABSTDLG_CLASS(AbstractPasswordToOpenModifyDialog)
+IMPL_ABSTDLG_CLASS(AbstractQrCodeGenDialog)
+IMPL_ABSTDLG_CLASS(AbstractScreenshotAnnotationDlg)
+IMPL_ABSTDLG_CLASS(AbstractSignatureLineDialog)
+IMPL_ABSTDLG_CLASS(AbstractSignSignatureLineDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxCharacterMapDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxHpLinkDlg)
+IMPL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxMultiPathDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxNameDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxNewDictionaryDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxObjectNameDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxPathSelectDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxPostItDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxSearchSimilarityDialog)
+IMPL_ABSTDLG_CLASS(AbstractSvxZoomDialog)
+IMPL_ABSTDLG_CLASS(AbstractTitleDialog)
+IMPL_ABSTDLG_CLASS(AbstractURLDlg)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasteDialog,SfxDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractScriptSelectorDialog,SfxDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSpellDialog,SfxDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxAreaTabDialog,SfxTabDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxCaptionDialog,SfxTabDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxTransformTabDialog,SfxTabDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractThesaurusDialog,SfxDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractControllerAsync,weld::DialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractTabController,SfxTabDialogController)
+IMPL_ABSTDLG_CLASS(CuiAbstractController)
+IMPL_ABSTDLG_CLASS(CuiAbstractSingleTabController)
 
 const SfxItemSet* AbstractSvxCharacterMapDialog_Impl::GetOutputItemSet() const
 {
@@ -321,36 +151,6 @@ const SfxItemSet* AbstractSvxCharacterMapDialog_Impl::GetOutputItemSet() const
 void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
 {
     m_xDlg->set_title(rStr);
-}
-
-short AbstractSignatureLineDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSignSignatureLineDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractQrCodeGenDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractScreenshotAnnotationDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short CuiAbstractTabController_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool CuiAbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 void CuiAbstractTabController_Impl::SetCurPageId( const OString &rName )
@@ -1390,46 +1190,33 @@ VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialo
 
 namespace {
 
-class SvxMacroAssignDialog : public VclAbstractDialog
+class SvxMacroAssignDialog_Impl : public VclAbstractDialog
 {
 public:
-    SvxMacroAssignDialog( weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
+    SvxMacroAssignDialog_Impl( weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
             const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
         :m_aItems( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM> )
     {
         m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
-        m_xDialog.reset(new SvxMacroAssignDlg(_pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent));
+        m_xDlg.reset(new SvxMacroAssignDlg(_pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent));
     }
 
     virtual short Execute() override;
 
 private:
     SfxItemSet                              m_aItems;
-    std::unique_ptr<SvxMacroAssignDlg>      m_xDialog;
+    std::unique_ptr<SvxMacroAssignDlg> m_xDlg;
 };
 
+IMPL_ABSTDLG_CLASS(SvxMacroAssignDialog)
 }
 
-short SvxMacroAssignDialog::Execute()
-{
-    return m_xDialog->run();
-}
-
-short AbstractAdditionsDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractDiagramDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg(
     weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
     const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
 {
-    return VclPtr<SvxMacroAssignDialog>::Create( _pParent, _rxDocumentFrame, _bUnoDialogMode, _rxEvents, _nInitiallySelectedEvent );
+    return VclPtr<SvxMacroAssignDialog_Impl>::Create(_pParent, _rxDocumentFrame, _bUnoDialogMode, _rxEvents, _nInitiallySelectedEvent);
 }
 
 // Factories for TabPages
@@ -1697,7 +1484,7 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
-    return VclPtr<CuiAbstractTipController_Impl>::Create(
+    return VclPtr<CuiAbstractControllerAsync_Impl>::Create(
         std::make_shared<TipOfTheDayDialog>(pParent));
 }
 
