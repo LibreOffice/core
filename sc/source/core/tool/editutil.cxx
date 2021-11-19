@@ -73,6 +73,11 @@ OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 static OUString lcl_GetDelimitedString( const EditEngine& rEngine, const char c )
 {
     sal_Int32 nParCount = rEngine.GetParagraphCount();
+    // avoid creating a new string if possible
+    if (nParCount == 0)
+        return OUString();
+    else if (nParCount == 1)
+        return rEngine.GetText(0);
     OUStringBuffer aRet( nParCount * 80 );
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
     {
