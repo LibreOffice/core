@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f82b675f_f4138a66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-19T13:45:24Z",
+      "side": 1,
+      "message": "using the XPathAPI is great, but this setDocumentReference is perhaps not so ideal...\n\nmaybe try to pass only the sequence of XML-DOMs to the domain-mapper?\n\nwhat if you refactor resolveCustomXmlStream(rStream); call out of OOXMLDocumentImpl::resolve() and call it directly in WriterFilter::filter() and then get the XML-DOMs and pass them to domain-mapper...\n\nor, set them in the XModel already, but apparently they go into a grab-bag with a bunch of other things... maybe those could be moved in a similar way?\n\nah no, this is all too complicated: why not just change resolveCustomXmlStream which gets the DomainMapper as a Stream parameter to call a new function on Stream that takes the list of XML-DOMs - then implement it in DomainMapper to store the list somewhere.",
+      "revId": "8f22d23983ab71f6aecdf8f52690f8e273e4223a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
