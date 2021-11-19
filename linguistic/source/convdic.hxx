@@ -31,10 +31,10 @@
 #include <unordered_map>
 
 // text conversion dictionary extension
-#define CONV_DIC_EXT            "tcd"
+inline constexpr OUStringLiteral CONV_DIC_EXT = u"tcd";
 #define CONV_DIC_DOT_EXT        ".tcd"
 
-#define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
+inline constexpr OUStringLiteral SN_CONV_DICTIONARY = u"com.sun.star.linguistic2.ConversionDictionary";
 
 
 bool    IsConvDic( const OUString &rFileURL, LanguageType &nLang, sal_Int16 &nConvType );
