@@ -68,7 +68,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle().get() / 10.0);
+                const double fAngle = toRadians(rG.aGradient.GetAngle());
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -91,7 +91,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle().get() / 10.0);
+                const double fAngle = toRadians(rG.aGradient.GetAngle());
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -115,7 +115,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle().get() / 10.0);
+                const double fAngle = toRadians(rG.aGradient.GetAngle());
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
@@ -150,7 +150,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
 
             if(rG.aGradient.GetAngle())
             {
-                const double fAngle = basegfx::deg2rad(rG.aGradient.GetAngle().get() / 10.0);
+                const double fAngle = toRadians(rG.aGradient.GetAngle());
                 const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
