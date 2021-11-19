@@ -5,6 +5,7 @@
   <object class="GtkPopover" id="Calendar">
     <property name="can-focus">False</property>
     <property name="position">bottom</property>
+    <property name="constrain-to">none</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
