@@ -153,6 +153,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilte
     , mbEmbedImages(false)
     , m_bCfgPrintLayout( false )
     , m_bParaDotLeaders( false )
+    , m_bPrettyPrint( true )
 {
     SetBaseURL(rBaseURL);
 
@@ -227,6 +228,12 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
         aStoreMap["NoLineLimit"] <<= true;
     }
 
+    // this option can be "on" together with any of above
+    if (rFilterOptions.find(u"NoPrettyPrint") != std::u16string_view::npos)
+    {
+        aStoreMap["NoPrettyPrint"] <<= true;
+    }
+
     const uno::Sequence<OUString> aOptionSeq
         = comphelper::string::convertCommaSeparated(rFilterOptions);
     static const OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
@@ -289,6 +296,14 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         bool bVal{};
         it->second >>= bVal;
         mbSkipHeaderFooter = bVal;
+    }
+
+    // this option can be "on" together with any of above
+    it = aStoreMap.find("NoPrettyPrint");
+    if (it != aStoreMap.end())
+    {
+        m_nWishLineLen = -1;
+        m_bPrettyPrint = false;
     }
 
     it = aStoreMap.find("EmbedImages");
