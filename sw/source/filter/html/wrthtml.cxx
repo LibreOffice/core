@@ -152,6 +152,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOpt
     , mbEmbedImages(false)
     , m_bCfgPrintLayout( false )
     , m_bParaDotLeaders( false )
+    , m_bPrettyPrint( true )
 {
     SetBaseURL(rBaseURL);
 
@@ -232,9 +233,10 @@ void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
     }
 
     // this option can be "on" together with any of above
-    if (rFilterOptions.indexOf("NoLineLimit") >= 0)
+    if (rFilterOptions.indexOf("NoPrettyPrint") >= 0)
     {
         m_nWishLineLen = -1;
+        m_bPrettyPrint = false;
     }
 
     const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
