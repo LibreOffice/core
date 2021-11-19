@@ -114,7 +114,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOpt
     , m_nDfltTopMargin(0)
     , m_nDfltBottomMargin(0)
     , m_nIndentLvl(0)
-    , m_nWishLineLen(0)
+    , m_nWishLineLen(70)
     , m_nDefListLvl(0)
     , m_nDefListMargin(0)
     , m_nHeaderFooterSpace(0)
@@ -206,17 +206,23 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 
 void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
 {
-    if (rFilterOptions == "SkipImages")
+    if (rFilterOptions.indexOf("SkipImages") >= 0)
     {
         mbSkipImages = true;
     }
-    else if (rFilterOptions == "SkipHeaderFooter")
+    else if (rFilterOptions.indexOf("SkipHeaderFooter") >= 0)
     {
         mbSkipHeaderFooter = true;
     }
-    else if (rFilterOptions == "EmbedImages")
+    else if (rFilterOptions.indexOf("EmbedImages") >= 0)
     {
         mbEmbedImages = true;
+    }
+
+    // this option can be "on" together with any of above
+    if (rFilterOptions.indexOf("NoLineLimit") >= 0)
+    {
+        m_nWishLineLen = -1;
     }
 
     const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
@@ -357,7 +363,6 @@ ErrCode SwHTMLWriter::WriteStream()
     m_bFirstCSS1Property = m_bFirstCSS1Rule = false;
     m_bCSS1IgnoreFirstPageDesc = false;
     m_nIndentLvl = 0;
-    m_nWishLineLen = 70;
     m_nLastLFPos = 0;
     m_nDefListLvl = 0;
     m_nDefListMargin = ((m_xTemplate.is() && !m_bCfgOutStyles) ? m_xTemplate.get() : m_pDoc)

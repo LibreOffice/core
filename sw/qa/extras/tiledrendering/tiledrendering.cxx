@@ -86,6 +86,7 @@ public:
     void testPostMouseEvent();
     void testSetTextSelection();
     void testGetTextSelection();
+    void testGetTextSelectionLineLimit();
     void testSetGraphicSelection();
     void testResetSelection();
     void testInsertShape();
@@ -169,6 +170,7 @@ public:
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testGetTextSelection);
+    CPPUNIT_TEST(testGetTextSelectionLineLimit);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testInsertShape);
@@ -550,6 +552,30 @@ void SwTiledRenderingTest::testGetTextSelection()
     ESelection aWordSelection(0, 0, 0, 5);
     rEditView.SetSelection(aWordSelection);
     CPPUNIT_ASSERT_EQUAL(OString("Shape"), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"));
+}
+
+void SwTiledRenderingTest::testGetTextSelectionLineLimit()
+{
+    const char sOriginalText[] = u8"Estonian employs the Latin script as the basis for its alphabet, which adds the letters ä, ö, ü, and õ, plus the later additions š and ž. The letters c, q, w, x and y are limited to proper names of foreign origin, and f, z, š, and ž appear in loanwords and foreign names only. Ö and Ü are pronounced similarly to their equivalents in Swedish and German. Unlike in standard German but like Swedish (when followed by 'r') and Finnish, Ä is pronounced [æ], as in English mat. The vowels Ä, Ö and Ü are clearly separate phonemes and inherent in Estonian, although the letter shapes come from German. The letter õ denotes /ɤ/, unrounded /o/, or a close-mid back unrounded vowel. It is almost identical to the Bulgarian ъ /ɤ̞/ and the Vietnamese ơ, and is also used to transcribe the Russian ы.";
+    const char sExpectedHtml[] = u8"Estonian employs the <a href=\"https://en.wikipedia.org/wiki/Latin_script\">Latin script</a> as the basis for <a href=\"https://en.wikipedia.org/wiki/Estonian_alphabet\">its alphabet</a>, which adds the letters <a href=\"https://en.wikipedia.org/wiki/%C3%84\"><i>ä</i></a>, <a href=\"https://en.wikipedia.org/wiki/%C3%96\"><i>ö</i></a>, <a href=\"https://en.wikipedia.org/wiki/%C3%9C\"><i>ü</i></a>, and <a href=\"https://en.wikipedia.org/wiki/%C3%95\"><i>õ</i></a>, plus the later additions <a href=\"https://en.wikipedia.org/wiki/%C5%A0\"><i>š</i></a> and <a href=\"https://en.wikipedia.org/wiki/%C5%BD\"><i>ž</i></a>. The letters <i>c</i>, <i>q</i>, <i>w</i>, <i>x</i> and <i>y</i> are limited to <a href=\"https://en.wikipedia.org/wiki/Proper_names\">proper names</a> of foreign origin, and <i>f</i>, <i>z</i>, <i>š</i>, and <i>ž</i> appear in loanwords and foreign names only. <i>Ö</i> and <i>Ü</i> are pronounced similarly to their equivalents in Swedish and German. Unlike in standard German but like Swedish (when followed by 'r') and Finnish, <i>Ä</i> is pronounced [æ], as in English <i>mat</i>. The vowels Ä, Ö and Ü are clearly separate <a href=\"https://en.wikipedia.org/wiki/Phonemes\">phonemes</a> and inherent in Estonian, although the letter shapes come from German. The letter <a href=\"https://en.wikipedia.org/wiki/%C3%95\"><i>õ</i></a> denotes /ɤ/, unrounded /o/, or a <a href=\"https://en.wikipedia.org/wiki/Close-mid_back_unrounded_vowel\">close-mid back unrounded vowel</a>. It is almost identical to the <a href=\"https://en.wikipedia.org/wiki/Bulgarian_language\">Bulgarian</a> <a href=\"https://en.wikipedia.org/wiki/%D0%AA\">ъ</a> /ɤ̞/ and the <a href=\"https://en.wikipedia.org/wiki/Vietnamese_language\">Vietnamese</a> <a href=\"https://en.wikipedia.org/wiki/%C6%A0\">ơ</a>, and is also used to transcribe the Russian <a href=\"https://en.wikipedia.org/wiki/%D0%AB\">ы</a>.";
+
+    SwXTextDocument* pXTextDocument = createDoc("estonian.odt");
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Move the cursor into the first word.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    // Create a selection.
+    pWrtShell->SelAll();
+
+    OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8");
+
+    CPPUNIT_ASSERT_EQUAL(OString(sOriginalText), sPlainText.trim());
+
+    OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html");
+
+    int nStart = sHtmlText.indexOf(u8"Estonian");
+
+    CPPUNIT_ASSERT(sHtmlText.match(sExpectedHtml, nStart));
 }
 
 void SwTiledRenderingTest::testSetGraphicSelection()
