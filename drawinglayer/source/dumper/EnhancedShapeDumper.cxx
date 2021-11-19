@@ -469,11 +469,10 @@ void EnhancedShapeDumper::dumpTextRotateAngleAsAttribute(double aTextRotateAngle
 void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "AdjustmentValues" ));
-    sal_Int32 nLength = aAdjustmentValues.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aAdjustmentValues)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
-        uno::Any aAny = aAdjustmentValues[i].Value;
+        uno::Any aAny = i.Value;
         OUString sValue;
         float fValue;
         sal_Int32 nValue;
@@ -496,7 +495,7 @@ void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(const uno::Sequence< dra
             (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
         }
 
-        switch(aAdjustmentValues[i].State)
+        switch(i.State)
         {
             case beans::PropertyState_DIRECT_VALUE:
                 (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
@@ -550,10 +549,9 @@ void EnhancedShapeDumper::dumpPropertyValueAsElement(const beans::PropertyValue&
 void EnhancedShapeDumper::dumpExtrusionAsElement(const uno::Sequence< beans::PropertyValue >& aExtrusion)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Extrusion" ));
-    sal_Int32 nLength = aExtrusion.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aExtrusion)
     {
-        dumpPropertyValueAsElement(aExtrusion[i]);
+        dumpPropertyValueAsElement(i);
     }
     (void)xmlTextWriterEndElement( xmlWriter );
 }
@@ -561,10 +559,9 @@ void EnhancedShapeDumper::dumpExtrusionAsElement(const uno::Sequence< beans::Pro
 void EnhancedShapeDumper::dumpPathAsElement(const uno::Sequence< beans::PropertyValue >& aPath)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Path" ));
-    sal_Int32 nLength = aPath.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aPath)
     {
-        dumpPropertyValueAsElement(aPath[i]);
+        dumpPropertyValueAsElement(i);
     }
     (void)xmlTextWriterEndElement( xmlWriter );
 }
@@ -572,10 +569,9 @@ void EnhancedShapeDumper::dumpPathAsElement(const uno::Sequence< beans::Property
 void EnhancedShapeDumper::dumpTextPathAsElement(const uno::Sequence< beans::PropertyValue >& aTextPath)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextPath" ));
-    sal_Int32 nLength = aTextPath.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aTextPath)
     {
-        dumpPropertyValueAsElement(aTextPath[i]);
+        dumpPropertyValueAsElement(i);
     }
     (void)xmlTextWriterEndElement( xmlWriter );
 }
@@ -583,11 +579,10 @@ void EnhancedShapeDumper::dumpTextPathAsElement(const uno::Sequence< beans::Prop
 void EnhancedShapeDumper::dumpEquationsAsElement(const uno::Sequence< OUString >& aEquations)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Equations" ));
-    sal_Int32 nLength = aEquations.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aEquations)
     {
         (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-            OUStringToOString(aEquations[i], RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(i, RTL_TEXTENCODING_UTF8).getStr());
     }
     (void)xmlTextWriterEndElement( xmlWriter );
 }
@@ -598,15 +593,13 @@ void EnhancedShapeDumper::dumpEquationsAsElement(const uno::Sequence< OUString >
 void EnhancedShapeDumper::dumpHandlesAsElement(const uno::Sequence< beans::PropertyValues >& aHandles)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Handles" ));
-    sal_Int32 nSequenceLength = aHandles.getLength();
-    for (sal_Int32 i = 0; i < nSequenceLength; ++i)
+    for (const auto& i : aHandles)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValues" ));
-        uno::Sequence< beans::PropertyValue > propertyValueSequence = aHandles[i];
-        sal_Int32 nLength = propertyValueSequence.getLength();
-        for (sal_Int32 j = 0; j < nLength; ++j)
+        uno::Sequence< beans::PropertyValue > propertyValueSequence = i;
+        for (const auto& j : propertyValueSequence)
         {
-            dumpPropertyValueAsElement(propertyValueSequence[j]);
+            dumpPropertyValueAsElement(j);
         }
         (void)xmlTextWriterEndElement( xmlWriter );
     }
@@ -907,11 +900,10 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(const uno::Referenc
 void EnhancedShapeDumper::dumpCoordinatesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aCoordinates)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Coordinates" ));
-    sal_Int32 nLength = aCoordinates.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aCoordinates)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
-        dumpEnhancedCustomShapeParameterPair(aCoordinates[i]);
+        dumpEnhancedCustomShapeParameterPair(i);
         (void)xmlTextWriterEndElement( xmlWriter );
     }
     (void)xmlTextWriterEndElement( xmlWriter );
@@ -920,12 +912,11 @@ void EnhancedShapeDumper::dumpCoordinatesAsElement(const uno::Sequence< drawing:
 void EnhancedShapeDumper::dumpSegmentsAsElement(const uno::Sequence< drawing::EnhancedCustomShapeSegment >& aSegments)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Segments" ));
-    sal_Int32 nLength = aSegments.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aSegments)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeSegment" ));
-        sal_Int32 aCommand = aSegments[i].Command;
-        sal_Int32 aCount = aSegments[i].Count;
+        sal_Int32 aCommand = i.Command;
+        sal_Int32 aCount = i.Count;
         (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("command"), "%" SAL_PRIdINT32, aCommand);
         (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("count"), "%" SAL_PRIdINT32, aCount);
         (void)xmlTextWriterEndElement( xmlWriter );
@@ -946,17 +937,16 @@ void EnhancedShapeDumper::dumpStretchYAsAttribute(sal_Int32 aStretchY)
 void EnhancedShapeDumper::dumpTextFramesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeTextFrame >& aTextFrames)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextFrames" ));
-    sal_Int32 nLength = aTextFrames.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aTextFrames)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeTextFrame" ));
         {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TopLeft" ));
-        dumpEnhancedCustomShapeParameterPair(aTextFrames[i].TopLeft);
+        dumpEnhancedCustomShapeParameterPair(i.TopLeft);
         (void)xmlTextWriterEndElement( xmlWriter );
 
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "BottomRight" ));
-        dumpEnhancedCustomShapeParameterPair(aTextFrames[i].BottomRight);
+        dumpEnhancedCustomShapeParameterPair(i.BottomRight);
         (void)xmlTextWriterEndElement( xmlWriter );
         }
         (void)xmlTextWriterEndElement( xmlWriter );
@@ -967,11 +957,10 @@ void EnhancedShapeDumper::dumpTextFramesAsElement(const uno::Sequence< drawing::
 void EnhancedShapeDumper::dumpGluePointsAsElement(const uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aGluePoints)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePoints" ));
-    sal_Int32 nLength = aGluePoints.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aGluePoints)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
-        dumpEnhancedCustomShapeParameterPair(aGluePoints[i]);
+        dumpEnhancedCustomShapeParameterPair(i);
         (void)xmlTextWriterEndElement( xmlWriter );
     }
     (void)xmlTextWriterEndElement( xmlWriter );
@@ -980,10 +969,9 @@ void EnhancedShapeDumper::dumpGluePointsAsElement(const uno::Sequence< drawing::
 void EnhancedShapeDumper::dumpGluePointLeavingDirectionsAsElement(const uno::Sequence< double >& aGluePointLeavingDirections)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePointLeavingDirections" ));
-    sal_Int32 nLength = aGluePointLeavingDirections.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aGluePointLeavingDirections)
     {
-        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("value"), "%f", aGluePointLeavingDirections[i]);
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("value"), "%f", i);
     }
     (void)xmlTextWriterEndElement( xmlWriter );
 }
@@ -1020,12 +1008,11 @@ void EnhancedShapeDumper::dumpTextPathAllowedAsAttribute(bool bTextPathAllowed)
 void EnhancedShapeDumper::dumpSubViewSizeAsElement(const uno::Sequence< awt::Size >& aSubViewSize)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SubViewSize" ));
-    sal_Int32 nLength = aSubViewSize.getLength();
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& i : aSubViewSize)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Size" ));
-        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aSubViewSize[i].Width);
-        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSubViewSize[i].Height);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, i.Width);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, i.Height);
         (void)xmlTextWriterEndElement( xmlWriter );
     }
     (void)xmlTextWriterEndElement( xmlWriter );
