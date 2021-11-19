@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7d15222_1909297c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-11-19T13:26:58Z",
+      "side": 1,
+      "message": "CI failure is nonsense. A +1 appreciated ? \u003d)",
+      "revId": "f15238356df6c1793bdb2efde5f667b3e5ad72b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
