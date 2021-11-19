@@ -8962,16 +8962,39 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     }
     else
     {
+        SvxLRSpaceItem const* pLRSpace(&rLRSpace);
+        ::std::optional<SvxLRSpaceItem> oLRSpace;
+        if (dynamic_cast<SwContentNode const*>(GetExport().m_pOutFormatNode) != nullptr)
+        {
+            auto pTextNd(static_cast<SwTextNode const*>(GetExport().m_pOutFormatNode));
+            // WW doesn't have a concept of a pararaph that's in a list but not
+            // counted in the list - see AttributeOutputBase::ParaNumRule()
+            // forcing non-existent numId="0" in this case.
+            // This means WW won't apply the indents from the numbering,
+            // so try to add them as paragraph properties here.
+            if (!pTextNd->IsCountedInList())
+            {
+                SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> temp(m_rExport.m_rDoc.GetAttrPool());
+                pTextNd->GetParaAttr(temp, 0, 0, false, true, true, nullptr);
+                if (auto *const pItem = temp.GetItem(RES_LR_SPACE))
+                {
+                    // but don't use first-line offset from list (should it be 0 or from node?)
+                    oLRSpace.emplace(*pItem);
+                    oLRSpace->SetTextFirstLineOffset(pLRSpace->GetTextFirstLineOffset());
+                    pLRSpace = &*oLRSpace;
+                }
+            }
+        }
         rtl::Reference<FastAttributeList> pLRSpaceAttrList = FastSerializerHelper::createAttrList();
-        if((0 != rLRSpace.GetTextLeft()) || (rLRSpace.IsExplicitZeroMarginValLeft()))
+        if ((0 != pLRSpace->GetTextLeft()) || (pLRSpace->IsExplicitZeroMarginValLeft()))
         {
-            pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::number(  rLRSpace.GetTextLeft() ) );
+            pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_left : XML_start)), OString::number(pLRSpace->GetTextLeft()) );
         }
-        if((0 != rLRSpace.GetRight()) || (rLRSpace.IsExplicitZeroMarginValRight()))
+        if ((0 != pLRSpace->GetRight()) || (pLRSpace->IsExplicitZeroMarginValRight()))
         {
-            pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::number(  rLRSpace.GetRight() ) );
+            pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_right : XML_end)), OString::number(pLRSpace->GetRight()) );
         }
-        sal_Int32 nFirstLineAdjustment = rLRSpace.GetTextFirstLineOffset();
+        sal_Int32 const nFirstLineAdjustment = pLRSpace->GetTextFirstLineOffset();
         if (nFirstLineAdjustment > 0)
             pLRSpaceAttrList->add( FSNS( XML_w, XML_firstLine ), OString::number( nFirstLineAdjustment ) );
         else
