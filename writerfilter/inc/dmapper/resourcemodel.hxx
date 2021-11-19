@@ -202,6 +202,8 @@ public:
     /// The current section is the last one in this body text.
     virtual void markLastSectionGroup(){};
 
+    virtual void setDocumentReference(void* pDocument) = 0;
+
     /**
        Receives start mark for group with the same paragraph properties.
      */
