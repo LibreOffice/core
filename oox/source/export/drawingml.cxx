@@ -2825,12 +2825,20 @@ const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment )
     return sAlignment;
 }
 
-void DrawingML::WriteLinespacing( const LineSpacing& rSpacing )
+void DrawingML::WriteLinespacing(const LineSpacing& rSpacing, float fFirstCharHeight)
 {
     if( rSpacing.Mode == LineSpacingMode::PROP )
     {
         mpFS->singleElementNS( XML_a, XML_spcPct,
                                XML_val, OString::number(static_cast<sal_Int32>(rSpacing.Height)*1000));
+    }
+    else if (rSpacing.Mode == LineSpacingMode::MINIMUM
+             && fFirstCharHeight > static_cast<sal_uInt16>(
+                    static_cast<double>(rSpacing.Height) * 0.001 * 72.0 / 2.54)) // 1/100mm to point
+    {
+        // 100% proportional line spacing = single line spacing
+        mpFS->singleElementNS(XML_a, XML_spcPct, XML_val,
+                              OString::number(static_cast<sal_Int32>(100000)));
     }
     else
     {
@@ -2916,7 +2924,7 @@ bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     if( bHasLinespacing )
     {
         mpFS->startElementNS(XML_a, XML_lnSpc);
-        WriteLinespacing( aLineSpacing );
+        WriteLinespacing(aLineSpacing, fFirstCharHeight);
         mpFS->endElementNS( XML_a, XML_lnSpc );
     }
 
