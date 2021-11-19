@@ -463,6 +463,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             if (sName == "events")
                 xRemoveList.push_back(xChild);
 
+            if (sName == "constrain-to")
+                xRemoveList.push_back(xChild);
+
             if (sName == "activates-default")
             {
                 if (GetParentObjectType(xChild) == "GtkSpinButton")
