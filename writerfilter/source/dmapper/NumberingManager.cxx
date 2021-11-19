@@ -568,16 +568,15 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 lcl_mergeProperties( rAbsCharStyleProps, rCharStyleProps );
             }
 
-            if( aAbsCharStyleProps.hasElements() )
-            {
-                // Change the sequence into a vector
-                auto aStyleProps = comphelper::sequenceToContainer<PropertyValueVector_t>(aAbsCharStyleProps);
+            // Change the sequence into a vector
+            auto aStyleProps
+                = comphelper::sequenceToContainer<PropertyValueVector_t>(aAbsCharStyleProps);
 
-                //create (or find) a character style containing the character
-                // attributes of the symbol and apply it to the numbering level
-                OUString sStyle = rDMapper.getOrCreateCharStyle( aStyleProps, /*bAlwaysCreate=*/true );
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_CHAR_STYLE_NAME), sStyle));
-            }
+            //create (or find) a character style containing the character
+            // attributes of the symbol and apply it to the numbering level
+            OUString sStyle = rDMapper.getOrCreateCharStyle(aStyleProps, /*bAlwaysCreate=*/true);
+            aLvlProps.push_back(
+                comphelper::makePropertyValue(getPropertyName(PROP_CHAR_STYLE_NAME), sStyle));
 
             OUString sText = pAbsLevel
                            ? pAbsLevel->GetBulletChar()
