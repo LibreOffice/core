@@ -316,11 +316,19 @@ static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t s
             SAL_INFO("ucb.ucp.webdav.curl", "debug log: " << handle << ": " << data);
             return 0;
         case CURLINFO_HEADER_IN:
-            pType = "CURLINFO_HEADER_IN";
-            break;
+            SAL_INFO("ucb.ucp.webdav.curl",
+                     "CURLINFO_HEADER_IN: " << handle << ": " << OString(data, size));
+            return 0;
         case CURLINFO_HEADER_OUT:
-            pType = "CURLINFO_HEADER_OUT";
-            break;
+        {
+            OString tmp(data, size);
+            if (tmp.startsWith("Authorization: "))
+            {
+                tmp = "Authorization: " + OString::number(tmp.getLength() - 15) + " bytes redacted";
+            }
+            SAL_INFO("ucb.ucp.webdav.curl", "CURLINFO_HEADER_OUT: " << handle << ": " << tmp);
+            return 0;
+        }
         case CURLINFO_DATA_IN:
             pType = "CURLINFO_DATA_IN";
             break;
