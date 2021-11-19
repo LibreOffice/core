@@ -129,6 +129,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/filldlg \
 	sc/uiconfig/scalc/ui/filterlist \
 	sc/uiconfig/scalc/ui/filterdropdown \
+	sc/uiconfig/scalc/ui/filtersubdropdown \
 	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/formulacalculationoptions \

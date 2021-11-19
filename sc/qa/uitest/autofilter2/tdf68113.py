@@ -39,7 +39,7 @@ class tdf68113(UITestCase):
             # Checkbox elements
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(5, len(xTreeList.getChildren()))
             self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])
@@ -61,7 +61,7 @@ class tdf68113(UITestCase):
             # Checkbox elements
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(5, len(xTreeList.getChildren()))
             self.assertEqual('false', get_state_as_dict(xTreeList.getChild('0'))['IsChecked'])

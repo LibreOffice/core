@@ -19,7 +19,7 @@ class tdf117276_autofilter_reset(UITestCase):
         self.assertIsNotNone(xFloatWindow)
 
         # get check list
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
         self.assertIsNotNone(xCheckListMenu)
 
         xTreeList = xCheckListMenu.getChild("check_list_box")
@@ -105,7 +105,7 @@ class tdf117276_autofilter_reset(UITestCase):
             # 3. open filter of column A and deselect first 3 entries (Unique a2, Unique a3, Unique a4)
             xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
 
             xEntry1 = xTreeList.getChild("0")
@@ -138,7 +138,7 @@ class tdf117276_autofilter_reset(UITestCase):
             # 4. open filter of column B and deselect "Unique b5"
             xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
 
             xEntry = xTreeList.getChild("0")

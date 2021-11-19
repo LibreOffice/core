@@ -29,7 +29,7 @@ class tdf46062(UITestCase):
 
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xList = xCheckListMenu.getChild("check_list_box")
             self.assertEqual(3, len(xList.getChildren()))
 

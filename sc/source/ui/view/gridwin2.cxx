@@ -467,32 +467,31 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     const ScDPLabelData& rLabelData = pDPData->maLabels;
 
-    mpDPFieldPopup.disposeAndClear();
+    mpDPFieldPopup.reset();
 
     vcl::ILibreOfficeKitNotifier* pNotifier = nullptr;
     if (comphelper::LibreOfficeKit::isActive())
         pNotifier = SfxViewShell::Current();
 
-    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &mrViewData.GetDocument(),
-                                                               bDimOrientNotPage, false, -1,
-                                                               nullptr, pNotifier));
+    weld::Window* pPopupParent = GetFrameWeld();
+    mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, &mrViewData.GetDocument(),
+                                                    bDimOrientNotPage, false, -1, pNotifier));
 
-    ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
-    rControl.setExtendedData(std::move(pDPData));
-    rControl.setOKAction(new DPFieldPopupOKAction(this));
+    mpDPFieldPopup->setExtendedData(std::move(pDPData));
+    mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
     {
         // Populate field members.
         size_t n = rLabelData.maMembers.size();
-        rControl.setMemberSize(n);
+        mpDPFieldPopup->setMemberSize(n);
         for (size_t i = 0; i < n; ++i)
         {
             const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
             OUString aName = rMem.getDisplayName();
             if (aName.isEmpty())
                 // Use special string for an empty name.
-                rControl.addMember(ScResId(STR_EMPTYDATA), 0.0, rMem.mbVisible);
+                mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), 0.0, rMem.mbVisible);
             else
-                rControl.addMember(rMem.getDisplayName(), 0.0, rMem.mbVisible);
+                mpDPFieldPopup->addMember(rMem.getDisplayName(), 0.0, rMem.mbVisible);
         }
     }
 
@@ -513,38 +512,36 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
         // Populate the menus.
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        rControl.addMenuItem(
+        mpDPFieldPopup->addMenuItem(
             ScResId(STR_MENU_SORT_ASC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::ASCENDING, 0, pViewShell));
-        rControl.addMenuItem(
+        mpDPFieldPopup->addMenuItem(
             ScResId(STR_MENU_SORT_DESC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::DESCENDING, 0, pViewShell));
 
-        ScCheckListMenuWindow* pSubMenu = rControl.addSubMenuItem(ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
+        ScListSubMenuControl* pSubMenu = mpDPFieldPopup->addSubMenuItem(ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
         if (pSubMenu)
         {
-            ScCheckListMenuControl& rSubMenu = pSubMenu->get_widget();
             size_t n = aUserSortNames.size();
             for (size_t i = 0; i < n; ++i)
             {
-                rSubMenu.addMenuItem(aUserSortNames[i],
-                                     new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::CUSTOM, sal_uInt16(i), pViewShell));
+                pSubMenu->addMenuItem(aUserSortNames[i],
+                                      new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::CUSTOM, sal_uInt16(i), pViewShell));
             }
-            rSubMenu.resizeToFitMenuItems();
+            pSubMenu->resizeToFitMenuItems();
         }
     }
 
-    rControl.initMembers();
+    mpDPFieldPopup->initMembers();
 
     tools::Rectangle aCellRect(rScrPos, rScrSize);
-
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
     aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo());
-    rControl.setConfig(aConfig);
+    mpDPFieldPopup->setConfig(aConfig);
     if (IsMouseCaptured())
         ReleaseMouse();
-    rControl.launch(aCellRect);
+    mpDPFieldPopup->launch(pPopupParent, aCellRect);
 }
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
@@ -554,9 +551,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     if (!mpDPFieldPopup)
         return;
 
-    ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
-
-    DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(rControl.getExtendedData());
+    DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(mpDPFieldPopup->getExtendedData());
     if (!pDPData)
         return;
 
@@ -577,7 +572,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
 
     // The raw result may contain a mixture of layout names and original names.
     ScCheckListMenuControl::ResultType aRawResult;
-    rControl.getResult(aRawResult);
+    mpDPFieldPopup->getResult(aRawResult);
 
     std::unordered_map<OUString, bool> aResult;
     for (const auto& rItem : aRawResult)

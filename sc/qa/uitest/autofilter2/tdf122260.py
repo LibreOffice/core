@@ -19,7 +19,7 @@ class tdf122260(UITestCase):
         self.assertIsNotNone(xFloatWindow)
 
         # get check list
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
         self.assertIsNotNone(xCheckListMenu)
 
         xTreeList = xCheckListMenu.getChild("check_list_box")
@@ -43,7 +43,7 @@ class tdf122260(UITestCase):
         self.assertIsNotNone(xFloatWindow)
 
         # get check list
-        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
         self.assertIsNotNone(xCheckListMenu)
 
         xTreeList = xCheckListMenu.getChild("check_list_box")

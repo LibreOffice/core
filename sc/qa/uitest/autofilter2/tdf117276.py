@@ -20,7 +20,7 @@ class tdf117276(UITestCase):
             # 2. open filter of column B (Fabrikat) and deselect (Citroen, Fiat, Ford, Opel, Peugeot, Renault, Tesla)
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
 
             xCitroenEntry = xTreeList.getChild("2")
@@ -48,7 +48,7 @@ class tdf117276(UITestCase):
             # 3. open filter of column I (Wert) and deselect 8000 (Values 7000 and 9000 are not shown)
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "8", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
 
             xCitroenEntry = xTreeList.getChild("0")
@@ -64,7 +64,7 @@ class tdf117276(UITestCase):
             # 4. open filter of column B and select Tesla
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
             xTeslaEntry = xTreeList.getChild("4")
             xTeslaEntry.executeAction("CLICK", tuple())   #Tesla
@@ -79,7 +79,7 @@ class tdf117276(UITestCase):
             #(which strings to show and which to hide, when multiple filters are in used).
             gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "8", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
-            xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+            xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
 
             x8000Entry = xTreeList.getChild("1") # check "8000"
