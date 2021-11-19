@@ -2175,6 +2175,16 @@ AC_ARG_WITH(system-poppler,
         [Use system poppler (only needed for PDF import).]),,
     [with_system_poppler="$with_system_libs"])
 
+AC_ARG_WITH(system-abseil,
+    AS_HELP_STRING([--with-system-abseil],
+        [Use the abseil libraries already on system.]),,
+    [with_system_abseil="$with_system_libs"])
+
+AC_ARG_WITH(system-openjpeg,
+    AS_HELP_STRING([--with-system-openjpeg],
+        [Use the OpenJPEG library already on system.]),,
+    [with_system_openjpeg="$with_system_libs"])
+
 libo_FUZZ_ARG_ENABLE(gpgmepp,
     AS_HELP_STRING([--disable-gpgmepp],
         [Disable building gpgmepp. Do not use in normal cases unless you want to fix potential problems it causes.])
@@ -11943,6 +11953,42 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_PDFIUM)
+
+if test "$ENABLE_PDFIUM" = "TRUE"; then
+    	AC_MSG_CHECKING([which OpenJPEG library to use])
+    	if test "$with_system_openjpeg" = "yes"; then
+		SYSTEM_OPENJPEG2=TRUE
+		AC_MSG_RESULT([external])
+        	PKG_CHECK_MODULES( OPENJPEG2, libopenjp2 )
+        	OPENJPEG2_CFLAGS=$(printf '%s' "$OPENJPEG2_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        	FilterLibs "${OPENJPEG2_LIBS}"
+        	OPENJPEG2_LIBS="${filteredlibs}"
+	else
+		SYSTEM_OPENJPEG2=FALSE
+		AC_MSG_RESULT([internal])
+	fi
+    	AC_MSG_CHECKING([which Abseil library to use])
+	if test "$with_system_abseil" = "yes"; then
+		AC_MSG_RESULT([external])
+        	SYSTEM_ABSEIL=TRUE
+        	AC_LANG_PUSH([C++])
+        	AC_CHECK_HEADER(absl/types/bad_optional_access.h, [],
+            		[AC_MSG_ERROR(abseil headers not found.)], [])
+        	#ABSEIL_CFLAGS=-I/usr/include
+        	AC_CHECK_LIB([absl_bad_optional_access], [main], [ABSEIL_LIBS=-labsl_bad_optional_access],
+                      	[ AC_MSG_ERROR([libabsl_bad_optional_access library not found.]) ])
+        	AC_LANG_POP([C++])
+        	ABSEIL_CFLAGS=$(printf '%s' "$ABSEIL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        	FilterLibs "${ABSEIL_LIBS}"
+        	ABSEIL_LIBS="${filteredlibs}"
+	else
+		AC_MSG_RESULT([internal])
+	fi
+fi
+AC_SUBST(SYSTEM_OPENJPEG2)
+AC_SUBST(SYSTEM_ABSEIL)
+AC_SUBST(ABSEIL_CFLAGS)
+AC_SUBST(ABSEIL_LIBS)
 
 dnl ===================================================================
 dnl Check for poppler
