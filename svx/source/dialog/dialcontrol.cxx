@@ -452,7 +452,7 @@ void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
     if( fH != 0.0 )
     {
         double fAngle = acos( nX / fH );
-        sal_Int32 nAngle = static_cast<sal_Int32>(basegfx::rad2deg(fAngle) * 100.0);
+        sal_Int32 nAngle = basegfx::rad2deg<100>(fAngle);
         if( nY < 0 )
             nAngle = 36000 - nAngle;
         if( bInitial )  // round to entire 15 degrees

@@ -1562,8 +1562,8 @@ bool SdrTextObj::IsTopToBottom() const
 bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
-    double fRotate = basegfx::deg2rad(maGeo.nRotationAngle.get() / 100.0);
-    double fShearX = basegfx::deg2rad(maGeo.nShearAngle.get() / 100.0);
+    double fRotate = toRadians(maGeo.nRotationAngle);
+    double fShearX = toRadians(maGeo.nShearAngle);
 
     // get aRect, this is the unrotated snaprect
     tools::Rectangle aRectangle(maRect);

@@ -1519,7 +1519,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, const OUString
         awt::Size aSize = xShape->getSize();
         awt::Point aPos2 = xShape->getPosition();
         // rotated shapes need special handling...
-        double fSin = fabs(sin(basegfx::deg2rad(nRotation*0.01)));
+        double fSin = fabs(sin(basegfx::deg2rad<100>(nRotation)));
         // remove part of height from X direction, if title is rotated down
         if( nRotation*0.01 > 180.0 )
             aPos2.X -= static_cast<sal_Int32>(fSin * aSize.Height + 0.5);
