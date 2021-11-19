@@ -62,6 +62,7 @@ public:
 
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt16 m_nRedlineCount;
+    bool m_bRedlineMoved;
 #endif
 };
 

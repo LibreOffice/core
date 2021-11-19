@@ -95,6 +95,7 @@ class SW_DLLPUBLIC SwRedlineData
     RedlineType m_eType;
     sal_uInt16 m_nSeqNo;
     bool m_bAutoFormat;
+    bool m_bMoved;
 
 public:
     SwRedlineData( RedlineType eT, std::size_t nAut );
@@ -111,6 +112,7 @@ public:
             return m_nAuthor == rCmp.m_nAuthor &&
                     m_eType == rCmp.m_eType &&
                     m_bAutoFormat == rCmp.m_bAutoFormat &&
+                    m_bMoved == rCmp.m_bMoved &&
                     m_sComment == rCmp.m_sComment &&
                     (( !m_pNext && !rCmp.m_pNext ) ||
                         ( m_pNext && rCmp.m_pNext && *m_pNext == *rCmp.m_pNext )) &&
@@ -133,6 +135,8 @@ public:
 
     void SetAutoFormat() { m_bAutoFormat = true; }
     bool IsAutoFormat() const { return m_bAutoFormat; }
+    void SetMoved() { m_bMoved = true; }
+    bool IsMoved() const { return m_bMoved; }
     bool CanCombine( const SwRedlineData& rCmp ) const;
 
     // ExtraData gets copied, the pointer is therefore not taken over by
@@ -155,7 +159,6 @@ class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
     SwNodeIndex* m_pContentSect;
     bool m_bDelLastPara : 1;
     bool m_bIsVisible : 1;
-    bool m_bIsMoved : 1;
     sal_uInt32 m_nId;
 
     std::optional<tools::Long> m_oLOKLastNodeTop;
@@ -175,7 +178,7 @@ public:
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
         SwPaM( rPos ), m_pRedlineData( pData ), m_pContentSect( nullptr ),
-        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_bIsMoved( false ), m_nId( s_nLastId++ )
+        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_nId( s_nLastId++ )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;
@@ -263,8 +266,8 @@ public:
 
     void MaybeNotifyRedlinePositionModification(tools::Long nTop);
 
-    void SetMoved() { m_bIsMoved = true; }
-    bool IsMoved() const { return m_bIsMoved; }
+    void SetMoved() {  m_pRedlineData->SetMoved(); }
+    bool IsMoved() const { return m_pRedlineData->IsMoved(); }
 };
 
 void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc);
