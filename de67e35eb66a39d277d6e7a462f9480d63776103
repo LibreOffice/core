@@ -34,6 +34,24 @@
       "parentUuid": "fe371e46_49a1331a",
       "revId": "de67e35eb66a39d277d6e7a462f9480d63776103",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9988f180_ca6cdc06",
+        "filename": "i18npool/source/calendar/calendar_hijri.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-19T09:12:19Z",
+      "side": 1,
+      "message": "Thank you - I see not where it came from. It makes sense in the current form, thanks for reverting!",
+      "parentUuid": "40f6fe16_8c45281c",
+      "revId": "de67e35eb66a39d277d6e7a462f9480d63776103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
