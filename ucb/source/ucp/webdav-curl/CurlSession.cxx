@@ -1800,13 +1800,15 @@ auto CurlSession::PUT(OUString const& rURIReference,
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
-        curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
-    if (!pList)
+    // NextCloud silently fails with chunked encoding
+    uno::Reference<io::XSeekable> const xSeekable(rxInStream, uno::UNO_QUERY);
+    if (!xSeekable.is())
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException("TODO: not seekable");
     }
+    curl_off_t const len(xSeekable->getLength() - xSeekable->getPosition());
+
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList;
     OUString const* const pToken(g_Init.LockStore.getLockTokenForURI(uri.GetURI(), nullptr));
     if (pToken)
     {
@@ -1828,7 +1830,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
 
     // lock m_Mutex after accessing global LockStore to avoid deadlock
 
-    ::std::vector<CurlOption> const options{};
+    ::std::vector<CurlOption> const options{ { CURLOPT_INFILESIZE_LARGE, len, nullptr } };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), nullptr,
                                   &rxInStream, nullptr);
