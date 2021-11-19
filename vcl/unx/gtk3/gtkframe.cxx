@@ -4713,10 +4713,12 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
     bool res =
 #endif
     g_idle_remove_by_data(this);
+#ifndef NDEBUG
 #if !GTK_CHECK_VERSION(4, 0, 0)
     assert(res);
 #else
     (void)res;
+#endif
 #endif
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
