@@ -16,6 +16,23 @@
       "message": "Thanks a lot, I don\u0027t see anything obviously problematic with this patch. Feel free to submit to master if Jenkins is happy. I\u0027m sure you tested the --with-system-libs case already. :-)",
       "revId": "7f48d1adbd9fe2c4b22c420bbbdbd2fcf62bbc0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5c44c87_2569f0a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-19T16:10:48Z",
+      "side": 1,
+      "message": "I did try with --with-system-abseil and --with-system-openjpeg set explicitely, but yes, I tested that :)",
+      "revId": "7f48d1adbd9fe2c4b22c420bbbdbd2fcf62bbc0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
