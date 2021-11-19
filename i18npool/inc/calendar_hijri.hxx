@@ -37,24 +37,6 @@ private:
     void mapToGregorian() override;
     void mapFromGregorian() override;
 
-    // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
-    static const double SynPeriod;
-
-    static const double SynMonth;           // Solar days in a year/SynPeriod
-
-    // Julian day on Jan 1, 1900
-    static const double jd1900;
-
-    // Reference point: September 1984 25d 3h 10m UT. == 1405 Hijri == 1048 Synodial month from 1900
-    static const sal_Int32 SynRef;
-    static const sal_Int32 GregRef;
-
-    // Period between 1.30pm - 6:30pm
-    static const double EveningPeriod;
-
-    // "Leap" years
-    static const sal_Int32 LeapYear[];
-
 private:
     static double NewMoon(sal_Int32 n);
     static void getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
