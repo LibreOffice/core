@@ -942,7 +942,7 @@ bool FreetypeFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2
     // convert to basegfx polypolygon
     // TODO: get rid of the intermediate tools polypolygon
     rB2DPolyPoly = aToolPolyPolygon.getB2DPolyPolygon();
-    rB2DPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix( +1.0/(1<<6), -1.0/(1<<6) ));
+    rB2DPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix( +0x1p-6, -0x1p-6 ));
 
     return true;
 }
