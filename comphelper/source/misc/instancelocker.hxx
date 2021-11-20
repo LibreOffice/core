@@ -74,7 +74,7 @@ public:
 class OLockListener : public ::cppu::WeakImplHelper< css::util::XCloseListener,
                                                      css::frame::XTerminateListener >
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     css::uno::Reference< css::uno::XInterface > m_xInstance;
     css::uno::Reference< css::embed::XActionsApproval > m_xApproval;
 

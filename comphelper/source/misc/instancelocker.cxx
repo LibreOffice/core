@@ -211,20 +211,25 @@ OLockListener::~OLockListener()
 
 void OLockListener::Dispose()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         return;
 
-    if ( m_nMode & embed::Actions::PREVENT_CLOSE )
+    auto xInstance = std::move(m_xInstance);
+    auto nMode = m_nMode;
+    m_bDisposed = true;
+    aGuard.unlock();
+
+    if ( nMode & embed::Actions::PREVENT_CLOSE )
     {
         try
         {
-            uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xInstance, uno::UNO_QUERY );
+            uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( xInstance, uno::UNO_QUERY );
             if ( xCloseBroadcaster.is() )
                 xCloseBroadcaster->removeCloseListener( static_cast< util::XCloseListener* >( this ) );
 
-            uno::Reference< util::XCloseable > xCloseable( m_xInstance, uno::UNO_QUERY );
+            uno::Reference< util::XCloseable > xCloseable( xInstance, uno::UNO_QUERY );
             if ( xCloseable.is() )
                 xCloseable->close( true );
         }
@@ -232,26 +237,23 @@ void OLockListener::Dispose()
         {}
     }
 
-    if ( m_nMode & embed::Actions::PREVENT_TERMINATION )
+    if ( nMode & embed::Actions::PREVENT_TERMINATION )
     {
         try
         {
-            uno::Reference< frame::XDesktop > xDesktop( m_xInstance, uno::UNO_QUERY_THROW );
+            uno::Reference< frame::XDesktop > xDesktop( xInstance, uno::UNO_QUERY_THROW );
             xDesktop->removeTerminateListener( static_cast< frame::XTerminateListener* >( this ) );
         }
         catch( uno::Exception& )
         {}
     }
-
-    m_xInstance.clear();
-    m_bDisposed = true;
 }
 
 // XEventListener
 
 void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // object is disposed
     if ( aEvent.Source != m_xInstance )
@@ -262,7 +264,7 @@ void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
 
     // dispose the wrapper;
     uno::Reference< lang::XComponent > xComponent( m_xWrapper.get(), uno::UNO_QUERY );
-    aGuard.clear();
+    aGuard.unlock();
     if ( xComponent.is() )
     {
         try { xComponent->dispose(); }
@@ -276,7 +278,7 @@ void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
 void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_Bool )
 {
     // GetsOwnership parameter is always ignored, the user of the service must close the object always
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( !(!m_bDisposed && aEvent.Source == m_xInstance && ( m_nMode & embed::Actions::PREVENT_CLOSE )) )
         return;
 
@@ -285,7 +287,7 @@ void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_
         uno::Reference< embed::XActionsApproval > xApprove = m_xApproval;
 
         // unlock the mutex here
-        aGuard.clear();
+        aGuard.unlock();
 
         if ( xApprove.is() && xApprove->approveAction( embed::Actions::PREVENT_CLOSE ) )
             throw util::CloseVetoException();
@@ -304,7 +306,7 @@ void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_
 
 void SAL_CALL OLockListener::notifyClosing( const lang::EventObject& aEvent )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // object is closed, no reason to listen
     if ( aEvent.Source != m_xInstance )
@@ -320,7 +322,7 @@ void SAL_CALL OLockListener::notifyClosing( const lang::EventObject& aEvent )
     {
         // dispose the wrapper;
         uno::Reference< lang::XComponent > xComponent( m_xWrapper.get(), uno::UNO_QUERY );
-        aGuard.clear();
+        aGuard.unlock();
         if ( xComponent.is() )
         {
             try { xComponent->dispose(); }
@@ -334,7 +336,7 @@ void SAL_CALL OLockListener::notifyClosing( const lang::EventObject& aEvent )
 
 void SAL_CALL OLockListener::queryTermination( const lang::EventObject& aEvent )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( !(aEvent.Source == m_xInstance && ( m_nMode & embed::Actions::PREVENT_TERMINATION )) )
         return;
 
@@ -343,7 +345,7 @@ void SAL_CALL OLockListener::queryTermination( const lang::EventObject& aEvent )
         uno::Reference< embed::XActionsApproval > xApprove = m_xApproval;
 
         // unlock the mutex here
-        aGuard.clear();
+        aGuard.unlock();
 
         if ( xApprove.is() && xApprove->approveAction( embed::Actions::PREVENT_TERMINATION ) )
             throw frame::TerminationVetoException();
@@ -362,7 +364,7 @@ void SAL_CALL OLockListener::queryTermination( const lang::EventObject& aEvent )
 
 void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // object is terminated, no reason to listen
     if ( aEvent.Source != m_xInstance )
@@ -380,7 +382,7 @@ void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent 
         {
             // dispose the wrapper;
             uno::Reference< lang::XComponent > xComponent( m_xWrapper.get(), uno::UNO_QUERY );
-            aGuard.clear();
+            aGuard.unlock();
             if ( xComponent.is() )
             {
                 try { xComponent->dispose(); }
@@ -397,7 +399,7 @@ void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent 
 
 void OLockListener::Init()
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed || m_bInitialized )
         return;
@@ -420,7 +422,7 @@ void OLockListener::Init()
     {
         // dispose the wrapper;
         uno::Reference< lang::XComponent > xComponent( m_xWrapper.get(), uno::UNO_QUERY );
-        aGuard.clear();
+        aGuard.unlock();
         if ( xComponent.is() )
         {
             try { xComponent->dispose(); }
