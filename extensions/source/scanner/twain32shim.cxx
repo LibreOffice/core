@@ -36,10 +36,7 @@
 
 namespace
 {
-TW_INT32 FixToInt32(const TW_FIX32& rFix)
-{
-    return static_cast<TW_INT32>(floor(rFix.Whole + rFix.Frac / 65536. + 0.5));
-}
+double FixToDouble(const TW_FIX32& rFix) { return rFix.Whole + rFix.Frac / 65536.; }
 
 const wchar_t sTwainWndClass[] = L"TwainClass";
 
@@ -383,12 +380,12 @@ void ImpTwain::ImplXfer()
     {
         TW_IMAGEINFO aInfo;
         HANDLE hDIB = nullptr;
-        TW_INT32 nXRes, nYRes;
+        double nXRes, nYRes;
 
         if (m_pDSM(&m_aAppId, &m_aSrcId, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo) == TWRC_SUCCESS)
         {
-            nXRes = FixToInt32(aInfo.XResolution);
-            nYRes = FixToInt32(aInfo.YResolution);
+            nXRes = FixToDouble(aInfo.XResolution);
+            nYRes = FixToDouble(aInfo.YResolution);
         }
         else
             nXRes = nYRes = -1;
@@ -411,15 +408,15 @@ void ImpTwain::ImplXfer()
                     {
                         if (LPVOID pBmpMem = GlobalLock(hGlob))
                         {
-                            if ((nXRes != -1) && (nYRes != -1))
+                            if ((nXRes > 0) && (nYRes > 0))
                             {
                                 // set resolution of bitmap
                                 BITMAPINFOHEADER* pBIH = static_cast<BITMAPINFOHEADER*>(pBmpMem);
 
-                                static const auto[m, d]
+                                const auto[m, d]
                                     = getConversionMulDiv(o3tl::Length::in, o3tl::Length::m);
-                                pBIH->biXPelsPerMeter = o3tl::convert(nXRes, d, m);
-                                pBIH->biYPelsPerMeter = o3tl::convert(nYRes, d, m);
+                                pBIH->biXPelsPerMeter = std::round(o3tl::convert(nXRes, d, m));
+                                pBIH->biYPelsPerMeter = std::round(o3tl::convert(nYRes, d, m));
                             }
 
                             HANDLE hMap = CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr,
