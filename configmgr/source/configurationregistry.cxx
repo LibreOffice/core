@@ -50,7 +50,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -119,7 +119,7 @@ private:
     void doClose();
 
     css::uno::Reference< css::lang::XMultiServiceFactory > provider_;
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     css::uno::Reference< css::uno::XInterface > access_;
     OUString url_;
     bool readOnly_;
@@ -234,7 +234,7 @@ Service::Service(
 }
 
 OUString Service::getURL() {
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     checkValid_RuntimeException();
     return url_;
 }
@@ -242,7 +242,7 @@ OUString Service::getURL() {
 void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
 {
     //TODO: bCreate
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     if (access_.is()) {
         doClose();
     }
@@ -269,13 +269,13 @@ void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
 }
 
 sal_Bool Service::isValid() {
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     return access_.is();
 }
 
 void Service::close()
 {
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     checkValid();
     doClose();
 }
@@ -289,13 +289,13 @@ void Service::destroy()
 
 css::uno::Reference< css::registry::XRegistryKey > Service::getRootKey()
 {
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     checkValid();
     return new RegistryKey(*this, css::uno::Any(access_));
 }
 
 sal_Bool Service::isReadOnly() {
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     checkValid_RuntimeException();
     return readOnly_;
 }
@@ -351,7 +351,7 @@ void Service::doClose() {
 }
 
 OUString RegistryKey::getKeyName() {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
     css::uno::Reference< css::container::XNamed > named;
     if (value_ >>= named) {
@@ -364,7 +364,7 @@ OUString RegistryKey::getKeyName() {
 
 sal_Bool RegistryKey::isReadOnly()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
     return service_.readOnly_; //TODO: read-only sub-nodes in update access?
 }
@@ -375,14 +375,14 @@ sal_Bool RegistryKey::isValid() {
 
 css::registry::RegistryKeyType RegistryKey::getKeyType(OUString const &)
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     return css::registry::RegistryKeyType_KEY;
 }
 
 css::registry::RegistryValueType RegistryKey::getValueType()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     css::uno::Type t(value_.getValueType());
     switch (t.getTypeClass()) {
@@ -409,7 +409,7 @@ css::registry::RegistryValueType RegistryKey::getValueType()
 
 sal_Int32 RegistryKey::getLongValue()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     sal_Int32 v = 0;
     if (value_ >>= v) {
@@ -429,7 +429,7 @@ void RegistryKey::setLongValue(sal_Int32)
 
 css::uno::Sequence< sal_Int32 > RegistryKey::getLongListValue()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     css::uno::Sequence< sal_Int32 > v;
     if (value_ >>= v) {
@@ -449,7 +449,7 @@ void RegistryKey::setLongListValue(css::uno::Sequence< sal_Int32 > const &)
 
 OUString RegistryKey::getAsciiValue()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     OUString v;
     if (value_ >>= v) {
@@ -469,7 +469,7 @@ void RegistryKey::setAsciiValue(OUString const &)
 
 css::uno::Sequence< OUString > RegistryKey::getAsciiListValue()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     css::uno::Sequence< OUString > v;
     if (value_ >>= v) {
@@ -489,7 +489,7 @@ void RegistryKey::setAsciiListValue(css::uno::Sequence< OUString > const &)
 
 OUString RegistryKey::getStringValue()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     OUString v;
     if (value_ >>= v) {
@@ -509,7 +509,7 @@ void RegistryKey::setStringValue(OUString const &)
 
 css::uno::Sequence< OUString > RegistryKey::getStringListValue()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     css::uno::Sequence< OUString > v;
     if (value_ >>= v) {
@@ -530,7 +530,7 @@ void RegistryKey::setStringListValue(
 
 css::uno::Sequence< sal_Int8 > RegistryKey::getBinaryValue()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid();
     css::uno::Sequence< sal_Int8 > v;
     if (value_ >>= v) {
@@ -551,7 +551,7 @@ void RegistryKey::setBinaryValue(css::uno::Sequence< sal_Int8 > const &)
 css::uno::Reference< css::registry::XRegistryKey > RegistryKey::openKey(
     OUString const & aKeyName)
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
     css::uno::Reference< css::container::XHierarchicalNameAccess > access;
     if (value_ >>= access) {
@@ -573,7 +573,7 @@ css::uno::Reference< css::registry::XRegistryKey > RegistryKey::createKey(
 
 void RegistryKey::closeKey()
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
 }
 
@@ -601,27 +601,27 @@ css::uno::Sequence< OUString > RegistryKey::getKeyNames()
 
 sal_Bool RegistryKey::createLink(OUString const &, OUString const &)
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
     return false;
 }
 
 void RegistryKey::deleteLink(OUString const &)
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
 }
 
 OUString RegistryKey::getLinkTarget(OUString const &)
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
     return OUString();
 }
 
 OUString RegistryKey::getResolvedName(OUString const & aKeyName)
 {
-    osl::MutexGuard g(service_.mutex_);
+    std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
     return aKeyName;
 }
