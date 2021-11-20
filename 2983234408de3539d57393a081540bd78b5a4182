@@ -34,6 +34,24 @@
       "parentUuid": "cb762d42_be3d332f",
       "revId": "2983234408de3539d57393a081540bd78b5a4182",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1ee4ca7_b4773535",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-20T10:02:18Z",
+      "side": 1,
+      "message": "\u003e I think the new use case should fit better to the applications of hexadecimal exponent floating point literals\n\nAbsolutely!",
+      "parentUuid": "8dfb0181_d39bacc8",
+      "revId": "2983234408de3539d57393a081540bd78b5a4182",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
