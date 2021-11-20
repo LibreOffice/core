@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea87084a_4c30700b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-20T12:00:00Z",
+      "side": 1,
+      "message": "I modified the comment to indicate some findings.\nIndeed, it seems MYSQL_TYPE_YEAR is treated as a MYSQL_TYPE_SHORT\n\nOn phpmyadmin, I tested that YEAR goes from 0 to 2155 included.\nOn LO, I had the same.",
+      "revId": "7896e19ccd19a6bcd02533ea43eb709cce09c0f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
