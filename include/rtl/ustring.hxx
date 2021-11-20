@@ -161,6 +161,11 @@ public:
     // no destructor necessary because we know we are pointing at a compile-time
     // constant OUStringLiteral, which bypasses ref-counting.
 
+    /**
+      make it easier to pass to OUStringBuffer and similar without casting/converting
+    */
+    constexpr std::u16string_view asView() const { return {pData->buffer, static_cast<sal_uInt32>(pData->length)}; }
+
     inline operator const OUString&() const;
 
 private:
