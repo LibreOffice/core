@@ -1037,7 +1037,7 @@ private:
 
     TOOLS_DLLPRIVATE static bool parseHost(
         sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
-        OUString & rCanonic);
+        OUStringBuffer* pCanonic);
 
     TOOLS_DLLPRIVATE static bool parseHostOrNetBiosName(
         sal_Unicode const * pBegin, sal_Unicode const * pEnd,
