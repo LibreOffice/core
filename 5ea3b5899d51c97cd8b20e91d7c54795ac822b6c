@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "568d3ca9_492b68f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-20T18:26:43Z",
+      "side": 1,
+      "message": "\"thru\" is not standard but should be fine (see https://dictionary.cambridge.org/fr/dictionnaire/anglais/thru).\nSo no need to replace occurences of it next time.",
+      "revId": "5ea3b5899d51c97cd8b20e91d7c54795ac822b6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
