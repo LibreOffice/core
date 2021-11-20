@@ -241,6 +241,18 @@ inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
     return nDelta;
 }
 
+inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
+                                       rtl::OUStringNumber<sal_Int64> const & rSubString)
+{
+    sal_Int32 nDelta = rSubString.length - m_nLength;
+
+    rString.remove(m_nBegin, m_nLength);
+    rString.insert(m_nBegin, rSubString);
+
+    m_nLength = rSubString.length;
+    return nDelta;
+}
+
 inline sal_Int32 INetURLObject::SubString::set(OUString & rString,
                                        OUString const & rSubString)
 {
@@ -255,6 +267,14 @@ inline sal_Int32 INetURLObject::SubString::set(OUString & rString,
 inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
                                        OUString const & rSubString,
                                                sal_Int32 nTheBegin)
+{
+    m_nBegin = nTheBegin;
+    return set(rString, rSubString);
+}
+
+sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
+                                        rtl::OUStringNumber<sal_Int64> const & rSubString,
+                                        sal_Int32 nTheBegin)
 {
     m_nBegin = nTheBegin;
     return set(rString, rSubString);
@@ -3996,7 +4016,7 @@ bool INetURLObject::SetPort(sal_uInt32 nThePort)
 {
     if (getSchemeInfo().m_bPort && m_aHost.isPresent())
     {
-        OUString aNewPort(OUString::number(nThePort));
+        rtl::OUStringNumber<sal_uInt64> aNewPort(OUString::number(nThePort));
         sal_Int32 nDelta;
         if (m_aPort.isPresent())
             nDelta = m_aPort.set(m_aAbsURIRef, aNewPort);

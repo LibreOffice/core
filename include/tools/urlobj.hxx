@@ -944,11 +944,18 @@ private:
                              OUString const & rSubString,
                              sal_Int32 nTheBegin);
 
+        sal_Int32 set(OUStringBuffer & rString,
+                             rtl::OUStringNumber<sal_Int64> const & rSubString,
+                             sal_Int32 nTheBegin);
+
         inline sal_Int32 set(OUString & rString,
                              OUString const & rSubString);
 
         inline sal_Int32 set(OUStringBuffer & rString,
                              OUString const & rSubString);
+
+        sal_Int32 set(OUStringBuffer & rString,
+                             rtl::OUStringNumber<sal_Int64> const & rSubString);
 
         inline void operator +=(sal_Int32 nDelta);
 
