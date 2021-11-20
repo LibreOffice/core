@@ -16,6 +16,24 @@
       "message": "No, this syntax is not for integers - it\u0027s for floating-point literals. It would of course be converted to an integer - but that\u0027s abusing the syntax. For integers with specific bit pattern, one should use hex, octal, or even - since C++14 - binary literals (see https://en.cppreference.com/w/cpp/language/integer_literal).",
       "revId": "2983234408de3539d57393a081540bd78b5a4182",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dfb0181_d39bacc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-20T07:09:44Z",
+      "side": 1,
+      "message": "This is reverted.\nI think the new use case should fit better to the applications of hexadecimal exponent floating point literals.",
+      "parentUuid": "cb762d42_be3d332f",
+      "revId": "2983234408de3539d57393a081540bd78b5a4182",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
