@@ -221,7 +221,7 @@ using namespace css;
    segment = *(pchar / ";")
  */
 
-inline sal_Int32 INetURLObject::SubString::clear()
+sal_Int32 INetURLObject::SubString::clear()
 {
     sal_Int32 nDelta = -m_nLength;
     m_nBegin = -1;
@@ -229,32 +229,33 @@ inline sal_Int32 INetURLObject::SubString::clear()
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
-                                       OUString const & rSubString)
+sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
+                                       std::u16string_view rSubString)
 {
-    sal_Int32 nDelta = rSubString.getLength() - m_nLength;
+    sal_Int32 nDelta = rSubString.size() - m_nLength;
 
     rString.remove(m_nBegin, m_nLength);
     rString.insert(m_nBegin, rSubString);
 
-    m_nLength = rSubString.getLength();
+    m_nLength = rSubString.size();
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUString & rString,
-                                       OUString const & rSubString)
+sal_Int32 INetURLObject::SubString::set(OUString & rString,
+                                       std::u16string_view rSubString)
 {
-    sal_Int32 nDelta = rSubString.getLength() - m_nLength;
+    sal_Int32 nDelta = rSubString.size() - m_nLength;
 
-    rString = rString.replaceAt(m_nBegin, m_nLength, rSubString);
+    rString = OUString::Concat(rString.subView(0, m_nBegin)) + 
+             rSubString + rString.subView(m_nBegin + m_nLength);
 
-    m_nLength = rSubString.getLength();
+    m_nLength = rSubString.size();
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
-                                       OUString const & rSubString,
-                                               sal_Int32 nTheBegin)
+sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
+                                        std::u16string_view rSubString,
+                                        sal_Int32 nTheBegin)
 {
     m_nBegin = nTheBegin;
     return set(rString, rSubString);
@@ -3996,14 +3997,15 @@ bool INetURLObject::SetPort(sal_uInt32 nThePort)
 {
     if (getSchemeInfo().m_bPort && m_aHost.isPresent())
     {
-        OUString aNewPort(OUString::number(nThePort));
+        auto aNewPort(OUString::number(nThePort));
+        std::u16string_view aNewPortView{aNewPort.buf, static_cast<size_t>(aNewPort.length)};
         sal_Int32 nDelta;
         if (m_aPort.isPresent())
-            nDelta = m_aPort.set(m_aAbsURIRef, aNewPort);
+            nDelta = m_aPort.set(m_aAbsURIRef, aNewPortView);
         else
         {
             m_aAbsURIRef.insert(m_aHost.getEnd(), u':');
-            nDelta = m_aPort.set(m_aAbsURIRef, aNewPort, m_aHost.getEnd() + 1)
+            nDelta = m_aPort.set(m_aAbsURIRef, aNewPortView, m_aHost.getEnd() + 1)
                          + 1;
         }
         m_aPath += nDelta;
