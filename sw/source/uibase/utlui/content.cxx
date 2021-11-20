@@ -3878,13 +3878,13 @@ void SwContentTree::UpdateTracking()
             }
             else
             {
-                // prevent fall thru to outline tracking when section tracking is off and the last
+                // prevent fall through to outline tracking when section tracking is off and the last
                 // GotoContent is the current section
                 if (m_nLastSelType == ContentTypeId::REGION &&
                         m_xTreeView->get_selected_text() == pSection->GetSectionName())
                     return;
             }
-            // fall thru to outline tracking when section tracking is off and the last GotoContent
+            // fall through to outline tracking when section tracking is off and the last GotoContent
             // is not the current section
         }
     }
