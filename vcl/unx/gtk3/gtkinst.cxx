@@ -22110,6 +22110,17 @@ public:
         gtk_popover_popup(m_pPopover);
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+#if defined(GDK_WINDOWING_X11)
+    virtual bool get_visible() const override
+    {
+        if (m_pMenuHack)
+            return gtk_widget_get_visible(GTK_WIDGET(m_pMenuHack));
+        return gtk_widget_get_visible(m_pWidget);
+    }
+#endif
+#endif
+
     virtual void popdown() override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
