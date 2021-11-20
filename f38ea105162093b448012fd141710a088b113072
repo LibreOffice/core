@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4ff6ab0_44427a37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-20T00:28:05Z",
+      "side": 1,
+      "message": "Hi Mihail,\n\nApparently we don\u0027t have your license statement on file, could you\nplease send us a blanket statement that you contribute all your past and\nfuture patches under the MPLv2 and LGPLv3+ licenses? Best on the dev\nmailing list libreoffice@lists.freedesktop.org so we can link to it from\nhttps://wiki.documentfoundation.org/Development/Developers\n\nSomething like this does nicely:\n\nAll of my past \u0026 future contributions to LibreOffice may be\nlicensed under the MPLv2/LGPLv3+ dual license.\n\nBest use Subject: \u003cyour full name\u003e license statement\n\nSorry for the inconvenience and thank you for cooperating :-)\n",
+      "revId": "f38ea105162093b448012fd141710a088b113072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
