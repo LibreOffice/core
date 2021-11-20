@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5688ae1e_d27cbdad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-20T13:22:44Z",
+      "side": 1,
+      "message": "I think it could be useful to have this one on 7.2 branch.",
+      "revId": "194de2ce0063b0c7ba7b22627a67eaa125aa7b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
