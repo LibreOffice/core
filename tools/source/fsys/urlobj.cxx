@@ -290,7 +290,7 @@ int INetURLObject::SubString::compare(SubString const & rOther,
 
 struct INetURLObject::SchemeInfo
 {
-    char const * m_pScheme;
+    rtl::OUStringConstExpr m_sScheme;
     char const * m_pPrefix;
     bool m_bAuthority;
     bool m_bUser;
@@ -316,91 +316,120 @@ struct INetURLObject::PrefixInfo
 inline INetURLObject::SchemeInfo const &
 INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
 {
+    static constexpr OUStringLiteral EMPTY = u"";
+    static constexpr OUStringLiteral FTP = u"ftp";
+    static constexpr OUStringLiteral HTTP = u"http";
+    static constexpr OUStringLiteral FILE1 = u"file"; // because FILE is already defined
+    static constexpr OUStringLiteral MAILTO = u"mailto";
+    static constexpr OUStringLiteral VND_WEBDAV = u"vnd.sun.star.webdav";
+    static constexpr OUStringLiteral PRIVATE = u"private";
+    static constexpr OUStringLiteral VND_HELP = u"vnd.sun.star.help";
+    static constexpr OUStringLiteral HTTPS = u"https";
+    static constexpr OUStringLiteral SLOT = u"slot";
+    static constexpr OUStringLiteral MACRO = u"macro";
+    static constexpr OUStringLiteral JAVASCRIPT = u"javascript";
+    static constexpr OUStringLiteral DATA = u"data";
+    static constexpr OUStringLiteral CID = u"cid";
+    static constexpr OUStringLiteral VND_HIER = u"vnd.sun.star.hier";
+    static constexpr OUStringLiteral UNO = u".uno";
+    static constexpr OUStringLiteral COMPONENT = u".component";
+    static constexpr OUStringLiteral VND_PKG = u"vnd.sun.star.pkg";
+    static constexpr OUStringLiteral LDAP = u"ldap";
+    static constexpr OUStringLiteral DB = u"db";
+    static constexpr OUStringLiteral VND_CMD = u"vnd.sun.star.cmd";
+    static constexpr OUStringLiteral TELNET = u"telnet";
+    static constexpr OUStringLiteral VND_EXPAND = u"vnd.sun.star.expand";
+    static constexpr OUStringLiteral VND_TDOC = u"vnd.sun.star.tdoc";
+    static constexpr OUStringLiteral SMB = u"smb";
+    static constexpr OUStringLiteral HID = u"hid";
+    static constexpr OUStringLiteral SFTP = u"sftp";
+    static constexpr OUStringLiteral VND_CMIS = u"vnd.libreoffice.cmis";
+
     static o3tl::enumarray<INetProtocol, SchemeInfo> const map = {
         SchemeInfo{
-            "", "", false, false, false, false, false, false, false, false},
+            EMPTY, "", false, false, false, false, false, false, false, false},
         SchemeInfo{
-            "ftp", "ftp://", true, true, false, true, true, true, true,
+            FTP, "ftp://", true, true, false, true, true, true, true,
             false},
         SchemeInfo{
-            "http", "http://", true, false, false, false, true, true, true,
+            HTTP, "http://", true, false, false, false, true, true, true,
             true},
         SchemeInfo{
-            "file", "file://", true, false, false, false, true, false, true,
+            FILE1, "file://", true, false, false, false, true, false, true,
             false},
         SchemeInfo{
-            "mailto", "mailto:", false, false, false, false, false, false,
+            MAILTO, "mailto:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            "vnd.sun.star.webdav", "vnd.sun.star.webdav://", true, false,
+            VND_WEBDAV, "vnd.sun.star.webdav://", true, false,
             false, false, true, true, true, true},
         SchemeInfo{
-            "private", "private:", false, false, false, false, false, false,
+            PRIVATE, "private:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            "vnd.sun.star.help", "vnd.sun.star.help://", true, false, false,
+            VND_HELP, "vnd.sun.star.help://", true, false, false,
             false, false, false, true, true},
         SchemeInfo{
-            "https", "https://", true, false, false, false, true, true,
+            HTTPS, "https://", true, false, false, false, true, true,
             true, true},
         SchemeInfo{
-            "slot", "slot:", false, false, false, false, false, false, false,
+            SLOT, "slot:", false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            "macro", "macro:", false, false, false, false, false, false,
+            MACRO, "macro:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            "javascript", "javascript:", false, false, false, false, false,
+            JAVASCRIPT, "javascript:", false, false, false, false, false,
             false, false, false},
         SchemeInfo{
-            "data", "data:", false, false, false, false, false, false, false,
+            DATA, "data:", false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            "cid", "cid:", false, false, false, false, false, false, false,
+            CID, "cid:", false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            "vnd.sun.star.hier", "vnd.sun.star.hier:", true, false, false,
+            VND_HIER, "vnd.sun.star.hier:", true, false, false,
             false, false, false, true, false},
         SchemeInfo{
-            ".uno", ".uno:", false, false, false, false, false, false, false,
+            UNO, ".uno:", false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            ".component", ".component:", false, false, false, false, false,
+            COMPONENT, ".component:", false, false, false, false, false,
             false, false, true},
         SchemeInfo{
-            "vnd.sun.star.pkg", "vnd.sun.star.pkg://", true, false, false,
+            VND_PKG, "vnd.sun.star.pkg://", true, false, false,
             false, false, false, true, true},
         SchemeInfo{
-            "ldap", "ldap://", true, false, false, false, true, true,
+            LDAP, "ldap://", true, false, false, false, true, true,
             false, true},
         SchemeInfo{
-            "db", "db:", false, false, false, false, false, false, false,
+            DB, "db:", false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            "vnd.sun.star.cmd", "vnd.sun.star.cmd:", false, false, false,
+            VND_CMD, "vnd.sun.star.cmd:", false, false, false,
             false, false, false, false, false},
         SchemeInfo{
-            "telnet", "telnet://", true, true, false, true, true, true,
+            TELNET, "telnet://", true, true, false, true, true, true,
             true, false},
         SchemeInfo{
-            "vnd.sun.star.expand", "vnd.sun.star.expand:", false, false,
+            VND_EXPAND, "vnd.sun.star.expand:", false, false,
             false, false, false, false, false, false},
         SchemeInfo{
-            "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", false, false, false,
+            VND_TDOC, "vnd.sun.star.tdoc:", false, false, false,
             false, false, false, true, false},
         SchemeInfo{
-            "", "", false, false, false, false, true, true, true, false },
+            EMPTY, "", false, false, false, false, true, true, true, false },
         SchemeInfo{
-            "smb", "smb://", true, true, false, true, true, true, true,
+            SMB, "smb://", true, true, false, true, true, true, true,
             true},
         SchemeInfo{
-            "hid", "hid:", false, false, false, false, false, false, false,
+            HID, "hid:", false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            "sftp", "sftp://", true, true, false, true, true, true, true,
+            SFTP, "sftp://", true, true, false, true, true, true, true,
             true},
         SchemeInfo{
-            "vnd.libreoffice.cmis", "vnd.libreoffice.cmis://", true, true,
+            VND_CMIS, "vnd.libreoffice.cmis://", true, true,
             false, false, true, false, true, true} };
     return map[eTheScheme];
 };
@@ -712,12 +741,11 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         pPos = p;
         m_eScheme = pPrefix->m_eScheme;
 
-        OUString sTemp(OUString::createFromAscii(pPrefix->m_eKind
-                                                 >= PrefixInfo::Kind::External ?
+        char const * pTemp = pPrefix->m_eKind >= PrefixInfo::Kind::External ?
                                              pPrefix->m_pTranslatedPrefix :
-                                             pPrefix->m_pPrefix));
-        aSynAbsURIRef.append(sTemp);
-        m_aScheme = SubString( 0, sTemp.indexOf(':') );
+                                             pPrefix->m_pPrefix;
+        aSynAbsURIRef.appendAscii(pTemp);
+        m_aScheme = SubString( 0, strstr(pTemp, ":") - pTemp );
     }
     else
     {
@@ -858,7 +886,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         }
 
         if (m_eScheme != INetProtocol::Generic) {
-            aSynScheme = OUString::createFromAscii(getSchemeInfo().m_pScheme);
+            aSynScheme = static_cast<const OUString&>(getSchemeInfo().m_sScheme);
         }
         m_aScheme.set(aSynAbsURIRef, aSynScheme, aSynAbsURIRef.getLength());
         aSynAbsURIRef.append(':');
@@ -1452,13 +1480,14 @@ void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
     OUString aTmpStr=m_aAbsURIRef.toString();
     m_aAbsURIRef.setLength(0);
     int oldSchemeLen = 0;
+    const OUString& aSchemeName = getSchemeInfo().m_sScheme;
     if (m_eScheme == INetProtocol::Generic)
         oldSchemeLen = m_aScheme.getLength();
     else
-        oldSchemeLen = strlen(getSchemeInfo().m_pScheme);
+        oldSchemeLen = aSchemeName.getLength();
     m_eScheme=eTargetScheme;
-    int newSchemeLen=strlen(getSchemeInfo().m_pScheme);
-    m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    int newSchemeLen = aSchemeName.getLength();
+    m_aAbsURIRef.append(aSchemeName);
     m_aAbsURIRef.append(aTmpStr.getStr()+oldSchemeLen);
     int delta=newSchemeLen-oldSchemeLen;
     m_aUser+=delta;
@@ -1619,7 +1648,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
     if (m_eScheme != INetProtocol::Generic)
     {
-        aSynAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+        aSynAbsURIRef.append(getSchemeInfo().m_sScheme.asView());
     }
     else
     {
@@ -3507,7 +3536,7 @@ INetURLObject::getAbbreviated(
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
     if (m_eScheme != INetProtocol::Generic)
     {
-        aBuffer.appendAscii(getSchemeInfo().m_pScheme);
+        aBuffer.append(getSchemeInfo().m_sScheme.asView());
     }
     else
     {
@@ -3742,7 +3771,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
     if (HasError() || m_eScheme == INetProtocol::Generic)
         return false;
     m_aAbsURIRef.setLength(0);
-    m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    m_aAbsURIRef.append(getSchemeInfo().m_sScheme.asView());
     m_aAbsURIRef.append(':');
     if (getSchemeInfo().m_bAuthority)
     {
@@ -3920,9 +3949,9 @@ OUString INetURLObject::GetScheme(INetProtocol eTheScheme)
 }
 
 // static
-OUString INetURLObject::GetSchemeName(INetProtocol eTheScheme)
+const OUString & INetURLObject::GetSchemeName(INetProtocol eTheScheme)
 {
-    return OUString::createFromAscii(getSchemeInfo(eTheScheme).m_pScheme);
+    return getSchemeInfo(eTheScheme).m_sScheme;
 }
 
 // static

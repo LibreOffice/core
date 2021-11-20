@@ -404,7 +404,7 @@ public:
 
         @return  The protocol name of URLs of the given scheme.
      */
-    static OUString GetSchemeName(INetProtocol eTheScheme);
+    static const OUString & GetSchemeName(INetProtocol eTheScheme);
 
     static INetProtocol CompareProtocolScheme(OUString const &
                                                   rTheAbsURIRef);
