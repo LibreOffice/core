@@ -66,21 +66,34 @@ Font::Font( vcl::Font&& rFont ) noexcept : mpImplFont( std::move(rFont.mpImplFon
 
 Font::Font( const OUString& rFamilyName, const Size& rSize )
 {
-    mpImplFont->SetFamilyName( rFamilyName );
-    mpImplFont->SetFontSize( rSize );
+    if (const_cast<const ImplType&>(mpImplFont)->maFamilyName != rFamilyName
+        || const_cast<const ImplType&>(mpImplFont)->maAverageFontSize != rSize)
+    {
+        mpImplFont->SetFamilyName( rFamilyName );
+        mpImplFont->SetFontSize( rSize );
+    }
 }
 
 Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
 {
-    mpImplFont->SetFamilyName( rFamilyName );
-    mpImplFont->SetStyleName( rStyleName );
-    mpImplFont->SetFontSize( rSize );
+    if (const_cast<const ImplType&>(mpImplFont)->maFamilyName != rFamilyName
+        || const_cast<const ImplType&>(mpImplFont)->maStyleName != rStyleName
+        || const_cast<const ImplType&>(mpImplFont)->maAverageFontSize != rSize)
+    {
+        mpImplFont->SetFamilyName( rFamilyName );
+        mpImplFont->SetStyleName( rStyleName );
+        mpImplFont->SetFontSize( rSize );
+    }
 }
 
 Font::Font( FontFamily eFamily, const Size& rSize )
 {
-    mpImplFont->SetFamilyType( eFamily );
-    mpImplFont->SetFontSize( rSize );
+    if (const_cast<const ImplType&>(mpImplFont)->meFamily != eFamily
+        || const_cast<const ImplType&>(mpImplFont)->maAverageFontSize != rSize)
+    {
+        mpImplFont->SetFamilyType( eFamily );
+        mpImplFont->SetFontSize( rSize );
+    }
 }
 
 Font::~Font()
@@ -97,9 +110,12 @@ void Font::SetColor( const Color& rColor )
 
 void Font::SetFillColor( const Color& rColor )
 {
-    mpImplFont->maFillColor = rColor;
-    if ( rColor.IsTransparent() )
-        mpImplFont->mbTransparent = true;
+    if (const_cast<const ImplType&>(mpImplFont)->maFillColor != rColor)
+    {
+        mpImplFont->maFillColor = rColor;
+        if ( rColor.IsTransparent() )
+            mpImplFont->mbTransparent = true;
+    }
 }
 
 void Font::SetTransparent( bool bTransparent )
@@ -116,12 +132,14 @@ void Font::SetAlignment( TextAlign eAlign )
 
 void Font::SetFamilyName( const OUString& rFamilyName )
 {
-    mpImplFont->SetFamilyName( rFamilyName );
+    if (const_cast<const ImplType&>(mpImplFont)->maFamilyName != rFamilyName)
+        mpImplFont->SetFamilyName( rFamilyName );
 }
 
 void Font::SetStyleName( const OUString& rStyleName )
 {
-    mpImplFont->maStyleName = rStyleName;
+    if (const_cast<const ImplType&>(mpImplFont)->maStyleName != rStyleName)
+        mpImplFont->maStyleName = rStyleName;
 }
 
 void Font::SetFontSize( const Size& rSize )
@@ -156,16 +174,19 @@ bool Font::IsSymbolFont() const
 
 void Font::SetSymbolFlag( bool bSymbol )
 {
-    mpImplFont->SetSymbolFlag( bSymbol );
+    if (const_cast<const ImplType&>(mpImplFont)->mbSymbolFlag != bSymbol)
+    {
+        mpImplFont->SetSymbolFlag( bSymbol );
 
-    if ( IsSymbolFont() )
-    {
-        mpImplFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
-    }
-    else
-    {
-        if ( std::as_const(*mpImplFont).GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-            mpImplFont->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+        if ( IsSymbolFont() )
+        {
+            mpImplFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
+        }
+        else
+        {
+            if ( std::as_const(*mpImplFont).GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+                mpImplFont->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+        }
     }
 }
 
