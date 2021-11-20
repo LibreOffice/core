@@ -296,9 +296,10 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt1
 bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumbering )
 {
     bool bRet = false;
-    if( bNumbering )
+    const SvxLRSpaceItem* pItem = bNumbering ? rSet.GetItem<SvxLRSpaceItem>(EE_PARA_LRSPACE) : nullptr;
+    if (pItem)
     {
-        SvxLRSpaceItem aItem( *rSet.GetItem<SvxLRSpaceItem>( EE_PARA_LRSPACE ) );
+        SvxLRSpaceItem aItem(*pItem);
         if( (aItem.GetLeft() != 0) || (aItem.GetTextFirstLineOffset() != 0) )
         {
             aItem.SetLeftValue( 0 );
