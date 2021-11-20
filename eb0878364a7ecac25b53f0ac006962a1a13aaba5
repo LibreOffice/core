@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "2fad4d6e_0aa8d41c",
         "filename": "libreofficekit/source/gtk/lokdocview.cxx",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "we can pass (timeoutUS \u003c 0) as a 2nd parameter to g_main_context; this TRUE vs. FALSE thing is really just sugar from a glib perspective the real values are \u00270\u0027 and not-zero so ... \u003d)",
       "revId": "eb0878364a7ecac25b53f0ac006962a1a13aaba5",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "5fb29245_f913c599",
         "filename": "libreofficekit/source/gtk/lokdocview.cxx",
@@ -32,8 +33,25 @@
       "message": "I\u0027ll upload a new revision, once Jenkins has finished a build.",
       "parentUuid": "2fad4d6e_0aa8d41c",
       "revId": "eb0878364a7ecac25b53f0ac006962a1a13aaba5",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b26dfddd_03125ce7",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2739,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-20T14:51:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fb29245_f913c599",
+      "revId": "eb0878364a7ecac25b53f0ac006962a1a13aaba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
