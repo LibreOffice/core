@@ -938,17 +938,17 @@ private:
 
         sal_Int32 getEnd() const { return m_nBegin + m_nLength; }
 
-        inline sal_Int32 clear();
+        sal_Int32 clear();
 
-        inline sal_Int32 set(OUStringBuffer & rString,
-                             OUString const & rSubString,
-                             sal_Int32 nTheBegin);
+        sal_Int32 set(OUStringBuffer & rString,
+                      std::u16string_view rSubString,
+                      sal_Int32 nTheBegin);
 
-        inline sal_Int32 set(OUString & rString,
-                             OUString const & rSubString);
+        sal_Int32 set(OUString & rString,
+                      std::u16string_view rSubString);
 
-        inline sal_Int32 set(OUStringBuffer & rString,
-                             OUString const & rSubString);
+        sal_Int32 set(OUStringBuffer & rString,
+                      std::u16string_view rSubString);
 
         inline void operator +=(sal_Int32 nDelta);
 
