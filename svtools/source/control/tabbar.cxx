@@ -1162,8 +1162,11 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             aDrawer.mbProtect = pItem->mbProtect;
             aDrawer.drawTab();
 
-            // actual page is drawn using a bold font
-            rRenderContext.SetFont(aLightFont);
+            // currently visible sheet is drawn using a bold font
+            if (bCurrent)
+                rRenderContext.SetFont(aFont);
+            else
+                rRenderContext.SetFont(aLightFont);
 
             // Set the correct FillInBrush depending on status
 
