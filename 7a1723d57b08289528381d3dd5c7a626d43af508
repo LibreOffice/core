@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c83591ff_5bac9ed0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-20T09:49:58Z",
+      "side": 1,
+      "message": "I could test BIT field. I tried a line by checking and another without checking, it worked.\nSo now, there\u0027s still the YEAR display pb remaining.",
+      "revId": "7a1723d57b08289528381d3dd5c7a626d43af508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
