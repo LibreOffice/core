@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ebd98f_ed61a2d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-20T09:38:36Z",
+      "side": 1,
+      "message": "I can view a table containing a \"YEAR\" field.\nThe weird thing is I can put a date (like 2021), phpmyadmin shows this value but LO displays 1717962725",
+      "revId": "818b469b87fefaa45bacbebf7151e61b71a64037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
