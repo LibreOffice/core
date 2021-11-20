@@ -103,10 +103,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("Bookmark1"));
 
-    // and it is really in exprted DOCX (let's ensure)
+    // and it is really in exported DOCX (let's ensure)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
-       return; // initial import, no futher checks
+       return; // initial import, no further checks
 
     CPPUNIT_ASSERT_EQUAL(OUString("Bookmark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name"));
 }
@@ -124,7 +124,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
-       return; // initial import, no futher checks
+       return; // initial import, no further checks
 
     // Ensure that we have <w:text w:multiLine="1"/>
     CPPUNIT_ASSERT_EQUAL(OUString("1"), getXPath(pXmlDoc, "/w:document/w:body/w:sdt[1]/w:sdtPr/w:text", "multiLine"));
