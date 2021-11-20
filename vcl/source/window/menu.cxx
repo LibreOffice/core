@@ -2740,10 +2740,8 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Point& rPopupPos 
     return Execute( pExecWindow, tools::Rectangle( rPopupPos, rPopupPos ), PopupMenuFlags::ExecuteDown );
 }
 
-sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const tools::Rectangle& rRect, PopupMenuFlags nFlags )
+static FloatWinPopupFlags lcl_TranslateFlags(PopupMenuFlags nFlags)
 {
-    ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
-
     FloatWinPopupFlags nPopupModeFlags = FloatWinPopupFlags::NONE;
     if ( nFlags & PopupMenuFlags::ExecuteDown )
         nPopupModeFlags = FloatWinPopupFlags::Down;
@@ -2757,7 +2755,13 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const tools::Rectangle&
     if (nFlags & PopupMenuFlags::NoMouseUpClose )                      // allow popup menus to stay open on mouse button up
         nPopupModeFlags |= FloatWinPopupFlags::NoMouseUpClose;    // useful if the menu was opened on mousebutton down (eg toolbox configuration)
 
-    return ImplExecute( pExecWindow, rRect, nPopupModeFlags, nullptr, false );
+    return nPopupModeFlags;
+}
+
+sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const tools::Rectangle& rRect, PopupMenuFlags nFlags )
+{
+    ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
+    return ImplExecute( pExecWindow, rRect, lcl_TranslateFlags(nFlags), nullptr, false );
 }
 
 void PopupMenu::ImplFlushPendingSelect()
@@ -2773,10 +2777,14 @@ void PopupMenu::ImplFlushPendingSelect()
     }
 }
 
-sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
+bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectangle& rRect,
+                           FloatWinPopupFlags& nPopupModeFlags, Menu* pSFrom,
+                           bool& bRealExecute, VclPtr<MenuFloatingWindow>& pWin)
 {
-    if ( !pSFrom && ( vcl::IsInPopupMenuExecute() || !GetItemCount() ) )
-        return 0;
+    bRealExecute = false;
+    const sal_uInt16 nItemCount = GetItemCount();
+    if (!pSFrom && (vcl::IsInPopupMenuExecute() || !nItemCount))
+        return false;
 
     mpLayoutData.reset();
 
@@ -2788,7 +2796,6 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     bCanceled = false;
 
     VclPtr<vcl::Window> xFocusId;
-    bool bRealExecute = false;
     if ( !pStartedFrom )
     {
         pSVData->mpWinData->mbNoDeactivate = true;
@@ -2804,25 +2811,24 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     }
 
     SAL_WARN_IF( ImplGetWindow(), "vcl", "Win?!" );
-    tools::Rectangle aRect( rRect );
-    aRect.SetPos( pW->OutputToScreenPixel( aRect.TopLeft() ) );
+    rRect.SetPos(pParentWin->OutputToScreenPixel(rRect.TopLeft()));
 
+    nPopupModeFlags |= FloatWinPopupFlags::NoKeyClose | FloatWinPopupFlags::AllMouseButtonClose | FloatWinPopupFlags::GrabFocus;
     if (bRealExecute)
         nPopupModeFlags |= FloatWinPopupFlags::NewLevel;
-    nPopupModeFlags |= FloatWinPopupFlags::NoKeyClose | FloatWinPopupFlags::AllMouseButtonClose;
 
     bInCallback = true; // set it here, if Activate overridden
     Activate();
     bInCallback = false;
 
-    if ( pW->isDisposed() )
-        return 0;   // Error
+    if (pParentWin->isDisposed())
+        return false;
 
     if ( bCanceled || bKilled )
-        return 0;
+        return false;
 
-    if ( !GetItemCount() )
-        return 0;
+    if (!nItemCount)
+        return false;
 
     // The flag MenuFlags::HideDisabledEntries is inherited.
     if ( pSFrom )
@@ -2852,10 +2858,10 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         ImplCallEventListeners(VclEventId::MenuSubmenuChanged, nPos);
     }
 
-    VclPtrInstance<MenuFloatingWindow> pWin( this, pW, WB_BORDER | WB_SYSTEMWINDOW );
+    pWin = VclPtrInstance<MenuFloatingWindow>(this, pParentWin, WB_BORDER | WB_SYSTEMWINDOW);
     if (comphelper::LibreOfficeKit::isActive() && get_id() == "editviewspellmenu")
     {
-        VclPtr<vcl::Window> xNotifierParent = pW->GetParentWithLOKNotifier();
+        VclPtr<vcl::Window> xNotifierParent = pParentWin->GetParentWithLOKNotifier();
         assert(xNotifierParent && xNotifierParent->GetLOKNotifier() && "editview menu without LOKNotifier");
         pWin->SetLOKNotifier(xNotifierParent->GetLOKNotifier());
     }
@@ -2874,9 +2880,9 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         vcl::Window* pDeskW = pWindow->GetWindow( GetWindowType::RealParent );
         if( ! pDeskW )
             pDeskW = pWindow;
-        Point aDesktopTL( pDeskW->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) );
+        Point aDesktopTL(pDeskW->OutputToAbsoluteScreenPixel(rRect.TopLeft()));
         aDesktopRect = Application::GetScreenPosSizePixel(
-            Application::GetBestScreen( tools::Rectangle( aDesktopTL, aRect.GetSize() ) ));
+            Application::GetBestScreen(tools::Rectangle(aDesktopTL, rRect.GetSize())));
     }
 
     tools::Long nMaxHeight = aDesktopRect.GetHeight();
@@ -2891,8 +2897,8 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         if ( pRef->GetParent() )
             pRef = pRef->GetParent();
 
-        tools::Rectangle devRect(  pRef->OutputToAbsoluteScreenPixel( aRect.TopLeft() ),
-                            pRef->OutputToAbsoluteScreenPixel( aRect.BottomRight() ) );
+        tools::Rectangle devRect(pRef->OutputToAbsoluteScreenPixel(rRect.TopLeft()),
+                                 pRef->OutputToAbsoluteScreenPixel(rRect.BottomRight()));
 
         tools::Long nHeightAbove = devRect.Top() - aDesktopRect.Top();
         tools::Long nHeightBelow = aDesktopRect.Bottom() - devRect.Bottom();
@@ -2907,7 +2913,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     nMaxHeight = std::max(nMaxHeight, tools::Long(768));
 
     if (pStartedFrom && pStartedFrom->IsMenuBar())
-        nMaxHeight -= pW->GetSizePixel().Height();
+        nMaxHeight -= pParentWin->GetSizePixel().Height();
     sal_Int32 nLeft, nTop, nRight, nBottom;
     pWindow->GetBorder( nLeft, nTop, nRight, nBottom );
     nMaxHeight -= nTop+nBottom;
@@ -2919,43 +2925,34 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         aSz.setHeight( ImplCalcHeight( nEntries ) );
     }
 
-    // tdf#126054 hold this until after function completes
-    VclPtr<PopupMenu> xThis(this);
-
     pWin->SetFocusId( xFocusId );
     pWin->SetOutputSizePixel( aSz );
-    if ( GetItemCount() )
-    {
-        SalMenu* pMenu = ImplGetSalMenu();
-        if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus ) )
-        {
-            pWin->StopExecute();
-            pWin->doShutdown();
-            pWindow.disposeAndClear();
-            ImplClosePopupToolBox(pW);
-            ImplFlushPendingSelect();
-            return nSelectedId;
-        }
-        else
-        {
-            pWin->StartPopupMode( aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus );
-        }
-        if( pSFrom )
-        {
-            sal_uInt16 aPos;
-            if (pSFrom->IsMenuBar())
-                aPos = static_cast<MenuBarWindow *>(pSFrom->pWindow.get())->GetHighlightedItem();
-            else
-                aPos = static_cast<MenuFloatingWindow *>(pSFrom->pWindow.get())->GetHighlightedItem();
+    return true;
+}
 
-            pWin->SetPosInParent( aPos );  // store position to be sent in SUBMENUDEACTIVATE
-            pSFrom->ImplCallEventListeners( VclEventId::MenuSubmenuActivate, aPos );
-        }
+bool PopupMenu::Run(const VclPtr<MenuFloatingWindow>& pWin, const bool bRealExecute, const bool bPreSelectFirst,
+                    const FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, const tools::Rectangle& rRect)
+{
+    SalMenu* pMenu = ImplGetSalMenu();
+    if (pMenu && bRealExecute && pMenu->ShowNativePopupMenu(pWin, rRect, nPopupModeFlags))
+        return true;
+
+    pWin->StartPopupMode(rRect, nPopupModeFlags);
+    if (pSFrom)
+    {
+        sal_uInt16 aPos;
+        if (pSFrom->IsMenuBar())
+            aPos = static_cast<MenuBarWindow *>(pSFrom->pWindow.get())->GetHighlightedItem();
+        else
+            aPos = static_cast<MenuFloatingWindow *>(pSFrom->pWindow.get())->GetHighlightedItem();
+
+        pWin->SetPosInParent(aPos);  // store position to be sent in SUBMENUDEACTIVATE
+        pSFrom->ImplCallEventListeners(VclEventId::MenuSubmenuActivate, aPos);
     }
+
     if ( bPreSelectFirst )
     {
-        size_t nCount = pItemList->size();
-        for ( size_t n = 0; n < nCount; n++ )
+        for (size_t n = 0; n < static_cast<size_t>(GetItemCount()); n++)
         {
             MenuItemData* pData = pItemList->GetDataFromPos( n );
             if (  (  pData->bEnabled
@@ -2966,22 +2963,30 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
                && ImplIsSelectable( n )
                )
             {
-                pWin->ChangeHighlightItem( n, false );
+                pWin->ChangeHighlightItem(n, false);
                 break;
             }
         }
     }
-    if ( bRealExecute )
-    {
-        pWin->Execute();
-        if (pWin->isDisposed())
-            return 0;
 
-        xFocusId = pWin->GetFocusId();
+    if (bRealExecute)
+        pWin->Execute();
+
+    return false;
+}
+
+void PopupMenu::FinishRun(const VclPtr<MenuFloatingWindow>& pWin, const VclPtr<vcl::Window>& pParentWin, const bool bRealExecute, const bool bIsNativeMenu)
+{
+    if (!bRealExecute || pWin->isDisposed())
+        return;
+
+    if (!bIsNativeMenu)
+    {
+        VclPtr<vcl::Window> xFocusId = pWin->GetFocusId();
         assert(xFocusId == nullptr && "Focus should already be restored by MenuFloatingWindow::End");
         pWin->ImplEndPopupMode(FloatWinPopupEndFlags::NONE, xFocusId);
 
-        if ( nSelectedId )  // then clean up .. ( otherwise done by TH )
+        if (nSelectedId)  // then clean up .. ( otherwise done by TH )
         {
             PopupMenu* pSub = pWin->GetActivePopup();
             while ( pSub )
@@ -2990,13 +2995,29 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
                 pSub = pSub->ImplGetFloatingWindow()->GetActivePopup();
             }
         }
-        pWin->doShutdown();
-        pWindow.disposeAndClear();
-        ImplClosePopupToolBox(pW);
-        ImplFlushPendingSelect();
     }
+    else
+        pWin->StopExecute();
 
-    return bRealExecute ? nSelectedId : 0;
+    pWin->doShutdown();
+    pWindow.disposeAndClear();
+    ImplClosePopupToolBox(pParentWin);
+    ImplFlushPendingSelect();
+}
+
+sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const tools::Rectangle& rRect,
+                                  FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst)
+{
+    // tdf#126054 hold this until after function completes
+    VclPtr<PopupMenu> xThis(this);
+    bool bRealExecute = false;
+    tools::Rectangle aRect(rRect);
+    VclPtr<MenuFloatingWindow> pWin;
+    if (!PrepareRun(pParentWin, aRect, nPopupModeFlags, pSFrom, bRealExecute, pWin))
+        return 0;
+    const bool bNative = Run(pWin, bRealExecute, bPreSelectFirst, nPopupModeFlags, pSFrom, aRect);
+    FinishRun(pWin, pParentWin, bRealExecute, bNative);
+    return nSelectedId;
 }
 
 sal_uInt16 PopupMenu::ImplCalcVisEntries( tools::Long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible ) const
