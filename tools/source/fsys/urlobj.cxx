@@ -221,7 +221,7 @@ using namespace css;
    segment = *(pchar / ";")
  */
 
-inline sal_Int32 INetURLObject::SubString::clear()
+sal_Int32 INetURLObject::SubString::clear()
 {
     sal_Int32 nDelta = -m_nLength;
     m_nBegin = -1;
@@ -229,32 +229,33 @@ inline sal_Int32 INetURLObject::SubString::clear()
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
-                                       OUString const & rSubString)
+sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
+                                       std::u16string_view rSubString)
 {
-    sal_Int32 nDelta = rSubString.getLength() - m_nLength;
+    sal_Int32 nDelta = rSubString.size() - m_nLength;
 
     rString.remove(m_nBegin, m_nLength);
     rString.insert(m_nBegin, rSubString);
 
-    m_nLength = rSubString.getLength();
+    m_nLength = rSubString.size();
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUString & rString,
-                                       OUString const & rSubString)
+sal_Int32 INetURLObject::SubString::set(OUString & rString,
+                                       std::u16string_view rSubString)
 {
-    sal_Int32 nDelta = rSubString.getLength() - m_nLength;
+    sal_Int32 nDelta = rSubString.size() - m_nLength;
 
-    rString = rString.replaceAt(m_nBegin, m_nLength, rSubString);
+    rString = OUString::Concat(rString.subView(0, m_nBegin)) + 
+             rSubString + rString.subView(m_nBegin + m_nLength);
 
-    m_nLength = rSubString.getLength();
+    m_nLength = rSubString.size();
     return nDelta;
 }
 
-inline sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
-                                       OUString const & rSubString,
-                                               sal_Int32 nTheBegin)
+sal_Int32 INetURLObject::SubString::set(OUStringBuffer & rString,
+                                        std::u16string_view rSubString,
+                                        sal_Int32 nTheBegin)
 {
     m_nBegin = nTheBegin;
     return set(rString, rSubString);
@@ -1411,7 +1412,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             {
                 aSynAbsURIRef.append(':');
                 m_aPort.set(aSynAbsURIRef,
-                    OUString(pPort + 1, pHostPortEnd - (pPort + 1)),
+                    std::u16string_view{pPort + 1, static_cast<size_t>(pHostPortEnd - (pPort + 1))},
                     aSynAbsURIRef.getLength());
             }
         }
@@ -2334,7 +2335,7 @@ bool INetURLObject::setPassword(std::u16string_view rThePassword,
     else if (m_aHost.isPresent())
     {
         m_aAbsURIRef.insert(m_aHost.getBegin(), ":@" );
-        m_aUser.set(m_aAbsURIRef, OUString(), m_aHost.getBegin());
+        m_aUser.set(m_aAbsURIRef, std::u16string_view{}, m_aHost.getBegin());
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aHost.getBegin() + 1) + 2;
     }
@@ -2343,7 +2344,7 @@ bool INetURLObject::setPassword(std::u16string_view rThePassword,
     else
     {
         m_aAbsURIRef.insert(m_aPath.getBegin(), u':');
-        m_aUser.set(m_aAbsURIRef, OUString(), m_aPath.getBegin());
+        m_aUser.set(m_aAbsURIRef, std::u16string_view{}, m_aPath.getBegin());
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aPath.getBegin() + 1) + 1;
     }
@@ -3996,14 +3997,13 @@ bool INetURLObject::SetPort(sal_uInt32 nThePort)
 {
     if (getSchemeInfo().m_bPort && m_aHost.isPresent())
     {
-        OUString aNewPort(OUString::number(nThePort));
         sal_Int32 nDelta;
         if (m_aPort.isPresent())
-            nDelta = m_aPort.set(m_aAbsURIRef, aNewPort);
+            nDelta = m_aPort.set(m_aAbsURIRef, OUString::number(nThePort));
         else
         {
             m_aAbsURIRef.insert(m_aHost.getEnd(), u':');
-            nDelta = m_aPort.set(m_aAbsURIRef, aNewPort, m_aHost.getEnd() + 1)
+            nDelta = m_aPort.set(m_aAbsURIRef, OUString::number(nThePort), m_aHost.getEnd() + 1)
                          + 1;
         }
         m_aPath += nDelta;
