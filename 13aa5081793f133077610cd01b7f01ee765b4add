@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d66f4852_a082c53f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-20T08:24:13Z",
+      "side": 1,
+      "message": "I took one removed define and tested it:\n$ find . -name spinner-64-12.png\n./icon-themes/colibre/vcl/res/spinner-64-12.png\n./icon-themes/karasa_jaga/vcl/res/spinner-64-12.png\n\nbut git grep -n spinner-64-12 returns nothing\n\nDoes it mean the files should also be removed or the filename is generated (\"spinner\" first, then \"-64\" added, ...) ?",
+      "revId": "13aa5081793f133077610cd01b7f01ee765b4add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
