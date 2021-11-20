@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "161868f4_2984288b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-20T10:04:58Z",
+      "side": 1,
+      "message": "Just one thing, that I noticed after pushing.\nAs Stephan mentioned, the correct name of that in the standard is \"hexadecimal floating point literal\" (no \"exponent\" in the name; see [lex.fcon]); I used wrong name in the commit messages, inspired by misreading https://en.cppreference.com/w/cpp/language/floating_literal. Please use the correct naming in the future. Thank you!",
+      "revId": "9f3271297e7ce980fdb09a063ce51435314066f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
