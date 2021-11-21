@@ -249,52 +249,6 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                     TextFrameIndex(0), css::i18n::ScriptType::ASIAN);
             if (aLang != LANGUAGE_KOREAN && aLang != LANGUAGE_JAPANESE)
                 nFirstLineOfs<<=1;
-
-            const SvxLineSpacingItem *pSpace = m_aLineInf.GetLineSpacing();
-            if( pSpace )
-            {
-                switch( pSpace->GetLineSpaceRule() )
-                {
-                    case SvxLineSpaceRule::Auto:
-                    break;
-                    case SvxLineSpaceRule::Min:
-                    {
-                        if( nFirstLineOfs < pSpace->GetLineHeight() )
-                            nFirstLineOfs = pSpace->GetLineHeight();
-                        break;
-                    }
-                    case SvxLineSpaceRule::Fix:
-                        nFirstLineOfs = pSpace->GetLineHeight();
-                    break;
-                    default: OSL_FAIL( ": unknown LineSpaceRule" );
-                }
-                switch( pSpace->GetInterLineSpaceRule() )
-                {
-                    case SvxInterLineSpaceRule::Off:
-                    break;
-                    case SvxInterLineSpaceRule::Prop:
-                    {
-                        tools::Long nTmp = pSpace->GetPropLineSpace();
-                        // 50% is the minimum, at 0% we switch to
-                        // the default value 100%...
-                        if( nTmp < 50 )
-                            nTmp = nTmp ? 50 : 100;
-
-                        nTmp *= nFirstLineOfs;
-                        nTmp /= 100;
-                        if( !nTmp )
-                            ++nTmp;
-                        nFirstLineOfs = nTmp;
-                        break;
-                    }
-                    case SvxInterLineSpaceRule::Fix:
-                    {
-                        nFirstLineOfs += pSpace->GetInterLineSpace();
-                        break;
-                    }
-                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
-                }
-            }
         }
         else
             nFirstLineOfs = nFLOfst;
