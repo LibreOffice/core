@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3804cc2_0d1449b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-21T15:37:54Z",
+      "side": 1,
+      "message": "I have made the code a little bit shorter without making the process less clear.\nThe Doxygen comment has been changed to avoid the impressing that week numbers are used.\nAs all arguments and variables are of type int, I have  retained the calculations in int. ",
+      "revId": "dbba4f262352e1fe757d044077309d12a1109a36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
