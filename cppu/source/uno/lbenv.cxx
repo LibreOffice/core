@@ -110,7 +110,7 @@ typedef std::unordered_map<
 
 struct EnvironmentsData
 {
-    ::osl::Mutex mutex;
+    std::mutex mutex;
     OUString2EnvironmentMap aName2EnvMap;
 
     EnvironmentsData() : isDisposing(false) {}
@@ -573,7 +573,7 @@ static void defenv_harden(
 
     uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     {
-    ::osl::MutexGuard guard( rData.mutex );
+    std::unique_lock guard( rData.mutex );
     if (1 == osl_atomic_increment( &that->nRef )) // is dead
     {
         that->nRef = 0;
@@ -878,10 +878,12 @@ namespace {
 
 EnvironmentsData::~EnvironmentsData()
 {
-    ::osl::MutexGuard guard( mutex );
+    std::unique_lock guard( mutex );
+    auto tmpMap =  std::move(aName2EnvMap);
     isDisposing = true;
+    guard.unlock();
 
-    for ( const auto& rEntry : aName2EnvMap )
+    for ( const auto& rEntry : tmpMap )
     {
         uno_Environment * pWeak = rEntry.second;
         uno_Environment * pHard = nullptr;
@@ -1115,7 +1117,7 @@ void SAL_CALL uno_getEnvironment(
 
     EnvironmentsData & rData = theEnvironmentsData();
 
-    ::osl::MutexGuard guard( rData.mutex );
+    std::unique_lock guard( rData.mutex );
     rData.getEnvironment( ppEnv, rEnvDcp, pContext );
     if (! *ppEnv)
     {
@@ -1135,7 +1137,7 @@ void SAL_CALL uno_getRegisteredEnvironments(
 {
     EnvironmentsData & rData = theEnvironmentsData();
 
-    ::osl::MutexGuard guard( rData.mutex );
+    std::unique_lock guard( rData.mutex );
     rData.getRegisteredEnvironments(
         pppEnvs, pnLen, memAlloc,
         (pEnvDcp ? OUString(pEnvDcp) : OUString()) );
