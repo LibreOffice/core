@@ -176,6 +176,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(65536), nNewLeft - nOldLeft);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testChineseAutoFirstLineIndent)
+{
+    // The test document contains two simple multi-line paragraph. For both paragraphs, the first line indent
+    // is set to 'auto'. Line spacing is 100% for the 1st paragraph and 200% for the 2nd paragraph.
+    // Also, there is a "AutoFirstLineIndentDisregardLineSpace" capability flag set in the document.
+    createSwDoc(DATA_DIRECTORY, "firstLineIndent-withFlag.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Get the line width of the first line for the 1st paragrapsh.
+    sal_Int32 nFirstLineWidth
+        = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwLinePortion[1]",
+                   "width")
+              .toInt32();
+    // Get the line width of the first line for the 2nd paragrapsh.
+    sal_Int32 nSecondLineWidth
+        = getXPath(pXmlDoc, "//body/txt[2]/SwParaPortion[1]/SwLineLayout[1]/SwLinePortion[1]",
+                   "width")
+              .toInt32();
+
+    // Tdf#129448: the changing of line-height should not affect the auto first line indent.
+    // As a result, the first line width of the two paragraphs should be the same.
+    CPPUNIT_ASSERT_EQUAL(nSecondLineWidth, nFirstLineWidth);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRuby)
 {
     // Given a document with multiple ruby portions:

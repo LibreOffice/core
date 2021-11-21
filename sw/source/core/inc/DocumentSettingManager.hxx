@@ -173,6 +173,7 @@ class DocumentSettingManager final :
     bool mbGutterAtTop;
     bool mbFootnoteInColumnToPageEnd;
     sal_Int32 mnImagePreferredDPI;
+    bool mbAutoFirstLineIndentDisregardLineSpace;
 
 public:
 
