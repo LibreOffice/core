@@ -33,7 +33,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ref.hxx>
 
 #include <officecfg/Office/Common.hxx>
@@ -512,15 +512,15 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
     if (!bReschedule)
         return;
 
-    static osl::Mutex rescheduleLock;
+    static std::mutex rescheduleLock;
     // SAFE ->
-    osl::ResettableMutexGuard aRescheduleGuard(rescheduleLock);
+    std::unique_lock aRescheduleGuard(rescheduleLock);
 
     if (m_nInReschedule != 0)
         return;
 
     ++m_nInReschedule;
-    aRescheduleGuard.clear();
+    aRescheduleGuard.unlock();
     // <- SAFE
 
     {
@@ -529,7 +529,7 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
     }
 
     // SAFE ->
-    aRescheduleGuard.reset();
+    aRescheduleGuard.lock();
     --m_nInReschedule;
 }
 
