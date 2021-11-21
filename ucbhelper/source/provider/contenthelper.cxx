@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -108,8 +109,10 @@ struct ContentImplHelper_Impl
     rtl::Reference< ::ucbhelper::PropertySetInfo >      m_xPropSetInfo;
     rtl::Reference< ::ucbhelper::CommandProcessorInfo > m_xCommandsInfo;
     std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pDisposeEventListeners;
-    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pContentEventListeners;
-    std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pPropSetChangeListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener>>
+                                                        m_pContentEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<beans::XPropertySetInfoChangeListener>>
+                                                        m_pPropSetChangeListeners;
     std::unique_ptr<cppu::OInterfaceContainerHelper>    m_pCommandChangeListeners;
     std::unique_ptr<PropertyChangeListeners>            m_pPropertyChangeListeners;
 };
@@ -270,7 +273,7 @@ void SAL_CALL ContentImplHelper::addContentEventListener(
 
     if ( !m_pImpl->m_pContentEventListeners )
         m_pImpl->m_pContentEventListeners.reset(
-            new cppu::OInterfaceContainerHelper( m_aMutex ));
+            new comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener>( m_aMutex ));
 
     m_pImpl->m_pContentEventListeners->addInterface( Listener );
 }
@@ -563,7 +566,7 @@ void SAL_CALL ContentImplHelper::addPropertySetInfoChangeListener(
 
     if ( !m_pImpl->m_pPropSetChangeListeners )
         m_pImpl->m_pPropSetChangeListeners.reset(
-            new cppu::OInterfaceContainerHelper( m_aMutex ));
+            new comphelper::OInterfaceContainerHelper3<beans::XPropertySetInfoChangeListener>( m_aMutex ));
 
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
@@ -721,15 +724,9 @@ void ContentImplHelper::notifyPropertySetInfoChange(
         return;
 
     // Notify event listeners.
-    cppu::OInterfaceIteratorHelper aIter( *m_pImpl->m_pPropSetChangeListeners );
+    comphelper::OInterfaceIteratorHelper3 aIter( *m_pImpl->m_pPropSetChangeListeners );
     while ( aIter.hasMoreElements() )
-    {
-        // Propagate event.
-        uno::Reference< beans::XPropertySetInfoChangeListener >
-            xListener( aIter.next(), uno::UNO_QUERY );
-        if ( xListener.is() )
-            xListener->propertySetInfoChange( evt );
-    }
+        aIter.next()->propertySetInfoChange( evt );
 }
 
 void ContentImplHelper::notifyContentEvent(
@@ -739,16 +736,9 @@ void ContentImplHelper::notifyContentEvent(
         return;
 
     // Notify event listeners.
-    cppu::OInterfaceIteratorHelper aIter( *m_pImpl->m_pContentEventListeners );
+    comphelper::OInterfaceIteratorHelper3 aIter( *m_pImpl->m_pContentEventListeners );
     while ( aIter.hasMoreElements() )
-    {
-        // Propagate event.
-        uno::Reference<
-            css::ucb::XContentEventListener > xListener(
-                aIter.next(), uno::UNO_QUERY );
-        if ( xListener.is() )
-            xListener->contentEvent( evt );
-    }
+        aIter.next()->contentEvent( evt );
 }
 
 void ContentImplHelper::inserted()
