@@ -50,9 +50,9 @@ WindowCommandDispatch::~WindowCommandDispatch()
 
 void WindowCommandDispatch::impl_startListening()
 {
-    osl::ClearableMutexGuard aReadLock(m_mutex);
+    std::unique_lock aReadLock(m_mutex);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
-    aReadLock.clear();
+    aReadLock.unlock();
 
     if ( ! xWindow.is())
         return;
@@ -70,9 +70,9 @@ void WindowCommandDispatch::impl_startListening()
 
 void WindowCommandDispatch::impl_stopListening()
 {
-    osl::ClearableMutexGuard aReadLock(m_mutex);
+    std::unique_lock aReadLock(m_mutex);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
-    aReadLock.clear();
+    aReadLock.unlock();
 
     if (!xWindow.is())
         return;
@@ -130,10 +130,10 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, vo
     try
     {
         // SYNCHRONIZED ->
-        osl::ClearableMutexGuard aReadLock(m_mutex);
+        std::unique_lock aReadLock(m_mutex);
         css::uno::Reference< css::frame::XDispatchProvider >   xProvider(m_xFrame.get(), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::uno::XComponentContext >     xContext    = m_xContext;
-        aReadLock.clear();
+        aReadLock.unlock();
         // <- SYNCHRONIZED
 
         // check provider ... we know it's weak reference only
