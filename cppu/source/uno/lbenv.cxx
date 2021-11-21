@@ -137,7 +137,7 @@ struct uno_DefaultEnvironment : public uno_ExtEnvironment
     sal_Int32 nRef;
     sal_Int32 nWeakRef;
 
-    ::osl::Mutex mutex;
+    std::mutex mutex;
     Ptr2ObjectMap aPtr2ObjectMap;
     OId2ObjectMap aOId2ObjectMap;
 
@@ -237,7 +237,7 @@ static void defenv_registerInterface(
 
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
-    ::osl::ClearableMutexGuard guard( that->mutex );
+    std::unique_lock guard( that->mutex );
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
@@ -262,7 +262,7 @@ static void defenv_registerInterface(
             {
                 void * pInterface = pIEntry->pInterface;
                 (*pEnv->acquireInterface)( pEnv, pInterface );
-                guard.clear();
+                guard.unlock();
                 (*pEnv->releaseInterface)( pEnv, *ppInterface );
                 *ppInterface = pInterface;
             }
@@ -285,7 +285,7 @@ static void defenv_registerProxyInterface(
 
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
-    ::osl::ClearableMutexGuard guard( that->mutex );
+    std::unique_lock guard( that->mutex );
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
@@ -320,7 +320,7 @@ static void defenv_registerProxyInterface(
                 void * pInterface = pIEntry->pInterface;
                 (*pEnv->acquireInterface)( pEnv, pInterface );
                 --pOEntry->nRef; // manual revoke of proxy to be freed
-                guard.clear();
+                guard.unlock();
                 (*freeProxy)( pEnv, *ppInterface );
                 *ppInterface = pInterface;
             }
@@ -341,7 +341,7 @@ static void s_stub_defenv_revokeInterface(va_list * pParam)
     OSL_ENSURE( pEnv && pInterface, "### null ptr!" );
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
-    ::osl::ClearableMutexGuard guard( that->mutex );
+    std::unique_lock guard( that->mutex );
 
     Ptr2ObjectMap::const_iterator const iFind(
         that->aPtr2ObjectMap.find( pInterface ) );
@@ -359,7 +359,7 @@ static void s_stub_defenv_revokeInterface(va_list * pParam)
 
         // the last proxy interface of the environment might kill this
         // environment, because of releasing its language binding!!!
-        guard.clear();
+        guard.unlock();
 
         // release interfaces
         for ( nPos = pOEntry->aInterfaces.size(); nPos--; )
@@ -410,7 +410,7 @@ static void s_stub_defenv_revokeInterface(va_list * pParam)
                         OSL_ASSERT( erased == 1 );
                     }
 
-                    guard.clear();
+                    guard.unlock();
 
                     typelib_typedescription_release( pTypeDescr );
                     (*fpFreeProxy)( pEnv, pInterface );
@@ -438,13 +438,13 @@ static void defenv_getObjectIdentifier(
 
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
-    ::osl::ClearableMutexGuard guard( that->mutex );
+    std::unique_lock guard( that->mutex );
 
     Ptr2ObjectMap::const_iterator const iFind(
         that->aPtr2ObjectMap.find( pInterface ) );
     if (iFind == that->aPtr2ObjectMap.end())
     {
-        guard.clear();
+        guard.unlock();
         (*pEnv->computeObjectIdentifier)( pEnv, ppOId, pInterface );
     }
     else
@@ -470,7 +470,7 @@ static void defenv_getRegisteredInterface(
     OUString const & rOId = OUString::unacquired( &pOId );
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
-    ::osl::MutexGuard guard( that->mutex );
+    std::unique_lock guard( that->mutex );
 
     OId2ObjectMap::const_iterator const iFind
         ( that->aOId2ObjectMap.find( rOId ) );
@@ -493,7 +493,7 @@ static void defenv_getRegisteredInterfaces(
     assert(pEnv && pppInterfaces && pnLen && memAlloc && "### null ptr!");
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
-    ::osl::MutexGuard guard( that->mutex );
+    std::unique_lock guard( that->mutex );
 
     sal_Int32 nLen = that->aPtr2ObjectMap.size();
     sal_Int32 nPos = 0;
@@ -711,7 +711,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 
     uno_DefaultEnvironment * that =
         reinterpret_cast< uno_DefaultEnvironment * >(pEnv);
-    ::osl::MutexGuard guard( that->mutex );
+    std::unique_lock guard( that->mutex );
 
     Ptr2ObjectMap ptr2obj( that->aPtr2ObjectMap );
     for (const auto& rEntry : that->aOId2ObjectMap)
