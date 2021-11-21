@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 
 #include <algorithm>
+#include <mutex>
 #include <numeric>
 
 using namespace com::sun::star::uno;
@@ -586,8 +587,8 @@ namespace
 void TransliterationImpl::loadBody( OUString const &implName, Reference<XExtendedTransliteration>& body )
 {
     assert(!implName.isEmpty());
-    static osl::Mutex transBodyMutex;
-    ::osl::MutexGuard guard(transBodyMutex);
+    static std::mutex transBodyMutex;
+    std::unique_lock guard(transBodyMutex);
     static TransBody lastTransBody;
     if (implName != lastTransBody.Name)
     {
