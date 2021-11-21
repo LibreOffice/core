@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <mutex>
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -37,7 +38,7 @@ namespace comphelper {
 
 class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
 {
-    ::osl::Mutex                                           m_aMutex;
+    std::mutex                                             m_aMutex;
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
 
@@ -133,6 +134,9 @@ public:
     static css::uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
+private:
+    css::uno::Reference< css::container::XNameAccess >
+                                            GetConfigurationByPathImpl( const OUString& aPath );
 };
 
 }
