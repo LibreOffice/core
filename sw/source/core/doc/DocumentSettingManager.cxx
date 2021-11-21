@@ -104,7 +104,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbFrameAutowidthWithMorePara(false),
     mbGutterAtTop(false),
     mbFootnoteInColumnToPageEnd(false),
-    mnImagePreferredDPI(0)
+    mnImagePreferredDPI(0),
+    mbAutoFirstLineIndentDisregardLineSpace(true)
 
     // COMPATIBILITY FLAGS END
 {
@@ -241,6 +242,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::GUTTER_AT_TOP:
             return mbGutterAtTop;
         case DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND: return mbFootnoteInColumnToPageEnd;
+        case DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
+            return mbAutoFirstLineIndentDisregardLineSpace;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -413,6 +416,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::SUBTRACT_FLYS:
             mbSubtractFlys = value;
+            break;
+
+        case DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
+            mbAutoFirstLineIndentDisregardLineSpace = value;
             break;
 
         // COMPATIBILITY FLAGS END
