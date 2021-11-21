@@ -24,6 +24,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <tools/link.hxx>
+#include <mutex>
 
 namespace com::sun::star::uno {
     class XComponentContext;
@@ -46,7 +47,7 @@ namespace framework{
 class WindowCommandDispatch final
 {
     private:
-        osl::Mutex m_mutex;
+        std::mutex m_mutex;
 
         /// can be used to create own needed services on demand.
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
