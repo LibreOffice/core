@@ -9894,11 +9894,18 @@ GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMen
     gtk_container_add(GTK_CONTAINER(pMenuHack), pChild);
     g_object_unref(pChild);
 
-    return show_menu(pAnchor, pMenuHack, rAnchor, ePlace);
+    GtkPositionType eRet = show_menu(pAnchor, pMenuHack, rAnchor, ePlace);
+
+    GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(pMenuHack));
+    g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopup", GINT_TO_POINTER(true));
+
+    return eRet;
 }
 
 void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkWidget* pAnchor)
 {
+    bool bHadFocus = gtk_window_has_toplevel_focus(pMenuHack);
+
     do_ungrab(GTK_WIDGET(pMenuHack));
 
     gtk_widget_hide(GTK_WIDGET(pMenuHack));
@@ -9908,6 +9915,9 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
     gtk_container_remove(GTK_CONTAINER(pMenuHack), pChild);
     gtk_container_add(GTK_CONTAINER(pPopover), pChild);
     g_object_unref(pChild);
+
+    GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(pMenuHack));
+    g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopup", GINT_TO_POINTER(false));
 
     // so gdk_window_move_to_rect will work again the next time
     gtk_widget_unrealize(GTK_WIDGET(pMenuHack));
@@ -9919,6 +9929,15 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
     GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
     if (pFrame)
         pFrame->UnblockTooltip();
+
+    if (bHadFocus)
+    {
+        GdkSurface* pParentSurface = pParent ? widget_get_surface(pParent) : nullptr;
+        void* pParentIsPopover = pParentSurface ? g_object_get_data(G_OBJECT(pParentSurface), "g-lo-InstancePopup") : nullptr;
+        if (pParentIsPopover)
+            do_grab(pAnchor);
+        gtk_widget_grab_focus(pAnchor);
+    }
 }
 
 #endif
@@ -10004,7 +10023,7 @@ private:
         {
             set_active(false);
         }
-        else
+        else if (!g_object_get_data(G_OBJECT(event->grab_window), "g-lo-InstancePopup")) // another LibreOffice popover took a grab
         {
             //try and regrab, so when we lose the grab to the menu of the color palette
             //combobox we regain it so the color palette doesn't itself disappear on next
@@ -18615,7 +18634,7 @@ private:
         {
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         }
-        else
+        else if (!g_object_get_data(G_OBJECT(event->grab_window), "g-lo-InstancePopup")) // another LibreOffice popover took a grab
         {
             //try and regrab, so when we lose the grab to the menu of the color palette
             //combobox we regain it so the color palette doesn't itself disappear on next
@@ -19861,9 +19880,14 @@ private:
                 m_bHoverSelection = false;
             }
 
+            bool bHadFocus = gtk_window_has_toplevel_focus(m_pMenuWindow);
+
             do_ungrab(GTK_WIDGET(m_pMenuWindow));
 
             gtk_widget_hide(GTK_WIDGET(m_pMenuWindow));
+
+            GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(m_pMenuWindow));
+            g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopup", GINT_TO_POINTER(false));
 
             // so gdk_window_move_to_rect will work again the next time
             gtk_widget_unrealize(GTK_WIDGET(m_pMenuWindow));
@@ -19878,6 +19902,15 @@ private:
             GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
             if (pFrame)
                 pFrame->UnblockTooltip();
+
+            if (bHadFocus)
+            {
+                GdkSurface* pParentSurface = pParent ? widget_get_surface(pParent) : nullptr;
+                void* pParentIsPopover = pParentSurface ? g_object_get_data(G_OBJECT(pParentSurface), "g-lo-InstancePopup") : nullptr;
+                if (pParentIsPopover)
+                    do_grab(m_pToggleButton);
+                gtk_widget_grab_focus(m_pToggleButton);
+            }
         }
         else
         {
@@ -19903,6 +19936,8 @@ private:
 
             GdkRectangle aAnchor {0, 0, gtk_widget_get_allocated_width(pComboBox), gtk_widget_get_allocated_height(pComboBox) };
             show_menu(pComboBox, m_pMenuWindow, aAnchor, weld::Placement::Under);
+            GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(m_pMenuWindow));
+            g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopup", GINT_TO_POINTER(true));
         }
     }
 
@@ -20362,7 +20397,7 @@ private:
         {
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         }
-        else
+        else if (!g_object_get_data(G_OBJECT(event->grab_window), "g-lo-InstancePopup")) // another LibreOffice popover took a grab
         {
             //try and regrab, so when we lose the grab to the menu of the color palette
             //combobox we regain it so the color palette doesn't itself disappear on next
@@ -22017,7 +22052,7 @@ private:
         {
             popdown();
         }
-        else
+        else if (!g_object_get_data(G_OBJECT(event->grab_window), "g-lo-InstancePopup")) // another LibreOffice popover took a grab
         {
             //try and regrab, so when we lose the grab to the menu of the color palette
             //combobox we regain it so the color palette doesn't itself disappear on next
