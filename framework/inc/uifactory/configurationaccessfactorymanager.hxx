@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
+#include <mutex>
 #include <string_view>
 #include <unordered_map>
 
@@ -64,7 +65,7 @@ class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< 
 
         bool impl_getElementProps( const css::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;
 
-        mutable osl::Mutex           m_aMutex;
+        mutable std::mutex           m_aMutex;
         OUString                     m_aPropType;
         OUString                     m_aPropName;
         OUString                     m_aPropModule;

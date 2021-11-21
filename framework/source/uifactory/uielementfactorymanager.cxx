@@ -78,7 +78,7 @@ ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Re
 ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
@@ -88,7 +88,7 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( std::u16string_view rType, const OUString& rName, std::u16string_view rModule ) const
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     FactoryManagerMap::const_iterator pIter =
         m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rName, rModule ));
@@ -124,7 +124,7 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
 void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule, const OUString& rServiceSpecifier )
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
@@ -138,7 +138,7 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( st
 void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule )
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
@@ -152,7 +152,7 @@ void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModul
 Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFactoriesDescription() const
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     Sequence< Sequence< PropertyValue > > aSeqSeq;
 
@@ -198,7 +198,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
     OUString   aService;
 
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
@@ -217,7 +217,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const Contain
     OUString   aService;
 
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
@@ -236,7 +236,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const Contain
     OUString   aService;
 
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
@@ -253,14 +253,14 @@ void SAL_CALL ConfigurationAccess_FactoryManager::disposing( const EventObject& 
 {
     // SAFE
     // remove our reference to the config access
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_FactoryManager::readConfigurationData()
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
