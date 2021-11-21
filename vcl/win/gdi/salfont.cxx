@@ -1549,7 +1549,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, hOldFont);
+    HFONT tmpFont = ImplDoSetFont(aIFSD, pFont, hOldFont);
+    ::DeleteFont(tmpFont);
 
     WinFontFace const * pWinFontData = static_cast<WinFontFace const *>(pFont);
 
@@ -1614,7 +1615,8 @@ const void* WinSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* 
     ScopedFont aOldFont(*this);
 
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, hOldFont);
+    HFONT tmpFont = ImplDoSetFont(aIFSD, pFont, hOldFont);
+    ::DeleteFont(tmpFont);
 
     // get the raw font file data
     RawFontData aRawFontData( getHDC() );
@@ -1644,7 +1646,8 @@ void WinSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
     ScopedFont aOldFont(*this);
 
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, hOldFont);
+    HFONT tmpFont = ImplDoSetFont(aIFSD, pFont, hOldFont);
+    ::DeleteFont(tmpFont);
 
     // get raw font file data
     const RawFontData xRawFontData( getHDC() );
