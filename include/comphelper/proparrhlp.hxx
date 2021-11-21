@@ -22,7 +22,7 @@
 
 #include <comphelper/propagg.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <osl/diagnose.h>
 
 namespace comphelper
@@ -34,9 +34,9 @@ class OPropertyArrayUsageHelper
 protected:
     static sal_Int32                        s_nRefCount;
     static ::cppu::IPropertyArrayHelper*    s_pProps;
-    static osl::Mutex& theMutex()
+    static std::mutex& theMutex()
     {
-        static osl::Mutex SINGLETON;
+        static std::mutex SINGLETON;
         return SINGLETON;
     }
 public:
@@ -92,14 +92,14 @@ template<class TYPE>
 template <class TYPE>
 OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
 {
-    ::osl::MutexGuard aGuard(theMutex());
+    std::unique_lock aGuard(theMutex());
     ++s_nRefCount;
 }
 
 template <class TYPE>
 OPropertyArrayUsageHelper<TYPE>::~OPropertyArrayUsageHelper()
 {
-    ::osl::MutexGuard aGuard(theMutex());
+    std::unique_lock aGuard(theMutex());
     OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
     if (!--s_nRefCount)
     {
@@ -114,7 +114,7 @@ template <class TYPE>
     OSL_ENSURE(s_nRefCount, "OPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
     if (!s_pProps)
     {
-        ::osl::MutexGuard aGuard(theMutex());
+        std::unique_lock aGuard(theMutex());
         if (!s_pProps)
         {
             s_pProps = createArrayHelper();
