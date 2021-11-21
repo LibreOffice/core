@@ -266,6 +266,22 @@ public:
         return *this;
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** Move assignment
+     * @since LibreOffice 7.3
+     */
+    OUStringBuffer& operator = ( OUStringBuffer&& value )
+    {
+        rtl_uString_release( pData );
+        pData = value.pData;
+        nCapacity = value.nCapacity;
+        value.pData = nullptr;
+        value.nCapacity = 0;
+        rtl_uString_new( &value.pData );
+        return *this;
+    }
+#endif
+
     /** Assign from a string.
 
         @since LibreOffice 5.3
