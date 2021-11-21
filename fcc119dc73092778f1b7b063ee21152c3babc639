@@ -16,6 +16,41 @@
       "message": "It seems right but prefer letting the last word to DaeHyun Sung for this one so just +1 :-)",
       "revId": "fcc119dc73092778f1b7b063ee21152c3babc639",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9fac376_09a4e55d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001877
+      },
+      "writtenOn": "2021-11-21T22:40:31Z",
+      "side": 1,
+      "message": "Oh, I also found duplicated word. so +1",
+      "parentUuid": "8499037f_94104cd6",
+      "revId": "fcc119dc73092778f1b7b063ee21152c3babc639",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "123ca606_ee8776fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001877
+      },
+      "writtenOn": "2021-11-21T22:40:31Z",
+      "side": 1,
+      "message": "I found duplicated Korean word. so +1",
+      "revId": "fcc119dc73092778f1b7b063ee21152c3babc639",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
