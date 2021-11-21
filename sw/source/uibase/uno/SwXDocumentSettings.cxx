@@ -151,6 +151,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_GUTTER_AT_TOP,
     HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND,
     HANDLE_IMAGE_PREFERRED_DPI,
+    HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE,
 };
 
 }
@@ -248,6 +249,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("GutterAtTop"), HANDLE_GUTTER_AT_TOP, cppu::UnoType<bool>::get(), 0 },
         { OUString("FootnoteInColumnToPageEnd"), HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND, cppu::UnoType<bool>::get(), 0 },
         { OUString("ImagePreferredDPI"), HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0 },
+        { OUString("AutoFirstLineIndentDisregardLineSpace"), HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1039,6 +1041,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE, bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1554,6 +1566,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_IMAGE_PREFERRED_DPI:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().getImagePreferredDPI();
+        }
+        break;
+        case HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE);
         }
         break;
         default:
