@@ -81,6 +81,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/threadex.hxx>
+#include <mutex>
 
 using namespace framework;
 
@@ -2580,7 +2581,7 @@ void SAL_CALL XFrameImpl::windowClosing( const css::lang::EventObject& )
 *//*-*****************************************************************************************************/
 void SAL_CALL XFrameImpl::windowShown( const css::lang::EventObject& )
 {
-    static osl::Mutex aFirstVisibleLock;
+    static std::mutex aFirstVisibleLock;
 
     /* SAFE { */
     SolarMutexClearableGuard aReadLock;
@@ -2595,10 +2596,10 @@ void SAL_CALL XFrameImpl::windowShown( const css::lang::EventObject& )
         return;
 
     static bool bFirstVisibleTask = true;
-    osl::ClearableMutexGuard aGuard(aFirstVisibleLock);
+    std::unique_lock aGuard(aFirstVisibleLock);
     bool bMustBeTriggered = bFirstVisibleTask;
     bFirstVisibleTask = false;
-    aGuard.clear();
+    aGuard.unlock();
 
     if (bMustBeTriggered)
     {
