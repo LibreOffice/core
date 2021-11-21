@@ -116,8 +116,12 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
 
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurationByPath( const OUString& aPath )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    return GetConfigurationByPathImpl(aPath);
+}
 
+uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurationByPathImpl( const OUString& aPath )
+{
     uno::Reference< container::XNameAccess > xConfig;
 
     try
@@ -143,10 +147,10 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
 
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetObjConfiguration()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_xObjectConfig.is() )
-        m_xObjectConfig = GetConfigurationByPath(
+        m_xObjectConfig = GetConfigurationByPathImpl(
                                          "/org.openoffice.Office.Embedding/Objects" );
 
     return m_xObjectConfig;
@@ -155,10 +159,10 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetObjConfigur
 
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetVerbsConfiguration()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_xVerbsConfig.is() )
-        m_xVerbsConfig = GetConfigurationByPath(
+        m_xVerbsConfig = GetConfigurationByPathImpl(
                                         "/org.openoffice.Office.Embedding/Verbs");
 
     return m_xVerbsConfig;
@@ -167,10 +171,10 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetVerbsConfig
 
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeConfiguration()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_xMediaTypeConfig.is() )
-        m_xMediaTypeConfig = GetConfigurationByPath(
+        m_xMediaTypeConfig = GetConfigurationByPathImpl(
                     "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations");
 
     return m_xMediaTypeConfig;
@@ -179,7 +183,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
 
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFactory()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !m_xFilterFactory.is() )
         m_xFilterFactory.set(
