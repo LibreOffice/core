@@ -34,6 +34,42 @@
       "parentUuid": "9dafe676_eb2bec7e",
       "revId": "782d1fcc500028bce1934988fed88028a952063b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba1be44_c753609b",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-21T16:37:26Z",
+      "side": 1,
+      "message": "Why not? The rCandidate parameter in the readAngle() is of type: const OUString\u0026, and the called methods readNumber() and matchIgnoreAsciiCase() take std::u16string_view. So, the literal was actually converted into 2-bytes characters anyway.",
+      "parentUuid": "d37fd371_c9f730b7",
+      "revId": "782d1fcc500028bce1934988fed88028a952063b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "213beb01_b4acee28",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-21T16:37:26Z",
+      "side": 1,
+      "message": "std::u16string_view would work, but it also uses 2-bytes characters. Isn\u0027t it better to keep OUStringLiteral?",
+      "parentUuid": "d37fd371_c9f730b7",
+      "revId": "782d1fcc500028bce1934988fed88028a952063b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
