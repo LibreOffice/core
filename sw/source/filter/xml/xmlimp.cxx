@@ -1302,6 +1302,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bSubtractFlysAnchoredAtFlys = false;
     bool bEmptyDbFieldHidesPara = false;
     bool bCollapseEmptyCellPara = false;
+    bool bAutoFirstLineIndentDisregardLineSpace = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
     const PropertyValue* currentDatabaseCommand = nullptr;
@@ -1551,6 +1552,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bCollapseEmptyCellPara)
         xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
+
+    if (!bAutoFirstLineIndentDisregardLineSpace)
+        xProps->setPropertyValue("AutoFirstLineIndentDisregardLineSpace", makeAny(false));
 
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
