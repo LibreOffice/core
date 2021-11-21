@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 namespace framework{
 
@@ -36,7 +36,7 @@ class ActionLockGuard final
     // member
 
     private:
-        osl::Mutex m_mutex;
+        std::mutex m_mutex;
 
         /** @short  points to the object, which can be locked from outside. */
         css::uno::Reference< css::document::XActionLockable > m_xActionLock;
@@ -81,7 +81,7 @@ class ActionLockGuard final
          */
         bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
-            osl::MutexGuard g(m_mutex);
+            std::unique_lock g(m_mutex);
 
             if (m_bActionLocked || !xLock.is())
                 return false;
@@ -107,7 +107,7 @@ class ActionLockGuard final
         void freeResource()
         {
             // SAFE -> ..........................
-            osl::ClearableMutexGuard aMutexLock(m_mutex);
+            std::unique_lock aMutexLock(m_mutex);
 
             css::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock;
             bool                                                  bLocked = m_bActionLocked;
@@ -115,7 +115,7 @@ class ActionLockGuard final
             m_xActionLock.clear();
             m_bActionLocked = false;
 
-            aMutexLock.clear();
+            aMutexLock.unlock();
             // <- SAFE ..........................
 
             if (bLocked && xLock.is())
@@ -125,7 +125,7 @@ class ActionLockGuard final
         /** @short  unlock the internal wrapped resource, if it's not already done. */
         void unlock()
         {
-            osl::MutexGuard g(m_mutex);
+            std::unique_lock g(m_mutex);
             if (m_bActionLocked && m_xActionLock.is())
             {
                 m_xActionLock->removeActionLock();
