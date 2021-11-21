@@ -250,49 +250,54 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
             if (aLang != LANGUAGE_KOREAN && aLang != LANGUAGE_JAPANESE)
                 nFirstLineOfs<<=1;
 
-            const SvxLineSpacingItem *pSpace = m_aLineInf.GetLineSpacing();
-            if( pSpace )
+            // tdf#129448: Auto first-line indent should not be effected by line space.
+            // Below is for compatibility with old documents.
+            if (!pNode->getIDocumentSettingAccess()->get(DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE))
             {
-                switch( pSpace->GetLineSpaceRule() )
+                const SvxLineSpacingItem *pSpace = m_aLineInf.GetLineSpacing();
+                if( pSpace )
                 {
-                    case SvxLineSpaceRule::Auto:
-                    break;
-                    case SvxLineSpaceRule::Min:
+                    switch( pSpace->GetLineSpaceRule() )
                     {
-                        if( nFirstLineOfs < pSpace->GetLineHeight() )
+                        case SvxLineSpaceRule::Auto:
+                        break;
+                        case SvxLineSpaceRule::Min:
+                        {
+                            if( nFirstLineOfs < pSpace->GetLineHeight() )
+                                nFirstLineOfs = pSpace->GetLineHeight();
+                            break;
+                        }
+                        case SvxLineSpaceRule::Fix:
                             nFirstLineOfs = pSpace->GetLineHeight();
                         break;
+                        default: OSL_FAIL( ": unknown LineSpaceRule" );
                     }
-                    case SvxLineSpaceRule::Fix:
-                        nFirstLineOfs = pSpace->GetLineHeight();
-                    break;
-                    default: OSL_FAIL( ": unknown LineSpaceRule" );
-                }
-                switch( pSpace->GetInterLineSpaceRule() )
-                {
-                    case SvxInterLineSpaceRule::Off:
-                    break;
-                    case SvxInterLineSpaceRule::Prop:
+                    switch( pSpace->GetInterLineSpaceRule() )
                     {
-                        tools::Long nTmp = pSpace->GetPropLineSpace();
-                        // 50% is the minimum, at 0% we switch to
-                        // the default value 100%...
-                        if( nTmp < 50 )
-                            nTmp = nTmp ? 50 : 100;
+                        case SvxInterLineSpaceRule::Off:
+                        break;
+                        case SvxInterLineSpaceRule::Prop:
+                        {
+                            tools::Long nTmp = pSpace->GetPropLineSpace();
+                            // 50% is the minimum, at 0% we switch to
+                            // the default value 100%...
+                            if( nTmp < 50 )
+                                nTmp = nTmp ? 50 : 100;
 
-                        nTmp *= nFirstLineOfs;
-                        nTmp /= 100;
-                        if( !nTmp )
-                            ++nTmp;
-                        nFirstLineOfs = nTmp;
-                        break;
+                            nTmp *= nFirstLineOfs;
+                            nTmp /= 100;
+                            if( !nTmp )
+                                ++nTmp;
+                            nFirstLineOfs = nTmp;
+                            break;
+                        }
+                        case SvxInterLineSpaceRule::Fix:
+                        {
+                            nFirstLineOfs += pSpace->GetInterLineSpace();
+                            break;
+                        }
+                        default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                     }
-                    case SvxInterLineSpaceRule::Fix:
-                    {
-                        nFirstLineOfs += pSpace->GetInterLineSpace();
-                        break;
-                    }
-                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                 }
             }
         }
