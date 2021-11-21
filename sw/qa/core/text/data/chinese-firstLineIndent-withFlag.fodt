@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:settings>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="AutoFirstLineIndentDisregardLineSpace" config:type="boolean">true</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:line-height="200%" fo:text-indent="0cm" style:auto-text-indent="true"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="P1">自由免费的全能办公套件，国际化的开源项目，您也可以成为团队的一员！自由免费的全能办公套件，国际化的开源项目，您也可以成为团队的一员！自由免费的全能办公套件，国际化的开源项目，您也可以成为团队的一员！自由免费的全能办公套件，国际化的开源项目，您也可以成为团队的一员！</text:p>
+  </office:text>
+ </office:body>
+</office:document>

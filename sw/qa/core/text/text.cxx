@@ -176,6 +176,38 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(65536), nNewLeft - nOldLeft);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testChineseAutoFirstLineIndent)
+{
+    // The test document contains a paragraph with Chinese characters.
+    // The first line indent is set to 'auto', and the line spacing is set to 200%.
+    // Also, there is a "AutoFirstLineIndentDisregardLineSpace" capability flag set in the document.
+    createSwDoc(DATA_DIRECTORY, "chinese-firstLineIndent-withFlag.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Get the line width of the first line.
+    sal_Int32 nFirstLineWidth
+        = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "width").toInt32();
+    // Get the line width of the second line.
+    sal_Int32 nSecondLineWidth
+        = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[2]/SwLinePortion[1]", "width").toInt32();
+    // Calculate the difference between the width of 2nd line and the 1st line.
+    sal_Int32 nFirstLineIndent = nSecondLineWidth - nFirstLineWidth;
+    // Get the number of characters in the second line.
+    sal_Int32 nSecondLineCharLength
+        = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[2]/SwLinePortion[1]", "length").toInt32();
+    // Calculate the width of one Chinese character, based on the current (fallback) font used.
+    sal_Int32 nCharWidth = nSecondLineWidth / nSecondLineCharLength;
+
+    // Calculate the first line indent in characters unit.
+    sal_Int32 nFirstLineIndentChars = nFirstLineIndent / nCharWidth;
+
+    // Tdf#64975: The auto first line indent should be 2 characters for Chinese language.
+    // Tdf#129448: For any language in ODF, the changing of line-height should not affect the auto first line
+    // indent.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nFirstLineIndentChars);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRuby)
 {
     // Given a document with multiple ruby portions:
