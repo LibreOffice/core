@@ -90,6 +90,8 @@ enum class DocumentSettingId
     // tdf#112443 disable off-page content positioning
     DISABLE_OFF_PAGE_POSITIONING,
     EMPTY_DB_FIELD_HIDES_PARA,
+    // tdf#129448: Auto first-line indent should not be effected by line space
+    AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE,
     // COMPATIBILITY FLAGS END
     BROWSE_MODE,
     HTML_MODE,
