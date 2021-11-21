@@ -28,6 +28,7 @@
 #include <rtl/ref.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 //  Defines
 
@@ -64,7 +65,7 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
     private:
         void impl_initConfigAccess();
 
-        osl::Mutex                                                m_mutex;
+        std::mutex                                                m_mutex;
         bool                                                      m_bDisposed   : 1,
                                                                   m_bConfigRead : 1;
         OUString                                                  m_aNodeRefStates;
@@ -91,7 +92,7 @@ GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::un
 // XComponent
 void SAL_CALL GlobalSettings_Access::dispose()
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     m_xConfigAccess.clear();
     m_bDisposed = true;
 }
@@ -107,14 +108,14 @@ void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Refere
 // XEventListener
 void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     m_xConfigAccess.clear();
 }
 
 // settings access
 bool GlobalSettings_Access::HasToolbarStatesInfo()
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     if ( m_bDisposed )
         return false;
@@ -148,7 +149,7 @@ bool GlobalSettings_Access::HasToolbarStatesInfo()
 
 bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue )
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     if ( m_bDisposed )
         return false;
