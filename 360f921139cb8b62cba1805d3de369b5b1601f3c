@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b57edf_d7bbe425",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-21T20:45:21Z",
+      "side": 1,
+      "message": "Chris/Jan-Marek: thought you might have some opinion here",
+      "revId": "360f921139cb8b62cba1805d3de369b5b1601f3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
