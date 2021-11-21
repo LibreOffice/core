@@ -1491,7 +1491,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         return false;
     }
 
-    m_aAbsURIRef = aSynAbsURIRef;
+    m_aAbsURIRef = std::move(aSynAbsURIRef);
 
     return true;
 }
