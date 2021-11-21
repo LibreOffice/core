@@ -20,8 +20,8 @@
 #pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-
 #include <rtl/ustring.hxx>
+#include <mutex>
 
 namespace framework{
 
@@ -50,7 +50,7 @@ class ConfigAccess final
     // member
 
     private:
-        mutable osl::Mutex m_mutex;
+        mutable std::mutex m_mutex;
 
         /**
             reference to the uno service manager
@@ -69,6 +69,7 @@ class ConfigAccess final
 
     // native interface methods
 
+        void      closeImpl();
     public:
 
                  ConfigAccess( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

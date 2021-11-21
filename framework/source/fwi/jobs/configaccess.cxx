@@ -67,7 +67,7 @@ ConfigAccess::~ConfigAccess()
  */
 ConfigAccess::EOpenMode ConfigAccess::getMode() const
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     return m_eMode;
 }
 
@@ -87,7 +87,7 @@ ConfigAccess::EOpenMode ConfigAccess::getMode() const
  */
 void ConfigAccess::open( /*IN*/ EOpenMode eMode )
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     // check if configuration is already open in the right mode.
     // By the way: Don't allow closing by using this method!
@@ -99,7 +99,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
     // can be called without checks! It does the checks by itself ...
     // e.g. for already closed or not opened configuration.
     // Flushing of all made changes will be done here too.
-    close();
+    closeImpl();
 
     // create the configuration provider, which provides sub access points
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
@@ -135,7 +135,12 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
  */
 void ConfigAccess::close()
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
+    closeImpl();
+}
+
+void ConfigAccess::closeImpl()
+{
     // check already closed configuration
     if (m_xConfig.is())
     {
