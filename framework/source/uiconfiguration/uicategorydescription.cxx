@@ -33,6 +33,7 @@
 
 #include <comphelper/propertysequence.hxx>
 
+#include <mutex>
 #include <string_view>
 #include <unordered_map>
 
@@ -47,7 +48,7 @@ namespace {
 
 class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess,XContainerListener>
 {
-    osl::Mutex aMutex;
+    std::mutex aMutex;
     public:
                                   ConfigurationAccess_UICategory( std::u16string_view aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICategory() override;
@@ -112,7 +113,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( std::u16string_v
 ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 {
     // SAFE
-    osl::MutexGuard g(aMutex);
+    std::unique_lock g(aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
@@ -121,7 +122,7 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 // XNameAccess
 Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
 {
-    osl::MutexGuard g(aMutex);
+    std::unique_lock g(aMutex);
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
@@ -242,7 +243,7 @@ Any ConfigurationAccess_UICategory::getUINameFromCache( const OUString& rId )
 Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 {
     // SAFE
-    osl::MutexGuard g(aMutex);
+    std::unique_lock g(aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -332,7 +333,7 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
 {
     // SAFE
     // remove our reference to the config access
-    osl::MutexGuard g(aMutex);
+    std::unique_lock g(aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
     Reference< XInterface > xIfac2( m_xConfigAccess, UNO_QUERY );
