@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
+#include <mutex>
 #include <string_view>
 #include <unordered_map>
 
@@ -45,7 +46,6 @@ public:
     virtual       ~ConfigurationAccess_ControllerFactory() override;
 
     void          readConfigurationData();
-    void          updateConfigurationData();
 
     OUString getServiceFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const;
     OUString getValueFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const;
@@ -61,6 +61,8 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 private:
+    void          updateConfigurationDataImpl();
+
     struct ControllerInfo
     {
         OUString m_aImplementationName;
@@ -75,7 +77,7 @@ private:
 
     bool impl_getElementProps( const css::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
 
-    mutable osl::Mutex           m_mutex;
+    mutable std::mutex           m_mutex;
     OUString                     m_aPropCommand;
     OUString                     m_aPropModule;
     OUString                     m_aPropController;

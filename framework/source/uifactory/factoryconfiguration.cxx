@@ -66,7 +66,7 @@ ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( co
 
 ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
@@ -75,7 +75,7 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 
 OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
     if ( pIter != m_aMenuControllerMap.end() )
@@ -94,7 +94,7 @@ OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( std
 }
 OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
@@ -118,7 +118,7 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     std::u16string_view rModule,
     const OUString& rServiceSpecifier )
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.emplace( aHashKey,ControllerInfo(rServiceSpecifier,OUString()) );
@@ -128,7 +128,7 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
     std::u16string_view rCommandURL,
     std::u16string_view rModule )
 {
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.erase( aHashKey );
@@ -142,7 +142,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
     OUString   aService;
     OUString   aValue;
 
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
@@ -162,7 +162,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
     OUString   aService;
     OUString   aValue;
 
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
@@ -182,14 +182,14 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementReplaced( const Cont
 void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObject& )
 {
     // remove our reference to the config access
-    osl::MutexGuard g(m_mutex);
+    std::unique_lock g(m_mutex);
     m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_ControllerFactory::readConfigurationData()
 {
     // SAFE
-    osl::ClearableMutexGuard aLock( m_mutex );
+    std::unique_lock aLock( m_mutex );
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -212,11 +212,11 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         return;
 
     // Read and update configuration data
-    updateConfigurationData();
+    updateConfigurationDataImpl();
 
     uno::Reference< container::XContainer > xContainer( m_xConfigAccess, uno::UNO_QUERY );
     // UNSAFE
-    aLock.clear();
+    aLock.unlock();
 
     if ( xContainer.is() )
     {
@@ -225,12 +225,8 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
     }
 }
 
-void ConfigurationAccess_ControllerFactory::updateConfigurationData()
+void ConfigurationAccess_ControllerFactory::updateConfigurationDataImpl()
 {
-    osl::MutexGuard g(m_mutex);
-    if ( !m_xConfigAccess.is() )
-        return;
-
     const Sequence< OUString > aPopupMenuControllers = m_xConfigAccess->getElementNames();
 
     OUString aCommand;
