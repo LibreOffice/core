@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a26f351e_7ac412b3",
+        "filename": "svgio/source/svgreader/svgtoken.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-21T19:34:05Z",
+      "side": 1,
+      "message": "this can be\n    typedef std::unordered_map\u003c rtl::OUStringConstExpr, SVGToken \u003e SVGTokenMapper;",
+      "revId": "782d1fcc500028bce1934988fed88028a952063b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9dafe676_eb2bec7e",
         "filename": "svgio/source/svgreader/svgtools.cxx",
         "patchSetId": 1
