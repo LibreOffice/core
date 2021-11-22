@@ -647,13 +647,6 @@ void Window::ImplCallOverlapPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Tiled rendering is used, idle paint does not need to do anything.
-        mpWindowImpl->mpFrameData->maPaintIdle.Stop();
-        return;
-    }
-
     comphelper::ProfileZone aZone("VCL idle re-paint");
 
     // save paint events until layout is done
@@ -672,6 +665,9 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
     else if ( mpWindowImpl->mbReallyVisible )
     {
         ImplCallOverlapPaint();
+        if (comphelper::LibreOfficeKit::isActive() &&
+            mpWindowImpl->mpFrameData->maPaintIdle.IsActive())
+            mpWindowImpl->mpFrameData->maPaintIdle.Stop();
     }
 }
 
@@ -692,12 +688,6 @@ IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Timer *, void)
 
 void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFlags nFlags )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Tiled rendering is used, so there's no need to invalidate for idle painting.
-        return;
-    }
-
     // set PAINTCHILDREN for all parent windows till the first OverlapWindow
     if ( !ImplIsOverlapWindow() )
     {
@@ -759,12 +749,6 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
 
 void Window::ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Tiled rendering is used, so there's no need to invalidate for idle painting.
-        return;
-    }
-
     vcl::Region aRegion = rRegion;
 
     ImplClipBoundaries( aRegion, true, true );
@@ -795,12 +779,6 @@ void Window::ImplInvalidateParentFrameRegion( const vcl::Region& rRegion )
 
 void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Tiled rendering is used, so there's no need to invalidate for idle painting.
-        return;
-    }
-
     // check what has to be redrawn
     bool bInvalidateAll = !pRegion;
 
@@ -1180,11 +1158,8 @@ void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
     tools::Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
     if ( !aRect.IsEmpty() )
     {
-        if (!comphelper::LibreOfficeKit::isActive())
-        {   // ImplInvalidate() immediately returns in LOK mode, skip useless Region construction
-            vcl::Region aRegion( aRect );
-            ImplInvalidate( &aRegion, nFlags );
-        }
+        vcl::Region aRegion( aRect );
+        ImplInvalidate( &aRegion, nFlags );
         tools::Rectangle aLogicRectangle(rRect);
         LogicInvalidate(&aLogicRectangle);
     }
