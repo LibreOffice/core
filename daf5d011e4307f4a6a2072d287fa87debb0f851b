@@ -16,6 +16,23 @@
       "message": "Not even compile tested. And no idea how fast CreateCompatibleDC actually is.",
       "revId": "daf5d011e4307f4a6a2072d287fa87debb0f851b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fb70bfd_1e2bf867",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-22T12:51:23Z",
+      "side": 1,
+      "message": "I also got this build error:\ncd C:/cygwin/home/serva/lode/dev/core/vcl \u0026\u0026 C:/cygwin/home/serva/lode/opt/bin/make -j 1 -rs build\n[build CXX] vcl/win/app/salinst.cxx\n[build CXX] vcl/win/gdi/gdiimpl.cxx\n[build CXX] vcl/win/gdi/salbmp.cxx\n[build CXX] vcl/win/gdi/salfont.cxx\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1491): error C3861: \u0027ImplDoSetFont\u0027: identifier not found\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1497): error C2664: \u0027void DeleteFont(HFONT)\u0027: cannot convert argument 1 from \u0027HGDIOBJ\u0027 to \u0027HFONT\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1497): note: Conversion from \u0027void*\u0027 to pointer to non-\u0027void\u0027 requires an explicit cast\nC:\\cygwin\\home\\serva\\lode\\dev\\core\\vcl\\inc\\win/wincomp.hxx(63): note: see declaration of \u0027DeleteFont\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1543): error C2664: \u0027`anonymous-namespace\u0027::ScopedFontHDC::ScopedFontHDC(WinSalGraphics \u0026,const vcl::font::PhysicalFontFace *)\u0027: cannot convert argument 1 from \u0027WinSa\nlGraphics *\u0027 to \u0027WinSalGraphics \u0026\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1476): note: see declaration of \u0027`anonymous-namespace\u0027::ScopedFontHDC::ScopedFontHDC\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1544): error C2065: \u0027aHDC\u0027: undeclared identifier\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1593): error C2065: \u0027aIFSD\u0027: undeclared identifier\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1593): error C2660: \u0027SalGraphics::CreateTTFfontSubset\u0027: function does not take 6 arguments\nC:\\cygwin\\home\\serva\\lode\\dev\\core\\vcl\\inc\\salgdi.hxx(657): note: see declaration of \u0027SalGraphics::CreateTTFfontSubset\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1599): error C2664: \u0027`anonymous-namespace\u0027::ScopedFontHDC::ScopedFontHDC(WinSalGraphics \u0026,const vcl::font::PhysicalFontFace *)\u0027: cannot convert argument 1 from \u0027WinSa\nlGraphics *\u0027 to \u0027WinSalGraphics \u0026\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1476): note: see declaration of \u0027`anonymous-namespace\u0027::ScopedFontHDC::ScopedFontHDC\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1600): error C2065: \u0027aHDC\u0027: undeclared identifier\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1620): error C2664: \u0027`anonymous-namespace\u0027::ScopedFontHDC::ScopedFontHDC(WinSalGraphics \u0026,const vcl::font::PhysicalFontFace *)\u0027: cannot convert argument 1 from \u0027WinSa\nlGraphics *\u0027 to \u0027WinSalGraphics \u0026\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1476): note: see declaration of \u0027`anonymous-namespace\u0027::ScopedFontHDC::ScopedFontHDC\u0027\nC:/cygwin/home/serva/lode/dev/core/vcl/win/gdi/salfont.cxx(1621): error C2065: \u0027aHDC\u0027: undeclared identifier\nmake[1]: *** [C:/cygwin/home/serva/lode/dev/core/solenv/gbuild/LinkTarget.mk:333: C:/cygwin/home/serva/lode/dev/core/workdir/CxxObject/vcl/win/gdi/salfont.o] Error 2\n",
+      "revId": "daf5d011e4307f4a6a2072d287fa87debb0f851b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
