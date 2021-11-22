@@ -260,7 +260,8 @@ void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)
     if (m_hFont)
         return;
     HFONT hOrigFont;
-    m_hFont = m_pGraphics->ImplDoSetFont(GetFontSelectPattern(), GetFontFace(), hOrigFont);
+    m_hFont = m_pGraphics->ImplDoSetFont(m_pGraphics->getHDC(), GetFontSelectPattern(),
+                                         GetFontFace(), hOrigFont);
     SelectObject(m_pGraphics->getHDC(), hOrigFont);
 }
 
