@@ -20,7 +20,7 @@
 
 #include <MutexContainer.hxx>
 #include <WrappedIgnoreProperty.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -94,7 +94,7 @@ public:
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListenerContainer;
 
     WrappedIgnoreProperty               m_aWrappedLineJointProperty;
 };

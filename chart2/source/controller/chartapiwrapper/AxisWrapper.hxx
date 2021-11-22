@@ -21,7 +21,7 @@
 #include <WrappedPropertySet.hxx>
 #include "ReferenceSizePropertyProvider.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/chart/XAxis.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -109,7 +109,7 @@ private: //methods
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListenerContainer;
 
     tAxisType           m_eType;
 
