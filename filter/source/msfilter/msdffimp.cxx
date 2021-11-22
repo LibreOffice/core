@@ -1293,7 +1293,7 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
         if ( bRotateWithShape )
         {
             // convert from 100th to 10th degrees
-            aBitmapEx.Rotate( toDegree10(nFix16Angle), rShadeColors[ 0 ].aColor );
+            aBitmapEx.Rotate( to<Degree10>(nFix16Angle), rShadeColors[ 0 ].aColor );
 
             BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
             if ( rObjData.nSpFlags & ShapeFlag::FlipV )

@@ -1051,7 +1051,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
-    Degree100 nAngle = toDegree100(aFnt.GetOrientation());
+    Degree100 nAngle = to<Degree100>(aFnt.GetOrientation());
     if ( nAngle )
         pText->SdrAttrObj::NbcRotate(aPos,nAngle);
     InsertObj( pText, false );

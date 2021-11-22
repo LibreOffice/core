@@ -392,7 +392,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 const SwRotationGrf& rRotation = aTmpSet.Get(RES_GRFATR_ROTATION);
                 nCurrentRotation = rRotation.GetValue();
                 aUnrotatedSize = rRotation.GetUnrotatedSize();
-                aSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, toDegree100(nCurrentRotation)));
+                aSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, to<Degree100>(nCurrentRotation)));
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -507,7 +507,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 // RotGrfFlyFrame: Get and process evtl. changed RotationAngle
                 if ( SfxItemState::SET == pSet->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem ))
                 {
-                    const Degree10 aNewRotation = toDegree10(static_cast<const SdrAngleItem*>(pItem)->GetValue() % 36000_deg100);
+                    const Degree10 aNewRotation = to<Degree10>(static_cast<const SdrAngleItem*>(pItem)->GetValue() % 36000_deg100);
 
                     // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
                     aMgr.SetRotation(nCurrentRotation, aNewRotation, aUnrotatedSize);
@@ -984,7 +984,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
                 SfxItemSetFixed<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION> aSet( rShell.GetAttrPool() );
                 rShell.GetCurAttr( aSet );
                 const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
-                rSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, toDegree100(rRotation.GetValue())));
+                rSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, to<Degree100>(rRotation.GetValue())));
                 break;
             }
             default:

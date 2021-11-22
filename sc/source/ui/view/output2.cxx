@@ -5078,7 +5078,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if ( nAttrRotate )
                                 {
                                     // attribute is 1/100, Font 1/10 degrees
-                                    nOriVal = toDegree10(nAttrRotate);
+                                    nOriVal = to<Degree10>(nAttrRotate);
 
                                     double nAddX = 0.0;
                                     double nAddY = 0.0;
