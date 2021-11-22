@@ -16,6 +16,24 @@
       "message": "There is some magic somewhere that I think extracts what pngs are used by hlst files, e.g. postprocess/CustomTarget_images.mk which might assume there will be a #define for the entry (?)",
       "revId": "5078e83d88a08881661a18636f38e8951cdda676",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "458ff359_ba741141",
+        "filename": "vcl/inc/bitmaps.hlst",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-22T10:13:53Z",
+      "side": 0,
+      "message": "My sed-foo is not black-belt level, but it looks like the pattern matching will still work because it relies on sucking on anything between quotes",
+      "parentUuid": "70f97821_da4a192f",
+      "revId": "5078e83d88a08881661a18636f38e8951cdda676",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
