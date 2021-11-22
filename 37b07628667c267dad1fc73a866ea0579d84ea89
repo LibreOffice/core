@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abae43d5_336446b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-22T12:09:56Z",
+      "side": 1,
+      "message": "sberg, new OUString methods, I\u0027m unsure of the naming for the new C entrypoints",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
