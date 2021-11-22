@@ -16,6 +16,24 @@
       "message": "the \"Ascii\" in the function and parameter names is rather confusing now",
       "revId": "4bc44490f51f7cc4a36cc7131137018da986c293",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5057903_452b5964",
+        "filename": "forms/source/inc/urltransformer.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-22T12:46:59Z",
+      "side": 1,
+      "message": "addressed in \n    https://gerrit.libreoffice.org/c/core/+/125663",
+      "parentUuid": "a1c86a80_d5e1eb98",
+      "revId": "4bc44490f51f7cc4a36cc7131137018da986c293",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
