@@ -1479,14 +1479,15 @@ void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
     OUString aTmpStr=m_aAbsURIRef.toString();
     m_aAbsURIRef.setLength(0);
     int oldSchemeLen = 0;
-    const OUString& aSchemeName = getSchemeInfo().m_sScheme;
+    const OUString& rOldSchemeName = getSchemeInfo().m_sScheme;
     if (m_eScheme == INetProtocol::Generic)
         oldSchemeLen = m_aScheme.getLength();
     else
-        oldSchemeLen = aSchemeName.getLength();
+        oldSchemeLen = rOldSchemeName.getLength();
     m_eScheme=eTargetScheme;
-    int newSchemeLen = aSchemeName.getLength();
-    m_aAbsURIRef.append(aSchemeName);
+    const OUString& rNewSchemeName = getSchemeInfo().m_sScheme;
+    int newSchemeLen = rNewSchemeName.getLength();
+    m_aAbsURIRef.append(rNewSchemeName);
     m_aAbsURIRef.append(aTmpStr.getStr()+oldSchemeLen);
     int delta=newSchemeLen-oldSchemeLen;
     m_aUser+=delta;
