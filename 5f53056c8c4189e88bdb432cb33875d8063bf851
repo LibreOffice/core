@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2810f3_315e1b5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-22T08:34:23Z",
+      "side": 1,
+      "message": "You forgot tdf#145538 from the commit message subject line",
+      "revId": "5f53056c8c4189e88bdb432cb33875d8063bf851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
