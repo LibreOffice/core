@@ -624,7 +624,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 
         // then add to the list:
         if (ACFlags::CapitalStartWord & m_nFlags)
-            pACorr->AddWrdSttException(m_sWord, m_eLanguage);
+            pACorr->AddWordStartException(m_sWord, m_eLanguage);
         else if (ACFlags::CapitalStartSentence & m_nFlags)
             pACorr->AddCplSttException(m_sWord, m_eLanguage);
     }

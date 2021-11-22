@@ -144,7 +144,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                 break;//"Exceptions/TwoCapitalsAtStart",
                 case  1:
                     if(*o3tl::doAccess<bool>(pValues[nProp]))
-                        nFlags |= ACFlags::SaveWordWrdSttLst;
+                        nFlags |= ACFlags::SaveWordWordStartLst;
                 break;//"Exceptions/CapitalAtStartSentence",
                 case  2:
                     if(*o3tl::doAccess<bool>(pValues[nProp]))
@@ -247,7 +247,7 @@ void SvxBaseAutoCorrCfg::ImplCommit()
         GetPropertyNames(),
         {css::uno::Any(bool(nFlags & ACFlags::SaveWordCplSttLst)),
             // "Exceptions/TwoCapitalsAtStart"
-         css::uno::Any(bool(nFlags & ACFlags::SaveWordWrdSttLst)),
+         css::uno::Any(bool(nFlags & ACFlags::SaveWordWordStartLst)),
             // "Exceptions/CapitalAtStartSentence"
          css::uno::Any(bool(nFlags & ACFlags::Autocorrect)), // "UseReplacementTable"
          css::uno::Any(bool(nFlags & ACFlags::CapitalStartWord)),

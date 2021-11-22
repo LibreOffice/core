@@ -1259,7 +1259,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
         StringsArrays& rArrays = it1->second;
         if(eCurLang != eLang) // current language is treated later
         {
-            SvStringsISortDtor* pWrdList = pAutoCorrect->LoadWrdSttExceptList(eCurLang);
+            SvStringsISortDtor* pWrdList = pAutoCorrect->LoadWordStartExceptList(eCurLang);
 
             if(pWrdList)
             {
@@ -1279,7 +1279,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
                 {
                     pWrdList->insert(elem);
                 }
-                pAutoCorrect->SaveWrdSttExceptList(eCurLang);
+                pAutoCorrect->SaveWordStartExceptList(eCurLang);
             }
 
             SvStringsISortDtor* pCplList = pAutoCorrect->LoadCplSttExceptList(eCurLang);
@@ -1308,7 +1308,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
     }
     aStringsTable.clear();
 
-    SvStringsISortDtor* pWrdList = pAutoCorrect->LoadWrdSttExceptList(eLang);
+    SvStringsISortDtor* pWrdList = pAutoCorrect->LoadWordStartExceptList(eLang);
 
     if(pWrdList)
     {
@@ -1327,7 +1327,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
         {
             pWrdList->insert(m_xDoubleCapsLB->get_text(i));
         }
-        pAutoCorrect->SaveWrdSttExceptList(eLang);
+        pAutoCorrect->SaveWordStartExceptList(eLang);
     }
 
     SvStringsISortDtor* pCplList = pAutoCorrect->LoadCplSttExceptList(eLang);
@@ -1353,7 +1353,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
     if (m_xAutoAbbrevCB->get_state_changed_from_saved())
         pAutoCorrect->SetAutoCorrFlag( ACFlags::SaveWordCplSttLst, m_xAutoAbbrevCB->get_active());
     if (m_xAutoCapsCB->get_state_changed_from_saved())
-        pAutoCorrect->SetAutoCorrFlag( ACFlags::SaveWordWrdSttLst, m_xAutoCapsCB->get_active());
+        pAutoCorrect->SetAutoCorrFlag( ACFlags::SaveWordWordStartLst, m_xAutoCapsCB->get_active());
     return false;
 }
 
@@ -1421,7 +1421,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
     {
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         const SvStringsISortDtor* pCplList = pAutoCorrect->GetCplSttExceptList(eLang);
-        const SvStringsISortDtor* pWrdList = pAutoCorrect->GetWrdSttExceptList(eLang);
+        const SvStringsISortDtor* pWrdList = pAutoCorrect->GetWordStartExceptList(eLang);
         size_t i;
         for( i = 0; i < pCplList->size(); i++ )
         {
@@ -1439,7 +1439,7 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     RefillReplaceBoxes(true, eLang, eLang);
     m_xAutoAbbrevCB->set_active(pAutoCorrect->IsAutoCorrFlag( ACFlags::SaveWordCplSttLst));
-    m_xAutoCapsCB->set_active(pAutoCorrect->IsAutoCorrFlag( ACFlags::SaveWordWrdSttLst));
+    m_xAutoCapsCB->set_active(pAutoCorrect->IsAutoCorrFlag( ACFlags::SaveWordWordStartLst));
     m_xAutoAbbrevCB->save_state();
     m_xAutoCapsCB->save_state();
 }
