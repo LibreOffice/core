@@ -707,14 +707,14 @@ namespace dbtools
             // TODO: shouldn't we subtract all the parameters which were already visited?
         if ( nParamsLeft )
         {
-            ::comphelper::OInterfaceIteratorHelper2 aIter( m_aParameterListeners );
+            ::comphelper::OInterfaceIteratorHelper3 aIter( m_aParameterListeners );
             Reference< XPropertySet > xProp = m_xComponent;
             OSL_ENSURE(xProp.is(),"Some already released my component!");
             DatabaseParameterEvent aEvent( xProp, m_pOuterParameters );
 
             _rClearForNotifies.clear();
             while ( aIter.hasMoreElements() && !bCanceled )
-                bCanceled = !static_cast< XDatabaseParameterListener* >( aIter.next() )->approveParameter( aEvent );
+                bCanceled = !aIter.next()->approveParameter( aEvent );
             _rClearForNotifies.reset();
         }
 
