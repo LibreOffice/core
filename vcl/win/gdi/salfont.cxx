@@ -811,7 +811,7 @@ void ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern& rFont,
 
 }
 
-HFONT WinSalGraphics::ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont,
+HFONT WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const & i_rFont,
                                     const vcl::font::PhysicalFontFace * i_pFontFace,
                                     HFONT& o_rOldFont)
 {
@@ -834,17 +834,17 @@ HFONT WinSalGraphics::ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont
         // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
         SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
     }
-    o_rOldFont = ::SelectFont( getHDC(), hNewFont );
+    o_rOldFont = ::SelectFont(hDC, hNewFont);
 
     TEXTMETRICW aTextMetricW;
-    if( !::GetTextMetricsW( getHDC(), &aTextMetricW ) )
+    if (!::GetTextMetricsW(hDC, &aTextMetricW))
     {
         // the selected font doesn't work => try a replacement
         // TODO: use its font fallback instead
         lstrcpynW( aLogFont.lfFaceName, L"Courier New", 12 );
         aLogFont.lfPitchAndFamily = FIXED_PITCH;
         HFONT hNewFont2 = CreateFontIndirectW( &aLogFont );
-        SelectFont( getHDC(), hNewFont2 );
+        SelectFont(hDC, hNewFont2);
         DeleteFont( hNewFont );
         hNewFont = hNewFont2;
     }
@@ -857,8 +857,6 @@ HFONT WinSalGraphics::ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont
 
 void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
 {
-    // check that we don't change the first font while ScopedFont has replaced HFONT
-    assert(!mpWinFontEntry[0].is() || nFallbackLevel != 0 || mpWinFontEntry[0]->GetHFONT());
     assert(nFallbackLevel >= 0 && nFallbackLevel < MAX_FALLBACK);
 
     // return early if there is no new font
@@ -1470,40 +1468,40 @@ bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& 
     return true;
 }
 
-class ScopedFont
+namespace {
+
+class ScopedFontHDC final
 {
 public:
-    explicit ScopedFont(WinSalGraphics & rData);
+    explicit ScopedFontHDC(WinSalGraphics& rGraphics, const vcl::font::PhysicalFontFace& rFontFace)
+        : m_hDC(nullptr)
+        , m_hOrigFont(nullptr)
+        // use height=1000 for easier debugging (to match psprint's font units)
+        , m_aFSP(rFontFace, Size(0,1000), 1000.0, 0, false)
+    {
+        m_hDC = CreateCompatibleDC(rGraphics.getHDC());
+        if (!m_hDC)
+            return;
 
-    ~ScopedFont();
+        rGraphics.ImplDoSetFont(m_hDC, m_aFSP, &rFontFace, m_hOrigFont);
+    }
+
+    ~ScopedFontHDC()
+    {
+        if (m_hOrigFont)
+            ::DeleteFont(SelectFont(m_hDC, m_hOrigFont));
+        if (m_hDC)
+            DeleteDC(m_hDC);
+    }
+
+    HDC hdc() const { return m_hDC; }
+    const vcl::font::FontSelectPattern& fsp() const { return m_aFSP; }
 
 private:
-    WinSalGraphics & m_rData;
+    vcl::font::FontSelectPattern m_aFSP;
+    HDC m_hDC;
     HFONT m_hOrigFont;
 };
-
-ScopedFont::ScopedFont(WinSalGraphics & rData): m_rData(rData), m_hOrigFont(nullptr)
-{
-    if (m_rData.mpWinFontEntry[0])
-    {
-        m_hOrigFont = m_rData.mpWinFontEntry[0]->GetHFONT();
-        m_rData.mpWinFontEntry[0]->SetHFONT(nullptr);
-    }
-}
-
-ScopedFont::~ScopedFont()
-{
-    if( m_hOrigFont )
-    {
-        // restore original font, destroy temporary font
-        HFONT hTempFont = m_rData.mpWinFontEntry[0]->GetHFONT();
-        m_rData.mpWinFontEntry[0]->SetHFONT(m_hOrigFont);
-        SelectObject( m_rData.getHDC(), m_hOrigFont );
-        DeleteObject( hTempFont );
-    }
-}
-
-namespace {
 
 class ScopedTrueTypeFont
 {
@@ -1539,25 +1537,16 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const vcl::font::PhysicalFontFace* pFont, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
-    // TODO: use more of the central font-subsetting code, move stuff there if needed
-
-    // create matching FontSelectPattern
-    // we need just enough to get to the font file data
-    // use height=1000 for easier debugging (to match psprint's font units)
-    vcl::font::FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
-
-    // TODO: much better solution: move SetFont and restoration of old font to caller
-    ScopedFont aOldFont(*this);
-    HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, hOldFont);
-
-    WinFontFace const * pWinFontData = static_cast<WinFontFace const *>(pFont);
+    ScopedFontHDC aScopedFontHDC(*this, *pFont);
+    HDC hDC = aScopedFontHDC.hdc();
+    if (!hDC)
+        return false;
 
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
     TEXTMETRICW aWinMetric;
-    if( !::GetTextMetricsW( getHDC(), &aWinMetric ) )
-        return FALSE;
+    if (!::GetTextMetricsW(hDC, &aWinMetric))
+        return false;
 
     SAL_WARN_IF( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "vcl", "cannot subset device font" );
     SAL_WARN_IF( !(aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE), "vcl", "can only subset TT font" );
@@ -1571,17 +1560,14 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // check if the font has a CFF-table
     const DWORD nCffTag = CalcTag( "CFF " );
-    const RawFontData aRawCffData( getHDC(), nCffTag );
+    const RawFontData aRawCffData(hDC, nCffTag);
     if (aRawCffData.get())
-    {
-        pWinFontData->UpdateFromHDC( getHDC() );
         return SalGraphics::CreateCFFfontSubset(aRawCffData.get(), aRawCffData.size(), aToFile,
                                                 pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount,
                                                 rInfo);
-    }
 
     // get raw font file data
-    const RawFontData xRawFontData( getHDC(), 0 );
+    const RawFontData xRawFontData(hDC, 0);
     if( !xRawFontData.get() )
         return false;
 
@@ -1601,29 +1587,21 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
 
     // write subset into destination file
-    return SalGraphics::CreateTTFfontSubset(*aSftTTF.get(), aToFile, aIFSD.mbVertical, pGlyphIds,
-                                            pEncoding, pGlyphWidths, nGlyphCount);
+    return SalGraphics::CreateTTFfontSubset(*aSftTTF.get(), aToFile, aScopedFontHDC.fsp().mbVertical,
+                                            pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
 }
 
 const void* WinSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
-    // create matching FontSelectPattern
-    // we need just enough to get to the font file data
-    vcl::font::FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
-
-    ScopedFont aOldFont(*this);
-
-    HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, hOldFont);
-
-    // get the raw font file data
-    RawFontData aRawFontData( getHDC() );
-    *pDataLen = aRawFontData.size();
-    if( !aRawFontData.get() )
+    ScopedFontHDC aScopedFontHDC(*this, *pFont);
+    HDC hDC = aScopedFontHDC.hdc();
+    if (!hDC)
         return nullptr;
 
-    const unsigned char* pData = aRawFontData.steal();
-    return pData;
+    // get the raw font file data
+    RawFontData aRawFontData(hDC);
+    *pDataLen = aRawFontData.size();
+    return aRawFontData.get() ? aRawFontData.steal() : nullptr;
 }
 
 void WinSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nLen*/ )
@@ -1636,18 +1614,13 @@ void WinSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                      std::vector< sal_Int32 >& rWidths,
                                      Ucs2UIntMap& rUnicodeEnc )
 {
-    // create matching FontSelectPattern
-    // we need just enough to get to the font file data
-    vcl::font::FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
-
-    // TODO: much better solution: move SetFont and restoration of old font to caller
-    ScopedFont aOldFont(*this);
-
-    HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, hOldFont);
+    ScopedFontHDC aScopedFontHDC(*this, *pFont);
+    HDC hDC = aScopedFontHDC.hdc();
+    if (!hDC)
+        return;
 
     // get raw font file data
-    const RawFontData xRawFontData( getHDC() );
+    const RawFontData xRawFontData(hDC);
     if( !xRawFontData.get() )
         return;
 
