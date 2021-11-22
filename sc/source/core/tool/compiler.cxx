@@ -4118,9 +4118,9 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 (ScCharFlags::Word | ScCharFlags::CharDontCare)) == ScCharFlags::NONE)) )
             nPos--;
         if ( nPos == MAXSTRLEN - 1 )
-            aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, OUString(cQuote) );   // '"' the MAXSTRLENth character
+            aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, rtl::OUStringChar(cQuote) );   // '"' the MAXSTRLENth character
         else
-            aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos + 1, 0, OUString(cQuote) );
+            aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos + 1, 0, rtl::OUStringChar(cQuote) );
         bCorrected = true;
     }
     else if ( c1 != cQuote && c2 == cQuote )
@@ -5448,7 +5448,7 @@ bool ScCompiler::EnQuote( OUString& rStr )
     sal_Int32 nPos = 0;
     while ( (nPos = rStr.indexOf( '\'', nPos)) != -1 )
     {
-        rStr = rStr.replaceAt( nPos, 0, "\\" );
+        rStr = rStr.replaceAt( nPos, 0, u"\\" );
         nPos += 2;
     }
     rStr = "'" + rStr + "'";

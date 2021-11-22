@@ -255,7 +255,7 @@ static OUString & getIniFileName_Impl()
             // rc files in LIBO_ETC_FOLDER (typically "Resources").
             sal_Int32 off = fileName.lastIndexOf( "/MacOS/" );
             if (off != -1)
-                fileName = fileName.replaceAt(off + 1, strlen("MacOS"), LIBO_ETC_FOLDER);
+                fileName = fileName.replaceAt(off + 1, strlen("MacOS"), u"" LIBO_ETC_FOLDER);
 #endif
         }
 #endif

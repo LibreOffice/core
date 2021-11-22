@@ -439,11 +439,11 @@ shrinkFilterName( const OUString &rFilterName, bool bAllowNoStar = false )
             if( nBracketEnd <= 0 )
                 continue;
             if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), "*." ) )
-                aRealName = aRealName.replaceAt( i, nBracketLen + 1, OUString() );
+                aRealName = aRealName.replaceAt( i, nBracketLen + 1, u"" );
             else if (bAllowNoStar)
             {
                 if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), ".") )
-                    aRealName = aRealName.replaceAt( i, nBracketLen + 1, OUString() );
+                    aRealName = aRealName.replaceAt( i, nBracketLen + 1, u"" );
             }
         }
     }

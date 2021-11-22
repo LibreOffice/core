@@ -40,7 +40,7 @@ uno::Reference< report::XSection> lcl_getSection(const uno::Reference< uno::XInt
     return xRet;
 }
 
-void throwIllegallArgumentException( const OUString& _sTypeName
+void throwIllegallArgumentException( std::u16string_view _sTypeName
                                     ,const uno::Reference< uno::XInterface >& ExceptionContext_
                                     ,sal_Int16 ArgumentPosition_
                                     )

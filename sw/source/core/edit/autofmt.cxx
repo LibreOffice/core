@@ -853,7 +853,7 @@ SwAutoFormat::GetDigitLevel(const SwTextFrame& rFrame, TextFrameIndex& rPos,
 
                 eScan = (eScan & ~(UPPER_ALPHA|LOWER_ALPHA)) | eTmpScan;
                 if( pNumTypes )
-                    (*pNumTypes) = pNumTypes->replaceAt( pNumTypes->getLength() - 1, 1, OUString(c) );
+                    (*pNumTypes) = pNumTypes->replaceAt( pNumTypes->getLength() - 1, 1, rtl::OUStringChar(c) );
             }
 
             if( eScan & DELIM )

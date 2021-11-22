@@ -2111,7 +2111,7 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
         {
             sal_Int32 nPos = aLabel.indexOf( static_cast< sal_Unicode >( maTextData.maData.mnShortcut ) );
             if( nPos != -1 )
-                aLabel = aLabel.replaceAt( nPos, 0, "~" );
+                aLabel = aLabel.replaceAt( nPos, 0, u"~" );
         }
         rPropSet.SetStringProperty( "Label", aLabel );
 

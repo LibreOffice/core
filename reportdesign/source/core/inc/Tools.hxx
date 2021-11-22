@@ -45,7 +45,7 @@ namespace reportdesign
      * \param ExceptionContext_ The exception context.
      * \param ArgumentPosition_ The argument position.
      */
-    void throwIllegallArgumentException(const OUString& _sTypeName
+    void throwIllegallArgumentException(std::u16string_view _sTypeName
                                         ,const css::uno::Reference< css::uno::XInterface >& ExceptionContext_
                                         ,sal_Int16 ArgumentPosition_);
 

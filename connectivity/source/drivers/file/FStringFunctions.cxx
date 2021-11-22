@@ -203,7 +203,8 @@ ORowSetValue OOp_Insert::operate(const std::vector<ORowSetValue>& lhs) const
     sal_Int32 nStart = static_cast<sal_Int32>(lhs[2]);
     if (nStart < 1)
         nStart = 1;
-    return sStr.replaceAt(nStart - 1, static_cast<sal_Int32>(lhs[1]), lhs[0]);
+    return sStr.replaceAt(nStart - 1, static_cast<sal_Int32>(lhs[1]),
+                          static_cast<OUString>(lhs[0]));
 }
 
 ORowSetValue OOp_Left::operate(const ORowSetValue& lhs, const ORowSetValue& rhs) const

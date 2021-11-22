@@ -50,7 +50,7 @@ OUString GetString(TranslateId pResId)
         OUString sPath = GetSofficeExe();
         if (const sal_Int32 nDotPos = sPath.lastIndexOf('.'); nDotPos >= 0)
         {
-            sPath = sPath.replaceAt(nDotPos, sPath.getLength() - nDotPos, SAL_CONFIGFILE(""));
+            sPath = sPath.replaceAt(nDotPos, sPath.getLength() - nDotPos, SAL_CONFIGFILE(u""));
             if (osl::FileBase::getFileURLFromSystemPath(sPath, sPath) == osl::FileBase::E_None)
                 rtl::Bootstrap::setIniFilename(sPath);
         }

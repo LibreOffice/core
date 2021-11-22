@@ -204,7 +204,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     sal_Int32 nPos = aTmpStr.indexOf( cStrDelim );
                     while ( nPos != -1 )
                     {
-                        aTmpStr = aTmpStr.replaceAt( nPos, 0, OUString(cStrDelim) );
+                        aTmpStr = aTmpStr.replaceAt( nPos, 0, rtl::OUStringChar(cStrDelim) );
                         nPos = aTmpStr.indexOf( cStrDelim, nPos+2 );
                     }
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );

@@ -2568,10 +2568,10 @@ static OUString OldNameToNewName_Impl( const OUString &rOld )
     OUString sServiceNameCC( rOld );
     sal_Int32 nIdx = sServiceNameCC.indexOf( aOldNamePart1 );
     if (nIdx >= 0)
-        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart1), ".textfield.docinfo." );
+        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart1), u".textfield.docinfo." );
     nIdx = sServiceNameCC.indexOf( aOldNamePart2 );
     if (nIdx >= 0)
-        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart2), ".textfield." );
+        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, strlen(aOldNamePart2), u".textfield." );
     return sServiceNameCC;
 }
 

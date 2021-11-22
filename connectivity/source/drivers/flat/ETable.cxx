@@ -472,7 +472,7 @@ OUString OFlatTable::getEntry() const
             if ( m_pConnection->matchesExtension( sExt ) )
             {
                 if ( !sExt.isEmpty() )
-                    sName = sName.replaceAt(sName.getLength() - (sExt.getLength() + 1), sExt.getLength()+1, OUString());
+                    sName = sName.replaceAt(sName.getLength() - (sExt.getLength() + 1), sExt.getLength()+1, u"");
                 if ( sName == m_Name )
                 {
                     Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );

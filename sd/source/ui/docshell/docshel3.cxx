@@ -308,7 +308,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         sal_Int32 nPos = -1;
                         if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix )))
                         {
-                            aNewLangTxt = aNewLangTxt.replaceAt( nPos, aDocumentLangPrefix.getLength(), "" );
+                            aNewLangTxt = aNewLangTxt.replaceAt( nPos, aDocumentLangPrefix.getLength(), u"" );
 
                             if (aNewLangTxt == "LANGUAGE_NONE")
                                 lcl_setLanguage( pDoc, u"", true );
@@ -320,12 +320,12 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         else if (-1 != (nPos = aNewLangTxt.indexOf( aSelectionLangPrefix )))
                         {
                             bSelection = true;
-                            aNewLangTxt = aNewLangTxt.replaceAt( nPos, aSelectionLangPrefix.getLength(), "" );
+                            aNewLangTxt = aNewLangTxt.replaceAt( nPos, aSelectionLangPrefix.getLength(), u"" );
                         }
                         else if (-1 != (nPos = aNewLangTxt.indexOf( aParagraphLangPrefix )))
                         {
                             bParagraph = true;
-                            aNewLangTxt = aNewLangTxt.replaceAt( nPos, aParagraphLangPrefix.getLength(), "" );
+                            aNewLangTxt = aNewLangTxt.replaceAt( nPos, aParagraphLangPrefix.getLength(), u"" );
                         }
 
                         if (bSelection || bParagraph)
@@ -410,7 +410,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             sal_Int32 nPos = 0;
             if(-1 != (nPos = sApplyText.indexOf( sSpellingRule )))
             {
-                sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), "");
+                sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), u"");
                 rEditView.InsertText( sApplyText );
             }
         }
