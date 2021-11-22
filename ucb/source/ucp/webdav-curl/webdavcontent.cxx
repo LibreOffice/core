@@ -1339,13 +1339,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
     }
 
+    bool bNetworkAccessAllowed = true;
+
     if ( !m_bTransient && !bHasAll )
     {
         // Obtain values from server...
 
 
         // First, identify whether resource is DAV or not
-        bool bNetworkAccessAllowed = true;
         const ResourceType eType = getResourceType(
                 xEnv, xResAccess, &bNetworkAccessAllowed );
 
@@ -1573,7 +1574,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // For DAV resources we only know the Title, for non-DAV
         // resources we additionally know that it is a document.
 
-        if ( eType == DAV )
+        else if ( eType == DAV )
         {
             if (!xProps)
                 xProps.reset(new ContentProperties(aUnescapedTitle));
@@ -1634,21 +1635,24 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     uno::makeAny( aDate ),
                     true );
             }
-            // If WebDAV didn't return the resource type, assume default
-            // This happens e.g. for lists exported by SharePoint
-            else if ( (*it) == "IsFolder" )
+            else if (bNetworkAccessAllowed) // don't set these if connection failed
             {
-                xProps->addProperty(
-                    (*it),
-                    uno::makeAny( false ),
-                    true );
-            }
-            else if ( (*it) == "IsDocument" )
-            {
-                xProps->addProperty(
-                    (*it),
-                    uno::makeAny( true ),
-                    true );
+                // If WebDAV didn't return the resource type, assume default
+                // This happens e.g. for lists exported by SharePoint
+                if ((*it) == "IsFolder")
+                {
+                    xProps->addProperty(
+                        (*it),
+                        uno::makeAny( false ),
+                        true );
+                }
+                else if ((*it) == "IsDocument")
+                {
+                    xProps->addProperty(
+                        (*it),
+                        uno::makeAny( true ),
+                        true );
+                }
             }
         }
     }
