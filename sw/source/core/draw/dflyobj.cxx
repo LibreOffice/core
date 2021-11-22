@@ -386,7 +386,7 @@ void SwVirtFlyDrawObj::Rotate(const Point& rRef, Degree100 nAngle100, double sn,
     {
         // RotGrfFlyFrame: Here is where the positively completed rotate interaction is executed.
         // Rotation is in 1/100th degree and may be signed (!)
-        Degree10 nAngle10 = toDegree10(nAngle100);
+        Degree10 nAngle10 = to<Degree10>(nAngle100);
 
         while(nAngle10 < 0_deg10)
         {
@@ -1174,7 +1174,7 @@ Degree100 SwVirtFlyDrawObj::GetRotateAngle() const
     if(ContainsSwGrfNode())
     {
         Size aSize;
-        return toDegree100(getPossibleRotationFromFraphicFrame(aSize));
+        return to<Degree100>(getPossibleRotationFromFraphicFrame(aSize));
     }
     else
     {
