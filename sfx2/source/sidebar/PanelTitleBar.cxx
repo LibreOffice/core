@@ -41,10 +41,16 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
     mxExpander->set_label(rsTitle);
     mxExpander->connect_expanded(LINK(this, PanelTitleBar, ExpandHdl));
 
+    // tdf#145801 lock the height to the size it needs with the "toolbar" button shown
+    // so all of the titlebars are the same height if the "toolbar" is hidden in some
+    // of them
+    mxToolBox->show();
+    mxTitlebar->set_size_request(-1, mxTitlebar->get_preferred_size().Height());
+    mxToolBox->hide();
+
     assert(mpPanel);
 
     UpdateExpandedState();
-
 }
 
 void PanelTitleBar::SetTitle(const OUString& rsTitle)
