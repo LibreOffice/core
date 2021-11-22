@@ -69,7 +69,7 @@ OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
     {
         aShortName = lExtensionList[ 0 ];
         if ( aShortName.startsWith( "*." ) )
-            aShortName = aShortName.replaceAt( 0, 2, "" );
+            aShortName = aShortName.replaceAt( 0, 2, u"" );
     }
     return aShortName;
 }
@@ -375,7 +375,7 @@ OUString FilterConfigCache::GetImportWildcard(sal_uInt16 nFormat, sal_Int32 nEnt
 {
     OUString aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
     if ( !aWildcard.isEmpty() )
-        aWildcard = aWildcard.replaceAt( 0, 0, "*." );
+        aWildcard = aWildcard.replaceAt( 0, 0, u"*." );
     return aWildcard;
 }
 
@@ -473,7 +473,7 @@ OUString FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEn
 {
     OUString aWildcard( GetExportFormatExtension( nFormat, nEntry ) );
     if ( !aWildcard.isEmpty() )
-        aWildcard = aWildcard.replaceAt( 0, 0, "*." );
+        aWildcard = aWildcard.replaceAt( 0, 0, u"*." );
     return aWildcard;
 }
 

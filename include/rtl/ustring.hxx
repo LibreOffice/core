@@ -2223,6 +2223,8 @@ public:
     }
 #endif
 
+// hide this from internal code to avoid ambiguous lookup error
+#ifndef LIBO_INTERNAL_ONLY
     /**
       Returns a new string resulting from replacing n = count characters
       from position index in this string with newStr.
@@ -2242,6 +2244,16 @@ public:
         rtl_uString_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
+#endif
+
+#ifdef LIBO_INTERNAL_ONLY
+    SAL_WARN_UNUSED_RESULT OUString replaceAt( sal_Int32 index, sal_Int32 count, std::u16string_view newStr ) const
+    {
+        rtl_uString* pNew = NULL;
+        rtl_uString_newReplaceStrAtUtf16L( &pNew, pData, index, count, newStr.data(), newStr.size() );
+        return OUString( pNew, SAL_NO_ACQUIRE );
+    }
+#endif
 
     /**
       Returns a new string resulting from replacing all occurrences of

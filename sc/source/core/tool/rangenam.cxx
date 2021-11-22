@@ -440,7 +440,7 @@ void ScRangeData::MakeValidName( const ScDocument& rDoc, OUString& rName )
     for (nPos=0; nPos<nLen; nPos++)
     {
         if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos, ScCharFlags::Name) )
-            rName = rName.replaceAt( nPos, 1, "_" );
+            rName = rName.replaceAt( nPos, 1, u"_" );
     }
 
     // Ensure that the proposed name is not a reference under any convention,

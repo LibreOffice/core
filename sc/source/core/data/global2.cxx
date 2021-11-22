@@ -326,7 +326,7 @@ OUString ScGlobal::GetDocTabName( std::u16string_view rFileName,
     sal_Int32 nPos = 1;
     while( (nPos = aDocTab.indexOf( '\'', nPos )) != -1 )
     {   // escape Quotes
-        aDocTab = aDocTab.replaceAt( nPos, 0, "\\" );
+        aDocTab = aDocTab.replaceAt( nPos, 0, u"\\" );
         nPos += 2;
     }
     aDocTab += "'" + OUStringChar(SC_COMPILER_FILE_TAB_SEP) + rTabName;

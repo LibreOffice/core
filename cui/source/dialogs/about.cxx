@@ -76,7 +76,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pBuildLabel->set_uri("https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h="
                            + sbuildId);
     m_pBuildLabel->set_label(sbuildId.getLength() > nMaxChar ? sbuildId.replaceAt(
-                                 nMaxChar, sbuildId.getLength() - nMaxChar, "...")
+                                 nMaxChar, sbuildId.getLength() - nMaxChar, u"...")
                                                              : sbuildId);
   } else {
     m_pBuildCaption->hide();

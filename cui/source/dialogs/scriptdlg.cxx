@@ -1091,11 +1091,11 @@ namespace {
 OUString ReplaceString(
     const OUString& source,
     const OUString& token,
-    const OUString& value )
+    std::u16string_view value )
 {
     sal_Int32 pos = source.indexOf( token );
 
-    if ( pos != -1 && !value.isEmpty() )
+    if ( pos != -1 && !value.empty() )
     {
         return source.replaceAt( pos, token.getLength(), value );
     }
@@ -1107,9 +1107,9 @@ OUString ReplaceString(
 
 OUString FormatErrorString(
     const OUString& unformatted,
-    const OUString& language,
-    const OUString& script,
-    const OUString& line,
+    std::u16string_view language,
+    std::u16string_view script,
+    std::u16string_view line,
     std::u16string_view type,
     std::u16string_view message )
 {
@@ -1247,7 +1247,7 @@ OUString GetErrorMessage(
         message = sError.Message;
     }
     return FormatErrorString(
-        unformatted, language, script, OUString(), std::u16string_view(), message );
+        unformatted, language, script, u"", std::u16string_view(), message );
 }
 
 OUString GetErrorMessage( const css::uno::Any& aException )

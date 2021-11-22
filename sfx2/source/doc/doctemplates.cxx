@@ -560,7 +560,7 @@ void SfxDocTplService_Impl::getDirList()
             if (nIndex<0)
                 continue;
 
-            rTemplateDir = rTemplateDir.replaceAt(nIndex, aPrefix.getLength(), OUString());
+            rTemplateDir = rTemplateDir.replaceAt(nIndex, aPrefix.getLength(), u"");
             rTemplateDir = xExpander->expandMacros( rTemplateDir );
         }
     }

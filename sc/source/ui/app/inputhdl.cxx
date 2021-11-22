@@ -362,10 +362,10 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
 
     sal_Int32 nColon = aDelimiters.indexOf( ':' );
     if ( nColon != -1 )
-        aDelimiters = aDelimiters.replaceAt( nColon, 1, ""); // Delimiter without colon
+        aDelimiters = aDelimiters.replaceAt( nColon, 1, u""); // Delimiter without colon
     sal_Int32 nDot = aDelimiters.indexOf(cSheetSep);
     if ( nDot != -1 )
-        aDelimiters = aDelimiters.replaceAt( nDot, 1 , ""); // Delimiter without dot
+        aDelimiters = aDelimiters.replaceAt( nDot, 1 , u""); // Delimiter without dot
 
     const sal_Unicode* pChar = rFormula.getStr();
     sal_Int32 nLen = rFormula.getLength();

@@ -6085,7 +6085,7 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
         else
         {
             // First character is not lower case i.e. assume upper or title case
-            OUString sWordSentence = sWordLower.replaceAt( 0, 1, OUString(rWord[0]) );
+            OUString sWordSentence = sWordLower.replaceAt( 0, 1, rtl::OUStringChar(rWord[0]) );
             if ( rWord == sWordSentence )
                 aWordCase = CASE_SENTENCE;
             else
@@ -6121,7 +6121,7 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
                 if ( aWordCase == CASE_LOWER )
                     sStr = rCC.lowercase(rStr);
                 else if ( aWordCase == CASE_SENTENCE )
-                    sStr = rCC.lowercase(rStr).replaceAt(0, 1, OUString(rStr[0]));
+                    sStr = rCC.lowercase(rStr).replaceAt(0, 1, rtl::OUStringChar(rStr[0]));
                 else if ( aWordCase == CASE_UPPER )
                     sStr = rCC.uppercase(rStr);
 
@@ -6172,7 +6172,7 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
             sStr = rCC.lowercase(aCompletedString);
         else if (aWordCase == CASE_SENTENCE)
             sStr = rCC.lowercase(aCompletedString)
-                       .replaceAt(0, 1, OUString(aCompletedString[0]));
+                       .replaceAt(0, 1, rtl::OUStringChar(aCompletedString[0]));
         else if (aWordCase == CASE_UPPER)
             sStr = rCC.uppercase(aCompletedString);
 

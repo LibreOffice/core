@@ -101,7 +101,7 @@ namespace connectivity
     namespace
     {
         size_t lcl_substitute( OUString& _inout_rString,
-            const char* _pAsciiPattern, const OUString& _rReplace )
+            const char* _pAsciiPattern, std::u16string_view _rReplace )
         {
             size_t nOccurrences = 0;
 

@@ -50,7 +50,7 @@ static OUString lclGenerateApiString( const OUString& rString )
     OUString aRetString = rString;
     sal_Int32 nQuotePos = aRetString.getLength();
     while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
-        aRetString = aRetString.replaceAt( nQuotePos, 1, "\"\"" );
+        aRetString = aRetString.replaceAt( nQuotePos, 1, u"\"\"" );
     return "\"" + aRetString + "\"";
 }
 

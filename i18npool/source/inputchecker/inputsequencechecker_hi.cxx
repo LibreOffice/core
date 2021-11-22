@@ -126,7 +126,7 @@ InputSequenceChecker_hi::correctInputSequence(OUString& Text,
                                             sal_Int16       inputCheckMode)
 {
     if (checkInputSequence(Text, nStartPos, inputChar, inputCheckMode))
-        Text = Text.replaceAt(++nStartPos, 0, OUString(inputChar));
+        Text = Text.replaceAt(++nStartPos, 0, rtl::OUStringChar(inputChar));
     else
         nStartPos=Text.getLength();
     return nStartPos;

@@ -815,8 +815,8 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
                 {
                     // extract alignment information from extrastring
                     aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
-                    pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
-                    aStr = aStr.replaceAt(nPos, n1-nPos+1, "");
+                    pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, u"");
+                    aStr = aStr.replaceAt(nPos, n1-nPos+1, u"");
                 }
             }
         }

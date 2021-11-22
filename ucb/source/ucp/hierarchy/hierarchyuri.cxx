@@ -92,7 +92,7 @@ void HierarchyUri::init() const
             m_aUri = m_aUri.replaceAt(
                         HIERARCHY_URL_SCHEME.getLength() + 2,
                         0,
-                        "/" + DEFAULT_DATA_SOURCE_SERVICE + "/" );
+                        rtl::OUStringConcatenation("/" + DEFAULT_DATA_SOURCE_SERVICE + "/") );
             m_aService = DEFAULT_DATA_SOURCE_SERVICE;
 
             nPos

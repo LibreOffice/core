@@ -199,7 +199,7 @@ void SdCustomShowDlg::SelectHdl(void const *p)
 
                     const CharClass* pCharClass = rDoc.GetCharClass();
                     while( pCharClass->isDigit( aStr, nStrPos ) )
-                        aStr = aStr.replaceAt( nStrPos, 1, "" );
+                        aStr = aStr.replaceAt( nStrPos, 1, u"" );
                     aStr = aStr.subView( 0, nStrPos) + OUString::number( ++nNum ) + aStr.subView( nStrPos);
                 }
 
