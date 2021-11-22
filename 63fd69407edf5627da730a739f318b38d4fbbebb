@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98f18e34_a8d4bff0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-22T11:30:34Z",
+      "side": 1,
+      "message": "Then another approach is to treak the xpdfimort binary to return an isEncrypted error and ask for a password.",
+      "revId": "63fd69407edf5627da730a739f318b38d4fbbebb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8036ec31_600312f1",
