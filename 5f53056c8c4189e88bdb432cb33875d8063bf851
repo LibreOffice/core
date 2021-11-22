@@ -16,6 +16,46 @@
       "message": "You forgot tdf#145538 from the commit message subject line",
       "revId": "5f53056c8c4189e88bdb432cb33875d8063bf851",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58786c71_1527a985",
+        "filename": "cui/source/tabpages/swpossizetabpage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-22T10:39:16Z",
+      "side": 1,
+      "message": "The assignment to eStringId is (and was) pointless here - you may simply return a.eVert directly.\n\nNot a problem, just in case you want to tweak it a little :-)",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 36
+      },
+      "revId": "5f53056c8c4189e88bdb432cb33875d8063bf851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b40c330_7a5b6e49",
+        "filename": "cui/source/tabpages/swpossizetabpage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-22T10:39:16Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "5f53056c8c4189e88bdb432cb33875d8063bf851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
