@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e02a576_030b9fd0",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-22T09:34:48Z",
+      "side": 1,
+      "message": "I assume that const_casting here is aimed to avoid COW? I suppose it\u0027s best to avoid const_casts, and maybe use std::as_const?",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 35
+      },
+      "revId": "a6ed7588114c643a4d4821201e81b149e3429f2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
