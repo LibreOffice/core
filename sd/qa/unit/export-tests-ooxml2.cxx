@@ -1804,6 +1804,11 @@ void SdOOXMLExportTest2::testTdf59323_slideFooters()
     // This is needed for backwards compatibility
     assertXPath(pXmlDocSlide1, "//a:fld [@type='datetime1']/a:t");
 
+    // tdf#143316: Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    assertXPath(pXmlDocSlide1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:rPr");
+
     xDocShRef->DoClose();
 }
 
