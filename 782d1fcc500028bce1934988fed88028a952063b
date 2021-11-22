@@ -87,6 +87,24 @@
       "parentUuid": "d37fd371_c9f730b7",
       "revId": "782d1fcc500028bce1934988fed88028a952063b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66a052fb_e7d4ee38",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-22T06:18:57Z",
+      "side": 1,
+      "message": "The proposal to use u16string_literal was to show that use of OUStringLiteral is absolutely *not* justified: we do *not* use right-hand OUString when comparing; we use only string literals (of various char type). We should *only* use OUStrings (OUStringLiterals) where we actually use that classes methods.\n\n\u003e the called methods readNumber() and matchIgnoreAsciiCase() take std::u16string_view\n\nIt is wrong - in the sense that the mentioned methods have *overloads*, so they do not *only* take 16-bit character arrays: e.g., see their overloads taking libreoffice_internal::ConstCharArrayDetector.\n\nAnd the overloads taking 8-bit arrays are no less effective. They do *not* convert the arrays to 16-bit.\n\nPlease just keep using char array.",
+      "parentUuid": "7ba1be44_c753609b",
+      "revId": "782d1fcc500028bce1934988fed88028a952063b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
