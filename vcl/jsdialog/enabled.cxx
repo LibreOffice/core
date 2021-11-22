@@ -50,8 +50,7 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
         || rUIFile == "modules/scalc/ui/datafielddialog.ui"
         || rUIFile == "modules/scalc/ui/pivotfielddialog.ui"
         || rUIFile == "modules/scalc/ui/datafieldoptionsdialog.ui"
-        || rUIFile == "svx/ui/fontworkgallerydialog.ui"
-        || rUIFile == "svx/ui/findreplacedialog.ui"
+        || rUIFile == "svx/ui/fontworkgallerydialog.ui" || rUIFile == "svx/ui/findreplacedialog.ui"
         || rUIFile == "cui/ui/macroselectordialog.ui" || rUIFile == "uui/ui/macrowarnmedium.ui"
         || rUIFile == "modules/scalc/ui/textimportcsv.ui"
         || rUIFile == "xmlsec/ui/digitalsignaturesdialog.ui"
@@ -75,7 +74,7 @@ bool isBuilderEnabledForPopup(const OUString& rUIFile)
         || rUIFile == "svx/ui/floatinglineproperty.ui" || rUIFile == "svx/ui/floatinglinestyle.ui"
         || rUIFile == "svx/ui/floatinglineend.ui" || rUIFile == "svx/ui/fontworkalignmentcontrol.ui"
         || rUIFile == "svx/ui/fontworkcharacterspacingcontrol.ui"
-        || rUIFile == "svx/ui/floatingareastyle.ui")
+        || rUIFile == "svx/ui/floatingareastyle.ui" || rUIFile == "modules/scalc/ui/filterlist.ui")
         return true;
 
     return false;
