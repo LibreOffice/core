@@ -270,7 +270,7 @@ public:
     /** Move assignment
      * @since LibreOffice 7.3
      */
-    OUStringBuffer& operator = ( OUStringBuffer&& value )
+    OUStringBuffer& operator = ( OUStringBuffer&& value ) noexcept
     {
         rtl_uString_release( pData );
         pData = value.pData;
