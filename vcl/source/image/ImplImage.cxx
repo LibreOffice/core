@@ -66,7 +66,7 @@ bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
             sal_Int32 nStart = maStockName.indexOf("%3f");
             sal_Int32 nEnd = maStockName.lastIndexOf(".");
 
-            OUString aFileName = maStockName.replaceAt(nStart, nEnd - nStart, "");
+            OUString aFileName = maStockName.replaceAt(nStart, nEnd - nStart, u"");
             if (!ImageTree::get().loadImage(aFileName, aIconTheme, aBitmapEx, true,
                                             nScalePercentage, eScalingFlags))
             {

@@ -106,7 +106,7 @@ namespace
         @return
             The quoted string.
     */
-    OUString SetQuotation(std::u16string_view rValue, const OUString& rQuot, const OUString& rQuotToReplace)
+    OUString SetQuotation(std::u16string_view rValue, const OUString& rQuot, std::u16string_view rQuotToReplace)
     {
         OUString rNewValue = rQuot + rValue;
         sal_Int32 nIndex = sal_Int32(-1);   // Replace quotes with double quotes or the parser gets into problems
@@ -757,7 +757,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     {
         OUString aStr = ConvertLikeToken(pParaNode, pEscNode, rParam.bInternational);
         rString.append(" ");
-        rString.append(SetQuotation(aStr,"\'","\'\'"));
+        rString.append(SetQuotation(aStr, "\'", u"\'\'"));
     }
     else
         pParaNode->impl_parseNodeToString_throw( rString, aNewParam, false );
@@ -1140,7 +1140,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
                 aValue = OUString::number(aResult.Value);
                 sal_Int32 nPos = aValue.lastIndexOf('.');
                 if((nPos+_nScale) < aValue.getLength())
-                    aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale,OUString());
+                    aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale, u"");
                 aValue = aValue.replaceAt(aValue.lastIndexOf('.'),1,s_xLocaleData->getLocaleItem(m_pData->aLocale).decimalSeparator);
                 return aValue;
             }
@@ -2429,7 +2429,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
         case SQLNodeType::String:
             if (!rString.isEmpty())
                 rString.append(" ");
-            rString.append(SetQuotation(m_aNodeValue,"\'","\'\'"));
+            rString.append(SetQuotation(m_aNodeValue, "\'", u"\'\'"));
             break;
         case SQLNodeType::Name:
             if (!rString.isEmpty())

@@ -778,7 +778,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         {
             OUString sDefaultName = DBA_RES( STR_DATABASEDEFAULTNAME );
             OUString sExtension = pFilter->GetDefaultExtension();
-            sDefaultName += sExtension.replaceAt( 0, 1, OUString() );
+            sDefaultName += sExtension.replaceAt( 0, 1, u"" );
             INetURLObject aWorkURL( m_sWorkPath );
             aWorkURL.Append( sDefaultName );
             sDefaultName = createUniqueFileName( aWorkURL );

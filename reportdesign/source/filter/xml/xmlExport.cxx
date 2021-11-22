@@ -1041,7 +1041,7 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
                 sal_Int32 nIndex = sExpression.indexOf('"');
                 while ( nIndex > -1 )
                 {
-                    sExpression = sExpression.replaceAt(nIndex, 1, "\"\"");
+                    sExpression = sExpression.replaceAt(nIndex, 1, u"\"\"");
                     nIndex = sExpression.indexOf('"',nIndex+2);
                 }
 

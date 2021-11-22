@@ -488,7 +488,7 @@ void MSWordExportBase::NumberingLevel(
                 {
                     *pLvlPos = static_cast<sal_uInt8>(nFnd + 1);
                     ++pLvlPos;
-                    sNumStr = sNumStr.replaceAt(nFnd, sSrch.getLength(), OUString(static_cast<char>(i)));
+                    sNumStr = sNumStr.replaceAt(nFnd, sSrch.getLength(), rtl::OUStringChar(static_cast<char>(i)));
                 }
             }
         }
@@ -635,7 +635,7 @@ void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
     // If Bullet char is "", don't change
     if (rNumStr[0] != u'\0')
     {
-        rNumStr = rNumStr.replaceAt(0, 1, OUString(
+        rNumStr = rNumStr.replaceAt(0, 1, rtl::OUStringChar(
             msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName)));
     }
 

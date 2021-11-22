@@ -890,7 +890,7 @@ static void lcl_DoubleEscapeChar( OUString& rString, sal_Unicode cStr )
     sal_Int32 n = 0;
     while( ( n = rString.indexOf( cStr, n ) ) != -1 )
     {
-        rString = rString.replaceAt( n, 0, OUString(cStr) );
+        rString = rString.replaceAt( n, 0, rtl::OUStringChar(cStr) );
         n += 2;
     }
 }

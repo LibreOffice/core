@@ -376,7 +376,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
                 sal_Int32 nP = m_pImplLB->GetEntryList().FindEntry( aToken );
                 if ((nP != LISTBOX_ENTRY_NOTFOUND) && (!m_pImplLB->GetEntryList().IsEntryPosSelected(nP)))
                 {
-                    aText = aText.replaceAt( nPrevIndex, nTokenLen, "" );
+                    aText = aText.replaceAt( nPrevIndex, nTokenLen, u"" );
                     nIndex = nIndex - nTokenLen;
                     sal_Int32 nSepCount=0;
                     if ((nPrevIndex+nSepCount < aText.getLength()) && (aText[nPrevIndex+nSepCount] == m_cMultiSep))
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
                         nIndex--;
                         ++nSepCount;
                     }
-                    aText = aText.replaceAt( nPrevIndex, nSepCount, "" );
+                    aText = aText.replaceAt( nPrevIndex, nSepCount, u"" );
                 }
                 aText = comphelper::string::strip(aText, ' ');
             }

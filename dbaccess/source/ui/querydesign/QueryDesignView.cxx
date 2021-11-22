@@ -326,7 +326,7 @@ namespace
         if(_rJoin.endsWith(")"))
         {
             bBrace = true;
-            _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1,OUString(' '));
+            _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1, u" ");
         }
         _rJoin += C_AND + BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
         if(bBrace)
@@ -1082,7 +1082,7 @@ namespace
         }
 
         if(!aTableListStr.isEmpty())
-            aTableListStr = aTableListStr.replaceAt(aTableListStr.getLength()-1,1, OUString() );
+            aTableListStr = aTableListStr.replaceAt(aTableListStr.getLength()-1,1, u"" );
         return aTableListStr;
     }
     OUString GenerateGroupBy(const OQueryDesignView* _pView,OTableFields& _rFieldList, bool bMulti )
@@ -1140,7 +1140,7 @@ namespace
             }
             if ( !aGroupByStr.isEmpty() )
             {
-                aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, OUString(' ') );
+                aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, u" " );
                 OUString aGroupByStr2 = " GROUP BY " + aGroupByStr;
                 aGroupByStr = aGroupByStr2;
             }

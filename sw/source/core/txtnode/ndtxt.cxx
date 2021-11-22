@@ -2392,8 +2392,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         abort();
     }
     pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
-                        m_Text.copy(nTextStartIdx, nLen));
-    OUString const newText = m_Text.replaceAt(nTextStartIdx, nLen, "");
+                        m_Text.subView(nTextStartIdx, nLen));
+    OUString const newText = m_Text.replaceAt(nTextStartIdx, nLen, u"");
     nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
     if (!nLen)                 // String didn't grow?
         return;
@@ -2639,7 +2639,7 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
                       ? m_Text.getLength() - nStartIdx : nCount;
     const sal_Int32 nEndIdx = nStartIdx + nCnt;
     if (nEndIdx <= m_Text.getLength())
-        m_Text = m_Text.replaceAt(nStartIdx, nCnt, "");
+        m_Text = m_Text.replaceAt(nStartIdx, nCnt, u"");
 
     // GCAttr(); don't remove all empty ones, just the ones that are in the
     // range but not at the end of the range.
@@ -3679,10 +3679,10 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
     {
         // Replace the 1st char, then delete the rest and insert.
         // This way the attributes of the 1st char are expanded!
-        m_Text = m_Text.replaceAt(nStartPos, 1, sInserted.copy(0, 1));
+        m_Text = m_Text.replaceAt(nStartPos, 1, sInserted.subView(0, 1));
 
         ++const_cast<SwIndex&>(rStart);
-        m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, "");
+        m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, u"");
         Update( rStart, nLen - 1, true );
 
         OUString aTmpText( sInserted.copy(1) );
@@ -3691,7 +3691,7 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
     }
     else
     {
-        m_Text = m_Text.replaceAt(nStartPos, nLen, "");
+        m_Text = m_Text.replaceAt(nStartPos, nLen, u"");
         Update( rStart, nLen, true );
 
         m_Text = m_Text.replaceAt(nStartPos, 0, sInserted);

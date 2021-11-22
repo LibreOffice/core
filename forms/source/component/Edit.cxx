@@ -680,7 +680,7 @@ Any OEditModel::translateDbColumnToControlValue()
             if ( nMaxTextLen && sValue.getLength() > nMaxTextLen )
             {
                 sal_Int32 nDiff = sValue.getLength() - nMaxTextLen;
-                sValue = sValue.replaceAt( nMaxTextLen, nDiff, OUString() );
+                sValue = sValue.replaceAt( nMaxTextLen, nDiff, u"" );
             }
 
             aRet <<= sValue;

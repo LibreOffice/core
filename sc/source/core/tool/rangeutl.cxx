@@ -519,7 +519,7 @@ bool ScRangeStringConverter::GetRangeFromString(
 
             if ( nIndex < aUIString.getLength() - 1 &&
                     aUIString[ nIndex + 1 ] == '.' )
-                aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
+                aUIString = aUIString.replaceAt( nIndex + 1, 1, u"" );
 
             bResult = ((rRange.Parse(aUIString, rDocument, eConv) & ScRefFlags::VALID) ==
                                                                                               ScRefFlags::VALID);

@@ -1546,7 +1546,7 @@ static OUString lcl_MaskDeletedRedlines( const SwTextNode* pTextNd )
                     pRed->CalcStartEnd( pTextNd->GetIndex(), nStart, nEnd );
 
                     while ( nStart < nEnd && nStart < sNodeText.getLength() )
-                        sNodeText = sNodeText.replaceAt( nStart++, 1, OUString(CH_TXTATR_INWORD) );
+                        sNodeText = sNodeText.replaceAt( nStart++, 1, rtl::OUStringChar(CH_TXTATR_INWORD) );
                 }
             }
         }

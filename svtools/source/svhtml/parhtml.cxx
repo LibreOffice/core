@@ -1168,7 +1168,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                         if ((nRet >= HtmlTokenId::ONOFF_START) && aToken.endsWith("/"))
                         {
                             mnPendingOffToken = static_cast<HtmlTokenId>(static_cast<int>(nRet) + 1);       // HtmlTokenId::<TOKEN>_ON -> HtmlTokenId::<TOKEN>_OFF
-                            aToken = aToken.replaceAt( aToken.getLength()-1, 1, "");   // remove trailing '/'
+                            aToken = aToken.replaceAt( aToken.getLength()-1, 1, u"");   // remove trailing '/'
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.eof() )
                         {
@@ -1387,7 +1387,7 @@ void HTMLParser::UnescapeToken()
         bEscape = false;
         if( '\\'==aToken[nPos] && !bOldEscape )
         {
-            aToken = aToken.replaceAt( nPos, 1, "" );
+            aToken = aToken.replaceAt( nPos, 1, u"" );
             bEscape = true;
         }
         else
@@ -1477,7 +1477,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
                             case '\r':
                             case '\n':
                                 if( bStripCRLF )
-                                    aToken = aToken.replaceAt( nPos, 1, "" );
+                                    aToken = aToken.replaceAt( nPos, 1, u"" );
                                 else
                                 {
                                     nPos++;
@@ -1492,7 +1492,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
                                 }
                                 else
                                 {
-                                    aToken = aToken.replaceAt( nPos, 1, "" );
+                                    aToken = aToken.replaceAt( nPos, 1, u"" );
                                     bEscape = true;
                                 }
                                 break;
@@ -1549,7 +1549,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
                                 }
                                 else
                                 {
-                                    aToken = aToken.replaceAt( nPos, 1, "" );
+                                    aToken = aToken.replaceAt( nPos, 1, u"" );
                                     bEscape = true;
                                 }
                                 break;

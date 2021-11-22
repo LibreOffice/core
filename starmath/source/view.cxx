@@ -1114,7 +1114,7 @@ Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rTex
                 }
 
                 aText = aLine.copy(0, m);
-                aLine = aLine.replaceAt(0, m, "");
+                aLine = aLine.replaceAt(0, m, u"");
                 aSize = GetTextLineSize(rDevice, aText);
                 aTextSize.AdjustHeight(aSize.Height() );
                 aTextSize.setWidth( std::clamp(aSize.Width(), aTextSize.Width(), MaxWidth) );
@@ -1194,7 +1194,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
                     }
                 }
                 aText = aLine.copy(0, m);
-                aLine = aLine.replaceAt(0, m, "");
+                aLine = aLine.replaceAt(0, m, u"");
 
                 DrawTextLine(rDevice, aPoint, aText);
                 aPoint.AdjustY(aSize.Height() );
@@ -1781,7 +1781,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             }
                             if ( bForceUTF16 )
                             {
-                                OUString aNewString = aString.replaceAt( nPosL,nPosU-nPosL,"UTF-16");
+                                OUString aNewString = aString.replaceAt( nPosL, nPosU-nPosL, u"UTF-16");
                                 pStrm.reset(new SvMemoryStream( const_cast<sal_Unicode *>(aNewString.getStr()), aNewString.getLength() * sizeof(sal_Unicode), StreamMode::READ));
                             }
                             else

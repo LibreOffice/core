@@ -175,13 +175,13 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
     {
         sal_uInt16 nLastChar = rVar.getLength()-1;
         if ( cSuffixes.find(rVar[ nLastChar ] ) != std::u16string_view::npos )
-            rVar = rVar.replaceAt( nLastChar, 1, "" );
+            rVar = rVar.replaceAt( nLastChar, 1, u"" );
     }
     if ( !rIndex.isEmpty() )
     {
         sal_uInt16 nLastChar = rIndex.getLength()-1;
         if ( cSuffixes.find(rIndex[ nLastChar ] ) != std::u16string_view::npos )
-            rIndex = rIndex.replaceAt( nLastChar, 1, "" );
+            rIndex = rIndex.replaceAt( nLastChar, 1, u"" );
     }
 }
 
@@ -373,7 +373,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 {
                     sal_uInt16 nLastChar = aWord.getLength() - 1;
                     if ( cSuffixes.find(aWord[ nLastChar ] ) != std::u16string_view::npos )
-                        aWord = aWord.replaceAt( nLastChar, 1, "" );
+                        aWord = aWord.replaceAt( nLastChar, 1, u"" );
                     SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
                     if (SbxVariable const* pVar = IsSbxVariable(pSBX))
                     {

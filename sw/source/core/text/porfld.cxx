@@ -68,7 +68,7 @@ void SwFieldPortion::TakeNextOffset( const SwFieldPortion* pField )
 {
     OSL_ENSURE( pField, "TakeNextOffset: Missing Source" );
     m_nNextOffset = pField->GetNextOffset();
-    m_aExpand = m_aExpand.replaceAt(0, sal_Int32(m_nNextOffset), "");
+    m_aExpand = m_aExpand.replaceAt(0, sal_Int32(m_nNextOffset), u"");
     m_bFollow = true;
 }
 

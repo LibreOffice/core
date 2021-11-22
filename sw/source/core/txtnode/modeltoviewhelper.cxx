@@ -226,7 +226,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             sal_Int32 const viewBlockPos(nBlockStart + nOffset);
             m_aMap.emplace_back(modelBlockPos, viewBlockPos, false);
 
-            m_aRetText = m_aRetText.replaceAt(nOffset + nBlockStart, nBlockLen, OUString());
+            m_aRetText = m_aRetText.replaceAt(nOffset + nBlockStart, nBlockLen, u"");
             nOffset -= nBlockLen;
         }
         else

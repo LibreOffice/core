@@ -2023,7 +2023,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                 {
                     if ( (nIndex > 1) || (nIndex == aStr.getLength()) )
                         nIndex--;
-                    aStr = aStr.replaceAt( nIndex, 1, "");
+                    aStr = aStr.replaceAt( nIndex, 1, u"");
                 }
             }
 
@@ -2295,12 +2295,12 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
             {
                 if ( rMnemonicPos == -1 )
                     rMnemonicPos = i;
-                aStr = aStr.replaceAt( i, 1, "" );
+                aStr = aStr.replaceAt( i, 1, u"" );
                 nLen--;
             }
             else
             {
-                aStr = aStr.replaceAt( i, 1, "" );
+                aStr = aStr.replaceAt( i, 1, u"" );
                 nLen--;
                 i++;
             }

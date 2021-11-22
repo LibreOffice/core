@@ -101,10 +101,10 @@ static OUString& lcl_TabToBlankAtSttEnd( OUString& rText )
 
     for( n = 0; n < rText.getLength() && ' ' >= ( c = rText[n] ); ++n )
         if( '\x9' == c )
-            rText = rText.replaceAt( n, 1, " " );
+            rText = rText.replaceAt( n, 1, u" " );
     for( n = rText.getLength(); n && ' ' >= ( c = rText[--n] ); )
         if( '\x9' == c )
-            rText = rText.replaceAt( n, 1, " " );
+            rText = rText.replaceAt( n, 1, u" " );
     return rText;
 }
 

@@ -173,7 +173,7 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& )
         // TODO: must be replaced by implementation of VCL, when available
         sal_Int32 nIndex = aText.indexOf( '~' );
         if ( nIndex >= 0 )
-            aText = aText.replaceAt( nIndex, 1, "" );
+            aText = aText.replaceAt( nIndex, 1, u"" );
         // TODO: must be replaced by implementation of VCL, when available
 
         if ( aText == m_aFontFamilyName )

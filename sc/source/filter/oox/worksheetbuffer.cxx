@@ -134,7 +134,7 @@ void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
         ScRange aRange;
         if ((aRange.ParseAny( sSheetNameRef.copy( nSepPos + 1 ), getScDocument(),
                         formula::FormulaGrammar::CONV_XL_R1C1) & ScRefFlags::VALID) == ScRefFlags::ZERO)
-            sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
+            sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, rtl::OUStringChar( '.' ) );
     }
     // #i66592# convert sheet names that have been renamed on import
     OUString aSheetName = sSheetNameRef.copy( 1, nSepPos - 1 );

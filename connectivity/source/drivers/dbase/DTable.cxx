@@ -646,7 +646,7 @@ OUString ODbaseTable::getEntry(file::OConnection const * _pConnection, std::u16s
             // name and extension have to coincide
             if ( _pConnection->matchesExtension( sExt ) )
             {
-                sName = sName.replaceAt(sName.getLength() - (sExt.getLength() + 1), sExt.getLength() + 1, OUString());
+                sName = sName.replaceAt(sName.getLength() - (sExt.getLength() + 1), sExt.getLength() + 1, u"");
                 if ( sName == _sName )
                 {
                     Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );

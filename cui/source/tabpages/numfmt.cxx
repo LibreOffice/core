@@ -103,12 +103,12 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
         {
             mnChar = aPrevStr[ mnPos + 1 ];
             // delete placeholder and char to repeat
-            aPrevStr = aPrevStr.replaceAt( mnPos, 2, "" );
+            aPrevStr = aPrevStr.replaceAt( mnPos, 2, u"" );
         }
         else
         {
             // delete placeholder
-            aPrevStr = aPrevStr.replaceAt( mnPos, 1, "" );
+            aPrevStr = aPrevStr.replaceAt( mnPos, 1, u"" );
             // do not attempt to draw a 0 fill character
             mnPos = -1;
         }
@@ -158,7 +158,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
         if (nNumCharsToInsert > 0)
         {
             for (int i = 0; i < nNumCharsToInsert; ++i)
-                aTmpStr = aTmpStr.replaceAt(mnPos, 0, OUString(mnChar));
+                aTmpStr = aTmpStr.replaceAt(mnPos, 0, rtl::OUStringChar(mnChar));
         }
     }
 

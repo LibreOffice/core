@@ -1680,7 +1680,7 @@ namespace
                 {
                     // cut out alignment string
                     aStr = rExtraString.copy(nPos, n2 - nPos + 1);
-                    rExtraString = rExtraString.replaceAt(nPos, n2 - nPos + 1, "");
+                    rExtraString = rExtraString.replaceAt(nPos, n2 - nPos + 1, u"");
                     aStr = aStr.copy( n1-nPos+1 );
                 }
             }

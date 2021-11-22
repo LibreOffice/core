@@ -659,6 +659,35 @@ void SAL_CALL rtl_string_newConcat(rtl_String** ppThis, rtl_String* pLeft, rtl_S
     rtl::str::newConcat(ppThis, pLeft, pRight);
 }
 
+static void rtl_string_newConcatL(
+    rtl_String ** newString, rtl_String * left, char const * right,
+    sal_Int32 rightLength)
+{
+    assert(newString != nullptr);
+    assert(left != nullptr);
+    assert(right != nullptr || rightLength == 0);
+    assert(rightLength >= 0);
+    if (left->length > std::numeric_limits<sal_Int32>::max() - rightLength) {
+#if !defined(__COVERITY__)
+        throw std::length_error("rtl_string_newConcatL");
+#else
+        //coverity doesn't report std::bad_alloc as an unhandled exception when
+        //potentially thrown from destructors but does report std::length_error
+        throw std::bad_alloc();
+#endif
+    }
+    sal_Int32 n = left->length + rightLength;
+    rtl_string_assign(newString, left);
+    rtl_string_ensureCapacity(newString, n);
+    if (rightLength != 0) {
+        memcpy(
+            (*newString)->buffer + (*newString)->length, right,
+            rightLength);
+    }
+    (*newString)->buffer[n] = 0;
+    (*newString)->length = n;
+}
+
 void SAL_CALL rtl_string_ensureCapacity(rtl_String** ppThis, sal_Int32 size) SAL_THROW_EXTERN_C()
 {
     rtl::str::ensureCapacity(ppThis, size);
@@ -669,6 +698,13 @@ void SAL_CALL rtl_string_newReplaceStrAt(rtl_String** ppThis, rtl_String* pStr, 
     SAL_THROW_EXTERN_C()
 {
     rtl::str::newReplaceStrAt(ppThis, pStr, nIndex, nCount, pNewSubStr);
+}
+
+void SAL_CALL rtl_string_newReplaceStrAt_WithLength(rtl_String** ppThis, rtl_String* pStr, sal_Int32 nIndex,
+                                         sal_Int32 nCount, char const * subStr, sal_Int32 substrLen)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newReplaceStrAt(ppThis, pStr, nIndex, nCount, subStr, substrLen);
 }
 
 void SAL_CALL rtl_string_newReplace(rtl_String** ppThis, rtl_String* pStr, char cOld, char cNew)

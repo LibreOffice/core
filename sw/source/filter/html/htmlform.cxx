@@ -2484,7 +2484,7 @@ void SwHTMLParser::InsertSelectText()
     {
         sal_Int32 nLen = rText.getLength();
         if( !nLen || ' '==rText[nLen-1])
-            aToken = aToken.replaceAt( 0, 1, "" );
+            aToken = aToken.replaceAt( 0, 1, u"" );
     }
     if( !aToken.isEmpty() )
         rText += aToken;

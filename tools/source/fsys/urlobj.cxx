@@ -2291,7 +2291,7 @@ namespace
     void lcl_Erase(OUStringBuffer &rBuf, sal_Int32 index, sal_Int32 count)
     {
         OUString sTemp(rBuf.makeStringAndClear());
-        rBuf.append(sTemp.replaceAt(index, count, OUString()));
+        rBuf.append(sTemp.replaceAt(index, count, u""));
     }
 }
 

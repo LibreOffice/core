@@ -383,7 +383,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             {
                 ++nIndex;
             }
-            OUString aString = rString.replaceAt( 1, nIndex - 1, "" );
+            OUString aString = rString.replaceAt( 1, nIndex - 1, u"" );
 
             // if the remaining part without the leading '+' or '-' character
             // is non-empty and not a number, handle as formula
@@ -2745,7 +2745,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
           for ( sal_Int32 i=1 ; i<sExponentialStandardFormat.getLength() ; i++ )
           {
             if ( sExponentialStandardFormat[i] >= '1' && sExponentialStandardFormat[i] <= '9' )
-              sExponentialStandardFormat = sExponentialStandardFormat.replaceAt( i, 1, "0" );
+              sExponentialStandardFormat = sExponentialStandardFormat.replaceAt( i, 1, u"0" );
           }
           aOut = aOut.copy( 0, nIndexE ); // remove exponential part
         }

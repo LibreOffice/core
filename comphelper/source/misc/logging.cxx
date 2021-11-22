@@ -94,7 +94,7 @@ namespace comphelper
 
     namespace
     {
-        void lcl_replaceParameter( OUString& _inout_Message, const char* _rPlaceHolder, const OUString& _rReplacement )
+        void lcl_replaceParameter( OUString& _inout_Message, const char* _rPlaceHolder, std::u16string_view _rReplacement )
         {
             sal_Int32 nPlaceholderPosition = _inout_Message.indexOfAsciiL( _rPlaceHolder, strlen(_rPlaceHolder) );
             OSL_ENSURE( nPlaceholderPosition >= 0, "lcl_replaceParameter: placeholder not found!" );

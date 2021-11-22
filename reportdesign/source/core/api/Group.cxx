@@ -171,7 +171,7 @@ uno::Reference< report::XSection > SAL_CALL OGroup::getFooter()
 void SAL_CALL OGroup::setGroupOn( ::sal_Int16 _groupon )
 {
     if ( _groupon < report::GroupOn::DEFAULT || _groupon > report::GroupOn::INTERVAL )
-        throwIllegallArgumentException("css::report::GroupOn"
+        throwIllegallArgumentException(u"css::report::GroupOn"
                         ,*this
                         ,1);
     set(PROPERTY_GROUPON,_groupon,m_aProps.m_nGroupOn);
@@ -197,7 +197,7 @@ void SAL_CALL OGroup::setGroupInterval( ::sal_Int32 _groupinterval )
 void SAL_CALL OGroup::setKeepTogether( ::sal_Int16 _keeptogether )
 {
     if ( _keeptogether < report::KeepTogether::NO || _keeptogether > report::KeepTogether::WITH_FIRST_DETAIL )
-        throwIllegallArgumentException("css::report::KeepTogether"
+        throwIllegallArgumentException(u"css::report::KeepTogether"
                         ,*this
                         ,1);
     set(PROPERTY_KEEPTOGETHER,_keeptogether,m_aProps.m_nKeepTogether);

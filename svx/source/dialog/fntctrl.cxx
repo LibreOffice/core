@@ -129,7 +129,7 @@ bool CleanAndCheckEmpty(OUString& rText)
     for (sal_Int32 i = 0; i < rText.getLength(); ++i)
     {
         if (0xa == rText[i] || 0xd == rText[i])
-            rText = rText.replaceAt(i, 1, " ");
+            rText = rText.replaceAt(i, 1, u" ");
         else
             bEmpty = false;
     }

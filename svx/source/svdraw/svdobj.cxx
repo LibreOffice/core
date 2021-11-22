@@ -1108,7 +1108,7 @@ OUString SdrObject::ImpGetDescriptionStr(TranslateId pStrCacheID) const
     nPos = aStr.indexOf("%2");
     if (nPos >= 0)
         // Replace '%2' with the passed value.
-        aStr = aStr.replaceAt(nPos, 2, "0");
+        aStr = aStr.replaceAt(nPos, 2, u"0");
     return aStr;
 }
 

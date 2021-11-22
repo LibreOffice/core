@@ -196,7 +196,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
                 sal_Int32 nColon = aUIString.lastIndexOf( ':' );
                 if ( nColon >= 0 && nColon < aUIString.getLength() - 1 &&
                      aUIString[nColon+1] == '.' )
-                    aUIString = aUIString.replaceAt( nColon+1, 1, "" );
+                    aUIString = aUIString.replaceAt( nColon+1, 1, u"" );
             }
 
             //  parse the rest like a UI string

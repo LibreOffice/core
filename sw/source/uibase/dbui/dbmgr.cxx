@@ -2686,7 +2686,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
         OUString sNewName = rURL.getName(
             INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous);
         sal_Int32 nExtLen = sExt.getLength();
-        sNewName = sNewName.replaceAt(sNewName.getLength() - nExtLen - 1, nExtLen + 1, "");
+        sNewName = sNewName.replaceAt(sNewName.getLength() - nExtLen - 1, nExtLen + 1, u"");
 
         //find a unique name if sNewName already exists
         sFind = sNewName;

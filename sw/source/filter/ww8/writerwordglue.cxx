@@ -869,7 +869,7 @@ namespace sw
                     bool bIsCharA = ( nPos != -1 && IsNotAM( rParams, nPos ) );
                     bForceNatNum |= bIsCharA;
                     if ( bIsCharA )
-                        rParams = rParams.replaceAt( nPos, 1, "D" );
+                        rParams = rParams.replaceAt( nPos, 1, u"D" );
                     nLastPos = nPos;
                 } while ( -1 != nLastPos );
             }
@@ -898,7 +898,7 @@ namespace sw
                     if ( nDocLang == LANGUAGE_FRENCH )
                     {
                         if ( ( nChar == 'a' || nChar == 'A' ) && IsNotAM(rParams, nI) )
-                            rParams = rParams.replaceAt(nI, 1, "Y");
+                            rParams = rParams.replaceAt(nI, 1, u"Y");
                     }
                     if (nChar == '/')
                     {
@@ -906,7 +906,7 @@ namespace sw
                         // But not if it's a '/' inside AM/PM
                         if (!(IsPreviousAM(rParams, nI) && IsNextPM(rParams, nI)))
                         {
-                            rParams = rParams.replaceAt(nI, 1, "\\/");
+                            rParams = rParams.replaceAt(nI, 1, u"\\/");
                             nLen++;
                         }
                         nI++;
@@ -922,13 +922,13 @@ namespace sw
                         if ( rLang == LANGUAGE_FINNISH )
                         {
                             if (nChar == 'y' || nChar == 'Y')
-                                rParams = rParams.replaceAt(nI, 1, "V");
+                                rParams = rParams.replaceAt(nI, 1, u"V");
                             else if (nChar == 'm' || nChar == 'M')
-                                rParams = rParams.replaceAt(nI, 1, "K");
+                                rParams = rParams.replaceAt(nI, 1, u"K");
                             else if (nChar == 'd' || nChar == 'D')
-                                rParams = rParams.replaceAt(nI, 1, "P");
+                                rParams = rParams.replaceAt(nI, 1, u"P");
                             else if (nChar == 'h' || nChar == 'H')
-                                rParams = rParams.replaceAt(nI, 1, "T");
+                                rParams = rParams.replaceAt(nI, 1, u"T");
                         }
                         else if ( rLang.anyOf(
                             LANGUAGE_DANISH,
@@ -939,7 +939,7 @@ namespace sw
                             LANGUAGE_SWEDISH_FINLAND))
                         {
                             if (nChar == 'h' || nChar == 'H')
-                                rParams = rParams.replaceAt(nI, 1, "T");
+                                rParams = rParams.replaceAt(nI, 1, u"T");
                         }
                         else if ( rLang.anyOf(
                             LANGUAGE_PORTUGUESE,
@@ -966,31 +966,31 @@ namespace sw
                             LANGUAGE_SPANISH_PUERTO_RICO))
                         {
                             if (nChar == 'a' || nChar == 'A')
-                                rParams = rParams.replaceAt(nI, 1, "O");
+                                rParams = rParams.replaceAt(nI, 1, u"O");
                             else if (nChar == 'y' || nChar == 'Y')
-                                rParams = rParams.replaceAt(nI, 1, "A");
+                                rParams = rParams.replaceAt(nI, 1, u"A");
                         }
                         else if ( rLang.anyOf(
                             LANGUAGE_DUTCH,
                             LANGUAGE_DUTCH_BELGIAN))
                         {
                             if (nChar == 'y' || nChar == 'Y')
-                                rParams = rParams.replaceAt(nI, 1, "J");
+                                rParams = rParams.replaceAt(nI, 1, u"J");
                             else if (nChar == 'u' || nChar == 'U')
-                                rParams = rParams.replaceAt(nI, 1, "H");
+                                rParams = rParams.replaceAt(nI, 1, u"H");
                         }
                         else if ( rLang.anyOf(
                                 LANGUAGE_ITALIAN,
                                 LANGUAGE_ITALIAN_SWISS))
                         {
                             if (nChar == 'a' || nChar == 'A')
-                                rParams = rParams.replaceAt(nI, 1, "O");
+                                rParams = rParams.replaceAt(nI, 1, u"O");
                             else if (nChar == 'g' || nChar == 'G')
-                                rParams = rParams.replaceAt(nI, 1, "X");
+                                rParams = rParams.replaceAt(nI, 1, u"X");
                             else if (nChar == 'y' || nChar == 'Y')
-                                rParams = rParams.replaceAt(nI, 1, "A");
+                                rParams = rParams.replaceAt(nI, 1, u"A");
                             else if (nChar == 'd' || nChar == 'D')
-                                rParams = rParams.replaceAt(nI, 1, "G");
+                                rParams = rParams.replaceAt(nI, 1, u"G");
                         }
                         else if ( rLang.anyOf(
                             LANGUAGE_GERMAN,
@@ -1000,9 +1000,9 @@ namespace sw
                             LANGUAGE_GERMAN_LIECHTENSTEIN))
                         {
                             if (nChar == 'y' || nChar == 'Y')
-                                rParams = rParams.replaceAt(nI, 1, "J");
+                                rParams = rParams.replaceAt(nI, 1, u"J");
                             else if (nChar == 'd' || nChar == 'D')
-                                rParams = rParams.replaceAt(nI, 1, "T");
+                                rParams = rParams.replaceAt(nI, 1, u"T");
                         }
                         else if ( rLang.anyOf(
                             LANGUAGE_FRENCH,
@@ -1013,9 +1013,9 @@ namespace sw
                             LANGUAGE_FRENCH_MONACO))
                         {
                             if (nChar == 'y' || nChar == 'Y' || nChar == 'a')
-                                rParams = rParams.replaceAt(nI, 1, "A");
+                                rParams = rParams.replaceAt(nI, 1, u"A");
                             else if (nChar == 'd' || nChar == 'D' || nChar == 'j')
-                                rParams = rParams.replaceAt(nI, 1, "J");
+                                rParams = rParams.replaceAt(nI, 1, u"J");
                         }
                     }
                 }
@@ -1061,9 +1061,9 @@ namespace sw
                 if (!nI || rFormat[nI-1]!='\\')
                 {
                     if (rFormat[nI]=='\"')
-                        rFormat = rFormat.replaceAt(nI, 1, "\'");
+                        rFormat = rFormat.replaceAt(nI, 1, u"\'");
                     else if (rFormat[nI]=='\'')
-                        rFormat = rFormat.replaceAt(nI, 1, "\"");
+                        rFormat = rFormat.replaceAt(nI, 1, u"\"");
                 }
             }
         }

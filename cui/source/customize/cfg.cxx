@@ -2990,7 +2990,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
 namespace
 {
-    OUString ReplaceIconName(const OUString& rMessage)
+    OUString ReplaceIconName(std::u16string_view rMessage)
     {
         OUString name;
         OUString message = CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING );
@@ -3009,7 +3009,7 @@ namespace
     private:
         std::unique_ptr<weld::MessageDialog> m_xQueryBox;
     public:
-        SvxIconReplacementDialog(weld::Window *pParent, const OUString& rMessage, bool bYestoAll)
+        SvxIconReplacementDialog(weld::Window *pParent, std::u16string_view rMessage, bool bYestoAll)
             : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Warning, VclButtonsType::NONE, ReplaceIconName(rMessage)))
         {
             m_xQueryBox->set_title(CuiResId(RID_SVXSTR_REPLACE_ICON_CONFIRM));

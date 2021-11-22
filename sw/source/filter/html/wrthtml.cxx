@@ -672,13 +672,13 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
             sal_Int32 nPos = aSection.indexOf( '%' );
             while( nPos != -1 )
             {
-                aSection = aSection.replaceAt(nPos, 1, "%25");
+                aSection = aSection.replaceAt(nPos, 1, u"%25");
                 nPos = aSection.indexOf( '%', nPos+3 );
             }
             nPos = aSection.indexOf( cDelim );
             while( nPos != -1 )
             {
-                aSection = aSection.replaceAt(nPos, 1, "%FF" );
+                aSection = aSection.replaceAt(nPos, 1, u"%FF" );
                 nPos = aSection.indexOf( cDelim, nPos+3 );
             }
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection,

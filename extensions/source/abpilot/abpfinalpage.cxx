@@ -113,7 +113,7 @@ namespace abp
         sal_Int32 nPos = sName.indexOf(aURL.GetFileExtension());
         if ( nPos != -1 )
         {
-            sName = sName.replaceAt(nPos-1, 4, "");
+            sName = sName.replaceAt(nPos-1, 4, u"");
         }
         m_xName->set_text(sName);
 

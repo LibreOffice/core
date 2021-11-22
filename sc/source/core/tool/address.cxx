@@ -547,7 +547,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                 else
                 {
                     rExternDocName = rExternDocName.copy(0, nClose);
-                    rExternDocName = rExternDocName.replaceAt( nOpen, 1, "");
+                    rExternDocName = rExternDocName.replaceAt( nOpen, 1, u"");
                     pMsoxlQuoteStop = p - 1;    // the ' quote char
                     // There may be embedded escaped quotes, just matching the
                     // doc name's length may not work.

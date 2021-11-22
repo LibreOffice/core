@@ -2187,7 +2187,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         // Just remember it in a sorted array
         if( bEncoded )
         {
-            aURL = aURL.replaceAt( nPos - 1, 3, OUString(cMarkSeparator)  );
+            aURL = aURL.replaceAt( nPos - 1, 3, rtl::OUStringChar(cMarkSeparator)  );
         }
         m_aImplicitMarks.insert( aURL );
     }
@@ -2209,7 +2209,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
             m_aOutlineMarkPoss.insert( m_aOutlineMarkPoss.begin()+nIns, nIdx );
             if( bEncoded )
             {
-                aURL = aURL.replaceAt( nPos - 1, 3, OUString(cMarkSeparator) );
+                aURL = aURL.replaceAt( nPos - 1, 3, rtl::OUStringChar(cMarkSeparator) );
             }
             m_aOutlineMarks.insert( m_aOutlineMarks.begin()+nIns, aURL );
         }

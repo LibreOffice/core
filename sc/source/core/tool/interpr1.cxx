@@ -3412,12 +3412,12 @@ void ScInterpreter::ScNumberValue()
     {
         sal_Unicode c = aInputString[ i ];
         if ( c == 0x0020 || c == 0x0009 || c == 0x000A || c == 0x000D )
-            aInputString = aInputString.replaceAt( i, 1, "" ); // remove spaces etc.
+            aInputString = aInputString.replaceAt( i, 1, u"" ); // remove spaces etc.
     }
     sal_Int32 nPercentCount = 0;
     for ( sal_Int32 i = aInputString.getLength() - 1; i >= 0 && aInputString[ i ] == 0x0025; i-- )
     {
-        aInputString = aInputString.replaceAt( i, 1, "" );  // remove and count trailing '%'
+        aInputString = aInputString.replaceAt( i, 1, u"" );  // remove and count trailing '%'
         nPercentCount++;
     }
 
@@ -3446,7 +3446,7 @@ void ScInterpreter::ScClean()
     for ( sal_Int32 i = 0; i < aStr.getLength(); i++ )
     {
         if ( !lcl_ScInterpreter_IsPrintable( aStr[i] ) )
-            aStr = aStr.replaceAt(i,1,"");
+            aStr = aStr.replaceAt(i, 1, u"");
     }
     PushString(aStr);
 }
@@ -8860,7 +8860,7 @@ void ScInterpreter::ScReplace()
             aOldStr.iterateCodePoints( &nIdx );
             ++nCnt;
         }
-        aOldStr = aOldStr.replaceAt( nStart, nIdx - nStart, "" );
+        aOldStr = aOldStr.replaceAt( nStart, nIdx - nStart, u"" );
         if ( CheckStringResultLen( aOldStr, aNewStr ) )
             aOldStr = aOldStr.replaceAt( nStart, 0, aNewStr );
         PushString( aOldStr );
@@ -9700,7 +9700,7 @@ void ScInterpreter::ScSubstitute()
             nCount++;
             if( !nCnt || nCount == nCnt )
             {
-                sStr = sStr.replaceAt(nPos,nOldLen, "");
+                sStr = sStr.replaceAt(nPos,nOldLen, u"");
                 if ( CheckStringResultLen( sStr, sNewStr ) )
                 {
                     sStr = sStr.replaceAt(nPos, 0, sNewStr);

@@ -264,7 +264,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
         do
         {
             if (pItem->maFormatText.getLength() > aAppendStr.getLength())
-                pItem->maFormatText = pItem->maFormatText.replaceAt( pItem->maFormatText.getLength()-aAppendStr.getLength()-1, 1, "" );
+                pItem->maFormatText = pItem->maFormatText.replaceAt( pItem->maFormatText.getLength()-aAppendStr.getLength()-1, 1, u"" );
             aSize.setWidth( GetOutDev()->GetCtrlTextWidth( pItem->maFormatText ) );
             aSize.AdjustWidth(aImageSize.Width() );
             aSize.AdjustWidth(TAB_TABOFFSET_X*2 );

@@ -601,7 +601,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
         {
             sal_Int32 nPos2 = aText.indexOf( ')' );
             if( nPos2 != -1 )
-                aText = aText.replaceAt( nPos, nPos2-nPos+1, "" );
+                aText = aText.replaceAt( nPos, nPos2-nPos+1, u"" );
         }
     }
 

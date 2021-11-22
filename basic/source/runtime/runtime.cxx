@@ -2853,7 +2853,7 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     sal_Int32 iComma = aStr.indexOf(',');
     if( iComma >= 0 )
     {
-        aStr = aStr.replaceAt(iComma, 1, ".");
+        aStr = aStr.replaceAt(iComma, 1, u".");
     }
     sal_Int32 nParseEnd = 0;
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;

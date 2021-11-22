@@ -478,20 +478,20 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix )))
                     {
                         // ... for the current selection
-                        aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
+                        aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), u"");
                         bForSelection = true;
                     }
                     else if (-1 != (nPos = aNewLangText.indexOf(aParagraphLangPrefix)))
                     {
                         // ... for the current paragraph language
-                        aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
+                        aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), u"");
                         bForSelection = true;
                         bForParagraph = true;
                     }
                     else if (-1 != (nPos = aNewLangText.indexOf(aDocumentLangPrefix)))
                     {
                         // ... as default document language
-                        aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
+                        aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), u"");
                         bForSelection = false;
                     }
 
@@ -1574,12 +1574,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt;
         if(-1 != (nPos = sApplyText.indexOf( sGrammarRule )))
         {
-            sApplyText = sApplyText.replaceAt(nPos, sGrammarRule.getLength(), "");
+            sApplyText = sApplyText.replaceAt(nPos, sGrammarRule.getLength(), u"");
             bGrammar = true;
         }
         else if (-1 != (nPos = sApplyText.indexOf( sSpellingRule )))
         {
-            sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), "");
+            sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), u"");
             SwRect aToFill;
             xSpellAlt.set(rWrtSh.GetCorrection(nullptr, aToFill));
             bGrammar = false;

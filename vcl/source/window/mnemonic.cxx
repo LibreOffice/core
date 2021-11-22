@@ -195,7 +195,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                 if ( maMnemonics[nMnemonicIndex] )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
-                    rKey = rKey.replaceAt( nIndex, 0, OUString(m_cMnemonic) );
+                    rKey = rKey.replaceAt( nIndex, 0, rtl::OUStringChar(m_cMnemonic) );
                     bChanged = true;
                     break;
                 }
@@ -247,7 +247,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
             if ( nBestCount != 0xFFFF )
             {
                 maMnemonics[nBestMnemonicIndex] = 0;
-                rKey = rKey.replaceAt( nBestIndex, 0, OUString(m_cMnemonic) );
+                rKey = rKey.replaceAt( nBestIndex, 0, rtl::OUStringChar(m_cMnemonic) );
                 bChanged = true;
             }
         }
@@ -327,7 +327,7 @@ OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
                     aStr[ i+2 ] == ')' &&
                     c >= MNEMONIC_RANGE_2_START && c <= MNEMONIC_RANGE_2_END )
                 {
-                    aStr = aStr.replaceAt( i-1, 4, "" );
+                    aStr = aStr.replaceAt( i-1, 4, u"" );
                     nLen -= 4;
                     i--;
                     continue;
@@ -335,7 +335,7 @@ OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
             }
 
             // remove standard mnemonics
-            aStr = aStr.replaceAt( i, 1, "" );
+            aStr = aStr.replaceAt( i, 1, u"" );
             nLen--;
         }
         else

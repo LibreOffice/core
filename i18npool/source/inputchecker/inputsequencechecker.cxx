@@ -68,7 +68,7 @@ InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartP
         if (language)
             return getInputSequenceChecker(language)->correctInputSequence(Text, nStartPos, inputChar, inputCheckMode);
     }
-    Text = Text.replaceAt(++nStartPos, 0, OUString(inputChar));
+    Text = Text.replaceAt(++nStartPos, 0, rtl::OUStringChar(inputChar));
     return nStartPos;
 }
 

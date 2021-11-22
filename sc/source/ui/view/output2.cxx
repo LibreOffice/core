@@ -536,7 +536,7 @@ bool ScDrawStringsVars::SetText( const ScRefCellValue& rCell )
                     {
                         nRepeatChar = aString[ nRepeatPos + 1 ];
                         // delete placeholder and char to repeat
-                        aString = aString.replaceAt( nRepeatPos, 2, "" );
+                        aString = aString.replaceAt( nRepeatPos, 2, u"" );
                         // Do not cache/reuse a repeat-filled string, column
                         // widths or fonts or sizes may differ.
                         maLastCell.clear();

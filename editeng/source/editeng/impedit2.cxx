@@ -1659,7 +1659,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         const OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
         if ( !aFldText.isEmpty() )
         {
-            aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(0,1) );
+            aText = aText.replaceAt( pField->GetStart(), 1, aFldText.subView(0,1) );
             short nFldScriptType = _xBI->getScriptType( aFldText, 0 );
 
             for ( sal_Int32 nCharInField = 1; nCharInField < aFldText.getLength(); nCharInField++ )
@@ -1670,14 +1670,14 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
                 if ( nFldScriptType == i18n::ScriptType::WEAK )
                 {
                     nFldScriptType = nTmpType;
-                    aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
+                    aText = aText.replaceAt( pField->GetStart(), 1, aFldText.subView(nCharInField,1) );
                 }
 
                 // ...  but if the first one is LATIN, and there are CJK or CTL chars too,
                 // we prefer that ScriptType because we need another font.
                 if ( ( nTmpType == i18n::ScriptType::ASIAN ) || ( nTmpType == i18n::ScriptType::COMPLEX ) )
                 {
-                    aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
+                    aText = aText.replaceAt( pField->GetStart(), 1, aFldText.subView(nCharInField,1) );
                     break;
                 }
             }

@@ -90,7 +90,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                             nIndex += 2;
                             nIndex = aTemp.indexOf(sQuot,nIndex);
                             if(nIndex != -1)
-                                aTemp = aTemp.replaceAt(nIndex,sQuot.getLength(), "\'\'");
+                                aTemp = aTemp.replaceAt(nIndex,sQuot.getLength(), u"\'\'");
                         } while (nIndex != -1);
 
                         aRet.append(aTemp);

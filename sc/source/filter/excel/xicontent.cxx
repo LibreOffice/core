@@ -341,7 +341,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
                         ScRange aRange;
                         if ((aRange.ParseAny( xTextMark->copy( nSepPos + 1 ), rDoc, formula::FormulaGrammar::CONV_XL_R1C1)
                                         & ScRefFlags::VALID) == ScRefFlags::ZERO)
-                            xTextMark.reset( new OUString( xTextMark->replaceAt( nSepPos, 1, OUString( '.' ))));
+                            xTextMark.reset( new OUString( xTextMark->replaceAt( nSepPos, 1, rtl::OUStringChar( '.' ))));
                     }
                 }
             }

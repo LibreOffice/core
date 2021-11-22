@@ -519,7 +519,7 @@ sal_Int16 getShortForLongAlso( const uno::Any& rAny )
 
 bool replaceParamterInString( OUString & rInOutResourceString,
                             const OUString & rParamToReplace,
-                            const OUString & rReplaceWith )
+                            std::u16string_view rReplaceWith )
 {
     sal_Int32 nPos = rInOutResourceString.indexOf( rParamToReplace );
     if( nPos == -1 )

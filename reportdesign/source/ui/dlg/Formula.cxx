@@ -152,7 +152,7 @@ void FormulaDialog::setCurrentFormula(const OUString& _sReplacement)
     const sal_Int32 nOldLen = m_nEnd - m_nStart;
     const sal_Int32 nNewLen = _sReplacement.getLength();
     if (nOldLen)
-        m_sFormula = m_sFormula.replaceAt( m_nStart, nOldLen, "" );
+        m_sFormula = m_sFormula.replaceAt( m_nStart, nOldLen, u"" );
     if (nNewLen)
         m_sFormula = m_sFormula.replaceAt( m_nStart, 0, _sReplacement );
     m_nEnd = m_nStart + nNewLen;

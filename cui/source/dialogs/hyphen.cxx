@@ -263,7 +263,7 @@ bool SvxHyphenWordDialog::SelLeft()
             DBG_ASSERT(i <= aTxt.getLength(), "index out of range");
             if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
             {
-                aTxt = aTxt.replaceAt( i, 1, OUString( CUR_HYPH_POS_CHAR ) );
+                aTxt = aTxt.replaceAt( i, 1, rtl::OUStringChar( CUR_HYPH_POS_CHAR ) );
 
                 m_nOldPos = i;
                 m_xWordEdit->set_text(aTxt);
@@ -286,7 +286,7 @@ bool SvxHyphenWordDialog::SelRight()
     {
         if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
         {
-            aTxt = aTxt.replaceAt( i, 1, OUString( CUR_HYPH_POS_CHAR ) );
+            aTxt = aTxt.replaceAt( i, 1, rtl::OUStringChar( CUR_HYPH_POS_CHAR ) );
 
             m_nOldPos = i;
             m_xWordEdit->set_text(aTxt);

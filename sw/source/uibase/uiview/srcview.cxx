@@ -183,7 +183,7 @@ static OUString lcl_ConvertTabsToSpaces( const OUString& sLine )
         }
         // Not 4 blanks, but on 4th TabPos:
         const sal_Int32 nPadLen = 4 - (nPos % 4);
-        aRet = aRet.replaceAt(nPos, 1, OUString(aPadSpaces, nPadLen));
+        aRet = aRet.replaceAt(nPos, 1, std::u16string_view{aPadSpaces, static_cast<size_t>(nPadLen)});
         nPos += nPadLen;
     }
     return aRet;

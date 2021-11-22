@@ -271,13 +271,13 @@ void TextNode::InsertText( sal_Int32 nPos, const OUString& rText )
 
 void TextNode::InsertText( sal_Int32 nPos, sal_Unicode c )
 {
-    maText = maText.replaceAt( nPos, 0, OUString(c) );
+    maText = maText.replaceAt( nPos, 0, rtl::OUStringChar(c) );
     ExpandAttribs( nPos, 1 );
 }
 
 void TextNode::RemoveText( sal_Int32 nPos, sal_Int32 nChars )
 {
-    maText = maText.replaceAt( nPos, nChars, "" );
+    maText = maText.replaceAt( nPos, nChars, u"" );
     CollapseAttribs( nPos, nChars );
 }
 

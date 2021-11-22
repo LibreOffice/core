@@ -125,7 +125,7 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
     OUString sDBName;
     if( (!rItem.m_bSynchron || !(nCol|nRow)) && !(sDBName = InsertLabEnvText( rSh, rFieldMgr, rItem.m_aWriting )).isEmpty() && !bLast )
     {
-        sDBName = comphelper::string::setToken(sDBName, 3, DB_DELIM, "True");
+        sDBName = comphelper::string::setToken(sDBName, 3, DB_DELIM, u"True");
         SwInsertField_Data aData(SwFieldTypesEnum::DatabaseNextSet, 0, sDBName, OUString(), 0, &rSh);
         rFieldMgr.InsertField( aData );
     }

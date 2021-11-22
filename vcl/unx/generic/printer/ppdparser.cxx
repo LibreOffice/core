@@ -1320,7 +1320,7 @@ void PPDParser::parseOrderDependency(const OString& rLine)
     OUString aKey(OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
     if( aKey[ 0 ] != '*' )
         return; // invalid order dependency
-    aKey = aKey.replaceAt( 0, 1, "" );
+    aKey = aKey.replaceAt( 0, 1, u"" );
 
     PPDKey* pKey;
     PPDParser::hash_type::const_iterator keyit = m_aKeys.find( aKey );
@@ -1354,7 +1354,7 @@ void PPDParser::parseConstraint( const OString& rLine )
     OUString aLine(OStringToOUString(rLine, RTL_TEXTENCODING_MS_1252));
     sal_Int32 nIdx = rLine.indexOf(':');
     if (nIdx != -1)
-        aLine = aLine.replaceAt(0, nIdx + 1, "");
+        aLine = aLine.replaceAt(0, nIdx + 1, u"");
     PPDConstraint aConstraint;
     int nTokens = GetCommandLineTokenCount( aLine );
     for( int i = 0; i < nTokens; i++ )
@@ -1362,7 +1362,7 @@ void PPDParser::parseConstraint( const OString& rLine )
         OUString aToken = GetCommandLineToken( i, aLine );
         if( !aToken.isEmpty() && aToken[ 0 ] == '*' )
         {
-            aToken = aToken.replaceAt( 0, 1, "" );
+            aToken = aToken.replaceAt( 0, 1, u"" );
             if( aConstraint.m_pKey1 )
                 aConstraint.m_pKey2 = getKey( aToken );
             else

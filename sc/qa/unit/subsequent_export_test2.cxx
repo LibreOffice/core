@@ -2328,7 +2328,7 @@ void ScExportTest2::testTdf87973_externalLinkSkipUnuseds()
     // change external link to: 87973_externalSource.ods
     OUString aFormula = rDoc.GetFormula(3, 1, 0);
     auto nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
-    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
+    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, u"87973_externalSource.ods");
     auto nIdxOfFile = aFormula.indexOf("file");
 
     // saveAndReload save the file to a temporary directory
@@ -2344,7 +2344,7 @@ void ScExportTest2::testTdf87973_externalLinkSkipUnuseds()
     // tdf#138832: test the same thing with singleref link
     aFormula = rDoc.GetFormula(3, 2, 0);
     nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
-    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
+    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, u"87973_externalSource.ods");
     nIdxOfFile = aFormula.indexOf("file");
 
     aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);

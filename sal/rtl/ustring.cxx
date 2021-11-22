@@ -1866,6 +1866,13 @@ void SAL_CALL rtl_uString_newReplaceStrAt(rtl_uString** ppThis, rtl_uString* pSt
     rtl::str::newReplaceStrAt(ppThis, pStr, nIndex, nCount, pNewSubStr);
 }
 
+void SAL_CALL rtl_uString_newReplaceStrAtUtf16L(rtl_uString** ppThis, rtl_uString* pStr, sal_Int32 nIndex,
+                                          sal_Int32 nCount, sal_Unicode const * subStr, sal_Int32 substrLen)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newReplaceStrAt(ppThis, pStr, nIndex, nCount, subStr, substrLen);
+}
+
 void SAL_CALL rtl_uString_newReplace(rtl_uString** ppThis, rtl_uString* pStr, sal_Unicode cOld,
                                      sal_Unicode cNew) SAL_THROW_EXTERN_C()
 {

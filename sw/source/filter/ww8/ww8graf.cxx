@@ -542,7 +542,7 @@ static void lcl_StripFields(OUString &rString, WW8_CP &rNewStartCp)
         }
 
         const bool was0x14 = rString[nStopPos]==0x14;
-        rString = rString.replaceAt(nStartPos, nStopPos+1-nStartPos, "");
+        rString = rString.replaceAt(nStartPos, nStopPos+1-nStartPos, u"");
         rNewStartCp += nStopPos-nStartPos;
 
         if (was0x14)
@@ -551,7 +551,7 @@ static void lcl_StripFields(OUString &rString, WW8_CP &rNewStartCp)
             nStartPos = rString.indexOf(0x15, nStartPos);
             if (nStartPos<0)
                 return;
-            rString = rString.replaceAt(nStartPos, 1, "");
+            rString = rString.replaceAt(nStartPos, 1, u"");
         }
     }
 }

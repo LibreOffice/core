@@ -589,7 +589,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
         m_nEndContent++;    // Delete: attach char at the end
         nUChrPos++;
     }
-    m_aSttStr = m_aSttStr->replaceAt( nUChrPos, 0, OUString(cDelChar) );
+    m_aSttStr = m_aSttStr->replaceAt( nUChrPos, 0, rtl::OUStringChar(cDelChar) );
     pDelTextNd->EraseText( pStt->nContent, 1 );
 
     m_bGroup = true;

@@ -112,7 +112,7 @@ OUString ReplacePoint( const OUString& rTmpName, bool bWithCommandType )
         return rTmpName;
     }
 
-    OUString sRes = rTmpName.replaceAt(nIndex, 1, OUString(DB_DELIM));
+    OUString sRes = rTmpName.replaceAt(nIndex, 1, rtl::OUStringChar(DB_DELIM));
 
     if (bWithCommandType)
     {
@@ -121,13 +121,13 @@ OUString ReplacePoint( const OUString& rTmpName, bool bWithCommandType )
         {
             return sRes;
         }
-        sRes = sRes.replaceAt(nIndex, 1, OUString(DB_DELIM));
+        sRes = sRes.replaceAt(nIndex, 1, rtl::OUStringChar(DB_DELIM));
     }
 
     nIndex = sRes.indexOf('.');
     if (nIndex>=0)
     {
-        sRes = sRes.replaceAt(nIndex, 1, OUString(DB_DELIM));
+        sRes = sRes.replaceAt(nIndex, 1, rtl::OUStringChar(DB_DELIM));
     }
     return sRes;
 }

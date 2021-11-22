@@ -122,7 +122,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     {
         sal_Int32 nIndex = sTypeName.indexOf(sAutoIncrementValue);
         if (nIndex != -1)
-            sTypeName = sTypeName.replaceAt(nIndex,sTypeName.getLength() - nIndex,OUString());
+            sTypeName = sTypeName.replaceAt(nIndex,sTypeName.getLength() - nIndex, u"");
     }
 
     if ( (nPrecision > 0 || nScale > 0) && bUseLiteral )
@@ -387,7 +387,7 @@ OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descri
     else
     {
         if ( aSql.endsWith(",") )
-            aSql = aSql.replaceAt(aSql.getLength()-1, 1, ")");
+            aSql = aSql.replaceAt(aSql.getLength()-1, 1, u")");
         else
             aSql += ")";
     }

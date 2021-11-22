@@ -286,7 +286,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, std::u16st
                 {
                     if (aURL.getLength() == rOldName.getLength() + 1) // standard page name
                     {
-                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, "") +
+                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, u"") +
                             rNewName;
                         pURLField->SetURL(aURL);
                     }
@@ -296,7 +296,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, std::u16st
                         if (aURL.getLength() == rOldName.getLength() + 2 + sNotes.getLength()
                             && aURL.indexOf(sNotes, rOldName.getLength() + 2) == rOldName.getLength() + 2)
                         {
-                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, "") +
+                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, u"") +
                                 rNewName + " " + sNotes;
                             pURLField->SetURL(aURL);
                         }
@@ -333,7 +333,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
                         OUString aURLCopy = aURL;
                         const OUString sNotes(SdResId(STR_NOTES));
 
-                        aURLCopy = aURLCopy.replaceAt(0, aHashSlide.getLength(), "");
+                        aURLCopy = aURLCopy.replaceAt(0, aHashSlide.getLength(), u"");
 
                         bool bNotesLink = ( aURLCopy.getLength() >= sNotes.getLength() + 3
                             && aURLCopy.endsWith(sNotes) );
@@ -342,7 +342,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
                             continue; // no compatible link and page
 
                         if (bNotes)
-                            aURLCopy = aURLCopy.replaceAt(aURLCopy.getLength() - sNotes.getLength(), sNotes.getLength(), "");
+                            aURLCopy = aURLCopy.replaceAt(aURLCopy.getLength() - sNotes.getLength(), sNotes.getLength(), u"");
 
                         sal_Int32 number = aURLCopy.toInt32();
                         sal_uInt16 realPageNumber = (nPos + 1)/ 2;
@@ -351,7 +351,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
                         {
                             // update link page number
                             number += nIncrement;
-                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, "") +
+                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, u"") +
                                 OUString::number(number);
                             if (bNotes)
                             {

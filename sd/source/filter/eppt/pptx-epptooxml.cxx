@@ -2266,7 +2266,7 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
     sRelId = addRelation(pFS->getOutputStream(),
                         oox::getRelationship(Relationship::AUDIO), sPath);
 
-    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(sPath.replaceAt(0, 2, "/ppt"),
+    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(sPath.replaceAt(0, 2, u"/ppt"),
             "audio/x-wav");
 
     comphelper::OStorageHelper::CopyInputToOutput(xAudioStream, xOutputStream);

@@ -1616,16 +1616,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ((i + nCopyStart + 1 >= sal_Int32(rInf.GetLen())) ||
                         aKernArray[i + nCopyStart] != aKernArray[ i + nCopyStart + 1])
                     {
-                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BULLET));
+                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(CH_BULLET));
                     }
                     else
                     {
-                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BLANK));
+                        aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(CH_BLANK));
                     }
                 }
                 else
                 {
-                    aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BLANK));
+                    aBulletOverlay = aBulletOverlay.replaceAt(i, 1, rtl::OUStringChar(CH_BLANK));
                 }
         }
 
@@ -2502,7 +2502,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
                     // In this case, the beginning of aTmpText is wrong.
                     OUString aSnippetTmp(aSnippet.copy(0, 1));
                     aSnippetTmp = m_aSub[m_nActual].CalcCaseMap( aSnippetTmp );
-                    aTmpText = aTmpText.replaceAt( 0, aSnippetTmp.getLength(), OUString(aSnippet[0]) );
+                    aTmpText = aTmpText.replaceAt( 0, aSnippetTmp.getLength(), rtl::OUStringChar(aSnippet[0]) );
                 }
             }
 

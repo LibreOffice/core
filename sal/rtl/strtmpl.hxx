@@ -1466,6 +1466,80 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
 
 /* ----------------------------------------------------------------------- */
 
+template <typename IMPL_RTL_STRINGDATA, typename IMPL_RTL_STRCODE>
+void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppThis,
+                                                      IMPL_RTL_STRINGDATA* pStr,
+                                                      sal_Int32 nIndex,
+                                                      sal_Int32 nCount,
+                                                      const IMPL_RTL_STRCODE* pNewSubStr,
+                                                      sal_Int32 nNewSubStrLen )
+{
+    assert(ppThis);
+    assert(nIndex >= 0 && nIndex <= pStr->length);
+    assert(nCount >= 0);
+    assert(nCount <= pStr->length - nIndex);
+    assert(pNewSubStr);
+    assert(nNewSubStrLen >= 0);
+    /* Append? */
+    if ( nIndex >= pStr->length )
+    {
+        if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+            rtl_string_newConcatL( ppThis, pStr, pNewSubStr, nNewSubStrLen );
+        else
+            rtl_uString_newConcatUtf16L( ppThis, pStr, pNewSubStr, nNewSubStrLen );
+        return;
+    }
+
+    /* not more than the String length could be deleted */
+    if ( nCount >= pStr->length-nIndex )
+    {
+        nCount = pStr->length-nIndex;
+
+        /* Assign of NewSubStr? */
+        if ( !nIndex && (nCount >= pStr->length) )
+        {
+            newFromStr_WithLength( ppThis, pNewSubStr, nNewSubStrLen );
+            return;
+        }
+    }
+
+    /* Assign of Str? */
+    if ( !nCount && !nNewSubStrLen )
+    {
+        assign( ppThis, pStr );
+        return;
+    }
+
+    IMPL_RTL_STRINGDATA*    pOrg = *ppThis;
+    sal_Int32               nNewLen;
+
+    /* Calculate length of the new string */
+    nNewLen = pStr->length-nCount + nNewSubStrLen;
+
+    /* Alloc New Buffer */
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nNewLen );
+    OSL_ASSERT(*ppThis != nullptr);
+    auto* pBuffer = (*ppThis)->buffer;
+    if ( nIndex )
+    {
+        Copy( pBuffer, pStr->buffer, nIndex );
+        pBuffer += nIndex;
+    }
+    if ( nNewSubStrLen )
+    {
+        Copy( pBuffer, pNewSubStr, nNewSubStrLen );
+        pBuffer += nNewSubStrLen;
+    }
+    Copy( pBuffer, pStr->buffer+nIndex+nCount, pStr->length-nIndex-nCount );
+
+    RTL_LOG_STRING_NEW( *ppThis );
+    /* must be done last, if pStr or pNewSubStr == *ppThis */
+    if ( pOrg )
+        release( pOrg );
+}
+
+/* ----------------------------------------------------------------------- */
+
 template <typename IMPL_RTL_STRINGDATA>
 void newReplace                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                  IMPL_RTL_STRINGDATA* pStr,
