@@ -51,6 +51,7 @@
 #include <rtl/ref.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 class BasicManager;
 
@@ -74,8 +75,8 @@ class NameContainer final : public ::cppu::BaseMutex, public NameContainer_BASE
     css::uno::Type mType;
     css::uno::XInterface* mpxEventSource;
 
-    ::comphelper::OInterfaceContainerHelper2 maContainerListeners;
-    ::comphelper::OInterfaceContainerHelper2 maChangesListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> maContainerListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XChangesListener> maChangesListeners;
 
 public:
     NameContainer( const css::uno::Type& rType )
