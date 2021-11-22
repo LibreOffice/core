@@ -732,7 +732,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
     sal_uInt32 nFragmentDelimiter = '#';
 
-    OUStringBuffer aSynAbsURIRef(rTheAbsURIRef.getLength()*2);
+    m_aAbsURIRef.setLength(0);
 
     // Parse <scheme>:
     sal_Unicode const * p = pPos;
@@ -745,7 +745,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         char const * pTemp = pPrefix->m_eKind >= PrefixInfo::Kind::External ?
                                              pPrefix->m_pTranslatedPrefix :
                                              pPrefix->m_pPrefix;
-        aSynAbsURIRef.appendAscii(pTemp);
+        m_aAbsURIRef.appendAscii(pTemp);
         m_aScheme = SubString( 0, strstr(pTemp, ":") - pTemp );
     }
     else
@@ -889,8 +889,8 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         if (m_eScheme != INetProtocol::Generic) {
             aSynScheme = static_cast<const OUString&>(getSchemeInfo().m_sScheme);
         }
-        m_aScheme.set(aSynAbsURIRef, aSynScheme, aSynAbsURIRef.getLength());
-        aSynAbsURIRef.append(':');
+        m_aScheme.set(m_aAbsURIRef, aSynScheme, m_aAbsURIRef.getLength());
+        m_aAbsURIRef.append(':');
     }
 
     sal_uInt32 nSegmentDelimiter = '/';
@@ -916,7 +916,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
-                aSynAbsURIRef.append("//");
+                m_aAbsURIRef.append("//");
                 OUStringBuffer aSynAuthority;
                 while (pPos < pEnd
                        && *pPos != '/' && *pPos != '?'
@@ -929,9 +929,9 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     appendUCS4(aSynAuthority, nUTF32, eEscapeType,
                                PART_AUTHORITY, eCharset, false);
                 }
-                m_aHost.set(aSynAbsURIRef,
+                m_aHost.set(m_aAbsURIRef,
                             aSynAuthority.makeStringAndClear(),
-                            aSynAbsURIRef.getLength());
+                            m_aAbsURIRef.getLength());
                     // misusing m_aHost to store the authority
                 break;
             }
@@ -941,7 +941,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                 {
                     pPos += 2;
-                    aSynAbsURIRef.append("//");
+                    m_aAbsURIRef.append("//");
                     OUStringBuffer aSynAuthority;
                     while (pPos < pEnd
                            && *pPos != '/' && *pPos != '?'
@@ -965,9 +965,9 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         setInvalid();
                         return false;
                     }
-                    m_aHost.set(aSynAbsURIRef,
+                    m_aHost.set(m_aAbsURIRef,
                                 aSynAuthority.makeStringAndClear(),
-                                aSynAbsURIRef.getLength());
+                                m_aAbsURIRef.getLength());
                         // misusing m_aHost to store the authority
                 }
                 break;
@@ -981,7 +981,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
-                aSynAbsURIRef.append("//");
+                m_aAbsURIRef.append("//");
                 OUStringBuffer aSynUser(128);
 
                 bool bHasUser = false;
@@ -1006,10 +1006,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 }
                 else
                 {
-                    m_aUser.set(aSynAbsURIRef,
+                    m_aUser.set(m_aAbsURIRef,
                             aSynUser.makeStringAndClear(),
-                            aSynAbsURIRef.getLength());
-                    aSynAbsURIRef.append("@");
+                            m_aAbsURIRef.getLength());
+                    m_aAbsURIRef.append("@");
                     ++pPos;
 
                     while (pPos < pEnd
@@ -1029,9 +1029,9 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
-                m_aHost.set(aSynAbsURIRef,
+                m_aHost.set(m_aAbsURIRef,
                             aSynAuthority.makeStringAndClear(),
-                            aSynAbsURIRef.getLength());
+                            m_aAbsURIRef.getLength());
                     // misusing m_aHost to store the authority
                 break;
             }
@@ -1074,7 +1074,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                                 pPos + 2, p1, EncodeMechanism::All,
                                 RTL_TEXTENCODING_DONTKNOW, true, nullptr))
                         {
-                            aSynAbsURIRef.append("//");
+                            m_aAbsURIRef.append("//");
                             pHostPortBegin = pPos + 2;
                             pHostPortEnd = p1;
                             pPos = p1;
@@ -1098,7 +1098,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //    "file:///" *path ["#" *UCS4]
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
-                        aSynAbsURIRef.append("//");
+                        m_aAbsURIRef.append("//");
                         pPos += 2;
                         bSkippedInitialSlash = true;
                         if ((eStyle & FSysStyle::Dos)
@@ -1117,7 +1117,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //    "file:///" *path ["#" *UCS4]
                     if (pPos < pEnd && *pPos == '/')
                     {
-                        aSynAbsURIRef.append("//");
+                        m_aAbsURIRef.append("//");
                         break;
                     }
 
@@ -1145,7 +1145,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                              (scanDomain(p1, pe) > 0 && p1 == pe)
                            )
                         {
-                            aSynAbsURIRef.append("//");
+                            m_aAbsURIRef.append("//");
                             pHostPortBegin = pPos + 2;
                             pHostPortEnd = pe;
                             pPos = pe;
@@ -1172,7 +1172,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                             || pPos[2] == '/'
                             || pPos[2] == '\\'))
                     {
-                        aSynAbsURIRef.append("//");
+                        m_aAbsURIRef.append("//");
                         nAltSegmentDelimiter = '\\';
                         bSkippedInitialSlash = true;
                         break;
@@ -1194,7 +1194,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //  character is not copied
                     if (eStyle & (FSysStyle::Unix | FSysStyle::Dos))
                     {
-                        aSynAbsURIRef.append("//");
+                        m_aAbsURIRef.append("//");
                         switch (guessFSysStyleByCounting(pPos, pEnd, eStyle))
                         {
                             case FSysStyle::Unix:
@@ -1232,7 +1232,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
-                aSynAbsURIRef.append("//");
+                m_aAbsURIRef.append("//");
 
                 sal_Unicode const * pAuthority = pPos;
                 sal_uInt32 c = getSchemeInfo().m_bQuery ? '?' : 0x80000000;
@@ -1314,13 +1314,13 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 appendUCS4(aSynUser, nUTF32, eEscapeType, ePart,
                            eCharset, false);
             }
-            m_aUser.set(aSynAbsURIRef, aSynUser.makeStringAndClear(),
-                aSynAbsURIRef.getLength());
+            m_aUser.set(m_aAbsURIRef, aSynUser.makeStringAndClear(),
+                m_aAbsURIRef.getLength());
             if (bHasAuth)
             {
                 if (bSupportsPassword)
                 {
-                    aSynAbsURIRef.append(':');
+                    m_aAbsURIRef.append(':');
                     OUStringBuffer aSynAuth;
                     while (p1 < pUserInfoEnd)
                     {
@@ -1331,12 +1331,12 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         appendUCS4(aSynAuth, nUTF32, eEscapeType,
                                    ePart, eCharset, false);
                     }
-                    m_aAuth.set(aSynAbsURIRef, aSynAuth.makeStringAndClear(),
-                        aSynAbsURIRef.getLength());
+                    m_aAuth.set(m_aAbsURIRef, aSynAuth.makeStringAndClear(),
+                        m_aAbsURIRef.getLength());
                 }
                 else
                 {
-                    aSynAbsURIRef.append(";AUTH=");
+                    m_aAbsURIRef.append(";AUTH=");
                     OUStringBuffer aSynAuth;
                     while (p1 < pUserInfoEnd)
                     {
@@ -1352,12 +1352,12 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         appendUCS4(aSynAuth, nUTF32, eEscapeType,
                                    ePart, eCharset, false);
                     }
-                    m_aAuth.set(aSynAbsURIRef, aSynAuth.makeStringAndClear(),
-                        aSynAbsURIRef.getLength());
+                    m_aAuth.set(m_aAbsURIRef, aSynAuth.makeStringAndClear(),
+                        m_aAbsURIRef.getLength());
                 }
             }
             if (pHostPortBegin)
-                aSynAbsURIRef.append('@');
+                m_aAbsURIRef.append('@');
         }
 
         if (pHostPortBegin)
@@ -1399,21 +1399,21 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     }
                     break;
             }
-            sal_Int32 nLenBeforeHost = aSynAbsURIRef.getLength();
+            sal_Int32 nLenBeforeHost = m_aAbsURIRef.getLength();
             if (!parseHostOrNetBiosName(
                     pHostPortBegin, pPort, eMechanism, eCharset,
-                    bNetBiosName, &aSynAbsURIRef))
+                    bNetBiosName, &m_aAbsURIRef))
             {
                 setInvalid();
                 return false;
             }
-            m_aHost = SubString(nLenBeforeHost, aSynAbsURIRef.getLength() - nLenBeforeHost);
+            m_aHost = SubString(nLenBeforeHost, m_aAbsURIRef.getLength() - nLenBeforeHost);
             if (pPort != pHostPortEnd)
             {
-                aSynAbsURIRef.append(':');
-                m_aPort.set(aSynAbsURIRef,
+                m_aAbsURIRef.append(':');
+                m_aPort.set(m_aAbsURIRef,
                     std::u16string_view{pPort + 1, static_cast<size_t>(pHostPortEnd - (pPort + 1))},
-                    aSynAbsURIRef.getLength());
+                    m_aAbsURIRef.getLength());
             }
         }
     }
@@ -1429,13 +1429,13 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         setInvalid();
         return false;
     }
-    m_aPath.set(aSynAbsURIRef, aSynPath.makeStringAndClear(),
-        aSynAbsURIRef.getLength());
+    m_aPath.set(m_aAbsURIRef, aSynPath.makeStringAndClear(),
+        m_aAbsURIRef.getLength());
 
     // Parse ?<query>
     if (getSchemeInfo().m_bQuery && pPos < pEnd && *pPos == '?')
     {
-        aSynAbsURIRef.append('?');
+        m_aAbsURIRef.append('?');
         OUStringBuffer aSynQuery;
         for (++pPos; pPos < pEnd && *pPos != nFragmentDelimiter;)
         {
@@ -1445,14 +1445,14 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             appendUCS4(aSynQuery, nUTF32, eEscapeType,
                        PART_URIC, eCharset, true);
         }
-        m_aQuery.set(aSynAbsURIRef, aSynQuery.makeStringAndClear(),
-            aSynAbsURIRef.getLength());
+        m_aQuery.set(m_aAbsURIRef, aSynQuery.makeStringAndClear(),
+            m_aAbsURIRef.getLength());
     }
 
     // Parse #<fragment>
     if (pPos < pEnd && *pPos == nFragmentDelimiter)
     {
-        aSynAbsURIRef.append(sal_Unicode(nFragmentDelimiter));
+        m_aAbsURIRef.append(sal_Unicode(nFragmentDelimiter));
         OUStringBuffer aSynFragment;
         for (++pPos; pPos < pEnd;)
         {
@@ -1462,8 +1462,8 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             appendUCS4(aSynFragment, nUTF32, eEscapeType, PART_URIC,
                        eCharset, true);
         }
-        m_aFragment.set(aSynAbsURIRef, aSynFragment.makeStringAndClear(),
-            aSynAbsURIRef.getLength());
+        m_aFragment.set(m_aAbsURIRef, aSynFragment.makeStringAndClear(),
+            m_aAbsURIRef.getLength());
     }
 
     if (pPos != pEnd)
@@ -1471,8 +1471,6 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         setInvalid();
         return false;
     }
-
-    m_aAbsURIRef = std::move(aSynAbsURIRef);
 
     return true;
 }
