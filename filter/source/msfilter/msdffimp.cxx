@@ -2774,7 +2774,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
         *pAny >>= fExtraTextRotateAngle;
 
     if ( rManager.mnFix16Angle )
-        fExtraTextRotateAngle += mnFix16Angle.get() / 100.0;
+        fExtraTextRotateAngle += toDegrees(mnFix16Angle);
     if ( rObjData.nSpFlags & ShapeFlag::FlipV )
         fExtraTextRotateAngle -= 180.0;
 
@@ -2797,24 +2797,21 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
         nChgColors ^= 1;
 
     //Translate a MS clockwise(+) or count clockwise angle(-) into an AOO count clock wise angle
-    Degree10 nAngle( 3600 - ( ( Fix16ToAngle(nAngleFix16).get() + 5 ) / 10 ) );
+    Degree10 nAngle( 3600_deg10 - to<Degree10>( Fix16ToAngle(nAngleFix16) ) );
     //Make sure this angle belongs to 0~3600
-    while ( nAngle >= Degree10(3600) ) nAngle -= Degree10(3600);
-    while ( nAngle < Degree10(0) ) nAngle += Degree10(3600);
+    while ( nAngle >= 3600_deg10 ) nAngle -= 3600_deg10;
+    while ( nAngle < 0_deg10 ) nAngle += 3600_deg10;
 
     //Rotate angle
     if ( mbRotateGranientFillWithAngle )
     {
         sal_Int32 nRotateAngle = GetPropertyValue( DFF_Prop_Rotation, 0 );
-        if(nRotateAngle)//fixed point number
-            nRotateAngle = ( static_cast<sal_Int16>( nRotateAngle >> 16) * 100L ) + ( ( ( nRotateAngle & 0x0000ffff) * 100L ) >> 16 );
-        nRotateAngle = ( nRotateAngle + 5 ) / 10 ;//round up
         //nAngle is a clockwise angle. If nRotateAngle is a clockwise angle, then gradient needs to be rotated a little less
         //or it needs to be rotated a little more
-        nAngle -=  Degree10(nRotateAngle);
+        nAngle -= to<Degree10>(Fix16ToAngle(nRotateAngle));
     }
-    while ( nAngle >= Degree10(3600) ) nAngle -= Degree10(3600);
-    while ( nAngle < Degree10(0) ) nAngle += Degree10(3600);
+    while ( nAngle >= 3600_deg10 ) nAngle -= 3600_deg10;
+    while ( nAngle < 0_deg10 ) nAngle += 3600_deg10;
 
     css::awt::GradientStyle eGrad = css::awt::GradientStyle_LINEAR;
 

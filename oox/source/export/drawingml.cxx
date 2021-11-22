@@ -1858,7 +1858,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
 
     // OOXML flips shapes before rotating them.
     if(bFlipH != bFlipV)
-        nRotation = Degree100(nRotation.get() * -1 + 36000);
+        nRotation = 36000_deg100 - nRotation;
 
     WriteTransformation(rXShape, tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
             bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation + nCameraRotation), IsGroupShape( rXShape ));

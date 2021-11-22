@@ -1218,7 +1218,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         case SDRATTR_TABLE_TEXT_ROTATION:
         {
             const SvxTextRotateItem& rTextRotate = mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION);
-            return Any(sal_Int32(rTextRotate.GetValue().get() * 10));
+            return Any(sal_Int32(to<Degree100>(rTextRotate.GetValue())));
         }
         default:
         {

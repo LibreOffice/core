@@ -414,7 +414,7 @@ WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, f
         // degrees.
         aTransform = aTransform
                      * D2D1::Matrix3x2F::Rotation(
-                           -static_cast<FLOAT>(angle.get()) / 10, rBaseline);
+                           -toDegrees(angle), rBaseline);
     }
     mpRenderTarget->SetTransform(aTransform);
 }

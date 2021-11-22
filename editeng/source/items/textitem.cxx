@@ -2196,7 +2196,7 @@ bool SvxTextRotateItem::GetPresentation(
     {
         rText = EditResId(RID_SVXITEMS_TEXTROTATE);
         rText = rText.replaceFirst("$(ARG1)",
-            OUString::number(GetValue().get() / 10));
+            OUString::number(toDegrees(GetValue())));
     }
     return true;
 }
@@ -2275,7 +2275,7 @@ bool SvxCharRotateItem::GetPresentation(
     {
         rText = EditResId( RID_SVXITEMS_CHARROTATE );
         rText = rText.replaceFirst( "$(ARG1)",
-                    OUString::number( GetValue().get() / 10 ));
+                    OUString::number( toDegrees(GetValue()) ));
         if( IsFitToLine() )
             rText += EditResId( RID_SVXITEMS_CHARROTATE_FITLINE );
     }
