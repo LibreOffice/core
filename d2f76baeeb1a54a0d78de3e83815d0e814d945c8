@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52a358b0_d9cc21cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-22T12:19:10Z",
+      "side": 1,
+      "message": "I think the UItest can be implemented as as CppUnittest instead, isn\u0027t it ?",
+      "revId": "d2f76baeeb1a54a0d78de3e83815d0e814d945c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
