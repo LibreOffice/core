@@ -16,6 +16,24 @@
       "message": "I took one removed define and tested it:\n$ find . -name spinner-64-12.png\n./icon-themes/colibre/vcl/res/spinner-64-12.png\n./icon-themes/karasa_jaga/vcl/res/spinner-64-12.png\n\nbut git grep -n spinner-64-12 returns nothing\n\nDoes it mean the files should also be removed or the filename is generated (\"spinner\" first, then \"-64\" added, ...) ?",
       "revId": "13aa5081793f133077610cd01b7f01ee765b4add",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "405152b8_2c555881",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-22T07:29:34Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t know, the resource images stuff is full of magic concatention of strings",
+      "parentUuid": "d66f4852_a082c53f",
+      "revId": "13aa5081793f133077610cd01b7f01ee765b4add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
