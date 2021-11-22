@@ -33,6 +33,23 @@
       "message": "Nice find, but the main problem is, that ScopedFont doesn\u0027t correctly free the new HFONT.\n",
       "revId": "360f921139cb8b62cba1805d3de369b5b1601f3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a24bade_ace681e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-22T07:05:00Z",
+      "side": 1,
+      "message": "Could you elaborate a bit more? What\u0027s the pb with ScopeFont?\nI mean with the patch I don\u0027t see anymore GDI leaks, did I miss something?\n\nAlso, should I use DeleteFont or DeleteObject (as put in example in https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-createfonta)?\n",
+      "revId": "360f921139cb8b62cba1805d3de369b5b1601f3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
