@@ -44,6 +44,7 @@
 #include <tools/wintypes.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -72,7 +73,7 @@ public:
 // FmXModifyMultiplexer
 
 class SAL_WARN_UNUSED FmXModifyMultiplexer final : public OWeakSubObject
-                            ,public ::comphelper::OInterfaceContainerHelper2
+                            ,public ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>
                             ,public css::util::XModifyListener
 {
 public:
@@ -95,7 +96,7 @@ public:
 // FmXUpdateMultiplexer
 
 class SAL_WARN_UNUSED FmXUpdateMultiplexer final : public OWeakSubObject,
-                             public ::comphelper::OInterfaceContainerHelper2,
+                             public ::comphelper::OInterfaceContainerHelper3<css::form::XUpdateListener>,
                              public css::form::XUpdateListener
 {
 public:
@@ -120,7 +121,7 @@ public:
 // FmXSelectionMultiplexer
 
 class SAL_WARN_UNUSED FmXSelectionMultiplexer final : public OWeakSubObject
-                                ,public ::comphelper::OInterfaceContainerHelper2
+                                ,public ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener>
                                 ,public css::view::XSelectionChangeListener
 {
 public:
@@ -144,7 +145,7 @@ public:
 // FmXGridControlMultiplexer
 
 class SAL_WARN_UNUSED FmXGridControlMultiplexer final : public OWeakSubObject
-                                ,public ::comphelper::OInterfaceContainerHelper2
+                                ,public ::comphelper::OInterfaceContainerHelper3<css::form::XGridControlListener>
                                 ,public css::form::XGridControlListener
 {
 public:
@@ -168,7 +169,7 @@ public:
 // FmXContainerMultiplexer
 
 class SAL_WARN_UNUSED FmXContainerMultiplexer final : public OWeakSubObject,
-                                public ::comphelper::OInterfaceContainerHelper2,
+                                public ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener>,
                                 public css::container::XContainerListener
 {
 public:
