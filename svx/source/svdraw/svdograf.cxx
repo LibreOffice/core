@@ -435,7 +435,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
         }
 
         if( bRotate )
-            aActAttr.SetRotation( toDegree10(maGeo.nRotationAngle ) );
+            aActAttr.SetRotation( to<Degree10>(maGeo.nRotationAngle ) );
     }
 
     return aActAttr;

@@ -834,7 +834,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
         aAttr.Put(XFillColorItem(OUString(), aFont.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
-    Degree100 nAngle = toDegree100(aFont.GetOrientation());
+    Degree100 nAngle = to<Degree100>(aFont.GetOrientation());
     if (nAngle)
         pText->SdrAttrObj::NbcRotate(aPosition, nAngle);
     InsertObj(pText, false);
