@@ -16,6 +16,23 @@
       "message": "I think it could be useful to have this one on 7.2 branch.",
       "revId": "194de2ce0063b0c7ba7b22627a67eaa125aa7b08",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b25813_cfe0dcf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-22T15:37:30Z",
+      "side": 1,
+      "message": "Lionel: is it ok for you or did you find something wrong here?",
+      "revId": "194de2ce0063b0c7ba7b22627a67eaa125aa7b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
