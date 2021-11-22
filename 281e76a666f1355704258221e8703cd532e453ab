@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dc2d3cc_7adc4cc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-22T06:27:07Z",
+      "side": 1,
+      "message": "I do not see a point of doing it \"later\". The change overall looks a hack. It changes rather clear (although verbose) implementation to some intensive use of casting relying on some implementation details and documenting that in comments, which may be overlooked. It does not e.g. allow for automatic compiler checks, like use of \u0027switch\u0027 provides when it may warn you that not all values are checked.\n\nMy personal advise would be - just keep it as it was, or use proper machinery. No need for intermediate worse implementations.",
+      "parentUuid": "a5a2104a_0497d468",
+      "revId": "281e76a666f1355704258221e8703cd532e453ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a009c18_32c72b55",
