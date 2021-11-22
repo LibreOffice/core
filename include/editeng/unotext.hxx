@@ -41,7 +41,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/diagnose.hxx>
@@ -523,7 +523,7 @@ private:
 
     // for xComponent
     ::osl::Mutex maDisposeContainerMutex;
-    ::comphelper::OInterfaceContainerHelper2 maDisposeListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> maDisposeListeners;
     bool mbDisposing;
 
 protected:
