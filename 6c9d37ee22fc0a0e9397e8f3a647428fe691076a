@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03d326c9_91e18ba4",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-22T10:25:17Z",
+      "side": 1,
+      "message": "Should we check self-assignment here?",
+      "revId": "6c9d37ee22fc0a0e9397e8f3a647428fe691076a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
