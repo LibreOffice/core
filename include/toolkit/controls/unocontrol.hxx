@@ -32,6 +32,7 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <tools/long.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
@@ -87,7 +88,7 @@ protected:
     MouseListenerMultiplexer            maMouseListeners;
     MouseMotionListenerMultiplexer      maMouseMotionListeners;
     PaintListenerMultiplexer            maPaintListeners;
-    ::comphelper::OInterfaceContainerHelper2   maModeChangeListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModeChangeListener> maModeChangeListeners;
 
     css::uno::Reference< css::uno::XInterface >       mxContext;
     css::uno::Reference< css::awt::XControlModel >    mxModel;
