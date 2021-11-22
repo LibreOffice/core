@@ -1768,7 +1768,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                 ShearPoint(aPoly[i],maRect.Center(), fTan );
         }
         if (maGeo.nRotationAngle)
-            aPoly.Rotate( maRect.Center(), toDegree10(maGeo.nRotationAngle) );
+            aPoly.Rotate( maRect.Center(), to<Degree10>(maGeo.nRotationAngle) );
 
         tools::Rectangle aBoundRect( aPoly.GetBoundRect() );
         sal_Int32 nXDiff = aBoundRect.Left() - maRect.Left();
