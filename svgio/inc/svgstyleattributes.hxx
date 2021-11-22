@@ -70,6 +70,8 @@ namespace svgio::svgreader
             initial
         };
 
+        // The min, max and order is important here. If you are changing
+        // something here, you should also fix the repective functions
         enum class FontStretch
         {
             notset,
@@ -97,6 +99,8 @@ namespace svgio::svgreader
             oblique
         };
 
+        // The min, max and order is important here. If you are changing
+        // something here, you should also fix the repective functions
         enum class FontWeight
         {
             notset,
