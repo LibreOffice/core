@@ -782,14 +782,21 @@ bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nIndex ) const
 
 bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated( nC, nR );
-    switch (maMat.get_type(nR, nC))
+    if(ValidColRowReplicated( nC, nR ))
     {
-        case mdds::mtm::element_empty:
-        case mdds::mtm::element_string:
-            return true;
-        default:
-            ;
+        switch (maMat.get_type(nR, nC))
+        {
+            case mdds::mtm::element_empty:
+            case mdds::mtm::element_string:
+                return true;
+            default:
+                ;
+        }
+    }
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::IsStringOrEmpty: dimension error");
+        return true;
     }
     return false;
 }
@@ -798,27 +805,44 @@ bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     // Flag must indicate an 'empty' or 'empty cell' or 'empty result' element,
     // but not an 'empty path' element.
-    ValidColRowReplicated( nC, nR );
-    return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get_numeric(nR, nC) != SC_MATFLAG_EMPTYPATH;
+    if(ValidColRowReplicated( nC, nR ))
+        return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
+            maMatFlag.get_numeric(nR, nC) != SC_MATFLAG_EMPTYPATH;
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::IsEmpty: dimension error");
+        return true;
+    }
+    return false;
 }
 
 bool ScMatrixImpl::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
 {
     // Flag must indicate an 'empty cell' element instead of an
     // 'empty' or 'empty result' or 'empty path' element.
-    ValidColRowReplicated( nC, nR );
-    return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get_type(nR, nC) == mdds::mtm::element_empty;
+    if(ValidColRowReplicated( nC, nR ))
+        return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
+            maMatFlag.get_type(nR, nC) == mdds::mtm::element_empty;
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::IsEmptyCell: dimension error");
+        return true;
+    }
+    return false;
 }
 
 bool ScMatrixImpl::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
 {
     // Flag must indicate an 'empty result' element instead of an
     // 'empty' or 'empty cell' or 'empty path' element.
-    ValidColRowReplicated( nC, nR );
-    return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
-        maMatFlag.get_numeric(nR, nC) == SC_MATFLAG_EMPTYRESULT;
+    if(ValidColRowReplicated( nC, nR ))
+        return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
+            maMatFlag.get_numeric(nR, nC) == SC_MATFLAG_EMPTYRESULT;
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::IsEmptyResult: dimension error");
+        return true;
+    }
 }
 
 bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
@@ -840,37 +864,55 @@ bool ScMatrixImpl::IsValue( SCSIZE nIndex ) const
 
 bool ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated(nC, nR);
-    switch (maMat.get_type(nR, nC))
+    if(ValidColRowReplicated(nC, nR))
     {
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
-            return true;
-        default:
-            ;
+        switch (maMat.get_type(nR, nC))
+        {
+            case mdds::mtm::element_boolean:
+            case mdds::mtm::element_numeric:
+                return true;
+            default:
+                ;
+        }
+    }
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::IsValue: dimension error");
     }
     return false;
 }
 
 bool ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated(nC, nR);
-    switch (maMat.get_type(nR, nC))
+    if(ValidColRowReplicated(nC, nR))
     {
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
-        case mdds::mtm::element_empty:
-            return true;
-        default:
-            ;
+        switch (maMat.get_type(nR, nC))
+        {
+            case mdds::mtm::element_boolean:
+            case mdds::mtm::element_numeric:
+            case mdds::mtm::element_empty:
+                return true;
+            default:
+                ;
+        }
+    }
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::IsValueOrEmpty: dimension error");
+        return true;
     }
     return false;
 }
 
 bool ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 {
-    ValidColRowReplicated( nC, nR );
-    return maMat.get_type(nR, nC) == mdds::mtm::element_boolean;
+    if(ValidColRowReplicated( nC, nR ))
+        return maMat.get_type(nR, nC) == mdds::mtm::element_boolean;
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::IsBoolean: dimension error");
+    }
+    return false;
 }
 
 bool ScMatrixImpl::IsNumeric() const
