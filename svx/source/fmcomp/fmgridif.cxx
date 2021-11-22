@@ -1451,10 +1451,10 @@ sal_Bool FmXGridPeer::commit()
         return true;
 
     EventObject aEvt(static_cast< ::cppu::OWeakObject* >(this));
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aUpdateListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aUpdateListeners);
     bool bCancel = false;
     while (aIter.hasMoreElements() && !bCancel)
-        if ( !static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvt ) )
+        if ( !aIter.next()->approveUpdate( aEvt ) )
             bCancel = true;
 
     if (!bCancel)
