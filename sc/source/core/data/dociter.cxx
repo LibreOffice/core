@@ -1117,6 +1117,7 @@ bool ScQueryCellIterator::GetThis()
         !maParam.bHasHeader && rItem.meType == ScQueryEntry::ByString &&
         ((maParam.bByRow && nRow == maParam.nRow1) ||
          (!maParam.bByRow && nCol == maParam.nCol1));
+    ScTable::ValidQueryCache validQueryCache;
 
     ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
     while (true)
@@ -1183,7 +1184,7 @@ bool ScQueryCellIterator::GetThis()
             if ( rDoc.maTabs[nTab]->ValidQuery( nRow, maParam,
                     (nCol == static_cast<SCCOL>(nFirstQueryField) ? &aCell : nullptr),
                     (nTestEqualCondition ? &bTestEqualCondition : nullptr),
-                    &mrContext) )
+                    &mrContext, nullptr, &validQueryCache) )
             {
                 if ( nTestEqualCondition && bTestEqualCondition )
                     nTestEqualCondition |= nTestEqualConditionMatched;
@@ -1506,6 +1507,7 @@ int ScCountIfCellIterator::GetCount()
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     const bool bSingleQueryItem = rEntry.GetQueryItems().size() == 1;
     int count = 0;
+    ScTable::ValidQueryCache validQueryCache;
 
     ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
     while (true)
@@ -1561,7 +1563,7 @@ int ScCountIfCellIterator::GetCount()
         if ( rDoc.maTabs[nTab]->ValidQuery( nRow, maParam,
                 (nCol == static_cast<SCCOL>(rEntry.nField) ? &aCell : nullptr),
                 nullptr,
-                &mrContext) )
+                &mrContext, nullptr, &validQueryCache) )
         {
             if (aCell.isEmpty())
                 return count;
