@@ -67,6 +67,23 @@
       "message": "Looks reasonable -- did you consider covering the fix with a test?",
       "revId": "1e72cc25bb78ef04a454feae0a48b4319e50227c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9427ea_b97f7e75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-22T13:05:51Z",
+      "side": 1,
+      "message": "3 weeks and didn\u0027t hear back; let\u0027s get this in without a test for now, since it fixes a regression.\n\nSarper: please consider covering this with a test in a follow-up change. Thanks!",
+      "revId": "1e72cc25bb78ef04a454feae0a48b4319e50227c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
