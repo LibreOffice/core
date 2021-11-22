@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31ff3471_56838ccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-22T08:13:31Z",
+      "side": 1,
+      "message": "From the bug report : Heiko Tietze 2021-05-13 10:16:08 UTC\nWe discussed the topic in the design meeting and recommend to make the caption of the active tab bold again.",
+      "revId": "e8789e525d2c80b44c2bb58feac706ad831588ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
