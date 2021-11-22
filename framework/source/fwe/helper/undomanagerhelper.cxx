@@ -29,7 +29,7 @@
 #include <com/sun/star/util/NotLockedException.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/asyncnotification.hxx>
@@ -202,8 +202,8 @@ namespace framework
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
         sal_Int32                           m_nLockCount;
-        ::comphelper::OInterfaceContainerHelper2   m_aUndoListeners;
-        ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
+        ::comphelper::OInterfaceContainerHelper3<XUndoManagerListener>   m_aUndoListeners;
+        ::comphelper::OInterfaceContainerHelper3<XModifyListener>   m_aModifyListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
         ::std::stack< bool >                m_aContextVisibilities;
 #if OSL_DEBUG_LEVEL > 0
