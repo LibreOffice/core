@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8162319d_dc7e0737",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-22T19:06:09Z",
+      "side": 1,
+      "message": "Typos in the commit message: User -\u003e Use, drawlinglayer -\u003e drawinglayer",
+      "revId": "acd73c48a67cba99ff2c07c02a9fc77e0b51e180",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
