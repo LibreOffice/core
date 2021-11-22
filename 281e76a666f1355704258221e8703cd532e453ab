@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5a2104a_0497d468",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-22T03:32:47Z",
+      "side": 1,
+      "message": "I will do this later. The comments are added to the .hxx files.",
+      "parentUuid": "00cb3db0_57986bf9",
+      "revId": "281e76a666f1355704258221e8703cd532e453ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a009c18_32c72b55",
@@ -41,6 +59,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2d58881_234a8f8a",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-22T03:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a009c18_32c72b55",
+      "range": {
+        "startLine": 89,
+        "startChar": 23,
+        "endLine": 89,
+        "endChar": 30
+      },
+      "revId": "281e76a666f1355704258221e8703cd532e453ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2bfba95_6dcd0df5",
@@ -54,6 +96,24 @@
       "writtenOn": "2021-10-07T13:22:40Z",
       "side": 1,
       "message": "I suppose it\u0027s still too verbose; if not using the o3tl machinery, some possible improvements:\n\n1. Avoid definition of \"min\"/\"max\", and compare passed argument directly to min/max enum values;\n2. If the check succeeds, do a one-liner operation like\n\n    aSource \u003d static_cast\u003cFontStretch\u003e(static_cast\u003cint\u003e(aSource) + 1);\n\n3. Return aSource.",
+      "revId": "281e76a666f1355704258221e8703cd532e453ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af5d596_f8c76f83",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-22T03:32:47Z",
+      "side": 1,
+      "message": "Done. I personally preferred patchset2 that did the job by introducing an integer variable, but anyway what you have suggested is done in patchset3.",
+      "parentUuid": "d2bfba95_6dcd0df5",
       "revId": "281e76a666f1355704258221e8703cd532e453ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
