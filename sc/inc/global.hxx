@@ -496,7 +496,6 @@ class ScGlobal
     static std::atomic<ScUnoAddInCollection*> pAddInCollection;
     static std::unique_ptr<ScUserList> xUserList;
     static OUString         aStrClipDocName;
-    static OUString         aStrErrorStringNoRef;
     static std::unique_ptr<SvxBrushItem> xEmptyBrushItem;
     static std::unique_ptr<SvxBrushItem> xButtonBrushItem;
 
