@@ -3272,6 +3272,7 @@ void Content::lock(
                         false );
             }
             break;
+            case DAVException::DAV_HTTP_NOAUTH:
             case DAVException::DAV_HTTP_AUTH:
             {
                 SAL_WARN( "ucb.ucp.webdav", "lock(): DAVException Authentication error - URL: <"
@@ -3697,6 +3698,7 @@ bool Content::shouldAccessNetworkAfterException( const DAVException & e )
          ( e.getError() == DAVException::DAV_HTTP_TIMEOUT ) ||
          ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) ||
          ( e.getError() == DAVException::DAV_HTTP_CONNECT ) ||
+         ( e.getError() == DAVException::DAV_HTTP_NOAUTH ) ||
          ( e.getError() == DAVException::DAV_HTTP_AUTH ) ||
          ( e.getError() == DAVException::DAV_HTTP_AUTHPROXY ) )
         return false;
@@ -3880,7 +3882,10 @@ Content::ResourceType Content::getResourceType(
             rResAccess->resetUri();
 
             // first check if the cached error can be mapped to DAVException::DAV_HTTP_TIMEOUT or mapped to DAVException::DAV_HTTP_CONNECT
-            if ( aDAVOptions.getHttpResponseStatusCode() == USC_CONNECTION_TIMED_OUT )
+            if (aDAVOptions.getHttpResponseStatusCode() == USC_CONNECTION_TIMED_OUT
+                // can't get any reliable info without auth => cancel request
+                || aDAVOptions.getHttpResponseStatusCode() == USC_AUTH_FAILED
+                || aDAVOptions.getHttpResponseStatusCode() == USC_AUTHPROXY_FAILED)
             {
                 // behave same as DAVException::DAV_HTTP_TIMEOUT or DAVException::DAV_HTTP_CONNECT was thrown
                 try
@@ -3889,7 +3894,22 @@ Content::ResourceType Content::getResourceType(
                     CurlUri   theUri( rResAccess->getURL() );
                     OUString  aHostName  = theUri.GetHost();
                     sal_Int32 nPort      = theUri.GetPort();
-                    throw DAVException( DAVException::DAV_HTTP_TIMEOUT,
+                    DAVException::ExceptionCode e{};
+                    switch (aDAVOptions.getHttpResponseStatusCode())
+                    {
+                        case USC_CONNECTION_TIMED_OUT:
+                            e = DAVException::DAV_HTTP_TIMEOUT;
+                            break;
+                        case USC_AUTH_FAILED:
+                            e = DAVException::DAV_HTTP_AUTH;
+                            break;
+                        case USC_AUTHPROXY_FAILED:
+                            e = DAVException::DAV_HTTP_AUTHPROXY;
+                            break;
+                        default:
+                            assert(false);
+                    }
+                    throw DAVException( e,
                                         ConnectionEndPointString(aHostName, nPort) );
                 }
                 catch ( DAVException& exp )
@@ -3907,7 +3927,8 @@ Content::ResourceType Content::getResourceType(
             {
                 //resource doesn't exist
                 if ( networkAccessAllowed != nullptr )
-                    *networkAccessAllowed = false;            }
+                    *networkAccessAllowed = false;
+            }
         }
     }
 
@@ -4054,6 +4075,7 @@ void Content::getResourceOptions(
                     }
                 }
                 break;
+                case DAVException::DAV_HTTP_NOAUTH:
                 case DAVException::DAV_HTTP_AUTH:
                 {
                     SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_AUTH for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
@@ -4064,8 +4086,11 @@ void Content::getResourceOptions(
                     //   though possibly DAV enabled
                     aDAVOptions.setHttpResponseStatusCode( USC_AUTH_FAILED );
                     // used only internally, so the text doesn't really matter..
-                    aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
-                                                          m_nOptsCacheLifeNotFound );
+                    if (xEnv && xEnv->getInteractionHandler())
+                    {   // only cache if there actually was a chance to request auth
+                        aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                              m_nOptsCacheLifeNotFound );
+                    }
                     if ( networkAccessAllowed != nullptr )
                     {
                         *networkAccessAllowed = *networkAccessAllowed
