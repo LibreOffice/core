@@ -1419,18 +1419,17 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     }
 
     // Parse <path>
-    OUStringBuffer aSynPath(256);
+    sal_Int32 nBeforePathLength = m_aAbsURIRef.getLength();
     if (!parsePath(m_eScheme, &pPos, pEnd, eMechanism, eCharset,
                    bSkippedInitialSlash, nSegmentDelimiter,
                    nAltSegmentDelimiter,
                    getSchemeInfo().m_bQuery ? '?' : 0x80000000,
-                   nFragmentDelimiter, aSynPath))
+                   nFragmentDelimiter, m_aAbsURIRef))
     {
         setInvalid();
         return false;
     }
-    m_aPath.set(m_aAbsURIRef, aSynPath.makeStringAndClear(),
-        m_aAbsURIRef.getLength());
+    m_aPath = SubString(nBeforePathLength, m_aAbsURIRef.getLength() - nBeforePathLength);
 
     // Parse ?<query>
     if (getSchemeInfo().m_bQuery && pPos < pEnd && *pPos == '?')
