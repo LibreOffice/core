@@ -287,7 +287,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
     {
         throw RuntimeException("addContainerListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
     }
-    maContainerListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maContainerListeners.addInterface( xListener );
 }
 
 void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
@@ -296,7 +296,7 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
     {
         throw RuntimeException("removeContainerListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
     }
-    maContainerListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maContainerListeners.removeInterface( xListener );
 }
 
 // Methods XChangesNotifier
@@ -306,7 +306,7 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
     {
         throw RuntimeException("addChangesListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
     }
-    maChangesListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maChangesListeners.addInterface( xListener );
 }
 
 void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
@@ -315,7 +315,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
     {
         throw RuntimeException("removeChangesListener called with null xListener",static_cast< cppu::OWeakObject * >(this));
     }
-    maChangesListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
+    maChangesListeners.removeInterface( xListener );
 }
 
 
