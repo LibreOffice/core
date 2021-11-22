@@ -57,6 +57,7 @@ public:
     void testTdf90626();
     void testTdf107608();
     void testTdf111786();
+    void testTdf143316();
     void testFontScale();
     void testShapeAutofitPPTX();
     void testLegacyShapeAutofitPPTX();
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testTdf90626);
     CPPUNIT_TEST(testTdf107608);
     CPPUNIT_TEST(testTdf111786);
+    CPPUNIT_TEST(testTdf143316);
     CPPUNIT_TEST(testFontScale);
     CPPUNIT_TEST(testShapeAutofitPPTX);
     CPPUNIT_TEST(testLegacyShapeAutofitPPTX);
@@ -341,6 +343,24 @@ void SdOOXMLExportTest3::testTdf111786()
     sal_Int16 nTransparency;
     xPropSet->getPropertyValue("LineTransparence") >>= nTransparency;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(33), nTransparency);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testTdf143316()
+{
+    // Export line transparency with the color
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf143316.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:rPr", 1);
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:t", 1);
 
     xDocShRef->DoClose();
 }
