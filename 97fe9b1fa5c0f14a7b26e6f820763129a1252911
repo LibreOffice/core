@@ -34,6 +34,24 @@
       "parentUuid": "e1966f09_a9683fa1",
       "revId": "97fe9b1fa5c0f14a7b26e6f820763129a1252911",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d6bdd17_c54aef44",
+        "filename": "svgio/source/svgreader/SvgNumber.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-22T04:07:36Z",
+      "side": 1,
+      "message": "OK. The condition will be changed in another commit.",
+      "parentUuid": "507ef42a_b2005b17",
+      "revId": "97fe9b1fa5c0f14a7b26e6f820763129a1252911",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
