@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "496085b2_ef74a77f",
+        "filename": "forms/source/inc/urltransformer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T13:13:08Z",
+      "side": 1,
+      "message": "Drop this \"ASCII\" too (or even replace the whole phrase with \"with a given protocol\")?",
+      "range": {
+        "startLine": 52,
+        "startChar": 65,
+        "endLine": 52,
+        "endChar": 70
+      },
+      "revId": "b925169bc11deaaf091fdf72985a29fcc5bb8613",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
