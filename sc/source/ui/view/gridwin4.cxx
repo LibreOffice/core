@@ -287,7 +287,8 @@ static void lcl_GetEditAreaTLOffset(tools::Long& nOffsetX, tools::Long& nOffsetY
         rViewData.GetPPTY(), Fraction(1.0), Fraction(1.0),
         false /* bPrintTwips */);
     const ScPatternAttr* pPattern = rDoc.GetPattern(rAddr);
-    nIndent = aEUtil.GetIndent(pPattern);
+    if (!rDoc.IsLayoutRTL(rAddr.Tab()))
+        nIndent = aEUtil.GetIndent(pPattern);
     aEUtil.GetMargins(pPattern, nLeftMargin, nTopMargin, nDummy, nDummy);
     nOffsetX = nIndent + nLeftMargin;
     nOffsetY = nTopMargin;
