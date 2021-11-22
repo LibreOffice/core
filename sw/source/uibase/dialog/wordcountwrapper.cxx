@@ -20,13 +20,13 @@ SwWordCountWrapper::SwWordCountWrapper(vcl::Window *pParentWindow,
     : SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    xAbstDlg.reset(pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow->GetFrameWeld(), pInfo));
-    SetController(xAbstDlg->GetController());
+    m_xAbstDlg.reset(pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow->GetFrameWeld(), pInfo));
+    SetController(m_xAbstDlg->GetController());
 }
 
 SwWordCountWrapper::~SwWordCountWrapper()
 {
-    xAbstDlg.disposeAndClear();
+    m_xAbstDlg.disposeAndClear();
 }
 
 SfxChildWinInfo SwWordCountWrapper::GetInfo() const
@@ -37,12 +37,12 @@ SfxChildWinInfo SwWordCountWrapper::GetInfo() const
 
 void SwWordCountWrapper::UpdateCounts()
 {
-    xAbstDlg->UpdateCounts();
+    m_xAbstDlg->UpdateCounts();
 }
 
 void SwWordCountWrapper::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
 {
-    xAbstDlg->SetCounts(rCurrCnt, rDocStat);
+    m_xAbstDlg->SetCounts(rCurrCnt, rDocStat);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
