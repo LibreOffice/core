@@ -22,7 +22,7 @@
 #include "ReferenceSizePropertyProvider.hxx"
 #include <TitleHelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -100,7 +100,7 @@ private:
     css::uno::Reference< css::chart2::XTitle > getTitleObject();
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::comphelper::OInterfaceContainerHelper2           m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListenerContainer;
 
     ::chart::TitleHelper::eTitleType        m_eTitleType;
 };

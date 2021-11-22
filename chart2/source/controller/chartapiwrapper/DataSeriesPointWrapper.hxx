@@ -21,7 +21,7 @@
 #include <WrappedPropertySet.hxx>
 #include "ReferenceSizePropertyProvider.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -104,7 +104,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > getDataPointProperties();
 
     std::shared_ptr< Chart2ModelContact >         m_spChart2ModelContact;
-    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListenerContainer;
 
     eType               m_eType;
     sal_Int32           m_nSeriesIndexInNewAPI;
