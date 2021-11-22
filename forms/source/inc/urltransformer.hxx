@@ -52,7 +52,7 @@ namespace frm
         /** parses a given URL smartly, with a protocol given by ASCII string
         */
         void
-            parseSmartWithAsciiProtocol( css::util::URL& _rURL, const OUString& _rAsciiURL ) const;
+            parseSmartWithProtocol( css::util::URL& _rURL, const OUString& _rProtocol ) const;
 
     private:
         /** ensures that we have a URLTransformer instance in <member>m_xTransformer</member>
