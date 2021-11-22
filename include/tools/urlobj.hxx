@@ -255,7 +255,7 @@ public:
     // General Structure:
 
     INetURLObject():
-        m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http) {}
+        m_aAbsURIRef(256), m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http) {}
 
     bool HasError() const { return m_eScheme == INetProtocol::NotValid; }
 
