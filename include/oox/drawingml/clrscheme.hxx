@@ -92,6 +92,8 @@ public:
 
     void SetName(const OUString& rName) { maName = rName; }
     const OUString& GetName() const { return maName; }
+
+    void ToAny(css::uno::Any& rVal) const;
 };
 
 }

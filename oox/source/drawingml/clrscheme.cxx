@@ -19,9 +19,15 @@
 
 #include <algorithm>
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/util/Color.hpp>
+
 #include <osl/diagnose.h>
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/token/tokens.hxx>
+#include <comphelper/sequence.hxx>
+
+using namespace com::sun::star;
 
 namespace oox::drawingml {
 
@@ -100,6 +106,18 @@ bool ClrScheme::getColorByIndex(size_t nIndex, ::Color& rColor) const
 
     rColor = maClrScheme[nIndex].second;
     return true;
+}
+
+void ClrScheme::ToAny(css::uno::Any& rVal) const
+{
+    std::vector<util::Color> aRet;
+
+    for (const auto& rIndexAndColor : maClrScheme)
+    {
+        aRet.push_back(static_cast<sal_Int32>(rIndexAndColor.second));
+    }
+
+    rVal <<= comphelper::containerToSequence(aRet);
 }
 
 }

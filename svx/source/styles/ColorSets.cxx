@@ -15,9 +15,12 @@
 #include <libxml/xmlwriter.h>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
@@ -169,7 +172,14 @@ void Theme::ToAny(css::uno::Any& rVal) const
 
     if (mpColorSet)
     {
+        std::vector<util::Color> aColorScheme;
+        for (size_t i = 0; i < 12; ++i)
+        {
+            aColorScheme.push_back(static_cast<sal_Int32>(mpColorSet->getColor(i)));
+        }
+
         aMap["ColorSchemeName"] <<= mpColorSet->getName();
+        aMap["ColorScheme"] <<= comphelper::containerToSequence(aColorScheme);
     }
 
     rVal <<= aMap.getAsConstPropertyValueList();
@@ -179,6 +189,7 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
 {
     comphelper::SequenceAsHashMap aMap(rVal);
     std::unique_ptr<Theme> pTheme;
+    ColorSet* pColorSet = nullptr;
 
     auto it = aMap.find("Name");
     if (it != aMap.end())
@@ -193,8 +204,26 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
     {
         OUString aName;
         it->second >>= aName;
-        auto pColorSet = std::make_unique<ColorSet>(aName);
-        pTheme->SetColorSet(std::move(pColorSet));
+        auto pSet = std::make_unique<ColorSet>(aName);
+        pTheme->SetColorSet(std::move(pSet));
+        pColorSet = pTheme->GetColorSet();
+    }
+
+    it = aMap.find("ColorScheme");
+    if (it != aMap.end() && pColorSet)
+    {
+        uno::Sequence<util::Color> aColors;
+        it->second >>= aColors;
+        for (size_t i = 0; i < aColors.size(); ++i)
+        {
+            if (i >= 12)
+            {
+                SAL_WARN("svx", "Theme::FromAny: too many colors in the color set");
+                break;
+            }
+
+            pColorSet->add(i, Color(ColorTransparency, aColors[i]));
+        }
     }
 
     return pTheme;
