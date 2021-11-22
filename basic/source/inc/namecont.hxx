@@ -49,6 +49,7 @@
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 #include <comphelper/interfacecontainer3.hxx>
@@ -130,7 +131,7 @@ public:
 class ModifiableHelper
 {
 private:
-    ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
     ::cppu::OWeakObject&                m_rEventSource;
     bool                                mbModified;
 
@@ -143,7 +144,7 @@ public:
     }
 
     bool    isModified() const  { return mbModified; }
-            void    setModified( bool _bModified );
+    void    setModified( bool _bModified );
 
     void    addModifyListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener )
     {
