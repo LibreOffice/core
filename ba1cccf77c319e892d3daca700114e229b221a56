@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "692922b7_97568d09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-22T07:24:30Z",
+      "side": 1,
+      "message": "online.git writer/table_properties_spec.js failed, let\u0027s try again.",
+      "revId": "ba1cccf77c319e892d3daca700114e229b221a56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
