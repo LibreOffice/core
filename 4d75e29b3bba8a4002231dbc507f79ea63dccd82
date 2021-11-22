@@ -16,6 +16,24 @@
       "message": "What is the rationale for this revert?",
       "revId": "4d75e29b3bba8a4002231dbc507f79ea63dccd82",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12c3220d_0a632884",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-22T10:13:27Z",
+      "side": 1,
+      "message": "the rationale would be obvious if it hadn\u0027t run into yet another spurious jenkins build failure that is wasting my time. maybe i should just get into the habit of overriding spurious jenkins test failures...",
+      "parentUuid": "ab059809_70674ee4",
+      "revId": "4d75e29b3bba8a4002231dbc507f79ea63dccd82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
