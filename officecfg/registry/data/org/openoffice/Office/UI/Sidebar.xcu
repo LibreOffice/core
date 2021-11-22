@@ -639,7 +639,7 @@
           <value>private:resource/toolpanel/SvxPanelFactory/EffectPropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>300</value>
+          <value>350</value>
         </prop>
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>
@@ -676,7 +676,7 @@
           <value>private:resource/toolpanel/SvxPanelFactory/ShadowPropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>300</value>
+          <value>360</value>
         </prop>
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>
@@ -718,7 +718,7 @@
           <value>private:resource/toolpanel/SvxPanelFactory/LinePropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>400</value>
+          <value>320</value>
         </prop>
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>
@@ -856,7 +856,7 @@
           <value>private:resource/toolpanel/SvxPanelFactory/GraphicPropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>300</value>
+          <value>250</value>
         </prop>
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>
