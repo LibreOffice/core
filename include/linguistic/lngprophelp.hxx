@@ -21,7 +21,7 @@
 #define INCLUDED_LINGUISTIC_LNGPROPHELP_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
@@ -57,7 +57,7 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyChgHelper :
 {
     std::vector< OUString >                             aPropNames;
     css::uno::Reference< css::uno::XInterface >         xMyEvtObj;
-    ::comphelper::OInterfaceContainerHelper2                   aLngSvcEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::linguistic2::XLinguServiceEventListener> aLngSvcEvtListeners;
     css::uno::Reference< css::beans::XPropertySet >     xPropSet;
 
     int     nEvtFlags;  // flags for event types allowed to be launched
