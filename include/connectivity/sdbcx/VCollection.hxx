@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/container/XContainer.hpp>
@@ -90,8 +90,8 @@ namespace connectivity::sdbcx
         protected:
             ::std::unique_ptr<IObjectCollection>    m_pElements;
 
-            ::comphelper::OInterfaceContainerHelper2       m_aContainerListeners;
-            ::comphelper::OInterfaceContainerHelper2       m_aRefreshListeners;
+            ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
+            ::comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener> m_aRefreshListeners;
 
         protected:
             ::cppu::OWeakObject&                    m_rParent;          // parent of the collection

@@ -425,9 +425,9 @@ void OCollection::notifyElementRemoved(const OUString& _sName)
 {
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_sName), Any(), Any());
     // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
-    OInterfaceIteratorHelper2 aListenerLoop(m_aContainerListeners);
+    OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
-        static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
+        aListenerLoop.next()->elementRemoved(aEvent);
 }
 
 sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName )
@@ -519,9 +519,9 @@ void OCollection::renameObject(const OUString& _sOldName, const OUString& _sNewN
     {
         ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_sNewName), makeAny(m_pElements->getObject(_sNewName)),makeAny(_sOldName));
         // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
-        OInterfaceIteratorHelper2 aListenerLoop(m_aContainerListeners);
+        OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
         while (aListenerLoop.hasMoreElements())
-            static_cast<XContainerListener*>(aListenerLoop.next())->elementReplaced(aEvent);
+            aListenerLoop.next()->elementReplaced(aEvent);
     }
 }
 
