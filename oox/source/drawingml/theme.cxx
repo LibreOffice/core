@@ -105,9 +105,13 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
 
 void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const
 {
+    beans::PropertyValue aColorScheme;
+    aColorScheme.Name = "ColorScheme";
+    maClrScheme.ToAny(aColorScheme.Value);
     beans::PropertyValues aValues = {
         comphelper::makePropertyValue("Name", maThemeName),
         comphelper::makePropertyValue("ColorSchemeName", maClrScheme.GetName()),
+        aColorScheme,
     };
     uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("Theme", uno::makeAny(aValues));
