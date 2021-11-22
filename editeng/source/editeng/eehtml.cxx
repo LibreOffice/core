@@ -195,7 +195,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
                     sal_Int32 nTabPos = aText.indexOf( '\t');
                     while ( nTabPos != -1 )
                     {
-                        aText = aText.replaceAt( nTabPos, 1, "        " );
+                        aText = aText.replaceAt( nTabPos, 1, u"        " );
                         nTabPos = aText.indexOf( '\t', nTabPos+8 );
                     }
                 }

@@ -101,7 +101,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                 if(sAsciiOptions.isEmpty())
                     sAsciiOptions = m_sExtraData.copy(nStt, nEnd - nStt);
                 nStt -= nDialogExtraDataLen;
-                m_sExtraData = m_sExtraData.replaceAt(nStt, nEnd - nStt + 1, "");
+                m_sExtraData = m_sExtraData.replaceAt(nStt, nEnd - nStt + 1, u"");
             }
         }
         if(!sAsciiOptions.isEmpty())
@@ -303,7 +303,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
         sal_Int32 nEnd = m_sExtraData.indexOf( cDialogExtraDataClose,
                                         nStt + nDialogExtraDataLen );
         if( -1 != nEnd )
-            m_sExtraData = m_sExtraData.replaceAt( nStt, nEnd - nStt + 1, "" );
+            m_sExtraData = m_sExtraData.replaceAt( nStt, nEnd - nStt + 1, u"" );
     }
     m_sExtraData += sFindNm + sData + OUStringChar(cDialogExtraDataClose);
 }

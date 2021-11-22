@@ -555,7 +555,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, weld::Button&, rButton, void 
             const sal_Int32 nSel = nMax - nPos;
             if( nSel )
                 // first delete the existing selection
-                aStr = aStr.replaceAt( nPos, nSel, "" );
+                aStr = aStr.replaceAt( nPos, nSel, u"" );
 
             aField = OUStringChar(cDBFieldStart) + aField + OUStringChar(cDBFieldEnd);
             if( !aStr.isEmpty() )

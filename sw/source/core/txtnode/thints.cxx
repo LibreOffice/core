@@ -1389,7 +1389,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                             // delete the char from the string
                             assert(CH_TXTATR_BREAKWORD == m_Text[pAttr->GetStart()]
                                 || CH_TXTATR_INWORD == m_Text[pAttr->GetStart()]);
-                            m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
+                            m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, u"");
                             // Update SwIndexes
                             SwIndex aTmpIdx( this, pAttr->GetStart() );
                             Update( aTmpIdx, 1, true );
@@ -1420,7 +1420,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         // delete the char from the string
                         assert(CH_TXTATR_BREAKWORD == m_Text[pAttr->GetStart()]
                             || CH_TXTATR_INWORD == m_Text[pAttr->GetStart()]);
-                        m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
+                        m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, u"");
                         // Update SwIndexes
                         SwIndex aTmpIdx( this, pAttr->GetStart() );
                         Update( aTmpIdx, 1, true );

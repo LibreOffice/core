@@ -1949,7 +1949,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 constexpr OUStringLiteral GRF_CONFIG_STR = u"   ";
 constexpr OUStringLiteral STD_CONFIG_STR = u"1 ";
 
-static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, const OUString& rStr)
+static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, std::u16string_view rStr)
 {
     const sal_Unicode*  pStr        = rOrigStr.getStr();
     sal_Int32     nLen              = rOrigStr.getLength();

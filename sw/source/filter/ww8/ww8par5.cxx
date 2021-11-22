@@ -184,7 +184,7 @@ tools::Long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
             case 0x0d:
                 if( bAllowCr )
                 {
-                    aVal = aVal.replaceAt( nI, 1, "\n" );
+                    aVal = aVal.replaceAt( nI, 1, u"\n" );
                     bSetAsHex = false;
                 }
                 else
@@ -1058,29 +1058,29 @@ void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
             case 132:                       // Exchange typographical quotation marks for normal ones
             case 148:
             case 147:
-                rStr = rStr.replaceAt( nI, 1, "\"" );
+                rStr = rStr.replaceAt( nI, 1, u"\"" );
                 break;
             case 19:
-                rStr = rStr.replaceAt( nI, 1, "{" );
+                rStr = rStr.replaceAt( nI, 1, u"{" );
                 break;  // 19..21 to {|}
             case 20:
-                rStr = rStr.replaceAt( nI, 1, "|" );
+                rStr = rStr.replaceAt( nI, 1, u"|" );
                 break;
             case 21:
-                rStr = rStr.replaceAt( nI, 1, "}" );
+                rStr = rStr.replaceAt( nI, 1, u"}" );
                 break;
             case '\\':                      // Tag \{|} with \ ...
             case '{':
             case '|':
             case '}':
-                rStr = rStr.replaceAt( nI, 0, "\\" );
+                rStr = rStr.replaceAt( nI, 0, u"\\" );
                 ++nI;
                 break;
             case 0x0b:
             case 0x0c:
             case 0x0d:
                 if( bAllowCr )
-                    rStr = rStr.replaceAt( nI, 1, "\n" );
+                    rStr = rStr.replaceAt( nI, 1, u"\n" );
                 else
                     bSetAsHex = true;
                 break;

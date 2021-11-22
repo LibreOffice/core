@@ -465,7 +465,7 @@ OUString removeAny(std::u16string_view rIn,
 }
 
 OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
-    const OUString& rNewToken)
+    std::u16string_view rNewToken)
 {
     sal_Int32 nLen = rIn.getLength();
     sal_Int32 nTok = 0;

@@ -405,7 +405,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     {
         // there is extra information
         rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32()));
-        aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, "" );
+        aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, u"" );
         rInfo.aExtraString = aWinData;
     }
     else
@@ -471,7 +471,7 @@ bool SfxChildWinInfo::GetExtraData_Impl
         {
             // Cut out Alignment string
             aStr = aExtraString.copy(nPos, n2 - nPos + 1);
-            aStr = aStr.replaceAt(nPos, n1-nPos+1, "");
+            aStr = aStr.replaceAt(nPos, n1-nPos+1, u"");
         }
     }
 

@@ -2633,7 +2633,7 @@ OpCode FormulaCompiler::NextToken()
                                 if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // >= instead of =>
                                     aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
-                                        OUString( mxSymbols->getSymbolChar(ocGreater) ) );
+                                        rtl::OUStringChar( mxSymbols->getSymbolChar(ocGreater) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
@@ -2642,14 +2642,14 @@ OpCode FormulaCompiler::NextToken()
                                 if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // <= instead of =<
                                     aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
-                                        OUString( mxSymbols->getSymbolChar(ocLess) ) );
+                                        rtl::OUStringChar( mxSymbols->getSymbolChar(ocLess) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                                 else if ( c == mxSymbols->getSymbolChar( ocGreater) )
                                 {   // <> instead of ><
                                     aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
-                                        OUString( mxSymbols->getSymbolChar(ocLess) ) );
+                                        rtl::OUStringChar( mxSymbols->getSymbolChar(ocLess) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
@@ -2658,7 +2658,7 @@ OpCode FormulaCompiler::NextToken()
                                 if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // *- instead of -*
                                     aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
-                                        OUString( mxSymbols->getSymbolChar(ocMul) ) );
+                                        rtl::OUStringChar( mxSymbols->getSymbolChar(ocMul) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
@@ -2667,7 +2667,7 @@ OpCode FormulaCompiler::NextToken()
                                 if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // /- instead of -/
                                     aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
-                                        OUString( mxSymbols->getSymbolChar(ocDiv) ) );
+                                        rtl::OUStringChar( mxSymbols->getSymbolChar(ocDiv) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }

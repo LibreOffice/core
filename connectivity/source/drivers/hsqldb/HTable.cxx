@@ -301,7 +301,7 @@ void OHSQLTable::executeStatement(const OUString& _rStatement )
 {
     OUString sSQL = _rStatement;
     if(sSQL.endsWith(","))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1, 1, ")");
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1, 1, u")");
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )

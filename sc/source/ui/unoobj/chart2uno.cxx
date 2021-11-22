@@ -2261,7 +2261,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
                 sal_Int32 nIndex = ScRangeStringConverter::IndexOf( sToken, ':', 0 );
                 if ( nIndex >= 0 && nIndex < aUIString.getLength() - 1 &&
                         aUIString[nIndex + 1] == '.' )
-                    aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
+                    aUIString = aUIString.replaceAt( nIndex + 1, 1, u"" );
 
                 if ( aUIString[0] == '.' )
                     aUIString = aUIString.copy( 1 );

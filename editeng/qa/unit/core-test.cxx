@@ -371,7 +371,7 @@ private:
     virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
-        m_rText = m_rText.replaceAt(nStt, nEnd-nStt, "");
+        m_rText = m_rText.replaceAt(nStt, nEnd-nStt, u"");
         return true;
     }
     virtual bool Insert( sal_Int32 nPos, const OUString& rTxt ) override

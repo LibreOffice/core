@@ -1213,7 +1213,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else if ( (nPos = aLangText.indexOf(aDocLangPrefix)) != -1 )
                 {
-                    aLangText = aLangText.replaceAt(nPos, aDocLangPrefix.getLength(), "");
+                    aLangText = aLangText.replaceAt(nPos, aDocLangPrefix.getLength(), u"");
 
                     if ( aLangText == "LANGUAGE_NONE" )
                     {
@@ -1243,12 +1243,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 else if (-1 != (nPos = aLangText.indexOf( aSelectionLangPrefix )))
                 {
                     bSelection = true;
-                    aLangText = aLangText.replaceAt( nPos, aSelectionLangPrefix.getLength(), "" );
+                    aLangText = aLangText.replaceAt( nPos, aSelectionLangPrefix.getLength(), u"" );
                 }
                 else if (-1 != (nPos = aLangText.indexOf( aParagraphLangPrefix )))
                 {
                     bParagraph = true;
-                    aLangText = aLangText.replaceAt( nPos, aParagraphLangPrefix.getLength(), "" );
+                    aLangText = aLangText.replaceAt( nPos, aParagraphLangPrefix.getLength(), u"" );
                 }
 
                 if (bSelection || bParagraph)
@@ -1345,7 +1345,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             sal_Int32 nPos = 0;
             if(-1 != (nPos = sApplyText.indexOf( sSpellingRule )))
             {
-                sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), "");
+                sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), u"");
                 pEditView->InsertText( sApplyText );
             }
         }

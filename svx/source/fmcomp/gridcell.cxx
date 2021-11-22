@@ -1179,7 +1179,7 @@ void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
     if (nMaxTextLen != 0 && sText.getLength() > nMaxTextLen)
     {
         sal_Int32 nDiff = sText.getLength() - nMaxTextLen;
-        sText = sText.replaceAt(sText.getLength() - nDiff,nDiff, OUString());
+        sText = sText.replaceAt(sText.getLength() - nDiff,nDiff, u"");
     }
 
 

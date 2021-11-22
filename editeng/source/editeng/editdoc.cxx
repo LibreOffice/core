@@ -1697,10 +1697,10 @@ void ContentNode::UnExpandPositions( sal_Int32 &rStartPos, sal_Int32 &rEndPos )
 
 void ContentNode::SetChar(sal_Int32 nPos, sal_Unicode c)
 {
-    maString = maString.replaceAt(nPos, 1, OUString(c));
+    maString = maString.replaceAt(nPos, 1, rtl::OUStringChar(c));
 }
 
-void ContentNode::Insert(const OUString& rStr, sal_Int32 nPos)
+void ContentNode::Insert(std::u16string_view rStr, sal_Int32 nPos)
 {
     maString = maString.replaceAt(nPos, 0, rStr);
 }
@@ -1717,7 +1717,7 @@ void ContentNode::Erase(sal_Int32 nPos)
 
 void ContentNode::Erase(sal_Int32 nPos, sal_Int32 nCount)
 {
-    maString = maString.replaceAt(nPos, nCount, "");
+    maString = maString.replaceAt(nPos, nCount, u"");
 }
 
 OUString ContentNode::Copy(sal_Int32 nPos) const
@@ -2291,7 +2291,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
 {
     assert(aPaM.GetNode());
 
-    aPaM.GetNode()->Insert( OUString(CH_FEATURE), aPaM.GetIndex() );
+    aPaM.GetNode()->Insert( rtl::OUStringChar(CH_FEATURE), aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1, GetItemPool() );
 
     // Create a feature-attribute for the feature...
