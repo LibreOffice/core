@@ -49,7 +49,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/pivotfielddialog.ui"
         || rUIFile == u"modules/scalc/ui/datafieldoptionsdialog.ui"
         || rUIFile == u"svx/ui/fontworkgallerydialog.ui"
-        || rUIFile == u"cui/ui/macroselectordialog.ui" || rUIFile == u"uui/ui/macrowarnmedium.ui"
+        || rUIFile == u"svx/ui/findreplacedialog.ui" || rUIFile == u"cui/ui/macroselectordialog.ui"
+        || rUIFile == u"uui/ui/macrowarnmedium.ui"
         || rUIFile == u"modules/scalc/ui/textimportcsv.ui"
         || rUIFile == u"xmlsec/ui/digitalsignaturesdialog.ui"
         || rUIFile == u"xmlsec/ui/viewcertdialog.ui" || rUIFile == u"xmlsec/ui/certgeneral.ui"
@@ -73,7 +74,8 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
         || rUIFile == u"svx/ui/floatinglineend.ui"
         || rUIFile == u"svx/ui/fontworkalignmentcontrol.ui"
         || rUIFile == u"svx/ui/fontworkcharacterspacingcontrol.ui"
-        || rUIFile == u"svx/ui/floatingareastyle.ui")
+        || rUIFile == u"svx/ui/floatingareastyle.ui"
+        || rUIFile == u"modules/scalc/ui/filterlist.ui")
         return true;
 
     return false;
