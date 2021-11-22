@@ -43,6 +43,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
