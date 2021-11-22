@@ -2889,7 +2889,7 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, ImportHdl, weld::Button&, void)
     }
 
     aImportDialog.SetCurrentFilter(
-        "PNG - Portable Network Graphic");
+        "PNG - Portable Network Graphics");
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {

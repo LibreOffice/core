@@ -1328,9 +1328,9 @@
                 <desc>MS Windows bitmap</desc>
               </info>
             </enumeration>
-            <enumeration oor:value="PNG - Portable Network Graphic">
+            <enumeration oor:value="PNG - Portable Network Graphics">
               <info>
-                <desc>Portable Network Graphic</desc>
+                <desc>Portable Network Graphics</desc>
               </info>
             </enumeration>
             <enumeration oor:value="EPS - Encapsulated PostScript">
