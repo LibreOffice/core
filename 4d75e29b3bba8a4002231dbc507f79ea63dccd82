@@ -34,6 +34,24 @@
       "parentUuid": "ab059809_70674ee4",
       "revId": "4d75e29b3bba8a4002231dbc507f79ea63dccd82",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ba0b2ab_a35bac1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T10:16:40Z",
+      "side": 1,
+      "message": "Even if the revert was made necessary by a planned follow-up commit, it would have been helpful to state that in this revert\u0027s commit message.  What appears obvious to you now is not necessarily obvious at all to somebody looking at this commit.",
+      "parentUuid": "12c3220d_0a632884",
+      "revId": "4d75e29b3bba8a4002231dbc507f79ea63dccd82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
