@@ -22,7 +22,7 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include <tools/debug.hxx>
 #include <ucbhelper/commandenvironment.hxx>
-#include <svl/fstathelper.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <vcl/errinf.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -1140,12 +1140,32 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
 
 bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
 {
-    return FStatHelper::IsFolder(rURL);
+    try
+    {
+        ::ucbhelper::Content content(rURL,
+            ::utl::UCBContentHelper::getDefaultCommandEnvironment(),
+            m_xContext);
+        return content.isFolder();
+    }
+    catch (css::uno::Exception const&)
+    {
+        return false;
+    }
 }
 
 bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
 {
-    return FStatHelper::IsDocument(rURL);
+    try
+    {
+        ::ucbhelper::Content content(rURL,
+            ::utl::UCBContentHelper::getDefaultCommandEnvironment(),
+            m_xContext);
+        return content.isDocument();
+    }
+    catch (css::uno::Exception const&)
+    {
+        return false;
+    }
 }
 
 sal_Int32 RemoteFilesDialog::getAvailableWidth()
