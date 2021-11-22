@@ -380,7 +380,7 @@ void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
     std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
     (*pData)[WINDOW_ID] = OUString::number(nWindowId);
     mpIdleNotify->sendMessage(jsdialog::MessageType::PopupClose, nullptr, std::move(pData));
-    mpIdleNotify->Start();
+    flush();
 }
 
 namespace
@@ -1707,6 +1707,19 @@ JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,
                      SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstancePopover, DockingWindow>(pSender, pDockingWindow, pBuilder, bTakeOwnership)
 {
+}
+
+void JSPopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect)
+{
+    SalInstancePopover::popup_at_rect(pParent, rRect);
+    sendPopup(getWidget()->GetChild(0), "_POPOVER_", "_POPOVER_");
+}
+
+void JSPopover::popdown()
+{
+    if (getWidget() && getWidget()->GetChild(0))
+        sendClosePopup(getWidget()->GetChild(0)->GetLOKWindowId());
+    SalInstancePopover::popdown();
 }
 
 JSBox::JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder,

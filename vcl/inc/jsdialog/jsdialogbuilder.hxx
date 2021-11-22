@@ -680,6 +680,9 @@ class JSPopover : public JSWidget<SalInstancePopover, DockingWindow>
 public:
     JSPopover(JSDialogSender* pSender, DockingWindow* pPopover, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
+
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override;
+    virtual void popdown() override;
 };
 
 class JSBox : public JSWidget<SalInstanceBox, VclBox>
