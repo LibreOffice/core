@@ -1332,6 +1332,13 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 Point aRefPointLogical = GetOutputArea().TopLeft();
                 // Get the relative coordinates w.r.t refpoint in display hmm.
                 aCursorRectPureLogical.Move(-aRefPointLogical.X(), -aRefPointLogical.Y());
+                if (pEditEngine->IsRightToLeft(nPara))
+                {
+                    tools::Long nMirrorW = GetOutputArea().GetWidth();
+                    tools::Long nLeft = aCursorRectPureLogical.Left(), nRight = aCursorRectPureLogical.Right();
+                    aCursorRectPureLogical.SetLeft(nMirrorW - nRight);
+                    aCursorRectPureLogical.SetRight(nMirrorW - nLeft);
+                }
                 // Convert to twips.
                 aCursorRectPureLogical = OutputDevice::LogicToLogic(aCursorRectPureLogical, MapMode(eDevUnit), MapMode(MapUnit::MapTwip));
                 // "refpoint" in print twips.
