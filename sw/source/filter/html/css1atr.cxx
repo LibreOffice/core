@@ -886,7 +886,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
         sal_Int32 nPos = rClass.indexOf( '.' );
         if( nPos >= 0 && rClass.getLength() > nPos+1 )
         {
-            rClass = rClass.replaceAt( 0, nPos+1, "" );
+            rClass = rClass.replaceAt( 0, nPos+1, u"" );
         }
 
         rClass = GetAppCharClass().lowercase( rClass );

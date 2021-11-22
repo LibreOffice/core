@@ -1607,12 +1607,24 @@ public:
       @param  newStr  the new substring.
       @return the new string.
     */
+#ifndef LIBO_INTERNAL_ONLY
+    // hide this from internal code to avoid ambiguous lookup error
     SAL_WARN_UNUSED_RESULT OString replaceAt( sal_Int32 index, sal_Int32 count, const OString& newStr ) const
     {
         rtl_String* pNew = NULL;
         rtl_string_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
         return OString( pNew, SAL_NO_ACQUIRE );
     }
+#endif
+
+#ifdef LIBO_INTERNAL_ONLY
+    SAL_WARN_UNUSED_RESULT OString replaceAt( sal_Int32 index, sal_Int32 count, std::string_view newStr ) const
+    {
+        rtl_String* pNew = NULL;
+        rtl_string_newReplaceStrAtWithLength( &pNew, pData, index, count, newStr.data(), newStr.size() );
+        return OString( pNew, SAL_NO_ACQUIRE );
+    }
+#endif
 
     /**
       Returns a new string resulting from replacing all occurrences of

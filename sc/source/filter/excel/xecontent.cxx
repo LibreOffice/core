@@ -425,7 +425,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         if(nSepPos < nPointPos)
         {
            nSepPos = nPointPos;
-           aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
+           aTextMark = aTextMark.replaceAt( nSepPos, 1, u"!" );
         }
 
         if (nSepPos != -1)
@@ -434,7 +434,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
             if (aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
             {
-                aTextMark = "'" + aTextMark.replaceAt(nSepPos, 0, "'");
+                aTextMark = "'" + aTextMark.replaceAt(nSepPos, 0, u"'");
             }
         }
         else

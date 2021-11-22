@@ -234,7 +234,7 @@ inline OUStringBuffer& padToLength(
     @return original string with token nToken replaced by rNewToken
  */
 COMPHELPER_DLLPUBLIC OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
-    const OUString& rNewToken);
+    std::u16string_view rNewToken);
 
 /** Find any of a list of code units in the string.
     @param rIn      OUString to search

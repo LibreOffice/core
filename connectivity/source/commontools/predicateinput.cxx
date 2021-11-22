@@ -153,7 +153,7 @@ namespace dbtools
                     sal_Int32 nTemp = 0;
                     while ( -1 != ( nIndex = sQuoted.indexOf( '\'',nTemp ) ) )
                     {
-                        sQuoted = sQuoted.replaceAt( nIndex, 1, "''" );
+                        sQuoted = sQuoted.replaceAt( nIndex, 1, u"''" );
                         nTemp = nIndex+2;
                     }
 

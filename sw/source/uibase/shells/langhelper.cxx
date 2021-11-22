@@ -132,20 +132,20 @@ namespace SwLangHelper
                 if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix )))
                 {
                     // ... for the current selection
-                    aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
+                    aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), u"");
                     bForSelection = true;
                 }
                 else if (-1 != (nPos = aNewLangText.indexOf( aParagraphLangPrefix )))
                 {
                     // ... for the current paragraph language
-                    aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
+                    aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), u"");
                     bForSelection = true;
                     bForParagraph = true;
                 }
                 else if (-1 != (nPos = aNewLangText.indexOf( aDocumentLangPrefix )))
                 {
                     // ... as default document language
-                    aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
+                    aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), u"");
                     bForSelection = false;
                 }
 

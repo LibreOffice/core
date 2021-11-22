@@ -762,7 +762,7 @@ void SAL_CALL OReportDefinition::setCaption( const OUString& _caption )
 void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptogether )
 {
     if ( _groupkeeptogether < report::GroupKeepTogether::PER_PAGE || _groupkeeptogether > report::GroupKeepTogether::PER_COLUMN )
-        throwIllegallArgumentException("css::report::GroupKeepTogether"
+        throwIllegallArgumentException(u"css::report::GroupKeepTogether"
                         ,*this
                         ,1);
     set(PROPERTY_GROUPKEEPTOGETHER,_groupkeeptogether,m_pImpl->m_nGroupKeepTogether);
@@ -777,7 +777,7 @@ void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptog
 void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderoption )
 {
     if ( _pageheaderoption < report::ReportPrintOption::ALL_PAGES || _pageheaderoption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
-        throwIllegallArgumentException("css::report::ReportPrintOption"
+        throwIllegallArgumentException(u"css::report::ReportPrintOption"
                         ,*this
                         ,1);
     set(PROPERTY_PAGEHEADEROPTION,_pageheaderoption,m_pImpl->m_nPageHeaderOption);
@@ -792,7 +792,7 @@ void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderopt
 void SAL_CALL OReportDefinition::setPageFooterOption( ::sal_Int16 _pagefooteroption )
 {
     if ( _pagefooteroption < report::ReportPrintOption::ALL_PAGES || _pagefooteroption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
-        throwIllegallArgumentException("css::report::ReportPrintOption"
+        throwIllegallArgumentException(u"css::report::ReportPrintOption"
                         ,*this
                         ,1);
     set(PROPERTY_PAGEFOOTEROPTION,_pagefooteroption,m_pImpl->m_nPageFooterOption);
@@ -818,7 +818,7 @@ void SAL_CALL OReportDefinition::setCommand( const OUString& _command )
 void SAL_CALL OReportDefinition::setCommandType( ::sal_Int32 _commandtype )
 {
     if ( _commandtype < sdb::CommandType::TABLE || _commandtype > sdb::CommandType::COMMAND )
-        throwIllegallArgumentException("css::sdb::CommandType"
+        throwIllegallArgumentException(u"css::sdb::CommandType"
                         ,*this
                         ,1);
     set(PROPERTY_COMMANDTYPE,_commandtype,m_pImpl->m_nCommandType);
@@ -1920,7 +1920,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype )
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     const uno::Sequence< OUString > aList = getAvailableMimeTypes();
     if ( ::std::find(aList.begin(), aList.end(), _mimetype) == aList.end() )
-        throwIllegallArgumentException("getAvailableMimeTypes()"
+        throwIllegallArgumentException(u"getAvailableMimeTypes()"
                         ,*this
                         ,1);
     set(PROPERTY_MIMETYPE,_mimetype,m_pImpl->m_sMimeType);

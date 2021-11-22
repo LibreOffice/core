@@ -1541,6 +1541,11 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newConcatUtf16L(
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceStrAt(
         rtl_uString ** newStr, rtl_uString * str, sal_Int32 idx, sal_Int32 count, rtl_uString * subStr ) SAL_THROW_EXTERN_C();
 
+#ifdef LIBO_INTERNAL_ONLY
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceStrAtUtf16L(
+        rtl_uString ** newStr, rtl_uString * str, sal_Int32 idx, sal_Int32 count, sal_Unicode const * subStr, sal_Int32 substrLen ) SAL_THROW_EXTERN_C();
+#endif
+
 /** Create a new string by replacing all occurrences of a single character
     within another string.
 

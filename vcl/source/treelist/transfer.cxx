@@ -1875,7 +1875,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
                     }
                     aURL = aString.copy( nStart + 1, nLen );
 
-                    aString = aString.replaceAt( 0, nStart + 1 + nLen, "" );
+                    aString = aString.replaceAt( 0, nStart + 1 + nLen, u"" );
                     nStart = aString.indexOf( '@' );
                     nLen = aString.toInt32();
 

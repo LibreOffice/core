@@ -79,7 +79,7 @@ OUString utils::convertToUTF8(std::string_view original)
             if (escape)
             {
                 i -= 2;
-                res = res.replaceAt(i, 6, OUString(c));
+                res = res.replaceAt(i, 6, rtl::OUStringChar(c));
                 ++i;
             }
         }

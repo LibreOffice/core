@@ -264,7 +264,7 @@ void InformationDialog::InitDialog()
         aTitle = xURLTransformer->getPresentation( aPresentationURL, false );
 
         if ( aTitle.match( sFileProtocol ) )
-            aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), OUString() );
+            aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), u"" );
     }
 
     OUString aInfoString( getString( eInfoString ) );

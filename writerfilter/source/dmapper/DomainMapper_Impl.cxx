@@ -3978,7 +3978,7 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
     if (delimPos != -1)
     {
         sal_Int32 wsChars = rCommand.indexOf('\"') - delimPos - 2;
-        command = rCommand.replaceAt(delimPos+2, wsChars, "");
+        command = rCommand.replaceAt(delimPos+2, wsChars, u"");
     }
     else
         command = rCommand;
@@ -4973,7 +4973,7 @@ void DomainMapper_Impl::handleFieldFormula
     sal_Int32 delimPos = command.indexOf("\\#");
     if (delimPos != -1)
     {
-        command = command.replaceAt(delimPos, command.getLength() - delimPos, "").trim();
+        command = command.replaceAt(delimPos, command.getLength() - delimPos, u"").trim();
     }
 
     // command must contains = and at least another char

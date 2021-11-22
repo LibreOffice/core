@@ -2014,7 +2014,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         sal_Int32 nPos = sRealCond.indexOf( "!=" );
         if ( nPos >= 0 )
         {
-            sRealCond = sRealCond.replaceAt( nPos, 2, "<>" );
+            sRealCond = sRealCond.replaceAt( nPos, 2, u"<>" );
         }
 
         nPos = sRealCond.indexOf( '.' );

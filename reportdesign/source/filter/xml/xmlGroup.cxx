@@ -91,7 +91,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 sal_Int32 nIndex = sValue.indexOf(s_sQuote,nPos);
                                 while ( nIndex > -1 )
                                 {
-                                    sValue = sValue.replaceAt(nIndex,2, "\"");
+                                    sValue = sValue.replaceAt(nIndex,2, u"\"");
                                     nIndex = sValue.indexOf(s_sQuote,nIndex+2);
                                 }
                                 nLen = sValue.getLength() - 1;

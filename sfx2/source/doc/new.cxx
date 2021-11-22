@@ -174,7 +174,7 @@ IMPL_LINK( SfxNewFileDialog, RegionSelect, weld::TreeView&, rBox, void )
     OUString aSel = m_xRegionLb->get_selected_text();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
-        aSel = aSel.replaceAt(nc-1, 1, "");
+        aSel = aSel.replaceAt(nc-1, 1, u"");
     if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD) ) == 0 )
         m_xTemplateLb->append_text(SfxResId(STR_NONE));
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -221,7 +221,7 @@ sal_uInt16  SfxNewFileDialog::GetSelectedTemplatePos() const
     OUString aSel = m_xRegionLb->get_selected_text();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
-        aSel = aSel.replaceAt(nc-1, 1, "");
+        aSel = aSel.replaceAt(nc-1, 1, u"");
     if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD)) != 0 )
         nEntry++;
     return nEntry;
