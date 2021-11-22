@@ -16,6 +16,143 @@
       "message": "sberg, new OUString methods, I\u0027m unsure of the naming for the new C entrypoints",
       "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c190c182_f0e1d051",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T12:58:22Z",
+      "side": 1,
+      "message": "I would call it rtl_string_newReplaceStrAt_WithLength in line with all the other functions taking a \"WithLength\" suffix.",
+      "range": {
+        "startLine": 1112,
+        "startChar": 28,
+        "endLine": 1112,
+        "endChar": 64
+      },
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d089fc2e_0247e036",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T12:58:22Z",
+      "side": 1,
+      "message": "Does this comment break the link between the preceding documentation comment and the following declaration for Doxygen?  (And why is the documentation comment not also covered by the #ifndef anyway?)",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be47165_8ec071f5",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2240,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T12:58:22Z",
+      "side": 1,
+      "message": "Does this comment break the link between the preceding documentation comment and the following declaration for Doxygen?  (And why is the documentation comment not also covered by the #ifndef anyway?)",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "125b6f27_44fe63c1",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T12:58:22Z",
+      "side": 1,
+      "message": "I wouldn\u0027t copy here dead code from the original newReplaceStarAt overload.",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4fbaf48_32ac0eeb",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T12:58:22Z",
+      "side": 1,
+      "message": "Here and elsewhere:  I wouldn\u0027t copy here the mistake from the original newReplaceStrAt overload of allowing pNewSubStr to be null.",
+      "range": {
+        "startLine": 1507,
+        "startChar": 17,
+        "endLine": 1507,
+        "endChar": 28
+      },
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26ab30c0_dfb153b2",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T12:58:22Z",
+      "side": 1,
+      "message": "Is this part of the comment copied from the original newReplaceStrAt overload relevant here?",
+      "range": {
+        "startLine": 1547,
+        "startChar": 34,
+        "endLine": 1547,
+        "endChar": 47
+      },
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a54803_0ea71014",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-22T12:58:22Z",
+      "side": 1,
+      "message": "Please sort these lines lexicographically.",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
