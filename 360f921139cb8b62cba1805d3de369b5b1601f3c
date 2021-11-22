@@ -50,6 +50,23 @@
       "message": "Could you elaborate a bit more? What\u0027s the pb with ScopeFont?\nI mean with the patch I don\u0027t see anymore GDI leaks, did I miss something?\n\nAlso, should I use DeleteFont or DeleteObject (as put in example in https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-createfonta)?\n",
       "revId": "360f921139cb8b62cba1805d3de369b5b1601f3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afee74ff_919db1fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-22T10:56:51Z",
+      "side": 1,
+      "message": "Take a look at ImplDoSetFont. You\u0027re freeing the new font just set on the DC. ScopedFont is supposed to free the temporary font used in these functions, but currently it\u0027s just broken. I just hacked up https://gerrit.libreoffice.org/c/core/+/125652 ; not even compile tested. There are more problems with the whole HFONT lifecycle. While reading the code I realized that HFONT creation doesn\u0027t depend on a hDC, so it could be created in WinFontInstance without the SetGraphics hack.\n\nThe graphics DC is actually just used to call GetTextMetricsW. I don\u0027t know if that really depends on the DC. But then there is the totally strange GetTextMetricsW error handling in ImplDoSetFont, which might result in a different HFONT then expected. If GetTextMetricsW is really DC dependent, then the that HFONT override would maybe be wrong for a different DC… hmmm.",
+      "revId": "360f921139cb8b62cba1805d3de369b5b1601f3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
