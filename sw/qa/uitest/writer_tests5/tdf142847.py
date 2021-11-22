@@ -20,20 +20,28 @@ class tdf142847(UITestCase):
             # get the shape
             shape = document.DrawPage.getByIndex(0)
 
+            # get the textbox
+            frame = shape.getText()
+
+            oldFramePos = frame.getPropertyValue("HoriOrientPosition")
+            oldShapePos = shape.getPropertyValue("LeftMargin")
+            oldDiff = oldFramePos - oldShapePos
+
             # select the shape.
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
             self.ui_test.wait_until_child_is_available('metricfield')
 
             # set the wrap spacing of the shape
             with self.ui_test.execute_dialog_through_command(".uno:TextWrap") as wrap_dialog:
-                for i in range(90):
-                    wrap_dialog.getChild('left').executeAction("UP", tuple())
+                wrap_dialog.getChild('left').executeAction("UP", tuple())
 
-            # get the textbox
-            frame = shape.getText()
+            newDiff = frame.getPropertyValue("HoriOrientPosition") - shape.getPropertyValue("LeftMargin")
 
             # without the fix, this will fail.
             # the textbox has fallen apart.
-            self.assertGreater(frame.getPropertyValue("HoriOrientPosition"), shape.getPropertyValue("LeftMargin"))
+            self.assertEqual(oldDiff, newDiff)
+
+            self.assertGreater(frame.getPropertyValue("HoriOrientPosition"), oldFramePos)
+            self.assertGreater(shape.getPropertyValue("LeftMargin"), oldShapePos)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
