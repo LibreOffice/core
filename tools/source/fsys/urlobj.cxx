@@ -1419,18 +1419,17 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     }
 
     // Parse <path>
-    OUStringBuffer aSynPath(256);
+    sal_Int32 nBeforePathLength = m_aAbsURIRef.getLength();
     if (!parsePath(m_eScheme, &pPos, pEnd, eMechanism, eCharset,
                    bSkippedInitialSlash, nSegmentDelimiter,
                    nAltSegmentDelimiter,
                    getSchemeInfo().m_bQuery ? '?' : 0x80000000,
-                   nFragmentDelimiter, aSynPath))
+                   nFragmentDelimiter, m_aAbsURIRef))
     {
         setInvalid();
         return false;
     }
-    m_aPath.set(m_aAbsURIRef, aSynPath.makeStringAndClear(),
-        m_aAbsURIRef.getLength());
+    m_aPath = SubString(nBeforePathLength, m_aAbsURIRef.getLength() - nBeforePathLength);
 
     // Parse ?<query>
     if (getSchemeInfo().m_bQuery && pPos < pEnd && *pPos == '?')
@@ -2953,7 +2952,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
     DBG_ASSERT(pBegin, "INetURLObject::parsePath(): Null output param");
 
     sal_Unicode const * pPos = *pBegin;
-
+    const sal_Int32 nSynPathBeforeLen = rSynPath.getLength();
     switch (eScheme)
     {
         case INetProtocol::NotValid:
@@ -2961,7 +2960,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INetProtocol::Ftp:
             if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
-                return false;
+                goto failed;
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -2980,7 +2979,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INetProtocol::Smb:
         case INetProtocol::Cmis:
             if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
-                return false;
+                goto failed;
             while (pPos < pEnd && *pPos != nQueryDelimiter
                    && *pPos != nFragmentDelimiter)
             {
@@ -3001,7 +3000,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             else if (pPos < pEnd
                      && *pPos != nSegmentDelimiter
                      && *pPos != nAltSegmentDelimiter)
-                return false;
+                goto failed;
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -3076,7 +3075,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             else
             {
                 if (*pPos != '/')
-                    return false;
+                    goto failed;
                 while (pPos < pEnd && *pPos != nQueryDelimiter
                        && *pPos != nFragmentDelimiter)
                 {
@@ -3108,7 +3107,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INetProtocol::VndSunStarPkg:
             if (pPos < pEnd && *pPos != '/'
                 && *pPos != nQueryDelimiter && *pPos != nFragmentDelimiter)
-                return false;
+                goto failed;
             while (pPos < pEnd && *pPos != nQueryDelimiter
                    && *pPos != nFragmentDelimiter)
             {
@@ -3129,7 +3128,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INetProtocol::VndSunStarExpand:
         {
             if (pPos == pEnd || *pPos == nFragmentDelimiter)
-                return false;
+                goto failed;
             Part ePart = PART_URIC_NO_SLASH;
             while (pPos != pEnd && *pPos != nFragmentDelimiter)
             {
@@ -3147,7 +3146,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             if (pPos < pEnd)
             {
                 if (*pPos != '/' || pEnd - pPos > 1)
-                    return false;
+                    goto failed;
                 ++pPos;
             }
             rSynPath.append('/');
@@ -3155,7 +3154,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INetProtocol::VndSunStarTdoc:
             if (pPos == pEnd || *pPos != '/')
-                return false;
+                goto failed;
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -3180,7 +3179,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                            PART_URIC, eCharset, true);
             }
             if (rSynPath.isEmpty())
-                return false;
+                goto failed;
             break;
         default:
             OSL_ASSERT(false);
@@ -3189,6 +3188,9 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
     *pBegin = pPos;
     return true;
+failed:
+    rSynPath.setLength(nSynPathBeforeLen);
+    return false;
 }
 
 bool INetURLObject::setPath(OUString const & rThePath,
