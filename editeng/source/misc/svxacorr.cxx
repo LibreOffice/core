@@ -95,7 +95,7 @@ namespace o3tl {
 }
 const sal_Unicode cNonBreakingSpace = 0xA0; // UNICODE code for no break space
 
-constexpr OUStringLiteral pXMLImplWrdStt_ExcptLstStr = u"WordExceptList.xml";
+constexpr OUStringLiteral pXMLImplWordStart_ExcptLstStr = u"WordExceptList.xml";
 constexpr OUStringLiteral pXMLImplCplStt_ExcptLstStr = u"SentenceExceptList.xml";
 constexpr OUStringLiteral pXMLImplAutocorr_ListStr = u"DocumentList.xml";
 
@@ -290,7 +290,7 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
                     | ACFlags::SetINetAttr
                     | ACFlags::ChgQuotes
                     | ACFlags::SaveWordCplSttLst
-                    | ACFlags::SaveWordWrdSttLst
+                    | ACFlags::SaveWordWordStartLst
                     | ACFlags::CorrectCapsLock;
     LanguageType eLang = GetAppLang().getLanguageType();
     if( eLang.anyOf(
@@ -342,7 +342,7 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
     , sUserAutoCorrFile( rCpy.sUserAutoCorrFile )
     , aSwFlags( rCpy.aSwFlags )
     , eCharClassLang(rCpy.eCharClassLang)
-    , nFlags( rCpy.nFlags & ~ACFlags(ACFlags::ChgWordLstLoad|ACFlags::CplSttLstLoad|ACFlags::WrdSttLstLoad))
+    , nFlags( rCpy.nFlags & ~ACFlags(ACFlags::ChgWordLstLoad|ACFlags::CplSttLstLoad|ACFlags::WordStartLstLoad))
     , cStartDQuote( rCpy.cStartDQuote )
     , cEndDQuote( rCpy.cEndDQuote )
     , cStartSQuote( rCpy.cStartSQuote )
@@ -372,7 +372,7 @@ void SvxAutoCorrect::SetAutoCorrFlag( ACFlags nFlag, bool bOn )
         if( (nOld & ACFlags::CapitalStartSentence) != (nFlags & ACFlags::CapitalStartSentence) )
             nFlags &= ~ACFlags::CplSttLstLoad;
         if( (nOld & ACFlags::CapitalStartWord) != (nFlags & ACFlags::CapitalStartWord) )
-            nFlags &= ~ACFlags::WrdSttLstLoad;
+            nFlags &= ~ACFlags::WordStartLstLoad;
         if( (nOld & ACFlags::Autocorrect) != (nFlags & ACFlags::Autocorrect) )
             nFlags &= ~ACFlags::ChgWordLstLoad;
     }
@@ -438,7 +438,7 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
         {
             // test if the word is in an exception list
             OUString sWord( rTxt.copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
-            if( !FindInWrdSttExceptList(eLang, sWord) )
+            if( !FindInWordStartExceptList(eLang, sWord) )
             {
                 // Check that word isn't correctly spelt before correcting:
                 css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller =
@@ -455,7 +455,7 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                 OUString sChar = rCC.lowercase( OUString(cSave) );
                 if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
-                    if( ACFlags::SaveWordWrdSttLst & nFlags )
+                    if( ACFlags::SaveWordWordStartLst & nFlags )
                         rDoc.SaveCpltSttWord( ACFlags::CapitalStartWord, nSttPos, sWord, cSave );
                 }
             }
@@ -930,7 +930,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     }
 
     // No replacement for words in TWo INitial CApitals or sMALL iNITIAL list
-    if (FindInWrdSttExceptList(eLang, OUString(pWordStt, pDelim - pWordStt)))
+    if (FindInWordStartExceptList(eLang, OUString(pWordStt, pDelim - pWordStt)))
         return;
 
     if( bAtStart )  // at the beginning of a paragraph?
@@ -1149,7 +1149,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
     aConverted.append( rCC.lowercase(OUString(rTxt[nSttPos+1])) );
 
     // No replacement for words in TWo INitial CApitals or sMALL iNITIAL list
-    if (FindInWrdSttExceptList(eLang, rTxt.copy(nSttPos, nEndPos - nSttPos)))
+    if (FindInWordStartExceptList(eLang, rTxt.copy(nSttPos, nEndPos - nSttPos)))
         return false;
 
     for( sal_Int32 i = nSttPos+2; i < nEndPos; ++i )
@@ -1646,11 +1646,11 @@ void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
     }
 }
 
-void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
+void SvxAutoCorrect::SaveWordStartExceptList(LanguageType eLang)
 {
     auto const iter = m_aLangTable.find(LanguageTag(eLang));
     if (iter != m_aLangTable.end() && iter->second)
-        iter->second->SaveWrdSttExceptList();
+        iter->second->SaveWordStartExceptList();
     else
     {
         SAL_WARN("editeng", "Save an empty list? ");
@@ -1680,7 +1680,7 @@ bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
 }
 
 // Adds a single word. The list will immediately be written to the file!
-bool SvxAutoCorrect::AddWrdSttException( const OUString& rNew,
+bool SvxAutoCorrect::AddWordStartException( const OUString& rNew,
                                          LanguageType eLang )
 {
     SvxAutoCorrectLanguageLists* pLists = nullptr;
@@ -1698,7 +1698,7 @@ bool SvxAutoCorrect::AddWrdSttException( const OUString& rNew,
             pLists = m_aLangTable.find(aLangTagUndetermined)->second.get();
     }
     OSL_ENSURE(pLists, "No auto correction file!");
-    return pLists && pLists->AddToWrdSttExceptList(rNew);
+    return pLists && pLists->AddToWordStartExceptList(rNew);
 }
 
 OUString SvxAutoCorrect::GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const OUString& rTxt,
@@ -1981,7 +1981,7 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     return nullptr;
 }
 
-bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
+bool SvxAutoCorrect::FindInWordStartExceptList( LanguageType eLang,
                                              const OUString& sWord )
 {
     LanguageTag aLanguageTag( eLang);
@@ -1995,7 +1995,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         auto const& pList = m_aLangTable.find(aLanguageTag)->second;
-        if(pList->GetWrdSttExceptList()->find(sWord) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWordStartExceptList()->find(sWord) != pList->GetWordStartExceptList()->end() )
             return true;
     }
 
@@ -2009,7 +2009,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         auto const& pList = m_aLangTable.find(aLanguageTag)->second;
-        if(pList->GetWrdSttExceptList()->find(sWord) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWordStartExceptList()->find(sWord) != pList->GetWordStartExceptList()->end() )
             return true;
     }
 
@@ -2018,7 +2018,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         auto const& pList = m_aLangTable.find(aLanguageTag)->second;
-        if(pList->GetWrdSttExceptList()->find(sWord) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWordStartExceptList()->find(sWord) != pList->GetWordStartExceptList()->end() )
             return true;
     }
     return false;
@@ -2168,15 +2168,15 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
             {
                 pCplStt_ExcptLst.reset();
             }
-            if( (ACFlags::WrdSttLstLoad & nFlags) && pWrdStt_ExcptLst )
+            if( (ACFlags::WordStartLstLoad & nFlags) && pWordStart_ExcptLst )
             {
-                pWrdStt_ExcptLst.reset();
+                pWordStart_ExcptLst.reset();
             }
             if( (ACFlags::ChgWordLstLoad & nFlags) && pAutocorr_List )
             {
                 pAutocorr_List.reset();
             }
-            nFlags &= ~ACFlags(ACFlags::CplSttLstLoad | ACFlags::WrdSttLstLoad | ACFlags::ChgWordLstLoad );
+            nFlags &= ~ACFlags(ACFlags::CplSttLstLoad | ACFlags::WordStartLstLoad | ACFlags::ChgWordLstLoad );
         }
         aLastCheckTime = tools::Time( tools::Time::SYSTEM );
     }
@@ -2403,15 +2403,15 @@ bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
     return bRet;
 }
 
-bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew)
+bool SvxAutoCorrectLanguageLists::AddToWordStartExceptList(const OUString& rNew)
 {
     bool bRet = false;
-    if( !rNew.isEmpty() && GetWrdSttExceptList()->insert( rNew ).second )
+    if( !rNew.isEmpty() && GetWordStartExceptList()->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
         tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
 
-        SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+        SaveExceptList_Imp( *pWordStart_ExcptLst, pXMLImplWordStart_ExcptLstStr, xStg );
 
         xStg = nullptr;
         // Set time stamp
@@ -2452,27 +2452,27 @@ void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
     aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 }
 
-SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
+SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWordStartExceptList()
 {
     try
     {
         tools::SvRef<SotStorage> xStg = new SotStorage( sShareAutoCorrFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
-        if( xStg.is() && xStg->IsContained( pXMLImplWrdStt_ExcptLstStr ) )
-            LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+        if( xStg.is() && xStg->IsContained( pXMLImplWordStart_ExcptLstStr ) )
+            LoadXMLExceptList_Imp( pWordStart_ExcptLst, pXMLImplWordStart_ExcptLstStr, xStg );
     }
     catch (const css::ucb::ContentCreationException &)
     {
-        TOOLS_WARN_EXCEPTION("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList");
+        TOOLS_WARN_EXCEPTION("editeng", "SvxAutoCorrectLanguageLists::LoadWordStartExceptList");
     }
-    return pWrdStt_ExcptLst.get();
+    return pWordStart_ExcptLst.get();
 }
 
-void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
+void SvxAutoCorrectLanguageLists::SaveWordStartExceptList()
 {
     MakeUserStorage_Impl();
     tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
 
-    SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+    SaveExceptList_Imp( *pWordStart_ExcptLst, pXMLImplWordStart_ExcptLstStr, xStg );
 
     xStg = nullptr;
     // Set time stamp
@@ -2481,19 +2481,19 @@ void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
     aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 }
 
-SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetWrdSttExceptList()
+SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetWordStartExceptList()
 {
-    if( !( ACFlags::WrdSttLstLoad & nFlags ) || IsFileChanged_Imp() )
+    if( !( ACFlags::WordStartLstLoad & nFlags ) || IsFileChanged_Imp() )
     {
-        LoadWrdSttExceptList();
-        if( !pWrdStt_ExcptLst )
+        LoadWordStartExceptList();
+        if( !pWordStart_ExcptLst )
         {
             OSL_ENSURE( false, "No valid list" );
-            pWrdStt_ExcptLst.reset( new SvStringsISortDtor );
+            pWordStart_ExcptLst.reset( new SvStringsISortDtor );
         }
-        nFlags |= ACFlags::WrdSttLstLoad;
+        nFlags |= ACFlags::WordStartLstLoad;
     }
-    return pWrdStt_ExcptLst.get();
+    return pWordStart_ExcptLst.get();
 }
 
 void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const OUString& rName )
@@ -2569,12 +2569,12 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         {
             std::unique_ptr<SvStringsISortDtor> pTmpWordList;
 
-            if (xSrcStg->IsContained( pXMLImplWrdStt_ExcptLstStr ) )
-                LoadXMLExceptList_Imp( pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xSrcStg );
+            if (xSrcStg->IsContained( pXMLImplWordStart_ExcptLstStr ) )
+                LoadXMLExceptList_Imp( pTmpWordList, pXMLImplWordStart_ExcptLstStr, xSrcStg );
 
             if (pTmpWordList)
             {
-                SaveExceptList_Imp( *pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xDstStg, true );
+                SaveExceptList_Imp( *pTmpWordList, pXMLImplWordStart_ExcptLstStr, xDstStg, true );
                 pTmpWordList.reset();
             }
 

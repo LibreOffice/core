@@ -68,7 +68,7 @@ enum class ACFlags : sal_uInt32 {
     Autocorrect          = 0x00000080,   // Call AutoCorrect
     ChgQuotes            = 0x00000100,   // replace double quotes
     SaveWordCplSttLst    = 0x00000200,   // Save Auto correction of Capital letter at beginning of sentence.
-    SaveWordWrdSttLst    = 0x00000400,   // Save Auto correction of TWo INitial CApitals or sMALL iNITIAL.
+    SaveWordWordStartLst    = 0x00000400,   // Save Auto correction of TWo INitial CApitals or sMALL iNITIAL.
     IgnoreDoubleSpace    = 0x00000800,   // Ignore 2 Spaces
     ChgSglQuotes         = 0x00001000,   // Replace simple quotes
     CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
@@ -77,7 +77,7 @@ enum class ACFlags : sal_uInt32 {
 
     ChgWordLstLoad       = 0x20000000,   // Replacement list loaded
     CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
-    WrdSttLstLoad        = 0x80000000,   // Exception list for Word Start loaded
+    WordStartLstLoad        = 0x80000000,   // Exception list for Word Start loaded
 };
 namespace o3tl {
     template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe000ffff> {};
@@ -189,7 +189,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
     tools::Time aModifiedTime, aLastCheckTime;
 
     std::unique_ptr<SvStringsISortDtor> pCplStt_ExcptLst;
-    std::unique_ptr<SvStringsISortDtor> pWrdStt_ExcptLst;
+    std::unique_ptr<SvStringsISortDtor> pWordStart_ExcptLst;
     std::unique_ptr<SvxAutocorrWordList> pAutocorr_List;
     SvxAutoCorrect&         rAutoCorrect;
 
@@ -226,10 +226,10 @@ public:
     bool AddToCplSttExceptList(const OUString& rNew);
 
     // Load, Set, Get the exception list for TWo INitial CApitals or sMALL iNITIAL
-    SvStringsISortDtor* LoadWrdSttExceptList();
-    void SaveWrdSttExceptList();
-    SvStringsISortDtor* GetWrdSttExceptList();
-    bool AddToWrdSttExceptList(const OUString& rNew);
+    SvStringsISortDtor* LoadWordStartExceptList();
+    void SaveWordStartExceptList();
+    SvStringsISortDtor* GetWordStartExceptList();
+    bool AddToWordStartExceptList(const OUString& rNew);
 
     // Save word substitutions:
     //      Store these directly in the storage. The word list is updated
@@ -386,16 +386,16 @@ public:
     bool AddCplSttException( const OUString& rNew, LanguageType eLang );
 
     // Load, Set, Get the exception list for TWo INitial CApitals or sMALL iNITIAL
-    void SaveWrdSttExceptList( LanguageType eLang );
-    SvStringsISortDtor* LoadWrdSttExceptList( LanguageType eLang )
-        {   return GetLanguageList_( eLang ).LoadWrdSttExceptList(); }
-    const SvStringsISortDtor* GetWrdSttExceptList( LanguageType eLang )
-        {   return GetLanguageList_( eLang ).GetWrdSttExceptList(); }
+    void SaveWordStartExceptList( LanguageType eLang );
+    SvStringsISortDtor* LoadWordStartExceptList( LanguageType eLang )
+        {   return GetLanguageList_( eLang ).LoadWordStartExceptList(); }
+    const SvStringsISortDtor* GetWordStartExceptList( LanguageType eLang )
+        {   return GetLanguageList_( eLang ).GetWordStartExceptList(); }
     // Adds a single word. The list will be immediately written to the file!
-    bool AddWrdSttException( const OUString& rNew, LanguageType eLang);
+    bool AddWordStartException( const OUString& rNew, LanguageType eLang);
 
     // Search through the Languages for the entry
-    bool FindInWrdSttExceptList( LanguageType eLang, const OUString& sWord );
+    bool FindInWordStartExceptList( LanguageType eLang, const OUString& sWord );
     bool FindInCplSttExceptList( LanguageType eLang, const OUString& sWord,
                                     bool bAbbreviation = false);
 
