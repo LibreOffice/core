@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XSet.hpp>
 
 #include <cppuhelper/implbase5.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertybag.hxx>
@@ -80,7 +80,7 @@ namespace comphelper
         bool            m_bAutoAddProperties;
 
         /// for notification
-        ::comphelper::OInterfaceContainerHelper2 m_NotifyListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_NotifyListeners;
         /// modify flag
         bool            m_isModified;
 
