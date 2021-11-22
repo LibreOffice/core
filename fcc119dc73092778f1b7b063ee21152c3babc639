@@ -51,6 +51,23 @@
       "message": "I found duplicated Korean word. so +1",
       "revId": "fcc119dc73092778f1b7b063ee21152c3babc639",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0e467c4_2020cb4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-22T06:15:03Z",
+      "side": 1,
+      "message": "Thank you for your feedback DaeHyun, let\u0027s push this one then.",
+      "revId": "fcc119dc73092778f1b7b063ee21152c3babc639",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
