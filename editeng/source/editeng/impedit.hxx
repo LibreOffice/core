@@ -337,7 +337,7 @@ protected:
     void ShowDDCursor( const tools::Rectangle& rRect );
     void HideDDCursor();
 
-    void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly );
+    void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly, bool bLOKCalcRTL );
     tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags,
             sal_Int32& nTextPortionStart, const ParaPortion* pParaPortion) const;
 

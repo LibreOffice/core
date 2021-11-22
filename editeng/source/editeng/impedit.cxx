@@ -518,6 +518,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     bool bStartHandleVisible = false;
     bool bEndHandleVisible = false;
+    bool bLOKCalcRTL = mpLOKSpecialPositioning && pEditEngine->IsRightToLeft(nStartPara);
 
     auto DrawHighlight = [&, nStartLine = sal_Int32(0), nEndLine = sal_Int32(0)](
                              const ImpEditEngine::LineAreaInfo& rInfo) mutable {
@@ -594,7 +595,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
                 aTmpRect.Move(aLineOffset.Width(), 0);
                 ImplDrawHighlightRect(pTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
-                                      pPolyPoly.get());
+                                      pPolyPoly.get(), bLOKCalcRTL);
             }
             else
             {
@@ -620,7 +621,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     aTmpRect.Move(aLineOffset.Width(), 0);
 
                     ImplDrawHighlightRect(pTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
-                                          pPolyPoly.get());
+                                          pPolyPoly.get(), bLOKCalcRTL);
                     nTmpStartIndex = nTmpEndIndex;
                 }
             }
@@ -657,7 +658,7 @@ void ImpEditView::GetSelectionRectangles(EditSelection aTmpSel, std::vector<tool
     aRegion.GetRegionRectangles(rLogicRects);
 }
 
-void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly )
+void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly, bool bLOKCalcRTL )
 {
     if ( rDocPosTopLeft.X() == rDocPosBottomRight.X() )
         return;
@@ -670,6 +671,13 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
         Point aRefPointLogical = GetOutputArea().TopLeft();
         // Get the relative coordinates w.r.t refpoint in display units.
         aSelRect.Move(-aRefPointLogical.X(), -aRefPointLogical.Y());
+        if (bLOKCalcRTL)
+        {
+            tools::Long nMirrorW = GetOutputArea().GetWidth();
+            tools::Long nLeft = aSelRect.Left(), nRight = aSelRect.Right();
+            aSelRect.SetLeft(nMirrorW - nRight);
+            aSelRect.SetRight(nMirrorW - nLeft);
+        }
         // Convert from display unit to twips.
         aSelRect = OutputDevice::LogicToLogic(aSelRect, MapMode(eDevUnit), MapMode(MapUnit::MapTwip));
 
