@@ -42,7 +42,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -86,7 +86,7 @@ class ImplEventAttacherManager
     std::deque< AttacherIndex_Impl >  aIndex;
     Mutex aLock;
     // Container for the ScriptListener
-    OInterfaceContainerHelper2          aScriptListeners;
+    OInterfaceContainerHelper3<XScriptListener> aScriptListeners;
     // Instance of EventAttacher
     Reference< XEventAttacher2 >        xAttacher;
     Reference< XComponentContext >      mxContext;
@@ -179,9 +179,9 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     aScriptEvent.ScriptCode     = aScriptCode;
 
     // Iterate over all listeners and pass events.
-    OInterfaceIteratorHelper2 aIt( mxManager->aScriptListeners );
+    OInterfaceIteratorHelper3 aIt( mxManager->aScriptListeners );
     while( aIt.hasMoreElements() )
-        static_cast<XScriptListener *>(aIt.next())->firing( aScriptEvent );
+        aIt.next()->firing( aScriptEvent );
 }
 
 
@@ -242,10 +242,10 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 
     Any aRet;
     // Iterate over all listeners and pass events.
-    OInterfaceIteratorHelper2 aIt( mxManager->aScriptListeners );
+    OInterfaceIteratorHelper3 aIt( mxManager->aScriptListeners );
     while( aIt.hasMoreElements() )
     {
-        aRet = static_cast<XScriptListener *>(aIt.next())->approveFiring( aScriptEvent );
+        aRet = aIt.next()->approveFiring( aScriptEvent );
         try
         {
             Reference< XIdlClass > xListenerType = mxManager->getReflection()->
