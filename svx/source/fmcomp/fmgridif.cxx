@@ -127,7 +127,7 @@ static vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
 
 FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
-                    ,OInterfaceContainerHelper2( _rMutex )
+                    ,OInterfaceContainerHelper3( _rMutex )
 {
 }
 
@@ -160,7 +160,7 @@ void FmXModifyMultiplexer::modified(const EventObject& e)
 
 FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
-                    ,OInterfaceContainerHelper2( _rMutex )
+                    ,OInterfaceContainerHelper3( _rMutex )
 {
 }
 
@@ -192,9 +192,9 @@ sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e)
     bool bResult = true;
     if (getLength())
     {
-        ::comphelper::OInterfaceIteratorHelper2 aIter(*this);
+        ::comphelper::OInterfaceIteratorHelper3 aIter(*this);
         while ( bResult && aIter.hasMoreElements() )
-            bResult = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aMulti );
+            bResult = aIter.next()->approveUpdate( aMulti );
     }
 
     return bResult;
@@ -210,7 +210,7 @@ void FmXUpdateMultiplexer::updated(const EventObject &e)
 
 FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
-    ,OInterfaceContainerHelper2( _rMutex )
+    ,OInterfaceContainerHelper3( _rMutex )
 {
 }
 
@@ -243,7 +243,7 @@ void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEv
 
 FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                         :OWeakSubObject( rSource )
-                        ,OInterfaceContainerHelper2( _rMutex )
+                        ,OInterfaceContainerHelper3( _rMutex )
 {
 }
 
@@ -291,7 +291,7 @@ void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e)
 
 FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
-    ,OInterfaceContainerHelper2( _rMutex )
+    ,OInterfaceContainerHelper3( _rMutex )
 {
 }
 
