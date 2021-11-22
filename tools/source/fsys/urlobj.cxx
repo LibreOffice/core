@@ -1419,51 +1419,48 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     }
 
     // Parse <path>
-    OUStringBuffer aSynPath(256);
+    sal_Int32 nBeforePathLength = m_aAbsURIRef.getLength();
     if (!parsePath(m_eScheme, &pPos, pEnd, eMechanism, eCharset,
                    bSkippedInitialSlash, nSegmentDelimiter,
                    nAltSegmentDelimiter,
                    getSchemeInfo().m_bQuery ? '?' : 0x80000000,
-                   nFragmentDelimiter, aSynPath))
+                   nFragmentDelimiter, m_aAbsURIRef))
     {
         setInvalid();
         return false;
     }
-    m_aPath.set(m_aAbsURIRef, aSynPath.makeStringAndClear(),
-        m_aAbsURIRef.getLength());
+    m_aPath = SubString(nBeforePathLength, m_aAbsURIRef.getLength() - nBeforePathLength);
 
     // Parse ?<query>
     if (getSchemeInfo().m_bQuery && pPos < pEnd && *pPos == '?')
     {
         m_aAbsURIRef.append('?');
-        OUStringBuffer aSynQuery;
+        sal_Int32 nBeforeLength = m_aAbsURIRef.getLength();
         for (++pPos; pPos < pEnd && *pPos != nFragmentDelimiter;)
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32 = getUTF32(pPos, pEnd,
                                          eMechanism, eCharset, eEscapeType);
-            appendUCS4(aSynQuery, nUTF32, eEscapeType,
+            appendUCS4(m_aAbsURIRef, nUTF32, eEscapeType,
                        PART_URIC, eCharset, true);
         }
-        m_aQuery.set(m_aAbsURIRef, aSynQuery.makeStringAndClear(),
-            m_aAbsURIRef.getLength());
+        m_aQuery = SubString(nBeforeLength, m_aAbsURIRef.getLength() - nBeforeLength);
     }
 
     // Parse #<fragment>
     if (pPos < pEnd && *pPos == nFragmentDelimiter)
     {
         m_aAbsURIRef.append(sal_Unicode(nFragmentDelimiter));
-        OUStringBuffer aSynFragment;
+        sal_Int32 nBeforeLength = m_aAbsURIRef.getLength();
         for (++pPos; pPos < pEnd;)
         {
             EscapeType eEscapeType;
             sal_uInt32 nUTF32 = getUTF32(pPos, pEnd,
                                          eMechanism, eCharset, eEscapeType);
-            appendUCS4(aSynFragment, nUTF32, eEscapeType, PART_URIC,
+            appendUCS4(m_aAbsURIRef, nUTF32, eEscapeType, PART_URIC,
                        eCharset, true);
         }
-        m_aFragment.set(m_aAbsURIRef, aSynFragment.makeStringAndClear(),
-            m_aAbsURIRef.getLength());
+        m_aFragment = SubString(nBeforeLength, m_aAbsURIRef.getLength() - nBeforeLength);
     }
 
     if (pPos != pEnd)
