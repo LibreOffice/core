@@ -48,7 +48,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -65,8 +65,8 @@ namespace com::sun::star::beans { struct NamedValue; }
 
 using ::osl::Mutex;
 using ::osl::Guard;
-using ::comphelper::OInterfaceContainerHelper2;
-using ::comphelper::OInterfaceIteratorHelper2;
+using ::comphelper::OInterfaceContainerHelper3;
+using ::comphelper::OInterfaceIteratorHelper3;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
@@ -299,7 +299,7 @@ public:
     void fireChangeListener();
 
 private:
-    OInterfaceContainerHelper2   maChangeListener;
+    OInterfaceContainerHelper3<XChangesListener>   maChangeListener;
 
     static void initTypeProvider( sal_Int16 nNodeType ) noexcept;
 
@@ -2100,18 +2100,14 @@ void AnimationNode::fireChangeListener()
 {
     Guard< Mutex > aGuard( maMutex );
 
-    OInterfaceIteratorHelper2 aIterator( maChangeListener );
+    OInterfaceIteratorHelper3 aIterator( maChangeListener );
     if( aIterator.hasMoreElements() )
     {
         Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
         Sequence< ElementChange > aChanges;
         const ChangesEvent aEvent( xSource, Any( mxParent.get() ), aChanges );
         while( aIterator.hasMoreElements() )
-        {
-            Reference< XChangesListener > xListener( aIterator.next(), UNO_QUERY );
-            if( xListener.is() )
-                xListener->changesOccurred( aEvent );
-        }
+            aIterator.next()->changesOccurred( aEvent );
     }
 
     //fdo#69645 use WeakReference of mxParent to test if mpParent is still valid
