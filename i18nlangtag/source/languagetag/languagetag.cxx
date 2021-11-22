@@ -3243,7 +3243,6 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             return LanguageTag("ga-Latg");
         case AppleLanguageId::TONGAN:
             return LanguageTag("to");
-            break;
         case AppleLanguageId::GREEK_POLYTONIC:
             nLang = LANGUAGE_USER_ANCIENT_GREEK;
             break;
