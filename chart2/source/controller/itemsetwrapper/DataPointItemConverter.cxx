@@ -551,9 +551,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_TEXT_DEGREES:
         {
-            double fValue = static_cast< double >(
-                static_cast< const SdrAngleItem & >(
-                    rItemSet.Get( nWhichId )).GetValue().get()) / 100.0;
+            double fValue = toDegrees(rItemSet.Get(SCHATTR_TEXT_DEGREES).GetValue());
             double fOldValue = 0.0;
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldValue );

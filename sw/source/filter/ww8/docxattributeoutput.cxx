@@ -9388,8 +9388,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         //     /oox/source/vml/vmlformatting.cxx :: FillModel::pushToPropMap
         // and also in
         //     /oox/source/drawingml/fillproperties.cxx :: FillProperties::pushToPropMap
-        sal_Int32 nReverseAngle = (4500_deg10 - rGradient.GetAngle()).get();
-        nReverseAngle = nReverseAngle / 10;
+        sal_Int32 nReverseAngle = toDegrees(4500_deg10 - rGradient.GetAngle());
         nReverseAngle = (270 - nReverseAngle) % 360;
         if (nReverseAngle != 0)
             AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(),

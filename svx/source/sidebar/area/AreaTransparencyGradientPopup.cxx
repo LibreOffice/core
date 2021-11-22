@@ -63,7 +63,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
 
     if (rGradient.GetXOffset() == AreaPropertyPanelBase::DEFAULT_CENTERX
         && rGradient.GetYOffset() == AreaPropertyPanelBase::DEFAULT_CENTERY
-        && (rGradient.GetAngle().get() / 10) == AreaPropertyPanelBase::DEFAULT_ANGLE
+        && static_cast<sal_Int32>(toDegrees(rGradient.GetAngle())) == AreaPropertyPanelBase::DEFAULT_ANGLE
         && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255)
             == AreaPropertyPanelBase::DEFAULT_STARTVALUE
         && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255)
@@ -78,7 +78,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     }
     mxMtrTrgrCenterX->set_value(aGradient.GetXOffset(), FieldUnit::PERCENT);
     mxMtrTrgrCenterY->set_value(aGradient.GetYOffset(), FieldUnit::PERCENT);
-    mxMtrTrgrAngle->set_value(aGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
+    mxMtrTrgrAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
     mxMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetStartColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
     mxMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetEndColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
     mxMtrTrgrBorder->set_value(aGradient.GetBorder(), FieldUnit::PERCENT);

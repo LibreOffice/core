@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
                 mxLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
                 mxLbFillGradTo->SelectEntry(aGradient.GetEndColor());
 
-                mxMTRAngle->set_value(aGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
+                mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
                 css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
                 mxGradientStyle->set_active(sal::static_int_cast< sal_Int32 >( eXGS ));
             }
@@ -1148,7 +1148,7 @@ void AreaPropertyPanelBase::Update()
                         if(mxGradientStyle->get_active() == sal_Int32(GradientStyle::Radial))
                             mxMTRAngle->set_sensitive(false);
                         else
-                            mxMTRAngle->set_value(aGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
+                            mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
                     }
                     else
                     {

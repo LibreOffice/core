@@ -148,17 +148,17 @@ SwCropGrf* SwCropGrf::Clone( SfxItemPool* ) const
 
 Degree10 SwRotationGrf::checkAndCorrectValue(Degree10 nValue)
 {
-    if(nValue.get() < 0)
+    if (nValue < 0_deg10)
     {
         // smaller zero, modulo (will keep negative) and add one range
         DBG_ASSERT(false, "SwRotationGrf: Value is in 10th degree and *has* to be in [0 .. 3600[ (!)");
-        return Degree10(3600 + (nValue.get() % 3600));
+        return 3600_deg10 + nValue % 3600_deg10;
     }
-    else if (nValue.get() >= 3600)
+    else if (nValue >= 3600_deg10)
     {
         // bigger range, use modulo
         DBG_ASSERT(false, "SwRotationGrf: Value is in 10th degree and *has* to be in [0 .. 3600[ (!)");
-        return Degree10(nValue.get() % 3600);
+        return nValue % 3600_deg10;
     }
 
     return nValue;

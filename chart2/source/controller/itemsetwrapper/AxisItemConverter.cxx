@@ -878,10 +878,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_TEXT_DEGREES:
         {
-            // convert int to double (divided by 100)
-            double fVal = static_cast< double >(
-                static_cast< const SdrAngleItem & >(
-                    rItemSet.Get( nWhichId )).GetValue().get()) / 100.0;
+            double fVal = toDegrees(rItemSet.Get(SCHATTR_TEXT_DEGREES).GetValue());
             double fOldVal = 0.0;
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldVal );
