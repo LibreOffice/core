@@ -201,7 +201,7 @@ public:
                 || name == "gFontPreviewVirDevs"
                     //svtools/source/control/ctrlbox.cxx, empty at exit
                 || name == "aLogger" // FormulaLogger& FormulaLogger::get() in sc/source/core/tool/formulalogger.cxx
-                || name == "m_aUncommittedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
+                || name == "s_aUncommittedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
                 || (loplugin::DeclCheck(pVarDecl).Var("maThreadSpecific")

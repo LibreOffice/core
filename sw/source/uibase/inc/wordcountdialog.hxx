@@ -57,7 +57,7 @@ public:
 
 class SwWordCountWrapper final : public SfxChildWindow
 {
-    VclPtr<AbstractSwWordCountFloatDlg> xAbstDlg;
+    VclPtr<AbstractSwWordCountFloatDlg> m_xAbstDlg;
 
 public:
     SwWordCountWrapper(    vcl::Window *pParentWindow,

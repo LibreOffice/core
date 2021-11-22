@@ -24,7 +24,7 @@
 class SwZoomControl final : public SvxZoomStatusBarControl
 {
 private:
-    OUString sPreviewZoom;
+    OUString m_sPreviewZoom;
 
 public:
     virtual void Command(const CommandEvent& rCEvt) override;

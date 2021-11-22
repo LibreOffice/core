@@ -185,7 +185,7 @@ bool SwWebGlosDocShell::Save()
 {
     // same comment as in SwGlosDocShell::Save - see there
     if ( GetWrtShell() )
-        return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
+        return ::lcl_Save( *GetWrtShell(), m_aGroupName, m_aShortName, m_aLongName );
     else
     {
         SetModified( false );

@@ -42,12 +42,12 @@ void SwZoomControl::StateChangedAtStatusBarControl( sal_uInt16 nSID, SfxItemStat
     const SfxStringItem* pItem = nullptr;
     if (SfxItemState::DEFAULT == eState && (pItem = dynamic_cast<const SfxStringItem*>(pState)))
     {
-        sPreviewZoom = pItem->GetValue();
-        GetStatusBar().SetItemText(GetId(), sPreviewZoom);
+        m_sPreviewZoom = pItem->GetValue();
+        GetStatusBar().SetItemText(GetId(), m_sPreviewZoom);
     }
     else
     {
-        sPreviewZoom.clear();
+        m_sPreviewZoom.clear();
         SvxZoomStatusBarControl::StateChangedAtStatusBarControl(nSID, eState, pState);
     }
 }
@@ -58,7 +58,7 @@ void SwZoomControl::Paint( const UserDrawEvent& )
 
 void SwZoomControl::Command( const CommandEvent& rCEvt )
 {
-    if (sPreviewZoom.isEmpty())
+    if (m_sPreviewZoom.isEmpty())
         SvxZoomStatusBarControl::Command(rCEvt);
 }
 
