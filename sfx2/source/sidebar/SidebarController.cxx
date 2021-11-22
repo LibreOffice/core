@@ -739,6 +739,7 @@ void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context&
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
     SharedPanelContainer aNewPanels;
     sal_Int32 nWriteIndex (0);
+    int aMaxHeight = 0; //height of title panel depends on icon visibility
 
     aNewPanels.resize(nNewPanelCount);
 
@@ -758,6 +759,9 @@ void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context&
             xOldPanel->SetLurkMode(false);
             aNewPanels[nWriteIndex] = xOldPanel;
             xOldPanel->SetExpanded(rPanelContexDescriptor.mbIsInitiallyVisible);
+            PanelTitleBar* pTitleBar(xOldPanel->GetTitleBar());
+            int aHeight(pTitleBar->get_preferred_size().Height());
+            aMaxHeight = std::max(aMaxHeight, aHeight );
             ++nWriteIndex;
         }
         else
@@ -780,9 +784,27 @@ void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context&
                         rPanelContexDescriptor.msMenuCommand,
                         mxFrame, xController);
                 }
+                int aHeight(pTitleBar->get_preferred_size().Height());
+                aMaxHeight = std::max(aMaxHeight, aHeight );
                 ++nWriteIndex;
             }
         }
+    }
+    // tdf#145801: title panel is taller when "more options" icon is shown
+    for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
+    {
+        const ResourceManager::PanelContextDescriptor& rPanelContexDescriptor (
+            aPanelContextDescriptors[nReadIndex]);
+        const bool bIsPanelVisible (!mbIsDocumentReadOnly || rPanelContexDescriptor.mbShowForReadOnlyDocuments);
+        if (!bIsPanelVisible)
+            continue;
+        auto xPanel(pDeck->GetPanel(rPanelContexDescriptor.msId));
+        if (!xPanel)
+            continue;
+        PanelTitleBar* pTitleBar(xPanel->GetTitleBar());
+        if (!pTitleBar)
+            continue;
+        pTitleBar->set_size_request(-1, aMaxHeight);
     }
 
     // mpCurrentPanels - may miss stuff (?)

@@ -49,6 +49,11 @@ TitleBar::~TitleBar()
 {
 }
 
+void TitleBar::set_size_request(int nWidth, int nHeight)
+{
+    mxTitlebar->set_size_request(nWidth, nHeight);
+}
+
 Size TitleBar::get_preferred_size() const
 {
     return mxTitlebar->get_preferred_size();

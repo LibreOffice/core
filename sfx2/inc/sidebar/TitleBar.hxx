@@ -39,6 +39,7 @@ public:
     bool GetVisible() const;
 
     Size get_preferred_size() const;
+    void set_size_request(int nWidth, int nHeight);
 
     void SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon);
 
