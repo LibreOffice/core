@@ -49,10 +49,10 @@ namespace frm
         css::util::URL
             getStrictURLFromAscii( const char* _pAsciiURL ) const;
 
-        /** parses a given URL smartly, with a protocol given by ASCII string
+        /** parses a given URL smartly, with a given protocol
         */
         void
-            parseSmartWithAsciiProtocol( css::util::URL& _rURL, const OUString& _rAsciiURL ) const;
+            parseSmartWithProtocol( css::util::URL& _rURL, const OUString& _rProtocol ) const;
 
     private:
         /** ensures that we have a URLTransformer instance in <member>m_xTransformer</member>

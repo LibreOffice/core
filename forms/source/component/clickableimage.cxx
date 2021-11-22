@@ -293,7 +293,7 @@ namespace frm
                 xSet->getPropertyValue(PROPERTY_DISPATCHURLINTERNAL) >>= bDispatchUrlInternal;
                 if ( bDispatchUrlInternal )
                 {
-                    m_pFeatureInterception->getTransformer().parseSmartWithAsciiProtocol( aURL, INET_FILE_SCHEME );
+                    m_pFeatureInterception->getTransformer().parseSmartWithProtocol( aURL, INET_FILE_SCHEME );
 
                     OUString aTargetFrame;
                     xSet->getPropertyValue(PROPERTY_TARGET_FRAME) >>= aTargetFrame;
