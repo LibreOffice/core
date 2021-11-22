@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c419789f_c978a89a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-22T15:23:40Z",
+      "side": 1,
+      "message": "I confirm it builds on Windows and no GDI leak when exporting in pdf! Thank you!\n\n(perhaps it could be interesting to prefix your patch with \"tdf#62812\" since it fixes this bug)",
+      "revId": "70455d2e081b7db8ff9e352d8df26b64aa1503e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
