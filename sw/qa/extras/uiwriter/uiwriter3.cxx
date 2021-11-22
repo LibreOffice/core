@@ -2525,6 +2525,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136385)
     CPPUNIT_ASSERT_EQUAL(aPos.Y, xShape->getPosition().Y);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145207)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf145207.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+
+    //select one shape and use the TAB key to iterate over the different shapes
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+    {
+        // Without the fix in place, this test would have crashed here
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+        Scheduler::ProcessEventsToIdle();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128782)
 {
     createSwDoc(DATA_DIRECTORY, "tdf128782.odt");
