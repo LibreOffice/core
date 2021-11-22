@@ -954,10 +954,17 @@ public:
 
     void Reorder( const sc::ReorderParam& rParam );
 
+    // Internal cache that can be repeatedly used for a sequence of related ValidQuery()
+    // calls (related meaning done in a loop for the same document and query data).
+    struct ValidQueryCache
+    {
+        std::unordered_map<FormulaError, svl::SharedString> mCachedSharedErrorStrings;
+    };
     bool ValidQuery(
         SCROW nRow, const ScQueryParam& rQueryParam, const ScRefCellValue* pCell = nullptr,
         bool* pbTestEqualCondition = nullptr, const ScInterpreterContext* pContext = nullptr,
-        sc::TableColumnBlockPositionSet* pBlockPos = nullptr );
+        sc::TableColumnBlockPositionSet* pBlockPos = nullptr,
+        ValidQueryCache* pQueryCache = nullptr );
     void        TopTenQuery( ScQueryParam& );
     void        PrepareQuery( ScQueryParam& rQueryParam );
     SCSIZE      Query(const ScQueryParam& rQueryParam, bool bKeepSub);

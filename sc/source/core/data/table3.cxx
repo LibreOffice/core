@@ -2330,6 +2330,7 @@ class QueryEvaluator
     CollatorWrapper* mpCollator;
     const bool mbMatchWholeCell;
     const bool mbCaseSensitive;
+    ScTable::ValidQueryCache* mpValidQueryCache;
 
     static bool isPartialTextMatchOp(const ScQueryEntry& rEntry)
     {
@@ -2399,7 +2400,7 @@ class QueryEvaluator
 
 public:
     QueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
-                   bool pTestEqualCondition) :
+                   bool pTestEqualCondition, ScTable::ValidQueryCache* pValidQueryCache) :
         mrDoc(rDoc),
         mrStrPool(rDoc.GetSharedStringPool()),
         mrTab(rTab),
@@ -2408,7 +2409,8 @@ public:
         mpTransliteration(nullptr),
         mpCollator(nullptr),
         mbMatchWholeCell(rDoc.GetDocOptions().IsMatchWholeCell()),
-        mbCaseSensitive( rParam.bCaseSens )
+        mbCaseSensitive( rParam.bCaseSens ),
+        mpValidQueryCache( pValidQueryCache )
     {
     }
 
@@ -2595,6 +2597,20 @@ public:
             if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
             {
                 // Error cell is evaluated as string (for now).
+                if(mpValidQueryCache)
+                {
+                    const FormulaError error = rCell.mpFormula->GetErrCode();
+                    auto it = mpValidQueryCache->mCachedSharedErrorStrings.find(error);
+                    if( it == mpValidQueryCache->mCachedSharedErrorStrings.end())
+                    {
+                        svl::SharedString str = mrStrPool.intern(ScGlobal::GetErrorString(error));
+                        auto pos = mpValidQueryCache->mCachedSharedErrorStrings.insert({error, str});
+                        assert(pos.second); // inserted
+                        it = pos.first;
+                    }
+                    const svl::SharedString& sharedError = it->second;
+                    return compareByStringComparator(rEntry, rItem, &sharedError, nullptr);
+                }
                 const OUString aCellStr = ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode());
                 return compareByStringComparator(rEntry, rItem, nullptr, &aCellStr);
             }
@@ -2976,7 +2992,8 @@ public:
 
 bool ScTable::ValidQuery(
     SCROW nRow, const ScQueryParam& rParam, const ScRefCellValue* pCell, bool* pbTestEqualCondition,
-    const ScInterpreterContext* pContext, sc::TableColumnBlockPositionSet* pBlockPos)
+    const ScInterpreterContext* pContext, sc::TableColumnBlockPositionSet* pBlockPos,
+    ValidQueryCache* pValidQueryCache)
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
@@ -2991,7 +3008,7 @@ bool ScTable::ValidQuery(
     bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new bool[nEntryCount] );
 
     tools::Long    nPos = -1;
-    QueryEvaluator aEval(rDocument, *this, rParam, pbTestEqualCondition != nullptr);
+    QueryEvaluator aEval(rDocument, *this, rParam, pbTestEqualCondition != nullptr, pValidQueryCache);
     ScQueryParam::const_iterator it, itBeg = rParam.begin(), itEnd = rParam.end();
     for (it = itBeg; it != itEnd && (*it)->bDoQuery; ++it)
     {
@@ -3389,12 +3406,13 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
     }
 
     sc::TableColumnBlockPositionSet blockPos( GetDoc(), nTab ); // cache mdds access
+    ValidQueryCache validQueryCache;
 
     SCROW nRealRow2 = aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
     {
         bool bResult;                                   // Filter result
-        bool bValid = ValidQuery(j, aParam, nullptr, nullptr, nullptr, &blockPos);
+        bool bValid = ValidQuery(j, aParam, nullptr, nullptr, nullptr, &blockPos, &validQueryCache);
         if (!bValid && bKeepSub)                        // Keep subtotals
         {
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
