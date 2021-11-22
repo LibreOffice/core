@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80f34d55_8a0093e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-22T11:17:20Z",
+      "side": 1,
+      "message": "Not even compile tested. And no idea how fast CreateCompatibleDC actually is.",
+      "revId": "daf5d011e4307f4a6a2072d287fa87debb0f851b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
