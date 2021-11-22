@@ -181,7 +181,7 @@ private:
     void DeInitGraphics();
 
 public:
-    HFONT ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont, const vcl::font::PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
+    HFONT ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const & i_rFont, const vcl::font::PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
     // NOTE: this doesn't transfer ownership! See class comment.

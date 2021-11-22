@@ -45,10 +45,6 @@ public:
     HFONT GetHFONT() const { return m_hFont; }
     float GetScale() const { return m_fScale; }
 
-    // Prevent deletion of the HFONT in the WinFontInstance destructor
-    // Used for the ScopedFont handling
-    void SetHFONT(HFONT hFont) { m_hFont = hFont; }
-
     const WinFontFace * GetFontFace() const { return static_cast<const WinFontFace *>(LogicalFontInstance::GetFontFace()); }
     WinFontFace * GetFontFace() { return static_cast<WinFontFace *>(LogicalFontInstance::GetFontFace()); }
 
