@@ -20,6 +20,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_SPELL_SSPELLIMP_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_SPELL_SSPELLIMP_HXX
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -68,7 +69,7 @@ class SpellChecker :
 
     Sequence< Locale >                 m_aSuppLocales;
 
-    ::comphelper::OInterfaceContainerHelper2       m_aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<XEventListener> m_aEvtListeners;
     std::unique_ptr<linguistic::PropertyHelper_Spelling> m_pPropHelper;
     bool                                    m_bDisposing;
 

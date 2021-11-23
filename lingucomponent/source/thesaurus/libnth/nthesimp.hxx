@@ -20,6 +20,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -63,7 +64,7 @@ class Thesaurus :
 {
     Sequence< Locale >                      aSuppLocales;
 
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<XEventListener> aEvtListeners;
     linguistic::PropertyHelper_Thesaurus*       pPropHelper;
     bool                                    bDisposing;
     struct ThesInfo
