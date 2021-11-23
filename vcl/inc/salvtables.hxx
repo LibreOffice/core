@@ -1898,6 +1898,8 @@ private:
 
     DECL_LINK(PopupModeEndHdl, FloatingWindow*, void);
 
+    void ImplPopDown();
+
 public:
     SalInstancePopover(DockingWindow* pPopover, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 

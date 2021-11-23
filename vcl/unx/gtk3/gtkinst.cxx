@@ -22195,17 +22195,26 @@ public:
         gtk_popover_popdown(m_pPopover);
     }
 
+    void PopdownAndFlushClosedSignal()
+    {
+        if (get_visible())
+            popdown();
+        if (m_pClosedEvent)
+        {
+            Application::RemoveUserEvent(m_pClosedEvent);
+            async_signal_closed(nullptr);
+        }
+    }
+
     virtual ~GtkInstancePopover() override
     {
+        PopdownAndFlushClosedSignal();
         DisconnectMouseEvents();
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pMenuHack)
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
 #endif
-        if (m_pClosedEvent)
-            Application::RemoveUserEvent(m_pClosedEvent);
         g_signal_handler_disconnect(m_pPopover, m_nSignalId);
-        signal_closed();
     }
 };
 

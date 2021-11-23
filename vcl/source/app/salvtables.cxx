@@ -6696,7 +6696,12 @@ SalInstancePopover::SalInstancePopover(DockingWindow* pPopover, SalInstanceBuild
 {
 }
 
-SalInstancePopover::~SalInstancePopover() { signal_closed(); }
+SalInstancePopover::~SalInstancePopover()
+{
+    DockingManager* pDockingManager = vcl::Window::GetDockingManager();
+    if (pDockingManager->IsInPopupMode(m_xPopover))
+        ImplPopDown();
+}
 
 void SalInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
                                        weld::Placement ePlace)
@@ -6726,12 +6731,14 @@ void SalInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Recta
     pDockingManager->StartPopupMode(m_xPopover, aRect, nFlags);
 }
 
-void SalInstancePopover::popdown()
+void SalInstancePopover::ImplPopDown()
 {
     vcl::Window::GetDockingManager()->EndPopupMode(m_xPopover);
     m_xPopover->EnableDocking(false);
     signal_closed();
 }
+
+void SalInstancePopover::popdown() { ImplPopDown(); }
 
 IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }
 
