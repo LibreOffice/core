@@ -231,11 +231,11 @@ bool decode(OUString * string, bool slash) {
             return true;
         }
         if (string->match("00", i + 1)) {
-            *string = string->replaceAt(i, 3, OUString(u'\0'));
+            *string = string->replaceAt(i, 3, OUStringChar(u'\0'));
         } else if (slash && string->match("2F", i + 1)) {
-            *string = string->replaceAt(i, 3, "/");
+            *string = string->replaceAt(i, 3, u"/");
         } else if (string->match("5C", i + 1)) {
-            *string = string->replaceAt(i + 1, 2, "");
+            *string = string->replaceAt(i + 1, 2, u"");
         } else {
             SAL_WARN("configmgr.dconf", "bad escape in " << *string);
             return false;
