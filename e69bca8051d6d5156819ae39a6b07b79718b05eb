@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "794c12b4_ccfca215",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-23T19:58:06Z",
+      "side": 1,
+      "message": "It\u0027s indeed a sal_Int32, consider:\nsal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat( sal_Int32 nKey, const OUString\u0026 aString )\nsee https://opengrok.libreoffice.org/xref/core/svl/source/numbers/numfmuno.cxx?r\u003d9c364847\u0026mo\u003d6789\u0026fi\u003d143#143\n\nand \nsal_Int16 getNumberFormatType(const css::uno::Reference\u003ccss::util::XNumberFormatter\u003e\u0026 xFormatter, sal_Int32 nKey)\nsee https://opengrok.libreoffice.org/xref/core/comphelper/source/misc/numbers.cxx?r\u003d368f2000#51\n\nThe comment of https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d5d01e747270722ad9216ace8e782c7dfac5d744e seems strange, where did you see \"sal_uInt32\" for these functions?\n\nAnyway, let\u0027s push this one then.",
+      "revId": "e69bca8051d6d5156819ae39a6b07b79718b05eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
