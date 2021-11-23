@@ -131,6 +131,8 @@ OUString ScCellFormat::GetInputString(
     const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter, const ScDocument& rDoc,
     const svl::SharedString** pShared, bool bFiltering )
 {
+    if(pShared != nullptr)
+        *pShared = nullptr;
     switch (rCell.meType)
     {
         case CELLTYPE_STRING:
