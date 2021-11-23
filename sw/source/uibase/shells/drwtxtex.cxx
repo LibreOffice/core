@@ -953,6 +953,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             {
                 if (!URLFieldHelper::IsCursorAtURLField(pOLV))
                     rSet.DisableItem(nWhich);
+                nSlotId = 0;
             }
             break;
             default:
@@ -960,7 +961,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 break;
         }
 
-        if (nSlotId && bFlag)
+        if (nSlotId)
             rSet.Put(SfxBoolItem(nWhich, bFlag));
 
         nWhich = aIter.NextWhich();
