@@ -294,6 +294,23 @@ namespace tools_urlobj
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
+        void testChangeScheme() {
+            INetURLObject obj("unkonwn://example.com/foo/bar");
+            CPPUNIT_ASSERT(!obj.HasError());
+            obj.changeScheme(INetProtocol::Http);
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("http://example.com/foo/bar"),
+                obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            obj.changeScheme(INetProtocol::Https);
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("https://example.com/foo/bar"),
+                obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            obj.changeScheme(INetProtocol::Ftp);
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("ftp://example.com/foo/bar"),
+                obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -308,6 +325,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjTest_isAnyKnownWebDAVScheme );
         CPPUNIT_TEST( testSetName );
         CPPUNIT_TEST( testSetExtension );
+        CPPUNIT_TEST( testChangeScheme );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
