@@ -16,6 +16,24 @@
       "message": "But the existing get* functions don\u0027t do exactly the same thing and require `!isNull()` as a prerequisite?",
       "revId": "33d982f123b9153a95435141eed41a8f3b4fa69e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "171e4cd2_e21c8a08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T09:34:53Z",
+      "side": 1,
+      "message": "if you look at the code of the get*() methods, they return 0 or false or empty in the case of \"null\", exactly the same as these functions",
+      "parentUuid": "c9280566_10ef7ea7",
+      "revId": "33d982f123b9153a95435141eed41a8f3b4fa69e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
