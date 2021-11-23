@@ -49,6 +49,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/uno3.hxx>
 #include <tools/gen.hxx>
 
@@ -814,7 +815,7 @@ private:
 
 protected:
     std::unique_ptr<UnoControlListBoxModel_Data>  m_xData;
-    ::comphelper::OInterfaceContainerHelper2             m_aItemListListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XItemListListener> m_aItemListListeners;
 };
 
 
