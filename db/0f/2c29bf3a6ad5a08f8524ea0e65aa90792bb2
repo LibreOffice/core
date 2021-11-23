@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+2: Gabor Kelemen <kelemeng@ubuntu.com>
+Code-Review+1: Heiko Tietze <heiko.tietze@documentfoundation.org>
+Submitted-by: Gabor Kelemen <kelemeng@ubuntu.com>
+Submitted-at: Tue, 23 Nov 2021 13:57:41 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/125121
+Project: core
+Branch: refs/heads/master
