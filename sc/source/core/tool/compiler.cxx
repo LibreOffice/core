@@ -4378,6 +4378,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
     OUString aUpper;
 
+Label_Rewind:
+
     do
     {
         const OUString aOrg( cSymbol );
@@ -4511,7 +4513,11 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // and 2016 until 5.1.4
     OUString aErrRef( mxSymbols->getSymbol( ocErrRef));
     if (aUpper.indexOf( aErrRef) >= 0 && IsReference( aUpper, &aErrRef))
+    {
+        if (mbRewind)
+            goto Label_Rewind;
         return true;
+    }
 
     if ( meExtendedErrorDetection != EXTENDED_ERROR_DETECTION_NONE )
     {
