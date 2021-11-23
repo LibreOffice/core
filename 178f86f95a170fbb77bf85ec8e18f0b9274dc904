@@ -69,6 +69,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a207109_86a42ee2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-23T13:44:48Z",
+      "side": 1,
+      "message": "Thank you Eike for the detailed feedback.\nAndrea: could you amend your patch to take into account Eike\u0027s remarks?\n\nI forgot to ask, some files have the typo too in their name, can they be renamed? (perhaps it would also need some tweak in mk files or other).",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d74fa810_cebdb6ff",
