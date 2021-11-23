@@ -50,6 +50,23 @@
       "message": "Thank you Stephan for your feedback, I\u0027ve just sent a message on dev list (see https://lists.freedesktop.org/archives/libreoffice/2021-November/thread.html)",
       "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c9245e_c043ea13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-23T12:38:55Z",
+      "side": 1,
+      "message": "Just for the record.\nOn Ubuntu 18.04 it passed \"make check\"",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
