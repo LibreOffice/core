@@ -34,6 +34,24 @@
       "parentUuid": "c418e1df_1b731df1",
       "revId": "5d01e747270722ad9216ace8e782c7dfac5d744e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b226d78_4e8498d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-23T15:50:59Z",
+      "side": 1,
+      "message": "\u003e should we use sal_uInt32 or sal_Int32?\n\nsal_Int32 is the better choice here\n\n\u003e He mentions that sal_uLong should be replaced by an appropriate unsigned integer type but this case may be different.\n\nThat is a good first advice in general, but in this particular case it looks like the variable was unsigned (`ULONG` back then) ever since \u003chttps://git.libreoffice.org/core/+/5e1b6f684538df8e38f8d60619a2ae2e792edf47%5E!/\u003e \"first version\" for no good reason.",
+      "parentUuid": "d7f7870d_2f60c43a",
+      "revId": "5d01e747270722ad9216ace8e782c7dfac5d744e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
