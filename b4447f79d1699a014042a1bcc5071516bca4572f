@@ -16,6 +16,24 @@
       "message": "Nice, hopefully it won\u0027t flicker.",
       "revId": "b4447f79d1699a014042a1bcc5071516bca4572f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "738c6372_d3fa33b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-23T16:38:12Z",
+      "side": 1,
+      "message": "it won\u0027t flicker, show/hide changes the state of things but the representation of the state, getting drawn and so on, need spins of the eventloop.",
+      "parentUuid": "ae184b00_8e431543",
+      "revId": "b4447f79d1699a014042a1bcc5071516bca4572f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
