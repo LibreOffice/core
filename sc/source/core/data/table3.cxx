@@ -2527,20 +2527,6 @@ public:
                 }
             }
         }
-        else if (rItem.mbRoundForFilter && fQueryVal != 0.0)
-        {
-            /* TODO: shouldn't rItem.mfVal (which fQueryVal is) already had
-             * been stored as rounded in all cases if needed so this extra
-             * rounding is superfluous? Or rather, if not, then rounding it
-             * here may produce different roundings for different cell number
-             * formats, which is odd. This all looks suspicious and the
-             * intention of tdf#142910 commit
-             * f6b143a57d9bd8f5d7b29febcb4e01ee1eb2ff1d isn't quite clear. */
-            if (nNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND)
-                nNumFmt = getNumFmt( nCol, nRow, pContext);
-            if (nNumFmt)
-                fQueryVal = mrDoc.RoundValueAsShown(fQueryVal, nNumFmt, pContext);
-        }
 
         switch (rEntry.eOp)
         {
