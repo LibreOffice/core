@@ -24,7 +24,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/errcode.hxx>
 
@@ -42,7 +42,7 @@ class DictionaryNeo :
     >
 {
 
-    ::comphelper::OInterfaceContainerHelper2                    aDicEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::linguistic2::XDictionaryEventListener> aDicEvtListeners;
     std::vector< css::uno::Reference< css::linguistic2::XDictionaryEntry > >
                                                                 aEntries;
     OUString                                                    aDicName;

@@ -21,7 +21,7 @@
 #define INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 
 #include <com/sun/star/uno/Reference.h>
@@ -64,7 +64,7 @@ class LngSvcMgr :
 {
     friend class LngSvcMgrListenerHelper;
 
-    ::comphelper::OInterfaceContainerHelper2            aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>  aEvtListeners;
 
     css::uno::Reference<
         css::util::XModifyBroadcaster>                  xMB;

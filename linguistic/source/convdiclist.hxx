@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <rtl/ref.hxx>
 
 #include <linguistic/misc.hxx>
@@ -51,7 +51,7 @@ class ConvDicList :
         virtual void    AtExit() override;
     };
 
-    ::comphelper::OInterfaceContainerHelper2  aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> aEvtListeners;
     rtl::Reference<ConvDicNameContainer>      mxNameContainer;
     rtl::Reference<MyAppExitListener>         mxExitListener;
     bool                                      bDisposing;

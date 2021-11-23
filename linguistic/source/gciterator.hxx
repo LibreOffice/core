@@ -36,7 +36,7 @@
 #include <osl/thread.h>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <i18nlangtag/lang.h>
 
 #include <map>
@@ -113,8 +113,8 @@ class GrammarCheckingIterator:
 
     //! beware of initialization order!
     static osl::Mutex& MyMutex();
-    comphelper::OInterfaceContainerHelper2     m_aEventListeners;
-    comphelper::OInterfaceContainerHelper2     m_aNotifyListeners;
+    comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>  m_aEventListeners;
+    comphelper::OInterfaceContainerHelper3<css::linguistic2::XLinguServiceEventListener>  m_aNotifyListeners;
 
     css::uno::Reference< css::i18n::XBreakIterator > m_xBreakIterator;
     mutable css::uno::Reference< css::util::XChangesBatch >  m_xUpdateAccess;

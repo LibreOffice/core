@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -54,7 +55,7 @@ class DicList :
 
     LinguOptions    aOpt;
 
-    ::comphelper::OInterfaceContainerHelper2    aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> aEvtListeners;
 
     typedef std::vector< css::uno::Reference< css::linguistic2::XDictionary > >   DictionaryVec_t;
     DictionaryVec_t                             aDicList;
