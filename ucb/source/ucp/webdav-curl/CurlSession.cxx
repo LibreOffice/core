@@ -270,7 +270,7 @@ public:
 #if SAL_TYPES_SIZEOFLONG == 4
             else if (curl_off_t const* const pOfft = ::std::get_if<curl_off_t>(&it.Value))
             {
-                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
+                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(-1));
             }
 #endif
 #endif
@@ -285,7 +285,7 @@ public:
 #if SAL_TYPES_SIZEOFLONG == 4
             else if (it.Tag == CurlOption::Type::CurlOffT)
             {
-                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
+                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(-1));
             }
 #endif
             else
