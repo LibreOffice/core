@@ -2451,15 +2451,12 @@ public:
         return nNumFmt;
     }
 
-    std::pair<bool,bool> compareByValue(
+    double getCellValue(
         const ScRefCellValue& rCell, SCCOL nCol, SCROW nRow,
-        const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+        const ScQueryEntry::Item& rItem,
         const ScInterpreterContext* pContext)
     {
-        bool bOk = false;
-        bool bTestEqual = false;
         double nCellVal;
-        double fQueryVal = rItem.mfVal;
         // Defer all number format detection to as late as possible as it's a
         // bottle neck, even if that complicates the code. Also do not
         // unnecessarily call ScDocument::RoundValueAsShown() for the same
@@ -2527,6 +2524,15 @@ public:
                 }
             }
         }
+        return nCellVal;
+    }
+
+    std::pair<bool,bool> compareByValue(
+        const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem, double nCellVal)
+    {
+        bool bOk = false;
+        bool bTestEqual = false;
+        double fQueryVal = rItem.mfVal;
 
         switch (rEntry.eOp)
         {
@@ -2561,9 +2567,8 @@ public:
         return std::pair<bool,bool>(bOk, bTestEqual);
     }
 
-    std::pair<bool,bool> compareByString(
-        const ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        const ScInterpreterContext* pContext)
+    OUString getCellString(const ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry,
+        const ScInterpreterContext* pContext, const svl::SharedString** sharedString)
     {
         if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
         {
@@ -2579,33 +2584,27 @@ public:
                     assert(pos.second); // inserted
                     it = pos.first;
                 }
-                const svl::SharedString& sharedError = it->second;
-                return compareByStringComparator(rEntry, rItem, &sharedError, nullptr);
+                *sharedString = &it->second;
+                return OUString();
             }
-            const OUString aCellStr = ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode());
-            return compareByStringComparator(rEntry, rItem, nullptr, &aCellStr);
+            return ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode());
         }
         else if (rCell.meType == CELLTYPE_STRING)
         {
-            return compareByStringComparator(rEntry, rItem, rCell.mpString, nullptr);
+            *sharedString = rCell.mpString;
+            return OUString();
         }
         else
         {
             sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
                 mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
             SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
-            const svl::SharedString* sharedString = nullptr;
-            OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, &sharedString, rEntry.bDoQuery);
-            // Use the shared string for less conversions, if available.
-            if( sharedString != nullptr )
-                return compareByStringComparator(rEntry, rItem, sharedString, nullptr);
-            return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
+            return ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, sharedString, rEntry.bDoQuery);
         }
     }
 
-    // Called from compareByString() method, where different sources of strings are checked.
     // The value is placed inside one parameter: [pValueSource1] or [pValueSource2] but never in both.
-    std::pair<bool,bool> compareByStringComparator(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+    std::pair<bool,bool> compareByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
         const svl::SharedString* pValueSource1, const OUString * pValueSource2)
     {
         bool bOk = false;
@@ -2960,6 +2959,11 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
         return aRes;
     }
     // Generic handling.
+    double cellValue;
+    bool cellValueSet = false;
+    const svl::SharedString* cellSharedString;
+    OUString cellString;
+    bool cellStringSet = false;
     for (const auto& rItem : rItems)
     {
         if (rItem.meType == ScQueryEntry::ByTextColor)
@@ -2978,15 +2982,26 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
         }
         else if (QueryEvaluator::isQueryByValue(rItem, aCell))
         {
+            if(!cellValueSet)
+            {
+                cellValue = aEval.getCellValue(aCell, nCol, nRow, rItem, pContext);
+                cellValueSet = true;
+            }
             std::pair<bool,bool> aThisRes =
-                aEval.compareByValue(aCell, nCol, nRow, rEntry, rItem, pContext);
+                aEval.compareByValue(rEntry, rItem, cellValue);
             aRes.first |= aThisRes.first;
             aRes.second |= aThisRes.second;
         }
         else if (QueryEvaluator::isQueryByString(rEntry, rItem, aCell))
         {
-            std::pair<bool,bool> aThisRes =
-                aEval.compareByString(aCell, nRow, rEntry, rItem, pContext);
+            if(!cellStringSet)
+            {
+                cellString = aEval.getCellString(aCell, nRow, rEntry, pContext, &cellSharedString);
+                cellStringSet = true;
+            }
+            std::pair<bool,bool> aThisRes = cellSharedString
+                ? aEval.compareByString(rEntry, rItem, cellSharedString, nullptr)
+                : aEval.compareByString(rEntry, rItem, nullptr, &cellString);
             aRes.first |= aThisRes.first;
             aRes.second |= aThisRes.second;
         }
