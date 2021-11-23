@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebb6f90e_6619795f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-23T10:43:27Z",
+      "side": 1,
+      "message": "I put back +1 for \"Code-Review\" and \"Verified\" since only the comment has been changed (as requested! :-)) Thank you Jan-Marek!",
+      "revId": "f5dfc7ede47d3089236b99f35ad854f5238014ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
