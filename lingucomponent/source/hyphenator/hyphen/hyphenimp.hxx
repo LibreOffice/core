@@ -20,6 +20,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_HYPHENATOR_HYPHEN_HYPHENIMP_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_HYPHENATOR_HYPHEN_HYPHENIMP_HXX
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -67,7 +68,7 @@ class Hyphenator :
     Sequence< Locale >                      aSuppLocales;
     std::vector< HDInfo >                   mvDicts;
 
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<XEventListener> aEvtListeners;
     std::unique_ptr<linguistic::PropertyHelper_Hyphenation> pPropHelper;
     bool                                    bDisposing;
 
