@@ -40,4 +40,7 @@ template <sal_Unicode C> OUString f(sal_Unicode c, int n)
     }
 }
 
+// Trigger clang-cl to actually parse f under MSVC template instantiation model:
+template OUString f<'a'>(sal_Unicode, int);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
