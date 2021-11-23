@@ -22,44 +22,6 @@ const SharedString & SharedString::getEmptyString()
     return EMPTY_SHARED_STRING;
 }
 
-SharedString::SharedString() : mpData(nullptr), mpDataIgnoreCase(nullptr) {}
-
-SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase ) :
-    mpData(pData), mpDataIgnoreCase(pDataIgnoreCase)
-{
-    if (mpData)
-        rtl_uString_acquire(mpData);
-    if (mpDataIgnoreCase)
-        rtl_uString_acquire(mpDataIgnoreCase);
-}
-
-SharedString::SharedString( const OUString& rStr ) : mpData(rStr.pData), mpDataIgnoreCase(nullptr)
-{
-    rtl_uString_acquire(mpData);
-}
-
-SharedString::SharedString( const SharedString& r ) : mpData(r.mpData), mpDataIgnoreCase(r.mpDataIgnoreCase)
-{
-    if (mpData)
-        rtl_uString_acquire(mpData);
-    if (mpDataIgnoreCase)
-        rtl_uString_acquire(mpDataIgnoreCase);
-}
-
-SharedString::SharedString(SharedString&& r) noexcept : mpData(r.mpData), mpDataIgnoreCase(r.mpDataIgnoreCase)
-{
-    r.mpData = nullptr;
-    r.mpDataIgnoreCase = nullptr;
-}
-
-SharedString::~SharedString()
-{
-    if (mpData)
-        rtl_uString_release(mpData);
-    if (mpDataIgnoreCase)
-        rtl_uString_release(mpDataIgnoreCase);
-}
-
 SharedString& SharedString::operator= ( const SharedString& r )
 {
     if(this == &r)
@@ -116,51 +78,6 @@ bool SharedString::operator== ( const SharedString& r ) const
     }
 
     return !r.mpData;
-}
-
-bool SharedString::operator!= ( const SharedString& r ) const
-{
-    return !operator== (r);
-}
-
-OUString SharedString::getString() const
-{
-    return mpData ? OUString(mpData) : OUString();
-}
-
-rtl_uString* SharedString::getData()
-{
-    return mpData;
-}
-
-const rtl_uString* SharedString::getData() const
-{
-    return mpData;
-}
-
-rtl_uString* SharedString::getDataIgnoreCase()
-{
-    return mpDataIgnoreCase;
-}
-
-const rtl_uString* SharedString::getDataIgnoreCase() const
-{
-    return mpDataIgnoreCase;
-}
-
-bool SharedString::isValid() const
-{
-    return mpData != nullptr;
-}
-
-bool SharedString::isEmpty() const
-{
-    return mpData == nullptr || mpData->length == 0;
-}
-
-sal_Int32 SharedString::getLength() const
-{
-    return mpData ? mpData->length : 0;
 }
 
 }
