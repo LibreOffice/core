@@ -58,6 +58,11 @@ public:
             ++m_value;
         }
 
+        void operator--( void )
+        {
+            --m_value;
+        }
+
         bool operator!=( Iterator rhs ) const
         {
             return m_value != rhs.m_value;
@@ -78,6 +83,12 @@ template< typename T >
 typename enumrange<T>::Iterator end( enumrange<T> )
 {
     return typename enumrange<T>::Iterator( static_cast<int>(T::LAST) + 1 );
+}
+
+template< typename T >
+typename enumrange<T>::Iterator last( enumrange<T> )
+{
+    return typename enumrange<T>::Iterator( static_cast<int>(T::LAST) );
 }
 
 }; // namespace o3tl
