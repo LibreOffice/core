@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae184b00_8e431543",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-23T16:15:02Z",
+      "side": 1,
+      "message": "Nice, hopefully it won\u0027t flicker.",
+      "revId": "b4447f79d1699a014042a1bcc5071516bca4572f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
