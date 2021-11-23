@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c8c7126_b3465a6d",
+        "filename": "svgio/inc/svgstyleattributes.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-23T18:34:05Z",
+      "side": 1,
+      "message": "what \"min, max\" mean here? I don\u0027t see what this comment tries to tell me. I would suspect something like \"the order and consecutive values starting from 0 are important here; LAST is for enumrange\".",
+      "revId": "b0f98147367128cc0e1af7d82a12a0e65b205cea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f02816ae_9c2cce65",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-23T18:34:05Z",
+      "side": 1,
+      "message": "Another approach:\n\nin svgio/inc/svgstyleattributes.hxx:\n\n  #include \u003co3tl/underlyingenumvalue.hxx\u003e\n  auto operator++(FontStretch e) { return static_cast\u003cFontStretch\u003e(o3tl::underlyingEnumValue(e) + 1); }\n\nhere:\n\n        FontStretch getWider(FontStretch aSource)\n        {\n            if (aSource !\u003d FontStretch::LAST)\n                ++aSource;\n            return aSource;\n        }\n\nPersonally I\u0027d rather use that.",
+      "revId": "b0f98147367128cc0e1af7d82a12a0e65b205cea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
