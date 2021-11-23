@@ -535,7 +535,8 @@ void Window::ImplCallMove()
         vcl::Window *pParent = ImplGetParent();
         while( pParent )
         {
-            if( pParent->mpWindowImpl->mpFrame != mpWindowImpl->mpFrame )
+            if( pParent->mpWindowImpl &&
+                pParent->mpWindowImpl->mpFrame != mpWindowImpl->mpFrame )
             {
                 pParentFrame = pParent->mpWindowImpl->mpFrame;
                 break;
