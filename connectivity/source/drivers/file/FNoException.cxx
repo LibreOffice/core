@@ -85,7 +85,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,std::vector< OS
 
 std::unique_ptr<OKeyValue> OResultSet::GetOrderbyKeyValue(OValueRefRow const & _rRow)
 {
-    sal_uInt32 nBookmarkValue = std::abs(static_cast<sal_Int32>((*_rRow)[0]->getValue()));
+    sal_uInt32 nBookmarkValue = std::abs((*_rRow)[0]->getValue().getInt32());
 
     std::unique_ptr<OKeyValue> pKeyValue = OKeyValue::createKeyValue(nBookmarkValue);
 

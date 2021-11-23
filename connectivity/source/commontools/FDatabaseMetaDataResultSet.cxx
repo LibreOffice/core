@@ -190,43 +190,43 @@ Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getChara
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 {
-    return bool(getValue(columnIndex));
+    return getValue(columnIndex).getBool();
 }
 
 
 sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt8();
 }
 
 
 Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getSequence();
 }
 
 
 css::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDate();
 }
 
 
 double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDouble();
 }
 
 
 float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getFloat();
 }
 
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt32();
 }
 
 
@@ -238,7 +238,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  )
 
 sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getLong();
 }
 
 
@@ -285,25 +285,25 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const
 
 sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt16();
 }
 
 
 OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getString();
 }
 
 
 css::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getTime();
 }
 
 
 css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDateTime();
 }
 
 

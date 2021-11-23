@@ -81,7 +81,7 @@ Any SAL_CALL ODbaseResultSet::getBookmark(  )
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"getBookmark called for deleted row");
 
-    return makeAny(static_cast<sal_Int32>((*m_aRow)[0]->getValue()));
+    return makeAny((*m_aRow)[0]->getValue().getInt32());
 }
 
 sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark )
