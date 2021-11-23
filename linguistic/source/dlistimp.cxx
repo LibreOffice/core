@@ -66,7 +66,7 @@ class DicEvtListenerHelper :
         XDictionaryEventListener
     >
 {
-    comphelper::OInterfaceContainerHelper2  aDicListEvtListeners;
+    comphelper::OInterfaceContainerHelper3<XDictionaryListEventListener> aDicListEvtListeners;
     uno::Reference< XDictionaryList >       xMyDicList;
 
     sal_Int16                               nCondensedEvt;
@@ -124,7 +124,7 @@ void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Reference< XInterface > xSrc( rSource.Source );
+    uno::Reference< XDictionaryListEventListener > xSrc( rSource.Source, UNO_QUERY );
 
     // remove event object from EventListener list
     if (xSrc.is())
@@ -133,7 +133,7 @@ void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
     // if object is a dictionary then remove it from the dictionary list
     // Note: this will probably happen only if someone makes a XDictionary
     // implementation of his own that is also a XComponent.
-    uno::Reference< XDictionary > xDic( xSrc, UNO_QUERY );
+    uno::Reference< XDictionary > xDic( rSource.Source, UNO_QUERY );
     if (xDic.is())
     {
         xMyDicList->removeDictionary( xDic );

@@ -34,6 +34,7 @@
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/lang.h>
