@@ -201,7 +201,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString const & aFirs
     if ( io_nType != DataType::VARCHAR )
     {
         bool bNumeric = io_nType == DataType::SQLNULL || io_nType == DataType::DOUBLE || io_nType == DataType::DECIMAL || io_nType == DataType::INTEGER;
-        sal_uLong  nIndex = 0;
+        sal_uInt32 nIndex = 0;
 
         if ( bNumeric )
         {
