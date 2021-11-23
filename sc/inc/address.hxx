@@ -182,11 +182,11 @@ namespace o3tl
 }
 inline void applyStartToEndFlags(ScRefFlags &target,const ScRefFlags source)
 {
-    target |= ScRefFlags(o3tl::underlyingEnumValue(source) << 4);
+    target |= ScRefFlags(o3tl::to_underlying(source) << 4);
 }
 inline void applyStartToEndFlags(ScRefFlags &target)
 {
-    target |= ScRefFlags(o3tl::underlyingEnumValue(target) << 4);
+    target |= ScRefFlags(o3tl::to_underlying(target) << 4);
 }
 
 //  ScAddress
