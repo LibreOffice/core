@@ -303,12 +303,12 @@
                         <property name="can-focus">False</property>
                         <property name="hexpand">False</property>
                         <items>
-                          <item translatable="yes" context="borderpage|linewidthlb">Hairline</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Very thin</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Thin</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Medium</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Thick</item>
-                          <item translatable="yes" context="borderpage|linewidthlb">Extra thick</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Hairline (0.05pt)</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Very thin (0.5pt)</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Thin (0.75pt)</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Medium (1.5pt)</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Thick (2.25pt)</item>
+                          <item translatable="yes" context="borderpage|linewidthlb">Extra thick (4.5pt)</item>
                           <item translatable="yes" context="borderpage|linewidthlb">Custom</item>
                         </items>
                         <accessibility>
