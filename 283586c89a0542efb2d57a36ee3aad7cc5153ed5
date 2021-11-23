@@ -16,6 +16,24 @@
       "message": "Hi Justin,\nThanks for fixing this issue.\nRegarding your comment \"I\u0027m not making a unit test because the color really\nought to be set - it should just be transparent.\", should it be added to the list of ideas for budget 2022 ? \u003c https://wiki.documentfoundation.org/Development/Budget2022 \u003e ?\nOTOH, what\u0027s wrong with adding a unittest for this issue ?",
       "revId": "283586c89a0542efb2d57a36ee3aad7cc5153ed5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b41de775_bc496b8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-23T10:03:29Z",
+      "side": 1,
+      "message": "We are just emulating something. So any test will be an implementation-specific test, and anyone who implements this fully/properly will end up breaking the test.  This ought to be a black background set fully transparent, while the implementation is no background at all.\n\nA bad unit test is worse than no unit test at all.",
+      "parentUuid": "4f9cd6fd_d526c986",
+      "revId": "283586c89a0542efb2d57a36ee3aad7cc5153ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
