@@ -44,6 +44,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagehierarchyprimitive2d.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/enumrange.hxx>
 
 const int nStyleDepthLimit = 1024;
 
@@ -82,76 +83,53 @@ namespace svgio::svgreader
             }
         }
 
+        // Approach 1: Using static_cast to int and LAST value
+
         FontStretch getWider(FontStretch aSource)
         {
-            switch(aSource)
-            {
-                case FontStretch::ultra_condensed: aSource = FontStretch::extra_condensed; break;
-                case FontStretch::extra_condensed: aSource = FontStretch::condensed; break;
-                case FontStretch::condensed: aSource = FontStretch::semi_condensed; break;
-                case FontStretch::semi_condensed: aSource = FontStretch::normal; break;
-                case FontStretch::normal: aSource = FontStretch::semi_expanded; break;
-                case FontStretch::semi_expanded: aSource = FontStretch::expanded; break;
-                case FontStretch::expanded: aSource = FontStretch::extra_expanded; break;
-                case FontStretch::extra_expanded: aSource = FontStretch::ultra_expanded; break;
-                default: break;
-            }
-
-            return aSource;
+            int width = static_cast<int>(aSource);
+            if(width != static_cast<int>(FontStretch::LAST))
+                ++width;
+            return static_cast<FontStretch>(width);
         }
+
+        // Approach 2: Using o3tl::enumrange
 
         FontStretch getNarrower(FontStretch aSource)
         {
-            switch(aSource)
-            {
-                case FontStretch::extra_condensed: aSource = FontStretch::ultra_condensed; break;
-                case FontStretch::condensed: aSource = FontStretch::extra_condensed; break;
-                case FontStretch::semi_condensed: aSource = FontStretch::condensed; break;
-                case FontStretch::normal: aSource = FontStretch::semi_condensed; break;
-                case FontStretch::semi_expanded: aSource = FontStretch::normal; break;
-                case FontStretch::expanded: aSource = FontStretch::semi_expanded; break;
-                case FontStretch::extra_expanded: aSource = FontStretch::expanded; break;
-                case FontStretch::ultra_expanded: aSource = FontStretch::extra_expanded; break;
-                default: break;
-            }
+            auto it = o3tl::enumrange<FontStretch>::Iterator(
+                        static_cast<int>(aSource));
+            if(it != begin(o3tl::enumrange<FontStretch>()))
+                --it;
+            return *it;
+        }
 
+        // Approach 3: Defining increase_enum() and decrease_enum()
+
+        template <typename T>
+        static T increase_enum(T aSource)
+        {
+            if(aSource <= T::LAST)
+                aSource = static_cast<T>(static_cast<int>(aSource) + 1);
+            return aSource;
+        }
+
+        template <typename T>
+        static T decrease_enum(T aSource)
+        {
+            if(aSource != T(0))
+                aSource = static_cast<T>(static_cast<int>(aSource) - 1);
             return aSource;
         }
 
         FontWeight getBolder(FontWeight aSource)
         {
-            switch(aSource)
-            {
-                case FontWeight::N100: aSource = FontWeight::N200; break;
-                case FontWeight::N200: aSource = FontWeight::N300; break;
-                case FontWeight::N300: aSource = FontWeight::N400; break;
-                case FontWeight::N400: aSource = FontWeight::N500; break;
-                case FontWeight::N500: aSource = FontWeight::N600; break;
-                case FontWeight::N600: aSource = FontWeight::N700; break;
-                case FontWeight::N700: aSource = FontWeight::N800; break;
-                case FontWeight::N800: aSource = FontWeight::N900; break;
-                default: break;
-            }
-
-            return aSource;
+            return increase_enum(aSource);
         }
 
         FontWeight getLighter(FontWeight aSource)
         {
-            switch(aSource)
-            {
-                case FontWeight::N200: aSource = FontWeight::N100; break;
-                case FontWeight::N300: aSource = FontWeight::N200; break;
-                case FontWeight::N400: aSource = FontWeight::N300; break;
-                case FontWeight::N500: aSource = FontWeight::N400; break;
-                case FontWeight::N600: aSource = FontWeight::N500; break;
-                case FontWeight::N700: aSource = FontWeight::N600; break;
-                case FontWeight::N800: aSource = FontWeight::N700; break;
-                case FontWeight::N900: aSource = FontWeight::N800; break;
-                default: break;
-            }
-
-            return aSource;
+            return decrease_enum(aSource);
         }
 
         ::FontWeight getVclFontWeight(FontWeight aSource)

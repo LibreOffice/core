@@ -70,6 +70,7 @@ namespace svgio::svgreader
             initial
         };
 
+        // The min, max (LAST) and order is important here.
         enum class FontStretch
         {
             notset,
@@ -83,7 +84,8 @@ namespace svgio::svgreader
             semi_expanded,
             expanded,
             extra_expanded,
-            ultra_expanded
+            ultra_expanded,
+            LAST=ultra_expanded
         };
 
         FontStretch getWider(FontStretch aSource);
@@ -97,6 +99,7 @@ namespace svgio::svgreader
             oblique
         };
 
+        // The min, max (LAST) and order is important here.
         enum class FontWeight
         {
             notset,
@@ -111,6 +114,7 @@ namespace svgio::svgreader
             N900,
             bolder,
             lighter,
+            LAST=lighter
         };
 
         FontWeight getBolder(FontWeight aSource);
