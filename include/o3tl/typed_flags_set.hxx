@@ -104,10 +104,10 @@ template<typename E>
 constexpr typename o3tl::typed_flags<E>::Wrap operator ~(E rhs) {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         o3tl::typed_flags<E>::mask
-        & ~o3tl::underlyingEnumValue(rhs));
+        & ~o3tl::to_underlying(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ~(
@@ -115,7 +115,7 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ~(
 {
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         o3tl::typed_flags<E>::mask
-        & ~o3tl::underlyingEnumValue<E>(rhs));
+        & ~o3tl::to_underlying<E>(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
@@ -123,13 +123,13 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue(lhs)
-        ^ o3tl::underlyingEnumValue(rhs));
+        o3tl::to_underlying(lhs)
+        ^ o3tl::to_underlying(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
@@ -137,10 +137,10 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue(lhs)
-        ^ o3tl::underlyingEnumValue<E>(rhs));
+        o3tl::to_underlying(lhs)
+        ^ o3tl::to_underlying<E>(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
@@ -148,10 +148,10 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue<E>(lhs)
-        ^ o3tl::underlyingEnumValue(rhs));
+        o3tl::to_underlying<E>(lhs)
+        ^ o3tl::to_underlying(rhs));
 }
 
 template<typename W> constexpr
@@ -159,21 +159,21 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator ^(
     W lhs, W rhs)
 {
     return static_cast<W>(
-        o3tl::underlyingEnumValue<typename W::Unwrapped::Self>(lhs)
-        ^ o3tl::underlyingEnumValue<typename W::Unwrapped::Self>(rhs));
+        o3tl::to_underlying<typename W::Unwrapped::Self>(lhs)
+        ^ o3tl::to_underlying<typename W::Unwrapped::Self>(rhs));
 }
 
 template<typename E>
 constexpr typename o3tl::typed_flags<E>::Wrap operator &(E lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue(lhs)
-        & o3tl::underlyingEnumValue(rhs));
+        o3tl::to_underlying(lhs)
+        & o3tl::to_underlying(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
@@ -181,10 +181,10 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue(lhs)
-        & o3tl::underlyingEnumValue<E>(rhs));
+        o3tl::to_underlying(lhs)
+        & o3tl::to_underlying<E>(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
@@ -192,10 +192,10 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue<E>(lhs)
-        & o3tl::underlyingEnumValue(rhs));
+        o3tl::to_underlying<E>(lhs)
+        & o3tl::to_underlying(rhs));
 }
 
 template<typename W> constexpr
@@ -203,21 +203,21 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator &(
     W lhs, W rhs)
 {
     return static_cast<W>(
-        o3tl::underlyingEnumValue<typename W::Unwrapped::Self>(lhs)
-        & o3tl::underlyingEnumValue<typename W::Unwrapped::Self>(rhs));
+        o3tl::to_underlying<typename W::Unwrapped::Self>(lhs)
+        & o3tl::to_underlying<typename W::Unwrapped::Self>(rhs));
 }
 
 template<typename E>
 constexpr typename o3tl::typed_flags<E>::Wrap operator |(E lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue(lhs)
-        | o3tl::underlyingEnumValue(rhs));
+        o3tl::to_underlying(lhs)
+        | o3tl::to_underlying(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
@@ -225,10 +225,10 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue(lhs)
-        | o3tl::underlyingEnumValue<E>(rhs));
+        o3tl::to_underlying(lhs)
+        | o3tl::to_underlying<E>(rhs));
 }
 
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
@@ -236,10 +236,10 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        o3tl::underlyingEnumValue<E>(lhs)
-        | o3tl::underlyingEnumValue(rhs));
+        o3tl::to_underlying<E>(lhs)
+        | o3tl::to_underlying(rhs));
 }
 
 template<typename W> constexpr
@@ -247,18 +247,18 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator |(
     W lhs, W rhs)
 {
     return static_cast<W>(
-        o3tl::underlyingEnumValue<typename W::Unwrapped::Self>(lhs)
-        | o3tl::underlyingEnumValue<typename W::Unwrapped::Self>(rhs));
+        o3tl::to_underlying<typename W::Unwrapped::Self>(lhs)
+        | o3tl::to_underlying<typename W::Unwrapped::Self>(rhs));
 }
 
 template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator &=(E & lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     lhs = lhs & rhs;
     return lhs;
 }
@@ -269,7 +269,7 @@ inline typename o3tl::typed_flags<E>::Self operator &=(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     lhs = lhs & rhs;
     return lhs;
 }
@@ -278,10 +278,10 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator |=(E & lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     lhs = lhs | rhs;
     return lhs;
 }
@@ -292,7 +292,7 @@ inline typename o3tl::typed_flags<E>::Self operator |=(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     lhs = lhs | rhs;
     return lhs;
 }
@@ -301,10 +301,10 @@ template<typename E>
 inline typename o3tl::typed_flags<E>::Self operator ^=(E & lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(rhs)));
+            o3tl::to_underlying(rhs)));
     lhs = lhs ^ rhs;
     return lhs;
 }
@@ -315,7 +315,7 @@ inline typename o3tl::typed_flags<E>::Self operator ^=(
 {
     assert(
         o3tl::detail::isNonNegative(
-            o3tl::underlyingEnumValue(lhs)));
+            o3tl::to_underlying(lhs)));
     lhs = lhs ^ rhs;
     return lhs;
 }

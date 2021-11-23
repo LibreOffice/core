@@ -16,8 +16,9 @@
 
 namespace o3tl
 {
+// An implementation of C++23 std::to_underlying
 // For a value e of an enumeration type T, return the corresponding value of T's underlying type:
-template <typename T> constexpr std::underlying_type_t<T> underlyingEnumValue(T e)
+template <typename T> constexpr std::underlying_type_t<T> to_underlying(T e)
 {
     return static_cast<std::underlying_type_t<T>>(e);
 }

@@ -496,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGood)
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
     CPPUNIT_ASSERT(pObjectShell);
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
     uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
@@ -561,7 +561,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
     CPPUNIT_ASSERT(pObjectShell);
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
     uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
@@ -585,7 +585,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Data)
     CPPUNIT_ASSERT(pObjectShell);
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
     uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
@@ -606,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFTripleX509Data)
     CPPUNIT_ASSERT(pObjectShell);
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     // here, libxmlsec will pick the 1st X509Data but signing key is the 2nd
-    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                                  SignatureState::BROKEN, nActual);
     uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
@@ -627,7 +627,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFMacroDoubleX509Data)
     CPPUNIT_ASSERT(pObjectShell);
     SignatureState nActual = pObjectShell->GetScriptingSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
     uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(true));
@@ -655,7 +655,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Certificate)
                       || nActual == SignatureState::BROKEN
 #endif
                       ));
-    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()), nTemp);
+    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()), nTemp);
     uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
     // We expect NOTVALIDATED_PARTIAL_OK in case the root CA is not imported on the system, and PARTIAL_OK otherwise, so accept both.
     // But reject NOTVALIDATED, hiding incompleteness is not OK.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                            (nActual == SignatureState::NOTVALIDATED_PARTIAL_OK
                             || nActual == SignatureState::PARTIAL_OK));
 }
@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
     }
 
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
@@ -868,7 +868,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pObjectShell);
 
     SignatureState nActual = pObjectShell->GetScriptingSignatureState();
-    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                            (nActual == SignatureState::OK || nActual == SignatureState::NOTVALIDATED
                             || nActual == SignatureState::INVALID));
 
@@ -905,7 +905,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
     CPPUNIT_ASSERT(pObjectShell);
 
     SignatureState nActual = pObjectShell->GetScriptingSignatureState();
-    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                            (nActual == SignatureState::OK || nActual == SignatureState::NOTVALIDATED
                             || nActual == SignatureState::INVALID));
 
@@ -1216,7 +1216,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESGood)
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
@@ -1281,7 +1281,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
     // Our local gpg config fully trusts the signing cert, so in
     // contrast to the X509 test we can fail on NOTVALIDATED here
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                                  SignatureState::OK, nActual);
 }
 
@@ -1297,7 +1297,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
     // contrast to the X509 test we can fail everything but
     // NOTVALIDATED here
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                                  SignatureState::NOTVALIDATED, nActual);
 }
 

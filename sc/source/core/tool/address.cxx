@@ -2232,7 +2232,7 @@ OUString ScRange::Format( const ScDocument& rDoc, ScRefFlags nFlags,
         {
             const ScDocument* pDoc = &rDoc;
             // move flags of end reference to start reference, mask with BITS to exclude FORCE_DOC flag
-            nFlags = ScRefFlags::VALID | (ScRefFlags(o3tl::underlyingEnumValue(nFlags) >> 4) & ScRefFlags::BITS);
+            nFlags = ScRefFlags::VALID | (ScRefFlags(o3tl::to_underlying(nFlags) >> 4) & ScRefFlags::BITS);
             if ( bOneTab )
                 pDoc = nullptr;
             else
