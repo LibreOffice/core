@@ -16,6 +16,24 @@
       "message": "Decoding the URL sounds like a plan, and you likely tested the patch with the example. ",
       "revId": "61d9545e49cf7c8224d5df2f3bb13eb9cf4f2794",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ec1990_0e5e0ddd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-11-23T09:26:21Z",
+      "side": 1,
+      "message": "Sure, I added an after-image to the bug.",
+      "parentUuid": "ae612d1e_2befe4f1",
+      "revId": "61d9545e49cf7c8224d5df2f3bb13eb9cf4f2794",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
