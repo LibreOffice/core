@@ -1144,7 +1144,7 @@ inline OUString INetURLObject::decode(SubString const & rSubString,
 inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset):
-    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
+    m_aAbsURIRef(rTheAbsURIRef.getLength() * 2), m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
 {
     setAbsURIRef(rTheAbsURIRef, eMechanism, eCharset, false,
                  FSysStyle(0));
