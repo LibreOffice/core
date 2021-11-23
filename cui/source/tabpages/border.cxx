@@ -116,8 +116,8 @@ static sal_Int64 lcl_GetMinLineWidth(SvxBorderLineStyle aStyle)
         return 15;
 
         // Double lines
-    case SvxBorderLineStyle::DOUBLE: return 22;
-    case SvxBorderLineStyle::DOUBLE_THIN: return 22;
+    case SvxBorderLineStyle::DOUBLE: return 15;
+    case SvxBorderLineStyle::DOUBLE_THIN: return 15;
     case SvxBorderLineStyle::THINTHICK_SMALLGAP: return 20;
     case SvxBorderLineStyle::THINTHICK_MEDIUMGAP: return 15;
     case SvxBorderLineStyle::THINTHICK_LARGEGAP: return 15;
