@@ -1323,13 +1323,13 @@ CustomPropertiesWindow::~CustomPropertiesWindow()
 void CustomPropertyLine::DoTypeHdl(const weld::ComboBox& rBox)
 {
     auto nType = rBox.get_active_id().toInt32();
-    m_xValueEdit->set_visible( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
-    m_xDateTimeBox->set_visible( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
-    m_xDateField->set_visible( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
-    m_xTimeField->set_visible( CUSTOM_TYPE_DATETIME  == nType );
-    m_xDurationBox->set_visible( CUSTOM_TYPE_DURATION == nType );
-    m_xDurationField->set_visible( CUSTOM_TYPE_DURATION == nType );
-    m_xYesNoButton->set_visible( CUSTOM_TYPE_BOOLEAN == nType );
+    m_xValueEdit->set_visible( (Custom_Type_Text == nType) || (Custom_Type_Number == nType) );
+    m_xDateTimeBox->set_visible( (Custom_Type_Date == nType) || (Custom_Type_Datetime == nType) );
+    m_xDateField->set_visible( (Custom_Type_Date == nType) || (Custom_Type_Datetime == nType) );
+    m_xTimeField->set_visible( Custom_Type_Datetime == nType );
+    m_xDurationBox->set_visible( Custom_Type_Duration == nType );
+    m_xDurationField->set_visible( Custom_Type_Duration == nType );
+    m_xYesNoButton->set_visible( Custom_Type_Boolean == nType );
 }
 
 IMPL_LINK(CustomPropertyLine, TypeHdl, weld::ComboBox&, rBox, void)
@@ -1405,11 +1405,11 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
         return true;
 
     sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
-    if ( CUSTOM_TYPE_NUMBER == nType )
+    if ( Custom_Type_Number == nType )
         // tdf#116214 Scientific format allows to use also standard numbers
         nIndex = const_cast< SvNumberFormatter& >(
             m_aNumberFormatter ).GetFormatIndex( NF_SCIENTIFIC_000E00 );
-    else if ( CUSTOM_TYPE_DATE == nType )
+    else if ( Custom_Type_Date == nType )
         nIndex = const_cast< SvNumberFormatter& >(
             m_aNumberFormatter).GetFormatIndex( NF_DATE_SYS_DDMMYYYY );
 
@@ -1436,7 +1436,7 @@ void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFr
         std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(&m_rBody,
                                                          VclMessageType::Question, VclButtonsType::OkCancel, SfxResId(STR_SFX_QUERY_WRONG_TYPE)));
         if (xMessageBox->run() == RET_OK)
-            pLine->m_xTypeBox->set_active_id(OUString::number(CUSTOM_TYPE_TEXT));
+            pLine->m_xTypeBox->set_active_id(OUString::number(Custom_Type_Text));
         else
             pLine->m_xValueEdit->grab_focus();
     }
@@ -1589,7 +1589,7 @@ void CustomPropertiesWindow::StoreCustomProperties()
         {
             m_aCustomProperties[nDataModelPos + i]->m_sName = sPropertyName;
             auto nType = pLine->m_xTypeBox->get_active_id().toInt32();
-            if (CUSTOM_TYPE_NUMBER == nType)
+            if (Custom_Type_Number == nType)
             {
                 double nValue = 0;
                 sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex(NF_NUMBER_SYSTEM);
@@ -1598,12 +1598,12 @@ void CustomPropertiesWindow::StoreCustomProperties()
                 if (bIsNum)
                     m_aCustomProperties[nDataModelPos + i]->m_aValue <<= nValue;
             }
-            else if (CUSTOM_TYPE_BOOLEAN == nType)
+            else if (Custom_Type_Boolean == nType)
             {
                 bool bValue = pLine->m_xYesNoButton->IsYesChecked();
                 m_aCustomProperties[nDataModelPos + i]->m_aValue <<= bValue;
             }
-            else if (CUSTOM_TYPE_DATETIME == nType)
+            else if (Custom_Type_Datetime == nType)
             {
                 Date aTmpDate = pLine->m_xDateField->get_date();
                 tools::Time aTmpTime = pLine->m_xTimeField->get_value();
@@ -1621,7 +1621,7 @@ void CustomPropertiesWindow::StoreCustomProperties()
                     m_aCustomProperties[nDataModelPos + i]->m_aValue <<= aDateTime;
                 }
             }
-            else if (CUSTOM_TYPE_DATE == nType)
+            else if (Custom_Type_Date == nType)
             {
                 Date aTmpDate = pLine->m_xDateField->get_date();
                 util::Date const aDate(aTmpDate.GetDay(), aTmpDate.GetMonth(),
@@ -1636,7 +1636,7 @@ void CustomPropertiesWindow::StoreCustomProperties()
                     m_aCustomProperties[nDataModelPos + i]->m_aValue <<= aDate;
                 }
             }
-            else if (CUSTOM_TYPE_DURATION == nType)
+            else if (Custom_Type_Duration == nType)
             {
                 m_aCustomProperties[nDataModelPos + i]->m_aValue <<= pLine->m_xDurationField->GetDuration();
             }
@@ -1667,7 +1667,7 @@ void CustomPropertiesWindow::ReloadLinesContent()
     util::Duration aTmpDuration;
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
-    sal_IntPtr nType = CUSTOM_TYPE_UNKNOWN;
+    CustomProperties nType = Custom_Type_Unknown;
     OUString sValue;
 
     sal_uInt32 nDataModelPos = GetCurrentDataModelPosition();
@@ -1693,37 +1693,38 @@ void CustomPropertiesWindow::ReloadLinesContent()
             sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex(NF_NUMBER_SYSTEM);
             m_aNumberFormatter.GetInputLineString(nTmpValue, nIndex, sValue);
             pLine->m_xValueEdit->set_text(sValue);
-            nType = CUSTOM_TYPE_NUMBER;
+            nType = Custom_Type_Number;
         }
         else if (rAny >>= bTmpValue)
         {
             sValue = (bTmpValue ? rLocaleWrapper.getTrueWord() : rLocaleWrapper.getFalseWord());
-            nType = CUSTOM_TYPE_BOOLEAN;
+            nType = Custom_Type_Boolean;
         }
         else if (rAny >>= sTmpValue)
         {
             pLine->m_xValueEdit->set_text(sTmpValue);
-            nType = CUSTOM_TYPE_TEXT;
+            nType = Custom_Type_Text;
         }
         else if (rAny >>= aTmpDate)
         {
             pLine->m_xDateField->set_date(Date(aTmpDate));
-            nType = CUSTOM_TYPE_DATE;
+            nType = Custom_Type_Date;
         }
         else if (rAny >>= aTmpDateTime)
         {
             pLine->m_xDateField->set_date(Date(aTmpDateTime));
             pLine->m_xTimeField->set_value(tools::Time(aTmpDateTime));
             pLine->m_xTimeField->m_isUTC = aTmpDateTime.IsUTC;
-            nType = CUSTOM_TYPE_DATETIME;
+            nType = Custom_Type_Datetime;
         }
         else if (rAny >>= aTmpDateTZ)
         {
             pLine->m_xDateField->set_date(Date(aTmpDateTZ.DateInTZ.Day,
                 aTmpDateTZ.DateInTZ.Month, aTmpDateTZ.DateInTZ.Year));
             pLine->m_xDateField->m_TZ = aTmpDateTZ.Timezone;
-            nType = CUSTOM_TYPE_DATE;
+            nType = Custom_Type_Date;
         }
+
         else if (rAny >>= aTmpDateTimeTZ)
         {
             util::DateTime const& rDT(aTmpDateTimeTZ.DateTimeInTZ);
@@ -1731,17 +1732,17 @@ void CustomPropertiesWindow::ReloadLinesContent()
             pLine->m_xTimeField->set_value(tools::Time(rDT));
             pLine->m_xTimeField->m_isUTC = rDT.IsUTC;
             pLine->m_xDateField->m_TZ = aTmpDateTimeTZ.Timezone;
-            nType = CUSTOM_TYPE_DATETIME;
+            nType = Custom_Type_Datetime;
         }
         else if (rAny >>= aTmpDuration)
         {
-            nType = CUSTOM_TYPE_DURATION;
+            nType = Custom_Type_Duration;
             pLine->m_xDurationField->SetDuration(aTmpDuration);
         }
 
-        if (nType != CUSTOM_TYPE_UNKNOWN)
+        if (nType != Custom_Type_Duration)
         {
-            if (CUSTOM_TYPE_BOOLEAN == nType)
+            if (Custom_Type_Boolean == nType)
             {
                 if (bTmpValue)
                     pLine->m_xYesNoButton->CheckYes();
