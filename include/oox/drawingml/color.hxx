@@ -100,6 +100,7 @@ public:
     const OUString&     getSchemeColorName() const { return msSchemeName; }
     sal_Int16           getSchemeColorIndex() const;
     sal_Int16           getTintOrShade();
+    sal_Int16           getLumMod();
 
     /** Returns the unaltered list of transformations for interoperability purposes */
     const css::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
