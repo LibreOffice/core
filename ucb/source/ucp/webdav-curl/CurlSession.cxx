@@ -124,17 +124,9 @@ struct CurlOption
     Type const Tag;
     union {
         void const* const pValue;
-        long const lValue;
-        curl_off_t const cValue;
+        long /*const*/ lValue;
+        curl_off_t /*const*/ cValue;
     };
-#if 0
-    ::std::variant<void const*, long
-#if SAL_TYPES_SIZEOFLONG == 4
-                   ,
-                   curl_off_t
-#endif
-                   > const Value;
-#endif
     char const* const pExceptionString;
 
     CurlOption(CURLoption const i_Option, void const* const i_Value,
@@ -145,23 +137,27 @@ struct CurlOption
         , pExceptionString(i_pExceptionString)
     {
     }
-    CurlOption(CURLoption const i_Option, long const i_Value, char const* const i_pExceptionString)
-        : Option(i_Option)
-        , Tag(Type::Long)
-        , lValue(i_Value)
-        , pExceptionString(i_pExceptionString)
-    {
-    }
-#if SAL_TYPES_SIZEOFLONG == 4
+    // Depending on platform, curl_off_t may be "long" or a larger type
+    // so cannot use overloading to distinguish these cases.
     CurlOption(CURLoption const i_Option, curl_off_t const i_Value,
-               char const* const i_pExceptionString)
+               char const* const i_pExceptionString, Type const type = Type::Long)
         : Option(i_Option)
-        , Tag(Type::CurlOffT)
-        , cValue(i_Value)
+        , Tag(type)
         , pExceptionString(i_pExceptionString)
     {
+        static_assert(sizeof(long) <= sizeof(curl_off_t));
+        switch (type)
+        {
+            case Type::Long:
+                lValue = i_Value;
+                break;
+            case Type::CurlOffT:
+                cValue = i_Value;
+                break;
+            default:
+                assert(false);
+        }
     }
-#endif
 };
 
 /// combined guard class to ensure things are released in correct order,
@@ -200,22 +196,6 @@ public:
         for (auto const& it : m_Options)
         {
             CURLcode rc(CURL_LAST); // warning C4701
-#if 0
-            if (void const* const* const pp = ::std::get_if<void const*>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, *pp);
-            }
-            else if (long const * const pLong = ::std::get_if<long>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, *pLong);
-            }
-#if SAL_TYPES_SIZEOFLONG == 4
-            else if (curl_off_t const* const pOfft = ::std::get_if<curl_off_t>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, *pOfft);
-            }
-#endif
-#endif
             if (it.Tag == CurlOption::Type::Pointer)
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, it.pValue);
@@ -224,12 +204,10 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, it.lValue);
             }
-#if SAL_TYPES_SIZEOFLONG == 4
             else if (it.Tag == CurlOption::Type::CurlOffT)
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, it.cValue);
             }
-#endif
             else
             {
                 assert(false);
@@ -258,22 +236,6 @@ public:
         for (auto const& it : m_Options)
         {
             CURLcode rc(CURL_LAST); // warning C4701
-#if 0
-            if (void const* const* const pp = ::std::get_if<void const*>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, nullptr);
-            }
-            else if (long const * const pLong = ::std::get_if<long>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, 0L);
-            }
-#if SAL_TYPES_SIZEOFLONG == 4
-            else if (curl_off_t const* const pOfft = ::std::get_if<curl_off_t>(&it.Value))
-            {
-                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
-            }
-#endif
-#endif
             if (it.Tag == CurlOption::Type::Pointer)
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, nullptr);
@@ -282,12 +244,10 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, 0L);
             }
-#if SAL_TYPES_SIZEOFLONG == 4
             else if (it.Tag == CurlOption::Type::CurlOffT)
             {
-                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
+                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(-1));
             }
-#endif
             else
             {
                 assert(false);
@@ -1830,7 +1790,8 @@ auto CurlSession::PUT(OUString const& rURIReference,
 
     // lock m_Mutex after accessing global LockStore to avoid deadlock
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_INFILESIZE_LARGE, len, nullptr } };
+    ::std::vector<CurlOption> const options{ { CURLOPT_INFILESIZE_LARGE, len, nullptr,
+                                               CurlOption::Type::CurlOffT } };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), nullptr,
                                   &rxInStream, nullptr);
