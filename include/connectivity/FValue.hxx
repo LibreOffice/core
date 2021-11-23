@@ -310,47 +310,6 @@ namespace connectivity
         // with the possibility to save an any for bookmarks
         ORowSetValue& operator=(const css::uno::Any& _rAny);
 
-        operator bool() const   {   return !isNull() && getBool();    }
-        operator sal_Bool() const = delete; // aka sal_uInt8
-        operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8();   }
-
-        operator sal_Int16() const  {   return isNull() ? static_cast<sal_Int16>(0) : getInt16();   }
-        operator sal_uInt16() const {   return isNull() ? static_cast<sal_uInt16>(0) : getUInt16(); }
-
-        operator sal_Int32() const  {   return isNull() ? 0         : getInt32();   }
-        operator sal_uInt32() const {   return isNull() ? 0         : getUInt32();  }
-
-        operator sal_Int64() const  {   return isNull() ? 0         : getLong();    }
-        operator sal_uInt64() const {   return isNull() ? 0         : getULong();   }
-
-        operator float() const      {   return isNull() ? float(0.0): getFloat();   }
-        operator double() const     {   return isNull() ? 0.0       : getDouble();  }
-
-        operator OUString() const
-        {
-            return isNull() ? OUString() : getString();
-        }
-
-        operator css::util::Date() const
-        {
-            return isNull() ? css::util::Date() : getDate();
-        }
-
-        operator css::util::Time() const
-        {
-            return isNull() ? css::util::Time() : getTime();
-        }
-
-        operator css::util::DateTime() const
-        {
-            return isNull() ? css::util::DateTime() : getDateTime();
-        }
-
-        operator css::uno::Sequence<sal_Int8>() const
-        {
-            return isNull() ? css::uno::Sequence<sal_Int8>() : getSequence();
-        }
-
         bool operator==(const ORowSetValue& _rRH) const;
         bool operator!=(const ORowSetValue& _rRH) const
         {
@@ -380,7 +339,6 @@ namespace connectivity
         sal_Int32   getTypeKind() const                 { return m_eTypeKind;   }
         void        setTypeKind(sal_Int32 _eType);
 
-        // before calling one of this methods, be sure that the value is not null
         bool            getBool()   const;
 
         sal_Int8        getInt8()   const;

@@ -430,7 +430,23 @@ T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
         return *reinterpret_cast<T*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
     else
-        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
+    {
+        ORowSetValue row = retrieveValue< ORowSetValue >(nColumnIndex, 0);
+        if constexpr ( std::is_same_v<sal_Int64, T> )
+            return row.getLong();
+        else if constexpr ( std::is_same_v<sal_Int32, T> )
+            return row.getInt32();
+        else if constexpr ( std::is_same_v<sal_Int16, T> )
+            return row.getInt16();
+        else if constexpr ( std::is_same_v<float, T> )
+            return row.getFloat();
+        else if constexpr ( std::is_same_v<double, T> )
+            return row.getDouble();
+        else if constexpr ( std::is_same_v<bool, T> )
+            return row.getBool();
+        else
+            return row;
+    }
 }
 
 template <>
@@ -511,7 +527,7 @@ Date OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
     }
     else
     {
-        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0).getDate();
     }
 }
 
@@ -534,7 +550,7 @@ Time OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
     }
     else
     {
-        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0).getTime();
     }
 }
 
@@ -560,7 +576,7 @@ DateTime OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     }
     else
     {
-        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0).getDateTime();
     }
 }
 
@@ -615,7 +631,7 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     }
     else
     {
-        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0).getString();
     }
 }
 
@@ -663,7 +679,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 nColumnIndex)
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)
 {
     // Not a native firebird type hence we always have to convert.
-    return safelyRetrieveValue< ORowSetValue >(nColumnIndex);
+    return safelyRetrieveValue< ORowSetValue >(nColumnIndex).getInt8();
 }
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 nColumnIndex)

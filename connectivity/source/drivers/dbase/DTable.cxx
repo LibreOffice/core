@@ -1843,7 +1843,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                 case DataType::TIMESTAMP:
                     {
                         sal_Int32 nJulianDate = 0, nJulianTime = 0;
-                        lcl_CalcJulDate(nJulianDate,nJulianTime, thisColVal);
+                        lcl_CalcJulDate(nJulianDate,nJulianTime, thisColVal.getDateTime());
                         // Exactly 8 bytes to copy:
                         memcpy(pData,&nJulianDate,4);
                         memcpy(pData+4,&nJulianTime,4);
@@ -1855,7 +1855,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     if(thisColVal.getTypeKind() == DataType::DOUBLE)
                         aDate = ::dbtools::DBTypeConversion::toDate(thisColVal.getDouble());
                     else
-                        aDate = thisColVal;
+                        aDate = thisColVal.getDate();
                     char s[sizeof("-327686553565535")];
                         // reserve enough space for hypothetical max length
                     snprintf(s,
@@ -1870,7 +1870,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                 } break;
                 case DataType::INTEGER:
                     {
-                        sal_Int32 nValue = thisColVal;
+                        sal_Int32 nValue = thisColVal.getInt32();
                         if (o3tl::make_unsigned(nLen) > sizeof(nValue))
                             return false;
                         memcpy(pData,&nValue,nLen);
@@ -1878,7 +1878,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     break;
                 case DataType::DOUBLE:
                     {
-                        const double d = thisColVal;
+                        const double d = thisColVal.getDouble();
                         m_xColumns->getByIndex(i) >>= xCol;
 
                         if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency is treated separately
@@ -1904,7 +1904,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                 {
                     memset(pData,' ',nLen); // Clear to NULL
 
-                    const double n = thisColVal;
+                    const double n = thisColVal.getDouble();
 
                     // one, because const_cast GetFormatPrecision on SvNumberFormat is not constant,
                     // even though it really could and should be

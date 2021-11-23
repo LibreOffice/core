@@ -1792,7 +1792,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
-                _xParams->setString(parameterIndex,_rValue);
+                _xParams->setString(parameterIndex,_rValue.getString());
                 break;
             case DataType::CLOB:
                 {
@@ -1816,26 +1816,26 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 break;
             case DataType::BIGINT:
                 if ( _rValue.isSigned() )
-                    _xParams->setLong(parameterIndex,_rValue);
+                    _xParams->setLong(parameterIndex,_rValue.getLong());
                 else
-                    _xParams->setString(parameterIndex,_rValue);
+                    _xParams->setString(parameterIndex,_rValue.getString());
                 break;
 
             case DataType::FLOAT:
-                _xParams->setFloat(parameterIndex,_rValue);
+                _xParams->setFloat(parameterIndex,_rValue.getFloat());
                 break;
             case DataType::REAL:
             case DataType::DOUBLE:
-                _xParams->setDouble(parameterIndex,_rValue);
+                _xParams->setDouble(parameterIndex,_rValue.getDouble());
                 break;
             case DataType::DATE:
-                _xParams->setDate(parameterIndex,_rValue);
+                _xParams->setDate(parameterIndex,_rValue.getDate());
                 break;
             case DataType::TIME:
-                _xParams->setTime(parameterIndex,_rValue);
+                _xParams->setTime(parameterIndex,_rValue.getTime());
                 break;
             case DataType::TIMESTAMP:
-                _xParams->setTimestamp(parameterIndex,_rValue);
+                _xParams->setTimestamp(parameterIndex,_rValue.getDateTime());
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -1868,25 +1868,25 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                _xParams->setBoolean(parameterIndex,static_cast<bool>(_rValue));
+                _xParams->setBoolean(parameterIndex,_rValue.getBool());
                 break;
             case DataType::TINYINT:
                 if ( _rValue.isSigned() )
-                    _xParams->setByte(parameterIndex,_rValue);
+                    _xParams->setByte(parameterIndex,_rValue.getInt8());
                 else
-                    _xParams->setShort(parameterIndex,_rValue);
+                    _xParams->setShort(parameterIndex,_rValue.getInt16());
                 break;
             case DataType::SMALLINT:
                 if ( _rValue.isSigned() )
-                    _xParams->setShort(parameterIndex,_rValue);
+                    _xParams->setShort(parameterIndex,_rValue.getInt16());
                 else
-                    _xParams->setInt(parameterIndex,_rValue);
+                    _xParams->setInt(parameterIndex,_rValue.getInt32());
                 break;
             case DataType::INTEGER:
                 if ( _rValue.isSigned() )
-                    _xParams->setInt(parameterIndex,_rValue);
+                    _xParams->setInt(parameterIndex,_rValue.getULong());
                 else
-                    _xParams->setLong(parameterIndex,_rValue);
+                    _xParams->setLong(parameterIndex,_rValue.getLong());
                 break;
             default:
                 {

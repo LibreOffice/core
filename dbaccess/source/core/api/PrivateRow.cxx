@@ -37,62 +37,62 @@ sal_Bool SAL_CALL OPrivateRow::wasNull(  )
     OUString SAL_CALL OPrivateRow::getString( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getString();
     }
     sal_Bool SAL_CALL OPrivateRow::getBoolean( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return bool(m_aRow[m_nPos]);
+        return m_aRow[m_nPos].getBool();
     }
     ::sal_Int8 SAL_CALL OPrivateRow::getByte( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getInt8();
     }
     ::sal_Int16 SAL_CALL OPrivateRow::getShort( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getInt16();
     }
     ::sal_Int32 SAL_CALL OPrivateRow::getInt( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getInt32();
     }
     ::sal_Int64 SAL_CALL OPrivateRow::getLong( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getLong();
     }
     float SAL_CALL OPrivateRow::getFloat( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getFloat();
     }
     double SAL_CALL OPrivateRow::getDouble( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getDouble();
     }
     Sequence< ::sal_Int8 > SAL_CALL OPrivateRow::getBytes( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getSequence();
     }
     css::util::Date SAL_CALL OPrivateRow::getDate( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getDate();
     }
     css::util::Time SAL_CALL OPrivateRow::getTime( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getTime();
     }
     css::util::DateTime SAL_CALL OPrivateRow::getTimestamp( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
-        return m_aRow[m_nPos];
+        return m_aRow[m_nPos].getDateTime();
     }
     Reference< css::io::XInputStream > SAL_CALL OPrivateRow::getBinaryStream( ::sal_Int32 columnIndex )
     {

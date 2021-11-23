@@ -32,7 +32,7 @@ ORowSetValue OOp_Abs::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    double nVal(lhs);
+    double nVal = lhs.getDouble();
     if ( nVal < 0 )
         nVal *= -1.0;
     return fabs(nVal);
@@ -44,7 +44,7 @@ ORowSetValue OOp_Sign::operate(const ORowSetValue& lhs) const
         return lhs;
 
     sal_Int32 nRet = 0;
-    double nVal(lhs);
+    double nVal = lhs.getDouble();
     if ( nVal < 0 )
         nRet = -1;
     else if ( nVal > 0 )
@@ -58,7 +58,7 @@ ORowSetValue OOp_Mod::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) c
     if ( lhs.isNull() || rhs.isNull() )
         return ORowSetValue();
 
-    return fmod(static_cast<double>(lhs),static_cast<double>(rhs));
+    return fmod(lhs.getDouble(), rhs.getDouble());
 }
 
 ORowSetValue OOp_Floor::operate(const ORowSetValue& lhs) const
@@ -66,7 +66,7 @@ ORowSetValue OOp_Floor::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    return floor(static_cast<double>(lhs));
+    return floor(lhs.getDouble());
 }
 
 ORowSetValue OOp_Ceiling::operate(const ORowSetValue& lhs) const
@@ -74,7 +74,7 @@ ORowSetValue OOp_Ceiling::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    double nVal(lhs);
+    double nVal = lhs.getDouble();
     return ceil(nVal);
 }
 
@@ -84,11 +84,11 @@ ORowSetValue OOp_Round::operate(const std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     size_t nSize = lhs.size();
-    double nVal = lhs[nSize-1];
+    double nVal = lhs[nSize-1].getDouble();
 
     sal_Int32 nDec = 0;
     if ( nSize == 2 && !lhs[0].isNull() )
-        nDec = lhs[0];
+        nDec = lhs[0].getDouble();
     return ::rtl::math::round(nVal,nDec);
 }
 
@@ -97,16 +97,16 @@ ORowSetValue OOp_Exp::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    double nVal(lhs);
+    double nVal = lhs.getDouble();
     return exp(nVal);
 }
 
 ORowSetValue OOp_Ln::operate(const ORowSetValue& lhs) const
 {
-    if ( lhs.isNull() || static_cast<double>(lhs) < 0.0 )
+    if ( lhs.isNull() || lhs.getDouble() < 0.0 )
         return lhs;
 
-    double nVal(lhs);
+    double nVal = lhs.getDouble();
     nVal = log(nVal);
     if ( std::isnan(nVal) )
         return ORowSetValue();
@@ -118,11 +118,11 @@ ORowSetValue OOp_Log::operate(const std::vector<ORowSetValue>& lhs) const
     if ( lhs.empty() || lhs.size() > 2 )
         return ORowSetValue();
     size_t nSize = lhs.size();
-    double nVal = log( static_cast<double>(lhs[nSize-1]) );
+    double nVal = log( lhs[nSize-1].getDouble() );
 
 
     if ( nSize == 2 && !lhs[0].isNull() )
-        nVal /= log(static_cast<double>(lhs[0]));
+        nVal /= log(lhs[0].getDouble());
 
     if ( std::isnan(nVal) )
         return ORowSetValue();
@@ -131,10 +131,10 @@ ORowSetValue OOp_Log::operate(const std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_Log10::operate(const ORowSetValue& lhs) const
 {
-    if ( lhs.isNull() || static_cast<double>(lhs) < 0.0 )
+    if ( lhs.isNull() || lhs.getDouble() < 0.0 )
         return lhs;
 
-    double nVal = log(static_cast<double>(lhs));
+    double nVal = log(lhs.getDouble());
     if ( std::isnan(nVal) )
         return ORowSetValue();
     nVal /= log(10.0);
@@ -146,7 +146,7 @@ ORowSetValue OOp_Pow::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) c
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
-    return pow(static_cast<double>(lhs),static_cast<double>(rhs));
+    return pow(lhs.getDouble(), rhs.getDouble());
 }
 
 ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
@@ -154,7 +154,7 @@ ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    double nVal = sqrt(static_cast<double>(lhs));
+    double nVal = sqrt(lhs.getDouble());
     if ( std::isnan(nVal) )
         return ORowSetValue();
     return nVal;
@@ -170,7 +170,7 @@ ORowSetValue OOp_Cos::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    return cos(static_cast<double>(lhs));
+    return cos(lhs.getDouble());
 }
 
 ORowSetValue OOp_Sin::operate(const ORowSetValue& lhs) const
@@ -178,7 +178,7 @@ ORowSetValue OOp_Sin::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    return sin(static_cast<double>(lhs));
+    return sin(lhs.getDouble());
 }
 
 ORowSetValue OOp_Tan::operate(const ORowSetValue& lhs) const
@@ -186,7 +186,7 @@ ORowSetValue OOp_Tan::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    return tan(static_cast<double>(lhs));
+    return tan(lhs.getDouble());
 }
 
 ORowSetValue OOp_ACos::operate(const ORowSetValue& lhs) const
@@ -194,7 +194,7 @@ ORowSetValue OOp_ACos::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    return acos(static_cast<double>(lhs));
+    return acos(lhs.getDouble());
 }
 
 ORowSetValue OOp_ASin::operate(const ORowSetValue& lhs) const
@@ -202,7 +202,7 @@ ORowSetValue OOp_ASin::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    return asin(static_cast<double>(lhs));
+    return asin(lhs.getDouble());
 }
 
 ORowSetValue OOp_ATan::operate(const ORowSetValue& lhs) const
@@ -210,7 +210,7 @@ ORowSetValue OOp_ATan::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    return atan(static_cast<double>(lhs));
+    return atan(lhs.getDouble());
 }
 
 ORowSetValue OOp_ATan2::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const
@@ -218,7 +218,7 @@ ORowSetValue OOp_ATan2::operate(const ORowSetValue& lhs,const ORowSetValue& rhs)
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
-    return atan2(static_cast<double>(lhs),static_cast<double>(rhs));
+    return atan2(lhs.getDouble(), rhs.getDouble());
 }
 
 ORowSetValue OOp_Degrees::operate(const ORowSetValue& lhs) const
@@ -226,7 +226,7 @@ ORowSetValue OOp_Degrees::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    double nLhs = lhs;
+    double nLhs = lhs.getDouble();
     return nLhs*180*(1.0/fPi);
 }
 
@@ -235,7 +235,7 @@ ORowSetValue OOp_Radians::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    double nLhs = lhs;
+    double nLhs = lhs.getDouble();
     return nLhs*fPi*(1.0/180.0);
 }
 

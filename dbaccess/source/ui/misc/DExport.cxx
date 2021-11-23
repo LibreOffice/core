@@ -189,11 +189,11 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
             sal_Int32 nPos = 1;
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            OUString sTypeName = aValue;
+            OUString sTypeName = aValue.getString();
             ++nPos;
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            sal_Int32 nType = aValue;
+            sal_Int32 nType = aValue.getInt32();
             ++nPos;
 
             if( nType == DataType::VARCHAR )
@@ -205,44 +205,44 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
 
                 OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nPrecision     = aValue;
+                m_pTypeInfo->nPrecision     = aValue.getInt32();
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); //LiteralPrefix
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); //LiteralSuffix
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aCreateParams  = aValue;
+                m_pTypeInfo->aCreateParams  = aValue.getString();
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bNullable      = static_cast<sal_Int32>(aValue) == ColumnValue::NULLABLE;
+                m_pTypeInfo->bNullable      = aValue.getInt32() == ColumnValue::NULLABLE;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 // bCaseSensitive
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nSearchType    = aValue;
+                m_pTypeInfo->nSearchType    = aValue.getInt16();
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 // bUnsigned
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bCurrency      = aValue;
+                m_pTypeInfo->bCurrency      = aValue.getBool();
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bAutoIncrement = aValue;
+                m_pTypeInfo->bAutoIncrement = aValue.getBool();
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->aLocalTypeName = aValue;
+                m_pTypeInfo->aLocalTypeName = aValue.getString();
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nMinimumScale  = aValue;
+                m_pTypeInfo->nMinimumScale  = aValue.getInt16();
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nMaximumScale  = aValue;
+                m_pTypeInfo->nMaximumScale  = aValue.getInt16();
                 nPos = 18;
                 aValue.fill(nPos,aTypes[nPos],xRow);
-                m_pTypeInfo->nNumPrecRadix  = aValue;
+                m_pTypeInfo->nNumPrecRadix  = aValue.getInt32();
 
                 // check if values are less than zero like it happens in a oracle jdbc driver
                 if( m_pTypeInfo->nPrecision < 0)
