@@ -16,6 +16,23 @@
       "message": "Caolan, what do you think about this solution? Works for some reason only the second time when a context updates but the titles have the same height now.",
       "revId": "99b7f1f71ec1720df19dcddf4fc8e15e88ad4256",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f21c281_fca817c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-23T15:55:10Z",
+      "side": 1,
+      "message": "I think we could do this in the PanelTitleBar ctor to set the titlebar to always use the height it needs with the \"toolbar\" more button shown even if the button is not shown. Let me update this with that idea.",
+      "revId": "99b7f1f71ec1720df19dcddf4fc8e15e88ad4256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
