@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ea5110a_568558c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-23T14:49:47Z",
+      "side": 1,
+      "message": "Now I am reasonable satisfied with the resulting code. Short and -in combination with the Doxygen comment- easy to understand.",
+      "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
