@@ -16,6 +16,23 @@
       "message": "Any chance to merge this request?",
       "revId": "1351084defd061f7c35e561ad261f6dba3801cfe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6721248f_34528f5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-23T14:29:05Z",
+      "side": 1,
+      "message": "Looks good to me. The lotuswordpro/source/filter/lwpresource.hxx is no longer in use, so it please removed it from this commit.",
+      "revId": "1351084defd061f7c35e561ad261f6dba3801cfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
