@@ -496,6 +496,32 @@
 		BE60B5AB1DB7D80200D3E1E4 /* saltimer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = saltimer.cxx; path = ../vcl/osx/saltimer.cxx; sourceTree = "<group>"; };
 		BE60B5AC1DB7D80200D3E1E4 /* service_entry.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = service_entry.cxx; path = ../vcl/osx/service_entry.cxx; sourceTree = "<group>"; };
 		BE60B5AD1DB7D80200D3E1E4 /* vclnsapp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = vclnsapp.mm; path = ../vcl/osx/vclnsapp.mm; sourceTree = "<group>"; };
+		BE7816B5274D208F00FC91C9 /* sbxres.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxres.cxx; path = ../basic/source/sbx/sbxres.cxx; sourceTree = "<group>"; };
+		BE7816B6274D208F00FC91C9 /* sbxbool.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxbool.cxx; path = ../basic/source/sbx/sbxbool.cxx; sourceTree = "<group>"; };
+		BE7816B7274D208F00FC91C9 /* sbxlng.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxlng.cxx; path = ../basic/source/sbx/sbxlng.cxx; sourceTree = "<group>"; };
+		BE7816B8274D208F00FC91C9 /* sbxbyte.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxbyte.cxx; path = ../basic/source/sbx/sbxbyte.cxx; sourceTree = "<group>"; };
+		BE7816B9274D208F00FC91C9 /* sbxdate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxdate.cxx; path = ../basic/source/sbx/sbxdate.cxx; sourceTree = "<group>"; };
+		BE7816BA274D208F00FC91C9 /* sbxobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxobj.cxx; path = ../basic/source/sbx/sbxobj.cxx; sourceTree = "<group>"; };
+		BE7816BB274D208F00FC91C9 /* sbxscan.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxscan.cxx; path = ../basic/source/sbx/sbxscan.cxx; sourceTree = "<group>"; };
+		BE7816BC274D208F00FC91C9 /* sbxdec.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxdec.cxx; path = ../basic/source/sbx/sbxdec.cxx; sourceTree = "<group>"; };
+		BE7816BD274D208F00FC91C9 /* sbxcoll.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxcoll.cxx; path = ../basic/source/sbx/sbxcoll.cxx; sourceTree = "<group>"; };
+		BE7816BE274D208F00FC91C9 /* sbxcurr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxcurr.cxx; path = ../basic/source/sbx/sbxcurr.cxx; sourceTree = "<group>"; };
+		BE7816BF274D208F00FC91C9 /* sbxbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxbase.cxx; path = ../basic/source/sbx/sbxbase.cxx; sourceTree = "<group>"; };
+		BE7816C0274D208F00FC91C9 /* sbxexec.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxexec.cxx; path = ../basic/source/sbx/sbxexec.cxx; sourceTree = "<group>"; };
+		BE7816C1274D208F00FC91C9 /* sbxconv.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sbxconv.hxx; path = ../basic/source/sbx/sbxconv.hxx; sourceTree = "<group>"; };
+		BE7816C2274D208F00FC91C9 /* sbxvar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxvar.cxx; path = ../basic/source/sbx/sbxvar.cxx; sourceTree = "<group>"; };
+		BE7816C3274D208F00FC91C9 /* sbxsng.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxsng.cxx; path = ../basic/source/sbx/sbxsng.cxx; sourceTree = "<group>"; };
+		BE7816C4274D208F00FC91C9 /* sbxres.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sbxres.hxx; path = ../basic/source/sbx/sbxres.hxx; sourceTree = "<group>"; };
+		BE7816C5274D208F00FC91C9 /* sbxuint.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxuint.cxx; path = ../basic/source/sbx/sbxuint.cxx; sourceTree = "<group>"; };
+		BE7816C6274D208F00FC91C9 /* sbxvalue.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxvalue.cxx; path = ../basic/source/sbx/sbxvalue.cxx; sourceTree = "<group>"; };
+		BE7816C7274D208F00FC91C9 /* sbxstr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxstr.cxx; path = ../basic/source/sbx/sbxstr.cxx; sourceTree = "<group>"; };
+		BE7816C8274D208F00FC91C9 /* sbxarray.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxarray.cxx; path = ../basic/source/sbx/sbxarray.cxx; sourceTree = "<group>"; };
+		BE7816C9274D208F00FC91C9 /* sbxdbl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxdbl.cxx; path = ../basic/source/sbx/sbxdbl.cxx; sourceTree = "<group>"; };
+		BE7816CA274D208F00FC91C9 /* sbxint.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxint.cxx; path = ../basic/source/sbx/sbxint.cxx; sourceTree = "<group>"; };
+		BE7816CB274D209000FC91C9 /* sbxulng.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxulng.cxx; path = ../basic/source/sbx/sbxulng.cxx; sourceTree = "<group>"; };
+		BE7816CC274D209000FC91C9 /* sbxdec.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sbxdec.hxx; path = ../basic/source/sbx/sbxdec.hxx; sourceTree = "<group>"; };
+		BE7816CD274D209000FC91C9 /* sbxform.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxform.cxx; path = ../basic/source/sbx/sbxform.cxx; sourceTree = "<group>"; };
+		BE7816CE274D209000FC91C9 /* sbxchar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sbxchar.cxx; path = ../basic/source/sbx/sbxchar.cxx; sourceTree = "<group>"; };
 		BE7EC139234CC0FA000D1DB6 /* VerticalOrientationData.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalOrientationData.cxx; path = ../vcl/source/gdi/VerticalOrientationData.cxx; sourceTree = "<group>"; };
 		BE7EC13A234CC0FA000D1DB6 /* impglyphitem.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impglyphitem.cxx; path = ../vcl/source/gdi/impglyphitem.cxx; sourceTree = "<group>"; };
 		BE7EC13B234CC0FA000D1DB6 /* TypeSerializer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TypeSerializer.cxx; path = ../vcl/source/gdi/TypeSerializer.cxx; sourceTree = "<group>"; };
@@ -1615,6 +1641,47 @@
 			name = osx;
 			sourceTree = "<group>";
 		};
+		BE7816B3274D206300FC91C9 /* basic */ = {
+			isa = PBXGroup;
+			children = (
+				BE7816B4274D207700FC91C9 /* sbx */,
+			);
+			name = basic;
+			sourceTree = "<group>";
+		};
+		BE7816B4274D207700FC91C9 /* sbx */ = {
+			isa = PBXGroup;
+			children = (
+				BE7816C8274D208F00FC91C9 /* sbxarray.cxx */,
+				BE7816BF274D208F00FC91C9 /* sbxbase.cxx */,
+				BE7816B6274D208F00FC91C9 /* sbxbool.cxx */,
+				BE7816B8274D208F00FC91C9 /* sbxbyte.cxx */,
+				BE7816CE274D209000FC91C9 /* sbxchar.cxx */,
+				BE7816BD274D208F00FC91C9 /* sbxcoll.cxx */,
+				BE7816C1274D208F00FC91C9 /* sbxconv.hxx */,
+				BE7816BE274D208F00FC91C9 /* sbxcurr.cxx */,
+				BE7816B9274D208F00FC91C9 /* sbxdate.cxx */,
+				BE7816C9274D208F00FC91C9 /* sbxdbl.cxx */,
+				BE7816BC274D208F00FC91C9 /* sbxdec.cxx */,
+				BE7816CC274D209000FC91C9 /* sbxdec.hxx */,
+				BE7816C0274D208F00FC91C9 /* sbxexec.cxx */,
+				BE7816CD274D209000FC91C9 /* sbxform.cxx */,
+				BE7816CA274D208F00FC91C9 /* sbxint.cxx */,
+				BE7816B7274D208F00FC91C9 /* sbxlng.cxx */,
+				BE7816BA274D208F00FC91C9 /* sbxobj.cxx */,
+				BE7816B5274D208F00FC91C9 /* sbxres.cxx */,
+				BE7816C4274D208F00FC91C9 /* sbxres.hxx */,
+				BE7816BB274D208F00FC91C9 /* sbxscan.cxx */,
+				BE7816C3274D208F00FC91C9 /* sbxsng.cxx */,
+				BE7816C7274D208F00FC91C9 /* sbxstr.cxx */,
+				BE7816C5274D208F00FC91C9 /* sbxuint.cxx */,
+				BE7816CB274D209000FC91C9 /* sbxulng.cxx */,
+				BE7816C6274D208F00FC91C9 /* sbxvalue.cxx */,
+				BE7816C2274D208F00FC91C9 /* sbxvar.cxx */,
+			);
+			name = sbx;
+			sourceTree = "<group>";
+		};
 		BE82BE5818298DEB00A447B5 /* sc */ = {
 			isa = PBXGroup;
 			children = (
@@ -2157,6 +2224,7 @@
 		BEC3D9171710B0390030AD56 = {
 			isa = PBXGroup;
 			children = (
+				BE7816B3274D206300FC91C9 /* basic */,
 				BEDCC8B62459A0DA00FB02BD /* bridges */,
 				BEDCC8FD246082D400FB02BD /* cui */,
 				BE28694D257D0668000E863E /* dbaccess */,
