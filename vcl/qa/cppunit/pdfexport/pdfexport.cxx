@@ -1547,6 +1547,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint71)
     saveAsPDF(u"forcepoint71.key");
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf84283)
+{
+    // Without the fix in place, this test would have crashed
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf84283.doc");
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 {
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
