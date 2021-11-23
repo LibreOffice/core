@@ -437,6 +437,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     // 4 is accent1, see oox::drawingml::Color::getSchemeColorIndex().
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4),
                          xPortion->getPropertyValue("CharColorTheme").get<sal_Int32>());
+    // 60000 in the file, just 100th vs 1000th percents.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6000
+    // - Actual  : 10000
+    // i.e. we had the default 100% value, not the value from the file.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000),
+                         xPortion->getPropertyValue("CharColorLumMod").get<sal_Int32>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
