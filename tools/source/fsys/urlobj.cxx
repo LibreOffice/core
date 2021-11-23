@@ -1476,7 +1476,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 }
 
 void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
-    int oldSchemeLen = 0;
+    sal_Int32 oldSchemeLen = 0;
     const OUString& rOldSchemeName = getSchemeInfo().m_sScheme;
     if (m_eScheme == INetProtocol::Generic)
         oldSchemeLen = m_aScheme.getLength();
@@ -1484,10 +1484,10 @@ void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
         oldSchemeLen = rOldSchemeName.getLength();
     m_eScheme=eTargetScheme;
     const OUString& rNewSchemeName = getSchemeInfo().m_sScheme;
-    int newSchemeLen = rNewSchemeName.getLength();
+    sal_Int32 newSchemeLen = rNewSchemeName.getLength();
     m_aAbsURIRef.remove(0, oldSchemeLen);
     m_aAbsURIRef.insert(0, rNewSchemeName);
-    int delta=newSchemeLen-oldSchemeLen;
+    sal_Int32 delta=newSchemeLen-oldSchemeLen;
     m_aUser+=delta;
     m_aAuth+=delta;
     m_aHost+=delta;
