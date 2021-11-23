@@ -6060,13 +6060,9 @@ private:
 
     bool isPositioningAllowed() const
     {
-        bool bPositioningAllowed = true;
-#if defined(GDK_WINDOWING_WAYLAND)
         // no X/Y positioning under Wayland
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-        bPositioningAllowed = !DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay);
-#endif
-        return bPositioningAllowed;
+        return !DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay);
     }
 
 protected:
@@ -6971,18 +6967,14 @@ public:
         // calc's insert->function is springing back to its original size if the ref-button
         // is used to shrink the dialog down and then the user clicks in the calc area to do
         // the selection
-#if defined(GDK_WINDOWING_WAYLAND)
         bool bWorkaroundSizeSpringingBack = DLSYM_GDK_IS_WAYLAND_DISPLAY(gtk_widget_get_display(m_pWidget));
         if (bWorkaroundSizeSpringingBack)
             gtk_widget_unmap(GTK_WIDGET(m_pDialog));
-#endif
 
         resize_to_request();
 
-#if defined(GDK_WINDOWING_WAYLAND)
         if (bWorkaroundSizeSpringingBack)
             gtk_widget_map(GTK_WIDGET(m_pDialog));
-#endif
 
         m_pRefEdit = pRefEdit;
     }
@@ -10331,7 +10323,6 @@ public:
             return;
         }
 
-#if defined(GDK_WINDOWING_X11)
         if (!m_pMenuHack)
         {
             //under wayland a Popover will work to "escape" the parent dialog, not
@@ -10351,7 +10342,6 @@ public:
                 g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
             }
         }
-#endif
 
         if (m_pMenuHack)
         {
@@ -22113,7 +22103,6 @@ public:
         , m_pClosedEvent(nullptr)
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-#if defined(GDK_WINDOWING_X11)
         //under wayland a Popover will work to "escape" the parent dialog, not
         //so under X, so come up with this hack to use a raw GtkWindow
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
@@ -22135,7 +22124,6 @@ public:
                 g_signal_connect(m_pMenuHack, "motion-notify-event", G_CALLBACK(signalMotion), this);
             }
         }
-#endif
 #endif
     }
 
@@ -22167,7 +22155,6 @@ public:
         }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-#if defined(GDK_WINDOWING_X11)
         //under wayland a Popover will work to "escape" the parent dialog, not
         //so under X, so come up with this hack to use a raw GtkWindow
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
@@ -22181,13 +22168,11 @@ public:
             return;
         }
 #endif
-#endif
 
         gtk_popover_popup(m_pPopover);
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-#if defined(GDK_WINDOWING_X11)
     virtual bool get_visible() const override
     {
         if (m_pMenuHack)
@@ -22205,12 +22190,10 @@ public:
         GtkInstanceContainer::ensureMouseEventWidget();
     }
 #endif
-#endif
 
     virtual void popdown() override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-#if defined(GDK_WINDOWING_X11)
         //under wayland a Popover will work to "escape" the parent dialog, not
         //so under X, so come up with this hack to use a raw GtkWindow
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
@@ -22225,7 +22208,6 @@ public:
             }
             return;
         }
-#endif
 #endif
 
         gtk_popover_popdown(m_pPopover);
