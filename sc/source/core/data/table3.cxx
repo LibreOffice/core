@@ -3001,20 +3001,12 @@ bool ScTable::ValidQuery(
         const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
         if (rItems.size() == 1 && rItems.front().meType == ScQueryEntry::ByEmpty)
         {
-            bool hasData;
-            if( pBlockPos )
-            {
-                ScColumn* column = FetchColumn(rEntry.nField);
-                hasData = column->HasDataAt(*pBlockPos->getBlockPosition(rEntry.nField), nRow);
-            }
-            else
-                hasData = aCol[rEntry.nField].HasDataAt(nRow);
             if (rEntry.IsQueryByEmpty())
-                aRes.first = !hasData;
+                aRes.first = aCell.isEmpty();
             else
             {
                 assert(rEntry.IsQueryByNonEmpty());
-                aRes.first = hasData;
+                aRes.first = !aCell.isEmpty();
             }
         }
         else
