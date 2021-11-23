@@ -2414,27 +2414,22 @@ public:
     {
     }
 
-    bool isQueryByValue(
-        const ScQueryEntry::Item& rItem, SCCOL nCol, SCROW nRow, ScRefCellValue& rCell)
+    static bool isQueryByValue(
+        const ScQueryEntry::Item& rItem, ScRefCellValue& rCell)
     {
         if (rItem.meType == ScQueryEntry::ByString)
             return false;
 
-        if (!rCell.isEmpty())
-        {
-            if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
-                // Error values are compared as string.
-                return false;
+        if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
+            // Error values are compared as string.
+            return false;
 
-            return rCell.hasNumeric();
-        }
-
-        return mrTab.HasValueData(nCol, nRow);
+        return rCell.hasNumeric();
     }
 
-    bool isQueryByString(
+    static bool isQueryByString(
         const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        SCCOL nCol, SCROW nRow, const ScRefCellValue& rCell)
+        const ScRefCellValue& rCell)
     {
         if (isTextMatchOp(rEntry))
             return true;
@@ -2442,10 +2437,7 @@ public:
         if (rItem.meType != ScQueryEntry::ByString)
             return false;
 
-        if (!rCell.isEmpty())
-            return rCell.hasString();
-
-        return mrTab.HasStringData(nCol, nRow);
+        return rCell.hasString();
     }
 
     sal_uInt32 getNumFmt( SCCOL nCol, SCROW nRow, const ScInterpreterContext* pContext )
@@ -2474,38 +2466,33 @@ public:
         // reason.
         sal_uInt32 nNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-        if (!rCell.isEmpty())
+        switch (rCell.meType)
         {
-            switch (rCell.meType)
+            case CELLTYPE_VALUE :
+                nCellVal = rCell.mfValue;
+            break;
+            case CELLTYPE_FORMULA :
+                nCellVal = rCell.mpFormula->GetValue();
+            break;
+            default:
+                nCellVal = 0.0;
+        }
+        if (rItem.mbRoundForFilter && nCellVal != 0.0)
+        {
+            nNumFmt = getNumFmt( nCol, nRow, pContext);
+            if (nNumFmt)
             {
-                case CELLTYPE_VALUE :
-                    nCellVal = rCell.mfValue;
-                break;
-                case CELLTYPE_FORMULA :
-                    nCellVal = rCell.mpFormula->GetValue();
-                break;
-                default:
-                    nCellVal = 0.0;
-            }
-            if (rItem.mbRoundForFilter && nCellVal != 0.0)
-            {
-                nNumFmt = getNumFmt( nCol, nRow, pContext);
-                if (nNumFmt)
+                switch (rCell.meType)
                 {
-                    switch (rCell.meType)
-                    {
-                        case CELLTYPE_VALUE :
-                        case CELLTYPE_FORMULA :
-                            nCellVal = mrDoc.RoundValueAsShown(nCellVal, nNumFmt, pContext);
-                        break;
-                        default:
-                            assert(!"can't be");
-                    }
+                    case CELLTYPE_VALUE :
+                    case CELLTYPE_FORMULA :
+                        nCellVal = mrDoc.RoundValueAsShown(nCellVal, nNumFmt, pContext);
+                    break;
+                    default:
+                        assert(!"can't be");
                 }
             }
         }
-        else
-            nCellVal = mrTab.GetValue(nCol, nRow);
 
         /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a
          * date+time format was queried rEntry.bQueryByDate is not set. In
@@ -2592,49 +2579,38 @@ public:
         const ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
         const ScInterpreterContext* pContext)
     {
-        if (!rCell.isEmpty())
+        if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
         {
-            if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
+            // Error cell is evaluated as string (for now).
+            if(mpValidQueryCache)
             {
-                // Error cell is evaluated as string (for now).
-                if(mpValidQueryCache)
+                const FormulaError error = rCell.mpFormula->GetErrCode();
+                auto it = mpValidQueryCache->mCachedSharedErrorStrings.find(error);
+                if( it == mpValidQueryCache->mCachedSharedErrorStrings.end())
                 {
-                    const FormulaError error = rCell.mpFormula->GetErrCode();
-                    auto it = mpValidQueryCache->mCachedSharedErrorStrings.find(error);
-                    if( it == mpValidQueryCache->mCachedSharedErrorStrings.end())
-                    {
-                        svl::SharedString str = mrStrPool.intern(ScGlobal::GetErrorString(error));
-                        auto pos = mpValidQueryCache->mCachedSharedErrorStrings.insert({error, str});
-                        assert(pos.second); // inserted
-                        it = pos.first;
-                    }
-                    const svl::SharedString& sharedError = it->second;
-                    return compareByStringComparator(rEntry, rItem, &sharedError, nullptr);
+                    svl::SharedString str = mrStrPool.intern(ScGlobal::GetErrorString(error));
+                    auto pos = mpValidQueryCache->mCachedSharedErrorStrings.insert({error, str});
+                    assert(pos.second); // inserted
+                    it = pos.first;
                 }
-                const OUString aCellStr = ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode());
-                return compareByStringComparator(rEntry, rItem, nullptr, &aCellStr);
+                const svl::SharedString& sharedError = it->second;
+                return compareByStringComparator(rEntry, rItem, &sharedError, nullptr);
             }
-            else if (rCell.meType == CELLTYPE_STRING)
-            {
-                return compareByStringComparator(rEntry, rItem, rCell.mpString, nullptr);
-            }
-            else
-            {
-                sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
-                    mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
-                SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
-                const svl::SharedString* sharedString = nullptr;
-                OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, &sharedString, rEntry.bDoQuery);
-                // Use the shared string for less conversions, if available.
-                if( sharedString != nullptr )
-                    return compareByStringComparator(rEntry, rItem, sharedString, nullptr);
-                return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
-            }
+            const OUString aCellStr = ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode());
+            return compareByStringComparator(rEntry, rItem, nullptr, &aCellStr);
+        }
+        else if (rCell.meType == CELLTYPE_STRING)
+        {
+            return compareByStringComparator(rEntry, rItem, rCell.mpString, nullptr);
         }
         else
         {
+            sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
+                mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
+            SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
             const svl::SharedString* sharedString = nullptr;
-            OUString aStr = mrTab.GetInputString(static_cast<SCCOL>(rEntry.nField), nRow, &sharedString);
+            OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, &sharedString, rEntry.bDoQuery);
+            // Use the shared string for less conversions, if available.
             if( sharedString != nullptr )
                 return compareByStringComparator(rEntry, rItem, sharedString, nullptr);
             return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
@@ -2955,8 +2931,8 @@ public:
     // To be called only if both isQueryByValue() and isQueryByString()
     // returned false and range lookup is wanted! In range lookup comparison
     // numbers are less than strings. Nothing else is compared.
-    std::pair<bool,bool> compareByRangeLookup(
-        const ScRefCellValue& rCell, SCCOL nCol, SCROW nRow,
+    static std::pair<bool,bool> compareByRangeLookup(
+        const ScRefCellValue& rCell,
         const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem)
     {
         bool bTestEqual = false;
@@ -2967,24 +2943,16 @@ public:
         if (rItem.meType != ScQueryEntry::ByString && rEntry.eOp != SC_GREATER && rEntry.eOp != SC_GREATER_EQUAL)
             return std::pair<bool,bool>(false, bTestEqual);
 
-        if (!rCell.isEmpty())
+        if (rItem.meType == ScQueryEntry::ByString)
         {
-            if (rItem.meType == ScQueryEntry::ByString)
-            {
-                if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
-                    // Error values are compared as string.
-                    return std::pair<bool,bool>(false, bTestEqual);
+            if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
+                // Error values are compared as string.
+                return std::pair<bool,bool>(false, bTestEqual);
 
-                return std::pair<bool,bool>(rCell.hasNumeric(), bTestEqual);
-            }
-
-            return std::pair<bool,bool>(!rCell.hasNumeric(), bTestEqual);
+            return std::pair<bool,bool>(rCell.hasNumeric(), bTestEqual);
         }
 
-        if (rItem.meType == ScQueryEntry::ByString)
-            return std::pair<bool,bool>(mrTab.HasValueData(nCol, nRow), bTestEqual);
-
-        return std::pair<bool,bool>(!mrTab.HasValueData(nCol, nRow), bTestEqual);
+        return std::pair<bool,bool>(!rCell.hasNumeric(), bTestEqual);
     }
 };
 
@@ -3067,14 +3035,14 @@ bool ScTable::ValidQuery(
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
-                else if (aEval.isQueryByValue(rItem, nCol, nRow, aCell))
+                else if (QueryEvaluator::isQueryByValue(rItem, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
                         aEval.compareByValue(aCell, nCol, nRow, rEntry, rItem, pContext);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
-                else if (aEval.isQueryByString(rEntry, rItem, nCol, nRow, aCell))
+                else if (QueryEvaluator::isQueryByString(rEntry, rItem, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
                         aEval.compareByString(aCell, nRow, rEntry, rItem, pContext);
@@ -3084,7 +3052,7 @@ bool ScTable::ValidQuery(
                 else if (rParam.mbRangeLookup)
                 {
                     std::pair<bool,bool> aThisRes =
-                        aEval.compareByRangeLookup(aCell, nCol, nRow, rEntry, rItem);
+                        QueryEvaluator::compareByRangeLookup(aCell, rEntry, rItem);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
