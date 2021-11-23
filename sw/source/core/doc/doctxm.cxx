@@ -737,6 +737,22 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
     return pNd ? pNd->FindOutlineNodeOfLevel(nLvl, pLayout) : nullptr;
 }
 
+static const bool IsHeadingContained(const SwTextNode* pOwnChapterNode, const SwNode& rNd)
+{
+    const SwNode* pNd = &rNd;
+    const SwOutlineNodes& rONds = pNd->GetNodes().GetOutLineNds();
+    if (!rONds.empty())
+    {
+        SwOutlineNodes::size_type nPos;
+        rONds.Seek_Entry(const_cast<SwNode*>(pNd), &nPos);
+        while (pOwnChapterNode->GetAttrOutlineLevel()
+               < rONds[nPos]->GetTextNode()->GetAttrOutlineLevel())
+            nPos--;
+        return pOwnChapterNode == rONds[nPos]->GetTextNode();
+    }
+    return false;
+}
+
 // Table of contents class
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFormat & rFormat)
     : SwTOXBase( rBase )
@@ -855,8 +871,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // find the first layout node for this TOX, if it only find the content
     // in his own chapter
     const SwTextNode* pOwnChapterNode = IsFromChapter()
-            ? ::lcl_FindChapterNode( *pSectNd, pLayout )
-            : nullptr;
+        ? ::lcl_FindChapterNode( *pSectNd, pLayout, pSectNd->FindSectionNode()->GetSectionLevel() + 1 )
+        : nullptr;
 
     SwNode2LayoutSaveUpperFrames aN2L(*pSectNd);
     const_cast<SwSectionNode*>(pSectNd)->DelFrames();
@@ -1249,8 +1265,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
            !pTextNd->HasHiddenCharAttribute( true ) &&
            (!pLayout || !pLayout->HasMergedParas()
                 || static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout))->GetTextNodeForParaProps() == pTextNd) &&
-            ( !IsFromChapter() ||
-               ::lcl_FindChapterNode(*pTextNd, pLayout) == pOwnChapterNode ))
+            ( !IsFromChapter() || IsHeadingContained(pOwnChapterNode, *pTextNd) ))
         {
             InsertSorted(MakeSwTOXSortTabBase<SwTOXPara>(pLayout, *pTextNd, SwTOXElement::OutlineLevel));
         }
