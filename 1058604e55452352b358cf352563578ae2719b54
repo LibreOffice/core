@@ -16,6 +16,23 @@
       "message": "As discussed via email, please amend this to be about something else as the gradient values are not of type Color.",
       "revId": "1058604e55452352b358cf352563578ae2719b54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e24402_6c1ed9dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-23T14:43:24Z",
+      "side": 1,
+      "message": "This can be fixed by creating a Color object from aGradient.EndColor.",
+      "revId": "1058604e55452352b358cf352563578ae2719b54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
