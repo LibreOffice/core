@@ -63,9 +63,8 @@ protected:
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
     SvMemoryStream maMemory;
-    // Export the document as PDF, then parse it with PDFium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument>
-    exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor);
+    utl::MediaDescriptor aMediaDescriptor;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> parseExport();
     std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
 public:
@@ -78,15 +77,8 @@ public:
 
 PdfExportTest::PdfExportTest() { maTempFile.EnableKillingFile(); }
 
-std::unique_ptr<vcl::pdf::PDFiumDocument>
-PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor)
+std::unique_ptr<vcl::pdf::PDFiumDocument> PdfExportTest::parseExport()
 {
-    // Import the bugdoc and export as PDF.
-    mxComponent = loadFromDesktop(rURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(maTempFile.GetURL(), rDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
@@ -121,13 +113,12 @@ void PdfExportTest::saveAsPDF(std::u16string_view rFile)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
     mxComponent = loadFromDesktop(aURL);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
 
 void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)
 {
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(rFile);
 
     // Parse the export result.
@@ -139,16 +130,12 @@ void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rD
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106059)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106059.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     // Explicitly enable the usage of the reference XObject markup.
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "UseReferenceXObject", uno::Any(true) } }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf106059.odt");
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
@@ -224,20 +211,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106693)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105461)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105461.odp";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf105461.odp");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
@@ -280,12 +258,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
@@ -357,17 +330,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105093)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106206)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106206.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf106206.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -405,21 +369,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106206)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf127217.odt";
-    mxComponent = loadFromDesktop(aURL);
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf127217.odt");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
@@ -438,17 +392,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf109143)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf109143.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf109143.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -477,17 +422,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf109143)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf106972.odt", aDocument);
 
     // Get access to the only form object on the only page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -525,17 +461,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972Pdf17)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972-pdf17.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf106972-pdf17.odt", aDocument);
 
     // Get access to the only image on the only page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -573,19 +500,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    if (aFile.bad() || !aMemory.GetSize())
-    {
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
         return;
-    }
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
-    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -821,20 +740,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf99680_2)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf108963.odp";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf108963.odp");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
@@ -1069,20 +979,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1a)
 {
 #if HAVE_MORE_FONTS
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115117-1.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf115117-1.odt");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
@@ -1114,20 +1015,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
     // See the comments in testTdf115117_1a() for explanation.
 
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115117-2.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf115117-2.odt");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
@@ -1153,20 +1045,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf145274.docx";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf145274.docx");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1487,24 +1370,15 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_3)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105954.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ReduceImageResolution", uno::Any(true) },
           { "MaxImageResolution", uno::Any(static_cast<sal_Int32>(300)) } }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"tdf105954.odt");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
@@ -1527,10 +1401,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf128630.odp";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"tdf128630.odp");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1560,10 +1434,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106702.odt";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"tdf106702.odt");
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has two pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -1607,8 +1482,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113143.odp";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
         { "ExportNotesPages", uno::Any(true) },
@@ -1619,7 +1492,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
         { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(16)) },
     }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
-    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"tdf113143.odp");
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has two pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -1667,15 +1543,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint71)
 {
     // I just care it doesn't crash
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     saveAsPDF(u"forcepoint71.key");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115262.ods";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
-    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"tdf115262.ods");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(8, pPdfDocument->getPageCount());
 
     // Get the 6th page.
@@ -1712,10 +1589,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf121962.odt";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"tdf121962.odt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -1737,10 +1614,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
 {
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115967.odt";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"tdf115967.odt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -1766,18 +1643,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf124272)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf124272.odt";
-    mxComponent = loadFromDesktop(aURL);
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf124272.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -1972,15 +1839,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)
 
     // Save as PDF.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -1996,21 +1858,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceSmallImage)
 {
     // Load the Writer document.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reduce-small-image.fodt";
-    mxComponent = loadFromDesktop(aURL);
-
-    // Save as PDF.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the PDF: get the image.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    saveAsPDF(u"reduce-small-image.fodt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -2061,11 +1911,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
     aOutputStream.Close();
 
     // Parse the PDF: get the image.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -2090,10 +1936,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "link-wrong-page.odp";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"link-wrong-page.odp");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has 2 pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -2115,10 +1961,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testLargePage)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "6m-wide.odg";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"6m-wide.odg");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has 1 page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2153,16 +1999,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
 
     // Save as PDF.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -2210,16 +2051,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testDefaultVersion)
 
     // Save as PDF.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
@@ -2234,17 +2070,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVersion15)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(15)) } }));
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     aMediaDescriptor["FilterData"] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
@@ -2273,17 +2104,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
     });
 
     // Load the PDF and save as PDF
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "SimpleMultiPagePDF.pdf";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"SimpleMultiPagePDF.pdf", aDocument);
 
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPages.size());
@@ -2396,21 +2218,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormFontName)
 {
     // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "form-font-name.odt";
-    mxComponent = loadFromDesktop(aURL);
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"form-font-name.odt");
 
     // Parse the export result with pdfium.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
@@ -2454,17 +2266,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
     });
 
     // Load the PDF and save as PDF
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "PDFWithImages.pdf";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"PDFWithImages.pdf", aDocument);
 
     // Assert that the XObject in the page resources dictionary is a reference XObject.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -2668,17 +2471,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportDocumentWithComplexResources)
     });
 
     // Load the PDF and save as PDF
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ComplexContentDictionary.pdf";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"ComplexContentDictionary.pdf", aDocument);
 
     // Assert that the XObject in the page resources dictionary is a reference XObject.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -2756,17 +2550,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportDocumentWithComplexResources)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfUaMetadata)
 {
     // Import a basic document (document doesn't really matter)
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "BrownFoxLazyDog.odt";
-    mxComponent = loadFromDesktop(aURL);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
 
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveAsPDF(u"BrownFoxLazyDog.odt");
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
@@ -2845,7 +2635,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
     dispatchCommand(mxComponent, ".uno:UpdateAllLinks", {});
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
 
     // Enable Outlines export
@@ -2944,16 +2733,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
 
     // Save as PDF.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -2994,10 +2778,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
 {
 // Assume Windows has the font for U+4E2D
 #ifdef _WIN32
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf144222.ods";
-    utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
-    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    saveAsPDF(u"tdf144222.ods");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
