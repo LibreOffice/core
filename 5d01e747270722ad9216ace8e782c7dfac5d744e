@@ -16,6 +16,24 @@
       "message": "Those two are not of type sal_uInt32 but sal_Int32 (which would thus be the suitable type for nIndex too), or what am I missing?",
       "revId": "5d01e747270722ad9216ace8e782c7dfac5d744e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7f7870d_2f60c43a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1003383
+      },
+      "writtenOn": "2021-11-23T15:17:35Z",
+      "side": 1,
+      "message": "They are indeed sal_Int32. Hossein wrote the middle part of the commit message so we may want ask him for a comment: should we use sal_uInt32 or sal_Int32? I chose sal_uInt32 based on the choices given by Michael Stahl in the bug report. He mentions that sal_uLong should be replaced by an appropriate unsigned integer type but this case may be different.",
+      "parentUuid": "c418e1df_1b731df1",
+      "revId": "5d01e747270722ad9216ace8e782c7dfac5d744e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
