@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42956a71_1fa8af9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-23T07:13:09Z",
+      "side": 1,
+      "message": "Eike: it seems correct but could it be:\nnLang \u003d ...;\nbreak;\n\n(like this since 2014 with 9a502e6b1d6044e6f00db798dc2931f57eab161f)",
+      "revId": "29a90b56ff5e96db55668e894258fc452206df66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
