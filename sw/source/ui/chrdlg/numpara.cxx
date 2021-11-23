@@ -184,10 +184,10 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 
         if( aStyle == "Outline")
         {
-            //add it, select it, remove it ? do we really want set_active(-1) instead ?
+            // tdf#145804 show "Chapter Numbering"
+            assert(!m_xNumberStyleBX->get_sensitive() && "pseudo entry shouldn't be editable");
             m_xNumberStyleLB->append_text(msOutlineNumbering);
             m_xNumberStyleLB->set_active_text(msOutlineNumbering);
-            m_xNumberStyleLB->remove_text(msOutlineNumbering);
             m_xNumberStyleLB->save_value();
         }
         else
