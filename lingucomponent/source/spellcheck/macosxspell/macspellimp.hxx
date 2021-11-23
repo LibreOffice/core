@@ -68,7 +68,7 @@ class MacSpellChecker :
 #else
     UITextChecker *         pChecker;
 #endif
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<XEventListener> aEvtListeners;
     rtl::Reference< linguistic::PropertyHelper_Spell >    xPropHelper;
     bool                                    bDisposing;
 

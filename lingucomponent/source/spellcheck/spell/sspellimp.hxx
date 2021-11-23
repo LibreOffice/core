@@ -68,7 +68,7 @@ class SpellChecker :
 
     Sequence< Locale >                 m_aSuppLocales;
 
-    ::comphelper::OInterfaceContainerHelper2       m_aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<XEventListener> m_aEvtListeners;
     std::unique_ptr<linguistic::PropertyHelper_Spelling> m_pPropHelper;
     bool                                    m_bDisposing;
 
