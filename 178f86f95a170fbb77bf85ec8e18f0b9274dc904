@@ -67,6 +67,103 @@
       "message": "Just for the record.\nOn Ubuntu 18.04 it passed \"make check\"",
       "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d74fa810_cebdb6ff",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-23T13:34:40Z",
+      "side": 1,
+      "message": "It seems sfx2::FileDialogHelper::SetCurrentFilter() expects a UIName so this would be fine, I just wonder it\u0027s not the translated name used here.. (not relevant in this change though,just a remark).",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31390e0d_3a60fa6e",
+        "filename": "filter/source/config/fragments/filters/PNG___Portable_Network_Graphic.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-23T13:34:40Z",
+      "side": 1,
+      "message": "Changing the programmatic name is not a good idea. It might be used by scripts that would break.",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b9e8f15_d813bd94",
+        "filename": "filter/source/config/fragments/internalgraphicfilters/png_Import.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-23T13:34:40Z",
+      "side": 1,
+      "message": "RealFilterName is an internal programmatic name, it then must match the filter/source/config/fragments/filters/PNG___Portable_Network_Graphic.xcu one.",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 38
+      },
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c9507a1_e7ce37a2",
+        "filename": "filter/source/config/fragments/types/png_Portable_Network_Graphic.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-23T13:34:40Z",
+      "side": 1,
+      "message": "PreferredFilter is an internal programmatic name, it then must match the filter/source/config/fragments/filters/PNG___Portable_Network_Graphic.xcu one.",
+      "range": {
+        "startLine": 24,
+        "startChar": 24,
+        "endLine": 24,
+        "endChar": 39
+      },
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c423b93e_65965f85",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-23T13:34:40Z",
+      "side": 1,
+      "message": "Not sure, but I think this is the internal programmatic filter name and then should match the filter/source/config/fragments/filters/PNG___Portable_Network_Graphic.xcu one.",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
