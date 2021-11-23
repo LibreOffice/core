@@ -2956,6 +2956,68 @@ public:
     }
 };
 
+std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, const ScQueryParam& rParam,
+    ScRefCellValue& aCell, const ScInterpreterContext* pContext, QueryEvaluator& aEval,
+    const ScQueryEntry& rEntry )
+{
+    std::pair<bool,bool> aRes(false, false);
+    const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+    if (rItems.size() == 1 && rItems.front().meType == ScQueryEntry::ByEmpty)
+    {
+        if (rEntry.IsQueryByEmpty())
+            aRes.first = aCell.isEmpty();
+        else
+        {
+            assert(rEntry.IsQueryByNonEmpty());
+            aRes.first = !aCell.isEmpty();
+        }
+        return aRes;
+    }
+    // Generic handling.
+    for (const auto& rItem : rItems)
+    {
+        if (rItem.meType == ScQueryEntry::ByTextColor)
+        {
+            std::pair<bool, bool> aThisRes
+                = aEval.compareByTextColor(nCol, nRow, nTab, rItem);
+            aRes.first |= aThisRes.first;
+            aRes.second |= aThisRes.second;
+        }
+        else if (rItem.meType == ScQueryEntry::ByBackgroundColor)
+        {
+            std::pair<bool,bool> aThisRes =
+                aEval.compareByBackgroundColor(nCol, nRow, nTab, rItem);
+            aRes.first |= aThisRes.first;
+            aRes.second |= aThisRes.second;
+        }
+        else if (QueryEvaluator::isQueryByValue(rItem, aCell))
+        {
+            std::pair<bool,bool> aThisRes =
+                aEval.compareByValue(aCell, nCol, nRow, rEntry, rItem, pContext);
+            aRes.first |= aThisRes.first;
+            aRes.second |= aThisRes.second;
+        }
+        else if (QueryEvaluator::isQueryByString(rEntry, rItem, aCell))
+        {
+            std::pair<bool,bool> aThisRes =
+                aEval.compareByString(aCell, nRow, rEntry, rItem, pContext);
+            aRes.first |= aThisRes.first;
+            aRes.second |= aThisRes.second;
+        }
+        else if (rParam.mbRangeLookup)
+        {
+            std::pair<bool,bool> aThisRes =
+                QueryEvaluator::compareByRangeLookup(aCell, rEntry, rItem);
+            aRes.first |= aThisRes.first;
+            aRes.second |= aThisRes.second;
+        }
+
+        if (aRes.first && aRes.second)
+            break;
+    }
+    return aRes;
+}
+
 }
 
 bool ScTable::ValidQuery(
@@ -2996,63 +3058,8 @@ bool ScTable::ValidQuery(
         else
             aCell = GetCellValue(nCol, nRow);
 
-        std::pair<bool,bool> aRes(false, false);
-
-        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-        if (rItems.size() == 1 && rItems.front().meType == ScQueryEntry::ByEmpty)
-        {
-            if (rEntry.IsQueryByEmpty())
-                aRes.first = aCell.isEmpty();
-            else
-            {
-                assert(rEntry.IsQueryByNonEmpty());
-                aRes.first = !aCell.isEmpty();
-            }
-        }
-        else
-        {
-            for (const auto& rItem : rItems)
-            {
-                if (rItem.meType == ScQueryEntry::ByTextColor)
-                {
-                    std::pair<bool, bool> aThisRes
-                        = aEval.compareByTextColor(nCol, nRow, nTab, rItem);
-                    aRes.first |= aThisRes.first;
-                    aRes.second |= aThisRes.second;
-                }
-                else if (rItem.meType == ScQueryEntry::ByBackgroundColor)
-                {
-                    std::pair<bool,bool> aThisRes =
-                        aEval.compareByBackgroundColor(nCol, nRow, nTab, rItem);
-                    aRes.first |= aThisRes.first;
-                    aRes.second |= aThisRes.second;
-                }
-                else if (QueryEvaluator::isQueryByValue(rItem, aCell))
-                {
-                    std::pair<bool,bool> aThisRes =
-                        aEval.compareByValue(aCell, nCol, nRow, rEntry, rItem, pContext);
-                    aRes.first |= aThisRes.first;
-                    aRes.second |= aThisRes.second;
-                }
-                else if (QueryEvaluator::isQueryByString(rEntry, rItem, aCell))
-                {
-                    std::pair<bool,bool> aThisRes =
-                        aEval.compareByString(aCell, nRow, rEntry, rItem, pContext);
-                    aRes.first |= aThisRes.first;
-                    aRes.second |= aThisRes.second;
-                }
-                else if (rParam.mbRangeLookup)
-                {
-                    std::pair<bool,bool> aThisRes =
-                        QueryEvaluator::compareByRangeLookup(aCell, rEntry, rItem);
-                    aRes.first |= aThisRes.first;
-                    aRes.second |= aThisRes.second;
-                }
-
-                if (aRes.first && aRes.second)
-                    break;
-            }
-        }
+        std::pair<bool,bool> aRes = validQueryProcessEntry(nRow, nCol, nTab, rParam, aCell, pContext,
+            aEval, rEntry);
 
         if (nPos == -1)
         {
