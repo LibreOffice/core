@@ -56,22 +56,24 @@ const TranslateId SFX_CB_PROPERTY_STRINGARRAY[] =
     NC_("SFX_CB_PROPERTY_STRINGARRAY", "URL")
 };
 
-#define CUSTOM_TYPE_UNKNOWN     0
-#define CUSTOM_TYPE_TEXT        1
-#define CUSTOM_TYPE_NUMBER      2
-#define CUSTOM_TYPE_DATE        3
-#define CUSTOM_TYPE_BOOLEAN     4
-#define CUSTOM_TYPE_DURATION    5
-#define CUSTOM_TYPE_DATETIME    6
+enum CustomProperties : sal_Int32 {
+    Custom_Type_Unknown = 0,
+    Custom_Type_Text = 1,
+    Custom_Type_Number = 2,
+    Custom_Type_Date = 3,
+    Custom_Type_Boolean = 4,
+    Custom_Type_Duration = 5,
+    Custom_Type_Datetime = 6
+};
 
-const std::pair<TranslateId, int> SFX_LB_PROPERTY_STRINGARRAY[] =
+const std::pair<TranslateId, CustomProperties> SFX_LB_PROPERTY_STRINGARRAY[] =
 {
-    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Text")        , CUSTOM_TYPE_TEXT },
-    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "DateTime")    , CUSTOM_TYPE_DATETIME },
-    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Date")        , CUSTOM_TYPE_DATE },
-    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Duration")    , CUSTOM_TYPE_DURATION },
-    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Number")      , CUSTOM_TYPE_NUMBER },
-    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Yes or no")   , CUSTOM_TYPE_BOOLEAN }
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Text")        , Custom_Type_Text },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "DateTime")    , Custom_Type_Datetime },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Date")        , Custom_Type_Date },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Duration")    , Custom_Type_Duration },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Number")      , Custom_Type_Number },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Yes or no")   , Custom_Type_Boolean }
 };
 
 #endif
