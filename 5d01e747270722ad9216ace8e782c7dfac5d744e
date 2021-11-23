@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c418e1df_1b731df1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-23T13:41:27Z",
+      "side": 1,
+      "message": "Those two are not of type sal_uInt32 but sal_Int32 (which would thus be the suitable type for nIndex too), or what am I missing?",
+      "revId": "5d01e747270722ad9216ace8e782c7dfac5d744e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
