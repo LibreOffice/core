@@ -1667,7 +1667,7 @@ void CustomPropertiesWindow::ReloadLinesContent()
     util::Duration aTmpDuration;
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
-    sal_IntPtr nType = CUSTOM_TYPE_UNKNOWN;
+    int nType = CUSTOM_TYPE_UNKNOWN;
     OUString sValue;
 
     sal_uInt32 nDataModelPos = GetCurrentDataModelPosition();

@@ -56,13 +56,13 @@ const TranslateId SFX_CB_PROPERTY_STRINGARRAY[] =
     NC_("SFX_CB_PROPERTY_STRINGARRAY", "URL")
 };
 
-#define CUSTOM_TYPE_UNKNOWN     0
-#define CUSTOM_TYPE_TEXT        1
-#define CUSTOM_TYPE_NUMBER      2
-#define CUSTOM_TYPE_DATE        3
-#define CUSTOM_TYPE_BOOLEAN     4
-#define CUSTOM_TYPE_DURATION    5
-#define CUSTOM_TYPE_DATETIME    6
+constexpr int CUSTOM_TYPE_UNKNOWN = 0;
+constexpr int CUSTOM_TYPE_TEXT = 1;
+constexpr int CUSTOM_TYPE_NUMBER = 2;
+constexpr int CUSTOM_TYPE_DATE = 3;
+constexpr int CUSTOM_TYPE_BOOLEAN = 4;
+constexpr int CUSTOM_TYPE_DURATION = 5;
+constexpr int CUSTOM_TYPE_DATETIME = 6;
 
 const std::pair<TranslateId, int> SFX_LB_PROPERTY_STRINGARRAY[] =
 {
