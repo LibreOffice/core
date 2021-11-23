@@ -3043,6 +3043,18 @@ bool ScTable::ValidQuery(
     for (it = itBeg; it != itEnd && (*it)->bDoQuery; ++it)
     {
         const ScQueryEntry& rEntry = **it;
+
+        // Short-circuit the test at the end of the loop - if this is SC_AND
+        // and the previous value is false, this value will not be needed.
+        // Disbable this if pbTestEqualCondition is present as that one may get set
+        // even if the result is false (that also means pTest doesn't need to be
+        // handled here).
+        if (rEntry.eConnect == SC_AND && pbTestEqualCondition == nullptr
+             && nPos != -1 && !pPasst[nPos])
+        {
+            continue;
+        }
+
         SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
 
         // We can only handle one single direct query passed as a known pCell,
