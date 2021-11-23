@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9cd6fd_d526c986",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-23T09:36:50Z",
+      "side": 1,
+      "message": "Hi Justin,\nThanks for fixing this issue.\nRegarding your comment \"I\u0027m not making a unit test because the color really\nought to be set - it should just be transparent.\", should it be added to the list of ideas for budget 2022 ? \u003c https://wiki.documentfoundation.org/Development/Budget2022 \u003e ?\nOTOH, what\u0027s wrong with adding a unittest for this issue ?",
+      "revId": "283586c89a0542efb2d57a36ee3aad7cc5153ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
