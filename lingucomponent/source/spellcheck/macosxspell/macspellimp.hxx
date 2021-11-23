@@ -20,6 +20,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_MACOSXSPELL_MACSPELLIMP_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_MACOSXSPELL_MACSPELLIMP_HXX
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <premac.h>
@@ -68,7 +69,7 @@ class MacSpellChecker :
 #else
     UITextChecker *         pChecker;
 #endif
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<XEventListener> aEvtListeners;
     rtl::Reference< linguistic::PropertyHelper_Spell >    xPropHelper;
     bool                                    bDisposing;
 
