@@ -16,6 +16,23 @@
       "message": "Stephan: I\u0027d put +1 because the patch is ok per se, but just to be sure, can it be pushed or some of these changes can\u0027t be made because of public interfaces? Perhaps it also requires a brand new LO profile so everything works?\n",
       "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "725a2698_d53535d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-23T07:55:09Z",
+      "side": 1,
+      "message": "I have no idea if anything would break, but my gut feeling is not to touch that.  You might want to e.g. ask on the dev mailing list about it.",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
