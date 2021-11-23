@@ -2957,7 +2957,7 @@ public:
 };
 
 std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, const ScQueryParam& rParam,
-    ScRefCellValue& aCell, const ScInterpreterContext* pContext, QueryEvaluator& aEval,
+    ScRefCellValue& aCell, bool* pbTestEqualCondition, const ScInterpreterContext* pContext, QueryEvaluator& aEval,
     const ScQueryEntry& rEntry )
 {
     std::pair<bool,bool> aRes(false, false);
@@ -3012,7 +3012,7 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
             aRes.second |= aThisRes.second;
         }
 
-        if (aRes.first && aRes.second)
+        if (aRes.first && (aRes.second || pbTestEqualCondition == nullptr))
             break;
     }
     return aRes;
@@ -3058,8 +3058,8 @@ bool ScTable::ValidQuery(
         else
             aCell = GetCellValue(nCol, nRow);
 
-        std::pair<bool,bool> aRes = validQueryProcessEntry(nRow, nCol, nTab, rParam, aCell, pContext,
-            aEval, rEntry);
+        std::pair<bool,bool> aRes = validQueryProcessEntry(nRow, nCol, nTab, rParam, aCell,
+            pbTestEqualCondition, pContext, aEval, rEntry);
 
         if (nPos == -1)
         {
