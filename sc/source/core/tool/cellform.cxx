@@ -174,6 +174,10 @@ OUString ScCellFormat::GetInputString(
 
             return str;
         }
+        case CELLTYPE_NONE:
+            if( pShared != nullptr )
+                *pShared = &svl::SharedString::getEmptyString();
+            return OUString();
         default:
             return OUString();
     }
