@@ -58,6 +58,11 @@ public:
             ++m_value;
         }
 
+        void operator--( void )
+        {
+            --m_value;
+        }
+
         bool operator!=( Iterator rhs ) const
         {
             return m_value != rhs.m_value;
