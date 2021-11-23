@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7566426_73f6693e",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-23T18:47:22Z",
+      "side": 1,
+      "message": "Was this intentionally changed to IsPrinterPreferred?  Or should it have been just renamed IsPaperSize?  tdf#119470",
+      "range": {
+        "startLine": 1905,
+        "startChar": 16,
+        "endLine": 1905,
+        "endChar": 45
+      },
+      "revId": "57991f885e60d04e93bf5004d4fdceee7d29f3d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
