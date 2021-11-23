@@ -34,6 +34,24 @@
       "parentUuid": "4c5698b5_83acf586",
       "revId": "62d015fb575ce339581fbd705052ce7c48ba60ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd15df33_f73b363a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-23T22:59:00Z",
+      "side": 1,
+      "message": "Fixed with https://gerrit.libreoffice.org/c/core/+/125736",
+      "parentUuid": "6e652ac6_44956154",
+      "revId": "62d015fb575ce339581fbd705052ce7c48ba60ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
