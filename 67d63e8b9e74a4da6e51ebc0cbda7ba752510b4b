@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84dff76b_463b927b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-11-23T06:30:15Z",
+      "side": 1,
+      "message": "Tomaz, figured out what was causing the crash - hadn\u0027t checked if mpMetaFile was set or not! oops. This will be irrelevant in a later patch, but fixed this now. Sorry about the delay, I had a small family holiday :-)",
+      "revId": "67d63e8b9e74a4da6e51ebc0cbda7ba752510b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
