@@ -63,7 +63,7 @@ class Thesaurus :
 {
     Sequence< Locale >                      aSuppLocales;
 
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<XEventListener> aEvtListeners;
     linguistic::PropertyHelper_Thesaurus*       pPropHelper;
     bool                                    bDisposing;
     struct ThesInfo
