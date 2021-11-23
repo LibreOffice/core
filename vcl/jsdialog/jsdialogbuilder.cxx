@@ -709,12 +709,18 @@ void JSInstanceBuilder::InsertWindowToMap(const std::string& nWindowId)
 
 void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
 {
-    auto it = GetLOKWeldWidgetsMap().find(getMapIdFromWindowId());
+    RememberWidget(getMapIdFromWindowId(), id, pWidget);
+    m_aRememberedWidgets.push_back(id.getStr());
+}
+
+void JSInstanceBuilder::RememberWidget(const std::string& nWindowId, const OString& id,
+                                       weld::Widget* pWidget)
+{
+    auto it = GetLOKWeldWidgetsMap().find(nWindowId);
     if (it != GetLOKWeldWidgetsMap().end())
     {
         it->second.erase(id);
         it->second.insert(WidgetMap::value_type(id, pWidget));
-        m_aRememberedWidgets.push_back(id.getStr());
     }
 }
 
@@ -1108,8 +1114,15 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
     }
 
     xMessageDialog->SetLOKTunnelingState(false);
-    InsertWindowToMap(std::to_string(xMessageDialog->GetLOKWindowId()));
-    return new JSMessageDialog(xMessageDialog, nullptr, true);
+    std::string sWindowId = std::to_string(xMessageDialog->GetLOKWindowId());
+    InsertWindowToMap(sWindowId);
+
+    weld::MessageDialog* pRet = new JSMessageDialog(xMessageDialog, nullptr, true);
+
+    if (pRet)
+        RememberWidget(sWindowId, "__DIALOG__", pRet);
+
+    return pRet;
 }
 
 JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
@@ -1313,12 +1326,13 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
 
     if (!pBuilder)
     {
+        m_sWindowId = std::to_string(m_xMessageDialog->GetLOKWindowId());
+
         if (::OKButton* pOKBtn
             = dynamic_cast<::OKButton*>(m_xMessageDialog->get_widget_for_response(RET_OK)))
         {
             m_pOK.reset(new JSButton(m_pSender, pOKBtn, nullptr, false));
-            JSInstanceBuilder::AddChildWidget(std::to_string(m_xMessageDialog->GetLOKWindowId()),
-                                              pOKBtn->get_id().toUtf8(), m_pOK.get());
+            JSInstanceBuilder::AddChildWidget(m_sWindowId, pOKBtn->get_id().toUtf8(), m_pOK.get());
             m_pOK->connect_clicked(LINK(this, JSMessageDialog, OKHdl));
         }
 
@@ -1326,8 +1340,8 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
             = dynamic_cast<::CancelButton*>(m_xMessageDialog->get_widget_for_response(RET_CANCEL)))
         {
             m_pCancel.reset(new JSButton(m_pSender, pCancelBtn, nullptr, false));
-            JSInstanceBuilder::AddChildWidget(std::to_string(m_xMessageDialog->GetLOKWindowId()),
-                                              pCancelBtn->get_id().toUtf8(), m_pCancel.get());
+            JSInstanceBuilder::AddChildWidget(m_sWindowId, pCancelBtn->get_id().toUtf8(),
+                                              m_pCancel.get());
             m_pCancel->connect_clicked(LINK(this, JSMessageDialog, CancelHdl));
         }
     }
@@ -1336,7 +1350,7 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
 JSMessageDialog::~JSMessageDialog()
 {
     if (m_pOK || m_pCancel)
-        JSInstanceBuilder::RemoveWindowWidget(std::to_string(m_xMessageDialog->GetLOKWindowId()));
+        JSInstanceBuilder::RemoveWindowWidget(m_sWindowId);
 }
 
 IMPL_LINK_NOARG(JSMessageDialog, OKHdl, weld::Button&, void) { response(RET_OK); }

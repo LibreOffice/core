@@ -217,6 +217,8 @@ class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
     static std::map<std::string, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(const std::string& nWindowId);
     void RememberWidget(const OString& id, weld::Widget* pWidget);
+    static void RememberWidget(const std::string& nWindowId, const OString& id,
+                               weld::Widget* pWidget);
     static weld::Widget* FindWeldWidgetsMap(const std::string& nWindowId, const OString& rWidget);
 
     std::string getMapIdFromWindowId() const;
@@ -525,6 +527,9 @@ class JSMessageDialog : public JSWidget<SalInstanceMessageDialog, ::MessageDialo
     std::unique_ptr<JSDialogSender> m_pOwnedSender;
     std::unique_ptr<JSButton> m_pOK;
     std::unique_ptr<JSButton> m_pCancel;
+
+    // used for message dialogs created using static functions
+    std::string m_sWindowId;
 
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
