@@ -16,6 +16,24 @@
       "message": "In this ofz discovered testcase I see that the maRawToken starts uninitialized, we end up at sc/source/core/tool/compiler.cxx ScCompiler::IsReference line 3474 and return true for IsReference, but no NewOpCode was set along this route so maRawToken.GetOpCode in ScCompiler::CompileString line 4679 is use of an uninitialized value. Any ideas what should have happened here?",
       "revId": "62d015fb575ce339581fbd705052ce7c48ba60ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e652ac6_44956154",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-23T13:53:15Z",
+      "side": 1,
+      "message": "I\u0027ll take a look.",
+      "parentUuid": "4c5698b5_83acf586",
+      "revId": "62d015fb575ce339581fbd705052ce7c48ba60ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
