@@ -34,6 +34,24 @@
       "parentUuid": "c9280566_10ef7ea7",
       "revId": "33d982f123b9153a95435141eed41a8f3b4fa69e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "237ba9c7_49aac843",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-23T10:12:59Z",
+      "side": 1,
+      "message": "oh my :)\n\n...in which case the commit message should mention that, and the misleading\n\n  // before calling one of this methods, be sure that the value is not null\n\ncomment in include/connectivity/FValue.hxx be removed?",
+      "parentUuid": "171e4cd2_e21c8a08",
+      "revId": "33d982f123b9153a95435141eed41a8f3b4fa69e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
