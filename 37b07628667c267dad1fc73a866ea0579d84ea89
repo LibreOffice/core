@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f77372_02e0df6c",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T07:03:52Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "c190c182_f0e1d051",
+      "range": {
+        "startLine": 1112,
+        "startChar": 28,
+        "endLine": 1112,
+        "endChar": 64
+      },
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d089fc2e_0247e036",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-11-22T12:58:22Z",
       "side": 1,
       "message": "Does this comment break the link between the preceding documentation comment and the following declaration for Doxygen?  (And why is the documentation comment not also covered by the #ifndef anyway?)",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5abac263_5576e08c",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T07:03:52Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "d089fc2e_0247e036",
       "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -75,6 +117,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1694d92c_2be833ca",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2240,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T07:03:52Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "5be47165_8ec071f5",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "125b6f27_44fe63c1",
@@ -92,6 +152,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b691957c_8af64efc",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T07:03:52Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "125b6f27_44fe63c1",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4fbaf48_32ac0eeb",
@@ -105,6 +183,30 @@
       "writtenOn": "2021-11-22T12:58:22Z",
       "side": 1,
       "message": "Here and elsewhere:  I wouldn\u0027t copy here the mistake from the original newReplaceStrAt overload of allowing pNewSubStr to be null.",
+      "range": {
+        "startLine": 1507,
+        "startChar": 17,
+        "endLine": 1507,
+        "endChar": 28
+      },
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63f0b1e1_fca95ff6",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T07:03:52Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "d4fbaf48_32ac0eeb",
       "range": {
         "startLine": 1507,
         "startChar": 17,
@@ -138,6 +240,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fcc4229_c324d13d",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T07:03:52Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "26ab30c0_dfb153b2",
+      "range": {
+        "startLine": 1547,
+        "startChar": 34,
+        "endLine": 1547,
+        "endChar": 47
+      },
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8a54803_0ea71014",
@@ -151,6 +277,24 @@
       "writtenOn": "2021-11-22T12:58:22Z",
       "side": 1,
       "message": "Please sort these lines lexicographically.",
+      "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f40d17f_3b2e0033",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-23T07:03:52Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "f8a54803_0ea71014",
       "revId": "37b07628667c267dad1fc73a866ea0579d84ea89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
