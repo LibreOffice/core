@@ -50,6 +50,89 @@ public:
     sal_Int32 getLength() const;
 };
 
+inline SharedString::SharedString() : mpData(nullptr), mpDataIgnoreCase(nullptr) {}
+
+inline SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase ) :
+    mpData(pData), mpDataIgnoreCase(pDataIgnoreCase)
+{
+    if (mpData)
+        rtl_uString_acquire(mpData);
+    if (mpDataIgnoreCase)
+        rtl_uString_acquire(mpDataIgnoreCase);
+}
+
+inline SharedString::SharedString( const OUString& rStr ) : mpData(rStr.pData), mpDataIgnoreCase(nullptr)
+{
+    rtl_uString_acquire(mpData);
+}
+
+inline SharedString::SharedString( const SharedString& r ) : mpData(r.mpData), mpDataIgnoreCase(r.mpDataIgnoreCase)
+{
+    if (mpData)
+        rtl_uString_acquire(mpData);
+    if (mpDataIgnoreCase)
+        rtl_uString_acquire(mpDataIgnoreCase);
+}
+
+inline SharedString::SharedString(SharedString&& r) noexcept : mpData(r.mpData), mpDataIgnoreCase(r.mpDataIgnoreCase)
+{
+    r.mpData = nullptr;
+    r.mpDataIgnoreCase = nullptr;
+}
+
+inline SharedString::~SharedString()
+{
+    if (mpData)
+        rtl_uString_release(mpData);
+    if (mpDataIgnoreCase)
+        rtl_uString_release(mpDataIgnoreCase);
+}
+
+inline bool SharedString::operator!= ( const SharedString& r ) const
+{
+    return !operator== (r);
+}
+
+inline OUString SharedString::getString() const
+{
+    return mpData ? OUString(mpData) : OUString();
+}
+
+inline rtl_uString* SharedString::getData()
+{
+    return mpData;
+}
+
+inline const rtl_uString* SharedString::getData() const
+{
+    return mpData;
+}
+
+inline rtl_uString* SharedString::getDataIgnoreCase()
+{
+    return mpDataIgnoreCase;
+}
+
+inline const rtl_uString* SharedString::getDataIgnoreCase() const
+{
+    return mpDataIgnoreCase;
+}
+
+inline bool SharedString::isValid() const
+{
+    return mpData != nullptr;
+}
+
+inline bool SharedString::isEmpty() const
+{
+    return mpData == nullptr || mpData->length == 0;
+}
+
+inline sal_Int32 SharedString::getLength() const
+{
+    return mpData ? mpData->length : 0;
+}
+
 }
 
 #endif
