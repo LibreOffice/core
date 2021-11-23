@@ -2367,25 +2367,6 @@ class QueryEvaluator
         return false;
     }
 
-    bool isRealWildOrRegExp(const ScQueryEntry& rEntry) const
-    {
-        if (mrParam.eSearchType == utl::SearchParam::SearchType::Normal)
-            return false;
-
-        return isTextMatchOp(rEntry);
-    }
-
-    bool isTestWildOrRegExp(const ScQueryEntry& rEntry) const
-    {
-        if (!mpTestEqualCondition)
-            return false;
-
-        if (mrParam.eSearchType == utl::SearchParam::SearchType::Normal)
-            return false;
-
-        return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);
-    }
-
     void setupTransliteratorIfNeeded()
     {
         if (!mpTransliteration)
@@ -2412,6 +2393,25 @@ public:
         mbCaseSensitive( rParam.bCaseSens ),
         mpValidQueryCache( pValidQueryCache )
     {
+    }
+
+    bool isRealWildOrRegExp(const ScQueryEntry& rEntry) const
+    {
+        if (mrParam.eSearchType == utl::SearchParam::SearchType::Normal)
+            return false;
+
+        return isTextMatchOp(rEntry);
+    }
+
+    bool isTestWildOrRegExp(const ScQueryEntry& rEntry) const
+    {
+        if (!mpTestEqualCondition)
+            return false;
+
+        if (mrParam.eSearchType == utl::SearchParam::SearchType::Normal)
+            return false;
+
+        return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);
     }
 
     static bool isQueryByValue(
@@ -2937,7 +2937,7 @@ public:
 
 std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, const ScQueryParam& rParam,
     ScRefCellValue& aCell, bool* pbTestEqualCondition, const ScInterpreterContext* pContext, QueryEvaluator& aEval,
-    const ScQueryEntry& rEntry )
+    const ScDocument& rDoc, const ScQueryEntry& rEntry )
 {
     std::pair<bool,bool> aRes(false, false);
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
@@ -2952,10 +2952,87 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
         }
         return aRes;
     }
-    // Generic handling.
+    if( rEntry.eOp == SC_EQUAL && rItems.size() >= 10 )
+    {
+        // If there are many items to query for (autofilter does this), then try to search
+        // efficiently in those items. So first search all the items of the relevant type,
+        // If that does not find anything, fall back to the generic code.
+        double value = 0;
+        bool valid = true;
+        // For ScQueryEntry::ByValue check that the cell either is a value or is a formula
+        // that has a value and is not an error (those are compared as strings). This
+        // is basically simplified isQueryByValue().
+        if( aCell.meType == CELLTYPE_VALUE )
+            value = aCell.mfValue;
+        else if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetErrCode() != FormulaError::NONE
+            && aCell.mpFormula->IsValue())
+        {
+            value = aCell.mpFormula->GetValue();
+        }
+        else
+            valid = false;
+        if(valid)
+        {
+            for (const auto& rItem : rItems)
+            {
+                // For speed don't bother comparing approximately here, usually there either
+                // will be an exact match or it wouldn't match anyway.
+                if (rItem.meType == ScQueryEntry::ByValue
+                    && value == rItem.mfVal)
+                {
+                    return std::make_pair(true, true);
+                }
+            }
+        }
+    }
     const svl::SharedString* cellSharedString = nullptr;
     OUString cellString;
     bool cellStringSet = false;
+    if( rEntry.eOp == SC_EQUAL && rItems.size() >= 10 )
+    {
+        // The same as above but for strings. Try to optimize the case when
+        // it's a svl::SharedString comparison (case sensitive or not).
+        // That happens when SC_EQUAL is used, whole cell matching is enabled,
+        // and a regexp is not wanted, see compareByString() above.
+        if(rDoc.GetDocOptions().IsMatchWholeCell()
+             && !aEval.isRealWildOrRegExp(rEntry) && !aEval.isTestWildOrRegExp(rEntry))
+        {
+            if(!cellStringSet)
+            {
+                cellString = aEval.getCellString(aCell, nRow, rEntry, pContext, &cellSharedString);
+                cellStringSet = true;
+            }
+            // For ScQueryEntry::ByString check that the cell is represented by a shared string,
+            // which means it's either a string cell or a formula error. This is not as
+            // generous as isQueryByString() but it should be enough and better be safe.
+            if(cellSharedString != nullptr)
+            {
+                if (rParam.bCaseSens)
+                {
+                    for (const auto& rItem : rItems)
+                    {
+                        if (rItem.meType == ScQueryEntry::ByString
+                            && cellSharedString->getData() == rItem.maString.getData())
+                        {
+                            return std::make_pair(true, true);
+                        }
+                    }
+                }
+                else
+                {
+                    for (const auto& rItem : rItems)
+                    {
+                        if (rItem.meType == ScQueryEntry::ByString
+                            && cellSharedString->getDataIgnoreCase() == rItem.maString.getDataIgnoreCase())
+                        {
+                            return std::make_pair(true, true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // Generic handling.
     for (const auto& rItem : rItems)
     {
         if (rItem.meType == ScQueryEntry::ByTextColor)
@@ -3059,7 +3136,7 @@ bool ScTable::ValidQuery(
             aCell = GetCellValue(nCol, nRow);
 
         std::pair<bool,bool> aRes = validQueryProcessEntry(nRow, nCol, nTab, rParam, aCell,
-            pbTestEqualCondition, pContext, aEval, rEntry);
+            pbTestEqualCondition, pContext, aEval, rDocument, rEntry);
 
         if (nPos == -1)
         {
