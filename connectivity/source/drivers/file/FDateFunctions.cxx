@@ -32,7 +32,7 @@ ORowSetValue OOp_DayOfWeek::operate(const ORowSetValue& lhs) const
         return lhs;
 
     sal_Int32 nRet = 0;
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     Date aDate(aD.Day, aD.Month, aD.Year);
     DayOfWeek eDayOfWeek = aDate.GetDayOfWeek();
     switch (eDayOfWeek)
@@ -69,7 +69,7 @@ ORowSetValue OOp_DayOfMonth::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     return static_cast<sal_Int16>(aD.Day);
 }
 
@@ -78,7 +78,7 @@ ORowSetValue OOp_DayOfYear::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     Date aDate(aD.Day, aD.Month, aD.Year);
     return static_cast<sal_Int16>(aDate.GetDayOfYear());
 }
@@ -88,7 +88,7 @@ ORowSetValue OOp_Month::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     return static_cast<sal_Int16>(aD.Month);
 }
 
@@ -98,7 +98,7 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
         return lhs;
 
     OUString sRet;
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     Date aDate(aD.Day, aD.Month, aD.Year);
     DayOfWeek eDayOfWeek = aDate.GetDayOfWeek();
     switch (eDayOfWeek)
@@ -136,7 +136,7 @@ ORowSetValue OOp_MonthName::operate(const ORowSetValue& lhs) const
         return lhs;
 
     OUString sRet;
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     switch (aD.Month)
     {
         case 1:
@@ -185,7 +185,7 @@ ORowSetValue OOp_Quarter::operate(const ORowSetValue& lhs) const
         return lhs;
 
     sal_Int32 nRet = 1;
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     if (aD.Month >= 4 && aD.Month < 7)
         nRet = 2;
     else if (aD.Month >= 7 && aD.Month < 10)
@@ -202,12 +202,12 @@ ORowSetValue OOp_Week::operate(const std::vector<ORowSetValue>& lhs) const
 
     size_t nSize = lhs.size();
 
-    css::util::Date aD = lhs[nSize - 1];
+    css::util::Date aD = lhs[nSize - 1].getDate();
     Date aDate(aD.Day, aD.Month, aD.Year);
 
     sal_Int16 nStartDay = SUNDAY;
     if (nSize == 2 && !lhs[0].isNull())
-        nStartDay = lhs[0];
+        nStartDay = lhs[0].getInt16();
 
     return static_cast<sal_Int16>(aDate.GetWeekOfYear(static_cast<DayOfWeek>(nStartDay)));
 }
@@ -217,7 +217,7 @@ ORowSetValue OOp_Year::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    css::util::Date aD = lhs;
+    css::util::Date aD = lhs.getDate();
     return aD.Year;
 }
 
@@ -226,7 +226,7 @@ ORowSetValue OOp_Hour::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    css::util::Time aT = lhs;
+    css::util::Time aT = lhs.getTime();
     return static_cast<sal_Int16>(aT.Hours);
 }
 
@@ -235,7 +235,7 @@ ORowSetValue OOp_Minute::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    css::util::Time aT = lhs;
+    css::util::Time aT = lhs.getTime();
     return static_cast<sal_Int16>(aT.Minutes);
 }
 
@@ -244,7 +244,7 @@ ORowSetValue OOp_Second::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    css::util::Time aT = lhs;
+    css::util::Time aT = lhs.getTime();
     return static_cast<sal_Int16>(aT.Seconds);
 }
 

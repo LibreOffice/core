@@ -491,7 +491,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x
     }
     catch(SQLException&)
     {
-        setString(parameterIndex, ORowSetValue(x));
+        setString(parameterIndex, ORowSetValue(x).getString());
     }
 }
 
@@ -584,8 +584,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
             {
                 ORowSetValue aValue;
                 aValue.fill(x);
-                // TODO: make sure that this calls the string overload
-                setParameter(parameterIndex, sqlType, scale, aValue);
+                setParameter(parameterIndex, sqlType, scale, aValue.getString());
             }
             else
                 setNull(parameterIndex,sqlType);

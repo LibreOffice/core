@@ -98,7 +98,7 @@ namespace frm
 
             void operator()( const ORowSetValue& _append )
             {
-                m_string += _append;
+                m_string += _append.getString();
             }
 
         private:

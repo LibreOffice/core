@@ -44,12 +44,12 @@ namespace connectivity
         OUString getKeyString(std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {
             OSL_ENSURE(m_aKeys.size() > i,"Wrong index for KEyValue");
-            return m_aKeys[i]->getValue();
+            return m_aKeys[i]->getValue().getString();
         }
         double          getKeyDouble(std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {
             OSL_ENSURE(m_aKeys.size() > i,"Wrong index for KEyValue");
-            return m_aKeys[i]->getValue();
+            return m_aKeys[i]->getValue().getDouble();
         }
 
         sal_Int32 getValue() const { return m_nValue; }

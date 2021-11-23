@@ -945,20 +945,20 @@ OUString ORowSetValue::getString( ) const
                 aRet = m_aValue.m_pString;
                 break;
             case DataType::FLOAT:
-                aRet = OUString::number(static_cast<float>(*this));
+                aRet = OUString::number(getFloat());
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                aRet = OUString::number(static_cast<double>(*this));
+                aRet = OUString::number(getDouble());
                 break;
             case DataType::DATE:
-                aRet = DBTypeConversion::toDateString(*this);
+                aRet = DBTypeConversion::toDateString(getDate());
                 break;
             case DataType::TIME:
-                aRet = DBTypeConversion::toTimeString(*this);
+                aRet = DBTypeConversion::toTimeString(getTime());
                 break;
             case DataType::TIMESTAMP:
-                aRet = DBTypeConversion::toDateTimeString(*this);
+                aRet = DBTypeConversion::toDateTimeString(getDateTime());
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -974,24 +974,24 @@ OUString ORowSetValue::getString( ) const
                 }
                 break;
             case DataType::BIT:
-                aRet = OUString::number(int(static_cast<bool>(*this)));
+                aRet = OUString::number(int(getBool()));
                 break;
             case DataType::BOOLEAN:
-                aRet = OUString::boolean(static_cast<bool>(*this));
+                aRet = OUString::boolean(getBool());
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
             case DataType::INTEGER:
                 if ( m_bSigned )
-                    aRet = OUString::number(static_cast<sal_Int32>(*this));
+                    aRet = OUString::number(getInt32());
                 else
-                    aRet = OUString::number(static_cast<sal_uInt32>(*this));
+                    aRet = OUString::number(getUInt32());
                 break;
             case DataType::BIGINT:
                 if ( m_bSigned )
-                    aRet = OUString::number(static_cast<sal_Int64>(*this));
+                    aRet = OUString::number(getLong());
                 else
-                    aRet = OUString::number(static_cast<sal_uInt64>(*this));
+                    aRet = OUString::number(getULong());
                 break;
             case DataType::CLOB:
                 {
@@ -1907,7 +1907,7 @@ css::util::Date ORowSetValue::getDate() const
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
-                aValue = DBTypeConversion::toDate(static_cast<double>(*this));
+                aValue = DBTypeConversion::toDate(getDouble());
                 break;
 
             case DataType::DATE:
@@ -1927,7 +1927,7 @@ css::util::Date ORowSetValue::getDate() const
             case DataType::SMALLINT:
             case DataType::INTEGER:
             case DataType::BIGINT:
-                aValue = DBTypeConversion::toDate( double( sal_Int64( *this ) ) );
+                aValue = DBTypeConversion::toDate( double( getLong() ) );
                 break;
 
             case DataType::BLOB:
@@ -1962,12 +1962,12 @@ css::util::Time ORowSetValue::getTime()        const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toTime(static_cast<double>(*this));
+                aValue = DBTypeConversion::toTime(getDouble());
                 break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
-                aValue = DBTypeConversion::toTime(static_cast<double>(*this));
+                aValue = DBTypeConversion::toTime(getDouble());
                 break;
             case DataType::TIMESTAMP:
                 {
@@ -2006,12 +2006,12 @@ css::util::DateTime ORowSetValue::getDateTime()    const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toDateTime(static_cast<double>(*this));
+                aValue = DBTypeConversion::toDateTime(getDouble());
                 break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
-                aValue = DBTypeConversion::toDateTime(static_cast<double>(*this));
+                aValue = DBTypeConversion::toDateTime(getDouble());
                 break;
             case DataType::DATE:
                 {

@@ -122,56 +122,56 @@ void WrappedResultSet::updateColumn(sal_Int32 nPos, const Reference< XRowUpdate 
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
-                _xParameter->updateString(nPos,_rValue);
+                _xParameter->updateString(nPos,_rValue.getString());
                 break;
             case DataType::BIGINT:
                 if ( _rValue.isSigned() )
-                    _xParameter->updateLong(nPos,_rValue);
+                    _xParameter->updateLong(nPos,_rValue.getLong());
                 else
-                    _xParameter->updateString(nPos,_rValue);
+                    _xParameter->updateString(nPos,_rValue.getString());
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                _xParameter->updateBoolean(nPos,static_cast<bool>(_rValue));
+                _xParameter->updateBoolean(nPos,_rValue.getBool());
                 break;
             case DataType::TINYINT:
                 if ( _rValue.isSigned() )
-                    _xParameter->updateByte(nPos,_rValue);
+                    _xParameter->updateByte(nPos,_rValue.getInt8());
                 else
-                    _xParameter->updateShort(nPos,_rValue);
+                    _xParameter->updateShort(nPos,_rValue.getInt16());
                 break;
             case DataType::SMALLINT:
                 if ( _rValue.isSigned() )
-                    _xParameter->updateShort(nPos,_rValue);
+                    _xParameter->updateShort(nPos,_rValue.getInt16());
                 else
-                    _xParameter->updateInt(nPos,_rValue);
+                    _xParameter->updateInt(nPos,_rValue.getInt32());
                 break;
             case DataType::INTEGER:
                 if ( _rValue.isSigned() )
-                    _xParameter->updateInt(nPos,_rValue);
+                    _xParameter->updateInt(nPos,_rValue.getInt32());
                 else
-                    _xParameter->updateLong(nPos,_rValue);
+                    _xParameter->updateLong(nPos,_rValue.getLong());
                 break;
             case DataType::FLOAT:
-                _xParameter->updateFloat(nPos,_rValue);
+                _xParameter->updateFloat(nPos,_rValue.getFloat());
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                _xParameter->updateDouble(nPos,_rValue);
+                _xParameter->updateDouble(nPos,_rValue.getDouble());
                 break;
             case DataType::DATE:
-                _xParameter->updateDate(nPos,_rValue);
+                _xParameter->updateDate(nPos,_rValue.getDate());
                 break;
             case DataType::TIME:
-                _xParameter->updateTime(nPos,_rValue);
+                _xParameter->updateTime(nPos,_rValue.getTime());
                 break;
             case DataType::TIMESTAMP:
-                _xParameter->updateTimestamp(nPos,_rValue);
+                _xParameter->updateTimestamp(nPos,_rValue.getDateTime());
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-                _xParameter->updateBytes(nPos,_rValue);
+                _xParameter->updateBytes(nPos,_rValue.getSequence());
                 break;
             case DataType::BLOB:
             case DataType::CLOB:

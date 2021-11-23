@@ -248,7 +248,25 @@ template <typename T> T OPreparedResultSet::retrieveValue(sal_Int32 nColumnIndex
     if (getTypeFromMysqlType(m_aFields[nColumnIndex - 1].type) == std::type_index(typeid(T)))
         return *static_cast<T*>(m_aData[nColumnIndex - 1].buffer);
     else
-        return getRowSetValue(nColumnIndex);
+    {
+        auto const& row = getRowSetValue(nColumnIndex);
+        if constexpr (std::is_same_v<sal_Int64, T>)
+            return row.getLong();
+        else if constexpr (std::is_same_v<sal_Int32, T>)
+            return row.getInt32();
+        else if constexpr (std::is_same_v<sal_Int16, T>)
+            return row.getInt16();
+        else if constexpr (std::is_same_v<sal_Int8, T>)
+            return row.getInt8();
+        else if constexpr (std::is_same_v<double, T>)
+            return row.getDouble();
+        else if constexpr (std::is_same_v<float, T>)
+            return row.getFloat();
+        else if constexpr (std::is_same_v<bool, T>)
+            return row.getBool();
+        else
+            return row;
+    }
 }
 
 template <> uno::Sequence<sal_Int8> OPreparedResultSet::retrieveValue(sal_Int32 column)
@@ -261,7 +279,7 @@ template <> uno::Sequence<sal_Int8> OPreparedResultSet::retrieveValue(sal_Int32 
 template <> Date OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
     if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(Date)))
-        return getRowSetValue(column);
+        return getRowSetValue(column).getDate();
     const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
 
     Date d;
@@ -274,7 +292,7 @@ template <> Date OPreparedResultSet::retrieveValue(sal_Int32 column)
 template <> Time OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
     if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(Time)))
-        return getRowSetValue(column);
+        return getRowSetValue(column).getTime();
     const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
 
     Time t;
@@ -287,7 +305,7 @@ template <> Time OPreparedResultSet::retrieveValue(sal_Int32 column)
 template <> DateTime OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
     if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(DateTime)))
-        return getRowSetValue(column);
+        return getRowSetValue(column).getDateTime();
     const MYSQL_TIME* pTime = static_cast<MYSQL_TIME*>(m_aData[column - 1].buffer);
 
     DateTime t;
@@ -306,7 +324,7 @@ template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
     // BLOB can be simply read out as string
     if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(OUString))
         && m_aFields[column - 1].type != MYSQL_TYPE_BLOB)
-        return getRowSetValue(column);
+        return getRowSetValue(column).getString();
     const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
 
     return OUString(sStr, *m_aData[column - 1].length, m_encoding);

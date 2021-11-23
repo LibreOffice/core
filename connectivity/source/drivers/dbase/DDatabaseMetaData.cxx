@@ -207,7 +207,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
                         aRow[9] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
                         aRow[11] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))));
                         aRow[13] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))));
-                        switch(static_cast<sal_Int32>(aRow[5]->getValue()))
+                        switch(aRow[5]->getValue().getInt32())
                         {
                         case DataType::CHAR:
                         case DataType::VARCHAR:
@@ -220,7 +220,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
                             aRow[16] = new ORowSetValueDecorator(sal_Int32(0));
                         }
                         aRow[17] = new ORowSetValueDecorator(i);
-                        switch(sal_Int32(aRow[11]->getValue()))
+                        switch(aRow[11]->getValue().getInt32())
                         {
                         case ColumnValue::NO_NULLS:
                             aRow[18] = new ORowSetValueDecorator(OUString("NO"));

@@ -176,7 +176,7 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
                     aRow[13] = new ORowSetValueDecorator(::comphelper::getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))));
                     //  aRow[14] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
                     //  aRow[15] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-                    switch(sal_Int32(aRow[5]->getValue()))
+                    switch(aRow[5]->getValue().getInt32())
                     {
                     case DataType::CHAR:
                     case DataType::VARCHAR:
@@ -189,7 +189,7 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
                         aRow[16] = new ORowSetValueDecorator(sal_Int32(0));
                     }
                     aRow[17] = new ORowSetValueDecorator(i);
-                    switch(sal_Int32(aRow[11]->getValue()))
+                    switch(aRow[11]->getValue().getInt32())
                     {
                     case ColumnValue::NO_NULLS:
                         aRow[18]  = new ORowSetValueDecorator(OUString("NO"));

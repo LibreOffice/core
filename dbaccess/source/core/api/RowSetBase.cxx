@@ -250,73 +250,73 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
 OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getString();
 }
 
 sal_Bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return bool(getValue(columnIndex));
+    return getValue(columnIndex).getBool();
 }
 
 sal_Int8 SAL_CALL ORowSetBase::getByte( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt8();
 }
 
 sal_Int16 SAL_CALL ORowSetBase::getShort( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt16();
 }
 
 sal_Int32 SAL_CALL ORowSetBase::getInt( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt32();
 }
 
 sal_Int64 SAL_CALL ORowSetBase::getLong( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getLong();
 }
 
 float SAL_CALL ORowSetBase::getFloat( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getFloat();
 }
 
 double SAL_CALL ORowSetBase::getDouble( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDouble();
 }
 
 Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getSequence();
 }
 
 css::util::Date SAL_CALL ORowSetBase::getDate( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDate();
 }
 
 css::util::Time SAL_CALL ORowSetBase::getTime( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getTime();
 }
 
 css::util::DateTime SAL_CALL ORowSetBase::getTimestamp( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDateTime();
 }
 
 Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex )

@@ -78,7 +78,7 @@ void MacabPreparedStatement::getNextParameter(OUString &rParameter) const
         ::dbtools::throwGenericSQLException(sError,*const_cast<MacabPreparedStatement *>(this));
     }
 
-    rParameter = (*m_aParameterRow)[m_nParameterIndex];
+    rParameter = (*m_aParameterRow)[m_nParameterIndex].getString();
 
     m_nParameterIndex++;
 }
