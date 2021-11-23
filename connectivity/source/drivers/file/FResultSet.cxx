@@ -217,43 +217,43 @@ Reference< css::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_
 
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex )
 {
-    return bool(getValue(columnIndex));
+    return getValue(columnIndex).getBool();
 }
 
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt8();
 }
 
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getSequence();
 }
 
 
 css::util::Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDate();
 }
 
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDouble();
 }
 
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getFloat();
 }
 
 
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt32();
 }
 
 
@@ -264,13 +264,13 @@ sal_Int32 SAL_CALL OResultSet::getRow(  )
 
     OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"getRow called for deleted row");
 
-    return m_aSkipDeletedSet.getMappedPosition((*m_aRow)[0]->getValue());
+    return m_aSkipDeletedSet.getMappedPosition((*m_aRow)[0]->getValue().getInt32());
 }
 
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getLong();
 }
 
 
@@ -316,22 +316,22 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< css:
 
 sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getInt16();
 }
 
 OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getString();
 }
 
 css::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getTime();
 }
 
 css::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex )
 {
-    return getValue(columnIndex);
+    return getValue(columnIndex).getDateTime();
 }
 
 
@@ -518,12 +518,12 @@ void SAL_CALL OResultSet::insertRow(  )
     m_bRowInserted = m_pTable->InsertRow(*m_aInsertRow, m_xColsIdx);
     if(m_bRowInserted && m_pFileSet.is())
     {
-        sal_Int32 nPos = (*m_aInsertRow)[0]->getValue();
+        sal_Int32 nPos = (*m_aInsertRow)[0]->getValue().getInt32();
         m_pFileSet->push_back(nPos);
         *(*m_aInsertRow)[0] = sal_Int32(m_pFileSet->size());
         clearInsertRow();
 
-        m_aSkipDeletedSet.insertNewPosition((*m_aRow)[0]->getValue());
+        m_aSkipDeletedSet.insertNewPosition((*m_aRow)[0]->getValue().getInt32());
     }
 }
 
@@ -536,7 +536,7 @@ void SAL_CALL OResultSet::updateRow(  )
         lcl_throwError(STR_TABLE_READONLY,*this);
 
     m_bRowUpdated = m_pTable->UpdateRow(*m_aInsertRow, m_aRow,m_xColsIdx);
-    *(*m_aInsertRow)[0] = static_cast<sal_Int32>((*m_aRow)[0]->getValue());
+    *(*m_aInsertRow)[0] = (*m_aRow)[0]->getValue().getInt32();
 
     clearInsertRow();
 }
@@ -553,7 +553,7 @@ void SAL_CALL OResultSet::deleteRow()
     if(m_aRow->isDeleted())
         lcl_throwError(STR_ROW_ALREADY_DELETED,*this);
 
-    sal_Int32 nPos = static_cast<sal_Int32>((*m_aRow)[0]->getValue());
+    sal_Int32 nPos = (*m_aRow)[0]->getValue().getInt32();
     m_bRowDeleted = m_pTable->DeleteRow(*m_xColumns);
     if(m_bRowDeleted && m_pFileSet.is())
     {
@@ -837,7 +837,7 @@ again:
         }
         else if (m_pFileSet.is())
         {
-            sal_uInt32 nBookmarkValue = std::abs(static_cast<sal_Int32>((*m_aEvaluateRow)[0]->getValue()));
+            sal_uInt32 nBookmarkValue = std::abs((*m_aEvaluateRow)[0]->getValue().getInt32());
             m_pFileSet->push_back(nBookmarkValue);
         }
     }
@@ -1143,7 +1143,7 @@ void OResultSet::sortRows()
         (*m_aSelectRow)[0]->setValue( (*m_aRow)[0]->getValue() );
         if ( m_pSQLAnalyzer->hasFunctions() )
             m_pSQLAnalyzer->setSelectionEvaluationResult( m_aSelectRow, m_aColMapping );
-        const sal_Int32 nBookmark = (*m_aRow->begin())->getValue();
+        const sal_Int32 nBookmark = (*m_aRow->begin())->getValue().getInt32();
         ExecuteRow( IResultSetHelper::BOOKMARK, nBookmark, true, false );
     }
 
@@ -1571,7 +1571,7 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
 
 sal_Int32 OResultSet::getDriverPos() const
 {
-    return (*m_aRow)[0]->getValue();
+    return (*m_aRow)[0]->getValue().getInt32();
 }
 
 bool OResultSet::isRowDeleted() const

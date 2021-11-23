@@ -455,7 +455,7 @@ static Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
-            return makeAny(static_cast<sal_Int32>(i_aValue));
+            return makeAny(i_aValue.getInt32());
         default:
             if ( i_pCacheSet && i_aValue.isNull())
                 i_aValue = i_pCacheSet->getBookmark();

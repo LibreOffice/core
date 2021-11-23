@@ -231,7 +231,7 @@ bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
         {
-            OUString sLH = aLH, sRH = aRH;
+            OUString sLH = aLH.getString(), sRH = aRH.getString();
             sal_Int32 nRes = sLH.compareToIgnoreAsciiCase(sRH);
             switch(aPredicateType)
             {
@@ -256,7 +256,7 @@ bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
         case DataType::DATE:
         case DataType::TIME:
         {
-            double n = aLH ,m = aRH;
+            double n = aLH.getDouble(), m = aRH.getDouble();
 
             switch (aPredicateType)
             {
@@ -285,7 +285,7 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
     OOperand  *pLeft    = rCodeStack.top();
     rCodeStack.pop();
 
-    rCodeStack.push(new OOperandResultNUM(operate(pLeft->getValue(), pRight->getValue())));
+    rCodeStack.push(new OOperandResultNUM(operate(pLeft->getValue().getDouble(), pRight->getValue().getDouble())));
     if( typeid(OOperandResult) == typeid(*pLeft))
         delete pLeft;
     if( typeid(OOperandResult) == typeid(*pRight))

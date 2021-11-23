@@ -80,7 +80,7 @@ bool OStaticSet::fetchRow()
         m_aSet.push_back(new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount()));
         m_aSetIter = m_aSet.end() - 1;
         (**m_aSetIter)[0] = getRow();
-        OCacheSet::fillValueRow(*m_aSetIter,(**m_aSetIter)[0]);
+        OCacheSet::fillValueRow(*m_aSetIter,(**m_aSetIter)[0].getInt32());
     }
     else
         m_bEnd = true;
@@ -99,7 +99,7 @@ void OStaticSet::fillAllRows()
         m_aSet.push_back(pRow);
         m_aSetIter = m_aSet.end() - 1;
         (*pRow)[0] = getRow();
-        OCacheSet::fillValueRow(pRow,(*pRow)[0]);
+        OCacheSet::fillValueRow(pRow,(*pRow)[0].getInt32());
     }
     m_bEnd = true;
 }

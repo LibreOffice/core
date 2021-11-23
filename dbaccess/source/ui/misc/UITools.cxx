@@ -432,52 +432,52 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
         }
 
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->aTypeName        = aValue;
+        pInfo->aTypeName        = aValue.getString();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->nType            = aValue;
+        pInfo->nType            = aValue.getInt32();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->nPrecision       = aValue;
+        pInfo->nPrecision       = aValue.getInt32();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); // LiteralPrefix
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow); //LiteralSuffix
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->aCreateParams    = aValue;
+        pInfo->aCreateParams    = aValue.getString();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->bNullable        = static_cast<sal_Int32>(aValue) == ColumnValue::NULLABLE;
+        pInfo->bNullable        = aValue.getInt32() == ColumnValue::NULLABLE;
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
         // bCaseSensitive
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->nSearchType      = aValue;
+        pInfo->nSearchType      = aValue.getInt16();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
         // bUnsigned
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->bCurrency        = static_cast<bool>(aValue);
+        pInfo->bCurrency        = aValue.getBool();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->bAutoIncrement   = static_cast<bool>(aValue);
+        pInfo->bAutoIncrement   = aValue.getBool();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->aLocalTypeName   = aValue;
+        pInfo->aLocalTypeName   = aValue.getString();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->nMinimumScale    = aValue;
+        pInfo->nMinimumScale    = aValue.getInt16();
         ++nPos;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->nMaximumScale    = aValue;
+        pInfo->nMaximumScale    = aValue.getInt16();
         assert(nPos == 15);
         // 16 and 17 are unused
         nPos = 18;
         aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-        pInfo->nNumPrecRadix    = aValue;
+        pInfo->nNumPrecRadix    = aValue.getInt32();
 
         // check if values are less than zero like it happens in a oracle jdbc driver
         if( pInfo->nPrecision < 0)

@@ -701,7 +701,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
             rStream.WriteBytes(&buf[0], sizeof(double));
         }
         else
-            rStream.WriteDouble( static_cast<double>(aKey.getValue()) );
+            rStream.WriteDouble( aKey.getValue().getDouble() );
     }
     else
     {
@@ -710,7 +710,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         memset(&pBuf[0], 0x20, nLen);
         if (!aKey.getValue().isNull())
         {
-            OUString sValue = aKey.getValue();
+            OUString sValue = aKey.getValue().getString();
             OString aText(OUStringToOString(sValue, rIndex.m_pTable->getConnection()->getTextEncoding()));
             strncpy(reinterpret_cast<char *>(&pBuf[0]), aText.getStr(),
                 std::min<size_t>(nLen, aText.getLength()));
@@ -764,8 +764,8 @@ int ONDXKey::Compare(const ONDXKey& rKey) const
     }
     else
     {
-        double m = getValue();
-        double n = rKey.getValue();
+        double m = getValue().getDouble();
+        double n = rKey.getValue().getDouble();
         nRes = (m > n) ? 1 : ( m < n) ? -1 : 0;
     }
 

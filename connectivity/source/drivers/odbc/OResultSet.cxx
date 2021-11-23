@@ -443,8 +443,33 @@ template < typename T > T OResultSet::getValue( sal_Int32 columnIndex )
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     fillColumn(columnIndex);
     m_bWasNull = m_aRow[columnIndex].isNull();
-    return m_aRow[columnIndex];
+    auto const & row = m_aRow[columnIndex];
+    if constexpr ( std::is_same_v<css::util::Time, T> )
+        return row.getTime();
+    else if constexpr ( std::is_same_v<css::util::DateTime, T> )
+        return row.getDateTime();
+    else if constexpr ( std::is_same_v<css::util::Date, T> )
+        return row.getDate();
+    else if constexpr ( std::is_same_v<OUString, T> )
+        return row.getString();
+    else if constexpr ( std::is_same_v<sal_Int64, T> )
+        return row.getLong();
+    else if constexpr ( std::is_same_v<sal_Int32, T> )
+        return row.getInt32();
+    else if constexpr ( std::is_same_v<sal_Int16, T> )
+        return row.getInt16();
+    else if constexpr ( std::is_same_v<sal_Int8, T> )
+        return row.getInt8();
+    else if constexpr ( std::is_same_v<float, T> )
+        return row.getFloat();
+    else if constexpr ( std::is_same_v<double, T> )
+        return row.getDouble();
+    else if constexpr ( std::is_same_v<bool, T> )
+        return row.getBool();
+    else
+        return row;
 }
+
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex )
 {
     return getValue<bool>( columnIndex );
@@ -469,7 +494,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex )
     case DataType::BINARY:
     case DataType::VARBINARY:
     case DataType::LONGVARBINARY:
-        nRet = m_aRow[columnIndex];
+        nRet = m_aRow[columnIndex].getSequence();
         break;
     default:
     {
@@ -1764,7 +1789,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
             case DataType::BLOB:
-                aSeq = m_aRow[nColumnIndex];
+                aSeq = m_aRow[nColumnIndex].getSequence();
                 N3SQLPutData (m_aStatementHandle, aSeq.getArray(), aSeq.getLength());
                 break;
             case SQL_WLONGVARCHAR:

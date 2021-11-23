@@ -353,29 +353,29 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode)
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                pOb1->setValue(static_cast<double>(pOb1->getValue()));
-                pOb2->setValue(static_cast<double>(pOb2->getValue()));
+                pOb1->setValue(pOb1->getValue().getDouble());
+                pOb2->setValue(pOb2->getValue().getDouble());
                 break;
             case DataType::FLOAT:
-                pOb1->setValue(static_cast<float>(pOb1->getValue()));
-                pOb2->setValue(static_cast<float>(pOb2->getValue()));
+                pOb1->setValue(pOb1->getValue().getFloat());
+                pOb2->setValue(pOb2->getValue().getFloat());
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                pOb1->setValue(static_cast<double>(pOb1->getValue()));
-                pOb2->setValue(static_cast<double>(pOb2->getValue()));
+                pOb1->setValue(pOb1->getValue().getDouble());
+                pOb2->setValue(pOb2->getValue().getDouble());
                 break;
             case DataType::DATE:
-                pOb1->setValue(static_cast<util::Date>(pOb1->getValue()));
-                pOb2->setValue(static_cast<util::Date>(pOb2->getValue()));
+                pOb1->setValue(pOb1->getValue().getDate());
+                pOb2->setValue(pOb2->getValue().getDate());
                 break;
             case DataType::TIME:
-                pOb1->setValue(static_cast<util::Time>(pOb1->getValue()));
-                pOb2->setValue(static_cast<util::Time>(pOb2->getValue()));
+                pOb1->setValue(pOb1->getValue().getTime());
+                pOb2->setValue(pOb2->getValue().getTime());
                 break;
             case DataType::TIMESTAMP:
-                pOb1->setValue(static_cast<util::DateTime>(pOb1->getValue()));
-                pOb2->setValue(static_cast<util::DateTime>(pOb2->getValue()));
+                pOb1->setValue(pOb1->getValue().getDateTime());
+                pOb2->setValue(pOb2->getValue().getDateTime());
                 break;
         }
     }
