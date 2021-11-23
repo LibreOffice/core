@@ -70,6 +70,24 @@
       "parentUuid": "8b226d78_4e8498d3",
       "revId": "5d01e747270722ad9216ace8e782c7dfac5d744e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c50756e_2b1e2c63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-23T17:42:16Z",
+      "side": 1,
+      "message": "Stephan is right. Looking at the above mentioned types, the variable nIndex should have been of a signed type. I mis-read the type names.",
+      "parentUuid": "5c8ba457_8d8dcb1f",
+      "revId": "5d01e747270722ad9216ace8e782c7dfac5d744e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
