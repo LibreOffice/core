@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "309fda3f_5069403e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-11-23T16:17:33Z",
+      "side": 1,
+      "message": "Looks like an un-related random CI failure.",
+      "revId": "a2d63317a0eb6661dda35df463b899548c7e69bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
