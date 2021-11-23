@@ -33,6 +33,23 @@
       "message": "I have no idea if anything would break, but my gut feeling is not to touch that.  You might want to e.g. ask on the dev mailing list about it.",
       "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a55ec1e_d1825907",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-23T08:03:27Z",
+      "side": 1,
+      "message": "Thank you Stephan for your feedback, I\u0027ve just sent a message on dev list (see https://lists.freedesktop.org/archives/libreoffice/2021-November/thread.html)",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
