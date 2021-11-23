@@ -86,8 +86,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143860NonPrimitiveCustomShape,
     assertXPath(pXmlDocument, "//a:custGeom", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCurve, "tdf136386_WrapPolygonCurve.odt")
+CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
 {
+    loadAndSave("tdf136386_WrapPolygonCurve.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a curve with contour wrap and 'outside only'. Error was, that type 'square' was
@@ -103,8 +104,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCurve, "tdf136386_WrapPolygon
     xmlXPathFreeObject(pXmlObj);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonLineShape, "tdf136386_WrapPolygonLineShape.odt")
+CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
 {
+    loadAndSave("tdf136386_WrapPolygonLineShape.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a sloping line with contour wrap. Error was, that type 'square' was written and
@@ -140,8 +142,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCustomShape,
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8936, nYCoord, 10);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFrameWrapTextMode, "tdf143432_Frame_WrapTextMode.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFrameWrapTextMode)
 {
+    loadAndSave("tdf143432_Frame_WrapTextMode.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -399,8 +402,9 @@ DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGutterTop, "gutter-top.docx")
+CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
+    loadAndSave("gutter-top.docx");
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     CPPUNIT_ASSERT(pXmlSettings);
     // Without the accompanying fix in place, this test would have failed with:
@@ -410,8 +414,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGutterTop, "gutter-top.docx")
     assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomShapePresetExport, "testCustomShapePresetExport.odt")
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 {
+    loadAndSave("testCustomShapePresetExport.odt");
     // Check if the load failed.
     CPPUNIT_ASSERT(getPages());
 
@@ -441,8 +446,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomShapePresetExport, "testCustomShap
     CPPUNIT_ASSERT_EQUAL(17, nCount);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf69635, "tdf69635.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf69635)
 {
+    loadAndSave("tdf69635.docx");
     xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     CPPUNIT_ASSERT(pXmlHeader1);
@@ -475,8 +481,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
     CPPUNIT_ASSERT_EQUAL( sal_Int16(0), getProperty<sal_Int16>(getRun(getParagraph(1), 1, "A-570-108"), "CharEscapement") );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_numberingProps.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 {
+    loadAndSave("tdf134619_numberingProps.doc");
     // Get the third paragraph's numbering style's 1st level's bullet size
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
@@ -489,8 +496,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_num
     CPPUNIT_ASSERT_EQUAL(72.f, getProperty<float>(xStyle, "CharHeight"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134951_duplicates, "tdf134951_duplicates.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 {
+    loadAndSave("tdf134951_duplicates.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -499,8 +507,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134951_duplicates, "tdf134951_duplica
     getParagraph(5, "Duplicate fields: 1");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135773_numberingShading, "tdf135774_numberingShading.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 {
+    loadAndSave("tdf135774_numberingShading.docx");
     // This test uses preTest to export CharBackground as Highlight instead of the 7.0 default of Shading.
 
     // Before the fix, the imported shading was converted into a red highlight.
@@ -541,8 +550,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabOverMarginC15, "tdf142404_tabOverMargi
     CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for one page", 2, getPages());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142404_tabOverSpacingC15, "tdf142404_tabOverSpacingC15.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf142404_tabOverSpacingC15)
 {
+    loadAndReload("tdf142404_tabOverSpacingC15.odt");
     // Although TabOverMargin no longer applies to compatibilityMode 15 DOCX files,
     // it still applies to a tab over the paragraph end (inside text boundaries).
     // The original 3-page ODT saved as DOCX would fit on one page in MS Word 2010, but 3 in Word 2013.
@@ -618,8 +628,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterMarginLost, "footer-margin-lost.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFooterMarginLost)
 {
+    loadAndSave("footer-margin-lost.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 709
@@ -667,8 +678,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:rtlGutter", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140572_docDefault_superscript, "tdf140572_docDefault_superscript.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf140572_docDefault_superscript)
 {
+    loadAndSave("tdf140572_docDefault_superscript.docx");
     // A round-trip was crashing.
 
     // Without the fix, everything was DFLT_ESC_AUTO_SUPER (default superscript)
@@ -794,8 +806,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105688, "tdf105688.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCommentDone, "CommentDone.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCommentDone)
 {
+    loadAndSave("CommentDone.docx");
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
     assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
     OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
@@ -861,8 +874,9 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_ShadowDirection, "tdf142361ShadowDirection.odt")
+CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
 {
+    loadAndSave("tdf142361ShadowDirection.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The attribute 'rotWithShape' has the default value 'true' in OOXML, so Words interprets a
@@ -876,8 +890,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_ShadowDirection, "tdf142361ShadowDirect
                 "rotWithShape", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf139549, "tdf139549.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 {
+    loadAndSave("tdf139549.docx");
     // Document contains a VML textbox, the position of the textbox was incorrect.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     OUString aStyle = getXPath(pXmlDoc, "//w:pict/v:shape", "style");
