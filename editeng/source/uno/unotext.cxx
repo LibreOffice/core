@@ -1329,13 +1329,13 @@ bool SvxUnoTextRangeBase::IsCollapsed() noexcept
              maSelection.nStartPos  == maSelection.nEndPos );
 }
 
-bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) noexcept
+bool SvxUnoTextRangeBase::GoLeft(sal_Int32 nCount, bool Expand) noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
     //  #75098# use end position, as in Writer (start is anchor, end is cursor)
-    sal_uInt16 nNewPos = maSelection.nEndPos;
-    sal_Int32  nNewPar = maSelection.nEndPara;
+    sal_Int32 nNewPos = maSelection.nEndPos;
+    sal_Int32 nNewPar = maSelection.nEndPara;
 
     bool bOk = true;
     SvxTextForwarder* pForwarder = nullptr;
@@ -1367,15 +1367,15 @@ bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) noexcept
     return bOk;
 }
 
-bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, bool Expand)  noexcept
+bool SvxUnoTextRangeBase::GoRight(sal_Int32 nCount, bool Expand)  noexcept
 {
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
         CheckSelection( maSelection, pForwarder );
 
-        sal_Int32 nNewPos = maSelection.nEndPos + nCount; //! Overflow???
-        sal_Int32  nNewPar = maSelection.nEndPara;
+        sal_Int32 nNewPos = maSelection.nEndPos + nCount;
+        sal_Int32 nNewPar = maSelection.nEndPara;
 
         bool bOk = true;
         sal_Int32 nParCount = pForwarder->GetParagraphCount();
