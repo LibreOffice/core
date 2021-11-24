@@ -9,7 +9,6 @@
 
 #pragma once
 
-#define BMP_STR_CLOSE   "formula/res/fapclose.png"
 #define BMP_STR_OPEN    "formula/res/fapopen.png"
 #define BMP_STR_END     "formula/res/fapok.png"
 #define BMP_STR_ERROR   "formula/res/faperror.png"
