@@ -2184,6 +2184,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf121546)
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145621)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf145621.odt");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAAAA"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+
+    // Without the fix in place, this test would have crashed
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAAAA"), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf134626.odt");
