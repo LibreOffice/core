@@ -44,7 +44,6 @@ inline constexpr OUStringLiteral PROPERTY_INPUT_REQUIRED = u"InputRequired";
 inline constexpr OUStringLiteral PROPERTY_ENABLED = u"Enabled";
 inline constexpr OUStringLiteral PROPERTY_ENABLE_VISIBLE = u"EnableVisible";
 inline constexpr OUStringLiteral PROPERTY_READONLY = u"ReadOnly";
-#define PROPERTY_ISREADONLY              "IsReadOnly"
 inline constexpr OUStringLiteral PROPERTY_FILTER = u"Filter";
 inline constexpr OUStringLiteral PROPERTY_WIDTH = u"Width";
 inline constexpr OUStringLiteral PROPERTY_MULTILINE = u"MultiLine";
@@ -205,8 +204,6 @@ inline constexpr OUStringLiteral PROPERTY_SHOWS_ROOT_HANDLES = u"ShowsRootHandle
 inline constexpr OUStringLiteral PROPERTY_EDITABLE = u"Editable";
 inline constexpr OUStringLiteral PROPERTY_INVOKES_STOP_NOT_EDITING = u"InvokesStopNodeEditing";
 
-#define PROPERTY_HARDLINEBREAKS         "HardLineBreaks"
-
 inline constexpr OUStringLiteral PROPERTY_TOGGLE = u"Toggle";
 inline constexpr OUStringLiteral PROPERTY_FOCUSONCLICK = u"FocusOnClick";
 inline constexpr OUStringLiteral PROPERTY_HIDEINACTIVESELECTION = u"HideInactiveSelection";
@@ -256,7 +253,6 @@ inline constexpr OUStringLiteral PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME = u"MinInc
 inline constexpr OUStringLiteral PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME = u"MinExclusiveDateTime";
 inline constexpr OUStringLiteral PROPERTY_SUBMISSION_ID = u"SubmissionID";
 inline constexpr OUStringLiteral PROPERTY_BINDING_ID = u"BindingID";
-#define PROPERTY_ID                     "ID"
 inline constexpr OUStringLiteral PROPERTY_WRITING_MODE = u"WritingMode";
 inline constexpr OUStringLiteral PROPERTY_TEXT_ANCHOR_TYPE = u"TextAnchorType";
 inline constexpr OUStringLiteral PROPERTY_SHEET_ANCHOR_TYPE = u"SheetAnchorType";
@@ -269,7 +265,6 @@ inline constexpr OUStringLiteral PROPERTY_MODEL = u"Model";
 inline constexpr OUStringLiteral PROPERTY_CELL_EXCHANGE_TYPE = u"ExchangeSelectionIndex";
 inline constexpr OUStringLiteral PROPERTY_BOUND_CELL = u"BoundCell";
 inline constexpr OUStringLiteral PROPERTY_LIST_CELL_RANGE = u"CellRange";
-#define PROPERTY_AUTOLINEBREAK          "AutomaticLineBreak"
 inline constexpr OUStringLiteral PROPERTY_TEXTTYPE = u"TextType";
 inline constexpr OUStringLiteral PROPERTY_RICHTEXT = u"RichText";
 inline constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";

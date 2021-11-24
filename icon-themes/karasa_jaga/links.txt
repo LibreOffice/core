@@ -1612,7 +1612,6 @@ desktop/res/extension_32.png cmd/32/addons.png
 extensions/res/buttonplus.png cmd/sc_add.png
 extensions/res/scanner/minus.png res/minus.png
 extensions/res/scanner/plus.png res/plus.png
-formula/res/fapclose.png svtools/res/folder.png
 formula/res/fapopen.png res/folderop.png
 formula/res/fx.png cmd/sc_insertformula.png
 framework/res/addtemplate_32.png cmd/32/newdoc.png

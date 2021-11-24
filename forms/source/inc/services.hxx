@@ -19,18 +19,14 @@
 
 #pragma once
 
-#define AWT_CONTROL_TEXTFIELD "com.sun.star.awt.TextField"
 
-#define VCL_CONTROL_EDIT "stardiv.vcl.control.Edit"
 inline constexpr OUStringLiteral VCL_CONTROL_LISTBOX = u"stardiv.vcl.control.ListBox";
 inline constexpr OUStringLiteral VCL_CONTROL_COMBOBOX = u"stardiv.vcl.control.ComboBox";
 inline constexpr OUStringLiteral VCL_CONTROL_RADIOBUTTON = u"stardiv.vcl.control.RadioButton";
 inline constexpr OUStringLiteral VCL_CONTROL_GROUPBOX = u"stardiv.vcl.control.GroupBox";
-#define VCL_CONTROL_FIXEDTEXT "stardiv.vcl.control.FixedText"
 inline constexpr OUStringLiteral VCL_CONTROL_COMMANDBUTTON = u"stardiv.vcl.control.Button";
 inline constexpr OUStringLiteral VCL_CONTROL_CHECKBOX = u"stardiv.vcl.control.CheckBox";
 inline constexpr OUStringLiteral VCL_CONTROL_IMAGEBUTTON = u"stardiv.vcl.control.ImageButton";
-#define VCL_CONTROL_FILECONTROL "stardiv.vcl.control.FileControl"
 inline constexpr OUStringLiteral VCL_CONTROL_TIMEFIELD = u"stardiv.vcl.control.TimeField";
 inline constexpr OUStringLiteral VCL_CONTROL_DATEFIELD = u"stardiv.vcl.control.DateField";
 inline constexpr OUStringLiteral VCL_CONTROL_NUMERICFIELD = u"stardiv.vcl.control.NumericField";
@@ -155,7 +151,6 @@ inline constexpr OUStringLiteral FRM_SUN_CONTROL_LISTBOX = u"com.sun.star.form.c
 inline constexpr OUStringLiteral FRM_SUN_CONTROL_COMBOBOX = u"com.sun.star.form.control.ComboBox";
 inline constexpr OUStringLiteral FRM_SUN_CONTROL_RADIOBUTTON = u"com.sun.star.form.control.RadioButton";
 inline constexpr OUStringLiteral FRM_SUN_CONTROL_GROUPBOX = u"com.sun.star.form.control.GroupBox";
-#define FRM_SUN_CONTROL_FIXEDTEXT "com.sun.star.form.control.FixedText"
 inline constexpr OUStringLiteral FRM_SUN_CONTROL_COMMANDBUTTON = u"com.sun.star.form.control.CommandButton";
 inline constexpr OUStringLiteral FRM_SUN_CONTROL_CHECKBOX = u"com.sun.star.form.control.CheckBox";
 inline constexpr OUStringLiteral FRM_SUN_CONTROL_GRIDCONTROL = u"com.sun.star.form.control.GridControl";
@@ -192,8 +187,6 @@ inline constexpr OUStringLiteral VALIDATABLE_BINDABLE_CONTROL_MODEL = u"com.sun.
 inline constexpr OUStringLiteral FRM_SUN_FORMCOMPONENT = u"com.sun.star.form.FormComponent";
 
 // misc
-
-#define SRV_AWT_IMAGEPRODUCER "com.sun.star.awt.ImageProducer"
 
 inline constexpr OUStringLiteral SRV_SDB_ROWSET = u"com.sun.star.sdb.RowSet";
 inline constexpr OUStringLiteral SRV_SDB_CONNECTION = u"com.sun.star.sdb.Connection";

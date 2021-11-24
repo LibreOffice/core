@@ -1912,7 +1912,6 @@ res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
 res/foldercl.png formula/res/fapclose.png
-res/folderop.png cmd/sc_open.png
 res/fp010.png cmd/sc_upsearch.png
 res/grafikei.png cmd/sc_graphic.png
 res/im30820.png cmd/sc_scriptorganizer.png

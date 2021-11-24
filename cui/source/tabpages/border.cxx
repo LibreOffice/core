@@ -336,81 +336,81 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xRemoveAdjacentCellBordersCB(m_xBuilder->weld_check_button("rmadjcellborders"))
     , m_xRemoveAdjacentCellBordersFT(m_xBuilder->weld_label("rmadjcellbordersft"))
 {
-    static std::vector<std::u16string_view> aBorderImageIds;
+    static std::vector<OUString> aBorderImageIds;
 
     if (aBorderImageIds.empty())
     {
         if (comphelper::LibreOfficeKit::isActive())
         {
             aBorderImageIds.insert(aBorderImageIds.end(), {
-                u"" RID_SVXBMP_CELL_NONE_32,
-                u"" RID_SVXBMP_CELL_ALL_32,
-                u"" RID_SVXBMP_CELL_LR_32,
-                u"" RID_SVXBMP_CELL_TB_32,
-                u"" RID_SVXBMP_CELL_L_32,
-                u"" RID_SVXBMP_CELL_DIAG_32
+                RID_SVXBMP_CELL_NONE_32,
+                RID_SVXBMP_CELL_ALL_32,
+                RID_SVXBMP_CELL_LR_32,
+                RID_SVXBMP_CELL_TB_32,
+                RID_SVXBMP_CELL_L_32,
+                RID_SVXBMP_CELL_DIAG_32
             });
         }
         else
         {
             aBorderImageIds.insert(aBorderImageIds.end(), {
-                u"" RID_SVXBMP_CELL_NONE,
-                u"" RID_SVXBMP_CELL_ALL,
-                u"" RID_SVXBMP_CELL_LR,
-                u"" RID_SVXBMP_CELL_TB,
-                u"" RID_SVXBMP_CELL_L,
-                u"" RID_SVXBMP_CELL_DIAG
+                RID_SVXBMP_CELL_NONE,
+                RID_SVXBMP_CELL_ALL,
+                RID_SVXBMP_CELL_LR,
+                RID_SVXBMP_CELL_TB,
+                RID_SVXBMP_CELL_L,
+                RID_SVXBMP_CELL_DIAG
             });
         }
         aBorderImageIds.insert(aBorderImageIds.end(), {
-            u"" RID_SVXBMP_HOR_NONE,
-            u"" RID_SVXBMP_HOR_OUTER,
-            u"" RID_SVXBMP_HOR_HOR,
-            u"" RID_SVXBMP_HOR_ALL,
-            u"" RID_SVXBMP_HOR_OUTER2,
-            u"" RID_SVXBMP_VER_NONE,
-            u"" RID_SVXBMP_VER_OUTER,
-            u"" RID_SVXBMP_VER_VER,
-            u"" RID_SVXBMP_VER_ALL,
-            u"" RID_SVXBMP_VER_OUTER2,
-            u"" RID_SVXBMP_TABLE_NONE,
-            u"" RID_SVXBMP_TABLE_OUTER,
-            u"" RID_SVXBMP_TABLE_OUTERH,
-            u"" RID_SVXBMP_TABLE_ALL,
-            u"" RID_SVXBMP_TABLE_OUTER2
+            RID_SVXBMP_HOR_NONE,
+            RID_SVXBMP_HOR_OUTER,
+            RID_SVXBMP_HOR_HOR,
+            RID_SVXBMP_HOR_ALL,
+            RID_SVXBMP_HOR_OUTER2,
+            RID_SVXBMP_VER_NONE,
+            RID_SVXBMP_VER_OUTER,
+            RID_SVXBMP_VER_VER,
+            RID_SVXBMP_VER_ALL,
+            RID_SVXBMP_VER_OUTER2,
+            RID_SVXBMP_TABLE_NONE,
+            RID_SVXBMP_TABLE_OUTER,
+            RID_SVXBMP_TABLE_OUTERH,
+            RID_SVXBMP_TABLE_ALL,
+            RID_SVXBMP_TABLE_OUTER2
         });
     }
 
     for (auto const & rImageId : aBorderImageIds)
-        m_aBorderImgVec.emplace_back(StockImage::Yes, OUString(rImageId));
+        m_aBorderImgVec.emplace_back(StockImage::Yes, rImageId);
 
-    static std::vector<std::u16string_view> aShadowImageIds;
+    static std::vector<OUString> aShadowImageIds;
     if (aShadowImageIds.empty())
     {
         if (comphelper::LibreOfficeKit::isActive())
         {
             aShadowImageIds.insert(aShadowImageIds.end(), {
-                u"" RID_SVXBMP_SHADOWNONE_32,
-                u"" RID_SVXBMP_SHADOW_BOT_RIGHT_32,
-                u"" RID_SVXBMP_SHADOW_TOP_RIGHT_32,
-                u"" RID_SVXBMP_SHADOW_BOT_LEFT_32,
-                u"" RID_SVXBMP_SHADOW_TOP_LEFT_32
+                RID_SVXBMP_SHADOWNONE_32,
+                RID_SVXBMP_SHADOW_BOT_RIGHT_32,
+                RID_SVXBMP_SHADOW_TOP_RIGHT_32,
+                RID_SVXBMP_SHADOW_BOT_LEFT_32,
+                RID_SVXBMP_SHADOW_TOP_LEFT_32
             });
         }
         else
         {
             aShadowImageIds.insert(aShadowImageIds.end(), {
-                u"" RID_SVXBMP_SHADOWNONE,
-                u"" RID_SVXBMP_SHADOW_BOT_RIGHT,
-                u"" RID_SVXBMP_SHADOW_TOP_RIGHT,
-                u"" RID_SVXBMP_SHADOW_BOT_LEFT,
-                u"" RID_SVXBMP_SHADOW_TOP_LEFT
+                RID_SVXBMP_SHADOWNONE,
+                RID_SVXBMP_SHADOW_BOT_RIGHT,
+                RID_SVXBMP_SHADOW_TOP_RIGHT,
+                RID_SVXBMP_SHADOW_BOT_LEFT,
+                RID_SVXBMP_SHADOW_TOP_LEFT
             });
         }
     }
 
     for (auto const & rImageId : aShadowImageIds)
-        m_aShadowImgVec.emplace_back(StockImage::Yes, OUString(rImageId));
+        m_aShadowImgVec.emplace_back(StockImage::Yes, rImageId);
 
     assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
 
