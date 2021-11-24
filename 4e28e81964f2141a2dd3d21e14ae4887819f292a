@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f982302f_1055fe92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-24T11:22:56Z",
+      "side": 1,
+      "message": "Thakns a lot Julien.\nGoing to upload new version.",
+      "revId": "4e28e81964f2141a2dd3d21e14ae4887819f292a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
