@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cb41ffc_cb5c2724",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-24T23:32:17Z",
+      "side": 1,
+      "message": "Build successful for me now.\n\nShould the FIXME in sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx:32 now be removed?",
+      "revId": "d436fec937a40785ecc2bd52d8ba195a9fae4a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
