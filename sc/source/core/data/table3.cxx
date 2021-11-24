@@ -3032,7 +3032,7 @@ bool ScTable::ValidQuery(
 
         // Short-circuit the test at the end of the loop - if this is SC_AND
         // and the previous value is false, this value will not be needed.
-        // Disbable this if pbTestEqualCondition is present as that one may get set
+        // Disable this if pbTestEqualCondition is present as that one may get set
         // even if the result is false (that also means pTest doesn't need to be
         // handled here).
         if (rEntry.eConnect == SC_AND && pbTestEqualCondition == nullptr
