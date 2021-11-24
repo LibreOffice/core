@@ -1414,8 +1414,17 @@ void ScCheckListMenuControl::launch(weld::Widget* pWidget, const tools::Rectangl
     if (maConfig.mbRTL)
     {
         // In RTL mode, the logical "left" is visual "right".
-        tools::Long nLeft = aRect.Left() - aRect.GetWidth();
-        aRect.SetLeft( nLeft );
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            tools::Long nLeft = aRect.Left() - aRect.GetWidth();
+            aRect.SetLeft( nLeft );
+        }
+        else
+        {
+            // in LOK mode, rRect is in document pixel coordinates, so width has to be added
+            // to place the popup next to the (visual) left aligned button.
+            aRect.Move(aRect.GetWidth(), 0);
+        }
     }
     else if (mnWndWidth < aRect.GetWidth())
     {
