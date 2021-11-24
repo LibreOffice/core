@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7fcf924_2e8a8951",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-24T10:50:40Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! It seems, the memory leaks were fixed in part 2, so I\u0027ve changed the bug  number for a better one. I\u0027ve found some interesting malfunction with the unit test document: TextBox text content converted to shape text content. We can check that later. I\u0027ve added a simplified test case to the commit description, which works as intended. Keep up the good work! (I\u0027ve found and fixed 6 other serious spelling mistakes in the Python comments, but we don\u0027t need to wait for the gerrit test, because only the comments were modified.",
+      "revId": "926f1779087cb158e8fae45810b16716938be131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
