@@ -2971,7 +2971,7 @@ public:
 
 std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, const ScQueryParam& rParam,
     ScRefCellValue& aCell, bool* pbTestEqualCondition, const ScInterpreterContext* pContext, QueryEvaluator& aEval,
-    const ScQueryEntry& rEntry )
+    ScTable::ValidQueryCache* pValidQueryCache, const ScQueryEntry& rEntry )
 {
     std::pair<bool,bool> aRes(false, false);
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
@@ -3007,14 +3007,35 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
             valid = false;
         if(valid)
         {
-            for (const auto& rItem : rItems)
+            if(rItems.size() >= 100 && pValidQueryCache)
             {
-                // For speed don't bother comparing approximately here, usually there either
-                // will be an exact match or it wouldn't match anyway.
-                if (rItem.meType == ScQueryEntry::ByValue
-                    && value == rItem.mfVal)
+                // Sort, cache and binary search for the value in items.
+                // Don't bother comparing approximately.
+                auto& values = pValidQueryCache->mCachedSortedItemValues;
+                if(!pValidQueryCache->mCachedSortedItemValuesReady)
                 {
+                    values.reserve(rItems.size());
+                    for (const auto& rItem : rItems)
+                        if (rItem.meType == ScQueryEntry::ByValue)
+                            values.push_back(rItem.mfVal);
+                    std::sort(values.begin(), values.end());
+                    pValidQueryCache->mCachedSortedItemValuesReady = true;
+                }
+                auto it = std::lower_bound(values.begin(), values.end(), value);
+                if( it != values.end() && *it == value )
                     return std::make_pair(true, true);
+            }
+            else
+            {
+                for (const auto& rItem : rItems)
+                {
+                    // For speed don't bother comparing approximately here, usually there either
+                    // will be an exact match or it wouldn't match anyway.
+                    if (rItem.meType == ScQueryEntry::ByValue
+                        && value == rItem.mfVal)
+                    {
+                        return std::make_pair(true, true);
+                    }
                 }
             }
         }
@@ -3042,17 +3063,34 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
         // generous as isQueryByString() but it should be enough and better be safe.
         if(cellSharedString != nullptr)
         {
-            if (rParam.bCaseSens)
+            if(rItems.size() >= 100 && pValidQueryCache)
             {
-                for (const auto& rItem : rItems)
+                // Sort, cache and binary search for the string in items.
+                // Since each SharedString is identified by pointer value,
+                // sorting by pointer value is enough.
+                auto& values = pValidQueryCache->mCachedSortedItemStrings;
+                if(!pValidQueryCache->mCachedSortedItemStringsReady)
                 {
-                    if ((rItem.meType == ScQueryEntry::ByString
-                            || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
-                        && cellSharedString->getData() == rItem.maString.getData())
+                    values.reserve(rItems.size());
+                    for (const auto& rItem : rItems)
                     {
-                        return std::make_pair(true, true);
+                        if (rItem.meType == ScQueryEntry::ByString
+                            || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
+                        {
+                            values.push_back(rParam.bCaseSens
+                                ? rItem.maString.getData()
+                                : rItem.maString.getDataIgnoreCase());
+                        }
                     }
+                    std::sort(values.begin(), values.end());
+                    pValidQueryCache->mCachedSortedItemStringsReady = true;
                 }
+                const rtl_uString* string = rParam.bCaseSens
+                    ? cellSharedString->getData()
+                    : cellSharedString->getDataIgnoreCase();
+                auto it = std::lower_bound(values.begin(), values.end(), string);
+                if( it != values.end() && *it == string )
+                    return std::make_pair(true, true);
             }
             else
             {
@@ -3060,7 +3098,9 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
                 {
                     if ((rItem.meType == ScQueryEntry::ByString
                             || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
-                        && cellSharedString->getDataIgnoreCase() == rItem.maString.getDataIgnoreCase())
+                        && ( rParam.bCaseSens
+                            ? cellSharedString->getData() == rItem.maString.getData()
+                            : cellSharedString->getDataIgnoreCase() == rItem.maString.getDataIgnoreCase()))
                     {
                         return std::make_pair(true, true);
                     }
@@ -3176,7 +3216,7 @@ bool ScTable::ValidQuery(
             aCell = GetCellValue(nCol, nRow);
 
         std::pair<bool,bool> aRes = validQueryProcessEntry(nRow, nCol, nTab, rParam, aCell,
-            pbTestEqualCondition, pContext, aEval, rEntry);
+            pbTestEqualCondition, pContext, aEval, pValidQueryCache, rEntry);
 
         if (nPos == -1)
         {
