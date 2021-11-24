@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f7afac7_1f10c42f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-11-24T08:55:27Z",
+      "side": 1,
+      "message": "Now also Justin is suggesting the same revert, in https://gerrit.libreoffice.org/c/core/+/125751 . ",
+      "revId": "2ed16eae500245f6d8d1140ec044bb90f36dc45e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
