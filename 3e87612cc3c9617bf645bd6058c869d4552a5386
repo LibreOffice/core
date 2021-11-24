@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e8c4b2b_54c6a547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T13:52:45Z",
+      "side": 1,
+      "message": "I\u0027ll let Eike respond because I don\u0027t understand how to know if the typo can be fixed or not. For the moment, I only understood that we\u0027re stuck if it\u0027s in an idl file.\n(still wonder too if filenames can be fixed or not)",
+      "revId": "3e87612cc3c9617bf645bd6058c869d4552a5386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
