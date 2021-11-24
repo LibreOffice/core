@@ -109,8 +109,9 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     Point aDiffPix = rMEvt.GetPosPixel();
 
     aDiffPix -= aScrPos;
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-    if ( bLayoutRTL )
+    if ( bLayoutRTL && !bLOKActive )
         aDiffPix.setX( -aDiffPix.X() );
 
     tools::Long nSizeX, nSizeY;
@@ -121,8 +122,8 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 
     // Check if the mouse cursor is clicking on the popup arrow box.
     mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &mrViewData.GetZoomY(), &rDoc));
-    mpFilterButton->setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
-    mpFilterButton->setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
+    mpFilterButton->setBoundingBox(aScrPos, aScrSize, bLayoutRTL && !bLOKActive);
+    mpFilterButton->setPopupLeft(bLayoutRTL && bLOKActive ? false : bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
     Point aPopupPos;
     Size aPopupSize;
     mpFilterButton->getPopupBoundingBox(aPopupPos, aPopupSize);
