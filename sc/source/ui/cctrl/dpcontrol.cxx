@@ -21,6 +21,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/lok.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
@@ -181,7 +182,11 @@ void ScDPFieldButton::drawPopupButton()
 
     // the arrowhead
     Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightLinkColor() : mpStyle->GetButtonTextColor();
-    mpOutDev->SetLineColor(aArrowColor);
+    // FIXME: HACK: The following DrawPolygon draws twice in lok rtl mode for some reason.
+    // => one at the correct location with fill (possibly no outline)
+    // => and the other at an x offset with outline and without fill
+    // eg. Replacing this with a DrawRect() does not have any such problems.
+    comphelper::LibreOfficeKit::isActive() ? mpOutDev->SetLineColor() : mpOutDev->SetLineColor(aArrowColor);
     mpOutDev->SetFillColor(aArrowColor);
 
     Point aCenter(aPos.X() + (aSize.Width() / 2), aPos.Y() + (aSize.Height() / 2));
