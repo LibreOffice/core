@@ -51,6 +51,24 @@
       "message": "crashtesting detected a new assert which I bisected to this commit, to reproduce:\n\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d123453 -O /tmp/tdf98567-1.docx\n./instdir/program/soffice --headless --convert-to docx /tmp/tdf98567-1.docx\n\nwarn:sax:1486131:1486131:sax/source/tools/fastserializer.cxx:460: Duplicate attribute: w:multiLine\nsoffice.bin: /home/caolan/LibreOffice/core/sax/source/tools/fastserializer.cxx:461: void sax_fastparser::FastSaxSerializer::writeFastAttributeList(const sax_fastparser::FastAttributeList \u0026): Assertion `DebugAttributes.find(nameId) \u003d\u003d DebugAttributes.end()\u0027 failed.\n",
       "revId": "75a49947c2eeb831a8e02192f1c4856eac62a743",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0cc7db4_0642b432",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-11-24T12:11:33Z",
+      "side": 1,
+      "message": "Seems resolved by the way in one of following patches which are not merged yet. \nAt least i can\u0027t repro with my current state with all follow up patches.",
+      "parentUuid": "02463f9a_4dbca7c0",
+      "revId": "75a49947c2eeb831a8e02192f1c4856eac62a743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
