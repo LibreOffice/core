@@ -3330,7 +3330,6 @@ void Content::lock(
                         // Detailed specification in:
                         // <http://tools.ietf.org/html/rfc4918#section-7.3>
                         return;
-                        break;
                     default:
                         //fallthrough
                         ;
@@ -3340,7 +3339,6 @@ void Content::lock(
                 // we already hold the lock and it is in our internal lockstore
                 // just return as if the lock was successful
                 return;
-                break;
             default:
                 //fallthrough
                 ;
