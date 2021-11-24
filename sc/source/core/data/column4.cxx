@@ -564,11 +564,15 @@ void ScColumn::CloneFormulaCell(
 
         ScAddress aPos(nCol, nRow1, nTab);
 
-        if (nLen == 1)
+        if (nLen == 1 || !rSrc.GetCode()->IsShareable())
         {
-            // Single, ungrouped formula cell.
-            ScFormulaCell* pCell = new ScFormulaCell(rSrc, rDocument, aPos);
-            aFormulas.push_back(pCell);
+            // Single, ungrouped formula cell, or create copies for
+            // non-shareable token arrays.
+            for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
+            {
+                ScFormulaCell* pCell = new ScFormulaCell(rSrc, rDocument, aPos);
+                aFormulas.push_back(pCell);
+            }
         }
         else
         {
