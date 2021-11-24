@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4e81064_d23b6c66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-24T21:46:36Z",
+      "side": 1,
+      "message": "Please don\u0027t use cgit URLs in commit message when referring to a commit: simple \"Regression from: bc0ab08634f59e1a1814e575fe6ad5e50bf1aee1\" is enough, and will be linkified correctly.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 97
+      },
+      "revId": "39496dc1d93592434d90198f98de867f3752e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a52bc5e_4020bb69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-24T21:46:36Z",
+      "side": 1,
+      "message": "Great catch! Thank you very much!",
+      "revId": "39496dc1d93592434d90198f98de867f3752e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
