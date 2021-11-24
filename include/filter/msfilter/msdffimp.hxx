@@ -119,7 +119,7 @@ public:
 
 typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 
-#define SVEXT_PERSIST_STREAM "\002OlePres000"
+inline constexpr OUStringLiteral SVEXT_PERSIST_STREAM = u"\002OlePres000";
 
 /// the following will be sorted by the order of their appearance:
 typedef std::vector<std::unique_ptr<SvxMSDffShapeOrder>> SvxMSDffShapeOrders;

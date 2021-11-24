@@ -9,14 +9,14 @@
 
 #pragma once
 
-#define STR_APPL_NAME_WRITER        "%PRODUCTNAME Writer (.sxw)"
-#define STR_APPL_NAME_CALC          "%PRODUCTNAME Calc (.sxc)"
-#define STR_APPL_NAME_IMPRESS       "%PRODUCTNAME Impress (.sxi)"
-#define STR_APPL_NAME_DRAW          "%PRODUCTNAME Draw (.sxd)"
-#define STR_APPL_NAME_OASIS_WRITER  "%PRODUCTNAME Writer (.odt)"
-#define STR_APPL_NAME_OASIS_CALC    "%PRODUCTNAME Calc (.ods)"
-#define STR_APPL_NAME_OASIS_IMPRESS "%PRODUCTNAME Impress (.odp)"
-#define STR_APPL_NAME_OASIS_DRAW    "%PRODUCTNAME Draw (.odg)"
-#define STR_DEFAULT_EXTENSION       "xml"
+inline constexpr OUStringLiteral STR_APPL_NAME_WRITER = u"%PRODUCTNAME Writer (.sxw)";
+inline constexpr OUStringLiteral STR_APPL_NAME_CALC = u"%PRODUCTNAME Calc (.sxc)";
+inline constexpr OUStringLiteral STR_APPL_NAME_IMPRESS = u"%PRODUCTNAME Impress (.sxi)";
+inline constexpr OUStringLiteral STR_APPL_NAME_DRAW = u"%PRODUCTNAME Draw (.sxd)";
+inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_WRITER = u"%PRODUCTNAME Writer (.odt)";
+inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_CALC = u"%PRODUCTNAME Calc (.ods)";
+inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_IMPRESS = u"%PRODUCTNAME Impress (.odp)";
+inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_DRAW = u"%PRODUCTNAME Draw (.odg)";
+inline constexpr OUStringLiteral STR_DEFAULT_EXTENSION = u"xml";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

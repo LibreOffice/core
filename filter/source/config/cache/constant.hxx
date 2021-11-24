@@ -28,58 +28,58 @@
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_NAME  "Name"
+inline constexpr OUStringLiteral PROPNAME_NAME = u"Name";
 
 /** @short  used to identify a type item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_UINAME            "UIName"
-#define  PROPNAME_UINAMES           "UINames"
-#define  PROPNAME_PREFERRED         "Preferred"
-#define  PROPNAME_PREFERREDFILTER   "PreferredFilter"
-#define  PROPNAME_DETECTSERVICE     "DetectService"
-#define  PROPNAME_MEDIATYPE         "MediaType"
-#define  PROPNAME_CLIPBOARDFORMAT   "ClipboardFormat"
-#define  PROPNAME_URLPATTERN        "URLPattern"
-#define  PROPNAME_EXTENSIONS        "Extensions"
+inline constexpr OUStringLiteral PROPNAME_UINAME = u"UIName";
+inline constexpr OUStringLiteral PROPNAME_UINAMES = u"UINames";
+inline constexpr OUStringLiteral PROPNAME_PREFERRED = u"Preferred";
+inline constexpr OUStringLiteral PROPNAME_PREFERREDFILTER = u"PreferredFilter";
+inline constexpr OUStringLiteral PROPNAME_DETECTSERVICE = u"DetectService";
+inline constexpr OUStringLiteral PROPNAME_MEDIATYPE = u"MediaType";
+inline constexpr OUStringLiteral PROPNAME_CLIPBOARDFORMAT = u"ClipboardFormat";
+inline constexpr OUStringLiteral PROPNAME_URLPATTERN = u"URLPattern";
+inline constexpr OUStringLiteral PROPNAME_EXTENSIONS = u"Extensions";
 
 /** @short  used to identify a filter item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_TYPE              "Type"
-#define  PROPNAME_DOCUMENTSERVICE   "DocumentService"
-#define  PROPNAME_FILTERSERVICE     "FilterService"
-#define  PROPNAME_UICOMPONENT       "UIComponent"
-#define  PROPNAME_FLAGS             "Flags"
-#define  PROPNAME_USERDATA          "UserData"
-#define  PROPNAME_TEMPLATENAME      "TemplateName"
-#define  PROPNAME_FILEFORMATVERSION "FileFormatVersion"
-#define  PROPNAME_EXPORTEXTENSION   "ExportExtension"
-#define  PROPNAME_ENABLED           "Enabled"
+inline constexpr OUStringLiteral PROPNAME_TYPE = u"Type";
+inline constexpr OUStringLiteral PROPNAME_DOCUMENTSERVICE = u"DocumentService";
+inline constexpr OUStringLiteral PROPNAME_FILTERSERVICE = u"FilterService";
+inline constexpr OUStringLiteral PROPNAME_UICOMPONENT = u"UIComponent";
+inline constexpr OUStringLiteral PROPNAME_FLAGS = u"Flags";
+inline constexpr OUStringLiteral PROPNAME_USERDATA = u"UserData";
+inline constexpr OUStringLiteral PROPNAME_TEMPLATENAME = u"TemplateName";
+inline constexpr OUStringLiteral PROPNAME_FILEFORMATVERSION = u"FileFormatVersion";
+inline constexpr OUStringLiteral PROPNAME_EXPORTEXTENSION = u"ExportExtension";
+inline constexpr OUStringLiteral PROPNAME_ENABLED = u"Enabled";
 
 /** @short  used to identify a frame loader or detect service item
             property against the configuration API and can be used
             at all name containers (based on this filtercache) too.
  */
-#define  PROPNAME_TYPES     "Types"
+inline constexpr OUStringLiteral PROPNAME_TYPES = u"Types";
 
 /** @short  used to identify the list of sorted filters for a specific
             office module
  */
-#define  PROPNAME_SORTEDFILTERLIST     "SortedFilterList"
+inline constexpr OUStringLiteral PROPNAME_SORTEDFILTERLIST = u"SortedFilterList";
 
 /** @short  implicit properties. which are used at the container interface only.
  */
-#define  PROPNAME_FINALIZED "Finalized"
-#define  PROPNAME_MANDATORY "Mandatory"
+inline constexpr OUStringLiteral PROPNAME_FINALIZED = u"Finalized";
+inline constexpr OUStringLiteral PROPNAME_MANDATORY = u"Mandatory";
 
 /** @short  used to identify a set of items against the configuration API. */
-#define  CFGSET_TYPES               "Types"
-#define  CFGSET_FILTERS             "Filters"
-#define  CFGSET_FRAMELOADERS        "FrameLoaders"
-#define  CFGSET_CONTENTHANDLERS     "ContentHandlers"
+inline constexpr OUStringLiteral CFGSET_TYPES = u"Types";
+inline constexpr OUStringLiteral CFGSET_FILTERS = u"Filters";
+inline constexpr OUStringLiteral CFGSET_FRAMELOADERS = u"FrameLoaders";
+inline constexpr OUStringLiteral CFGSET_CONTENTHANDLERS = u"ContentHandlers";
 
 /** @short  used to address some configuration keys directly.
 
@@ -88,8 +88,8 @@
 
     @TODO   define these direct keys ...
  */
-#define  CFGDIRECTKEY_OFFICELOCALE          "/org.openoffice.Setup/L10N/ooLocale"
-#define  CFGDIRECTKEY_DEFAULTFRAMELOADER    "/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader"
+inline constexpr OUStringLiteral CFGDIRECTKEY_OFFICELOCALE = u"/org.openoffice.Setup/L10N/ooLocale";
+inline constexpr OUStringLiteral CFGDIRECTKEY_DEFAULTFRAMELOADER = u"/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader";
 #define  CFGDIRECTKEY_PRODUCTNAME           "/org.openoffice.Setup/Product/ooName"
 
 // Note that these flag bits have parallel names in
@@ -97,55 +97,55 @@
 // documentation on their meaning.
 
 /** @short  names of filter flags, sorted in alphabetical order */
-#define  FLAGNAME_3RDPARTYFILTER    "3RDPARTYFILTER"
-#define  FLAGNAME_ALIEN             "ALIEN"
-#define  FLAGNAME_CONSULTSERVICE    "CONSULTSERVICE"
-#define  FLAGNAME_DEFAULT           "DEFAULT"
-#define  FLAGNAME_ENCRYPTION        "ENCRYPTION"
-#define  FLAGNAME_EXPORT            "EXPORT"
-#define  FLAGNAME_GPGENCRYPTION     "GPGENCRYPTION"
-#define  FLAGNAME_IMPORT            "IMPORT"
-#define  FLAGNAME_INTERNAL          "INTERNAL"
-#define  FLAGNAME_NOTINFILEDIALOG   "NOTINFILEDIALOG"
-#define  FLAGNAME_NOTINSTALLED      "NOTINSTALLED"
-#define  FLAGNAME_OWN               "OWN"
-#define  FLAGNAME_PACKED            "PACKED"
-#define  FLAGNAME_PASSWORDTOMODIFY  "PASSWORDTOMODIFY"
-#define  FLAGNAME_PREFERRED         "PREFERRED"
-#define  FLAGNAME_STARTPRESENTATION "STARTPRESENTATION"
-#define  FLAGNAME_READONLY          "READONLY"
-#define  FLAGNAME_SUPPORTSSELECTION "SUPPORTSSELECTION"
-#define  FLAGNAME_TEMPLATE          "TEMPLATE"
-#define  FLAGNAME_TEMPLATEPATH      "TEMPLATEPATH"
-#define  FLAGNAME_COMBINED          "COMBINED"
-#define FLAGNAME_SUPPORTSSIGNING "SUPPORTSSIGNING"
-#define FLAGNAME_EXOTIC "EXOTIC"
+inline constexpr OUStringLiteral FLAGNAME_3RDPARTYFILTER = u"3RDPARTYFILTER";
+inline constexpr OUStringLiteral FLAGNAME_ALIEN = u"ALIEN";
+inline constexpr OUStringLiteral FLAGNAME_CONSULTSERVICE = u"CONSULTSERVICE";
+inline constexpr OUStringLiteral FLAGNAME_DEFAULT = u"DEFAULT";
+inline constexpr OUStringLiteral FLAGNAME_ENCRYPTION = u"ENCRYPTION";
+inline constexpr OUStringLiteral FLAGNAME_EXPORT = u"EXPORT";
+inline constexpr OUStringLiteral FLAGNAME_GPGENCRYPTION = u"GPGENCRYPTION";
+inline constexpr OUStringLiteral FLAGNAME_IMPORT = u"IMPORT";
+inline constexpr OUStringLiteral FLAGNAME_INTERNAL = u"INTERNAL";
+inline constexpr OUStringLiteral FLAGNAME_NOTINFILEDIALOG = u"NOTINFILEDIALOG";
+inline constexpr OUStringLiteral FLAGNAME_NOTINSTALLED = u"NOTINSTALLED";
+inline constexpr OUStringLiteral FLAGNAME_OWN = u"OWN";
+inline constexpr OUStringLiteral FLAGNAME_PACKED = u"PACKED";
+inline constexpr OUStringLiteral FLAGNAME_PASSWORDTOMODIFY = u"PASSWORDTOMODIFY";
+inline constexpr OUStringLiteral FLAGNAME_PREFERRED = u"PREFERRED";
+inline constexpr OUStringLiteral FLAGNAME_STARTPRESENTATION = u"STARTPRESENTATION";
+inline constexpr OUStringLiteral FLAGNAME_READONLY = u"READONLY";
+inline constexpr OUStringLiteral FLAGNAME_SUPPORTSSELECTION = u"SUPPORTSSELECTION";
+inline constexpr OUStringLiteral FLAGNAME_TEMPLATE = u"TEMPLATE";
+inline constexpr OUStringLiteral FLAGNAME_TEMPLATEPATH = u"TEMPLATEPATH";
+inline constexpr OUStringLiteral FLAGNAME_COMBINED = u"COMBINED";
+inline constexpr OUStringLiteral FLAGNAME_SUPPORTSSIGNING = u"SUPPORTSSIGNING";
+inline constexpr OUStringLiteral FLAGNAME_EXOTIC = u"EXOTIC";
 
 /** @short  some uno service names.
  */
-#define  SERVICE_CONFIGURATIONUPDATEACCESS  "com.sun.star.configuration.ConfigurationUpdateAccess"
-#define  SERVICE_CONFIGURATIONACCESS        "com.sun.star.configuration.ConfigurationAccess"
+inline constexpr OUStringLiteral SERVICE_CONFIGURATIONUPDATEACCESS = u"com.sun.star.configuration.ConfigurationUpdateAccess";
+inline constexpr OUStringLiteral SERVICE_CONFIGURATIONACCESS = u"com.sun.star.configuration.ConfigurationAccess";
 
 /** @short  some configuration paths.
  */
-#define  CFGPACKAGE_TD_TYPES           "/org.openoffice.TypeDetection.Types"
-#define  CFGPACKAGE_TD_FILTERS         "/org.openoffice.TypeDetection.Filter"
-#define  CFGPACKAGE_TD_OTHERS          "/org.openoffice.TypeDetection.Misc"
-#define  CFGPACKAGE_TD_OLD             "/org.openoffice.Office.TypeDetection"
+inline constexpr OUStringLiteral CFGPACKAGE_TD_TYPES = u"/org.openoffice.TypeDetection.Types";
+inline constexpr OUStringLiteral CFGPACKAGE_TD_FILTERS = u"/org.openoffice.TypeDetection.Filter";
+inline constexpr OUStringLiteral CFGPACKAGE_TD_OTHERS = u"/org.openoffice.TypeDetection.Misc";
+inline constexpr OUStringLiteral CFGPACKAGE_TD_OLD = u"/org.openoffice.Office.TypeDetection";
 
 /** @short  some default values.
  */
-#define  DEFAULT_OFFICELOCALE       "en-US"
+inline constexpr OUStringLiteral DEFAULT_OFFICELOCALE = u"en-US";
 
 /** @short  used for the queries of the FilterFactory service.
  */
-#define  QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE    "matchByDocumentService"
-#define  QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE "getDefaultFilterForType"
-#define  QUERY_IDENTIFIER_GET_SORTED_FILTERLIST     "getSortedFilterList()"
+inline constexpr OUStringLiteral QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE = u"matchByDocumentService";
+inline constexpr OUStringLiteral QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE = u"getDefaultFilterForType";
+inline constexpr OUStringLiteral QUERY_IDENTIFIER_GET_SORTED_FILTERLIST = u"getSortedFilterList()";
 
-#define  QUERY_PARAM_IFLAGS                         "iflags"
-#define  QUERY_PARAM_EFLAGS                         "eflags"
-#define  QUERY_PARAM_MODULE                         "module"
+inline constexpr OUStringLiteral QUERY_PARAM_IFLAGS = u"iflags";
+inline constexpr OUStringLiteral QUERY_PARAM_EFLAGS = u"eflags";
+inline constexpr OUStringLiteral QUERY_PARAM_MODULE = u"module";
 #define  QUERY_PARAM_DEFAULTFIRST                   "default_first"
 #define  QUERY_CONSTVALUE_ALL                       "all"
 
