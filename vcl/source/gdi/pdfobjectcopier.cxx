@@ -26,11 +26,11 @@ PDFObjectCopier::PDFObjectCopier(PDFObjectContainer& rContainer)
 {
 }
 
-void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement* pInputElement,
+void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement& rInputElement,
                                       SvMemoryStream& rDocBuffer,
                                       std::map<sal_Int32, sal_Int32>& rCopiedResources)
 {
-    if (auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pInputElement))
+    if (auto pReference = dynamic_cast<filter::PDFReferenceElement*>(&rInputElement))
     {
         filter::PDFObjectElement* pReferenced = pReference->LookupObject();
         if (pReferenced)
@@ -43,17 +43,17 @@ void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement* 
             rLine.append(" 0 R");
         }
     }
-    else if (auto pInputArray = dynamic_cast<filter::PDFArrayElement*>(pInputElement))
+    else if (auto pInputArray = dynamic_cast<filter::PDFArrayElement*>(&rInputElement))
     {
         rLine.append("[ ");
         for (auto const& pElement : pInputArray->GetElements())
         {
-            copyRecursively(rLine, pElement, rDocBuffer, rCopiedResources);
+            copyRecursively(rLine, *pElement, rDocBuffer, rCopiedResources);
             rLine.append(" ");
         }
         rLine.append("] ");
     }
-    else if (auto pInputDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pInputElement))
+    else if (auto pInputDictionary = dynamic_cast<filter::PDFDictionaryElement*>(&rInputElement))
     {
         rLine.append("<< ");
         for (auto const& pPair : pInputDictionary->GetItems())
@@ -61,14 +61,14 @@ void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement* 
             rLine.append("/");
             rLine.append(pPair.first);
             rLine.append(" ");
-            copyRecursively(rLine, pPair.second, rDocBuffer, rCopiedResources);
+            copyRecursively(rLine, *pPair.second, rDocBuffer, rCopiedResources);
             rLine.append(" ");
         }
         rLine.append(">> ");
     }
     else
     {
-        pInputElement->writeString(rLine);
+        rInputElement.writeString(rLine);
     }
 }
 
@@ -107,7 +107,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             aLine.append("/");
             aLine.append(rPair.first);
             aLine.append(" ");
-            copyRecursively(aLine, rPair.second, rDocBuffer, rCopiedResources);
+            copyRecursively(aLine, *rPair.second, rDocBuffer, rCopiedResources);
         }
 
         aLine.append(" >>\n");
@@ -134,7 +134,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
                 bFirst = false;
             else
                 aLine.append(" ");
-            copyRecursively(aLine, pElement, rDocBuffer, rCopiedResources);
+            copyRecursively(aLine, *pElement, rDocBuffer, rCopiedResources);
         }
         aLine.append("]\n");
     }

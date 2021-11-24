@@ -33,7 +33,7 @@ class PDFObjectCopier
 {
     PDFObjectContainer& m_rContainer;
 
-    void copyRecursively(OStringBuffer& rLine, filter::PDFElement* pInputElement,
+    void copyRecursively(OStringBuffer& rLine, filter::PDFElement& rInputElement,
                          SvMemoryStream& rDocBuffer,
                          std::map<sal_Int32, sal_Int32>& rCopiedResources);
 
