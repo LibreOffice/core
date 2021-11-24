@@ -324,7 +324,7 @@ void JSDialogSender::sendFullUpdate(bool bForce)
 
 void JSDialogSender::sendClose()
 {
-    if (!mpIdleNotify)
+    if (!mpIdleNotify || !m_bCanClose)
         return;
 
     mpIdleNotify->clearQueue();
@@ -539,6 +539,10 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     }
     else
     {
+        // embedded fragments cannot send close message for whole sidebar
+        if (rUIFile == "modules/simpress/ui/customanimationfragment.ui")
+            m_bCanClose = false;
+
         // builder for PanelLayout, get SidebarDockingWindow as m_aContentWindow
         m_aContentWindow = pRoot;
         for (int i = 0; i < 9 && m_aContentWindow; i++)
