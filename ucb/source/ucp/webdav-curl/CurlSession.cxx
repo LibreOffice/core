@@ -1307,11 +1307,16 @@ auto CurlProcessor::ProcessRequest(
 
                             if (ret == 0)
                             {
+                                // NTLM may either use a password requested
+                                // from the user, or from the system via SSPI
+                                // so i guess it should not be disabled here
+                                // regardless of the state of the system auth
+                                // checkbox, particularly since SSPI is only
+                                // available on WNT.
                                 roAuth.emplace(userName, passWord,
-                                               authAvail
-                                                   & ((userName.isEmpty() && passWord.isEmpty())
-                                                          ? authSystem
-                                                          : ~authSystem));
+                                               ((userName.isEmpty() && passWord.isEmpty())
+                                                    ? authSystem
+                                                    : (authAvail & ~CURLAUTH_NEGOTIATE)));
                                 isRetry = true;
                                 // Acquire is only necessary in case of success.
                                 guard.Acquire();
