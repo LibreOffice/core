@@ -574,6 +574,11 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
 
 bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection, const char* _pAsciiSettingName )
 {
+    return getBooleanDataSourceSetting(_rxConnection, OUString::createFromAscii( _pAsciiSettingName ));
+}
+
+bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection, const OUString & rSettingName )
+{
     bool bValue( false );
     try
     {
@@ -585,7 +590,7 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
                 xDataSourceProperties->getPropertyValue("Settings"),
                 UNO_QUERY_THROW
             );
-            OSL_VERIFY( xSettings->getPropertyValue( OUString::createFromAscii( _pAsciiSettingName ) ) >>= bValue );
+            OSL_VERIFY( xSettings->getPropertyValue( rSettingName ) >>= bValue );
         }
     }
     catch( const Exception& )
