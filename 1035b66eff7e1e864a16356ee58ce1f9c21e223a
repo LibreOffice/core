@@ -16,6 +16,23 @@
       "message": "There is already https://gerrit.libreoffice.org/c/core/+/124989 to revert that commit. It is waiting for input from the author of that commit, mostly.",
       "revId": "1035b66eff7e1e864a16356ee58ce1f9c21e223a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67f1c7bc_ed8f8d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-11-24T08:54:29Z",
+      "side": 1,
+      "message": "I didn\u0027t feel I understand the issue well enough to write a similarly bold commit message, though;)",
+      "revId": "1035b66eff7e1e864a16356ee58ce1f9c21e223a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
