@@ -86,6 +86,40 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
     return comphelper::containerToSequence( aResult );
 }
 
+Sequence< InputSource > lclGetCoreStreams(const Reference< XStorage >& rxSource)
+{
+    Sequence< InputSource > aCoreStreams = lclGetRelatedStreams(rxSource, CREATE_OFFICEDOC_RELATION_TYPE("metadata/core-properties"));
+    // OOXML strict
+    if (!aCoreStreams.hasElements())
+        aCoreStreams = lclGetRelatedStreams(rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT("metadata/core-properties"));
+    // MS Office seems to have a bug, so we have to do similar handling
+    if (!aCoreStreams.hasElements())
+        aCoreStreams = lclGetRelatedStreams(rxSource, "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties");
+
+    return aCoreStreams;
+}
+
+Sequence< InputSource > lclGetExtStreams(const Reference< XStorage >& rxSource)
+{
+    Sequence< InputSource > aExtStreams = lclGetRelatedStreams(rxSource, CREATE_OFFICEDOC_RELATION_TYPE("extended-properties"));
+    // OOXML strict
+    if (!aExtStreams.hasElements())
+        aExtStreams = lclGetRelatedStreams(rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT("extended-properties"));
+
+    return aExtStreams;
+}
+
+Sequence< InputSource > lclGetCustomStreams(const Reference< XStorage >& rxSource)
+{
+    Sequence< InputSource > aCustomStreams = lclGetRelatedStreams(rxSource, CREATE_OFFICEDOC_RELATION_TYPE("custom-properties"));
+    // OOXML strict
+    if (!aCustomStreams.hasElements())
+        aCustomStreams = lclGetRelatedStreams(rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT("custom-properties"));
+
+    return aCustomStreams;
+}
+
+
 } // namespace
 
 DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentContext >& rxContext ) :
@@ -120,22 +154,11 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     if( !rxSource.is() || !rxDocumentProperties.is() )
         throw IllegalArgumentException();
 
-    Sequence< InputSource > aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "metadata/core-properties" ) );
-    // OOXML strict
-    if( !aCoreStreams.hasElements() )
-        aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "metadata/core-properties" ) );
-    // MS Office seems to have a bug, so we have to do similar handling
-    if( !aCoreStreams.hasElements() )
-        aCoreStreams = lclGetRelatedStreams( rxSource, "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" );
+    Sequence< InputSource > aCoreStreams = lclGetCoreStreams(rxSource);
 
-    Sequence< InputSource > aExtStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "extended-properties" ) );
-    // OOXML strict
-    if( !aExtStreams.hasElements() )
-        aExtStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "extended-properties" ) );
-    Sequence< InputSource > aCustomStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "custom-properties" ) );
-    // OOXML strict
-    if( !aCustomStreams.hasElements() )
-        aCustomStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "custom-properties" ) );
+    Sequence< InputSource > aExtStreams = lclGetExtStreams(rxSource);
+
+    Sequence< InputSource > aCustomStreams = lclGetCustomStreams(rxSource);
 
     if( !(aCoreStreams.hasElements() || aExtStreams.hasElements() || aCustomStreams.hasElements()) )
         return;
@@ -158,6 +181,41 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         aParser.parseStream( rExtStream, true );
     for( const auto& rCustomStream : std::as_const(aCustomStreams) )
         aParser.parseStream( rCustomStream, true );
+}
+
+Reference < com::sun::star::io::XInputStream > SAL_CALL DocumentPropertiesImport::getCorePropertiesStream(
+    const Reference< XStorage >& rxSource)
+{
+    Sequence< InputSource > aCoreStreams = lclGetCoreStreams(rxSource);
+    if (!aCoreStreams.hasElements())
+        return nullptr;
+
+    return aCoreStreams[0].aInputStream;
+}
+
+Reference < com::sun::star::io::XInputStream > SAL_CALL DocumentPropertiesImport::getExtendedPropertiesStream(
+    const Reference< XStorage >& rxSource)
+{
+    Sequence< InputSource > aExtStreams = lclGetExtStreams(rxSource);
+    if (!aExtStreams.hasElements())
+        return nullptr;
+
+    return aExtStreams[0].aInputStream;
+}
+
+css::uno::Sequence< css::uno::Reference< com::sun::star::io::XInputStream > > SAL_CALL DocumentPropertiesImport::getCustomPropertiesStreams(
+    const Reference< XStorage >& rxSource)
+{
+    Sequence <InputSource> aExtStreams = lclGetCustomStreams(rxSource);
+
+    // Repack the sequence
+    std::vector<Reference<XInputStream>> aResult(aExtStreams.getLength());
+    for (const auto& aInputSource : aExtStreams)
+    {
+        aResult.push_back(aInputSource.aInputStream);
+    }
+
+    return comphelper::containerToSequence(aResult);
 }
 
 } // namespace oox::docprop
