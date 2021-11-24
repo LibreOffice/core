@@ -62,6 +62,14 @@ struct DocxSettingsData
     bool trackRevisions;    // Should 'Track Revisions' be set
 };
 
+/// Data to keep and write to XMLs
+struct SdtData
+{
+    OUString namespaces;
+    OUString xpath;
+    OUString data;
+};
+
 /// The class that does all the actual DOCX export-related work.
 class DocxExport : public MSWordExportBase
 {
@@ -117,6 +125,9 @@ class DocxExport : public MSWordExportBase
 
     /// Map authors to remove personal info
     std::unique_ptr<SvtSecurityMapPersonalInfo> m_pAuthorIDs;
+
+    /// Storage for sdt data which need to be written to other XMLs
+    std::vector<SdtData> m_SdtData;
 
 public:
 
@@ -197,6 +208,11 @@ public:
     sal_Int32 WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp, bool bNeedsLastParaId);
 
     virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOCX; }
+
+    void AddSdtData(const OUString & namespaces, const OUString & xpath, const OUString & data)
+    {
+        m_SdtData.push_back({ namespaces, xpath, data });
+    }
 
 protected:
     /// Format-dependent part of the actual export.
