@@ -39,6 +39,19 @@
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <osl/diagnose.h>
+#include <sal/log.hxx>
+
+using namespace ::com::sun::star;
+using utl::MediaDescriptor;
+
 // To be shorten source code by realking
 #define hconv(x)        hstr2ucsstr(x).c_str()
 #define ascii(x)        OUString::createFromAscii(x)
@@ -143,11 +156,23 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHWP(SvStream &rStream)
 
 sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
 {
+    SAL_WARN("HwpReader", "open HwpReader::filter");
     utl::MediaDescriptor aDescriptor(rDescriptor);
     aDescriptor.addInputStream();
 
     Reference< XInputStream > xInputStream(
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY_THROW);
+    OUString sURL
+        = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString());
+    // check HWPv5.0 file(zipped compound file) format
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<css::packages::zip::XZipFileAccess2> xZip
+        = packages::zip::ZipFileAccess::createWithURL(xContext, sURL);
+    if (xZip.is()) {
+        hwpfile.SetState(HWP_UNSUPPORTED_VERSION);
+        SAL_WARN("HwpReader", "Can't read document - unsupported HWP v5.0 document.");
+        return false;
+    }
 
     std::unique_ptr<HStream> stream(new HStream);
     Sequence < sal_Int8 > aBuffer;
@@ -4904,6 +4929,7 @@ sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName )
 //XExtendedFilterDetection
 OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
 {
+    SAL_WARN("HwpImportFilter::detect", "HwpImportFilter::detect");
     OUString sTypeName;
 
     utl::MediaDescriptor aDescriptor(rDescriptor);
@@ -4911,6 +4937,31 @@ OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue 
 
     Reference< XInputStream > xInputStream(
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
+
+    OUString sFilter;
+    OUString sType;
+    aDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] >>= sFilter;
+    aDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sType;
+    OUString sURL
+        = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString());
+    SAL_WARN("HwpImportFilter::detect", "filter " + sFilter);
+    SAL_WARN("HwpImportFilter::detect", "sType " + sType);
+    SAL_WARN("HwpImportFilter::detect", "sURL " + sURL);
+
+    // Check the contents of the updated copy.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(comphelper::getProcessServiceFactory());
+
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    SAL_WARN("HwpImportFilter::detect", "xContext");
+    uno::Reference<packages::zip::XZipFileAccess2>  xZip(
+        packages::zip::ZipFileAccess::createWithURL(xContext, sURL));
+
+    if (xZip.is())
+    {
+        SAL_WARN("HwpImportFilter::detect", "That maybe HWP v5.0 format");
+        uno::Reference<io::XInputStream> const isHwpV5FileHeaderStream(xZip->getByName("FileHeader"),
+                                                            uno::UNO_QUERY);
+    }
 
     if (xInputStream.is())
     {
