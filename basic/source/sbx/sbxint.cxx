@@ -76,16 +76,7 @@ start:
                 nRes = static_cast<sal_Int16>(p->nULong);
             break;
         case SbxSINGLE:
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(p->nSingle), SbxMAXINT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
-            }
-            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(p->nSingle), SbxMININT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMININT;
-            }
-            else
-                nRes = static_cast<sal_Int16>(rtl::math::round( p->nSingle ));
+            nRes = ImpDoubleToInteger(p->nSingle);
             break;
         case SbxCURRENCY:
             {
@@ -137,16 +128,7 @@ start:
             else
                 dVal = p->nDouble;
 
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(dVal), SbxMAXINT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
-            }
-            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(dVal), SbxMININT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMININT;
-            }
-            else
-                nRes = static_cast<sal_Int16>(rtl::math::round( dVal ));
+            nRes = ImpDoubleToInteger(dVal);
             break;
             }
         case SbxLPSTR:
@@ -160,16 +142,8 @@ start:
                 SbxDataType t;
                 if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                     nRes = 0;
-                else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXINT) )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
-                }
-                else if( !o3tl::convertsToAtLeast(o3tl::roundAway(d), SbxMININT) )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMININT;
-                }
                 else
-                    nRes = static_cast<sal_Int16>(rtl::math::round( d ));
+                    nRes = ImpDoubleToInteger(d);
             }
             break;
         case SbxOBJECT:
@@ -339,39 +313,6 @@ start:
 
 // sal_Int64 / hyper
 
-sal_Int64 ImpDoubleToSalInt64( double d )
-{
-    sal_Int64 nRes;
-    if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SAL_MAX_INT64) )
-    {
-        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_INT64;
-    }
-    else if( !o3tl::convertsToAtLeast(o3tl::roundAway(d), SAL_MIN_INT64) )
-    {
-        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MIN_INT64;
-    }
-    else
-        nRes = static_cast<sal_Int64>(rtl::math::round( d ));
-    return nRes;
-}
-
-sal_uInt64 ImpDoubleToSalUInt64( double d )
-{
-    sal_uInt64 nRes;
-    if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SAL_MAX_UINT64) )
-    {
-        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
-    }
-    else if( d < 0.0 )
-    {
-        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
-    }
-    else
-        nRes = static_cast<sal_uInt64>(rtl::math::round( d ));
-    return nRes;
-}
-
-
 double ImpSalUInt64ToDouble( sal_uInt64 n )
 {
     double d = 0.0;
@@ -410,11 +351,11 @@ start:
         case SbxULONG:
             nRes = static_cast<sal_Int64>(p->nULong); break;
         case SbxSINGLE:
-            nRes = static_cast<sal_Int64>(p->nSingle);
+            nRes = ImpDoubleToSalInt64(p->nSingle);
             break;
         case SbxDATE:
         case SbxDOUBLE:
-            nRes = static_cast<sal_Int64>(p->nDouble);
+            nRes = ImpDoubleToSalInt64(p->nDouble);
             break;
         case SbxCURRENCY:
             nRes = p->nInt64 / CURRENCY_FACTOR; break;
@@ -436,8 +377,7 @@ start:
                 nRes = 0;
             else
             {
-                ::OString aOStr = OUStringToOString( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
-                nRes = aOStr.toInt64();
+                nRes = p->pOUString->toInt64();
                 if( nRes == 0 )
                 {
                     // Check if really 0 or invalid conversion
@@ -446,7 +386,7 @@ start:
                     if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                         nRes = 0;
                     else
-                        nRes = static_cast<sal_Int64>(d);
+                        nRes = ImpDoubleToSalInt64(d);
                 }
             }
             break;
@@ -668,14 +608,11 @@ start:
         case SbxULONG:
             nRes = static_cast<sal_uInt64>(p->nULong); break;
         case SbxSINGLE:
-            nRes = static_cast<sal_uInt64>(p->nSingle); break;
+            nRes = ImpDoubleToSalUInt64(p->nSingle); break;
         case SbxDATE:
         case SbxDOUBLE:
-            {
-//TODO overflow check
-            nRes = static_cast<sal_uInt64>(p->nDouble);
+            nRes = ImpDoubleToSalUInt64(p->nDouble);
             break;
-            }
         case SbxCURRENCY:
             nRes = p->nInt64 * CURRENCY_FACTOR; break;
         case SbxSALINT64:
@@ -696,34 +633,16 @@ start:
                 nRes = 0;
             else
             {
-                ::OString aOStr = OUStringToOString
-                    ( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
-                sal_Int64 n64 = aOStr.toInt64();
-                if( n64 == 0 )
+                nRes = p->pOUString->toUInt64();
+                if( nRes == 0 )
                 {
                     // Check if really 0 or invalid conversion
                     double d;
                     SbxDataType t;
                     if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                         nRes = 0;
-                    else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SAL_MAX_UINT64) )
-                    {
-                        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
-                    }
-                    else if( d < 0.0 )
-                    {
-                        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
-                    }
                     else
-                        nRes = static_cast<sal_uInt64>(rtl::math::round( d ));
-                }
-                else if( n64 < 0 )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
-                }
-                else
-                {
-                    nRes = n64;
+                        nRes = ImpDoubleToSalUInt64(d);
                 }
             }
             break;

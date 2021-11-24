@@ -20,9 +20,44 @@
 #pragma once
 
 #include "sbxdec.hxx"
+#include <basic/sberrors.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sbxcore.hxx>
+#include <basic/sbxdef.hxx>
+
+#include <o3tl/float_int_conversion.hxx>
+#include <rtl/math.hxx>
+#include <sal/types.h>
 
 class SbxArray;
+
+template <typename I> inline I DoubleTo(double f, I min, I max)
+{
+    f = rtl::math::round(f);
+    if (!o3tl::convertsToAtMost(f, max))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return max;
+    }
+    if (!o3tl::convertsToAtLeast(f, min))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return min;
+    }
+    return f;
+}
+
+inline auto ImpDoubleToChar(double f) { return DoubleTo<sal_Unicode>(f, SbxMINCHAR, SbxMAXCHAR); }
+inline auto ImpDoubleToByte(double f) { return DoubleTo<sal_uInt8>(f, 0, SbxMAXBYTE); }
+inline auto ImpDoubleToUShort(double f) { return DoubleTo<sal_uInt16>(f, 0, SbxMAXUINT); }
+inline auto ImpDoubleToInteger(double f) { return DoubleTo<sal_Int16>(f, SbxMININT, SbxMAXINT); }
+inline auto ImpDoubleToULong(double f) { return DoubleTo<sal_uInt32>(f, 0, SbxMAXULNG); }
+inline auto ImpDoubleToLong(double f) { return DoubleTo<sal_Int32>(f, SbxMINLNG, SbxMAXLNG); }
+inline auto ImpDoubleToSalUInt64(double d) { return DoubleTo<sal_uInt64>(d, 0, SAL_MAX_UINT64); }
+inline auto ImpDoubleToSalInt64(double d)
+{
+    return DoubleTo<sal_Int64>(d, SAL_MIN_INT64, SAL_MAX_INT64);
+}
 
 // SBXSCAN.CXX
 extern void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString=false );
@@ -45,8 +80,6 @@ void        ImpPutInt64( SbxValues*, sal_Int64 );
 sal_uInt64  ImpGetUInt64( const SbxValues* );
 void        ImpPutUInt64( SbxValues*, sal_uInt64 );
 
-sal_Int64   ImpDoubleToSalInt64 ( double d );
-sal_uInt64  ImpDoubleToSalUInt64( double d );
 double      ImpSalUInt64ToDouble( sal_uInt64 n );
 
 // SBXLNG.CXX
