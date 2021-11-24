@@ -740,6 +740,7 @@ private:
     void WritePostponedCustomShape();
 
     void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
+    void WriteSdtPlainText(const OUString& sValue, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
     void WriteSdtDropDownStart(OUString const& rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtDropDownEnd(OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtEnd();
