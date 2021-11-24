@@ -45,6 +45,12 @@ public:
     virtual void SAL_CALL importProperties(
                             const css::uno::Reference< css::embed::XStorage >& rxSource,
                             const css::uno::Reference< css::document::XDocumentProperties >& rxDocumentProperties ) override;
+    virtual css::uno::Reference < com::sun::star::io::XInputStream > SAL_CALL getCorePropertiesStream(
+        const css::uno::Reference< css::embed::XStorage >& rxSource) override;
+    virtual css::uno::Reference < com::sun::star::io::XInputStream > SAL_CALL getExtendedPropertiesStream(
+        const css::uno::Reference< css::embed::XStorage >& rxSource) override;
+    virtual css::uno::Sequence< css::uno::Reference< com::sun::star::io::XInputStream > > SAL_CALL getCustomPropertiesStreams(
+        const css::uno::Reference< css::embed::XStorage >& rxSource) override;
 
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
