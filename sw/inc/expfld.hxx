@@ -37,6 +37,7 @@ class SwDoc;
 class SwFormatField;
 class SetGetExpFields;
 class SwEditShell;
+namespace com::sun::star::beans { struct PropertyValue; }
 
 /// Forward declaration: get "BodyTextNode" for exp.fld in Fly's headers/footers/footnotes.
 const SwTextNode* GetBodyTextNode( const SwDoc& pDoc, SwPosition& rPos,
@@ -288,6 +289,7 @@ class SW_DLLPUBLIC SwInputField final : public SwField
     OUString maToolTip;
     sal_uInt16 mnSubType;
     bool mbIsFormField;
+    css::uno::Sequence<css::beans::PropertyValue> maGrabBag;
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 
@@ -316,6 +318,7 @@ public:
     void applyFieldContent( const OUString& rNewFieldContent );
 
     bool isFormField() const;
+    css::uno::Sequence<css::beans::PropertyValue> getGrabBagParams() const { return maGrabBag; }
 
     virtual OUString        GetFieldName() const override;
 
