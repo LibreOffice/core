@@ -67,6 +67,24 @@
       "message": "I\u0027d use the word \"trailing\" instead of \"terminating\", just if you want to take on the opportunity to make it more idiomatic",
       "revId": "915e76399d99ae68f699b921d5f95da4fc0d73d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d642e14c_42fc01ad",
+        "filename": "sw/source/core/doc/docredln.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T17:08:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93b520ad_991fa439",
+      "revId": "915e76399d99ae68f699b921d5f95da4fc0d73d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
