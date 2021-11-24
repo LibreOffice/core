@@ -26,6 +26,8 @@
 #include <memory>
 #include <vector>
 #include <tools/solar.h>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 class SfxPoolItem;
 class SwTextNode;
@@ -285,7 +287,8 @@ class SW_DLLPUBLIC SwInputField final : public SwField
     OUString maHelp;
     OUString maToolTip;
     sal_uInt16 mnSubType;
-    bool const mbIsFormField;
+    bool mbIsFormField;
+    css::uno::Sequence<css::beans::PropertyValue> maGrabBag;
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 
@@ -314,6 +317,7 @@ public:
     void applyFieldContent( const OUString& rNewFieldContent );
 
     bool isFormField() const;
+    css::uno::Sequence<css::beans::PropertyValue> getGrabBagParams() const { return maGrabBag; }
 
     virtual OUString        GetFieldName() const override;
 

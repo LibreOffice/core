@@ -81,7 +81,7 @@ public:
                  utl::MediaDescriptor const & rMediaDesc);
     virtual ~DomainMapper() override;
 
-    virtual void setDocumentReference(void* pDocument) override;
+    virtual void setDocumentReference(writerfilter::ooxml::OOXMLDocument* pDocument) override;
 
     // Stream
     virtual void markLastParagraphInSection() override;
