@@ -57,6 +57,30 @@
       },
       "revId": "aa480ff28dd997d8c0cb8737de4f63dce52c49c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22ae69ea_694bc1f1",
+        "filename": "sfx2/inc/dinfdlg.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T14:02:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c52d7427_308c510e",
+      "range": {
+        "startLine": 69,
+        "startChar": 29,
+        "endLine": 69,
+        "endChar": 32
+      },
+      "revId": "aa480ff28dd997d8c0cb8737de4f63dce52c49c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
