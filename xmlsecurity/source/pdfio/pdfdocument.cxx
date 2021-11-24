@@ -209,6 +209,52 @@ bad_data:
     return rv;
 }
 #elif defined XMLSEC_CRYPTO_MSCRYPTO
+
+OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
+{
+    OUString subjectName;
+
+    // Get Subject name size.
+    DWORD dwData = CertGetNameStringW(pCertContext,
+                                      CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                                      0,
+                                      nullptr,
+                                      nullptr,
+                                      0);
+    if (!dwData)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CertGetNameString failed");
+        return subjectName;
+    }
+
+    // Allocate memory for subject name.
+    LPWSTR szName = static_cast<LPWSTR>(
+        LocalAlloc(LPTR, dwData * sizeof(WCHAR)));
+    if (!szName)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: Unable to allocate memory for subject name");
+        return subjectName;
+    }
+
+    // Get subject name.
+    if (!CertGetNameStringW(pCertContext,
+                            CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                            0,
+                            nullptr,
+                            szName,
+                            dwData))
+    {
+        LocalFree(szName);
+        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CertGetNameString failed");
+        return subjectName;
+    }
+
+    subjectName = SAL_U(szName);
+    LocalFree(szName);
+
+    return subjectName;
+}
+
 /// Verifies a non-detached signature using CryptoAPI.
 bool VerifyNonDetachedSignature(SvStream& rStream, std::vector<std::pair<size_t, size_t>>& rByteRanges, std::vector<BYTE>& rExpectedHash)
 {
