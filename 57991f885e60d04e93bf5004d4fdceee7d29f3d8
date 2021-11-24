@@ -46,6 +46,30 @@
       },
       "revId": "57991f885e60d04e93bf5004d4fdceee7d29f3d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feeaa91f_65570a8a",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-11-24T08:45:10Z",
+      "side": 1,
+      "message": "Hi!\n\nSorry, I\u0027m nowadays seriously out of context of this topic: too much time passed.\n\nI remember, that in this class and situation we have serious mess of page parameters from document, printer. And moreover, depending on OS and printer there can be very different list o available params.\n\nSo I\u0027m not objecting on reverting this patch: I see that situation is even more complex than I thought those days.",
+      "parentUuid": "813e8562_a9f1b305",
+      "range": {
+        "startLine": 1905,
+        "startChar": 16,
+        "endLine": 1905,
+        "endChar": 45
+      },
+      "revId": "57991f885e60d04e93bf5004d4fdceee7d29f3d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
