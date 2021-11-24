@@ -295,7 +295,7 @@ namespace tools_urlobj
         }
 
         void testChangeScheme() {
-            INetURLObject obj("unkonwn://example.com/foo/bar");
+            INetURLObject obj("unknown://example.com/foo/bar");
             CPPUNIT_ASSERT(!obj.HasError());
             obj.changeScheme(INetProtocol::Http);
             CPPUNIT_ASSERT_EQUAL(

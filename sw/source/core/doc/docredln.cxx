@@ -841,7 +841,7 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
             bDeletePairPaM = true;
         }
 
-        // pair at tracked moving: same text by trimming terminatin white spaces
+        // pair at tracked moving: same text by trimming trailing white spaces
         if ( abs(pPaM->GetText().getLength() - pPairPaM->GetText().getLength()) <= 2 &&
             sTrimmed == pPairPaM->GetText().trim() )
         {
