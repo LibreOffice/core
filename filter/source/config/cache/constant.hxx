@@ -146,7 +146,6 @@ inline constexpr OUStringLiteral QUERY_IDENTIFIER_GET_SORTED_FILTERLIST = u"getS
 inline constexpr OUStringLiteral QUERY_PARAM_IFLAGS = u"iflags";
 inline constexpr OUStringLiteral QUERY_PARAM_EFLAGS = u"eflags";
 inline constexpr OUStringLiteral QUERY_PARAM_MODULE = u"module";
-#define  QUERY_PARAM_DEFAULTFIRST                   "default_first"
 #define  QUERY_CONSTVALUE_ALL                       "all"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
