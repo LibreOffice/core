@@ -86,6 +86,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51ab1155_d14c4c6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-24T11:29:14Z",
+      "side": 1,
+      "message": "Thanks a lot!\n\nPlease have a look.\n\nI\u0027m going to push new version",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d74fa810_cebdb6ff",
@@ -99,6 +116,24 @@
       "writtenOn": "2021-11-23T13:34:40Z",
       "side": 1,
       "message": "It seems sfx2::FileDialogHelper::SetCurrentFilter() expects a UIName so this would be fine, I just wonder it\u0027s not the translated name used here.. (not relevant in this change though,just a remark).",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "896fe108_80bd4e7f",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-24T11:29:14Z",
+      "side": 1,
+      "message": "Ok, so I don\u0027t revert this.",
+      "parentUuid": "d74fa810_cebdb6ff",
       "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -120,6 +155,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24bb398d_65d4a136",
+        "filename": "filter/source/config/fragments/filters/PNG___Portable_Network_Graphic.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-24T11:29:14Z",
+      "side": 1,
+      "message": "Ok, I revert.",
+      "parentUuid": "31390e0d_3a60fa6e",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b9e8f15_d813bd94",
@@ -133,6 +186,30 @@
       "writtenOn": "2021-11-23T13:34:40Z",
       "side": 1,
       "message": "RealFilterName is an internal programmatic name, it then must match the filter/source/config/fragments/filters/PNG___Portable_Network_Graphic.xcu one.",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 38
+      },
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a81a03b_fc85d6f3",
+        "filename": "filter/source/config/fragments/internalgraphicfilters/png_Import.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-24T11:29:14Z",
+      "side": 1,
+      "message": "Reverted.",
+      "parentUuid": "6b9e8f15_d813bd94",
       "range": {
         "startLine": 21,
         "startChar": 24,
@@ -166,6 +243,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba531f0_2b244b2e",
+        "filename": "filter/source/config/fragments/types/png_Portable_Network_Graphic.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-24T11:29:14Z",
+      "side": 1,
+      "message": "Reverted.",
+      "parentUuid": "1c9507a1_e7ce37a2",
+      "range": {
+        "startLine": 24,
+        "startChar": 24,
+        "endLine": 24,
+        "endChar": 39
+      },
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c423b93e_65965f85",
@@ -179,6 +280,24 @@
       "writtenOn": "2021-11-23T13:34:40Z",
       "side": 1,
       "message": "Not sure, but I think this is the internal programmatic filter name and then should match the filter/source/config/fragments/filters/PNG___Portable_Network_Graphic.xcu one.",
+      "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ae36e2_a4cdf4b4",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-11-24T11:29:14Z",
+      "side": 1,
+      "message": "Reverted.",
+      "parentUuid": "c423b93e_65965f85",
       "revId": "178f86f95a170fbb77bf85ec8e18f0b9274dc904",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
