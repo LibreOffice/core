@@ -783,6 +783,11 @@ typedef enum
      * When a user tries to use command which is restricted for that user
      */
     LOK_COMMAND_BLOCKED = 53,
+
+    /**
+     * For sending the focused paragprah's text for a11y features.
+     */
+    LOK_FOCUSED_PARAGRAPH_TEXT = 54,
 }
 LibreOfficeKitCallbackType;
 
@@ -919,6 +924,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR";
     case LOK_COMMAND_BLOCKED:
         return "LOK_COMMAND_BLOCKED";
+    case LOK_FOCUSED_PARAGRAPH_TEXT:
+        return "LOK_FOCUSED_PARAGRAPH_TEXT";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

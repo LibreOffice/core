@@ -215,7 +215,6 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
 
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                     atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
-
                 break;
             }
 

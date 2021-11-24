@@ -26,6 +26,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -165,6 +168,7 @@ protected:
 
     virtual void InvalidateCursorPos_();
     virtual void InvalidateFocus_();
+    virtual void NotifyView(const com::sun::star::accessibility::AccessibleEventObject& aEvent);
 
 public:
     void FireAccessibleEvent( css::accessibility::AccessibleEventObject& rEvent );

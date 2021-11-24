@@ -440,6 +440,37 @@ void SwAccessibleContext::InvalidateFocus_()
 {
 }
 
+void SwAccessibleContext::NotifyView(const com::sun::star::accessibility::AccessibleEventObject& aEvent)
+{
+    uno::Reference< com::sun::star::accessibility::XAccessible > accessible(aEvent.Source, uno::UNO_QUERY);
+
+    if( !accessible.is() )
+        return;
+
+    switch (aEvent.EventId)
+    {
+        case com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED:
+        {
+            sal_Int16 nState = com::sun::star::accessibility::AccessibleStateType::INVALID;
+            aEvent.NewValue >>= nState;
+            if( com::sun::star::accessibility::AccessibleStateType::FOCUSED == nState )
+            {
+                css::uno::Reference<css::accessibility::XAccessibleText> mpText;
+                mpText.set(acc  essible, css::uno::UNO_QUERY);
+                if (mpText.is()) {
+                    OString contentO;
+                    mpText->getText().convertToString(&contentO, 11, RTL_UNICODETOTEXT_FLAGS_FLUSH);
+                    std::string contentS = std::string(contentO.getStr());
+                    GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_FOCUSED_PARAGRAPH_TEXT, contentS.c_str());
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 {
     OSL_ENSURE( GetFrame(), "fire event for disposed frame?" );
@@ -453,7 +484,11 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
     }
 
     if (m_nClientId)
+    {
         comphelper::AccessibleEventNotifier::addEvent( m_nClientId, rEvent );
+        if (comphelper::LibreOfficeKit::isActive())
+            NotifyView(rEvent);
+    }
 }
 
 void SwAccessibleContext::FireVisibleDataEvent()
