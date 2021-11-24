@@ -11992,27 +11992,14 @@ if test "$ENABLE_PDFIMPORT" = "TRUE" -a "$ENABLE_POPPLER" = "TRUE"; then
     if test "$with_system_poppler" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_POPPLER=TRUE
-        PKG_CHECK_MODULES( POPPLER, poppler >= 0.12.0 )
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        save_CPPFLAGS=$CPPFLAGS
-        CXXFLAGS="$CXXFLAGS $POPPLER_CFLAGS"
-        CPPFLAGS="$CPPFLAGS $POPPLER_CFLAGS"
-        AC_CHECK_HEADER([cpp/poppler-version.h],
-            [AC_DEFINE([HAVE_POPPLER_VERSION_H], 1)],
-            [])
-        CXXFLAGS=$save_CXXFLAGS
-        CPPFLAGS=$save_CPPFLAGS
-        AC_LANG_POP([C++])
+        PKG_CHECK_MODULES(POPPLER,[poppler >= 0.14 poppler-cpp])
         POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-
         FilterLibs "${POPPLER_LIBS}"
         POPPLER_LIBS="${filteredlibs}"
     else
         AC_MSG_RESULT([internal])
         SYSTEM_POPPLER=
         BUILD_TYPE="$BUILD_TYPE POPPLER"
-        AC_DEFINE([HAVE_POPPLER_VERSION_H], 1)
     fi
     AC_DEFINE([ENABLE_PDFIMPORT],1)
 fi
