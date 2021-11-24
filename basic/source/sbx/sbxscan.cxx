@@ -59,21 +59,7 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal
 }
 
 
-/** NOTE: slightly differs from strchr() in that it does not consider the
-    terminating NULL character to be part of the string and returns bool
-    instead of pointer, if character is 0 returns false.
- */
-static bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
-{
-    if (!c)
-        return false;
-    while (*p)
-    {
-        if (*p++ == c)
-            return true;
-    }
-    return false;
-}
+static bool ImpStrChr( const OUString& str, sal_Unicode c ) { return str.indexOf(c) >= 0; }
 
 
 // scanning a string according to BASIC-conventions
@@ -134,8 +120,8 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             aSearchStr.append(cIntntlDecSepAlt);
         if( bOnlyIntntl )
             aSearchStr.append(cIntntlGrpSep);
-        const sal_Unicode* const pSearchStr = aSearchStr.getStr();
-        const sal_Unicode pDdEe[] = { 'D', 'd', 'E', 'e', 0 };
+        const OUString pSearchStr = aSearchStr.makeStringAndClear();
+        static const OUStringLiteral pDdEe = u"DdEe";
         while( ImpStrChr( pSearchStr, *p ) )
         {
             aBuf.append( *p );
@@ -205,7 +191,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             eScanType = SbxDOUBLE;
 
         // type detection?
-        const sal_Unicode pTypes[] = { '%', '!', '&', '#', 0 };
+        static const OUStringLiteral pTypes = u"%!&#";
         if( ImpStrChr( pTypes, *p ) )
             p++;
     }
@@ -214,7 +200,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     {
         p++;
         eScanType = SbxLONG;
-        OUString aCmp( "0123456789ABCDEFabcdef" );
+        OUString aCmp( "0123456789ABCDEF" );
         char base = 16;
         char ndig = 8;
         switch( *p++ )
@@ -231,16 +217,11 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             default :
                 bRes = false;
         }
-        const sal_Unicode* const pCmp = aCmp.getStr();
         while( rtl::isAsciiAlphanumeric( *p ) )    /* XXX: really munge all alnum also when error? */
         {
-            sal_Unicode ch = *p;
-            if( ImpStrChr( pCmp, ch ) )
-            {
-                if (ch > 0x60)
-                    ch -= 0x20;     // convert ASCII lower to upper case
+            sal_Unicode ch = rtl::toAsciiUpperCase(*p);
+            if( ImpStrChr( aCmp, ch ) )
                 aBuf.append( ch );
-            }
             else
                 bRes = false;
             p++;
