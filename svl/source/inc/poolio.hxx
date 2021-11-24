@@ -45,24 +45,24 @@ static bool CompareSortablePoolItems(SfxPoolItem const* lhs, SfxPoolItem const* 
 struct SfxPoolItemArray_Impl
 {
 private:
-    o3tl::sorted_vector<SfxPoolItem*> maPoolItemSet;
+    SortedBigPtrArray maPoolItemSet;
     // In some cases, e.g. subclasses of NameOrIndex, the parent class (NameOrIndex) is sortable,
     // but the subclasses do not define an operator<, which means that we don't get an ordering
     // strong enough to enforce uniqueness purely with operator<, which means we need to do
     // a partial scan with operator==
     std::vector<SfxPoolItem*> maSortablePoolItems;
 public:
-    o3tl::sorted_vector<SfxPoolItem*>::const_iterator begin() const { return maPoolItemSet.begin(); }
-    o3tl::sorted_vector<SfxPoolItem*>::const_iterator end() const { return maPoolItemSet.end(); }
+    auto begin() const { return maPoolItemSet.begin(); }
+    auto end() const { return maPoolItemSet.end(); }
     /// clear array of PoolItem variants after all PoolItems are deleted
     /// or all ref counts are decreased
     void clear();
     size_t size() const {return maPoolItemSet.size();}
     bool empty() const {return maPoolItemSet.empty();}
-    o3tl::sorted_vector<SfxPoolItem*>::const_iterator find(SfxPoolItem* pItem) const { return maPoolItemSet.find(pItem); }
+    auto find(SfxPoolItem* pItem) const { return maPoolItemSet.find(pItem); }
     void insert(SfxPoolItem* pItem)
     {
-        bool bInserted = maPoolItemSet.insert(pItem).second;
+        bool bInserted = maPoolItemSet.insert(pItem);
         assert( bInserted && "duplicate item?" );
         (void)bInserted;
 
@@ -114,7 +114,7 @@ public:
         }
         return rv;
     }
-    void erase(o3tl::sorted_vector<SfxPoolItem*>::const_iterator it)
+    void erase(SortedBigPtrArray::const_iterator it)
     {
         auto pNeedle = *it;
         if ((*it)->IsSortable())
