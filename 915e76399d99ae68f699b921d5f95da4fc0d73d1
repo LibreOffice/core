@@ -16,6 +16,23 @@
       "message": "It seems ok to me.",
       "revId": "915e76399d99ae68f699b921d5f95da4fc0d73d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93b520ad_991fa439",
+        "filename": "sw/source/core/doc/docredln.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-11-24T02:58:08Z",
+      "side": 1,
+      "message": "I\u0027d use the word \"trailing\" instead of \"terminating\", just if you want to take on the opportunity to make it more idiomatic",
+      "revId": "915e76399d99ae68f699b921d5f95da4fc0d73d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
