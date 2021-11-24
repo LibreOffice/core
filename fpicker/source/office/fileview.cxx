@@ -642,15 +642,20 @@ void ViewTabListBox_Impl::DeleteEntries()
             eResult = aDlg.run();
         }
 
-        if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
-             ( eResult == svtools::QUERYDELETE_YES ) )
+        bool bDeleted = false;
+
+        if (eResult == svtools::QUERYDELETE_ALL || eResult == svtools::QUERYDELETE_YES)
         {
             if ( Kill( aURL ) )
             {
                 delete reinterpret_cast<SvtContentEntry*>(mxTreeView->get_id(rCurEntry).toInt64());
                 mpParent->EntryRemoved( aURL );
+                bDeleted = true;
             }
         }
+
+        if (!bDeleted)
+            mxTreeView->unselect(rCurEntry);
 
         return false;
     });
