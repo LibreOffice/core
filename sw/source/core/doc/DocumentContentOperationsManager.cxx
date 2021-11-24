@@ -300,6 +300,12 @@ namespace sw
                 ::sw::mark::InsertMode::CopyText);
             // Explicitly try to get exactly the same name as in the source
             // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
+            if (pNewMark == nullptr)
+            {
+                assert(IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK
+                    || IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
+                continue; // can't insert duplicate cross reference mark
+            }
             rDestDoc.getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
 
             // copying additional attributes for bookmarks or fieldmarks
