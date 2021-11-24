@@ -10,11 +10,11 @@
 #pragma once
 
 #define BMP_STR_CLOSE   "formula/res/fapclose.png"
-#define BMP_STR_OPEN    "formula/res/fapopen.png"
-#define BMP_STR_END     "formula/res/fapok.png"
-#define BMP_STR_ERROR   "formula/res/faperror.png"
-#define RID_BMP_REFBTN1 "formula/res/refinp1.png"
-#define RID_BMP_REFBTN2 "formula/res/refinp2.png"
-#define BMP_FX          "formula/res/fx.png"
+inline constexpr OUStringLiteral BMP_STR_OPEN = u"formula/res/fapopen.png";
+inline constexpr OUStringLiteral BMP_STR_END = u"formula/res/fapok.png";
+inline constexpr OUStringLiteral BMP_STR_ERROR = u"formula/res/faperror.png";
+inline constexpr OUStringLiteral RID_BMP_REFBTN1 = u"formula/res/refinp1.png";
+inline constexpr OUStringLiteral RID_BMP_REFBTN2 = u"formula/res/refinp2.png";
+inline constexpr OUStringLiteral BMP_FX = u"formula/res/fx.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

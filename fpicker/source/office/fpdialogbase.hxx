@@ -52,7 +52,7 @@ namespace o3tl {
     template<> struct typed_flags<PickerFlags> : is_typed_flags<PickerFlags, 0x00ffff> {};
 }
 
-#define FILEDIALOG_FILTER_ALL   "*.*"
+inline constexpr OUStringLiteral FILEDIALOG_FILTER_ALL = u"*.*";
 
 // SvtFileDialog_Base
 
