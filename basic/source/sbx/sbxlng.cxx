@@ -59,16 +59,7 @@ start:
                 nRes = static_cast<sal_Int32>(p->nULong);
             break;
         case SbxSINGLE:
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(p->nSingle), SbxMAXLNG) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
-            }
-            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(p->nSingle), SbxMINLNG) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
-            }
-            else
-                nRes = static_cast<sal_Int32>(rtl::math::round( p->nSingle ));
+            nRes = ImpDoubleToLong(p->nSingle);
             break;
         case SbxSALINT64:
             nRes = p->nInt64;
@@ -100,16 +91,7 @@ start:
             else
                 dVal = p->nDouble;
 
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(dVal), SbxMAXLNG) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
-            }
-            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(dVal), SbxMINLNG) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
-            }
-            else
-                nRes = static_cast<sal_Int32>(rtl::math::round( dVal ));
+            nRes = ImpDoubleToLong(dVal);
             break;
             }
         case SbxBYREF | SbxSTRING:
@@ -123,16 +105,8 @@ start:
                 SbxDataType t;
                 if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                     nRes = 0;
-                else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXLNG) )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
-                }
-                else if( !o3tl::convertsToAtLeast(o3tl::roundAway(d), SbxMINLNG) )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
-                }
                 else
-                    nRes = static_cast<sal_Int32>(rtl::math::round( d ));
+                    nRes = ImpDoubleToLong(d);
             }
             break;
         case SbxOBJECT:

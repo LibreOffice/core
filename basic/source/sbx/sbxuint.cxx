@@ -107,16 +107,7 @@ start:
                 nRes = static_cast<sal_uInt16>(p->uInt64);
             break;
         case SbxSINGLE:
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(p->nSingle), SbxMAXUINT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXUINT;
-            }
-            else if( p->nSingle < 0 )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
-            }
-            else
-                nRes = static_cast<sal_uInt16>( p->nSingle + 0.5 );
+            nRes = ImpDoubleToUShort(p->nSingle);
             break;
         case SbxDATE:
         case SbxDOUBLE:
@@ -133,16 +124,7 @@ start:
             else
                 dVal = p->nDouble;
 
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(dVal), SbxMAXUINT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXUINT;
-            }
-            else if( dVal < 0 )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
-            }
-            else
-                nRes = static_cast<sal_uInt16>( dVal + 0.5 );
+            nRes = ImpDoubleToUShort(dVal);
             break;
             }
         case SbxBYREF | SbxSTRING:
@@ -156,16 +138,8 @@ start:
                 SbxDataType t;
                 if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
                     nRes = 0;
-                else if( !o3tl::convertsToAtMost(o3tl::roundAway(d), SbxMAXUINT) )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXUINT;
-                }
-                else if( d < 0 )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
-                }
                 else
-                    nRes = static_cast<sal_uInt16>( d + 0.5 );
+                    nRes = ImpDoubleToUShort(d);
             }
             break;
         case SbxOBJECT:
