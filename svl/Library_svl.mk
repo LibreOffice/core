@@ -140,6 +140,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/rngitem \
     svl/source/items/sitem \
     svl/source/items/slstitm \
+    svl/source/items/sortedbparr \
     svl/source/items/srchitem \
     svl/source/items/stringio \
     svl/source/items/stritem \

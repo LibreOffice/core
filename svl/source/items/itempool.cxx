@@ -800,7 +800,7 @@ const SfxPoolItem *SfxItemPool::GetItem2Default(sal_uInt16 nWhich) const
 
 SfxItemPool::Item2Range SfxItemPool::GetItemSurrogates(sal_uInt16 nWhich) const
 {
-    static const o3tl::sorted_vector<SfxPoolItem*> EMPTY;
+    static const SortedBigPtrArray EMPTY;
 
     if ( !IsInRange(nWhich) )
     {
