@@ -28,6 +28,7 @@
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <svl/sortedbparr.hxx>
 
 class SfxBroadcaster;
 struct SfxItemPool_Impl;
@@ -149,10 +150,10 @@ public:
 
     struct Item2Range
     {
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_begin;
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_end;
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator const & begin() const { return m_begin; }
-        o3tl::sorted_vector<SfxPoolItem*>::const_iterator const & end() const { return m_end; }
+        SortedBigPtrArray::const_iterator m_begin;
+        SortedBigPtrArray::const_iterator m_end;
+        SortedBigPtrArray::const_iterator const & begin() const { return m_begin; }
+        SortedBigPtrArray::const_iterator const & end() const { return m_end; }
     };
     const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
     template<class T> const T*      GetItem2Default( TypedWhichId<T> nWhich ) const
