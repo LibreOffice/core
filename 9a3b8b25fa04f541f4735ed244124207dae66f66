@@ -16,6 +16,24 @@
       "message": "Thank you for your effort. Now the conversions are clear. I would suggest in order to avoid all these files cInt-1, cInt-2, cInt-3 etc. to use the assertion mechanism like in https://opengrok.libreoffice.org/xref/core/basic/qa/basic_coverage/dateadd.bas?r\u003dc3fc5aaa and combine the tests regarding the same functions in a single test file.",
       "revId": "9a3b8b25fa04f541f4735ed244124207dae66f66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "628dc747_e9ea5c39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-11-24T12:31:30Z",
+      "side": 1,
+      "message": "Well, it is far from clear that this change is acceptable. It is just a \"proof of concept\".",
+      "parentUuid": "9ec22ee8_2f6cd412",
+      "revId": "9a3b8b25fa04f541f4735ed244124207dae66f66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
