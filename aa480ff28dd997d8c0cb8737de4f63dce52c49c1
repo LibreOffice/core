@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dad01d99_52bff7ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T13:47:49Z",
+      "side": 1,
+      "message": "Reading https://en.cppreference.com/w/cpp/language/enum, an enum can be unscoped but typed too.",
+      "revId": "aa480ff28dd997d8c0cb8737de4f63dce52c49c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
