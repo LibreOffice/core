@@ -620,6 +620,34 @@ private:
 
 }
 
+/**
+ * Used to store the necessary information about the (combined-)tile
+ * area relevant to coordinate transformations in RTL mode.
+ */
+class ScLokRTLContext
+{
+public:
+    ScLokRTLContext(const ScOutputData& rOutputData, const tools::Long nTileDeviceOriginPixelX):
+        mrOutputData(rOutputData),
+        mnTileDevOriginX(nTileDeviceOriginPixelX)
+    {}
+
+    /**
+     * Converts from document x pixel position to the
+     * corresponding pixel position w.r.t the tile device origin.
+     */
+    tools::Long docToTilePos(tools::Long nPosX) const
+    {
+        tools::Long nMirrorX = (-2 * mnTileDevOriginX) + mrOutputData.GetScrW();
+        return nMirrorX - 1 - nPosX;
+    }
+
+
+private:
+    const ScOutputData& mrOutputData;
+    const tools::Long mnTileDevOriginX;
+};
+
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
         bool bLogicText)
 {
@@ -701,6 +729,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
     tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+    std::unique_ptr<ScLokRTLContext> pLokRTLCtxt(
+        bIsTiledRendering && bLayoutRTL ?
+            new ScLokRTLContext(aOutputData, aOriginalMode.GetOrigin().X() / TWIPS_PER_PIXEL) :
+            nullptr);
 
     {
         // get drawing pixel rect
@@ -889,9 +921,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     else
         pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
-        // Autofilter- and Pivot-Buttons
-
-    DrawButtons(nX1, nX2, rTableInfo, pContentDev);          // Pixel
+    // Autofilter- and Pivot-Buttons
+    DrawButtons(nX1, nX2, rTableInfo, pContentDev, pLokRTLCtxt.get());          // Pixel
 
     pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
@@ -1054,12 +1085,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             {
                                 // Transform the cell range X coordinates such that the edit cell area is
                                 // horizontally mirrored w.r.t the (combined-)tile.
-                                tools::Long nStartTileX = -aOriginalMode.GetOrigin().X() / TWIPS_PER_PIXEL;
-                                // Note: nStartTileX is scaled by 2 only to offset for the addition of
-                                // the -ve of the same qty (and nScrX) few lines below.
-                                tools::Long nMirrorX = 2 * nStartTileX + aOutputData.GetScrW();
-                                aStart.setX(nMirrorX - 1 - aStart.X());
-                                aEnd.setX(nMirrorX - 1 - aEnd.X());
+                                aStart.setX(pLokRTLCtxt->docToTilePos(aStart.X()));
+                                aEnd.setX(pLokRTLCtxt->docToTilePos(aEnd.X()));
                             }
 
                             // don't overwrite grid
@@ -1148,12 +1175,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         {
             // Transform the cell range X coordinates such that the edit cell area is
             // horizontally mirrored w.r.t the (combined-)tile.
-            tools::Long nStartTileX = -aOriginalMode.GetOrigin().X() / TWIPS_PER_PIXEL;
-            // Note: nStartTileX is scaled by 2 only to offset for the addition of
-            // the -ve of the same qty (and nScrX) few lines below.
-            tools::Long nMirrorX = 2 * nStartTileX + aOutputData.GetScrW();
-            aStart.setX(nMirrorX - 1 - aStart.X());
-            aEnd.setX(nMirrorX - 1 - aEnd.X());
+            aStart.setX(pLokRTLCtxt->docToTilePos(aStart.X()));
+            aEnd.setX(pLokRTLCtxt->docToTilePos(aEnd.X()));
         }
 
         // don't overwrite grid
@@ -1882,7 +1905,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     }
 }
 
-void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev)
+void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev, ScLokRTLContext* pLokRTLContext)
 {
     aComboButton.SetOutputDevice( pContentDev );
 
@@ -1978,6 +2001,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     mrViewData.GetMergeSizePixel( nStartCol, nStartRow, nSizeX, nSizeY );//get nSizeX
                     nSizeY = ScViewData::ToPixel(rDoc.GetRowHeight(nRow, nTab), mrViewData.GetPPTY());
                     Point aScrPos = mrViewData.GetScrPos( nCol, nRow, eWhich );
+                    if (pLokRTLContext)
+                        aScrPos.setX(pLokRTLContext->docToTilePos(aScrPos.X()));
 
                     aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                     aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
