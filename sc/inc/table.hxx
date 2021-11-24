@@ -959,6 +959,10 @@ public:
     struct ValidQueryCache
     {
         std::unordered_map<FormulaError, svl::SharedString> mCachedSharedErrorStrings;
+        std::vector<double> mCachedSortedItemValues;
+        std::vector<const rtl_uString*> mCachedSortedItemStrings;
+        bool mCachedSortedItemValuesReady = false;
+        bool mCachedSortedItemStringsReady = false;
     };
     bool ValidQuery(
         SCROW nRow, const ScQueryParam& rQueryParam, const ScRefCellValue* pCell = nullptr,
