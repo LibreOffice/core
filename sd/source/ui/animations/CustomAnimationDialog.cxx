@@ -44,6 +44,7 @@
 
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
@@ -84,7 +85,8 @@ using ::com::sun::star::beans::XPropertySet;
 namespace sd {
 
 SdPropertySubControl::SdPropertySubControl(weld::Container* pParent)
-    : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui"))
+    : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui",
+        false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , mxContainer(mxBuilder->weld_container("EffectFragment"))
     , mpParent(pParent)
 {

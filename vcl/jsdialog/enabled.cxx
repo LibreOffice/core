@@ -121,7 +121,8 @@ bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
         || rUIFile == u"svx/ui/inspectortextpanel.ui"
         || rUIFile == u"modules/swriter/ui/sidebarstylepresets.ui"
         || rUIFile == u"modules/swriter/ui/sidebartheme.ui"
-        || rUIFile == u"modules/swriter/ui/sidebartableedit.ui")
+        || rUIFile == u"modules/swriter/ui/sidebartableedit.ui"
+        || rUIFile == u"modules/simpress/ui/customanimationfragment.ui")
         return true;
 
     return false;
