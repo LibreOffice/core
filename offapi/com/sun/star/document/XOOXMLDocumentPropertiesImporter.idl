@@ -24,6 +24,7 @@
 #include <com/sun/star/xml/sax/SAXException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/io/XInputStream.idl>
 
 
 module com { module sun { module star { module document {
@@ -70,6 +71,30 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::xml::sax::SAXException,
                     com::sun::star::uno::Exception );
+
+    /** find and get core properties stream
+
+        (usually it is docProps\core.xml)
+        @since LibreOffice 7.4
+     */
+
+    com::sun::star::io::XInputStream getCorePropertiesStream([in] com::sun::star::embed::XStorage xSource);
+
+    /** find and get extended properties stream
+
+        (usually it is docProps/app.xml)
+        @since LibreOffice 7.4
+     */
+
+    com::sun::star::io::XInputStream getExtendedPropertiesStream([in] com::sun::star::embed::XStorage xSource);
+
+    /** find and get custom properties streams
+
+        (usually it is customXml\*.xml)
+        @since LibreOffice 7.4
+     */
+
+    sequence< com::sun::star::io::XInputStream > getCustomPropertiesStreams([in] com::sun::star::embed::XStorage xSource);
 };
 
 
