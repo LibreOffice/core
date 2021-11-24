@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8624ada1_5b96c49e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-24T07:17:44Z",
+      "side": 1,
+      "message": "(I\u0027ll leave it Reviewed+1 rather than submit in case you want to address Adolfo\u0027s comment.)",
+      "revId": "915e76399d99ae68f699b921d5f95da4fc0d73d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93b520ad_991fa439",
