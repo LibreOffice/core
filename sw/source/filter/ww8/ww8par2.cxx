@@ -2453,7 +2453,7 @@ void WW8TabDesc::CreateSwTable()
     // Because SW cannot handle multi-page floating frames,
     // _any unnecessary_ floating tables have been converted to inline.
     tools::Long nLeft = 0;
-    if ( m_pIo->m_xSFlyPara && !m_pIo->m_xSFlyPara->pFlyFormat )
+    if (m_pIo->m_xSFlyPara && !m_pIo->m_xSFlyPara->GetFlyFormat())
     {
         // Get the table orientation from the fly
         // Do we also need to check m_pIo->m_xSFlyPara->bTogglePos/IsPosToggle()? [Probably not - layout-only concern]
@@ -2527,7 +2527,7 @@ void WW8TabDesc::CreateSwTable()
     {
         SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, m_nSwWidth);
         // Don't set relative width if the table is in a floating frame
-        if ( m_nPercentWidth && (!m_pIo->m_xSFlyPara || !m_pIo->m_xSFlyPara->pFlyFormat) )
+        if ( m_nPercentWidth && (!m_pIo->m_xSFlyPara || !m_pIo->m_xSFlyPara->GetFlyFormat()) )
             aFrameSize.SetWidthPercent(m_nPercentWidth);
         m_pTable->GetFrameFormat()->SetFormatAttr(aFrameSize);
         m_aItemSet.Put(aFrameSize);
@@ -2540,12 +2540,12 @@ void WW8TabDesc::CreateSwTable()
     if (text::HoriOrientation::LEFT_AND_WIDTH == m_eOri)
     {
         if (!m_pIo->m_nInTable && m_pIo->InLocalApo() && m_pIo->m_xSFlyPara &&
-            m_pIo->m_xSFlyPara->pFlyFormat && GetMinLeft())
+            m_pIo->m_xSFlyPara->GetFlyFormat() && GetMinLeft())
         {
             //If we are inside a frame and we have a border, the frames
             //placement does not consider the tables border, which word
             //displays outside the frame, so adjust here.
-            SwFormatHoriOrient aHori(m_pIo->m_xSFlyPara->pFlyFormat->GetHoriOrient());
+            SwFormatHoriOrient aHori(m_pIo->m_xSFlyPara->GetFlyFormat()->GetHoriOrient());
             sal_Int16 eHori = aHori.GetHoriOrient();
             if ((eHori == text::HoriOrientation::NONE) || (eHori == text::HoriOrientation::LEFT) ||
                 (eHori == text::HoriOrientation::LEFT_AND_WIDTH))
@@ -2554,7 +2554,7 @@ void WW8TabDesc::CreateSwTable()
                 //the maximum is what word does ?
                 aHori.SetPos(m_pIo->m_xSFlyPara->nXPos + GetMinLeft());
                 aHori.SetHoriOrient(text::HoriOrientation::NONE);
-                m_pIo->m_xSFlyPara->pFlyFormat->SetFormatAttr(aHori);
+                m_pIo->m_xSFlyPara->GetFlyFormat()->SetFormatAttr(aHori);
             }
         }
         else   // Not directly in a floating frame.
