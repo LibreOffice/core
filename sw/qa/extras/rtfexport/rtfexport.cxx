@@ -1033,6 +1033,17 @@ DECLARE_RTFEXPORT_TEST(testTdf92521, "tdf92521.odt")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf114309, "tdf114309.rtf")
+{
+    // Without the fix in place, this test would have failed with
+    // - the property is of unexpected type or void: TextSection
+    auto xTextSection
+        = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(1), "TextSection");
+    auto xTextColumns
+        = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf94043, "tdf94043.rtf")
 {
     auto xTextSection
