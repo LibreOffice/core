@@ -66,7 +66,7 @@ struct WW8SwFlyPara
 
                 // part 2: changes found during reading
     tools::Long nNewNetWidth;
-    std::unique_ptr<SwPosition> xMainTextPos;   // to return to main text after apo
+    std::shared_ptr<SwUnoCursor> xMainTextPos;   // to return to main text after apo
     sal_uInt16 nLineSpace;          // line space in tw for graf apos
     bool bAutoWidth;
     bool bTogglePos;
@@ -204,7 +204,7 @@ class WW8TabDesc
     WW8TabBandDesc* m_pFirstBand;
     WW8TabBandDesc* m_pActBand;
 
-    std::unique_ptr<SwPosition> m_xTmpPos;
+    std::shared_ptr<SwUnoCursor> m_xTmpPos;
 
     SwTableNode* m_pTableNd;          // table node
     const SwTableLines* m_pTabLines;  // row array of node
