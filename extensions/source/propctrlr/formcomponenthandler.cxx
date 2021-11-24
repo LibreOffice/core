@@ -666,7 +666,7 @@ namespace pcr
             {
                 OUString sLabel;
                 if( ! (xSet->getPropertyValue( PROPERTY_LABEL) >>= sLabel) )
-                    SAL_WARN("extensions.propctrlr", "convertToPropertyValue: unable to get property " PROPERTY_LABEL);
+                    SAL_WARN("extensions.propctrlr", "convertToPropertyValue: unable to get property " << PROPERTY_LABEL);
                 sControlValue = "<" + sLabel + ">";
             }
 
@@ -1795,7 +1795,7 @@ namespace pcr
             {
                 ListSourceType eLSType = ListSourceType_VALUELIST;
                 if( ! (impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType) )
-                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " PROPERTY_LISTSOURCETYPE);
+                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " << PROPERTY_LISTSOURCETYPE);
 
                 OUString sListSource;
                 {
@@ -1808,7 +1808,7 @@ namespace pcr
                     }
                     else
                         if( ! (aListSourceValue >>= sListSource) )
-                            SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " PROPERTY_LISTSOURCE);
+                            SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " << PROPERTY_LISTSOURCE);
                 }
 
                 bool bIsEnabled =   (  ( eLSType == ListSourceType_VALUELIST )
@@ -1830,7 +1830,7 @@ namespace pcr
             {
                 ListSourceType eLSType = ListSourceType_VALUELIST;
                 if( ! (impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType) )
-                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " PROPERTY_LISTSOURCETYPE);
+                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " << PROPERTY_LISTSOURCETYPE);
 
                 _rxInspectorUI->enablePropertyUI( PROPERTY_BOUNDCOLUMN,
                         ( eLSType != ListSourceType_VALUELIST )
@@ -1860,13 +1860,13 @@ namespace pcr
             {
                 OUString sControlSource;
                 if( ! (impl_getPropertyValue_throw( PROPERTY_CONTROLSOURCE ) >>= sControlSource) )
-                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " PROPERTY_CONTROLSOURCE);
+                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " << PROPERTY_CONTROLSOURCE);
 
                 bool bEmptyIsNULL = false;
                 bool bHasEmptyIsNULL = impl_componentHasProperty_throw( PROPERTY_EMPTY_IS_NULL );
                 if ( bHasEmptyIsNULL )
                     if( ! (impl_getPropertyValue_throw( PROPERTY_EMPTY_IS_NULL ) >>= bEmptyIsNULL) )
-                        SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " PROPERTY_EMPTY_IS_NULL);
+                        SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " << PROPERTY_EMPTY_IS_NULL);
 
                 // if the control is not bound to a DB field, there is no sense in having the "Input required"
                 // property
@@ -1907,7 +1907,7 @@ namespace pcr
                 if ( 0 != m_nClassId )
                 {
                     if( ! (impl_getPropertyValue_throw( PROPERTY_BUTTONTYPE ) >>= eButtonType) )
-                        SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " PROPERTY_BUTTONTYPE);
+                        SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " << PROPERTY_BUTTONTYPE);
                 }
                 // if m_nClassId is 0, then we're inspecting a form. In this case, eButtonType is always
                 // FormButtonType_URL here
@@ -1949,7 +1949,7 @@ namespace pcr
             {
                 sal_Int32   nCommandType( CommandType::COMMAND );
                 if( ! (impl_getPropertyValue_throw( PROPERTY_COMMANDTYPE ) >>= nCommandType) )
-                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " PROPERTY_COMMANDTYPE);
+                    SAL_WARN("extensions.propctrlr", "impl_updateDependentProperty_nothrow: unable to get property " << PROPERTY_COMMANDTYPE);
 
                 impl_ensureRowsetConnection_nothrow();
                 Reference< XConnection > xConnection = m_xRowSetConnection.getTyped();
@@ -2083,7 +2083,7 @@ namespace pcr
         if ( impl_componentHasProperty_throw( PROPERTY_CLASSID ) )
         {
             if( ! (m_xComponent->getPropertyValue( PROPERTY_CLASSID ) >>= m_nClassId) )
-                SAL_WARN("extensions.propctrlr", "impl_classifyControlModel_throw: unable to get property " PROPERTY_CLASSID);
+                SAL_WARN("extensions.propctrlr", "impl_classifyControlModel_throw: unable to get property " << PROPERTY_CLASSID);
         }
         else if ( eDialogControl == m_eComponentClass )
         {
@@ -2348,16 +2348,16 @@ namespace pcr
 
             OUString sObjectName;
             if( ! (xFormSet->getPropertyValue( PROPERTY_COMMAND ) >>= sObjectName) )
-                SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " PROPERTY_COMMAND);
+                SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " << PROPERTY_COMMAND);
             // when there is no command we don't need to ask for columns
             if ( !sObjectName.isEmpty() && impl_ensureRowsetConnection_nothrow() )
             {
                 OUString aDatabaseName;
                 if( ! (xFormSet->getPropertyValue( PROPERTY_DATASOURCE ) >>= aDatabaseName) )
-                    SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " PROPERTY_DATASOURCE);
+                    SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " << PROPERTY_DATASOURCE);
                 sal_Int32 nObjectType = CommandType::COMMAND;
                 if( ! (xFormSet->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nObjectType) )
-                    SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " PROPERTY_COMMANDTYPE);
+                    SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " << PROPERTY_COMMANDTYPE);
 
                 const Sequence<OUString> aNames = ::dbtools::getFieldNamesByCommandDescriptor( m_xRowSetConnection, nObjectType, sObjectName );
                 _rFieldNames.insert( _rFieldNames.end(), aNames.begin(), aNames.end() );
@@ -2777,7 +2777,7 @@ namespace pcr
 
         OUString sCurValue;
         if( ! (impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sCurValue) )
-            SAL_WARN("extensions.propctrlr", "impl_browseForImage_nothrow: unable to get property " PROPERTY_IMAGE_URL);
+            SAL_WARN("extensions.propctrlr", "impl_browseForImage_nothrow: unable to get property " << PROPERTY_IMAGE_URL);
         if (!sCurValue.isEmpty())
         {
             aFileDlg.SetDisplayDirectory( sCurValue );
@@ -2818,7 +2818,7 @@ namespace pcr
 
         OUString sURL;
         if( ! (impl_getPropertyValue_throw( PROPERTY_TARGET_URL ) >>= sURL) )
-            SAL_WARN("extensions.propctrlr", "impl_browseForTargetURL_nothrow: unable to get property " PROPERTY_TARGET_URL);
+            SAL_WARN("extensions.propctrlr", "impl_browseForTargetURL_nothrow: unable to get property " << PROPERTY_TARGET_URL);
         INetURLObject aParser( sURL );
         if ( INetProtocol::File == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
@@ -2874,7 +2874,7 @@ namespace pcr
 
         OUString sDataSource;
         if( ! (impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource) )
-            SAL_WARN("extensions.propctrlr", "impl_browseForDatabaseDocument_throw: unable to get property " PROPERTY_DATASOURCE);
+            SAL_WARN("extensions.propctrlr", "impl_browseForDatabaseDocument_throw: unable to get property " << PROPERTY_DATASOURCE);
         INetURLObject aParser( sDataSource );
         if ( INetProtocol::File == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
@@ -3009,7 +3009,7 @@ namespace pcr
         {
             OUString sCommand;
             if( ! (m_xObject->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand) )
-                SAL_WARN("extensions.propctrlr", "getSQLCommand: unable to get property " PROPERTY_COMMAND);
+                SAL_WARN("extensions.propctrlr", "getSQLCommand: unable to get property " << PROPERTY_COMMAND);
             return sCommand;
         }
 
@@ -3018,7 +3018,7 @@ namespace pcr
         {
             bool bEscapeProcessing( false );
             if( ! (m_xObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing) )
-                SAL_WARN("extensions.propctrlr", "getSQLCommand: unable to get property " PROPERTY_ESCAPE_PROCESSING);
+                SAL_WARN("extensions.propctrlr", "getSQLCommand: unable to get property " << PROPERTY_ESCAPE_PROCESSING);
             return bEscapeProcessing;
         }
 
@@ -3105,7 +3105,7 @@ namespace pcr
         {
             ListSourceType eType = ListSourceType_SQL;
             if( ! (m_xObject->getPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eType) )
-                SAL_WARN("extensions.propctrlr", "getEscapeProcessing: unable to get property " PROPERTY_LISTSOURCETYPE);
+                SAL_WARN("extensions.propctrlr", "getEscapeProcessing: unable to get property " << PROPERTY_LISTSOURCETYPE);
             OSL_ENSURE( ( eType == ListSourceType_SQL ) || ( eType == ListSourceType_SQLPASSTHROUGH ),
                 "ValueListCommandUI::getEscapeProcessing: unexpected list source type!" );
             return ( eType == ListSourceType_SQL );
