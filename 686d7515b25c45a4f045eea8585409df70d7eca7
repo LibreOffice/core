@@ -57,6 +57,30 @@
       },
       "revId": "686d7515b25c45a4f045eea8585409df70d7eca7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f54856_da50f4b7",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T13:43:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa6629a7_a84ad02a",
+      "range": {
+        "startLine": 1670,
+        "startChar": 4,
+        "endLine": 1670,
+        "endChar": 7
+      },
+      "revId": "686d7515b25c45a4f045eea8585409df70d7eca7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
