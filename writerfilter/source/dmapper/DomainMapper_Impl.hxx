@@ -27,6 +27,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <queue>
 #include <stack>
 #include <tuple>
@@ -1067,6 +1068,8 @@ public:
     /// store their data, and create them after frame creation
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
+
+    css::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
