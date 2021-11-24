@@ -21,7 +21,7 @@
         <prop oor:name="RealFilterName"/>
         <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PNG - Portable Network Graphic</value>
+            <value xml:lang="en-US">PNG - Portable Network Graphics</value>
         </prop>
         <prop oor:name="Flags"><value>EXPORT</value></prop>
     </node>
