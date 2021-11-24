@@ -16,6 +16,23 @@
       "message": "Now also Justin is suggesting the same revert, in https://gerrit.libreoffice.org/c/core/+/125751 . ",
       "revId": "2ed16eae500245f6d8d1140ec044bb90f36dc45e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69261542_c1d912c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-24T09:34:12Z",
+      "side": 1,
+      "message": "It would be good to get this reverted before 7.4 - that will help with regression testing and any follow-up commits.\n\nI think this should have been reverted 2 years ago, when bug reports first indicated that the implications were far bigger than first expected.\n\nVasily indicated in https://gerrit.libreoffice.org/46407 that he is not opposed to a revert.",
+      "revId": "2ed16eae500245f6d8d1140ec044bb90f36dc45e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
