@@ -902,6 +902,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {u"" UNO_NAME_HINT,       FIELD_PROP_PAR2, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {u"" UNO_NAME_HELP,       FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {u"" UNO_NAME_TOOLTIP,        FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
+                    {UNO_NAME_MISC_OBJ_INTEROPGRABBAG, FIELD_PROP_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     { u"", 0, css::uno::Type(), 0, 0 }
                 };

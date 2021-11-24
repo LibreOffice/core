@@ -1578,7 +1578,10 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin() + nFieldsInPrevHyperlink; pIt != m_Fields.end(); )
     {
         // Add the fields starts for all but hyperlinks and TOCs
-        if (pIt->bOpen && pIt->pField && pIt->eType != ww::eFORMDROPDOWN)
+        if (pIt->bOpen && pIt->pField && pIt->eType != ww::eFORMDROPDOWN &&
+            // it is not an input field with extra grabbag params (sdt field)
+            (!(pIt->eType == ww::eFILLIN && static_cast<const SwInputField*>(pIt->pField.get())->getGrabBagParams().hasElements()))
+            )
         {
             StartField_Impl( pNode, nPos, *pIt );
 
@@ -1642,7 +1645,9 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
     {
         // Add the fields starts for hyperlinks, TOCs and index marks
-        if (pIt->bOpen && (!pIt->pField || pIt->eType == ww::eFORMDROPDOWN))
+        if (pIt->bOpen && (!pIt->pField || pIt->eType == ww::eFORMDROPDOWN ||
+            // InputField with extra grabbag params - it is sdt field
+            (pIt->eType == ww::eFILLIN && static_cast<const SwInputField*>(pIt->pField.get())->getGrabBagParams().hasElements())))
         {
             StartRedline( m_pRedlineData );
             StartField_Impl( pNode, nPos, *pIt, true );
@@ -2236,6 +2241,54 @@ void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OU
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
 }
 
+void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
+{
+    m_pSerializer->startElementNS(XML_w, XML_sdt);
+    m_pSerializer->startElementNS(XML_w, XML_sdtPr);
+
+    if (aGrabBagSdt.hasElements())
+    {
+        // There are some extra sdt parameters came from grab bag
+        SdtBlockHelper aSdtBlock;
+        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt);
+        aSdtBlock.WriteExtraParams(m_pSerializer);
+
+        if (aSdtBlock.m_nSdtPrToken && aSdtBlock.m_nSdtPrToken != FSNS(XML_w, XML_id))
+        {
+            // Write <w:text/> or whatsoever from grabbag
+            m_pSerializer->singleElement(aSdtBlock.m_nSdtPrToken);
+        }
+
+        // Store databindings data for later writing to corresponding XMLs
+        OUString sPrefixMapping, sXpath;
+        for (const auto& rProp : std::as_const(aGrabBagSdt))
+        {
+            if (rProp.Name == "ooxml:CT_SdtPr_dataBinding")
+            {
+                uno::Sequence<beans::PropertyValue> aDataBindingProps;
+                rProp.Value >>= aDataBindingProps;
+                for (const auto& rDBProp : std::as_const(aDataBindingProps))
+                {
+                    if (rDBProp.Name == "ooxml:CT_DataBinding_prefixMappings")
+                        sPrefixMapping = rDBProp.Value.get<OUString>();
+                    else if (rDBProp.Name == "ooxml:CT_DataBinding_xpath")
+                        sXpath = rDBProp.Value.get<OUString>();
+                }
+            }
+        }
+
+        if (sXpath.getLength())
+        {
+            // Given xpath is sufficient
+            m_rExport.AddSdtData(sPrefixMapping, sXpath, sValue);
+        }
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+    m_pSerializer->startElementNS(XML_w, XML_sdtContent);
+}
+
 void DocxAttributeOutput::WriteSdtEnd()
 {
     m_pSerializer->endElementNS(XML_w, XML_sdtContent);
@@ -2306,6 +2359,7 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     {
         // Expand unsupported fields
         RunText( rInfos.pField->GetFieldName() );
+        return;
     }
     else if ( rInfos.eType == ww::eFORMDATE )
     {
@@ -2334,9 +2388,10 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         params.extractParam( ODF_FORMDATE_DATEFORMAT_LANGUAGE, sLang );
 
         uno::Sequence<beans::PropertyValue> aSdtParams;
-        params.extractParam("SdtParams", aSdtParams);
+        params.extractParam(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, aSdtParams);
 
         WriteFormDateStart( sFullDate, sDateFormat, sLang, aSdtParams);
+        return;
     }
     else if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
     {
@@ -2345,8 +2400,20 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         WriteSdtDropDownStart(rField2.GetName(),
                 rField2.GetSelectedItem(),
                 rField2.GetItemSequence());
+        return;
     }
-    else if ( rInfos.eType != ww::eNONE ) // HYPERLINK fields are just commands
+    else if (rInfos.eType == ww::eFILLIN)
+    {
+        SwInputField const& rField(*static_cast<SwInputField const*>(rInfos.pField.get()));
+        if (rField.getGrabBagParams().hasElements())
+        {
+            WriteSdtPlainText(rField.GetPar1(), rField.getGrabBagParams());
+            m_sRawText = rField.GetPar1();  // Write field content also as a fallback
+            return;
+        }
+    }
+
+    if ( rInfos.eType != ww::eNONE ) // HYPERLINK fields are just commands
     {
         if ( bWriteRun )
             m_pSerializer->startElementNS(XML_w, XML_r);
@@ -2585,7 +2652,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
         WriteSdtEnd();
         return;
     }
-    if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
+    else if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
     {
         // write selected item from End not Start to ensure that any bookmarks
         // precede it
@@ -2593,7 +2660,15 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
         WriteSdtDropDownEnd(rField.GetSelectedItem(), rField.GetItemSequence());
         return;
     }
-
+    else if (rInfos.eType == ww::eFILLIN && rInfos.pField)
+    {
+        SwInputField const& rField(*static_cast<SwInputField const*>(rInfos.pField.get()));
+        if (rField.getGrabBagParams().hasElements())
+        {
+            WriteSdtEnd();
+            return;
+        }
+    }
     // The command has to be written before for the hyperlinks
     if ( rInfos.pField )
     {
