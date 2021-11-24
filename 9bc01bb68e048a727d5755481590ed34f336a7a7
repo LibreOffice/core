@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3049702_fb220bb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-24T13:36:50Z",
+      "side": 1,
+      "message": "@Tibi: very nice fix! Checked in Word successfully.",
+      "revId": "9bc01bb68e048a727d5755481590ed34f336a7a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
