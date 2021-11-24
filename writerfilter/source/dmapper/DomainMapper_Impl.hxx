@@ -441,7 +441,7 @@ public:
 private:
     SourceDocumentType const                                                        m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
-    void* m_pOOXMLDocument;
+    writerfilter::ooxml::OOXMLDocument* m_pOOXMLDocument;
     OUString m_aBaseUrl;
     css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
     css::uno::Reference<css::beans::XPropertySet> m_xDocumentSettings;
@@ -608,7 +608,7 @@ public:
             utl::MediaDescriptor const & rMediaDesc);
     ~DomainMapper_Impl();
 
-    void setDocumentReference(void* pDocument) { m_pOOXMLDocument = pDocument; };
+    void setDocumentReference(writerfilter::ooxml::OOXMLDocument* pDocument) { if (!m_pOOXMLDocument) m_pOOXMLDocument = pDocument; };
     writerfilter::ooxml::OOXMLDocument* getDocumentReference() const;
 
     SectionPropertyMap* GetLastSectionContext( )
