@@ -1374,7 +1374,7 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
         const uno::Any aShapeVertRelOrient
             = uno::makeAny(pShape->GetVertOrient().GetRelationOrient());
 
-        // Get the new page number. If this is 0 incrase it to 1!
+        // Get the new page number. If this is 0 increase it to 1!
         // (0 is invalid page)
         const sal_uInt16 nPageNum = rNewAnch.GetPageNum() ? rNewAnch.GetPageNum() : 1;
 
