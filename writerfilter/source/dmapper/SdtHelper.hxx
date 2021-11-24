@@ -39,6 +39,7 @@ enum class SdtControlType
 {
     datePicker,
     dropDown,
+    plainText,
     unknown
 };
 
@@ -131,6 +132,8 @@ public:
     void createDropDownControl();
     /// Create date control from w:sdt's w:date.
     void createDateContentControl();
+
+    void createPlainTextControl();
 
     void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();
