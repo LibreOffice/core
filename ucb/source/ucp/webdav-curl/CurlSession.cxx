@@ -1012,10 +1012,14 @@ auto CurlProcessor::ProcessRequestImpl(
                 assert(rc == CURLE_OK);
                 if (pRedirectURL)
                 {
-                    throw DAVException(DAVException::DAV_HTTP_REDIRECT,
-                                       pRedirectURL ? OUString(pRedirectURL, strlen(pRedirectURL),
-                                                               RTL_TEXTENCODING_UTF8)
-                                                    : OUString());
+                    // Sharepoint 2016 workaround: contains unencoded U+0020
+                    OUString const redirectURL(::rtl::Uri::encode(
+                        pRedirectURL
+                            ? OUString(pRedirectURL, strlen(pRedirectURL), RTL_TEXTENCODING_UTF8)
+                            : OUString(),
+                        rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8));
+
+                    throw DAVException(DAVException::DAV_HTTP_REDIRECT, redirectURL);
                 }
                 [[fallthrough]];
             }
