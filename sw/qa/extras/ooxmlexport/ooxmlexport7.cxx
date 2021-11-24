@@ -686,7 +686,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtAndShapeOverlapping)
     loadAndSave("ShapeOverlappingWithSdt.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]/w:t[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLockedCanvas)
