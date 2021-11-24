@@ -36,7 +36,6 @@ class tdf39959(UITestCase):
                 allsheets.executeAction("CLICK", tuple())
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
-                # print(xDialog.getChildren())
 
             #verify Sheet2.A1 = "bbb"
             self.assertEqual(get_cell_by_position(calc_doc, 1, 0, 0).getString(), "bbb ")

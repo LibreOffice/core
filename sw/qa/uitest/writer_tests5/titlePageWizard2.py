@@ -57,7 +57,6 @@ class tdf138907(UITestCase):
                 #set restart page number to 1 - which is the default.
                 #set restart title page to 1 - the current value for this document is 6.
                 xRestartNumbering = xDialog.getChild("NF_SET_PAGE_NUMBER")
-                print(xDialog.getChildren())
                 for _ in range(0,5):
                     xRestartNumbering.executeAction("DOWN", tuple()) # restart title numbering at 1
                 #Insert two title/index pages at beginning of the document.
@@ -91,7 +90,6 @@ class tdf138907(UITestCase):
 
             #dialog Title Page
             with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
-                print(xDialog.getChildren())
                 #Convert four pages to title/index pages starting at page one.
                 xPageCount = xDialog.getChild("NF_PAGE_COUNT")
                 for _ in range(0,3):

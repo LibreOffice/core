@@ -297,7 +297,6 @@ class styleNavigator(UITestCase):
             self.assertEqual("Nested Text Content\tames", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
 
             xMetadata = xDirFormatting.getChild('0')
-            print(get_state_as_dict(xMetadata))
             self.assertEqual(2, len(xMetadata.getChildren()))
             self.assertEqual("xml:id\tID-24478193-9630-4d03-8976-9e097c843a0b", get_state_as_dict(xMetadata.getChild('0'))['Text'])
             # RGB code of the custom shading color of the annotated text range is 97E1E9 (the code can be lower case, see STRtoRGB)

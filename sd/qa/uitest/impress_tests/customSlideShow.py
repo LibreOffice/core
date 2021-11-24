@@ -37,11 +37,9 @@ class customSlideShow(UITestCase):
                 with self.ui_test.execute_blocking_action(edit.executeAction, args=('CLICK', ()), close_button="cancel") as DefineCustomSlideShow:
                     customname = DefineCustomSlideShow.getChild("customname")
                     self.assertEqual(get_state_as_dict(customname)["Text"], "aa")
-#            print(DefineCustomSlideShow.getChildren())
                     custompages = DefineCustomSlideShow.getChild("custompages")
                     pages = DefineCustomSlideShow.getChild("pages")
                     remove = DefineCustomSlideShow.getChild("remove")
-#            print(get_state_as_dict(custompages))
                     self.assertEqual(get_state_as_dict(custompages)["Children"], "1")
                     self.assertEqual(get_state_as_dict(pages)["Children"], "1")
                     xEntry = custompages.getChild("0")

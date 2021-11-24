@@ -71,7 +71,6 @@ class validity(UITestCase):
                 xtsbhelp = xDialog.getChild("tsbhelp")
                 xtitle = xDialog.getChild("title")
                 xinputhelp = xDialog.getChild("inputhelp")
-                # print(get_state_as_dict(xtsbhelp))
                 select_pos(xTabs, "1")
                 self.assertEqual(get_state_as_dict(xtsbhelp)["Selected"], "true")
                 self.assertEqual(get_state_as_dict(xtitle)["Text"], "A")
