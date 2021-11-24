@@ -1603,15 +1603,15 @@ sal_uInt16 SdrMeasureTextHPosItem::GetValueCount() const { return 4; }
 
 OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALMEASURETEXTTYPES[] =
+    static std::array<OUString, 4> aMeasureTextHPosItem
     {
-        STR_ItemValMEASURE_TEXTHAUTO,
-        STR_ItemValMEASURE_TEXTLEFTOUTSIDE,
-        STR_ItemValMEASURE_TEXTINSIDE,
-        STR_ItemValMEASURE_TEXTRIGHTOUTSID
+        "automatic",
+        "left outside",
+        "inside (centered)",
+        "right outside"
     };
-    assert(nPos < SAL_N_ELEMENTS(ITEMVALMEASURETEXTTYPES) && "wrong pos!");
-    return SvxResId(ITEMVALMEASURETEXTTYPES[nPos]);
+    assert(nPos < aMeasureTextHPosItem.size() && "wrong pos!");
+    return aMeasureTextHPosItem[nPos];
 }
 
 bool SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
