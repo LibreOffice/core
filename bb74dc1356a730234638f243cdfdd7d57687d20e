@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca5c933d_2ed98976",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T13:43:15Z",
+      "side": 1,
+      "message": "Indeed I had overlooked \"unscoped\", sorry for this.",
+      "revId": "bb74dc1356a730234638f243cdfdd7d57687d20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
