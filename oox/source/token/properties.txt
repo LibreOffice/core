@@ -57,6 +57,7 @@ CharContoured
 CharColorTheme
 CharColorTintOrShade
 CharColorLumMod
+CharColorLumOff
 CharEscapement
 CharEscapementHeight
 CharFontCharSet

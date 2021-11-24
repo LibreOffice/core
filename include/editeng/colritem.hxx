@@ -33,8 +33,10 @@ private:
     Color mColor;
     sal_Int16 maThemeIndex;
     sal_Int16 maTintShade;
-    /// Luminance Modulation: 100th percentage, defaults to 10000.
+    /// Luminance Modulation: 100th percentage, defaults to 100%.
     sal_Int16 mnLumMod;
+    /// Luminance Offset: 100th percentage, defaults to 0%.
+    sal_Int16 mnLumOff;
 
 public:
     static SfxPoolItem* CreateDefault();

@@ -101,6 +101,7 @@ public:
     sal_Int16           getSchemeColorIndex() const;
     sal_Int16           getTintOrShade();
     sal_Int16           getLumMod();
+    sal_Int16           getLumOff();
 
     /** Returns the unaltered list of transformations for interoperability purposes */
     const css::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
