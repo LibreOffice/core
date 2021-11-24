@@ -3119,7 +3119,7 @@ private:
         MouseEvent aMEvt(aPos, 0, eModifiers, nModCode, nModCode);
 
         m_aMouseMotionHdl.Call(aMEvt);
-        return true;
+        return false;
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
