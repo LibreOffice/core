@@ -16,6 +16,47 @@
       "message": "Reading https://en.cppreference.com/w/cpp/language/enum, an enum can be unscoped but typed too.",
       "revId": "aa480ff28dd997d8c0cb8737de4f63dce52c49c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87643758_12ca7a66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-24T13:59:07Z",
+      "side": 1,
+      "message": "\u003e Reading https://en.cppreference.com/w/cpp/language/enum, an enum can be unscoped but typed too.\n\n\"...can have an explicitly specified underlying type\" would be what the standard calls it",
+      "parentUuid": "dad01d99_52bff7ad",
+      "revId": "aa480ff28dd997d8c0cb8737de4f63dce52c49c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c52d7427_308c510e",
+        "filename": "sfx2/inc/dinfdlg.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-24T13:59:07Z",
+      "side": 1,
+      "message": "this should arguably be CustomProperties, too",
+      "range": {
+        "startLine": 69,
+        "startChar": 29,
+        "endLine": 69,
+        "endChar": 32
+      },
+      "revId": "aa480ff28dd997d8c0cb8737de4f63dce52c49c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
