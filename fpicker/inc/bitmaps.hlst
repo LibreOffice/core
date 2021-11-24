@@ -9,7 +9,6 @@
 
 #pragma once
 
-#define RID_BMP_FOLDER_OPEN         "res/folderop.png"
 inline constexpr OUStringLiteral BMP_FILEDLG_PLACE_LOCAL = u"fpicker/res/fp015.png";
 inline constexpr OUStringLiteral BMP_FILEDLG_PLACE_REMOTE = u"fpicker/res/fp016.png";
 inline constexpr OUStringLiteral RID_BMP_FOLDER = u"svtools/res/folder.png";

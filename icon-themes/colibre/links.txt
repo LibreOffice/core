@@ -2018,7 +2018,6 @@ extensions/res/buttonplus.png extensions/res/scanner/plus.png
 
 # formula
 # ==============================================
-formula/res/fapclose.png svtools/res/folder.png
 formula/res/faperror.png cmd/sc_cancel.png
 formula/res/fapok.png cmd/sc_ok.png
 formula/res/fapopen.png cmd/sc_open.png
@@ -2064,7 +2063,6 @@ res/extension_plus_32.png cmd/32/insertplugin.png
 res/fp010.png svtools/res/up_small.png
 res/fileopen.png cmd/sc_open.png
 res/foldercl.png svtools/res/folder.png
-res/folderop.png cmd/sc_open.png
 res/hlinettp.png cmd/32/inserthyperlink.png
 res/im30820.png cmd/sc_scriptorganizer.png
 res/im30821.png cmd/sc_choosemacro.png

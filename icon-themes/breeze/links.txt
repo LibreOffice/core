@@ -2215,7 +2215,6 @@ extensions/res/buttonplus.png extensions/res/scanner/plus.png
 
 # formula
 # ==============================================
-formula/res/fapclose.png cmd/sc_open.png
 formula/res/faperror.png cmd/sc_cancel.png
 formula/res/fapok.png cmd/sc_ok.png
 formula/res/fapopen.png cmd/sc_open.png
@@ -2258,7 +2257,6 @@ res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
 res/foldercl.png cmd/sc_open.png
-res/folderop.png cmd/sc_open.png
 res/fp010.png cmd/sc_upsearch.png
 res/grafikei.png cmd/sc_graphic.png
 res/im30821.png cmd/sc_insertscript.png

@@ -9,7 +9,6 @@
 
 #pragma once
 
-#define BMP_STR_CLOSE   "formula/res/fapclose.png"
 inline constexpr OUStringLiteral BMP_STR_OPEN = u"formula/res/fapopen.png";
 inline constexpr OUStringLiteral BMP_STR_END = u"formula/res/fapok.png";
 inline constexpr OUStringLiteral BMP_STR_ERROR = u"formula/res/faperror.png";

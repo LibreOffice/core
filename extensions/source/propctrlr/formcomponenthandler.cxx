@@ -999,8 +999,8 @@ namespace pcr
             aDescriptor.Control = pControl;
 
             aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
-                ? std::u16string_view(u"" UID_PROP_DLG_ATTR_TARGET_URL)
-                : std::u16string_view(u"" UID_PROP_DLG_IMAGE_URL);
+                ? OUString(UID_PROP_DLG_ATTR_TARGET_URL)
+                : OUString(UID_PROP_DLG_IMAGE_URL);
             break;
         }
 

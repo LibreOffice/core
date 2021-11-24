@@ -32,9 +32,6 @@ inline constexpr OUStringLiteral PROPERTY_FETCHSIZE = u"FetchSize";
 inline constexpr OUStringLiteral PROPERTY_VALUE = u"Value";
 inline constexpr OUStringLiteral PROPERTY_TEXT = u"Text";
 inline constexpr OUStringLiteral PROPERTY_LABEL = u"Label";
-#define PROPERTY_CANINSERT                "CanInsert"
-#define PROPERTY_CANUPDATE                "CanUpdate"
-#define PROPERTY_CANDELETE                "CanDelete"
 inline constexpr OUStringLiteral PROPERTY_NAVIGATION = u"NavigationBarMode";
 inline constexpr OUStringLiteral PROPERTY_HASNAVIGATION = u"HasNavigationBar";
 inline constexpr OUStringLiteral PROPERTY_CYCLE = u"Cycle";
@@ -90,8 +87,6 @@ inline constexpr OUStringLiteral PROPERTY_DEFAULT_DATE = u"DefaultDate";
 inline constexpr OUStringLiteral PROPERTY_DEFAULT_TIME = u"DefaultTime";
 inline constexpr OUStringLiteral PROPERTY_DEFAULT_VALUE = u"DefaultValue";
 inline constexpr OUStringLiteral PROPERTY_DECIMAL_ACCURACY = u"DecimalAccuracy";
-#define PROPERTY_CURSORSOURCE             "DataSelection"
-#define PROPERTY_CURSORSOURCETYPE         "DataSelectionType"
 inline constexpr OUStringLiteral PROPERTY_FIELDTYPE = u"Type";
 inline constexpr OUStringLiteral PROPERTY_DECIMALS = u"Decimals";
 inline constexpr OUStringLiteral PROPERTY_REFVALUE = u"RefValue";
@@ -162,7 +157,6 @@ inline constexpr OUStringLiteral PROPERTY_HIDDEN = u"Hidden";
 inline constexpr OUStringLiteral PROPERTY_FILTERPROPOSAL = u"UseFilterValueProposal";
 inline constexpr OUStringLiteral PROPERTY_FIELDSOURCE = u"FieldSource";
 inline constexpr OUStringLiteral PROPERTY_TABLENAME = u"TableName";
-#define PROPERTY_ISFILTERAPPLIED          "IsFilterApplied"
 inline constexpr OUStringLiteral PROPERTY_CONTROLLABEL = u"LabelControl";
 inline constexpr OUStringLiteral PROPERTY_CURRSYM_POSITION = u"PrependCurrencySymbol";
 inline constexpr OUStringLiteral PROPERTY_CURSORCOLOR = u"CursorColor";

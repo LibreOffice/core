@@ -9,44 +9,44 @@
 
 #pragma once
 
-#define RID_SVXBMP_CELL_NONE            "svx/res/pr01.png"
-#define RID_SVXBMP_CELL_NONE_32         "svx/res/border_cell_none_32.png"
-#define RID_SVXBMP_CELL_ALL             "svx/res/pr02.png"
-#define RID_SVXBMP_CELL_ALL_32          "svx/res/border_cell_all_32.png"
-#define RID_SVXBMP_CELL_LR              "svx/res/pr03.png"
-#define RID_SVXBMP_CELL_LR_32           "svx/res/border_cell_lr_32.png"
-#define RID_SVXBMP_CELL_TB              "svx/res/pr04.png"
-#define RID_SVXBMP_CELL_TB_32           "svx/res/border_cell_tb_32.png"
-#define RID_SVXBMP_CELL_L               "svx/res/pr05.png"
-#define RID_SVXBMP_CELL_L_32            "svx/res/border_cell_l_32.png"
-#define RID_SVXBMP_CELL_DIAG            "svx/res/pr06.png"
-#define RID_SVXBMP_CELL_DIAG_32         "svx/res/border_cell_diag_32.png"
-#define RID_SVXBMP_HOR_NONE             "svx/res/pr07.png"
-#define RID_SVXBMP_HOR_OUTER            "svx/res/pr08.png"
-#define RID_SVXBMP_HOR_HOR              "svx/res/pr09.png"
-#define RID_SVXBMP_HOR_ALL              "svx/res/pr010.png"
-#define RID_SVXBMP_HOR_OUTER2           "svx/res/pr011.png"
-#define RID_SVXBMP_VER_NONE             "svx/res/pr012.png"
-#define RID_SVXBMP_VER_OUTER            "svx/res/pr013.png"
-#define RID_SVXBMP_VER_VER              "svx/res/pr014.png"
-#define RID_SVXBMP_VER_ALL              "svx/res/pr015.png"
-#define RID_SVXBMP_VER_OUTER2           "svx/res/pr016.png"
-#define RID_SVXBMP_TABLE_NONE           "svx/res/pr017.png"
-#define RID_SVXBMP_TABLE_OUTER          "svx/res/pr018.png"
-#define RID_SVXBMP_TABLE_OUTERH         "svx/res/pr019.png"
-#define RID_SVXBMP_TABLE_ALL            "svx/res/pr020.png"
-#define RID_SVXBMP_TABLE_OUTER2         "svx/res/pr021.png"
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_NONE = u"svx/res/pr01.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_NONE_32 = u"svx/res/border_cell_none_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_ALL = u"svx/res/pr02.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_ALL_32 = u"svx/res/border_cell_all_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_LR = u"svx/res/pr03.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_LR_32 = u"svx/res/border_cell_lr_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_TB = u"svx/res/pr04.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_TB_32 = u"svx/res/border_cell_tb_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_L  = u"svx/res/pr05.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_L_32 = u"svx/res/border_cell_l_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_DIAG = u"svx/res/pr06.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CELL_DIAG_32 = u"svx/res/border_cell_diag_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_HOR_NONE = u"svx/res/pr07.png";
+inline constexpr OUStringLiteral RID_SVXBMP_HOR_OUTER = u"svx/res/pr08.png";
+inline constexpr OUStringLiteral RID_SVXBMP_HOR_HOR = u"svx/res/pr09.png";
+inline constexpr OUStringLiteral RID_SVXBMP_HOR_ALL = u"svx/res/pr010.png";
+inline constexpr OUStringLiteral RID_SVXBMP_HOR_OUTER2 = u"svx/res/pr011.png";
+inline constexpr OUStringLiteral RID_SVXBMP_VER_NONE = u"svx/res/pr012.png";
+inline constexpr OUStringLiteral RID_SVXBMP_VER_OUTER = u"svx/res/pr013.png";
+inline constexpr OUStringLiteral RID_SVXBMP_VER_VER = u"svx/res/pr014.png";
+inline constexpr OUStringLiteral RID_SVXBMP_VER_ALL = u"svx/res/pr015.png";
+inline constexpr OUStringLiteral RID_SVXBMP_VER_OUTER2 = u"svx/res/pr016.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TABLE_NONE = u"svx/res/pr017.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TABLE_OUTER = u"svx/res/pr018.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TABLE_OUTERH = u"svx/res/pr019.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TABLE_ALL = u"svx/res/pr020.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TABLE_OUTER2 = u"svx/res/pr021.png";
 
-#define RID_SVXBMP_SHADOWNONE           "svx/res/sh01.png"
-#define RID_SVXBMP_SHADOWNONE_32        "svx/res/shadow_none_32.png"
-#define RID_SVXBMP_SHADOW_BOT_RIGHT     "svx/res/sh02.png"
-#define RID_SVXBMP_SHADOW_BOT_RIGHT_32  "svx/res/shadow_bottom_right_32.png"
-#define RID_SVXBMP_SHADOW_BOT_LEFT      "svx/res/sh03.png"
-#define RID_SVXBMP_SHADOW_BOT_LEFT_32   "svx/res/shadow_bottom_left_32.png"
-#define RID_SVXBMP_SHADOW_TOP_RIGHT     "svx/res/sh04.png"
-#define RID_SVXBMP_SHADOW_TOP_RIGHT_32  "svx/res/shadow_top_right_32.png"
-#define RID_SVXBMP_SHADOW_TOP_LEFT      "svx/res/sh05.png"
-#define RID_SVXBMP_SHADOW_TOP_LEFT_32   "svx/res/shadow_top_left_32.png"
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOWNONE = u"svx/res/sh01.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOWNONE_32 = u"svx/res/shadow_none_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_BOT_RIGHT = u"svx/res/sh02.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_BOT_RIGHT_32 = u"svx/res/shadow_bottom_right_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_BOT_LEFT = u"svx/res/sh03.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_BOT_LEFT_32 = u"svx/res/shadow_bottom_left_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_TOP_RIGHT = u"svx/res/sh04.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_TOP_RIGHT_32 = u"svx/res/shadow_top_right_32.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_TOP_LEFT = u"svx/res/sh05.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_TOP_LEFT_32 = u"svx/res/shadow_top_left_32.png";
 
 inline constexpr OUStringLiteral RID_SVXBMP_BOTTOMLOCK = u"svx/res/lo01.png";
 inline constexpr OUStringLiteral RID_SVXBMP_TOPLOCK = u"svx/res/lo02.png";
@@ -62,13 +62,8 @@ inline constexpr OUStringLiteral RID_CUIBMP_HARDDISK = u"res/harddisk_16.png";
 inline constexpr OUStringLiteral RID_CUIBMP_LIB = u"res/im30820.png";
 inline constexpr OUStringLiteral RID_CUIBMP_MACRO = u"res/im30821.png";
 inline constexpr OUStringLiteral RID_CUIBMP_DOC = u"res/im30826.png";
-#define RID_CUIBMP_COLLAPSED            "res/plus.png"
-#define RID_CUIBMP_EXPANDED             "res/minus.png"
 
 inline constexpr OUStringLiteral RID_SVXBMP_SCRIPT = u"res/script.png";
-
-#define RID_SVXBMP_COLLAPSEDNODE        "res/sx18002.png"
-#define RID_SVXBMP_EXPANDEDNODE         "res/sx18003.png"
 
 inline constexpr OUStringLiteral RID_SVXBMP_LEGTYP1 = u"svx/res/legtyp1.png";
 inline constexpr OUStringLiteral RID_SVXBMP_LEGTYP2 = u"svx/res/legtyp2.png";
