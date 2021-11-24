@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9d418d2_b4c2cc0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-11-24T10:41:50Z",
+      "side": 1,
+      "message": "No point waiting for Jenkins for this. This Xcode project is used for debugging only.",
+      "revId": "9417b69ee18194206295bc7872d158d2ea8746e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
