@@ -22,6 +22,30 @@
       },
       "revId": "57991f885e60d04e93bf5004d4fdceee7d29f3d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "813e8562_a9f1b305",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-24T08:00:50Z",
+      "side": 1,
+      "message": "My question is answered by comparing patchset 1 with 2. This was intentional. But it seems to be designed with only Presentation in mind, and ignoring Draw - despite the fact that draw was explicitly checked for earlier in isPrinterPreferred.",
+      "parentUuid": "e7566426_73f6693e",
+      "range": {
+        "startLine": 1905,
+        "startChar": 16,
+        "endLine": 1905,
+        "endChar": 45
+      },
+      "revId": "57991f885e60d04e93bf5004d4fdceee7d29f3d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
