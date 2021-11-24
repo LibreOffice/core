@@ -172,11 +172,13 @@ bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
     {
         bValid = true;
         m_pDialog->m_xCBDavs->set_active(false);
+        ToggledDavsHdl(*m_pDialog->m_xCBDavs);
     }
     else if ( rScheme == "https://" )
     {
         bValid = true;
         m_pDialog->m_xCBDavs->set_active(true);
+        ToggledDavsHdl(*m_pDialog->m_xCBDavs);
     }
     return bValid;
 }
