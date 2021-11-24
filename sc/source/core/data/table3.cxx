@@ -2597,12 +2597,12 @@ public:
         }
     }
 
-    // The value is placed inside one parameter: [pValueSource1] or [pValueSource2] but never in both.
-    std::pair<bool,bool> compareByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        const svl::SharedString* pValueSource1, const OUString * pValueSource2)
+    bool isFastCompareByString(const ScQueryEntry& rEntry) const
     {
-        bool bOk = false;
-        bool bTestEqual = false;
+        // If this is true, then there's a fast path in compareByString() which
+        // can be selected using the template argument to get fast code
+        // that will not check the same conditions every time. This makes a difference
+        // in fast lookups that search for an exact value (case sensitive or not).
         bool bMatchWholeCell = mbMatchWholeCell;
         if (isPartialTextMatchOp(rEntry))
             // may have to do partial textural comparison.
@@ -2611,10 +2611,37 @@ public:
         const bool bRealWildOrRegExp = isRealWildOrRegExp(rEntry);
         const bool bTestWildOrRegExp = isTestWildOrRegExp(rEntry);
 
+        // SC_EQUAL is part of isTextMatchOp(rEntry)
+        return rEntry.eOp == SC_EQUAL && !bRealWildOrRegExp && !bTestWildOrRegExp && bMatchWholeCell;
+    }
+
+    // The value is placed inside one parameter: [pValueSource1] or [pValueSource2] but never in both.
+    // For the template argument see isFastCompareByString().
+    template<bool bFast = false>
+    std::pair<bool,bool> compareByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+        const svl::SharedString* pValueSource1, const OUString * pValueSource2)
+    {
+        bool bOk = false;
+        bool bTestEqual = false;
+        bool bMatchWholeCell;
+        if(bFast)
+            bMatchWholeCell = true;
+        else
+        {
+            bMatchWholeCell = mbMatchWholeCell;
+            if (isPartialTextMatchOp(rEntry))
+                // may have to do partial textural comparison.
+                bMatchWholeCell = false;
+        }
+
+        const bool bRealWildOrRegExp = !bFast && isRealWildOrRegExp(rEntry);
+        const bool bTestWildOrRegExp = !bFast && isTestWildOrRegExp(rEntry);
+
+        assert(!bFast || pValueSource1 != nullptr); // shared string for fast path
         // [pValueSource1] or [pValueSource2] but never both of them or none of them
         assert((pValueSource1 != nullptr) != (pValueSource2 != nullptr));
 
-        if ( bRealWildOrRegExp || bTestWildOrRegExp )
+        if ( !bFast && ( bRealWildOrRegExp || bTestWildOrRegExp ))
         {
             const OUString & rValue = pValueSource1 ? pValueSource1->getString() : *pValueSource2;
 
@@ -2671,11 +2698,12 @@ public:
             else
                 bTestEqual = bMatch;
         }
-        if ( !bRealWildOrRegExp )
+        if ( bFast || !bRealWildOrRegExp )
         {
             // Simple string matching i.e. no regexp match.
-            if (isTextMatchOp(rEntry))
+            if (bFast || isTextMatchOp(rEntry))
             {
+                // Check this even with bFast.
                 if (rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                 {
                     // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
@@ -2685,11 +2713,12 @@ public:
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
-                else if ( bMatchWholeCell )
+                else if ( bFast || bMatchWholeCell )
                 {
-                    if (pValueSource1)
+                    if (bFast || pValueSource1)
                     {
                         // Fast string equality check by comparing string identifiers.
+                        // This is the bFast path, all conditions should lead here on bFast == true.
                         if (mrParam.bCaseSens)
                         {
                             bOk = pValueSource1->getData() == rItem.maString.getData();
@@ -2714,7 +2743,7 @@ public:
                         }
                     }
 
-                    if ( rEntry.eOp == SC_NOT_EQUAL )
+                    if ( !bFast && rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
                 else
@@ -2937,7 +2966,7 @@ public:
 
 std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, const ScQueryParam& rParam,
     ScRefCellValue& aCell, bool* pbTestEqualCondition, const ScInterpreterContext* pContext, QueryEvaluator& aEval,
-    const ScDocument& rDoc, const ScQueryEntry& rEntry )
+    const ScQueryEntry& rEntry )
 {
     std::pair<bool,bool> aRes(false, false);
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
@@ -2988,45 +3017,41 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
     const svl::SharedString* cellSharedString = nullptr;
     OUString cellString;
     bool cellStringSet = false;
-    if( rEntry.eOp == SC_EQUAL && rItems.size() >= 10 )
+    const bool bFastCompareByString = aEval.isFastCompareByString(rEntry);
+    if(rEntry.eOp == SC_EQUAL && rItems.size() >= 10 && bFastCompareByString)
     {
         // The same as above but for strings. Try to optimize the case when
-        // it's a svl::SharedString comparison (case sensitive or not).
-        // That happens when SC_EQUAL is used, whole cell matching is enabled,
-        // and a regexp is not wanted, see compareByString() above.
-        if(rDoc.GetDocOptions().IsMatchWholeCell()
-             && !aEval.isRealWildOrRegExp(rEntry) && !aEval.isTestWildOrRegExp(rEntry))
+        // it's a svl::SharedString comparison. That happens when SC_EQUAL is used
+        // and simple matching is used, see compareByString()
+        if(!cellStringSet)
         {
-            if(!cellStringSet)
+            cellString = aEval.getCellString(aCell, nRow, rEntry, pContext, &cellSharedString);
+            cellStringSet = true;
+        }
+        // For ScQueryEntry::ByString check that the cell is represented by a shared string,
+        // which means it's either a string cell or a formula error. This is not as
+        // generous as isQueryByString() but it should be enough and better be safe.
+        if(cellSharedString != nullptr)
+        {
+            if (rParam.bCaseSens)
             {
-                cellString = aEval.getCellString(aCell, nRow, rEntry, pContext, &cellSharedString);
-                cellStringSet = true;
-            }
-            // For ScQueryEntry::ByString check that the cell is represented by a shared string,
-            // which means it's either a string cell or a formula error. This is not as
-            // generous as isQueryByString() but it should be enough and better be safe.
-            if(cellSharedString != nullptr)
-            {
-                if (rParam.bCaseSens)
+                for (const auto& rItem : rItems)
                 {
-                    for (const auto& rItem : rItems)
+                    if (rItem.meType == ScQueryEntry::ByString
+                        && cellSharedString->getData() == rItem.maString.getData())
                     {
-                        if (rItem.meType == ScQueryEntry::ByString
-                            && cellSharedString->getData() == rItem.maString.getData())
-                        {
-                            return std::make_pair(true, true);
-                        }
+                        return std::make_pair(true, true);
                     }
                 }
-                else
+            }
+            else
+            {
+                for (const auto& rItem : rItems)
                 {
-                    for (const auto& rItem : rItems)
+                    if (rItem.meType == ScQueryEntry::ByString
+                        && cellSharedString->getDataIgnoreCase() == rItem.maString.getDataIgnoreCase())
                     {
-                        if (rItem.meType == ScQueryEntry::ByString
-                            && cellSharedString->getDataIgnoreCase() == rItem.maString.getDataIgnoreCase())
-                        {
-                            return std::make_pair(true, true);
-                        }
+                        return std::make_pair(true, true);
                     }
                 }
             }
@@ -3063,9 +3088,13 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
                 cellString = aEval.getCellString(aCell, nRow, rEntry, pContext, &cellSharedString);
                 cellStringSet = true;
             }
-            std::pair<bool,bool> aThisRes = cellSharedString
-                ? aEval.compareByString(rEntry, rItem, cellSharedString, nullptr)
-                : aEval.compareByString(rEntry, rItem, nullptr, &cellString);
+            std::pair<bool,bool> aThisRes;
+            if( cellSharedString && bFastCompareByString ) // fast
+                aThisRes = aEval.compareByString<true>(rEntry, rItem, cellSharedString, nullptr);
+            else if( cellSharedString )
+                aThisRes = aEval.compareByString(rEntry, rItem, cellSharedString, nullptr);
+            else
+                aThisRes = aEval.compareByString(rEntry, rItem, nullptr, &cellString);
             aRes.first |= aThisRes.first;
             aRes.second |= aThisRes.second;
         }
@@ -3136,7 +3165,7 @@ bool ScTable::ValidQuery(
             aCell = GetCellValue(nCol, nRow);
 
         std::pair<bool,bool> aRes = validQueryProcessEntry(nRow, nCol, nTab, rParam, aCell,
-            pbTestEqualCondition, pContext, aEval, rDocument, rEntry);
+            pbTestEqualCondition, pContext, aEval, rEntry);
 
         if (nPos == -1)
         {
