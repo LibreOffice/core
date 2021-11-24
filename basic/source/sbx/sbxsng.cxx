@@ -236,90 +236,28 @@ start:
             break;
         }
         case SbxBYREF | SbxCHAR:
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXCHAR) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXCHAR;
-            }
-            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(n), SbxMINCHAR) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMINCHAR;
-            }
-            *p->pChar = static_cast<sal_Unicode>(n); break;
+            *p->pChar = ImpDoubleToChar(n); break;
         case SbxBYREF | SbxBYTE:
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXBYTE) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXBYTE;
-            }
-            else if( n < 0 )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
-            }
-            *p->pByte = static_cast<sal_uInt8>(n); break;
+            *p->pByte = ImpDoubleToByte(n); break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXINT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXINT;
-            }
-            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(n), SbxMININT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMININT;
-            }
-            *p->pInteger = static_cast<sal_Int16>(n); break;
+            *p->pInteger = ImpDoubleToInteger(n); break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXUINT) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXUINT;
-            }
-            else if( n < 0 )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
-            }
-            *p->pUShort = static_cast<sal_uInt16>(n); break;
+            *p->pUShort = ImpDoubleToUShort(n); break;
         case SbxBYREF | SbxLONG:
-        {
-            sal_Int32 i;
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXLNG) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMAXLNG;
-            }
-            else if( !o3tl::convertsToAtLeast(o3tl::roundAway(n), SbxMINLNG) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMINLNG;
-            }
-            else
-            {
-                i = sal::static_int_cast< sal_Int32 >(n);
-            }
-            *p->pLong = i; break;
-        }
+            *p->pLong = ImpDoubleToLong(n); break;
         case SbxBYREF | SbxULONG:
-        {
-            sal_uInt32 i;
-            if( !o3tl::convertsToAtMost(o3tl::roundAway(n), SbxMAXULNG) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = SbxMAXULNG;
-            }
-            else if( n < 0 )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); i = 0;
-            }
-            else
-            {
-                i = sal::static_int_cast< sal_uInt32 >(n);
-            }
-            *p->pULong = i; break;
-        }
+            *p->pULong = ImpDoubleToULong(n); break;
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = n; break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = static_cast<double>(n); break;
         case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = static_cast<sal_Int64>(n); break;
+            *p->pnInt64 = ImpDoubleToSalInt64(n); break;
         case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = static_cast<sal_uInt64>(n); break;
+            *p->puInt64 = ImpDoubleToSalUInt64(n); break;
         case SbxBYREF | SbxCURRENCY:
             double d;
             if( n > SbxMAXCURR )
