@@ -2505,7 +2505,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         }
 
         // remember Pos in body text
-        m_xSFlyPara->xMainTextPos.reset(new SwPosition(*m_pPaM->GetPoint()));
+        m_xSFlyPara->xMainTextPos = m_rDoc.CreateUnoCursor(*m_pPaM->GetPoint());
 
         //remove fltanchors, otherwise they will be closed inside the
         //frame, which makes no sense, restore them after the frame is
@@ -2578,7 +2578,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
             {
                 // If an open apo pos is here, then clear it before
                 // JoinNext destroys it
-                SwNodeIndex aOpenApoPos(m_xSFlyPara->xMainTextPos->nNode);
+                SwNodeIndex aOpenApoPos(m_xSFlyPara->xMainTextPos->GetPoint()->nNode);
                 if (aOpenApoPos == aToBeJoined)
                     m_xSFlyPara->xMainTextPos.reset();
             }
@@ -2653,7 +2653,7 @@ void SwWW8ImplReader::StopApo()
         SwNodeIndex aPref(m_pPaM->GetPoint()->nNode, -1);
 
         SwTwips nNewWidth =
-            MoveOutsideFly(m_xSFlyPara->pFlyFormat, *m_xSFlyPara->xMainTextPos);
+            MoveOutsideFly(m_xSFlyPara->pFlyFormat, *m_xSFlyPara->xMainTextPos->GetPoint());
         if (nNewWidth)
             m_xSFlyPara->BoxUpWidth(nNewWidth);
 
@@ -2732,7 +2732,7 @@ void SwWW8ImplReader::StopApo()
 
             if (!m_bFuzzing)
             {
-                CalculateFlySize(aFlySet, m_xSFlyPara->xMainTextPos->nNode,
+                CalculateFlySize(aFlySet, m_xSFlyPara->xMainTextPos->GetPoint()->nNode,
                     m_xSFlyPara->nWidth);
             }
 

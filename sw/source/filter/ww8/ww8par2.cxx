@@ -2448,7 +2448,7 @@ void WW8TabDesc::CreateSwTable()
     if (bInsNode)
         m_pIo->AppendTextNode(*pPoint);
 
-    m_xTmpPos.reset(new SwPosition(*m_pIo->m_pPaM->GetPoint()));
+    m_xTmpPos = m_pIo->m_rDoc.CreateUnoCursor(*m_pIo->m_pPaM->GetPoint());
 
     // Because SW cannot handle multi-page floating frames,
     // _any unnecessary_ floating tables have been converted to inline.
@@ -2483,7 +2483,7 @@ void WW8TabDesc::CreateSwTable()
     // rows of a band can be duplicated easy.
     m_pTable = m_pIo->m_rDoc.InsertTable(
             SwInsertTableOptions( SwInsertTableFlags::HeadlineNoBorder, 0 ),
-            *m_xTmpPos, m_nBands, m_nDefaultSwCols, m_eOri );
+            *m_xTmpPos->GetPoint(), m_nBands, m_nDefaultSwCols, m_eOri );
 
     OSL_ENSURE(m_pTable && m_pTable->GetFrameFormat(), "insert table failed");
     if (!m_pTable || !m_pTable->GetFrameFormat())
@@ -2501,7 +2501,7 @@ void WW8TabDesc::CreateSwTable()
     // contains a Pagedesc. If so that Pagedesc would be moved to the
     // row after the table, that would be wrong. So delete and
     // set later to the table format.
-    if (SwTextNode *const pNd = m_xTmpPos->nNode.GetNode().GetTextNode())
+    if (SwTextNode *const pNd = m_xTmpPos->GetPoint()->nNode.GetNode().GetTextNode())
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
         {
@@ -2788,7 +2788,7 @@ void WW8TabDesc::MoveOutsideTable()
 {
     OSL_ENSURE(m_xTmpPos && m_pIo, "I've forgotten where the table is anchored");
     if (m_xTmpPos && m_pIo)
-        *m_pIo->m_pPaM->GetPoint() = *m_xTmpPos;
+        *m_pIo->m_pPaM->GetPoint() = *m_xTmpPos->GetPoint();
 }
 
 void WW8TabDesc::FinishSwTable()
