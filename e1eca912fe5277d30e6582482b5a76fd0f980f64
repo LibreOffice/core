@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d8ede42_056f1343",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T08:11:03Z",
+      "side": 1,
+      "message": "Does it look to you? I hesitated between taking a plain int (to make it simple) or something like sal_Int32 (to force 32 bits number but is it what we want here?) instead of sal_IntPtr, I don\u0027t know how to choose. About the define, I think constexpr is the last right way but perhaps new features of C++ brought something else even better?\nI know this patch seems very straightforward to ask some advice but sometimes devil is in the details :-)",
+      "revId": "e1eca912fe5277d30e6582482b5a76fd0f980f64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
