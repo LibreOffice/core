@@ -272,7 +272,7 @@ void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
     }
 
     o_rVCLGradient.SetAngle(
-        Degree10(static_cast<sal_uInt32>(basegfx::rad2deg<100>(rFiGrAtt.getAngle()))));
+        Degree10(static_cast<sal_uInt32>(basegfx::rad2deg<10>(rFiGrAtt.getAngle()))));
     o_rVCLGradient.SetBorder(static_cast<sal_uInt16>(rFiGrAtt.getBorder() * 100.0));
     o_rVCLGradient.SetOfsX(static_cast<sal_uInt16>(rFiGrAtt.getOffsetX() * 100.0));
     o_rVCLGradient.SetOfsY(static_cast<sal_uInt16>(rFiGrAtt.getOffsetY() * 100.0));
