@@ -648,7 +648,6 @@ void ViewTabListBox_Impl::DeleteEntries()
         {
             if ( Kill( aURL ) )
             {
-                delete reinterpret_cast<SvtContentEntry*>(mxTreeView->get_id(rCurEntry).toInt64());
                 mpParent->EntryRemoved( aURL );
                 bDeleted = true;
             }
