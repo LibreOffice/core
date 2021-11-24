@@ -89,8 +89,6 @@ class classification(UITestCase):
                 self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
                 #verify textBox Content  TODO textbox not supported
                 #self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
-                # print(get_state_as_dict(classificationEditWindow))
-
 
             self.assertEqual(document.Text.String[0:6], "(Conf)")
             self.assertEqual(header.String, "Confidential")
@@ -114,8 +112,6 @@ class classification(UITestCase):
                 self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
                 #verify textBox Content  TODO  - texbox not supported yet
                 # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
-                # print(get_state_as_dict(classificationEditWindow))
-
 
             controller = document.getCurrentController()
             self.assertEqual(document.Text.String[0:6], "(Conf)")

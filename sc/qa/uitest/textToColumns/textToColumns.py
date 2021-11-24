@@ -27,10 +27,8 @@ class CalcTextToColumns(UITestCase):
                 xWriterGeneralEntry = xWriterEntry.getChild('0')
                 xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
                 xreplwarncb = xDialogOpt.getChild("replwarncb")
-                print(get_state_as_dict(xreplwarncb)["Selected"])
                 if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
                     xreplwarncb.executeAction("CLICK", tuple())
-                print(get_state_as_dict(xreplwarncb)["Selected"])
 
             #Select A1:A5 on Sheet 'Dot_as_Separator'
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
@@ -117,10 +115,8 @@ class CalcTextToColumns(UITestCase):
                 xWriterGeneralEntry = xWriterEntry.getChild('0')
                 xWriterGeneralEntry.executeAction("SELECT", tuple())          #General / replwarncb
                 xreplwarncb = xDialogOpt.getChild("replwarncb")
-                print(get_state_as_dict(xreplwarncb)["Selected"])
                 if (get_state_as_dict(xreplwarncb)["Selected"]) == "false":
                     xreplwarncb.executeAction("CLICK", tuple())
-                print(get_state_as_dict(xreplwarncb)["Selected"])
 
             # Select A1:A5
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))

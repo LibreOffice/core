@@ -215,12 +215,7 @@ class clearCells(UITestCase):
                 select_pos(xTabs, "1")  #tab Font
 
                 xstylelb = xDialog.getChild("weststylelb-cjk")
-                print(get_state_as_dict(xstylelb))
-
-
                 self.assertEqual(get_state_as_dict(xstylelb)["Text"], "Regular")
-
-
 
     def test_clear_cells_all(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:

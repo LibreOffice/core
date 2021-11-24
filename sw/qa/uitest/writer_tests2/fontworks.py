@@ -24,7 +24,6 @@ class fontWorksDialog(UITestCase):
                 # Select element with id (3)
                 element3 = FontWorkSelector.getChild("2")
                 element3.executeAction("SELECT", mkPropertyValues({}))
-                print(get_state_as_dict(FontWorkSelector))
                 self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "2")
                 self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "3")
                 self.assertEqual(get_state_as_dict(FontWorkSelector)["VisibleCount"], "36")
