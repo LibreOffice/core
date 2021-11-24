@@ -22,7 +22,7 @@ if ( oDoc == null )
 XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oDoc);
 Object oTab = xDocMSF.createInstance("com.sun.star.text.TextTable");
 XTextTable xTextTable = (XTextTable)UnoRuntime.queryInterface(XTextTable.class, oTab);
-xTextTable.initialize(4,3); //vier Reihen, drei Spalten
+xTextTable.initialize(4,3); // four rows, three columns
 xTextContent = (XTextContent)UnoRuntime.queryInterface(XTextContent.class, xTextTable);
 
 xTextDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,oDoc);
