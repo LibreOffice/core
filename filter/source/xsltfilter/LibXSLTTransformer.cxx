@@ -267,7 +267,7 @@ namespace XSLT
         OSL_ASSERT(m_transformer != nullptr);
         OSL_ASSERT(m_transformer->getInputStream().is());
         OSL_ASSERT(m_transformer->getOutputStream().is());
-        OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty());
+        OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty() || !m_transformer->getStyleSheetText().isEmpty());
         ::std::map<const char*, OString> pmap = m_transformer->getParameters();
         ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
         int paramIndex = 0;
@@ -280,8 +280,25 @@ namespace XSLT
         xmlDocPtr doc = xmlReadIO(&ParserInputBufferCallback::on_read,
                 &ParserInputBufferCallback::on_close,
                 static_cast<void*> (this), nullptr, nullptr, 0);
-        xsltStylesheetPtr styleSheet = xsltParseStylesheetFile(
+        xsltStylesheetPtr styleSheet = nullptr;
+        if (m_transformer->getStyleSheetURL().getLength())
+            styleSheet = xsltParseStylesheetFile(
                 reinterpret_cast<const xmlChar *>(m_transformer->getStyleSheetURL().getStr()));
+        else if (m_transformer->getStyleSheetText().getLength())
+        {
+            xmlDocPtr styleSheetDoc = xmlReadMemory(
+                m_transformer->getStyleSheetText().getStr(),
+                m_transformer->getStyleSheetText().getLength(),
+                "noname.xml", nullptr, 0);
+
+            styleSheet = xsltParseStylesheetDoc(styleSheetDoc);
+        }
+
+        if (!styleSheet)
+        {
+            m_transformer->error("No stylesheet was created");
+        }
+
         xmlDocPtr result = nullptr;
         exsltRegisterAll();
         registerExtensionModule();
@@ -326,7 +343,6 @@ namespace XSLT
 
             m_transformer->error(msg);
         }
-        closeOutput();
         oh.reset();
         xsltFreeStylesheet(styleSheet);
         xsltTransformContextPtr tcontext = nullptr;
@@ -511,6 +527,10 @@ namespace XSLT
             if (nameUTF8 == "StylesheetURL")
             {
                 m_styleSheetURL = valueUTF8;
+            }
+            if (nameUTF8 == "StylesheetText")
+            {
+                m_styleSheetText = valueUTF8;
             }
             else if (nameUTF8 == "SourceURL")
             {
