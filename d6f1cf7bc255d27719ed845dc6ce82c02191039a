@@ -16,6 +16,24 @@
       "message": "Balazs Varga: If I understand it correctly, since f6b143a57d9bd8f5d7b29febcb4e01ee1eb2ff1d came with a test and the test still passes even with this removed, then the code is actually not necessary as the comment says, right?\n",
       "revId": "d6f1cf7bc255d27719ed845dc6ce82c02191039a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0db2ee91_ceec29a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-11-24T07:18:16Z",
+      "side": 1,
+      "message": "Luboš Luňák: Yes, it looks like this code part isn\u0027t necessary anymore. Thanks for your patch.",
+      "parentUuid": "0003685d_a30e5af3",
+      "revId": "d6f1cf7bc255d27719ed845dc6ce82c02191039a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
