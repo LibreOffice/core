@@ -16,6 +16,29 @@
       "message": "wait for 7.4 at minimum. Given how unstable layout is, I\u0027m not sure I want to propose this.",
       "revId": "530ef7394a5441793135e69c1c7a74266f3660ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22408ba9_dfb53d60",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-11-24T10:25:01Z",
+      "side": 1,
+      "message": "missing a space here.",
+      "range": {
+        "startLine": 545,
+        "startChar": 9,
+        "endLine": 545,
+        "endChar": 10
+      },
+      "revId": "530ef7394a5441793135e69c1c7a74266f3660ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
