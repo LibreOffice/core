@@ -14,12 +14,14 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, typ
 class findReplace(UITestCase):
     def test_find_impress(self):
         with self.ui_test.load_file(get_url_for_data_file("findReplace.odp")) as impress_doc:
-            # print(dir(document))
-            # xPages= document.CurrentController.getCurrentPage().Number
-            # print(xPages)
 
             # check current slide is 1
             self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)
+
+            self.assertEqual("First first first", impress_doc.DrawPages[0].getByIndex(1).String)
+            self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
+            self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
+            self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
 
             # search for string "second"
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
@@ -39,6 +41,11 @@ class findReplace(UITestCase):
 
                 #verify we moved to slide 3
                 self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 3)  #3rd slide
+
+            self.assertEqual("First first first", impress_doc.DrawPages[0].getByIndex(1).String)
+            self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
+            self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
+            self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
 
             # now open dialog and verify find="third" (remember last value);
             # replace value with "First" (click match case) with word "Replace"
@@ -66,15 +73,19 @@ class findReplace(UITestCase):
 
                 # hit replace button 2 times
                 replace = xDialog.getChild("replace")
+
                 replace.executeAction("CLICK", tuple())
                 replace.executeAction("CLICK", tuple())   #click twice Replace button (one selects, second replaces)
-
-            # reopen the dialog, because of bug 122788
-            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 # now replace first (uncheck match case) with word "aaa" - click once Replace All button, check "Replace aaa aaa"
                 matchcase = xDialog.getChild("matchcase")
                 matchcase.executeAction("CLICK", tuple())  # uncheck match case
+
+                self.assertEqual("Replace first first", impress_doc.DrawPages[0].getByIndex(1).String)
+                self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
+                # FIXME: tdf#145868
+                self.assertEqual("Replace", impress_doc.DrawPages[2].getByIndex(1).String)
+                self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
 
                 replaceterm = xDialog.getChild("replaceterm")
                 replaceterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -83,23 +94,14 @@ class findReplace(UITestCase):
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple()) # click on replace all button
 
-            # go to second page
-            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
-                searchterm = xDialog.getChild("searchterm")
-                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd slide
-                xsearch = xDialog.getChild("search")
-                xsearch.executeAction("CLICK", tuple())
-            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 2)
-            #now check if text "Replace aaa aaa" is on first slide
-            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
-                searchterm = xDialog.getChild("searchterm")
-                backsearch = xDialog.getChild("backsearch")
-                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Replace aaa aaa"}))
-                backsearch.executeAction("CLICK", tuple())
-                #verify
-                self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)  #1st slide
+            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)
 
+            # tdf#122788: Without the fix in place, this test would have failed with
+            # AssertionError: 'Replace aaa aaa' != 'Replace first first'
+            self.assertEqual("Replace aaa aaa", impress_doc.DrawPages[0].getByIndex(1).String)
+            self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
+            # FIXME: tdf#145868
+            self.assertEqual("Replace", impress_doc.DrawPages[2].getByIndex(1).String)
+            self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
