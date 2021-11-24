@@ -17,10 +17,17 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/ref.hxx>
 
-namespace com::sun::star::awt
+namespace com::sun::star
+{
+namespace uno
+{
+class XComponentContext;
+}
+namespace awt
 {
 struct Size;
 class XControlModel;
+}
 }
 
 namespace writerfilter::dmapper
@@ -31,6 +38,7 @@ enum class SdtControlType
 {
     datePicker,
     dropDown,
+    plainText,
     unknown
 };
 
@@ -123,6 +131,8 @@ public:
     void createDropDownControl();
     /// Create date control from w:sdt's w:date.
     void createDateContentControl();
+
+    void createPlainTextControl();
 
     void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();
