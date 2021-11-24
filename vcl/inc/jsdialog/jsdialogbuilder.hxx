@@ -136,10 +136,17 @@ class JSDialogSender
 {
     std::unique_ptr<JSDialogNotifyIdle> mpIdleNotify;
 
+protected:
+    bool m_bCanClose; // specifies if can send a close message
+
 public:
-    JSDialogSender() = default;
+    JSDialogSender()
+        : m_bCanClose(true)
+    {
+    }
     JSDialogSender(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                    std::string sTypeOfJSON)
+        : m_bCanClose(true)
     {
         initializeSender(aNotifierWindow, aContentWindow, sTypeOfJSON);
     }
