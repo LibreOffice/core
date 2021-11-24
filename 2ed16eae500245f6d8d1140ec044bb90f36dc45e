@@ -33,6 +33,23 @@
       "message": "It would be good to get this reverted before 7.4 - that will help with regression testing and any follow-up commits.\n\nI think this should have been reverted 2 years ago, when bug reports first indicated that the implications were far bigger than first expected.\n\nVasily indicated in https://gerrit.libreoffice.org/46407 that he is not opposed to a revert.",
       "revId": "2ed16eae500245f6d8d1140ec044bb90f36dc45e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c6f37d7_fc6a58c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-11-24T09:36:01Z",
+      "side": 1,
+      "message": "No objections from my side as author of original commit.",
+      "revId": "2ed16eae500245f6d8d1140ec044bb90f36dc45e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
