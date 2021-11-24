@@ -78,7 +78,7 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, ToolBox*, pToolBox, void)
     sal_uInt16 nId = pToolBox->GetCurItemId();
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
-    editeng::SvxBorderLine theDefLine(nullptr, 1);
+    editeng::SvxBorderLine theDefLine(nullptr, SvxBorderLineWidth::Thin);
     editeng::SvxBorderLine *pLeft = nullptr, *pRight = nullptr, *pTop = nullptr, *pBottom = nullptr;
     sal_uInt8 nValidFlags = 0;
 
@@ -138,7 +138,7 @@ IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
 
     if (nId == pToolBox->GetItemId("diagup"))
     {
-        editeng::SvxBorderLine aTmp( nullptr, 1 );
+        editeng::SvxBorderLine aTmp( nullptr, SvxBorderLineWidth::Thin );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_BLTR );
         aLineItem.SetLine( &aTmp );
         mpDispatcher->ExecuteList(
@@ -146,7 +146,7 @@ IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
     }
     else if (nId == pToolBox->GetItemId("diagdown"))
     {
-        editeng::SvxBorderLine aTmp( nullptr, 1 );
+        editeng::SvxBorderLine aTmp( nullptr, SvxBorderLineWidth::Thin );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_TLBR );
         aLineItem.SetLine( &aTmp );
         mpDispatcher->ExecuteList(
@@ -156,7 +156,7 @@ IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
     {
         SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
         SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
-        editeng::SvxBorderLine theDefLine(nullptr, 1);
+        editeng::SvxBorderLine theDefLine(nullptr, SvxBorderLineWidth::Thin);
         editeng::SvxBorderLine       *pLeft = nullptr,
                             *pRight = nullptr,
                             *pTop = nullptr,
@@ -249,7 +249,7 @@ IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
     else if (nId == maTBBorder3->GetItemId("topthickbottom"))
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thick));
-        pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
+        pTop.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thin));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }
     else if (nId == maTBBorder3->GetItemId("topdoublebottom"))
@@ -257,7 +257,7 @@ IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
         pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, SvxBorderLineWidth::Hairline,
                                   SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Thin);
-        pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
+        pTop.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thin));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }
 
