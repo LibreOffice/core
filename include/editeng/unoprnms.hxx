@@ -330,6 +330,7 @@
 #define UNO_NAME_EDIT_CHAR_COLOR_THEME          "CharColorTheme"
 #define UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE  "CharColorTintOrShade"
 #define UNO_NAME_EDIT_CHAR_COLOR_LUM_MOD        "CharColorLumMod"
+#define UNO_NAME_EDIT_CHAR_COLOR_LUM_OFF        "CharColorLumOff"
 #define UNO_NAME_EDIT_CHAR_TRANSPARENCE         "CharTransparence"
 #define UNO_NAME_EDIT_CHAR_CROSSEDOUT           "CharCrossedOut"
 #define UNO_NAME_EDIT_CHAR_STRIKEOUT            "CharStrikeout"

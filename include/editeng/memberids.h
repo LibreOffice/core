@@ -184,6 +184,7 @@
 #define MID_COLOR_THEME_INDEX   4
 #define MID_COLOR_TINT_OR_SHADE 5
 #define MID_COLOR_LUM_MOD       6
+#define MID_COLOR_LUM_OFF       7
 
 
 #endif

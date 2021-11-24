@@ -444,6 +444,14 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     // i.e. we had the default 100% value, not the value from the file.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000),
                          xPortion->getPropertyValue("CharColorLumMod").get<sal_Int32>());
+
+    // 40000 in the file, just 100th vs 1000th percents.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4000
+    // - Actual  : 0
+    // i.e. we had the default 0% value, not the value from the file.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000),
+                         xPortion->getPropertyValue("CharColorLumOff").get<sal_Int32>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

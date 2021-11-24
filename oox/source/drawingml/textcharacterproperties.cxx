@@ -132,6 +132,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty(PROP_CharColorTheme, aColor.getSchemeColorIndex());
         rPropMap.setProperty(PROP_CharColorTintOrShade, aColor.getTintOrShade());
         rPropMap.setProperty(PROP_CharColorLumMod, aColor.getLumMod());
+        rPropMap.setProperty(PROP_CharColorLumOff, aColor.getLumOff());
 
         if (aColor.hasTransparency())
         {

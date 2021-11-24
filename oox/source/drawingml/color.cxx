@@ -512,6 +512,22 @@ sal_Int16 Color::getLumMod()
     return 10000;
 }
 
+sal_Int16 Color::getLumOff()
+{
+    for (const auto& rTransform : maTransforms)
+    {
+        if (rTransform.mnToken != XML_lumOff)
+        {
+            continue;
+        }
+
+        // From 1000th percent to 100th percent.
+        return rTransform.mnValue / 10;
+    }
+
+    return 0;
+}
+
 ::Color Color::getColor( const GraphicHelper& rGraphicHelper, ::Color nPhClr ) const
 {
     const sal_Int32 nTempC1 = mnC1;

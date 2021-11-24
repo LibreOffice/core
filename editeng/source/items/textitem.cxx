@@ -1358,7 +1358,8 @@ SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     mColor( COL_BLACK ),
     maThemeIndex(-1),
     maTintShade(0),
-    mnLumMod(10000)
+    mnLumMod(10000),
+    mnLumOff(0)
 {
 }
 
@@ -1367,7 +1368,8 @@ SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     mColor( rCol ),
     maThemeIndex(-1),
     maTintShade(0),
-    mnLumMod(10000)
+    mnLumMod(10000),
+    mnLumOff(0)
 {
 }
 
@@ -1383,7 +1385,8 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     return mColor == rColorItem.mColor &&
            maThemeIndex == rColorItem.maThemeIndex &&
            maTintShade == rColorItem.maTintShade &&
-           mnLumMod == rColorItem.mnLumMod;
+           mnLumMod == rColorItem.mnLumMod &&
+           mnLumOff == rColorItem.mnLumOff;
 }
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1415,6 +1418,11 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_COLOR_LUM_MOD:
         {
             rVal <<= mnLumMod;
+            break;
+        }
+        case MID_COLOR_LUM_OFF:
+        {
+            rVal <<= mnLumOff;
             break;
         }
         default:
@@ -1469,6 +1477,14 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= nLumMod))
                 return false;
             mnLumMod = nLumMod;
+        }
+        break;
+        case MID_COLOR_LUM_OFF:
+        {
+            sal_Int16 nLumOff = -1;
+            if (!(rVal >>= nLumOff))
+                return false;
+            mnLumOff = nLumOff;
         }
         break;
         default:
