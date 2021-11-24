@@ -16,6 +16,24 @@
       "message": "Does it look to you? I hesitated between taking a plain int (to make it simple) or something like sal_Int32 (to force 32 bits number but is it what we want here?) instead of sal_IntPtr, I don\u0027t know how to choose. About the define, I think constexpr is the last right way but perhaps new features of C++ brought something else even better?\nI know this patch seems very straightforward to ask some advice but sometimes devil is in the details :-)",
       "revId": "e1eca912fe5277d30e6582482b5a76fd0f980f64",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3af0aff1_a5fff871",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-24T09:09:43Z",
+      "side": 1,
+      "message": "Seeing how those values are used in combination with OUString::toInt32, I would turn them into an unscoped enumeration with underlying type sal_Int32.",
+      "parentUuid": "0d8ede42_056f1343",
+      "revId": "e1eca912fe5277d30e6582482b5a76fd0f980f64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
