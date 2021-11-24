@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c6aca3e_db54dfeb",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-24T06:04:36Z",
+      "side": 0,
+      "message": "By the way. The enum is not organized as you use it here.\n\n            notset,\n            normal,\n            wider,\n            narrower,\n            ultra_condensed,\n            extra_condensed,\n            condensed,\n            semi_condensed,\n            semi_expanded,\n            expanded,\n            extra_expanded,\n            ultra_expanded,\n\n\u0027normal\u0027 then \u0027wider\u0027 then \u0027narrower\u0027 then \u0027ultra_condensed\u0027; \u0027wider\u0027 and \u0027narrower\u0027 do not appear in the switch. Your change does not simply refactor, it also changes the behavior. I have overlooked it - sorry; the change is wrong at this point.",
+      "revId": "5a00326951690d820d8ea5412a93aadf3da42dc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
