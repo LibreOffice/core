@@ -1072,6 +1072,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtContent:
             m_pImpl->SetSdt(true);
+            if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::unknown)
+                m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
             m_pImpl->SetSdt(false);
@@ -1087,6 +1089,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 case SdtControlType::dropDown:
                     m_pImpl->m_pSdtHelper->createDropDownControl();
+                    break;
+                case SdtControlType::plainText:
+                    m_pImpl->m_pSdtHelper->createPlainTextControl();
                     break;
                 case SdtControlType::datePicker:
                     m_pImpl->m_pSdtHelper->createDateContentControl();
@@ -2701,6 +2706,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_text:
+        m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtPr_text", sStringValue);
+        break;
     case NS_ooxml::LN_CT_SdtPr_dataBinding:
     case NS_ooxml::LN_CT_SdtPr_equation:
     case NS_ooxml::LN_CT_SdtPr_checkbox:
@@ -2709,7 +2718,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_picture:
     case NS_ooxml::LN_CT_SdtPr_citation:
     case NS_ooxml::LN_CT_SdtPr_group:
-    case NS_ooxml::LN_CT_SdtPr_text:
     case NS_ooxml::LN_CT_SdtPr_id:
     case NS_ooxml::LN_CT_SdtPr_alias:
     case NS_ooxml::LN_CT_SdtPlaceholder_docPart:
@@ -2727,7 +2735,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             case NS_ooxml::LN_CT_SdtPr_picture:     sName = "ooxml:CT_SdtPr_picture"; break;
             case NS_ooxml::LN_CT_SdtPr_citation:    sName = "ooxml:CT_SdtPr_citation"; break;
             case NS_ooxml::LN_CT_SdtPr_group:       sName = "ooxml:CT_SdtPr_group"; break;
-            case NS_ooxml::LN_CT_SdtPr_text:        sName = "ooxml:CT_SdtPr_text"; break;
             case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
             case NS_ooxml::LN_CT_SdtPr_alias:       sName = "ooxml:CT_SdtPr_alias"; break;
             case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
@@ -3555,6 +3562,11 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             m_pImpl->m_pSdtHelper->getLocale().truncate();
             return;
         }
+    }
+    else if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
+    {
+        m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
+        return;
     }
     else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
     {
