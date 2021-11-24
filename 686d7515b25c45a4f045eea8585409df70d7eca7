@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7416052_7668a8ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T12:25:10Z",
+      "side": 1,
+      "message": "Thank you Stephan for your feedback.\nI haven\u0027t found a way to avoid the use of all these static_cast\u003cint\u003e\n\nHere\u0027s the type of error I had without it:\n/home/julien/lo/libreoffice/sfx2/source/dialog/dinfdlg.cxx:1326:68: error: invalid operands to binary expression (\u0027CustomProperties\u0027 and \u0027int\u0027)\n    m_xValueEdit-\u003eset_visible( (CustomProperties::Custom_Type_Text \u003d\u003d nType) || (CustomProperties::Custom_Type_Number \u003d\u003d nType) );\n                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~\n/home/julien/lo/libreoffice/include/com/sun/star/uno/Any.hxx:657:22: note: candidate function template not viable: no known conversion from \u0027CustomProperties\u0027 to \u0027const com::sun::star::uno::Any\u0027 for 1st argument\ninline bool SAL_CALL operator \u003d\u003d ( const Any \u0026 rAny, const C \u0026 value )\n                     ^\n/home/julien/lo/libreoffice/include/svl/typedwhich.hxx:32:35: note: candidate template ignored: could not match \u0027TypedWhichId\u003ctype-parameter-0-0\u003e\u0027 against \u0027int\u0027\ntemplate \u003cclass T\u003e constexpr bool operator\u003d\u003d(sal_uInt16 lhs, TypedWhichId\u003cT\u003e const\u0026 rhs)\n                                  ^\n/home/julien/lo/libreoffice/include/svl/typedwhich.hxx:40:35: note: candidate template ignored: could not match \u0027TypedWhichId\u003ctype-parameter-0-0\u003e\u0027 against \u0027CustomProperties\u0027\ntemplate \u003cclass T\u003e constexpr bool operator\u003d\u003d(TypedWhichId\u003cT\u003e const\u0026 lhs, sal_uInt16 rhs)\n                                  ^\n...",
+      "revId": "686d7515b25c45a4f045eea8585409df70d7eca7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
