@@ -1949,7 +1949,7 @@ void OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             }
             else
             {
-                SAL_WARN("forms.component", "OBoundControlModel::connectToField: property " PROPERTY_VALUE " not supported!");
+                SAL_WARN("forms.component", "OBoundControlModel::connectToField: property " << PROPERTY_VALUE << " not supported!");
                 impl_setField_noNotify( nullptr );
             }
 
