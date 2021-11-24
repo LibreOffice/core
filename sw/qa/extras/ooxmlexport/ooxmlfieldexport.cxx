@@ -477,7 +477,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphSdt, "paragraph-sdt.docx")
     if (xmlDocPtr pXmlDoc = parseExport())
     {
         // The path to w:sdt contained a w:p.
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:sdt");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc//w:p/w:sdt");
     }
 }
 
@@ -615,7 +615,8 @@ DECLARE_OOXMLEXPORT_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
     {
         // This was 3, but multiple paragraphs inside "Company" SDT is now allowed.
-        assertXPath(pXmlDoc, "//w:sdtContent/w:p", 1);
+        assertXPath(pXmlDoc, "//w:sdtContent/w:p", 0);
+        assertXPath(pXmlDoc, "//w:sdtContent/w:r", 1);
     }
 }
 

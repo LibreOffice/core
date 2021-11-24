@@ -69,7 +69,7 @@ DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
         return;
 
     // <w:alias> was completely missing.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFooterBodyDistance, "footer-body-distance.docx")
@@ -220,7 +220,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO83044, "fdo83044.docx")
     if (!pXmlDoc)
        return;
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:text", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:text", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo83428, "fdo83428.docx")
