@@ -2415,11 +2415,16 @@ public:
     }
 
     static bool isQueryByValue(
-        const ScQueryEntry::Item& rItem, ScRefCellValue& rCell)
+        const ScQueryEntry::Item& rItem, const ScRefCellValue& rCell)
     {
         if (rItem.meType == ScQueryEntry::ByString)
             return false;
 
+        return isQueryByValueForCell(rCell);
+    }
+
+    static bool isQueryByValueForCell(const ScRefCellValue& rCell)
+    {
         if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
             // Error values are compared as string.
             return false;
@@ -3028,6 +3033,10 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
             cellString = aEval.getCellString(aCell, nRow, rEntry, pContext, &cellSharedString);
             cellStringSet = true;
         }
+        // Allow also checking ScQueryEntry::ByValue if the cell is not numeric,
+        // as in that case isQueryByNumeric() would be false and isQueryByString() would
+        // be true because of SC_EQUAL making isTextMatchOp() true.
+        bool compareByValue = !QueryEvaluator::isQueryByValueForCell(aCell);
         // For ScQueryEntry::ByString check that the cell is represented by a shared string,
         // which means it's either a string cell or a formula error. This is not as
         // generous as isQueryByString() but it should be enough and better be safe.
@@ -3037,7 +3046,8 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
             {
                 for (const auto& rItem : rItems)
                 {
-                    if (rItem.meType == ScQueryEntry::ByString
+                    if ((rItem.meType == ScQueryEntry::ByString
+                            || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
                         && cellSharedString->getData() == rItem.maString.getData())
                     {
                         return std::make_pair(true, true);
@@ -3048,7 +3058,8 @@ std::pair<bool,bool> validQueryProcessEntry(SCROW nRow, SCCOL nCol, SCTAB nTab, 
             {
                 for (const auto& rItem : rItems)
                 {
-                    if (rItem.meType == ScQueryEntry::ByString
+                    if ((rItem.meType == ScQueryEntry::ByString
+                            || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
                         && cellSharedString->getDataIgnoreCase() == rItem.maString.getDataIgnoreCase())
                     {
                         return std::make_pair(true, true);
