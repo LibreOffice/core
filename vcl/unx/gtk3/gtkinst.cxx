@@ -3057,8 +3057,7 @@ private:
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(nState);
         MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nModCode, nModCode);
 
-        m_aMouseMotionHdl.Call(aMEvt);
-        return true;
+        return m_aMouseMotionHdl.Call(aMEvt);
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
