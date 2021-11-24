@@ -313,8 +313,8 @@ public:
     void            CollapseToStart() noexcept;
     void            CollapseToEnd() noexcept;
     bool            IsCollapsed() noexcept;
-    bool            GoLeft(sal_Int16 nCount, bool Expand) noexcept;
-    bool            GoRight(sal_Int16 nCount, bool Expand) noexcept;
+    bool            GoLeft(sal_Int32 nCount, bool Expand) noexcept;
+    bool            GoRight(sal_Int32 nCount, bool Expand) noexcept;
     void            GotoStart(bool Expand) noexcept;
     void            GotoEnd(bool Expand) noexcept;
 
