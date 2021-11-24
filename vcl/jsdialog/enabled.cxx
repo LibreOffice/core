@@ -119,7 +119,8 @@ bool isBuilderEnabledForSidebar(const OUString& rUIFile)
         || rUIFile == "svx/ui/inspectortextpanel.ui"
         || rUIFile == "modules/swriter/ui/sidebarstylepresets.ui"
         || rUIFile == "modules/swriter/ui/sidebartheme.ui"
-        || rUIFile == "modules/swriter/ui/sidebartableedit.ui")
+        || rUIFile == "modules/swriter/ui/sidebartableedit.ui"
+        || rUIFile == "modules/simpress/ui/customanimationfragment.ui")
         return true;
 
     return false;

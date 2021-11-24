@@ -661,7 +661,16 @@ void CustomAnimationPane::updateControls()
     else
     {
         // use an empty direction box to fill the space
-        mxLBSubControl = SdPropertySubControl::create(nPropertyTypeDirection, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), uno::Any(), OUString(), LINK(this, CustomAnimationPane, implPropertyHdl));
+        if (!mxLBSubControl || (nOldPropertyType != nPropertyTypeDirection && nOldPropertyType != nPropertyTypeNone))
+        {
+            // for LOK destroy old widgets first
+            mxLBSubControl.reset(nullptr);
+            // then create new control, to keep correct pointers for actions
+            mxLBSubControl = SdPropertySubControl::create(nPropertyTypeDirection, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), uno::Any(), OUString(), LINK(this, CustomAnimationPane, implPropertyHdl));
+        }
+        else
+            mxLBSubControl->setValue(uno::Any(), OUString());
+
         mxPlaceholderBox->set_sensitive(false);
         mxFTProperty->set_sensitive(false);
         mxFTStartDelay->set_sensitive(false);
