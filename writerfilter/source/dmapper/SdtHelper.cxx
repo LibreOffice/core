@@ -14,6 +14,7 @@
 #include <editeng/unoprnms.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmloff/odffields.hxx>
 #include <com/sun/star/text/XTextField.hpp>
@@ -32,6 +33,7 @@ namespace writerfilter::dmapper
 {
 using namespace ::com::sun::star;
 using namespace ::css::xml::xpath;
+using namespace ::comphelper;
 
 /// w:sdt's w:dropDownList doesn't have width, so guess the size based on the longest string.
 static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
@@ -85,6 +87,38 @@ SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
 
 SdtHelper::~SdtHelper() = default;
 
+static void lcl_registerNamespaces(const OUString& sNamespaceString,
+                                   uno::Reference<XXPathAPI> xXPathAPI)
+{
+    // Split namespaces and register it in XPathAPI
+    auto aNamespaces = string::split(sNamespaceString, ' ');
+    for (const auto& sNamespace : aNamespaces)
+    {
+        // Here we have just one namespace in format "xmlns:ns0='http://someurl'"
+        auto aNamespace = string::split(sNamespace, '=');
+        if (aNamespace.size() < 2)
+        {
+            SAL_WARN("writerfilter",
+                     "SdtHelper::getValueFromDataBinding: invalid namespace: " << sNamespace);
+            continue;
+        }
+
+        auto aNamespaceId = string::split(aNamespace[0], ':');
+        if (aNamespaceId.size() < 2)
+        {
+            SAL_WARN("writerfilter",
+                     "SdtHelper::getValueFromDataBinding: invalid namespace: " << aNamespace[0]);
+            continue;
+        }
+
+        OUString sNamespaceURL = aNamespace[1];
+        sNamespaceURL = string::strip(sNamespaceURL, ' ');
+        sNamespaceURL = string::strip(sNamespaceURL, '\'');
+
+        xXPathAPI->registerNS(aNamespaceId[1], sNamespaceURL);
+    }
+}
+
 std::optional<OUString> SdtHelper::getValueFromDataBinding()
 {
     // No xpath - nothing to do
@@ -103,8 +137,8 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
     {
         uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
 
-        //xXpathAPI->registerNS("ns0", m_sDataBindingPrefixMapping);
-        xXpathAPI->registerNS("ns0", "http://schemas.microsoft.com/vsto/samples");
+        lcl_registerNamespaces(m_sDataBindingPrefixMapping, xXpathAPI);
+
         uno::Reference<XXPathObject> xResult = xXpathAPI->eval(xCustomXml, m_sDataBindingXPath);
 
         if (xResult.is())
@@ -112,6 +146,11 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
             return xResult->getString();
         }
     }
+
+    // Still not found?
+    // TODO: iterate core-properties
+    // TODO: iterate extended-properties
+    // TODO: iterate coverPageProps
 
     return {};
 }
@@ -170,6 +209,34 @@ void SdtHelper::createDropDownControl()
             lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems),
             xControlModel, uno::Sequence<beans::PropertyValue>());
     }
+
+    // clean up
+    m_aDropDownItems.clear();
+    setControlType(SdtControlType::unknown);
+}
+
+void SdtHelper::createPlainTextControl()
+{
+    assert(getControlType() == SdtControlType::plainText);
+
+    OUString aDefaultText = m_aSdtTexts.makeStringAndClear();
+
+    // create field
+    uno::Reference<css::text::XTextField> xControlModel(
+        m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.TextField.Input"),
+        uno::UNO_QUERY);
+
+    // set properties
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+
+    std::optional<OUString> oData = getValueFromDataBinding();
+    if (oData.has_value())
+        aDefaultText = oData.value();
+
+    xPropertySet->setPropertyValue("Content", uno::makeAny(aDefaultText));
+
+    // add it into document
+    m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
 
     // clean up
     m_aDropDownItems.clear();
