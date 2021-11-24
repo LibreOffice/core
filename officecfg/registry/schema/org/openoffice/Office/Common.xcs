@@ -4702,7 +4702,7 @@
             <prop oor:name="Translucent" oor:type="xs:int" oor:nillable="false">
               <!-- OldPath: PNG-EXPORT-TRANSLUCENT -->
               <!-- OldLocation: fltopt.ini -->
-              <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphic -->
+              <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphics -->
               <info>
                 <desc>Specifies if the graphic background is stored as
                 transparent.</desc>
