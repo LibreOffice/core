@@ -1895,7 +1895,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
                             const sal_uInt32 nPgWidth,
                             const sal_Int32 nIniFlyDx,
                             const sal_Int32 nIniFlyDy ):
-pFlyFormat(nullptr),
 nXPos(0),
 nYPos(0),
 nLeMgn(rWW.nLeMgn),
@@ -2146,7 +2145,22 @@ void WW8SwFlyPara::BoxUpWidth( tools::Long nInWidth )
 {
     if( bAutoWidth && nInWidth > nNewNetWidth )
         nNewNetWidth = nInWidth;
-};
+}
+
+SwFlyFrameFormat* WW8SwFlyPara::GetFlyFormat() const
+{
+    if (!m_xFlyFormat)
+        return nullptr;
+    return static_cast<SwFlyFrameFormat*>(m_xFlyFormat->GetFormat());
+}
+
+void WW8SwFlyPara::SetFlyFormat(SwFlyFrameFormat* pNewFlyFormat)
+{
+    if (pNewFlyFormat)
+        m_xFlyFormat.reset(new FrameDeleteWatch(pNewFlyFormat));
+    else
+        m_xFlyFormat.reset();
+}
 
 // The class WW8FlySet is derived from SfxItemSetFixed and does not
 // provide more, but is easier to handle for me.
@@ -2477,31 +2491,31 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
 
         if (pTabPos && pTabPos->bNoFly)
         {
-            m_xSFlyPara->pFlyFormat = nullptr;
+            m_xSFlyPara->SetFlyFormat(nullptr);
         }
         else
         {
             // ofz#34749 we shouldn't anchor anything into an 'extra' paragraph scheduled for
             // removal at end of import, but check if that scenario is happening
             m_aExtraneousParas.check_anchor_destination(m_pPaM->GetNode().GetTextNode());
-            m_xSFlyPara->pFlyFormat = m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
-                    m_pPaM->GetPoint(), &aFlySet);
-            OSL_ENSURE(m_xSFlyPara->pFlyFormat->GetAnchor().GetAnchorId() ==
+            m_xSFlyPara->SetFlyFormat(m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
+                                                            m_pPaM->GetPoint(), &aFlySet));
+            OSL_ENSURE(m_xSFlyPara->GetFlyFormat()->GetAnchor().GetAnchorId() ==
                     WW8SwFlyPara::eAnchor, "Not the anchor type requested!");
         }
 
-        if (m_xSFlyPara->pFlyFormat)
+        if (SwFlyFrameFormat* pFlyFormat = m_xSFlyPara->GetFlyFormat())
         {
             if (!m_pDrawModel)
                 GraphicCtor();
 
-            SdrObject* pOurNewObject = CreateContactObject(m_xSFlyPara->pFlyFormat);
+            SdrObject* pOurNewObject = CreateContactObject(pFlyFormat);
             m_xWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
-        if (RndStdIds::FLY_AS_CHAR != WW8SwFlyPara::eAnchor && m_xSFlyPara->pFlyFormat)
+        if (RndStdIds::FLY_AS_CHAR != WW8SwFlyPara::eAnchor && m_xSFlyPara->GetFlyFormat())
         {
-            m_xAnchorStck->AddAnchor(*m_pPaM->GetPoint(), m_xSFlyPara->pFlyFormat);
+            m_xAnchorStck->AddAnchor(*m_pPaM->GetPoint(), m_xSFlyPara->GetFlyFormat());
         }
 
         // remember Pos in body text
@@ -2513,8 +2527,8 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         m_xSFlyPara->xOldAnchorStck = std::move(m_xAnchorStck);
         m_xAnchorStck.reset(new SwWW8FltAnchorStack(m_rDoc, m_nFieldFlags));
 
-        if (m_xSFlyPara->pFlyFormat)
-            MoveInsideFly(m_xSFlyPara->pFlyFormat);
+        if (SwFlyFrameFormat* pFlyFormat = m_xSFlyPara->GetFlyFormat())
+            MoveInsideFly(pFlyFormat);
 
         // 1) ReadText() is not called recursively because the length of
         //    the Apo is unknown at that  time, and ReadText() needs it.
@@ -2653,7 +2667,7 @@ void SwWW8ImplReader::StopApo()
         SwNodeIndex aPref(m_pPaM->GetPoint()->nNode, -1);
 
         SwTwips nNewWidth =
-            MoveOutsideFly(m_xSFlyPara->pFlyFormat, *m_xSFlyPara->xMainTextPos->GetPoint());
+            MoveOutsideFly(m_xSFlyPara->GetFlyFormat(), *m_xSFlyPara->xMainTextPos->GetPoint());
         if (nNewWidth)
             m_xSFlyPara->BoxUpWidth(nNewWidth);
 
@@ -2661,7 +2675,7 @@ void SwWW8ImplReader::StopApo()
 
         SwTextNode* pNd = aPref.GetNode().GetTextNode();
         SwTextNode* pJoinNext = nullptr;
-        if (pNd && m_xSFlyPara->pFlyFormat)
+        if (pNd && m_xSFlyPara->GetFlyFormat())
         {
             /*
             #i582#
@@ -2693,8 +2707,8 @@ void SwWW8ImplReader::StopApo()
             pJoinNext = pNd;
         }
 
-        if (m_xSFlyPara->pFlyFormat)
-            m_xSFlyPara->pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
+        if (SwFlyFrameFormat* pFlyFormat = m_xSFlyPara->GetFlyFormat())
+            pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStack();
         if (pJoinNext)
@@ -2706,11 +2720,11 @@ void SwWW8ImplReader::StopApo()
         // function, the extension of the SW-fly has to be set
         // manually as the SW fly has no auto function to adjust the
         // frame´s size.
-        if (m_xSFlyPara->nNewNetWidth > MINFLY && m_xSFlyPara->pFlyFormat)    // BoxUpWidth ?
+        if (m_xSFlyPara->nNewNetWidth > MINFLY && m_xSFlyPara->GetFlyFormat())    // BoxUpWidth ?
         {
             tools::Long nW = m_xSFlyPara->nNewNetWidth;
             nW += m_xSFlyPara->nWidth - m_xSFlyPara->nNetWidth;   // border for it
-            m_xSFlyPara->pFlyFormat->SetFormatAttr(
+            m_xSFlyPara->GetFlyFormat()->SetFormatAttr(
                 SwFormatFrameSize(m_xSFlyPara->eHeightFix, nW, m_xSFlyPara->nHeight));
         }
         /*
@@ -2721,10 +2735,10 @@ void SwWW8ImplReader::StopApo()
         #i27204# Added AutoWidth setting. Left the old CalculateFlySize in place
         so that if the user unselects autowidth, the width doesn't max out
         */
-        else if (!m_xWFlyPara->nSp28 && m_xSFlyPara->pFlyFormat)
+        else if (!m_xWFlyPara->nSp28 && m_xSFlyPara->GetFlyFormat())
         {
             using namespace sw::util;
-            SfxItemSet aFlySet( m_xSFlyPara->pFlyFormat->GetAttrSet() );
+            SfxItemSet aFlySet( m_xSFlyPara->GetFlyFormat()->GetAttrSet() );
 
             SwFormatFrameSize aSize(ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE));
 
@@ -2741,7 +2755,7 @@ void SwWW8ImplReader::StopApo()
             aSize.SetWidth(nNewWidth);
             aSize.SetWidthSizeType(SwFrameSize::Variable);
 
-            m_xSFlyPara->pFlyFormat->SetFormatAttr(aSize);
+            m_xSFlyPara->GetFlyFormat()->SetFormatAttr(aSize);
         }
 
         m_xSFlyPara->xMainTextPos.reset();
@@ -2751,8 +2765,8 @@ void SwWW8ImplReader::StopApo()
     }
 
     //#i8062#
-    if (m_xSFlyPara && m_xSFlyPara->pFlyFormat)
-        m_xFormatOfJustInsertedApo.reset(new FrameDeleteWatch(m_xSFlyPara->pFlyFormat));
+    if (m_xSFlyPara && m_xSFlyPara->GetFlyFormat())
+        m_xFormatOfJustInsertedApo.reset(new FrameDeleteWatch(m_xSFlyPara->GetFlyFormat()));
 
     m_xSFlyPara.reset();
     m_xWFlyPara.reset();

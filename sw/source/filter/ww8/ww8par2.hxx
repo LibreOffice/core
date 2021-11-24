@@ -44,8 +44,9 @@ private:
 
 struct WW8SwFlyPara
 {
-    SwFlyFrameFormat* pFlyFormat;
-
+private:
+    std::unique_ptr<FrameDeleteWatch> m_xFlyFormat;
+public:
                 // part 1: directly derived Sw attributes
     sal_Int16 nXPos, nYPos;         // Position
     sal_Int16 nLeMgn, nRiMgn;       // borders
@@ -81,6 +82,9 @@ struct WW8SwFlyPara
                   const sal_Int32 nIniFlyDy );
 
     void BoxUpWidth( tools::Long nWidth );
+    SwFlyFrameFormat* GetFlyFormat() const;
+    void SetFlyFormat(SwFlyFrameFormat* pNewFlyFormat);
+
     std::unique_ptr<SwWW8FltAnchorStack> xOldAnchorStck;
 };
 
