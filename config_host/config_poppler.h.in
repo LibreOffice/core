@@ -7,6 +7,4 @@ Settings for poppler header file detection
 
 #define ENABLE_PDFIMPORT 0
 
-#define HAVE_POPPLER_VERSION_H 0
-
 #endif
