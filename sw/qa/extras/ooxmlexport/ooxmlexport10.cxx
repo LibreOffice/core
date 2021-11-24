@@ -778,6 +778,20 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80555, "fdo80555.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(247), xShape->getPosition().Y);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104418, "tdf104418.odt")
+{
+    // Problem was that <w:hideMark> cell property was ignored.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 750
+    // - Actual  : 1499
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(750) , getProperty<sal_Int64>(xTableRows->getByIndex(0), "Height"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testHidemark, "hidemark.docx")
 {
     // Problem was that <w:hideMark> cell property was ignored.
