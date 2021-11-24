@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtAlias)
     xmlDocUniquePtr pXmlDoc = parseExport();
 
     // <w:alias> was completely missing.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFooterBodyDistance)
@@ -249,7 +249,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO83044)
     loadAndSave("fdo83044.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:text", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:text", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo83428, "fdo83428.docx")

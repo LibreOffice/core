@@ -1306,6 +1306,7 @@ std::unique_ptr<SwField> SwInputField::Copy() const
 
     pField->SetHelp( maHelp );
     pField->SetToolTip( maToolTip );
+    pField->maGrabBag = maGrabBag;
 
     pField->SetAutomaticLanguage(IsAutomaticLanguage());
     return std::unique_ptr<SwField>(pField.release());
@@ -1352,6 +1353,9 @@ bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR4:
         rAny <<= maToolTip;
         break;
+    case FIELD_PROP_GRABBAG:
+        rAny <<= maGrabBag;
+        break;
     default:
         assert(false);
     }
@@ -1373,6 +1377,9 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR4:
         rAny >>= maToolTip;
+        break;
+    case FIELD_PROP_GRABBAG:
+        rAny >>= maGrabBag;
         break;
     default:
         assert(false);

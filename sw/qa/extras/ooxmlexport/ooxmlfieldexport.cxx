@@ -456,7 +456,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSdt)
     // The problem was that the SDT was around the run only, not the whole paragraph.
     xmlDocUniquePtr pXmlDoc = parseExport();
     // The path to w:sdt contained a w:p.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:sdt");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:sdt");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
@@ -598,8 +598,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtCompanyMultipara)
 {
     loadAndReload("sdt-company-multipara.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    // This was 3, but multiple paragraphs inside "Company" SDT is now allowed.
-    assertXPath(pXmlDoc, "//w:sdtContent/w:p", 1);
+    // Here is just imple text node, so there should be either one or zero paragraphs
+    // (in this case sdt element is inside paragraph)
+    assertXPath(pXmlDoc, "//w:sdtContent/w:p", 0);
+    assertXPath(pXmlDoc, "//w:sdtContent/w:r", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
