@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39892e01_d0fc680c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-24T20:28:30Z",
+      "side": 1,
+      "message": "Jenkins ok + no more issues to deal with, let\u0027s push this one then.",
+      "revId": "59a561aeabe08e8a43d70e7e07a881d8d64bf905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
