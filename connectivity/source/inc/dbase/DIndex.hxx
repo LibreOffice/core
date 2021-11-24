@@ -23,7 +23,7 @@
 #include <dbase/DTable.hxx>
 #include <dbase/dindexnode.hxx>
 
-#define dBASE_III_GROUP "dBase III"
+inline constexpr OStringLiteral dBASE_III_GROUP = "dBase III";
 
 namespace connectivity::dbase
     {
