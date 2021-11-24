@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6593aef1_619e6dca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-24T08:18:57Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! Note: I was able to check it only in LibreOffice, because MSO 2016 for desktop and MSO 365 for web don\u0027t support editing password.",
+      "revId": "7caea0f80b9549f431b22aa5b82a8f77f12faa08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
