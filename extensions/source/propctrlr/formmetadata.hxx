@@ -43,7 +43,7 @@ namespace pcr
         // IPropertyInfoService
         virtual sal_Int32                      getPropertyId(const OUString& _rName) const override;
         virtual OUString                       getPropertyTranslation(sal_Int32 _nId) const override;
-        virtual OString                        getPropertyHelpId(sal_Int32 _nId) const override;
+        virtual OUString                       getPropertyHelpId(sal_Int32 _nId) const override;
         virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const override;
         virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const override;
         virtual std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const override;

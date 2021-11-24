@@ -44,14 +44,13 @@ namespace pcr
     }
 
 
-    OUString HelpIdUrl::getHelpURL( std::string_view sHelpId )
+    OUString HelpIdUrl::getHelpURL( const OUString & sHelpId )
     {
         OUStringBuffer aBuffer;
-        OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
-        INetURLObject aHID( aTmp );
+        INetURLObject aHID( sHelpId );
         if ( aHID.GetProtocol() == INetProtocol::NotValid )
             aBuffer.append( INET_HID_SCHEME );
-        aBuffer.append( aTmp );
+        aBuffer.append( sHelpId );
         return aBuffer.makeStringAndClear();
     }
 

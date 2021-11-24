@@ -40,7 +40,7 @@ namespace pcr
     {
         OUString        sName;
         OUString        sTranslation;
-        OString         sHelpId;
+        OUString         sHelpId;
         sal_Int32       nId;
         sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
@@ -50,13 +50,13 @@ namespace pcr
                         sal_Int32                   _nId,
                         const OUString&             aTranslation,
                         sal_uInt16                  nPosId,
-                        const OString&,
+                        const OUString&,
                         sal_uInt32                  _nUIFlags);
     };
 
 
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
-                                   const OUString& aString, sal_uInt16 nP, const OString& sHid, sal_uInt32 _nUIFlags)
+                                   const OUString& aString, sal_uInt16 nP, const OUString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
        ,sHelpId(sHid)
@@ -387,10 +387,10 @@ namespace pcr
         return pInfo ? pInfo->sTranslation : OUString();
     }
 
-    OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
+    OUString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return pInfo ? pInfo->sHelpId : OString();
+        return pInfo ? pInfo->sHelpId : OUString();
     }
 
     sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const

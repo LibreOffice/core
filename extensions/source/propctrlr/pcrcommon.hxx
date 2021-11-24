@@ -68,7 +68,7 @@ namespace pcr
     {
     public:
         static OString getHelpId( const OUString& _rHelpURL );
-        static OUString getHelpURL( std::string_view );
+        static OUString getHelpURL( const OUString& );
     };
 
 
