@@ -19,21 +19,23 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 namespace framework{
 
 //  used servicenames by framework
 
-#define SERVICENAME_FILTERFACTORY                               "com.sun.star.document.FilterFactory"
-#define SERVICENAME_CFGUPDATEACCESS                             "com.sun.star.configuration.ConfigurationUpdateAccess"   // provides read/write access to the configuration
-#define SERVICENAME_CFGREADACCESS                               "com.sun.star.configuration.ConfigurationAccess"         // provides readonly access to the configuration
-#define SERVICENAME_JOB                                         "com.sun.star.task.Job"
-#define SERVICENAME_PROTOCOLHANDLER                             "com.sun.star.frame.ProtocolHandler"
-#define SERVICENAME_POPUPMENUCONTROLLER                         "com.sun.star.frame.PopupMenuController"
+inline constexpr OUStringLiteral SERVICENAME_FILTERFACTORY = u"com.sun.star.document.FilterFactory";
+inline constexpr OUStringLiteral SERVICENAME_CFGUPDATEACCESS = u"com.sun.star.configuration.ConfigurationUpdateAccess"; // provides read/write access to the configuration
+inline constexpr OUStringLiteral SERVICENAME_CFGREADACCESS = u"com.sun.star.configuration.ConfigurationAccess";  // provides readonly access to the configuration
+inline constexpr OUStringLiteral SERVICENAME_JOB = u"com.sun.star.task.Job";
+inline constexpr OUStringLiteral SERVICENAME_PROTOCOLHANDLER = u"com.sun.star.frame.ProtocolHandler";
+inline constexpr OUStringLiteral SERVICENAME_POPUPMENUCONTROLLER = u"com.sun.star.frame.PopupMenuController";
 
 //  used implementationnames by framework
 
 #define IMPLEMENTATIONNAME_QUICKLAUNCHER                        "com.sun.star.comp.desktop.QuickstartWrapper"
-#define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      "com.sun.star.comp.framework.TaskCreator"
+inline constexpr OUStringLiteral IMPLEMENTATIONNAME_FWK_TASKCREATOR = u"com.sun.star.comp.framework.TaskCreator";
 
 }       //  namespace framework
 

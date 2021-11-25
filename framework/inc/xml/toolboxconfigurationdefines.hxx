@@ -20,7 +20,7 @@
 
 #define XMLNS_TOOLBAR               "http://openoffice.org/2001/toolbar"
 #define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
-#define XMLNS_TOOLBAR_PREFIX        "toolbar:"
+inline constexpr OUStringLiteral XMLNS_TOOLBAR_PREFIX = u"toolbar:";
 #define XMLNS_XLINK_PREFIX          "xlink:"
 
 #define XMLNS_FILTER_SEPARATOR      "^"
@@ -38,28 +38,28 @@
 #define ATTRIBUTE_VISIBLE           "visible"
 #define ATTRIBUTE_ITEMSTYLE         "style"
 
-#define ELEMENT_NS_TOOLBAR          "toolbar:toolbar"
-#define ELEMENT_NS_TOOLBARITEM      "toolbar:toolbaritem"
-#define ELEMENT_NS_TOOLBARSPACE     "toolbar:toolbarspace"
-#define ELEMENT_NS_TOOLBARBREAK     "toolbar:toolbarbreak"
-#define ELEMENT_NS_TOOLBARSEPARATOR "toolbar:toolbarseparator"
+inline constexpr OUStringLiteral ELEMENT_NS_TOOLBAR = u"toolbar:toolbar";
+inline constexpr OUStringLiteral ELEMENT_NS_TOOLBARITEM = u"toolbar:toolbaritem";
+inline constexpr OUStringLiteral ELEMENT_NS_TOOLBARSPACE = u"toolbar:toolbarspace";
+inline constexpr OUStringLiteral ELEMENT_NS_TOOLBARBREAK = u"toolbar:toolbarbreak";
+inline constexpr OUStringLiteral ELEMENT_NS_TOOLBARSEPARATOR = u"toolbar:toolbarseparator";
 
-#define ATTRIBUTE_XMLNS_TOOLBAR     "xmlns:toolbar"
-#define ATTRIBUTE_XMLNS_XLINK       "xmlns:xlink"
+inline constexpr OUStringLiteral ATTRIBUTE_XMLNS_TOOLBAR = u"xmlns:toolbar";
+inline constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 
-#define ATTRIBUTE_TYPE_CDATA        "CDATA"
+inline constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
 
 #define ATTRIBUTE_BOOLEAN_TRUE      "true"
-#define ATTRIBUTE_BOOLEAN_FALSE     "false"
+inline constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_FALSE  = u"false";
 
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_RADIO = u"radio";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTO = u"auto";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_LEFT = u"left";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTOSIZE = u"autosize";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWN = u"dropdown";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_REPEAT = u"repeat";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_TEXT = u"text";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY = u"dropdownonly";
-constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_IMAGE = u"image";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_RADIO = u"radio";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTO = u"auto";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_LEFT = u"left";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_AUTOSIZE = u"autosize";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWN = u"dropdown";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_REPEAT = u"repeat";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_TEXT = u"text";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY = u"dropdownonly";
+inline constexpr OUStringLiteral ATTRIBUTE_ITEMSTYLE_IMAGE = u"image";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

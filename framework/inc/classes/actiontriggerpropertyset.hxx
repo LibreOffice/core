@@ -28,8 +28,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
-#define SERVICENAME_ACTIONTRIGGER "com.sun.star.ui.ActionTrigger"
-#define IMPLEMENTATIONNAME_ACTIONTRIGGER "com.sun.star.comp.ui.ActionTrigger"
+inline constexpr OUStringLiteral SERVICENAME_ACTIONTRIGGER = u"com.sun.star.ui.ActionTrigger";
+inline constexpr OUStringLiteral IMPLEMENTATIONNAME_ACTIONTRIGGER = u"com.sun.star.comp.ui.ActionTrigger";
 
 namespace framework
 {

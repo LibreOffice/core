@@ -25,12 +25,12 @@ namespace framework{
 
 /** properties for "Frame" class */
 
-#define FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER   "DispatchRecorderSupplier"
-#define FRAME_PROPNAME_ASCII_ISHIDDEN                   "IsHidden"
-#define FRAME_PROPNAME_ASCII_LAYOUTMANAGER              "LayoutManager"
-#define FRAME_PROPNAME_ASCII_TITLE                      "Title"
-#define FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION      "IndicatorInterception"
-#define FRAME_PROPNAME_ASCII_URL "URL"
+inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER = u"DispatchRecorderSupplier";
+inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_ISHIDDEN = u"IsHidden";
+inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_LAYOUTMANAGER = u"LayoutManager";
+inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_TITLE = u"Title";
+inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION = u"IndicatorInterception";
+inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_URL = u"URL";
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
@@ -74,12 +74,12 @@ namespace framework{
 
 /** properties for "LayoutManager" class */
 
-#define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER          "MenuBarCloser"
-#define LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS      "AutomaticToolbars"
-#define LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY      "RefreshContextToolbarVisibility"
-#define LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI          "HideCurrentUI"
-#define LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT              "LockCount"
-#define LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE  "PreserveContentSize"
+inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER = u"MenuBarCloser";
+inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS = u"AutomaticToolbars";
+inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY = u"RefreshContextToolbarVisibility";
+inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI = u"HideCurrentUI";
+inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT = u"LockCount";
+inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE = u"PreserveContentSize";
 
 #define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER
 
@@ -91,18 +91,18 @@ namespace framework{
 #define LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE  5
 
 /** properties for "UICommandDescription" class */
-#define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST        "private:resource/image/commandimagelist"
-#define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST  "private:resource/image/commandrotateimagelist"
-#define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST  "private:resource/image/commandmirrorimagelist"
+inline constexpr OUStringLiteral UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST = u"private:resource/image/commandimagelist";
+inline constexpr OUStringLiteral UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST = u"private:resource/image/commandrotateimagelist";
+inline constexpr OUStringLiteral UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST = u"private:resource/image/commandmirrorimagelist";
 
 
 #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON            8
 
 /** properties for "AutoRecovery" class */
 
-#define AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA "ExistsRecoveryData"
-#define AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA  "ExistsSessionData"
-#define AUTORECOVERY_PROPNAME_ASCII_CRASHED             "Crashed"
+inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA = u"ExistsRecoveryData";
+inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA = u"ExistsSessionData";
+inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_CRASHED = u"Crashed";
 
 #define AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA       AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA
 #define AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA        AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA
@@ -116,12 +116,12 @@ namespace framework{
 
 /** properties for Filter config */
 
-#define FILTER_PROPNAME_ASCII_DOCUMENTSERVICE           "DocumentService"
+inline constexpr OUStringLiteral FILTER_PROPNAME_ASCII_DOCUMENTSERVICE = u"DocumentService";
 
 /** properties for office module config (Setup.xcu) */
 
-#define OFFICEFACTORY_PROPNAME_ASCII_UINAME             "ooSetupFactoryUIName"
-#define OFFICEFACTORY_PROPNAME_ASCII_ICON               "ooSetupFactoryIcon"
+inline constexpr OUStringLiteral OFFICEFACTORY_PROPNAME_ASCII_UINAME = u"ooSetupFactoryUIName";
+inline constexpr OUStringLiteral OFFICEFACTORY_PROPNAME_ASCII_ICON = u"ooSetupFactoryIcon";
 
 /** properties for tab window (old) */
 #define TABWINDOW_PROPNAME_ASCII_PARENTWINDOW           "ParentWindow"
