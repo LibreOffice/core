@@ -82,6 +82,7 @@
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -101,6 +102,7 @@
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 using namespace ::com::sun::star;
 
@@ -186,6 +188,7 @@ public:
     void testTdf93124();
     void testTdf99729();
     void testTdf89927();
+    void testTdf145873();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -253,6 +256,7 @@ public:
     CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
+    CPPUNIT_TEST(testTdf145873);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1936,6 +1940,35 @@ void SdImportTest::testTdf89927()
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, nCharColor );
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf145873()
+{
+    uno::Reference<lang::XComponent> xComponent
+            = loadFromDesktop(m_directories.getURLFromSrc(u"/sd/qa/unit/data/ppt/tdf145873.ppt"));
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xComponent, uno::UNO_QUERY );
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("MS PowerPoint 97");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent = loadFromDesktop(aTempFile.GetURL());
+
+    // Check if the bitmap shape was lost.
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDoc->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: com.sun.star.drawing.GraphicObjectShape
+    // - Actual  : com.sun.star.drawing.CustomShape
+    // i.e. the custom shape geometry was kept, but the actual bitmap was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GraphicObjectShape"),
+                         xShape->getShapeType());
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
