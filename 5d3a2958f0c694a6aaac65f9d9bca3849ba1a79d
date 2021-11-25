@@ -105,6 +105,24 @@
       "parentUuid": "b12e1e80_2826a43f",
       "revId": "5d3a2958f0c694a6aaac65f9d9bca3849ba1a79d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41b6be39_43b4065b",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-25T12:14:05Z",
+      "side": 1,
+      "message": "Done. The test should work fine now.\nI\u0027ve put the test in SVGExportTests.cxx. The PPTX file is opened, exported to SVG, and then checked if there are enough \u003cglyph\u003e tags there.",
+      "parentUuid": "b461dead_8d593b03",
+      "revId": "5d3a2958f0c694a6aaac65f9d9bca3849ba1a79d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
