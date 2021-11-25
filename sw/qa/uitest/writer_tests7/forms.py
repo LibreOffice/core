@@ -73,6 +73,8 @@ class Forms(UITestCase):
                 select_by_text(xAction, "Open document/web page")
 
                 self.assertEqual("Open document/web page", get_state_as_dict(xAction)['SelectEntryText'])
+
+                self.ui_test.wait_until_property_is_updated(xURL, "Enabled", "true")
                 self.assertEqual("true", get_state_as_dict(xURL)['Enabled'])
 
                 xURL.executeAction("TYPE", mkPropertyValues({"TEXT": "1"}))
