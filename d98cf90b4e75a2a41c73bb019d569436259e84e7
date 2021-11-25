@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1d3ddaa_7aa0cf88",
+        "filename": "i18npool/inc/breakiterator_cjk.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1003476
+      },
+      "writtenOn": "2021-11-25T13:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f16d5c37_3762e1c5",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00587163_a4d1ba3e",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-18T17:47:10Z",
       "side": 1,
       "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "395d3283_8b2475d8",
+        "filename": "i18npool/inc/characterclassificationImpl.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1003476
+      },
+      "writtenOn": "2021-11-25T13:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00587163_a4d1ba3e",
       "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4ab2ef0_091733f7",
+        "filename": "i18npool/inc/collator_unicode.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1003476
+      },
+      "writtenOn": "2021-11-25T13:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aadd2d0a_b4edc8c3",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "741f1427_9a336bd2",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-11-18T17:47:10Z",
       "side": 1,
       "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9a1e9a6_8c663d84",
+        "filename": "i18npool/inc/transliteration_Ignore.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1003476
+      },
+      "writtenOn": "2021-11-25T13:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "741f1427_9a336bd2",
       "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -86,6 +158,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "447be466_7f7badb6",
+        "filename": "i18npool/inc/transliteration_caseignore.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1003476
+      },
+      "writtenOn": "2021-11-25T13:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f24ac50d_067ae047",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd7139e7_4aea3fd9",
@@ -99,6 +189,24 @@
       "writtenOn": "2021-11-18T17:47:10Z",
       "side": 1,
       "message": "Don\u0027t remove the newline after the vim settings line.",
+      "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bea3507f_cf3a3119",
+        "filename": "i18npool/inc/transliteration_commonclass.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1003476
+      },
+      "writtenOn": "2021-11-25T13:04:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd7139e7_4aea3fd9",
       "revId": "d98cf90b4e75a2a41c73bb019d569436259e84e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
