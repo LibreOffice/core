@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf8966b0_3102c7ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-25T07:53:24Z",
+      "side": 1,
+      "message": "May i ask for a little help? This is in a comment in the code. Thank you!\n(I have not modified the ui part yet, and i do not want to waste the time.)",
+      "revId": "4cc502f71a3fba40b01db8c9771b67a7f5e86259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13cdb44f_f74fb455",
+        "filename": "sc/qa/uitest/calc_tests8/tdf144940.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-25T07:53:24Z",
+      "side": 1,
+      "message": "Is there any idea why the checkbox on the 5th tab namely \"checkSameFP\" cannot be activated? This is the only problem with the test, after this it can be merged. Any idea is welcome! Thank you!\n(Maybe the problem can be that, the header and footer uses the same ui-file and class, and the checkbox id is the same. But without the py-test it works fine)",
+      "range": {
+        "startLine": 38,
+        "startChar": 20,
+        "endLine": 39,
+        "endChar": 108
+      },
+      "revId": "4cc502f71a3fba40b01db8c9771b67a7f5e86259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
