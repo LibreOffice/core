@@ -1400,7 +1400,8 @@ void ScCheckListMenuControl::setPopupEndAction(Action* p)
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PopupModeEndHdl, weld::Popover&, void)
 {
-    clearSelectedMenuItem();
+    if (mxMenu)
+        clearSelectedMenuItem();
     if (mxPopupEndAction)
         mxPopupEndAction->execute();
 
