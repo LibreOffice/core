@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c7ad4c_6ca81259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-25T09:30:02Z",
+      "side": 1,
+      "message": "sample file is just too big. As far as I remember, the limitation is 500 kb, were you able to commit it without any warning ?",
+      "revId": "5d3a2958f0c694a6aaac65f9d9bca3849ba1a79d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
