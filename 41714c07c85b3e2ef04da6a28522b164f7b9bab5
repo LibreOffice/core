@@ -16,6 +16,24 @@
       "message": "20s for me if I deselect the \"#N/A\" in and click OK in column A of the 1st attachment of tdf#136838.\nThe same operation takes 13s if I do without *this* change but with change 125794. Is there a \"regression\" between these two?",
       "revId": "41714c07c85b3e2ef04da6a28522b164f7b9bab5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64a314e5_d7b7f47a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-25T13:26:16Z",
+      "side": 1,
+      "message": "It\u0027s almost instant for me, so I don\u0027t know.",
+      "parentUuid": "8cb61793_462cb3fc",
+      "revId": "41714c07c85b3e2ef04da6a28522b164f7b9bab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
