@@ -33,6 +33,24 @@
       "message": "Record type 0 (META_EOF \u003d 0x0000) indicates the end of the WMF metafile. \nPlease add W_META_EOF record type enumeration to avoid magic numbers.",
       "revId": "8428becc384ee90d3c3ec157c7dda323eff0aed6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74697323_64ca59da",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-25T14:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bd61644_2b0db599",
+      "revId": "8428becc384ee90d3c3ec157c7dda323eff0aed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
