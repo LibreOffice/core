@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46e13473_28d93b16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-25T15:16:40Z",
+      "side": 1,
+      "message": "Note: this still not tested with address sanitizer, but it will be on tomorrow.\nThis is a fix for eabcfb3f18a6944d9ad89cecd3eb3ca7a2259cf3 124657: tdf#129183 sw: textboxes in group shapes - part 3 | https://gerrit.libreoffice.org/c/core/+/124657\nHopefully it will be fine.",
+      "revId": "488ea3ac6008c09d12bd5579b3338452658fed11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
