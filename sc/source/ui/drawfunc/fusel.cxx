@@ -31,6 +31,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <comphelper/lok.hxx>
 
 #include <fusel.hxx>
 #include <sc.hrc>
@@ -83,6 +84,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         aMDPos = *aLogicPosition;
     else
         aMDPos = pWindow->PixelToLogic(rMEvt.GetPosPixel());
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScViewData& rViewData = rViewShell.GetViewData();
+        ScDocument& rDocument = rViewData.GetDocument();
+        if (rDocument.IsNegativePage(rViewData.GetTabNo()))
+            aMDPos.setX(-aMDPos.X());
+    }
 
     if ( rMEvt.IsLeft() )
     {
@@ -349,6 +358,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : nullptr );
     ::std::vector< OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
+
+    if (comphelper::LibreOfficeKit::isActive() && rDocument.IsNegativePage(rViewData.GetTabNo()))
+        aPnt.setX(-aPnt.X());
 
     if (pView && rMEvt.IsLeft())
     {
