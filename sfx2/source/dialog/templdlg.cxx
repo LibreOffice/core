@@ -909,11 +909,8 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
 
     bWaterDisabled = !IsSafeForWaterCan();
 
-    if (!bIsCallback)
-    {
-        // tdf#134598 call UpdateStyleDependents to update watercan
-        UpdateStyleDependents();
-    }
+    // tdf#134598 call UpdateStyleDependents to update watercan
+    UpdateStyleDependents();
 }
 
 OUString SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
@@ -1956,9 +1953,6 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, FmtSelectHdl, weld::TreeView&, rListBox,
     std::unique_ptr<weld::TreeIter> xHdlEntry = rListBox.make_iterator();
     if (!rListBox.get_cursor(xHdlEntry.get()))
         return;
-
-    if (rListBox.is_selected(*xHdlEntry))
-        UpdateStyleDependents();
 
     SelectStyle(rListBox.get_text(*xHdlEntry), true);
 }
