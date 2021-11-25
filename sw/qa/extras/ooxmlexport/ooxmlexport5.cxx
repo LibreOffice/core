@@ -234,8 +234,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77890 )
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:br", "type", "page");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNumberedList,"NumberedList.docx")
+CPPUNIT_TEST_FIXTURE(Test, testNumberedList)
 {
+    loadAndReload("NumberedList.docx");
     //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:pStyle", "val", "NumberedList1");
@@ -471,8 +472,9 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78420)
 }
 
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageBreakInFirstPara,"fdo77727.docx")
+CPPUNIT_TEST_FIXTURE(Test, testPageBreakInFirstPara)
 {
+    loadAndReload("fdo77727.docx");
     /* Break to next page was not exported if it is in first paragraph of the section.
      * Now after fix , LO writes Next Page Break and also preserves <w:br> tag.
      */
@@ -490,8 +492,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78284)
                         "image/png");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78384,"fdo78384.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFDO78384)
 {
+    loadAndReload("fdo78384.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
 }
@@ -621,8 +624,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFo
     CPPUNIT_ASSERT( !getStyles("PageStyles")->hasByName("Converted1") );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79668,"fdo79668.docx")
+CPPUNIT_TEST_FIXTURE(Test, testfdo79668)
 {
+    loadAndReload("fdo79668.docx");
     // fdo#79668: Document was Crashing on DebugUtil build while Saving
     // because of repeated attribute value in same element.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -632,8 +636,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79668,"fdo79668.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pPrChange/w:pPr/w:shd", "fill", "FFFFFF" );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78907,"fdo78907.docx")
+CPPUNIT_TEST_FIXTURE(Test, testfdo78907)
 {
+    loadAndReload("fdo78907.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page" );
 
@@ -641,8 +646,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78907,"fdo78907.docx")
     assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf118702,"tdf118702.odt")
+CPPUNIT_TEST_FIXTURE(Test, tdf118702)
 {
+    loadAndReload("tdf118702.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:type", "val", "nextPage" );
@@ -904,8 +910,9 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79969_xlsm)
         "Excel.SheetMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80522,"fdo80522.docx")
+CPPUNIT_TEST_FIXTURE(Test, testfdo80522)
 {
+    loadAndReload("fdo80522.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
 
     assertXPath(pXmlDoc,
@@ -927,8 +934,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80522,"fdo80522.docx")
         "Word.DocumentMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
+CPPUNIT_TEST_FIXTURE(Test, testfdo80523_pptm)
 {
+    loadAndReload("fdo80523_pptm.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
 
     assertXPath(pXmlDoc,
@@ -950,8 +958,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
         "PowerPoint.ShowMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
+CPPUNIT_TEST_FIXTURE(Test, testfdo80523_sldm)
 {
+    loadAndReload("fdo80523_sldm.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
 
     assertXPath(pXmlDoc,

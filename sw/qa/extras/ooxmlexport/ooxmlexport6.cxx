@@ -124,8 +124,9 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 }
 
 // testDmlTextshapeB was only made export-only because as an import-export test it failed for an unknown reason
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
+CPPUNIT_TEST_FIXTURE(Test, testDmlTextshapeB)
 {
+    loadAndReload("dml-textshapeB.docx");
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
@@ -888,8 +889,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69616)
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignForShape,"Shape.docx")
+CPPUNIT_TEST_FIXTURE(Test, testAlignForShape)
 {
+    loadAndReload("Shape.docx");
     //fdo73545:Shape Horizontal and vertical orientation is wrong
     //The wp:align tag is missing after roundtrip
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -962,8 +964,9 @@ CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType_VML)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", "dash");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74110,"fdo74110.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo74110)
 {
+    loadAndReload("fdo74110.docx");
     /*
     The File contains word art which is being exported as shape and the mapping is defaulted to
     shape type rect since the actual shape type(s) is/are commented out for some reason.
@@ -976,8 +979,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74110,"fdo74110.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]",0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOuterShdw,"testOuterShdw.docx")
+CPPUNIT_TEST_FIXTURE(Test, testOuterShdw)
 {
+    loadAndReload("testOuterShdw.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "1041400");
 }

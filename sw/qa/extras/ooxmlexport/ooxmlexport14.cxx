@@ -1381,9 +1381,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108505)
         getProperty<OUString>(xText, "CharFontName"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginHasHeader,
-                         "tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginHasHeader)
 {
+    loadAndReload("tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx");
     // tdf#123324 The height was set relative to page print area top,
     // but this was handled relative to page height.
     // Note: page print area top = margin + header height.
@@ -1392,9 +1392,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginHasHead
     assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
-                         "tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromTopMarginNoHeader)
 {
+    loadAndReload("tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx");
     // tdf#123324 The height was set relative from top margin, but this was handled relative from page height.
     // Note: the MSO Word margin = LO margin + LO header height.
     // In this case the header does not exist, so MSO Word margin and LO Writer margin are the same.
@@ -1407,8 +1407,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginNoHeade
     assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf64531,"tdf64531.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf64531)
 {
+    loadAndReload("tdf64531.docx");
     xmlDocUniquePtr pXmlDoc= parseExport("word/document.xml");
     OString sPathToTabs= "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:pPr/w:tabs/";
     assertXPath(pXmlDoc, sPathToTabs+"w:tab[1]", "pos","720");

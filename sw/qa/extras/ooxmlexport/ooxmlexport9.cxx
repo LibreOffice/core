@@ -844,8 +844,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79329, "tdf79329.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xTables->getCount());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103982, "tdf103982.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf103982)
 {
+    loadAndReload("tdf103982.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
     // This was -260350, which is not a valid value for an unsigned type.

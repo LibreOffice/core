@@ -24,8 +24,9 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_GlowShadowReflection, "TextEffects_Glow_Shadow_Reflection.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_GlowShadowReflection)
 {
+    loadAndReload("TextEffects_Glow_Shadow_Reflection.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow", "rad").match("63500"));
@@ -91,8 +92,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_GlowShadowReflection, "Text
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "algn").match("bl"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_TextOutline, "TextEffects_TextOutline.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextOutline)
 {
+    loadAndReload("TextEffects_TextOutline.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Paragraph 1
@@ -146,8 +148,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_TextOutline, "TextEffects_T
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:bevel", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_TextFill, "TextEffects_TextFill.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextFill)
 {
+    loadAndReload("TextEffects_TextFill.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Paragraph 1 has no textFill
 
@@ -183,8 +186,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_TextFill, "TextEffects_Text
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:lin", "scaled", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing, "TextEffects_Props3d_Ligatures_NumForm_NumSpacing.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing)
 {
+    loadAndReload("TextEffects_Props3d_Ligatures_NumForm_NumSpacing.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Paragraph 1 - w14:props3d
@@ -228,8 +232,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_Props3d_Ligatures_NumForm_N
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numSpacing", "val", "proportional");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_StylisticSets_CntxtAlts, "TextEffects_StylisticSets_CntxtAlts.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_StylisticSets_CntxtAlts)
 {
+    loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Paragraph 1 - w14:stylisticSets
@@ -244,8 +249,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_StylisticSets_CntxtAlts, "T
 
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_McIgnorable, "TextEffects_StylisticSets_CntxtAlts.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_McIgnorable)
 {
+    loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14");
@@ -255,8 +261,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_McIgnorable, "TextEffects_StylisticSets
     assertXPath(pXmlStyles, "/w:styles", "Ignorable", "w14");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_CompatSettingsForW14, "TextEffects_StylisticSets_CntxtAlts.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_CompatSettingsForW14)
 {
+    loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
 
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting", 5);
@@ -282,8 +289,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_CompatSettingsForW14, "TextEffects_Styl
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "val", "1");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_Groupshapes, "TextEffects_Groupshapes.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Groupshapes)
 {
+    loadAndReload("TextEffects_Groupshapes.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OString sPathToWGP = "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp";
@@ -395,8 +403,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_Groupshapes, "TextEffects_G
     assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id", "1");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_InStyleXml, "TextEffects_InStyle.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_InStyleXml)
 {
+    loadAndReload("TextEffects_InStyle.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
 
     OString sPathToCharacterStyle = "/w:styles/w:style[3]";
@@ -622,8 +631,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_TextEffects_InStyleXml, "TextEffects_In
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_no_tag_if_no_fill, "tdf112103_tablebgnofill.docx")
+CPPUNIT_TEST_FIXTURE(Test, Test_no_tag_if_no_fill)
 {
+    loadAndReload("tdf112103_tablebgnofill.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:shd", 0);

@@ -24,8 +24,9 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSaveAsDotX, "sample.dotx")
+CPPUNIT_TEST_FIXTURE(Test, testSaveAsDotX)
 {
+    loadAndReload("sample.dotx");
     xmlDocUniquePtr pXmlDocCT = parseExport("[Content_Types].xml");
 
     // Ensure that document has correct content type
