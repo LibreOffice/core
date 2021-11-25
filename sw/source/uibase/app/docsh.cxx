@@ -1134,6 +1134,22 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 // OLE-Hdls
 IMPL_LINK( SwDocShell, Ole2ModifiedHdl, bool, bNewStatus, void )
 {
+    if (m_pWrtShell)
+    {
+        SwOLENode* pOLENode = nullptr;
+        if (!m_pWrtShell->IsTableMode())
+        {
+            pOLENode = m_pWrtShell->GetCursor()->GetNode().GetOLENode();
+        }
+        if (pOLENode)
+        {
+            if (pOLENode->GetOLEObj().IsProtected())
+            {
+                return;
+            }
+        }
+    }
+
     if( IsEnableSetModified() )
         SetModified( bNewStatus );
 }
