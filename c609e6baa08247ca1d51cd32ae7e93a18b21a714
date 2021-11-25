@@ -16,6 +16,24 @@
       "message": "The code looks good to me!  No idea why the Jenkins failed :-(",
       "revId": "c609e6baa08247ca1d51cd32ae7e93a18b21a714",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76eff2c7_2f66db97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002093
+      },
+      "writtenOn": "2021-11-25T13:43:25Z",
+      "side": 1,
+      "message": "The error message says that there is no subView method in rtl::OUString. I\u0027ll replace \u0027subView\u0027 with \u0027copy\u0027 and push a new patch.",
+      "parentUuid": "e06038e8_dfbb4e3b",
+      "revId": "c609e6baa08247ca1d51cd32ae7e93a18b21a714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
