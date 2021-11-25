@@ -2561,8 +2561,11 @@ SwFrameFormat::~SwFrameFormat()
     {
         // This format is the owner shape, so its time
         // to del the textbox node.
-        delete m_pOtherTextBoxFormat;
-        m_pOtherTextBoxFormat = nullptr;
+        if (m_pOtherTextBoxFormat)
+        {
+            delete m_pOtherTextBoxFormat;
+            m_pOtherTextBoxFormat = nullptr;
+        }
     }
 }
 
