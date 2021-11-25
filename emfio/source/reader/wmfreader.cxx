@@ -44,6 +44,7 @@ namespace
     // MS Windows defines
     enum WMFRecords
     {
+        W_META_EOF                  = 0x0000,
         W_META_SETBKCOLOR           = 0x0201,
         W_META_SETBKMODE            = 0x0102,
         W_META_SETMAPMODE           = 0x0103,
@@ -1572,7 +1573,7 @@ namespace emfio
                     if (
                          !mpInputStream->good() ||
                          (mnRecSize < 3) ||
-                         (mnRecSize == 3 && nFunction == 0)
+                         (mnRecSize == 3 && nFunction == W_META_EOF)
                        )
                     {
                         if( mpInputStream->eof() )
@@ -1689,7 +1690,7 @@ namespace emfio
                     bRet = false;
                     break;
                 }
-                else if ( nRSize==3 && nFunction==0 )
+                else if ( nFunction == W_META_EOF )
                 {
                     break;
                 }
