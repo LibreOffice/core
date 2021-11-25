@@ -137,9 +137,16 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
     uno::Reference < util::XModifiable > xMod( pObject->GetObject()->getComponent(), uno::UNO_QUERY );
     if ( nNewState == embed::EmbedStates::RUNNING )
     {
+        bool bProtected = false;
+        if (pObject->GetIsProtectedHdl().IsSet())
+        {
+            bProtected = pObject->GetIsProtectedHdl().Call(nullptr);
+        }
+
         // TODO/LATER: container must be set before!
         // When is this event created? Who sets the new container when it changed?
-        if( ( pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON ) && nOldState != embed::EmbedStates::LOADED && !pObject->IsChart() )
+        if ((pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON)
+            && nOldState != embed::EmbedStates::LOADED && !pObject->IsChart() && !bProtected)
             // get new replacement after deactivation
             pObject->UpdateReplacement();
 
@@ -240,6 +247,8 @@ struct EmbeddedObjectRef_Impl
     // #i104867#
     sal_uInt32                                  mnGraphicVersion;
     awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
+
+    Link<LinkParamNone*, bool> m_aIsProtectedHdl;
 
     EmbeddedObjectRef_Impl() :
         pContainer(nullptr),
@@ -394,6 +403,16 @@ void EmbeddedObjectRef::Lock( bool bLock )
 bool EmbeddedObjectRef::IsLocked() const
 {
     return mpImpl->bIsLocked;
+}
+
+void EmbeddedObjectRef::SetIsProtectedHdl(const Link<LinkParamNone*, bool>& rProtectedHdl)
+{
+    mpImpl->m_aIsProtectedHdl = rProtectedHdl;
+}
+
+Link<LinkParamNone*, bool> EmbeddedObjectRef::GetIsProtectedHdl() const
+{
+    return mpImpl->m_aIsProtectedHdl;
 }
 
 void EmbeddedObjectRef::GetReplacement( bool bUpdate )

@@ -44,6 +44,8 @@ public:
     bool IsCheckForOLEInCaption() const { return m_IsOldCheckForOLEInCaption; }
 
     virtual void FormatChanged() override;
+
+    bool IsProtected() const override;
 };
 
 #endif

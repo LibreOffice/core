@@ -57,6 +57,7 @@
 #include <libxml/xmlwriter.h>
 #include <sfx2/xmldump.hxx>
 #include <osl/diagnose.h>
+#include <flyfrm.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -906,6 +907,36 @@ bool SwOLEObj::IsOleRef() const
     return m_xOLERef.is();
 }
 
+IMPL_LINK_NOARG(SwOLEObj, IsProtectedHdl, LinkParamNone*, bool) { return IsProtected(); }
+
+bool SwOLEObj::IsProtected() const
+{
+    if (!m_pOLENode)
+    {
+        return false;
+    }
+
+    SwFrame* pFrame = m_pOLENode->getLayoutFrame(nullptr);
+    if (!pFrame)
+    {
+        return false;
+    }
+    SwFrame* pUpper = pFrame->GetUpper();
+    if (!pUpper || !pUpper->IsFlyFrame())
+    {
+        return false;
+    }
+
+    auto pFlyFrame = static_cast<SwFlyFrame*>(pUpper);
+    const SwFrame* pAnchor = pFlyFrame->GetAnchorFrame();
+    if (!pAnchor)
+    {
+        return false;
+    }
+
+    return pAnchor->IsProtected();
+}
+
 uno::Reference < embed::XEmbeddedObject > const & SwOLEObj::GetOleRef()
 {
     if( !m_xOLERef.is() )
@@ -939,6 +970,7 @@ uno::Reference < embed::XEmbeddedObject > const & SwOLEObj::GetOleRef()
         }
         if (xObj.is())
         {
+            m_xOLERef.SetIsProtectedHdl(LINK(this, SwOLEObj, IsProtectedHdl));
             m_xOLERef.Assign( xObj, m_xOLERef.GetViewAspect() );
             m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), m_aName );
             m_xListener = new SwOLEListener_Impl( this );
