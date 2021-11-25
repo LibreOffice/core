@@ -4831,8 +4831,6 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
         bDependencyComputed = true;
 
-        const static bool bHyperThreadingActive = cpuid::hasHyperThreading();
-
         // Then do the threaded calculation
 
         class Executor : public comphelper::ThreadTask
@@ -4885,9 +4883,6 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
         comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
         sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
-
-        if ( bHyperThreadingActive && nThreadCount >= 2 )
-            nThreadCount /= 2;
 
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
 
