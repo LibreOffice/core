@@ -16,6 +16,23 @@
       "message": "Hello,\n\nThis patch is for getting the paragraph text from the core side into COOL. This will improve the A11Y compatibility.\n\nCan you review when you have time:)\n\nThank you.",
       "revId": "03bec8b8fbd15cd00cb46085f27f419eac33d97a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06dfb9cd_c2c00f45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-11-25T14:26:03Z",
+      "side": 1,
+      "message": "So - lets drop the atk whitespace change. Before we do anything here - we -must- not touch the a11y APIs unless this is explicitly enabled since they can have significant memory and performance impacts for users that don\u0027t want that.\n\nThen - we badly don\u0027t want to instrument the a11y code to add LOK callbacks to it.\n\nInstead in the desktop/source/lib/init.cxx - I would expect: when a view is enabled for a11y - to register listeners with vcl and inside those connect via the UNO API to our a11y functionality and listen to that in various UNO listener objects we would create in desktop/source/lib. Those listeners should emit LOK events - and be built on top of the generic a11y code.\n\nI am not expecting to need any changes to core LibreOffice a11y here - just a \u0027bridge\u0027 from UNO-a11y to LOK-events.\n\nThanks!",
+      "revId": "03bec8b8fbd15cd00cb46085f27f419eac33d97a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
