@@ -69,6 +69,24 @@
       "parentUuid": "5a9dca21_fe73c1ec",
       "revId": "3e9d9003b180cf0bba3fb5ec611828f3a940969c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41c0901f_73f63ef6",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-25T17:49:30Z",
+      "side": 1,
+      "message": "The first proposal didn\u0027t work. The second one was OK, and is used.",
+      "parentUuid": "9c6e261d_14c1e347",
+      "revId": "3e9d9003b180cf0bba3fb5ec611828f3a940969c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
