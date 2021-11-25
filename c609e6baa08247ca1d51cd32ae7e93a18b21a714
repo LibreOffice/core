@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e06038e8_dfbb4e3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2021-11-25T13:26:44Z",
+      "side": 1,
+      "message": "The code looks good to me!  No idea why the Jenkins failed :-(",
+      "revId": "c609e6baa08247ca1d51cd32ae7e93a18b21a714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
