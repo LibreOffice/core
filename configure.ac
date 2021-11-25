@@ -5913,7 +5913,7 @@ if test -z "$enable_pch"; then
     if test "$_os" = "WINNT"; then
         # Enabled by default on Windows.
         enable_pch=yes
-        # never use sccache on auto-enabled PCH builds, except if requested explicitely
+        # never use sccache on auto-enabled PCH builds, except if requested explicitly
         if test -z "$enable_ccache" -a "$SCCACHE"; then
             CCACHE=""
         fi
