@@ -969,7 +969,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
     Point aGridOff = aCurPosHmm - aOldPos;
     // fdo#63878 Fix the X position for RTL Sheet
-    if( rDoc.IsNegativePage( GetTab() ) )
+    if( rDoc.IsNegativePage( GetTab() ) && !comphelper::LibreOfficeKit::isActive() )
         aGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
 }
 
@@ -1048,13 +1048,16 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
     Point aGridOff(aCurPosHmm - aOldPos);
 
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bNegativePage = rDoc.IsNegativePage(GetTab());
+
     // fdo#63878 Fix the X position for RTL Sheet
-    if(rDoc.IsNegativePage(GetTab()))
+    if(bNegativePage && !bLOKActive)
     {
         aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
     }
 
-    rTarget.setX(aGridOff.X());
+    rTarget.setX(bNegativePage && bLOKActive ? -aGridOff.X() : aGridOff.X());
     rTarget.setY(aGridOff.Y());
     return true;
 }
@@ -1096,13 +1099,16 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
     Point aGridOff(aCurPosHmm - aOldPos);
 
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bNegativePage = rDoc.IsNegativePage(GetTab());
+
     // fdo#63878 Fix the X position for RTL Sheet
-    if(rDoc.IsNegativePage(GetTab()))
+    if(bNegativePage && !bLOKActive)
     {
         aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
     }
 
-    rTarget.setX(aGridOff.X());
+    rTarget.setX(bLOKActive && bNegativePage ? -aGridOff.X() : aGridOff.X());
     rTarget.setY(aGridOff.Y());
     return true;
 }
