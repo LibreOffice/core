@@ -1229,7 +1229,7 @@ namespace
             OUString valueB;
             a[0] >>= valueA;
             b[0] >>= valueB;
-            return compare_schema(valueA, valueB);
+            return compare_schema(valueA, valueB) < 0;
         }
     };
 }
