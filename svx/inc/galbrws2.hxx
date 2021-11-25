@@ -85,7 +85,6 @@ private:
     std::unique_ptr<weld::ToggleButton> mxIconButton;
     std::unique_ptr<weld::ToggleButton> mxListButton;
     std::unique_ptr<weld::Label> mxInfoBar;
-    ScopedVclPtr<VirtualDevice> mxDev;
     Size maPreviewSize;
     rtl::Reference<GalleryTransferable> m_xHelper;
     sal_uInt32 mnCurActionPos;
