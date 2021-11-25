@@ -16,6 +16,24 @@
       "message": "this is a many months old change, and doesn\u0027t state any reason why it would be necessary.\n\nSince it apparently worked for all lthe years, whether empty value or not, I guess it is safe to assume that the change can be abandoned?",
       "revId": "1aa3633458169757d580ce2062146c86aa487e5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a1aa960_8411d98f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003333
+      },
+      "writtenOn": "2021-11-25T22:50:32Z",
+      "side": 1,
+      "message": "If you export LIBTOOL environment variable some external projects built from sources will use the value from the environment rather a default one and the empty value of LIBTOOL causes failure in libreoffice build. \n\nIn particular the build of current master fails in building liblangtag from  external/\n\nThis patch fixes this issue. If no LIBTOOL environment variable is set, any external package built from sources will find one appropriate or use default value. \n\nDo you have any test environment where libreoffice is built with all externals built from sources? If you had one  you must have this error picked up already.",
+      "parentUuid": "92da994e_18d026db",
+      "revId": "1aa3633458169757d580ce2062146c86aa487e5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
