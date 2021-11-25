@@ -24,6 +24,15 @@ constexpr sal_Int16 nStopPredefinedFormatIndex = 51;
     This later in the build is static asserted to be greater or equal to
     NfIndexTableOffset::NF_INDEX_TABLE_ENTRIES */
 constexpr sal_Int16 nFirstFreeFormatIndex = 66;
+
+/** This number shows month days without Jan and Feb.
+ *  According to this, it is calcuated as (365-31-28)/10 = 30.6, but because
+ *  of a floating point bug, it was used as 30.6001 as a workaround. It was a
+ *  "workaround for the numerical errors in his hp-85 microcomputer from 1978".
+ *
+ *  "30.6001, 25 year old hack?"
+ *  https://www.hpmuseum.org/cgi-sys/cgiwrap/hpmuseum/archv011.cgi?read=31650 */
+constexpr double monthDaysWithoutJanFeb = (365 - 31 - 28) / 10.0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
