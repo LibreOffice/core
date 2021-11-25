@@ -52,6 +52,8 @@ class SW_DLLPUBLIC SwOLEObj
 
     void SetNode( SwOLENode* pNode );
 
+    DECL_LINK(IsProtectedHdl, LinkParamNone*, bool);
+
 public:
     SwOLEObj( const svt::EmbeddedObjectRef& pObj );
     SwOLEObj( const OUString &rName, sal_Int64 nAspect );
@@ -69,6 +71,7 @@ public:
     const OUString& GetCurrentPersistName() const { return m_aName; }
     OUString GetStyleString();
     bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
+    bool IsProtected() const;
 
     // try to get OLE visualization in form of a Primitive2DSequence
     // and the corresponding B2DRange. This data may be locally buffered
