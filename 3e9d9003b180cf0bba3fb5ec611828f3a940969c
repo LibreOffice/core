@@ -16,6 +16,24 @@
       "message": "Nitpick: It would be great to change nFunction\u003d\u003d0 to nFunction\u003d\u003dW_META_EOF.\n\nI am also wondering if it could be simplified just to always return in case nFunction\u003d\u003dW_META_EOF",
       "revId": "3e9d9003b180cf0bba3fb5ec611828f3a940969c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e8ae9bd_552908e7",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-11-25T14:30:06Z",
+      "side": 1,
+      "message": "I think you could just remove this checking fully.\n\nChecking if nFunction\u003d\u003dW_META_EOF will be done below",
+      "parentUuid": "4bb5b310_1b94f707",
+      "revId": "3e9d9003b180cf0bba3fb5ec611828f3a940969c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
