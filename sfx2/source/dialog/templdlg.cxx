@@ -367,11 +367,8 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
 
     bWaterDisabled = !IsSafeForWaterCan();
 
-    if (!bIsCallback)
-    {
-        // tdf#134598 call UpdateStyleDependents to update watercan
-        UpdateStyleDependents_Hdl(nullptr);
-    }
+    // tdf#134598 call UpdateStyleDependents to update watercan
+    UpdateStyleDependents_Hdl(nullptr);
 }
 
 void SfxCommonTemplateDialog_Impl::EnableTreeDrag(bool bEnable)
