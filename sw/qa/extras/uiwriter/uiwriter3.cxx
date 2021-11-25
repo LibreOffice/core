@@ -42,6 +42,7 @@
 #include <drawdoc.hxx>
 #include <dcontact.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -1180,6 +1181,48 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143574.odt");
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"),
+                         xShapeDescriptor->getShapeType());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    SdrPage* pDrawPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObjGroup = pDrawPage->GetObj(0);
+    SdrObject* pObjShape = pObjGroup->GetSubList()->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("Alakzat1"), pObjShape->GetName());
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SelectObj(Point(), 0, pObjShape);
+
+    // Make sure that one shape is selected.
+    const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+
+    // At this point Writer crashed here before the fix.
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<beans::XPropertySet> xShapeProps(pObjShape->getUnoShape(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, xShapeProps->getPropertyValue("TextBox").get<bool>());
+
+    dispatchCommand(mxComponent, ".uno:RemoveTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(false, xShapeProps->getPropertyValue("TextBox").get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
