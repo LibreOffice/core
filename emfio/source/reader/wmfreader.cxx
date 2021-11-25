@@ -1695,6 +1695,13 @@ namespace emfio
                 }
                 switch( nFunction )
                 {
+                    // A Placeable WMF file without some records related to the
+                    // size of the WMF
+                    case 0:
+                    {
+                        return;
+                    }
+
                     case W_META_SETWINDOWORG:
                     {
                         aWinOrg = ReadYX();
