@@ -1980,8 +1980,19 @@ auto CurlProcessor::Lock(
     uno::Reference<io::XInputStream> const* const pxRequestInStream)
     -> ::std::vector<::std::pair<ucb::Lock, sal_Int32>>
 {
-    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "LOCK",
-                                               "CURLOPT_CUSTOMREQUEST" } };
+    curl_off_t len(0);
+    if (pxRequestInStream)
+    {
+        uno::Reference<io::XSeekable> const xSeekable(*pxRequestInStream, uno::UNO_QUERY);
+        assert(xSeekable.is());
+        len = xSeekable->getLength();
+    }
+
+    ::std::vector<CurlOption> const options{
+        { CURLOPT_CUSTOMREQUEST, "LOCK", "CURLOPT_CUSTOMREQUEST" },
+        // note: Sharepoint cannot handle "Transfer-Encoding: chunked"
+        { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
+    };
 
     // stream for response
     uno::Reference<io::XInputStream> const xResponseInStream(io::Pipe::create(rSession.m_xContext));
@@ -2047,9 +2058,9 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     // note: no m_Mutex lock needed here, only in CurlProcessor::Lock()
 
     // generate XML document for acquiring new LOCK
-    uno::Reference<io::XInputStream> const xRequestInStream(io::Pipe::create(m_xContext));
-    uno::Reference<io::XOutputStream> const xRequestOutStream(xRequestInStream, uno::UNO_QUERY);
-    assert(xRequestInStream.is());
+    uno::Reference<io::XSequenceOutputStream> const xSeqOutStream(
+        io::SequenceOutputStream::create(m_xContext));
+    uno::Reference<io::XOutputStream> const xRequestOutStream(xSeqOutStream);
     assert(xRequestOutStream.is());
     uno::Reference<xml::sax::XWriter> const xWriter(xml::sax::Writer::create(m_xContext));
     xWriter->setOutputStream(xRequestOutStream);
@@ -2085,15 +2096,13 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     }
     xWriter->endElement("lockinfo");
     xWriter->endDocument();
-    xRequestOutStream->closeOutput();
 
-    // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
-        curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
-    if (!pList)
-    {
-        throw uno::RuntimeException("curl_slist_append failed");
-    }
+    uno::Reference<io::XInputStream> const xRequestInStream(
+        io::SequenceInputStream::createStreamFromSequence(m_xContext,
+                                                          xSeqOutStream->getWrittenBytes()));
+    assert(xRequestInStream.is());
+
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList;
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
