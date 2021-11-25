@@ -1963,7 +1963,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyleDependents()
     if ( IsInitialized() &&
          IsCheckedItem("watercan") &&
          // only if that region is allowed
-         nullptr != pFamilyState[nActFamily-1] && (mxTreeBox || mxFmtLb->count_selected_rows() <= 1) )
+         nullptr != pFamilyState[nActFamily-1] && IsSafeForWaterCan() )
     {
         Execute_Impl(SID_STYLE_WATERCAN,
                      "", "", 0);
