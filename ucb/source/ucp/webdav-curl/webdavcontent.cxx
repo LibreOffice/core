@@ -1452,9 +1452,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             // All properties obtained already?
             std::vector< OUString > aMissingProps;
             if ( !( xProps
-                    && xProps->containsAllNames(
-                        rProperties, aMissingProps ) )
-                 || !m_bDidGetOrHead )
+                    && xProps->containsAllNames(rProperties, aMissingProps))
+                // i#121922 for non-DAV, uncacheable properties must be fetched
+                // regardless of m_bDidGetOrHead.
+                // But SharePoint may do weird things on HEAD so for DAV
+                // only do this if required.
+                && (eType != DAV || !m_bDidGetOrHead))
             {
                 // Possibly the missing props can be obtained using a HEAD
                 // request.
