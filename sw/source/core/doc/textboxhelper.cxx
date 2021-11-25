@@ -1677,8 +1677,12 @@ SwTextBoxNode::~SwTextBoxNode()
     {
         for (auto& rTextBox : m_pTextBoxTable)
         {
-            rTextBox.second->SetOtherTextBoxFormat(nullptr);
-            rTextBox.second = nullptr;
+            if (rTextBox.second)
+            {
+                if (rTextBox.second->GetOtherTextBoxFormat())
+                    rTextBox.second->SetOtherTextBoxFormat(nullptr);
+                rTextBox.second = nullptr;
+            }
         }
         m_pTextBoxTable.clear();
     }
