@@ -1507,7 +1507,10 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     addUpdateRegion(aPath.getBounds());
     SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
     SkPaint aPaint;
-    setBlendModeDifference(&aPaint);
+    // There's no blend mode for inverting as such, but kExclusion is 's + d - 2*s*d',
+    // so with d = 1.0 (all channels) it becomes effectively '1 - s', i.e. inverted color.
+    aPaint.setBlendMode(SkBlendMode::kExclusion);
+    aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
     // TrackFrame just inverts a dashed path around the polygon
     if (eFlags == SalInvert::TrackFrame)
     {
@@ -1519,11 +1522,9 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         constexpr float intervals[] = { 4.0f, 4.0f };
         aPaint.setStyle(SkPaint::kStroke_Style);
         aPaint.setPathEffect(SkDashPathEffect::Make(intervals, SK_ARRAY_COUNT(intervals), 0));
-        aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
     }
     else
     {
-        aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setStyle(SkPaint::kFill_Style);
 
         // N50 inverts in checker pattern
