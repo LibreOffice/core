@@ -103,9 +103,6 @@ enum DirectImage
     No
 };
 
-// Do 'paint->setBlendMode(SkBlendMode::kDifference)' (workaround for buggy drivers).
-void setBlendModeDifference(SkPaint* paint);
-
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void
