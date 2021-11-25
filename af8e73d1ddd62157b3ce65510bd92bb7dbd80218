@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2d8f405_4120782a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-25T17:18:08Z",
+      "side": 1,
+      "message": "It is (1) not a bug, and (2) not specific to hp-85. It is specific to some binary representation of numbers in a given system.\n\nHowever, *iif* this artifact really ascends to that, then we don\u0027t need it. In IEEE 754, both 32-bit (float) and 34-bit (double) representations of 30.6 are slightly *greater* than 30.6 (use https://baseconvert.com/ieee-754-floating-point to check). Just use the correct value, and have some unit tests just in case.",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "af8e73d1ddd62157b3ce65510bd92bb7dbd80218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
