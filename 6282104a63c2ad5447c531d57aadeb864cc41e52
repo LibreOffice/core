@@ -33,6 +33,23 @@
       "message": "In a PM Mike gave a comment on patchset 3, I insert the relevant part in this gerrit conversation:\n\n\u003e [...]\n\u003e However, they are not equivalent across the 0: as 0 is now at 0001-01-01, the following (for \u0027\u003dWEEKS(\"0001-01-02\";\"-0001-12-31\";1)\u0027) will give correct -1:\n\u003e\n\u003e\u003e return ( std::floor(nDays2 / 7.0) - std::floor(nDays1 / 7.0) ); \n\u003e where nDays2 is -1 (corresponding to \"-0001-12-31\"), and nDays1 is 1 (for \"0001-01-02\"): nDays2 / 7.0 gives -0.14; std::floor on it gives -1; nDays1 / 7.0 gives 0; std::floor on it gives 0; -1 -0 \u003d -1.\n\u003e\n\u003e But the following will give 0:\n\u003e\n\u003e\u003e return ( nDays2 / 7 - nDays1 / 7 );\n\u003e because both \u0027-1 / 7\u0027 and \u00271 / 7\u0027 give the same 0 (integer truncation rounds toward 0, changing\n\u003e direction around 0, unlike std::floor).\n\u003e [...]\n\nI can reproduce the given example.\nMike stated earlier that \"0001-01-01\" was a Monday which means that the result is incorrect indeed.\nHowever, Calc (release version as well as patched dev-version) shows Saturday when the date presentation format is \u0027NN YYYY-MM-DD\u0027, which means that the result is correct when \"0001-01-02\u0027 is a Sunday and \"-0001-12-31\" a Friday.\n\nWhen not crossing the 0 I can create incorrect results, e.g. \u003dWEEKS(\"-0001-12-17\";\"-0001-12-20\";1) returns 0, but should return 1 (based on the dow Calc shows).\nAccording to Calc, \"-0001-12-17\" is a Friday and \"-0001-12-20\" is a Monday, so we stepped from one week number to another.\n\nI am confused.\nI can only verify the results of WEEKS with mode 1 when I know the dow. With the two examples here, one is right the other isn\u0027t. But which one?\n\n\n\n\n",
       "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeca7fd2_a00ee580",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-25T15:03:11Z",
+      "side": 1,
+      "message": "I have a suggestion:\nDATE() doesn\u0027t accept year values below 1583, which AFAIK is the year from which we know for certain that the date and dow is correct.\nI  propose to apply the same validation as DATE() for WEEKS().\nCertainly for mode 1, it is not realistic to think in ISO9601 weeks for date before 1583.",
+      "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
