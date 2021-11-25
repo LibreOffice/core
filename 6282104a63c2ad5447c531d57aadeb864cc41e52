@@ -68,6 +68,24 @@
       "parentUuid": "d21c18df_a6089508",
       "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b3e4eb7_6fda2682",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-25T15:11:37Z",
+      "side": 1,
+      "message": "I do not think it\u0027s a good solution - in view of the cited tdf#144699, which would obsolete the reason why DATE does not accept those dates. Additionally, there is (currently) a good reason for DATE to reject those dates - because it would require to reject some combination of arguments (for the days skipped in the Gregorian introduction), or - if using Gregorian - would result in dates displayed differently. There\u0027s no such reason for WEEKS: it takes well-defined dates, and it *is* able to detect their weekdays and week differences unambiguously.",
+      "parentUuid": "aeca7fd2_a00ee580",
+      "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
