@@ -88,6 +88,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/unit_conversion.hxx>
 
 #include <PostItMgr.hxx>
 #include <FrameControlsManager.hxx>
@@ -311,8 +312,8 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         Size aSz( pFrameMgr->GetSize() );
         if ( !aSz.Width() || !aSz.Height() )
         {
-            aSz.setWidth(567);
-            aSz.setHeight( 567);
+            aSz.setWidth(o3tl::toTwips(1, o3tl::Length::cm));
+            aSz.setHeight(o3tl::toTwips(1, o3tl::Length::cm));
             pFrameMgr->SetSize( aSz );
         }
         else if ( aSz.Width() != DFLT_WIDTH && aSz.Height() != DFLT_HEIGHT )
