@@ -51,6 +51,24 @@
       "message": "if you are exporting it to MS PowerPoint 97 this test should go into sd/qa/unit/export-tests.cxx and just use saveAndReload here",
       "revId": "5d3a2958f0c694a6aaac65f9d9bca3849ba1a79d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b12e1e80_2826a43f",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-25T10:24:18Z",
+      "side": 1,
+      "message": "The export to MS PPT 97 actually didn\u0027t work, but now I see that exporting to SVG is fine here. If the fix is in place, there would be an \u003cimage\u003e tag in the XML. Without the fix, there won\u0027t be any. SVGExportTests.cxx is the right place, isn\u0027t it?",
+      "parentUuid": "472a5ffd_e53172c4",
+      "revId": "5d3a2958f0c694a6aaac65f9d9bca3849ba1a79d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
