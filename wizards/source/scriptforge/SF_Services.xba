@@ -547,7 +547,7 @@ Check:
 			sLocale = pvArgs(1)
 		End If
 		If Len(sLocale) = 0 Then	&apos;	Called from Python, the Locale argument may be the zero-length string
-			Set oLocale = SF_Utils._GetUNOService(&quot;Locale&quot;)
+			Set oLocale = SF_Utils._GetUNOService(&quot;SystemLocale&quot;)
 			sLocale = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
 		End If
 		If UBound(pvArgs) &gt;= 2 Then
