@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c49555_575c4e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-25T11:02:45Z",
+      "side": 1,
+      "message": "Hi Attila,\nYes, it seems the footer tab is problematic when interacting with UItest, I think it\u0027s because the header and the footer are the same and generated dynamically, anyway, this is not related to tdf#144940. \nI think you don\u0027t need to check the header and the footer, just checking the header is enough to check this issue",
+      "parentUuid": "bf8966b0_3102c7ff",
+      "revId": "4cc502f71a3fba40b01db8c9771b67a7f5e86259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13cdb44f_f74fb455",
