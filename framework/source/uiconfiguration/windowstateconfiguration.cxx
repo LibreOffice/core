@@ -79,7 +79,7 @@ const sal_Int16 PROPERTY_DOCKPOS                 = 14;
 const sal_Int16 PROPERTY_DOCKSIZE                = 15;
 
 // Order must be the same as WindowStateMask!!
-const char* CONFIGURATION_PROPERTIES[]           =
+rtl::OUStringConstExpr CONFIGURATION_PROPERTIES[]
 {
     WINDOWSTATE_PROPERTY_LOCKED,
     WINDOWSTATE_PROPERTY_DOCKED,
@@ -96,8 +96,7 @@ const char* CONFIGURATION_PROPERTIES[]           =
     WINDOWSTATE_PROPERTY_INTERNALSTATE,
     WINDOWSTATE_PROPERTY_STYLE,
     WINDOWSTATE_PROPERTY_DOCKPOS,
-    WINDOWSTATE_PROPERTY_DOCKSIZE,
-    nullptr
+    WINDOWSTATE_PROPERTY_DOCKSIZE
 };
 
 //  Configuration access class for WindowState supplier implementation
@@ -223,12 +222,8 @@ ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( std::u16string
     m_bModified( false )
 {
     // Initialize access array with property names.
-    sal_Int32 n = 0;
-    while ( CONFIGURATION_PROPERTIES[n] )
-    {
-        m_aPropArray.push_back( OUString::createFromAscii( CONFIGURATION_PROPERTIES[n] ));
-        ++n;
-    }
+    for (const rtl::OUStringConstExpr & s : CONFIGURATION_PROPERTIES )
+        m_aPropArray.push_back(s);
 }
 
 ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()

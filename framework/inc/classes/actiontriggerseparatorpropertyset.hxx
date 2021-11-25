@@ -26,8 +26,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
-#define SERVICENAME_ACTIONTRIGGERSEPARATOR          "com.sun.star.ui.ActionTriggerSeparator"
-#define IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR   "com.sun.star.comp.ui.ActionTriggerSeparator"
+inline constexpr OUStringLiteral SERVICENAME_ACTIONTRIGGERSEPARATOR = u"com.sun.star.ui.ActionTriggerSeparator";
+inline constexpr OUStringLiteral IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR = u"com.sun.star.comp.ui.ActionTriggerSeparator";
 
 namespace framework
 {

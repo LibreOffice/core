@@ -19,21 +19,23 @@
 
 #pragma once
 
-#define WINDOWSTATE_PROPERTY_LOCKED         "Locked"
-#define WINDOWSTATE_PROPERTY_DOCKED         "Docked"
-#define WINDOWSTATE_PROPERTY_VISIBLE        "Visible"
-#define WINDOWSTATE_PROPERTY_DOCKINGAREA    "DockingArea"
-#define WINDOWSTATE_PROPERTY_DOCKPOS        "DockPos"
-#define WINDOWSTATE_PROPERTY_DOCKSIZE       "DockSize"
-#define WINDOWSTATE_PROPERTY_POS            "Pos"
-#define WINDOWSTATE_PROPERTY_SIZE           "Size"
-#define WINDOWSTATE_PROPERTY_UINAME         "UIName"
-#define WINDOWSTATE_PROPERTY_INTERNALSTATE  "InternalState"
-#define WINDOWSTATE_PROPERTY_STYLE          "Style"
-#define WINDOWSTATE_PROPERTY_CONTEXT        "ContextSensitive"
-#define WINDOWSTATE_PROPERTY_HIDEFROMENU    "HideFromToolbarMenu"
-#define WINDOWSTATE_PROPERTY_NOCLOSE        "NoClose"
-#define WINDOWSTATE_PROPERTY_SOFTCLOSE      "SoftClose"
-#define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
+#include <rtl/ustring.hxx>
+
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_LOCKED = u"Locked";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKED = u"Docked";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_VISIBLE = u"Visible";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKINGAREA = u"DockingArea";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKPOS = u"DockPos";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKSIZE = u"DockSize";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_POS = u"Pos";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_SIZE = u"Size";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_UINAME = u"UIName";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_INTERNALSTATE = u"InternalState";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_STYLE = u"Style";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_CONTEXT = u"ContextSensitive";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_HIDEFROMENU = u"HideFromToolbarMenu";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_NOCLOSE = u"NoClose";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_SOFTCLOSE = u"SoftClose";
+inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_CONTEXTACTIVE = u"ContextActive";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

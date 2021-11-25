@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
-#define IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER   "com.sun.star.comp.ui.RootActionTriggerContainer"
+inline constexpr OUStringLiteral IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER = u"com.sun.star.comp.ui.RootActionTriggerContainer";
 
 namespace framework
 {

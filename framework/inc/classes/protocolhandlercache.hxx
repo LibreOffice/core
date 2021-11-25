@@ -29,7 +29,7 @@
 
 namespace framework{
 
-#define PACKAGENAME_PROTOCOLHANDLER                 "Office.ProtocolHandler"                          /// name of our configuration package
+inline constexpr OUStringLiteral PACKAGENAME_PROTOCOLHANDLER = u"Office.ProtocolHandler";                    /// name of our configuration package
 
 #define CFG_PATH_SEPARATOR                          "/"                                               /// separator for configuration paths
 
