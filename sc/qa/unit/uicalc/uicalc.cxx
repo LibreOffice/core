@@ -922,6 +922,46 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138710)
     CPPUNIT_ASSERT_EQUAL(OUString("Total"), pDoc->GetString(ScAddress(0, 0, 1)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf128914)
+{
+    ScModelObj* pModelObj = createDoc("tdf128914.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(ScAddress(3, 1, 0)));
+
+    goToCell("D2");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    goToCell("D3:D6");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 24
+    // - Actual  : 6
+    CPPUNIT_ASSERT_EQUAL(24.0, pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(60.0, pDoc->GetValue(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(120.0, pDoc->GetValue(ScAddress(3, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(210.0, pDoc->GetValue(ScAddress(3, 5, 0)));
+
+    CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(ScAddress(1, 14, 0)));
+
+    goToCell("B15");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    goToCell("C15:F15");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(24.0, pDoc->GetValue(ScAddress(2, 14, 0)));
+    CPPUNIT_ASSERT_EQUAL(60.0, pDoc->GetValue(ScAddress(3, 14, 0)));
+    CPPUNIT_ASSERT_EQUAL(120.0, pDoc->GetValue(ScAddress(4, 14, 0)));
+    CPPUNIT_ASSERT_EQUAL(210.0, pDoc->GetValue(ScAddress(5, 14, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
 {
     ScModelObj* pModelObj = createDoc("tdf108654.ods");
