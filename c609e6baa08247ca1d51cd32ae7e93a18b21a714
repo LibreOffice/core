@@ -34,6 +34,24 @@
       "parentUuid": "e06038e8_dfbb4e3b",
       "revId": "c609e6baa08247ca1d51cd32ae7e93a18b21a714",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54b6923e_e610db14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002093
+      },
+      "writtenOn": "2021-11-25T14:04:35Z",
+      "side": 1,
+      "message": "It seems that this method is not available in 6.4. Its funny that my original patch to master used \u0027copy\u0027 instead \u0027subView\u0027 and I got a build error that I should use \u0027subView\u0027. Now is the opposite :))",
+      "parentUuid": "76eff2c7_2f66db97",
+      "revId": "c609e6baa08247ca1d51cd32ae7e93a18b21a714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
