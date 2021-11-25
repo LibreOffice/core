@@ -16,6 +16,23 @@
       "message": "sample file is just too big. As far as I remember, the limitation is 500 kb, were you able to commit it without any warning ?",
       "revId": "5d3a2958f0c694a6aaac65f9d9bca3849ba1a79d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "472a5ffd_e53172c4",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-25T10:01:23Z",
+      "side": 1,
+      "message": "if you are exporting it to MS PowerPoint 97 this test should go into sd/qa/unit/export-tests.cxx and just use saveAndReload here",
+      "revId": "5d3a2958f0c694a6aaac65f9d9bca3849ba1a79d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
