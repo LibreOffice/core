@@ -218,7 +218,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
 #ifdef IOS
     m_xPreviewWin->hide();
 #endif
-    m_pImpl->m_aNoStyleText = CuiResId( RID_SVXSTR_CHARNAME_NOSTYLE );
+    m_pImpl->m_aNoStyleText = CuiResId( RID_CUISTR_CHARNAME_NOSTYLE );
 
     SvtCTLOptions aCTLLanguageOptions;
     bool bShowCJK = SvtCJKOptions::IsCJKFontEnabled();
@@ -276,18 +276,18 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     //In Windows the standard dialogs name font-name, font-style as
     //Font, Style
 #ifdef _WIN32
-    OUString sFontFamilyString(CuiResId(RID_SVXSTR_CHARNAME_FONT));
+    OUString sFontFamilyString(CuiResId(RID_CUISTR_CHARNAME_FONT));
 #else
-    OUString sFontFamilyString(CuiResId(RID_SVXSTR_CHARNAME_FAMILY));
+    OUString sFontFamilyString(CuiResId(RID_CUISTR_CHARNAME_FAMILY));
 #endif
     m_xWestFontNameFT->set_label(sFontFamilyString);
     m_xEastFontNameFT->set_label(sFontFamilyString);
     m_xCTLFontNameFT->set_label(sFontFamilyString);
 
 #ifdef MACOSX
-    OUString sFontStyleString(CuiResId(RID_SVXSTR_CHARNAME_TYPEFACE));
+    OUString sFontStyleString(CuiResId(RID_CUISTR_CHARNAME_TYPEFACE));
 #else
-    OUString sFontStyleString(CuiResId(RID_SVXSTR_CHARNAME_STYLE));
+    OUString sFontStyleString(CuiResId(RID_CUISTR_CHARNAME_STYLE));
 #endif
     m_xWestFontStyleFT->set_label(sFontStyleString);
     m_xEastFontStyleFT->set_label(sFontStyleString);

@@ -89,14 +89,14 @@ void SvxHlinkDlgMarkWnd::ErrorChanged()
 {
     if (mnError == LERR_NOENTRIES)
     {
-        OUString aStrMessage = CuiResId( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
+        OUString aStrMessage = CuiResId( RID_CUISTR_HYPDLG_ERR_LERR_NOENTRIES );
         mxError->set_label(aStrMessage);
         mxError->show();
         mxLbTree->hide();
     }
     else if (mnError == LERR_DOCNOTOPEN)
     {
-        OUString aStrMessage = CuiResId( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
+        OUString aStrMessage = CuiResId( RID_CUISTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
         mxError->set_label(aStrMessage);
         mxError->show();
         mxLbTree->hide();

@@ -117,7 +117,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   }
 
   // Links
-  m_pCreditsButton->set_uri(CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL));
+  m_pCreditsButton->set_uri(CuiResId(RID_CUISTR_ABOUT_CREDITS_URL));
 
   OUString sURL(officecfg::Office::Common::Help::StartCenter::InfoURL::get());
   localizeWebserviceURI(sURL);
@@ -192,9 +192,9 @@ OUString AboutDialog::GetLocaleString(const bool bLocalized) {
       Application::GetSettings().GetUILanguageTag().getBcp47();
   OUString sUILocaleStr;
   if (bLocalized)
-     sUILocaleStr = CuiResId(RID_SVXSTR_ABOUT_UILOCALE);
+     sUILocaleStr = CuiResId(RID_CUISTR_ABOUT_UILOCALE);
   else
-     sUILocaleStr = Translate::get(RID_SVXSTR_ABOUT_UILOCALE, Translate::Create("cui", LanguageTag("en-US")));
+     sUILocaleStr = Translate::get(RID_CUISTR_ABOUT_UILOCALE, Translate::Create("cui", LanguageTag("en-US")));
 
   if (sUILocaleStr.indexOf("$LOCALE") == -1) {
     SAL_WARN("cui.dialogs", "translated uilocale string in translations "
@@ -249,14 +249,14 @@ OUString AboutDialog::GetMiscString() {
 }
 
 OUString AboutDialog::GetCopyrightString() {
-  OUString sVendorTextStr(CuiResId(RID_SVXSTR_ABOUT_VENDOR));
+  OUString sVendorTextStr(CuiResId(RID_CUISTR_ABOUT_VENDOR));
   OUString aCopyrightString =
-      sVendorTextStr + "\n" + CuiResId(RID_SVXSTR_ABOUT_COPYRIGHT) + "\n";
+      sVendorTextStr + "\n" + CuiResId(RID_CUISTR_ABOUT_COPYRIGHT) + "\n";
 
   if (utl::ConfigManager::getProductName() == "LibreOffice")
-    aCopyrightString += CuiResId(RID_SVXSTR_ABOUT_BASED_ON);
+    aCopyrightString += CuiResId(RID_CUISTR_ABOUT_BASED_ON);
   else
-    aCopyrightString += CuiResId(RID_SVXSTR_ABOUT_DERIVED);
+    aCopyrightString += CuiResId(RID_CUISTR_ABOUT_DERIVED);
 
   return aCopyrightString;
 }

@@ -88,7 +88,7 @@ IMPL_LINK(SvxProxyTabPage, PortChangedHdl, weld::Entry&, rEdit, void)
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok,
-                                                       CuiResId( RID_SVXSTR_OPT_PROXYPORTS)));
+                                                       CuiResId(RID_CUISTR_OPT_PROXYPORTS)));
         xErrorBox->run();
     }
 }

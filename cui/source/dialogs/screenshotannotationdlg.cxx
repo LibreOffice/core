@@ -202,7 +202,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     mxVirtualBufferDevice(nullptr),
     mpHilighted(nullptr),
     maPicture(this),
-    maSaveAsText(CuiResId(RID_SVXSTR_SAVE_SCREENSHOT_AS))
+    maSaveAsText(CuiResId(RID_CUISTR_SAVE_SCREENSHOT_AS))
 {
     VclPtr<VirtualDevice> xParentDialogSurface(rParentDialog.screenshot());
     maParentDialogSize = xParentDialogSurface->GetOutputSizePixel();

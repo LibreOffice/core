@@ -240,9 +240,9 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
             mxCbbFrame->set_active(nPos);
 
         // Form
-        OUString aStrFormText = CuiResId( RID_SVXSTR_HYPERDLG_FROM_TEXT );
+        OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
 
-        OUString aStrFormButton = CuiResId( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
+        OUString aStrFormButton = CuiResId( RID_CUISTR_HYPERDLG_FORM_BUTTON );
 
         if( pHyperlinkItem->GetInsertMode() & HLINK_HTMLMODE )
         {
@@ -353,13 +353,13 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, voi
     SfxMacroTabPage *pMacroPage = aDlg.GetTabPage();
 
     if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOverObject )
-        pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT1),
+        pMacroPage->AddEvent( CuiResId(RID_CUISTR_HYPDLG_MACROACT1),
                               SvMacroItemId::OnMouseOver );
     if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseClickObject )
-        pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT2),
+        pMacroPage->AddEvent( CuiResId(RID_CUISTR_HYPDLG_MACROACT2),
                               SvMacroItemId::OnClick);
     if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOutObject )
-        pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT3),
+        pMacroPage->AddEvent( CuiResId(RID_CUISTR_HYPDLG_MACROACT3),
                               SvMacroItemId::OnMouseOut);
     // execute dlg
     short nRet = aDlg.run();

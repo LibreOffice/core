@@ -136,7 +136,7 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
                 std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
             m_xControl->append(
                 OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                CuiResId(RID_SVXSTR_ALLFUNCTIONS));
+                CuiResId(RID_CUISTR_ALLFUNCTIONS));
         }
 
         // Separate the "All commands"category from the actual categories
@@ -193,14 +193,14 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
         m_aGroupInfo.push_back(
             std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr));
         m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                           CuiResId(RID_SVXSTR_MACROS));
+                           CuiResId(RID_CUISTR_MACROS));
 
         // Add styles category
         //TODO: last param should contain user data?
         m_aGroupInfo.push_back(
             std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, nullptr));
         m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                           CuiResId(RID_SVXSTR_GROUP_STYLES));
+                           CuiResId(RID_CUISTR_GROUP_STYLES));
     }
     catch (const css::uno::RuntimeException&)
     {
@@ -392,11 +392,11 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                         OUString sUIName;
                         if (childGroup->getName() == "user")
                         {
-                            sUIName = CuiResId(RID_SVXSTR_MYMACROS);
+                            sUIName = CuiResId(RID_CUISTR_MYMACROS);
                         }
                         else if (childGroup->getName() == "share")
                         {
-                            sUIName = CuiResId(RID_SVXSTR_PRODMACROS);
+                            sUIName = CuiResId(RID_CUISTR_PRODMACROS);
                         }
                         else
                         {
@@ -596,7 +596,7 @@ void CommandCategoryListBox::addChildren(
 
             if (description.isEmpty())
             {
-                description = CuiResId(RID_SVXSTR_NOMACRODESC);
+                description = CuiResId(RID_CUISTR_NOMACRODESC);
             }
 
             OUString* pScriptURI = new OUString(uri);

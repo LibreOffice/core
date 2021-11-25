@@ -1625,10 +1625,10 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
                 bool bIsExperimental
                     = vcl::CommandInfoProvider::IsExperimental(pData->sCommand, m_aModuleId);
 
-                OUString aExperimental = "\n" + CuiResId(RID_SVXSTR_COMMANDEXPERIMENTAL);
-                OUString aLabel = CuiResId(RID_SVXSTR_COMMANDLABEL) + ": " + pData->sLabel + "\n";
-                OUString aName = CuiResId(RID_SVXSTR_COMMANDNAME) + ": " + pData->sCommand + "\n";
-                OUString aTip = CuiResId(RID_SVXSTR_COMMANDTIP) + ": " + pData->sTooltip;
+                OUString aExperimental = "\n" + CuiResId(RID_CUISTR_COMMANDEXPERIMENTAL);
+                OUString aLabel = CuiResId(RID_CUISTR_COMMANDLABEL) + ": " + pData->sLabel + "\n";
+                OUString aName = CuiResId(RID_CUISTR_COMMANDNAME) + ": " + pData->sCommand + "\n";
+                OUString aTip = CuiResId(RID_CUISTR_COMMANDTIP) + ": " + pData->sTooltip;
                 if (bIsExperimental)
                     m_xDescriptionField->set_text(aLabel + aName + aTip + aExperimental);
                 else
@@ -1776,7 +1776,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     if ( bCreateMenu )
     {
         // Generate custom name for new menu
-        OUString prefix = CuiResId( RID_SVXSTR_NEW_MENU );
+        OUString prefix = CuiResId( RID_CUISTR_NEW_MENU );
 
         OUString newname = SvxConfigPageHelper::generateCustomName( prefix, entries );
         OUString newurl = SvxConfigPageHelper::generateCustomMenuURL( mpEntries.get() );
@@ -1803,7 +1803,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         // hide name label and textfield
         m_xMenuBox->hide();
         // change the title
-        m_xDialog->set_title(CuiResId(RID_SVXSTR_MOVE_MENU));
+        m_xDialog->set_title(CuiResId(RID_CUISTR_MOVE_MENU));
     }
 
     m_xMenuListBox->connect_changed(LINK(this, SvxMainMenuOrganizerDialog, SelectHdl));
@@ -2902,7 +2902,7 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, ImportHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxIconSelectorDialog, DeleteHdl, weld::Button&, void)
 {
-    OUString message = CuiResId( RID_SVXSTR_DELETE_ICON_CONFIRM );
+    OUString message = CuiResId( RID_CUISTR_DELETE_ICON_CONFIRM );
 
     std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xDialog.get(),
                                                VclMessageType::Warning, VclButtonsType::OkCancel,
@@ -2995,7 +2995,7 @@ namespace
     OUString ReplaceIconName(std::u16string_view rMessage)
     {
         OUString name;
-        OUString message = CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING );
+        OUString message = CuiResId( RID_CUISTR_REPLACE_ICON_WARNING );
         OUString placeholder("%ICONNAME" );
         sal_Int32 pos = message.indexOf( placeholder );
         if ( pos != -1 )
@@ -3014,10 +3014,10 @@ namespace
         SvxIconReplacementDialog(weld::Window *pParent, std::u16string_view rMessage, bool bYestoAll)
             : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Warning, VclButtonsType::NONE, ReplaceIconName(rMessage)))
         {
-            m_xQueryBox->set_title(CuiResId(RID_SVXSTR_REPLACE_ICON_CONFIRM));
+            m_xQueryBox->set_title(CuiResId(RID_CUISTR_REPLACE_ICON_CONFIRM));
             m_xQueryBox->add_button(GetStandardText(StandardButtonType::Yes), 2);
             if (bYestoAll)
-                m_xQueryBox->add_button(CuiResId(RID_SVXSTR_YESTOALL), 5);
+                m_xQueryBox->add_button(CuiResId(RID_CUISTR_YESTOALL), 5);
             m_xQueryBox->add_button(GetStandardText(StandardButtonType::No), 4);
             m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), 6);
             m_xQueryBox->set_default_response(2);

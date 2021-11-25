@@ -829,10 +829,10 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
 #if HAVE_FEATURE_SCRIPTING
     , m_pMacroInfoItem()
 #endif
-    , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
-    , aSaveAccelConfigStr(CuiResId(RID_SVXSTR_SAVEACCELCONFIG))
+    , aLoadAccelConfigStr(CuiResId(RID_CUISTR_LOADACCELCONFIG))
+    , aSaveAccelConfigStr(CuiResId(RID_CUISTR_SAVEACCELCONFIG))
     , aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL))
-    , aFilterCfgStr(CuiResId(RID_SVXSTR_FILTERNAME_CFG))
+    , aFilterCfgStr(CuiResId(RID_CUISTR_FILTERNAME_CFG))
     , m_bStylesInfoInitialized(false)
     , m_aUpdateDataTimer("SfxAcceleratorConfigPage UpdateDataTimer")
     , m_aFillGroupIdle("SfxAcceleratorConfigPage m_aFillGroupIdle")

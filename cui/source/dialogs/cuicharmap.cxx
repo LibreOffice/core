@@ -524,9 +524,9 @@ void SvxCharacterMap::init()
 
     // tdf#117038 set the buttons width to its max possible width so it doesn't
     // make layout change when the label changes
-    m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_REMOVE_FAVORITES));
+    m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_REMOVE_FAVORITES));
     auto nMaxWidth = m_xFavouritesBtn->get_preferred_size().Width();
-    m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_ADD_FAVORITES));
+    m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
     nMaxWidth = std::max(nMaxWidth, m_xFavouritesBtn->get_preferred_size().Width());
     m_xFavouritesBtn->set_size_request(nMaxWidth, -1);
 
@@ -590,7 +590,7 @@ void SvxCharacterMap::setFavButtonState(std::u16string_view sTitle, std::u16stri
 
     if (isFavChar(sTitle, rFont))
     {
-        m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_REMOVE_FAVORITES));
+        m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_REMOVE_FAVORITES));
     }
     else
     {
@@ -599,7 +599,7 @@ void SvxCharacterMap::setFavButtonState(std::u16string_view sTitle, std::u16stri
             m_xFavouritesBtn->set_sensitive(false);
         }
 
-        m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_ADD_FAVORITES));
+        m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
     }
 }
 
@@ -959,7 +959,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
 {
-    if (m_xFavouritesBtn->get_label().match(CuiResId(RID_SVXSTR_ADD_FAVORITES)))
+    if (m_xFavouritesBtn->get_label().match(CuiResId(RID_CUISTR_ADD_FAVORITES)))
     {
         updateFavCharacterList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
         setFavButtonState(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
@@ -967,7 +967,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
     else
     {
         deleteFavCharacterFromList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
-        m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_ADD_FAVORITES));
+        m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
         m_xFavouritesBtn->set_sensitive(false);
     }
 
@@ -1080,7 +1080,7 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
         // Select the corresponding character
         SetChar(cChar);
     else {
-        m_xCharName->set_label(CuiResId(RID_SVXSTR_MISSING_CHAR));
+        m_xCharName->set_label(CuiResId(RID_CUISTR_MISSING_CHAR));
         m_aShowChar.SetText(" ");
         switch(radix)
         {

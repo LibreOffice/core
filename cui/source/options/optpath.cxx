@@ -66,7 +66,7 @@ struct OptPath_Impl
     Reference< css::util::XPathSettings >   m_xPathSettings;
 
     OptPath_Impl()
-        : m_sMultiPathDlg(CuiResId(RID_SVXSTR_EDIT_PATHS))
+        : m_sMultiPathDlg(CuiResId(RID_CUISTR_EDIT_PATHS))
     {
     }
 };
@@ -250,39 +250,39 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
         switch (static_cast<SvtPathOptions::Paths>(i))
         {
             case SvtPathOptions::Paths::AutoCorrect:
-                pId = RID_SVXSTR_KEY_AUTOCORRECT_DIR;
+                pId = RID_CUISTR_KEY_AUTOCORRECT_DIR;
                 break;
             case SvtPathOptions::Paths::AutoText:
-                pId = RID_SVXSTR_KEY_GLOSSARY_PATH;
+                pId = RID_CUISTR_KEY_GLOSSARY_PATH;
                 break;
             case SvtPathOptions::Paths::Backup:
-                pId = RID_SVXSTR_KEY_BACKUP_PATH;
+                pId = RID_CUISTR_KEY_BACKUP_PATH;
                 break;
             case SvtPathOptions::Paths::Gallery:
-                pId = RID_SVXSTR_KEY_GALLERY_DIR;
+                pId = RID_CUISTR_KEY_GALLERY_DIR;
                 break;
             case SvtPathOptions::Paths::Graphic:
-                pId = RID_SVXSTR_KEY_GRAPHICS_PATH;
+                pId = RID_CUISTR_KEY_GRAPHICS_PATH;
                 break;
             case SvtPathOptions::Paths::Temp:
-                pId = RID_SVXSTR_KEY_TEMP_PATH;
+                pId = RID_CUISTR_KEY_TEMP_PATH;
                 break;
             case SvtPathOptions::Paths::Template:
-                pId = RID_SVXSTR_KEY_TEMPLATE_PATH;
+                pId = RID_CUISTR_KEY_TEMPLATE_PATH;
                 break;
             case SvtPathOptions::Paths::Dictionary:
-                pId = RID_SVXSTR_KEY_DICTIONARY_PATH;
+                pId = RID_CUISTR_KEY_DICTIONARY_PATH;
                 break;
             case SvtPathOptions::Paths::Classification:
-                pId = RID_SVXSTR_KEY_CLASSIFICATION_PATH;
+                pId = RID_CUISTR_KEY_CLASSIFICATION_PATH;
                 break;
 #if OSL_DEBUG_LEVEL > 1
             case SvtPathOptions::Paths::Linguistic:
-                pId = RID_SVXSTR_KEY_LINGUISTIC_DIR;
+                pId = RID_CUISTR_KEY_LINGUISTIC_DIR;
                 break;
 #endif
             case SvtPathOptions::Paths::Work:
-                pId = RID_SVXSTR_KEY_WORK_PATH;
+                pId = RID_CUISTR_KEY_WORK_PATH;
                 break;
             default: break;
         }

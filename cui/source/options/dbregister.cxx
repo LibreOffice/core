@@ -67,7 +67,7 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog(weld::Window* pParent, co
     , SfxSingleTabDialogController(pParent, &getRegistrationItems())
 {
     SetTabPage(DbRegistrationOptionsPage::Create(get_content_area(), this, &getRegistrationItems()));
-    m_xDialog->set_title(CuiResId(RID_SVXSTR_REGISTERED_DATABASES));
+    m_xDialog->set_title(CuiResId(RID_CUISTR_REGISTERED_DATABASES));
 }
 
 short DatabaseRegistrationDialog::run()
@@ -202,7 +202,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl, weld::Button&, void)
     if (nEntry != -1)
     {
         std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(GetFrameWeld(),
-                                                    VclMessageType::Question, VclButtonsType::YesNo, CuiResId(RID_SVXSTR_QUERY_DELETE_CONFIRM)));
+                                                    VclMessageType::Question, VclButtonsType::YesNo, CuiResId(RID_CUISTR_QUERY_DELETE_CONFIRM)));
         if (xQuery->run() == RET_YES)
             m_xPathBox->remove(nEntry);
     }

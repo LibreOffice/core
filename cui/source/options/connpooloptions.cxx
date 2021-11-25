@@ -46,8 +46,8 @@ namespace offapp
 
     ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
         : SfxTabPage(pPage, pController, "cui/ui/connpooloptions.ui", "ConnPoolPage", &_rAttrSet)
-        , m_sYes(CuiResId(RID_SVXSTR_YES))
-        , m_sNo(CuiResId(RID_SVXSTR_NO))
+        , m_sYes(CuiResId(RID_CUISTR_YES))
+        , m_sNo(CuiResId(RID_CUISTR_NO))
         , m_xEnablePooling(m_xBuilder->weld_check_button("connectionpooling"))
         , m_xDriversLabel(m_xBuilder->weld_label("driverslabel"))
         , m_xDriverList(m_xBuilder->weld_tree_view("driverlist"))

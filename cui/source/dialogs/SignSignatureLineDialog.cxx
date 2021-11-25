@@ -208,7 +208,7 @@ css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGr
     aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
 
     OUString aIssuerLine
-        = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
+        = CuiResId(RID_CUISTR_SIGNATURELINE_SIGNED_BY)
               .replaceFirst("%1", svx::SignatureLineHelper::getSignerName(m_xSelectedCertifate));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
     if (bValid)

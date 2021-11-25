@@ -70,13 +70,13 @@ static OUString charToString(const char* cString)
 static OUString getFileName(std::u16string_view aFileName)
 {
     if (aFileName == u"notebookbar.ui")
-        return CuiResId(RID_SVXSTR_TABBED);
+        return CuiResId(RID_CUISTR_TABBED);
     else if (aFileName == u"notebookbar_compact.ui")
-        return CuiResId(RID_SVXSTR_TABBED_COMPACT);
+        return CuiResId(RID_CUISTR_TABBED_COMPACT);
     else if (aFileName == u"notebookbar_groupedbar_full.ui")
-        return CuiResId(RID_SVXSTR_GROUPEDBAR);
+        return CuiResId(RID_CUISTR_GROUPEDBAR);
     else if (aFileName == u"notebookbar_groupedbar_compact.ui")
-        return CuiResId(RID_SVXSTR_GROUPEDBAR_COMPACT);
+        return CuiResId(RID_CUISTR_GROUPEDBAR_COMPACT);
     else
         return "None";
 }
@@ -154,7 +154,7 @@ void SvxNotebookbarConfigPage::Init()
     m_xSaveInListBox->append(sSaveInListBoxID, sScopeName);
     m_xSaveInListBox->set_active_id(sSaveInListBoxID);
 
-    m_xTopLevelListBox->append("NotebookBar", CuiResId(RID_SVXSTR_ALL_COMMANDS));
+    m_xTopLevelListBox->append("NotebookBar", CuiResId(RID_CUISTR_ALL_COMMANDS));
     m_xTopLevelListBox->set_active_id("NotebookBar");
     SelectElement();
 }
@@ -172,7 +172,7 @@ void SvxNotebookbarConfigPage::UpdateButtonStates() {}
 
 short SvxNotebookbarConfigPage::QueryReset()
 {
-    OUString msg = CuiResId(RID_SVXSTR_CONFIRM_TOOLBAR_RESET);
+    OUString msg = CuiResId(RID_CUISTR_CONFIRM_TOOLBAR_RESET);
 
     OUString saveInName = m_xSaveInListBox->get_active_text();
 

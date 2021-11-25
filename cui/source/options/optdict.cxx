@@ -136,7 +136,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
         // Detected an invalid character.
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      CuiResId(RID_SVXSTR_OPT_INVALID_DICT_NAME)));
+                                                      CuiResId(RID_CUISTR_OPT_INVALID_DICT_NAME)));
         xInfoBox->run();
         m_xNameEdit->grab_focus();
         return;
@@ -147,7 +147,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
         // duplicate names?
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      CuiResId(RID_SVXSTR_OPT_DOUBLE_DICTS)));
+                                                      CuiResId(RID_CUISTR_OPT_DOUBLE_DICTS)));
         xInfoBox->run();
         m_xNameEdit->grab_focus();
         return;
@@ -425,7 +425,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, weld::ComboBox&, vo
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Question, VclButtonsType::YesNo,
-                                                  CuiResId(RID_SVXSTR_CONFIRM_SET_LANGUAGE)));
+                                                  CuiResId(RID_CUISTR_CONFIRM_SET_LANGUAGE)));
     OUString sTxt(xBox->get_primary_text());
     sTxt = sTxt.replaceFirst("%1", m_xAllDictsLB->get_active_text());
     xBox->set_primary_text(sTxt);
@@ -468,7 +468,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     {
         m_xReplaceFT->set_label(sReplaceFT_Text);
     } else if (!bLangNone) {
-        m_xReplaceFT->set_label(CuiResId(RID_SVXSTR_OPT_GRAMMAR_BY));
+        m_xReplaceFT->set_label(CuiResId(RID_CUISTR_OPT_GRAMMAR_BY));
     }
 
     if(bIsNegative || !bLangNone)

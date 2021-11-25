@@ -434,14 +434,14 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  CuiResId(RID_SVXSTR_JRE_NOT_RECOGNIZED)));
+                                                  CuiResId(RID_CUISTR_JRE_NOT_RECOGNIZED)));
         xBox->run();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                  CuiResId(RID_SVXSTR_JRE_FAILED_VERSION)));
+                                                  CuiResId(RID_CUISTR_JRE_FAILED_VERSION)));
         xBox->run();
     }
 
@@ -712,7 +712,7 @@ void SvxJavaParameterDlg::EditParameter()
     if (nPos == -1)
         return;
 
-    InputDialog aParamEditDlg(m_xDialog.get(), CuiResId(RID_SVXSTR_JAVA_START_PARAM));
+    InputDialog aParamEditDlg(m_xDialog.get(), CuiResId(RID_CUISTR_JAVA_START_PARAM));
     OUString editableClassPath = m_xAssignedList->get_selected_text();
     aParamEditDlg.SetEntryText(editableClassPath);
     aParamEditDlg.HideHelpBtn();
@@ -792,8 +792,8 @@ SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aDlg(TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
-    aDlg.SetTitle( CuiResId( RID_SVXSTR_ARCHIVE_TITLE ) );
-    aDlg.AddFilter( CuiResId( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
+    aDlg.SetTitle( CuiResId( RID_CUISTR_ARCHIVE_TITLE ) );
+    aDlg.AddFilter( CuiResId( RID_CUISTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
     aDlg.SetContext(sfx2::FileDialogHelper::JavaClassPath);
     OUString sFolder;
     if (m_xPathList->count_selected_rows() > 0)
@@ -817,7 +817,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
             }
             else
             {
-                OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+                OUString sMsg( CuiResId( RID_CUISTR_MULTIFILE_DBL_ERR ) );
                 sMsg = sMsg.replaceFirst( "%1", sFile );
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Warning, VclButtonsType::Ok, sMsg));
@@ -826,7 +826,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
         }
         else
         {
-            OUString sMsg( CuiResId( RID_SVXSTR_CANNOTCONVERTURL_ERR ) );
+            OUString sMsg( CuiResId( RID_CUISTR_CANNOTCONVERTURL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sURL );
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, sMsg));
@@ -865,7 +865,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, weld::Button&, void)
             }
             else
             {
-                OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+                OUString sMsg( CuiResId( RID_CUISTR_MULTIFILE_DBL_ERR ) );
                 sMsg = sMsg.replaceFirst( "%1", sNewFolder );
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Warning, VclButtonsType::Ok, sMsg));
@@ -874,7 +874,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, weld::Button&, void)
         }
         else
         {
-            OUString sMsg( CuiResId( RID_SVXSTR_CANNOTCONVERTURL_ERR ) );
+            OUString sMsg( CuiResId( RID_CUISTR_CANNOTCONVERTURL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sFolderURL );
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, sMsg));

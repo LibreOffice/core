@@ -295,7 +295,7 @@ IMPL_LINK(SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void)
 
     if (rIdent == "toolbar_gear_add")
     {
-        OUString prefix = CuiResId(RID_SVXSTR_NEW_TOOLBAR);
+        OUString prefix = CuiResId(RID_CUISTR_NEW_TOOLBAR);
 
         OUString aNewName
             = SvxConfigPageHelper::generateCustomName(prefix, GetSaveInData()->GetEntries());
@@ -358,11 +358,11 @@ IMPL_LINK(SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void)
 
         //Rename the toolbar
         OUString sCurrentName(SvxConfigPageHelper::stripHotKey(pToolbar->GetName()));
-        OUString sDesc = CuiResId(RID_SVXSTR_LABEL_NEW_NAME);
+        OUString sDesc = CuiResId(RID_CUISTR_LABEL_NEW_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), sCurrentName, sDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_TOOLBAR);
-        aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_TOOLBAR));
+        aNameDialog.set_title(CuiResId(RID_CUISTR_RENAME_TOOLBAR));
 
         if (aNameDialog.run() == RET_OK)
         {
@@ -474,11 +474,11 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             = reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
 
         OUString aNewName(SvxConfigPageHelper::stripHotKey(pEntry->GetName()));
-        OUString aDesc = CuiResId(RID_SVXSTR_LABEL_NEW_NAME);
+        OUString aDesc = CuiResId(RID_CUISTR_LABEL_NEW_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM);
-        aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_TOOLBAR));
+        aNameDialog.set_title(CuiResId(RID_CUISTR_RENAME_TOOLBAR));
 
         if (aNameDialog.run() == RET_OK)
         {
@@ -659,7 +659,7 @@ IMPL_LINK_NOARG(SvxToolbarConfigPage, ResetToolbarHdl, weld::Button&, void)
 
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
         GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
-        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT)));
+        CuiResId(RID_CUISTR_CONFIRM_RESTORE_DEFAULT)));
     if (xQueryBox->run() == RET_YES)
     {
         ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>(GetSaveInData());
@@ -696,7 +696,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
 short SvxToolbarConfigPage::QueryReset()
 {
-    OUString msg = CuiResId(RID_SVXSTR_CONFIRM_TOOLBAR_RESET);
+    OUString msg = CuiResId(RID_CUISTR_CONFIRM_TOOLBAR_RESET);
 
     OUString saveInName = m_xSaveInListBox->get_active_text();
 

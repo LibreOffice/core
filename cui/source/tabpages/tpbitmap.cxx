@@ -523,7 +523,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
     if( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    OUString aDesc( CuiResId( RID_SVXSTR_DESC_NEW_BITMAP ) );
+    OUString aDesc( CuiResId( RID_CUISTR_DESC_NEW_BITMAP ) );
     OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -718,7 +718,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 {
     weld::Window* pDialogFrameWeld = GetFrameWeld();
 
-    SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_ADD_IMAGE), pDialogFrameWeld);
+    SvxOpenGraphicDialog aDlg(CuiResId(RID_CUISTR_ADD_IMAGE), pDialogFrameWeld);
     aDlg.EnableLink(false);
     tools::Long nCount = m_pBitmapList->Count();
 
@@ -733,7 +733,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 
     if( !nError )
     {
-        OUString aDesc(CuiResId(RID_SVXSTR_DESC_EXT_BITMAP));
+        OUString aDesc(CuiResId(RID_CUISTR_DESC_EXT_BITMAP));
 
         // convert file URL to UI name
         OUString        aName;

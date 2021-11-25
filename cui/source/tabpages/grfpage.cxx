@@ -656,7 +656,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
              if (abs(ax - ay) > 1) {
                 sPPI += u"\u00D7" + OUString::number(ay);
              }
-             sTemp += " " + CuiResId(RID_SVXSTR_PPI).replaceAll("%1", sPPI);
+             sTemp += " " + CuiResId(RID_CUISTR_PPI).replaceAll("%1", sPPI);
         }
         m_xOrigSizeFT->set_label(sTemp);
     }

@@ -297,9 +297,9 @@ IMPL_LINK(CuiConfigFunctionListBox, QueryTooltip, const weld::TreeIter&, rIter, 
     SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter).toInt64());
     if (!pData)
         return OUString();
-    OUString aLabel = CuiResId(RID_SVXSTR_COMMANDLABEL) + ": ";
-    OUString aName = CuiResId(RID_SVXSTR_COMMANDNAME) + ": ";
-    OUString aTip = CuiResId(RID_SVXSTR_COMMANDTIP) + ": ";
+    OUString aLabel = CuiResId(RID_CUISTR_COMMANDLABEL) + ": ";
+    OUString aName = CuiResId(RID_CUISTR_COMMANDNAME) + ": ";
+    OUString aTip = CuiResId(RID_CUISTR_COMMANDTIP) + ": ";
     return  aLabel + pData->sLabel + "\n" + aName + pData->sCommand+ "\n" + aTip + pData->sTooltip;
 }
 
@@ -355,12 +355,12 @@ struct SvxConfigGroupBoxResource_Impl
 };
 
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
-    m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS)),
-    m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
-    m_sMacros(CuiResId(RID_SVXSTR_BASICMACROS)),
-    m_sDlgMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
-    m_aStrGroupStyles(CuiResId(RID_SVXSTR_GROUP_STYLES)),
-    m_aStrGroupSidebarDecks(CuiResId(RID_SVXSTR_GROUP_SIDEBARDECKS))
+    m_sMyMacros(CuiResId(RID_CUISTR_MYMACROS)),
+    m_sProdMacros(CuiResId(RID_CUISTR_PRODMACROS)),
+    m_sMacros(CuiResId(RID_CUISTR_BASICMACROS)),
+    m_sDlgMacros(CuiResId(RID_CUISTR_PRODMACROS)),
+    m_aStrGroupStyles(CuiResId(RID_CUISTR_GROUP_STYLES)),
+    m_aStrGroupSidebarDecks(CuiResId(RID_CUISTR_GROUP_SIDEBARDECKS))
 {
 }
 
@@ -481,7 +481,7 @@ void CuiConfigGroupListBox::InitModule()
             // Add All Commands category
             aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
             m_xTreeView->append(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())),
-                                CuiResId(RID_SVXSTR_ALLFUNCTIONS));
+                                CuiResId(RID_CUISTR_ALLFUNCTIONS));
         }
 
         for (i1=0; i1<c1; ++i1)
@@ -1244,7 +1244,7 @@ IMPL_LINK(SvxScriptSelectorDialog, ClickHdl, weld::Button&, rButton, void)
 void
 SvxScriptSelectorDialog::SetRunLabel()
 {
-    m_xOKButton->set_label(CuiResId(RID_SVXSTR_SELECTOR_RUN));
+    m_xOKButton->set_label(CuiResId(RID_CUISTR_SELECTOR_RUN));
 }
 
 OUString
