@@ -729,17 +729,20 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
     tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+    bool bLokRTL = bLayoutRTL && bIsTiledRendering;
     std::unique_ptr<ScLokRTLContext> pLokRTLCtxt(
-        bIsTiledRendering && bLayoutRTL ?
+        bLokRTL ?
             new ScLokRTLContext(aOutputData, aOriginalMode.GetOrigin().X() / TWIPS_PER_PIXEL) :
             nullptr);
 
     {
         // get drawing pixel rect
-        tools::Rectangle aDrawingRectPixel(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
+        tools::Rectangle aDrawingRectPixel(
+            bLokRTL ? Point(-(nScrX + aOutputData.GetScrW()), nScrY) : Point(nScrX, nScrY),
+            Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
 
         // correct for border (left/right)
-        if(rDoc.MaxCol() == nX2)
+        if(rDoc.MaxCol() == nX2 && !bLokRTL)
         {
             if(bLayoutRTL)
             {
@@ -960,7 +963,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if (bIsTiledRendering)
     {
         Point aOrigin = aOriginalMode.GetOrigin();
-        Size aPixelOffset(aOrigin.getX() / TWIPS_PER_PIXEL, aOrigin.getY() / TWIPS_PER_PIXEL);
+        tools::Long nXOffset = bLayoutRTL ? (-aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.GetScrW()) : aOrigin.getX() / TWIPS_PER_PIXEL;
+        Size aPixelOffset(nXOffset, aOrigin.getY() / TWIPS_PER_PIXEL);
         pContentDev->SetPixelOffset(aPixelOffset);
         comphelper::LibreOfficeKit::setLocalRendering();
     }
@@ -1081,7 +1085,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
                             Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
 
-                            if (bIsTiledRendering && bLayoutRTL)
+                            if (bLokRTL)
                             {
                                 // Transform the cell range X coordinates such that the edit cell area is
                                 // horizontally mirrored w.r.t the (combined-)tile.
@@ -1095,7 +1099,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             aEnd.AdjustY( -2 );
 
                             tools::Rectangle aBackground(aStart, aEnd);
-                            if (bIsTiledRendering && bLayoutRTL)
+                            if (bLokRTL)
                                 aBackground.Justify();
 
                             // Need to draw the background in absolute coords.
@@ -1171,7 +1175,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         Point aStart = mrViewData.GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eWhich );
 
-        if (bIsTiledRendering && bLayoutRTL)
+        if (bLokRTL)
         {
             // Transform the cell range X coordinates such that the edit cell area is
             // horizontally mirrored w.r.t the (combined-)tile.
@@ -1186,7 +1190,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         // set the correct mapmode
         tools::Rectangle aBackground(aStart, aEnd);
-        if (bIsTiledRendering && bLayoutRTL)
+        if (bLokRTL)
             aBackground.Justify();
         tools::Rectangle aBGAbs(aBackground);
 
