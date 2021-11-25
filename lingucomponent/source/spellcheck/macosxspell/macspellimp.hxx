@@ -24,7 +24,6 @@
 
 #include <premac.h>
 #ifdef MACOSX
-#include <Carbon/Carbon.h>
 #import <Cocoa/Cocoa.h>
 #else
 #include <UIKit/UIKit.h>
