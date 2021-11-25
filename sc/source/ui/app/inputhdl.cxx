@@ -3794,10 +3794,21 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     }
                     if (pTopView)
                     {
-                        if ( bUsed && rKEvt.GetKeyCode().GetFunction() == KeyFuncType::CUT )
-                            pTopView->DeleteSelected();
-                        else if ( pTopView->PostKeyEvent( rKEvt ) )
+                        if (comphelper::LibreOfficeKit::isActive() &&
+                            rKEvt.GetKeyCode().GetFunction() == KeyFuncType::PASTE &&
+                            !pTopView->GetWindow() && pTableView->GetWindow() &&
+                            !pTopView->IsReadOnly())
+                        {
+                            pTopView->PasteWithClipboard(pTableView->GetWindow()->GetClipboard());
                             bUsed = true;
+                        }
+                        else
+                        {
+                            if ( bUsed && rKEvt.GetKeyCode().GetFunction() == KeyFuncType::CUT )
+                                pTopView->DeleteSelected();
+                            else if ( pTopView->PostKeyEvent( rKEvt ) )
+                                bUsed = true;
+                        }
                     }
                 }
 

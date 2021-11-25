@@ -647,7 +647,12 @@ void EditView::Copy()
 void EditView::Paste()
 {
     Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(pImpEditView->GetClipboard());
-    pImpEditView->Paste( aClipBoard );
+    PasteWithClipboard( aClipBoard );
+}
+
+void EditView::PasteWithClipboard(css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard)
+{
+    pImpEditView->Paste( xClipboard );
 }
 
 void EditView::PasteSpecial()

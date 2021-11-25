@@ -22,6 +22,7 @@
 
 #include <config_options.h>
 #include <memory>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <i18nlangtag/lang.h>
@@ -234,6 +235,8 @@ public:
     void            Copy();
     void            Paste();
     void            PasteSpecial();
+
+    void            PasteWithClipboard(css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard);
 
     void            Undo();
     void            Redo();
