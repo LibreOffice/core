@@ -368,19 +368,6 @@ Dim vNodePath As Variant
 					Set .Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
 				End If
 				Set _GetUNOService = .Introspection
-			Case &quot;Locale&quot;
-				If IsEmpty(.Locale) Or IsNull(.Locale) Then
-					.Locale = CreateUnoStruct(&quot;com.sun.star.lang.Locale&quot;)
-					&apos;	Derived from the Tools library
-					Set oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
-					vNodePath = Array()	:	ReDim vNodePath(0)
-					vNodePath(0) = New com.sun.star.beans.PropertyValue
-					vNodePath(0).Name = &quot;nodepath&quot;	:	vNodePath(0).Value = &quot;org.openoffice.Setup/L10N&quot;
-					sLocale = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, vNodePath()).getByName(&quot;ooLocale&quot;)
-					.Locale.Language = Left(sLocale, 2)
-					.Locale.Country = Right(sLocale, 2)
-				End If
-				Set _GetUNOService = .Locale
 			Case &quot;MacroExpander&quot;
 				Set oDefaultContext = GetDefaultContext()
 				If Not IsNull(oDefaultContext) Then Set _GetUNOService = oDefaultContext.getValueByName(&quot;/singletons/com.sun.star.util.theMacroExpander&quot;)
@@ -429,6 +416,19 @@ Dim vNodePath As Variant
 					End With
 				End If
 				Set _GetUNOService = .SearchOptions
+			Case &quot;SystemLocale&quot;, &quot;Locale&quot;
+				If IsEmpty(.Locale) Or IsNull(.Locale) Then
+					.Locale = CreateUnoStruct(&quot;com.sun.star.lang.Locale&quot;)
+					&apos;	Derived from the Tools library
+					Set oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
+					vNodePath = Array()	:	ReDim vNodePath(0)
+					vNodePath(0) = New com.sun.star.beans.PropertyValue
+					vNodePath(0).Name = &quot;nodepath&quot;	:	vNodePath(0).Value = &quot;org.openoffice.System/L10N&quot;
+					sLocale = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, vNodePath()).getByName(&quot;SystemLocale&quot;)
+					.Locale.Language = Left(sLocale, 2)
+					.Locale.Country = Right(sLocale, 2)
+				End If
+				Set _GetUNOService = .Locale
 			Case &quot;SystemShellExecute&quot;
 				If IsEmpty(.SystemShellExecute) Or IsNull(.SystemShellExecute) Then
 					Set .SystemShellExecute = CreateUnoService(&quot;com.sun.star.system.SystemShellExecute&quot;)

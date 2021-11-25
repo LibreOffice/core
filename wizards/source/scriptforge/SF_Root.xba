@@ -283,7 +283,7 @@ Try:
 		&apos;	Build the po file name
 		With SF_FileSystem
 			sInstallFolder = ._SFInstallFolder()	&apos;	ScriptForge installation folder
-			sLocale = SF_Utils._GetUNOService(&quot;Locale&quot;).Language
+			sLocale = SF_Utils._GetUNOService(&quot;SystemLocale&quot;).Language
 			sPOFolder = .BuildPath(sInstallFolder, &quot;po&quot;)
 			sPOFile = .BuildPath(sPOFolder, sLocale &amp; &quot;.po&quot;)
 			If Not .FileExists(sPOFile) Then	&apos;	File not found =&gt; load texts from code below

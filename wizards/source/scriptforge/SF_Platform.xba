@@ -351,7 +351,7 @@ Const cstSubArgs = &quot;&quot;
 			&apos;	Remove leading and trailing commas
 			If Len(sFonts) &gt; 1 Then _PropertyGet = Split(Mid(sFonts, 2, Len(sFonts) - 2), &quot;,&quot;) Else _PropertyGet = Array()
 		Case &quot;Locale&quot;
-			Set oLocale = SF_Utils._GetUNOService(&quot;Locale&quot;)
+			Set oLocale = SF_Utils._GetUNOService(&quot;SystemLocale&quot;)
 			_PropertyGet = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
 		Case &quot;OfficeVersion&quot;
 			_PropertyGet = _GetProductName()
