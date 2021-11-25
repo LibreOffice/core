@@ -9856,22 +9856,20 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRec
 namespace {
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-bool button_release_is_outside(GtkWidget* pWidget, GtkWidget* pMenuHack, GdkEventButton* pEvent)
+bool button_event_is_outside(GtkWidget* pMenuHack, GdkEventButton* pEvent)
 {
     //we want to pop down if the button was released outside our popup
     gdouble x = pEvent->x_root;
     gdouble y = pEvent->y_root;
-    gint xoffset, yoffset;
-    gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
+
+    gint window_x, window_y;
+    GdkSurface* pWindow = widget_get_surface(pMenuHack);
+    gdk_window_get_position(pWindow, &window_x, &window_y);
 
     GtkAllocation alloc;
-    gtk_widget_get_allocation(pWidget, &alloc);
-    xoffset += alloc.x;
-    yoffset += alloc.y;
-
     gtk_widget_get_allocation(pMenuHack, &alloc);
-    gint x1 = alloc.x + xoffset;
-    gint y1 = alloc.y + yoffset;
+    gint x1 = window_x;
+    gint y1 = window_y;
     gint x2 = x1 + alloc.width;
     gint y2 = y1 + alloc.height;
 
@@ -10037,10 +10035,10 @@ private:
         return false;
     }
 
-    static gboolean signalButtonRelease(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
+    static gboolean signalButtonRelease(GtkWidget* /*pWidget*/, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
-        if (pThis->m_nButtonPressSeen && button_release_is_outside(pWidget, GTK_WIDGET(pThis->m_pMenuHack), pEvent))
+        if (pThis->m_nButtonPressSeen && button_event_is_outside(GTK_WIDGET(pThis->m_pMenuHack), pEvent))
             pThis->set_active(false);
         return false;
     }
@@ -20402,36 +20400,17 @@ private:
         }
     }
 
-    static gboolean signalButtonPress(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
+    static gboolean signalButtonPress(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
-        return pThis->button_press(pWidget, pEvent);
+        return pThis->button_press(pEvent);
     }
 
-    bool button_press(GtkWidget* pWidget, GdkEventButton* pEvent)
+    bool button_press(GdkEventButton* pEvent)
     {
         //we want to pop down if the button was pressed outside our popup
-        gdouble x = pEvent->x_root;
-        gdouble y = pEvent->y_root;
-        gint xoffset, yoffset;
-        gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
-
-        GtkAllocation alloc;
-        gtk_widget_get_allocation(pWidget, &alloc);
-        xoffset += alloc.x;
-        yoffset += alloc.y;
-
-        gtk_widget_get_allocation(GTK_WIDGET(m_pMenuWindow), &alloc);
-        gint x1 = alloc.x + xoffset;
-        gint y1 = alloc.y + yoffset;
-        gint x2 = x1 + alloc.width;
-        gint y2 = y1 + alloc.height;
-
-        if (x > x1 && x < x2 && y > y1 && y < y2)
-            return false;
-
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
-
+        if (button_event_is_outside(GTK_WIDGET(m_pMenuWindow), pEvent))
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         return false;
     }
 
@@ -22028,10 +22007,10 @@ private:
         return false;
     }
 
-    static gboolean signalButtonRelease(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
+    static gboolean signalButtonRelease(GtkWidget* /*pWidget*/, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
-        if (pThis->m_nButtonPressSeen && button_release_is_outside(pWidget, GTK_WIDGET(pThis->m_pMenuHack), pEvent))
+        if (pThis->m_nButtonPressSeen && button_event_is_outside(GTK_WIDGET(pThis->m_pMenuHack), pEvent))
             pThis->popdown();
         return false;
     }
