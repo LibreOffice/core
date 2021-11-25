@@ -340,14 +340,11 @@ GalleryBrowser2::GalleryBrowser2(weld::Builder& rBuilder, Gallery* pGallery)
     , mxIconButton(rBuilder.weld_toggle_button("icon"))
     , mxListButton(rBuilder.weld_toggle_button("list"))
     , mxInfoBar(rBuilder.weld_label("label"))
-    , mxDev(mxListView->create_virtual_device())
     , maPreviewSize(28, 28)
     , mnCurActionPos      ( 0xffffffff )
     , meMode              ( GALLERYBROWSERMODE_NONE )
     , meLastMode          ( GALLERYBROWSERMODE_NONE )
 {
-    mxDev->SetOutputSizePixel(maPreviewSize);
-
     m_xContext.set( ::comphelper::getProcessComponentContext() );
 
     int nHeight = mxListView->get_height_rows(10);
@@ -858,6 +855,9 @@ void GalleryBrowser2::UpdateRows(bool bVisibleOnly)
             }
         }
 
+        ScopedVclPtr<VirtualDevice> xDev(mxListView->create_virtual_device());
+        xDev->SetOutputSizePixel(maPreviewSize);
+
         if (!aBitmapEx.IsEmpty())
         {
             const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
@@ -865,19 +865,17 @@ void GalleryBrowser2::UpdateRows(bool bVisibleOnly)
                 ((maPreviewSize.Width() - aBitmapExSizePixel.Width()) >> 1),
                 ((maPreviewSize.Height() - aBitmapExSizePixel.Height()) >> 1));
 
-            mxDev->Erase();
-
             if (aBitmapEx.IsAlpha())
             {
                 // draw checkered background
-                GalleryIconView::drawTransparenceBackground(*mxDev, aPos, aBitmapExSizePixel);
+                GalleryIconView::drawTransparenceBackground(*xDev, aPos, aBitmapExSizePixel);
             }
 
-            mxDev->DrawBitmapEx(aPos, aBitmapEx);
+            xDev->DrawBitmapEx(aPos, aBitmapEx);
         }
 
         mxListView->set_text(rEntry, sItemTextTitle);
-        mxListView->set_image(rEntry, *mxDev);
+        mxListView->set_image(rEntry, *xDev);
         mxListView->set_id(rEntry, OUString());
 
         return false;
