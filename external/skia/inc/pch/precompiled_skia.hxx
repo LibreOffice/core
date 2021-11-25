@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-10 22:24:48 using:
+ Generated on 2021-11-25 16:36:08 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -54,6 +54,7 @@
 #include <png.h>
 #include <queue>
 #include <sstream>
+#include <stack>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -215,6 +216,7 @@
 #include <include/private/SkSLLayout.h>
 #include <include/private/SkSLModifiers.h>
 #include <include/private/SkSLProgramElement.h>
+#include <include/private/SkSLProgramKind.h>
 #include <include/private/SkSLSampleUsage.h>
 #include <include/private/SkSLStatement.h>
 #include <include/private/SkSLString.h>
@@ -261,18 +263,15 @@
 #include <src/codec/SkColorTable.h>
 #include <src/codec/SkFrameHolder.h>
 #include <src/codec/SkIcoCodec.h>
-#include <src/codec/SkJpegCodec.h>
 #include <src/codec/SkMaskSwizzler.h>
 #include <src/codec/SkMasks.h>
 #include <src/codec/SkPngCodec.h>
 #include <src/codec/SkPngPriv.h>
-#include <src/codec/SkRawCodec.h>
 #include <src/codec/SkSampledCodec.h>
 #include <src/codec/SkSampler.h>
 #include <src/codec/SkStreamBuffer.h>
 #include <src/codec/SkSwizzler.h>
 #include <src/codec/SkWbmpCodec.h>
-#include <src/codec/SkWebpCodec.h>
 #include <src/core/SkAAClip.h>
 #include <src/core/SkATrace.h>
 #include <src/core/SkAdvancedTypefaceMetrics.h>
@@ -292,6 +291,7 @@
 #include <src/core/SkBlenderBase.h>
 #include <src/core/SkBlitRow.h>
 #include <src/core/SkBlitter.h>
+#include <src/core/SkBlockAllocator.h>
 #include <src/core/SkBlurMask.h>
 #include <src/core/SkBuffer.h>
 #include <src/core/SkCachedData.h>
@@ -454,6 +454,7 @@
 #include <src/effects/SkEmbossMaskFilter.h>
 #include <src/effects/SkOpPE.h>
 #include <src/effects/SkTrimPE.h>
+#include <src/effects/imagefilters/SkCropImageFilter.h>
 #include <src/effects/imagefilters/SkRuntimeImageFilter.h>
 #include <src/gpu/BaseDevice.h>
 #include <src/gpu/GrBlend.h>
@@ -502,6 +503,7 @@
 #include <src/gpu/text/GrSDFTControl.h>
 #include <src/gpu/text/GrStrikeCache.h>
 #include <src/gpu/text/GrTextBlobCache.h>
+#include <src/gpu/v1/SurfaceDrawContext_v1.h>
 #include <src/image/SkImage_Base.h>
 #include <src/image/SkImage_Gpu.h>
 #include <src/image/SkImage_Lazy.h>

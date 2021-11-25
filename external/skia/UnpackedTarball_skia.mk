@@ -25,11 +25,10 @@ skia_patches := \
     windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
-    fix-without-gl.patch.0 \
+    fix-without-gl.patch.1 \
     windows-typeface-directwrite.patch.0 \
     windows-raster-surface-no-copies.patch.1 \
     fix-windows-dwrite.patch.1 \
-    constexpr-debug-std-max.patch.1 \
     swap-buffers-rect.patch.1 \
     ubsan.patch.0 \
     fast-png-write.patch.1 \
@@ -37,6 +36,7 @@ skia_patches := \
     fix-warnings.patch.1 \
     disable-freetype-colrv1.1 \
     windows-libraries-system32.patch.1 \
+    fix-graphite-ifdef.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
