@@ -48,14 +48,14 @@ const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 #define PKG_SIZE_ENCR_MNFST 12
 
 // the properties related constants
-#define ENCRYPTION_KEY_PROPERTY "EncryptionKey"
-#define STORAGE_ENCRYPTION_KEYS_PROPERTY "StorageEncryptionKeys"
-#define ENCRYPTION_ALGORITHMS_PROPERTY "EncryptionAlgorithms"
-#define ENCRYPTION_GPG_PROPERTIES "EncryptionGpGProperties"
+inline constexpr OUStringLiteral ENCRYPTION_KEY_PROPERTY = u"EncryptionKey";
+inline constexpr OUStringLiteral STORAGE_ENCRYPTION_KEYS_PROPERTY = u"StorageEncryptionKeys";
+inline constexpr OUStringLiteral ENCRYPTION_ALGORITHMS_PROPERTY = u"EncryptionAlgorithms";
+inline constexpr OUStringLiteral ENCRYPTION_GPG_PROPERTIES = u"EncryptionGpGProperties";
 #define HAS_ENCRYPTED_ENTRIES_PROPERTY "HasEncryptedEntries"
 #define HAS_NONENCRYPTED_ENTRIES_PROPERTY "HasNonEncryptedEntries"
 #define IS_INCONSISTENT_PROPERTY "IsInconsistent"
-#define MEDIATYPE_FALLBACK_USED_PROPERTY "MediaTypeFallbackUsed"
+inline constexpr OUStringLiteral MEDIATYPE_FALLBACK_USED_PROPERTY = u"MediaTypeFallbackUsed";
 
 #endif
 
