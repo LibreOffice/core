@@ -1673,19 +1673,7 @@ SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
 
 SwTextBoxNode::~SwTextBoxNode()
 {
-    if (m_pTextBoxTable.size())
-    {
-        for (auto& rTextBox : m_pTextBoxTable)
-        {
-            rTextBox.second->SetOtherTextBoxFormat(nullptr);
-            rTextBox.second = nullptr;
-        }
-        m_pTextBoxTable.clear();
-    }
-
-    if (m_pOwnerShapeFormat && m_pOwnerShapeFormat->GetOtherTextBoxFormat())
-        m_pOwnerShapeFormat->SetOtherTextBoxFormat(nullptr);
-
+    m_pTextBoxTable.clear();
     m_pOwnerShapeFormat = nullptr;
 }
 
@@ -1732,9 +1720,8 @@ void SwTextBoxNode::DelTextBox(SwFrameFormat* pTextBox)
         return;
 
     for (auto it = m_pTextBoxTable.begin(); it != m_pTextBoxTable.end(); ++it)
-        if (it->second == pTextBox)
+        if (it->second->GetName() == pTextBox->GetName())
         {
-            it->second->SetOtherTextBoxFormat(nullptr);
             m_pTextBoxTable.erase(it->first);
             break;
         }

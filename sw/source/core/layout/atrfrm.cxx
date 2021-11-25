@@ -2555,6 +2555,7 @@ SwFrameFormat::~SwFrameFormat()
         // This is a fly-frame-format just delete this
         // textbox entry from the draw-frame-format.
         m_pOtherTextBoxFormat->DelTextBox(this);
+        m_pOtherTextBoxFormat = nullptr;
     }
 
     if (Which() == RES_DRAWFRMFMT)
