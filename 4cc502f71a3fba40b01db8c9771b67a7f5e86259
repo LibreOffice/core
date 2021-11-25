@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7a936d8_6895d863",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-25T11:14:27Z",
+      "side": 1,
+      "message": "Hi Xisco!\nThanks you for the quick response, and as I see You modified the test too so, i think we can merge it right now (after Jenkins).",
+      "parentUuid": "86c49555_575c4e58",
+      "revId": "4cc502f71a3fba40b01db8c9771b67a7f5e86259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13cdb44f_f74fb455",
