@@ -1130,8 +1130,7 @@ void XmlFilterBase::exportCustomFragments()
     uno::Reference<beans::XPropertySet> xPropSet(xModel, uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
-    static constexpr OUStringLiteral aName = u"" UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if (!xPropSetInfo->hasPropertyByName(aName))
+    if (!xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         return;
 
     uno::Sequence<uno::Reference<xml::dom::XDocument>> customXmlDomlist;
@@ -1142,7 +1141,7 @@ void XmlFilterBase::exportCustomFragments()
     uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypes;
 
     uno::Sequence<beans::PropertyValue> propList;
-    xPropSet->getPropertyValue(aName) >>= propList;
+    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
     for (const auto& rProp : std::as_const(propList))
     {
         const OUString propName = rProp.Name;
