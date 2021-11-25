@@ -1613,9 +1613,6 @@ IMPL_LINK(StyleList, FmtSelectHdl, weld::TreeView&, rListBox, void)
     if (!rListBox.get_cursor(xHdlEntry.get()))
         return;
 
-    if (rListBox.is_selected(*xHdlEntry))
-        m_aUpdateStyleDependents.Call(nullptr);
-
     m_pParentDialog->SelectStyle(rListBox.get_text(*xHdlEntry), true, *this);
 }
 
