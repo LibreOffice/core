@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92da994e_18d026db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-11-25T11:03:06Z",
+      "side": 1,
+      "message": "this is a many months old change, and doesn\u0027t state any reason why it would be necessary.\n\nSince it apparently worked for all lthe years, whether empty value or not, I guess it is safe to assume that the change can be abandoned?",
+      "revId": "1aa3633458169757d580ce2062146c86aa487e5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
