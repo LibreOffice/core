@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "519ec07a_ac489d8e",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10306,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-25T10:09:40Z",
+      "side": 0,
+      "message": "oh, i somehow never noticed this fallback check when i incremented the first check to 7.63.0 - good to get rid of this.",
+      "range": {
+        "startLine": 10306,
+        "startChar": 8,
+        "endLine": 10306,
+        "endChar": 55
+      },
+      "revId": "8c66455df8f6a26c314290f252bedbc19db6b327",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

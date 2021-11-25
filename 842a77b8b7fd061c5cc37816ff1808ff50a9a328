@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0426a250_5446d341",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-25T10:09:40Z",
+      "side": 1,
+      "message": "oops i didn\u0027t notice that.\n\nwe definitely need 7.63 for some URI feature, but multi_wakeup is only needed to implement abort() which i have never tested yet (it should work in theory :) but in neon it has been disabled forever because there it couldn\u0027t even work in theory...\n\nso if anybody finds 7.68 an inconvenient requirement we could also just put an #ifdef into abort().",
+      "revId": "842a77b8b7fd061c5cc37816ff1808ff50a9a328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
