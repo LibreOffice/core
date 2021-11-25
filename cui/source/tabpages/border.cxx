@@ -37,6 +37,7 @@
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/intitem.hxx>
@@ -1374,7 +1375,7 @@ void SvxBorderTabPage::FillPresetVS()
     {
         m_xWndPresets->InsertItem( nVSIdx );
         m_xWndPresets->SetItemImage(nVSIdx, m_aBorderImgVec[GetPresetImageId(nVSIdx) - 1]);
-        m_xWndPresets->SetItemText( nVSIdx, CuiResId( GetPresetStringId( nVSIdx ) ) );
+        m_xWndPresets->SetItemText( nVSIdx, SvxResId( GetPresetStringId( nVSIdx ) ) );
     }
 
     // show the control
