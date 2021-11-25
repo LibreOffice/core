@@ -818,8 +818,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteParagraphTag)
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:footnoteRef", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSpacingLineRule,"table_lineRule.docx")
+CPPUNIT_TEST_FIXTURE(Test, testSpacingLineRule)
 {
+    loadAndReload("table_lineRule.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
 }
@@ -1016,8 +1017,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCrashWhileSave)
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFileOpenInputOutputError)
 {
+    loadAndReload("floatingtbl_with_formula.docx");
     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");

@@ -489,8 +489,9 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76803, "fdo76803.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo76803)
 {
+    loadAndReload("fdo76803.docx");
     // The ContourPolyPolygon was wrong
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
 

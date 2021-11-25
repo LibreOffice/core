@@ -211,9 +211,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), nIndex);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCrossReferenceCustomFormat,
-                                    "table_cross_reference_custom_format.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 {
+    loadAndReload("table_cross_reference_custom_format.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting

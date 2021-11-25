@@ -73,9 +73,9 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143860NonPrimitiveCustomShape,
-                                    "tdf143860_NonPrimitiveCustomShape.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
 {
+    loadAndReload("tdf143860_NonPrimitiveCustomShape.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The document has a custom shape of type non-primitive without handles. Make sure that the shape
@@ -121,9 +121,9 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nXCoord);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCustomShape,
-                                    "tdf142433_WrapPolygonCustomShape.odt")
+CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
 {
+    loadAndReload("tdf142433_WrapPolygonCustomShape.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has 4-point star with contour wrap. Error was, that the enhanced path was written

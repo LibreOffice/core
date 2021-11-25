@@ -204,8 +204,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesParagraphProperties)
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMsoSpt180, "mso-spt180.docx")
+CPPUNIT_TEST_FIXTURE(Test, testMsoSpt180)
 {
+    loadAndReload("mso-spt180.docx");
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), "CustomShapeGeometry");
     OUString aType;
@@ -257,8 +258,9 @@ DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice,"table-row-data-displaye
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73556,"fdo73556.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo73556)
 {
+    loadAndSave("fdo73556.docx");
     /*
     *  The file contains a table with 3 columns
     *  the gridcols are as follows: {1210, 1331, 1210}
@@ -314,16 +316,18 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76741)
     assertXPath(pXmlDoc, "//w:tblW", "type", "dxa");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73541,"fdo73541.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo73541)
 {
+    loadAndSave("fdo73541.docx");
     // fdo#73541: The mirrored margins were not imported and mapped correctly in Page Layout
     // Hence <w:mirrorMargins /> tag was not exported back in settings.xml
     xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
     assertXPath(pXmlDoc, "/w:settings/w:mirrorMargins");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo106029,"fdo106029.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo106029)
 {
+    loadAndSave("fdo106029.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotExpandShiftReturn");
 }
@@ -534,8 +538,9 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberedLists_StartingWithZero)
     assertXPath(pXmlDoc, "w:numbering/w:abstractNum[1]/w:lvl[1]/w:start", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageBreak,"fdo74566.docx")
+CPPUNIT_TEST_FIXTURE(Test, testPageBreak)
 {
+    loadAndReload("fdo74566.docx");
     /*  Break to next page was written into wrong paragraph as <w:pageBreakBefore />.
      *  LO was not preserving Page Break as <w:br w:type="page" />.
      *  Now after fix , LO writes Page Break as the new paragraph and also

@@ -271,8 +271,9 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeInFloattable)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEmptyAnnotationMark, "empty-annotation-mark.docx")
+CPPUNIT_TEST_FIXTURE(Test, testEmptyAnnotationMark)
 {
+    loadAndReload("empty-annotation-mark.docx");
     // Delete the word that is commented, and save again.
     uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 3);
     CPPUNIT_ASSERT_EQUAL(OUString("with"), xRun->getString());

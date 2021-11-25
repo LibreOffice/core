@@ -48,8 +48,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledN
     CPPUNIT_ASSERT_EQUAL(OUString("i"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135906, "tdf135906.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
+    loadAndSave("tdf135906.docx");
     // just test round-tripping. The document was exported as corrupt and didn't re-load.
 }
 
