@@ -24,6 +24,7 @@
 #include <svl/poolitem.hxx>
 #include "calbck.hxx"
 #include "frmfmt.hxx"
+#include <svl/listener.hxx>
 
 class IntlWrapper;
 
@@ -51,8 +52,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    const SwFrameFormat *GetHeaderFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
-          SwFrameFormat *GetHeaderFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+    const SwFrameFormat *const m_pFrameFormat;
+          SwFrameFormat *m_pFrameFormat;
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return m_bActive; }
@@ -82,8 +83,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    const SwFrameFormat *GetFooterFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
-          SwFrameFormat *GetFooterFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+    const SwFrameFormat *const m_pFrameFormat;
+          SwFrameFormat *m_pFrameFormat;
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return m_bActive; }
