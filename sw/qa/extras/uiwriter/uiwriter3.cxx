@@ -1182,6 +1182,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf143574.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"),
+                         xShapeDescriptor->getShapeType());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // At this point Writer crashed here before the fix.
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, xShapeProps->getPropertyValue("TextBox").get<bool>());
+
+    dispatchCommand(mxComponent, ".uno:RemoveTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(false, xShapeProps->getPropertyValue("TextBox").get<bool>());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
 {
     createSwDoc(DATA_DIRECTORY, "tdf140828.docx");
