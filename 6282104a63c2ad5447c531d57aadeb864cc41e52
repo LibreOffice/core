@@ -50,6 +50,24 @@
       "message": "I have a suggestion:\nDATE() doesn\u0027t accept year values below 1583, which AFAIK is the year from which we know for certain that the date and dow is correct.\nI  propose to apply the same validation as DATE() for WEEKS().\nCertainly for mode 1, it is not realistic to think in ISO9601 weeks for date before 1583.",
       "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a223d21_4e8f7abf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-25T15:06:46Z",
+      "side": 1,
+      "message": "Thanks!\n\nIf I understand correctly, you are confused that 0001-01-01 is not Monday in Calc, right?\n\nThat is because the 0001-01-01 we are talking about *here* (and that is used in the scaddins/source/datefunc/datefunc.cxx) is the proleptic Gregorian, while what Calc uses for pre-Gregorian times is Julian - see tdf#144699 (and bugs linked from there). There\u0027s no \"one is right and one is not\", only different calendars used - so Gregorian\u0027s 0001-01-01 is Julian\u0027s 0001-01-03; and Julian\u0027s 0001-01-01 is Gregorian\u0027s -0001-12-30 (Saturday).\n\nSo given all that, checks of week crossing \"Gregorian date 0\" (0001-01-01) should use e.g. Julian\u0027s (current Calc\u0027s) 0001-01-02 and 0001-01-04.\n\nRegarding \u0027\u003dWEEKS(\"-0001-12-17\";\"-0001-12-20\";1)\u0027 - that is another way to see how negatives may hit us - of course, Mondays give whole (negative) numbers when divided by 7; and previous week\u0027s Tue till Sun also will get rounded to that number when using integer calculations (because integer division rounds numbers toward zero).\n\nSo I still suppose that my suggestion of using floating-point math and floor() would be the cleanest solution, not requiring two alternative branches of code here.",
+      "parentUuid": "d21c18df_a6089508",
+      "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
