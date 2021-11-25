@@ -23,6 +23,8 @@ will be used to write the log under `instdir/uitest/`.
 
 * `SAL_DISABLE_WATCHDOG` - don't start the thread that watches for broken GL/Vulkan/OpenCL drivers
 
+* `SAL_NO_MOUSEGRABS` - for debugging - stop blocking UI if a breakpoint is hit
+
 ## Gtk+
 
 * `VCL_GTK3_PAINTDEBUG` - in debug builds, if set to `1` then holding down `shift+0` forces a redraw event, `shift+1` repaints everything, and
