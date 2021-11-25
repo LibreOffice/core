@@ -112,7 +112,7 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
         }
     }
 
-    m_pApply->set_label(CuiResId(RID_SVXSTR_UI_APPLYALL).replaceFirst("%MODULE", GetCurrentApp()));
+    m_pApply->set_label(CuiResId(RID_CUISTR_UI_APPLYALL).replaceFirst("%MODULE", GetCurrentApp()));
     m_pApply->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
     m_pApplyAll->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
 

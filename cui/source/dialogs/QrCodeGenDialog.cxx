@@ -219,7 +219,7 @@ short QrCodeGenDialog::run()
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                     mpParent, VclMessageType::Warning, VclButtonsType::Ok,
-                    CuiResId(RID_SVXSTR_QRCODEDATALONG)));
+                    CuiResId(RID_CUISTR_QRCODEDATALONG)));
                 xBox->run();
             }
         }

@@ -189,7 +189,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , nInitFormat(std::numeric_limits<sal_uInt32>::max())
     , m_nLbFormatSelPosEdComment(SELPOS_NONE)
     , bLegacyAutomaticCurrency(false)
-    , sAutomaticLangEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
+    , sAutomaticLangEntry(CuiResId(RID_CUISTR_AUTO_ENTRY))
     , m_xFtCategory(m_xBuilder->weld_label("categoryft"))
     , m_xLbCategory(m_xBuilder->weld_tree_view("categorylb"))
     , m_xFtFormat(m_xBuilder->weld_label("formatft"))

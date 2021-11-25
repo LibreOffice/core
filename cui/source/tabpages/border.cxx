@@ -140,10 +140,10 @@ static sal_Int64 lcl_GetMinLineWidth(SvxBorderLineStyle aStyle)
 }
 
 // number of preset images to show
-const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
+const sal_uInt16 BORDER_PRESET_COUNT = 5;
 
 // number of shadow images to show
-const sal_uInt16 SVX_BORDER_SHADOW_COUNT = 5;
+const sal_uInt16 BORDER_SHADOW_COUNT = 5;
 
 ShadowControlsWrapper::ShadowControlsWrapper(ValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor)
     : mrVsPos(rVsPos)
@@ -412,7 +412,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     for (auto const & rImageId : aShadowImageIds)
         m_aShadowImgVec.emplace_back(StockImage::Yes, rImageId);
 
-    assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
+    assert(m_aShadowImgVec.size() == BORDER_SHADOW_COUNT);
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -1300,7 +1300,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
 sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
 {
     // table with all sets of predefined border styles
-    static const sal_uInt16 ppnImgIds[][ SVX_BORDER_PRESET_COUNT ] =
+    static const sal_uInt16 ppnImgIds[][ BORDER_PRESET_COUNT ] =
     {
         // simple cell without diagonal frame borders
         {   IID_PRE_CELL_NONE,  IID_PRE_CELL_ALL,       IID_PRE_CELL_LR,        IID_PRE_CELL_TB,    IID_PRE_CELL_L          },
@@ -1325,7 +1325,7 @@ sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
     else
         nLine = 4;
 
-    DBG_ASSERT( (1 <= nValueSetIdx) && (nValueSetIdx <= SVX_BORDER_PRESET_COUNT),
+    DBG_ASSERT( (1 <= nValueSetIdx) && (nValueSetIdx <= BORDER_PRESET_COUNT),
         "SvxBorderTabPage::GetPresetImageId - wrong index" );
     return ppnImgIds[ nLine ][ nValueSetIdx - 1 ];
 }
@@ -1367,10 +1367,10 @@ void SvxBorderTabPage::FillPresetVS()
 {
     // basic initialization of the ValueSet
     m_xWndPresets->SetStyle( m_xWndPresets->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    m_xWndPresets->SetColCount( SVX_BORDER_PRESET_COUNT );
+    m_xWndPresets->SetColCount( BORDER_PRESET_COUNT );
 
     // insert images and help texts
-    for( sal_uInt16 nVSIdx = 1; nVSIdx <= SVX_BORDER_PRESET_COUNT; ++nVSIdx )
+    for( sal_uInt16 nVSIdx = 1; nVSIdx <= BORDER_PRESET_COUNT; ++nVSIdx )
     {
         m_xWndPresets->InsertItem( nVSIdx );
         m_xWndPresets->SetItemImage(nVSIdx, m_aBorderImgVec[GetPresetImageId(nVSIdx) - 1]);
@@ -1387,14 +1387,14 @@ void SvxBorderTabPage::FillShadowVS()
 {
     // basic initialization of the ValueSet
     m_xWndShadows->SetStyle( m_xWndShadows->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    m_xWndShadows->SetColCount( SVX_BORDER_SHADOW_COUNT );
+    m_xWndShadows->SetColCount( BORDER_SHADOW_COUNT );
 
     // string resource IDs for each image
-    static const TranslateId pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
-        { RID_SVXSTR_SHADOW_STYLE_NONE, RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT, RID_SVXSTR_SHADOW_STYLE_TOPRIGHT, RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT, RID_SVXSTR_SHADOW_STYLE_TOPLEFT };
+    static const TranslateId pnStrIds[ BORDER_SHADOW_COUNT ] =
+        { RID_CUISTR_SHADOW_STYLE_NONE, RID_CUISTR_SHADOW_STYLE_BOTTOMRIGHT, RID_CUISTR_SHADOW_STYLE_TOPRIGHT, RID_CUISTR_SHADOW_STYLE_BOTTOMLEFT, RID_CUISTR_SHADOW_STYLE_TOPLEFT };
 
     // insert images and help texts
-    for( sal_uInt16 nVSIdx = 1; nVSIdx <= SVX_BORDER_SHADOW_COUNT; ++nVSIdx )
+    for( sal_uInt16 nVSIdx = 1; nVSIdx <= BORDER_SHADOW_COUNT; ++nVSIdx )
     {
         m_xWndShadows->InsertItem( nVSIdx );
         m_xWndShadows->SetItemImage(nVSIdx, m_aShadowImgVec[nVSIdx-1]);

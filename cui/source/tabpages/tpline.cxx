@@ -1553,7 +1553,7 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
     }
     else if (rIdent == "file")
     {
-        SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC), GetFrameWeld());
+        SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_CUISTR_EDIT_GRAPHIC), GetFrameWeld());
         aGrfDlg.EnableLink(false);
         aGrfDlg.AsLink(false);
         if( !aGrfDlg.Execute() )

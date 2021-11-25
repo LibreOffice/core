@@ -100,10 +100,10 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     , m_xReenterPasswdToModifyFT(m_xBuilder->weld_label("label8"))
     , m_xReenterPasswdToModifyED(m_xBuilder->weld_entry("confirmropassEntry"))
     , m_xReenterPasswdToModifyInd(m_xBuilder->weld_label("confirmropassIndicator"))
-    , m_aOneMismatch( CuiResId( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
-    , m_aTwoMismatch( CuiResId( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
-    , m_aInvalidStateForOkButton( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
-    , m_aInvalidStateForOkButton_v2( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
+    , m_aOneMismatch( CuiResId( RID_CUISTR_ONE_PASSWORD_MISMATCH ) )
+    , m_aTwoMismatch( CuiResId( RID_CUISTR_TWO_PASSWORDS_MISMATCH ) )
+    , m_aInvalidStateForOkButton( CuiResId( RID_CUISTR_INVALID_STATE_FOR_OK_BUTTON ) )
+    , m_aInvalidStateForOkButton_v2( CuiResId( RID_CUISTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
     , m_nMaxPasswdLen(nMaxPasswdLen)
     , m_bIsPasswordToModify( bIsPasswordToModify )
 {
@@ -111,7 +111,7 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
 
     if (nMaxPasswdLen)
     {
-        OUString aIndicatorTemplate(CuiResId(RID_SVXSTR_PASSWORD_LEN_INDICATOR).replaceFirst("%1", OUString::number(nMaxPasswdLen)));
+        OUString aIndicatorTemplate(CuiResId(RID_CUISTR_PASSWORD_LEN_INDICATOR).replaceFirst("%1", OUString::number(nMaxPasswdLen)));
         m_xPasswdToOpenED->set_max_length( nMaxPasswdLen );
         m_xPasswdToOpenED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
         m_xPasswdToOpenInd->set_label(aIndicatorTemplate);

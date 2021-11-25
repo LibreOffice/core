@@ -374,17 +374,17 @@ SvxScriptOrgDialog::SvxScriptOrgDialog(weld::Window* pParent, const OUString& la
     : SfxDialogController(pParent, "cui/ui/scriptorganizer.ui", "ScriptOrganizerDialog")
     , m_pParent(pParent)
     , m_sLanguage(language)
-    , m_delErrStr(CuiResId(RID_SVXSTR_DELFAILED))
-    , m_delErrTitleStr(CuiResId(RID_SVXSTR_DELFAILED_TITLE))
-    , m_delQueryStr(CuiResId(RID_SVXSTR_DELQUERY))
-    , m_delQueryTitleStr(CuiResId(RID_SVXSTR_DELQUERY_TITLE))
-    , m_createErrStr(CuiResId(RID_SVXSTR_CREATEFAILED))
-    , m_createDupStr(CuiResId(RID_SVXSTR_CREATEFAILEDDUP))
-    , m_createErrTitleStr(CuiResId(RID_SVXSTR_CREATEFAILED_TITLE))
-    , m_renameErrStr(CuiResId(RID_SVXSTR_RENAMEFAILED))
-    , m_renameErrTitleStr(CuiResId(RID_SVXSTR_RENAMEFAILED_TITLE))
-    , m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS))
-    , m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS))
+    , m_delErrStr(CuiResId(RID_CUISTR_DELFAILED))
+    , m_delErrTitleStr(CuiResId(RID_CUISTR_DELFAILED_TITLE))
+    , m_delQueryStr(CuiResId(RID_CUISTR_DELQUERY))
+    , m_delQueryTitleStr(CuiResId(RID_CUISTR_DELQUERY_TITLE))
+    , m_createErrStr(CuiResId(RID_CUISTR_CREATEFAILED))
+    , m_createDupStr(CuiResId(RID_CUISTR_CREATEFAILEDDUP))
+    , m_createErrTitleStr(CuiResId(RID_CUISTR_CREATEFAILED_TITLE))
+    , m_renameErrStr(CuiResId(RID_CUISTR_RENAMEFAILED))
+    , m_renameErrTitleStr(CuiResId(RID_CUISTR_RENAMEFAILED_TITLE))
+    , m_sMyMacros(CuiResId(RID_CUISTR_MYMACROS))
+    , m_sProdMacros(CuiResId(RID_CUISTR_PRODMACROS))
     , m_xScriptsBox(m_xBuilder->weld_tree_view("scripts"))
     , m_xScratchIter(m_xScriptsBox->make_iterator())
     , m_xRunButton(m_xBuilder->weld_button("ok"))
@@ -1121,12 +1121,12 @@ OUString FormatErrorString(
 
     if ( !type.empty() )
     {
-        result += "\n\n" + CuiResId(RID_SVXSTR_ERROR_TYPE_LABEL) + " " + type;
+        result += "\n\n" + CuiResId(RID_CUISTR_ERROR_TYPE_LABEL) + " " + type;
     }
 
     if ( !message.empty() )
     {
-        result += "\n\n" + CuiResId(RID_SVXSTR_ERROR_MESSAGE_LABEL) + " " + message;
+        result += "\n\n" + CuiResId(RID_CUISTR_ERROR_MESSAGE_LABEL) + " " + message;
     }
 
     return result;
@@ -1135,7 +1135,7 @@ OUString FormatErrorString(
 OUString GetErrorMessage(
     const provider::ScriptErrorRaisedException& eScriptError )
 {
-    OUString unformatted = CuiResId( RID_SVXSTR_ERROR_AT_LINE );
+    OUString unformatted = CuiResId( RID_CUISTR_ERROR_AT_LINE );
 
     OUString unknown("UNKNOWN");
     OUString language = unknown;
@@ -1160,11 +1160,11 @@ OUString GetErrorMessage(
     if ( eScriptError.lineNum != -1 )
     {
         line = OUString::number( eScriptError.lineNum );
-        unformatted = CuiResId( RID_SVXSTR_ERROR_AT_LINE );
+        unformatted = CuiResId( RID_CUISTR_ERROR_AT_LINE );
     }
     else
     {
-        unformatted = CuiResId( RID_SVXSTR_ERROR_RUNNING );
+        unformatted = CuiResId( RID_CUISTR_ERROR_RUNNING );
     }
 
     return FormatErrorString(
@@ -1174,7 +1174,7 @@ OUString GetErrorMessage(
 OUString GetErrorMessage(
     const provider::ScriptExceptionRaisedException& eScriptException )
 {
-    OUString unformatted = CuiResId( RID_SVXSTR_EXCEPTION_AT_LINE );
+    OUString unformatted = CuiResId( RID_CUISTR_EXCEPTION_AT_LINE );
 
     OUString unknown("UNKNOWN");
     OUString language = unknown;
@@ -1200,11 +1200,11 @@ OUString GetErrorMessage(
     if ( eScriptException.lineNum != -1 )
     {
         line = OUString::number( eScriptException.lineNum );
-        unformatted = CuiResId( RID_SVXSTR_EXCEPTION_AT_LINE );
+        unformatted = CuiResId( RID_CUISTR_EXCEPTION_AT_LINE );
     }
     else
     {
-        unformatted = CuiResId( RID_SVXSTR_EXCEPTION_RUNNING );
+        unformatted = CuiResId( RID_CUISTR_EXCEPTION_RUNNING );
     }
 
     if ( !eScriptException.exceptionType.isEmpty() )
@@ -1219,7 +1219,7 @@ OUString GetErrorMessage(
 OUString GetErrorMessage(
     const provider::ScriptFrameworkErrorException& sError )
 {
-    OUString unformatted = CuiResId( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING );
+    OUString unformatted = CuiResId( RID_CUISTR_FRAMEWORK_ERROR_RUNNING );
 
     OUString language("UNKNOWN");
 
@@ -1237,8 +1237,7 @@ OUString GetErrorMessage(
     }
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
-        message =
-            CuiResId(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED );
+        message = CuiResId(RID_CUISTR_ERROR_LANG_NOT_SUPPORTED);
         message = ReplaceString(message, "%LANGUAGENAME", language );
 
     }
@@ -1320,7 +1319,7 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
     OUString message = xData->sMessage;
 
     if ( message.isEmpty() )
-        message = CuiResId( RID_SVXSTR_ERROR_TITLE );
+        message = CuiResId( RID_CUISTR_ERROR_TITLE );
 
     std::shared_ptr<weld::MessageDialog> xBox;
     xBox.reset(Application::CreateMessageDialog(
@@ -1330,7 +1329,7 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
             message,
             comphelper::LibreOfficeKit::isActive()));
 
-    xBox->set_title(CuiResId(RID_SVXSTR_ERROR_TITLE));
+    xBox->set_title(CuiResId(RID_CUISTR_ERROR_TITLE));
 
     xBox->runAsync(xBox, [](sal_Int32 /*nResult*/) {});
 }

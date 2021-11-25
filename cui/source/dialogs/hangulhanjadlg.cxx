@@ -452,8 +452,8 @@ namespace svx
         m_xSuggestions->set_size_request(m_xOriginalWord->get_approximate_digit_width() * 42,
                                          m_xOriginalWord->get_text_height() * 5);
 
-        const OUString sHangul(CuiResId(RID_SVXSTR_HANGUL));
-        const OUString sHanja(CuiResId(RID_SVXSTR_HANJA));
+        const OUString sHangul(CuiResId(RID_CUISTR_HANGUL));
+        const OUString sHanja(CuiResId(RID_CUISTR_HANJA));
         m_xHanjaAbove->init( sHangul, sHanja, PseudoRubyText::eAbove );
         m_xHanjaBelow->init( sHangul, sHanja, PseudoRubyText::eBelow );
         m_xHangulAbove->init( sHanja, sHangul, PseudoRubyText::eAbove );
@@ -1432,7 +1432,7 @@ namespace svx
 
     HangulHanjaEditDictDialog::HangulHanjaEditDictDialog(weld::Window* pParent, HHDictList& _rDictList, sal_uInt32 nSelDict)
         : GenericDialogController(pParent, "cui/ui/hangulhanjaeditdictdialog.ui", "HangulHanjaEditDictDialog")
-        , m_aEditHintText        ( CuiResId(RID_SVXSTR_EDITHINT) )
+        , m_aEditHintText        ( CuiResId(RID_CUISTR_EDITHINT) )
         , m_rDictList            ( _rDictList )
         , m_nCurrentDict         ( 0xFFFFFFFF )
         , m_nTopPos              ( 0 )

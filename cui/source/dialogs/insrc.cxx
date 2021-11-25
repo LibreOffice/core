@@ -37,15 +37,15 @@ SvxInsRowColDlg::SvxInsRowColDlg(weld::Window* pParent, bool bColumn, const OStr
     , m_xBeforeBtn(m_xBuilder->weld_radio_button("insert_before"))
     , m_xAfterBtn(m_xBuilder->weld_radio_button("insert_after"))
 {
-    m_xDialog->set_title(bColumn ? CuiResId(RID_SVXSTR_COL) : CuiResId(RID_SVXSTR_ROW));
+    m_xDialog->set_title(bColumn ? CuiResId(RID_CUISTR_COL) : CuiResId(RID_CUISTR_ROW));
 
     // tdf#119293
     if (bColumn) {
-        m_xBeforeBtn->set_label(CuiResId(RID_SVXSTR_INSERTCOL_BEFORE));
-        m_xAfterBtn->set_label(CuiResId(RID_SVXSTR_INSERTCOL_AFTER));
+        m_xBeforeBtn->set_label(CuiResId(RID_CUISTR_INSERTCOL_BEFORE));
+        m_xAfterBtn->set_label(CuiResId(RID_CUISTR_INSERTCOL_AFTER));
     } else {
-        m_xBeforeBtn->set_label(CuiResId(RID_SVXSTR_INSERTROW_BEFORE));
-        m_xAfterBtn->set_label(CuiResId(RID_SVXSTR_INSERTROW_AFTER));
+        m_xBeforeBtn->set_label(CuiResId(RID_CUISTR_INSERTROW_BEFORE));
+        m_xAfterBtn->set_label(CuiResId(RID_CUISTR_INSERTROW_AFTER));
     }
 
     m_xDialog->set_help_id(rHelpId);

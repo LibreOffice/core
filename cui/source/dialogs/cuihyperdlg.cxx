@@ -114,7 +114,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     mbGrabFocus = true;
 
     // set OK/Cancel - button
-    m_xCancelBtn->set_label(CuiResId(RID_SVXSTR_HYPDLG_CLOSEBUT));
+    m_xCancelBtn->set_label(CuiResId(RID_CUISTR_HYPDLG_CLOSEBUT));
 
     // create itemset for tabpages
     mpItemSet = std::make_unique<SfxItemSetFixed<SID_HYPERLINK_GETLINK,

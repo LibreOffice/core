@@ -249,7 +249,7 @@ bool SvxHyperlinkNewDocTp::AskApply()
     {
         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpDialog->getDialog(),
                                                    VclMessageType::Warning, VclButtonsType::Ok,
-                                                   CuiResId(RID_SVXSTR_HYPDLG_NOVALIDFILENAME)));
+                                                   CuiResId(RID_CUISTR_HYPDLG_NOVALIDFILENAME)));
         xWarn->run();
     }
     return bRet;
@@ -368,7 +368,7 @@ void SvxHyperlinkNewDocTp::DoApply()
         {
             std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpDialog->getDialog(),
                                                        VclMessageType::Warning, VclButtonsType::YesNo,
-                                                       CuiResId(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE)));
+                                                       CuiResId(RID_CUISTR_HYPERDLG_QUERYOVERWRITE)));
             bCreate = xWarn->run() == RET_YES;
         }
     }

@@ -94,7 +94,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
     // add filter
     try
     {
-        xFilePicker->appendFilter(CuiResId(RID_SVXSTR_FILTER_ALL), "*.*");
+        xFilePicker->appendFilter(CuiResId(RID_CUISTR_FILTER_ALL), "*.*");
     }
     catch( const IllegalArgumentException& )
     {
@@ -208,7 +208,7 @@ short SvInsertOleDlg::run()
                                     xProgress = xProgressFactory->createStatusIndicator();
                                     if (xProgress)
                                     {
-                                        aProgressText = CuiResId(RID_SVXSTR_OLE_INSERT);
+                                        aProgressText = CuiResId(RID_CUISTR_OLE_INSERT);
                                     }
                                 }
                             }
@@ -312,7 +312,7 @@ short SvInsertOleDlg::run()
                         xProgress = xProgressFactory->createStatusIndicator();
                         if (xProgress)
                         {
-                            OUString aOleInsert(CuiResId(RID_SVXSTR_OLE_INSERT));
+                            OUString aOleInsert(CuiResId(RID_CUISTR_OLE_INSERT));
                             xProgress->start(aOleInsert, 100);
                         }
                     }
@@ -624,7 +624,7 @@ IMPL_LINK_NOARG( SfxInsertFloatingFrameDialog, OpenHdl, weld::Button&, void)
             SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_xDialog.get());
 
     // set the title
-    aFileDlg.SetTitle(CuiResId(RID_SVXSTR_SELECT_FILE_IFRAME));
+    aFileDlg.SetTitle(CuiResId(RID_CUISTR_SELECT_FILE_IFRAME));
 
     // show the dialog
     if ( aFileDlg.Execute() == ERRCODE_NONE )

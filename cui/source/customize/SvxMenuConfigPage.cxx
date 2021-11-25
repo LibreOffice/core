@@ -243,7 +243,7 @@ void SvxMenuConfigPage::DeleteSelectedContent()
 
 short SvxMenuConfigPage::QueryReset()
 {
-    OUString msg = CuiResId(RID_SVXSTR_CONFIRM_MENU_RESET);
+    OUString msg = CuiResId(RID_CUISTR_CONFIRM_MENU_RESET);
 
     OUString saveInName = m_xSaveInListBox->get_active_text();
 
@@ -300,11 +300,11 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
         OUString sCurrentName(SvxConfigPageHelper::stripHotKey(pMenuData->GetName()));
-        OUString sDesc = CuiResId(RID_SVXSTR_LABEL_NEW_NAME);
+        OUString sDesc = CuiResId(RID_CUISTR_LABEL_NEW_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), sCurrentName, sDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU);
-        aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
+        aNameDialog.set_title(CuiResId(RID_CUISTR_RENAME_MENU));
 
         if (aNameDialog.run() == RET_OK)
         {
@@ -386,11 +386,11 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
     else if (rIdent == "insertsubmenu")
     {
         OUString aNewName;
-        OUString aDesc = CuiResId(RID_SVXSTR_SUBMENU_NAME);
+        OUString aDesc = CuiResId(RID_CUISTR_SUBMENU_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_NAME_SUBMENU);
-        aNameDialog.set_title(CuiResId(RID_SVXSTR_ADD_SUBMENU));
+        aNameDialog.set_title(CuiResId(RID_CUISTR_ADD_SUBMENU));
 
         if (aNameDialog.run() == RET_OK)
         {
@@ -434,11 +434,11 @@ IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             = reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
 
         OUString aNewName(SvxConfigPageHelper::stripHotKey(pEntry->GetName()));
-        OUString aDesc = CuiResId(RID_SVXSTR_LABEL_NEW_NAME);
+        OUString aDesc = CuiResId(RID_CUISTR_LABEL_NEW_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU_ITEM);
-        aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
+        aNameDialog.set_title(CuiResId(RID_CUISTR_RENAME_MENU));
 
         if (aNameDialog.run() == RET_OK)
         {
@@ -477,7 +477,7 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
 
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
         GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
-        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU)));
+        CuiResId(RID_CUISTR_CONFIRM_RESTORE_DEFAULT_MENU)));
 
     // Resetting individual top-level menus is not possible at the moment.
     // So we are resetting only if it is a context menu

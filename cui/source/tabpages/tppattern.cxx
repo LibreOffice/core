@@ -147,7 +147,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 
     // determining (possibly cutting) the name and
     // displaying it in the GroupBox
-    OUString        aString = CuiResId( RID_SVXSTR_TABLE ) + ": ";
+    OUString        aString = CuiResId( RID_CUISTR_TABLE ) + ": ";
     INetURLObject   aURL( m_pPatternList->GetPath() );
 
     aURL.Append( m_pPatternList->GetName() );
@@ -323,7 +323,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
 {
 
     OUString aNewName( SvxResId( RID_SVXSTR_PATTERN_UNTITLED ) );
-    OUString aDesc( CuiResId( RID_SVXSTR_DESC_NEW_PATTERN ) );
+    OUString aDesc( CuiResId( RID_CUISTR_DESC_NEW_PATTERN ) );
     OUString aName;
 
     tools::Long nCount = m_pPatternList->Count();
@@ -436,7 +436,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    OUString aDesc(CuiResId(RID_SVXSTR_DESC_NEW_PATTERN));
+    OUString aDesc(CuiResId(RID_CUISTR_DESC_NEW_PATTERN));
     OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

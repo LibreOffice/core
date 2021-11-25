@@ -54,7 +54,7 @@ SvxMeasureDialog::SvxMeasureDialog(weld::Window* pParent, const SfxItemSet& rInA
     xPage->Construct();
 
     SetTabPage(std::move(xPage));
-    m_xDialog->set_title(CuiResId(RID_SVXSTR_DIMENSION_LINE));
+    m_xDialog->set_title(CuiResId(RID_CUISTR_DIMENSION_LINE));
 }
 
 /*************************************************************************

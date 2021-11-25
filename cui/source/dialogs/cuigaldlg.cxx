@@ -457,7 +457,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, weld::Button&, void)
 
         if ((pInfo->GetId() == nId) && (pInfo->GetThemeName() != m_pThm->GetName()))
         {
-            OUString aStr = CuiResId( RID_SVXSTR_GALLERY_ID_EXISTS ) +
+            OUString aStr = CuiResId( RID_CUISTR_GALLERY_ID_EXISTS ) +
                 " (" + pInfo->GetThemeName() + ")";
 
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
@@ -487,7 +487,7 @@ GalleryThemeProperties::GalleryThemeProperties(weld::Widget* pParent,
     OUString aText = m_xDialog->get_title().replaceFirst( "%1",  pData->pTheme->GetName() );
 
     if (pData->pTheme->IsReadOnly())
-        aText +=  " " + CuiResId( RID_SVXSTR_GALLERY_READONLY );
+        aText +=  " " + CuiResId( RID_CUISTR_GALLERY_READONLY );
 
     m_xDialog->set_title(aText);
 }
@@ -518,7 +518,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     GalleryTheme*       pThm = pData->pTheme;
     OUString            aOutStr( OUString::number(pThm->GetObjectCount()) );
-    OUString            aObjStr( CuiResId( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
+    OUString            aObjStr( CuiResId( RID_CUISTR_GALLERYPROPS_OBJECT ) );
     OUString            aAccess;
     OUString            aType( SvxResId( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     bool            bReadOnly = pThm->IsReadOnly();
@@ -528,7 +528,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     m_xEdtMSName->set_sensitive(!bReadOnly);
 
     if( pThm->IsReadOnly() )
-        aType += CuiResId( RID_SVXSTR_GALLERY_READONLY );
+        aType += CuiResId( RID_CUISTR_GALLERY_READONLY );
 
     m_xFtMSShowType->set_label(aType);
     m_xFtMSShowPath->set_label(pThm->getThemeURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
@@ -611,7 +611,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     m_xCbbFileType->connect_changed(LINK(this, TPGalleryThemeProperties, SelectFileTypeHdl));
     m_xLbxFound->connect_row_activated(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
     m_xLbxFound->connect_changed(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
-    m_xLbxFound->append_text(CuiResId(RID_SVXSTR_GALLERY_NOFILES));
+    m_xLbxFound->append_text(CuiResId(RID_CUISTR_GALLERY_NOFILES));
     m_xLbxFound->show();
 
     FillFilterList();
@@ -767,7 +767,7 @@ void TPGalleryThemeProperties::FillFilterList()
 #endif
 
     std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
-    pFilterEntry->aFilterName = CuiResId(RID_SVXSTR_GALLERY_ALLFILES);
+    pFilterEntry->aFilterName = CuiResId(RID_CUISTR_GALLERY_ALLFILES);
     pFilterEntry->aFilterName = addExtension(pFilterEntry->aFilterName, aExtensions);
     m_xCbbFileType->insert_text(0, pFilterEntry->aFilterName);
     m_xCbbFileType->set_active(0);
@@ -909,7 +909,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, weld::Button&, void)
 
     if (!m_xLbxFound->count_selected_rows() || !bEntriesFound)
     {
-        SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_KEY_GALLERY_DIR), GetFrameWeld());
+        SvxOpenGraphicDialog aDlg(CuiResId(RID_CUISTR_KEY_GALLERY_DIR), GetFrameWeld());
         aDlg.EnableLink(false);
         aDlg.AsLink(false);
 
@@ -991,7 +991,7 @@ void TPGalleryThemeProperties::EndSearchProgressHdl(sal_Int32 /*nResult*/)
   }
   else
   {
-      m_xLbxFound->append_text(CuiResId(RID_SVXSTR_GALLERY_NOFILES));
+      m_xLbxFound->append_text(CuiResId(RID_CUISTR_GALLERY_NOFILES));
       m_xBtnTakeAll->set_sensitive(false);
       m_xCbxPreview->set_sensitive(false);
       bEntriesFound = false;

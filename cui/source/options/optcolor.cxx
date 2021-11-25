@@ -815,9 +815,9 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, weld::Button&, rButton, vo
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(),
-                            sName, CuiResId(RID_SVXSTR_COLOR_CONFIG_SAVE2) ));
+                            sName, CuiResId(RID_CUISTR_COLOR_CONFIG_SAVE2) ));
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
-        aNameDlg->SetText(CuiResId(RID_SVXSTR_COLOR_CONFIG_SAVE1));
+        aNameDlg->SetText(CuiResId(RID_CUISTR_COLOR_CONFIG_SAVE1));
         aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         if(RET_OK == aNameDlg->Execute())
@@ -835,8 +835,8 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, weld::Button&, rButton, vo
         DBG_ASSERT(m_xColorSchemeLB->get_count() > 1, "don't delete the last scheme");
         std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(GetFrameWeld(),
                                                     VclMessageType::Question, VclButtonsType::YesNo,
-                                                    CuiResId(RID_SVXSTR_COLOR_CONFIG_DELETE)));
-        xQuery->set_title(CuiResId(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
+                                                    CuiResId(RID_CUISTR_COLOR_CONFIG_DELETE)));
+        xQuery->set_title(CuiResId(RID_CUISTR_COLOR_CONFIG_DELETE_TITLE));
         if (RET_YES == xQuery->run())
         {
             OUString sDeleteScheme(m_xColorSchemeLB->get_active_text());

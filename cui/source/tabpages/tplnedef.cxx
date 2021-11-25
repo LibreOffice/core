@@ -166,7 +166,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 
     // determining (and possibly cutting) the name
     // and displaying it in the GroupBox
-//             OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
+//             OUString        aString( CuiResId( RID_CUISTR_TABLE ) );
 //             aString         += ": ";
     INetURLObject   aURL( pDashList->GetPath() );
 
@@ -203,10 +203,10 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     {
         std::unique_ptr<weld::MessageDialog> xMessDlg(Application::CreateMessageDialog(GetFrameWeld(),
                                                       VclMessageType::Warning, VclButtonsType::Cancel,
-                                                      CuiResId(RID_SVXSTR_ASK_CHANGE_LINESTYLE)));
+                                                      CuiResId(RID_CUISTR_ASK_CHANGE_LINESTYLE)));
         xMessDlg->set_title(SvxResId(RID_SVXSTR_LINESTYLE));
-        xMessDlg->add_button(CuiResId(RID_SVXSTR_CHANGE), RET_BTN_1);
-        xMessDlg->add_button(CuiResId(RID_SVXSTR_ADD), RET_BTN_2);
+        xMessDlg->add_button(CuiResId(RID_CUISTR_CHANGE), RET_BTN_1);
+        xMessDlg->add_button(CuiResId(RID_CUISTR_ADD), RET_BTN_2);
 
         short nRet = xMessDlg->run();
 
@@ -489,7 +489,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(const weld::ComboBox* p)
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
 {
     OUString aNewName(SvxResId(RID_SVXSTR_LINESTYLE));
-    OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINESTYLE));
+    OUString aDesc(CuiResId(RID_CUISTR_DESC_LINESTYLE));
     OUString aName;
 
     tools::Long nCount = pDashList->Count();
@@ -569,7 +569,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     if (nPos == -1)
         return;
 
-    OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINESTYLE));
+    OUString aDesc(CuiResId(RID_CUISTR_DESC_LINESTYLE));
     OUString aName( pDashList->GetDash( nPos )->GetName() );
     OUString aOldName = aName;
 
