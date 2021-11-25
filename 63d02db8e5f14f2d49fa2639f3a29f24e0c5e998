@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e03aae2_556dee3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-25T03:03:50Z",
+      "side": 1,
+      "message": "[CXX] sc/source/core/tool/chartlock.cxx\n/mnt/SSD_DATA/lo/core/sc/source/core/data/table3.cxx:3039:32: error: accessing static class member through class member access syntax, use a qualified name like \u0027(anonymous namespace)::QueryEvaluator::isQueryByValueForCell\u0027 instead [loplugin:staticaccess]\n        bool compareByValue \u003d !aEval.isQueryByValueForCell(aCell);\n                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\nmake[1]: *** [/mnt/SSD_DATA/lo/core/solenv/gbuild/LinkTarget.mk:333：/mnt/SSD_DATA/lo/core/workdir/CxxObject/sc/source/core/data/table3.o] error 1",
+      "revId": "63d02db8e5f14f2d49fa2639f3a29f24e0c5e998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
