@@ -30,6 +30,8 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <ndole.hxx>
+
 using namespace com::sun::star;
 
 SwOleClient::SwOleClient(SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj)
@@ -163,6 +165,29 @@ void SwOleClient::FormatChanged()
         if (rWrtSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ))
             rWrtSh.AlignFormulaToBaseline( xObj );
     }
+}
+
+bool SwOleClient::IsProtected() const
+{
+    auto pView = dynamic_cast<SwView*>(GetViewShell());
+    if (!pView)
+    {
+        return false;
+    }
+
+    SwWrtShell& rWrtSh = pView->GetWrtShell();
+    if (rWrtSh.IsTableMode())
+    {
+        return false;
+    }
+
+    SwOLENode* pOLENode = rWrtSh.GetCursor()->GetNode().GetOLENode();
+    if (!pOLENode)
+    {
+        return false;
+    }
+
+    return pOLENode->GetOLEObj().IsProtected();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

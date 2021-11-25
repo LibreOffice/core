@@ -212,7 +212,7 @@ uno::Reference < frame::XFrame > const & SfxInPlaceClient_Impl::GetFrame() const
 
 void SAL_CALL SfxInPlaceClient_Impl::saveObject()
 {
-    if ( !m_bStoreObject )
+    if (!m_bStoreObject || m_pClient->IsProtected())
         // client wants to discard the object (usually it means the container document is closed while an object is active
         // and the user didn't request saving the changes
         return;
@@ -1043,6 +1043,8 @@ void SfxInPlaceClient::FormatChanged()
 {
     // dummy implementation
 }
+
+bool SfxInPlaceClient::IsProtected() const { return false; }
 
 void SfxInPlaceClient::DeactivateObject()
 {

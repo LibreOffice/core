@@ -107,6 +107,10 @@ public:
     bool is() const;
 
     bool IsLocked() const;
+
+    void SetIsProtectedHdl(const Link<LinkParamNone*, bool>& rProtectedHdl);
+    Link<LinkParamNone*, bool> GetIsProtectedHdl() const;
+
     bool IsChart() const;
 
     OUString GetChartType();

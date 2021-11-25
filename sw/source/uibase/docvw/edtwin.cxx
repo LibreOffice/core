@@ -3282,8 +3282,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case 2:
                     {
                         g_bFrameDrag = false;
-                        if ( !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
-                             FlyProtectFlags::NONE == rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) )
+                        if (!bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos)
+                            && (FlyProtectFlags::NONE
+                                    == rSh.IsSelObjProtected(FlyProtectFlags::Content
+                                                             | FlyProtectFlags::Parent)
+                                || rSh.GetSelectionType() == SelectionType::Ole))
                         {
                         /* This is no good: on the one hand GetSelectionType is used as flag field
                          * (take a look into the GetSelectionType method) and on the other hand the
@@ -3303,11 +3306,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                             // double click on OLE object --> OLE-InPlace
                             case SelectionType::Ole:
-                                if (rSh.IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE)
-                                {
-                                    RstMBDownFlags();
-                                    rSh.LaunchOLEObj();
-                                }
+                                RstMBDownFlags();
+                                rSh.LaunchOLEObj();
                                 return;
 
                             case SelectionType::Frame:
