@@ -1,8 +1,8 @@
 diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
-index f143dab013..046c525365 100644
+index 79f6d72f35..428d198159 100644
 --- a/tools/sk_app/WindowContext.h
 +++ b/tools/sk_app/WindowContext.h
-@@ -17,7 +17,7 @@ class SkSurface;
+@@ -22,7 +22,7 @@ class Context;
  
  namespace sk_app {
  
@@ -12,7 +12,7 @@ index f143dab013..046c525365 100644
      WindowContext(const DisplayParams&);
  
 diff --git a/tools/sk_app/mac/WindowContextFactory_mac.h b/tools/sk_app/mac/WindowContextFactory_mac.h
-index e772030b95..224ff03f23 100644
+index 3e136a8f57..affb89e43e 100644
 --- a/tools/sk_app/mac/WindowContextFactory_mac.h
 +++ b/tools/sk_app/mac/WindowContextFactory_mac.h
 @@ -52,7 +52,7 @@ std::unique_ptr<WindowContext> MakeDawnMTLForMac(const MacWindowInfo&, const Dis
@@ -21,9 +21,9 @@ index e772030b95..224ff03f23 100644
  #ifdef SK_METAL
 -std::unique_ptr<WindowContext> MakeMetalForMac(const MacWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeMetalForMac(const MacWindowInfo&, const DisplayParams&);
+ #ifdef SK_GRAPHITE_ENABLED
+ std::unique_ptr<WindowContext> MakeGraphiteMetalForMac(const MacWindowInfo&, const DisplayParams&);
  #endif
- 
- }  // namespace window_context_factory
 diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/WindowContextFactory_unix.h
 index 11bd2d2ac2..09c92dc417 100644
 --- a/tools/sk_app/unix/WindowContextFactory_unix.h
