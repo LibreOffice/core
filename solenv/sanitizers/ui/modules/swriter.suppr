@@ -41,7 +41,6 @@ sw/uiconfig/swriter/ui/exchangedatabases.ui://GtkLabel[@id='dbnameft'] orphan-la
 sw/uiconfig/swriter/ui/flddocumentpage.ui://GtkSpinButton[@id='offset'] duplicate-mnemonic
 sw/uiconfig/swriter/ui/fldrefpage.ui://GtkLabel[@id='label4'] orphan-label
 sw/uiconfig/swriter/ui/fldvarpage.ui://GtkLabel[@id='label5'] orphan-label
-sw/uiconfig/swriter/ui/floatingnavigation.ui://GtkLabel[@id='label'] orphan-label
 sw/uiconfig/swriter/ui/footnotepage.ui://GtkLabel[@id='label6'] orphan-label
 sw/uiconfig/swriter/ui/footnotepage.ui://GtkLabel[@id='label7'] orphan-label
 sw/uiconfig/swriter/ui/footnotepage.ui://GtkLabel[@id='label8'] orphan-label
