@@ -24,13 +24,14 @@
 #include <svl/poolitem.hxx>
 #include "calbck.hxx"
 #include "frmfmt.hxx"
+#include <svl/listener.hxx>
 
 class IntlWrapper;
 
  /** Header, for PageFormats
  Client of FrameFormat describing the header. */
 
-class SW_DLLPUBLIC SwFormatHeader final : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatHeader final : public SfxPoolItem, public SvtListener
 {
     bool m_bActive;       ///< Only for controlling (creation of content).
 
@@ -51,8 +52,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    const SwFrameFormat *GetHeaderFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
-          SwFrameFormat *GetHeaderFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+    const SwFrameFormat *const m_pFrameFormat;
+          SwFrameFormat *m_pFrameFormat;
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return m_bActive; }
@@ -61,7 +62,7 @@ public:
  /**Footer, for pageformats
  Client of FrameFormat describing the footer */
 
-class SW_DLLPUBLIC SwFormatFooter final : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatFooter final : public SfxPoolItem, public SvtListener
 {
     bool m_bActive;       // Only for controlling (creation of content).
 
@@ -82,8 +83,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    const SwFrameFormat *GetFooterFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
-          SwFrameFormat *GetFooterFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+    const SwFrameFormat *const m_pFrameFormat;
+          SwFrameFormat *m_pFrameFormat;
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return m_bActive; }
