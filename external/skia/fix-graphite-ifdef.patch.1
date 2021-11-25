@@ -1,0 +1,13 @@
+diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
+index 79f6d72f35..f9d8081b85 100644
+--- a/tools/sk_app/WindowContext.h
++++ b/tools/sk_app/WindowContext.h
+@@ -55,7 +55,7 @@ protected:
+     virtual bool isGpuContext() { return true;  }
+ 
+     sk_sp<GrDirectContext> fContext;
+-#if SK_GRAPHITE_ENABLED
++#ifdef SK_GRAPHITE_ENABLED
+     sk_sp<skgpu::Context> fGraphiteContext;
+ #endif
+ 

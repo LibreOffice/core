@@ -1,8 +1,8 @@
 diff --git a/tools/sk_app/MetalWindowContext.h b/tools/sk_app/MetalWindowContext.h
-index e8c8392a15..fbf35c3c2b 100644
+index a9eacdd66f..23604db25b 100644
 --- a/tools/sk_app/MetalWindowContext.h
 +++ b/tools/sk_app/MetalWindowContext.h
-@@ -13,13 +13,18 @@
+@@ -14,13 +14,18 @@
  
  #include "tools/sk_app/WindowContext.h"
  
@@ -21,7 +21,7 @@ index e8c8392a15..fbf35c3c2b 100644
      sk_sp<SkSurface> getBackbufferSurface() override;
  
      bool isValid() override { return fValid; }
-@@ -45,16 +50,34 @@ protected:
+@@ -46,16 +51,34 @@ protected:
      void destroyContext();
      virtual void onDestroyContext() = 0;
  
@@ -59,10 +59,10 @@ index e8c8392a15..fbf35c3c2b 100644
  }   // namespace sk_app
  
 diff --git a/tools/sk_app/MetalWindowContext.mm b/tools/sk_app/MetalWindowContext.mm
-index 5b623811ed..49dc77b74d 100644
+index c464c3904a..799aafa78b 100644
 --- a/tools/sk_app/MetalWindowContext.mm
 +++ b/tools/sk_app/MetalWindowContext.mm
-@@ -37,24 +37,30 @@
+@@ -37,24 +37,30 @@ NSURL* MetalWindowContext::CacheURL() {
  }
  
  void MetalWindowContext::initializeContext() {
@@ -100,7 +100,7 @@ index 5b623811ed..49dc77b74d 100644
  
  #if GR_METAL_SDK_VERSION >= 230
      if (fDisplayParams.fEnableBinaryArchive) {
-@@ -62,12 +68,12 @@
+@@ -62,11 +68,11 @@ void MetalWindowContext::initializeContext() {
              sk_cfp<MTLBinaryArchiveDescriptor*> desc([MTLBinaryArchiveDescriptor new]);
              (*desc).url = CacheURL(); // try to load
              NSError* error;
@@ -109,7 +109,6 @@ index 5b623811ed..49dc77b74d 100644
 +            d->fPipelineArchive = [*d->fDevice newBinaryArchiveWithDescriptor:*desc error:&error];
 +            if (!d->fPipelineArchive) {
                  (*desc).url = nil; // create new
-                 NSError* error;
 -                fPipelineArchive = [*fDevice newBinaryArchiveWithDescriptor:*desc error:&error];
 -                if (!fPipelineArchive) {
 +                d->fPipelineArchive = [*d->fDevice newBinaryArchiveWithDescriptor:*desc error:&error];
@@ -117,7 +116,7 @@ index 5b623811ed..49dc77b74d 100644
                      SkDebugf("Error creating MTLBinaryArchive:\n%s\n",
                               error.debugDescription.UTF8String);
                  }
-@@ -75,46 +81,75 @@
+@@ -74,46 +80,75 @@ void MetalWindowContext::initializeContext() {
          }
      } else {
          if (@available(macOS 11.0, iOS 14.0, *)) {
@@ -208,7 +207,7 @@ index 5b623811ed..49dc77b74d 100644
  }
  
  sk_sp<SkSurface> MetalWindowContext::getBackbufferSurface() {
-@@ -155,7 +190,7 @@ GrBackendRenderTarget backendRT(fWidth,
+@@ -154,7 +189,7 @@ sk_sp<SkSurface> MetalWindowContext::getBackbufferSurface() {
  void MetalWindowContext::swapBuffers() {
      id<CAMetalDrawable> currentDrawable = (id<CAMetalDrawable>)fDrawableHandle;
  
@@ -217,7 +216,7 @@ index 5b623811ed..49dc77b74d 100644
      commandBuffer.label = @"Present";
  
      [commandBuffer presentDrawable:currentDrawable];
-@@ -176,9 +211,9 @@ GrBackendRenderTarget backendRT(fWidth,
+@@ -175,9 +210,9 @@ void MetalWindowContext::activate(bool isActive) {
      if (!isActive) {
  #if GR_METAL_SDK_VERSION >= 230
          if (@available(macOS 11.0, iOS 14.0, *)) {
@@ -229,7 +228,7 @@ index 5b623811ed..49dc77b74d 100644
                  if (error) {
                      SkDebugf("Error storing MTLBinaryArchive:\n%s\n",
                               error.debugDescription.UTF8String);
-@@ -189,4 +224,11 @@ GrBackendRenderTarget backendRT(fWidth,
+@@ -188,4 +223,11 @@ void MetalWindowContext::activate(bool isActive) {
      }
  }
  
@@ -767,7 +766,7 @@ index 580dba2733..92bfba6dff 100644
  
      uint32_t               fImageCount;
 diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
-index f143dab013..68bb84b988 100644
+index 79f6d72f35..01d0e18f46 100644
 --- a/tools/sk_app/WindowContext.h
 +++ b/tools/sk_app/WindowContext.h
 @@ -10,9 +10,9 @@
@@ -779,13 +778,13 @@ index f143dab013..68bb84b988 100644
  
 -class GrDirectContext;
  class SkSurface;
- 
- namespace sk_app {
+ #ifdef SK_GRAPHITE_ENABLED
+ namespace skgpu {
 diff --git a/tools/sk_app/mac/MetalWindowContext_mac.mm b/tools/sk_app/mac/MetalWindowContext_mac.mm
-index 5bea8578fa..058c3994be 100644
+index 5bea8578fa..f7df061af0 100644
 --- a/tools/sk_app/mac/MetalWindowContext_mac.mm
 +++ b/tools/sk_app/mac/MetalWindowContext_mac.mm
-@@ -49,6 +49,10 @@
+@@ -49,10 +49,14 @@ MetalWindowContext_mac::~MetalWindowContext_mac() {
  }
  
  bool MetalWindowContext_mac::onInitializeContext() {
@@ -793,10 +792,6 @@ index 5bea8578fa..058c3994be 100644
 +    if(fMainView == nil)
 +        return true;
 +
-     SkASSERT(nil != fMainView);
- 
-     fMetalLayer = [CAMetalLayer layer];
-@@ -56,7 +56,7 @@
      SkASSERT(nil != fMainView);
  
      fMetalLayer = [CAMetalLayer layer];
