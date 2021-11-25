@@ -34,6 +34,23 @@
       "parentUuid": "4bb5b310_1b94f707",
       "revId": "3e9d9003b180cf0bba3fb5ec611828f3a940969c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a9dca21_fe73c1ec",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-11-25T15:04:27Z",
+      "side": 1,
+      "message": "With this \"return;\" (exit from method), it will be not possible to setup the \"rPlaceableBound\" even if all requirements will be correctly set before.\n\nHave you try to set:\n    bRet \u003d false;\n    break;\n\ninstead? To break \"while( bRet )\" loop but allow to set \"rPlaceableBound\"?\n\nThen it will be possible to remove code:\n\n                else if ( nRSize\u003d\u003d3 \u0026\u0026 nFunction\u003d\u003d0 )\n                {\n                    break;\n                }",
+      "revId": "3e9d9003b180cf0bba3fb5ec611828f3a940969c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
