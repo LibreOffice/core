@@ -644,45 +644,11 @@ tools::Long maxImageCacheSize()
     return officecfg::Office::Common::Cache::Skia::ImageCacheSize::get();
 }
 
-static sk_sp<SkBlender> differenceBlender;
-
-void setBlendModeDifference(SkPaint* paint)
-{
-    // This should normally do 'paint->setBlendMode(SkBlendMode::kDifference);'.
-    // But some drivers have a problem with this, namely currently AMD on Windows
-    // (e.g. 'Vulkan API version: 1.2.170, driver version: 2.0.179, vendor: 0x1002 (AMD),
-    // device: 0x15dd, type: integrated, name: AMD Radeon(TM) Vega 8 Graphics')
-    // simply crashes when kDifference is used.
-    // Intel also had repaint problems with kDifference (tdf#130430), but it seems
-    // those do not(?) exist anymore.
-    // Interestingly, explicitly writing a shader that does exactly the same works fine,
-    // so do that.
-    if (!differenceBlender)
-    {
-        const char* const diff = R"(
-            vec4 main( vec4 src, vec4 dst )
-            {
-                return vec4(abs( src.r - dst.r ), abs( src.g - dst.g ), abs( src.b - dst.b ), dst.a );
-            }
-        )";
-        auto effect = SkRuntimeEffect::MakeForBlender(SkString(diff));
-        if (!effect.effect)
-        {
-            SAL_WARN("vcl.skia",
-                     "SKRuntimeEffect::MakeForBlender failed: " << effect.errorText.c_str());
-            abort();
-        }
-        differenceBlender = effect.effect->makeBlender(nullptr);
-    }
-    paint->setBlender(differenceBlender);
-}
-
 void cleanup()
 {
     sharedWindowContext.reset();
     imageCache.clear();
     imageCacheSize = 0;
-    differenceBlender.reset();
 }
 
 static SkSurfaceProps commonSurfaceProps;
