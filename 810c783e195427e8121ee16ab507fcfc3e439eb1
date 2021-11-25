@@ -16,6 +16,24 @@
       "message": "With these patches, the file in comment 2 of tdf#136838 takes around 40s to show the filtered result for me if I deselect the \"#N/A\" value in the column. This is much better now (previously it freezes), but still not good enough.\n\nI do not know the code, but maybe you guys can consider the suggestion I made in the initial report in tdf#136838? i.e. if I deselect the item \"#N/A\", then you should only do the \"the cell value does not equal to \"#N/A\"\" check, similar as if I use the standard filter (doing POMatch \u003c\u003e \"#N/A\" using standard filter takes only \u003c5s for me). If I deselect 2 items, then it should be a \"the cell value does not equal to A and does not equal to B\" check.",
       "revId": "810c783e195427e8121ee16ab507fcfc3e439eb1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc0409af_99e08c9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-25T13:25:23Z",
+      "side": 1,
+      "message": "For me the document is almost instant. But if you think there\u0027s still need for the bugreport, then simply reopen it and somebody might have a look.",
+      "parentUuid": "5dae2f9a_c04aa3ad",
+      "revId": "810c783e195427e8121ee16ab507fcfc3e439eb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
