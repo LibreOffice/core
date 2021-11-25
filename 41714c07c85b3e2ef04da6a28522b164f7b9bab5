@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cb61793_462cb3fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-25T09:07:16Z",
+      "side": 1,
+      "message": "20s for me if I deselect the \"#N/A\" in and click OK in column A of the 1st attachment of tdf#136838.\nThe same operation takes 13s if I do without *this* change but with change 125794. Is there a \"regression\" between these two?",
+      "revId": "41714c07c85b3e2ef04da6a28522b164f7b9bab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
