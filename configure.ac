@@ -3068,8 +3068,6 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
         AC_PATH_PROG([CCACHE],[ccache],[not found])
         if test "$CCACHE" != "not found" -a "$_os" = "WINNT"; then
             CCACHE=`win_short_path_for_make "$CCACHE"`
-        fi
-        if test "$CCACHE" != "not found" -a "$COM" = MSC; then
             # check that it has MSVC support (it should recognize it in CCACHE_COMPILERTYPE)
             rm -f conftest.txt
             AC_MSG_CHECKING([whether $CCACHE has MSVC support])
@@ -5928,8 +5926,8 @@ if test -z "$enable_pch"; then
     if test "$_os" = "WINNT"; then
         # Enabled by default on Windows.
         enable_pch=yes
-        # never use [s]ccache on auto-enabled PCH builds, except if requested explicitly
-        if test -z "$enable_ccache"; then
+        # never use sccache on auto-enabled PCH builds, except if requested explicitely
+        if test -z "$enable_ccache" -a "$SCCACHE"; then
             CCACHE=""
         fi
     else
