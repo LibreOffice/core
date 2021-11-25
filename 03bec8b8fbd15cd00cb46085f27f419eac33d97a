@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7b5f69e_4f7804a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2021-11-25T12:25:41Z",
+      "side": 1,
+      "message": "Hello,\n\nThis patch is for getting the paragraph text from the core side into COOL. This will improve the A11Y compatibility.\n\nCan you review when you have time:)\n\nThank you.",
+      "revId": "03bec8b8fbd15cd00cb46085f27f419eac33d97a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
