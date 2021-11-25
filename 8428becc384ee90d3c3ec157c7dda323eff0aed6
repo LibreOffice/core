@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e01c4f34_a668816f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-11-25T13:29:12Z",
+      "side": 1,
+      "message": "META_EOF record (META_EOF \u003d 0x0000) specifies the end of the file, the last record in the metafile.\nIt will be great if you could use that enumeration instead of magic number (0).",
+      "revId": "8428becc384ee90d3c3ec157c7dda323eff0aed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bd61644_2b0db599",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-11-25T13:29:12Z",
+      "side": 1,
+      "message": "Record type 0 (META_EOF \u003d 0x0000) indicates the end of the WMF metafile. \nPlease add W_META_EOF record type enumeration to avoid magic numbers.",
+      "revId": "8428becc384ee90d3c3ec157c7dda323eff0aed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
