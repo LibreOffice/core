@@ -438,7 +438,7 @@ void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEve
         throw lang::DisposedException(THROW_WHERE );
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper2( m_aMutexHolder->GetMutex() ) );
+        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutexHolder->GetMutex() ) );
     m_pListenersContainer->addInterface( xListener );
 }
 

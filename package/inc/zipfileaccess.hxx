@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -48,7 +48,7 @@ class OZipFileAccess final : public ::cppu::WeakImplHelper<
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::io::XInputStream > m_xContentStream;
     std::optional<ZipFile> m_pZipFile;
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer;
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pListenersContainer;
     bool m_bDisposed;
     bool m_bOwnContent;
 
