@@ -44,6 +44,7 @@ namespace
     // MS Windows defines
     enum WMFRecords
     {
+        W_META_EOF                  = 0x0000,
         W_META_SETBKCOLOR           = 0x0201,
         W_META_SETBKMODE            = 0x0102,
         W_META_SETMAPMODE           = 0x0103,
@@ -1695,6 +1696,13 @@ namespace emfio
                 }
                 switch( nFunction )
                 {
+                    // A Placeable WMF file without some records related to the
+                    // size of the WMF
+                    case W_META_EOF:
+                    {
+                        return;
+                    }
+
                     case W_META_SETWINDOWORG:
                     {
                         aWinOrg = ReadYX();
