@@ -1051,8 +1051,7 @@ IMPL_LINK_NOARG(StyleList, UpdateStyleDependents, void*, void)
     // Trigger Help PI. Only when the watercan is on
     if (m_nActFamily != 0xffff && m_pParentDialog->IsCheckedItem("watercan") &&
         // only if that region is allowed
-        nullptr != m_pFamilyState[m_nActFamily - 1]
-        && (m_xTreeBox || m_xFmtLb->count_selected_rows() <= 1))
+        nullptr != m_pFamilyState[m_nActFamily - 1] && IsSafeForWaterCan(nullptr))
     {
         m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, *this);
         m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, GetSelectedEntry(), "",
