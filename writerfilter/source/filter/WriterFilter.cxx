@@ -154,143 +154,140 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         xExprtr->setSourceDocument(m_xSrcDoc);
         return xFltr->filter(rDescriptor);
     }
-    if (m_xDstDoc.is())
+    if (!m_xDstDoc)
+        return false;
+    uno::Reference<beans::XPropertySet> const xDocProps(m_xDstDoc, uno::UNO_QUERY);
+    xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(true));
+    comphelper::ScopeGuard g([xDocProps] {
+        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
+    });
+    utl::MediaDescriptor aMediaDesc(rDescriptor);
+    bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
+    bool bSkipImages
+        = aMediaDesc.getUnpackedValueOrDefault("FilterOptions", OUString()) == "SkipImages";
+
+    uno::Reference<io::XInputStream> xInputStream;
+    try
     {
-        uno::Reference<beans::XPropertySet> const xDocProps(m_xDstDoc, uno::UNO_QUERY);
-        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(true));
-        comphelper::ScopeGuard g([xDocProps] {
-            xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
-        });
-        utl::MediaDescriptor aMediaDesc(rDescriptor);
-        bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
-        bool bSkipImages
-            = aMediaDesc.getUnpackedValueOrDefault("FilterOptions", OUString()) == "SkipImages";
-
-        uno::Reference<io::XInputStream> xInputStream;
-        try
-        {
-            // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
-            rtl::Reference<::oox::core::FilterDetect> xDetector(
-                new ::oox::core::FilterDetect(m_xContext));
-            xInputStream = xDetector->extractUnencryptedPackage(aMediaDesc);
-        }
-        catch (uno::Exception&)
-        {
-        }
-
-        if (!xInputStream.is())
-            return false;
-
-        writerfilter::Stream::Pointer_t pStream(
-            writerfilter::dmapper::DomainMapperFactory::createMapper(
-                m_xContext, xInputStream, m_xDstDoc, bRepairStorage,
-                writerfilter::dmapper::SourceDocumentType::OOXML, aMediaDesc));
-        //create the tokenizer and domain mapper
-        writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream
-            = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream,
-                                                                      bRepairStorage);
-        uno::Reference<task::XStatusIndicator> xStatusIndicator
-            = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR,
-                                                   uno::Reference<task::XStatusIndicator>());
-        writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(
-            writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator,
-                                                                      bSkipImages, rDescriptor));
-
-        uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
-        pDocument->setModel(xModel);
-
-        uno::Reference<drawing::XDrawPageSupplier> xDrawings(m_xDstDoc, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawings->getDrawPage(), uno::UNO_SET_THROW);
-        pDocument->setDrawPage(xDrawPage);
-
-        try
-        {
-            pDocument->resolve(*pStream);
-        }
-        catch (xml::sax::SAXParseException const& e)
-        {
-            // note: SfxObjectShell checks for WrongFormatException
-            io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this),
-                                                      uno::makeAny(wfe));
-        }
-        catch (xml::sax::SAXException const& e)
-        {
-            // note: SfxObjectShell checks for WrongFormatException
-            io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this),
-                                                      uno::makeAny(wfe));
-        }
-        catch (uno::RuntimeException const&)
-        {
-            throw;
-        }
-        catch (uno::Exception const&)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            SAL_WARN("writerfilter",
-                     "WriterFilter::filter(): failed with " << exceptionToString(anyEx));
-            throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this), anyEx);
-        }
-
-        // Adding some properties to the document's grab bag for interoperability purposes:
-        comphelper::SequenceAsHashMap aGrabBagProperties;
-
-        // Adding the saved Theme DOM
-        aGrabBagProperties["OOXTheme"] <<= pDocument->getThemeDom();
-
-        // Adding the saved custom xml DOM
-        aGrabBagProperties["OOXCustomXml"] <<= pDocument->getCustomXmlDomList();
-        aGrabBagProperties["OOXCustomXmlProps"] <<= pDocument->getCustomXmlDomPropsList();
-
-        // Adding the saved Glossary Document DOM to the document's grab bag
-        aGrabBagProperties["OOXGlossary"] <<= pDocument->getGlossaryDocDom();
-        aGrabBagProperties["OOXGlossaryDom"] <<= pDocument->getGlossaryDomList();
-
-        // Adding the saved embedding document to document's grab bag
-        aGrabBagProperties["OOXEmbeddings"] <<= pDocument->getEmbeddingsList();
-
-        oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(m_xDstDoc, aGrabBagProperties);
-
-        writerfilter::ooxml::OOXMLStream::Pointer_t pVBAProjectStream(
-            writerfilter::ooxml::OOXMLDocumentFactory::createStream(
-                pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT));
-        oox::StorageRef xVbaPrjStrg = std::make_shared<::oox::ole::OleStorage>(
-            m_xContext, pVBAProjectStream->getDocumentStream(), false);
-        if (xVbaPrjStrg && xVbaPrjStrg->isStorage())
-        {
-            ::oox::ole::VbaProject aVbaProject(m_xContext, xModel, u"Writer");
-            uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_FRAME, uno::Reference<frame::XFrame>());
-
-            // if no XFrame try fallback to what we can glean from the Model
-            if (!xFrame.is())
-            {
-                uno::Reference<frame::XController> xController = xModel->getCurrentController();
-                xFrame = xController.is() ? xController->getFrame() : nullptr;
-            }
-
-            oox::GraphicHelper gHelper(m_xContext, xFrame, xVbaPrjStrg);
-            aVbaProject.importVbaProject(*xVbaPrjStrg, gHelper);
-
-            writerfilter::ooxml::OOXMLStream::Pointer_t pVBADataStream(
-                writerfilter::ooxml::OOXMLDocumentFactory::createStream(
-                    pDocStream, writerfilter::ooxml::OOXMLStream::VBADATA));
-            if (pVBADataStream)
-            {
-                uno::Reference<io::XInputStream> xDataStream = pVBADataStream->getDocumentStream();
-                if (xDataStream.is())
-                    aVbaProject.importVbaData(xDataStream);
-            }
-        }
-
-        pStream.clear();
-
-        // note: pStream.clear calls RemoveLastParagraph()
-
-        return true;
+        // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
+        rtl::Reference<::oox::core::FilterDetect> xDetector(
+            new ::oox::core::FilterDetect(m_xContext));
+        xInputStream = xDetector->extractUnencryptedPackage(aMediaDesc);
     }
-    return false;
+    catch (uno::Exception&)
+    {
+    }
+
+    if (!xInputStream.is())
+        return false;
+
+    writerfilter::Stream::Pointer_t pStream(
+        writerfilter::dmapper::DomainMapperFactory::createMapper(
+            m_xContext, xInputStream, m_xDstDoc, bRepairStorage,
+            writerfilter::dmapper::SourceDocumentType::OOXML, aMediaDesc));
+    //create the tokenizer and domain mapper
+    writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream
+        = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream,
+                                                                  bRepairStorage);
+    uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_STATUSINDICATOR, uno::Reference<task::XStatusIndicator>());
+    writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(
+        writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator,
+                                                                  bSkipImages, rDescriptor));
+
+    uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
+    pDocument->setModel(xModel);
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawings(m_xDstDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawings->getDrawPage(), uno::UNO_SET_THROW);
+    pDocument->setDrawPage(xDrawPage);
+
+    try
+    {
+        pDocument->resolve(*pStream);
+    }
+    catch (xml::sax::SAXParseException const& e)
+    {
+        // note: SfxObjectShell checks for WrongFormatException
+        io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
+        throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this),
+                                                  uno::makeAny(wfe));
+    }
+    catch (xml::sax::SAXException const& e)
+    {
+        // note: SfxObjectShell checks for WrongFormatException
+        io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
+        throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this),
+                                                  uno::makeAny(wfe));
+    }
+    catch (uno::RuntimeException const&)
+    {
+        throw;
+    }
+    catch (uno::Exception const&)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        SAL_WARN("writerfilter",
+                 "WriterFilter::filter(): failed with " << exceptionToString(anyEx));
+        throw lang::WrappedTargetRuntimeException("", static_cast<OWeakObject*>(this), anyEx);
+    }
+
+    // Adding some properties to the document's grab bag for interoperability purposes:
+    comphelper::SequenceAsHashMap aGrabBagProperties;
+
+    // Adding the saved Theme DOM
+    aGrabBagProperties["OOXTheme"] <<= pDocument->getThemeDom();
+
+    // Adding the saved custom xml DOM
+    aGrabBagProperties["OOXCustomXml"] <<= pDocument->getCustomXmlDomList();
+    aGrabBagProperties["OOXCustomXmlProps"] <<= pDocument->getCustomXmlDomPropsList();
+
+    // Adding the saved Glossary Document DOM to the document's grab bag
+    aGrabBagProperties["OOXGlossary"] <<= pDocument->getGlossaryDocDom();
+    aGrabBagProperties["OOXGlossaryDom"] <<= pDocument->getGlossaryDomList();
+
+    // Adding the saved embedding document to document's grab bag
+    aGrabBagProperties["OOXEmbeddings"] <<= pDocument->getEmbeddingsList();
+
+    oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(m_xDstDoc, aGrabBagProperties);
+
+    writerfilter::ooxml::OOXMLStream::Pointer_t pVBAProjectStream(
+        writerfilter::ooxml::OOXMLDocumentFactory::createStream(
+            pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT));
+    oox::StorageRef xVbaPrjStrg = std::make_shared<::oox::ole::OleStorage>(
+        m_xContext, pVBAProjectStream->getDocumentStream(), false);
+    if (xVbaPrjStrg && xVbaPrjStrg->isStorage())
+    {
+        ::oox::ole::VbaProject aVbaProject(m_xContext, xModel, u"Writer");
+        uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_FRAME, uno::Reference<frame::XFrame>());
+
+        // if no XFrame try fallback to what we can glean from the Model
+        if (!xFrame.is())
+        {
+            uno::Reference<frame::XController> xController = xModel->getCurrentController();
+            xFrame = xController.is() ? xController->getFrame() : nullptr;
+        }
+
+        oox::GraphicHelper gHelper(m_xContext, xFrame, xVbaPrjStrg);
+        aVbaProject.importVbaProject(*xVbaPrjStrg, gHelper);
+
+        writerfilter::ooxml::OOXMLStream::Pointer_t pVBADataStream(
+            writerfilter::ooxml::OOXMLDocumentFactory::createStream(
+                pDocStream, writerfilter::ooxml::OOXMLStream::VBADATA));
+        if (pVBADataStream)
+        {
+            uno::Reference<io::XInputStream> xDataStream = pVBADataStream->getDocumentStream();
+            if (xDataStream.is())
+                aVbaProject.importVbaData(xDataStream);
+        }
+    }
+
+    pStream.clear();
+
+    // note: pStream.clear calls RemoveLastParagraph()
+
+    return true;
 }
 
 void WriterFilter::cancel() {}

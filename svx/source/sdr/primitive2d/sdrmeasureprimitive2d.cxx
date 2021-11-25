@@ -465,26 +465,24 @@ namespace drawinglayer::primitive2d
 
         bool SdrMeasurePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrMeasurePrimitive2D& rCompare = static_cast<const SdrMeasurePrimitive2D&>(rPrimitive);
+            if(!BufferedDecompositionPrimitive2D::operator==(rPrimitive))
+                return false;
 
-                return (getStart() == rCompare.getStart()
-                    && getEnd() == rCompare.getEnd()
-                    && getHorizontal() == rCompare.getHorizontal()
-                    && getVertical() == rCompare.getVertical()
-                    && getDistance() == rCompare.getDistance()
-                    && getUpper() == rCompare.getUpper()
-                    && getLower() == rCompare.getLower()
-                    && getLeftDelta() == rCompare.getLeftDelta()
-                    && getRightDelta() == rCompare.getRightDelta()
-                    && getBelow() == rCompare.getBelow()
-                    && getTextRotation() == rCompare.getTextRotation()
-                    && getTextAutoAngle() == rCompare.getTextAutoAngle()
-                    && getSdrLSTAttribute() == rCompare.getSdrLSTAttribute());
-            }
+            const SdrMeasurePrimitive2D& rCompare = static_cast<const SdrMeasurePrimitive2D&>(rPrimitive);
 
-            return false;
+            return (getStart() == rCompare.getStart()
+                && getEnd() == rCompare.getEnd()
+                && getHorizontal() == rCompare.getHorizontal()
+                && getVertical() == rCompare.getVertical()
+                && getDistance() == rCompare.getDistance()
+                && getUpper() == rCompare.getUpper()
+                && getLower() == rCompare.getLower()
+                && getLeftDelta() == rCompare.getLeftDelta()
+                && getRightDelta() == rCompare.getRightDelta()
+                && getBelow() == rCompare.getBelow()
+                && getTextRotation() == rCompare.getTextRotation()
+                && getTextAutoAngle() == rCompare.getTextAutoAngle()
+                && getSdrLSTAttribute() == rCompare.getSdrLSTAttribute());
         }
 
         // provide unique ID

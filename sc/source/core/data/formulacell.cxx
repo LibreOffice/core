@@ -389,34 +389,34 @@ lcl_refListFormsOneRange(
     bool bCell(false);
     bool bRow(false);
     bool bTab(false);
-    if (lcl_checkRangeDimensions(rDoc, rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
-    {
-        DimensionSelector aWhich;
-        if (bCell)
-        {
-            aWhich = lcl_GetCol;
-        }
-        else if (bRow)
-        {
-            aWhich = lcl_GetRow;
-        }
-        else if (bTab)
-        {
-            aWhich = lcl_GetTab;
-        }
-        else
-        {
-            OSL_FAIL( "lcl_checkRangeDimensions shouldn't allow that!");
-            aWhich = lcl_GetRow;    // initialize to avoid warning
-        }
+    if (!lcl_checkRangeDimensions(rDoc, rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
+        return false;
 
-        // Sort the references by start of range
-        std::sort(rReferences.begin(), rReferences.end(), LessByReference(rDoc, rPos, aWhich));
-        if (lcl_checkIfAdjacent(rDoc, rPos, rReferences, aWhich))
-        {
-            lcl_fillRangeFromRefList(rDoc, rPos, rReferences, rRange);
-            return true;
-        }
+    DimensionSelector aWhich;
+    if (bCell)
+    {
+        aWhich = lcl_GetCol;
+    }
+    else if (bRow)
+    {
+        aWhich = lcl_GetRow;
+    }
+    else if (bTab)
+    {
+        aWhich = lcl_GetTab;
+    }
+    else
+    {
+        OSL_FAIL( "lcl_checkRangeDimensions shouldn't allow that!");
+        aWhich = lcl_GetRow;    // initialize to avoid warning
+    }
+
+    // Sort the references by start of range
+    std::sort(rReferences.begin(), rReferences.end(), LessByReference(rDoc, rPos, aWhich));
+    if (lcl_checkIfAdjacent(rDoc, rPos, rReferences, aWhich))
+    {
+        lcl_fillRangeFromRefList(rDoc, rPos, rReferences, rRange);
+        return true;
     }
     return false;
 }
@@ -3050,34 +3050,34 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
     // Get first reference, if any
     formula::FormulaTokenArrayPlainIterator aIter(*pCode);
     formula::FormulaToken* const pFirstReference(aIter.GetNextReferenceRPN());
-    if (pFirstReference)
+    if (!pFirstReference)
+        return false;
+
+    // Collect all consecutive references, starting by the one
+    // already found
+    std::vector<formula::FormulaToken*> aReferences { pFirstReference };
+    FormulaToken* pToken(aIter.NextRPN());
+    FormulaToken* pFunction(nullptr);
+    while (pToken)
     {
-        // Collect all consecutive references, starting by the one
-        // already found
-        std::vector<formula::FormulaToken*> aReferences { pFirstReference };
-        FormulaToken* pToken(aIter.NextRPN());
-        FormulaToken* pFunction(nullptr);
-        while (pToken)
+        if (lcl_isReference(*pToken))
         {
-            if (lcl_isReference(*pToken))
-            {
-                aReferences.push_back(pToken);
-                pToken = aIter.NextRPN();
-            }
-            else
-            {
-                if (pToken->IsFunction())
-                {
-                    pFunction = pToken;
-                }
-                break;
-            }
+            aReferences.push_back(pToken);
+            pToken = aIter.NextRPN();
         }
-        if (pFunction && !aIter.GetNextReferenceRPN()
-                && (pFunction->GetParamCount() == aReferences.size()))
+        else
         {
-            return lcl_refListFormsOneRange(rDocument, aPos, aReferences, rRange);
+            if (pToken->IsFunction())
+            {
+                pFunction = pToken;
+            }
+            break;
         }
+    }
+    if (pFunction && !aIter.GetNextReferenceRPN()
+            && (pFunction->GetParamCount() == aReferences.size()))
+    {
+        return lcl_refListFormsOneRange(rDocument, aPos, aReferences, rRange);
     }
     return false;
 }
@@ -4819,156 +4819,154 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
                                                    SCROW nEndOffset)
 {
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
-    if (!bDependencyCheckFailed && !bThreadingProhibited &&
-        pCode->IsEnabledForThreading() &&
-        ScCalcConfig::isThreadingEnabled())
+    if (bDependencyCheckFailed || bThreadingProhibited ||
+        !pCode->IsEnabledForThreading() ||
+        !ScCalcConfig::isThreadingEnabled())
+        return false;
+
+    if(!bDependencyComputed && !CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset))
     {
-        if(!bDependencyComputed && !CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset))
-        {
-            bDependencyComputed = true;
-            bDependencyCheckFailed = true;
-            return false;
-        }
-
         bDependencyComputed = true;
-
-        // Then do the threaded calculation
-
-        class Executor : public comphelper::ThreadTask
-        {
-        private:
-            const unsigned mnThisThread;
-            const unsigned mnThreadsTotal;
-            ScDocument* mpDocument;
-            ScInterpreterContext* mpContext;
-            const ScAddress& mrTopPos;
-            SCCOL mnStartCol;
-            SCCOL mnEndCol;
-            SCROW mnStartOffset;
-            SCROW mnEndOffset;
-
-        public:
-            Executor(const std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
-                     unsigned nThisThread,
-                     unsigned nThreadsTotal,
-                     ScDocument* pDocument2,
-                     ScInterpreterContext* pContext,
-                     const ScAddress& rTopPos,
-                     SCCOL nStartCol,
-                     SCCOL nEndCol,
-                     SCROW nStartOff,
-                     SCROW nEndOff) :
-                comphelper::ThreadTask(rTag),
-                mnThisThread(nThisThread),
-                mnThreadsTotal(nThreadsTotal),
-                mpDocument(pDocument2),
-                mpContext(pContext),
-                mrTopPos(rTopPos),
-                mnStartCol(nStartCol),
-                mnEndCol(nEndCol),
-                mnStartOffset(nStartOff),
-                mnEndOffset(nEndOff)
-            {
-            }
-
-            virtual void doWork() override
-            {
-                ScRange aCalcRange(mnStartCol, mrTopPos.Row() + mnStartOffset, mrTopPos.Tab(),
-                                   mnEndCol, mrTopPos.Row() + mnEndOffset, mrTopPos.Tab());
-                mpDocument->CalculateInColumnInThread(*mpContext, aCalcRange, mnThisThread, mnThreadsTotal);
-            }
-
-        };
-
-        SvNumberFormatter* pNonThreadedFormatter = rDocument.GetNonThreadedContext().GetFormatTable();
-
-        comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
-        sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
-
-        SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
-
-        o3tl::sorted_vector<ScFormulaCellGroup*> aFGSet;
-        std::map<SCCOL, ScFormulaCell*> aFGMap;
-        aFGSet.insert(mxGroup.get());
-
-        ScRecursionHelper& rRecursionHelper = rDocument.GetRecursionHelper();
-        SCCOL nColStart = aPos.Col();
-        SCCOL nColEnd = nColStart;
-        if (!rRecursionHelper.HasFormulaGroupSet() && rDocument.IsInDocShellRecalc())
-        {
-            nColStart = lcl_probeLeftOrRightFGs(mxGroup, rDocument, aFGSet, aFGMap, true);
-            nColEnd = lcl_probeLeftOrRightFGs(mxGroup, rDocument, aFGSet, aFGMap, false);
-        }
-
-        if (nColStart != nColEnd)
-        {
-            ScCheckIndependentFGGuard aGuard(rRecursionHelper, &aFGSet);
-            for (SCCOL nCurrCol = nColStart; nCurrCol <= nColEnd; ++nCurrCol)
-            {
-                if (nCurrCol == aPos.Col())
-                    continue;
-
-                bool bFGOK = aFGMap[nCurrCol]->CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset, true);
-                if (!bFGOK || !aGuard.AreGroupsIndependent())
-                {
-                    nColEnd = nColStart = aPos.Col();
-                    break;
-                }
-            }
-        }
-
-        std::vector<std::unique_ptr<ScInterpreter>> aInterpreters(nThreadCount);
-        {
-            assert(!rDocument.IsThreadedGroupCalcInProgress());
-            rDocument.SetThreadedGroupCalcInProgress(true);
-
-            ScMutationDisable aGuard(rDocument, ScMutationGuardFlags::CORE);
-
-            // Start nThreadCount new threads
-            std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
-            ScThreadedInterpreterContextGetterGuard aContextGetterGuard(nThreadCount, rDocument, pNonThreadedFormatter);
-            ScInterpreterContext* context = nullptr;
-
-            for (int i = 0; i < nThreadCount; ++i)
-            {
-                context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
-                assert(!context->pInterpreter);
-                aInterpreters[i].reset(new ScInterpreter(this, rDocument, *context, mxGroup->mpTopCell->aPos, *pCode, true));
-                context->pInterpreter = aInterpreters[i].get();
-                rDocument.SetupContextFromNonThreadedContext(*context, i);
-                rThreadPool.pushTask(std::make_unique<Executor>(aTag, i, nThreadCount, &rDocument, context, mxGroup->mpTopCell->aPos,
-                                                                nColStart, nColEnd, nStartOffset, nEndOffset));
-            }
-
-            SAL_INFO("sc.threaded", "Waiting for threads to finish work");
-            // Do not join the threads here. They will get joined in ScDocument destructor
-            // if they don't get joined from elsewhere before (via ThreadPool::waitUntilDone).
-            rThreadPool.waitUntilDone(aTag, false);
-
-            rDocument.SetThreadedGroupCalcInProgress(false);
-
-            for (int i = 0; i < nThreadCount; ++i)
-            {
-                context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
-                // This is intentionally done in this main thread in order to avoid locking.
-                rDocument.MergeContextBackIntoNonThreadedContext(*context, i);
-                context->pInterpreter = nullptr;
-            }
-
-            SAL_INFO("sc.threaded", "Done");
-        }
-
-        ScAddress aStartPos(mxGroup->mpTopCell->aPos);
-        SCROW nSpanLen = nEndOffset - nStartOffset + 1;
-        aStartPos.SetRow(aStartPos.Row() + nStartOffset);
-        // Reuse one of the previously allocated interpreter objects here.
-        rDocument.HandleStuffAfterParallelCalculation(nColStart, nColEnd, aStartPos.Row(), nSpanLen,
-                                                       aStartPos.Tab(), aInterpreters[0].get());
-
-        return true;
+        bDependencyCheckFailed = true;
+        return false;
     }
 
-    return false;
+    bDependencyComputed = true;
+
+    // Then do the threaded calculation
+
+    class Executor : public comphelper::ThreadTask
+    {
+    private:
+        const unsigned mnThisThread;
+        const unsigned mnThreadsTotal;
+        ScDocument* mpDocument;
+        ScInterpreterContext* mpContext;
+        const ScAddress& mrTopPos;
+        SCCOL mnStartCol;
+        SCCOL mnEndCol;
+        SCROW mnStartOffset;
+        SCROW mnEndOffset;
+
+    public:
+        Executor(const std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
+                 unsigned nThisThread,
+                 unsigned nThreadsTotal,
+                 ScDocument* pDocument2,
+                 ScInterpreterContext* pContext,
+                 const ScAddress& rTopPos,
+                 SCCOL nStartCol,
+                 SCCOL nEndCol,
+                 SCROW nStartOff,
+                 SCROW nEndOff) :
+            comphelper::ThreadTask(rTag),
+            mnThisThread(nThisThread),
+            mnThreadsTotal(nThreadsTotal),
+            mpDocument(pDocument2),
+            mpContext(pContext),
+            mrTopPos(rTopPos),
+            mnStartCol(nStartCol),
+            mnEndCol(nEndCol),
+            mnStartOffset(nStartOff),
+            mnEndOffset(nEndOff)
+        {
+        }
+
+        virtual void doWork() override
+        {
+            ScRange aCalcRange(mnStartCol, mrTopPos.Row() + mnStartOffset, mrTopPos.Tab(),
+                               mnEndCol, mrTopPos.Row() + mnEndOffset, mrTopPos.Tab());
+            mpDocument->CalculateInColumnInThread(*mpContext, aCalcRange, mnThisThread, mnThreadsTotal);
+        }
+
+    };
+
+    SvNumberFormatter* pNonThreadedFormatter = rDocument.GetNonThreadedContext().GetFormatTable();
+
+    comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
+    sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
+
+    SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
+
+    o3tl::sorted_vector<ScFormulaCellGroup*> aFGSet;
+    std::map<SCCOL, ScFormulaCell*> aFGMap;
+    aFGSet.insert(mxGroup.get());
+
+    ScRecursionHelper& rRecursionHelper = rDocument.GetRecursionHelper();
+    SCCOL nColStart = aPos.Col();
+    SCCOL nColEnd = nColStart;
+    if (!rRecursionHelper.HasFormulaGroupSet() && rDocument.IsInDocShellRecalc())
+    {
+        nColStart = lcl_probeLeftOrRightFGs(mxGroup, rDocument, aFGSet, aFGMap, true);
+        nColEnd = lcl_probeLeftOrRightFGs(mxGroup, rDocument, aFGSet, aFGMap, false);
+    }
+
+    if (nColStart != nColEnd)
+    {
+        ScCheckIndependentFGGuard aGuard(rRecursionHelper, &aFGSet);
+        for (SCCOL nCurrCol = nColStart; nCurrCol <= nColEnd; ++nCurrCol)
+        {
+            if (nCurrCol == aPos.Col())
+                continue;
+
+            bool bFGOK = aFGMap[nCurrCol]->CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset, true);
+            if (!bFGOK || !aGuard.AreGroupsIndependent())
+            {
+                nColEnd = nColStart = aPos.Col();
+                break;
+            }
+        }
+    }
+
+    std::vector<std::unique_ptr<ScInterpreter>> aInterpreters(nThreadCount);
+    {
+        assert(!rDocument.IsThreadedGroupCalcInProgress());
+        rDocument.SetThreadedGroupCalcInProgress(true);
+
+        ScMutationDisable aGuard(rDocument, ScMutationGuardFlags::CORE);
+
+        // Start nThreadCount new threads
+        std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
+        ScThreadedInterpreterContextGetterGuard aContextGetterGuard(nThreadCount, rDocument, pNonThreadedFormatter);
+        ScInterpreterContext* context = nullptr;
+
+        for (int i = 0; i < nThreadCount; ++i)
+        {
+            context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
+            assert(!context->pInterpreter);
+            aInterpreters[i].reset(new ScInterpreter(this, rDocument, *context, mxGroup->mpTopCell->aPos, *pCode, true));
+            context->pInterpreter = aInterpreters[i].get();
+            rDocument.SetupContextFromNonThreadedContext(*context, i);
+            rThreadPool.pushTask(std::make_unique<Executor>(aTag, i, nThreadCount, &rDocument, context, mxGroup->mpTopCell->aPos,
+                                                            nColStart, nColEnd, nStartOffset, nEndOffset));
+        }
+
+        SAL_INFO("sc.threaded", "Waiting for threads to finish work");
+        // Do not join the threads here. They will get joined in ScDocument destructor
+        // if they don't get joined from elsewhere before (via ThreadPool::waitUntilDone).
+        rThreadPool.waitUntilDone(aTag, false);
+
+        rDocument.SetThreadedGroupCalcInProgress(false);
+
+        for (int i = 0; i < nThreadCount; ++i)
+        {
+            context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
+            // This is intentionally done in this main thread in order to avoid locking.
+            rDocument.MergeContextBackIntoNonThreadedContext(*context, i);
+            context->pInterpreter = nullptr;
+        }
+
+        SAL_INFO("sc.threaded", "Done");
+    }
+
+    ScAddress aStartPos(mxGroup->mpTopCell->aPos);
+    SCROW nSpanLen = nEndOffset - nStartOffset + 1;
+    aStartPos.SetRow(aStartPos.Row() + nStartOffset);
+    // Reuse one of the previously allocated interpreter objects here.
+    rDocument.HandleStuffAfterParallelCalculation(nColStart, nColEnd, aStartPos.Row(), nSpanLen,
+                                                   aStartPos.Tab(), aInterpreters[0].get());
+
+    return true;
 }
 
 // To be called only from InterpretFormulaGroup().

@@ -204,32 +204,27 @@ SvxUnoGluePointAccess::SvxUnoGluePointAccess( SdrObject* pObject ) noexcept
 // XIdentifierContainer
 sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement )
 {
-    if( mpObject.is() )
-    {
-        SdrGluePointList* pList = mpObject->ForceGluePointList();
-        if( pList )
-        {
-            // second, insert the new gluepoint
-            drawing::GluePoint2 aUnoGlue;
+    if( !mpObject )
+        return -1;
 
-            if( aElement >>= aUnoGlue )
-            {
-                SdrGluePoint aSdrGlue;
-                convert( aUnoGlue, aSdrGlue );
-                sal_uInt16 nId = pList->Insert( aSdrGlue );
+    SdrGluePointList* pList = mpObject->ForceGluePointList();
+    if( !pList )
+        return -1;
 
-                // only repaint, no objectchange
-                mpObject->ActionChanged();
-                // mpObject->BroadcastObjectChange();
+    // second, insert the new gluepoint
+    drawing::GluePoint2 aUnoGlue;
+    if( !(aElement >>= aUnoGlue) )
+        throw lang::IllegalArgumentException();
 
-                return static_cast<sal_Int32>((*pList)[nId].GetId() + NON_USER_DEFINED_GLUE_POINTS) - 1;
-            }
+    SdrGluePoint aSdrGlue;
+    convert( aUnoGlue, aSdrGlue );
+    sal_uInt16 nId = pList->Insert( aSdrGlue );
 
-            throw lang::IllegalArgumentException();
-        }
-    }
+    // only repaint, no objectchange
+    mpObject->ActionChanged();
+    // mpObject->BroadcastObjectChange();
 
-    return -1;
+    return static_cast<sal_Int32>((*pList)[nId].GetId() + NON_USER_DEFINED_GLUE_POINTS) - 1;
 }
 
 void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )

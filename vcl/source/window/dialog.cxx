@@ -96,29 +96,27 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
          (pWindow->GetType() == WindowType::PUSHBUTTON) )
         return true;
 
-    if ( pWindow->GetType() == WindowType::FIXEDTEXT )
-    {
-        FixedText *pText = static_cast<FixedText*>(pWindow);
-        if (pText->get_mnemonic_widget())
-            return true;
-        //This is the legacy pre-layout logic which we retain
-        //until we can be sure we can remove it
-        if (pWindow->GetStyle() & WB_NOLABEL)
-            return false;
-        vcl::Window* pNextWindow = pWindow->GetWindow( GetWindowType::Next );
-        if ( !pNextWindow )
-            return false;
-        pNextWindow = pNextWindow->GetWindow( GetWindowType::Client );
-        return !(!(pNextWindow->GetStyle() & WB_TABSTOP) ||
-                 (pNextWindow->GetType() == WindowType::FIXEDTEXT) ||
-                 (pNextWindow->GetType() == WindowType::GROUPBOX) ||
-                 (pNextWindow->GetType() == WindowType::RADIOBUTTON) ||
-                 (pNextWindow->GetType() == WindowType::CHECKBOX) ||
-                 (pNextWindow->GetType() == WindowType::TRISTATEBOX) ||
-                 (pNextWindow->GetType() == WindowType::PUSHBUTTON));
-    }
+    if ( pWindow->GetType() != WindowType::FIXEDTEXT )
+        return false;
 
-    return false;
+    FixedText *pText = static_cast<FixedText*>(pWindow);
+    if (pText->get_mnemonic_widget())
+        return true;
+    //This is the legacy pre-layout logic which we retain
+    //until we can be sure we can remove it
+    if (pWindow->GetStyle() & WB_NOLABEL)
+        return false;
+    vcl::Window* pNextWindow = pWindow->GetWindow( GetWindowType::Next );
+    if ( !pNextWindow )
+        return false;
+    pNextWindow = pNextWindow->GetWindow( GetWindowType::Client );
+    return !(!(pNextWindow->GetStyle() & WB_TABSTOP) ||
+             (pNextWindow->GetType() == WindowType::FIXEDTEXT) ||
+             (pNextWindow->GetType() == WindowType::GROUPBOX) ||
+             (pNextWindow->GetType() == WindowType::RADIOBUTTON) ||
+             (pNextWindow->GetType() == WindowType::CHECKBOX) ||
+             (pNextWindow->GetType() == WindowType::TRISTATEBOX) ||
+             (pNextWindow->GetType() == WindowType::PUSHBUTTON));
 }
 
 // Called by native error dialog popup implementations

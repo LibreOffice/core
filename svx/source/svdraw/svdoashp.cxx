@@ -2255,172 +2255,171 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
 {
     // Either we have text or the application has native text and suggested its size to us.
     bool bHasText = HasText() || !m_aSuggestedTextFrameSize.IsEmpty();
-    if ( bHasText && !rR.IsEmpty() )
+    if ( !bHasText || rR.IsEmpty() )
+        return false;
+
+    bool bWdtGrow=bWdt && IsAutoGrowWidth();
+    bool bHgtGrow=bHgt && IsAutoGrowHeight();
+    if ( !bWdtGrow && !bHgtGrow )
+        return false;
+
+    tools::Rectangle aR0(rR);
+    tools::Long nHgt=0,nMinHgt=0,nMaxHgt=0;
+    tools::Long nWdt=0,nMinWdt=0,nMaxWdt=0;
+    Size aSiz(rR.GetSize()); aSiz.AdjustWidth( -1 ); aSiz.AdjustHeight( -1 );
+    Size aMaxSiz(100000,100000);
+    Size aTmpSiz(getSdrModelFromSdrObject().GetMaxObjSize());
+    if (aTmpSiz.Width()!=0) aMaxSiz.setWidth(aTmpSiz.Width() );
+    if (aTmpSiz.Height()!=0) aMaxSiz.setHeight(aTmpSiz.Height() );
+    if (bWdtGrow)
     {
-        bool bWdtGrow=bWdt && IsAutoGrowWidth();
-        bool bHgtGrow=bHgt && IsAutoGrowHeight();
-        if ( bWdtGrow || bHgtGrow )
+        nMinWdt=GetMinTextFrameWidth();
+        nMaxWdt=GetMaxTextFrameWidth();
+        if (nMaxWdt==0 || nMaxWdt>aMaxSiz.Width()) nMaxWdt=aMaxSiz.Width();
+        if (nMinWdt<=0) nMinWdt=1;
+        aSiz.setWidth(nMaxWdt );
+    }
+    if (bHgtGrow)
+    {
+        nMinHgt=GetMinTextFrameHeight();
+        nMaxHgt=GetMaxTextFrameHeight();
+        if (nMaxHgt==0 || nMaxHgt>aMaxSiz.Height()) nMaxHgt=aMaxSiz.Height();
+        if (nMinHgt<=0) nMinHgt=1;
+        aSiz.setHeight(nMaxHgt );
+    }
+    tools::Long nHDist=GetTextLeftDistance()+GetTextRightDistance();
+    tools::Long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
+    aSiz.AdjustWidth( -nHDist );
+    aSiz.AdjustHeight( -nVDist );
+    if ( aSiz.Width() < 2 )
+        aSiz.setWidth( 2 );   // minimum size=2
+    if ( aSiz.Height() < 2 )
+        aSiz.setHeight( 2 ); // minimum size=2
+
+    if (HasText())
+    {
+        if(mpEditingOutliner)
         {
-            tools::Rectangle aR0(rR);
-            tools::Long nHgt=0,nMinHgt=0,nMaxHgt=0;
-            tools::Long nWdt=0,nMinWdt=0,nMaxWdt=0;
-            Size aSiz(rR.GetSize()); aSiz.AdjustWidth( -1 ); aSiz.AdjustHeight( -1 );
-            Size aMaxSiz(100000,100000);
-            Size aTmpSiz(getSdrModelFromSdrObject().GetMaxObjSize());
-            if (aTmpSiz.Width()!=0) aMaxSiz.setWidth(aTmpSiz.Width() );
-            if (aTmpSiz.Height()!=0) aMaxSiz.setHeight(aTmpSiz.Height() );
+            mpEditingOutliner->SetMaxAutoPaperSize( aSiz );
             if (bWdtGrow)
             {
-                nMinWdt=GetMinTextFrameWidth();
-                nMaxWdt=GetMaxTextFrameWidth();
-                if (nMaxWdt==0 || nMaxWdt>aMaxSiz.Width()) nMaxWdt=aMaxSiz.Width();
-                if (nMinWdt<=0) nMinWdt=1;
-                aSiz.setWidth(nMaxWdt );
-            }
-            if (bHgtGrow)
+                Size aSiz2(mpEditingOutliner->CalcTextSize());
+                nWdt=aSiz2.Width()+1; // a little more tolerance
+                if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little more tolerance
+            } else
             {
-                nMinHgt=GetMinTextFrameHeight();
-                nMaxHgt=GetMaxTextFrameHeight();
-                if (nMaxHgt==0 || nMaxHgt>aMaxSiz.Height()) nMaxHgt=aMaxSiz.Height();
-                if (nMinHgt<=0) nMinHgt=1;
-                aSiz.setHeight(nMaxHgt );
+                nHgt=mpEditingOutliner->GetTextHeight()+1; // a little more tolerance
             }
-            tools::Long nHDist=GetTextLeftDistance()+GetTextRightDistance();
-            tools::Long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-            aSiz.AdjustWidth( -nHDist );
-            aSiz.AdjustHeight( -nVDist );
-            if ( aSiz.Width() < 2 )
-                aSiz.setWidth( 2 );   // minimum size=2
-            if ( aSiz.Height() < 2 )
-                aSiz.setHeight( 2 ); // minimum size=2
-
-            if (HasText())
+        }
+        else
+        {
+            Outliner& rOutliner=ImpGetDrawOutliner();
+            rOutliner.SetPaperSize(aSiz);
+            rOutliner.SetUpdateLayout(true);
+            // TODO: add the optimization with bPortionInfoChecked again.
+            OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+            if( pOutlinerParaObject != nullptr )
             {
-                if(mpEditingOutliner)
-                {
-                    mpEditingOutliner->SetMaxAutoPaperSize( aSiz );
-                    if (bWdtGrow)
-                    {
-                        Size aSiz2(mpEditingOutliner->CalcTextSize());
-                        nWdt=aSiz2.Width()+1; // a little more tolerance
-                        if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little more tolerance
-                    } else
-                    {
-                        nHgt=mpEditingOutliner->GetTextHeight()+1; // a little more tolerance
-                    }
-                }
-                else
-                {
-                    Outliner& rOutliner=ImpGetDrawOutliner();
-                    rOutliner.SetPaperSize(aSiz);
-                    rOutliner.SetUpdateLayout(true);
-                    // TODO: add the optimization with bPortionInfoChecked again.
-                    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-                    if( pOutlinerParaObject != nullptr )
-                    {
-                        rOutliner.SetText(*pOutlinerParaObject);
-                        rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
-                    }
-                    if ( bWdtGrow )
-                    {
-                        Size aSiz2(rOutliner.CalcTextSize());
-                        nWdt=aSiz2.Width()+1; // a little more tolerance
-                        if ( bHgtGrow )
-                            nHgt=aSiz2.Height()+1; // a little more tolerance
-                    }
-                    else
-                    {
-                        nHgt = rOutliner.GetTextHeight()+1; // a little more tolerance
-
-                        sal_Int16 nColumns = GetMergedItem(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue();
-                        if (bHgtGrow && nColumns > 1)
-                        {
-                            // Both 'resize shape to fix text' and multiple columns are enabled. The
-                            // first means a dynamic height, the second expects a fixed height.
-                            // Resolve this conflict by going with the original height.
-                            nHgt = rR.getHeight();
-                        }
-                    }
-                    rOutliner.Clear();
-                }
+                rOutliner.SetText(*pOutlinerParaObject);
+                rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+            }
+            if ( bWdtGrow )
+            {
+                Size aSiz2(rOutliner.CalcTextSize());
+                nWdt=aSiz2.Width()+1; // a little more tolerance
+                if ( bHgtGrow )
+                    nHgt=aSiz2.Height()+1; // a little more tolerance
             }
             else
             {
-                nHgt = m_aSuggestedTextFrameSize.Height();
-                nWdt = m_aSuggestedTextFrameSize.Width();
+                nHgt = rOutliner.GetTextHeight()+1; // a little more tolerance
+
+                sal_Int16 nColumns = GetMergedItem(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue();
+                if (bHgtGrow && nColumns > 1)
+                {
+                    // Both 'resize shape to fix text' and multiple columns are enabled. The
+                    // first means a dynamic height, the second expects a fixed height.
+                    // Resolve this conflict by going with the original height.
+                    nHgt = rR.getHeight();
+                }
             }
-            if ( nWdt < nMinWdt )
-                nWdt = nMinWdt;
-            if ( nWdt > nMaxWdt )
-                nWdt = nMaxWdt;
-            nWdt += nHDist;
-            if ( nWdt < 1 )
-                nWdt = 1; // nHDist may also be negative
-            if ( nHgt < nMinHgt )
-                nHgt = nMinHgt;
-            if ( nHgt > nMaxHgt )
-                nHgt = nMaxHgt;
-            nHgt+=nVDist;
-            if ( nHgt < 1 )
-                nHgt = 1; // nVDist may also be negative
-            tools::Long nWdtGrow = nWdt-(rR.Right()-rR.Left());
-            tools::Long nHgtGrow = nHgt-(rR.Bottom()-rR.Top());
-            if ( nWdtGrow == 0 )
-                bWdtGrow = false;
-            if ( nHgtGrow == 0 )
-                bHgtGrow=false;
-            if ( bWdtGrow || bHgtGrow || !m_aSuggestedTextFrameSize.IsEmpty())
-            {
-                if ( bWdtGrow || m_aSuggestedTextFrameSize.Width() )
-                {
-                    SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
-                    if (m_aSuggestedTextFrameSize.Width())
-                    {
-                        rR.SetRight(rR.Left() + m_aSuggestedTextFrameSize.Width());
-                    }
-                    else if ( eHAdj == SDRTEXTHORZADJUST_LEFT )
-                        rR.AdjustRight(nWdtGrow );
-                    else if ( eHAdj == SDRTEXTHORZADJUST_RIGHT )
-                        rR.AdjustLeft( -nWdtGrow );
-                    else
-                    {
-                        tools::Long nWdtGrow2=nWdtGrow/2;
-                        rR.AdjustLeft( -nWdtGrow2 );
-                        rR.SetRight(rR.Left()+nWdt );
-                    }
-                }
-                if ( bHgtGrow || m_aSuggestedTextFrameSize.Height() )
-                {
-                    SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
-                    if (m_aSuggestedTextFrameSize.Height())
-                    {
-                        rR.SetBottom(rR.Top() + m_aSuggestedTextFrameSize.Height());
-                    }
-                    else if ( eVAdj == SDRTEXTVERTADJUST_TOP )
-                        rR.AdjustBottom(nHgtGrow );
-                    else if ( eVAdj == SDRTEXTVERTADJUST_BOTTOM )
-                        rR.AdjustTop( -nHgtGrow );
-                    else
-                    {
-                        tools::Long nHgtGrow2=nHgtGrow/2;
-                        rR.AdjustTop( -nHgtGrow2 );
-                        rR.SetBottom(rR.Top()+nHgt );
-                    }
-                }
-                if ( maGeo.nRotationAngle )
-                {
-                    Point aD1(rR.TopLeft());
-                    aD1-=aR0.TopLeft();
-                    Point aD2(aD1);
-                    RotatePoint(aD2,Point(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
-                    aD2-=aD1;
-                    rR.Move(aD2.X(),aD2.Y());
-                }
-                return true;
-            }
+            rOutliner.Clear();
         }
     }
-    return false;
+    else
+    {
+        nHgt = m_aSuggestedTextFrameSize.Height();
+        nWdt = m_aSuggestedTextFrameSize.Width();
+    }
+    if ( nWdt < nMinWdt )
+        nWdt = nMinWdt;
+    if ( nWdt > nMaxWdt )
+        nWdt = nMaxWdt;
+    nWdt += nHDist;
+    if ( nWdt < 1 )
+        nWdt = 1; // nHDist may also be negative
+    if ( nHgt < nMinHgt )
+        nHgt = nMinHgt;
+    if ( nHgt > nMaxHgt )
+        nHgt = nMaxHgt;
+    nHgt+=nVDist;
+    if ( nHgt < 1 )
+        nHgt = 1; // nVDist may also be negative
+    tools::Long nWdtGrow = nWdt-(rR.Right()-rR.Left());
+    tools::Long nHgtGrow = nHgt-(rR.Bottom()-rR.Top());
+    if ( nWdtGrow == 0 )
+        bWdtGrow = false;
+    if ( nHgtGrow == 0 )
+        bHgtGrow=false;
+    if ( !bWdtGrow && !bHgtGrow && m_aSuggestedTextFrameSize.IsEmpty())
+        return false;
+
+    if ( bWdtGrow || m_aSuggestedTextFrameSize.Width() )
+    {
+        SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
+        if (m_aSuggestedTextFrameSize.Width())
+        {
+            rR.SetRight(rR.Left() + m_aSuggestedTextFrameSize.Width());
+        }
+        else if ( eHAdj == SDRTEXTHORZADJUST_LEFT )
+            rR.AdjustRight(nWdtGrow );
+        else if ( eHAdj == SDRTEXTHORZADJUST_RIGHT )
+            rR.AdjustLeft( -nWdtGrow );
+        else
+        {
+            tools::Long nWdtGrow2=nWdtGrow/2;
+            rR.AdjustLeft( -nWdtGrow2 );
+            rR.SetRight(rR.Left()+nWdt );
+        }
+    }
+    if ( bHgtGrow || m_aSuggestedTextFrameSize.Height() )
+    {
+        SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
+        if (m_aSuggestedTextFrameSize.Height())
+        {
+            rR.SetBottom(rR.Top() + m_aSuggestedTextFrameSize.Height());
+        }
+        else if ( eVAdj == SDRTEXTVERTADJUST_TOP )
+            rR.AdjustBottom(nHgtGrow );
+        else if ( eVAdj == SDRTEXTVERTADJUST_BOTTOM )
+            rR.AdjustTop( -nHgtGrow );
+        else
+        {
+            tools::Long nHgtGrow2=nHgtGrow/2;
+            rR.AdjustTop( -nHgtGrow2 );
+            rR.SetBottom(rR.Top()+nHgt );
+        }
+    }
+    if ( maGeo.nRotationAngle )
+    {
+        Point aD1(rR.TopLeft());
+        aD1-=aR0.TopLeft();
+        Point aD2(aD1);
+        RotatePoint(aD2,Point(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+        aD2-=aD1;
+        rR.Move(aD2.X(),aD2.Y());
+    }
+    return true;
 }
 
 tools::Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool bWdt )

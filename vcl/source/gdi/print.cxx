@@ -779,40 +779,38 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
         ImplInitPrnQueueList();
 
     ImplPrnQueueList* pPrnList = pSVData->maGDIData.mpPrinterQueueList.get();
-    if ( pPrnList && !pPrnList->m_aQueueInfos.empty() )
+    if ( !pPrnList || pPrnList->m_aQueueInfos.empty() )
+        return nullptr;
+
+    // first search for the printer name directly
+    ImplPrnQueueData* pInfo = pPrnList->Get( rPrinterName );
+    if( pInfo )
+        return pInfo->mpSalQueueInfo.get();
+
+    // then search case insensitive
+    for(const ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
     {
-        // first search for the printer name directly
-        ImplPrnQueueData* pInfo = pPrnList->Get( rPrinterName );
-        if( pInfo )
-            return pInfo->mpSalQueueInfo.get();
-
-        // then search case insensitive
-        for(const ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
-        {
-            if( rQueueInfo.mpSalQueueInfo->maPrinterName.equalsIgnoreAsciiCase( rPrinterName ) )
-                return rQueueInfo.mpSalQueueInfo.get();
-        }
-
-        // then search for driver name
-        if ( pDriver )
-        {
-            for(const ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
-            {
-                if( rQueueInfo.mpSalQueueInfo->maDriver == *pDriver )
-                    return rQueueInfo.mpSalQueueInfo.get();
-            }
-        }
-
-        // then the default printer
-        pInfo = pPrnList->Get( GetDefaultPrinterName() );
-        if( pInfo )
-            return pInfo->mpSalQueueInfo.get();
-
-        // last chance: the first available printer
-        return pPrnList->m_aQueueInfos[0].mpSalQueueInfo.get();
+        if( rQueueInfo.mpSalQueueInfo->maPrinterName.equalsIgnoreAsciiCase( rPrinterName ) )
+            return rQueueInfo.mpSalQueueInfo.get();
     }
 
-    return nullptr;
+    // then search for driver name
+    if ( pDriver )
+    {
+        for(const ImplPrnQueueData & rQueueInfo : pPrnList->m_aQueueInfos)
+        {
+            if( rQueueInfo.mpSalQueueInfo->maDriver == *pDriver )
+                return rQueueInfo.mpSalQueueInfo.get();
+        }
+    }
+
+    // then the default printer
+    pInfo = pPrnList->Get( GetDefaultPrinterName() );
+    if( pInfo )
+        return pInfo->mpSalQueueInfo.get();
+
+    // last chance: the first available printer
+    return pPrnList->m_aQueueInfos[0].mpSalQueueInfo.get();
 }
 
 void Printer::ImplUpdatePageData()
@@ -1127,35 +1125,33 @@ bool Printer::SetOrientation( Orientation eOrientation )
     if ( mbInPrintPage )
         return false;
 
-    if ( maJobSetup.ImplGetConstData().GetOrientation() != eOrientation )
+    if ( maJobSetup.ImplGetConstData().GetOrientation() == eOrientation )
+        return true;
+
+    JobSetup      aJobSetup = maJobSetup;
+    ImplJobSetup& rData = aJobSetup.ImplGetData();
+
+    rData.SetOrientation(eOrientation);
+
+    if ( IsDisplayPrinter() )
     {
-        JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
-
-        rData.SetOrientation(eOrientation);
-
-        if ( IsDisplayPrinter() )
-        {
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            return true;
-        }
-
-        ReleaseGraphics();
-        if ( mpInfoPrinter->SetData( JobSetFlags::ORIENTATION, &rData ) )
-        {
-            ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            ImplUpdatePageData();
-            ImplUpdateFontList();
-            return true;
-        }
-        else
-            return false;
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        return true;
     }
 
-    return true;
+    ReleaseGraphics();
+    if ( mpInfoPrinter->SetData( JobSetFlags::ORIENTATION, &rData ) )
+    {
+        ImplUpdateJobSetupPaper( aJobSetup );
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        ImplUpdatePageData();
+        ImplUpdateFontList();
+        return true;
+    }
+    else
+        return false;
 }
 
 Orientation Printer::GetOrientation() const
@@ -1168,35 +1164,33 @@ bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
     if ( mbInPrintPage )
         return false;
 
-    if ( maJobSetup.ImplGetConstData().GetPaperBin() != nPaperBin &&
-         nPaperBin < GetPaperBinCount() )
+    if ( maJobSetup.ImplGetConstData().GetPaperBin() == nPaperBin ||
+         nPaperBin >= GetPaperBinCount() )
+        return true;
+
+    JobSetup      aJobSetup = maJobSetup;
+    ImplJobSetup& rData = aJobSetup.ImplGetData();
+    rData.SetPaperBin(nPaperBin);
+
+    if ( IsDisplayPrinter() )
     {
-        JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
-        rData.SetPaperBin(nPaperBin);
-
-        if ( IsDisplayPrinter() )
-        {
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            return true;
-        }
-
-        ReleaseGraphics();
-        if ( mpInfoPrinter->SetData( JobSetFlags::PAPERBIN, &rData ) )
-        {
-            ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            ImplUpdatePageData();
-            ImplUpdateFontList();
-            return true;
-        }
-        else
-            return false;
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        return true;
     }
 
-    return true;
+    ReleaseGraphics();
+    if ( mpInfoPrinter->SetData( JobSetFlags::PAPERBIN, &rData ) )
+    {
+        ImplUpdateJobSetupPaper( aJobSetup );
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        ImplUpdatePageData();
+        ImplUpdateFontList();
+        return true;
+    }
+    else
+        return false;
 }
 
 sal_uInt16 Printer::GetPaperBin() const
@@ -1338,39 +1332,37 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
             maJobSetup.ImplGetConstData().GetPaperFormat() != aPaper;
     }
 
-    if(bNeedToChange)
+    if(!bNeedToChange)
+        return true;
+
+    JobSetup      aJobSetup = maJobSetup;
+    ImplJobSetup& rData = aJobSetup.ImplGetData();
+    rData.SetPaperFormat( PAPER_USER );
+    rData.SetPaperWidth( aPageSize.Width() );
+    rData.SetPaperHeight( aPageSize.Height() );
+
+    if ( IsDisplayPrinter() )
     {
-        JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
-        rData.SetPaperFormat( PAPER_USER );
-        rData.SetPaperWidth( aPageSize.Width() );
-        rData.SetPaperHeight( aPageSize.Height() );
-
-        if ( IsDisplayPrinter() )
-        {
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            return true;
-        }
-
-        ReleaseGraphics();
-        ImplFindPaperFormatForUserSize( aJobSetup );
-
-        // Changing the paper size can also change the orientation!
-        if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, &rData ))
-        {
-            ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
-            ImplUpdatePageData();
-            ImplUpdateFontList();
-            return true;
-        }
-        else
-            return false;
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        return true;
     }
 
-    return true;
+    ReleaseGraphics();
+    ImplFindPaperFormatForUserSize( aJobSetup );
+
+    // Changing the paper size can also change the orientation!
+    if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, &rData ))
+    {
+        ImplUpdateJobSetupPaper( aJobSetup );
+        mbNewJobSetup = true;
+        maJobSetup = aJobSetup;
+        ImplUpdatePageData();
+        ImplUpdateFontList();
+        return true;
+    }
+    else
+        return false;
 }
 
 int Printer::GetPaperInfoCount() const

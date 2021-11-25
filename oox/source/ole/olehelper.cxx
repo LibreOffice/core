@@ -488,32 +488,32 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
 bool MSConvertOCXControls::ReadOCXStorage( tools::SvRef<SotStorage> const & xOleStg,
                                   Reference< XFormComponent > & rxFormComp )
 {
-    if ( xOleStg.is() )
+    if ( !xOleStg )
+        return false;
+
+    tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME", StreamMode::READ);
+    BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
+
+    tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream("contents", StreamMode::READ);
+    BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
+
+    tools::SvRef<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj", StreamMode::READ);
+    BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
+    aClsStrm.skip(12);
+
+    OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( aClsStrm );
+    if ( importControlFromStream(  aInStrm,  rxFormComp, aStrmClassId, aInStrm.size() ) )
     {
-        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME", StreamMode::READ);
-        BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
-
-        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream("contents", StreamMode::READ);
-        BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
-
-        tools::SvRef<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj", StreamMode::READ);
-        BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
-        aClsStrm.skip(12);
-
-        OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( aClsStrm );
-        if ( importControlFromStream(  aInStrm,  rxFormComp, aStrmClassId, aInStrm.size() ) )
+        OUString aName = aNameStream.readNulUnicodeArray();
+        Reference< XControlModel > xCtlModel( rxFormComp, UNO_QUERY );
+        if ( !aName.isEmpty() && xCtlModel.is() )
         {
-            OUString aName = aNameStream.readNulUnicodeArray();
-            Reference< XControlModel > xCtlModel( rxFormComp, UNO_QUERY );
-            if ( !aName.isEmpty() && xCtlModel.is() )
-            {
-                PropertyMap aPropMap;
-                aPropMap.setProperty( PROP_Name, aName );
-                PropertySet aPropSet( xCtlModel );
-                aPropSet.setProperties( aPropMap );
-            }
-            return rxFormComp.is();
+            PropertyMap aPropMap;
+            aPropMap.setProperty( PROP_Name, aName );
+            PropertySet aPropSet( xCtlModel );
+            aPropSet.setProperties( aPropMap );
         }
+        return rxFormComp.is();
     }
     return  false;
 }

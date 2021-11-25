@@ -301,42 +301,42 @@ void SvBaseLink::clearStreamToLoadFrom()
 
 bool SvBaseLink::Update()
 {
-    if( isClientType(mnObjType) )
+    if( !isClientType(mnObjType) )
+        return false;
+
+    AddNextRef();
+    Disconnect();
+
+    GetRealObject_();
+    ReleaseRef();
+    if( !xObj.is() )
+        return false;
+
+    xObj->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
+    OUString sMimeType( SotExchange::GetFormatMimeType(
+                    pImplData->ClientType.nCntntType ));
+    Any aData;
+
+    if( xObj->GetData( aData, sMimeType ) )
     {
+        UpdateResult eRes = DataChanged(sMimeType, aData);
+        bool bSuccess = eRes == SUCCESS;
+        //for manual Updates there is no need to hold the ServerObject
+        if( SvBaseLinkObjectType::ClientDde == mnObjType &&
+            SfxLinkUpdateMode::ONCALL == GetUpdateMode() && xObj.is() )
+            xObj->RemoveAllDataAdvise( this );
+        return bSuccess;
+    }
+    if( xObj.is() )
+    {
+        // should be asynchronous?
+        if( xObj->IsPending() )
+            return true;
+
+        // we do not need the object anymore
         AddNextRef();
         Disconnect();
-
-        GetRealObject_();
         ReleaseRef();
-        if( xObj.is() )
-        {
-            xObj->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
-            OUString sMimeType( SotExchange::GetFormatMimeType(
-                            pImplData->ClientType.nCntntType ));
-            Any aData;
-
-            if( xObj->GetData( aData, sMimeType ) )
-            {
-                UpdateResult eRes = DataChanged(sMimeType, aData);
-                bool bSuccess = eRes == SUCCESS;
-                //for manual Updates there is no need to hold the ServerObject
-                if( SvBaseLinkObjectType::ClientDde == mnObjType &&
-                    SfxLinkUpdateMode::ONCALL == GetUpdateMode() && xObj.is() )
-                    xObj->RemoveAllDataAdvise( this );
-                return bSuccess;
-            }
-            if( xObj.is() )
-            {
-                // should be asynchronous?
-                if( xObj->IsPending() )
-                    return true;
-
-                // we do not need the object anymore
-                AddNextRef();
-                Disconnect();
-                ReleaseRef();
-            }
-        }
     }
     return false;
 }

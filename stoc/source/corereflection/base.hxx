@@ -356,24 +356,23 @@ inline bool extract(
     IdlReflectionServiceImpl * pRefl )
 {
     rDest.clear();
-    if (nullptr != pTo)
+    if (!pTo)
+        return false;
+    if (! rObj.hasValue())
+        return true;
+    if (rObj.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
     {
-        if (! rObj.hasValue())
-            return true;
-        if (rObj.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
-        {
-            return ::uno_type_assignData(
-                &rDest, pTo->aBase.pWeakRef,
-                const_cast< void * >( rObj.getValue() ), rObj.getValueTypeRef(),
-                reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
-                reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
-                reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );
-        }
-        else if (auto t = o3tl::tryAccess<css::uno::Type>(rObj))
-        {
-            rDest = pRefl->forType( t->getTypeLibType() );
-            return rDest.is();
-        }
+        return ::uno_type_assignData(
+            &rDest, pTo->aBase.pWeakRef,
+            const_cast< void * >( rObj.getValue() ), rObj.getValueTypeRef(),
+            reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
+            reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
+            reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );
+    }
+    else if (auto t = o3tl::tryAccess<css::uno::Type>(rObj))
+    {
+        rDest = pRefl->forType( t->getTypeLibType() );
+        return rDest.is();
     }
     return false;
 }

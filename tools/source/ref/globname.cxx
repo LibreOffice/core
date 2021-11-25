@@ -153,75 +153,74 @@ void SvGlobalName::MakeFromMemory( void const * pData )
 bool SvGlobalName::MakeId( const OUString & rIdStr )
 {
     const sal_Unicode *pStr = rIdStr.getStr();
-    if( rIdStr.getLength() == 36
-      && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
-      && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
+    if( rIdStr.getLength() != 36
+      || '-' != pStr[ 8 ]  || '-' != pStr[ 13 ]
+      || '-' != pStr[ 18 ] || '-' != pStr[ 23 ] )
+          return false;
+
+    sal_uInt32 nFirst = 0;
+    int i = 0;
+    for( i = 0; i < 8; i++ )
     {
-        sal_uInt32 nFirst = 0;
-        int i = 0;
-        for( i = 0; i < 8; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                if( rtl::isAsciiDigit( *pStr ) )
-                    nFirst = nFirst * 16 + (*pStr - '0');
-                else
-                    nFirst = nFirst * 16 + (rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+        if( rtl::isAsciiHexDigit( *pStr ) )
+            if( rtl::isAsciiDigit( *pStr ) )
+                nFirst = nFirst * 16 + (*pStr - '0');
             else
-                return false;
-            pStr++;
-        }
-
-        sal_uInt16 nSec = 0;
+                nFirst = nFirst * 16 + (rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+        else
+            return false;
         pStr++;
-        for( i = 0; i < 4; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                if( rtl::isAsciiDigit( *pStr ) )
-                    nSec = nSec * 16 + (*pStr - '0');
-                else
-                    nSec = nSec * 16 + static_cast<sal_uInt16>(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
-            else
-                return false;
-            pStr++;
-        }
-
-        sal_uInt16 nThird = 0;
-        pStr++;
-        for( i = 0; i < 4; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                if( rtl::isAsciiDigit( *pStr ) )
-                    nThird = nThird * 16 + (*pStr - '0');
-                else
-                    nThird = nThird * 16 + static_cast<sal_uInt16>(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
-            else
-                return false;
-            pStr++;
-        }
-
-        sal_Int8 szRemain[ 8 ] = {};
-        pStr++;
-        for( i = 0; i < 16; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                if( rtl::isAsciiDigit( *pStr ) )
-                    szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
-                else
-                    szRemain[i/2] = szRemain[i/2] * 16 + static_cast<sal_Int8>(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
-            else
-                return false;
-            pStr++;
-            if( i == 3 )
-                pStr++;
-        }
-
-        memcpy(&pImp->szData.Data1, &nFirst, sizeof(nFirst));
-        memcpy(&pImp->szData.Data2, &nSec, sizeof(nSec));
-        memcpy(&pImp->szData.Data3, &nThird, sizeof(nThird));
-        memcpy(&pImp->szData.Data4, szRemain, 8);
-        return true;
     }
-    return false;
+
+    sal_uInt16 nSec = 0;
+    pStr++;
+    for( i = 0; i < 4; i++ )
+    {
+        if( rtl::isAsciiHexDigit( *pStr ) )
+            if( rtl::isAsciiDigit( *pStr ) )
+                nSec = nSec * 16 + (*pStr - '0');
+            else
+                nSec = nSec * 16 + static_cast<sal_uInt16>(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+        else
+            return false;
+        pStr++;
+    }
+
+    sal_uInt16 nThird = 0;
+    pStr++;
+    for( i = 0; i < 4; i++ )
+    {
+        if( rtl::isAsciiHexDigit( *pStr ) )
+            if( rtl::isAsciiDigit( *pStr ) )
+                nThird = nThird * 16 + (*pStr - '0');
+            else
+                nThird = nThird * 16 + static_cast<sal_uInt16>(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+        else
+            return false;
+        pStr++;
+    }
+
+    sal_Int8 szRemain[ 8 ] = {};
+    pStr++;
+    for( i = 0; i < 16; i++ )
+    {
+        if( rtl::isAsciiHexDigit( *pStr ) )
+            if( rtl::isAsciiDigit( *pStr ) )
+                szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
+            else
+                szRemain[i/2] = szRemain[i/2] * 16 + static_cast<sal_Int8>(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+        else
+            return false;
+        pStr++;
+        if( i == 3 )
+            pStr++;
+    }
+
+    memcpy(&pImp->szData.Data1, &nFirst, sizeof(nFirst));
+    memcpy(&pImp->szData.Data2, &nSec, sizeof(nSec));
+    memcpy(&pImp->szData.Data3, &nThird, sizeof(nThird));
+    memcpy(&pImp->szData.Data4, szRemain, 8);
+    return true;
 }
 
 OUString SvGlobalName::GetHexName() const

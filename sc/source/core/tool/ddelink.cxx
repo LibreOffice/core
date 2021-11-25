@@ -197,24 +197,24 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
 
     //  Something happened...
 
-    if (HasListeners())
-    {
-        Broadcast(ScHint(SfxHintId::ScDataChanged, ScAddress()));
-        rDoc.TrackFormulas();      // must happen immediately
-        rDoc.StartTrackTimer();
+    if (!HasListeners())
+        return SUCCESS;
 
-        //  StartTrackTimer asynchronously calls TrackFormulas, Broadcast(FID_DATACHANGED),
-        //  ResetChanged, SetModified and Invalidate(SID_SAVEDOC/SID_DOC_MODIFIED)
-        //  TrackFormulas additionally once again immediately, so that, e.g., a formula still
-        //  located in the FormulaTrack doesn't get calculated by IdleCalc (#61676#)
+    Broadcast(ScHint(SfxHintId::ScDataChanged, ScAddress()));
+    rDoc.TrackFormulas();      // must happen immediately
+    rDoc.StartTrackTimer();
 
-        //  notify Uno objects (for XRefreshListener)
-        //  must be after TrackFormulas
-        //TODO: do this asynchronously?
-        ScLinkRefreshedHint aHint;
-        aHint.SetDdeLink( aAppl, aTopic, aItem );
-        rDoc.BroadcastUno( aHint );
-    }
+    //  StartTrackTimer asynchronously calls TrackFormulas, Broadcast(FID_DATACHANGED),
+    //  ResetChanged, SetModified and Invalidate(SID_SAVEDOC/SID_DOC_MODIFIED)
+    //  TrackFormulas additionally once again immediately, so that, e.g., a formula still
+    //  located in the FormulaTrack doesn't get calculated by IdleCalc (#61676#)
+
+    //  notify Uno objects (for XRefreshListener)
+    //  must be after TrackFormulas
+    //TODO: do this asynchronously?
+    ScLinkRefreshedHint aHint;
+    aHint.SetDdeLink( aAppl, aTopic, aItem );
+    rDoc.BroadcastUno( aHint );
 
     return SUCCESS;
 }

@@ -4063,91 +4063,91 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
             break;
     }
 
-    if( !rWidget.m_aAppearances.empty() )
+    if( rWidget.m_aAppearances.empty() )
+        return true;
+
+    rAnnotDict.append( "/AP<<\n" );
+    for (auto & dict_item : rWidget.m_aAppearances)
     {
-        rAnnotDict.append( "/AP<<\n" );
-        for (auto & dict_item : rWidget.m_aAppearances)
+        rAnnotDict.append( "/" );
+        rAnnotDict.append( dict_item.first );
+        bool bUseSubDict = (dict_item.second.size() > 1);
+
+        // PDF/A requires sub-dicts for /FT/Btn objects (clause
+        // 6.3.3)
+        if( m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3)
         {
-            rAnnotDict.append( "/" );
-            rAnnotDict.append( dict_item.first );
-            bool bUseSubDict = (dict_item.second.size() > 1);
-
-            // PDF/A requires sub-dicts for /FT/Btn objects (clause
-            // 6.3.3)
-            if( m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3)
+            if( rWidget.m_eType == PDFWriter::RadioButton ||
+                rWidget.m_eType == PDFWriter::CheckBox ||
+                rWidget.m_eType == PDFWriter::PushButton )
             {
-                if( rWidget.m_eType == PDFWriter::RadioButton ||
-                    rWidget.m_eType == PDFWriter::CheckBox ||
-                    rWidget.m_eType == PDFWriter::PushButton )
-                {
-                    bUseSubDict = true;
-                }
+                bUseSubDict = true;
             }
-
-            rAnnotDict.append( bUseSubDict ? "<<" : " " );
-
-            for (auto const& stream_item : dict_item.second)
-            {
-                SvMemoryStream* pAppearanceStream = stream_item.second;
-                dict_item.second[ stream_item.first ] = nullptr;
-
-                bool bDeflate = compressStream( pAppearanceStream );
-
-                sal_Int64 nStreamLen = pAppearanceStream->TellEnd();
-                pAppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
-                sal_Int32 nObject = createObject();
-                CHECK_RETURN( updateObject( nObject ) );
-                if (g_bDebugDisableCompression)
-                {
-                    emitComment( "PDFWriterImpl::emitAppearances" );
-                }
-                OStringBuffer aLine;
-                aLine.append( nObject );
-
-                aLine.append( " 0 obj\n"
-                              "<</Type/XObject\n"
-                              "/Subtype/Form\n"
-                              "/BBox[0 0 " );
-                appendFixedInt( rWidget.m_aRect.GetWidth()-1, aLine );
-                aLine.append( " " );
-                appendFixedInt( rWidget.m_aRect.GetHeight()-1, aLine );
-                aLine.append( "]\n"
-                              "/Resources " );
-                aLine.append( getResourceDictObj() );
-                aLine.append( " 0 R\n"
-                              "/Length " );
-                aLine.append( nStreamLen );
-                aLine.append( "\n" );
-                if( bDeflate )
-                    aLine.append( "/Filter/FlateDecode\n" );
-                aLine.append( ">>\nstream\n" );
-                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-                checkAndEnableStreamEncryption( nObject );
-                CHECK_RETURN( writeBuffer( pAppearanceStream->GetData(), nStreamLen ) );
-                disableStreamEncryption();
-                CHECK_RETURN( writeBuffer( "\nendstream\nendobj\n\n", 19 ) );
-
-                if( bUseSubDict )
-                {
-                    rAnnotDict.append( " /" );
-                    rAnnotDict.append( stream_item.first );
-                    rAnnotDict.append( " " );
-                }
-                rAnnotDict.append( nObject );
-                rAnnotDict.append( " 0 R" );
-
-                delete pAppearanceStream;
-            }
-
-            rAnnotDict.append( bUseSubDict ? ">>\n" : "\n" );
         }
-        rAnnotDict.append( ">>\n" );
-        if( !aStandardAppearance.isEmpty() )
+
+        rAnnotDict.append( bUseSubDict ? "<<" : " " );
+
+        for (auto const& stream_item : dict_item.second)
         {
-            rAnnotDict.append( "/AS /" );
-            rAnnotDict.append( aStandardAppearance );
-            rAnnotDict.append( "\n" );
+            SvMemoryStream* pAppearanceStream = stream_item.second;
+            dict_item.second[ stream_item.first ] = nullptr;
+
+            bool bDeflate = compressStream( pAppearanceStream );
+
+            sal_Int64 nStreamLen = pAppearanceStream->TellEnd();
+            pAppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
+            sal_Int32 nObject = createObject();
+            CHECK_RETURN( updateObject( nObject ) );
+            if (g_bDebugDisableCompression)
+            {
+                emitComment( "PDFWriterImpl::emitAppearances" );
+            }
+            OStringBuffer aLine;
+            aLine.append( nObject );
+
+            aLine.append( " 0 obj\n"
+                          "<</Type/XObject\n"
+                          "/Subtype/Form\n"
+                          "/BBox[0 0 " );
+            appendFixedInt( rWidget.m_aRect.GetWidth()-1, aLine );
+            aLine.append( " " );
+            appendFixedInt( rWidget.m_aRect.GetHeight()-1, aLine );
+            aLine.append( "]\n"
+                          "/Resources " );
+            aLine.append( getResourceDictObj() );
+            aLine.append( " 0 R\n"
+                          "/Length " );
+            aLine.append( nStreamLen );
+            aLine.append( "\n" );
+            if( bDeflate )
+                aLine.append( "/Filter/FlateDecode\n" );
+            aLine.append( ">>\nstream\n" );
+            CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+            checkAndEnableStreamEncryption( nObject );
+            CHECK_RETURN( writeBuffer( pAppearanceStream->GetData(), nStreamLen ) );
+            disableStreamEncryption();
+            CHECK_RETURN( writeBuffer( "\nendstream\nendobj\n\n", 19 ) );
+
+            if( bUseSubDict )
+            {
+                rAnnotDict.append( " /" );
+                rAnnotDict.append( stream_item.first );
+                rAnnotDict.append( " " );
+            }
+            rAnnotDict.append( nObject );
+            rAnnotDict.append( " 0 R" );
+
+            delete pAppearanceStream;
         }
+
+        rAnnotDict.append( bUseSubDict ? ">>\n" : "\n" );
+    }
+    rAnnotDict.append( ">>\n" );
+    if( !aStandardAppearance.isEmpty() )
+    {
+        rAnnotDict.append( "/AS /" );
+        rAnnotDict.append( aStandardAppearance );
+        rAnnotDict.append( "\n" );
     }
 
     return true;

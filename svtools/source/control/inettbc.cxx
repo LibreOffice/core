@@ -665,82 +665,82 @@ bool SvtURLBox_Impl::TildeParsing(
 )
 {
 #ifdef UNX
-    if( aText.startsWith( "~" ) )
+    if( !aText.startsWith( "~" ) )
+        return true;
+
+    OUString aParseTilde;
+    bool bTrailingSlash = true; // use trailing slash
+
+    if( aText.getLength() == 1 || aText[ 1 ] == '/' )
     {
-        OUString aParseTilde;
-        bool bTrailingSlash = true; // use trailing slash
+        // covers "~" or "~/..." cases
+        const char* aHomeLocation = getenv( "HOME" );
+        if( !aHomeLocation )
+            aHomeLocation = "";
 
-        if( aText.getLength() == 1 || aText[ 1 ] == '/' )
-        {
-            // covers "~" or "~/..." cases
-            const char* aHomeLocation = getenv( "HOME" );
-            if( !aHomeLocation )
-                aHomeLocation = "";
+        aParseTilde = OUString::createFromAscii(aHomeLocation);
 
-            aParseTilde = OUString::createFromAscii(aHomeLocation);
+        // in case the whole path is just "~" then there should
+        // be no trailing slash at the end
+        if( aText.getLength() == 1 )
+            bTrailingSlash = false;
+    }
+    else
+    {
+        // covers "~username" and "~username/..." cases
+        sal_Int32 nNameEnd = aText.indexOf( '/' );
+        OUString aUserName = aText.copy( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
 
-            // in case the whole path is just "~" then there should
-            // be no trailing slash at the end
-            if( aText.getLength() == 1 )
-                bTrailingSlash = false;
-        }
-        else
-        {
-            // covers "~username" and "~username/..." cases
-            sal_Int32 nNameEnd = aText.indexOf( '/' );
-            OUString aUserName = aText.copy( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
-
-            struct passwd* pPasswd = nullptr;
+        struct passwd* pPasswd = nullptr;
 #ifdef __sun
-            Sequence< sal_Int8 > sBuf( 1024 );
-            struct passwd aTmp;
-            sal_Int32 nRes = getpwnam_r( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr(),
-                                  &aTmp,
-                                  (char*)sBuf.getArray(),
-                                  1024,
-                                  &pPasswd );
-            if( !nRes && pPasswd )
-                aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
-            else
-                return false; // no such user
+        Sequence< sal_Int8 > sBuf( 1024 );
+        struct passwd aTmp;
+        sal_Int32 nRes = getpwnam_r( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr(),
+                              &aTmp,
+                              (char*)sBuf.getArray(),
+                              1024,
+                              &pPasswd );
+        if( !nRes && pPasswd )
+            aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
+        else
+            return false; // no such user
 #else
-            pPasswd = getpwnam( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            if( pPasswd )
-                aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
-            else
-                return false; // no such user
+        pPasswd = getpwnam( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        if( pPasswd )
+            aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
+        else
+            return false; // no such user
 #endif
 
-            // in case the path is "~username" then there should
-            // be no trailing slash at the end
-            if( nNameEnd == -1 )
-                bTrailingSlash = false;
-        }
+        // in case the path is "~username" then there should
+        // be no trailing slash at the end
+        if( nNameEnd == -1 )
+            bTrailingSlash = false;
+    }
 
-        if( !bTrailingSlash )
+    if( !bTrailingSlash )
+    {
+        if( aParseTilde.isEmpty() || aParseTilde == "/" )
         {
-            if( aParseTilde.isEmpty() || aParseTilde == "/" )
-            {
-                // "/" path should be converted to "/."
-                aParseTilde = "/.";
-            }
-            else
-            {
-                // "blabla/" path should be converted to "blabla"
-                aParseTilde = comphelper::string::stripEnd(aParseTilde, '/');
-            }
+            // "/" path should be converted to "/."
+            aParseTilde = "/.";
         }
         else
         {
-            if( !aParseTilde.endsWith("/") )
-                aParseTilde += "/";
-            if( aText.getLength() > 2 )
-                aParseTilde += aText.subView( 2 );
+            // "blabla/" path should be converted to "blabla"
+            aParseTilde = comphelper::string::stripEnd(aParseTilde, '/');
         }
-
-        aText = aParseTilde;
-        aBaseURL.clear(); // tilde provide absolute path
     }
+    else
+    {
+        if( !aParseTilde.endsWith("/") )
+            aParseTilde += "/";
+        if( aText.getLength() > 2 )
+            aParseTilde += aText.subView( 2 );
+    }
+
+    aText = aParseTilde;
+    aBaseURL.clear(); // tilde provide absolute path
 #endif
 
     return true;

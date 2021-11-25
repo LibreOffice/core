@@ -37,27 +37,26 @@ static rtl::Reference<ConfigurationListener> const & getFormulaCalculationListen
 static ForceCalculationType forceCalculationTypeInit()
 {
     const char* env = getenv( "SC_FORCE_CALCULATION" );
-    if( env != nullptr )
+    if( !env )
+        return ForceCalculationNone;
+
+    if( strcmp( env, "opencl" ) == 0 )
     {
-        if( strcmp( env, "opencl" ) == 0 )
-        {
-            SAL_INFO("sc.core.formulagroup", "Forcing calculations to use OpenCL");
-            return ForceCalculationOpenCL;
-        }
-        if( strcmp( env, "threads" ) == 0 )
-        {
-            SAL_INFO("sc.core.formulagroup", "Forcing calculations to use threads");
-            return ForceCalculationThreads;
-        }
-        if( strcmp( env, "core" ) == 0 )
-        {
-            SAL_INFO("sc.core.formulagroup", "Forcing calculations to use core");
-            return ForceCalculationCore;
-        }
-        SAL_WARN("sc.core.formulagroup", "Unrecognized value of SC_FORCE_CALCULATION");
-        abort();
+        SAL_INFO("sc.core.formulagroup", "Forcing calculations to use OpenCL");
+        return ForceCalculationOpenCL;
     }
-    return ForceCalculationNone;
+    if( strcmp( env, "threads" ) == 0 )
+    {
+        SAL_INFO("sc.core.formulagroup", "Forcing calculations to use threads");
+        return ForceCalculationThreads;
+    }
+    if( strcmp( env, "core" ) == 0 )
+    {
+        SAL_INFO("sc.core.formulagroup", "Forcing calculations to use core");
+        return ForceCalculationCore;
+    }
+    SAL_WARN("sc.core.formulagroup", "Unrecognized value of SC_FORCE_CALCULATION");
+    abort();
 }
 
 ForceCalculationType ScCalcConfig::getForceCalculationType()

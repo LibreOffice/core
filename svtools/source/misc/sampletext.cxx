@@ -1140,38 +1140,38 @@ namespace
         aMasked.set(vcl::UnicodeCoverage::PHAGS_PA, false);
 
         //So, possibly a CJK font
-        if (!aMasked.count() && rFontCapabilities.oCodePageRange)
+        if (aMasked.count() || !rFontCapabilities.oCodePageRange)
+            return USCRIPT_COMMON;
+
+        std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aCJKCodePageMask;
+        aCJKCodePageMask.set(vcl::CodePageCoverage::CP932);
+        aCJKCodePageMask.set(vcl::CodePageCoverage::CP936);
+        aCJKCodePageMask.set(vcl::CodePageCoverage::CP949);
+        aCJKCodePageMask.set(vcl::CodePageCoverage::CP950);
+        aCJKCodePageMask.set(vcl::CodePageCoverage::CP1361);
+        std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aMaskedCodePage =
+            *rFontCapabilities.oCodePageRange & aCJKCodePageMask;
+        //fold Korean
+        if (aMaskedCodePage[vcl::CodePageCoverage::CP1361])
         {
-            std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aCJKCodePageMask;
-            aCJKCodePageMask.set(vcl::CodePageCoverage::CP932);
-            aCJKCodePageMask.set(vcl::CodePageCoverage::CP936);
-            aCJKCodePageMask.set(vcl::CodePageCoverage::CP949);
-            aCJKCodePageMask.set(vcl::CodePageCoverage::CP950);
-            aCJKCodePageMask.set(vcl::CodePageCoverage::CP1361);
-            std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aMaskedCodePage =
-                *rFontCapabilities.oCodePageRange & aCJKCodePageMask;
-            //fold Korean
-            if (aMaskedCodePage[vcl::CodePageCoverage::CP1361])
-            {
-                aMaskedCodePage.set(vcl::CodePageCoverage::CP949);
-                aMaskedCodePage.set(vcl::CodePageCoverage::CP1361, false);
-            }
-
-            if (aMaskedCodePage.count() == 1)
-            {
-                if (aMaskedCodePage[vcl::CodePageCoverage::CP932])
-                    return USCRIPT_JAPANESE;
-                if (aMaskedCodePage[vcl::CodePageCoverage::CP949])
-                    return USCRIPT_KOREAN;
-                if (aMaskedCodePage[vcl::CodePageCoverage::CP936])
-                    return USCRIPT_SIMPLIFIED_HAN;
-                if (aMaskedCodePage[vcl::CodePageCoverage::CP950])
-                    return USCRIPT_TRADITIONAL_HAN;
-            }
-
-            if (aMaskedCodePage.count())
-                return USCRIPT_HAN;
+            aMaskedCodePage.set(vcl::CodePageCoverage::CP949);
+            aMaskedCodePage.set(vcl::CodePageCoverage::CP1361, false);
         }
+
+        if (aMaskedCodePage.count() == 1)
+        {
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP932])
+                return USCRIPT_JAPANESE;
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP949])
+                return USCRIPT_KOREAN;
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP936])
+                return USCRIPT_SIMPLIFIED_HAN;
+            if (aMaskedCodePage[vcl::CodePageCoverage::CP950])
+                return USCRIPT_TRADITIONAL_HAN;
+        }
+
+        if (aMaskedCodePage.count())
+            return USCRIPT_HAN;
 
         return USCRIPT_COMMON;
     }

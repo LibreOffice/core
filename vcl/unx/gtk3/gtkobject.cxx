@@ -222,28 +222,27 @@ void GtkSalObject::Show( bool bVisible )
 
 Size GtkSalObjectBase::GetOptimalSize() const
 {
-    if (m_pSocket)
-    {
-        bool bVisible = gtk_widget_get_visible(m_pSocket);
-        if (!bVisible)
-            gtk_widget_set_visible(m_pSocket, true);
+    if (!m_pSocket)
+        return Size();
 
-        // Undo SetPosSize before getting its preferred size
-        gint width(-1), height(-1);
-        gtk_widget_get_size_request(m_pSocket, &width, &height);
-        gtk_widget_set_size_request(m_pSocket, -1, -1);
+    bool bVisible = gtk_widget_get_visible(m_pSocket);
+    if (!bVisible)
+        gtk_widget_set_visible(m_pSocket, true);
 
-        GtkRequisition size;
-        gtk_widget_get_preferred_size(m_pSocket, nullptr, &size);
+    // Undo SetPosSize before getting its preferred size
+    gint width(-1), height(-1);
+    gtk_widget_get_size_request(m_pSocket, &width, &height);
+    gtk_widget_set_size_request(m_pSocket, -1, -1);
 
-        // Restore SetPosSize size
-        gtk_widget_set_size_request(m_pSocket, width, height);
+    GtkRequisition size;
+    gtk_widget_get_preferred_size(m_pSocket, nullptr, &size);
 
-        if (!bVisible)
-            gtk_widget_set_visible(m_pSocket, false);
-        return Size(size.width, size.height);
-    }
-    return Size();
+    // Restore SetPosSize size
+    gtk_widget_set_size_request(m_pSocket, width, height);
+
+    if (!bVisible)
+        gtk_widget_set_visible(m_pSocket, false);
+    return Size(size.width, size.height);
 }
 
 const SystemEnvData* GtkSalObjectBase::GetSystemData() const

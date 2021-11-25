@@ -337,82 +337,81 @@ namespace svgio::svgreader
 
         Display getDisplayFromContent(std::u16string_view aContent)
         {
-            if(!aContent.empty())
+            if(aContent.empty())
+                // return the default
+                return Display::Inline;
+            if(o3tl::starts_with(aContent, u"inline"))
             {
-                if(o3tl::starts_with(aContent, u"inline"))
-                {
-                    return Display::Inline;
-                }
-                else if(o3tl::starts_with(aContent, u"none"))
-                {
-                    return Display::None;
-                }
-                else if(o3tl::starts_with(aContent, u"inherit"))
-                {
-                    return Display::Inherit;
-                }
-                else if(o3tl::starts_with(aContent, u"block"))
-                {
-                    return Display::Block;
-                }
-                else if(o3tl::starts_with(aContent, u"list-item"))
-                {
-                    return Display::ListItem;
-                }
-                else if(o3tl::starts_with(aContent, u"run-in"))
-                {
-                    return Display::RunIn;
-                }
-                else if(o3tl::starts_with(aContent, u"compact"))
-                {
-                    return Display::Compact;
-                }
-                else if(o3tl::starts_with(aContent, u"marker"))
-                {
-                    return Display::Marker;
-                }
-                else if(o3tl::starts_with(aContent, u"table"))
-                {
-                    return Display::Table;
-                }
-                else if(o3tl::starts_with(aContent, u"inline-table"))
-                {
-                    return Display::InlineTable;
-                }
-                else if(o3tl::starts_with(aContent, u"table-row-group"))
-                {
-                    return Display::TableRowGroup;
-                }
-                else if(o3tl::starts_with(aContent, u"table-header-group"))
-                {
-                    return Display::TableHeaderGroup;
-                }
-                else if(o3tl::starts_with(aContent, u"table-footer-group"))
-                {
-                    return Display::TableFooterGroup;
-                }
-                else if(o3tl::starts_with(aContent, u"table-row"))
-                {
-                    return Display::TableRow;
-                }
-                else if(o3tl::starts_with(aContent, u"table-column-group"))
-                {
-                    return Display::TableColumnGroup;
-                }
-                else if(o3tl::starts_with(aContent, u"table-column"))
-                {
-                    return Display::TableColumn;
-                }
-                else if(o3tl::starts_with(aContent, u"table-cell"))
-                {
-                    return Display::TableCell;
-                }
-                else if(o3tl::starts_with(aContent, u"table-caption"))
-                {
-                    return Display::TableCaption;
-                }
+                return Display::Inline;
             }
-
+            else if(o3tl::starts_with(aContent, u"none"))
+            {
+                return Display::None;
+            }
+            else if(o3tl::starts_with(aContent, u"inherit"))
+            {
+                return Display::Inherit;
+            }
+            else if(o3tl::starts_with(aContent, u"block"))
+            {
+                return Display::Block;
+            }
+            else if(o3tl::starts_with(aContent, u"list-item"))
+            {
+                return Display::ListItem;
+            }
+            else if(o3tl::starts_with(aContent, u"run-in"))
+            {
+                return Display::RunIn;
+            }
+            else if(o3tl::starts_with(aContent, u"compact"))
+            {
+                return Display::Compact;
+            }
+            else if(o3tl::starts_with(aContent, u"marker"))
+            {
+                return Display::Marker;
+            }
+            else if(o3tl::starts_with(aContent, u"table"))
+            {
+                return Display::Table;
+            }
+            else if(o3tl::starts_with(aContent, u"inline-table"))
+            {
+                return Display::InlineTable;
+            }
+            else if(o3tl::starts_with(aContent, u"table-row-group"))
+            {
+                return Display::TableRowGroup;
+            }
+            else if(o3tl::starts_with(aContent, u"table-header-group"))
+            {
+                return Display::TableHeaderGroup;
+            }
+            else if(o3tl::starts_with(aContent, u"table-footer-group"))
+            {
+                return Display::TableFooterGroup;
+            }
+            else if(o3tl::starts_with(aContent, u"table-row"))
+            {
+                return Display::TableRow;
+            }
+            else if(o3tl::starts_with(aContent, u"table-column-group"))
+            {
+                return Display::TableColumnGroup;
+            }
+            else if(o3tl::starts_with(aContent, u"table-column"))
+            {
+                return Display::TableColumn;
+            }
+            else if(o3tl::starts_with(aContent, u"table-cell"))
+            {
+                return Display::TableCell;
+            }
+            else if(o3tl::starts_with(aContent, u"table-caption"))
+            {
+                return Display::TableCaption;
+            }
             // return the default
             return Display::Inline;
         }

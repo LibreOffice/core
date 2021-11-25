@@ -374,29 +374,27 @@ formula::ParamClass ScParameterClassification::GetParameterType(
             // added to avoid warnings
         }
     }
-    if ( 0 <= static_cast<short>(eOp) && eOp <= SC_OPCODE_LAST_OPCODE_ID )
+    if ( 0 > static_cast<short>(eOp) || eOp > SC_OPCODE_LAST_OPCODE_ID )
+        return Unknown;
+    sal_uInt8 nRepeat;
+    formula::ParamClass eType;
+    if (nParameter == SAL_MAX_UINT16)
+        eType = pData[eOp].aData.eReturn;
+    else if ( nParameter < CommonData::nMaxParams )
+        eType = pData[eOp].aData.nParam[nParameter];
+    else if ( (nRepeat = pData[eOp].aData.nRepeatLast) > 0 )
     {
-        sal_uInt8 nRepeat;
-        formula::ParamClass eType;
-        if (nParameter == SAL_MAX_UINT16)
-            eType = pData[eOp].aData.eReturn;
-        else if ( nParameter < CommonData::nMaxParams )
-            eType = pData[eOp].aData.nParam[nParameter];
-        else if ( (nRepeat = pData[eOp].aData.nRepeatLast) > 0 )
-        {
-            // The usual case is 1 repeated parameter, we don't need to
-            // calculate that on each call.
-            sal_uInt16 nParam = (nRepeat > 1 ?
-                    (pData[eOp].nMinParams -
-                     ((nParameter - pData[eOp].nMinParams) % nRepeat)) :
-                    pData[eOp].nMinParams);
-            return pData[eOp].aData.nParam[nParam];
-        }
-        else
-            eType = Bounds;
-        return eType == Unknown ? Value : eType;
+        // The usual case is 1 repeated parameter, we don't need to
+        // calculate that on each call.
+        sal_uInt16 nParam = (nRepeat > 1 ?
+                (pData[eOp].nMinParams -
+                 ((nParameter - pData[eOp].nMinParams) % nRepeat)) :
+                pData[eOp].nMinParams);
+        return pData[eOp].aData.nParam[nParam];
     }
-    return Unknown;
+    else
+        eType = Bounds;
+    return eType == Unknown ? Value : eType;
 }
 
 formula::ParamClass ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,

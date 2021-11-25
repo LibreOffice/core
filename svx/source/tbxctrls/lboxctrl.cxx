@@ -158,45 +158,43 @@ IMPL_LINK(SvxPopupWindowListBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
     sal_uInt16 nCode = rKCode.GetCode();
 
-    if (nCode == KEY_UP || nCode == KEY_PAGEUP ||
-        nCode == KEY_DOWN || nCode == KEY_PAGEDOWN)
+    if (!(nCode == KEY_UP || nCode == KEY_PAGEUP ||
+          nCode == KEY_DOWN || nCode == KEY_PAGEDOWN))
+        return false;
+
+    sal_Int32 nIndex = m_nSelectedRows - 1;
+    sal_Int32 nOrigIndex = nIndex;
+    sal_Int32 nCount = m_xListBox->n_children();
+
+    if (nCode == KEY_UP)
+        --nIndex;
+    else if (nCode == KEY_DOWN)
+        ++nIndex;
+    else if (nCode == KEY_PAGEUP)
+        nIndex -= m_nVisRows;
+    else if (nCode == KEY_PAGEDOWN)
+        nIndex += m_nVisRows;
+
+    if (nIndex < 0)
+        nIndex = 0;
+    if (nIndex >= nCount)
+        nIndex = nCount - 1;
+
+    if (nIndex != nOrigIndex)
     {
-        sal_Int32 nIndex = m_nSelectedRows - 1;
-        sal_Int32 nOrigIndex = nIndex;
-        sal_Int32 nCount = m_xListBox->n_children();
-
-        if (nCode == KEY_UP)
-            --nIndex;
-        else if (nCode == KEY_DOWN)
-            ++nIndex;
-        else if (nCode == KEY_PAGEUP)
-            nIndex -= m_nVisRows;
-        else if (nCode == KEY_PAGEDOWN)
-            nIndex += m_nVisRows;
-
-        if (nIndex < 0)
-            nIndex = 0;
-        if (nIndex >= nCount)
-            nIndex = nCount - 1;
-
-        if (nIndex != nOrigIndex)
+        m_xListBox->scroll_to_row(nIndex);
+        if (nIndex > nOrigIndex)
         {
-            m_xListBox->scroll_to_row(nIndex);
-            if (nIndex > nOrigIndex)
-            {
-                for (int i = nOrigIndex + 1; i <= nIndex; ++i)
-                    UpdateRow(i);
-            }
-            else
-            {
-                for (int i = nOrigIndex - 1; i >= nIndex; --i)
-                    UpdateRow(i);
-            }
+            for (int i = nOrigIndex + 1; i <= nIndex; ++i)
+                UpdateRow(i);
         }
-        return true;
+        else
+        {
+            for (int i = nOrigIndex - 1; i >= nIndex; --i)
+                UpdateRow(i);
+        }
     }
-
-    return false;
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxPopupWindowListBox, ActivateHdl, weld::TreeView&, bool)

@@ -147,38 +147,38 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::setValue(
     const t_Key & rKey, const t_Val & rValue )
 {
     std::scoped_lock aGuard( _aCacheMutex );
-    if (_nCachedElements > 0)
-    {
-        const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
+    if (_nCachedElements <= 0)
+        return;
 
-        CacheEntry * pEntry;
-        if (iFind == _aKey2Element.end())
-        {
-            pEntry = _pTail; // erase last element
+    const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
+
+    CacheEntry * pEntry;
+    if (iFind == _aKey2Element.end())
+    {
+        pEntry = _pTail; // erase last element
 #ifdef __CACHE_DIAGNOSE
-            if (pEntry->aKey.getLength())
-            {
-                SAL_INFO("stoc.corerefl", "> kicking element \"" );
-                SAL_INFO("stoc.corerefl", "" << pEntry->aKey);
-                SAL_INFO("stoc.corerefl", "\" from cache <" );
-            }
-#endif
-            _aKey2Element.erase( pEntry->aKey );
-            pEntry->aKey = rKey;
-            _aKey2Element[ rKey ] = pEntry;
-        }
-        else
+        if (pEntry->aKey.getLength())
         {
-            pEntry = (*iFind).second;
-#ifdef __CACHE_DIAGNOSE
-            SAL_INFO("stoc.corerefl", "> replacing element \"" );
+            SAL_INFO("stoc.corerefl", "> kicking element \"" );
             SAL_INFO("stoc.corerefl", "" << pEntry->aKey);
-            SAL_INFO("stoc.corerefl", "\" in cache <" );
-#endif
+            SAL_INFO("stoc.corerefl", "\" from cache <" );
         }
-        pEntry->aVal = rValue;
-        toFront( pEntry );
+#endif
+        _aKey2Element.erase( pEntry->aKey );
+        pEntry->aKey = rKey;
+        _aKey2Element[ rKey ] = pEntry;
     }
+    else
+    {
+        pEntry = (*iFind).second;
+#ifdef __CACHE_DIAGNOSE
+        SAL_INFO("stoc.corerefl", "> replacing element \"" );
+        SAL_INFO("stoc.corerefl", "" << pEntry->aKey);
+        SAL_INFO("stoc.corerefl", "\" in cache <" );
+#endif
+    }
+    pEntry->aVal = rValue;
+    toFront( pEntry );
 }
 
 template< class t_Key, class t_Val, class t_KeyHash >

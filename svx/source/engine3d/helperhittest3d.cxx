@@ -237,37 +237,36 @@ bool checkHitSingle3DObject(
     const uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, rCandidate);
+    if(!pRootScene)
+        return false;
 
-    if(pRootScene)
+    // prepare relative HitPoint. To do so, get the VC of the 3DScene and from there
+    // the Scene's 2D transformation. Multiplying with the inverse transformation
+    // will create a point relative to the 3D scene as unit-2d-object
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
+    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+    aInverseSceneTransform.invert();
+    const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rPoint);
+
+    // check if test point is inside scene's area at all
+    if(aRelativePoint.getX() < 0.0 || aRelativePoint.getX() > 1.0 || aRelativePoint.getY() < 0.0 || aRelativePoint.getY() > 1.0)
+        return false;
+
+    // create HitPoint Front and Back, transform to object coordinates
+    basegfx::B3DHomMatrix aViewToObject(aViewInfo3D.getObjectToView());
+    aViewToObject.invert();
+    const basegfx::B3DPoint aFront(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 0.0));
+    const basegfx::B3DPoint aBack(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 1.0));
+
+    if(!aFront.equal(aBack))
     {
-        // prepare relative HitPoint. To do so, get the VC of the 3DScene and from there
-        // the Scene's 2D transformation. Multiplying with the inverse transformation
-        // will create a point relative to the 3D scene as unit-2d-object
-        const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
-        basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
-        aInverseSceneTransform.invert();
-        const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rPoint);
+        // get all hit points with object
+        ::std::vector< basegfx::B3DPoint > aHitsWithObject;
+        getAllHit3DObjectWithRelativePoint(aFront, aBack, rCandidate, aViewInfo3D, aHitsWithObject, true);
 
-        // check if test point is inside scene's area at all
-        if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0 && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
+        if(!aHitsWithObject.empty())
         {
-            // create HitPoint Front and Back, transform to object coordinates
-            basegfx::B3DHomMatrix aViewToObject(aViewInfo3D.getObjectToView());
-            aViewToObject.invert();
-            const basegfx::B3DPoint aFront(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 0.0));
-            const basegfx::B3DPoint aBack(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 1.0));
-
-            if(!aFront.equal(aBack))
-            {
-                // get all hit points with object
-                ::std::vector< basegfx::B3DPoint > aHitsWithObject;
-                getAllHit3DObjectWithRelativePoint(aFront, aBack, rCandidate, aViewInfo3D, aHitsWithObject, true);
-
-                if(!aHitsWithObject.empty())
-                {
-                    return true;
-                }
-            }
+            return true;
         }
     }
 

@@ -138,25 +138,24 @@ oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldM
         ((nRtldMode & SAL_LOADMODULE_LAZY) != 0
          && (nRtldMode & SAL_LOADMODULE_NOW) != 0),
         "sal.osl", "only either LAZY or NOW");
-    if (pModuleName)
-    {
-#ifdef ANDROID
-        (void) nRtldMode;
-        void *pLib = lo_dlopen(pModuleName);
-#else
-        int rtld_mode =
-            ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
-            ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
-        void* pLib = dlopen(pModuleName, rtld_mode);
+    if (!pModuleName)
+        return nullptr;
 
-        SAL_WARN_IF(
-            pLib == nullptr, "sal.osl",
-            "dlopen(" << pModuleName << ", " << rtld_mode << "): "
-                << dlerror());
+#ifdef ANDROID
+    (void) nRtldMode;
+    void *pLib = lo_dlopen(pModuleName);
+#else
+    int rtld_mode =
+        ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
+        ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
+    void* pLib = dlopen(pModuleName, rtld_mode);
+
+    SAL_WARN_IF(
+        pLib == nullptr, "sal.osl",
+        "dlopen(" << pModuleName << ", " << rtld_mode << "): "
+            << dlerror());
 #endif
-        return pLib;
-    }
-    return nullptr;
+    return pLib;
 }
 
 oslModule osl_loadModuleRelativeAscii(
@@ -294,35 +293,35 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
-    bool result = false;
     rtl_String * path = nullptr;
-    if (getModulePathFromAddress(addr, &path))
+    if (!getModulePathFromAddress(addr, &path))
+        return false;
+
+    rtl_string2UString(ppLibraryUrl,
+                       path->buffer,
+                       path->length,
+                       osl_getThreadTextEncoding(),
+                       OSTRING_TO_OUSTRING_CVTFLAGS);
+
+    bool result = false;
+    SAL_WARN_IF(
+        *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
+    auto const e = osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
+    if (e == osl_File_E_None)
     {
-        rtl_string2UString(ppLibraryUrl,
-                           path->buffer,
-                           path->length,
-                           osl_getThreadTextEncoding(),
-                           OSTRING_TO_OUSTRING_CVTFLAGS);
+        SAL_INFO("sal.osl", "osl_getModuleURLFromAddress(" << addr << ") => " << OUString(*ppLibraryUrl));
 
-        SAL_WARN_IF(
-            *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
-        auto const e = osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
-        if (e == osl_File_E_None)
-        {
-            SAL_INFO("sal.osl", "osl_getModuleURLFromAddress(" << addr << ") => " << OUString(*ppLibraryUrl));
-
-            result = true;
-        }
-        else
-        {
-            SAL_WARN(
-                "sal.osl",
-                "osl_getModuleURLFromAddress(" << addr << "), osl_getFileURLFromSystemPath("
-                    << OUString::unacquired(ppLibraryUrl) << ") failed with " << e);
-            result = false;
-        }
-        rtl_string_release(path);
+        result = true;
     }
+    else
+    {
+        SAL_WARN(
+            "sal.osl",
+            "osl_getModuleURLFromAddress(" << addr << "), osl_getFileURLFromSystemPath("
+                << OUString::unacquired(ppLibraryUrl) << ") failed with " << e);
+        result = false;
+    }
+    rtl_string_release(path);
     return result;
 }
 

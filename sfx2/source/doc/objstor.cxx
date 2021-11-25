@@ -468,34 +468,32 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 
     pMedium->CanDisposeStorage_Impl( true );
 
-    if ( InitNew( pMed ? pMed->GetStorage() : uno::Reference < embed::XStorage >() ) )
+    if ( !InitNew( pMed ? pMed->GetStorage() : uno::Reference < embed::XStorage >() ) )
+        return false;
+
+    // empty documents always get their macros from the user, so there is no reason to restrict access
+    pImpl->aMacroMode.allowMacroExecution();
+    if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
+        SetTitle(SfxResId(STR_NONAME));
+
+    uno::Reference< frame::XModel >  xModel = GetModel();
+    if ( xModel.is() )
     {
-        // empty documents always get their macros from the user, so there is no reason to restrict access
-        pImpl->aMacroMode.allowMacroExecution();
-        if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
-            SetTitle(SfxResId(STR_NONAME));
-
-        uno::Reference< frame::XModel >  xModel = GetModel();
-        if ( xModel.is() )
-        {
-            SfxItemSet *pSet = GetMedium()->GetItemSet();
-            uno::Sequence< beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, *pSet, aArgs );
-            sal_Int32 nLength = aArgs.getLength();
-            aArgs.realloc( nLength + 1 );
-            auto pArgs = aArgs.getArray();
-            pArgs[nLength].Name = "Title";
-            pArgs[nLength].Value <<= GetTitle( SFX_TITLE_DETECT );
-            xModel->attachResource( OUString(), aArgs );
-            if (!utl::ConfigManager::IsFuzzing())
-                impl_addToModelCollection(xModel);
-        }
-
-        SetInitialized_Impl( true );
-        return true;
+        SfxItemSet *pSet = GetMedium()->GetItemSet();
+        uno::Sequence< beans::PropertyValue > aArgs;
+        TransformItems( SID_OPENDOC, *pSet, aArgs );
+        sal_Int32 nLength = aArgs.getLength();
+        aArgs.realloc( nLength + 1 );
+        auto pArgs = aArgs.getArray();
+        pArgs[nLength].Name = "Title";
+        pArgs[nLength].Value <<= GetTitle( SFX_TITLE_DETECT );
+        xModel->attachResource( OUString(), aArgs );
+        if (!utl::ConfigManager::IsFuzzing())
+            impl_addToModelCollection(xModel);
     }
 
-    return false;
+    SetInitialized_Impl( true );
+    return true;
 }
 
 bool SfxObjectShell::ImportFromGeneratedStream_Impl(
@@ -2206,149 +2204,149 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             xLoader.clear();
         }
     }
-    if ( xLoader.is() )
+    if ( !xLoader )
+        return false;
+
+    // it happens that xLoader does not support xImporter!
+    try
     {
-        // it happens that xLoader does not support xImporter!
-        try
+        uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
+        xImporter->setTargetDocument( xComp );
+
+        uno::Sequence < beans::PropertyValue > lDescriptor;
+        rMedium.GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
+        TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
+
+        css::uno::Sequence < css::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
+        css::beans::PropertyValue * pNewValue = aArgs.getArray();
+        const css::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
+        static const OUStringLiteral sInputStream ( u"InputStream"  );
+
+        bool bHasInputStream = false;
+        bool bHasBaseURL = false;
+        sal_Int32 nEnd = lDescriptor.getLength();
+
+        for ( sal_Int32 i = 0; i < nEnd; i++ )
         {
-            uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
-            xImporter->setTargetDocument( xComp );
+            pNewValue[i] = pOldValue[i];
+            if ( pOldValue [i].Name == sInputStream )
+                bHasInputStream = true;
+            else if ( pOldValue[i].Name == "DocumentBaseURL" )
+                bHasBaseURL = true;
+        }
 
-            uno::Sequence < beans::PropertyValue > lDescriptor;
-            rMedium.GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
-            TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
+        if ( !bHasInputStream )
+        {
+            aArgs.realloc ( ++nEnd );
+            auto pArgs = aArgs.getArray();
+            pArgs[nEnd-1].Name = sInputStream;
+            pArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
+        }
 
-            css::uno::Sequence < css::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
-            css::beans::PropertyValue * pNewValue = aArgs.getArray();
-            const css::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
-            static const OUStringLiteral sInputStream ( u"InputStream"  );
+        if ( !bHasBaseURL )
+        {
+            aArgs.realloc ( ++nEnd );
+            auto pArgs = aArgs.getArray();
+            pArgs[nEnd-1].Name = "DocumentBaseURL";
+            pArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
+        }
 
-            bool bHasInputStream = false;
-            bool bHasBaseURL = false;
-            sal_Int32 nEnd = lDescriptor.getLength();
+        if (xInsertPosition.is()) {
+            aArgs.realloc( nEnd += 2 );
+            auto pArgs = aArgs.getArray();
+            pArgs[nEnd-2].Name = "InsertMode";
+            pArgs[nEnd-2].Value <<= true;
+            pArgs[nEnd-1].Name = "TextInsertModeRange";
+            pArgs[nEnd-1].Value <<= xInsertPosition;
+        }
 
-            for ( sal_Int32 i = 0; i < nEnd; i++ )
+        // #i119492# During loading, some OLE objects like chart will be set
+        // modified flag, so needs to reset the flag to false after loading
+        bool bRtn = true;
+        if (!tools::isEmptyFileUrl(rMedium.GetName()))
+        {
+            bRtn = xLoader->filter(aArgs);
+        }
+        const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        for ( const auto& rName : aNames )
+        {
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
+            if ( xObj.is() )
             {
-                pNewValue[i] = pOldValue[i];
-                if ( pOldValue [i].Name == sInputStream )
-                    bHasInputStream = true;
-                else if ( pOldValue[i].Name == "DocumentBaseURL" )
-                    bHasBaseURL = true;
-            }
-
-            if ( !bHasInputStream )
-            {
-                aArgs.realloc ( ++nEnd );
-                auto pArgs = aArgs.getArray();
-                pArgs[nEnd-1].Name = sInputStream;
-                pArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
-            }
-
-            if ( !bHasBaseURL )
-            {
-                aArgs.realloc ( ++nEnd );
-                auto pArgs = aArgs.getArray();
-                pArgs[nEnd-1].Name = "DocumentBaseURL";
-                pArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
-            }
-
-            if (xInsertPosition.is()) {
-                aArgs.realloc( nEnd += 2 );
-                auto pArgs = aArgs.getArray();
-                pArgs[nEnd-2].Name = "InsertMode";
-                pArgs[nEnd-2].Value <<= true;
-                pArgs[nEnd-1].Name = "TextInsertModeRange";
-                pArgs[nEnd-1].Value <<= xInsertPosition;
-            }
-
-            // #i119492# During loading, some OLE objects like chart will be set
-            // modified flag, so needs to reset the flag to false after loading
-            bool bRtn = true;
-            if (!tools::isEmptyFileUrl(rMedium.GetName()))
-            {
-                bRtn = xLoader->filter(aArgs);
-            }
-            const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-            for ( const auto& rName : aNames )
-            {
-                uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
-                OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
-                if ( xObj.is() )
+                sal_Int32 nState = xObj->getCurrentState();
+                if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    // means that the object is not active
                 {
-                    sal_Int32 nState = xObj->getCurrentState();
-                    if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    // means that the object is not active
+                    uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                    if (xModifiable.is() && xModifiable->isModified())
                     {
-                        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-                        if (xModifiable.is() && xModifiable->isModified())
-                        {
-                            uno::Reference<embed::XEmbedPersist> const xPers(xObj, uno::UNO_QUERY);
-                            assert(xPers.is() && "Modified object without persistence!");
-                            // store it before resetting modified!
-                            xPers->storeOwn();
-                            xModifiable->setModified(false);
-                        }
+                        uno::Reference<embed::XEmbedPersist> const xPers(xObj, uno::UNO_QUERY);
+                        assert(xPers.is() && "Modified object without persistence!");
+                        // store it before resetting modified!
+                        xPers->storeOwn();
+                        xModifiable->setModified(false);
                     }
                 }
             }
+        }
 
-            // tdf#107690 import custom document property _MarkAsFinal as SecurityOptOpenReadonly
-            // (before this fix, LibreOffice opened read-only OOXML documents as editable,
-            // also saved and exported _MarkAsFinal=true silently, resulting unintended read-only
-            // warning info bar in MSO)
-            uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier(GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps = xPropSupplier->getDocumentProperties() ;
-            uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocProps->getUserDefinedProperties();
-            if (xPropertyContainer.is())
+        // tdf#107690 import custom document property _MarkAsFinal as SecurityOptOpenReadonly
+        // (before this fix, LibreOffice opened read-only OOXML documents as editable,
+        // also saved and exported _MarkAsFinal=true silently, resulting unintended read-only
+        // warning info bar in MSO)
+        uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier(GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps = xPropSupplier->getDocumentProperties() ;
+        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocProps->getUserDefinedProperties();
+        if (xPropertyContainer.is())
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
+            if (xPropertySet.is())
             {
-                uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
-                if (xPropertySet.is())
+                uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("_MarkAsFinal"))
                 {
-                    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-                    if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("_MarkAsFinal"))
+                    if (xPropertySet->getPropertyValue("_MarkAsFinal").get<bool>())
                     {
-                        if (xPropertySet->getPropertyValue("_MarkAsFinal").get<bool>())
-                        {
-                            uno::Reference< lang::XMultiServiceFactory > xFactory(GetModel(), uno::UNO_QUERY);
-                            uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                            xSettings->setPropertyValue("LoadReadonly", uno::makeAny(true));
-                        }
-                        xPropertyContainer->removeProperty("_MarkAsFinal");
+                        uno::Reference< lang::XMultiServiceFactory > xFactory(GetModel(), uno::UNO_QUERY);
+                        uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                        xSettings->setPropertyValue("LoadReadonly", uno::makeAny(true));
                     }
+                    xPropertyContainer->removeProperty("_MarkAsFinal");
                 }
             }
+        }
 
-            return bRtn;
-        }
-        catch (const packages::zip::ZipIOException&)
-        {
-            SetError(ERRCODE_IO_BROKENPACKAGE);
-        }
-        catch (const lang::WrappedTargetRuntimeException& rWrapped)
-        {
-            io::WrongFormatException e;
-            if (rWrapped.TargetException >>= e)
-            {
-                SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
-                    e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
-            }
-        }
-        catch (const css::io::IOException& e)
+        return bRtn;
+    }
+    catch (const packages::zip::ZipIOException&)
+    {
+        SetError(ERRCODE_IO_BROKENPACKAGE);
+    }
+    catch (const lang::WrappedTargetRuntimeException& rWrapped)
+    {
+        io::WrongFormatException e;
+        if (rWrapped.TargetException >>= e)
         {
             SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
                 e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
         }
-        catch (const std::exception& e)
-        {
-            const char *msg = e.what();
-            const OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
-            SetError(*new StringErrorInfo(ERRCODE_SFX_DOLOADFAILED,
-                sError, DialogMask::ButtonsOk | DialogMask::MessageError));
-        }
-        catch (...)
-        {
-            std::abort(); // cannot happen
-        }
+    }
+    catch (const css::io::IOException& e)
+    {
+        SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
+            e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
+    }
+    catch (const std::exception& e)
+    {
+        const char *msg = e.what();
+        const OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
+        SetError(*new StringErrorInfo(ERRCODE_SFX_DOLOADFAILED,
+            sError, DialogMask::ButtonsOk | DialogMask::MessageError));
+    }
+    catch (...)
+    {
+        std::abort(); // cannot happen
     }
 
     return false;
@@ -2388,9 +2386,10 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         }
     }
 
-    if ( xExporter.is() )
-    {
-        try{
+    if ( !xExporter )
+        return false;
+
+    try{
         uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY_THROW );
         xExporter->setSourceDocument( xComp );
@@ -2474,9 +2473,8 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         }
 
         return xFilter->filter( aArgs );
-        }catch(...)
-        {}
-    }
+    }catch(...)
+    {}
 
     return false;
 }

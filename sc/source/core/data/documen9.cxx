@@ -473,26 +473,26 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     if ( HasAnyDraw( nTab, aMMRect ))
         return false;
 
-    if ( nStartCol > 0 && !bLeftIsEmpty )
-    {
-        // similar to in ScPrintFunc::AdjustPrintArea
-        // ExtendPrintArea starting only from the start column of the print area
+    if ( nStartCol <= 0 || bLeftIsEmpty )
+        return true;
 
-        SCCOL nExtendCol = nStartCol - 1;
-        SCROW nTmpRow = nEndRow;
+    // similar to in ScPrintFunc::AdjustPrintArea
+    // ExtendPrintArea starting only from the start column of the print area
 
-        // ExtendMerge() is non-const, but called without refresh. GetPrinter()
-        // might create and assign a printer.
-        ScDocument* pThis = const_cast<ScDocument*>(this);
+    SCCOL nExtendCol = nStartCol - 1;
+    SCROW nTmpRow = nEndRow;
 
-        pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab );      // no Refresh, incl. Attrs
+    // ExtendMerge() is non-const, but called without refresh. GetPrinter()
+    // might create and assign a printer.
+    ScDocument* pThis = const_cast<ScDocument*>(this);
 
-        OutputDevice* pDev = pThis->GetPrinter();
-        pDev->SetMapMode(MapMode(MapUnit::MapPixel)); // Important for GetNeededSize
-        ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
-        if ( nExtendCol >= nStartCol )
-            return false;
-    }
+    pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab );      // no Refresh, incl. Attrs
+
+    OutputDevice* pDev = pThis->GetPrinter();
+    pDev->SetMapMode(MapMode(MapUnit::MapPixel)); // Important for GetNeededSize
+    ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
+    if ( nExtendCol >= nStartCol )
+        return false;
 
     return true;
 }

@@ -162,25 +162,24 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
     ErrCode nErrCode(sal_uInt32(pErr->GetErrorCode()) & ERRCODE_ERROR_MASK);
     if (pErr->GetErrorCode().GetArea() < lStart || lEnd < pErr->GetErrorCode().GetArea())
         return false;
-    if(GetErrorString(nErrCode, rStr))
+    if(!GetErrorString(nErrCode, rStr))
+        return false;
+
+    const StringErrorInfo *pStringInfo = dynamic_cast<const StringErrorInfo *>(pErr);
+    if(pStringInfo)
     {
-        const StringErrorInfo *pStringInfo = dynamic_cast<const StringErrorInfo *>(pErr);
-        if(pStringInfo)
-        {
-            rStr = rStr.replaceAll("$(ARG1)", pStringInfo->GetErrorString());
-        }
-        else
-        {
-            const TwoStringErrorInfo * pTwoStringInfo = dynamic_cast<const TwoStringErrorInfo* >(pErr);
-            if (pTwoStringInfo)
-            {
-                rStr = rStr.replaceAll("$(ARG1)", pTwoStringInfo->GetArg1());
-                rStr = rStr.replaceAll("$(ARG2)", pTwoStringInfo->GetArg2());
-            }
-        }
-        return true;
+        rStr = rStr.replaceAll("$(ARG1)", pStringInfo->GetErrorString());
     }
-    return false;
+    else
+    {
+        const TwoStringErrorInfo * pTwoStringInfo = dynamic_cast<const TwoStringErrorInfo* >(pErr);
+        if (pTwoStringInfo)
+        {
+            rStr = rStr.replaceAll("$(ARG1)", pTwoStringInfo->GetArg1());
+            rStr = rStr.replaceAll("$(ARG2)", pTwoStringInfo->GetArg2());
+        }
+    }
+    return true;
 }
 
 void SfxErrorHandler::GetClassString(ErrCodeClass lClassId, OUString &rStr)

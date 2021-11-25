@@ -263,28 +263,28 @@ bool SfxObjectShell::IsModified() const
         return false;
     }
 
-    if (pImpl->mxObjectContainer)
+    if (!pImpl->mxObjectContainer)
+        return false;
+
+    const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+    for ( const auto& rName : aNames )
     {
-        const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-        for ( const auto& rName : aNames )
+        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
+        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
+        if ( xObj.is() )
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
-            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
-            if ( xObj.is() )
+            try
             {
-                try
+                sal_Int32 nState = xObj->getCurrentState();
+                if ( nState != embed::EmbedStates::LOADED )
                 {
-                    sal_Int32 nState = xObj->getCurrentState();
-                    if ( nState != embed::EmbedStates::LOADED )
-                    {
-                        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-                        if ( xModifiable.is() && xModifiable->isModified() )
-                            return true;
-                    }
+                    uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xModifiable.is() && xModifiable->isModified() )
+                        return true;
                 }
-                catch( uno::Exception& )
-                {}
             }
+            catch( uno::Exception& )
+            {}
         }
     }
 

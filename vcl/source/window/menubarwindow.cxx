@@ -542,33 +542,33 @@ static int ImplGetTopDockingAreaHeight( vcl::Window const *pWindow )
 {
     // find docking area that is top aligned and return its height
     // note: dockingareas are direct children of the SystemWindow
-    if( pWindow->ImplGetFrameWindow() )
+    if( !pWindow->ImplGetFrameWindow() )
+        return 0;
+
+    vcl::Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( GetWindowType::FirstChild ); //mpWindowImpl->mpFirstChild;
+    while( pWin )
     {
-        vcl::Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( GetWindowType::FirstChild ); //mpWindowImpl->mpFirstChild;
-        while( pWin )
+        if( pWin->IsSystemWindow() )
         {
-            if( pWin->IsSystemWindow() )
+            vcl::Window *pChildWin = pWin->GetWindow( GetWindowType::FirstChild ); //mpWindowImpl->mpFirstChild;
+            while( pChildWin )
             {
-                vcl::Window *pChildWin = pWin->GetWindow( GetWindowType::FirstChild ); //mpWindowImpl->mpFirstChild;
-                while( pChildWin )
+                DockingAreaWindow *pDockingArea = nullptr;
+                if ( pChildWin->GetType() == WindowType::DOCKINGAREA )
+                    pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
+
+                if( pDockingArea && pDockingArea->GetAlign() == WindowAlign::Top &&
+                    pDockingArea->IsVisible() && pDockingArea->GetOutputSizePixel().Height() != 0 )
                 {
-                    DockingAreaWindow *pDockingArea = nullptr;
-                    if ( pChildWin->GetType() == WindowType::DOCKINGAREA )
-                        pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
-
-                    if( pDockingArea && pDockingArea->GetAlign() == WindowAlign::Top &&
-                        pDockingArea->IsVisible() && pDockingArea->GetOutputSizePixel().Height() != 0 )
-                    {
-                        return pDockingArea->GetOutputSizePixel().Height();
-                    }
-
-                    pChildWin = pChildWin->GetWindow( GetWindowType::Next ); //mpWindowImpl->mpNext;
+                    return pDockingArea->GetOutputSizePixel().Height();
                 }
 
+                pChildWin = pChildWin->GetWindow( GetWindowType::Next ); //mpWindowImpl->mpNext;
             }
 
-            pWin = pWin->GetWindow( GetWindowType::Next ); //mpWindowImpl->mpNext;
         }
+
+        pWin = pWin->GetWindow( GetWindowType::Next ); //mpWindowImpl->mpNext;
     }
     return 0;
 }

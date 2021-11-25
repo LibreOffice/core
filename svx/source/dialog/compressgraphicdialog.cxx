@@ -374,26 +374,25 @@ Graphic CompressGraphicsDialog::GetCompressedGraphic()
 
 SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
 {
-    if ( m_dResolution > 0.0  )
+    if ( m_dResolution <= 0.0  )
+        return nullptr;
+
+    SdrGrafObj* pNewObject(m_xGraphicObj->CloneSdrObject(m_xGraphicObj->getSdrModelFromSdrObject()));
+
+    if ( m_xReduceResolutionCB->get_active() )
     {
-        SdrGrafObj* pNewObject(m_xGraphicObj->CloneSdrObject(m_xGraphicObj->getSdrModelFromSdrObject()));
+        tools::Rectangle aScaledCropedRectangle = GetScaledCropRectangle();
+        SdrGrafCropItem aNewCrop(
+            aScaledCropedRectangle.Left(),
+            aScaledCropedRectangle.Top(),
+            aScaledCropedRectangle.Right(),
+            aScaledCropedRectangle.Bottom());
 
-        if ( m_xReduceResolutionCB->get_active() )
-        {
-            tools::Rectangle aScaledCropedRectangle = GetScaledCropRectangle();
-            SdrGrafCropItem aNewCrop(
-                aScaledCropedRectangle.Left(),
-                aScaledCropedRectangle.Top(),
-                aScaledCropedRectangle.Right(),
-                aScaledCropedRectangle.Bottom());
-
-            pNewObject->SetMergedItem(aNewCrop);
-        }
-        pNewObject->SetGraphic( GetCompressedGraphic() );
-
-        return pNewObject;
+        pNewObject->SetMergedItem(aNewCrop);
     }
-    return nullptr;
+    pNewObject->SetGraphic( GetCompressedGraphic() );
+
+    return pNewObject;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -554,43 +554,43 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
 {
     const sal_uInt16 nCount = rAnimation.Count();
 
-    if (nCount)
+    if (!nCount)
+        return rOStm;
+
+    const sal_uInt32 nDummy32 = 0;
+
+    // If no BitmapEx was set we write the first Bitmap of
+    // the Animation
+    if (rAnimation.GetBitmapEx().GetBitmap().IsEmpty())
+        WriteDIBBitmapEx(rAnimation.Get(0).maBitmapEx, rOStm);
+    else
+        WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
+
+    // Write identifier ( SDANIMA1 )
+    rOStm.WriteUInt32(0x5344414e).WriteUInt32(0x494d4931);
+
+    for (sal_uInt16 i = 0; i < nCount; i++)
     {
-        const sal_uInt32 nDummy32 = 0;
+        const AnimationBitmap& rAnimationBitmap = rAnimation.Get(i);
+        const sal_uInt16 nRest = nCount - i - 1;
 
-        // If no BitmapEx was set we write the first Bitmap of
-        // the Animation
-        if (rAnimation.GetBitmapEx().GetBitmap().IsEmpty())
-            WriteDIBBitmapEx(rAnimation.Get(0).maBitmapEx, rOStm);
-        else
-            WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
-
-        // Write identifier ( SDANIMA1 )
-        rOStm.WriteUInt32(0x5344414e).WriteUInt32(0x494d4931);
-
-        for (sal_uInt16 i = 0; i < nCount; i++)
-        {
-            const AnimationBitmap& rAnimationBitmap = rAnimation.Get(i);
-            const sal_uInt16 nRest = nCount - i - 1;
-
-            // Write AnimationBitmap
-            WriteDIBBitmapEx(rAnimationBitmap.maBitmapEx, rOStm);
-            tools::GenericTypeSerializer aSerializer(rOStm);
-            aSerializer.writePoint(rAnimationBitmap.maPositionPixel);
-            aSerializer.writeSize(rAnimationBitmap.maSizePixel);
-            aSerializer.writeSize(rAnimation.maGlobalSize);
-            rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationBitmap.mnWait)
-                                  ? 65535
-                                  : rAnimationBitmap.mnWait);
-            rOStm.WriteUInt16(static_cast<sal_uInt16>(rAnimationBitmap.meDisposal));
-            rOStm.WriteBool(rAnimationBitmap.mbUserInput);
-            rOStm.WriteUInt32(rAnimation.mnLoopCount);
-            rOStm.WriteUInt32(nDummy32); // Unused
-            rOStm.WriteUInt32(nDummy32); // Unused
-            rOStm.WriteUInt32(nDummy32); // Unused
-            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, ""); // dummy
-            rOStm.WriteUInt16(nRest); // Count of remaining structures
-        }
+        // Write AnimationBitmap
+        WriteDIBBitmapEx(rAnimationBitmap.maBitmapEx, rOStm);
+        tools::GenericTypeSerializer aSerializer(rOStm);
+        aSerializer.writePoint(rAnimationBitmap.maPositionPixel);
+        aSerializer.writeSize(rAnimationBitmap.maSizePixel);
+        aSerializer.writeSize(rAnimation.maGlobalSize);
+        rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationBitmap.mnWait)
+                              ? 65535
+                              : rAnimationBitmap.mnWait);
+        rOStm.WriteUInt16(static_cast<sal_uInt16>(rAnimationBitmap.meDisposal));
+        rOStm.WriteBool(rAnimationBitmap.mbUserInput);
+        rOStm.WriteUInt32(rAnimation.mnLoopCount);
+        rOStm.WriteUInt32(nDummy32); // Unused
+        rOStm.WriteUInt32(nDummy32); // Unused
+        rOStm.WriteUInt32(nDummy32); // Unused
+        write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, ""); // dummy
+        rOStm.WriteUInt16(nRest); // Count of remaining structures
     }
 
     return rOStm;

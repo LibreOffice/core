@@ -720,38 +720,36 @@ bool ChildrenManagerImpl::ReplaceChild (
     auto I = std::find_if(maVisibleChildren.begin(), maVisibleChildren.end(),
         [&pCurrentChild](const ChildDescriptor& rChild) { return rChild.GetAccessibleShape() == pCurrentChild; });
 
-    if (I != maVisibleChildren.end())
-    {
-        // Dispose the current child and send an event about its deletion.
-        pCurrentChild->dispose();
-        mrContext.CommitChange (
-            AccessibleEventId::CHILD,
-            uno::Any(),
-            uno::makeAny (I->mxAccessibleShape));
+    if (I == maVisibleChildren.end())
+        // When not found among the visible children we have to search the list
+        // of accessible shapes.  This is not yet implemented.
+        return false;
 
-        // Replace with replacement and send an event about existence
-        // of the new child.
-        AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this );
-        // create the new child
-        rtl::Reference<AccessibleShape> pNewChild(ShapeTypeHandler::Instance().CreateAccessibleObject (
-            aShapeInfo,
-            _rShapeTreeInfo
-        ));
-        if ( pNewChild.is() )
-            pNewChild->Init();
+    // Dispose the current child and send an event about its deletion.
+    pCurrentChild->dispose();
+    mrContext.CommitChange (
+        AccessibleEventId::CHILD,
+        uno::Any(),
+        uno::makeAny (I->mxAccessibleShape));
 
-        I->mxAccessibleShape = pNewChild.get();
-        mrContext.CommitChange (
-            AccessibleEventId::CHILD,
-            uno::makeAny (I->mxAccessibleShape),
-            uno::Any());
+    // Replace with replacement and send an event about existence
+    // of the new child.
+    AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this );
+    // create the new child
+    rtl::Reference<AccessibleShape> pNewChild(ShapeTypeHandler::Instance().CreateAccessibleObject (
+        aShapeInfo,
+        _rShapeTreeInfo
+    ));
+    if ( pNewChild.is() )
+        pNewChild->Init();
 
-        return true;
-    }
+    I->mxAccessibleShape = pNewChild.get();
+    mrContext.CommitChange (
+        AccessibleEventId::CHILD,
+        uno::makeAny (I->mxAccessibleShape),
+        uno::Any());
 
-    // When not found among the visible children we have to search the list
-    // of accessible shapes.  This is not yet implemented.
-    return false;
+    return true;
 }
 
 // Add the impl method for IAccessibleParent interface

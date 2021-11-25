@@ -1890,42 +1890,41 @@ void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
 
 bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent)
 {
-    if (GetMedium()->IsOriginallyReadOnly())
+    if (!GetMedium()->IsOriginallyReadOnly())
+        return false;
+
+    // If the file is physically read-only, we just show the existing signatures
+    try
     {
-        // If the file is physically read-only, we just show the existing signatures
-        try
+        OUString aODFVersion(
+            comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
+        uno::Reference<security::XDocumentDigitalSignatures> xSigner(
+            security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
+                comphelper::getProcessComponentContext(), aODFVersion, HasValidSignatures()));
+        if (bSignScriptingContent)
+            xSigner->showScriptingContentSignatures(GetMedium()->GetZipStorageToSign_Impl(),
+                                                    uno::Reference<io::XInputStream>());
+        else
         {
-            OUString aODFVersion(
-                comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
-            uno::Reference<security::XDocumentDigitalSignatures> xSigner(
-                security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
-                    comphelper::getProcessComponentContext(), aODFVersion, HasValidSignatures()));
-            if (bSignScriptingContent)
-                xSigner->showScriptingContentSignatures(GetMedium()->GetZipStorageToSign_Impl(),
-                                                        uno::Reference<io::XInputStream>());
+            uno::Reference<embed::XStorage> xStorage = GetMedium()->GetZipStorageToSign_Impl();
+            if (xStorage.is())
+                xSigner->showDocumentContentSignatures(xStorage,
+                                                       uno::Reference<io::XInputStream>());
             else
             {
-                uno::Reference<embed::XStorage> xStorage = GetMedium()->GetZipStorageToSign_Impl();
-                if (xStorage.is())
-                    xSigner->showDocumentContentSignatures(xStorage,
-                                                           uno::Reference<io::XInputStream>());
-                else
-                {
-                    std::unique_ptr<SvStream> pStream(
-                        utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ));
-                    uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(*pStream));
-                    xSigner->showDocumentContentSignatures(uno::Reference<embed::XStorage>(),
-                                                           xStream);
-                }
+                std::unique_ptr<SvStream> pStream(
+                    utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ));
+                uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(*pStream));
+                xSigner->showDocumentContentSignatures(uno::Reference<embed::XStorage>(),
+                                                       xStream);
             }
         }
-        catch (const uno::Exception&)
-        {
-            SAL_WARN("sfx.doc", "Couldn't use signing functionality!");
-        }
-        return true;
     }
-    return false;
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("sfx.doc", "Couldn't use signing functionality!");
+    }
+    return true;
 }
 
 bool SfxObjectShell::HasValidSignatures() const

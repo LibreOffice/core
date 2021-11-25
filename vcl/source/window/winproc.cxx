@@ -71,86 +71,86 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if (pSVData->mpWinData->mpFirstFloat && !pSVData->mpWinData->mpCaptureWin
-        && !pSVData->mpWinData->mpFirstFloat->ImplIsFloatPopupModeWindow(pChild))
-    {
-        /*
-         *  #93895# since floats are system windows, coordinates have
-         *  to be converted to float relative for the hittest
-         */
-        bool            bHitTestInsideRect = false;
-        FloatingWindow* pFloat = pSVData->mpWinData->mpFirstFloat->ImplFloatHitTest( pChild, rMousePos, bHitTestInsideRect );
-        if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
-        {
-            if ( bMouseLeave )
-                return true;
+    if (!pSVData->mpWinData->mpFirstFloat || pSVData->mpWinData->mpCaptureWin
+        || pSVData->mpWinData->mpFirstFloat->ImplIsFloatPopupModeWindow(pChild))
+            return false;
 
-            if ( !pFloat || bHitTestInsideRect )
-            {
-                if ( ImplGetSVHelpData().mpHelpWin && !ImplGetSVHelpData().mbKeyboardHelp )
-                    ImplDestroyHelpWindow( true );
-                pChild->ImplGetFrame()->SetPointer( PointerStyle::Arrow );
-                return true;
-            }
-        }
-        else
+    /*
+     *  #93895# since floats are system windows, coordinates have
+     *  to be converted to float relative for the hittest
+     */
+    bool            bHitTestInsideRect = false;
+    FloatingWindow* pFloat = pSVData->mpWinData->mpFirstFloat->ImplFloatHitTest( pChild, rMousePos, bHitTestInsideRect );
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+    {
+        if ( bMouseLeave )
+            return true;
+
+        if ( !pFloat || bHitTestInsideRect )
         {
-            if ( nCode & MOUSE_LEFT )
+            if ( ImplGetSVHelpData().mpHelpWin && !ImplGetSVHelpData().mbKeyboardHelp )
+                ImplDestroyHelpWindow( true );
+            pChild->ImplGetFrame()->SetPointer( PointerStyle::Arrow );
+            return true;
+        }
+    }
+    else
+    {
+        if ( nCode & MOUSE_LEFT )
+        {
+            if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
             {
-                if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
+                if ( !pFloat )
                 {
-                    if ( !pFloat )
+                    FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
+                    pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
+                    return true;
+                }
+                else if ( bHitTestInsideRect )
+                {
+                    pFloat->ImplSetMouseDown();
+                    return true;
+                }
+            }
+            else
+            {
+                if ( pFloat )
+                {
+                    if ( bHitTestInsideRect )
                     {
-                        FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
-                        pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
-                        return true;
-                    }
-                    else if ( bHitTestInsideRect )
-                    {
-                        pFloat->ImplSetMouseDown();
+                        if ( pFloat->ImplIsMouseDown() )
+                            pFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel );
                         return true;
                     }
                 }
                 else
                 {
-                    if ( pFloat )
-                    {
-                        if ( bHitTestInsideRect )
-                        {
-                            if ( pFloat->ImplIsMouseDown() )
-                                pFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel );
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
-                        FloatWinPopupFlags nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
-                        if ( !(nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) )
-                        {
-                            pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
-                            return true;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if ( !pFloat )
-                {
                     FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
                     FloatWinPopupFlags nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
-                    if ( nPopupFlags & FloatWinPopupFlags::AllMouseButtonClose )
+                    if ( !(nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) )
                     {
-                        if ( (nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) &&
-                             (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
-                            return true;
                         pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                         return true;
                     }
-                    else
-                        return true;
                 }
+            }
+        }
+        else
+        {
+            if ( !pFloat )
+            {
+                FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
+                FloatWinPopupFlags nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
+                if ( nPopupFlags & FloatWinPopupFlags::AllMouseButtonClose )
+                {
+                    if ( (nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) &&
+                         (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
+                        return true;
+                    pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
+                    return true;
+                }
+                else
+                    return true;
             }
         }
     }

@@ -163,44 +163,44 @@ template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKe
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
     t_key const & key, t_val const & val )
 {
-    if (0 < m_size)
-    {
-        typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
+    if (0 >= m_size)
+        return;
 
-        Entry * entry;
-        if (iFind == m_key2element.end())
-        {
-            entry = m_tail; // erase last element
+    typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
+
+    Entry * entry;
+    if (iFind == m_key2element.end())
+    {
+        entry = m_tail; // erase last element
 #ifdef __CACHE_DIAGNOSE
-            if (entry->m_key.getLength())
-            {
-                OUStringBuffer buf( 48 );
-                buf.appendAscii( "> kicking element \"" );
-                buf.append( entry->m_key );
-                buf.appendAscii( "\" from cache" );
-                SAL_INFO("stoc", buf.makeStringAndClear() );
-            }
-#endif
-            m_key2element.erase( entry->m_key );
-            entry->m_key = key;
-            ::std::pair< typename t_key2element::iterator, bool > insertion(
-                m_key2element.emplace( key, entry ) );
-            OSL_ENSURE( insertion.second, "### inserting new cache entry failed?!" );
-        }
-        else
+        if (entry->m_key.getLength())
         {
-            entry = iFind->second;
-#ifdef __CACHE_DIAGNOSE
             OUStringBuffer buf( 48 );
-            buf.appendAscii( "> replacing element \"" );
+            buf.appendAscii( "> kicking element \"" );
             buf.append( entry->m_key );
-            buf.appendAscii( "\" in cache" );
+            buf.appendAscii( "\" from cache" );
             SAL_INFO("stoc", buf.makeStringAndClear() );
-#endif
         }
-        entry->m_val = val;
-        toFront( entry );
+#endif
+        m_key2element.erase( entry->m_key );
+        entry->m_key = key;
+        ::std::pair< typename t_key2element::iterator, bool > insertion(
+            m_key2element.emplace( key, entry ) );
+        OSL_ENSURE( insertion.second, "### inserting new cache entry failed?!" );
     }
+    else
+    {
+        entry = iFind->second;
+#ifdef __CACHE_DIAGNOSE
+        OUStringBuffer buf( 48 );
+        buf.appendAscii( "> replacing element \"" );
+        buf.append( entry->m_key );
+        buf.appendAscii( "\" in cache" );
+        SAL_INFO("stoc", buf.makeStringAndClear() );
+#endif
+    }
+    entry->m_val = val;
+    toFront( entry );
 }
 
 }

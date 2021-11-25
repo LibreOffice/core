@@ -1181,51 +1181,48 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
 {
     // system file locking is not active, ask user whether he wants to open the document without any locking
     uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+    if (!xHandler)
+        return false;
 
-    if (xHandler.is())
+    ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl;
+
+    switch (nWhichDlg)
     {
-        ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl;
-
-        switch (nWhichDlg)
-        {
-            case MessageDlg::LockFileIgnore:
-                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileIgnoreRequest() ));
-                break;
-            case MessageDlg::LockFileCorrupt:
-                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileCorruptRequest() ));
-                break;
-        }
-
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
-            new ::ucbhelper::InteractionAbort(xIgnoreRequestImpl.get()),
-            new ::ucbhelper::InteractionApprove(xIgnoreRequestImpl.get())
-        };
-        xIgnoreRequestImpl->setContinuations(aContinuations);
-
-        xHandler->handle(xIgnoreRequestImpl);
-
-        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
-        bool bReadOnly = true;
-
-        if (uno::Reference<task::XInteractionAbort>(xSelected.get(), uno::UNO_QUERY).is())
-        {
-            SetError(ERRCODE_ABORT);
-            bReadOnly = false;
-        }
-        else if (!uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY).is())
-        {
-            // user selected "Notify"
-            pImpl->m_bNotifyWhenEditable = true;
-            AddToCheckEditableWorkerList();
-        }
-
-        if (bReadOnly)
-            GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
-
-        return bReadOnly;
+        case MessageDlg::LockFileIgnore:
+            xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileIgnoreRequest() ));
+            break;
+        case MessageDlg::LockFileCorrupt:
+            xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileCorruptRequest() ));
+            break;
     }
 
-    return false;
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
+        new ::ucbhelper::InteractionAbort(xIgnoreRequestImpl.get()),
+        new ::ucbhelper::InteractionApprove(xIgnoreRequestImpl.get())
+    };
+    xIgnoreRequestImpl->setContinuations(aContinuations);
+
+    xHandler->handle(xIgnoreRequestImpl);
+
+    ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
+    bool bReadOnly = true;
+
+    if (uno::Reference<task::XInteractionAbort>(xSelected.get(), uno::UNO_QUERY).is())
+    {
+        SetError(ERRCODE_ABORT);
+        bReadOnly = false;
+    }
+    else if (!uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY).is())
+    {
+        // user selected "Notify"
+        pImpl->m_bNotifyWhenEditable = true;
+        AddToCheckEditableWorkerList();
+    }
+
+    if (bReadOnly)
+        GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+
+    return bReadOnly;
 }
 
 namespace
@@ -2167,57 +2164,57 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTar
     // otherwise the stream copying can not be done
     const SfxStringItem* pNewPassItem = aTargetSet.GetItem<SfxStringItem>(SID_PASSWORD, false);
     const SfxStringItem* pOldPassItem = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_PASSWORD, false);
-    if ( ( !pNewPassItem && !pOldPassItem )
-      || ( pNewPassItem && pOldPassItem && pNewPassItem->GetValue() == pOldPassItem->GetValue() ) )
+    if ( ( pNewPassItem || pOldPassItem )
+      && ( !pNewPassItem || !pOldPassItem || pNewPassItem->GetValue() != pOldPassItem->GetValue() ) )
+        return false;
+
+    // the filter must be the same
+    const SfxStringItem* pNewFilterItem = aTargetSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
+    const SfxStringItem* pOldFilterItem = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_FILTER_NAME, false);
+    if ( !pNewFilterItem || !pOldFilterItem || pNewFilterItem->GetValue() != pOldFilterItem->GetValue() )
+        return false;
+
+    // get the input stream and copy it
+    // in case of success return true
+    uno::Reference< io::XInputStream > xInStream = GetInputStream();
+
+    ResetError();
+    if ( !xInStream )
+        return false;
+
+    try
     {
-        // the filter must be the same
-        const SfxStringItem* pNewFilterItem = aTargetSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
-        const SfxStringItem* pOldFilterItem = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_FILTER_NAME, false);
-        if ( pNewFilterItem && pOldFilterItem && pNewFilterItem->GetValue() == pOldFilterItem->GetValue() )
+        uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
+        sal_Int64 nPos = 0;
+        if ( xSeek.is() )
         {
-            // get the input stream and copy it
-            // in case of success return true
-            uno::Reference< io::XInputStream > xInStream = GetInputStream();
-
-            ResetError();
-            if ( xInStream.is() )
-            {
-                try
-                {
-                    uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
-                    sal_Int64 nPos = 0;
-                    if ( xSeek.is() )
-                    {
-                        nPos = xSeek->getPosition();
-                        xSeek->seek( 0 );
-                    }
-
-                    uno::Reference < css::ucb::XCommandEnvironment > xEnv;
-                    ::ucbhelper::Content aTargetContent( aURL, xEnv, comphelper::getProcessComponentContext() );
-
-                    InsertCommandArgument aInsertArg;
-                    aInsertArg.Data = xInStream;
-                    const SfxBoolItem* pOverWrite = aTargetSet.GetItem<SfxBoolItem>(SID_OVERWRITE, false);
-                    if ( pOverWrite && !pOverWrite->GetValue() ) // argument says: never overwrite
-                        aInsertArg.ReplaceExisting = false;
-                    else
-                        aInsertArg.ReplaceExisting = true; // default is overwrite existing files
-
-                    Any aCmdArg;
-                    aCmdArg <<= aInsertArg;
-                    aTargetContent.executeCommand( "insert",
-                                                    aCmdArg );
-
-                    if ( xSeek.is() )
-                        xSeek->seek( nPos );
-
-                    return true;
-                }
-                catch( const uno::Exception& )
-                {}
-            }
+            nPos = xSeek->getPosition();
+            xSeek->seek( 0 );
         }
+
+        uno::Reference < css::ucb::XCommandEnvironment > xEnv;
+        ::ucbhelper::Content aTargetContent( aURL, xEnv, comphelper::getProcessComponentContext() );
+
+        InsertCommandArgument aInsertArg;
+        aInsertArg.Data = xInStream;
+        const SfxBoolItem* pOverWrite = aTargetSet.GetItem<SfxBoolItem>(SID_OVERWRITE, false);
+        if ( pOverWrite && !pOverWrite->GetValue() ) // argument says: never overwrite
+            aInsertArg.ReplaceExisting = false;
+        else
+            aInsertArg.ReplaceExisting = true; // default is overwrite existing files
+
+        Any aCmdArg;
+        aCmdArg <<= aInsertArg;
+        aTargetContent.executeCommand( "insert",
+                                        aCmdArg );
+
+        if ( xSeek.is() )
+            xSeek->seek( nPos );
+
+        return true;
     }
+    catch( const uno::Exception& )
+    {}
 
     return false;
 }
@@ -4508,33 +4505,33 @@ void SfxMedium::AddToCheckEditableWorkerList()
         return;
 
     std::unique_lock<std::mutex> globalLock(g_chkReadOnlyGlobalMutex);
-    if (g_newReadOnlyDocs.find(this) == g_newReadOnlyDocs.end())
+    if (g_newReadOnlyDocs.find(this) != g_newReadOnlyDocs.end())
+        return;
+
+    bool bAddNewEntry = false;
+    if (!g_bChkReadOnlyTaskRunning)
     {
-        bool bAddNewEntry = false;
-        if (!g_bChkReadOnlyTaskRunning)
+        std::shared_ptr<comphelper::ThreadTaskTag> pTag
+            = comphelper::ThreadPool::createThreadTaskTag();
+        if (pTag != nullptr)
         {
-            std::shared_ptr<comphelper::ThreadTaskTag> pTag
-                = comphelper::ThreadPool::createThreadTaskTag();
-            if (pTag != nullptr)
-            {
-                g_bChkReadOnlyTaskRunning = true;
-                bAddNewEntry = true;
-                comphelper::ThreadPool::getSharedOptimalPool().pushTask(
-                    std::make_unique<CheckReadOnlyTask>(pTag));
-            }
-        }
-        else
+            g_bChkReadOnlyTaskRunning = true;
             bAddNewEntry = true;
+            comphelper::ThreadPool::getSharedOptimalPool().pushTask(
+                std::make_unique<CheckReadOnlyTask>(pTag));
+        }
+    }
+    else
+        bAddNewEntry = true;
 
-        if (bAddNewEntry)
+    if (bAddNewEntry)
+    {
+        std::shared_ptr<ReadOnlyMediumEntry> newEntry = std::make_shared<ReadOnlyMediumEntry>(
+            pImpl->m_pCheckEditableWorkerMutex, pImpl->m_pIsDestructed);
+
+        if (newEntry != nullptr)
         {
-            std::shared_ptr<ReadOnlyMediumEntry> newEntry = std::make_shared<ReadOnlyMediumEntry>(
-                pImpl->m_pCheckEditableWorkerMutex, pImpl->m_pIsDestructed);
-
-            if (newEntry != nullptr)
-            {
-                g_newReadOnlyDocs[this] = newEntry;
-            }
+            g_newReadOnlyDocs[this] = newEntry;
         }
     }
 }
@@ -4542,24 +4539,24 @@ void SfxMedium::AddToCheckEditableWorkerList()
 // should only be called on main thread
 void SfxMedium::CancelCheckEditableEntry(bool bRemoveEvent)
 {
-    if (pImpl->m_pCheckEditableWorkerMutex != nullptr)
+    if (!pImpl->m_pCheckEditableWorkerMutex)
+        return;
+
+    std::unique_lock<std::recursive_mutex> lock(*(pImpl->m_pCheckEditableWorkerMutex));
+
+    if (pImpl->m_pReloadEvent != nullptr)
     {
-        std::unique_lock<std::recursive_mutex> lock(*(pImpl->m_pCheckEditableWorkerMutex));
+        if (bRemoveEvent)
+            Application::RemoveUserEvent(pImpl->m_pReloadEvent);
+        // make sure destructor doesn't use a freed reference
+        // and reset the event so we can check again
+        pImpl->m_pReloadEvent = nullptr;
+    }
 
-        if (pImpl->m_pReloadEvent != nullptr)
-        {
-            if (bRemoveEvent)
-                Application::RemoveUserEvent(pImpl->m_pReloadEvent);
-            // make sure destructor doesn't use a freed reference
-            // and reset the event so we can check again
-            pImpl->m_pReloadEvent = nullptr;
-        }
-
-        if (pImpl->m_pIsDestructed != nullptr)
-        {
-            *(pImpl->m_pIsDestructed) = true;
-            pImpl->m_pIsDestructed = nullptr;
-        }
+    if (pImpl->m_pIsDestructed != nullptr)
+    {
+        *(pImpl->m_pIsDestructed) = true;
+        pImpl->m_pIsDestructed = nullptr;
     }
 }
 
@@ -4576,37 +4573,37 @@ IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
     pMed->CancelCheckEditableEntry(false);
 
     uno::Reference<task::XInteractionHandler> xHandler = pMed->GetInteractionHandler();
-    if (xHandler.is())
+    if (!xHandler.is())
+        return;
+
+    OUString aDocumentURL
+        = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+    ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl
+        = new ::ucbhelper::InteractionRequest(uno::makeAny(document::ReloadEditableRequest(
+            OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
+    if (!xInteractionRequestImpl)
+        return;
+
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{
+        new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get()),
+        new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get())
+    };
+    xInteractionRequestImpl->setContinuations(aContinuations);
+    xHandler->handle(xInteractionRequestImpl);
+    ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
+        = xInteractionRequestImpl->getSelection();
+    if (uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY).is())
     {
-        OUString aDocumentURL
-            = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
-        ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl
-            = new ::ucbhelper::InteractionRequest(uno::makeAny(document::ReloadEditableRequest(
-                OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
-        if (xInteractionRequestImpl != nullptr)
+        for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
+             pFrame = SfxViewFrame::GetNext(*pFrame))
         {
-            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{
-                new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get()),
-                new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get())
-            };
-            xInteractionRequestImpl->setContinuations(aContinuations);
-            xHandler->handle(xInteractionRequestImpl);
-            ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
-                = xInteractionRequestImpl->getSelection();
-            if (uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY).is())
+            if (pFrame->GetObjectShell()->GetMedium() == pMed)
             {
-                for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
-                     pFrame = SfxViewFrame::GetNext(*pFrame))
-                {
-                    if (pFrame->GetObjectShell()->GetMedium() == pMed)
-                    {
-                        // special case to ensure view isn't set to read-only in
-                        // SfxViewFrame::ExecReload_Impl after reloading
-                        pMed->SetOriginallyReadOnly(false);
-                        pFrame->GetDispatcher()->Execute(SID_RELOAD);
-                        break;
-                    }
-                }
+                // special case to ensure view isn't set to read-only in
+                // SfxViewFrame::ExecReload_Impl after reloading
+                pMed->SetOriginallyReadOnly(false);
+                pFrame->GetDispatcher()->Execute(SID_RELOAD);
+                break;
             }
         }
     }

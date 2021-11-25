@@ -1568,39 +1568,37 @@ bool ScInterpreter::ConvertMatrixParameters()
             }
         }
     }
-    if( nJumpCols && nJumpRows )
+    if( !nJumpCols || !nJumpRows )
+        return false;
+    short nPC = aCode.GetPC();
+    short nStart = nPC - 1;     // restart on current code (-1)
+    short nNext = nPC;          // next instruction after subroutine
+    short nStop = nPC + 1;      // stop subroutine before reaching that
+    FormulaConstTokenRef xNew;
+    ScTokenMatrixMap::const_iterator aMapIter;
+    if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
+        xNew = (*aMapIter).second;
+    else
     {
-        short nPC = aCode.GetPC();
-        short nStart = nPC - 1;     // restart on current code (-1)
-        short nNext = nPC;          // next instruction after subroutine
-        short nStop = nPC + 1;      // stop subroutine before reaching that
-        FormulaConstTokenRef xNew;
-        ScTokenMatrixMap::const_iterator aMapIter;
-        if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
-            xNew = (*aMapIter).second;
-        else
+        auto pJumpMat = std::make_shared<ScJumpMatrix>( pCur->GetOpCode(), nJumpCols, nJumpRows);
+        pJumpMat->SetAllJumps( 1.0, nStart, nNext, nStop);
+        // pop parameters and store in ScJumpMatrix, push in JumpMatrix()
+        ScTokenVec aParams(nParams);
+        for ( sal_uInt16 i=1; i <= nParams && sp > 0; ++i )
         {
-            auto pJumpMat = std::make_shared<ScJumpMatrix>( pCur->GetOpCode(), nJumpCols, nJumpRows);
-            pJumpMat->SetAllJumps( 1.0, nStart, nNext, nStop);
-            // pop parameters and store in ScJumpMatrix, push in JumpMatrix()
-            ScTokenVec aParams(nParams);
-            for ( sal_uInt16 i=1; i <= nParams && sp > 0; ++i )
-            {
-                const FormulaToken* p = pStack[ --sp ];
-                p->IncRef();
-                // store in reverse order such that a push may simply iterate
-                aParams[ nParams - i ] = p;
-            }
-            pJumpMat->SetJumpParameters( std::move(aParams) );
-            xNew = new ScJumpMatrixToken( std::move(pJumpMat) );
-            GetTokenMatrixMap().emplace(pCur, xNew);
+            const FormulaToken* p = pStack[ --sp ];
+            p->IncRef();
+            // store in reverse order such that a push may simply iterate
+            aParams[ nParams - i ] = p;
         }
-        PushTempTokenWithoutError( xNew.get());
-        // set continuation point of path for main code line
-        aCode.Jump( nNext, nNext);
-        return true;
+        pJumpMat->SetJumpParameters( std::move(aParams) );
+        xNew = new ScJumpMatrixToken( std::move(pJumpMat) );
+        GetTokenMatrixMap().emplace(pCur, xNew);
     }
-    return false;
+    PushTempTokenWithoutError( xNew.get());
+    // set continuation point of path for main code line
+    aCode.Jump( nNext, nNext);
+    return true;
 }
 
 ScMatrixRef ScInterpreter::PopMatrix()

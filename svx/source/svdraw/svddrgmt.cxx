@@ -1105,25 +1105,25 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
 bool SdrDragMovHdl::EndSdrDrag(bool /*bCopy*/)
 {
-    if( GetDragHdl() )
+    if( !GetDragHdl() )
+        return true;
+
+    switch (GetDragHdl()->GetKind())
     {
-        switch (GetDragHdl()->GetKind())
-        {
-            case SdrHdlKind::Ref1:
-                Ref1()=DragStat().GetNow();
-                break;
+        case SdrHdlKind::Ref1:
+            Ref1()=DragStat().GetNow();
+            break;
 
-            case SdrHdlKind::Ref2:
-                Ref2()=DragStat().GetNow();
-                break;
+        case SdrHdlKind::Ref2:
+            Ref2()=DragStat().GetNow();
+            break;
 
-            case SdrHdlKind::MirrorAxis:
-                Ref1()+=DragStat().GetNow()-DragStat().GetStart();
-                Ref2()+=DragStat().GetNow()-DragStat().GetStart();
-                break;
+        case SdrHdlKind::MirrorAxis:
+            Ref1()+=DragStat().GetNow()-DragStat().GetStart();
+            Ref2()+=DragStat().GetNow()-DragStat().GetStart();
+            break;
 
-            default: break;
-        }
+        default: break;
     }
 
     return true;
@@ -2411,44 +2411,42 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
     if (bResize && aFact==Fraction(1,1))
         bResize=false;
 
-    if (nAngle || bResize)
+    if (!nAngle && !bResize)
+        return false;
+
+    if (nAngle && bResize)
     {
-        if (nAngle && bResize)
-        {
-            OUString aStr = ImpGetDescriptionStr(STR_EditShear);
+        OUString aStr = ImpGetDescriptionStr(STR_EditShear);
 
-            if (bCopy)
-                aStr += SvxResId(STR_EditWithCopy);
+        if (bCopy)
+            aStr += SvxResId(STR_EditWithCopy);
 
-            getSdrDragView().BegUndo(aStr);
-        }
-
-        if (bResize)
-        {
-            if (bVertical)
-            {
-                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),aFact,Fraction(1,1),bCopy);
-            }
-            else
-            {
-                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),Fraction(1,1),aFact,bCopy);
-            }
-
-            bCopy=false;
-        }
-
-        if (nAngle)
-        {
-            getSdrDragView().ShearMarkedObj(DragStat().GetRef1(),nAngle,bVertical,bCopy);
-        }
-
-        if (nAngle && bResize)
-            getSdrDragView().EndUndo();
-
-        return true;
+        getSdrDragView().BegUndo(aStr);
     }
 
-    return false;
+    if (bResize)
+    {
+        if (bVertical)
+        {
+            getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),aFact,Fraction(1,1),bCopy);
+        }
+        else
+        {
+            getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),Fraction(1,1),aFact,bCopy);
+        }
+
+        bCopy=false;
+    }
+
+    if (nAngle)
+    {
+        getSdrDragView().ShearMarkedObj(DragStat().GetRef1(),nAngle,bVertical,bCopy);
+    }
+
+    if (nAngle && bResize)
+        getSdrDragView().EndUndo();
+
+    return true;
 }
 
 PointerStyle SdrDragShear::GetSdrDragPointer() const
@@ -3307,70 +3305,68 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
 
     bool bDoCrook=aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0;
 
-    if (bDoCrook || bResize)
+    if (!bDoCrook && !bResize)
+        return false;
+
+    if (bResize && bUndo)
     {
-        if (bResize && bUndo)
-        {
-            OUString aStr = ImpGetDescriptionStr(!bContortion?STR_EditCrook:STR_EditCrookContortion);
+        OUString aStr = ImpGetDescriptionStr(!bContortion?STR_EditCrook:STR_EditCrookContortion);
 
-            if (bCopy)
-                aStr += SvxResId(STR_EditWithCopy);
+        if (bCopy)
+            aStr += SvxResId(STR_EditWithCopy);
 
-            getSdrDragView().BegUndo(aStr);
-        }
-
-        if (bResize)
-        {
-            Fraction aFact1(1,1);
-
-            if (bContortion)
-            {
-                if (bVertical)
-                    getSdrDragView().ResizeMarkedObj(aCenter,aFact1,aFact,bCopy);
-                else
-                    getSdrDragView().ResizeMarkedObj(aCenter,aFact,aFact1,bCopy);
-            }
-            else
-            {
-                if (bCopy)
-                    getSdrDragView().CopyMarkedObj();
-
-                const size_t nMarkCount=getSdrDragView().GetMarkedObjectList().GetMarkCount();
-
-                for (size_t nm=0; nm<nMarkCount; ++nm)
-                {
-                    SdrMark* pM=getSdrDragView().GetMarkedObjectList().GetMark(nm);
-                    SdrObject* pO=pM->GetMarkedSdrObj();
-                    Point aCtr0(pO->GetSnapRect().Center());
-                    Point aCtr1(aCtr0);
-
-                    if (bVertical)
-                        ResizePoint(aCtr1,aCenter,aFact1,aFact);
-                    else
-                        ResizePoint(aCtr1,aCenter,aFact,aFact1);
-
-                    Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
-                    if( bUndo )
-                        AddUndo(getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
-                    pO->Move(aSiz);
-                }
-            }
-
-            bCopy=false;
-        }
-
-        if (bDoCrook)
-        {
-            getSdrDragView().CrookMarkedObj(aCenter,aRad,eMode,bVertical,!bContortion,bCopy);
-        }
-
-        if (bResize && bUndo)
-            getSdrDragView().EndUndo();
-
-        return true;
+        getSdrDragView().BegUndo(aStr);
     }
 
-    return false;
+    if (bResize)
+    {
+        Fraction aFact1(1,1);
+
+        if (bContortion)
+        {
+            if (bVertical)
+                getSdrDragView().ResizeMarkedObj(aCenter,aFact1,aFact,bCopy);
+            else
+                getSdrDragView().ResizeMarkedObj(aCenter,aFact,aFact1,bCopy);
+        }
+        else
+        {
+            if (bCopy)
+                getSdrDragView().CopyMarkedObj();
+
+            const size_t nMarkCount=getSdrDragView().GetMarkedObjectList().GetMarkCount();
+
+            for (size_t nm=0; nm<nMarkCount; ++nm)
+            {
+                SdrMark* pM=getSdrDragView().GetMarkedObjectList().GetMark(nm);
+                SdrObject* pO=pM->GetMarkedSdrObj();
+                Point aCtr0(pO->GetSnapRect().Center());
+                Point aCtr1(aCtr0);
+
+                if (bVertical)
+                    ResizePoint(aCtr1,aCenter,aFact1,aFact);
+                else
+                    ResizePoint(aCtr1,aCenter,aFact,aFact1);
+
+                Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
+                if( bUndo )
+                    AddUndo(getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
+                pO->Move(aSiz);
+            }
+        }
+
+        bCopy=false;
+    }
+
+    if (bDoCrook)
+    {
+        getSdrDragView().CrookMarkedObj(aCenter,aRad,eMode,bVertical,!bContortion,bCopy);
+    }
+
+    if (bResize && bUndo)
+        getSdrDragView().EndUndo();
+
+    return true;
 }
 
 PointerStyle SdrDragCrook::GetSdrDragPointer() const

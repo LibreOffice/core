@@ -261,21 +261,21 @@ CompoundIdlClassImpl::~CompoundIdlClassImpl()
 
 sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
 {
-    if (xType.is())
+    if (!xType)
+        return false;
+
+    TypeClass eTC = xType->getTypeClass();
+    if (eTC == TypeClass_STRUCT || eTC == TypeClass_EXCEPTION)
     {
-        TypeClass eTC = xType->getTypeClass();
-        if (eTC == TypeClass_STRUCT || eTC == TypeClass_EXCEPTION)
+        if (equals( xType ))
+            return true;
+        else
         {
-            if (equals( xType ))
-                return true;
-            else
+            const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
+            if (rSeq.hasElements())
             {
-                const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
-                if (rSeq.hasElements())
-                {
-                    OSL_ENSURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
-                    return isAssignableFrom( rSeq[0] );
-                }
+                OSL_ENSURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
+                return isAssignableFrom( rSeq[0] );
             }
         }
     }

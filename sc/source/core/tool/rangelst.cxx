@@ -928,34 +928,31 @@ bool handleFourRanges( const ScRange& rDelRange, ScRange& r, std::vector<ScRange
     SCROW nRow2 = aPEnd.Row();
     SCTAB nTab = aPStart.Tab();
 
-    if (nCol1 < nDeleteCol1 && nDeleteCol2 < nCol2 && nRow1 < nDeleteRow1 && nDeleteRow2 < nRow2)
-    {
+    if (nCol1 >= nDeleteCol1 || nDeleteCol2 >= nCol2 || nRow1 >= nDeleteRow1 || nDeleteRow2 >= nRow2)
+        return false;
 
-        // +---------------+
-        // |       1       |
-        // +---+-------+---+
-        // |   |xxxxxxx|   |
-        // | 2 |xxxxxxx| 3 |
-        // |   |xxxxxxx|   |
-        // +---+-------+---+
-        // |       4       |
-        // +---------------+
+    // +---------------+
+    // |       1       |
+    // +---+-------+---+
+    // |   |xxxxxxx|   |
+    // | 2 |xxxxxxx| 3 |
+    // |   |xxxxxxx|   |
+    // +---+-------+---+
+    // |       4       |
+    // +---------------+
 
-        ScRange aNewRange(ScAddress(nCol1, nDeleteRow2+1, nTab), aPEnd); // 4
-        rNewRanges.push_back( aNewRange );
+    ScRange aNewRange(ScAddress(nCol1, nDeleteRow2+1, nTab), aPEnd); // 4
+    rNewRanges.push_back( aNewRange );
 
-        aNewRange = ScRange(nCol1, nDeleteRow1, nTab, nDeleteCol1-1, nDeleteRow2, nTab); // 2
-        rNewRanges.push_back( aNewRange );
+    aNewRange = ScRange(nCol1, nDeleteRow1, nTab, nDeleteCol1-1, nDeleteRow2, nTab); // 2
+    rNewRanges.push_back( aNewRange );
 
-        aNewRange = ScRange(nDeleteCol2+1, nDeleteRow1, nTab, nCol2, nDeleteRow2, nTab); // 3
-        rNewRanges.push_back( aNewRange );
+    aNewRange = ScRange(nDeleteCol2+1, nDeleteRow1, nTab, nCol2, nDeleteRow2, nTab); // 3
+    rNewRanges.push_back( aNewRange );
 
-        r.aEnd.SetRow(nDeleteRow1-1); // 1
+    r.aEnd.SetRow(nDeleteRow1-1); // 1
 
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 }

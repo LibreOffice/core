@@ -1255,27 +1255,27 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
 {
     if (nEntry < 0)
         return 0;
-    if (o3tl::make_unsigned(nEntry) < aCurEntryList.size())
+    if (o3tl::make_unsigned(nEntry) >= aCurEntryList.size())
+        return 0;
+
+    sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
+
+    if (nMyNfEntry != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
-
-        if (nMyNfEntry != NUMBERFORMAT_ENTRY_NOT_FOUND)
+        const SvNumberformat* pNumEntry = pFormatter->GetEntry(nMyNfEntry);
+        if (pNumEntry != nullptr)
         {
-            const SvNumberformat* pNumEntry = pFormatter->GetEntry(nMyNfEntry);
-            if (pNumEntry != nullptr)
-            {
-                SvNumFormatType nMyCat = pNumEntry->GetMaskedType();
-                sal_uInt16 nMyType;
-                CategoryToPos_Impl(nMyCat, nMyType);
+            SvNumFormatType nMyCat = pNumEntry->GetMaskedType();
+            sal_uInt16 nMyType;
+            CategoryToPos_Impl(nMyCat, nMyType);
 
-                return static_cast<short>(nMyType);
-            }
-            return 0;
+            return static_cast<short>(nMyType);
         }
-        else if (!aCurrencyFormatList.empty())
-        {
-            return CAT_CURRENCY;
-        }
+        return 0;
+    }
+    else if (!aCurrencyFormatList.empty())
+    {
+        return CAT_CURRENCY;
     }
     return 0;
 }

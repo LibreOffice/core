@@ -46,27 +46,26 @@ E3dObjFactory::~E3dObjFactory()
 
 IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
-    if ( aParams.nInventor == SdrInventor::E3d )
+    if ( aParams.nInventor != SdrInventor::E3d )
+        return nullptr;
+    switch ( aParams.nObjIdentifier )
     {
-        switch ( aParams.nObjIdentifier )
-        {
-            case E3D_SCENE_ID:
-                return new E3dScene(aParams.rSdrModel);
-            case E3D_POLYGONOBJ_ID  :
-                return new E3dPolygonObj(aParams.rSdrModel);
-            case E3D_CUBEOBJ_ID :
-                return new E3dCubeObj(aParams.rSdrModel);
-            case E3D_SPHEREOBJ_ID:
-                return new E3dSphereObj(aParams.rSdrModel);
-            case E3D_EXTRUDEOBJ_ID:
-                return new E3dExtrudeObj(aParams.rSdrModel);
-            case E3D_LATHEOBJ_ID:
-                return new E3dLatheObj(aParams.rSdrModel);
-            case E3D_COMPOUNDOBJ_ID:
-                return new E3dCompoundObject(aParams.rSdrModel);
-            default:
-                break;
-        }
+        case E3D_SCENE_ID:
+            return new E3dScene(aParams.rSdrModel);
+        case E3D_POLYGONOBJ_ID  :
+            return new E3dPolygonObj(aParams.rSdrModel);
+        case E3D_CUBEOBJ_ID :
+            return new E3dCubeObj(aParams.rSdrModel);
+        case E3D_SPHEREOBJ_ID:
+            return new E3dSphereObj(aParams.rSdrModel);
+        case E3D_EXTRUDEOBJ_ID:
+            return new E3dExtrudeObj(aParams.rSdrModel);
+        case E3D_LATHEOBJ_ID:
+            return new E3dLatheObj(aParams.rSdrModel);
+        case E3D_COMPOUNDOBJ_ID:
+            return new E3dCompoundObject(aParams.rSdrModel);
+        default:
+            break;
     }
     return nullptr;
 }

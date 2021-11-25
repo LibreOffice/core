@@ -722,65 +722,65 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
     }
     else
         cChar = 0;
-    if ( cChar )
+    if ( cChar == 0 )
+        return true;
+
+    OUStringBuffer  aStr(rEdit.GetText());
+    bool        bError = false;
+    if ( bSameMask && rEdit.IsInsertMode() )
     {
-        OUStringBuffer  aStr(rEdit.GetText());
-        bool        bError = false;
-        if ( bSameMask && rEdit.IsInsertMode() )
+        // crop spaces and literals at the end until current position
+        sal_Int32 n = aStr.getLength();
+        while ( n && (n > nNewPos) )
         {
-            // crop spaces and literals at the end until current position
-            sal_Int32 n = aStr.getLength();
-            while ( n && (n > nNewPos) )
-            {
-                if ( (aStr[n-1] != ' ') &&
-                     ((n > rEditMask.getLength()) || (rEditMask[n-1] != EDITMASK_LITERAL)) )
-                    break;
+            if ( (aStr[n-1] != ' ') &&
+                 ((n > rEditMask.getLength()) || (rEditMask[n-1] != EDITMASK_LITERAL)) )
+                break;
 
-                n--;
-            }
-            aStr.truncate( n );
-
-            if ( aSel.Len() )
-                aStr.remove( aSel.Min(), aSel.Len() );
-
-            if ( aStr.getLength() < rEditMask.getLength() )
-            {
-                // possibly extend string until cursor position
-                if ( aStr.getLength() < nNewPos )
-                    aStr.append( rLiteralMask.subView(aStr.getLength(), nNewPos-aStr.getLength()) );
-                if ( nNewPos < aStr.getLength() )
-                    aStr.insert( cChar, nNewPos );
-                else if ( nNewPos < rEditMask.getLength() )
-                    aStr.append(cChar);
-                aStr = ImplPatternReformat( aStr.toString(), rEditMask, rLiteralMask, nFormatFlags );
-            }
-            else
-                bError = true;
+            n--;
         }
-        else
-        {
-            if ( aSel.Len() )
-            {
-                // delete selection
-                OUString aRep = rLiteralMask.copy( aSel.Min(), aSel.Len() );
-                aStr.remove( aSel.Min(), aRep.getLength() );
-                aStr.insert( aSel.Min(), aRep );
-            }
+        aStr.truncate( n );
 
+        if ( aSel.Len() )
+            aStr.remove( aSel.Min(), aSel.Len() );
+
+        if ( aStr.getLength() < rEditMask.getLength() )
+        {
+            // possibly extend string until cursor position
+            if ( aStr.getLength() < nNewPos )
+                aStr.append( rLiteralMask.subView(aStr.getLength(), nNewPos-aStr.getLength()) );
             if ( nNewPos < aStr.getLength() )
-                aStr[nNewPos] = cChar;
+                aStr.insert( cChar, nNewPos );
             else if ( nNewPos < rEditMask.getLength() )
                 aStr.append(cChar);
+            aStr = ImplPatternReformat( aStr.toString(), rEditMask, rLiteralMask, nFormatFlags );
+        }
+        else
+            bError = true;
+    }
+    else
+    {
+        if ( aSel.Len() )
+        {
+            // delete selection
+            OUString aRep = rLiteralMask.copy( aSel.Min(), aSel.Len() );
+            aStr.remove( aSel.Min(), aRep.getLength() );
+            aStr.insert( aSel.Min(), aRep );
         }
 
-        if ( !bError )
-        {
-            rbInKeyInput = true;
-            Selection aNewSel( ImplPatternRightPos( aStr.toString(), rEditMask, nFormatFlags, bSameMask, nNewPos ) );
-            rEdit.SetText( aStr.toString(), aNewSel );
-            rEdit.SetModified();
-            rbInKeyInput = false;
-        }
+        if ( nNewPos < aStr.getLength() )
+            aStr[nNewPos] = cChar;
+        else if ( nNewPos < rEditMask.getLength() )
+            aStr.append(cChar);
+    }
+
+    if ( !bError )
+    {
+        rbInKeyInput = true;
+        Selection aNewSel( ImplPatternRightPos( aStr.toString(), rEditMask, nFormatFlags, bSameMask, nNewPos ) );
+        rEdit.SetText( aStr.toString(), aNewSel );
+        rEdit.SetModified();
+        rbInKeyInput = false;
     }
 
     return true;

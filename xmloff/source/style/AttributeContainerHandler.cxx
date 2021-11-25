@@ -42,35 +42,33 @@ bool XMLAttributeContainerHandler::equals(
     Reference< XNameContainer > xContainer1;
     Reference< XNameContainer > xContainer2;
 
-    if( ( r1 >>= xContainer1 ) && ( r2 >>= xContainer2 ) )
+    if( !( r1 >>= xContainer1 ) || !( r2 >>= xContainer2 ) )
+        return false;
+
+    const uno::Sequence< OUString > aAttribNames1( xContainer1->getElementNames() );
+    uno::Sequence< OUString > aAttribNames2( xContainer2->getElementNames() );
+
+    if( aAttribNames1.getLength() != aAttribNames2.getLength() )
+        return false;
+
+    xml::AttributeData aData1;
+    xml::AttributeData aData2;
+
+    for( const OUString& rAttribName : aAttribNames1 )
     {
-        const uno::Sequence< OUString > aAttribNames1( xContainer1->getElementNames() );
-        uno::Sequence< OUString > aAttribNames2( xContainer2->getElementNames() );
+        if( !xContainer2->hasByName( rAttribName ) )
+            return false;
 
-        if( aAttribNames1.getLength() == aAttribNames2.getLength() )
-        {
-            xml::AttributeData aData1;
-            xml::AttributeData aData2;
+        xContainer1->getByName( rAttribName ) >>= aData1;
+        xContainer2->getByName( rAttribName ) >>= aData2;
 
-            for( const OUString& rAttribName : aAttribNames1 )
-            {
-                if( !xContainer2->hasByName( rAttribName ) )
-                    return false;
-
-                xContainer1->getByName( rAttribName ) >>= aData1;
-                xContainer2->getByName( rAttribName ) >>= aData2;
-
-                if( ( aData1.Namespace != aData2.Namespace ) ||
-                    ( aData1.Type      != aData2.Type      ) ||
-                    ( aData1.Value     != aData2.Value     ) )
-                    return false;
-            }
-
-            return true;
-        }
+        if( ( aData1.Namespace != aData2.Namespace ) ||
+            ( aData1.Type      != aData2.Type      ) ||
+            ( aData1.Value     != aData2.Value     ) )
+            return false;
     }
 
-    return false;
+    return true;
 }
 
 bool XMLAttributeContainerHandler::importXML( const OUString& /*rStrImpValue*/, Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const

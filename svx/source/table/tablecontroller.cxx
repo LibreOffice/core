@@ -323,26 +323,26 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive() && rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && eHit == TableHitKind::CellTextArea)
+    if (!comphelper::LibreOfficeKit::isActive() || rMEvt.GetClicks() != 2 || !rMEvt.IsLeft() || eHit != TableHitKind::CellTextArea)
+        return false;
+
+    bool bEmptyOutliner = false;
+    if (Outliner* pOutliner = mrView.GetTextEditOutliner())
     {
-        bool bEmptyOutliner = false;
-        if (Outliner* pOutliner = mrView.GetTextEditOutliner())
+        if (pOutliner->GetParagraphCount() == 1)
         {
-            if (pOutliner->GetParagraphCount() == 1)
-            {
-                if (Paragraph* pParagraph = pOutliner->GetParagraph(0))
-                    bEmptyOutliner = pOutliner->GetText(pParagraph).isEmpty();
-            }
+            if (Paragraph* pParagraph = pOutliner->GetParagraph(0))
+                bEmptyOutliner = pOutliner->GetText(pParagraph).isEmpty();
         }
-        if (bEmptyOutliner)
-        {
-            // Tiled rendering: a left double-click in an empty cell: select it.
-            StartSelection(maMouseDownPos);
-            setSelectedCells(maMouseDownPos, maMouseDownPos);
-            // Update graphic selection, should be hidden now.
-            mrView.AdjustMarkHdl();
-            return true;
-        }
+    }
+    if (bEmptyOutliner)
+    {
+        // Tiled rendering: a left double-click in an empty cell: select it.
+        StartSelection(maMouseDownPos);
+        setSelectedCells(maMouseDownPos, maMouseDownPos);
+        // Update graphic selection, should be hidden now.
+        mrView.AdjustMarkHdl();
+        return true;
     }
 
     return false;
@@ -367,25 +367,25 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWind
 
     SdrTableObj* pTableObj = mxTableObj.get();
     CellPos aPos;
-    if (mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit(pixelToLogic(rMEvt.GetPosPixel(), pWindow), aPos.mnCol, aPos.mnRow ) != TableHitKind::NONE)
+    if (!mbLeftButtonDown || !pTableObj || pTableObj->CheckTableHit(pixelToLogic(rMEvt.GetPosPixel(), pWindow), aPos.mnCol, aPos.mnRow ) == TableHitKind::NONE)
+        return false;
+
+    if(aPos != maMouseDownPos)
     {
-        if(aPos != maMouseDownPos)
+        if( mbCellSelectionMode )
         {
-            if( mbCellSelectionMode )
-            {
-                setSelectedCells( maMouseDownPos, aPos );
-                return true;
-            }
-            else
-            {
-                StartSelection( maMouseDownPos );
-            }
-        }
-        else if( mbCellSelectionMode )
-        {
-            UpdateSelection( aPos );
+            setSelectedCells( maMouseDownPos, aPos );
             return true;
         }
+        else
+        {
+            StartSelection( maMouseDownPos );
+        }
+    }
+    else if( mbCellSelectionMode )
+    {
+        UpdateSelection( aPos );
+        return true;
     }
     return false;
 }
@@ -1468,69 +1468,67 @@ bool SvxTableController::DeleteMarked()
 
 bool SvxTableController::GetStyleSheet( SfxStyleSheet*& rpStyleSheet ) const
 {
-    if( hasSelectedCells() )
+    if( !hasSelectedCells() )
+        return false;
+
+    rpStyleSheet = nullptr;
+
+    if( !mxTable )
+        return false;
+
+    SfxStyleSheet* pRet=nullptr;
+    bool b1st=true;
+
+    CellPos aStart, aEnd;
+    const_cast<SvxTableController&>(*this).getSelectedCells( aStart, aEnd );
+
+    for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
     {
-        rpStyleSheet = nullptr;
-
-        if( mxTable.is() )
+        for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
         {
-            SfxStyleSheet* pRet=nullptr;
-            bool b1st=true;
-
-            CellPos aStart, aEnd;
-            const_cast<SvxTableController&>(*this).getSelectedCells( aStart, aEnd );
-
-            for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
+            CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+            if( xCell.is() )
             {
-                for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
+                SfxStyleSheet* pSS=xCell->GetStyleSheet();
+                if(b1st)
                 {
-                    CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                    if( xCell.is() )
-                    {
-                        SfxStyleSheet* pSS=xCell->GetStyleSheet();
-                        if(b1st)
-                        {
-                            pRet=pSS;
-                        }
-                        else if(pRet != pSS)
-                        {
-                            return true;
-                        }
-                        b1st=false;
-                    }
+                    pRet=pSS;
                 }
+                else if(pRet != pSS)
+                {
+                    return true;
+                }
+                b1st=false;
             }
-            rpStyleSheet = pRet;
-            return true;
         }
     }
-    return false;
+    rpStyleSheet = pRet;
+    return true;
 }
 
 bool SvxTableController::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr )
 {
-    if( hasSelectedCells() && (!pStyleSheet || pStyleSheet->GetFamily() == SfxStyleFamily::Frame) )
+    if( !hasSelectedCells() || (pStyleSheet && pStyleSheet->GetFamily() != SfxStyleFamily::Frame) )
+        return false;
+
+    if( !mxTable )
+        return false;
+
+    CellPos aStart, aEnd;
+    getSelectedCells( aStart, aEnd );
+
+    for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
     {
-        if( mxTable.is() )
+        for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
         {
-            CellPos aStart, aEnd;
-            getSelectedCells( aStart, aEnd );
-
-            for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
-            {
-                for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
-                {
-                    CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                    if( xCell.is() )
-                        xCell->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-                }
-            }
-
-            UpdateTableShape();
-            return true;
+            CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+            if( xCell.is() )
+                xCell->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
         }
     }
-    return false;
+
+    UpdateTableShape();
+    return true;
 }
 
 void SvxTableController::changeTableEdge(const SfxRequest& rReq)
@@ -3325,25 +3323,25 @@ bool SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPo
 
     SdrTableObj* pTableObj = mxTableObj.get();
     CellPos aCellPos;
-    if (pTableObj->CheckTableHit(rPosition, aCellPos.mnCol, aCellPos.mnRow) != TableHitKind::NONE)
+    if (pTableObj->CheckTableHit(rPosition, aCellPos.mnCol, aCellPos.mnRow) == TableHitKind::NONE)
+        return false;
+
+    // Position is a table cell.
+    if (mbCellSelectionMode)
     {
-        // Position is a table cell.
-        if (mbCellSelectionMode)
-        {
-            // We have a table selection already: adjust the point or the mark.
-            if (bPoint)
-                setSelectedCells(maCursorFirstPos, aCellPos);
-            else
-                setSelectedCells(aCellPos, maCursorLastPos);
-            return true;
-        }
-        else if (aCellPos != maMouseDownPos)
-        {
-            // No selection, but rPosition is at another cell: start table selection.
-            StartSelection(maMouseDownPos);
-            // Update graphic selection, should be hidden now.
-            mrView.AdjustMarkHdl();
-        }
+        // We have a table selection already: adjust the point or the mark.
+        if (bPoint)
+            setSelectedCells(maCursorFirstPos, aCellPos);
+        else
+            setSelectedCells(aCellPos, maCursorLastPos);
+        return true;
+    }
+    else if (aCellPos != maMouseDownPos)
+    {
+        // No selection, but rPosition is at another cell: start table selection.
+        StartSelection(maMouseDownPos);
+        // Update graphic selection, should be hidden now.
+        mrView.AdjustMarkHdl();
     }
 
     return false;

@@ -163,7 +163,10 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
     rEnd.mnCol = mnRight; rEnd.mnRow = mnBottom;
 
     // single cell merge is never valid
-    if( mxTable.is() && ((mnLeft != mnRight) || (mnTop != mnBottom)) ) try
+    if( !mxTable || !((mnLeft != mnRight) || (mnTop != mnBottom)) )
+        return false;
+
+    try
     {
         CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( mnLeft, mnTop ).get() ) );
 

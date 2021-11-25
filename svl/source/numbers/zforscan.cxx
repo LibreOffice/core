@@ -1664,48 +1664,47 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
 int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
                                                  sal_uInt16& rResultStringsCnt )
 {
-    if ( i < nStringsCnt-1 &&
+    if (!( i < nStringsCnt-1 &&
          sStrArray[i][0] == '[' &&
          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
-         sStrArray[i+1][0] == '~' )
+         sStrArray[i+1][0] == '~' ))
+        return 0;
+
+    // [~calendarID]
+    nPos = nPos + sStrArray[i].getLength();           // [
+    nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
+    nPos = nPos + sStrArray[++i].getLength();         // ~
+    sStrArray[i-1] += sStrArray[i];                   // [~
+    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+    rResultStringsCnt--;
+    if ( ++i >= nStringsCnt )
     {
-        // [~calendarID]
-        nPos = nPos + sStrArray[i].getLength();           // [
-        nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
-        nPos = nPos + sStrArray[++i].getLength();         // ~
-        sStrArray[i-1] += sStrArray[i];                   // [~
+        return -1; // error
+    }
+    nPos = nPos + sStrArray[i].getLength();           // calendarID
+    OUString& rStr = sStrArray[i];
+    nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR;          // convert
+    i++;
+    while ( i < nStringsCnt && sStrArray[i][0] != ']' )
+    {
+        nPos = nPos + sStrArray[i].getLength();
+        rStr += sStrArray[i];
         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
         rResultStringsCnt--;
-        if ( ++i >= nStringsCnt )
-        {
-            return -1; // error
-        }
-        nPos = nPos + sStrArray[i].getLength();           // calendarID
-        OUString& rStr = sStrArray[i];
-        nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR;          // convert
         i++;
-        while ( i < nStringsCnt && sStrArray[i][0] != ']' )
-        {
-            nPos = nPos + sStrArray[i].getLength();
-            rStr += sStrArray[i];
-            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-            rResultStringsCnt--;
-            i++;
-        }
-        if ( rStr.getLength() && i < nStringsCnt &&
-             sStrArray[i][0] == ']' )
-        {
-            nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
-            nPos = nPos + sStrArray[i].getLength();
-            i++;
-        }
-        else
-        {
-            return -1; // error
-        }
-        return 1;
     }
-    return 0;
+    if ( rStr.getLength() && i < nStringsCnt &&
+         sStrArray[i][0] == ']' )
+    {
+        nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
+        nPos = nPos + sStrArray[i].getLength();
+        i++;
+    }
+    else
+    {
+        return -1; // error
+    }
+    return 1;
 }
 
 bool ImpSvNumberformatScan::IsDateFragment( size_t nPos1, size_t nPos2 ) const

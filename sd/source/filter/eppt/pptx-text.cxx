@@ -1354,40 +1354,39 @@ short FontCollection::GetScriptDirection( std::u16string_view rString )
 
 sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
 {
-    if( !rEntry.Name.isEmpty() )
+    if( rEntry.Name.isEmpty() )
+        return 0;
+
+    const sal_uInt32 nFonts = maFonts.size();
+
+    for( sal_uInt32 i = 0; i < nFonts; i++ )
     {
-        const sal_uInt32 nFonts = maFonts.size();
-
-        for( sal_uInt32 i = 0; i < nFonts; i++ )
-        {
-            const FontCollectionEntry* pEntry = GetById( i );
-            if( pEntry->Name == rEntry.Name )
-                return i;
-        }
-        vcl::Font aFont;
-        aFont.SetCharSet( rEntry.CharSet );
-        aFont.SetFamilyName( rEntry.Original );
-        aFont.SetFontHeight( 100 );
-
-        if ( !pVDev )
-            pVDev = VclPtr<VirtualDevice>::Create();
-
-        pVDev->SetFont( aFont );
-        FontMetric aMetric( pVDev->GetFontMetric() );
-
-        sal_uInt16 nTxtHeight = static_cast<sal_uInt16>(aMetric.GetAscent()) + static_cast<sal_uInt16>(aMetric.GetDescent());
-
-        if ( nTxtHeight )
-        {
-            double fScaling = static_cast<double>(nTxtHeight) / 120.0;
-            if ( ( fScaling > 0.50 ) && ( fScaling < 1.5 ) )
-                rEntry.Scaling = fScaling;
-        }
-
-        maFonts.push_back(rEntry);
-        return nFonts;
+        const FontCollectionEntry* pEntry = GetById( i );
+        if( pEntry->Name == rEntry.Name )
+            return i;
     }
-    return 0;
+    vcl::Font aFont;
+    aFont.SetCharSet( rEntry.CharSet );
+    aFont.SetFamilyName( rEntry.Original );
+    aFont.SetFontHeight( 100 );
+
+    if ( !pVDev )
+        pVDev = VclPtr<VirtualDevice>::Create();
+
+    pVDev->SetFont( aFont );
+    FontMetric aMetric( pVDev->GetFontMetric() );
+
+    sal_uInt16 nTxtHeight = static_cast<sal_uInt16>(aMetric.GetAscent()) + static_cast<sal_uInt16>(aMetric.GetDescent());
+
+    if ( nTxtHeight )
+    {
+        double fScaling = static_cast<double>(nTxtHeight) / 120.0;
+        if ( ( fScaling > 0.50 ) && ( fScaling < 1.5 ) )
+            rEntry.Scaling = fScaling;
+    }
+
+    maFonts.push_back(rEntry);
+    return nFonts;
 }
 
 const FontCollectionEntry* FontCollection::GetById( sal_uInt32 nId )

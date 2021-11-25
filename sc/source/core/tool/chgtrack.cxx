@@ -250,22 +250,18 @@ bool ScChangeAction::IsDialogParent() const
     if ( HasDependent() )
         return IsDeleteType() || !IsDeletedIn();
     if ( HasDeleted() )
+        return false;
+    if ( !IsDeleteType() )
+        return true;
+    if ( IsDialogRoot() )
+        return true;
+    ScChangeActionLinkEntry* pL = pLinkDeleted;
+    while ( pL )
     {
-        if ( IsDeleteType() )
-        {
-            if ( IsDialogRoot() )
-                return true;
-            ScChangeActionLinkEntry* pL = pLinkDeleted;
-            while ( pL )
-            {
-                ScChangeAction* p = pL->GetAction();
-                if ( p && p->GetType() != eType )
-                    return true;
-                pL = pL->GetNext();
-            }
-        }
-        else
+        ScChangeAction* p = pL->GetAction();
+        if ( p && p->GetType() != eType )
             return true;
+        pL = pL->GetNext();
     }
     return false;
 }
@@ -344,31 +340,30 @@ void ScChangeAction::RemoveAllDeletedIn()
 bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
 {
     ScChangeActionLinkEntry* pL = GetDeletedIn();
-    if ( pL )
+    if ( !pL )
+        return false;
+    // InsertType for MergePrepare/MergeOwn
+    ScChangeActionType eInsType;
+    switch ( eDelType )
     {
-        // InsertType for MergePrepare/MergeOwn
-        ScChangeActionType eInsType;
-        switch ( eDelType )
-        {
-            case SC_CAT_DELETE_COLS :
-                eInsType = SC_CAT_INSERT_COLS;
-            break;
-            case SC_CAT_DELETE_ROWS :
-                eInsType = SC_CAT_INSERT_ROWS;
-            break;
-            case SC_CAT_DELETE_TABS :
-                eInsType = SC_CAT_INSERT_TABS;
-            break;
-            default:
-                eInsType = SC_CAT_NONE;
-        }
-        while ( pL )
-        {
-            ScChangeAction* p = pL->GetAction();
-            if ( p != nullptr && (p->GetType() == eDelType || p->GetType() == eInsType) )
-                return true;
-            pL = pL->GetNext();
-        }
+        case SC_CAT_DELETE_COLS :
+            eInsType = SC_CAT_INSERT_COLS;
+        break;
+        case SC_CAT_DELETE_ROWS :
+            eInsType = SC_CAT_INSERT_ROWS;
+        break;
+        case SC_CAT_DELETE_TABS :
+            eInsType = SC_CAT_INSERT_TABS;
+        break;
+        default:
+            eInsType = SC_CAT_NONE;
+    }
+    while ( pL )
+    {
+        ScChangeAction* p = pL->GetAction();
+        if ( p != nullptr && (p->GetType() == eDelType || p->GetType() == eInsType) )
+            return true;
+        pL = pL->GetNext();
     }
     return false;
 }

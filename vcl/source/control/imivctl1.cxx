@@ -1213,36 +1213,35 @@ bool SvxIconChoiceCtrl_Impl::CheckHorScrollBar()
         return false;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
-    if(!( nWinBits & WB_HSCROLL) && !aOrigin.X() )
+    if(( nWinBits & WB_HSCROLL) || aOrigin.X() )
+        return false;
+
+    tools::Long nWidth = aOutputSize.Width();
+    const size_t nCount = maZOrderList.size();
+    tools::Long nMostRight = 0;
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        tools::Long nWidth = aOutputSize.Width();
-        const size_t nCount = maZOrderList.size();
-        tools::Long nMostRight = 0;
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCur ];
-            tools::Long nRight = GetEntryBoundRect(pEntry).Right();
-            if( nRight > nWidth )
-                return false;
-            if( nRight > nMostRight )
-                nMostRight = nRight;
-        }
-        aHorSBar->Hide();
-        aOutputSize.AdjustHeight(nHorSBarHeight );
-        aVirtOutputSize.setWidth( nMostRight );
-        aHorSBar->SetThumbPos( 0 );
-        Range aRange;
-        aRange.Max() = nMostRight - 1;
-        aHorSBar->SetRange( aRange  );
-        if( aVerSBar->IsVisible() )
-        {
-            Size aSize( aVerSBar->GetSizePixel());
-            aSize.AdjustHeight(nHorSBarHeight );
-            aVerSBar->SetSizePixel( aSize );
-        }
-        return true;
+        SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCur ];
+        tools::Long nRight = GetEntryBoundRect(pEntry).Right();
+        if( nRight > nWidth )
+            return false;
+        if( nRight > nMostRight )
+            nMostRight = nRight;
     }
-    return false;
+    aHorSBar->Hide();
+    aOutputSize.AdjustHeight(nHorSBarHeight );
+    aVirtOutputSize.setWidth( nMostRight );
+    aHorSBar->SetThumbPos( 0 );
+    Range aRange;
+    aRange.Max() = nMostRight - 1;
+    aHorSBar->SetRange( aRange  );
+    if( aVerSBar->IsVisible() )
+    {
+        Size aSize( aVerSBar->GetSizePixel());
+        aSize.AdjustHeight(nHorSBarHeight );
+        aVerSBar->SetSizePixel( aSize );
+    }
+    return true;
 }
 
 bool SvxIconChoiceCtrl_Impl::CheckVerScrollBar()
@@ -1251,36 +1250,35 @@ bool SvxIconChoiceCtrl_Impl::CheckVerScrollBar()
         return false;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
-    if(!( nWinBits & WB_VSCROLL) && !aOrigin.Y() )
+    if(( nWinBits & WB_VSCROLL) || aOrigin.Y() )
+        return false;
+
+    tools::Long nDeepest = 0;
+    tools::Long nHeight = aOutputSize.Height();
+    const size_t nCount = maZOrderList.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        tools::Long nDeepest = 0;
-        tools::Long nHeight = aOutputSize.Height();
-        const size_t nCount = maZOrderList.size();
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCur ];
-            tools::Long nBottom = GetEntryBoundRect(pEntry).Bottom();
-            if( nBottom > nHeight )
-                return false;
-            if( nBottom > nDeepest )
-                nDeepest = nBottom;
-        }
-        aVerSBar->Hide();
-        aOutputSize.AdjustWidth(nVerSBarWidth );
-        aVirtOutputSize.setHeight( nDeepest );
-        aVerSBar->SetThumbPos( 0 );
-        Range aRange;
-        aRange.Max() = nDeepest - 1;
-        aVerSBar->SetRange( aRange  );
-        if( aHorSBar->IsVisible() )
-        {
-            Size aSize( aHorSBar->GetSizePixel());
-            aSize.AdjustWidth(nVerSBarWidth );
-            aHorSBar->SetSizePixel( aSize );
-        }
-        return true;
+        SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCur ];
+        tools::Long nBottom = GetEntryBoundRect(pEntry).Bottom();
+        if( nBottom > nHeight )
+            return false;
+        if( nBottom > nDeepest )
+            nDeepest = nBottom;
     }
-    return false;
+    aVerSBar->Hide();
+    aOutputSize.AdjustWidth(nVerSBarWidth );
+    aVirtOutputSize.setHeight( nDeepest );
+    aVerSBar->SetThumbPos( 0 );
+    Range aRange;
+    aRange.Max() = nDeepest - 1;
+    aVerSBar->SetRange( aRange  );
+    if( aHorSBar->IsVisible() )
+    {
+        Size aSize( aHorSBar->GetSizePixel());
+        aSize.AdjustWidth(nVerSBarWidth );
+        aHorSBar->SetSizePixel( aSize );
+    }
+    return true;
 }
 
 

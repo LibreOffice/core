@@ -226,44 +226,44 @@ void XPropertyList::SetName( const OUString& rString )
 
 bool XPropertyList::Load()
 {
-    if( mbListDirty )
+    if( !mbListDirty )
+        return false;
+
+    mbListDirty = false;
+    std::stack<OUString> aDirs;
+
+    sal_Int32 nIndex = 0;
+    do
     {
-        mbListDirty = false;
-        std::stack<OUString> aDirs;
+        aDirs.push(maPath.getToken(0, ';', nIndex));
+    }
+    while (nIndex >= 0);
 
-        sal_Int32 nIndex = 0;
-        do
+    //try all entries palette path list working back to front until one
+    //succeeds
+    while (!aDirs.empty())
+    {
+        OUString aPath(aDirs.top());
+        aDirs.pop();
+
+        INetURLObject aURL(aPath);
+
+        if( INetProtocol::NotValid == aURL.GetProtocol() )
         {
-            aDirs.push(maPath.getToken(0, ';', nIndex));
+            DBG_ASSERT( aPath.isEmpty(), "invalid URL" );
+            return false;
         }
-        while (nIndex >= 0);
 
-        //try all entries palette path list working back to front until one
-        //succeeds
-        while (!aDirs.empty())
-        {
-            OUString aPath(aDirs.top());
-            aDirs.pop();
+        aURL.Append( maName );
 
-            INetURLObject aURL(aPath);
+        if( aURL.getExtension().isEmpty() )
+            aURL.setExtension( GetDefaultExt() );
 
-            if( INetProtocol::NotValid == aURL.GetProtocol() )
-            {
-                DBG_ASSERT( aPath.isEmpty(), "invalid URL" );
-                return false;
-            }
-
-            aURL.Append( maName );
-
-            if( aURL.getExtension().isEmpty() )
-                aURL.setExtension( GetDefaultExt() );
-
-            bool bRet = SvxXMLXTableImport::load(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                                             maReferer, uno::Reference < embed::XStorage >(),
-                                             createInstance(), nullptr );
-            if (bRet)
-                return bRet;
-        }
+        bool bRet = SvxXMLXTableImport::load(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                                         maReferer, uno::Reference < embed::XStorage >(),
+                                         createInstance(), nullptr );
+        if (bRet)
+            return bRet;
     }
     return false;
 }

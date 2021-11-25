@@ -147,45 +147,44 @@ bool GalleryPreview::Command(const CommandEvent& rCEvt)
 
 bool GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 {
-    if(mpTheme)
+    if(!mpTheme)
+        return false;
+
+    GalleryBrowser2* pBrowser = mpParent;
+
+    switch( rKEvt.GetKeyCode().GetCode() )
     {
-        GalleryBrowser2* pBrowser = mpParent;
+        case KEY_BACKSPACE:
+            pBrowser->TogglePreview();
+        break;
 
-        switch( rKEvt.GetKeyCode().GetCode() )
+        case KEY_HOME:
+            pBrowser->Travel( GalleryBrowserTravel::First );
+        break;
+
+        case KEY_END:
+            pBrowser->Travel( GalleryBrowserTravel::Last );
+        break;
+
+        case KEY_LEFT:
+        case KEY_UP:
+            pBrowser->Travel( GalleryBrowserTravel::Previous );
+        break;
+
+        case KEY_RIGHT:
+        case KEY_DOWN:
+            pBrowser->Travel( GalleryBrowserTravel::Next );
+        break;
+
+        default:
         {
-            case KEY_BACKSPACE:
-                pBrowser->TogglePreview();
-            break;
-
-            case KEY_HOME:
-                pBrowser->Travel( GalleryBrowserTravel::First );
-            break;
-
-            case KEY_END:
-                pBrowser->Travel( GalleryBrowserTravel::Last );
-            break;
-
-            case KEY_LEFT:
-            case KEY_UP:
-                pBrowser->Travel( GalleryBrowserTravel::Previous );
-            break;
-
-            case KEY_RIGHT:
-            case KEY_DOWN:
-                pBrowser->Travel( GalleryBrowserTravel::Next );
-            break;
-
-            default:
-            {
-                if (!pBrowser->KeyInput(rKEvt))
-                    return false;
-            }
-            break;
+            if (!pBrowser->KeyInput(rKEvt))
+                return false;
         }
-
-        return true;
+        break;
     }
-    return false;
+
+    return true;
 }
 
 bool GalleryPreview::StartDrag()

@@ -50,26 +50,24 @@ bool BasicElementBase::getBoolAttr(bool* pRet, sal_Int32 nToken,
                                    const Reference<XFastAttributeList>& xAttributes)
 {
     OUString aValue = xAttributes->getOptionalValue(nToken);
-    if (!aValue.isEmpty())
+    if (aValue.isEmpty())
+        return false;
+    if (aValue == "true")
     {
-        if (aValue == "true")
-        {
-            *pRet = true;
-            return true;
-        }
-        else if (aValue == "false")
-        {
-            *pRet = false;
-            return true;
-        }
-        else
-        {
-            throw xml::sax::SAXException(SvXMLImport::getNameFromToken(nToken)
-                                             + ": no boolean value (true|false)!",
-                                         Reference<XInterface>(), Any());
-        }
+        *pRet = true;
+        return true;
     }
-    return false;
+    else if (aValue == "false")
+    {
+        *pRet = false;
+        return true;
+    }
+    else
+    {
+        throw xml::sax::SAXException(SvXMLImport::getNameFromToken(nToken)
+                                         + ": no boolean value (true|false)!",
+                                     Reference<XInterface>(), Any());
+    }
 }
 
 // BasicLibrariesElement

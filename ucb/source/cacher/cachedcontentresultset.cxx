@@ -94,24 +94,24 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
     m_bLastReadWasFromCache = true;
     m_bLastCachedReadWasNull = !( rValue >>= aRet );
     /* Last chance. Try type converter service... */
-    if ( m_bLastCachedReadWasNull && rValue.hasValue() )
+    if ( !m_bLastCachedReadWasNull || !rValue.hasValue() )
+        return aRet;
+
+    Reference< XTypeConverter > xConverter = getTypeConverter();
+    if ( xConverter.is() )
     {
-        Reference< XTypeConverter > xConverter = getTypeConverter();
-        if ( xConverter.is() )
+        try
         {
-            try
-            {
-                Any aConvAny = xConverter->convertTo(
-                    rValue,
-                    cppu::UnoType<T>::get() );
-                m_bLastCachedReadWasNull = !( aConvAny >>= aRet );
-            }
-            catch (const IllegalArgumentException&)
-            {
-            }
-            catch (const CannotConvertException&)
-            {
-            }
+            Any aConvAny = xConverter->convertTo(
+                rValue,
+                cppu::UnoType<T>::get() );
+            m_bLastCachedReadWasNull = !( aConvAny >>= aRet );
+        }
+        catch (const IllegalArgumentException&)
+        {
+        }
+        catch (const CannotConvertException&)
+        {
         }
     }
     return aRet;
@@ -691,13 +691,64 @@ bool CachedContentResultSet
 
     aGuard.clear();
 
-    if( bAfterLastApplied || nLastAppliedPos != nRow )
-    {
-        if( nForwardOnly == 1 )
-        {
-            if( bAfterLastApplied || bAfterLast || !nRow || nRow < nLastAppliedPos )
-                throw SQLException();
+    if( !bAfterLastApplied && nLastAppliedPos == nRow )
+        return true;
 
+    if( nForwardOnly == 1 )
+    {
+        if( bAfterLastApplied || bAfterLast || !nRow || nRow < nLastAppliedPos )
+            throw SQLException();
+
+        sal_Int32 nN = nRow - nLastAppliedPos;
+        sal_Int32 nM;
+        for( nM = 0; nN--; nM++ )
+        {
+            if( !m_xResultSetOrigin->next() )
+                break;
+        }
+
+        aGuard.reset();
+        m_nLastAppliedPos += nM;
+        m_bAfterLastApplied = nRow != m_nLastAppliedPos;
+        return nRow == m_nLastAppliedPos;
+    }
+
+    if( !nRow ) //absolute( 0 ) will throw exception
+    {
+        m_xResultSetOrigin->beforeFirst();
+
+        aGuard.reset();
+        m_nLastAppliedPos = 0;
+        m_bAfterLastApplied = false;
+        return false;
+    }
+    try
+    {
+        //move absolute, if !nLastAppliedPos
+        //because move relative would throw exception
+        if( !nLastAppliedPos || bAfterLast || bAfterLastApplied )
+        {
+            bool bValid = m_xResultSetOrigin->absolute( nRow );
+
+            aGuard.reset();
+            m_nLastAppliedPos = nRow;
+            m_bAfterLastApplied = !bValid;
+            return bValid;
+        }
+        else
+        {
+            bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
+
+            aGuard.reset();
+            m_nLastAppliedPos += ( nRow - nLastAppliedPos );
+            m_bAfterLastApplied = !bValid;
+            return bValid;
+        }
+    }
+    catch (const SQLException&)
+    {
+        if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly() )
+        {
             sal_Int32 nN = nRow - nLastAppliedPos;
             sal_Int32 nM;
             for( nM = 0; nN--; nM++ )
@@ -709,64 +760,12 @@ bool CachedContentResultSet
             aGuard.reset();
             m_nLastAppliedPos += nM;
             m_bAfterLastApplied = nRow != m_nLastAppliedPos;
-            return nRow == m_nLastAppliedPos;
         }
-
-        if( !nRow ) //absolute( 0 ) will throw exception
-        {
-            m_xResultSetOrigin->beforeFirst();
-
-            aGuard.reset();
-            m_nLastAppliedPos = 0;
-            m_bAfterLastApplied = false;
-            return false;
-        }
-        try
-        {
-            //move absolute, if !nLastAppliedPos
-            //because move relative would throw exception
-            if( !nLastAppliedPos || bAfterLast || bAfterLastApplied )
-            {
-                bool bValid = m_xResultSetOrigin->absolute( nRow );
-
-                aGuard.reset();
-                m_nLastAppliedPos = nRow;
-                m_bAfterLastApplied = !bValid;
-                return bValid;
-            }
-            else
-            {
-                bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
-
-                aGuard.reset();
-                m_nLastAppliedPos += ( nRow - nLastAppliedPos );
-                m_bAfterLastApplied = !bValid;
-                return bValid;
-            }
-        }
-        catch (const SQLException&)
-        {
-            if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly() )
-            {
-                sal_Int32 nN = nRow - nLastAppliedPos;
-                sal_Int32 nM;
-                for( nM = 0; nN--; nM++ )
-                {
-                    if( !m_xResultSetOrigin->next() )
-                        break;
-                }
-
-                aGuard.reset();
-                m_nLastAppliedPos += nM;
-                m_bAfterLastApplied = nRow != m_nLastAppliedPos;
-            }
-            else
-                throw;
-        }
-
-        return nRow == m_nLastAppliedPos;
+        else
+            throw;
     }
-    return true;
+
+    return nRow == m_nLastAppliedPos;
 };
 
 

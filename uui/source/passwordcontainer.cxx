@@ -164,62 +164,62 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     }
 
     // m_xPasswordContainer works with userName passwdSequences pairs:
-    if (rRequest.HasUserName && rRequest.HasPassword)
+    if (!rRequest.HasUserName || !rRequest.HasPassword)
+        return false;
+
+    try
     {
-        try
+        if (rRequest.UserName.isEmpty())
         {
-            if (rRequest.UserName.isEmpty())
+            task::UrlRecord aRec;
+            if ( !rURL.isEmpty() )
+                aRec = m_xPasswordContainer->find(rURL, xIH);
+
+            if ( !aRec.UserList.hasElements() )
             {
-                task::UrlRecord aRec;
-                if ( !rURL.isEmpty() )
-                    aRec = m_xPasswordContainer->find(rURL, xIH);
-
-                if ( !aRec.UserList.hasElements() )
-                {
-                    // compat: try server name.
-                    aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH);
-                }
-
-                if ( fillContinuation( false,
-                                       rRequest,
-                                       aRec,
-                                       xSupplyAuthentication,
-                                       xSupplyAuthentication2,
-                                       bCanUseSystemCredentials,
-                                       false ) )
-                {
-                    return true;
-                }
+                // compat: try server name.
+                aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH);
             }
-            else
+
+            if ( fillContinuation( false,
+                                   rRequest,
+                                   aRec,
+                                   xSupplyAuthentication,
+                                   xSupplyAuthentication2,
+                                   bCanUseSystemCredentials,
+                                   false ) )
             {
-                task::UrlRecord aRec;
-                if ( !rURL.isEmpty() )
-                    aRec = m_xPasswordContainer->findForName(
-                        rURL, rRequest.UserName, xIH);
-
-                if ( !aRec.UserList.hasElements() )
-                {
-                    // compat: try server name.
-                    aRec = m_xPasswordContainer->findForName(
-                        rRequest.ServerName, rRequest.UserName, xIH);
-                }
-
-                if ( fillContinuation( false,
-                                       rRequest,
-                                       aRec,
-                                       xSupplyAuthentication,
-                                       xSupplyAuthentication2,
-                                       bCanUseSystemCredentials,
-                                       true ) )
-                {
-                    return true;
-                }
+                return true;
             }
         }
-        catch (task::NoMasterException const &)
-        {} // user did not enter master password
+        else
+        {
+            task::UrlRecord aRec;
+            if ( !rURL.isEmpty() )
+                aRec = m_xPasswordContainer->findForName(
+                    rURL, rRequest.UserName, xIH);
+
+            if ( !aRec.UserList.hasElements() )
+            {
+                // compat: try server name.
+                aRec = m_xPasswordContainer->findForName(
+                    rRequest.ServerName, rRequest.UserName, xIH);
+            }
+
+            if ( fillContinuation( false,
+                                   rRequest,
+                                   aRec,
+                                   xSupplyAuthentication,
+                                   xSupplyAuthentication2,
+                                   bCanUseSystemCredentials,
+                                   true ) )
+            {
+                return true;
+            }
+        }
     }
+    catch (task::NoMasterException const &)
+    {} // user did not enter master password
     return false;
 }
 

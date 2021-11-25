@@ -149,30 +149,30 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
     }
 
     // Apply all transformations and create undo's
-    if(mbMovedAtAll)
-    {
-        const bool bUndo = getSdrDragView().IsUndoEnabled();
-        if( bUndo )
-            getSdrDragView().BegUndo(SvxResId(RID_SVX_3D_UNDO_ROTATE));
-        sal_uInt32 nOb(0);
+    if(!mbMovedAtAll)
+        return true;
 
-        for(nOb=0;nOb<nCnt;nOb++)
-        {
-            E3dDragMethodUnit& rCandidate = maGrp[nOb];
-            E3DModifySceneSnapRectUpdater aUpdater(&rCandidate.mr3DObj);
-            rCandidate.mr3DObj.SetTransform(rCandidate.maTransform);
-            if( bUndo )
-            {
-                getSdrDragView().AddUndo(
-                    std::make_unique<E3dRotateUndoAction>(
-                        rCandidate.mr3DObj,
-                        rCandidate.maInitTransform,
-                        rCandidate.maTransform));
-            }
-        }
+    const bool bUndo = getSdrDragView().IsUndoEnabled();
+    if( bUndo )
+        getSdrDragView().BegUndo(SvxResId(RID_SVX_3D_UNDO_ROTATE));
+    sal_uInt32 nOb(0);
+
+    for(nOb=0;nOb<nCnt;nOb++)
+    {
+        E3dDragMethodUnit& rCandidate = maGrp[nOb];
+        E3DModifySceneSnapRectUpdater aUpdater(&rCandidate.mr3DObj);
+        rCandidate.mr3DObj.SetTransform(rCandidate.maTransform);
         if( bUndo )
-            getSdrDragView().EndUndo();
+        {
+            getSdrDragView().AddUndo(
+                std::make_unique<E3dRotateUndoAction>(
+                    rCandidate.mr3DObj,
+                    rCandidate.maInitTransform,
+                    rCandidate.maTransform));
+        }
     }
+    if( bUndo )
+        getSdrDragView().EndUndo();
 
     return true;
 }

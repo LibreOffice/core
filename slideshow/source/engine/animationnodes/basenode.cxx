@@ -437,51 +437,50 @@ bool BaseNode::resolve()
         return true;
 
     StateTransition st(this);
-    if (st.enter( RESOLVED ) &&
-        isTransition( RESOLVED, ACTIVE ) &&
-        resolve_st() /* may call derived class */)
-    {
-        st.commit(); // changing state
+    if (!st.enter( RESOLVED ) ||
+        !isTransition( RESOLVED, ACTIVE ) ||
+        !resolve_st() /* may call derived class */)
+        return false;
 
-        // discharge a loaded event, if any:
-        if (mpCurrentEvent)
-            mpCurrentEvent->dispose();
+    st.commit(); // changing state
 
-        // schedule activation event:
+    // discharge a loaded event, if any:
+    if (mpCurrentEvent)
+        mpCurrentEvent->dispose();
 
-        // This method takes the NodeContext::mnStartDelay value into account,
-        // to cater for iterate container time shifts. We cannot put different
-        // iterations of the iterate container's children into different
-        // subcontainer (such as a 'DelayContainer', which delays resolving its
-        // children by a fixed amount), since all iterations' nodes must be
-        // resolved at the same time (otherwise, the delayed subset creation
-        // will not work, i.e. deactivate the subsets too late in the master
-        // shape).
-        uno::Any const aBegin( mxAnimationNode->getBegin() );
-        if (aBegin.hasValue()) {
-            auto self(mpSelf);
-            mpCurrentEvent = generateEvent(
-                aBegin, [self] () { self->activate(); },
-                maContext, mnStartDelay );
-        }
-        else {
-            // For some leaf nodes, PPT import yields empty begin time,
-            // although semantically, it should be 0.0
-            // TODO(F3): That should really be provided by the PPT import
+    // schedule activation event:
 
-            // schedule delayed activation event. Take iterate node
-            // timeout into account
-            auto self(mpSelf);
-            mpCurrentEvent = makeDelay(
-                [self] () { self->activate(); },
-                mnStartDelay,
-                "AnimationNode::activate with delay");
-            maContext.mrEventQueue.addEvent( mpCurrentEvent );
-        }
-
-        return true;
+    // This method takes the NodeContext::mnStartDelay value into account,
+    // to cater for iterate container time shifts. We cannot put different
+    // iterations of the iterate container's children into different
+    // subcontainer (such as a 'DelayContainer', which delays resolving its
+    // children by a fixed amount), since all iterations' nodes must be
+    // resolved at the same time (otherwise, the delayed subset creation
+    // will not work, i.e. deactivate the subsets too late in the master
+    // shape).
+    uno::Any const aBegin( mxAnimationNode->getBegin() );
+    if (aBegin.hasValue()) {
+        auto self(mpSelf);
+        mpCurrentEvent = generateEvent(
+            aBegin, [self] () { self->activate(); },
+            maContext, mnStartDelay );
     }
-    return false;
+    else {
+        // For some leaf nodes, PPT import yields empty begin time,
+        // although semantically, it should be 0.0
+        // TODO(F3): That should really be provided by the PPT import
+
+        // schedule delayed activation event. Take iterate node
+        // timeout into account
+        auto self(mpSelf);
+        mpCurrentEvent = makeDelay(
+            [self] () { self->activate(); },
+            mnStartDelay,
+            "AnimationNode::activate with delay");
+        maContext.mrEventQueue.addEvent( mpCurrentEvent );
+    }
+
+    return true;
 }
 
 bool BaseNode::resolve_st()

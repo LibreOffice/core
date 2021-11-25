@@ -922,7 +922,10 @@ bool TreeControlPeer::onEditingEntry( UnoTreeListEntry const * pEntry )
 
 bool TreeControlPeer::onEditedEntry( UnoTreeListEntry const * pEntry, const OUString& rNewText )
 {
-    if( mpTreeImpl && pEntry && pEntry->mxNode.is() ) try
+    if( !mpTreeImpl || !pEntry || !pEntry->mxNode )
+        return true;
+
+    try
     {
         LockGuard aLockGuard( mnEditLock );
         if( maTreeEditListeners.getLength() > 0 )

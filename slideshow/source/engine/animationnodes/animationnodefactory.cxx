@@ -311,120 +311,120 @@ bool implCreateIteratedNodes(
     // slideshow engine, only that the text won't be
     // currently visible, because animations are always in
     // the foreground)
-    if( nSubItem != presentation::ShapeAnimationSubType::ONLY_BACKGROUND )
+    if( nSubItem == presentation::ShapeAnimationSubType::ONLY_BACKGROUND )
+        return true;
+
+    // determine type of subitem iteration (logical
+    // text unit to animate)
+    DocTreeNode::NodeType eIterateNodeType(
+        DocTreeNode::NodeType::LogicalCharacterCell );
+
+    switch( xIterNode->getIterateType() )
     {
-        // determine type of subitem iteration (logical
-        // text unit to animate)
-        DocTreeNode::NodeType eIterateNodeType(
-            DocTreeNode::NodeType::LogicalCharacterCell );
+    case presentation::TextAnimationType::BY_PARAGRAPH:
+        eIterateNodeType = DocTreeNode::NodeType::LogicalParagraph;
+        break;
 
-        switch( xIterNode->getIterateType() )
+    case presentation::TextAnimationType::BY_WORD:
+        eIterateNodeType = DocTreeNode::NodeType::LogicalWord;
+        break;
+
+    case presentation::TextAnimationType::BY_LETTER:
+        eIterateNodeType = DocTreeNode::NodeType::LogicalCharacterCell;
+        break;
+
+    default:
+        ENSURE_OR_THROW(
+            false, "implCreateIteratedNodes(): "
+            "Unexpected IterateType on XIterateContainer");
+        break;
+    }
+
+    if( bParagraphTarget &&
+        eIterateNodeType != DocTreeNode::NodeType::LogicalWord &&
+        eIterateNodeType != DocTreeNode::NodeType::LogicalCharacterCell )
+    {
+        // will not animate the whole paragraph, when
+        // only the paragraph is animated at all.
+        OSL_FAIL( "implCreateIteratedNodes(): Ignoring paragraph iteration for paragraph master" );
+    }
+    else
+    {
+        // setup iteration parameters
+
+
+        // iterate target is the whole shape (or the
+        // whole parent subshape), thus, can save
+        // loads of subset shapes by generating them
+        // only when the effects become active -
+        // before and after the effect active
+        // duration, all attributes are shared by
+        // master shape and subset (since the iterated
+        // effects are all the same).
+        aContext.mbIsIndependentSubset = false;
+
+        // determine number of nodes for given subitem
+        // type
+        sal_Int32 nTreeNodes( 0 );
+        if( bParagraphTarget )
         {
-        case presentation::TextAnimationType::BY_PARAGRAPH:
-            eIterateNodeType = DocTreeNode::NodeType::LogicalParagraph;
-            break;
-
-        case presentation::TextAnimationType::BY_WORD:
-            eIterateNodeType = DocTreeNode::NodeType::LogicalWord;
-            break;
-
-        case presentation::TextAnimationType::BY_LETTER:
-            eIterateNodeType = DocTreeNode::NodeType::LogicalCharacterCell;
-            break;
-
-        default:
-            ENSURE_OR_THROW(
-                false, "implCreateIteratedNodes(): "
-                "Unexpected IterateType on XIterateContainer");
-            break;
-        }
-
-        if( bParagraphTarget &&
-            eIterateNodeType != DocTreeNode::NodeType::LogicalWord &&
-            eIterateNodeType != DocTreeNode::NodeType::LogicalCharacterCell )
-        {
-            // will not animate the whole paragraph, when
-            // only the paragraph is animated at all.
-            OSL_FAIL( "implCreateIteratedNodes(): Ignoring paragraph iteration for paragraph master" );
+            // create the iterated subset _relative_ to
+            // the given paragraph index (i.e. animate the
+            // given subset type, but only when it's part
+            // of the given paragraph)
+            nTreeNodes = rTreeNodeSupplier.getNumberOfSubsetTreeNodes(
+                pTargetSubset->getSubset(),
+                eIterateNodeType );
         }
         else
         {
-            // setup iteration parameters
+            // generate normal subset
+            nTreeNodes = rTreeNodeSupplier.getNumberOfTreeNodes(
+                eIterateNodeType );
+        }
 
 
-            // iterate target is the whole shape (or the
-            // whole parent subshape), thus, can save
-            // loads of subset shapes by generating them
-            // only when the effects become active -
-            // before and after the effect active
-            // duration, all attributes are shared by
-            // master shape and subset (since the iterated
-            // effects are all the same).
-            aContext.mbIsIndependentSubset = false;
+        // iterate node, generate copies of the children for each subset
 
-            // determine number of nodes for given subitem
-            // type
-            sal_Int32 nTreeNodes( 0 );
+
+        // NodeContext::mnStartDelay contains additional node delay.
+        // This will make the duplicated nodes for each iteration start
+        // increasingly later.
+        aContext.mnStartDelay = nIntervalTimeout;
+
+        for( sal_Int32 i=0; i<nTreeNodes; ++i )
+        {
+            // create subset with the corresponding tree nodes
             if( bParagraphTarget )
             {
-                // create the iterated subset _relative_ to
-                // the given paragraph index (i.e. animate the
-                // given subset type, but only when it's part
-                // of the given paragraph)
-                nTreeNodes = rTreeNodeSupplier.getNumberOfSubsetTreeNodes(
-                    pTargetSubset->getSubset(),
-                    eIterateNodeType );
+                // create subsets relative to paragraph subset
+                aContext.mpMasterShapeSubset =
+                    std::make_shared<ShapeSubset>(
+                        pTargetSubset,
+                        rTreeNodeSupplier.getSubsetTreeNode(
+                            pTargetSubset->getSubset(),
+                            i,
+                            eIterateNodeType ) );
             }
             else
             {
-                // generate normal subset
-                nTreeNodes = rTreeNodeSupplier.getNumberOfTreeNodes(
-                    eIterateNodeType );
+                // create subsets from main shape
+                aContext.mpMasterShapeSubset =
+                    std::make_shared<ShapeSubset>( pTargetSubset,
+                                     rTreeNodeSupplier.getTreeNode(
+                                         i,
+                                         eIterateNodeType ) );
             }
 
-
-            // iterate node, generate copies of the children for each subset
-
-
-            // NodeContext::mnStartDelay contains additional node delay.
-            // This will make the duplicated nodes for each iteration start
-            // increasingly later.
-            aContext.mnStartDelay = nIntervalTimeout;
-
-            for( sal_Int32 i=0; i<nTreeNodes; ++i )
+            CloningNodeCreator aCreator( rParent, aContext );
+            if( !for_each_childNode( xNode, aCreator ) )
             {
-                // create subset with the corresponding tree nodes
-                if( bParagraphTarget )
-                {
-                    // create subsets relative to paragraph subset
-                    aContext.mpMasterShapeSubset =
-                        std::make_shared<ShapeSubset>(
-                            pTargetSubset,
-                            rTreeNodeSupplier.getSubsetTreeNode(
-                                pTargetSubset->getSubset(),
-                                i,
-                                eIterateNodeType ) );
-                }
-                else
-                {
-                    // create subsets from main shape
-                    aContext.mpMasterShapeSubset =
-                        std::make_shared<ShapeSubset>( pTargetSubset,
-                                         rTreeNodeSupplier.getTreeNode(
-                                             i,
-                                             eIterateNodeType ) );
-                }
-
-                CloningNodeCreator aCreator( rParent, aContext );
-                if( !for_each_childNode( xNode, aCreator ) )
-                {
-                    ENSURE_OR_RETURN_FALSE(
-                        false, "implCreateIteratedNodes(): "
-                        "iterated child node creation failed" );
-                }
-
-                aContext.mnStartDelay += nIntervalTimeout;
+                ENSURE_OR_RETURN_FALSE(
+                    false, "implCreateIteratedNodes(): "
+                    "iterated child node creation failed" );
             }
+
+            aContext.mnStartDelay += nIntervalTimeout;
         }
     }
 

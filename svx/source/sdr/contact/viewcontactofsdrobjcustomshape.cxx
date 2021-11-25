@@ -140,97 +140,97 @@ namespace sdr::contact
                 pSdrObjRepresentation->GetViewContact().getViewIndependentPrimitive2DContainer(xGroup);
             }
 
-            if(bHasText || !xGroup.empty())
+            if(!bHasText && xGroup.empty())
+                return;
+
+            // prepare text box geometry
+            basegfx::B2DHomMatrix aTextBoxMatrix;
+            bool bWordWrap(false);
+
+            // take unrotated snap rect as default, then get the
+            // unrotated text box. Rotation needs to be done centered
+            const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+            const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
+
+            if(bHasText)
             {
-                // prepare text box geometry
-                basegfx::B2DHomMatrix aTextBoxMatrix;
-                bool bWordWrap(false);
+                // #i101684# get the text range unrotated and absolute to the object range
+                const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
 
-                // take unrotated snap rect as default, then get the
-                // unrotated text box. Rotation needs to be done centered
-                const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-                const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
-
-                if(bHasText)
+                // Rotation before scaling
+                if(!basegfx::fTools::equalZero(GetCustomShapeObj().GetExtraTextRotation(true)))
                 {
-                    // #i101684# get the text range unrotated and absolute to the object range
-                    const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
+                    basegfx::B2DVector aTranslation(0.5, 0.5);
+                    aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
+                    aTextBoxMatrix.rotate(basegfx::deg2rad(
+                        360.0 - GetCustomShapeObj().GetExtraTextRotation(true)));
+                    aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
+                }
+                // give text object a size
+                aTextBoxMatrix.scale(aTextRange.getWidth(), aTextRange.getHeight());
 
-                    // Rotation before scaling
-                    if(!basegfx::fTools::equalZero(GetCustomShapeObj().GetExtraTextRotation(true)))
+                // check if we have a rotation/shear at all to take care of
+                const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
+                const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
+
+                if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
+                {
+                    if(aObjectRange != aTextRange)
                     {
-                        basegfx::B2DVector aTranslation(0.5, 0.5);
+                        // move relative to unrotated object range
+                        aTextBoxMatrix.translate(
+                            aTextRange.getMinX() - aObjectRange.getMinimum().getX(),
+                            aTextRange.getMinY() - aObjectRange.getMinimum().getY());
+                    }
+
+                    if(!basegfx::fTools::equalZero(fExtraTextRotation))
+                    {
+                        basegfx::B2DVector aTranslation(
+                            ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
+                            ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
                         aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
-                        aTextBoxMatrix.rotate(basegfx::deg2rad(
-                            360.0 - GetCustomShapeObj().GetExtraTextRotation(true)));
+                        aTextBoxMatrix.rotate(basegfx::deg2rad(360.0 - fExtraTextRotation));
                         aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                     }
-                    // give text object a size
-                    aTextBoxMatrix.scale(aTextRange.getWidth(), aTextRange.getHeight());
 
-                    // check if we have a rotation/shear at all to take care of
-                    const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
-                    const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
-
-                    if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
+                    if(rGeoStat.nShearAngle)
                     {
-                        if(aObjectRange != aTextRange)
-                        {
-                            // move relative to unrotated object range
-                            aTextBoxMatrix.translate(
-                                aTextRange.getMinX() - aObjectRange.getMinimum().getX(),
-                                aTextRange.getMinY() - aObjectRange.getMinimum().getY());
-                        }
-
-                        if(!basegfx::fTools::equalZero(fExtraTextRotation))
-                        {
-                            basegfx::B2DVector aTranslation(
-                                ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
-                                ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
-                            aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
-                            aTextBoxMatrix.rotate(basegfx::deg2rad(360.0 - fExtraTextRotation));
-                            aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
-                        }
-
-                        if(rGeoStat.nShearAngle)
-                        {
-                            aTextBoxMatrix.shearX(-rGeoStat.mfTanShearAngle);
-                        }
-
-                        if(rGeoStat.nRotationAngle)
-                        {
-                            aTextBoxMatrix.rotate(toRadians(36000_deg100 - rGeoStat.nRotationAngle));
-                        }
-
-                        // give text it's target position
-                        aTextBoxMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
-                    }
-                    else
-                    {
-                        aTextBoxMatrix.translate(aTextRange.getMinX(), aTextRange.getMinY());
+                        aTextBoxMatrix.shearX(-rGeoStat.mfTanShearAngle);
                     }
 
-                    // check if SdrTextWordWrapItem is set
-                    bWordWrap = GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue();
+                    if(rGeoStat.nRotationAngle)
+                    {
+                        aTextBoxMatrix.rotate(toRadians(36000_deg100 - rGeoStat.nRotationAngle));
+                    }
+
+                    // give text it's target position
+                    aTextBoxMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
+                }
+                else
+                {
+                    aTextBoxMatrix.translate(aTextRange.getMinX(), aTextRange.getMinY());
                 }
 
-                // fill object matrix
-                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                    aObjectRange.getWidth(), aObjectRange.getHeight(),
-                    /*fShearX=*/0, /*fRotate=*/0,
-                    aObjectRange.getMinX(), aObjectRange.getMinY()));
-
-                // create primitive
-                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                    new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                        aAttribute,
-                        std::move(xGroup),
-                        aTextBoxMatrix,
-                        bWordWrap,
-                        b3DShape,
-                        aObjectMatrix));
-                rVisitor.visit(xReference);
+                // check if SdrTextWordWrapItem is set
+                bWordWrap = GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue();
             }
+
+            // fill object matrix
+            const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectRange.getWidth(), aObjectRange.getHeight(),
+                /*fShearX=*/0, /*fRotate=*/0,
+                aObjectRange.getMinX(), aObjectRange.getMinY()));
+
+            // create primitive
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
+                    aAttribute,
+                    std::move(xGroup),
+                    aTextBoxMatrix,
+                    bWordWrap,
+                    b3DShape,
+                    aObjectMatrix));
+            rVisitor.visit(xReference);
         }
 
 } // end of namespace

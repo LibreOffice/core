@@ -78,33 +78,31 @@ bool ScMultiSel::HasOneMark( SCCOL nCol, SCROW& rStartRow, SCROW& rEndRow ) cons
     bool aResult2 = nCol < static_cast<SCCOL>(aMultiSelContainer.size())
                     && aMultiSelContainer[nCol].HasOneMark( nRow3, nRow4 );
 
-    if ( aResult1 || aResult2 )
+    if ( !aResult1 && !aResult2 )
+            return false;
+
+    if ( aResult1 && aResult2 )
     {
-        if ( aResult1 && aResult2 )
-        {
-            if ( ( nRow2 + 1 ) < nRow3 )
-                return false;
-            if ( ( nRow4 + 1 ) < nRow1 )
-                return false;
+        if ( ( nRow2 + 1 ) < nRow3 )
+            return false;
+        if ( ( nRow4 + 1 ) < nRow1 )
+            return false;
 
-            auto aRows = std::minmax( { nRow1, nRow2, nRow3, nRow4 } );
-            rStartRow = aRows.first;
-            rEndRow = aRows.second;
-            return true;
-        }
-        if ( aResult1 )
-        {
-            rStartRow = nRow1;
-            rEndRow = nRow2;
-            return true;
-        }
-
-        rStartRow = nRow3;
-        rEndRow = nRow4;
+        auto aRows = std::minmax( { nRow1, nRow2, nRow3, nRow4 } );
+        rStartRow = aRows.first;
+        rEndRow = aRows.second;
+        return true;
+    }
+    if ( aResult1 )
+    {
+        rStartRow = nRow1;
+        rEndRow = nRow2;
         return true;
     }
 
-    return false;
+    rStartRow = nRow3;
+    rEndRow = nRow4;
+    return true;
 }
 
 bool ScMultiSel::GetMark( SCCOL nCol, SCROW nRow ) const

@@ -303,46 +303,44 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
         return osl_File_E_INVAL;
 
     // Handle ~ notation:
-    if (resolveHome && path->getLength() >= 2 && (*path)[1] == '~')
-    {
-        sal_Int32 j = path->indexOf('/', 2);
-        if (j == -1)
-            j = path->getLength();
+    if (!resolveHome || path->getLength() < 2 || (*path)[1] != '~')
+        return osl_File_E_None;
 
-        if (j == 2)
-        {
-            OUString home;
-            if (!osl::Security().getHomeDir(home))
-            {
-                SAL_WARN("sal.file", "osl::Security::getHomeDir failed");
-                return osl_File_E_INVAL;
-            }
+    sal_Int32 j = path->indexOf('/', 2);
+    if (j == -1)
+        j = path->getLength();
 
-            i = url.indexOf('/', i + 1);
-
-            if (i == -1)
-                i = url.getLength();
-            else
-                ++i;
-
-            //TODO: cheesy way of ensuring home's path ends in slash:
-            if (!home.isEmpty() && home[home.getLength() - 1] != '/')
-                home += "/";
-            try
-            {
-                home = rtl::Uri::convertRelToAbs(home, url.copy(i));
-            }
-            catch (rtl::MalformedUriException & e)
-            {
-                SAL_WARN("sal.file", "rtl::MalformedUriException " << e.getMessage());
-                return osl_File_E_INVAL;
-            }
-            return getSystemPathFromFileUrl(home, path, false);
-        }
+    if (j != 2)
         // FIXME: replace ~user with user's home directory
         return osl_File_E_INVAL;
+
+    OUString home;
+    if (!osl::Security().getHomeDir(home))
+    {
+        SAL_WARN("sal.file", "osl::Security::getHomeDir failed");
+        return osl_File_E_INVAL;
     }
-    return osl_File_E_None;
+
+    i = url.indexOf('/', i + 1);
+
+    if (i == -1)
+        i = url.getLength();
+    else
+        ++i;
+
+    //TODO: cheesy way of ensuring home's path ends in slash:
+    if (!home.isEmpty() && home[home.getLength() - 1] != '/')
+        home += "/";
+    try
+    {
+        home = rtl::Uri::convertRelToAbs(home, url.copy(i));
+    }
+    catch (rtl::MalformedUriException & e)
+    {
+        SAL_WARN("sal.file", "rtl::MalformedUriException " << e.getMessage());
+        return osl_File_E_INVAL;
+    }
+    return getSystemPathFromFileUrl(home, path, false);
 }
 
 }

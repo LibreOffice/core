@@ -586,26 +586,24 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     // later processing
     // after effect nodes are not inserted at their import
     // position, so return false in this case
-    if( bAfterEffect )
+    if( !bAfterEffect )
+        return true;
+
+    if( nMasterRel != 2 )
     {
-        if( nMasterRel != 2 )
-        {
-            Event aEvent;
+        Event aEvent;
 
-            aEvent.Source <<= xParent;
-            aEvent.Trigger = EventTrigger::END_EVENT;
-            aEvent.Repeat = 0;
+        aEvent.Source <<= xParent;
+        aEvent.Trigger = EventTrigger::END_EVENT;
+        aEvent.Repeat = 0;
 
-            xNode->setBegin( makeAny( aEvent ) );
-        }
-
-        // add to after effect nodes for later processing
-        sd::AfterEffectNode aNode( xNode, xParent, nMasterRel == 2 );
-        maAfterEffectNodes.push_back( aNode );
-        return false;
+        xNode->setBegin( makeAny( aEvent ) );
     }
 
-    return true;
+    // add to after effect nodes for later processing
+    sd::AfterEffectNode aNode( xNode, xParent, nMasterRel == 2 );
+    maAfterEffectNodes.push_back( aNode );
+    return false;
 }
 
 void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, const AnimationNode& rNode, const PropertySet& rSet )

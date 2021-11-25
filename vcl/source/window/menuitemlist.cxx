@@ -204,53 +204,53 @@ MenuItemData* MenuItemList::SearchItem(
     // nothing found, try keycode instead
     nDuplicates = GetItemCount( aKeyCode ); // return number of duplicates
 
-    if( nDuplicates )
-    {
-        char ascii = 0;
-        if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
-            ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
+    if( !nDuplicates )
+        return nullptr;
 
-        MenuItemData* pFirstMatch = nullptr;
-        size_t nFirstPos(0);
-        for ( rPos = 0; rPos < nListCount; rPos++)
+    char ascii = 0;
+    if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
+        ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
+
+    MenuItemData* pFirstMatch = nullptr;
+    size_t nFirstPos(0);
+    for ( rPos = 0; rPos < nListCount; rPos++)
+    {
+        MenuItemData* pData = maItemList[ rPos ].get();
+        if ( pData->bEnabled )
         {
-            MenuItemData* pData = maItemList[ rPos ].get();
-            if ( pData->bEnabled )
+            sal_Int32 n = pData->aText.indexOf('~');
+            if ( n != -1 )
             {
-                sal_Int32 n = pData->aText.indexOf('~');
-                if ( n != -1 )
+                KeyCode nKeyCode;
+                sal_Unicode nUnicode = pData->aText[n+1];
+                vcl::Window* pDefWindow = ImplGetDefaultWindow();
+                if(  (  pDefWindow
+                     && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( nUnicode,
+                         Application::GetSettings().GetUILanguageTag().getLanguageType(), nKeyCode )
+                     && aKeyCode.GetCode() == nKeyCode.GetCode()
+                     )
+                  || (  ascii
+                     && rI18nHelper.MatchMnemonic( pData->aText, ascii )
+                     )
+                  )
                 {
-                    KeyCode nKeyCode;
-                    sal_Unicode nUnicode = pData->aText[n+1];
-                    vcl::Window* pDefWindow = ImplGetDefaultWindow();
-                    if(  (  pDefWindow
-                         && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( nUnicode,
-                             Application::GetSettings().GetUILanguageTag().getLanguageType(), nKeyCode )
-                         && aKeyCode.GetCode() == nKeyCode.GetCode()
-                         )
-                      || (  ascii
-                         && rI18nHelper.MatchMnemonic( pData->aText, ascii )
-                         )
-                      )
+                    if (nDuplicates == 1)
+                        return pData;
+                    if (rPos > nCurrentPos)
+                        return pData;   // select next entry with the same mnemonic
+                    if (!pFirstMatch)   // stash the first match for use if nothing follows nCurrentPos
                     {
-                        if (nDuplicates == 1)
-                            return pData;
-                        if (rPos > nCurrentPos)
-                            return pData;   // select next entry with the same mnemonic
-                        if (!pFirstMatch)   // stash the first match for use if nothing follows nCurrentPos
-                        {
-                            pFirstMatch = pData;
-                            nFirstPos = rPos;
-                        }
+                        pFirstMatch = pData;
+                        nFirstPos = rPos;
                     }
                 }
             }
         }
-        if (pFirstMatch)
-        {
-            rPos = nFirstPos;
-            return pFirstMatch;
-        }
+    }
+    if (pFirstMatch)
+    {
+        rPos = nFirstPos;
+        return pFirstMatch;
     }
 
     return nullptr;

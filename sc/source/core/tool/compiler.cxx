@@ -473,25 +473,23 @@ static bool lcl_isValidQuotedText( const OUString& rFormula, sal_Int32 nSrcPos, 
     // but '' marks an escaped '
     // We've earlier guaranteed that a string containing '' will be
     // surrounded by '
-    if (nSrcPos < rFormula.getLength() && rFormula[nSrcPos] == '\'')
+    if (nSrcPos >= rFormula.getLength() || rFormula[nSrcPos] != '\'')
+        return false;
+    sal_Int32 nPos = nSrcPos+1;
+    while (nPos < rFormula.getLength())
     {
-        sal_Int32 nPos = nSrcPos+1;
-        while (nPos < rFormula.getLength())
+        if (rFormula[nPos] == '\'')
         {
-            if (rFormula[nPos] == '\'')
+            if ( (nPos+1 == rFormula.getLength()) || (rFormula[nPos+1] != '\'') )
             {
-                if ( (nPos+1 == rFormula.getLength()) || (rFormula[nPos+1] != '\'') )
-                {
-                    rRes.TokenType = KParseType::SINGLE_QUOTE_NAME;
-                    rRes.EndPos = nPos+1;
-                    return true;
-                }
-                ++nPos;
+                rRes.TokenType = KParseType::SINGLE_QUOTE_NAME;
+                rRes.EndPos = nPos+1;
+                return true;
             }
             ++nPos;
         }
+        ++nPos;
     }
-
     return false;
 }
 
@@ -4046,42 +4044,41 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
         return true;
     }
 
-    if (pDBData->HasHeader())
+    if (!pDBData->HasHeader())
+        return false;
+    // Quite similar to IsColRowName() but limited to one row of headers.
+    ScCellIterator aIter( rDoc, aRange);
+    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
-        // Quite similar to IsColRowName() but limited to one row of headers.
-        ScCellIterator aIter( rDoc, aRange);
-        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+        CellType eType = aIter.getType();
+        bool bOk = false;
+        if (eType == CELLTYPE_FORMULA)
         {
-            CellType eType = aIter.getType();
-            bool bOk = false;
-            if (eType == CELLTYPE_FORMULA)
-            {
-                ScFormulaCell* pFC = aIter.getFormulaCell();
-                bOk = (pFC->GetCode()->GetCodeLen() > 0) && (pFC->aPos != aPos);
-            }
-            else
-                bOk = true;
+            ScFormulaCell* pFC = aIter.getFormulaCell();
+            bOk = (pFC->GetCode()->GetCodeLen() > 0) && (pFC->aPos != aPos);
+        }
+        else
+            bOk = true;
 
-            if (bOk && aIter.hasString())
+        if (bOk && aIter.hasString())
+        {
+            OUString aStr = aIter.getString();
+            if (ScGlobal::GetTransliteration().isEqual( aStr, aName))
             {
-                OUString aStr = aIter.getString();
-                if (ScGlobal::GetTransliteration().isEqual( aStr, aName))
-                {
-                    // If this is successful and the internal column name
-                    // lookup was not, it may be worth a warning.
-                    SAL_WARN("sc.core", "ScCompiler::IsTableRefColumn - falling back to cell lookup");
+                // If this is successful and the internal column name
+                // lookup was not, it may be worth a warning.
+                SAL_WARN("sc.core", "ScCompiler::IsTableRefColumn - falling back to cell lookup");
 
-                    /* XXX NOTE: we could init the column as relative so copying a
-                     * formula across columns would point to the relative column,
-                     * but do it absolute because:
-                     * a) it makes the reference work in named expressions without
-                     * having to distinguish
-                     * b) Excel does it the same. */
-                    ScSingleRefData aRef;
-                    aRef.InitAddress( aIter.GetPos());
-                    maRawToken.SetSingleReference( aRef );
-                    return true;
-                }
+                /* XXX NOTE: we could init the column as relative so copying a
+                 * formula across columns would point to the relative column,
+                 * but do it absolute because:
+                 * a) it makes the reference work in named expressions without
+                 * having to distinguish
+                 * b) Excel does it the same. */
+                ScSingleRefData aRef;
+                aRef.InitAddress( aIter.GetPos());
+                maRawToken.SetSingleReference( aRef );
+                return true;
             }
         }
     }

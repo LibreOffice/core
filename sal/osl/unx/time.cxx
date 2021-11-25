@@ -151,35 +151,33 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
      * the returned value to be timezone neutral.
      */
 
-    if ( nSeconds != time_t(-1) )
-    {
-        time_t bias;
+    if ( nSeconds == time_t(-1) )
+        return false;
 
-        /* timezone corrections */
-        tzset();
+    time_t bias;
+
+    /* timezone corrections */
+    tzset();
 
 #if defined(STRUCT_TM_HAS_GMTOFF)
-        /* members of struct tm are corrected by mktime */
-        bias = 0 - aTime.tm_gmtoff;
+    /* members of struct tm are corrected by mktime */
+    bias = 0 - aTime.tm_gmtoff;
 
 #elif defined(HAS_ALTZONE)
-        /* check if daylight saving time is in effect */
-        bias = aTime.tm_isdst > 0 ? altzone : timezone;
+    /* check if daylight saving time is in effect */
+    bias = aTime.tm_isdst > 0 ? altzone : timezone;
 #else
-        /* expect daylight saving time to be one hour */
-        bias = aTime.tm_isdst > 0 ? timezone - 3600 : timezone;
+    /* expect daylight saving time to be one hour */
+    bias = aTime.tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 
-        pTimeVal->Seconds = nSeconds;
-        pTimeVal->Nanosec = pDateTime->NanoSeconds;
+    pTimeVal->Seconds = nSeconds;
+    pTimeVal->Nanosec = pDateTime->NanoSeconds;
 
-        if ( nSeconds > bias )
-            pTimeVal->Seconds -= bias;
+    if ( nSeconds > bias )
+        pTimeVal->Seconds -= bias;
 
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )

@@ -188,46 +188,46 @@ T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
         getObject( columnIndex, Reference< XNameAccess >() );
     }
 
-    if ( rValue.nPropsSet & PropsSet::Object )
+    if ( !(rValue.nPropsSet & PropsSet::Object) )
+        return aValue;
+
+    /* Value is available as Any. */
+
+    if ( !rValue.aObject.hasValue() )
+        return aValue;
+
+    /* Try to convert into native value. */
+    if ( rValue.aObject >>= aValue )
     {
-        /* Value is available as Any. */
+        rValue.*_member_name_ = aValue;
+        rValue.nPropsSet |= nTypeName;
+        m_bWasNull = false;
+    }
+    else
+    {
+        /* Last chance. Try type converter service... */
 
-        if ( rValue.aObject.hasValue() )
+        Reference< XTypeConverter > xConverter = getTypeConverter();
+        if ( xConverter.is() )
         {
-            /* Try to convert into native value. */
-            if ( rValue.aObject >>= aValue )
+            try
             {
-                rValue.*_member_name_ = aValue;
-                rValue.nPropsSet |= nTypeName;
-                m_bWasNull = false;
-            }
-            else
-            {
-                /* Last chance. Try type converter service... */
+                Any aConvAny = xConverter->convertTo(
+                                         rValue.aObject,
+                                         cppu::UnoType<T>::get() );
 
-                Reference< XTypeConverter > xConverter = getTypeConverter();
-                if ( xConverter.is() )
+                if ( aConvAny >>= aValue )
                 {
-                    try
-                    {
-                        Any aConvAny = xConverter->convertTo(
-                                                 rValue.aObject,
-                                                 cppu::UnoType<T>::get() );
-
-                        if ( aConvAny >>= aValue )
-                        {
-                            rValue.*_member_name_ = aValue;
-                            rValue.nPropsSet |= nTypeName;
-                            m_bWasNull = false;
-                        }
-                    }
-                    catch (const IllegalArgumentException&)
-                    {
-                    }
-                    catch (const CannotConvertException&)
-                    {
-                    }
+                    rValue.*_member_name_ = aValue;
+                    rValue.nPropsSet |= nTypeName;
+                    m_bWasNull = false;
                 }
+            }
+            catch (const IllegalArgumentException&)
+            {
+            }
+            catch (const CannotConvertException&)
+            {
             }
         }
     }
@@ -661,23 +661,22 @@ bool PropertyValueSet::appendPropertySetValue(
                                 const Reference< XPropertySet >& rxSet,
                                 const Property& rProperty )
 {
-    if ( rxSet.is() )
+    if ( !rxSet )
+        return false; // Error
+    try
     {
-        try
+        Any aValue = rxSet->getPropertyValue( rProperty.Name );
+        if ( aValue.hasValue() )
         {
-            Any aValue = rxSet->getPropertyValue( rProperty.Name );
-            if ( aValue.hasValue() )
-            {
-                appendObject( rProperty, aValue );
-                return true;
-            }
+            appendObject( rProperty, aValue );
+            return true;
         }
-        catch (const UnknownPropertyException&)
-        {
-        }
-        catch (const WrappedTargetException&)
-        {
-        }
+    }
+    catch (const UnknownPropertyException&)
+    {
+    }
+    catch (const WrappedTargetException&)
+    {
     }
 
     // Error.

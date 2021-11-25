@@ -156,47 +156,45 @@ sal_Bool SAL_CALL IFrameObject::load(
     const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
 {
-    if ( officecfg::Office::Common::Misc::PluginsEnabled::get() )
-    {
-        DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
-        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-        VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
-        pWin->SetSizePixel( pParent->GetOutputSizePixel() );
-        pWin->SetBackground();
-        pWin->Show();
+    if ( !officecfg::Office::Common::Misc::PluginsEnabled::get() )
+        return false;
 
-        uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
-        xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
+    DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+    VclPtr<IFrameWindow_Impl> pWin = VclPtr<IFrameWindow_Impl>::Create( pParent, maFrmDescr.IsFrameBorderOn() );
+    pWin->SetSizePixel( pParent->GetOutputSizePixel() );
+    pWin->SetBackground();
+    pWin->Show();
 
-        // we must destroy the IFrame before the parent is destroyed
-        xWindow->addEventListener( this );
+    uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
+    xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
 
-        mxFrame = frame::Frame::create( mxContext );
-        uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
-        mxFrame->initialize( xWin );
-        mxFrame->setName( maFrmDescr.GetName() );
+    // we must destroy the IFrame before the parent is destroyed
+    xWindow->addEventListener( this );
 
-        uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
-        if ( xFramesSupplier.is() )
-            mxFrame->setCreator( xFramesSupplier );
+    mxFrame = frame::Frame::create( mxContext );
+    uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
+    mxFrame->initialize( xWin );
+    mxFrame->setName( maFrmDescr.GetName() );
 
-        util::URL aTargetURL;
-        aTargetURL.Complete = maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
-        xTrans->parseStrict( aTargetURL );
+    uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
+    if ( xFramesSupplier.is() )
+        mxFrame->setCreator( xFramesSupplier );
 
-        uno::Sequence < beans::PropertyValue > aProps{
-            comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
-            comphelper::makePropertyValue("ReadOnly", true)
-        };
-        uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
-        if ( xDisp.is() )
-            xDisp->dispatch( aTargetURL, aProps );
+    util::URL aTargetURL;
+    aTargetURL.Complete = maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
+    xTrans->parseStrict( aTargetURL );
 
-        return true;
-    }
+    uno::Sequence < beans::PropertyValue > aProps{
+        comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
+        comphelper::makePropertyValue("ReadOnly", true)
+    };
+    uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
+    if ( xDisp.is() )
+        xDisp->dispatch( aTargetURL, aProps );
 
-    return false;
+    return true;
 }
 
 void SAL_CALL IFrameObject::cancel()

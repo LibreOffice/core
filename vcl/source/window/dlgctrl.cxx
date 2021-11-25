@@ -956,30 +956,28 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         }
     }
 
-    if (isSuitableDestination(pButtonWindow))
+    if (!isSuitableDestination(pButtonWindow))
+        return false;
+
+    if ( bKeyInput )
     {
-        if ( bKeyInput )
+        if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow) )
         {
-            if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow) )
-            {
-                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
-                mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
-            }
-
-            static_cast<PushButton*>(pButtonWindow)->SetPressed( true );
-            mpWindowImpl->mpDlgCtrlDownWindow = pButtonWindow;
-        }
-        else if ( mpWindowImpl->mpDlgCtrlDownWindow.get() == pButtonWindow )
-        {
+            static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
             mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
-            static_cast<PushButton*>(pButtonWindow)->SetPressed( false );
-            static_cast<PushButton*>(pButtonWindow)->Click();
         }
 
-        return true;
+        static_cast<PushButton*>(pButtonWindow)->SetPressed( true );
+        mpWindowImpl->mpDlgCtrlDownWindow = pButtonWindow;
+    }
+    else if ( mpWindowImpl->mpDlgCtrlDownWindow.get() == pButtonWindow )
+    {
+        mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
+        static_cast<PushButton*>(pButtonWindow)->SetPressed( false );
+        static_cast<PushButton*>(pButtonWindow)->Click();
     }
 
-    return false;
+    return true;
 }
 
 // checks if this window has dialog control

@@ -1057,28 +1057,27 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
 
 static bool svx_needLogicRectHack( SdrObject const * pObj )
 {
-    if( pObj->GetObjInventor() == SdrInventor::Default)
+    if( pObj->GetObjInventor() != SdrInventor::Default)
+        return false;
+    switch(pObj->GetObjIdentifier())
     {
-        switch(pObj->GetObjIdentifier())
-        {
-        case OBJ_GRUP:
-        case OBJ_LINE:
-        case OBJ_POLY:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_PATHFILL:
-        case OBJ_FREELINE:
-        case OBJ_FREEFILL:
-        case OBJ_SPLNLINE:
-        case OBJ_SPLNFILL:
-        case OBJ_EDGE:
-        case OBJ_PATHPOLY:
-        case OBJ_PATHPLIN:
-        case OBJ_MEASURE:
-            return true;
-        default:
-            break;
-        }
+    case OBJ_GRUP:
+    case OBJ_LINE:
+    case OBJ_POLY:
+    case OBJ_PLIN:
+    case OBJ_PATHLINE:
+    case OBJ_PATHFILL:
+    case OBJ_FREELINE:
+    case OBJ_FREEFILL:
+    case OBJ_SPLNLINE:
+    case OBJ_SPLNFILL:
+    case OBJ_EDGE:
+    case OBJ_PATHPOLY:
+    case OBJ_PATHPLIN:
+    case OBJ_MEASURE:
+        return true;
+    default:
+        break;
     }
     return false;
 }
@@ -1400,108 +1399,108 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
 {
     // check if an item with the given name and which id is inside the models
     // pool or the stylesheet pool, if found it's put in the itemset
-    if( !SetFillAttribute( nWID, rName, rSet ) )
+    if( SetFillAttribute( nWID, rName, rSet ) )
+        return true;
+
+    // we did not find such item in one of the pools, so we check
+    // the property lists that are loaded for the model for items
+    // that support such.
+    OUString aStrName = SvxUnogetInternalNameForItem(nWID, rName);
+
+    switch( nWID )
     {
-        // we did not find such item in one of the pools, so we check
-        // the property lists that are loaded for the model for items
-        // that support such.
-        OUString aStrName = SvxUnogetInternalNameForItem(nWID, rName);
+    case XATTR_FILLBITMAP:
+    {
+        XBitmapListRef pBitmapList = pModel->GetBitmapList();
 
-        switch( nWID )
-        {
-        case XATTR_FILLBITMAP:
-        {
-            XBitmapListRef pBitmapList = pModel->GetBitmapList();
-
-            if( !pBitmapList.is() )
-                return false;
-
-            tools::Long nPos = pBitmapList->GetIndex(aStrName);
-            if( nPos == -1 )
-                return false;
-
-            const XBitmapEntry* pEntry = pBitmapList->GetBitmap(nPos);
-            XFillBitmapItem aBmpItem(rName, pEntry->GetGraphicObject());
-            rSet.Put(aBmpItem);
-            break;
-        }
-        case XATTR_FILLGRADIENT:
-        {
-            XGradientListRef pGradientList = pModel->GetGradientList();
-
-            if( !pGradientList.is() )
-                return false;
-
-            tools::Long nPos = pGradientList->GetIndex(aStrName);
-            if( nPos == -1 )
-                return false;
-
-            const XGradientEntry* pEntry = pGradientList->GetGradient(nPos);
-            XFillGradientItem aGrdItem(rName, pEntry->GetGradient());
-            rSet.Put( aGrdItem );
-            break;
-        }
-        case XATTR_FILLHATCH:
-        {
-            XHatchListRef pHatchList = pModel->GetHatchList();
-
-            if( !pHatchList.is() )
-                return false;
-
-            tools::Long nPos = pHatchList->GetIndex(aStrName);
-            if( nPos == -1 )
-                return false;
-
-            const XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
-            XFillHatchItem aHatchItem(rName, pEntry->GetHatch());
-            rSet.Put( aHatchItem );
-            break;
-        }
-        case XATTR_LINEEND:
-        case XATTR_LINESTART:
-        {
-            XLineEndListRef pLineEndList = pModel->GetLineEndList();
-
-            if( !pLineEndList.is() )
-                return false;
-
-            tools::Long nPos = pLineEndList->GetIndex(aStrName);
-            if( nPos == -1 )
-                return false;
-
-            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
-            if( sal_uInt16(XATTR_LINEEND) == nWID )
-            {
-                XLineEndItem aLEItem(rName, pEntry->GetLineEnd());
-                rSet.Put( aLEItem );
-            }
-            else
-            {
-                XLineStartItem aLSItem(rName, pEntry->GetLineEnd());
-                rSet.Put( aLSItem );
-            }
-
-            break;
-        }
-        case XATTR_LINEDASH:
-        {
-            XDashListRef pDashList = pModel->GetDashList();
-
-            if( !pDashList.is() )
-                return false;
-
-            tools::Long nPos = pDashList->GetIndex(aStrName);
-            if( nPos == -1 )
-                return false;
-
-            const XDashEntry* pEntry = pDashList->GetDash(nPos);
-            XLineDashItem aDashItem(rName, pEntry->GetDash());
-            rSet.Put( aDashItem );
-            break;
-        }
-        default:
+        if( !pBitmapList.is() )
             return false;
+
+        tools::Long nPos = pBitmapList->GetIndex(aStrName);
+        if( nPos == -1 )
+            return false;
+
+        const XBitmapEntry* pEntry = pBitmapList->GetBitmap(nPos);
+        XFillBitmapItem aBmpItem(rName, pEntry->GetGraphicObject());
+        rSet.Put(aBmpItem);
+        break;
+    }
+    case XATTR_FILLGRADIENT:
+    {
+        XGradientListRef pGradientList = pModel->GetGradientList();
+
+        if( !pGradientList.is() )
+            return false;
+
+        tools::Long nPos = pGradientList->GetIndex(aStrName);
+        if( nPos == -1 )
+            return false;
+
+        const XGradientEntry* pEntry = pGradientList->GetGradient(nPos);
+        XFillGradientItem aGrdItem(rName, pEntry->GetGradient());
+        rSet.Put( aGrdItem );
+        break;
+    }
+    case XATTR_FILLHATCH:
+    {
+        XHatchListRef pHatchList = pModel->GetHatchList();
+
+        if( !pHatchList.is() )
+            return false;
+
+        tools::Long nPos = pHatchList->GetIndex(aStrName);
+        if( nPos == -1 )
+            return false;
+
+        const XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
+        XFillHatchItem aHatchItem(rName, pEntry->GetHatch());
+        rSet.Put( aHatchItem );
+        break;
+    }
+    case XATTR_LINEEND:
+    case XATTR_LINESTART:
+    {
+        XLineEndListRef pLineEndList = pModel->GetLineEndList();
+
+        if( !pLineEndList.is() )
+            return false;
+
+        tools::Long nPos = pLineEndList->GetIndex(aStrName);
+        if( nPos == -1 )
+            return false;
+
+        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
+        if( sal_uInt16(XATTR_LINEEND) == nWID )
+        {
+            XLineEndItem aLEItem(rName, pEntry->GetLineEnd());
+            rSet.Put( aLEItem );
         }
+        else
+        {
+            XLineStartItem aLSItem(rName, pEntry->GetLineEnd());
+            rSet.Put( aLSItem );
+        }
+
+        break;
+    }
+    case XATTR_LINEDASH:
+    {
+        XDashListRef pDashList = pModel->GetDashList();
+
+        if( !pDashList.is() )
+            return false;
+
+        tools::Long nPos = pDashList->GetIndex(aStrName);
+        if( nPos == -1 )
+            return false;
+
+        const XDashEntry* pEntry = pDashList->GetDash(nPos);
+        XLineDashItem aDashItem(rName, pEntry->GetDash());
+        rSet.Put( aDashItem );
+        break;
+    }
+    default:
+        return false;
     }
 
     return true;

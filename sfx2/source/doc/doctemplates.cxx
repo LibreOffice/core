@@ -613,27 +613,27 @@ bool SfxDocTplService_Impl::needsUpdate()
 
 bool SfxDocTplService_Impl::setTitleForURL( const OUString& rURL, const OUString& aTitle )
 {
-    if (m_xDocProps.is())
+    if (!m_xDocProps)
+        return false;
+
+    try
     {
-        try
-        {
-            m_xDocProps->loadFromMedium(rURL, Sequence<PropertyValue>());
-            m_xDocProps->setTitle(aTitle);
+        m_xDocProps->loadFromMedium(rURL, Sequence<PropertyValue>());
+        m_xDocProps->setTitle(aTitle);
 
-            uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
-                    rURL, embed::ElementModes::READWRITE);
+        uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                rURL, embed::ElementModes::READWRITE);
 
-            uno::Sequence<beans::PropertyValue> medium( comphelper::InitPropertySequence({
-                    { "DocumentBaseURL", Any(rURL) },
-                    { "URL", Any(rURL) }
-                }));
+        uno::Sequence<beans::PropertyValue> medium( comphelper::InitPropertySequence({
+                { "DocumentBaseURL", Any(rURL) },
+                { "URL", Any(rURL) }
+            }));
 
-            m_xDocProps->storeToStorage(xStorage, medium);
-            return true;
-        }
-        catch ( Exception& )
-        {
-        }
+        m_xDocProps->storeToStorage(xStorage, medium);
+        return true;
+    }
+    catch ( Exception& )
+    {
     }
     return false;
 }
@@ -1615,23 +1615,23 @@ bool SfxDocTplService_Impl::renameGroup( std::u16string_view rOldName,
     }
     catch ( Exception& ) {}
 
-    if ( bCanBeRenamed )
+    if ( !bCanBeRenamed )
+        return false;
+
+    INetURLObject aGroupTargetObj( aGroupTargetURL );
+    const OUString aFsysName = aGroupTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+
+    if ( aGroupTargetObj.removeSegment()
+      && ReplaceUINamesForTemplateDir_Impl( aGroupTargetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+                                              aFsysName,
+                                            rOldName,
+                                            rNewName ) )
     {
-        INetURLObject aGroupTargetObj( aGroupTargetURL );
-        const OUString aFsysName = aGroupTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+        // rename the group in the hierarchy
+        Any aTitleValue;
+        aTitleValue <<= rNewName;
 
-        if ( aGroupTargetObj.removeSegment()
-          && ReplaceUINamesForTemplateDir_Impl( aGroupTargetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                                                  aFsysName,
-                                                rOldName,
-                                                rNewName ) )
-        {
-            // rename the group in the hierarchy
-            Any aTitleValue;
-            aTitleValue <<= rNewName;
-
-            return setProperty( aGroup, TITLE, aTitleValue );
-        }
+        return setProperty( aGroup, TITLE, aTitleValue );
     }
 
     return false;

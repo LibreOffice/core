@@ -1026,67 +1026,65 @@ sal_Int16 UCBStorageStream_Impl::Commit()
 {
     // send stream to the original content
     // the  parent storage is responsible for the correct handling of deleted contents
-    if ( m_bCommited || m_bIsOLEStorage || m_bDirect )
+    if ( !m_bCommited && !m_bIsOLEStorage && !m_bDirect )
+        return COMMIT_RESULT_NOTHING_TO_DO;
+
+    // modified streams with OLEStorages on it have autocommit; it is assumed that the OLEStorage
+    // was committed as well ( if not opened in direct mode )
+
+    if ( !m_bModified )
+        return COMMIT_RESULT_NOTHING_TO_DO;
+
+    try
     {
-        // modified streams with OLEStorages on it have autocommit; it is assumed that the OLEStorage
-        // was committed as well ( if not opened in direct mode )
+        CopySourceToTemporary();
 
-        if ( m_bModified )
-        {
-            try
-            {
-                CopySourceToTemporary();
+        // release all stream handles
+        Free();
 
-                // release all stream handles
-                Free();
+        // the temporary file does not exist only for truncated streams
+        DBG_ASSERT( !m_aTempURL.isEmpty() || ( m_nMode & StreamMode::TRUNC ), "No temporary file to read from!");
+        if ( m_aTempURL.isEmpty() && !( m_nMode & StreamMode::TRUNC ) )
+            throw RuntimeException();
 
-                // the temporary file does not exist only for truncated streams
-                DBG_ASSERT( !m_aTempURL.isEmpty() || ( m_nMode & StreamMode::TRUNC ), "No temporary file to read from!");
-                if ( m_aTempURL.isEmpty() && !( m_nMode & StreamMode::TRUNC ) )
-                    throw RuntimeException();
+        // create wrapper to stream that is only used while reading inside package component
+        Reference < XInputStream > xStream = new FileStreamWrapper_Impl( m_aTempURL );
 
-                // create wrapper to stream that is only used while reading inside package component
-                Reference < XInputStream > xStream = new FileStreamWrapper_Impl( m_aTempURL );
+        InsertCommandArgument aArg;
+        aArg.Data = xStream;
+        aArg.ReplaceExisting = true;
+        m_pContent->executeCommand( "insert", Any(aArg) );
 
-                InsertCommandArgument aArg;
-                aArg.Data = xStream;
-                aArg.ReplaceExisting = true;
-                m_pContent->executeCommand( "insert", Any(aArg) );
+        // wrapper now controls lifetime of temporary file
+        m_aTempURL.clear();
 
-                // wrapper now controls lifetime of temporary file
-                m_aTempURL.clear();
-
-                INetURLObject aObj( m_aURL );
-                aObj.setName( m_aName );
-                m_aURL = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                m_bModified = false;
-                m_bSourceRead = true;
-            }
-            catch (const CommandAbortedException&)
-            {
-                // any command wasn't executed successfully - not specified
-                SetError( ERRCODE_IO_GENERAL );
-                return COMMIT_RESULT_FAILURE;
-            }
-            catch (const RuntimeException&)
-            {
-                // any other error - not specified
-                SetError( ERRCODE_IO_GENERAL );
-                return COMMIT_RESULT_FAILURE;
-            }
-            catch (const Exception&)
-            {
-                // any other error - not specified
-                SetError( ERRCODE_IO_GENERAL );
-                return COMMIT_RESULT_FAILURE;
-            }
-
-            m_bCommited = false;
-            return COMMIT_RESULT_SUCCESS;
-        }
+        INetURLObject aObj( m_aURL );
+        aObj.setName( m_aName );
+        m_aURL = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        m_bModified = false;
+        m_bSourceRead = true;
+    }
+    catch (const CommandAbortedException&)
+    {
+        // any command wasn't executed successfully - not specified
+        SetError( ERRCODE_IO_GENERAL );
+        return COMMIT_RESULT_FAILURE;
+    }
+    catch (const RuntimeException&)
+    {
+        // any other error - not specified
+        SetError( ERRCODE_IO_GENERAL );
+        return COMMIT_RESULT_FAILURE;
+    }
+    catch (const Exception&)
+    {
+        // any other error - not specified
+        SetError( ERRCODE_IO_GENERAL );
+        return COMMIT_RESULT_FAILURE;
     }
 
-    return COMMIT_RESULT_NOTHING_TO_DO;
+    m_bCommited = false;
+    return COMMIT_RESULT_SUCCESS;
 }
 
 void UCBStorageStream_Impl::Revert()
@@ -2522,40 +2520,38 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
         }
     }
 
-    if ( !pElement->m_bIsFolder )
-    {
-        // check if stream is already created
-        if ( pElement->m_xStream.is() )
-        {
-            // stream has already been created; if it has no external reference, it may be opened another time
-            if ( pElement->m_xStream->m_pAntiImpl )
-            {
-                OSL_FAIL("Stream is already open!" );
-                SetError( SVSTREAM_ACCESS_DENIED );  // ???
-                return nullptr;
-            }
-            else
-            {
-                // check if stream is opened with the same keyword as before
-                // if not, generate a new stream because it could be encrypted vs. decrypted!
-                if ( pElement->m_xStream->m_aKey.isEmpty() )
-                {
-                    pElement->m_xStream->PrepareCachedForReopen( nMode );
+    if ( pElement->m_bIsFolder )
+        return nullptr;
 
-                    return new UCBStorageStream( pElement->m_xStream.get() );
-                }
+    // check if stream is already created
+    if ( pElement->m_xStream.is() )
+    {
+        // stream has already been created; if it has no external reference, it may be opened another time
+        if ( pElement->m_xStream->m_pAntiImpl )
+        {
+            OSL_FAIL("Stream is already open!" );
+            SetError( SVSTREAM_ACCESS_DENIED );  // ???
+            return nullptr;
+        }
+        else
+        {
+            // check if stream is opened with the same keyword as before
+            // if not, generate a new stream because it could be encrypted vs. decrypted!
+            if ( pElement->m_xStream->m_aKey.isEmpty() )
+            {
+                pElement->m_xStream->PrepareCachedForReopen( nMode );
+
+                return new UCBStorageStream( pElement->m_xStream.get() );
             }
         }
-
-        // stream is opened the first time
-        pImp->OpenStream( pElement, nMode, bDirect );
-
-        // if name has been changed before creating the stream: set name!
-        pElement->m_xStream->m_aName = rEleName;
-        return new UCBStorageStream( pElement->m_xStream.get() );
     }
 
-    return nullptr;
+    // stream is opened the first time
+    pImp->OpenStream( pElement, nMode, bDirect );
+
+    // if name has been changed before creating the stream: set name!
+    pElement->m_xStream->m_aName = rEleName;
+    return new UCBStorageStream( pElement->m_xStream.get() );
 }
 
 void UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect )

@@ -592,33 +592,32 @@ namespace svt
             }
 
 
-        if  (   ( nId != BROWSER_NONE )
-            &&  (   !IsEditing()
-                ||  (   !bNonEditOnly
-                    &&  aController->MoveAllowed(rKeyEvent)
+        if  (   ( nId == BROWSER_NONE )
+            ||  (   IsEditing()
+                &&  (   bNonEditOnly
+                    || ! aController->MoveAllowed(rKeyEvent)
                     )
                 )
             )
+            return false;
+
+        if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
         {
-            if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
+            // save the cell content (if necessary)
+            if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
             {
-                // save the cell content (if necessary)
-                if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
-                {
-                    // maybe we're not visible ...
-                    EnableAndShow();
-                    aController->GetWindow().GrabFocus();
-                    return true;
-                }
+                // maybe we're not visible ...
+                EnableAndShow();
+                aController->GetWindow().GrabFocus();
+                return true;
             }
-
-            Dispatch(nId);
-
-            if (bLocalSelect && (GetSelectRowCount() || GetSelection() != nullptr))
-                DeactivateCell();
-            return true;
         }
-        return false;
+
+        Dispatch(nId);
+
+        if (bLocalSelect && (GetSelectRowCount() || GetSelection() != nullptr))
+            DeactivateCell();
+        return true;
     }
 
     bool EditBrowseBox::PreNotify(NotifyEvent& rEvt)

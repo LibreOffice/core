@@ -362,39 +362,38 @@ FatError Validator::FindUnrefedChains() const
 
 FatError StgIo::ValidateFATs()
 {
-    if( m_bFile )
-    {
-        std::optional<Validator> pV( *this );
-        bool bRet1 = !pV->IsError(), bRet2 = true ;
-        pV.reset();
-
-        SvFileStream *pFileStrm = static_cast<SvFileStream *>( GetStrm() );
-        if ( !pFileStrm )
-            return FatError::InMemoryError;
-
-        StgIo aIo;
-        if( aIo.Open( pFileStrm->GetFileName(),
-                      StreamMode::READ | StreamMode::SHARE_DENYNONE) &&
-            aIo.Load() )
-        {
-            pV.emplace( aIo );
-            bRet2 = !pV->IsError();
-            pV.reset();
-        }
-
-        FatError nErr;
-        if( bRet1 != bRet2 )
-            nErr = bRet1 ? FatError::OnFileError : FatError::InMemoryError;
-        else nErr = bRet1 ? FatError::Ok : FatError::BothError;
-        if( nErr != FatError::Ok && !m_bCopied )
-        {
-            m_bCopied = true;
-        }
-//      DBG_ASSERT( nErr == FatError::Ok ,"Storage broken");
-        return nErr;
-    }
+    if( !m_bFile )
 //  OSL_FAIL("Do not validate (no FileStorage)");
-    return FatError::Ok;
+        return FatError::Ok;
+
+    std::optional<Validator> pV( *this );
+    bool bRet1 = !pV->IsError(), bRet2 = true ;
+    pV.reset();
+
+    SvFileStream *pFileStrm = static_cast<SvFileStream *>( GetStrm() );
+    if ( !pFileStrm )
+        return FatError::InMemoryError;
+
+    StgIo aIo;
+    if( aIo.Open( pFileStrm->GetFileName(),
+                  StreamMode::READ | StreamMode::SHARE_DENYNONE) &&
+        aIo.Load() )
+    {
+        pV.emplace( aIo );
+        bRet2 = !pV->IsError();
+        pV.reset();
+    }
+
+    FatError nErr;
+    if( bRet1 != bRet2 )
+        nErr = bRet1 ? FatError::OnFileError : FatError::InMemoryError;
+    else nErr = bRet1 ? FatError::Ok : FatError::BothError;
+    if( nErr != FatError::Ok && !m_bCopied )
+    {
+        m_bCopied = true;
+    }
+//      DBG_ASSERT( nErr == FatError::Ok ,"Storage broken");
+    return nErr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

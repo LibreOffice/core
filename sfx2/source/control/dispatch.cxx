@@ -792,26 +792,25 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
 
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
-    if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false, true ) )
-    {
-        SfxAllItemSet aSet( pShell->GetPool() );
-        if ( pArgs )
-        {
-            SfxItemIter aIter(*pArgs);
-            for ( const SfxPoolItem *pArg = aIter.GetCurItem();
-                pArg;
-                pArg = aIter.NextItem() )
-                MappedPut_Impl( aSet, *pArg );
-        }
-        SfxRequest aReq(nSlot, nCall, aSet);
-        if (pInternalArgs)
-            aReq.SetInternalArgs_Impl( *pInternalArgs );
-        aReq.SetModifier( nModi );
+    if ( !GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false, true ) )
+        return nullptr;
 
-        Execute_( *pShell, *pSlot, aReq, nCall );
-        return aReq.GetReturnValue();
+    SfxAllItemSet aSet( pShell->GetPool() );
+    if ( pArgs )
+    {
+        SfxItemIter aIter(*pArgs);
+        for ( const SfxPoolItem *pArg = aIter.GetCurItem();
+            pArg;
+            pArg = aIter.NextItem() )
+            MappedPut_Impl( aSet, *pArg );
     }
-    return nullptr;
+    SfxRequest aReq(nSlot, nCall, aSet);
+    if (pInternalArgs)
+        aReq.SetInternalArgs_Impl( *pInternalArgs );
+    aReq.SetModifier( nModi );
+
+    Execute_( *pShell, *pSlot, aReq, nCall );
+    return aReq.GetReturnValue();
 }
 
 /** Method to execute a <SfxSlot>s over the Slot-Id.
@@ -836,31 +835,30 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
-    if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false, true ) )
+    if ( !GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false, true ) )
+        return nullptr;
+
+    std::unique_ptr<SfxRequest> pReq;
+    if ( pArgs && *pArgs )
     {
-        std::unique_ptr<SfxRequest> pReq;
-        if ( pArgs && *pArgs )
-        {
-            SfxAllItemSet aSet( pShell->GetPool() );
-            for ( const SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
-                MappedPut_Impl( aSet, **pArg );
-            pReq.reset(new SfxRequest( nSlot, eCall, aSet ));
-        }
-        else
-            pReq.reset(new SfxRequest( nSlot, eCall, pShell->GetPool() ));
-        pReq->SetModifier( nModi );
-        if( pInternalArgs && *pInternalArgs)
-        {
-            SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
-            for ( const SfxPoolItem **pArg = pInternalArgs; *pArg; ++pArg )
-                aSet.Put( **pArg );
-            pReq->SetInternalArgs_Impl( aSet );
-        }
-        Execute_( *pShell, *pSlot, *pReq, eCall );
-        const SfxPoolItem* pRet = pReq->GetReturnValue();
-        return pRet;
+        SfxAllItemSet aSet( pShell->GetPool() );
+        for ( const SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
+            MappedPut_Impl( aSet, **pArg );
+        pReq.reset(new SfxRequest( nSlot, eCall, aSet ));
     }
-    return nullptr;
+    else
+        pReq.reset(new SfxRequest( nSlot, eCall, pShell->GetPool() ));
+    pReq->SetModifier( nModi );
+    if( pInternalArgs && *pInternalArgs)
+    {
+        SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
+        for ( const SfxPoolItem **pArg = pInternalArgs; *pArg; ++pArg )
+            aSet.Put( **pArg );
+        pReq->SetInternalArgs_Impl( aSet );
+    }
+    Execute_( *pShell, *pSlot, *pReq, eCall );
+    const SfxPoolItem* pRet = pReq->GetReturnValue();
+    return pRet;
 }
 
 /** Method to execute a <SfxSlot>s over the Slot-Id.
@@ -935,33 +933,32 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
 
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
-    if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, false, true ) )
+    if ( !GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, false, true ) )
+        return nullptr;
+
+    SfxAllItemSet aSet( pShell->GetPool() );
+
+    for (const SfxPoolItem *pArg : args)
     {
-       SfxAllItemSet aSet( pShell->GetPool() );
-
-       for (const SfxPoolItem *pArg : args)
-       {
-           assert(pArg);
-           MappedPut_Impl( aSet, *pArg );
-       }
-
-       SfxRequest aReq(nSlot, eCall, aSet);
-
-       if (internalargs.begin() != internalargs.end())
-       {
-           SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
-           for (const SfxPoolItem *pArg : internalargs)
-           {
-               assert(pArg);
-               aInternalSet.Put(*pArg);
-           }
-           aReq.SetInternalArgs_Impl(aInternalSet);
-       }
-
-       Execute_( *pShell, *pSlot, aReq, eCall );
-       return aReq.GetReturnValue();
+        assert(pArg);
+        MappedPut_Impl( aSet, *pArg );
     }
-    return nullptr;
+
+    SfxRequest aReq(nSlot, eCall, aSet);
+
+    if (internalargs.begin() != internalargs.end())
+    {
+        SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
+        for (const SfxPoolItem *pArg : internalargs)
+        {
+            assert(pArg);
+            aInternalSet.Put(*pArg);
+        }
+        aReq.SetInternalArgs_Impl(aInternalSet);
+    }
+
+    Execute_( *pShell, *pSlot, aReq, eCall );
+    return aReq.GetReturnValue();
 }
 
 /** Helper method to receive the asynchronously executed <SfxRequest>s.
@@ -1637,52 +1634,50 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
         return false;
     }
 
-    if ( pSlot )
-    {
-        DBG_ASSERT(xImp->bFlushed,
-                "Dispatcher not flushed after retrieving slot servers!");
-        if (!xImp->bFlushed)
-            return false;
+    if ( !pSlot )
+        return false;
 
-        // Determine the object and call the Message of this object
-        SfxShell *pSh = GetShell(rSvr.GetShellLevel());
-        DBG_ASSERT(pSh, "ObjectShell not found");
+    DBG_ASSERT(xImp->bFlushed,
+            "Dispatcher not flushed after retrieving slot servers!");
+    if (!xImp->bFlushed)
+        return false;
 
-        SfxStateFunc pFunc;
+    // Determine the object and call the Message of this object
+    SfxShell *pSh = GetShell(rSvr.GetShellLevel());
+    DBG_ASSERT(pSh, "ObjectShell not found");
 
-        if (pRealSlot)
-            pFunc = pRealSlot->GetStateFnc();
-        else
-            pFunc = pSlot->GetStateFnc();
+    SfxStateFunc pFunc;
 
-        (*pFunc)(pSh, rState);
+    if (pRealSlot)
+        pFunc = pRealSlot->GetStateFnc();
+    else
+        pFunc = pSlot->GetStateFnc();
+
+    (*pFunc)(pSh, rState);
 #ifdef DBG_UTIL
-        // To examine the conformity of IDL (SlotMap) and current Items
-        if ( rState.Count() )
+    // To examine the conformity of IDL (SlotMap) and current Items
+    if ( !rState.Count() )
+        return true;
+
+    SfxInterface *pIF = pSh->GetInterface();
+    SfxItemIter aIter( rState );
+    for ( const SfxPoolItem *pItem = aIter.GetCurItem();
+          pItem;
+          pItem = aIter.NextItem() )
+    {
+        if ( !IsInvalidItem(pItem) && !pItem->IsVoidItem() )
         {
-            SfxInterface *pIF = pSh->GetInterface();
-            SfxItemIter aIter( rState );
-            for ( const SfxPoolItem *pItem = aIter.GetCurItem();
-                  pItem;
-                  pItem = aIter.NextItem() )
-            {
-                if ( !IsInvalidItem(pItem) && !pItem->IsVoidItem() )
-                {
-                    sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
-                    SAL_INFO_IF(
-                        typeid(pItem) != *pIF->GetSlot(nSlotId)->GetType()->Type(),
-                        "sfx.control",
-                        "item-type unequal to IDL (=> no BASIC) with SID: "
-                            << nSlotId << " in " << pIF->GetClassName());
-                }
-            }
+            sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
+            SAL_INFO_IF(
+                typeid(pItem) != *pIF->GetSlot(nSlotId)->GetType()->Type(),
+                "sfx.control",
+                "item-type unequal to IDL (=> no BASIC) with SID: "
+                    << nSlotId << " in " << pIF->GetClassName());
         }
+    }
 #endif
 
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
@@ -1860,27 +1855,27 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
 {
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
-    if ( GetShellAndSlot_Impl( nSID, &pShell, &pSlot, false, true ) )
-    {
-        const SfxPoolItem* pItem = pShell->GetSlotState( nSID );
-        if ( !pItem )
-            return SfxItemState::DISABLED;
-        else
-        {
-            css::uno::Any aState;
-            if ( !pItem->IsVoidItem() )
-            {
-                sal_uInt16 nSubId( 0 );
-                SfxItemPool& rPool = pShell->GetPool();
-                sal_uInt16 nWhich = rPool.GetWhich( nSID );
-                if ( rPool.GetMetric( nWhich ) == MapUnit::MapTwip )
-                    nSubId |= CONVERT_TWIPS;
-                pItem->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
-            }
-            rAny = aState;
+    if ( !GetShellAndSlot_Impl( nSID, &pShell, &pSlot, false, true ) )
+        return SfxItemState::DISABLED;
 
-            return SfxItemState::DEFAULT;
+    const SfxPoolItem* pItem = pShell->GetSlotState( nSID );
+    if ( !pItem )
+        return SfxItemState::DISABLED;
+    else
+    {
+        css::uno::Any aState;
+        if ( !pItem->IsVoidItem() )
+        {
+            sal_uInt16 nSubId( 0 );
+            SfxItemPool& rPool = pShell->GetPool();
+            sal_uInt16 nWhich = rPool.GetWhich( nSID );
+            if ( rPool.GetMetric( nWhich ) == MapUnit::MapTwip )
+                nSubId |= CONVERT_TWIPS;
+            pItem->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
         }
+        rAny = aState;
+
+        return SfxItemState::DEFAULT;
     }
 
     return SfxItemState::DISABLED;

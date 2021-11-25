@@ -431,53 +431,51 @@ bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
     if (rWhat.isEmpty() || rString.getLength() < nPos + rWhat.getLength())
         return false;
 
-    if (StringPtrContainsImpl( rWhat, rString.getStr(), nPos))
+    if (!StringPtrContainsImpl( rWhat, rString.getStr(), nPos))
+        return false;
+
+    nPos += rWhat.getLength();
+    if (nPos == rString.getLength())
+        return true;    // word at end of string
+
+    /* TODO: we COULD invoke bells and whistles word break iterator to find
+     * the next boundary, but really ... this is called for date input, so
+     * how many languages do not separate the day and month names in some
+     * form? */
+
+    // Check simple ASCII first before invoking i18n or anything else.
+    const sal_Unicode c = rString[nPos];
+
+    // Common separating ASCII characters in date context.
+    switch (c)
     {
-        nPos += rWhat.getLength();
-        if (nPos == rString.getLength())
-            return true;    // word at end of string
-
-        /* TODO: we COULD invoke bells and whistles word break iterator to find
-         * the next boundary, but really ... this is called for date input, so
-         * how many languages do not separate the day and month names in some
-         * form? */
-
-        // Check simple ASCII first before invoking i18n or anything else.
-        const sal_Unicode c = rString[nPos];
-
-        // Common separating ASCII characters in date context.
-        switch (c)
-        {
-            case ' ':
-            case '-':
-            case '.':
-            case '/':
-                return true;
-            default:
-                ;   // nothing
-        }
-
-        if (rtl::isAsciiAlphanumeric( c ))
-            return false;   // Alpha or numeric is not word gap.
-
-        sal_Int32 nIndex = nPos;
-        rString.iterateCodePoints( &nIndex);
-        if (nPos+1 < nIndex)
-            return true;    // Surrogate, assume these to be new words.
-
-        const sal_Int32 nType = pFormatter->GetCharClass()->getCharacterType( rString, nPos);
-        using namespace ::com::sun::star::i18n;
-
-        if ((nType & (KCharacterType::UPPER | KCharacterType::LOWER | KCharacterType::DIGIT)) != 0)
-            return false;   // Alpha or numeric is not word gap.
-
-        if (nType & KCharacterType::LETTER)
-            return true;    // Letter other than alpha is new word. (Is it?)
-
-        return true;        // Catch all remaining as gap until we know better.
+        case ' ':
+        case '-':
+        case '.':
+        case '/':
+            return true;
+        default:
+            ;   // nothing
     }
 
-    return false;
+    if (rtl::isAsciiAlphanumeric( c ))
+        return false;   // Alpha or numeric is not word gap.
+
+    sal_Int32 nIndex = nPos;
+    rString.iterateCodePoints( &nIndex);
+    if (nPos+1 < nIndex)
+        return true;    // Surrogate, assume these to be new words.
+
+    const sal_Int32 nType = pFormatter->GetCharClass()->getCharacterType( rString, nPos);
+    using namespace ::com::sun::star::i18n;
+
+    if ((nType & (KCharacterType::UPPER | KCharacterType::LOWER | KCharacterType::DIGIT)) != 0)
+        return false;   // Alpha or numeric is not word gap.
+
+    if (nType & KCharacterType::LETTER)
+        return true;    // Letter other than alpha is new word. (Is it?)
+
+    return true;        // Catch all remaining as gap until we know better.
 }
 
 
@@ -772,33 +770,33 @@ int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos
  */
 bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos )
 {
-    if ( rString.getLength() > nPos )
+    if ( rString.getLength() <= nPos )
+        return false;
+
+    if ( !aUpperCurrSymbol.getLength() )
+    {   // If no format specified the currency of the currently active locale.
+        LanguageType eLang = (mpFormat ? mpFormat->GetLanguage() :
+                pFormatter->GetLocaleData()->getLanguageTag().getLanguageType());
+        aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
+            SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
+    }
+    if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
     {
-        if ( !aUpperCurrSymbol.getLength() )
-        {   // If no format specified the currency of the currently active locale.
-            LanguageType eLang = (mpFormat ? mpFormat->GetLanguage() :
-                    pFormatter->GetLocaleData()->getLanguageTag().getLanguageType());
-            aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
-                SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
-        }
-        if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
+        nPos = nPos + aUpperCurrSymbol.getLength();
+        return true;
+    }
+    if ( mpFormat )
+    {
+        OUString aSymbol, aExtension;
+        if ( mpFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {
-            nPos = nPos + aUpperCurrSymbol.getLength();
-            return true;
-        }
-        if ( mpFormat )
-        {
-            OUString aSymbol, aExtension;
-            if ( mpFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
+            if ( aSymbol.getLength() <= rString.getLength() - nPos )
             {
-                if ( aSymbol.getLength() <= rString.getLength() - nPos )
+                aSymbol = pFormatter->GetCharClass()->uppercase(aSymbol);
+                if ( StringContains( aSymbol, rString, nPos ) )
                 {
-                    aSymbol = pFormatter->GetCharClass()->uppercase(aSymbol);
-                    if ( StringContains( aSymbol, rString, nPos ) )
-                    {
-                        nPos = nPos + aSymbol.getLength();
-                        return true;
-                    }
+                    nPos = nPos + aSymbol.getLength();
+                    return true;
                 }
             }
         }
@@ -876,26 +874,26 @@ inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32&
  */
 inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal_Int32& nPos ) const
 {
-    if ( rString.getLength() > nPos )
+    if ( rString.getLength() <= nPos )
+        return false;
+
+    if (bIso8601Tsep)
     {
-        if (bIso8601Tsep)
+        // ISO 8601 specifies both '.' dot and ',' comma as fractional
+        // separator.
+        if (rString[nPos] == '.' || rString[nPos] == ',')
         {
-            // ISO 8601 specifies both '.' dot and ',' comma as fractional
-            // separator.
-            if (rString[nPos] == '.' || rString[nPos] == ',')
-            {
-                ++nPos;
-                return true;
-            }
-        }
-        // Even in an otherwise ISO 8601 string be lenient and accept the
-        // locale defined separator.
-        const OUString& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
-        if ( rString.match( rSep, nPos ))
-        {
-            nPos = nPos + rSep.getLength();
+            ++nPos;
             return true;
         }
+    }
+    // Even in an otherwise ISO 8601 string be lenient and accept the
+    // locale defined separator.
+    const OUString& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
+    if ( rString.match( rSep, nPos ))
+    {
+        nPos = nPos + rSep.getLength();
+        return true;
     }
     return false;
 }

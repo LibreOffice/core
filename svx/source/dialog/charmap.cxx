@@ -165,24 +165,24 @@ bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
 
 bool SvxShowCharSet::MouseMove(const MouseEvent& rMEvt)
 {
-    if ( rMEvt.IsLeft() && bDrag )
-    {
-        Point aPos  = rMEvt.GetPosPixel();
-        Size  aSize = GetOutputSizePixel();
+    if ( !rMEvt.IsLeft() || !bDrag )
+        return true;
 
-        if ( aPos.X() < 0 )
-            aPos.setX( 0 );
-        else if ( aPos.X() > aSize.Width()-5 )
-            aPos.setX( aSize.Width()-5 );
-        if ( aPos.Y() < 0 )
-            aPos.setY( 0 );
-        else if ( aPos.Y() > aSize.Height()-5 )
-            aPos.setY( aSize.Height()-5 );
+    Point aPos  = rMEvt.GetPosPixel();
+    Size  aSize = GetOutputSizePixel();
 
-        int nIndex = PixelToMapIndex( aPos );
+    if ( aPos.X() < 0 )
+        aPos.setX( 0 );
+    else if ( aPos.X() > aSize.Width()-5 )
+        aPos.setX( aSize.Width()-5 );
+    if ( aPos.Y() < 0 )
+        aPos.setY( 0 );
+    else if ( aPos.Y() > aSize.Height()-5 )
+        aPos.setY( aSize.Height()-5 );
+
+    int nIndex = PixelToMapIndex( aPos );
     // Fire the focus event.
-        SelectIndex( nIndex, true );
-    }
+    SelectIndex( nIndex, true );
 
     return true;
 }

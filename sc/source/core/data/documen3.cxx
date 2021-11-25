@@ -671,23 +671,22 @@ void ScDocument::SetSheetEvents( SCTAB nTab, std::unique_ptr<ScSheetEvents> pNew
 
 bool ScDocument::HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bWithVbaEvents ) const
 {
-    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
+        return false;
+    // check if any event handler script has been configured
+    const ScSheetEvents* pEvents = maTabs[nTab]->GetSheetEvents();
+    if ( pEvents && pEvents->GetScript( nEvent ) )
+        return true;
+    // check if VBA event handlers exist
+    if (bWithVbaEvents && mxVbaEvents.is()) try
     {
-        // check if any event handler script has been configured
-        const ScSheetEvents* pEvents = maTabs[nTab]->GetSheetEvents();
-        if ( pEvents && pEvents->GetScript( nEvent ) )
+        uno::Sequence< uno::Any > aArgs{ uno::Any(nTab) };
+        if (mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs ) ||
+            mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), uno::Sequence< uno::Any >() ))
             return true;
-        // check if VBA event handlers exist
-        if (bWithVbaEvents && mxVbaEvents.is()) try
-        {
-            uno::Sequence< uno::Any > aArgs{ uno::Any(nTab) };
-            if (mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs ) ||
-                mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), uno::Sequence< uno::Any >() ))
-                return true;
-        }
-        catch( uno::Exception& )
-        {
-        }
+    }
+    catch( uno::Exception& )
+    {
     }
     return false;
 }

@@ -53,51 +53,51 @@ namespace sdr::overlay
 
         bool OverlayObjectList::isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance) const
         {
-            if(!maVector.empty())
+            if(maVector.empty())
+                return false;
+
+            OverlayObject* pFirst = maVector.front().get();
+            OverlayManager* pManager = pFirst->getOverlayManager();
+
+            if(!pManager)
+                return false;
+
+            if(0.0 == fLogicTolerance)
             {
-                OverlayObject* pFirst = maVector.front().get();
-                OverlayManager* pManager = pFirst->getOverlayManager();
+                Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(
+                    Size(DEFAULT_VALUE_FOR_HITTEST_PIXEL, DEFAULT_VALUE_FOR_HITTEST_PIXEL)));
 
-                if(pManager)
+                // When tiled rendering, we always work in logic units, use the non-pixel default.
+                if (comphelper::LibreOfficeKit::isActive())
                 {
-                    if(0.0 == fLogicTolerance)
+                    aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
+                    if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                        aSizeLogic = o3tl::convert(aSizeLogic, o3tl::Length::twip, o3tl::Length::mm100);
+                }
+
+                fLogicTolerance = aSizeLogic.Width();
+            }
+
+            const drawinglayer::geometry::ViewInformation2D& aViewInformation2D(pManager->getCurrentViewInformation2D());
+            drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
+                aViewInformation2D,
+                rLogicPosition,
+                fLogicTolerance,
+                false);
+
+            for(auto & pCandidate : maVector)
+            {
+                if(pCandidate->isHittable())
+                {
+                    const drawinglayer::primitive2d::Primitive2DContainer& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
+
+                    if(!rSequence.empty())
                     {
-                        Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(
-                            Size(DEFAULT_VALUE_FOR_HITTEST_PIXEL, DEFAULT_VALUE_FOR_HITTEST_PIXEL)));
+                        aHitTestProcessor2D.process(rSequence);
 
-                        // When tiled rendering, we always work in logic units, use the non-pixel default.
-                        if (comphelper::LibreOfficeKit::isActive())
+                        if(aHitTestProcessor2D.getHit())
                         {
-                            aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
-                            if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                                aSizeLogic = o3tl::convert(aSizeLogic, o3tl::Length::twip, o3tl::Length::mm100);
-                        }
-
-                        fLogicTolerance = aSizeLogic.Width();
-                    }
-
-                    const drawinglayer::geometry::ViewInformation2D& aViewInformation2D(pManager->getCurrentViewInformation2D());
-                    drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
-                        aViewInformation2D,
-                        rLogicPosition,
-                        fLogicTolerance,
-                        false);
-
-                    for(auto & pCandidate : maVector)
-                    {
-                        if(pCandidate->isHittable())
-                        {
-                            const drawinglayer::primitive2d::Primitive2DContainer& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
-
-                            if(!rSequence.empty())
-                            {
-                                aHitTestProcessor2D.process(rSequence);
-
-                                if(aHitTestProcessor2D.getHit())
-                                {
-                                    return true;
-                                }
-                            }
+                            return true;
                         }
                     }
                 }

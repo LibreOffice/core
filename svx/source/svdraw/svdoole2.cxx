@@ -1876,32 +1876,30 @@ bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHei
 bool SdrOle2Obj::AddOwnLightClient()
 {
     // The Own Light Client must be registered in object only using this method!
-    if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(getSdrModelFromSdrObject().GetPersist()), mpImpl->mxObjRef.GetObject() )
-      && !( mpImpl->mxLightClient.is() && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient ) ) )
+    if ( SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(getSdrModelFromSdrObject().GetPersist()), mpImpl->mxObjRef.GetObject() )
+      || ( mpImpl->mxLightClient.is() && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient ) ) )
+          return true;
+
+    Connect();
+
+    if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
     {
-        Connect();
-
-        if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
+        Fraction aScaleWidth;
+        Fraction aScaleHeight;
+        Size aObjAreaSize;
+        if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
         {
-            Fraction aScaleWidth;
-            Fraction aScaleHeight;
-            Size aObjAreaSize;
-            if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
-            {
-                mpImpl->mxLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
-                try {
-                    mpImpl->mxObjRef->setClientSite( mpImpl->mxLightClient );
-                    return true;
-                } catch( uno::Exception& )
-                {}
-            }
-
+            mpImpl->mxLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
+            try {
+                mpImpl->mxObjRef->setClientSite( mpImpl->mxLightClient );
+                return true;
+            } catch( uno::Exception& )
+            {}
         }
 
-        return false;
     }
 
-    return true;
+    return false;
 }
 
 Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()

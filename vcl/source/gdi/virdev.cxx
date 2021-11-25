@@ -353,38 +353,36 @@ void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                             sal_uInt8 *const pBuffer)
 {
-    if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
-    {
-        if (meAlphaFormat != DeviceFormat::NONE)
-        {
-            // #110958# Setup alpha bitmap
-            if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
-            {
-                mpAlphaVDev.disposeAndClear();
-            }
+    if( !InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
+        return false;
 
-            if( !mpAlphaVDev )
-            {
-                mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meAlphaFormat);
-                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, nullptr);
-            }
-
-            // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
-            if( GetLineColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetLineColor( COL_BLACK );
-
-            if( GetFillColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetFillColor( COL_BLACK );
-
-            mpAlphaVDev->SetMapMode( GetMapMode() );
-
-            mpAlphaVDev->SetAntialiasing( GetAntialiasing() );
-        }
-
+    if (meAlphaFormat == DeviceFormat::NONE)
         return true;
+
+    // #110958# Setup alpha bitmap
+    if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
+    {
+        mpAlphaVDev.disposeAndClear();
     }
 
-    return false;
+    if( !mpAlphaVDev )
+    {
+        mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meAlphaFormat);
+        mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, nullptr);
+    }
+
+    // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
+    if( GetLineColor() != COL_TRANSPARENT )
+        mpAlphaVDev->SetLineColor( COL_BLACK );
+
+    if( GetFillColor() != COL_TRANSPARENT )
+        mpAlphaVDev->SetFillColor( COL_BLACK );
+
+    mpAlphaVDev->SetMapMode( GetMapMode() );
+
+    mpAlphaVDev->SetAntialiasing( GetAntialiasing() );
+
+    return true;
 }
 
 void VirtualDevice::EnableRTL( bool bEnable )

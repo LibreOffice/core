@@ -1818,29 +1818,28 @@ bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pE
 
 bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry const * pEntry)
 {
-    if( m_pActiveButton )
+    if( !m_pActiveButton )
+        return false;
+
+    tools::Long nMouseX = rMEvt.GetPosPixel().X();
+    if( pEntry == m_pActiveEntry &&
+         m_pView->GetItem(m_pActiveEntry, nMouseX) == m_pActiveButton )
     {
-        tools::Long nMouseX = rMEvt.GetPosPixel().X();
-        if( pEntry == m_pActiveEntry &&
-             m_pView->GetItem(m_pActiveEntry, nMouseX) == m_pActiveButton )
+        if( !m_pActiveButton->IsStateHilighted() )
         {
-            if( !m_pActiveButton->IsStateHilighted() )
-            {
-                m_pActiveButton->SetStateHilighted(true );
-                InvalidateEntry(m_pActiveEntry);
-            }
+            m_pActiveButton->SetStateHilighted(true );
+            InvalidateEntry(m_pActiveEntry);
         }
-        else
-        {
-            if( m_pActiveButton->IsStateHilighted() )
-            {
-                m_pActiveButton->SetStateHilighted(false );
-                InvalidateEntry(m_pActiveEntry);
-            }
-        }
-        return true;
     }
-    return false;
+    else
+    {
+        if( m_pActiveButton->IsStateHilighted() )
+        {
+            m_pActiveButton->SetStateHilighted(false );
+            InvalidateEntry(m_pActiveEntry);
+        }
+    }
+    return true;
 }
 
 bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
@@ -2901,54 +2900,54 @@ IMPL_LINK_NOARG(SvImpLBox, EditTimerCall, Timer *, void)
 
 bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( rHEvt.GetMode() & HelpEventMode::QUICK )
+    if( !(rHEvt.GetMode() & HelpEventMode::QUICK) )
+        return false;
+
+    Point aPos( m_pView->ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
+    if( !GetVisibleArea().Contains( aPos ))
+        return false;
+
+    SvTreeListEntry* pEntry = GetEntry( aPos );
+    if( !pEntry )
+        return false;
+
+    // recalculate text rectangle
+    SvLBoxTab* pTab;
+    SvLBoxItem* pItem = m_pView->GetItem( pEntry, aPos.X(), &pTab );
+    if (!pItem || pItem->GetType() != SvLBoxItemType::String)
+        return false;
+
+    aPos = GetEntryPosition( pEntry );
+    aPos.setX( m_pView->GetTabPos( pEntry, pTab ) ); //pTab->GetPos();
+    Size aSize(pItem->GetWidth(m_pView, pEntry), pItem->GetHeight(m_pView, pEntry));
+    SvLBoxTab* pNextTab = NextTab( pTab );
+    bool bItemClipped = false;
+    // is the item cut off by its right neighbor?
+    if( pNextTab && m_pView->GetTabPos(pEntry,pNextTab) < aPos.X()+aSize.Width() )
     {
-        Point aPos( m_pView->ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        if( !GetVisibleArea().Contains( aPos ))
-            return false;
+        aSize.setWidth( pNextTab->GetPos() - pTab->GetPos() );
+        bItemClipped = true;
+    }
+    tools::Rectangle aItemRect( aPos, aSize );
 
-        SvTreeListEntry* pEntry = GetEntry( aPos );
-        if( pEntry )
-        {
-            // recalculate text rectangle
-            SvLBoxTab* pTab;
-            SvLBoxItem* pItem = m_pView->GetItem( pEntry, aPos.X(), &pTab );
-            if (!pItem || pItem->GetType() != SvLBoxItemType::String)
-                return false;
+    tools::Rectangle aViewRect( GetVisibleArea() );
 
-            aPos = GetEntryPosition( pEntry );
-            aPos.setX( m_pView->GetTabPos( pEntry, pTab ) ); //pTab->GetPos();
-            Size aSize(pItem->GetWidth(m_pView, pEntry), pItem->GetHeight(m_pView, pEntry));
-            SvLBoxTab* pNextTab = NextTab( pTab );
-            bool bItemClipped = false;
-            // is the item cut off by its right neighbor?
-            if( pNextTab && m_pView->GetTabPos(pEntry,pNextTab) < aPos.X()+aSize.Width() )
-            {
-                aSize.setWidth( pNextTab->GetPos() - pTab->GetPos() );
-                bItemClipped = true;
-            }
-            tools::Rectangle aItemRect( aPos, aSize );
+    if( bItemClipped || !aViewRect.Contains( aItemRect ) )
+    {
+        // clip the right edge of the item at the edge of the view
+        //if( aItemRect.Right() > aViewRect.Right() )
+        //  aItemRect.Right() = aViewRect.Right();
 
-            tools::Rectangle aViewRect( GetVisibleArea() );
+        Point aPt = m_pView->OutputToScreenPixel( aItemRect.TopLeft() );
+        aItemRect.SetLeft( aPt.X() );
+        aItemRect.SetTop( aPt.Y() );
+        aPt = m_pView->OutputToScreenPixel( aItemRect.BottomRight() );
+        aItemRect.SetRight( aPt.X() );
+        aItemRect.SetBottom( aPt.Y() );
 
-            if( bItemClipped || !aViewRect.Contains( aItemRect ) )
-            {
-                // clip the right edge of the item at the edge of the view
-                //if( aItemRect.Right() > aViewRect.Right() )
-                //  aItemRect.Right() = aViewRect.Right();
-
-                Point aPt = m_pView->OutputToScreenPixel( aItemRect.TopLeft() );
-                aItemRect.SetLeft( aPt.X() );
-                aItemRect.SetTop( aPt.Y() );
-                aPt = m_pView->OutputToScreenPixel( aItemRect.BottomRight() );
-                aItemRect.SetRight( aPt.X() );
-                aItemRect.SetBottom( aPt.Y() );
-
-                Help::ShowQuickHelp( m_pView, aItemRect,
-                                     static_cast<SvLBoxString*>(pItem)->GetText(), QuickHelpFlags::Left | QuickHelpFlags::VCenter );
-                return true;
-            }
-        }
+        Help::ShowQuickHelp( m_pView, aItemRect,
+                             static_cast<SvLBoxString*>(pItem)->GetText(), QuickHelpFlags::Left | QuickHelpFlags::VCenter );
+        return true;
     }
     return false;
 }

@@ -127,40 +127,34 @@ static bool ParseURL(
     OUString* pName, OUString* pLocation )
 {
     Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-
     Reference< css::uri::XUriReferenceFactory > xFactory = css::uri::UriReferenceFactory::create(xContext);
-
     Reference< css::uri::XVndSunStarScriptUrl > xUrl ( xFactory->parse( rAttrValue ), UNO_QUERY );
+    if ( !xUrl )
+        return false;
 
-    if ( xUrl.is() )
+    const OUString& aLanguageKey = GetXMLToken( XML_LANGUAGE );
+    if ( !xUrl->hasParameter( aLanguageKey ) )
+        return false;
+
+    OUString aLanguage = xUrl->getParameter( aLanguageKey );
+    if ( !aLanguage.equalsIgnoreAsciiCase("basic") )
+        return false;
+
+    *pName = xUrl->getName();
+
+    OUString tmp = xUrl->getParameter( GetXMLToken( XML_LOCATION ) );
+
+    const OUString& doc = GetXMLToken( XML_DOCUMENT );
+
+    if ( tmp.equalsIgnoreAsciiCase( doc ) )
     {
-        const OUString& aLanguageKey = GetXMLToken( XML_LANGUAGE );
-        if ( xUrl.is() && xUrl->hasParameter( aLanguageKey ) )
-        {
-            OUString aLanguage = xUrl->getParameter( aLanguageKey );
-
-            if ( aLanguage.equalsIgnoreAsciiCase("basic") )
-            {
-                *pName = xUrl->getName();
-
-                OUString tmp =
-                    xUrl->getParameter( GetXMLToken( XML_LOCATION ) );
-
-                const OUString& doc = GetXMLToken( XML_DOCUMENT );
-
-                if ( tmp.equalsIgnoreAsciiCase( doc ) )
-                {
-                    *pLocation = doc;
-                }
-                else
-                {
-                    *pLocation = GetXMLToken( XML_APPLICATION );
-                }
-                return true;
-            }
-        }
+        *pLocation = doc;
     }
-    return false;
+    else
+    {
+        *pLocation = GetXMLToken( XML_APPLICATION );
+    }
+    return true;
 }
 
 void XMLEventOASISTransformerContext::StartElement(

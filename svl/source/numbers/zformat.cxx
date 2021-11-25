@@ -3440,24 +3440,24 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, dou
 {
     using namespace ::com::sun::star::i18n;
     CalendarWrapper& rCal = GetCal();
-    if ( rCal.getUniqueID() != GREGORIAN )
+    if ( rCal.getUniqueID() == GREGORIAN )
+        return false;
+
+    sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+    if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID == "Dummy" )
     {
-        sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-        if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID == "Dummy" )
+        if ( !rOrgCalendar.getLength() )
         {
-            if ( !rOrgCalendar.getLength() )
-            {
-                rOrgCalendar = rCal.getUniqueID();
-                fOrgDateTime = rCal.getDateTime();
-            }
-            else if ( rOrgCalendar == GREGORIAN )
-            {
-                rOrgCalendar.clear();
-            }
-            rCal.loadCalendar( GREGORIAN, rLoc().getLanguageTag().getLocale() );
-            rCal.setDateTime( fOrgDateTime );
-            return true;
+            rOrgCalendar = rCal.getUniqueID();
+            fOrgDateTime = rCal.getDateTime();
         }
+        else if ( rOrgCalendar == GREGORIAN )
+        {
+            rOrgCalendar.clear();
+        }
+        rCal.loadCalendar( GREGORIAN, rLoc().getLanguageTag().getLocale() );
+        rCal.setDateTime( fOrgDateTime );
+        return true;
     }
     return false;
 }

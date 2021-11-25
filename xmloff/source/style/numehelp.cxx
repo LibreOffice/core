@@ -209,35 +209,33 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
 bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& sCurrencySymbol,
     uno::Reference <util::XNumberFormatsSupplier> const & xNumberFormatsSupplier)
 {
-    if (xNumberFormatsSupplier.is())
+    if (!xNumberFormatsSupplier)
+        return false;
+    uno::Reference <util::XNumberFormats> xNumberFormats(xNumberFormatsSupplier->getNumberFormats());
+    if (!xNumberFormats)
+        return false;
+    try
     {
-        uno::Reference <util::XNumberFormats> xNumberFormats(xNumberFormatsSupplier->getNumberFormats());
-        if (xNumberFormats.is())
+        uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+        if ( xNumberPropertySet->getPropertyValue(gsCurrencySymbol) >>= sCurrencySymbol)
         {
-            try
+            OUString sCurrencyAbbreviation;
+            if ( xNumberPropertySet->getPropertyValue(gsCurrencyAbbreviation) >>= sCurrencyAbbreviation)
             {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-                if ( xNumberPropertySet->getPropertyValue(gsCurrencySymbol) >>= sCurrencySymbol)
+                if ( !sCurrencyAbbreviation.isEmpty())
+                    sCurrencySymbol = sCurrencyAbbreviation;
+                else
                 {
-                    OUString sCurrencyAbbreviation;
-                    if ( xNumberPropertySet->getPropertyValue(gsCurrencyAbbreviation) >>= sCurrencyAbbreviation)
-                    {
-                        if ( !sCurrencyAbbreviation.isEmpty())
-                            sCurrencySymbol = sCurrencyAbbreviation;
-                        else
-                        {
-                            if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                                sCurrencySymbol = "EUR";
-                        }
-                    }
-                    return true;
+                    if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
+                        sCurrencySymbol = "EUR";
                 }
             }
-            catch ( uno::Exception& )
-            {
-                OSL_FAIL("Numberformat not found");
-            }
+            return true;
         }
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL("Numberformat not found");
     }
     return false;
 }
@@ -246,26 +244,24 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard,
     uno::Reference <util::XNumberFormatsSupplier> const & xNumberFormatsSupplier)
 {
-    if (xNumberFormatsSupplier.is())
+    if (!xNumberFormatsSupplier)
+        return 0;
+    uno::Reference <util::XNumberFormats> xNumberFormats(xNumberFormatsSupplier->getNumberFormats());
+    if (!xNumberFormats)
+        return 0;
+    try
     {
-        uno::Reference <util::XNumberFormats> xNumberFormats(xNumberFormatsSupplier->getNumberFormats());
-        if (xNumberFormats.is())
+        uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+        xNumberPropertySet->getPropertyValue(gsStandardFormat) >>= bIsStandard;
+        sal_Int16 nNumberType = sal_Int16();
+        if ( xNumberPropertySet->getPropertyValue(gsType) >>= nNumberType )
         {
-            try
-            {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-                xNumberPropertySet->getPropertyValue(gsStandardFormat) >>= bIsStandard;
-                sal_Int16 nNumberType = sal_Int16();
-                if ( xNumberPropertySet->getPropertyValue(gsType) >>= nNumberType )
-                {
-                    return nNumberType;
-                }
-            }
-            catch ( uno::Exception& )
-            {
-                OSL_FAIL("Numberformat not found");
-            }
+            return nNumberType;
         }
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL("Numberformat not found");
     }
     return 0;
 }
@@ -296,31 +292,31 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
     if (!xNumberFormats.is() && pExport && pExport->GetNumberFormatsSupplier().is())
         xNumberFormats.set(pExport->GetNumberFormatsSupplier()->getNumberFormats());
 
-    if (xNumberFormats.is())
+    if (!xNumberFormats)
+        return false;
+
+    try
     {
-        try
+        uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+        if ( xNumberPropertySet->getPropertyValue(gsCurrencySymbol) >>= rCurrencySymbol)
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-            if ( xNumberPropertySet->getPropertyValue(gsCurrencySymbol) >>= rCurrencySymbol)
+            OUString sCurrencyAbbreviation;
+            if ( xNumberPropertySet->getPropertyValue(gsCurrencyAbbreviation) >>= sCurrencyAbbreviation)
             {
-                OUString sCurrencyAbbreviation;
-                if ( xNumberPropertySet->getPropertyValue(gsCurrencyAbbreviation) >>= sCurrencyAbbreviation)
+                if ( !sCurrencyAbbreviation.isEmpty())
+                    rCurrencySymbol = sCurrencyAbbreviation;
+                else
                 {
-                    if ( !sCurrencyAbbreviation.isEmpty())
-                        rCurrencySymbol = sCurrencyAbbreviation;
-                    else
-                    {
-                        if ( rCurrencySymbol.getLength() == 1 && rCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                            rCurrencySymbol = "EUR";
-                    }
+                    if ( rCurrencySymbol.getLength() == 1 && rCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
+                        rCurrencySymbol = "EUR";
                 }
-                return true;
             }
+            return true;
         }
-        catch ( uno::Exception& )
-        {
-            OSL_FAIL("Numberformat not found");
-        }
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL("Numberformat not found");
     }
     return false;
 }
@@ -330,25 +326,24 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
     if (!xNumberFormats.is() && pExport && pExport->GetNumberFormatsSupplier().is())
         xNumberFormats.set(pExport->GetNumberFormatsSupplier()->getNumberFormats());
 
-    if (xNumberFormats.is())
+    if (!xNumberFormats)
+        return 0;
+    try
     {
-        try
+        uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+        if (xNumberPropertySet.is())
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-            if (xNumberPropertySet.is())
+            xNumberPropertySet->getPropertyValue(gsStandardFormat) >>= bIsStandard;
+            sal_Int16 nNumberType = sal_Int16();
+            if ( xNumberPropertySet->getPropertyValue(gsType) >>= nNumberType )
             {
-                xNumberPropertySet->getPropertyValue(gsStandardFormat) >>= bIsStandard;
-                sal_Int16 nNumberType = sal_Int16();
-                if ( xNumberPropertySet->getPropertyValue(gsType) >>= nNumberType )
-                {
-                    return nNumberType;
-                }
+                return nNumberType;
             }
         }
-        catch ( uno::Exception& )
-        {
-            OSL_FAIL("Numberformat not found");
-        }
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL("Numberformat not found");
     }
     return 0;
 }

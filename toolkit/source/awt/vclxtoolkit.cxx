@@ -2438,38 +2438,38 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
     std::vector< css::uno::Reference< css::awt::XKeyHandler > >
           aHandlers(m_aKeyHandlers.getElements());
 
-    if (!aHandlers.empty())
-    {
-        vcl::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
+    if (aHandlers.empty())
+        return false;
 
-        // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
-        ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
-            static_cast< ::VclWindowEvent const * >(pEvent)->GetData());
-        css::awt::KeyEvent aAwtEvent(
-            static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
-            (pKeyEvent->GetKeyCode().IsShift()
-             ? css::awt::KeyModifier::SHIFT : 0)
-            | (pKeyEvent->GetKeyCode().IsMod1()
-               ? css::awt::KeyModifier::MOD1 : 0)
-            | (pKeyEvent->GetKeyCode().IsMod2()
-               ? css::awt::KeyModifier::MOD2 : 0)
-            | (pKeyEvent->GetKeyCode().IsMod3()
-               ? css::awt::KeyModifier::MOD3 : 0),
-            pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
-            sal::static_int_cast< sal_Int16 >(
-                pKeyEvent->GetKeyCode().GetFunction()));
-        for (const css::uno::Reference<css::awt::XKeyHandler> & xHandler : aHandlers)
+    vcl::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
+
+    // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
+    ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
+        static_cast< ::VclWindowEvent const * >(pEvent)->GetData());
+    css::awt::KeyEvent aAwtEvent(
+        static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
+        (pKeyEvent->GetKeyCode().IsShift()
+         ? css::awt::KeyModifier::SHIFT : 0)
+        | (pKeyEvent->GetKeyCode().IsMod1()
+           ? css::awt::KeyModifier::MOD1 : 0)
+        | (pKeyEvent->GetKeyCode().IsMod2()
+           ? css::awt::KeyModifier::MOD2 : 0)
+        | (pKeyEvent->GetKeyCode().IsMod3()
+           ? css::awt::KeyModifier::MOD3 : 0),
+        pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
+        sal::static_int_cast< sal_Int16 >(
+            pKeyEvent->GetKeyCode().GetFunction()));
+    for (const css::uno::Reference<css::awt::XKeyHandler> & xHandler : aHandlers)
+    {
+        try
         {
-            try
-            {
-                if (bPressed ? xHandler->keyPressed(aAwtEvent)
-                             : xHandler->keyReleased(aAwtEvent))
-                    return true;
-            }
-            catch (const css::uno::RuntimeException &)
-            {
-                DBG_UNHANDLED_EXCEPTION("toolkit");
-            }
+            if (bPressed ? xHandler->keyPressed(aAwtEvent)
+                         : xHandler->keyReleased(aAwtEvent))
+                return true;
+        }
+        catch (const css::uno::RuntimeException &)
+        {
+            DBG_UNHANDLED_EXCEPTION("toolkit");
         }
     }
     return false;

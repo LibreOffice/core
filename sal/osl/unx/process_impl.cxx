@@ -368,33 +368,33 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
         rtl_uString_getStr(pustrEnvVar), rtl_uString_getLength(pustrEnvVar), encoding,
         OUSTRING_TO_OSTRING_CVTFLAGS);
 
-    if (pstr_env_var)
-    {
+    if (!pstr_env_var)
+        return result;
+
 #if defined (__sun)
-        rtl_String * pBuffer = NULL;
+    rtl_String * pBuffer = NULL;
 
-        sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,
-            rtl_string_getLength(pstr_env_var) + 1, pstr_env_var );
-        rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, "=", 1);
+    sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,
+        rtl_string_getLength(pstr_env_var) + 1, pstr_env_var );
+    rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, "=", 1);
 
-        rtl_string_acquire(pBuffer); // argument to putenv must leak on success
+    rtl_string_acquire(pBuffer); // argument to putenv must leak on success
 
-        if (putenv(rtl_string_getStr(pBuffer)) == 0)
-            result = osl_Process_E_None;
-        else
-            rtl_string_release(pBuffer);
-#elif (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
-        // MacOSX baseline is 10.4, which has an old-school void return
-        // for unsetenv.
-        // See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
-        unsetenv(rtl_string_getStr(pstr_env_var));
+    if (putenv(rtl_string_getStr(pBuffer)) == 0)
         result = osl_Process_E_None;
+    else
+        rtl_string_release(pBuffer);
+#elif (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+    // MacOSX baseline is 10.4, which has an old-school void return
+    // for unsetenv.
+    // See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
+    unsetenv(rtl_string_getStr(pstr_env_var));
+    result = osl_Process_E_None;
 #else
-        if (unsetenv(rtl_string_getStr(pstr_env_var)) == 0)
-            result = osl_Process_E_None;
+    if (unsetenv(rtl_string_getStr(pstr_env_var)) == 0)
+        result = osl_Process_E_None;
 #endif
-        rtl_string_release(pstr_env_var);
-    }
+    rtl_string_release(pstr_env_var);
 
     return result;
 }

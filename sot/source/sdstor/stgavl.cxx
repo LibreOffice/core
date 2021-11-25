@@ -218,52 +218,52 @@ StgAvlNode* StgAvlNode::RotRL()
 
 StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
 {
-    if( p && *p && pDel )
+    if( !p || !*p || !pDel )
+        return nullptr;
+
+    StgAvlNode* pCur = *p;
+    sal_Int32 nRes = bPtrs ? sal_Int32( pCur == pDel ) : pCur->Compare( pDel );
+    if( !nRes )
     {
-        StgAvlNode* pCur = *p;
-        sal_Int32 nRes = bPtrs ? sal_Int32( pCur == pDel ) : pCur->Compare( pDel );
-        if( !nRes )
+        // Element found: remove
+        if( !pCur->m_pRight )
         {
-            // Element found: remove
-            if( !pCur->m_pRight )
-            {
-                *p = pCur->m_pLeft; pCur->m_pLeft = nullptr;
-            }
-            else if( !pCur->m_pLeft )
-            {
-                *p = pCur->m_pRight; pCur->m_pRight = nullptr;
-            }
-            else
-            {
-                // The damn element has two leaves. Get the
-                // rightmost element of the left subtree (which
-                // is lexically before this element) and replace
-                // this element with the element found.
-                StgAvlNode* last = pCur;
-                StgAvlNode* l;
-                for( l = pCur->m_pLeft;
-                     l->m_pRight; last = l, l = l->m_pRight ) {}
-                // remove the element from chain
-                if( l == last->m_pRight )
-                    last->m_pRight = l->m_pLeft;
-                else
-                    last->m_pLeft = l->m_pLeft;
-                // perform the replacement
-                l->m_pLeft = pCur->m_pLeft;
-                l->m_pRight = pCur->m_pRight;
-                *p = l;
-                // delete the element
-                pCur->m_pLeft = pCur->m_pRight = nullptr;
-            }
-            return pCur;
+            *p = pCur->m_pLeft; pCur->m_pLeft = nullptr;
+        }
+        else if( !pCur->m_pLeft )
+        {
+            *p = pCur->m_pRight; pCur->m_pRight = nullptr;
         }
         else
         {
-            if( nRes < 0 )
-                return Rem( &pCur->m_pLeft, pDel, bPtrs );
+            // The damn element has two leaves. Get the
+            // rightmost element of the left subtree (which
+            // is lexically before this element) and replace
+            // this element with the element found.
+            StgAvlNode* last = pCur;
+            StgAvlNode* l;
+            for( l = pCur->m_pLeft;
+                 l->m_pRight; last = l, l = l->m_pRight ) {}
+            // remove the element from chain
+            if( l == last->m_pRight )
+                last->m_pRight = l->m_pLeft;
             else
-                return Rem( &pCur->m_pRight, pDel, bPtrs );
+                last->m_pLeft = l->m_pLeft;
+            // perform the replacement
+            l->m_pLeft = pCur->m_pLeft;
+            l->m_pRight = pCur->m_pRight;
+            *p = l;
+            // delete the element
+            pCur->m_pLeft = pCur->m_pRight = nullptr;
         }
+        return pCur;
+    }
+    else
+    {
+        if( nRes < 0 )
+            return Rem( &pCur->m_pLeft, pDel, bPtrs );
+        else
+            return Rem( &pCur->m_pRight, pDel, bPtrs );
     }
     return nullptr;
 }
@@ -308,29 +308,29 @@ bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
         pPrev->m_pRight = pIns;
     // rebalance tree
     short nDelta = pPivot->Adjust( &pHeavy, pIns );
-    if( pPivot->m_nBalance >= 2 || pPivot->m_nBalance <= -2 )
-    {
-        StgAvlNode* pNewRoot;
-        pHeavy = ( nDelta < 0 ) ? pPivot->m_pRight : pPivot->m_pLeft;
-        // left imbalance
-        if( nDelta > 0 )
-            if( pHeavy->m_nBalance == 1 )
-                pNewRoot = pPivot->RotLL();
-            else
-                pNewRoot = pPivot->RotLR();
-        // right imbalance
-        else if( pHeavy->m_nBalance == -1 )
-            pNewRoot = pPivot->RotRR();
+    if( pPivot->m_nBalance < 2 && pPivot->m_nBalance > -2 )
+        return true;
+
+    StgAvlNode* pNewRoot;
+    pHeavy = ( nDelta < 0 ) ? pPivot->m_pRight : pPivot->m_pLeft;
+    // left imbalance
+    if( nDelta > 0 )
+        if( pHeavy->m_nBalance == 1 )
+            pNewRoot = pPivot->RotLL();
         else
-            pNewRoot = pPivot->RotRL();
-        // relink balanced subtree
-        if( pParent == nullptr )
-            *pRoot = pNewRoot;
-        else if( pPivot == pParent->m_pLeft )
-            pParent->m_pLeft = pNewRoot;
-        else if( pPivot == pParent->m_pRight )
-            pParent->m_pRight = pNewRoot;
-    }
+            pNewRoot = pPivot->RotLR();
+    // right imbalance
+    else if( pHeavy->m_nBalance == -1 )
+        pNewRoot = pPivot->RotRR();
+    else
+        pNewRoot = pPivot->RotRL();
+    // relink balanced subtree
+    if( pParent == nullptr )
+        *pRoot = pNewRoot;
+    else if( pPivot == pParent->m_pLeft )
+        pParent->m_pLeft = pNewRoot;
+    else if( pPivot == pParent->m_pRight )
+        pParent->m_pRight = pNewRoot;
     return true;
 }
 

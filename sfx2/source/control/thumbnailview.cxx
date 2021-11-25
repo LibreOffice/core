@@ -780,86 +780,86 @@ bool ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         return true;
     }
 
-    if(rMEvt.GetClicks() == 1)
+    if(rMEvt.GetClicks() != 1)
+        return true;
+
+    if (rMEvt.IsMod1())
     {
-        if (rMEvt.IsMod1())
+        //Keep selected item group state and just invert current desired one state
+        pItem->setSelection(!pItem->isSelected());
+
+        //This one becomes the selection range start position if it changes its state to selected otherwise resets it
+        mpStartSelRange = pItem->isSelected() ? mFilteredItemList.begin() + nPos : mFilteredItemList.end();
+    }
+    else if (rMEvt.IsShift() && mpStartSelRange != mFilteredItemList.end())
+    {
+        std::pair<size_t,size_t> aNewRange;
+        aNewRange.first = mpStartSelRange - mFilteredItemList.begin();
+        aNewRange.second = nPos;
+
+        if (aNewRange.first > aNewRange.second)
+            std::swap(aNewRange.first,aNewRange.second);
+
+        //Deselect the ones outside of it
+        for (size_t i = 0, n = mFilteredItemList.size(); i < n; ++i)
         {
-            //Keep selected item group state and just invert current desired one state
-            pItem->setSelection(!pItem->isSelected());
+            ThumbnailViewItem *pCurItem  = mFilteredItemList[i];
 
-            //This one becomes the selection range start position if it changes its state to selected otherwise resets it
-            mpStartSelRange = pItem->isSelected() ? mFilteredItemList.begin() + nPos : mFilteredItemList.end();
-        }
-        else if (rMEvt.IsShift() && mpStartSelRange != mFilteredItemList.end())
-        {
-            std::pair<size_t,size_t> aNewRange;
-            aNewRange.first = mpStartSelRange - mFilteredItemList.begin();
-            aNewRange.second = nPos;
-
-            if (aNewRange.first > aNewRange.second)
-                std::swap(aNewRange.first,aNewRange.second);
-
-            //Deselect the ones outside of it
-            for (size_t i = 0, n = mFilteredItemList.size(); i < n; ++i)
+            if (pCurItem->isSelected() && (i < aNewRange.first || i > aNewRange.second))
             {
-                ThumbnailViewItem *pCurItem  = mFilteredItemList[i];
+                pCurItem->setSelection(false);
 
-                if (pCurItem->isSelected() && (i < aNewRange.first || i > aNewRange.second))
+                DrawItem(pCurItem);
+
+                maItemStateHdl.Call(pCurItem);
+            }
+        }
+
+        size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+
+        //Select the items between start range and the selected item
+        if (nSelPos != nPos)
+        {
+            int dir = nSelPos < nPos ? 1 : -1;
+            size_t nCurPos = nSelPos + dir;
+
+            while (nCurPos != nPos)
+            {
+                ThumbnailViewItem *pCurItem  = mFilteredItemList[nCurPos];
+
+                if (!pCurItem->isSelected())
                 {
-                    pCurItem->setSelection(false);
+                    pCurItem->setSelection(true);
 
                     DrawItem(pCurItem);
 
                     maItemStateHdl.Call(pCurItem);
                 }
+
+                nCurPos += dir;
             }
-
-            size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
-
-            //Select the items between start range and the selected item
-            if (nSelPos != nPos)
-            {
-                int dir = nSelPos < nPos ? 1 : -1;
-                size_t nCurPos = nSelPos + dir;
-
-                while (nCurPos != nPos)
-                {
-                    ThumbnailViewItem *pCurItem  = mFilteredItemList[nCurPos];
-
-                    if (!pCurItem->isSelected())
-                    {
-                        pCurItem->setSelection(true);
-
-                        DrawItem(pCurItem);
-
-                        maItemStateHdl.Call(pCurItem);
-                    }
-
-                    nCurPos += dir;
-                }
-            }
-
-            pItem->setSelection(true);
-        }
-        else
-        {
-            //If we got a group of selected items deselect the rest and only keep the desired one
-            //mark items as not selected to not fire unnecessary change state events.
-            pItem->setSelection(false);
-            deselectItems();
-            pItem->setSelection(true);
-
-            //Mark as initial selection range position and reset end one
-            mpStartSelRange = mFilteredItemList.begin() + nPos;
         }
 
-        if (!pItem->isHighlighted())
-            DrawItem(pItem);
-
-        maItemStateHdl.Call(pItem);
-
-        //fire accessible event??
+        pItem->setSelection(true);
     }
+    else
+    {
+        //If we got a group of selected items deselect the rest and only keep the desired one
+        //mark items as not selected to not fire unnecessary change state events.
+        pItem->setSelection(false);
+        deselectItems();
+        pItem->setSelection(true);
+
+        //Mark as initial selection range position and reset end one
+        mpStartSelRange = mFilteredItemList.begin() + nPos;
+    }
+
+    if (!pItem->isHighlighted())
+        DrawItem(pItem);
+
+    maItemStateHdl.Call(pItem);
+
+    //fire accessible event??
     return true;
 }
 

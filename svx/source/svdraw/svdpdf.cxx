@@ -613,24 +613,23 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj, bool bScale)
 bool ImpSdrPdfImport::CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     // #i73407# reformulation to use new B2DPolygon classes
-    if (mbLastObjWasPolyWithoutLine)
+    if (!mbLastObjWasPolyWithoutLine)
+        return false;
+
+    SdrObject* pTmpObj = !maTmpList.empty() ? maTmpList[maTmpList.size() - 1] : nullptr;
+    SdrPathObj* pLastPoly = dynamic_cast<SdrPathObj*>(pTmpObj);
+    if (!pLastPoly)
+        return false;
+
+    if (pLastPoly->GetPathPoly() == rPolyPolygon)
     {
-        SdrObject* pTmpObj = !maTmpList.empty() ? maTmpList[maTmpList.size() - 1] : nullptr;
-        SdrPathObj* pLastPoly = dynamic_cast<SdrPathObj*>(pTmpObj);
+        SetAttributes(nullptr);
 
-        if (pLastPoly)
+        if (!mbNoLine && mbNoFill)
         {
-            if (pLastPoly->GetPathPoly() == rPolyPolygon)
-            {
-                SetAttributes(nullptr);
+            pLastPoly->SetMergedItemSet(*mpLineAttr);
 
-                if (!mbNoLine && mbNoFill)
-                {
-                    pLastPoly->SetMergedItemSet(*mpLineAttr);
-
-                    return true;
-                }
-            }
+            return true;
         }
     }
 

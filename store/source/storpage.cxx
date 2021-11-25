@@ -460,46 +460,47 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
     entry e (xNodePage->m_pData[i]);
 
     // Check for (not a) hardlink.
-    if (!(store::ntohl(e.m_nAttrib) & STORE_ATTRIB_ISLINK))
+    if (store::ntohl(e.m_nAttrib) & STORE_ATTRIB_ISLINK)
+        // Remove entry.
+        return remove_Impl (e);
+
+    // Load directory page.
+    OStoreDirectoryPageObject aPage;
+    eErrCode = base::loadObjectAt (aPage, e.m_aLink.location());
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    inode_holder_type xNode (aPage.get());
+
+    // Acquire page write access.
+    OStorePageDescriptor aDescr (xNode->m_aDescr);
+    eErrCode = base::acquirePage (aDescr, storeAccessMode::ReadWrite);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    // Check for symbolic link.
+    if (!(aPage.attrib() & STORE_ATTRIB_ISLINK))
     {
-        // Load directory page.
-        OStoreDirectoryPageObject aPage;
-        eErrCode = base::loadObjectAt (aPage, e.m_aLink.location());
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        inode_holder_type xNode (aPage.get());
-
-        // Acquire page write access.
-        OStorePageDescriptor aDescr (xNode->m_aDescr);
-        eErrCode = base::acquirePage (aDescr, storeAccessMode::ReadWrite);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        // Check for symbolic link.
-        if (!(aPage.attrib() & STORE_ATTRIB_ISLINK))
+        // Ordinary inode. Determine 'Data' scope.
+        inode::ChunkScope eScope = xNode->scope (aPage.dataLength());
+        if (eScope == inode::SCOPE_EXTERNAL)
         {
-            // Ordinary inode. Determine 'Data' scope.
-            inode::ChunkScope eScope = xNode->scope (aPage.dataLength());
-            if (eScope == inode::SCOPE_EXTERNAL)
-            {
-                // External 'Data' scope. Truncate all external data pages.
-                eErrCode = aPage.truncate (0, *this);
-                if (eErrCode != store_E_None)
-                    return eErrCode;
-            }
-
-            // Truncate internal data page.
-            memset (&(xNode->m_pData[0]), 0, xNode->capacity());
-            aPage.dataLength (0);
+            // External 'Data' scope. Truncate all external data pages.
+            eErrCode = aPage.truncate (0, *this);
+            if (eErrCode != store_E_None)
+                return eErrCode;
         }
 
-        // Release page write access.
-        base::releasePage (aDescr);
-
-        // Release and free directory page.
-        (void)base::free (aPage.location());
+        // Truncate internal data page.
+        memset (&(xNode->m_pData[0]), 0, xNode->capacity());
+        aPage.dataLength (0);
     }
+
+    // Release page write access.
+    base::releasePage (aDescr);
+
+    // Release and free directory page.
+    (void)base::free (aPage.location());
 
     // Remove entry.
     return remove_Impl (e);

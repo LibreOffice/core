@@ -910,23 +910,23 @@ ScDdeLink* lclGetDdeLink(
         std::u16string_view rAppl, std::u16string_view rTopic, std::u16string_view rItem, sal_uInt8 nMode,
         size_t* pnDdePos = nullptr )
 {
-    if( pLinkManager )
+    if( !pLinkManager )
+        return nullptr;
+
+    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    size_t nCount = rLinks.size();
+    if( pnDdePos ) *pnDdePos = 0;
+    for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        size_t nCount = rLinks.size();
-        if( pnDdePos ) *pnDdePos = 0;
-        for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
+        ::sfx2::SvBaseLink* pLink = rLinks[ nIndex ].get();
+        if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
         {
-            ::sfx2::SvBaseLink* pLink = rLinks[ nIndex ].get();
-            if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
-            {
-                if( (pDdeLink->GetAppl() == rAppl) &&
-                    (pDdeLink->GetTopic() == rTopic) &&
-                    (pDdeLink->GetItem() == rItem) &&
-                    ((nMode == SC_DDE_IGNOREMODE) || (nMode == pDdeLink->GetMode())) )
-                    return pDdeLink;
-                if( pnDdePos ) ++*pnDdePos;
-            }
+            if( (pDdeLink->GetAppl() == rAppl) &&
+                (pDdeLink->GetTopic() == rTopic) &&
+                (pDdeLink->GetItem() == rItem) &&
+                ((nMode == SC_DDE_IGNOREMODE) || (nMode == pDdeLink->GetMode())) )
+                return pDdeLink;
+            if( pnDdePos ) ++*pnDdePos;
         }
     }
     return nullptr;

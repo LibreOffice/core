@@ -583,29 +583,28 @@ bool ComCtlObjectBase::dumpComCtlCommon( sal_uInt32 nPartSize )
 
 bool ComCtlObjectBase::dumpComCtlComplex()
 {
-    if( dumpComCtlHeader( 0xBDECDE1F, 5, 1 ) )
+    if( !dumpComCtlHeader( 0xBDECDE1F, 5, 1 ) )
+        return false;
+
+    IndentGuard aIndGuard( mxOut );
+    sal_uInt32 nFlags = dumpHex< sal_uInt32 >( "comctl-complex-flags", "COMCTL-COMPLEX-FLAGS" );
+    if( !mxStrm->isEof() && (nFlags & 0x01) )
     {
-        IndentGuard aIndGuard( mxOut );
-        sal_uInt32 nFlags = dumpHex< sal_uInt32 >( "comctl-complex-flags", "COMCTL-COMPLEX-FLAGS" );
-        if( !mxStrm->isEof() && (nFlags & 0x01) )
-        {
-            writeEmptyItem( "font" );
-            IndentGuard aIndGuard2( mxOut );
-            OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
-            if ( aClassName == "StdFont" )
-                StdFontObject( *this ).dump();
-        }
-        if( !mxStrm->isEof() && (nFlags & 0x02) )
-        {
-            writeEmptyItem( "mouse-icon" );
-            IndentGuard aIndGuard2( mxOut );
-            OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
-            if ( aClassName == "StdPic" )
-                StdPicObject( *this ).dump();
-        }
-        return !mxStrm->isEof();
+        writeEmptyItem( "font" );
+        IndentGuard aIndGuard2( mxOut );
+        OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
+        if ( aClassName == "StdFont" )
+            StdFontObject( *this ).dump();
     }
-    return false;
+    if( !mxStrm->isEof() && (nFlags & 0x02) )
+    {
+        writeEmptyItem( "mouse-icon" );
+        IndentGuard aIndGuard2( mxOut );
+        OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
+        if ( aClassName == "StdPic" )
+            StdPicObject( *this ).dump();
+    }
+    return !mxStrm->isEof();
 }
 
 ComCtlScrollBarObject::ComCtlScrollBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion ) :

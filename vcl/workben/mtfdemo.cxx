@@ -156,17 +156,13 @@ private:
             OUString sWorkingDir, sFileUrl;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
             osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
-            if (rc == osl::FileBase::E_None)
-            {
-                rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
-                if (rc != osl::FileBase::E_None)
-                {
-                    throw css::uno::RuntimeException("Can not make absolute: " + aFilename);
-                }
-            }
-            else
-            {
+            if (rc != osl::FileBase::E_None)
                 throw css::uno::RuntimeException("Can not get file url from system path: " + aFilename);
+
+            rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
+            if (rc != osl::FileBase::E_None)
+            {
+                throw css::uno::RuntimeException("Can not make absolute: " + aFilename);
             }
 
             uno::Reference<uno::XComponentContext> xComponentContext
@@ -182,28 +178,20 @@ private:
                 GDIMetaFile aMtf;
                 SvFileStream aFileStream(maFileName, StreamMode::READ);
 
-                if (aFileStream.IsOpen())
-                {
-                    ReadWindowMetafile(aFileStream, aMtf);
-                }
-                else
-                {
+                if (!aFileStream.IsOpen())
                     throw css::uno::RuntimeException("Can't read metafile " + aFileStream.GetFileName());
-                }
+
+                ReadWindowMetafile(aFileStream, aMtf);
 
                 OUString sAbsoluteDumpUrl, sDumpUrl;
                 rc = osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
-                if (rc == osl::FileBase::E_None)
-                {
-                    rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
-                    if (rc != osl::FileBase::E_None)
-                    {
-                        throw css::uno::RuntimeException("Can not make absolute: metadump.xml");
-                    }
-                }
-                else
-                {
+                if (rc != osl::FileBase::E_None)
                     throw css::uno::RuntimeException("Can not get file url from system path: metadump.xml");
+
+                rc = osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
+                if (rc != osl::FileBase::E_None)
+                {
+                    throw css::uno::RuntimeException("Can not make absolute: metadump.xml");
                 }
 
                 aMtf.dumpAsXml(rtl::OUStringToOString(sAbsoluteDumpUrl, RTL_TEXTENCODING_UTF8).getStr());

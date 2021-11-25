@@ -477,61 +477,60 @@ IMPL_LINK(IndexTabPage_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
     sal_uInt16 nCode = rKCode.GetCode();
 
-    if (nCode == KEY_UP || nCode == KEY_PAGEUP ||
-        nCode == KEY_DOWN || nCode == KEY_PAGEDOWN)
-    {
+    if (nCode != KEY_UP && nCode != KEY_PAGEUP &&
+        nCode != KEY_DOWN && nCode != KEY_PAGEDOWN)
+        return false;
+
 //        disable_notify_events();
-        sal_Int32 nIndex = m_xIndexList->get_selected_index();
-        sal_Int32 nOrigIndex = nIndex;
-        sal_Int32 nCount = m_xIndexList->n_children();
-        if (nIndex == -1)
+    sal_Int32 nIndex = m_xIndexList->get_selected_index();
+    sal_Int32 nOrigIndex = nIndex;
+    sal_Int32 nCount = m_xIndexList->n_children();
+    if (nIndex == -1)
+    {
+        m_xIndexList->set_cursor(0);
+        m_xIndexList->select(0);
+        m_xIndexEntry->set_text(m_xIndexList->get_selected_text());
+    }
+    else
+    {
+        if (nCode == KEY_UP)
+            --nIndex;
+        else if (nCode == KEY_DOWN)
+            ++nIndex;
+        else if (nCode == KEY_PAGEUP)
         {
-            m_xIndexList->set_cursor(0);
-            m_xIndexList->select(0);
+            int nVisRows = nAllHeight / nRowHeight;
+            nIndex -= nVisRows;
+        }
+        else if (nCode == KEY_PAGEDOWN)
+        {
+            int nVisRows = nAllHeight / nRowHeight;
+            nIndex += nVisRows;
+        }
+
+        if (nIndex < 0)
+            nIndex = 0;
+        if (nIndex >= nCount)
+            nIndex = nCount - 1;
+
+        if (nIndex != nOrigIndex)
+        {
+            m_xIndexList->set_cursor(nIndex);
+            m_xIndexList->select(nIndex);
             m_xIndexEntry->set_text(m_xIndexList->get_selected_text());
         }
-        else
-        {
-            if (nCode == KEY_UP)
-                --nIndex;
-            else if (nCode == KEY_DOWN)
-                ++nIndex;
-            else if (nCode == KEY_PAGEUP)
-            {
-                int nVisRows = nAllHeight / nRowHeight;
-                nIndex -= nVisRows;
-            }
-            else if (nCode == KEY_PAGEDOWN)
-            {
-                int nVisRows = nAllHeight / nRowHeight;
-                nIndex += nVisRows;
-            }
-
-            if (nIndex < 0)
-                nIndex = 0;
-            if (nIndex >= nCount)
-                nIndex = nCount - 1;
-
-            if (nIndex != nOrigIndex)
-            {
-                m_xIndexList->set_cursor(nIndex);
-                m_xIndexList->select(nIndex);
-                m_xIndexEntry->set_text(m_xIndexList->get_selected_text());
-            }
 
 //            m_xIndexList->grab_focus();
 //            g_signal_emit_by_name(pWidget, "key-press-event", pEvent, &ret);
 //            m_xIndexEntry->set_text(m_xIndexList->get_selected_text());
 //            m_xIndexEntry->grab_focus();
-        }
-        m_xIndexEntry->select_region(0, -1);
+    }
+    m_xIndexEntry->select_region(0, -1);
 //        enable_notify_events();
 //        m_bTreeChange = true;
 //        m_pEntry->fire_signal_changed();
 //        m_bTreeChange = false;
-        return true;
-    }
-    return false;
+    return true;
 }
 
 IndexTabPage_Impl::~IndexTabPage_Impl()

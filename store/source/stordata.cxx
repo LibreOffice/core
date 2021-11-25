@@ -62,32 +62,32 @@ static storeError store_truncate_Impl (
     sal_uInt16      nSingle,
     OStorePageBIOS &rBIOS)
 {
-    if (nAddr != STORE_PAGE_NULL)
-    {
-        // Load single indirect page.
-        OStoreIndirectionPageObject aSingle;
-        storeError eErrCode = rBIOS.loadObjectAt (aSingle, nAddr);
-        if (eErrCode == store_E_None)
-        {
-            // Truncate to 'nSingle' direct pages.
-            eErrCode = aSingle.truncate (nSingle, rBIOS);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
-        else
-        {
-            if (eErrCode != store_E_InvalidChecksum)
-                return eErrCode;
-        }
+    if (nAddr == STORE_PAGE_NULL)
+        return store_E_None;
 
-        // Check for complete truncation.
-        if (nSingle == 0)
-        {
-            // Free single indirect page.
-            eErrCode = rBIOS.free (nAddr);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
+    // Load single indirect page.
+    OStoreIndirectionPageObject aSingle;
+    storeError eErrCode = rBIOS.loadObjectAt (aSingle, nAddr);
+    if (eErrCode == store_E_None)
+    {
+        // Truncate to 'nSingle' direct pages.
+        eErrCode = aSingle.truncate (nSingle, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+    }
+    else
+    {
+        if (eErrCode != store_E_InvalidChecksum)
+            return eErrCode;
+    }
+
+    // Check for complete truncation.
+    if (nSingle == 0)
+    {
+        // Free single indirect page.
+        eErrCode = rBIOS.free (nAddr);
+        if (eErrCode != store_E_None)
+            return eErrCode;
     }
     return store_E_None;
 }
@@ -101,32 +101,32 @@ static storeError store_truncate_Impl (
     sal_uInt16       nSingle,
     OStorePageBIOS  &rBIOS)
 {
-    if (nAddr != STORE_PAGE_NULL)
-    {
-        // Load double indirect page.
-        OStoreIndirectionPageObject aDouble;
-        storeError eErrCode = rBIOS.loadObjectAt (aDouble, nAddr);
-        if (eErrCode == store_E_None)
-        {
-            // Truncate to 'nDouble', 'nSingle' pages.
-            eErrCode = aDouble.truncate (nDouble, nSingle, rBIOS);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
-        else
-        {
-            if (eErrCode != store_E_InvalidChecksum)
-                return eErrCode;
-        }
+    if (nAddr == STORE_PAGE_NULL)
+        return store_E_None;
 
-        // Check for complete truncation.
-        if ((nDouble + nSingle) == 0)
-        {
-            // Free double indirect page.
-            eErrCode = rBIOS.free (nAddr);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
+    // Load double indirect page.
+    OStoreIndirectionPageObject aDouble;
+    storeError eErrCode = rBIOS.loadObjectAt (aDouble, nAddr);
+    if (eErrCode == store_E_None)
+    {
+        // Truncate to 'nDouble', 'nSingle' pages.
+        eErrCode = aDouble.truncate (nDouble, nSingle, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+    }
+    else
+    {
+        if (eErrCode != store_E_InvalidChecksum)
+            return eErrCode;
+    }
+
+    // Check for complete truncation.
+    if ((nDouble + nSingle) == 0)
+    {
+        // Free double indirect page.
+        eErrCode = rBIOS.free (nAddr);
+        if (eErrCode != store_E_None)
+            return eErrCode;
     }
     return store_E_None;
 }
@@ -141,27 +141,27 @@ static storeError store_truncate_Impl (
     sal_uInt16       nSingle,
     OStorePageBIOS  &rBIOS)
 {
-    if (nAddr != STORE_PAGE_NULL)
+    if (nAddr == STORE_PAGE_NULL)
+        return store_E_None;
+
+    // Load triple indirect page.
+    OStoreIndirectionPageObject aTriple;
+    storeError eErrCode = rBIOS.loadObjectAt (aTriple, nAddr);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    // Truncate to 'nTriple', 'nDouble', 'nSingle' pages.
+    eErrCode = aTriple.truncate (nTriple, nDouble, nSingle, rBIOS);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    // Check for complete truncation.
+    if ((nTriple + nDouble + nSingle) == 0)
     {
-        // Load triple indirect page.
-        OStoreIndirectionPageObject aTriple;
-        storeError eErrCode = rBIOS.loadObjectAt (aTriple, nAddr);
+        // Free triple indirect page.
+        eErrCode = rBIOS.free (nAddr);
         if (eErrCode != store_E_None)
             return eErrCode;
-
-        // Truncate to 'nTriple', 'nDouble', 'nSingle' pages.
-        eErrCode = aTriple.truncate (nTriple, nDouble, nSingle, rBIOS);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        // Check for complete truncation.
-        if ((nTriple + nDouble + nSingle) == 0)
-        {
-            // Free triple indirect page.
-            eErrCode = rBIOS.free (nAddr);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
     }
     return store_E_None;
 }
@@ -676,45 +676,43 @@ OStoreDirectoryPageObject::scope (
     // triple indirect.
     nCount = OStoreDirectoryDataBlock::tripleCount;
     nLimit = nCount * nCapacity * nCapacity * nCapacity;
-    if (nPage < nLimit)
+    if (nPage >= nLimit)
+        // Unreachable (more than triple indirect).
+        return page::SCOPE_UNREACHABLE;
+
+    // Page to index reduction.
+    sal_uInt32 n = nPage;
+
+    // Reduce to triple indirect i(3), double indirect n.
+    sal_uInt32 index3 = n / (nCapacity * nCapacity * nCapacity);
+    n      = n % (nCapacity * nCapacity * nCapacity);
+
+    // Reduce to double indirect i(2), single indirect n.
+    index2 = n / (nCapacity * nCapacity);
+    n      = n % (nCapacity * nCapacity);
+
+    // Reduce to single indirect i(1), direct n = i(0).
+    index1 = n / nCapacity;
+    index0 = n % nCapacity;
+
+    // Verify reduction.
+    n = index3 * nCapacity * nCapacity * nCapacity +
+        index2 * nCapacity * nCapacity +
+        index1 * nCapacity + index0;
+    if (n != nPage)
     {
-        // Page to index reduction.
-        sal_uInt32 n = nPage;
-
-        // Reduce to triple indirect i(3), double indirect n.
-        sal_uInt32 index3 = n / (nCapacity * nCapacity * nCapacity);
-        n      = n % (nCapacity * nCapacity * nCapacity);
-
-        // Reduce to double indirect i(2), single indirect n.
-        index2 = n / (nCapacity * nCapacity);
-        n      = n % (nCapacity * nCapacity);
-
-        // Reduce to single indirect i(1), direct n = i(0).
-        index1 = n / nCapacity;
-        index0 = n % nCapacity;
-
-        // Verify reduction.
-        n = index3 * nCapacity * nCapacity * nCapacity +
-            index2 * nCapacity * nCapacity +
-            index1 * nCapacity + index0;
-        if (n != nPage)
-        {
-            SAL_WARN("store", "wrong math on triple indirect indices");
-            return page::SCOPE_UNKNOWN;
-        }
-
-        // Setup LinkDescriptor indices.
-        rDescr.m_nIndex0 = static_cast<sal_uInt16>(index0 & 0xffff);
-        rDescr.m_nIndex1 = static_cast<sal_uInt16>(index1 & 0xffff);
-        rDescr.m_nIndex2 = static_cast<sal_uInt16>(index2 & 0xffff);
-        rDescr.m_nIndex3 = static_cast<sal_uInt16>(index3 & 0xffff);
-
-        // Done.
-        return page::SCOPE_TRIPLE;
+        SAL_WARN("store", "wrong math on triple indirect indices");
+        return page::SCOPE_UNKNOWN;
     }
 
-    // Unreachable (more than triple indirect).
-    return page::SCOPE_UNREACHABLE;
+    // Setup LinkDescriptor indices.
+    rDescr.m_nIndex0 = static_cast<sal_uInt16>(index0 & 0xffff);
+    rDescr.m_nIndex1 = static_cast<sal_uInt16>(index1 & 0xffff);
+    rDescr.m_nIndex2 = static_cast<sal_uInt16>(index2 & 0xffff);
+    rDescr.m_nIndex3 = static_cast<sal_uInt16>(index3 & 0xffff);
+
+    // Done.
+    return page::SCOPE_TRIPLE;
 }
 
 /*

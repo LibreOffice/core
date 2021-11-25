@@ -61,91 +61,91 @@ printChainFailure(CERTVerifyLog *log)
     unsigned int       depth  = static_cast<unsigned int>(-1);
     CERTVerifyLogNode *node   = nullptr;
 
-    if (log->count > 0)
+    if (log->count <= 0)
+        return;
+
+    SAL_INFO("xmlsecurity.xmlsec", "Bad certification path:");
+    unsigned long errorFlags  = 0;
+    for (node = log->head; node; node = node->next)
     {
-        SAL_INFO("xmlsecurity.xmlsec", "Bad certification path:");
-        unsigned long errorFlags  = 0;
-        for (node = log->head; node; node = node->next)
+        if (depth != node->depth)
         {
-            if (depth != node->depth)
+            depth = node->depth;
+            SAL_INFO("xmlsecurity.xmlsec", "Certificate:  " << depth <<
+                     node->cert->subjectName << ": " <<
+                     (depth ? "[Certificate Authority]": ""));
+        }
+        SAL_INFO("xmlsecurity.xmlsec", "  ERROR " << node->error << ": " <<
+                 getCertError(node->error));
+        const char * specificError = nullptr;
+        const char * issuer = nullptr;
+        switch (node->error)
+        {
+        case SEC_ERROR_INADEQUATE_KEY_USAGE:
+            errorFlags = reinterpret_cast<unsigned long>(node->arg);
+            switch (errorFlags)
             {
-                depth = node->depth;
-                SAL_INFO("xmlsecurity.xmlsec", "Certificate:  " << depth <<
-                         node->cert->subjectName << ": " <<
-                         (depth ? "[Certificate Authority]": ""));
-            }
-            SAL_INFO("xmlsecurity.xmlsec", "  ERROR " << node->error << ": " <<
-                     getCertError(node->error));
-            const char * specificError = nullptr;
-            const char * issuer = nullptr;
-            switch (node->error)
-            {
-            case SEC_ERROR_INADEQUATE_KEY_USAGE:
-                errorFlags = reinterpret_cast<unsigned long>(node->arg);
-                switch (errorFlags)
-                {
-                case KU_DIGITAL_SIGNATURE:
-                    specificError = "Certificate cannot sign.";
-                    break;
-                case KU_KEY_ENCIPHERMENT:
-                    specificError = "Certificate cannot encrypt.";
-                    break;
-                case KU_KEY_CERT_SIGN:
-                    specificError = "Certificate cannot sign other certs.";
-                    break;
-                default:
-                    specificError = "[unknown usage].";
-                    break;
-                }
+            case KU_DIGITAL_SIGNATURE:
+                specificError = "Certificate cannot sign.";
                 break;
-            case SEC_ERROR_INADEQUATE_CERT_TYPE:
-                errorFlags = reinterpret_cast<unsigned long>(node->arg);
-                switch (errorFlags)
-                {
-                case NS_CERT_TYPE_SSL_CLIENT:
-                case NS_CERT_TYPE_SSL_SERVER:
-                    specificError = "Certificate cannot be used for SSL.";
-                    break;
-                case NS_CERT_TYPE_SSL_CA:
-                    specificError = "Certificate cannot be used as an SSL CA.";
-                    break;
-                case NS_CERT_TYPE_EMAIL:
-                    specificError = "Certificate cannot be used for SMIME.";
-                    break;
-                case NS_CERT_TYPE_EMAIL_CA:
-                    specificError = "Certificate cannot be used as an SMIME CA.";
-                    break;
-                case NS_CERT_TYPE_OBJECT_SIGNING:
-                    specificError = "Certificate cannot be used for object signing.";
-                    break;
-                case NS_CERT_TYPE_OBJECT_SIGNING_CA:
-                    specificError = "Certificate cannot be used as an object signing CA.";
-                    break;
-                default:
-                    specificError = "[unknown usage].";
-                    break;
-                }
+            case KU_KEY_ENCIPHERMENT:
+                specificError = "Certificate cannot encrypt.";
                 break;
-            case SEC_ERROR_UNKNOWN_ISSUER:
-                specificError = "Unknown issuer:";
-                issuer = node->cert->issuerName;
-                break;
-            case SEC_ERROR_UNTRUSTED_ISSUER:
-                specificError = "Untrusted issuer:";
-                issuer = node->cert->issuerName;
-                break;
-            case SEC_ERROR_EXPIRED_ISSUER_CERTIFICATE:
-                specificError = "Expired issuer certificate:";
-                issuer = node->cert->issuerName;
+            case KU_KEY_CERT_SIGN:
+                specificError = "Certificate cannot sign other certs.";
                 break;
             default:
+                specificError = "[unknown usage].";
                 break;
             }
-            if (specificError)
-                SAL_INFO("xmlsecurity.xmlsec", specificError);
-            if (issuer)
-                SAL_INFO("xmlsecurity.xmlsec", issuer);
+            break;
+        case SEC_ERROR_INADEQUATE_CERT_TYPE:
+            errorFlags = reinterpret_cast<unsigned long>(node->arg);
+            switch (errorFlags)
+            {
+            case NS_CERT_TYPE_SSL_CLIENT:
+            case NS_CERT_TYPE_SSL_SERVER:
+                specificError = "Certificate cannot be used for SSL.";
+                break;
+            case NS_CERT_TYPE_SSL_CA:
+                specificError = "Certificate cannot be used as an SSL CA.";
+                break;
+            case NS_CERT_TYPE_EMAIL:
+                specificError = "Certificate cannot be used for SMIME.";
+                break;
+            case NS_CERT_TYPE_EMAIL_CA:
+                specificError = "Certificate cannot be used as an SMIME CA.";
+                break;
+            case NS_CERT_TYPE_OBJECT_SIGNING:
+                specificError = "Certificate cannot be used for object signing.";
+                break;
+            case NS_CERT_TYPE_OBJECT_SIGNING_CA:
+                specificError = "Certificate cannot be used as an object signing CA.";
+                break;
+            default:
+                specificError = "[unknown usage].";
+                break;
+            }
+            break;
+        case SEC_ERROR_UNKNOWN_ISSUER:
+            specificError = "Unknown issuer:";
+            issuer = node->cert->issuerName;
+            break;
+        case SEC_ERROR_UNTRUSTED_ISSUER:
+            specificError = "Untrusted issuer:";
+            issuer = node->cert->issuerName;
+            break;
+        case SEC_ERROR_EXPIRED_ISSUER_CERTIFICATE:
+            specificError = "Expired issuer certificate:";
+            issuer = node->cert->issuerName;
+            break;
+        default:
+            break;
         }
+        if (specificError)
+            SAL_INFO("xmlsecurity.xmlsec", specificError);
+        if (issuer)
+            SAL_INFO("xmlsecurity.xmlsec", issuer);
     }
 }
 

@@ -64,369 +64,362 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
         }
     }
 
-    if (pWidget != nullptr)
+    if (!pWidget)
+        return false;
+
+    if (sControlType == "tabcontrol")
     {
-        if (sControlType == "tabcontrol")
+        auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
+        if (pNotebook)
         {
-            auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
-            if (pNotebook)
+            if (sAction == "selecttab")
             {
-                if (sAction == "selecttab")
-                {
-                    OString pageId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int page = std::atoi(pageId.getStr());
+                OString pageId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                int page = std::atoi(pageId.getStr());
 
-                    pNotebook->set_current_page(page);
+                pNotebook->set_current_page(page);
 
-                    return true;
-                }
+                return true;
             }
         }
-        else if (sControlType == "combobox")
+    }
+    else if (sControlType == "combobox")
+    {
+        auto pCombobox = dynamic_cast<weld::ComboBox*>(pWidget);
+        if (pCombobox)
         {
-            auto pCombobox = dynamic_cast<weld::ComboBox*>(pWidget);
-            if (pCombobox)
+            if (sAction == "selected")
             {
-                if (sAction == "selected")
+                int separatorPos = rData["data"].indexOf(';');
+                if (separatorPos > 0)
                 {
-                    int separatorPos = rData["data"].indexOf(';');
-                    if (separatorPos > 0)
-                    {
-                        OUString entryPos = rData["data"].copy(0, separatorPos);
-                        OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
-                        int pos = std::atoi(posString.getStr());
-                        pCombobox->set_active(pos);
-                        LOKTrigger::trigger_changed(*pCombobox);
-                        return true;
-                    }
-                }
-                else if (sAction == "change")
-                {
-                    pCombobox->set_entry_text(rData["data"]);
+                    OUString entryPos = rData["data"].copy(0, separatorPos);
+                    OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
+                    int pos = std::atoi(posString.getStr());
+                    pCombobox->set_active(pos);
                     LOKTrigger::trigger_changed(*pCombobox);
                     return true;
                 }
             }
-        }
-        else if (sControlType == "pushbutton")
-        {
-            auto pButton = dynamic_cast<weld::Button*>(pWidget);
-            if (pButton)
+            else if (sAction == "change")
             {
-                if (sAction == "click")
-                {
-                    pButton->clicked();
-                    return true;
-                }
+                pCombobox->set_entry_text(rData["data"]);
+                LOKTrigger::trigger_changed(*pCombobox);
+                return true;
             }
         }
-        else if (sControlType == "menubutton")
+    }
+    else if (sControlType == "pushbutton")
+    {
+        auto pButton = dynamic_cast<weld::Button*>(pWidget);
+        if (pButton)
         {
-            auto pButton = dynamic_cast<weld::MenuButton*>(pWidget);
-            if (pButton)
+            if (sAction == "click")
             {
-                if (sAction == "toggle")
-                {
-                    if (pButton->get_active())
-                        pButton->set_active(false);
-                    else
-                        pButton->set_active(true);
+                pButton->clicked();
+                return true;
+            }
+        }
+    }
+    else if (sControlType == "menubutton")
+    {
+        auto pButton = dynamic_cast<weld::MenuButton*>(pWidget);
+        if (pButton)
+        {
+            if (sAction == "toggle")
+            {
+                if (pButton->get_active())
+                    pButton->set_active(false);
+                else
+                    pButton->set_active(true);
 
-                    BaseJSWidget* pMenuButton = dynamic_cast<BaseJSWidget*>(pButton);
-                    if (pMenuButton)
-                        pMenuButton->sendUpdate(true);
+                BaseJSWidget* pMenuButton = dynamic_cast<BaseJSWidget*>(pButton);
+                if (pMenuButton)
+                    pMenuButton->sendUpdate(true);
 
-                    return true;
-                }
+                return true;
             }
         }
-        else if (sControlType == "checkbox")
+    }
+    else if (sControlType == "checkbox")
+    {
+        auto pCheckButton = dynamic_cast<weld::CheckButton*>(pWidget);
+        if (pCheckButton)
         {
-            auto pCheckButton = dynamic_cast<weld::CheckButton*>(pWidget);
-            if (pCheckButton)
+            if (sAction == "change")
             {
-                if (sAction == "change")
-                {
-                    bool bChecked = rData["data"] == "true";
-                    pCheckButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-                    LOKTrigger::trigger_toggled(*static_cast<weld::Toggleable*>(pCheckButton));
-                    return true;
-                }
+                bool bChecked = rData["data"] == "true";
+                pCheckButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                LOKTrigger::trigger_toggled(*static_cast<weld::Toggleable*>(pCheckButton));
+                return true;
             }
         }
-        else if (sControlType == "drawingarea")
+    }
+    else if (sControlType == "drawingarea")
+    {
+        auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);
+        if (pArea)
         {
-            auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);
-            if (pArea)
+            if (sAction == "click")
             {
-                if (sAction == "click")
+                int separatorPos = rData["data"].indexOf(';');
+                if (separatorPos > 0)
                 {
-                    int separatorPos = rData["data"].indexOf(';');
-                    if (separatorPos > 0)
+                    // x;y
+                    std::string_view clickPosX = OUStringToOString(
+                        rData["data"].subView(0, separatorPos), RTL_TEXTENCODING_ASCII_US);
+                    std::string_view clickPosY = OUStringToOString(
+                        rData["data"].subView(separatorPos + 1), RTL_TEXTENCODING_ASCII_US);
+                    if (!clickPosX.empty() && !clickPosY.empty())
                     {
-                        // x;y
-                        std::string_view clickPosX = OUStringToOString(
-                            rData["data"].subView(0, separatorPos), RTL_TEXTENCODING_ASCII_US);
-                        std::string_view clickPosY = OUStringToOString(
-                            rData["data"].subView(separatorPos + 1), RTL_TEXTENCODING_ASCII_US);
-                        if (!clickPosX.empty() && !clickPosY.empty())
-                        {
-                            double posX = std::atof(clickPosX.data());
-                            double posY = std::atof(clickPosY.data());
-                            OutputDevice& rRefDevice = pArea->get_ref_device();
-                            // We send OutPutSize for the drawing area bitmap
-                            // get_size_request is not necessarily updated
-                            // therefore it may be incorrect.
-                            Size size = rRefDevice.GetOutputSize();
-                            posX = posX * size.Width();
-                            posY = posY * size.Height();
-                            LOKTrigger::trigger_click(*pArea, Point(posX, posY));
-                            return true;
-                        }
-                    }
-                    LOKTrigger::trigger_click(*pArea, Point(10, 10));
-                    return true;
-                }
-            }
-        }
-        else if (sControlType == "spinfield")
-        {
-            auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
-            if (pSpinField)
-            {
-                if (sAction == "change" || sAction == "value")
-                {
-                    if (rData["data"] == "undefined")
+                        double posX = std::atof(clickPosX.data());
+                        double posY = std::atof(clickPosY.data());
+                        OutputDevice& rRefDevice = pArea->get_ref_device();
+                        // We send OutPutSize for the drawing area bitmap
+                        // get_size_request is not necessarily updated
+                        // therefore it may be incorrect.
+                        Size size = rRefDevice.GetOutputSize();
+                        posX = posX * size.Width();
+                        posY = posY * size.Height();
+                        LOKTrigger::trigger_click(*pArea, Point(posX, posY));
                         return true;
-
-                    OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    double nValue = std::atof(sValue.getStr());
-                    pSpinField->set_value(nValue
-                                          * weld::SpinButton::Power10(pSpinField->get_digits()));
-                    LOKTrigger::trigger_value_changed(*pSpinField);
-                    return true;
+                    }
                 }
-                if (sAction == "plus")
-                {
-                    pSpinField->set_value(pSpinField->get_value() + 1);
-                    LOKTrigger::trigger_value_changed(*pSpinField);
-                    return true;
-                }
-                else if (sAction == "minus")
-                {
-                    pSpinField->set_value(pSpinField->get_value() - 1);
-                    LOKTrigger::trigger_value_changed(*pSpinField);
-                    return true;
-                }
+                LOKTrigger::trigger_click(*pArea, Point(10, 10));
+                return true;
             }
         }
-        else if (sControlType == "toolbox")
+    }
+    else if (sControlType == "spinfield")
+    {
+        auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
+        if (pSpinField)
         {
-            auto pToolbar = dynamic_cast<weld::Toolbar*>(pWidget);
-            if (pToolbar)
+            if (sAction == "change" || sAction == "value")
             {
-                if (sAction == "click")
-                {
-                    LOKTrigger::trigger_clicked(
-                        *pToolbar, OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US));
+                if (rData["data"] == "undefined")
                     return true;
-                }
-                else if (sAction == "togglemenu")
-                {
-                    pToolbar->set_menu_item_active(
-                        OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US), true);
-                    return true;
-                }
+
+                OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                double nValue = std::atof(sValue.getStr());
+                pSpinField->set_value(nValue * weld::SpinButton::Power10(pSpinField->get_digits()));
+                LOKTrigger::trigger_value_changed(*pSpinField);
+                return true;
+            }
+            if (sAction == "plus")
+            {
+                pSpinField->set_value(pSpinField->get_value() + 1);
+                LOKTrigger::trigger_value_changed(*pSpinField);
+                return true;
+            }
+            else if (sAction == "minus")
+            {
+                pSpinField->set_value(pSpinField->get_value() - 1);
+                LOKTrigger::trigger_value_changed(*pSpinField);
+                return true;
             }
         }
-        else if (sControlType == "edit")
+    }
+    else if (sControlType == "toolbox")
+    {
+        auto pToolbar = dynamic_cast<weld::Toolbar*>(pWidget);
+        if (pToolbar)
         {
-            auto pEdit = dynamic_cast<JSEntry*>(pWidget);
-            if (pEdit)
+            if (sAction == "click")
             {
-                if (sAction == "change")
-                {
-                    pEdit->set_text_without_notify(rData["data"]);
-                    LOKTrigger::trigger_changed(*pEdit);
-                    return true;
-                }
+                LOKTrigger::trigger_clicked(
+                    *pToolbar, OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US));
+                return true;
             }
-
-            auto pTextView = dynamic_cast<weld::TextView*>(pWidget);
-            if (pTextView)
+            else if (sAction == "togglemenu")
             {
-                if (sAction == "change")
-                {
-                    pTextView->set_text(rData["data"]);
-                    LOKTrigger::trigger_changed(*pTextView);
-                    return true;
-                }
+                pToolbar->set_menu_item_active(
+                    OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US), true);
+                return true;
             }
         }
-        else if (sControlType == "treeview")
+    }
+    else if (sControlType == "edit")
+    {
+        auto pEdit = dynamic_cast<JSEntry*>(pWidget);
+        if (pEdit)
         {
-            auto pTreeView = dynamic_cast<JSTreeView*>(pWidget);
-            if (pTreeView)
+            if (sAction == "change")
             {
-                if (sAction == "change")
-                {
-                    OUString sDataJSON = rtl::Uri::decode(
-                        rData["data"], rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
-                        RTL_TEXTENCODING_UTF8);
-                    StringMap aMap(jsonToStringMap(
-                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
-
-                    OString nRowString = OUStringToOString(aMap["row"], RTL_TEXTENCODING_ASCII_US);
-                    int nRow = std::atoi(nRowString.getStr());
-                    bool bValue = aMap["value"] == "true";
-
-                    pTreeView->set_toggle(nRow, bValue ? TRISTATE_TRUE : TRISTATE_FALSE);
-
-                    return true;
-                }
-                else if (sAction == "select")
-                {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-
-                    pTreeView->unselect_all();
-
-                    int nAbsPos = std::atoi(nRowString.getStr());
-
-                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
-                    pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
-                    pTreeView->select(*itEntry);
-                    pTreeView->set_cursor(*itEntry);
-                    LOKTrigger::trigger_changed(*pTreeView);
-                    return true;
-                }
-                else if (sAction == "activate")
-                {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nRow = std::atoi(nRowString.getStr());
-
-                    pTreeView->unselect_all();
-                    pTreeView->select(nRow);
-                    pTreeView->set_cursor(nRow);
-                    LOKTrigger::trigger_changed(*pTreeView);
-                    LOKTrigger::trigger_row_activated(*pTreeView);
-                    return true;
-                }
-                else if (sAction == "expand")
-                {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nAbsPos = std::atoi(nRowString.getStr());
-                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
-                    pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
-                    pTreeView->expand_row(*itEntry);
-                    return true;
-                }
-                else if (sAction == "dragstart")
-                {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nRow = std::atoi(nRowString.getStr());
-
-                    pTreeView->select(nRow);
-                    pTreeView->drag_start();
-
-                    return true;
-                }
-                else if (sAction == "dragend")
-                {
-                    pTreeView->drag_end();
-                    return true;
-                }
+                pEdit->set_text_without_notify(rData["data"]);
+                LOKTrigger::trigger_changed(*pEdit);
+                return true;
             }
         }
-        else if (sControlType == "iconview")
+
+        auto pTextView = dynamic_cast<weld::TextView*>(pWidget);
+        if (pTextView)
         {
-            auto pIconView = dynamic_cast<weld::IconView*>(pWidget);
-            if (pIconView)
+            if (sAction == "change")
             {
-                if (sAction == "select")
-                {
-                    OString nPosString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nPos = std::atoi(nPosString.getStr());
-
-                    pIconView->select(nPos);
-                    LOKTrigger::trigger_changed(*pIconView);
-
-                    return true;
-                }
-                else if (sAction == "activate")
-                {
-                    OString nPosString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nPos = std::atoi(nPosString.getStr());
-
-                    pIconView->select(nPos);
-                    LOKTrigger::trigger_changed(*pIconView);
-                    LOKTrigger::trigger_item_activated(*pIconView);
-
-                    return true;
-                }
+                pTextView->set_text(rData["data"]);
+                LOKTrigger::trigger_changed(*pTextView);
+                return true;
             }
         }
-        else if (sControlType == "expander")
+    }
+    else if (sControlType == "treeview")
+    {
+        auto pTreeView = dynamic_cast<JSTreeView*>(pWidget);
+        if (pTreeView)
         {
-            auto pExpander = dynamic_cast<weld::Expander*>(pWidget);
-            if (pExpander)
+            if (sAction == "change")
             {
-                if (sAction == "toggle")
-                {
-                    pExpander->set_expanded(!pExpander->get_expanded());
-                    return true;
-                }
+                OUString sDataJSON = rtl::Uri::decode(
+                    rData["data"], rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                    RTL_TEXTENCODING_UTF8);
+                StringMap aMap(jsonToStringMap(
+                    OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+
+                OString nRowString = OUStringToOString(aMap["row"], RTL_TEXTENCODING_ASCII_US);
+                int nRow = std::atoi(nRowString.getStr());
+                bool bValue = aMap["value"] == "true";
+
+                pTreeView->set_toggle(nRow, bValue ? TRISTATE_TRUE : TRISTATE_FALSE);
+
+                return true;
+            }
+            else if (sAction == "select")
+            {
+                OString nRowString = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+
+                pTreeView->unselect_all();
+
+                int nAbsPos = std::atoi(nRowString.getStr());
+
+                std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
+                pTreeView->select(*itEntry);
+                pTreeView->set_cursor(*itEntry);
+                LOKTrigger::trigger_changed(*pTreeView);
+                return true;
+            }
+            else if (sAction == "activate")
+            {
+                OString nRowString = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                int nRow = std::atoi(nRowString.getStr());
+
+                pTreeView->unselect_all();
+                pTreeView->select(nRow);
+                pTreeView->set_cursor(nRow);
+                LOKTrigger::trigger_changed(*pTreeView);
+                LOKTrigger::trigger_row_activated(*pTreeView);
+                return true;
+            }
+            else if (sAction == "expand")
+            {
+                OString nRowString = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                int nAbsPos = std::atoi(nRowString.getStr());
+                std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
+                pTreeView->expand_row(*itEntry);
+                return true;
+            }
+            else if (sAction == "dragstart")
+            {
+                OString nRowString = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                int nRow = std::atoi(nRowString.getStr());
+
+                pTreeView->select(nRow);
+                pTreeView->drag_start();
+
+                return true;
+            }
+            else if (sAction == "dragend")
+            {
+                pTreeView->drag_end();
+                return true;
             }
         }
-        else if (sControlType == "dialog")
+    }
+    else if (sControlType == "iconview")
+    {
+        auto pIconView = dynamic_cast<weld::IconView*>(pWidget);
+        if (pIconView)
         {
-            auto pDialog = dynamic_cast<weld::Dialog*>(pWidget);
-            if (pDialog)
+            if (sAction == "select")
             {
-                if (sAction == "close")
-                {
-                    pDialog->response(RET_CANCEL);
-                    return true;
-                }
-                else if (sAction == "response")
-                {
-                    OString nResponseString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nResponse = std::atoi(nResponseString.getStr());
-                    pDialog->response(nResponse);
-                    return true;
-                }
+                OString nPosString = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                int nPos = std::atoi(nPosString.getStr());
+
+                pIconView->select(nPos);
+                LOKTrigger::trigger_changed(*pIconView);
+
+                return true;
+            }
+            else if (sAction == "activate")
+            {
+                OString nPosString = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                int nPos = std::atoi(nPosString.getStr());
+
+                pIconView->select(nPos);
+                LOKTrigger::trigger_changed(*pIconView);
+                LOKTrigger::trigger_item_activated(*pIconView);
+
+                return true;
             }
         }
-        else if (sControlType == "popover")
+    }
+    else if (sControlType == "expander")
+    {
+        auto pExpander = dynamic_cast<weld::Expander*>(pWidget);
+        if (pExpander)
         {
-            auto pPopover = dynamic_cast<weld::Popover*>(pWidget);
-            if (pPopover)
+            if (sAction == "toggle")
             {
-                if (sAction == "close")
-                {
-                    LOKTrigger::trigger_closed(*pPopover);
-                    return true;
-                }
+                pExpander->set_expanded(!pExpander->get_expanded());
+                return true;
             }
         }
-        else if (sControlType == "radiobutton")
+    }
+    else if (sControlType == "dialog")
+    {
+        auto pDialog = dynamic_cast<weld::Dialog*>(pWidget);
+        if (pDialog)
         {
-            auto pRadioButton = dynamic_cast<weld::RadioButton*>(pWidget);
-            if (pRadioButton)
+            if (sAction == "close")
             {
-                if (sAction == "change")
-                {
-                    bool bChecked = rData["data"] == "true";
-                    pRadioButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-                    LOKTrigger::trigger_toggled(*static_cast<weld::Toggleable*>(pRadioButton));
-                    return true;
-                }
+                pDialog->response(RET_CANCEL);
+                return true;
+            }
+            else if (sAction == "response")
+            {
+                OString nResponseString
+                    = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                int nResponse = std::atoi(nResponseString.getStr());
+                pDialog->response(nResponse);
+                return true;
+            }
+        }
+    }
+    else if (sControlType == "popover")
+    {
+        auto pPopover = dynamic_cast<weld::Popover*>(pWidget);
+        if (pPopover)
+        {
+            if (sAction == "close")
+            {
+                LOKTrigger::trigger_closed(*pPopover);
+                return true;
+            }
+        }
+    }
+    else if (sControlType == "radiobutton")
+    {
+        auto pRadioButton = dynamic_cast<weld::RadioButton*>(pWidget);
+        if (pRadioButton)
+        {
+            if (sAction == "change")
+            {
+                bool bChecked = rData["data"] == "true";
+                pRadioButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                LOKTrigger::trigger_toggled(*static_cast<weld::Toggleable*>(pRadioButton));
+                return true;
             }
         }
     }

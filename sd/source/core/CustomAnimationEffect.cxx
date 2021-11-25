@@ -2171,30 +2171,28 @@ bool EffectSequenceHelper::getParagraphNumberingLevels( const Reference< XShape 
         return false;
 
     Reference< XText > xText( xShape, UNO_QUERY );
-    if( xText.is() )
+    if( !xText )
+        return true;
+    Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
+    if( !xEA )
+        return true;
+
+    Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
+    if( !xEnumeration )
+        return true;
+
+    for( sal_Int32 index = 0; xEnumeration->hasMoreElements(); index++ )
     {
-        Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
-        if( xEA.is() )
+        Reference< XPropertySet > xParaSet;
+        xEnumeration->nextElement() >>= xParaSet;
+
+        sal_Int32 nParaDepth = 0;
+        if( xParaSet.is() )
         {
-            Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
-
-            if( xEnumeration.is() )
-            {
-                for( sal_Int32 index = 0; xEnumeration->hasMoreElements(); index++ )
-                {
-                    Reference< XPropertySet > xParaSet;
-                    xEnumeration->nextElement() >>= xParaSet;
-
-                    sal_Int32 nParaDepth = 0;
-                    if( xParaSet.is() )
-                    {
-                        xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
-                    }
-
-                    rParagraphNumberingLevel.push_back( nParaDepth );
-                }
-            }
+            xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
         }
+
+        rParagraphNumberingLevel.push_back( nParaDepth );
     }
 
     return true;

@@ -1718,60 +1718,58 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
     //  test for page fields
 
     SCROW nPageStartRow = aStartPos.Row() + ( bDoFilter ? 1 : 0 );
-    if ( nCol >= aStartPos.Col() && nCol <= nTabEndCol &&
-            nRow + 1 >= nPageStartRow && o3tl::make_unsigned(nRow) < nPageStartRow + pPageFields.size() )
+    if ( nCol < aStartPos.Col() || nCol > nTabEndCol ||
+            nRow + 1 < nPageStartRow || o3tl::make_unsigned(nRow) >= nPageStartRow + pPageFields.size() )
+        return false;
+
+    tools::Long nField = nRow - nPageStartRow;
+    if (nField < 0)
     {
-        tools::Long nField = nRow - nPageStartRow;
-        if (nField < 0)
-        {
-            nField = 0;
-            bMouseTop = true;
-        }
-        //TODO: find start of dimension
+        nField = 0;
+        bMouseTop = true;
+    }
+    //TODO: find start of dimension
 
-        rPosRect = tools::Rectangle( aStartPos.Col(), nPageStartRow + nField,
-                              nTabEndCol, nPageStartRow + nField - 1 );
+    rPosRect = tools::Rectangle( aStartPos.Col(), nPageStartRow + nField,
+                          nTabEndCol, nPageStartRow + nField - 1 );
 
-        bool bFound = false;            // is this within the same orientation?
-        bool bBeforeDrag = false;
-        bool bAfterDrag = false;
-        for (tools::Long nPos=0; o3tl::make_unsigned(nPos)<pPageFields.size() && !bFound; nPos++)
+    bool bFound = false;            // is this within the same orientation?
+    bool bBeforeDrag = false;
+    bool bAfterDrag = false;
+    for (tools::Long nPos=0; o3tl::make_unsigned(nPos)<pPageFields.size() && !bFound; nPos++)
+    {
+        if (pPageFields[nPos].mnDim == nDragDim)
         {
-            if (pPageFields[nPos].mnDim == nDragDim)
-            {
-                bFound = true;
-                if ( nField < nPos )
-                    bBeforeDrag = true;
-                else if ( nField > nPos )
-                    bAfterDrag = true;
-            }
+            bFound = true;
+            if ( nField < nPos )
+                bBeforeDrag = true;
+            else if ( nField > nPos )
+                bAfterDrag = true;
         }
-
-        if ( bFound )
-        {
-            if (!bBeforeDrag)
-            {
-                rPosRect.AdjustBottom( 1 );
-                if (bAfterDrag)
-                    rPosRect.AdjustTop( 1 );
-            }
-        }
-        else
-        {
-            if ( !bMouseTop )
-            {
-                rPosRect.AdjustTop( 1 );
-                rPosRect.AdjustBottom( 1 );
-                ++nField;
-            }
-        }
-
-        rOrient = sheet::DataPilotFieldOrientation_PAGE;
-        rDimPos = nField;                       //!...
-        return true;
     }
 
-    return false;
+    if ( bFound )
+    {
+        if (!bBeforeDrag)
+        {
+            rPosRect.AdjustBottom( 1 );
+            if (bAfterDrag)
+                rPosRect.AdjustTop( 1 );
+        }
+    }
+    else
+    {
+        if ( !bMouseTop )
+        {
+            rPosRect.AdjustTop( 1 );
+            rPosRect.AdjustBottom( 1 );
+            ++nField;
+        }
+    }
+
+    rOrient = sheet::DataPilotFieldOrientation_PAGE;
+    rDimPos = nField;                       //!...
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

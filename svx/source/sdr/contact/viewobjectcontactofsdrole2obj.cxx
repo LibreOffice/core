@@ -66,71 +66,70 @@ void ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
         }
     }
 
-    if( !bDone )
+    if( bDone )
+        return;
+
+    //old stuff that should be reworked
     {
-        //old stuff that should be reworked
-        {
-            //if no replacement image is available load the OLE object
+        //if no replacement image is available load the OLE object
 //          if(!rSdrOle2.GetGraphic()) //try to fetch the metafile - this can lead to the actual creation of the metafile what can be extremely expensive (e.g. for big charts)!!! #i101925#
 //          {
 //            // try to create embedded object
 //              rSdrOle2.GetObjRef(); //this loads the OLE object if it is not loaded already
 //          }
-            const svt::EmbeddedObjectRef& xObjRef  = rSdrOle2.getEmbeddedObjectRef();
-            if(xObjRef.is())
-            {
-                const sal_Int64 nMiscStatus(xObjRef->getStatus(rSdrOle2.GetAspect()));
-
-                // this hack (to change model data during PAINT argh(!)) should be reworked
-                if(!rSdrOle2.IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
-                {
-                    const_cast< SdrOle2Obj* >(&rSdrOle2)->SetResizeProtect(true);
-                }
-
-                SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-                if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
-                {
-                    // connect plugin object
-                    pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
-                }
-            }
-        }//end old stuff to rework
-
-        // create OLE primitive stuff directly at VC with HC as parameter
-        const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
-        rVC.createPrimitive2DSequenceWithParameters(rVisitor);
-
-        if(bIsOutplaceActive)
+        const svt::EmbeddedObjectRef& xObjRef  = rSdrOle2.getEmbeddedObjectRef();
+        if(xObjRef.is())
         {
-            // do not shade when printing or PDF exporting
-            if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
+            const sal_Int64 nMiscStatus(xObjRef->getStatus(rSdrOle2.GetAspect()));
+
+            // this hack (to change model data during PAINT argh(!)) should be reworked
+            if(!rSdrOle2.IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
             {
-                // get object transformation
-                const basegfx::B2DHomMatrix aObjectMatrix(static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).createObjectTransform());
+                const_cast< SdrOle2Obj* >(&rSdrOle2)->SetResizeProtect(true);
+            }
 
-                // shade the representation if the object is activated outplace
-                basegfx::B2DPolygon aObjectOutline(basegfx::utils::createUnitPolygon());
-                aObjectOutline.transform(aObjectMatrix);
-
-                // Use a FillHatchPrimitive2D with necessary attributes
-                const drawinglayer::attribute::FillHatchAttribute aFillHatch(
-                    drawinglayer::attribute::HatchStyle::Single, // single hatch
-                    125.0, // 1.25 mm
-                    basegfx::deg2rad(45.0), // 45 degree diagonal
-                    COL_BLACK.getBColor(), // black color
-                    3, // same default as VCL, a minimum of three discrete units (pixels) offset
-                    false); // no filling
-
-                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
-                    basegfx::B2DPolyPolygon(aObjectOutline),
-                    COL_BLACK.getBColor(),
-                    aFillHatch));
-
-                rVisitor.visit(xReference);
+            SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+            if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
+            {
+                // connect plugin object
+                pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
             }
         }
+    }//end old stuff to rework
 
-    }
+    // create OLE primitive stuff directly at VC with HC as parameter
+    const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
+    rVC.createPrimitive2DSequenceWithParameters(rVisitor);
+
+    if(!bIsOutplaceActive)
+        return;
+
+    // do not shade when printing or PDF exporting
+    if(GetObjectContact().isOutputToPrinter() || GetObjectContact().isOutputToRecordingMetaFile())
+        return;
+
+    // get object transformation
+    const basegfx::B2DHomMatrix aObjectMatrix(static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).createObjectTransform());
+
+    // shade the representation if the object is activated outplace
+    basegfx::B2DPolygon aObjectOutline(basegfx::utils::createUnitPolygon());
+    aObjectOutline.transform(aObjectMatrix);
+
+    // Use a FillHatchPrimitive2D with necessary attributes
+    const drawinglayer::attribute::FillHatchAttribute aFillHatch(
+        drawinglayer::attribute::HatchStyle::Single, // single hatch
+        125.0, // 1.25 mm
+        basegfx::deg2rad(45.0), // 45 degree diagonal
+        COL_BLACK.getBColor(), // black color
+        3, // same default as VCL, a minimum of three discrete units (pixels) offset
+        false); // no filling
+
+    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
+        basegfx::B2DPolyPolygon(aObjectOutline),
+        COL_BLACK.getBColor(),
+        aFillHatch));
+
+    rVisitor.visit(xReference);
 }
 
 ViewObjectContactOfSdrOle2Obj::ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact)

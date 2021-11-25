@@ -1453,38 +1453,38 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
 
     const sal_Unicode cQuote = '\'';
 
-    if (rSource[nStartPos] == cQuote)
-    {
-        OUStringBuffer aBuffer;
-        sal_Int32 nPos = nStartPos + 1;
-        const sal_Int32 nLen = rSource.getLength();
+    if (rSource[nStartPos] != cQuote)
+        return false;
 
-        while ( nPos < nLen )
+    OUStringBuffer aBuffer;
+    sal_Int32 nPos = nStartPos + 1;
+    const sal_Int32 nLen = rSource.getLength();
+
+    while ( nPos < nLen )
+    {
+        const sal_Unicode cNext = rSource[nPos];
+        if ( cNext == cQuote )
         {
-            const sal_Unicode cNext = rSource[nPos];
-            if ( cNext == cQuote )
+            if (nPos+1 < nLen && rSource[nPos+1] == cQuote)
             {
-                if (nPos+1 < nLen && rSource[nPos+1] == cQuote)
-                {
-                    // double quote is used for an embedded quote
-                    aBuffer.append( cNext );    // append one quote
-                    ++nPos;                     // skip the next one
-                }
-                else
-                {
-                    // end of quoted string
-                    rResult = aBuffer.makeStringAndClear();
-                    rEndPos = nPos + 1;         // behind closing quote
-                    return true;
-                }
+                // double quote is used for an embedded quote
+                aBuffer.append( cNext );    // append one quote
+                ++nPos;                     // skip the next one
             }
             else
-                aBuffer.append( cNext );
-
-            ++nPos;
+            {
+                // end of quoted string
+                rResult = aBuffer.makeStringAndClear();
+                rEndPos = nPos + 1;         // behind closing quote
+                return true;
+            }
         }
-        // no closing quote before the end of the string -> error (bRet still false)
+        else
+            aBuffer.append( cNext );
+
+        ++nPos;
     }
+    // no closing quote before the end of the string -> error (bRet still false)
 
     return false;
 }
@@ -1638,25 +1638,25 @@ bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBrac
         }
     }
 
-    if (bParsed)
+    if (!bParsed)
+        return false;
+
+    // look for following space or end of string
+
+    bool bValid = false;
+    if ( sal::static_int_cast<sal_Int32>(nMatchList) >= rList.getLength() )
+        bValid = true;
+    else
     {
-        // look for following space or end of string
-
-        bool bValid = false;
-        if ( sal::static_int_cast<sal_Int32>(nMatchList) >= rList.getLength() )
+        sal_Unicode cNext = rList[nMatchList];
+        if ( cNext == ' ' || ( bAllowBracket && cNext == '[' ) )
             bValid = true;
-        else
-        {
-            sal_Unicode cNext = rList[nMatchList];
-            if ( cNext == ' ' || ( bAllowBracket && cNext == '[' ) )
-                bValid = true;
-        }
+    }
 
-        if ( bValid )
-        {
-            rMatched = nMatchList;
-            return true;
-        }
+    if ( bValid )
+    {
+        rMatched = nMatchList;
+        return true;
     }
 
     return false;
@@ -1686,25 +1686,25 @@ bool isAtStart(
             rList, 0, rList.getLength(), nMatchList, rSearch, 0, rSearch.getLength(), nMatchSearch);
     }
 
-    if (nMatchSearch == rSearch.getLength())
+    if (nMatchSearch != rSearch.getLength())
+        return false;
+
+    // search string is at start of rList - look for following space or end of string
+
+    bool bValid = false;
+    if ( sal::static_int_cast<sal_Int32>(nMatchList) >= rList.getLength() )
+        bValid = true;
+    else
     {
-        // search string is at start of rList - look for following space or end of string
-
-        bool bValid = false;
-        if ( sal::static_int_cast<sal_Int32>(nMatchList) >= rList.getLength() )
+        sal_Unicode cNext = rList[nMatchList];
+        if ( cNext == ' ' || ( bAllowBracket && cNext == '[' ) )
             bValid = true;
-        else
-        {
-            sal_Unicode cNext = rList[nMatchList];
-            if ( cNext == ' ' || ( bAllowBracket && cNext == '[' ) )
-                bValid = true;
-        }
+    }
 
-        if ( bValid )
-        {
-            rMatched = nMatchList;
-            return true;
-        }
+    if ( bValid )
+    {
+        rMatched = nMatchList;
+        return true;
     }
 
     return false;

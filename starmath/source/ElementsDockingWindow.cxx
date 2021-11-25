@@ -561,38 +561,36 @@ bool SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
         return false;
     }
 
-    if (tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel()))
+    if (!tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel()))
+        return false;
+
+    const SmElement* pPrevElement = current();
+    if (pPrevElement)
     {
-        const SmElement* pPrevElement = current();
-        if (pPrevElement)
-        {
-            const tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-                return true;
-        }
-
-        const sal_uInt16 nElementCount = maElementList.size();
-        for (sal_uInt16 n = 0; n < nElementCount; n++)
-        {
-            const SmElement* element = maElementList[n].get();
-            if (pPrevElement == element)
-                continue;
-
-            const tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-            {
-                m_nCurrentRolloverElement = n;
-                Invalidate();
-                return true;
-            }
-        }
-        if (pPrevElement && hasRollover())
-            Invalidate();
-        m_nCurrentRolloverElement = SAL_MAX_UINT16;
-        return true;
+        const tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
+        if (rect.Contains(rMouseEvent.GetPosPixel()))
+            return true;
     }
 
-    return false;
+    const sal_uInt16 nElementCount = maElementList.size();
+    for (sal_uInt16 n = 0; n < nElementCount; n++)
+    {
+        const SmElement* element = maElementList[n].get();
+        if (pPrevElement == element)
+            continue;
+
+        const tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
+        if (rect.Contains(rMouseEvent.GetPosPixel()))
+        {
+            m_nCurrentRolloverElement = n;
+            Invalidate();
+            return true;
+        }
+    }
+    if (pPrevElement && hasRollover())
+        Invalidate();
+    m_nCurrentRolloverElement = SAL_MAX_UINT16;
+    return true;
 }
 
 namespace {
@@ -613,38 +611,39 @@ bool SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     GrabFocus();
 
-    if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
+    if (!rMouseEvent.IsLeft()
+        || !tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel())
+        || !maSelectHdlLink.IsSet())
+        return false;
+
+    const SmElement* pPrevElement = hasRollover() ? current() : nullptr;
+    if (pPrevElement)
     {
-        const SmElement* pPrevElement = hasRollover() ? current() : nullptr;
-        if (pPrevElement)
+        tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
+        if (rect.Contains(rMouseEvent.GetPosPixel()))
         {
-            tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-            {
-                setCurrentElement(m_nCurrentRolloverElement);
-                maSelectHdlLink.Call(*const_cast<SmElement*>(pPrevElement));
-                collectUIInformation(OUString::number(m_nCurrentRolloverElement));
-                return true;
-            }
+            setCurrentElement(m_nCurrentRolloverElement);
+            maSelectHdlLink.Call(*const_cast<SmElement*>(pPrevElement));
+            collectUIInformation(OUString::number(m_nCurrentRolloverElement));
+            return true;
         }
-
-        const sal_uInt16 nElementCount = maElementList.size();
-        for (sal_uInt16 n = 0; n < nElementCount; n++)
-        {
-            SmElement* element = maElementList[n].get();
-            tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-            {
-                setCurrentElement(n);
-                maSelectHdlLink.Call(*element);
-                collectUIInformation(OUString::number(n));
-                return true;
-            }
-        }
-
-        return true;
     }
-    return false;
+
+    const sal_uInt16 nElementCount = maElementList.size();
+    for (sal_uInt16 n = 0; n < nElementCount; n++)
+    {
+        SmElement* element = maElementList[n].get();
+        tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
+        if (rect.Contains(rMouseEvent.GetPosPixel()))
+        {
+            setCurrentElement(n);
+            maSelectHdlLink.Call(*element);
+            collectUIInformation(OUString::number(n));
+            return true;
+        }
+    }
+
+    return true;
 }
 
 void SmElementsControl::GetFocus()

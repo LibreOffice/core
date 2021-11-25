@@ -37,30 +37,28 @@ bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, c
 {
     sal_uInt16 nValue = 0;
 
-    if( SvXMLUnitConverter::convertEnum( nValue, rStrImpValue, mpEnumMap ) )
-    {
-        switch( mrType.getTypeClass() )
-        {
-        case TypeClass_ENUM:
-            rValue = ::cppu::int2enum( nValue, mrType );
-            break;
-        case TypeClass_LONG:
-            rValue <<= static_cast<sal_Int32>(nValue);
-            break;
-        case TypeClass_SHORT:
-            rValue <<= static_cast<sal_Int16>(nValue);
-            break;
-        case TypeClass_BYTE:
-            rValue <<= static_cast<sal_Int8>(nValue);
-            break;
-        default:
-            assert(!"Wrong type for enum property handler!");
-            return false;
-        }
-        return true;
-    }
+    if( !SvXMLUnitConverter::convertEnum( nValue, rStrImpValue, mpEnumMap ) )
+        return false;
 
-    return false;
+    switch( mrType.getTypeClass() )
+    {
+    case TypeClass_ENUM:
+        rValue = ::cppu::int2enum( nValue, mrType );
+        break;
+    case TypeClass_LONG:
+        rValue <<= static_cast<sal_Int32>(nValue);
+        break;
+    case TypeClass_SHORT:
+        rValue <<= static_cast<sal_Int16>(nValue);
+        break;
+    case TypeClass_BYTE:
+        rValue <<= static_cast<sal_Int8>(nValue);
+        break;
+    default:
+        assert(!"Wrong type for enum property handler!");
+        return false;
+    }
+    return true;
 }
 
 bool XMLEnumPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const

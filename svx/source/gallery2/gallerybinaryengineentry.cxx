@@ -153,23 +153,23 @@ GalleryBinaryEngineEntry::getCachedTheme(std::unique_ptr<GalleryTheme>& pNewThem
 
     DBG_ASSERT(aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL");
 
-    if (FileExists(aURL))
+    if (!FileExists(aURL))
+        return pNewTheme;
+
+    std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
+        aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
+
+    if (pIStm)
     {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
-            aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
-
-        if (pIStm)
+        try
         {
-            try
-            {
-                ReadGalleryTheme(*pIStm, *pNewTheme);
+            ReadGalleryTheme(*pIStm, *pNewTheme);
 
-                if (pIStm->GetError())
-                    pNewTheme.reset();
-            }
-            catch (const css::ucb::ContentCreationException&)
-            {
-            }
+            if (pIStm->GetError())
+                pNewTheme.reset();
+        }
+        catch (const css::ucb::ContentCreationException&)
+        {
         }
     }
     return pNewTheme;

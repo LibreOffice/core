@@ -140,50 +140,49 @@ void ScUnoAddInFuncData::SetCompNames( ::std::vector< ScUnoAddInFuncData::Locali
 bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const
 {
     const ::std::vector<LocalizedName>& rCompNames = GetCompNames();
-    if ( !rCompNames.empty() )
+    if ( rCompNames.empty() )
+        return false;
+
+    LanguageTag aLanguageTag( eDestLang);
+    const OUString& aSearch( aLanguageTag.getBcp47());
+
+    // First, check exact match without fallback overhead.
+    ::std::vector<LocalizedName>::const_iterator itNames = std::find_if(rCompNames.begin(), rCompNames.end(),
+        [&aSearch](const LocalizedName& rName) { return rName.maLocale == aSearch; });
+    if (itNames != rCompNames.end())
     {
-        LanguageTag aLanguageTag( eDestLang);
-        const OUString& aSearch( aLanguageTag.getBcp47());
-
-        // First, check exact match without fallback overhead.
-        ::std::vector<LocalizedName>::const_iterator itNames = std::find_if(rCompNames.begin(), rCompNames.end(),
-            [&aSearch](const LocalizedName& rName) { return rName.maLocale == aSearch; });
-        if (itNames != rCompNames.end())
-        {
-            rRetExcelName = (*itNames).maName;
-            return true;
-        }
-
-        // Second, try match of fallback search with fallback locales,
-        // appending also 'en-US' and 'en' to search if not queried.
-        ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
-        if (aSearch != "en-US")
-        {
-            aFallbackSearch.emplace_back("en-US");
-            if (aSearch != "en")
-            {
-                aFallbackSearch.emplace_back("en");
-            }
-        }
-        for (const auto& rSearch : aFallbackSearch)
-        {
-            for (const auto& rCompName : rCompNames)
-            {
-                // We checked already the full tag, start with second.
-                ::std::vector< OUString > aFallbackLocales( LanguageTag( rCompName.maLocale).getFallbackStrings( false));
-                if (std::find(aFallbackLocales.begin(), aFallbackLocales.end(), rSearch) != aFallbackLocales.end())
-                {
-                    rRetExcelName = rCompName.maName;
-                    return true;
-                }
-            }
-        }
-
-        // Third, last resort, use first (default) entry.
-        rRetExcelName = rCompNames[0].maName;
+        rRetExcelName = (*itNames).maName;
         return true;
     }
-    return false;
+
+    // Second, try match of fallback search with fallback locales,
+    // appending also 'en-US' and 'en' to search if not queried.
+    ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
+    if (aSearch != "en-US")
+    {
+        aFallbackSearch.emplace_back("en-US");
+        if (aSearch != "en")
+        {
+            aFallbackSearch.emplace_back("en");
+        }
+    }
+    for (const auto& rSearch : aFallbackSearch)
+    {
+        for (const auto& rCompName : rCompNames)
+        {
+            // We checked already the full tag, start with second.
+            ::std::vector< OUString > aFallbackLocales( LanguageTag( rCompName.maLocale).getFallbackStrings( false));
+            if (std::find(aFallbackLocales.begin(), aFallbackLocales.end(), rSearch) != aFallbackLocales.end())
+            {
+                rRetExcelName = rCompName.maName;
+                return true;
+            }
+        }
+    }
+
+    // Third, last resort, use first (default) entry.
+    rRetExcelName = rCompNames[0].maName;
+    return true;
 }
 
 void ScUnoAddInFuncData::SetFunction( const uno::Reference< reflection::XIdlMethod>& rNewFunc, const uno::Any& rNewObj )

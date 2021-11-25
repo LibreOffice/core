@@ -605,43 +605,40 @@ bool SfxDocumentTemplates::CopyOrMove
 
     uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
-    if ( xTemplates->addTemplate( pTargetRgn->GetTitle(),
+    if ( !xTemplates->addTemplate( pTargetRgn->GetTitle(),
                                   aTitle,
                                   pSource->GetTargetURL() ) )
+        // --**-- if the current file is opened,
+        // it must be re-opened afterwards.
+        return false;
+
+    const OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
+    if ( aNewTargetURL.isEmpty() )
+        return false;
+
+    if ( bMove )
     {
-        const OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
-        if ( aNewTargetURL.isEmpty() )
-            return false;
-
-        if ( bMove )
+        // --**-- delete the original file
+        bool bDeleted = xTemplates->removeTemplate( pSourceRgn->GetTitle(),
+                                                        pSource->GetTitle() );
+        if ( bDeleted )
+            pSourceRgn->DeleteEntry( nSourceIdx );
+        else
         {
-            // --**-- delete the original file
-            bool bDeleted = xTemplates->removeTemplate( pSourceRgn->GetTitle(),
-                                                            pSource->GetTitle() );
-            if ( bDeleted )
-                pSourceRgn->DeleteEntry( nSourceIdx );
-            else
-            {
-                if ( xTemplates->removeTemplate( pTargetRgn->GetTitle(), aTitle ) )
-                    return false; // will trigger retry with copy instead of move
+            if ( xTemplates->removeTemplate( pTargetRgn->GetTitle(), aTitle ) )
+                return false; // will trigger retry with copy instead of move
 
-                // if it is not possible to remove just created template ( must be possible! )
-                // it is better to report success here, since at least the copy has succeeded
-                // TODO/LATER: solve it more gracefully in future
-            }
+            // if it is not possible to remove just created template ( must be possible! )
+            // it is better to report success here, since at least the copy has succeeded
+            // TODO/LATER: solve it more gracefully in future
         }
-
-        // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
-        size_t temp_nTargetIdx = nTargetIdx;
-        pTargetRgn->AddEntry( aTitle, aNewTargetURL, &temp_nTargetIdx );
-
-        return true;
     }
 
-    // --**-- if the current file is opened,
-    // it must be re-opened afterwards.
+    // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
+    size_t temp_nTargetIdx = nTargetIdx;
+    pTargetRgn->AddEntry( aTitle, aNewTargetURL, &temp_nTargetIdx );
 
-    return false;
+    return true;
 }
 
 
@@ -870,42 +867,42 @@ bool SfxDocumentTemplates::CopyFrom
     }
 
 
-    if( bTemplateAdded )
+    if( !bTemplateAdded )
+        return false;
+
+    INetURLObject aTemplObj( pTargetRgn->GetHierarchyURL() );
+    aTemplObj.insertName( aTitle, false,
+                          INetURLObject::LAST_SEGMENT,
+                          INetURLObject::EncodeMechanism::All );
+    const OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+
+    uno::Reference< XCommandEnvironment > aCmdEnv;
+    Content aTemplCont;
+
+    if( Content::create( aTemplURL, aCmdEnv, comphelper::getProcessComponentContext(), aTemplCont ) )
     {
-        INetURLObject aTemplObj( pTargetRgn->GetHierarchyURL() );
-        aTemplObj.insertName( aTitle, false,
-                              INetURLObject::LAST_SEGMENT,
-                              INetURLObject::EncodeMechanism::All );
-        const OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-        uno::Reference< XCommandEnvironment > aCmdEnv;
-        Content aTemplCont;
-
-        if( Content::create( aTemplURL, aCmdEnv, comphelper::getProcessComponentContext(), aTemplCont ) )
+        OUString aTemplName;
+        if( getTextProperty_Impl( aTemplCont, TARGET_URL, aTemplName ) )
         {
-            OUString aTemplName;
-            if( getTextProperty_Impl( aTemplCont, TARGET_URL, aTemplName ) )
-            {
-                if ( nIdx == USHRT_MAX )
-                    nIdx = 0;
-                else
-                    ++nIdx;
-
-                // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
-                size_t temp_nIdx = nIdx;
-                pTargetRgn->AddEntry( aTitle, aTemplName, &temp_nIdx );
-                rName = aTitle;
-                return true;
-            }
+            if ( nIdx == USHRT_MAX )
+                nIdx = 0;
             else
-            {
-                SAL_WARN( "sfx.doc", "CopyFrom(): The content should contain target URL!" );
-            }
+                ++nIdx;
+
+            // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
+            size_t temp_nIdx = nIdx;
+            pTargetRgn->AddEntry( aTitle, aTemplName, &temp_nIdx );
+            rName = aTitle;
+            return true;
         }
         else
         {
-            SAL_WARN( "sfx.doc", "CopyFrom(): The content just was created!" );
+            SAL_WARN( "sfx.doc", "CopyFrom(): The content should contain target URL!" );
         }
+    }
+    else
+    {
+        SAL_WARN( "sfx.doc", "CopyFrom(): The content just was created!" );
     }
 
     return false;

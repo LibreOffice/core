@@ -36,26 +36,26 @@ const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
 {
     const sdr::contact::ViewContactOfE3dScene* pSceneParent =
         dynamic_cast< const sdr::contact::ViewContactOfE3dScene* >(rCandidate.GetParentContact());
+    if(!pSceneParent)
+        // object hierarchy structure is incorrect; no result
+        return nullptr;
 
-    if(pSceneParent)
+    // each 3d object (including in-between scenes) should have a scene as parent
+    const sdr::contact::ViewContactOfE3dScene* pSceneParentParent =
+        dynamic_cast< const sdr::contact::ViewContactOfE3dScene* >(pSceneParent->GetParentContact());
+
+    if(pSceneParentParent)
     {
-        // each 3d object (including in-between scenes) should have a scene as parent
-        const sdr::contact::ViewContactOfE3dScene* pSceneParentParent =
-            dynamic_cast< const sdr::contact::ViewContactOfE3dScene* >(pSceneParent->GetParentContact());
-
-        if(pSceneParentParent)
-        {
-            // the parent scene of rCandidate is an in-between scene, call recursively and collect
-            // the in-between scene's object transformation part in o_rInBetweenObjectTransform
-            const basegfx::B3DHomMatrix& rSceneParentTransform = pSceneParent->GetE3dScene().GetTransform();
-            o_rInBetweenObjectTransform = rSceneParentTransform * o_rInBetweenObjectTransform;
-            return tryToFindVCOfE3DScene(*pSceneParent, o_rInBetweenObjectTransform);
-        }
-        else
-        {
-            // the parent scene is the outmost scene
-            return pSceneParent;
-        }
+        // the parent scene of rCandidate is an in-between scene, call recursively and collect
+        // the in-between scene's object transformation part in o_rInBetweenObjectTransform
+        const basegfx::B3DHomMatrix& rSceneParentTransform = pSceneParent->GetE3dScene().GetTransform();
+        o_rInBetweenObjectTransform = rSceneParentTransform * o_rInBetweenObjectTransform;
+        return tryToFindVCOfE3DScene(*pSceneParent, o_rInBetweenObjectTransform);
+    }
+    else
+    {
+        // the parent scene is the outmost scene
+        return pSceneParent;
     }
 
     // object hierarchy structure is incorrect; no result

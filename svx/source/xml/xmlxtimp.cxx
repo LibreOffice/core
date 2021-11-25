@@ -414,45 +414,45 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 SvXMLImportContext *SvxXMLXTableImport::CreateFastContext( sal_Int32 nElement,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    if( IsTokenInNamespace(nElement, XML_NAMESPACE_OOO) ||
-        IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE) ||
-        IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE_OOO) )
-    {
-        bool bOOoFormat = IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE) ||
-                          IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE_OOO);
-        Type aType = mrTable->getElementType();
-        sal_Int32 nToken = nElement & TOKEN_MASK;
+    if( !(IsTokenInNamespace(nElement, XML_NAMESPACE_OOO) ||
+          IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE) ||
+          IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE_OOO)) )
+              return nullptr;
 
-        if ( nToken == XML_COLOR_TABLE )
-        {
-            if( aType == ::cppu::UnoType<sal_Int32>::get() )
-                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Color, mrTable, bOOoFormat );
-        }
-        else if ( nToken == XML_MARKER_TABLE )
-        {
-            if( aType == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
-                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Marker, mrTable, bOOoFormat );
-        }
-        else if ( nToken == XML_DASH_TABLE )
-        {
-            if( aType == cppu::UnoType<drawing::LineDash>::get())
-                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Dash, mrTable, bOOoFormat );
-        }
-        else if ( nToken == XML_HATCH_TABLE )
-        {
-            if( aType == cppu::UnoType<drawing::Hatch>::get())
-                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Hatch, mrTable, bOOoFormat );
-        }
-        else if ( nToken == XML_GRADIENT_TABLE )
-        {
-            if( aType == cppu::UnoType<awt::Gradient>::get())
-                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Gradient, mrTable, bOOoFormat );
-        }
-        else if ( nToken == XML_BITMAP_TABLE )
-        {
-            if( aType == ::cppu::UnoType<awt::XBitmap>::get())
-                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Bitmap, mrTable, bOOoFormat );
-        }
+    bool bOOoFormat = IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE) ||
+                      IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE_OOO);
+    Type aType = mrTable->getElementType();
+    sal_Int32 nToken = nElement & TOKEN_MASK;
+
+    if ( nToken == XML_COLOR_TABLE )
+    {
+        if( aType == ::cppu::UnoType<sal_Int32>::get() )
+            return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Color, mrTable, bOOoFormat );
+    }
+    else if ( nToken == XML_MARKER_TABLE )
+    {
+        if( aType == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
+            return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Marker, mrTable, bOOoFormat );
+    }
+    else if ( nToken == XML_DASH_TABLE )
+    {
+        if( aType == cppu::UnoType<drawing::LineDash>::get())
+            return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Dash, mrTable, bOOoFormat );
+    }
+    else if ( nToken == XML_HATCH_TABLE )
+    {
+        if( aType == cppu::UnoType<drawing::Hatch>::get())
+            return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Hatch, mrTable, bOOoFormat );
+    }
+    else if ( nToken == XML_GRADIENT_TABLE )
+    {
+        if( aType == cppu::UnoType<awt::Gradient>::get())
+            return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Gradient, mrTable, bOOoFormat );
+    }
+    else if ( nToken == XML_BITMAP_TABLE )
+    {
+        if( aType == ::cppu::UnoType<awt::XBitmap>::get())
+            return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Bitmap, mrTable, bOOoFormat );
     }
 
     return nullptr;

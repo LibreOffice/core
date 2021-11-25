@@ -279,24 +279,24 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
 {
     Point aMousePos(nX, nY);
     vcl::Window* pChartWindow = GetWindow();
-    if (pChartWindow)
+    if (!pChartWindow)
+        return false;
+
+    tools::Rectangle rChartBBox = GetChartBoundingBox();
+    if (rChartBBox.Contains(aMousePos))
     {
-        tools::Rectangle rChartBBox = GetChartBoundingBox();
-        if (rChartBBox.Contains(aMousePos))
-        {
-            int nChartWinX = nX - rChartBBox.Left();
-            int nChartWinY = nY - rChartBBox.Top();
+        int nChartWinX = nX - rChartBBox.Left();
+        int nChartWinY = nY - rChartBBox.Top();
 
-            // chart window expects pixels, but the conversion factor
-            // can depend on the client zoom
-            Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
+        // chart window expects pixels, but the conversion factor
+        // can depend on the client zoom
+        Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
 
-            LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
-                                              nButtons, nModifier);
-            SfxLokHelper::postMouseEventAsync(pChartWindow, aMouseEventData);
+        LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
+                                          nButtons, nModifier);
+        SfxLokHelper::postMouseEventAsync(pChartWindow, aMouseEventData);
 
-            return true;
-        }
+        return true;
     }
     return false;
 }
@@ -304,67 +304,65 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
 bool LokChartHelper::setTextSelection(int nType, int nX, int nY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();
-    if (rChartBBox.Contains(Point(nX, nY)))
-    {
-        css::uno::Reference<css::frame::XDispatch> xDispatcher = GetXDispatcher();
-        if (xDispatcher.is())
-        {
-            int nChartWinX = nX - rChartBBox.Left();
-            int nChartWinY = nY - rChartBBox.Top();
+    if (!rChartBBox.Contains(Point(nX, nY)))
+        return false;
 
-            // no scale here the chart controller expects twips
-            // that are converted to hmm
-            util::URL aURL;
-            aURL.Path = "LOKSetTextSelection";
-            uno::Sequence< beans::PropertyValue > aArgs{
-                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nType)), // Why no name?
-                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
-                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))
-            };
-            xDispatcher->dispatch(aURL, aArgs);
-        }
-        return true;
+    css::uno::Reference<css::frame::XDispatch> xDispatcher = GetXDispatcher();
+    if (xDispatcher.is())
+    {
+        int nChartWinX = nX - rChartBBox.Left();
+        int nChartWinY = nY - rChartBBox.Top();
+
+        // no scale here the chart controller expects twips
+        // that are converted to hmm
+        util::URL aURL;
+        aURL.Path = "LOKSetTextSelection";
+        uno::Sequence< beans::PropertyValue > aArgs{
+            comphelper::makePropertyValue({}, static_cast<sal_Int32>(nType)), // Why no name?
+            comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
+            comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))
+        };
+        xDispatcher->dispatch(aURL, aArgs);
     }
-    return false;
+    return true;
 }
 
 bool LokChartHelper::setGraphicSelection(int nType, int nX, int nY,
                                          double fScaleX, double fScaleY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();
-    if (rChartBBox.Contains(Point(nX, nY)))
+    if (!rChartBBox.Contains(Point(nX, nY)))
+        return false;
+
+    int nChartWinX = nX - rChartBBox.Left();
+    int nChartWinY = nY - rChartBBox.Top();
+
+    vcl::Window* pChartWindow = GetWindow();
+
+    Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
+    switch (nType)
     {
-        int nChartWinX = nX - rChartBBox.Left();
-        int nChartWinY = nY - rChartBBox.Top();
-
-        vcl::Window* pChartWindow = GetWindow();
-
-        Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
-        switch (nType)
+    case LOK_SETGRAPHICSELECTION_START:
         {
-        case LOK_SETGRAPHICSELECTION_START:
-            {
-                MouseEvent aClickEvent(aPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
-                pChartWindow->MouseButtonDown(aClickEvent);
-                MouseEvent aMoveEvent(aPos, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
-                pChartWindow->MouseMove(aMoveEvent);
-            }
-            break;
-        case LOK_SETGRAPHICSELECTION_END:
-            {
-                MouseEvent aMoveEvent(aPos, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
-                pChartWindow->MouseMove(aMoveEvent);
-                MouseEvent aClickEvent(aPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
-                pChartWindow->MouseButtonUp(aClickEvent);
-            }
-            break;
-        default:
-            assert(false);
-            break;
+            MouseEvent aClickEvent(aPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+            pChartWindow->MouseButtonDown(aClickEvent);
+            MouseEvent aMoveEvent(aPos, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+            pChartWindow->MouseMove(aMoveEvent);
         }
-        return true;
+        break;
+    case LOK_SETGRAPHICSELECTION_END:
+        {
+            MouseEvent aMoveEvent(aPos, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+            pChartWindow->MouseMove(aMoveEvent);
+            MouseEvent aClickEvent(aPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+            pChartWindow->MouseButtonUp(aClickEvent);
+        }
+        break;
+    default:
+        assert(false);
+        break;
     }
-    return false;
+    return true;
 }
 
 

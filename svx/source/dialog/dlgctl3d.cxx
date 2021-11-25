@@ -590,68 +590,68 @@ bool Svx3DLightControl::MouseMove(const MouseEvent& rMEvt)
         }
     }
 
-    if(mbMouseMoved)
+    if(!mbMouseMoved)
+        return true;
+
+    if(mbGeometrySelected)
     {
-        if(mbGeometrySelected)
+        double fNewRotX = mfSaveActionStartVer - basegfx::deg2rad(aDeltaPos.Y());
+        double fNewRotY = mfSaveActionStartHor + basegfx::deg2rad(aDeltaPos.X());
+
+        // cut horizontal
+        while(fNewRotY < 0.0)
         {
-            double fNewRotX = mfSaveActionStartVer - basegfx::deg2rad(aDeltaPos.Y());
-            double fNewRotY = mfSaveActionStartHor + basegfx::deg2rad(aDeltaPos.X());
-
-            // cut horizontal
-            while(fNewRotY < 0.0)
-            {
-                fNewRotY += 2 * M_PI;
-            }
-
-            while(fNewRotY >= 2 * M_PI)
-            {
-                fNewRotY -= 2 * M_PI;
-            }
-
-            // cut vertical
-            if(fNewRotX < -M_PI_2)
-            {
-                fNewRotX = -M_PI_2;
-            }
-
-            if(fNewRotX > M_PI_2)
-            {
-                fNewRotX = M_PI_2;
-            }
-
-            SetRotation(fNewRotX, fNewRotY, mfSaveActionStartRotZ);
-
-            if(maChangeCallback.IsSet())
-            {
-                maChangeCallback.Call(this);
-            }
+            fNewRotY += 2 * M_PI;
         }
-        else
+
+        while(fNewRotY >= 2 * M_PI)
         {
-            // interaction in progress
-            double fNewPosHor = mfSaveActionStartHor + static_cast<double>(aDeltaPos.X());
-            double fNewPosVer = mfSaveActionStartVer - static_cast<double>(aDeltaPos.Y());
+            fNewRotY -= 2 * M_PI;
+        }
 
-            // cut horizontal
-            fNewPosHor = NormAngle360(fNewPosHor);
+        // cut vertical
+        if(fNewRotX < -M_PI_2)
+        {
+            fNewRotX = -M_PI_2;
+        }
 
-            // cut vertical
-            if(fNewPosVer < -90.0)
-            {
-                fNewPosVer = -90.0;
-            }
+        if(fNewRotX > M_PI_2)
+        {
+            fNewRotX = M_PI_2;
+        }
 
-            if(fNewPosVer > 90.0)
-            {
-                fNewPosVer = 90.0;
-            }
+        SetRotation(fNewRotX, fNewRotY, mfSaveActionStartRotZ);
 
-            SetPosition(fNewPosHor, fNewPosVer);
+        if(maChangeCallback.IsSet())
+        {
+            maChangeCallback.Call(this);
+        }
+    }
+    else
+    {
+        // interaction in progress
+        double fNewPosHor = mfSaveActionStartHor + static_cast<double>(aDeltaPos.X());
+        double fNewPosVer = mfSaveActionStartVer - static_cast<double>(aDeltaPos.Y());
 
-            if(maChangeCallback.IsSet())
-            {
-                maChangeCallback.Call(this);
-            }
+        // cut horizontal
+        fNewPosHor = NormAngle360(fNewPosHor);
+
+        // cut vertical
+        if(fNewPosVer < -90.0)
+        {
+            fNewPosVer = -90.0;
+        }
+
+        if(fNewPosVer > 90.0)
+        {
+            fNewPosVer = 90.0;
+        }
+
+        SetPosition(fNewPosHor, fNewPosVer);
+
+        if(maChangeCallback.IsSet())
+        {
+            maChangeCallback.Call(this);
         }
     }
     return true;

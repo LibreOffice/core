@@ -640,53 +640,52 @@ bool XMLTextImportHelper::HasFrameByName( const OUString& rName ) const
 
 bool XMLTextImportHelper::IsDuplicateFrame(const OUString& sName, sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight) const
 {
-    if (HasFrameByName(sName))
+    if (!HasFrameByName(sName))
+        return false;
+
+    uno::Reference<beans::XPropertySet> xOtherFrame;
+    if(m_xImpl->m_xTextFrames.is() && m_xImpl->m_xTextFrames->hasByName(sName))
+        xOtherFrame.set(m_xImpl->m_xTextFrames->getByName(sName), uno::UNO_QUERY);
+    else if(m_xImpl->m_xGraphics.is() && m_xImpl->m_xGraphics->hasByName(sName))
+        xOtherFrame.set(m_xImpl->m_xGraphics->getByName(sName), uno::UNO_QUERY);
+    else if (m_xImpl->m_xObjects.is() && m_xImpl->m_xObjects->hasByName(sName))
+        xOtherFrame.set(m_xImpl->m_xObjects->getByName(sName), uno::UNO_QUERY);
+
+    Reference< XPropertySetInfo > xPropSetInfo = xOtherFrame->getPropertySetInfo();
+    if(xPropSetInfo->hasPropertyByName("Width"))
     {
-        uno::Reference<beans::XPropertySet> xOtherFrame;
-        if(m_xImpl->m_xTextFrames.is() && m_xImpl->m_xTextFrames->hasByName(sName))
-            xOtherFrame.set(m_xImpl->m_xTextFrames->getByName(sName), uno::UNO_QUERY);
-        else if(m_xImpl->m_xGraphics.is() && m_xImpl->m_xGraphics->hasByName(sName))
-            xOtherFrame.set(m_xImpl->m_xGraphics->getByName(sName), uno::UNO_QUERY);
-        else if (m_xImpl->m_xObjects.is() && m_xImpl->m_xObjects->hasByName(sName))
-            xOtherFrame.set(m_xImpl->m_xObjects->getByName(sName), uno::UNO_QUERY);
-
-        Reference< XPropertySetInfo > xPropSetInfo = xOtherFrame->getPropertySetInfo();
-        if(xPropSetInfo->hasPropertyByName("Width"))
-        {
-            sal_Int32 nOtherWidth = 0;
-            xOtherFrame->getPropertyValue("Width") >>= nOtherWidth;
-            if(nWidth != nOtherWidth)
-                return false;
-        }
-
-        if (xPropSetInfo->hasPropertyByName("Height"))
-        {
-            sal_Int32 nOtherHeight = 0;
-            xOtherFrame->getPropertyValue("Height") >>= nOtherHeight;
-            if (nHeight != nOtherHeight)
-                return false;
-        }
-
-        if (xPropSetInfo->hasPropertyByName("HoriOrientPosition"))
-        {
-            sal_Int32 nOtherX = 0;
-            xOtherFrame->getPropertyValue("HoriOrientPosition") >>= nOtherX;
-            if (nX != nOtherX)
-                return false;
-        }
-
-        if (xPropSetInfo->hasPropertyByName("VertOrientPosition"))
-        {
-            sal_Int32 nOtherY = 0;
-            xOtherFrame->getPropertyValue("VertOrientPosition") >>= nOtherY;
-            if (nY != nOtherY)
-                return false;
-        }
-
-        // In some case, position is not defined for frames, so check whether the two frames follow each other (are anchored to the same position)
-        return m_xImpl->msLastImportedFrameName == sName;
+        sal_Int32 nOtherWidth = 0;
+        xOtherFrame->getPropertyValue("Width") >>= nOtherWidth;
+        if(nWidth != nOtherWidth)
+            return false;
     }
-    return false;
+
+    if (xPropSetInfo->hasPropertyByName("Height"))
+    {
+        sal_Int32 nOtherHeight = 0;
+        xOtherFrame->getPropertyValue("Height") >>= nOtherHeight;
+        if (nHeight != nOtherHeight)
+            return false;
+    }
+
+    if (xPropSetInfo->hasPropertyByName("HoriOrientPosition"))
+    {
+        sal_Int32 nOtherX = 0;
+        xOtherFrame->getPropertyValue("HoriOrientPosition") >>= nOtherX;
+        if (nX != nOtherX)
+            return false;
+    }
+
+    if (xPropSetInfo->hasPropertyByName("VertOrientPosition"))
+    {
+        sal_Int32 nOtherY = 0;
+        xOtherFrame->getPropertyValue("VertOrientPosition") >>= nOtherY;
+        if (nY != nOtherY)
+            return false;
+    }
+
+    // In some case, position is not defined for frames, so check whether the two frames follow each other (are anchored to the same position)
+    return m_xImpl->msLastImportedFrameName == sName;
 }
 
 void XMLTextImportHelper::StoreLastImportedFrameName(const OUString& rName)
@@ -1463,43 +1462,43 @@ void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
         return;
 
     // Empty? Then we need o do stuff. Let's do error checking first.
-    if (m_xImpl->m_xChapterNumbering.is() &&
-        ( nOutlineLevel > 0 ) &&
-        (nOutlineLevel <= m_xImpl->m_xChapterNumbering->getCount()))
+    if (!m_xImpl->m_xChapterNumbering ||
+        ( nOutlineLevel <= 0 ) ||
+        (nOutlineLevel > m_xImpl->m_xChapterNumbering->getCount()))
+        // else: nothing we can do, so we'll leave it empty
+        // else: we already had a style name, so we let it pass.
+        return;
+
+    nOutlineLevel--;   // for the remainder, the level's are 0-based
+
+    // empty style name: look-up previously used name
+
+    // if we don't have a previously used name, we'll use the default
+    m_xImpl->InitOutlineStylesCandidates();
+    if (m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].empty())
     {
-        nOutlineLevel--;   // for the remainder, the level's are 0-based
+        // no other name used previously? Then use default
 
-        // empty style name: look-up previously used name
-
-        // if we don't have a previously used name, we'll use the default
-        m_xImpl->InitOutlineStylesCandidates();
-        if (m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].empty())
+        // iterate over property value sequence to find the style name
+        Sequence<PropertyValue> aProperties;
+        m_xImpl->m_xChapterNumbering->getByIndex( nOutlineLevel )
+            >>= aProperties;
+        auto pProp = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
+            [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
+        if (pProp != std::cend(aProperties))
         {
-            // no other name used previously? Then use default
-
-            // iterate over property value sequence to find the style name
-            Sequence<PropertyValue> aProperties;
-            m_xImpl->m_xChapterNumbering->getByIndex( nOutlineLevel )
-                >>= aProperties;
-            auto pProp = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
-                [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
-            if (pProp != std::cend(aProperties))
-            {
-                OUString aOutlineStyle;
-                pProp->Value >>= aOutlineStyle;
-                m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel]
-                    .push_back( aOutlineStyle );
-            }
+            OUString aOutlineStyle;
+            pProp->Value >>= aOutlineStyle;
+            m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel]
+                .push_back( aOutlineStyle );
         }
-
-        // finally, we'll use the previously used style name for this
-        // format (or the default we've just put into that style)
-        // take last added one (#i71249#)
-        rStyleName =
-            m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].back();
     }
-    // else: nothing we can do, so we'll leave it empty
-    // else: we already had a style name, so we let it pass.
+
+    // finally, we'll use the previously used style name for this
+    // format (or the default we've just put into that style)
+    // take last added one (#i71249#)
+    rStyleName =
+        m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].back();
 }
 
 void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,

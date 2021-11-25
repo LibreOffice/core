@@ -421,7 +421,9 @@ bool AnimationExporter::hasAfterEffectNode( const Reference< XAnimationNode >& x
 // after effect nodes are not exported at their original position
 bool AnimationExporter::isEmptyNode( const Reference< XAnimationNode >& xNode ) const
 {
-    if( xNode.is() ) switch( xNode->getType() )
+    if( !xNode )
+        return true;
+    switch( xNode->getType() )
     {
     case AnimationNodeType::PAR :
     case AnimationNodeType::SEQ :

@@ -405,25 +405,26 @@ void ScAppCfg::ReadSortListCfg()
     if (aValues.getLength() != aNames.getLength())
         return;
 
-    if (Sequence<OUString> aSeq; aValues[SCSORTLISTOPT_LIST] >>= aSeq)
+    Sequence<OUString> aSeq;
+    if (!(aValues[SCSORTLISTOPT_LIST] >>= aSeq))
+        return;
+
+    ScUserList aList;
+
+    //  if setting is "default", keep default values from ScUserList ctor
+    //TODO: mark "default" in a safe way
+    const bool bDefault = (aSeq.getLength() == 1 && aSeq[0] == "NULL");
+
+    if (!bDefault)
     {
-        ScUserList aList;
-
-        //  if setting is "default", keep default values from ScUserList ctor
-        //TODO: mark "default" in a safe way
-        const bool bDefault = (aSeq.getLength() == 1 && aSeq[0] == "NULL");
-
-        if (!bDefault)
+        for (const OUString& rStr : std::as_const(aSeq))
         {
-            for (const OUString& rStr : std::as_const(aSeq))
-            {
-                ScUserListData* pNew = new ScUserListData(rStr);
-                aList.push_back(pNew);
-            }
+            ScUserListData* pNew = new ScUserListData(rStr);
+            aList.push_back(pNew);
         }
-
-        ScGlobal::SetUserList(&aList);
     }
+
+    ScGlobal::SetUserList(&aList);
 }
 
 void ScAppCfg::ReadMiscCfg()

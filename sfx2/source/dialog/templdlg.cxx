@@ -453,24 +453,24 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     if ( !pItem || aDeleted )
         return false;
 
-    if ((nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId)
-        && rStyleList.EnableExecute())
+    if ((nId != SID_STYLE_NEW && SID_STYLE_EDIT != nId)
+        || !rStyleList.EnableExecute())
+        return true;
+
+    const SfxUInt16Item *pFilterItem = dynamic_cast< const SfxUInt16Item* >(pItem);
+    assert(pFilterItem);
+    SfxStyleSearchBits nFilterFlags = static_cast<SfxStyleSearchBits>(pFilterItem->GetValue()) & ~SfxStyleSearchBits::UserDefined;
+    if(nFilterFlags == SfxStyleSearchBits::Auto)       // User Template?
+        nFilterFlags = static_cast<SfxStyleSearchBits>(pFilterItem->GetValue());
+    const SfxStyleFamilyItem *pFamilyItem = rStyleList.GetFamilyItem();
+    const size_t nFilterCount = pFamilyItem->GetFilterList().size();
+
+    for ( size_t i = 0; i < nFilterCount; ++i )
     {
-        const SfxUInt16Item *pFilterItem = dynamic_cast< const SfxUInt16Item* >(pItem);
-        assert(pFilterItem);
-        SfxStyleSearchBits nFilterFlags = static_cast<SfxStyleSearchBits>(pFilterItem->GetValue()) & ~SfxStyleSearchBits::UserDefined;
-        if(nFilterFlags == SfxStyleSearchBits::Auto)       // User Template?
-            nFilterFlags = static_cast<SfxStyleSearchBits>(pFilterItem->GetValue());
-        const SfxStyleFamilyItem *pFamilyItem = rStyleList.GetFamilyItem();
-        const size_t nFilterCount = pFamilyItem->GetFilterList().size();
+        const SfxFilterTuple &rTupel = pFamilyItem->GetFilterList()[ i ];
 
-        for ( size_t i = 0; i < nFilterCount; ++i )
-        {
-            const SfxFilterTuple &rTupel = pFamilyItem->GetFilterList()[ i ];
-
-            if ( ( rTupel.nFlags & nFilterFlags ) == nFilterFlags && pIdx )
-                *pIdx = i;
-        }
+        if ( ( rTupel.nFlags & nFilterFlags ) == nFilterFlags && pIdx )
+            *pIdx = i;
     }
 
     return true;

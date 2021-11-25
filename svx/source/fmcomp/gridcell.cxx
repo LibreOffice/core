@@ -2936,53 +2936,53 @@ bool DbFilterField::commitControl()
         }
     }
 
-    if (m_aText != aText)
+    if (m_aText == aText)
+        return true;
+
+    // check the text with the SQL-Parser
+    OUString aNewText(comphelper::string::stripEnd(aText, ' '));
+    if (!aNewText.isEmpty())
     {
-        // check the text with the SQL-Parser
-        OUString aNewText(comphelper::string::stripEnd(aText, ' '));
-        if (!aNewText.isEmpty())
+        OUString aErrorMsg;
+        Reference< XNumberFormatter >  xNumberFormatter(m_rColumn.GetParent().getNumberFormatter());
+
+        std::unique_ptr< OSQLParseNode > pParseNode = predicateTree(aErrorMsg, aNewText,xNumberFormatter, m_rColumn.GetField());
+        if (pParseNode != nullptr)
         {
-            OUString aErrorMsg;
-            Reference< XNumberFormatter >  xNumberFormatter(m_rColumn.GetParent().getNumberFormatter());
+            OUString aPreparedText;
 
-            std::unique_ptr< OSQLParseNode > pParseNode = predicateTree(aErrorMsg, aNewText,xNumberFormatter, m_rColumn.GetField());
-            if (pParseNode != nullptr)
-            {
-                OUString aPreparedText;
+            css::lang::Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
-                css::lang::Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+            Reference< XRowSet > xDataSourceRowSet(
+                Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY);
+            Reference< XConnection >  xConnection(getConnection(xDataSourceRowSet));
 
-                Reference< XRowSet > xDataSourceRowSet(
-                    Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY);
-                Reference< XConnection >  xConnection(getConnection(xDataSourceRowSet));
-
-                pParseNode->parseNodeToPredicateStr(aPreparedText,
-                                                    xConnection,
-                                                    xNumberFormatter,
-                                                    m_rColumn.GetField(),
-                                                    OUString(),
-                                                    aAppLocale,
-                                                    OUString("."),
-                                                    getParseContext());
-                m_aText = aPreparedText;
-            }
-            else
-            {
-
-                SQLException aError;
-                aError.Message = aErrorMsg;
-                displayException(aError, VCLUnoHelper::GetInterface(m_pWindow->GetParent()));
-                    // TODO: transport the title
-
-                return false;
-            }
+            pParseNode->parseNodeToPredicateStr(aPreparedText,
+                                                xConnection,
+                                                xNumberFormatter,
+                                                m_rColumn.GetField(),
+                                                OUString(),
+                                                aAppLocale,
+                                                OUString("."),
+                                                getParseContext());
+            m_aText = aPreparedText;
         }
         else
-            m_aText = aText;
+        {
 
-        m_pWindow->SetText(m_aText);
-        m_aCommitLink.Call(*this);
+            SQLException aError;
+            aError.Message = aErrorMsg;
+            displayException(aError, VCLUnoHelper::GetInterface(m_pWindow->GetParent()));
+                // TODO: transport the title
+
+            return false;
+        }
     }
+    else
+        m_aText = aText;
+
+    m_pWindow->SetText(m_aText);
+    m_aCommitLink.Call(*this);
     return true;
 }
 

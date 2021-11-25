@@ -144,34 +144,33 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
     tools::Rectangle aR;
     TakeActionRect(aR);
     rPos = bTR ? aR.TopRight() : aR.TopLeft();
-    if (GetMarkedObjectCount()==1 && IsDragObj() && // only on single selection
-        !IsDraggingPoints() && !IsDraggingGluePoints() && // not when moving points
-        dynamic_cast<const SdrDragMovHdl*>( mpCurrentSdrDragMethod.get() ) ==  nullptr) // not when moving handles
-    {
-        SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (auto pCaptionObj = dynamic_cast<SdrCaptionObj*>(pObj))
-        {
-            Point aPt(pCaptionObj->GetTailPos());
-            bool bTail=meDragHdl==SdrHdlKind::Poly; // drag tail
-            bool bOwn=dynamic_cast<const SdrDragObjOwn*>( mpCurrentSdrDragMethod.get() ) !=  nullptr; // specific to object
-            if (!bTail)
-            { // for bTail, TakeActionRect already does the right thing
-                if (bOwn)
-                { // bOwn may be MoveTextFrame, ResizeTextFrame, but may not (any more) be DragTail
-                    rPos=aPt;
-                }
-                else
-                {
-                    // drag the whole Object (Move, Resize, ...)
-                    const basegfx::B2DPoint aTransformed(mpCurrentSdrDragMethod->getCurrentTransformation() * basegfx::B2DPoint(aPt.X(), aPt.Y()));
-                    rPos.setX( basegfx::fround(aTransformed.getX()) );
-                    rPos.setY( basegfx::fround(aTransformed.getY()) );
-                }
-            }
-        }
+    if (GetMarkedObjectCount() != 1 || !IsDragObj() || // only on single selection
+        IsDraggingPoints() || IsDraggingGluePoints() || // not when moving points
+        dynamic_cast<const SdrDragMovHdl*>( mpCurrentSdrDragMethod.get() ) != nullptr) // not when moving handles
+        return false;
+
+    SdrObject* pObj=GetMarkedObjectByIndex(0);
+    auto pCaptionObj = dynamic_cast<SdrCaptionObj*>(pObj);
+    if (!pCaptionObj)
         return true;
+    Point aPt(pCaptionObj->GetTailPos());
+    bool bTail=meDragHdl==SdrHdlKind::Poly; // drag tail
+    bool bOwn=dynamic_cast<const SdrDragObjOwn*>( mpCurrentSdrDragMethod.get() ) !=  nullptr; // specific to object
+    if (!bTail)
+    { // for bTail, TakeActionRect already does the right thing
+        if (bOwn)
+        { // bOwn may be MoveTextFrame, ResizeTextFrame, but may not (any more) be DragTail
+            rPos=aPt;
+        }
+        else
+        {
+            // drag the whole Object (Move, Resize, ...)
+            const basegfx::B2DPoint aTransformed(mpCurrentSdrDragMethod->getCurrentTransformation() * basegfx::B2DPoint(aPt.X(), aPt.Y()));
+            rPos.setX( basegfx::fround(aTransformed.getX()) );
+            rPos.setY( basegfx::fround(aTransformed.getY()) );
+        }
     }
-    return false;
+    return true;
 }
 
 

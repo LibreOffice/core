@@ -849,72 +849,72 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         return true;
     }
 
-    if ( m_pData->m_pObjectShell.is() )
+    if ( !m_pData->m_pObjectShell )
+        return true;
+
+    m_pData->m_sURL = rURL;
+
+    SfxObjectShell* pObjectShell = m_pData->m_pObjectShell.get();
+
+    ::comphelper::NamedValueCollection aArgs( rArgs );
+
+    Sequence< sal_Int32 > aWinExtent;
+    if ( ( aArgs.get( "WinExtent" ) >>= aWinExtent )&& ( aWinExtent.getLength() == 4 ) )
     {
-        m_pData->m_sURL = rURL;
+        tools::Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
+        aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(MapUnit::Map100thMM), MapMode(pObjectShell->GetMapUnit()));
+        pObjectShell->SetVisArea( aVisArea );
+    }
 
-        SfxObjectShell* pObjectShell = m_pData->m_pObjectShell.get();
+    bool bBreakMacroSign = false;
+    if ( aArgs.get( "BreakMacroSignature" ) >>= bBreakMacroSign )
+    {
+        pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
+    }
 
-        ::comphelper::NamedValueCollection aArgs( rArgs );
+    bool bMacroEventRead = false;
+    if ((aArgs.get("MacroEventRead") >>= bMacroEventRead) && bMacroEventRead)
+    {
+        pObjectShell->SetMacroCallsSeenWhileLoading();
+    }
 
-        Sequence< sal_Int32 > aWinExtent;
-        if ( ( aArgs.get( "WinExtent" ) >>= aWinExtent )&& ( aWinExtent.getLength() == 4 ) )
-        {
-            tools::Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
-            aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(MapUnit::Map100thMM), MapMode(pObjectShell->GetMapUnit()));
-            pObjectShell->SetVisArea( aVisArea );
-        }
+    aArgs.remove( "WinExtent" );
+    aArgs.remove( "BreakMacroSignature" );
+    aArgs.remove( "MacroEventRead" );
+    aArgs.remove( "Stream" );
+    aArgs.remove( "InputStream" );
+    aArgs.remove( "URL" );
+    aArgs.remove( "Frame" );
+    aArgs.remove( "Password" );
+    aArgs.remove( "EncryptionData" );
 
-        bool bBreakMacroSign = false;
-        if ( aArgs.get( "BreakMacroSignature" ) >>= bBreakMacroSign )
-        {
-            pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
-        }
+    // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
-        bool bMacroEventRead = false;
-        if ((aArgs.get("MacroEventRead") >>= bMacroEventRead) && bMacroEventRead)
-        {
-            pObjectShell->SetMacroCallsSeenWhileLoading();
-        }
+    m_pData->m_seqArguments = aArgs.getPropertyValues();
 
-        aArgs.remove( "WinExtent" );
-        aArgs.remove( "BreakMacroSignature" );
-        aArgs.remove( "MacroEventRead" );
-        aArgs.remove( "Stream" );
-        aArgs.remove( "InputStream" );
-        aArgs.remove( "URL" );
-        aArgs.remove( "Frame" );
-        aArgs.remove( "Password" );
-        aArgs.remove( "EncryptionData" );
+    SfxMedium* pMedium = pObjectShell->GetMedium();
+    if ( !pMedium )
+        return true;
 
-        // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
+    SfxAllItemSet aSet( pObjectShell->GetPool() );
+    TransformParameters( SID_OPENDOC, rArgs, aSet );
 
-        m_pData->m_seqArguments = aArgs.getPropertyValues();
+    // the arguments are not allowed to reach the medium
+    aSet.ClearItem( SID_FILE_NAME );
+    aSet.ClearItem( SID_FILLFRAME );
 
-        SfxMedium* pMedium = pObjectShell->GetMedium();
-        if ( pMedium )
-        {
-            SfxAllItemSet aSet( pObjectShell->GetPool() );
-            TransformParameters( SID_OPENDOC, rArgs, aSet );
+    pMedium->GetItemSet()->Put( aSet );
+    const SfxStringItem* pItem = aSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
+    if ( pItem )
+        pMedium->SetFilter(
+            pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( pItem->GetValue() ) );
 
-            // the arguments are not allowed to reach the medium
-            aSet.ClearItem( SID_FILE_NAME );
-            aSet.ClearItem( SID_FILLFRAME );
-
-            pMedium->GetItemSet()->Put( aSet );
-            const SfxStringItem* pItem = aSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
-            if ( pItem )
-                pMedium->SetFilter(
-                    pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( pItem->GetValue() ) );
-
-            const SfxStringItem* pTitleItem = aSet.GetItem<SfxStringItem>(SID_DOCINFO_TITLE, false);
-            if ( pTitleItem )
-            {
-                SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjectShell );
-                if ( pFrame )
-                    pFrame->UpdateTitle();
-            }
-        }
+    const SfxStringItem* pTitleItem = aSet.GetItem<SfxStringItem>(SID_DOCINFO_TITLE, false);
+    if ( pTitleItem )
+    {
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjectShell );
+        if ( pFrame )
+            pFrame->UpdateTitle();
     }
 
     return true ;

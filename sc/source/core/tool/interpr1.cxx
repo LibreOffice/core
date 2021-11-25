@@ -836,42 +836,41 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             aCode.Jump( nStart, nNext, nStop );
         }
     }
-    if ( !bCont )
-    {   // We're done with it, throw away jump matrix, keep result.
-        // For an intermediate result of Reference use the array of references
-        // if there are more than one reference and the current ForceArray
-        // context is ReferenceOrRefArray.
-        // Else (also for a final result of Reference) use the matrix.
-        // Treat the result of a jump command as final and use the matrix (see
-        // tdf#115493 for why).
-        if (pCur->GetInForceArray() == ParamClass::ReferenceOrRefArray &&
-                pJumpMatrix->GetRefList().size() > 1 &&
-                ScParameterClassification::GetParameterType( pCur, SAL_MAX_UINT16) == ParamClass::Reference &&
-                !FormulaCompiler::IsOpCodeJumpCommand( pJumpMatrix->GetOpCode()) &&
-                aCode.PeekNextOperator())
-        {
-            FormulaTokenRef xRef = new ScRefListToken(true);
-            *(xRef->GetRefList()) = pJumpMatrix->GetRefList();
-            pJumpMatrix = nullptr;
-            Pop();
-            PushTokenRef( xRef);
-            maTokenMatrixMap.erase( pCur);
-            // There's no result matrix to remember in this case.
-        }
-        else
-        {
-            ScMatrix* pResMat = pJumpMatrix->GetResultMatrix();
-            pJumpMatrix = nullptr;
-            Pop();
-            PushMatrix( pResMat );
-            // Remove jump matrix from map and remember result matrix in case it
-            // could be reused in another path of the same condition.
-            maTokenMatrixMap.erase( pCur);
-            maTokenMatrixMap.emplace(pCur, pStack[sp-1]);
-        }
-        return true;
+    if ( bCont )
+        return false;
+    // We're done with it, throw away jump matrix, keep result.
+    // For an intermediate result of Reference use the array of references
+    // if there are more than one reference and the current ForceArray
+    // context is ReferenceOrRefArray.
+    // Else (also for a final result of Reference) use the matrix.
+    // Treat the result of a jump command as final and use the matrix (see
+    // tdf#115493 for why).
+    if (pCur->GetInForceArray() == ParamClass::ReferenceOrRefArray &&
+            pJumpMatrix->GetRefList().size() > 1 &&
+            ScParameterClassification::GetParameterType( pCur, SAL_MAX_UINT16) == ParamClass::Reference &&
+            !FormulaCompiler::IsOpCodeJumpCommand( pJumpMatrix->GetOpCode()) &&
+            aCode.PeekNextOperator())
+    {
+        FormulaTokenRef xRef = new ScRefListToken(true);
+        *(xRef->GetRefList()) = pJumpMatrix->GetRefList();
+        pJumpMatrix = nullptr;
+        Pop();
+        PushTokenRef( xRef);
+        maTokenMatrixMap.erase( pCur);
+        // There's no result matrix to remember in this case.
     }
-    return false;
+    else
+    {
+        ScMatrix* pResMat = pJumpMatrix->GetResultMatrix();
+        pJumpMatrix = nullptr;
+        Pop();
+        PushMatrix( pResMat );
+        // Remove jump matrix from map and remember result matrix in case it
+        // could be reused in another path of the same condition.
+        maTokenMatrixMap.erase( pCur);
+        maTokenMatrixMap.emplace(pCur, pStack[sp-1]);
+    }
+    return true;
 }
 
 double ScInterpreter::Compare( ScQueryOp eOp )

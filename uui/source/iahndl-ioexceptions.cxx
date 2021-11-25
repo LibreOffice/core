@@ -78,200 +78,199 @@ UUIInteractionHelper::handleInteractiveIOException(
     bHasErrorString = false;
 
     ucb::InteractiveIOException aIoException;
-    if (aAnyRequest >>= aIoException)
+    if (!(aAnyRequest >>= aIoException))
+        return false;
+
+    uno::Sequence< uno::Any > aRequestArguments;
+    ucb::InteractiveAugmentedIOException aAugmentedIoException;
+    if (aAnyRequest >>= aAugmentedIoException)
+        aRequestArguments = aAugmentedIoException.Arguments;
+
+    ErrCode nErrorCode;
+    std::vector< OUString > aArguments;
+    static ErrCode const
+        aErrorCode[sal_Int32(ucb::IOErrorCode_WRONG_VERSION) + 1][2]
+        = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
+            { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
+            // ACCESS_DENIED
+            { ERRCODE_IO_ALREADYEXISTS,
+              ERRCODE_UUI_IO_ALREADYEXISTS }, // ALREADY_EXISTING
+            { ERRCODE_IO_BADCRC, ERRCODE_UUI_IO_BADCRC }, // BAD_CRC
+            { ERRCODE_IO_CANTCREATE, ERRCODE_UUI_IO_CANTCREATE },
+            // CANT_CREATE
+            { ERRCODE_IO_CANTREAD, ERRCODE_UUI_IO_CANTREAD },
+            // CANT_READ
+            { ERRCODE_IO_CANTSEEK, ERRCODE_UUI_IO_CANTSEEK },
+            // CANT_SEEK
+            { ERRCODE_IO_CANTTELL, ERRCODE_UUI_IO_CANTTELL },
+            // CANT_TELL
+            { ERRCODE_IO_CANTWRITE, ERRCODE_UUI_IO_CANTWRITE },
+            // CANT_WRITE
+            { ERRCODE_IO_CURRENTDIR, ERRCODE_UUI_IO_CURRENTDIR },
+            // CURRENT_DIRECTORY
+            { ERRCODE_IO_DEVICENOTREADY, ERRCODE_UUI_IO_NOTREADY },
+            // DEVICE_NOT_READY
+            { ERRCODE_IO_NOTSAMEDEVICE,
+              ERRCODE_UUI_IO_NOTSAMEDEVICE }, // DIFFERENT_DEVICES
+            { ERRCODE_IO_GENERAL, ERRCODE_UUI_IO_GENERAL }, // GENERAL
+            { ERRCODE_IO_INVALIDACCESS,
+              ERRCODE_UUI_IO_INVALIDACCESS }, // INVALID_ACCESS
+            { ERRCODE_IO_INVALIDCHAR, ERRCODE_UUI_IO_INVALIDCHAR },
+            // INVALID_CHARACTER
+            { ERRCODE_IO_INVALIDDEVICE,
+              ERRCODE_UUI_IO_INVALIDDEVICE }, // INVALID_DEVICE
+            { ERRCODE_IO_INVALIDLENGTH,
+              ERRCODE_UUI_IO_INVALIDLENGTH }, // INVALID_LENGTH
+            { ERRCODE_IO_INVALIDPARAMETER,
+              ERRCODE_UUI_IO_INVALIDPARAMETER }, // INVALID_PARAMETER
+            { ERRCODE_IO_ISWILDCARD, ERRCODE_UUI_IO_ISWILDCARD },
+            // IS_WILDCARD
+            { ERRCODE_IO_LOCKVIOLATION,
+              ERRCODE_UUI_IO_LOCKVIOLATION }, // LOCKING_VIOLATION
+            { ERRCODE_IO_MISPLACEDCHAR,
+              ERRCODE_UUI_IO_MISPLACEDCHAR }, // MISPLACED_CHARACTER
+            { ERRCODE_IO_NAMETOOLONG, ERRCODE_UUI_IO_NAMETOOLONG },
+            // NAME_TOO_LONG
+            { ERRCODE_IO_NOTEXISTS, ERRCODE_UUI_IO_NOTEXISTS },
+            // NOT_EXISTING
+            { ERRCODE_IO_NOTEXISTSPATH,
+              ERRCODE_UUI_IO_NOTEXISTSPATH }, // NOT_EXISTING_PATH
+            { ERRCODE_IO_NOTSUPPORTED, ERRCODE_UUI_IO_NOTSUPPORTED },
+            // NOT_SUPPORTED
+            { ERRCODE_IO_NOTADIRECTORY,
+              ERRCODE_UUI_IO_NOTADIRECTORY }, // NO_DIRECTORY
+            { ERRCODE_IO_NOTAFILE, ERRCODE_UUI_IO_NOTAFILE },
+            // NO_FILE
+            { ERRCODE_IO_OUTOFSPACE, ERRCODE_UUI_IO_OUTOFSPACE },
+            // OUT_OF_DISK_SPACE
+            { ERRCODE_IO_TOOMANYOPENFILES,
+              ERRCODE_UUI_IO_TOOMANYOPENFILES },
+            // OUT_OF_FILE_HANDLES
+            { ERRCODE_IO_OUTOFMEMORY, ERRCODE_UUI_IO_OUTOFMEMORY },
+            // OUT_OF_MEMORY
+            { ERRCODE_IO_PENDING, ERRCODE_UUI_IO_PENDING }, // PENDING
+            { ERRCODE_IO_RECURSIVE, ERRCODE_UUI_IO_RECURSIVE },
+            // RECURSIVE
+            { ERRCODE_IO_UNKNOWN, ERRCODE_UUI_IO_UNKNOWN }, // UNKNOWN
+            { ERRCODE_IO_WRITEPROTECTED,
+              ERRCODE_UUI_IO_WRITEPROTECTED }, // WRITE_PROTECTED
+            { ERRCODE_IO_WRONGFORMAT, ERRCODE_UUI_IO_WRONGFORMAT },
+            // WRONG_FORMAT
+            { ERRCODE_IO_WRONGVERSION,
+              ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
+    switch (aIoException.Code)
     {
-        uno::Sequence< uno::Any > aRequestArguments;
-        ucb::InteractiveAugmentedIOException aAugmentedIoException;
-        if (aAnyRequest >>= aAugmentedIoException)
-            aRequestArguments = aAugmentedIoException.Arguments;
-
-        ErrCode nErrorCode;
-        std::vector< OUString > aArguments;
-        static ErrCode const
-            aErrorCode[sal_Int32(ucb::IOErrorCode_WRONG_VERSION) + 1][2]
-            = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
-                { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
-                // ACCESS_DENIED
-                { ERRCODE_IO_ALREADYEXISTS,
-                  ERRCODE_UUI_IO_ALREADYEXISTS }, // ALREADY_EXISTING
-                { ERRCODE_IO_BADCRC, ERRCODE_UUI_IO_BADCRC }, // BAD_CRC
-                { ERRCODE_IO_CANTCREATE, ERRCODE_UUI_IO_CANTCREATE },
-                // CANT_CREATE
-                { ERRCODE_IO_CANTREAD, ERRCODE_UUI_IO_CANTREAD },
-                // CANT_READ
-                { ERRCODE_IO_CANTSEEK, ERRCODE_UUI_IO_CANTSEEK },
-                // CANT_SEEK
-                { ERRCODE_IO_CANTTELL, ERRCODE_UUI_IO_CANTTELL },
-                // CANT_TELL
-                { ERRCODE_IO_CANTWRITE, ERRCODE_UUI_IO_CANTWRITE },
-                // CANT_WRITE
-                { ERRCODE_IO_CURRENTDIR, ERRCODE_UUI_IO_CURRENTDIR },
-                // CURRENT_DIRECTORY
-                { ERRCODE_IO_DEVICENOTREADY, ERRCODE_UUI_IO_NOTREADY },
-                // DEVICE_NOT_READY
-                { ERRCODE_IO_NOTSAMEDEVICE,
-                  ERRCODE_UUI_IO_NOTSAMEDEVICE }, // DIFFERENT_DEVICES
-                { ERRCODE_IO_GENERAL, ERRCODE_UUI_IO_GENERAL }, // GENERAL
-                { ERRCODE_IO_INVALIDACCESS,
-                  ERRCODE_UUI_IO_INVALIDACCESS }, // INVALID_ACCESS
-                { ERRCODE_IO_INVALIDCHAR, ERRCODE_UUI_IO_INVALIDCHAR },
-                // INVALID_CHARACTER
-                { ERRCODE_IO_INVALIDDEVICE,
-                  ERRCODE_UUI_IO_INVALIDDEVICE }, // INVALID_DEVICE
-                { ERRCODE_IO_INVALIDLENGTH,
-                  ERRCODE_UUI_IO_INVALIDLENGTH }, // INVALID_LENGTH
-                { ERRCODE_IO_INVALIDPARAMETER,
-                  ERRCODE_UUI_IO_INVALIDPARAMETER }, // INVALID_PARAMETER
-                { ERRCODE_IO_ISWILDCARD, ERRCODE_UUI_IO_ISWILDCARD },
-                // IS_WILDCARD
-                { ERRCODE_IO_LOCKVIOLATION,
-                  ERRCODE_UUI_IO_LOCKVIOLATION }, // LOCKING_VIOLATION
-                { ERRCODE_IO_MISPLACEDCHAR,
-                  ERRCODE_UUI_IO_MISPLACEDCHAR }, // MISPLACED_CHARACTER
-                { ERRCODE_IO_NAMETOOLONG, ERRCODE_UUI_IO_NAMETOOLONG },
-                // NAME_TOO_LONG
-                { ERRCODE_IO_NOTEXISTS, ERRCODE_UUI_IO_NOTEXISTS },
-                // NOT_EXISTING
-                { ERRCODE_IO_NOTEXISTSPATH,
-                  ERRCODE_UUI_IO_NOTEXISTSPATH }, // NOT_EXISTING_PATH
-                { ERRCODE_IO_NOTSUPPORTED, ERRCODE_UUI_IO_NOTSUPPORTED },
-                // NOT_SUPPORTED
-                { ERRCODE_IO_NOTADIRECTORY,
-                  ERRCODE_UUI_IO_NOTADIRECTORY }, // NO_DIRECTORY
-                { ERRCODE_IO_NOTAFILE, ERRCODE_UUI_IO_NOTAFILE },
-                // NO_FILE
-                { ERRCODE_IO_OUTOFSPACE, ERRCODE_UUI_IO_OUTOFSPACE },
-                // OUT_OF_DISK_SPACE
-                { ERRCODE_IO_TOOMANYOPENFILES,
-                  ERRCODE_UUI_IO_TOOMANYOPENFILES },
-                // OUT_OF_FILE_HANDLES
-                { ERRCODE_IO_OUTOFMEMORY, ERRCODE_UUI_IO_OUTOFMEMORY },
-                // OUT_OF_MEMORY
-                { ERRCODE_IO_PENDING, ERRCODE_UUI_IO_PENDING }, // PENDING
-                { ERRCODE_IO_RECURSIVE, ERRCODE_UUI_IO_RECURSIVE },
-                // RECURSIVE
-                { ERRCODE_IO_UNKNOWN, ERRCODE_UUI_IO_UNKNOWN }, // UNKNOWN
-                { ERRCODE_IO_WRITEPROTECTED,
-                  ERRCODE_UUI_IO_WRITEPROTECTED }, // WRITE_PROTECTED
-                { ERRCODE_IO_WRONGFORMAT, ERRCODE_UUI_IO_WRONGFORMAT },
-                // WRONG_FORMAT
-                { ERRCODE_IO_WRONGVERSION,
-                  ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
-        switch (aIoException.Code)
+    case ucb::IOErrorCode_CANT_CREATE:
         {
-        case ucb::IOErrorCode_CANT_CREATE:
-            {
-                OUString aArgFolder;
-                if (getRequestArgument(aRequestArguments, u"Folder", &aArgFolder))
-                {
-                    OUString aArgUri;
-                    if (getResourceNameRequestArgument(aRequestArguments,
-                                                       &aArgUri))
-                    {
-                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE;
-                        aArguments.reserve(2);
-                        aArguments.push_back(aArgUri);
-                        aArguments.push_back(aArgFolder);
-                    }
-                    else
-                    {
-                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE_NONAME;
-                        aArguments.push_back(aArgFolder);
-                    }
-                }
-                else
-                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
-                break;
-            }
-
-        case ucb::IOErrorCode_DEVICE_NOT_READY:
+            OUString aArgFolder;
+            if (getRequestArgument(aRequestArguments, u"Folder", &aArgFolder))
             {
                 OUString aArgUri;
                 if (getResourceNameRequestArgument(aRequestArguments,
                                                    &aArgUri))
                 {
-                    OUString aResourceType;
-                    getRequestArgument(aRequestArguments, u"ResourceType", &aResourceType);
-                    bool bRemovable = false;
-                    getRequestArgument(aRequestArguments, u"Removable", &bRemovable);
-                    nErrorCode = aResourceType == "volume"
-                        ? (bRemovable
-                           ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
-                           : ERRCODE_UUI_IO_NOTREADY_VOLUME)
-                        : (bRemovable
-                           ? ERRCODE_UUI_IO_NOTREADY_REMOVABLE
-                           : ERRCODE_UUI_IO_NOTREADY);
-                    aArguments.push_back(aArgUri);
-                }
-                else
-                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
-                break;
-            }
-
-        case ucb::IOErrorCode_DIFFERENT_DEVICES:
-            {
-                OUString aArgVolume;
-                OUString aArgOtherVolume;
-                if (getRequestArgument(aRequestArguments, u"Volume", &aArgVolume)
-                    && getRequestArgument(aRequestArguments, u"OtherVolume",
-                        &aArgOtherVolume))
-                {
-                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][1];
+                    nErrorCode = ERRCODE_UUI_IO_CANTCREATE;
                     aArguments.reserve(2);
-                    aArguments.push_back(aArgVolume);
-                    aArguments.push_back(aArgOtherVolume);
+                    aArguments.push_back(aArgUri);
+                    aArguments.push_back(aArgFolder);
                 }
                 else
-                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
-                break;
+                {
+                    nErrorCode = ERRCODE_UUI_IO_CANTCREATE_NONAME;
+                    aArguments.push_back(aArgFolder);
+                }
+            }
+            else
+                nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
+            break;
         }
 
-        case ucb::IOErrorCode_NOT_EXISTING:
+    case ucb::IOErrorCode_DEVICE_NOT_READY:
+        {
+            OUString aArgUri;
+            if (getResourceNameRequestArgument(aRequestArguments,
+                                               &aArgUri))
             {
-                OUString aArgUri;
-                if (getResourceNameRequestArgument(aRequestArguments,
-                           &aArgUri))
-                {
-                    OUString aResourceType;
-                    getRequestArgument(aRequestArguments, u"ResourceType",
-                                            &aResourceType);
-                    nErrorCode = aResourceType == "volume"
-                        ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME
-                        : (aResourceType == "folder"
-                           ? ERRCODE_UUI_IO_NOTEXISTS_FOLDER
-                           : ERRCODE_UUI_IO_NOTEXISTS);
-                    aArguments.push_back(aArgUri);
-                }
-                else
-                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
-                break;
+                OUString aResourceType;
+                getRequestArgument(aRequestArguments, u"ResourceType", &aResourceType);
+                bool bRemovable = false;
+                getRequestArgument(aRequestArguments, u"Removable", &bRemovable);
+                nErrorCode = aResourceType == "volume"
+                    ? (bRemovable
+                       ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
+                       : ERRCODE_UUI_IO_NOTREADY_VOLUME)
+                    : (bRemovable
+                       ? ERRCODE_UUI_IO_NOTREADY_REMOVABLE
+                       : ERRCODE_UUI_IO_NOTREADY);
+                aArguments.push_back(aArgUri);
             }
-
-        default:
-            {
-                OUString aArgUri;
-                if (getResourceNameRequestArgument(aRequestArguments,
-                                                   &aArgUri))
-                {
-                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][1];
-                    aArguments.push_back(aArgUri);
-                }
-                else
-                    nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
-                break;
-            }
+            else
+                nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
+            break;
         }
 
-        handleErrorHandlerRequest(aIoException.Classification,
-                                  nErrorCode,
-                                  aArguments,
-                                  rRequest->getContinuations(),
-                                  bObtainErrorStringOnly,
-                                  bHasErrorString,
-                                  rErrorString);
-        return true;
+    case ucb::IOErrorCode_DIFFERENT_DEVICES:
+        {
+            OUString aArgVolume;
+            OUString aArgOtherVolume;
+            if (getRequestArgument(aRequestArguments, u"Volume", &aArgVolume)
+                && getRequestArgument(aRequestArguments, u"OtherVolume",
+                    &aArgOtherVolume))
+            {
+                nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][1];
+                aArguments.reserve(2);
+                aArguments.push_back(aArgVolume);
+                aArguments.push_back(aArgOtherVolume);
+            }
+            else
+                nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
+            break;
     }
-    return false;
+
+    case ucb::IOErrorCode_NOT_EXISTING:
+        {
+            OUString aArgUri;
+            if (getResourceNameRequestArgument(aRequestArguments,
+                       &aArgUri))
+            {
+                OUString aResourceType;
+                getRequestArgument(aRequestArguments, u"ResourceType",
+                                        &aResourceType);
+                nErrorCode = aResourceType == "volume"
+                    ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME
+                    : (aResourceType == "folder"
+                       ? ERRCODE_UUI_IO_NOTEXISTS_FOLDER
+                       : ERRCODE_UUI_IO_NOTEXISTS);
+                aArguments.push_back(aArgUri);
+            }
+            else
+                nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
+            break;
+        }
+
+    default:
+        {
+            OUString aArgUri;
+            if (getResourceNameRequestArgument(aRequestArguments,
+                                               &aArgUri))
+            {
+                nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][1];
+                aArguments.push_back(aArgUri);
+            }
+            else
+                nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][0];
+            break;
+        }
+    }
+
+    handleErrorHandlerRequest(aIoException.Classification,
+                              nErrorCode,
+                              aArguments,
+                              rRequest->getContinuations(),
+                              bObtainErrorStringOnly,
+                              bHasErrorString,
+                              rErrorString);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

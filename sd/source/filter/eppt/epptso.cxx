@@ -376,155 +376,155 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
 bool PPTWriter::ImplCloseDocument()
 {
     sal_uInt32 nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Document );
-    if ( nOfs )
+    if ( !nOfs )
+        return false;
+
+    mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_CurrentPos, mpStrm->Tell() );
+    mpStrm->Seek( nOfs );
+
+    // creating the TxMasterStyleAtom
+    SvMemoryStream aTxMasterStyleAtomStrm( 0x200, 0x200 );
     {
-        mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_CurrentPos, mpStrm->Tell() );
-        mpStrm->Seek( nOfs );
-
-        // creating the TxMasterStyleAtom
-        SvMemoryStream aTxMasterStyleAtomStrm( 0x200, 0x200 );
+        EscherExAtom aTxMasterStyleAtom( aTxMasterStyleAtomStrm, EPP_TxMasterStyleAtom, EPP_TEXTTYPE_Other );
+        aTxMasterStyleAtomStrm.WriteUInt16( 5 );        // paragraph count
+        sal_uInt16 nLev;
+        for ( nLev = 0; nLev < 5; nLev++ )
         {
-            EscherExAtom aTxMasterStyleAtom( aTxMasterStyleAtomStrm, EPP_TxMasterStyleAtom, EPP_TEXTTYPE_Other );
-            aTxMasterStyleAtomStrm.WriteUInt16( 5 );        // paragraph count
-            sal_uInt16 nLev;
-            for ( nLev = 0; nLev < 5; nLev++ )
-            {
-                mpStyleSheet->mpParaSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, nLev, false, mXPagePropSet );
-                mpStyleSheet->mpCharSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, nLev, false, mXPagePropSet );
-            }
+            mpStyleSheet->mpParaSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, nLev, false, mXPagePropSet );
+            mpStyleSheet->mpCharSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, nLev, false, mXPagePropSet );
         }
+    }
 
-        sal_uInt32 nExEmbedSize = mpExEmbed->TellEnd();
+    sal_uInt32 nExEmbedSize = mpExEmbed->TellEnd();
 
-        // nEnvironment : whole size of the environment container
-        sal_uInt32 nEnvironment = maFontCollection.GetCount() * 76      // 68 bytes per Fontenityatom and 8 Bytes per header
-                                + 8                                     // 1 FontCollection container
-                                + 20                                    // SrKinsoku container
-                                + 18                                    // 1 TxSiStyleAtom
-                                + aTxMasterStyleAtomStrm.Tell()         // 1 TxMasterStyleAtom;
-                                + PPTExStyleSheet::SizeOfTxCFStyleAtom();
+    // nEnvironment : whole size of the environment container
+    sal_uInt32 nEnvironment = maFontCollection.GetCount() * 76      // 68 bytes per Fontenityatom and 8 Bytes per header
+                            + 8                                     // 1 FontCollection container
+                            + 20                                    // SrKinsoku container
+                            + 18                                    // 1 TxSiStyleAtom
+                            + aTxMasterStyleAtomStrm.Tell()         // 1 TxMasterStyleAtom;
+                            + PPTExStyleSheet::SizeOfTxCFStyleAtom();
 
-        sal_uInt32 nBytesToInsert = nEnvironment + 8;
+    sal_uInt32 nBytesToInsert = nEnvironment + 8;
 
-        if ( nExEmbedSize )
-            nBytesToInsert += nExEmbedSize + 8 + 12;
+    if ( nExEmbedSize )
+        nBytesToInsert += nExEmbedSize + 8 + 12;
 
-        nBytesToInsert += maSoundCollection.GetSize();
-        nBytesToInsert += mpPptEscherEx->DrawingGroupContainerSize();
-        nBytesToInsert += ImplMasterSlideListContainer(nullptr);
-        nBytesToInsert += ImplDocumentListContainer(nullptr);
+    nBytesToInsert += maSoundCollection.GetSize();
+    nBytesToInsert += mpPptEscherEx->DrawingGroupContainerSize();
+    nBytesToInsert += ImplMasterSlideListContainer(nullptr);
+    nBytesToInsert += ImplDocumentListContainer(nullptr);
 
-        // insert nBytes into stream and adjust depending container
-        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert );
+    // insert nBytes into stream and adjust depending container
+    mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert );
 
-        // CREATE HYPERLINK CONTAINER
-        if ( nExEmbedSize )
+    // CREATE HYPERLINK CONTAINER
+    if ( nExEmbedSize )
+    {
+        mpStrm->WriteUInt16( 0xf )
+               .WriteUInt16( EPP_ExObjList )
+               .WriteUInt32( nExEmbedSize + 12 )
+               .WriteUInt16( 0 )
+               .WriteUInt16( EPP_ExObjListAtom )
+               .WriteUInt32( 4 )
+               .WriteUInt32( mnExEmbed );
+        mpPptEscherEx->InsertPersistOffset( EPP_Persist_ExObj, mpStrm->Tell() );
+        mpStrm->WriteBytes(mpExEmbed->GetData(), nExEmbedSize);
+    }
+
+    // CREATE ENVIRONMENT
+    mpStrm->WriteUInt16( 0xf ).WriteUInt16( EPP_Environment ).WriteUInt32( nEnvironment );
+
+    // Open Container ( EPP_SrKinsoku )
+    mpStrm->WriteUInt16( 0x2f ).WriteUInt16( EPP_SrKinsoku ).WriteUInt32( 12 );
+    mpPptEscherEx->AddAtom( 4, EPP_SrKinsokuAtom, 0, 3 );
+    mpStrm->WriteInt32( 0 );                        // SrKinsoku Level 0
+
+    // Open Container ( EPP_FontCollection )
+    mpStrm->WriteUInt16( 0xf ).WriteUInt16( EPP_FontCollection ).WriteUInt32( maFontCollection.GetCount() * 76 );
+
+    for ( sal_uInt32 i = 0; i < maFontCollection.GetCount(); i++ )
+    {
+        mpPptEscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
+        const FontCollectionEntry* pDesc = maFontCollection.GetById( i );
+        sal_Int32 nFontLen = pDesc->Name.getLength();
+        if ( nFontLen > 31 )
+            nFontLen = 31;
+        for ( sal_Int32 n = 0; n < 32; n++ )
         {
-            mpStrm->WriteUInt16( 0xf )
-                   .WriteUInt16( EPP_ExObjList )
-                   .WriteUInt32( nExEmbedSize + 12 )
-                   .WriteUInt16( 0 )
-                   .WriteUInt16( EPP_ExObjListAtom )
-                   .WriteUInt32( 4 )
-                   .WriteUInt32( mnExEmbed );
-            mpPptEscherEx->InsertPersistOffset( EPP_Persist_ExObj, mpStrm->Tell() );
-            mpStrm->WriteBytes(mpExEmbed->GetData(), nExEmbedSize);
+            sal_Unicode nUniCode = 0;
+            if ( n < nFontLen )
+                nUniCode = pDesc->Name[n];
+            mpStrm->WriteUInt16( nUniCode );
         }
+        sal_uInt8   lfCharSet = ANSI_CHARSET;
+        sal_uInt8 const lfClipPrecision = 0;
+        sal_uInt8 const lfQuality = 6;
+        sal_uInt8   lfPitchAndFamily = 0;
 
-        // CREATE ENVIRONMENT
-        mpStrm->WriteUInt16( 0xf ).WriteUInt16( EPP_Environment ).WriteUInt32( nEnvironment );
+        if ( pDesc->CharSet == RTL_TEXTENCODING_SYMBOL )
+            lfCharSet = SYMBOL_CHARSET;
 
-        // Open Container ( EPP_SrKinsoku )
-        mpStrm->WriteUInt16( 0x2f ).WriteUInt16( EPP_SrKinsoku ).WriteUInt32( 12 );
-        mpPptEscherEx->AddAtom( 4, EPP_SrKinsokuAtom, 0, 3 );
-        mpStrm->WriteInt32( 0 );                        // SrKinsoku Level 0
-
-        // Open Container ( EPP_FontCollection )
-        mpStrm->WriteUInt16( 0xf ).WriteUInt16( EPP_FontCollection ).WriteUInt32( maFontCollection.GetCount() * 76 );
-
-        for ( sal_uInt32 i = 0; i < maFontCollection.GetCount(); i++ )
+        switch( pDesc->Family )
         {
-            mpPptEscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
-            const FontCollectionEntry* pDesc = maFontCollection.GetById( i );
-            sal_Int32 nFontLen = pDesc->Name.getLength();
-            if ( nFontLen > 31 )
-                nFontLen = 31;
-            for ( sal_Int32 n = 0; n < 32; n++ )
-            {
-                sal_Unicode nUniCode = 0;
-                if ( n < nFontLen )
-                    nUniCode = pDesc->Name[n];
-                mpStrm->WriteUInt16( nUniCode );
-            }
-            sal_uInt8   lfCharSet = ANSI_CHARSET;
-            sal_uInt8 const lfClipPrecision = 0;
-            sal_uInt8 const lfQuality = 6;
-            sal_uInt8   lfPitchAndFamily = 0;
+            case css::awt::FontFamily::ROMAN :
+                lfPitchAndFamily |= FF_ROMAN;
+            break;
 
-            if ( pDesc->CharSet == RTL_TEXTENCODING_SYMBOL )
-                lfCharSet = SYMBOL_CHARSET;
+            case css::awt::FontFamily::SWISS :
+                lfPitchAndFamily |= FF_SWISS;
+            break;
 
-            switch( pDesc->Family )
-            {
-                case css::awt::FontFamily::ROMAN :
-                    lfPitchAndFamily |= FF_ROMAN;
-                break;
+            case css::awt::FontFamily::MODERN :
+                lfPitchAndFamily |= FF_MODERN;
+            break;
 
-                case css::awt::FontFamily::SWISS :
-                    lfPitchAndFamily |= FF_SWISS;
-                break;
+            case css::awt::FontFamily::SCRIPT:
+                lfPitchAndFamily |= FF_SCRIPT;
+            break;
 
-                case css::awt::FontFamily::MODERN :
-                    lfPitchAndFamily |= FF_MODERN;
-                break;
+            case css::awt::FontFamily::DECORATIVE:
+                 lfPitchAndFamily |= FF_DECORATIVE;
+            break;
 
-                case css::awt::FontFamily::SCRIPT:
-                    lfPitchAndFamily |= FF_SCRIPT;
-                break;
-
-                case css::awt::FontFamily::DECORATIVE:
-                     lfPitchAndFamily |= FF_DECORATIVE;
-                break;
-
-                default:
-                    lfPitchAndFamily |= FAMILY_DONTKNOW;
-                break;
-            }
-            switch( pDesc->Pitch )
-            {
-                case css::awt::FontPitch::FIXED:
-                    lfPitchAndFamily |= FIXED_PITCH;
-                break;
-
-                default:
-                    lfPitchAndFamily |= DEFAULT_PITCH;
-                break;
-            }
-            mpStrm->WriteUChar( lfCharSet )
-                   .WriteUChar( lfClipPrecision )
-                   .WriteUChar( lfQuality )
-                   .WriteUChar( lfPitchAndFamily );
+            default:
+                lfPitchAndFamily |= FAMILY_DONTKNOW;
+            break;
         }
-        mpStyleSheet->WriteTxCFStyleAtom( *mpStrm );        // create style that is used for new standard objects
-        mpPptEscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
-        mpStrm->WriteUInt32( 7 )                        // ?
-               .WriteInt16( 2 )                         // ?
-               .WriteUChar( 9 )                         // ?
-               .WriteUChar( 8 )                         // ?
-               .WriteInt16( 0 );                        // ?
-
-        mpStrm->WriteBytes(aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell());
-        maSoundCollection.Write( *mpStrm );
-        mpPptEscherEx->WriteDrawingGroupContainer( *mpStrm );
-        ImplMasterSlideListContainer( mpStrm.get() );
-        ImplDocumentListContainer( mpStrm.get() );
-
-        sal_uInt32 nOldPos = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_CurrentPos );
-        if ( nOldPos )
+        switch( pDesc->Pitch )
         {
-            mpStrm->Seek( nOldPos );
-            return true;
+            case css::awt::FontPitch::FIXED:
+                lfPitchAndFamily |= FIXED_PITCH;
+            break;
+
+            default:
+                lfPitchAndFamily |= DEFAULT_PITCH;
+            break;
         }
+        mpStrm->WriteUChar( lfCharSet )
+               .WriteUChar( lfClipPrecision )
+               .WriteUChar( lfQuality )
+               .WriteUChar( lfPitchAndFamily );
+    }
+    mpStyleSheet->WriteTxCFStyleAtom( *mpStrm );        // create style that is used for new standard objects
+    mpPptEscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
+    mpStrm->WriteUInt32( 7 )                        // ?
+           .WriteInt16( 2 )                         // ?
+           .WriteUChar( 9 )                         // ?
+           .WriteUChar( 8 )                         // ?
+           .WriteInt16( 0 );                        // ?
+
+    mpStrm->WriteBytes(aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell());
+    maSoundCollection.Write( *mpStrm );
+    mpPptEscherEx->WriteDrawingGroupContainer( *mpStrm );
+    ImplMasterSlideListContainer( mpStrm.get() );
+    ImplDocumentListContainer( mpStrm.get() );
+
+    sal_uInt32 nOldPos = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_CurrentPos );
+    if ( nOldPos )
+    {
+        mpStrm->Seek( nOldPos );
+        return true;
     }
     return false;
 }
@@ -2960,38 +2960,37 @@ struct CellBorder
 bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2)
 {
     sal_Int32 nLineWidth = pCellBorder->maCellBorder.OuterLineWidth + pCellBorder->maCellBorder.InnerLineWidth;
-    if ( nLineWidth )
-    {
-        nLineWidth *= 2;
-        mnAngle = 0;
-        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-        EscherPropertyContainer aPropOptSp;
+    if ( !nLineWidth )
+        return false;
 
-        sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
-        mpPptEscherEx->AddShape( ESCHER_ShpInst_Line,
-                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Child,
-                                 nId );
-        aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-        aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0xa0008 );
-        aPropOptSp.AddOpt( ESCHER_Prop_fshadowObscured, 0x20000 );
+    nLineWidth *= 2;
+    mnAngle = 0;
+    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+    EscherPropertyContainer aPropOptSp;
 
-        sal_uInt32 nBorderColor = pCellBorder->maCellBorder.Color & 0xff00;                 // green
-        nBorderColor |= static_cast< sal_uInt8 >( pCellBorder->maCellBorder.Color ) << 16;  // red
-        nBorderColor |= static_cast< sal_uInt8 >( pCellBorder->maCellBorder.Color >> 16 );  // blue
-        aPropOptSp.AddOpt( ESCHER_Prop_lineColor, nBorderColor );
+    sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
+    mpPptEscherEx->AddShape( ESCHER_ShpInst_Line,
+                             ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Child,
+                             nId );
+    aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+    aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0xa0008 );
+    aPropOptSp.AddOpt( ESCHER_Prop_fshadowObscured, 0x20000 );
 
-        aPropOptSp.AddOpt( ESCHER_Prop_lineWidth, nLineWidth * 360 );
-        aPropOptSp.AddOpt( ESCHER_Prop_fc3DLightFace, 0x80000 );
-        aPropOptSp.Commit( *mpStrm );
-        mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-        mpStrm    ->WriteInt32( nX1 )
-                   .WriteInt32( nY1 )
-                   .WriteInt32( nX2 )
-                   .WriteInt32( nY2 );
-        mpPptEscherEx->CloseContainer();
-        return true;
-    }
-    return false;
+    sal_uInt32 nBorderColor = pCellBorder->maCellBorder.Color & 0xff00;                 // green
+    nBorderColor |= static_cast< sal_uInt8 >( pCellBorder->maCellBorder.Color ) << 16;  // red
+    nBorderColor |= static_cast< sal_uInt8 >( pCellBorder->maCellBorder.Color >> 16 );  // blue
+    aPropOptSp.AddOpt( ESCHER_Prop_lineColor, nBorderColor );
+
+    aPropOptSp.AddOpt( ESCHER_Prop_lineWidth, nLineWidth * 360 );
+    aPropOptSp.AddOpt( ESCHER_Prop_fc3DLightFace, 0x80000 );
+    aPropOptSp.Commit( *mpStrm );
+    mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+    mpStrm    ->WriteInt32( nX1 )
+               .WriteInt32( nY1 )
+               .WriteInt32( nX2 )
+               .WriteInt32( nY2 );
+    mpPptEscherEx->CloseContainer();
+    return true;
 }
 
 //get merged cell's width

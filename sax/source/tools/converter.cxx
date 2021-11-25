@@ -1233,29 +1233,20 @@ readDurationComponent(std::u16string_view rString,
     size_t & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
     sal_Int32 & o_rnTarget, const sal_Unicode cLower, const sal_Unicode cUpper)
 {
-    if (io_rnPos < rString.size())
+    if (io_rnPos >= rString.size())
+        return true;
+    if (cLower != rString[io_rnPos] && cUpper != rString[io_rnPos])
+        return true;
+    ++io_rnPos;
+    if (-1 == io_rnTemp)
+        return false;
+    o_rnTarget = io_rnTemp;
+    io_rnTemp = -1;
+    if (!io_rbTimePart)
     {
-        if (cLower == rString[io_rnPos] || cUpper == rString[io_rnPos])
-        {
-            ++io_rnPos;
-            if (-1 != io_rnTemp)
-            {
-                o_rnTarget = io_rnTemp;
-                io_rnTemp = -1;
-                if (!io_rbTimePart)
-                {
-                    io_rbTimePart = readDurationT(rString, io_rnPos);
-                }
-                return (R_OVERFLOW !=
-                        readUnsignedNumber(rString, io_rnPos, io_rnTemp));
-            }
-            else
-            {
-                return false;
-            }
-        }
+        io_rbTimePart = readDurationT(rString, io_rnPos);
     }
-    return true;
+    return (R_OVERFLOW != readUnsignedNumber(rString, io_rnPos, io_rnTemp));
 }
 
 /** convert ISO8601 "duration" string to util::Duration */

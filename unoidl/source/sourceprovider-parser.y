@@ -4100,125 +4100,125 @@ bool SourceProviderInterfaceTypeEntityPad::checkBaseClashes(
     assert(data != nullptr);
     assert(entity.is());
     assert(seen != nullptr);
-    if (direct || optional || seen->insert(name).second) {
-        std::map<OUString, BaseKind>::const_iterator i(allBases.find(name));
-        if (i != allBases.end()) {
-            switch (i->second) {
-            case BASE_INDIRECT_OPTIONAL:
-                if (direct && optional) {
-                    error(
-                        location, yyscanner,
-                        ("interface type " + data->currentName
-                         + " duplicate base " + name));
-                    return false;
-                }
-                break;
-            case BASE_DIRECT_OPTIONAL:
-                if (direct || !outerOptional) {
-                    error(
-                        location, yyscanner,
-                        ("interface type " + data->currentName
-                         + " duplicate base " + name));
-                    return false;
-                }
-                return true;
-            case BASE_INDIRECT_MANDATORY:
-                if (direct) {
-                    error(
-                        location, yyscanner,
-                        ("interface type " + data->currentName
-                         + " duplicate base " + name));
-                    return false;
-                }
-                return true;
-            case BASE_DIRECT_MANDATORY:
-                if (direct || (!optional && !outerOptional)) {
-                    error(
-                        location, yyscanner,
-                        ("interface type " + data->currentName
-                         + " duplicate base " + name));
-                    return false;
-                }
-                return true;
+    if (!direct && !optional && !seen->insert(name).second)
+        return true;
+    std::map<OUString, BaseKind>::const_iterator i(allBases.find(name));
+    if (i != allBases.end()) {
+        switch (i->second) {
+        case BASE_INDIRECT_OPTIONAL:
+            if (direct && optional) {
+                error(
+                    location, yyscanner,
+                    ("interface type " + data->currentName
+                     + " duplicate base " + name));
+                return false;
             }
+            break;
+        case BASE_DIRECT_OPTIONAL:
+            if (direct || !outerOptional) {
+                error(
+                    location, yyscanner,
+                    ("interface type " + data->currentName
+                     + " duplicate base " + name));
+                return false;
+            }
+            return true;
+        case BASE_INDIRECT_MANDATORY:
+            if (direct) {
+                error(
+                    location, yyscanner,
+                    ("interface type " + data->currentName
+                     + " duplicate base " + name));
+                return false;
+            }
+            return true;
+        case BASE_DIRECT_MANDATORY:
+            if (direct || (!optional && !outerOptional)) {
+                error(
+                    location, yyscanner,
+                    ("interface type " + data->currentName
+                     + " duplicate base " + name));
+                return false;
+            }
+            return true;
         }
-        if (direct || !optional) {
-            for (auto & j: entity->getDirectMandatoryBases()) {
-                OUString n("." + j.name);
-                unoidl::detail::SourceProviderEntity const * p;
-                if (findEntity(
-                        location, yyscanner, data, true, &n, &p, nullptr,
-                        nullptr)
-                    == FOUND_ERROR)
-                {
-                    return false;
-                }
-                if (p == nullptr || !p->entity.is()
-                    || (p->entity->getSort()
-                        != unoidl::Entity::SORT_INTERFACE_TYPE))
-                {
-                    error(
-                        location, yyscanner,
-                        ("inconsistent type manager: interface type "
-                         + data->currentName + " base " + n
-                         + " does not resolve to an existing interface type"));
-                    return false;
-                }
-                if (!checkBaseClashes(
-                        location, yyscanner, data, n,
-                        static_cast<unoidl::InterfaceTypeEntity *>(
-                            p->entity.get()),
-                        false, false, outerOptional, seen))
-                {
-                    return false;
-                }
-            }
-            for (auto & j: entity->getDirectOptionalBases()) {
-                OUString n("." + j.name);
-                unoidl::detail::SourceProviderEntity const * p;
-                if (findEntity(
-                        location, yyscanner, data, true, &n, &p, nullptr,
-                        nullptr)
-                    == FOUND_ERROR)
-                {
-                    return false;
-                }
-                if (p == nullptr || !p->entity.is()
-                    || (p->entity->getSort()
-                        != unoidl::Entity::SORT_INTERFACE_TYPE))
-                {
-                    error(
-                        location, yyscanner,
-                        ("inconsistent type manager: interface type "
-                         + data->currentName + " base " + n
-                         + " does not resolve to an existing interface type"));
-                    return false;
-                }
-                if (!checkBaseClashes(
-                        location, yyscanner, data, n,
-                        static_cast<unoidl::InterfaceTypeEntity *>(
-                            p->entity.get()),
-                        false, true, outerOptional, seen))
-                {
-                    return false;
-                }
-            }
-            for (auto & j: entity->getDirectAttributes()) {
-                if (!checkMemberClashes(
-                        location, yyscanner, data, name, j.name,
-                        !outerOptional))
-                {
-                    return false;
-                }
-            }
-            for (auto & j: entity->getDirectMethods()) {
-                if (!checkMemberClashes(
-                        location, yyscanner, data, name, j.name,
-                        !outerOptional))
-                {
-                    return false;
-                }
-            }
+    }
+    if (!direct && optional)
+        return true;
+    for (auto & j: entity->getDirectMandatoryBases()) {
+        OUString n("." + j.name);
+        unoidl::detail::SourceProviderEntity const * p;
+        if (findEntity(
+                location, yyscanner, data, true, &n, &p, nullptr,
+                nullptr)
+            == FOUND_ERROR)
+        {
+            return false;
+        }
+        if (p == nullptr || !p->entity.is()
+            || (p->entity->getSort()
+                != unoidl::Entity::SORT_INTERFACE_TYPE))
+        {
+            error(
+                location, yyscanner,
+                ("inconsistent type manager: interface type "
+                 + data->currentName + " base " + n
+                 + " does not resolve to an existing interface type"));
+            return false;
+        }
+        if (!checkBaseClashes(
+                location, yyscanner, data, n,
+                static_cast<unoidl::InterfaceTypeEntity *>(
+                    p->entity.get()),
+                false, false, outerOptional, seen))
+        {
+            return false;
+        }
+    }
+    for (auto & j: entity->getDirectOptionalBases()) {
+        OUString n("." + j.name);
+        unoidl::detail::SourceProviderEntity const * p;
+        if (findEntity(
+                location, yyscanner, data, true, &n, &p, nullptr,
+                nullptr)
+            == FOUND_ERROR)
+        {
+            return false;
+        }
+        if (p == nullptr || !p->entity.is()
+            || (p->entity->getSort()
+                != unoidl::Entity::SORT_INTERFACE_TYPE))
+        {
+            error(
+                location, yyscanner,
+                ("inconsistent type manager: interface type "
+                 + data->currentName + " base " + n
+                 + " does not resolve to an existing interface type"));
+            return false;
+        }
+        if (!checkBaseClashes(
+                location, yyscanner, data, n,
+                static_cast<unoidl::InterfaceTypeEntity *>(
+                    p->entity.get()),
+                false, true, outerOptional, seen))
+        {
+            return false;
+        }
+    }
+    for (auto & j: entity->getDirectAttributes()) {
+        if (!checkMemberClashes(
+                location, yyscanner, data, name, j.name,
+                !outerOptional))
+        {
+            return false;
+        }
+    }
+    for (auto & j: entity->getDirectMethods()) {
+        if (!checkMemberClashes(
+                location, yyscanner, data, name, j.name,
+                !outerOptional))
+        {
+            return false;
         }
     }
     return true;
@@ -4230,26 +4230,26 @@ bool SourceProviderInterfaceTypeEntityPad::checkMemberClashes(
     bool checkOptional) const
 {
     std::map<OUString, Member>::const_iterator i(allMembers.find(memberName));
-    if (i != allMembers.end()) {
-        if (!i->second.mandatory.isEmpty()) {
-            // For a direct member, interfaceName will be empty, so this will
-            // catch two direct members with the same name:
-            if (i->second.mandatory != interfaceName) {
+    if (i == allMembers.end())
+        return true;
+    if (!i->second.mandatory.isEmpty()) {
+        // For a direct member, interfaceName will be empty, so this will
+        // catch two direct members with the same name:
+        if (i->second.mandatory != interfaceName) {
+            error(
+                location, yyscanner,
+                ("interface type " + data->currentName
+                 + " duplicate member " + memberName));
+            return false;
+        }
+    } else if (checkOptional) {
+        for (auto & j: i->second.optional) {
+            if (j != interfaceName) {
                 error(
                     location, yyscanner,
                     ("interface type " + data->currentName
                      + " duplicate member " + memberName));
                 return false;
-            }
-        } else if (checkOptional) {
-            for (auto & j: i->second.optional) {
-                if (j != interfaceName) {
-                    error(
-                        location, yyscanner,
-                        ("interface type " + data->currentName
-                         + " duplicate member " + memberName));
-                    return false;
-                }
             }
         }
     }
@@ -4273,68 +4273,68 @@ bool SourceProviderInterfaceTypeEntityPad::addBase(
     if (!p.second && kind > p.first->second) {
         p.first->second = kind;
     }
-    if (!optional && !seen) {
-        for (auto & i: entity->getDirectMandatoryBases()) {
-            OUString n("." + i.name);
-            unoidl::detail::SourceProviderEntity const * q;
-            if (findEntity(
-                    location, yyscanner, data, true, &n, &q, nullptr, nullptr)
-                == FOUND_ERROR)
-            {
-                return false;
-            }
-            if (q == nullptr || !q->entity.is()
-                || q->entity->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
-            {
-                error(
-                    location, yyscanner,
-                    ("inconsistent type manager: interface type "
-                     + data->currentName + " base " + n
-                     + " does not resolve to an existing interface type"));
-                return false;
-            }
-            if (!addBase(
-                    location, yyscanner, data, directBaseName, n,
-                    static_cast<unoidl::InterfaceTypeEntity *>(q->entity.get()),
-                    false, false))
-            {
-                return false;
-            }
-        }
-        for (auto & i: entity->getDirectOptionalBases())
+    if (optional || seen)
+        return true;
+    for (auto & i: entity->getDirectMandatoryBases()) {
+        OUString n("." + i.name);
+        unoidl::detail::SourceProviderEntity const * q;
+        if (findEntity(
+                location, yyscanner, data, true, &n, &q, nullptr, nullptr)
+            == FOUND_ERROR)
         {
-            OUString n("." + i.name);
-            unoidl::detail::SourceProviderEntity const * q;
-            if (findEntity(
-                    location, yyscanner, data, true, &n, &q, nullptr, nullptr)
-                == FOUND_ERROR)
-            {
-                return false;
-            }
-            if (q == nullptr || !q->entity.is()
-                || q->entity->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
-            {
-                error(
-                    location, yyscanner,
-                    ("inconsistent type manager: interface type "
-                     + data->currentName + " base " + n
-                     + " does not resolve to an existing interface type"));
-                return false;
-            }
-            if (!addBase(
-                    location, yyscanner, data, directBaseName, n,
-                    static_cast<unoidl::InterfaceTypeEntity *>(q->entity.get()),
-                    false, true))
-            {
-                return false;
-            }
+            return false;
         }
-        for (auto & i: entity->getDirectAttributes()) {
-            allMembers.emplace(i.name, Member(name));
+        if (q == nullptr || !q->entity.is()
+            || q->entity->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
+        {
+            error(
+                location, yyscanner,
+                ("inconsistent type manager: interface type "
+                 + data->currentName + " base " + n
+                 + " does not resolve to an existing interface type"));
+            return false;
         }
-        for (auto & i: entity->getDirectMethods()) {
-            allMembers.emplace(i.name, Member(name));
+        if (!addBase(
+                location, yyscanner, data, directBaseName, n,
+                static_cast<unoidl::InterfaceTypeEntity *>(q->entity.get()),
+                false, false))
+        {
+            return false;
         }
+    }
+    for (auto & i: entity->getDirectOptionalBases())
+    {
+        OUString n("." + i.name);
+        unoidl::detail::SourceProviderEntity const * q;
+        if (findEntity(
+                location, yyscanner, data, true, &n, &q, nullptr, nullptr)
+            == FOUND_ERROR)
+        {
+            return false;
+        }
+        if (q == nullptr || !q->entity.is()
+            || q->entity->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
+        {
+            error(
+                location, yyscanner,
+                ("inconsistent type manager: interface type "
+                 + data->currentName + " base " + n
+                 + " does not resolve to an existing interface type"));
+            return false;
+        }
+        if (!addBase(
+                location, yyscanner, data, directBaseName, n,
+                static_cast<unoidl::InterfaceTypeEntity *>(q->entity.get()),
+                false, true))
+        {
+            return false;
+        }
+    }
+    for (auto & i: entity->getDirectAttributes()) {
+        allMembers.emplace(i.name, Member(name));
+    }
+    for (auto & i: entity->getDirectMethods()) {
+        allMembers.emplace(i.name, Member(name));
     }
     return true;
 }

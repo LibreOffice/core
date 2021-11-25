@@ -175,48 +175,48 @@ void ViewContactOfMasterPage::createViewIndependentPrimitive2DSequence(drawingla
     // is done in the corresponding VOC since DisplayInfo data is needed
     const SdrPage& rPage = getPage();
 
-    if(rPage.IsMasterPage())
+    if(!rPage.IsMasterPage())
+        return;
+
+    if(0 == rPage.GetPageNum())
     {
-        if(0 == rPage.GetPageNum())
+        // #i98063#
+        // filter MasterPage 0 since it's the HandoutPage. Thus, it's a
+        // MasterPage, but has no MPBGO, so there is nothing to do here.
+    }
+    else
+    {
+        drawinglayer::attribute::SdrFillAttribute aFill;
+
+        // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
+        // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
+        // MasterPages should have a StyleSheet exactly for this reason, but historically
+        // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
+        if(rPage.getSdrPageProperties().GetStyleSheet())
         {
-            // #i98063#
-            // filter MasterPage 0 since it's the HandoutPage. Thus, it's a
-            // MasterPage, but has no MPBGO, so there is nothing to do here.
+            // create page fill attributes with correct properties
+            aFill = drawinglayer::primitive2d::createNewSdrFillAttribute(
+                rPage.getSdrPageProperties().GetItemSet());
         }
-        else
+
+        if(!aFill.isDefault())
         {
-            drawinglayer::attribute::SdrFillAttribute aFill;
+            // direct model data is the page size, get and use it
+            const basegfx::B2DRange aOuterRange(
+                0, 0, rPage.GetWidth(), rPage.GetHeight());
+            const basegfx::B2DRange aInnerRange(
+                rPage.GetLeftBorder(), rPage.GetUpperBorder(),
+                rPage.GetWidth() - rPage.GetRightBorder(), rPage.GetHeight() - rPage.GetLowerBorder());
+            bool const isFullSize(rPage.IsBackgroundFullSize());
+            const basegfx::B2DPolygon aFillPolygon(
+                basegfx::utils::createPolygonFromRect(isFullSize ? aOuterRange : aInnerRange));
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
+                    basegfx::B2DPolyPolygon(aFillPolygon),
+                    aFill,
+                    drawinglayer::attribute::FillGradientAttribute()));
 
-            // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
-            // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
-            // MasterPages should have a StyleSheet exactly for this reason, but historically
-            // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
-            if(rPage.getSdrPageProperties().GetStyleSheet())
-            {
-                // create page fill attributes with correct properties
-                aFill = drawinglayer::primitive2d::createNewSdrFillAttribute(
-                    rPage.getSdrPageProperties().GetItemSet());
-            }
-
-            if(!aFill.isDefault())
-            {
-                // direct model data is the page size, get and use it
-                const basegfx::B2DRange aOuterRange(
-                    0, 0, rPage.GetWidth(), rPage.GetHeight());
-                const basegfx::B2DRange aInnerRange(
-                    rPage.GetLeftBorder(), rPage.GetUpperBorder(),
-                    rPage.GetWidth() - rPage.GetRightBorder(), rPage.GetHeight() - rPage.GetLowerBorder());
-                bool const isFullSize(rPage.IsBackgroundFullSize());
-                const basegfx::B2DPolygon aFillPolygon(
-                    basegfx::utils::createPolygonFromRect(isFullSize ? aOuterRange : aInnerRange));
-                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                    drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aFillPolygon),
-                        aFill,
-                        drawinglayer::attribute::FillGradientAttribute()));
-
-                rVisitor.visit(xReference);
-            }
+            rVisitor.visit(xReference);
         }
     }
 }

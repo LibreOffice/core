@@ -101,57 +101,55 @@ bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
     bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
     bool bCtrl = rMEvt.IsMod1();
 
-    if (bZoomIn || bZoomOut)
+    if (!bZoomIn && !bZoomOut)
+        return true;
+
+    Fraction aXFrac = m_aMapMode.GetScaleX();
+    Fraction aYFrac = m_aMapMode.GetScaleY();
+    std::unique_ptr<Fraction> pMultFrac;
+
+    if (bZoomIn)
     {
-        Fraction aXFrac = m_aMapMode.GetScaleX();
-        Fraction aYFrac = m_aMapMode.GetScaleY();
-        std::unique_ptr<Fraction> pMultFrac;
-
-        if (bZoomIn)
-        {
-            if (bCtrl)
-                pMultFrac.reset(new Fraction(3, 2));
-            else
-                pMultFrac.reset(new Fraction(11, 10));
-        }
+        if (bCtrl)
+            pMultFrac.reset(new Fraction(3, 2));
         else
-        {
-            if (bCtrl)
-                pMultFrac.reset(new Fraction(2, 3));
-            else
-                pMultFrac.reset(new Fraction(10, 11));
-        }
-
-        aXFrac *= *pMultFrac;
-        aYFrac *= *pMultFrac;
-
-        if (double(aXFrac) > 0.001 && double(aXFrac) < 1000.0 && double(aYFrac) > 0.001
-            && double(aYFrac) < 1000.0)
-        {
-            m_aMapMode.SetScaleX(aXFrac);
-            m_aMapMode.SetScaleY(aYFrac);
-
-            OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
-            rRefDevice.Push(vcl::PushFlags::MAPMODE);
-            rRefDevice.SetMapMode(m_aMapMode);
-            Size aOutSize(rRefDevice.PixelToLogic(GetOutputSizePixel()));
-            rRefDevice.Pop();
-
-            Point aPt(m_aMapMode.GetOrigin());
-            tools::Long nX = tools::Long(
-                (double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0
-                + 0.5);
-            tools::Long nY = tools::Long(
-                (double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0
-                + 0.5);
-            aPt.AdjustX(nX);
-            aPt.AdjustY(nY);
-
-            m_aMapMode.SetOrigin(aPt);
-
-            Invalidate();
-        }
+            pMultFrac.reset(new Fraction(11, 10));
     }
+    else
+    {
+        if (bCtrl)
+            pMultFrac.reset(new Fraction(2, 3));
+        else
+            pMultFrac.reset(new Fraction(10, 11));
+    }
+
+    aXFrac *= *pMultFrac;
+    aYFrac *= *pMultFrac;
+
+    if (double(aXFrac) <= 0.001 || double(aXFrac) >= 1000.0 || double(aYFrac) <= 0.001
+        || double(aYFrac) >= 1000.0)
+        return true;
+
+    m_aMapMode.SetScaleX(aXFrac);
+    m_aMapMode.SetScaleY(aYFrac);
+
+    OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
+    rRefDevice.Push(vcl::PushFlags::MAPMODE);
+    rRefDevice.SetMapMode(m_aMapMode);
+    Size aOutSize(rRefDevice.PixelToLogic(GetOutputSizePixel()));
+    rRefDevice.Pop();
+
+    Point aPt(m_aMapMode.GetOrigin());
+    tools::Long nX = tools::Long(
+        (double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0 + 0.5);
+    tools::Long nY = tools::Long(
+        (double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0 + 0.5);
+    aPt.AdjustX(nX);
+    aPt.AdjustY(nY);
+
+    m_aMapMode.SetOrigin(aPt);
+
+    Invalidate();
 
     return true;
 }

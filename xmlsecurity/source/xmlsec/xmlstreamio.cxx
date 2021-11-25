@@ -73,30 +73,30 @@ static void* xmlStreamOpen( const char* uri )
 {
     css::uno::Reference< css::io::XInputStream > xInputStream ;
 
-    if (g_bInputCallbacksEnabled && g_bInputCallbacksRegistered)
+    if (!g_bInputCallbacksEnabled || !g_bInputCallbacksRegistered)
+        return nullptr;
+
+    if( uri == nullptr || !m_xUriBinding.is() )
+        return nullptr ;
+
+    //see xmlStreamMatch
+    OUString sUri =
+        ::rtl::Uri::encode( OUString::createFromAscii( uri ),
+        rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
+    xInputStream = m_xUriBinding->getUriBinding( sUri ) ;
+    if (!xInputStream.is())
     {
-        if( uri == nullptr || !m_xUriBinding.is() )
-            return nullptr ;
+        //For old documents.
+        //try the passed in uri directly.
+        xInputStream = m_xUriBinding->getUriBinding(
+            OUString::createFromAscii(uri));
+    }
 
-        //see xmlStreamMatch
-        OUString sUri =
-            ::rtl::Uri::encode( OUString::createFromAscii( uri ),
-            rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
-        xInputStream = m_xUriBinding->getUriBinding( sUri ) ;
-        if (!xInputStream.is())
-        {
-            //For old documents.
-            //try the passed in uri directly.
-            xInputStream = m_xUriBinding->getUriBinding(
-                OUString::createFromAscii(uri));
-        }
-
-        if( xInputStream.is() ) {
-            css::io::XInputStream* pInputStream ;
-            pInputStream = xInputStream.get() ;
-            pInputStream->acquire() ;
-            return static_cast<void*>(pInputStream) ;
-        }
+    if( xInputStream.is() ) {
+        css::io::XInputStream* pInputStream ;
+        pInputStream = xInputStream.get() ;
+        pInputStream->acquire() ;
+        return static_cast<void*>(pInputStream) ;
     }
 
     return nullptr ;
@@ -144,62 +144,62 @@ static int xmlStreamClose( void * context )
 
 int xmlEnableStreamInputCallbacks()
 {
-    if (!g_bInputCallbacksEnabled)
+    if (g_bInputCallbacksEnabled)
+        return 0;
+
+    //Register the callbacks into xmlSec
+    //In order to make the xmlsec io finding the callbacks firstly,
+    //I put the callbacks at the very beginning.
+
+    //Cleanup the older callbacks.
+    //Notes: all none default callbacks will lose.
+    xmlSecIOCleanupCallbacks() ;
+
+    // Make sure that errors are reported via SAL_WARN().
+    setErrorRecorder();
+    comphelper::ScopeGuard g([] { clearErrorRecorder(); });
+
+    // Newer xmlsec wants the callback order in the opposite direction.
+    if (xmlSecCheckVersionExt(1, 2, 26, xmlSecCheckVersionABICompatible))
     {
-        //Register the callbacks into xmlSec
-        //In order to make the xmlsec io finding the callbacks firstly,
-        //I put the callbacks at the very beginning.
-
-        //Cleanup the older callbacks.
-        //Notes: all none default callbacks will lose.
-        xmlSecIOCleanupCallbacks() ;
-
-        // Make sure that errors are reported via SAL_WARN().
-        setErrorRecorder();
-        comphelper::ScopeGuard g([] { clearErrorRecorder(); });
-
-        // Newer xmlsec wants the callback order in the opposite direction.
-        if (xmlSecCheckVersionExt(1, 2, 26, xmlSecCheckVersionABICompatible))
-        {
-            //Register the default callbacks.
-            //Notes: the error will cause xmlsec working problems.
-            int cbs = xmlSecIORegisterDefaultCallbacks() ;
-            if( cbs < 0 ) {
-                return -1 ;
-            }
-
-            //Register my classbacks.
-            cbs = xmlSecIORegisterCallbacks(
-                        xmlStreamMatch,
-                        xmlStreamOpen,
-                        xmlStreamRead,
-                        xmlStreamClose ) ;
-            if( cbs < 0 ) {
-                return -1 ;
-            }
-        }
-        else
-        {
-            //Register my classbacks.
-            int cbs = xmlSecIORegisterCallbacks(
-                        xmlStreamMatch,
-                        xmlStreamOpen,
-                        xmlStreamRead,
-                        xmlStreamClose ) ;
-            if( cbs < 0 ) {
-                return -1 ;
-            }
-
-            //Register the default callbacks.
-            //Notes: the error will cause xmlsec working problems.
-            cbs = xmlSecIORegisterDefaultCallbacks() ;
-            if( cbs < 0 ) {
-                return -1 ;
-            }
+        //Register the default callbacks.
+        //Notes: the error will cause xmlsec working problems.
+        int cbs = xmlSecIORegisterDefaultCallbacks() ;
+        if( cbs < 0 ) {
+            return -1 ;
         }
 
-        g_bInputCallbacksEnabled = true;
+        //Register my classbacks.
+        cbs = xmlSecIORegisterCallbacks(
+                    xmlStreamMatch,
+                    xmlStreamOpen,
+                    xmlStreamRead,
+                    xmlStreamClose ) ;
+        if( cbs < 0 ) {
+            return -1 ;
+        }
     }
+    else
+    {
+        //Register my classbacks.
+        int cbs = xmlSecIORegisterCallbacks(
+                    xmlStreamMatch,
+                    xmlStreamOpen,
+                    xmlStreamRead,
+                    xmlStreamClose ) ;
+        if( cbs < 0 ) {
+            return -1 ;
+        }
+
+        //Register the default callbacks.
+        //Notes: the error will cause xmlsec working problems.
+        cbs = xmlSecIORegisterDefaultCallbacks() ;
+        if( cbs < 0 ) {
+            return -1 ;
+        }
+    }
+
+    g_bInputCallbacksEnabled = true;
 
     return 0 ;
 }

@@ -3804,35 +3804,33 @@ namespace
 bool Window::DeleteSurroundingText(const Selection& rSelection)
 {
     uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(this);
-    if (xText.is())
+    if (!xText)
+        return false;
+
+    sal_Int32 nPosition = xText->getCaretPosition();
+    // #i111768# range checking
+    sal_Int32 nDeletePos = rSelection.Min();
+    sal_Int32 nDeleteEnd = rSelection.Max();
+    if (nDeletePos < 0)
+        nDeletePos = 0;
+    if (nDeleteEnd < 0)
+        nDeleteEnd = 0;
+    if (nDeleteEnd > xText->getCharacterCount())
+        nDeleteEnd = xText->getCharacterCount();
+
+    xText->deleteText(nDeletePos, nDeleteEnd);
+    //tdf91641 adjust cursor if deleted chars shift it forward (normal case)
+    if (nDeletePos < nPosition)
     {
-        sal_Int32 nPosition = xText->getCaretPosition();
-        // #i111768# range checking
-        sal_Int32 nDeletePos = rSelection.Min();
-        sal_Int32 nDeleteEnd = rSelection.Max();
-        if (nDeletePos < 0)
-            nDeletePos = 0;
-        if (nDeleteEnd < 0)
-            nDeleteEnd = 0;
-        if (nDeleteEnd > xText->getCharacterCount())
-            nDeleteEnd = xText->getCharacterCount();
+        if (nDeleteEnd <= nPosition)
+            nPosition = nPosition - (nDeleteEnd - nDeletePos);
+        else
+            nPosition = nDeletePos;
 
-        xText->deleteText(nDeletePos, nDeleteEnd);
-        //tdf91641 adjust cursor if deleted chars shift it forward (normal case)
-        if (nDeletePos < nPosition)
-        {
-            if (nDeleteEnd <= nPosition)
-                nPosition = nPosition - (nDeleteEnd - nDeletePos);
-            else
-                nPosition = nDeletePos;
-
-            if (xText->getCharacterCount() >= nPosition)
-                xText->setCaretPosition( nPosition );
-        }
-        return true;
+        if (xText->getCharacterCount() >= nPosition)
+            xText->setCaretPosition( nPosition );
     }
-
-    return false;
+    return true;
 }
 
 bool WindowOutputDevice::UsePolyPolygonForComplexGradient()

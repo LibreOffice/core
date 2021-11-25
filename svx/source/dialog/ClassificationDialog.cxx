@@ -38,29 +38,29 @@ IMPL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, rKeyEvent, boo
 {
     bool bTextIsFreeForm = officecfg::Office::Common::Classification::IntellectualPropertyTextInputIsFreeForm::get();
 
-    if (!bTextIsFreeForm)
-    {
-        // Ignore key combination with modifier keys
-        if (rKeyEvent.GetKeyCode().IsMod3()
-         || rKeyEvent.GetKeyCode().IsMod2()
-         || rKeyEvent.GetKeyCode().IsMod1())
-        {
-            return true;
-        }
+    if (bTextIsFreeForm)
+        return false;
 
-        switch (rKeyEvent.GetKeyCode().GetCode())
-        {
-            // Allowed characters
-            case KEY_BACKSPACE:
-            case KEY_DELETE:
-            case KEY_DIVIDE:
-            case KEY_SEMICOLON:
-            case KEY_SPACE:
-                return false;
-            // Anything else is ignored
-            default:
-                return true;
-        }
+    // Ignore key combination with modifier keys
+    if (rKeyEvent.GetKeyCode().IsMod3()
+     || rKeyEvent.GetKeyCode().IsMod2()
+     || rKeyEvent.GetKeyCode().IsMod1())
+    {
+        return true;
+    }
+
+    switch (rKeyEvent.GetKeyCode().GetCode())
+    {
+        // Allowed characters
+        case KEY_BACKSPACE:
+        case KEY_DELETE:
+        case KEY_DIVIDE:
+        case KEY_SEMICOLON:
+        case KEY_SPACE:
+            return false;
+        // Anything else is ignored
+        default:
+            return true;
     }
 
     return false;

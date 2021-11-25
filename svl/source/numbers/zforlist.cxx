@@ -3867,31 +3867,31 @@ bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
     }
     else
         bFound = false;
-    if ( bFound )
+    if ( !bFound )
+        return true;
+
+    if ( pFoundEntry && pFoundEntry != pData )
     {
-        if ( pFoundEntry && pFoundEntry != pData )
+        pFoundEntry = nullptr;
+        return false;   // break loop, not unique
+    }
+    if ( nPos == 0 )
+    {   // first entry is SYSTEM
+        pFoundEntry = MatchSystemCurrency();
+        if ( pFoundEntry )
         {
-            pFoundEntry = nullptr;
-            return false;   // break loop, not unique
-        }
-        if ( nPos == 0 )
-        {   // first entry is SYSTEM
-            pFoundEntry = MatchSystemCurrency();
-            if ( pFoundEntry )
-            {
-                return false;   // break loop
-                // even if there are more matching entries
-                // this one is probably the one we are looking for
-            }
-            else
-            {
-                pFoundEntry = pData;
-            }
+            return false;   // break loop
+            // even if there are more matching entries
+            // this one is probably the one we are looking for
         }
         else
         {
             pFoundEntry = pData;
         }
+    }
+    else
+    {
+        pFoundEntry = pData;
     }
     return true;
 }

@@ -870,23 +870,22 @@ bool StgDataStrm::SetSize( sal_Int32 nBytes )
 
     nBytes = ( ( nBytes + m_nIncr - 1 ) / m_nIncr ) * m_nIncr;
     sal_Int32 nOldSz = m_nSize;
-    if( nOldSz != nBytes )
-    {
-        if( !StgStrm::SetSize( nBytes ) )
+    if( nOldSz == nBytes )
+        return true;
+    if( !StgStrm::SetSize( nBytes ) )
+        return false;
+    sal_Int32 nMaxPage = m_pFat->GetMaxPage();
+    if( nMaxPage > m_rIo.GetPhysPages() )
+        if( !m_rIo.SetSize( nMaxPage ) )
             return false;
-        sal_Int32 nMaxPage = m_pFat->GetMaxPage();
-        if( nMaxPage > m_rIo.GetPhysPages() )
-            if( !m_rIo.SetSize( nMaxPage ) )
-                return false;
-        // If we only allocated one page or less, create this
-        // page in the cache for faster throughput. The current
-        // position is the former EOF point.
-        if( ( m_nSize - 1 )  / m_nPageSize - ( nOldSz - 1 ) / m_nPageSize == 1 )
-        {
-            Pos2Page( nBytes );
-            if( m_nPage >= 0 )
-                m_rIo.Copy( m_nPage );
-        }
+    // If we only allocated one page or less, create this
+    // page in the cache for faster throughput. The current
+    // position is the former EOF point.
+    if( ( m_nSize - 1 )  / m_nPageSize - ( nOldSz - 1 ) / m_nPageSize == 1 )
+    {
+        Pos2Page( nBytes );
+        if( m_nPage >= 0 )
+            m_rIo.Copy( m_nPage );
     }
     return true;
 }

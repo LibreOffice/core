@@ -425,47 +425,47 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
                                    const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     // 1-based, sequence starts with an empty element.
-    if (pExternalLinks && pExternalLinks->hasElements())
+    if (!pExternalLinks || !pExternalLinks->hasElements())
+        return true;
+
+    // A numeric "document name" is an index into the sequence.
+    if (!CharClass::isAsciiNumeric( rExternDocName))
+        return true;
+
+    sal_Int32 i = rExternDocName.toInt32();
+    if (i < 0 || i >= pExternalLinks->getLength())
+        return false;   // with default *ppErrRet
+    const sheet::ExternalLinkInfo & rInfo = (*pExternalLinks)[i];
+    switch (rInfo.Type)
     {
-        // A numeric "document name" is an index into the sequence.
-        if (CharClass::isAsciiNumeric( rExternDocName))
-        {
-            sal_Int32 i = rExternDocName.toInt32();
-            if (i < 0 || i >= pExternalLinks->getLength())
-                return false;   // with default *ppErrRet
-            const sheet::ExternalLinkInfo & rInfo = (*pExternalLinks)[i];
-            switch (rInfo.Type)
+        case sheet::ExternalLinkType::DOCUMENT :
             {
-                case sheet::ExternalLinkType::DOCUMENT :
-                    {
-                        OUString aStr;
-                        if (!(rInfo.Data >>= aStr))
-                        {
-                            SAL_INFO(
-                                "sc.core",
-                                "Data type mismatch for ExternalLinkInfo "
-                                    << i);
-                            *ppErrRet = nullptr;
-                            return false;
-                        }
-                        rExternDocName = aStr;
-                    }
-                    break;
-                    case sheet::ExternalLinkType::SELF :
-                        return false;   // ???
-                    case sheet::ExternalLinkType::SPECIAL :
-                        // silently return nothing (do not assert), caller has to handle this
-                        *ppErrRet = nullptr;
-                        return false;
-                default:
+                OUString aStr;
+                if (!(rInfo.Data >>= aStr))
+                {
                     SAL_INFO(
                         "sc.core",
-                        "unhandled ExternalLinkType " << rInfo.Type
-                            << " for index " << i);
+                        "Data type mismatch for ExternalLinkInfo "
+                            << i);
                     *ppErrRet = nullptr;
                     return false;
+                }
+                rExternDocName = aStr;
             }
-        }
+            break;
+            case sheet::ExternalLinkType::SELF :
+                return false;   // ???
+            case sheet::ExternalLinkType::SPECIAL :
+                // silently return nothing (do not assert), caller has to handle this
+                *ppErrRet = nullptr;
+                return false;
+        default:
+            SAL_INFO(
+                "sc.core",
+                "unhandled ExternalLinkType " << rInfo.Type
+                    << " for index " << i);
+            *ppErrRet = nullptr;
+            return false;
     }
     return true;
 }

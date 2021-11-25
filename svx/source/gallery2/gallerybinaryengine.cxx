@@ -106,28 +106,27 @@ bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme, const GalleryThe
 
     DBG_ASSERT(aPathURL.GetProtocol() != INetProtocol::NotValid, "invalid URL");
 
-    if (FileExists(aPathURL) || CreateDir(aPathURL))
-    {
+    if (!FileExists(aPathURL) && !CreateDir(aPathURL))
+        return true;
+
 #ifdef UNX
-        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
-            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
-            StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC));
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+        GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+        StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC));
 #else
-        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
-            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
-            StreamMode::WRITE | StreamMode::TRUNC));
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+        GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+        StreamMode::WRITE | StreamMode::TRUNC));
 #endif
 
-        if (pOStm)
-        {
-            writeGalleryTheme(*pOStm, rTheme, pThm);
-            pOStm.reset();
-            return true;
-        }
-
-        return false;
+    if (pOStm)
+    {
+        writeGalleryTheme(*pOStm, rTheme, pThm);
+        pOStm.reset();
+        return true;
     }
-    return true;
+
+    return false;
 }
 
 void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry,

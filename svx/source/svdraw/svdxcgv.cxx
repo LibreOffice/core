@@ -204,23 +204,21 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
-    if(pObj->GetOutlinerParaObject())
+    if(!pObj->GetOutlinerParaObject())
+        return true;
+
+    SdrOutliner& rOutliner = pObj->getSdrModelFromSdrObject().GetHitTestOutliner();
+    rOutliner.SetText(*pObj->GetOutlinerParaObject());
+    if(1 != rOutliner.GetParagraphCount())
+        return true;
+
+    SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0);
+    if(!pCandidate)
+        return true;
+
+    if(pObj->getSdrModelFromSdrObject().GetStyleSheetPool() == pCandidate->GetPool())
     {
-        SdrOutliner& rOutliner = pObj->getSdrModelFromSdrObject().GetHitTestOutliner();
-        rOutliner.SetText(*pObj->GetOutlinerParaObject());
-
-        if(1 == rOutliner.GetParagraphCount())
-        {
-            SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0);
-
-            if(pCandidate)
-            {
-                if(pObj->getSdrModelFromSdrObject().GetStyleSheetPool() == pCandidate->GetPool())
-                {
-                    pObj->NbcSetStyleSheet(pCandidate, true);
-                }
-            }
-        }
+        pObj->NbcSetStyleSheet(pCandidate, true);
     }
 
     return true;

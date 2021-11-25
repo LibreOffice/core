@@ -360,40 +360,40 @@ bool SfxObjectShell::Close()
 // variant that does not take a reference to itself, so we can call it during object destruction
 bool SfxObjectShell::CloseInternal()
 {
-    if ( !pImpl->bClosing )
+    if ( pImpl->bClosing )
+        return true;
+
+    // Do not close if a progress is still running
+    if ( GetProgress() )
+        return false;
+
+    pImpl->bClosing = true;
+    Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
+
+    if ( xCloseable.is() )
     {
-        // Do not close if a progress is still running
-        if ( GetProgress() )
-            return false;
-
-        pImpl->bClosing = true;
-        Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
-
-        if ( xCloseable.is() )
+        try
         {
-            try
-            {
-                xCloseable->close( true );
-            }
-            catch (const Exception&)
-            {
-                pImpl->bClosing = false;
-            }
+            xCloseable->close( true );
         }
-
-        if ( pImpl->bClosing )
+        catch (const Exception&)
         {
-            // remove from Document list
-            // If there is no App, there is no document to remove
-            // no need to call GetOrCreate here
-            SfxApplication *pSfxApp = SfxApplication::Get();
-            if(pSfxApp)
-            {
-                std::vector<SfxObjectShell*> &rDocs = pSfxApp->GetObjectShells_Impl();
-                auto it = std::find( rDocs.begin(), rDocs.end(), this );
-                if ( it != rDocs.end() )
-                    rDocs.erase( it );
-            }
+            pImpl->bClosing = false;
+        }
+    }
+
+    if ( pImpl->bClosing )
+    {
+        // remove from Document list
+        // If there is no App, there is no document to remove
+        // no need to call GetOrCreate here
+        SfxApplication *pSfxApp = SfxApplication::Get();
+        if(pSfxApp)
+        {
+            std::vector<SfxObjectShell*> &rDocs = pSfxApp->GetObjectShells_Impl();
+            auto it = std::find( rDocs.begin(), rDocs.end(), this );
+            if ( it != rDocs.end() )
+                rDocs.erase( it );
         }
     }
 

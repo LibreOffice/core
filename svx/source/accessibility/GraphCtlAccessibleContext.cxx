@@ -337,22 +337,23 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent()
 
     //  Iterate over all the parent's children and search for this object.
     css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
-    if (xParent.is())
+    if (!xParent)
+        // Return -1 to indicate that this object's parent does not know about the object.
+        return -1;
+
+    Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
+    if( !xParentContext )
+        return -1;
+
+    sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
+    for( sal_Int32 i = 0 ; i < nChildCount ; ++i )
     {
-        Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
-        if( xParentContext.is() )
+        Reference< XAccessible > xChild( xParentContext->getAccessibleChild( i ) );
+        if( xChild.is() )
         {
-            sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-            for( sal_Int32 i = 0 ; i < nChildCount ; ++i )
-            {
-                Reference< XAccessible > xChild( xParentContext->getAccessibleChild( i ) );
-                if( xChild.is() )
-                {
-                    Reference< XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                    if( xChildContext == static_cast<XAccessibleContext*>(this) )
-                        return i;
-                }
-            }
+            Reference< XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+            if( xChildContext == static_cast<XAccessibleContext*>(this) )
+                return i;
         }
     }
 

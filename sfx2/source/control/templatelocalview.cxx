@@ -557,27 +557,25 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
         nDocId = pItem->maTemplates.back().nDocId+1;
     }
 
-    if (mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
-    {
-        TemplateItemProperties aTemplate;
-        aTemplate.nId = nId;
-        aTemplate.nDocId = nDocId;
-        aTemplate.nRegionId = nRegionId;
-        aTemplate.aName = aPath;
-        aTemplate.aThumbnail = TemplateLocalView::fetchThumbnail(rPath,
-                                                                    TEMPLATE_THUMBNAIL_MAX_WIDTH,
-                                                                    TEMPLATE_THUMBNAIL_MAX_HEIGHT);
-        aTemplate.aPath = rPath;
-        aTemplate.aRegionName = getRegionName(nRegionId);
+    if (!mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
+        return false;
 
-        pItem->maTemplates.push_back(aTemplate);
+    TemplateItemProperties aTemplate;
+    aTemplate.nId = nId;
+    aTemplate.nDocId = nDocId;
+    aTemplate.nRegionId = nRegionId;
+    aTemplate.aName = aPath;
+    aTemplate.aThumbnail = TemplateLocalView::fetchThumbnail(rPath,
+                                                                TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                TEMPLATE_THUMBNAIL_MAX_HEIGHT);
+    aTemplate.aPath = rPath;
+    aTemplate.aRegionName = getRegionName(nRegionId);
 
-        CalculateItemPositions();
+    pItem->maTemplates.push_back(aTemplate);
 
-        return true;
-    }
+    CalculateItemPositions();
 
-    return false;
+    return true;
 }
 
 bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName)

@@ -162,24 +162,24 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
     if(rName.isEmpty())
         return false;
 
-    if( aName != rName )
-    {
-        OUString aOldName = aName;
-        SfxStyleSheetBase *pOther = m_pPool->Find( rName, nFamily ) ;
-        if ( pOther && pOther != this )
-            return false;
+    if( aName == rName )
+        return true;
 
-        if ( !aName.isEmpty() )
-            m_pPool->ChangeParent(aName, rName, nFamily, false);
+    OUString aOldName = aName;
+    SfxStyleSheetBase *pOther = m_pPool->Find( rName, nFamily ) ;
+    if ( pOther && pOther != this )
+        return false;
 
-        if ( aFollow == aName )
-            aFollow = rName;
-        aName = rName;
-        if (bReIndexNow)
-            m_pPool->Reindex();
+    if ( !aName.isEmpty() )
+        m_pPool->ChangeParent(aName, rName, nFamily, false);
 
-        m_pPool->Broadcast( SfxStyleSheetModifiedHint( aOldName, *this ) );
-    }
+    if ( aFollow == aName )
+        aFollow = rName;
+    aName = rName;
+    if (bReIndexNow)
+        m_pPool->Reindex();
+
+    m_pPool->Broadcast( SfxStyleSheetModifiedHint( aOldName, *this ) );
     return true;
 }
 
@@ -832,25 +832,24 @@ bool SfxStyleSheet::SetParent( const OUString& rName )
     if(aParent == rName)
         return true;
     const OUString aOldParent(aParent);
-    if(SfxStyleSheetBase::SetParent(rName))
+    if(!SfxStyleSheetBase::SetParent(rName))
+        return false;
+
+    // Remove from notification chain of the old parent if applicable
+    if(!aOldParent.isEmpty())
     {
-        // Remove from notification chain of the old parent if applicable
-        if(!aOldParent.isEmpty())
-        {
-            SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(m_pPool->Find(aOldParent, nFamily));
-            if(pParent)
-                EndListening(*pParent);
-        }
-        // Add to the notification chain of the new parent
-        if(!aParent.isEmpty())
-        {
-            SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(m_pPool->Find(aParent, nFamily));
-            if(pParent)
-                StartListening(*pParent);
-        }
-        return true;
+        SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(m_pPool->Find(aOldParent, nFamily));
+        if(pParent)
+            EndListening(*pParent);
     }
-    return false;
+    // Add to the notification chain of the new parent
+    if(!aParent.isEmpty())
+    {
+        SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(m_pPool->Find(aParent, nFamily));
+        if(pParent)
+            StartListening(*pParent);
+    }
+    return true;
 }
 
 /**

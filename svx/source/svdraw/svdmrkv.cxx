@@ -2493,22 +2493,22 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
             return true;
         }
     }
-    if (bBoundCheckOn2ndPass) {
-        for (size_t nMarkNum=nMarkCount; nMarkNum>0;) {
-            --nMarkNum;
-            SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-            SdrPageView* pPV=pM->GetPageView();
-            SdrObject* pObj=pM->GetMarkedSdrObj();
-            tools::Rectangle aRect(pObj->GetCurrentBoundRect());
-            aRect.AdjustLeft( -mnHitTolLog );
-            aRect.AdjustTop( -mnHitTolLog );
-            aRect.AdjustRight(mnHitTolLog );
-            aRect.AdjustBottom(mnHitTolLog );
-            if (aRect.Contains(rPnt)) {
-                rpObj=pObj;
-                rpPV=pPV;
-                return true;
-            }
+    if (!bBoundCheckOn2ndPass)
+        return false;
+    for (size_t nMarkNum=nMarkCount; nMarkNum>0;) {
+        --nMarkNum;
+        SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
+        SdrPageView* pPV=pM->GetPageView();
+        SdrObject* pObj=pM->GetMarkedSdrObj();
+        tools::Rectangle aRect(pObj->GetCurrentBoundRect());
+        aRect.AdjustLeft( -mnHitTolLog );
+        aRect.AdjustTop( -mnHitTolLog );
+        aRect.AdjustRight(mnHitTolLog );
+        aRect.AdjustBottom(mnHitTolLog );
+        if (aRect.Contains(rPnt)) {
+            rpObj=pObj;
+            rpPV=pPV;
+            return true;
         }
     }
     return false;

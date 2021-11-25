@@ -1315,35 +1315,35 @@ SdrViewContext SdrView::GetContext() const
             return SdrViewContext::PointEdit;
     }
 
-    if( GetMarkedObjectCount() )
+    if( !GetMarkedObjectCount() )
+        return SdrViewContext::Standard;
+
+    bool bGraf = true, bMedia = true, bTable = true;
+
+    for( size_t nMarkNum = 0; nMarkNum < nMarkCount && ( bGraf || bMedia ); ++nMarkNum )
     {
-        bool bGraf = true, bMedia = true, bTable = true;
+        const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
+        DBG_ASSERT( pMarkObj, "SdrView::GetContext(), null pointer in mark list!" );
 
-        for( size_t nMarkNum = 0; nMarkNum < nMarkCount && ( bGraf || bMedia ); ++nMarkNum )
-        {
-            const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
-            DBG_ASSERT( pMarkObj, "SdrView::GetContext(), null pointer in mark list!" );
+        if( !pMarkObj )
+            continue;
 
-            if( !pMarkObj )
-                continue;
+        if( dynamic_cast<const SdrGrafObj*>( pMarkObj) ==  nullptr )
+            bGraf = false;
 
-            if( dynamic_cast<const SdrGrafObj*>( pMarkObj) ==  nullptr )
-                bGraf = false;
+        if( dynamic_cast<const SdrMediaObj*>( pMarkObj) ==  nullptr )
+            bMedia = false;
 
-            if( dynamic_cast<const SdrMediaObj*>( pMarkObj) ==  nullptr )
-                bMedia = false;
-
-            if( dynamic_cast<const sdr::table::SdrTableObj* >( pMarkObj ) ==  nullptr )
-                bTable = false;
-        }
-
-        if( bGraf )
-            return SdrViewContext::Graphic;
-        else if( bMedia )
-            return SdrViewContext::Media;
-        else if( bTable )
-            return SdrViewContext::Table;
+        if( dynamic_cast<const sdr::table::SdrTableObj* >( pMarkObj ) ==  nullptr )
+            bTable = false;
     }
+
+    if( bGraf )
+        return SdrViewContext::Graphic;
+    else if( bMedia )
+        return SdrViewContext::Media;
+    else if( bTable )
+        return SdrViewContext::Table;
 
     return SdrViewContext::Standard;
 }

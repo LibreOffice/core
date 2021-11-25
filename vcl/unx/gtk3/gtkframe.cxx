@@ -5243,30 +5243,30 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
     }
 
     // Determine if we got an earlier key press event corresponding to this key release
-    if (pEvent->type == GDK_KEY_RELEASE)
+    if (pEvent->type != GDK_KEY_RELEASE)
+        return false;
+
+    GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( m_pIMContext ) ) );
+    bool bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
+    g_object_unref( pRef );
+
+    if( aDel.isDeleted() )
+        return true;
+
+    m_bPreeditJustChanged = false;
+
+    auto iter = std::find(m_aPrevKeyPresses.begin(), m_aPrevKeyPresses.end(), pEvent);
+    // If we found a corresponding previous key press event, swallow the release
+    // and remove the earlier key press from our list
+    if (iter != m_aPrevKeyPresses.end())
     {
-        GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( m_pIMContext ) ) );
-        bool bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
-        g_object_unref( pRef );
-
-        if( aDel.isDeleted() )
-            return true;
-
-        m_bPreeditJustChanged = false;
-
-        auto iter = std::find(m_aPrevKeyPresses.begin(), m_aPrevKeyPresses.end(), pEvent);
-        // If we found a corresponding previous key press event, swallow the release
-        // and remove the earlier key press from our list
-        if (iter != m_aPrevKeyPresses.end())
-        {
-            m_aPrevKeyPresses.erase(iter);
-            m_nPrevKeyPresses--;
-            return true;
-        }
-
-        if( bResult )
-            return true;
+        m_aPrevKeyPresses.erase(iter);
+        m_nPrevKeyPresses--;
+        return true;
     }
+
+    if( bResult )
+        return true;
 
     return false;
 }

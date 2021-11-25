@@ -308,75 +308,77 @@ bool parseParameters(ParameterList const & rInput,
             return false;
     }
 
-    if (pOutput)
-        for (auto it = rInput.begin(), itNext = rInput.begin(); it != rInput.end(); it = itNext)
+    if (!pOutput)
+        return true;
+
+    for (auto it = rInput.begin(), itNext = rInput.begin(); it != rInput.end(); it = itNext)
+    {
+        bool bCharset = !it->m_aCharset.isEmpty();
+        rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
+        if (bCharset)
+            eEncoding
+                = getCharsetEncoding(it->m_aCharset.getStr(),
+                                               it->m_aCharset.getStr()
+                                                   + it->m_aCharset.getLength());
+        OUStringBuffer aValue(64);
+        bool bBadEncoding = false;
+        itNext = it;
+        do
         {
-            bool bCharset = !it->m_aCharset.isEmpty();
-            rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
-            if (bCharset)
-                eEncoding
-                    = getCharsetEncoding(it->m_aCharset.getStr(),
-                                                   it->m_aCharset.getStr()
-                                                       + it->m_aCharset.getLength());
-            OUStringBuffer aValue(64);
-            bool bBadEncoding = false;
+            sal_Size nSize;
+            std::unique_ptr<sal_Unicode[]> pUnicode
+                = convertToUnicode(itNext->m_aValue.getStr(),
+                                             itNext->m_aValue.getStr()
+                                                 + itNext->m_aValue.getLength(),
+                                             bCharset && it->m_bExtended ?
+                                                 eEncoding :
+                                                 RTL_TEXTENCODING_UTF8,
+                                             nSize);
+            if (!pUnicode && !(bCharset && it->m_bExtended))
+                pUnicode = convertToUnicode(
+                               itNext->m_aValue.getStr(),
+                               itNext->m_aValue.getStr()
+                                   + itNext->m_aValue.getLength(),
+                               RTL_TEXTENCODING_ISO_8859_1, nSize);
+            if (!pUnicode)
+            {
+                bBadEncoding = true;
+                break;
+            }
+            aValue.append(pUnicode.get(), static_cast<sal_Int32>(nSize));
+            ++itNext;
+        }
+        while (itNext != rInput.end() && itNext->m_nSection != 0);
+
+        if (bBadEncoding)
+        {
+            aValue.setLength(0);
             itNext = it;
             do
             {
-                sal_Size nSize;
-                std::unique_ptr<sal_Unicode[]> pUnicode
-                    = convertToUnicode(itNext->m_aValue.getStr(),
-                                                 itNext->m_aValue.getStr()
-                                                     + itNext->m_aValue.getLength(),
-                                                 bCharset && it->m_bExtended ?
-                                                     eEncoding :
-                                                     RTL_TEXTENCODING_UTF8,
-                                                 nSize);
-                if (!pUnicode && !(bCharset && it->m_bExtended))
-                    pUnicode = convertToUnicode(
-                                   itNext->m_aValue.getStr(),
-                                   itNext->m_aValue.getStr()
-                                       + itNext->m_aValue.getLength(),
-                                   RTL_TEXTENCODING_ISO_8859_1, nSize);
-                if (!pUnicode)
+                if (itNext->m_bExtended)
                 {
-                    bBadEncoding = true;
-                    break;
+                    for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
+                        aValue.append(
+                            static_cast<sal_Unicode>(
+                                static_cast<unsigned char>(itNext->m_aValue[i])
+                                | 0xF800)); // map to unicode corporate use sub area
                 }
-                aValue.append(pUnicode.get(), static_cast<sal_Int32>(nSize));
+                else
+                {
+                    for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
+                        aValue.append( itNext->m_aValue[i] );
+                }
                 ++itNext;
             }
             while (itNext != rInput.end() && itNext->m_nSection != 0);
-
-            if (bBadEncoding)
-            {
-                aValue.setLength(0);
-                itNext = it;
-                do
-                {
-                    if (itNext->m_bExtended)
-                    {
-                        for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
-                            aValue.append(
-                                static_cast<sal_Unicode>(
-                                    static_cast<unsigned char>(itNext->m_aValue[i])
-                                    | 0xF800)); // map to unicode corporate use sub area
-                    }
-                    else
-                    {
-                        for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
-                            aValue.append( itNext->m_aValue[i] );
-                    }
-                    ++itNext;
-                }
-                while (itNext != rInput.end() && itNext->m_nSection != 0);
-            }
-            auto const ret = pOutput->insert(
-                {it->m_aAttribute,
-                 {it->m_aCharset, it->m_aLanguage, aValue.makeStringAndClear(), !bBadEncoding}});
-            SAL_INFO_IF(!ret.second, "tools",
-                "INetMIME: dropping duplicate parameter: " << it->m_aAttribute);
         }
+        auto const ret = pOutput->insert(
+            {it->m_aAttribute,
+             {it->m_aCharset, it->m_aLanguage, aValue.makeStringAndClear(), !bBadEncoding}});
+        SAL_INFO_IF(!ret.second, "tools",
+            "INetMIME: dropping duplicate parameter: " << it->m_aAttribute);
+    }
     return true;
 }
 

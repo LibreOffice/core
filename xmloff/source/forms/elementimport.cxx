@@ -475,50 +475,49 @@ namespace xmloff
     {
         // the generic approach (which I hope all props will be migrated to, on the medium term): property handlers
         const AttributeDescription attribute( metadata::getAttributeDescription( nElement ) );
-        if ( attribute.attributeToken != XML_TOKEN_INVALID )
+        if ( attribute.attributeToken == XML_TOKEN_INVALID )
+            return false;
+
+        PropertyGroups propertyGroups;
+        metadata::getPropertyGroupList( attribute, propertyGroups );
+        const PropertyGroups::const_iterator pos = impl_matchPropertyGroup( propertyGroups );
+        if ( pos == propertyGroups.end() )
+            return false;
+
+        do
         {
-            PropertyGroups propertyGroups;
-            metadata::getPropertyGroupList( attribute, propertyGroups );
-            const PropertyGroups::const_iterator pos = impl_matchPropertyGroup( propertyGroups );
-            if ( pos == propertyGroups.end() )
-                return false;
-
-            do
+            const PropertyDescriptionList& rProperties( *pos );
+            const PropertyDescription* first = *rProperties.begin();
+            if ( !first )
             {
-                const PropertyDescriptionList& rProperties( *pos );
-                const PropertyDescription* first = *rProperties.begin();
-                if ( !first )
-                {
-                    SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property description!" );
-                    break;
-                }
+                SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property description!" );
+                break;
+            }
 
-                const PPropertyHandler handler = (*first->factory)( first->propertyId );
-                if ( !handler )
-                {
-                    SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property handler!" );
-                    break;
-                }
+            const PPropertyHandler handler = (*first->factory)( first->propertyId );
+            if ( !handler )
+            {
+                SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property handler!" );
+                break;
+            }
 
-                PropertyValues aValues;
+            PropertyValues aValues;
+            for ( const auto& propDesc : rProperties )
+            {
+                aValues[ propDesc->propertyId ] = Any();
+            }
+            if ( handler->getPropertyValues( _rValue, aValues ) )
+            {
                 for ( const auto& propDesc : rProperties )
                 {
-                    aValues[ propDesc->propertyId ] = Any();
-                }
-                if ( handler->getPropertyValues( _rValue, aValues ) )
-                {
-                    for ( const auto& propDesc : rProperties )
-                    {
-                        implPushBackPropertyValue( propDesc->propertyName, aValues[ propDesc->propertyId ] );
-                    }
+                    implPushBackPropertyValue( propDesc->propertyName, aValues[ propDesc->propertyId ] );
                 }
             }
-            while ( false );
-
-            // handled
-            return true;
         }
-        return false;
+        while ( false );
+
+        // handled
+        return true;
     }
 
     bool OElementImport::handleAttribute(sal_Int32 nElement, const OUString& _rValue)

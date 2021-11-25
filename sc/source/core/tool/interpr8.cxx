@@ -435,50 +435,49 @@ bool ScETSForecastCalculation::prefillTrendData()
 
 bool ScETSForecastCalculation::prefillPerIdx()
 {
-    if ( !bEDS )
+    if ( bEDS )
+        return true;
+    // use as many complete periods as available
+    if ( mnSmplInPrd == 0 )
     {
-        // use as many complete periods as available
-        if ( mnSmplInPrd == 0 )
+        // should never happen; if mnSmplInPrd equals 0, bEDS is true
+        mnErrorValue = FormulaError::UnknownState;
+        return false;
+    }
+    SCSIZE nPeriods = mnCount / mnSmplInPrd;
+    std::vector< KahanSum > aPeriodAverage( nPeriods, 0.0 );
+    for ( SCSIZE i = 0; i < nPeriods ; i++ )
+    {
+        for ( SCSIZE j = 0; j < mnSmplInPrd; j++ )
+            aPeriodAverage[ i ] += maRange[ i * mnSmplInPrd + j ].Y;
+        aPeriodAverage[ i ] /= static_cast< double >( mnSmplInPrd );
+        if ( aPeriodAverage[ i ] == 0.0 )
         {
-            // should never happen; if mnSmplInPrd equals 0, bEDS is true
-            mnErrorValue = FormulaError::UnknownState;
+            SAL_WARN( "sc.core", "prefillPerIdx(), average of 0 will cause divide by zero error, quitting calculation" );
+            mnErrorValue = FormulaError::DivisionByZero;
             return false;
         }
-        SCSIZE nPeriods = mnCount / mnSmplInPrd;
-        std::vector< KahanSum > aPeriodAverage( nPeriods, 0.0 );
+    }
+
+    for ( SCSIZE j = 0; j < mnSmplInPrd; j++ )
+    {
+        KahanSum fI = 0.0;
         for ( SCSIZE i = 0; i < nPeriods ; i++ )
         {
-            for ( SCSIZE j = 0; j < mnSmplInPrd; j++ )
-                aPeriodAverage[ i ] += maRange[ i * mnSmplInPrd + j ].Y;
-            aPeriodAverage[ i ] /= static_cast< double >( mnSmplInPrd );
-            if ( aPeriodAverage[ i ] == 0.0 )
-            {
-                SAL_WARN( "sc.core", "prefillPerIdx(), average of 0 will cause divide by zero error, quitting calculation" );
-                mnErrorValue = FormulaError::DivisionByZero;
-                return false;
-            }
+            // adjust average value for position within period
+            if ( bAdditive )
+                fI +=   maRange[ i * mnSmplInPrd + j ].Y -
+                        ( aPeriodAverage[ i ].get() + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
+                          mpTrend[ 0 ] );
+            else
+                fI +=   maRange[ i * mnSmplInPrd + j ].Y /
+                        ( aPeriodAverage[ i ].get() + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
+                          mpTrend[ 0 ] );
         }
-
-        for ( SCSIZE j = 0; j < mnSmplInPrd; j++ )
-        {
-            KahanSum fI = 0.0;
-            for ( SCSIZE i = 0; i < nPeriods ; i++ )
-            {
-                // adjust average value for position within period
-                if ( bAdditive )
-                    fI +=   maRange[ i * mnSmplInPrd + j ].Y -
-                            ( aPeriodAverage[ i ].get() + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
-                              mpTrend[ 0 ] );
-                else
-                    fI +=   maRange[ i * mnSmplInPrd + j ].Y /
-                            ( aPeriodAverage[ i ].get() + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
-                              mpTrend[ 0 ] );
-            }
-            mpPerIdx[ j ] = fI.get() / nPeriods;
-        }
-        if (mnSmplInPrd < mnCount)
-            mpPerIdx[mnSmplInPrd] = 0.0;
+        mpPerIdx[ j ] = fI.get() / nPeriods;
     }
+    if (mnSmplInPrd < mnCount)
+        mpPerIdx[mnSmplInPrd] = 0.0;
     return true;
 }
 

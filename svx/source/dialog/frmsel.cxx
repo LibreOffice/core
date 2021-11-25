@@ -1098,67 +1098,67 @@ bool FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
     // #107394# do not auto-select a frame border
     mxImpl->SilentGrabFocus();
 
-    if( rMEvt.IsLeft() )
+    if( !rMEvt.IsLeft() )
+        return true;
+
+    Point aPos( mxImpl->GetDevPosFromMousePos( rMEvt.GetPosPixel() ) );
+    FrameBorderPtrVec aDeselectBorders;
+
+    bool bAnyClicked = false;   // Any frame border clicked?
+    bool bNewSelected = false;  // Any unselected frame border selected?
+
+    /*  If frame borders are set to "don't care" and the control does not
+        support this state, hide them on first mouse click.
+        DR 2004-01-30: Why are the borders set to "don't care" then?!? */
+    bool bHideDontCare = !SupportsDontCareState();
+
+    for( FrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
     {
-        Point aPos( mxImpl->GetDevPosFromMousePos( rMEvt.GetPosPixel() ) );
-        FrameBorderPtrVec aDeselectBorders;
-
-        bool bAnyClicked = false;   // Any frame border clicked?
-        bool bNewSelected = false;  // Any unselected frame border selected?
-
-        /*  If frame borders are set to "don't care" and the control does not
-            support this state, hide them on first mouse click.
-            DR 2004-01-30: Why are the borders set to "don't care" then?!? */
-        bool bHideDontCare = !SupportsDontCareState();
-
-        for( FrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
+        if( (*aIt)->ContainsClickPoint( aPos ) )
         {
-            if( (*aIt)->ContainsClickPoint( aPos ) )
+            // frame border is clicked
+            bAnyClicked = true;
+            if( !(*aIt)->IsSelected() )
             {
-                // frame border is clicked
-                bAnyClicked = true;
-                if( !(*aIt)->IsSelected() )
-                {
-                    bNewSelected = true;
-                    //mxImpl->SelectBorder( **aIt, true );
-                    SelectBorder((**aIt).GetType());
-                }
-            }
-            else
-            {
-                // hide a "don't care" frame border only if it is not clicked
-                if( bHideDontCare && ((*aIt)->GetState() == FrameBorderState::DontCare) )
-                    mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
-
-                // deselect frame borders not clicked (if SHIFT or CTRL are not pressed)
-                if( !rMEvt.IsShift() && !rMEvt.IsMod1() )
-                    aDeselectBorders.push_back( *aIt );
+                bNewSelected = true;
+                //mxImpl->SelectBorder( **aIt, true );
+                SelectBorder((**aIt).GetType());
             }
         }
-
-        if( bAnyClicked )
+        else
         {
-            // any valid frame border clicked? -> deselect other frame borders
-            for( FrameBorderIter aIt( aDeselectBorders ); aIt.Is(); ++aIt )
-                mxImpl->SelectBorder( **aIt, false );
+            // hide a "don't care" frame border only if it is not clicked
+            if( bHideDontCare && ((*aIt)->GetState() == FrameBorderState::DontCare) )
+                mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
 
-            if( bNewSelected || !mxImpl->SelectedBordersEqual() )
-            {
-                // new frame border selected, selection extended, or selected borders different? -> show
-                for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-                    // SetBorderState() sets current style and color to the frame border
-                    mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
-            }
-            else
-            {
-                // all selected frame borders are equal -> toggle state
-                for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-                    mxImpl->ToggleBorderState( **aIt );
-            }
-
-            GetSelectHdl().Call( nullptr );
+            // deselect frame borders not clicked (if SHIFT or CTRL are not pressed)
+            if( !rMEvt.IsShift() && !rMEvt.IsMod1() )
+                aDeselectBorders.push_back( *aIt );
         }
     }
+
+    if( !bAnyClicked )
+        return true;
+
+    // any valid frame border clicked? -> deselect other frame borders
+    for( FrameBorderIter aIt( aDeselectBorders ); aIt.Is(); ++aIt )
+        mxImpl->SelectBorder( **aIt, false );
+
+    if( bNewSelected || !mxImpl->SelectedBordersEqual() )
+    {
+        // new frame border selected, selection extended, or selected borders different? -> show
+        for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
+            // SetBorderState() sets current style and color to the frame border
+            mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
+    }
+    else
+    {
+        // all selected frame borders are equal -> toggle state
+        for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
+            mxImpl->ToggleBorderState( **aIt );
+    }
+
+    GetSelectHdl().Call( nullptr );
 
     return true;
 }

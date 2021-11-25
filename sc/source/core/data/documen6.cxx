@@ -50,24 +50,23 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
 
 bool ScDocument::HasStringWeakCharacters( const OUString& rString )
 {
-    if (!rString.isEmpty())
+    if (rString.isEmpty())
+        return false;
+    uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
+    if ( xBreakIter.is() )
     {
-        uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
-        if ( xBreakIter.is() )
+        sal_Int32 nLen = rString.getLength();
+
+        sal_Int32 nPos = 0;
+        do
         {
-            sal_Int32 nLen = rString.getLength();
+            sal_Int16 nType = xBreakIter->getScriptType( rString, nPos );
+            if ( nType == i18n::ScriptType::WEAK )
+                return true;                            // found
 
-            sal_Int32 nPos = 0;
-            do
-            {
-                sal_Int16 nType = xBreakIter->getScriptType( rString, nPos );
-                if ( nType == i18n::ScriptType::WEAK )
-                    return true;                            // found
-
-                nPos = xBreakIter->endOfScript( rString, nPos, nType );
-            }
-            while ( nPos >= 0 && nPos < nLen );
+            nPos = xBreakIter->endOfScript( rString, nPos, nType );
         }
+        while ( nPos >= 0 && nPos < nLen );
     }
 
     return false;       // none found

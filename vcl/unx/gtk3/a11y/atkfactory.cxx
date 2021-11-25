@@ -120,28 +120,28 @@ wrapper_factory_create_accessible( GObject *obj )
     g_return_val_if_fail( pFrame != nullptr, nullptr );
 
     vcl::Window* pFrameWindow = pFrame->GetWindow();
-    if( pFrameWindow )
+    if( !pFrameWindow )
+        return nullptr;
+
+    vcl::Window* pWindow = pFrameWindow;
+
+    // skip accessible objects already exposed by the frame objects
+    if( WindowType::BORDERWINDOW == pWindow->GetType() )
+        pWindow = pFrameWindow->GetAccessibleChildWindow(0);
+
+    if( pWindow )
     {
-        vcl::Window* pWindow = pFrameWindow;
-
-        // skip accessible objects already exposed by the frame objects
-        if( WindowType::BORDERWINDOW == pWindow->GetType() )
-            pWindow = pFrameWindow->GetAccessibleChildWindow(0);
-
-        if( pWindow )
+        uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible();
+        if( xAccessible.is() )
         {
-            uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible();
-            if( xAccessible.is() )
-            {
-                AtkObject *accessible = ooo_wrapper_registry_get( xAccessible );
+            AtkObject *accessible = ooo_wrapper_registry_get( xAccessible );
 
-                if( accessible )
-                    g_object_ref( G_OBJECT(accessible) );
-                else
-                    accessible = atk_object_wrapper_new( xAccessible, gtk_widget_get_accessible(pTopLevel) );
+            if( accessible )
+                g_object_ref( G_OBJECT(accessible) );
+            else
+                accessible = atk_object_wrapper_new( xAccessible, gtk_widget_get_accessible(pTopLevel) );
 
-                return accessible;
-            }
+            return accessible;
         }
     }
 

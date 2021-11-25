@@ -29,29 +29,29 @@
 namespace unoidl {
 
 static bool operator ==(ConstantValue const & lhs, ConstantValue const & rhs) {
-    if (lhs.type == rhs.type) {
-        switch (lhs.type) {
-        case ConstantValue::TYPE_BOOLEAN:
-            return lhs.booleanValue == rhs.booleanValue;
-        case ConstantValue::TYPE_BYTE:
-            return lhs.byteValue == rhs.byteValue;
-        case ConstantValue::TYPE_SHORT:
-            return lhs.shortValue == rhs.shortValue;
-        case ConstantValue::TYPE_UNSIGNED_SHORT:
-            return lhs.unsignedShortValue == rhs.unsignedShortValue;
-        case ConstantValue::TYPE_LONG:
-            return lhs.longValue == rhs.longValue;
-        case ConstantValue::TYPE_UNSIGNED_LONG:
-            return lhs.unsignedLongValue == rhs.unsignedLongValue;
-        case ConstantValue::TYPE_HYPER:
-            return lhs.hyperValue == rhs.hyperValue;
-        case ConstantValue::TYPE_UNSIGNED_HYPER:
-            return lhs.unsignedHyperValue == rhs.unsignedHyperValue;
-        case ConstantValue::TYPE_FLOAT:
-            return lhs.floatValue == rhs.floatValue;
-        case ConstantValue::TYPE_DOUBLE:
-            return lhs.doubleValue == rhs.doubleValue;
-        }
+    if (lhs.type != rhs.type)
+        return false;
+    switch (lhs.type) {
+    case ConstantValue::TYPE_BOOLEAN:
+        return lhs.booleanValue == rhs.booleanValue;
+    case ConstantValue::TYPE_BYTE:
+        return lhs.byteValue == rhs.byteValue;
+    case ConstantValue::TYPE_SHORT:
+        return lhs.shortValue == rhs.shortValue;
+    case ConstantValue::TYPE_UNSIGNED_SHORT:
+        return lhs.unsignedShortValue == rhs.unsignedShortValue;
+    case ConstantValue::TYPE_LONG:
+        return lhs.longValue == rhs.longValue;
+    case ConstantValue::TYPE_UNSIGNED_LONG:
+        return lhs.unsignedLongValue == rhs.unsignedLongValue;
+    case ConstantValue::TYPE_HYPER:
+        return lhs.hyperValue == rhs.hyperValue;
+    case ConstantValue::TYPE_UNSIGNED_HYPER:
+        return lhs.unsignedHyperValue == rhs.unsignedHyperValue;
+    case ConstantValue::TYPE_FLOAT:
+        return lhs.floatValue == rhs.floatValue;
+    case ConstantValue::TYPE_DOUBLE:
+        return lhs.doubleValue == rhs.doubleValue;
     }
     return false;
 }

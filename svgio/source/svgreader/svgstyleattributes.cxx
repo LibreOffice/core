@@ -817,78 +817,77 @@ namespace svgio::svgreader
 
             // get marker primitive representation
             rMarkerPrimitives = rMarker.getMarkerPrimitives();
+            if(rMarkerPrimitives.empty())
+                return false;
 
-            if(!rMarkerPrimitives.empty())
+            basegfx::B2DRange aPrimitiveRange(0.0, 0.0, 1.0, 1.0);
+            const basegfx::B2DRange* pViewBox = rMarker.getViewBox();
+
+            if(pViewBox)
             {
-                basegfx::B2DRange aPrimitiveRange(0.0, 0.0, 1.0, 1.0);
-                const basegfx::B2DRange* pViewBox = rMarker.getViewBox();
+                aPrimitiveRange = *pViewBox;
+            }
 
-                if(pViewBox)
+            if(aPrimitiveRange.getWidth() > 0.0 && aPrimitiveRange.getHeight() > 0.0)
+            {
+                double fTargetWidth(rMarker.getMarkerWidth().isSet() ? rMarker.getMarkerWidth().solve(mrOwner, NumberType::xcoordinate) : 3.0);
+                double fTargetHeight(rMarker.getMarkerHeight().isSet() ? rMarker.getMarkerHeight().solve(mrOwner, NumberType::xcoordinate) : 3.0);
+                const bool bStrokeWidth(SvgMarkerNode::MarkerUnits::strokeWidth == rMarker.getMarkerUnits());
+                const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
+
+                if(bStrokeWidth)
                 {
-                    aPrimitiveRange = *pViewBox;
+                    // relative to strokeWidth
+                    fTargetWidth *= fStrokeWidth;
+                    fTargetHeight *= fStrokeWidth;
                 }
 
-                if(aPrimitiveRange.getWidth() > 0.0 && aPrimitiveRange.getHeight() > 0.0)
+                if(fTargetWidth > 0.0 && fTargetHeight > 0.0)
                 {
-                    double fTargetWidth(rMarker.getMarkerWidth().isSet() ? rMarker.getMarkerWidth().solve(mrOwner, NumberType::xcoordinate) : 3.0);
-                    double fTargetHeight(rMarker.getMarkerHeight().isSet() ? rMarker.getMarkerHeight().solve(mrOwner, NumberType::xcoordinate) : 3.0);
-                    const bool bStrokeWidth(SvgMarkerNode::MarkerUnits::strokeWidth == rMarker.getMarkerUnits());
-                    const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
+                    // create mapping
+                    const basegfx::B2DRange aTargetRange(0.0, 0.0, fTargetWidth, fTargetHeight);
+                    const SvgAspectRatio& rRatio = rMarker.getSvgAspectRatio();
 
-                    if(bStrokeWidth)
+                    if(rRatio.isSet())
                     {
-                        // relative to strokeWidth
-                        fTargetWidth *= fStrokeWidth;
-                        fTargetHeight *= fStrokeWidth;
-                    }
+                        // let mapping be created from SvgAspectRatio
+                        rMarkerTransform = rRatio.createMapping(aTargetRange, aPrimitiveRange);
 
-                    if(fTargetWidth > 0.0 && fTargetHeight > 0.0)
-                    {
-                        // create mapping
-                        const basegfx::B2DRange aTargetRange(0.0, 0.0, fTargetWidth, fTargetHeight);
-                        const SvgAspectRatio& rRatio = rMarker.getSvgAspectRatio();
-
-                        if(rRatio.isSet())
+                        if(rRatio.isMeetOrSlice())
                         {
-                            // let mapping be created from SvgAspectRatio
-                            rMarkerTransform = rRatio.createMapping(aTargetRange, aPrimitiveRange);
-
-                            if(rRatio.isMeetOrSlice())
+                            // need to clip
+                            rClipRange = aPrimitiveRange;
+                        }
+                    }
+                    else
+                    {
+                        if(!pViewBox)
+                        {
+                            if(bStrokeWidth)
                             {
-                                // need to clip
-                                rClipRange = aPrimitiveRange;
+                                // adapt to strokewidth if needed
+                                rMarkerTransform.scale(fStrokeWidth, fStrokeWidth);
                             }
                         }
                         else
                         {
-                            if(!pViewBox)
-                            {
-                                if(bStrokeWidth)
-                                {
-                                    // adapt to strokewidth if needed
-                                    rMarkerTransform.scale(fStrokeWidth, fStrokeWidth);
-                                }
-                            }
-                            else
-                            {
-                                // choose default mapping
-                                rMarkerTransform = SvgAspectRatio::createLinearMapping(aTargetRange, aPrimitiveRange);
-                            }
+                            // choose default mapping
+                            rMarkerTransform = SvgAspectRatio::createLinearMapping(aTargetRange, aPrimitiveRange);
                         }
-
-                        // get and apply reference point. Initially it's in marker local coordinate system
-                        basegfx::B2DPoint aRefPoint(
-                            rMarker.getRefX().isSet() ? rMarker.getRefX().solve(mrOwner, NumberType::xcoordinate) : 0.0,
-                            rMarker.getRefY().isSet() ? rMarker.getRefY().solve(mrOwner, NumberType::ycoordinate) : 0.0);
-
-                        // apply MarkerTransform to have it in mapped coordinates
-                        aRefPoint *= rMarkerTransform;
-
-                        // apply by moving RepPoint to (0.0)
-                        rMarkerTransform.translate(-aRefPoint.getX(), -aRefPoint.getY());
-
-                        return true;
                     }
+
+                    // get and apply reference point. Initially it's in marker local coordinate system
+                    basegfx::B2DPoint aRefPoint(
+                        rMarker.getRefX().isSet() ? rMarker.getRefX().solve(mrOwner, NumberType::xcoordinate) : 0.0,
+                        rMarker.getRefY().isSet() ? rMarker.getRefY().solve(mrOwner, NumberType::ycoordinate) : 0.0);
+
+                    // apply MarkerTransform to have it in mapped coordinates
+                    aRefPoint *= rMarkerTransform;
+
+                    // apply by moving RepPoint to (0.0)
+                    rMarkerTransform.translate(-aRefPoint.getX(), -aRefPoint.getY());
+
+                    return true;
                 }
             }
 

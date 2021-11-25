@@ -438,33 +438,33 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
     }
 
     /* found part separator */
-    if ( pSecondPart )
-    {
-        /* Search for the part tab */
-        const ImplStrFirstPartCharsetDef* pFirstPartData = aUnixCharsetFirstPartTab;
-        while ( pFirstPartData->mpCharsetStr )
-        {
-            if ( Impl_matchString( pFirstPart, pFirstPartData->mpCharsetStr ) )
-            {
-                /* Search for the charset in the second part tab */
-                const ImplStrCharsetDef* pData = pFirstPartData->mpSecondPartTab;
-                while ( pData->mpCharsetStr )
-                {
-                    if ( Impl_matchString( pSecondPart, pData->mpCharsetStr ) )
-                    {
-                        break;
-                    }
+    if ( !pSecondPart )
+        return eEncoding;
 
-                    pData++;
+    /* Search for the part tab */
+    const ImplStrFirstPartCharsetDef* pFirstPartData = aUnixCharsetFirstPartTab;
+    while ( pFirstPartData->mpCharsetStr )
+    {
+        if ( Impl_matchString( pFirstPart, pFirstPartData->mpCharsetStr ) )
+        {
+            /* Search for the charset in the second part tab */
+            const ImplStrCharsetDef* pData = pFirstPartData->mpSecondPartTab;
+            while ( pData->mpCharsetStr )
+            {
+                if ( Impl_matchString( pSecondPart, pData->mpCharsetStr ) )
+                {
+                    break;
                 }
 
-                /* use default encoding for first part */
-                eEncoding = pData->meTextEncoding;
-                break;
+                pData++;
             }
 
-            pFirstPartData++;
+            /* use default encoding for first part */
+            eEncoding = pData->meTextEncoding;
+            break;
         }
+
+        pFirstPartData++;
     }
 
     return eEncoding;

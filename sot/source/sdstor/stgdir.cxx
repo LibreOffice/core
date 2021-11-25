@@ -184,24 +184,23 @@ bool StgDirEntry::Store( StgDirStrm& rStrm )
 
 bool StgDirEntry::StoreStream( StgIo& rIo )
 {
-    if( m_aEntry.GetType() == STG_STREAM || m_aEntry.GetType() == STG_ROOT )
+    if( m_aEntry.GetType() != STG_STREAM && m_aEntry.GetType() != STG_ROOT )
+        return true;
+    if( m_bInvalid )
     {
-        if( m_bInvalid )
+        // Delete the stream if needed
+        if( !m_pStgStrm )
         {
-            // Delete the stream if needed
-            if( !m_pStgStrm )
-            {
-                OpenStream( rIo );
-                delete m_pStgStrm;
-                m_pStgStrm = nullptr;
-            }
-            else
-                m_pStgStrm->SetSize( 0 );
+            OpenStream( rIo );
+            delete m_pStgStrm;
+            m_pStgStrm = nullptr;
         }
-        // or write the data stream
-        else if( !Tmp2Strm() )
-            return false;
+        else
+            m_pStgStrm->SetSize( 0 );
     }
+    // or write the data stream
+    else if( !Tmp2Strm() )
+        return false;
     return true;
 }
 
@@ -547,61 +546,61 @@ bool StgDirEntry::Commit()
 
 bool StgDirEntry::Strm2Tmp()
 {
-    if( !m_pTmpStrm )
+    if( m_pTmpStrm )
+        return true;
+
+    sal_uInt64 n = 0;
+    if( m_pCurStrm )
     {
-        sal_uInt64 n = 0;
-        if( m_pCurStrm )
+        // It was already committed once
+        m_pTmpStrm = new StgTmpStrm;
+        if( m_pTmpStrm->GetError() == ERRCODE_NONE && m_pTmpStrm->Copy( *m_pCurStrm ) )
+            return true;
+        n = 1;  // indicates error
+    }
+    else
+    {
+        n = m_aEntry.GetSize();
+        m_pTmpStrm = new StgTmpStrm( n );
+        if( m_pTmpStrm->GetError() == ERRCODE_NONE )
         {
-            // It was already committed once
-            m_pTmpStrm = new StgTmpStrm;
-            if( m_pTmpStrm->GetError() == ERRCODE_NONE && m_pTmpStrm->Copy( *m_pCurStrm ) )
-                return true;
-            n = 1;  // indicates error
+            if( n )
+            {
+                OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
+                if ( !m_pStgStrm )
+                    return false;
+
+                sal_uInt8 aTempBytes[ 4096 ];
+                void* p = static_cast<void*>( aTempBytes );
+                m_pStgStrm->Pos2Page( 0 );
+                while( n )
+                {
+                    sal_uInt64 nn = n;
+                    if( nn > 4096 )
+                        nn = 4096;
+                    if( static_cast<sal_uInt64>(m_pStgStrm->Read( p, nn )) != nn )
+                        break;
+                    if (m_pTmpStrm->WriteBytes( p, nn ) != nn)
+                        break;
+                    n -= nn;
+                }
+                m_pStgStrm->Pos2Page( m_nPos );
+                m_pTmpStrm->Seek( m_nPos );
+            }
         }
         else
-        {
-            n = m_aEntry.GetSize();
-            m_pTmpStrm = new StgTmpStrm( n );
-            if( m_pTmpStrm->GetError() == ERRCODE_NONE )
-            {
-                if( n )
-                {
-                    OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
-                    if ( !m_pStgStrm )
-                        return false;
+            n = 1;
+    }
 
-                    sal_uInt8 aTempBytes[ 4096 ];
-                    void* p = static_cast<void*>( aTempBytes );
-                    m_pStgStrm->Pos2Page( 0 );
-                    while( n )
-                    {
-                        sal_uInt64 nn = n;
-                        if( nn > 4096 )
-                            nn = 4096;
-                        if( static_cast<sal_uInt64>(m_pStgStrm->Read( p, nn )) != nn )
-                            break;
-                        if (m_pTmpStrm->WriteBytes( p, nn ) != nn)
-                            break;
-                        n -= nn;
-                    }
-                    m_pStgStrm->Pos2Page( m_nPos );
-                    m_pTmpStrm->Seek( m_nPos );
-                }
-            }
-            else
-                n = 1;
-        }
+    if( n )
+    {
+        OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
+        if ( m_pStgStrm )
+            m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
 
-        if( n )
-        {
-            OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
-            if ( m_pStgStrm )
-                m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
-
-            delete m_pTmpStrm;
-            m_pTmpStrm = nullptr;
-            return false;
-        }
+        delete m_pTmpStrm;
+        m_pTmpStrm = nullptr;
+        return false;
     }
     return true;
 }
@@ -616,53 +615,53 @@ bool StgDirEntry::Tmp2Strm()
         m_pTmpStrm = m_pCurStrm;
         m_pCurStrm = nullptr;
     }
-    if( m_pTmpStrm )
+    if( !m_pTmpStrm )
+        return true;
+
+    OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
+    if ( !m_pStgStrm )
+        return false;
+    sal_uInt64 n = m_pTmpStrm->GetSize();
+    std::unique_ptr<StgStrm> pNewStrm;
+    StgIo& rIo = m_pStgStrm->GetIo();
+    sal_uInt64 nThreshold = rIo.m_aHdr.GetThreshold();
+    if( n < nThreshold )
+        pNewStrm.reset(new StgSmallStrm( rIo, STG_EOF ));
+    else
+        pNewStrm.reset(new StgDataStrm( rIo, STG_EOF ));
+    if( !pNewStrm->SetSize( n ) )
+        return true;
+
+    sal_uInt8 p[ 4096 ];
+    m_pTmpStrm->Seek( 0 );
+    while( n )
     {
-        OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
-        if ( !m_pStgStrm )
-            return false;
-        sal_uInt64 n = m_pTmpStrm->GetSize();
-        std::unique_ptr<StgStrm> pNewStrm;
-        StgIo& rIo = m_pStgStrm->GetIo();
-        sal_uInt64 nThreshold = rIo.m_aHdr.GetThreshold();
-        if( n < nThreshold )
-            pNewStrm.reset(new StgSmallStrm( rIo, STG_EOF ));
-        else
-            pNewStrm.reset(new StgDataStrm( rIo, STG_EOF ));
-        if( pNewStrm->SetSize( n ) )
-        {
-            sal_uInt8 p[ 4096 ];
-            m_pTmpStrm->Seek( 0 );
-            while( n )
-            {
-                sal_uInt64 nn = n;
-                if( nn > 4096 )
-                    nn = 4096;
-                if (m_pTmpStrm->ReadBytes( p, nn ) != nn)
-                    break;
-                if( static_cast<sal_uInt64>(pNewStrm->Write( p, nn )) != nn )
-                    break;
-                n -= nn;
-            }
-            if( n )
-            {
-                m_pTmpStrm->Seek( m_nPos );
-                m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
-                return false;
-            }
-            else
-            {
-                m_pStgStrm->SetSize( 0 );
-                delete m_pStgStrm;
-                m_pStgStrm = pNewStrm.release();
-                m_pStgStrm->SetEntry(*this);
-                m_pStgStrm->Pos2Page(m_nPos);
-                delete m_pTmpStrm;
-                delete m_pCurStrm;
-                m_pTmpStrm = m_pCurStrm = nullptr;
-                m_aSave = m_aEntry;
-            }
-        }
+        sal_uInt64 nn = n;
+        if( nn > 4096 )
+            nn = 4096;
+        if (m_pTmpStrm->ReadBytes( p, nn ) != nn)
+            break;
+        if( static_cast<sal_uInt64>(pNewStrm->Write( p, nn )) != nn )
+            break;
+        n -= nn;
+    }
+    if( n )
+    {
+        m_pTmpStrm->Seek( m_nPos );
+        m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
+        return false;
+    }
+    else
+    {
+        m_pStgStrm->SetSize( 0 );
+        delete m_pStgStrm;
+        m_pStgStrm = pNewStrm.release();
+        m_pStgStrm->SetEntry(*this);
+        m_pStgStrm->Pos2Page(m_nPos);
+        delete m_pTmpStrm;
+        delete m_pCurStrm;
+        m_pTmpStrm = m_pCurStrm = nullptr;
+        m_aSave = m_aEntry;
     }
     return true;
 }

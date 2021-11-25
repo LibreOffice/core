@@ -332,53 +332,51 @@ SdrInventor SelectionAnalyzer::GetInventorTypeFromMark(const SdrMarkList& rMarkL
 sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup(const SdrObject* pObj)
 {
     SdrObjList* pObjList = pObj->GetSubList();
-    if (pObjList)
+    if (!pObjList)
+        return 0;
+
+    const size_t nSubObjCount(pObjList->GetObjCount());
+
+    if (nSubObjCount <= 0)
+        return 0;
+
+    SdrObject* pSubObj = pObjList->GetObj(0);
+    sal_uInt16 nResultType = pSubObj->GetObjIdentifier();
+
+    if (nResultType == OBJ_GRUP)
+        nResultType = GetObjectTypeFromGroup(pSubObj);
+
+    if (IsShapeType(nResultType))
+        nResultType = OBJ_CUSTOMSHAPE;
+
+    if (IsTextObjType(nResultType))
+        nResultType = OBJ_TEXT;
+
+    for (size_t nIndex = 1; nIndex < nSubObjCount; ++nIndex)
     {
-        const size_t nSubObjCount(pObjList->GetObjCount());
+        pSubObj = pObjList->GetObj(nIndex);
+        sal_uInt16 nType(pSubObj->GetObjIdentifier());
 
-        if (nSubObjCount > 0)
-        {
-            SdrObject* pSubObj = pObjList->GetObj(0);
-            sal_uInt16 nResultType = pSubObj->GetObjIdentifier();
+        if (nType == OBJ_GRUP)
+            nType = GetObjectTypeFromGroup(pSubObj);
 
-            if (nResultType == OBJ_GRUP)
-                nResultType = GetObjectTypeFromGroup(pSubObj);
+        if (IsShapeType(nType))
+            nType = OBJ_CUSTOMSHAPE;
 
-            if (IsShapeType(nResultType))
-                nResultType = OBJ_CUSTOMSHAPE;
+        if ((nType == OBJ_CUSTOMSHAPE) && (nResultType == OBJ_TEXT))
+            nType = OBJ_TEXT;
 
-            if (IsTextObjType(nResultType))
-                nResultType = OBJ_TEXT;
+        if (IsTextObjType(nType))
+            nType = OBJ_TEXT;
 
-            for (size_t nIndex = 1; nIndex < nSubObjCount; ++nIndex)
-            {
-                pSubObj = pObjList->GetObj(nIndex);
-                sal_uInt16 nType(pSubObj->GetObjIdentifier());
+        if ((nType == OBJ_TEXT) && (nResultType == OBJ_CUSTOMSHAPE))
+            nResultType = OBJ_TEXT;
 
-                if (nType == OBJ_GRUP)
-                    nType = GetObjectTypeFromGroup(pSubObj);
-
-                if (IsShapeType(nType))
-                    nType = OBJ_CUSTOMSHAPE;
-
-                if ((nType == OBJ_CUSTOMSHAPE) && (nResultType == OBJ_TEXT))
-                    nType = OBJ_TEXT;
-
-                if (IsTextObjType(nType))
-                    nType = OBJ_TEXT;
-
-                if ((nType == OBJ_TEXT) && (nResultType == OBJ_CUSTOMSHAPE))
-                    nResultType = OBJ_TEXT;
-
-                if (nType != nResultType)
-                    return 0;
-            }
-
-            return nResultType;
-        }
+        if (nType != nResultType)
+            return 0;
     }
 
-    return 0;
+    return nResultType;
 }
 
 sal_uInt16 SelectionAnalyzer::GetObjectTypeFromMark(const SdrMarkList& rMarkList)

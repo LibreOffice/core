@@ -667,35 +667,35 @@ bool X11SalBitmap::Create(
 ) {
     css::uno::Reference< css::beans::XFastPropertySet > xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
 
-    if( xFastPropertySet ) {
-        css::uno::Sequence< css::uno::Any > args;
+    if( !xFastPropertySet )
+        return false;
 
-        if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
-            sal_Int64 pixmapHandle = {}; // spurious -Werror=maybe-uninitialized
-            sal_Int32 depth;
-            if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
+    css::uno::Sequence< css::uno::Any > args;
 
-                mbGrey = bMask;
-                bool bSuccess = ImplCreateFromDrawable(
-                                    pixmapHandle,
-                                    // FIXME: this seems multi-screen broken to me
-                                    SalX11Screen( 0 ),
-                                    depth,
-                                    0,
-                                    0,
-                                    rSize.Width(),
-                                    rSize.Height()
-                                );
-                bool bFreePixmap = false;
-                if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
-                    XFreePixmap( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay(), pixmapHandle );
+    if( !(xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args) )
+        return false;
 
-                return bSuccess;
-            }
-        }
-    }
+    sal_Int64 pixmapHandle = {}; // spurious -Werror=maybe-uninitialized
+    sal_Int32 depth;
+    if( !( args[1] >>= pixmapHandle ) || !( args[2] >>= depth ) )
+        return false;
 
-    return false;
+    mbGrey = bMask;
+    bool bSuccess = ImplCreateFromDrawable(
+                        pixmapHandle,
+                        // FIXME: this seems multi-screen broken to me
+                        SalX11Screen( 0 ),
+                        depth,
+                        0,
+                        0,
+                        rSize.Width(),
+                        rSize.Height()
+                    );
+    bool bFreePixmap = false;
+    if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
+        XFreePixmap( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay(), pixmapHandle );
+
+    return bSuccess;
 }
 
 void X11SalBitmap::Destroy()

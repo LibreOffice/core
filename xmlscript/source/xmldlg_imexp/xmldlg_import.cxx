@@ -777,34 +777,33 @@ bool ImportContext::importAlignProperty(
     OUString aAlign(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aAlign.isEmpty())
-    {
-        sal_Int16 nAlign;
-        if ( aAlign == "left" )
-        {
-            nAlign = 0;
-        }
-        else if ( aAlign == "center" )
-        {
-            nAlign = 1;
-        }
-        else if ( aAlign == "right" )
-        {
-            nAlign = 2;
-        }
-        else if ( aAlign == "none" )
-        {
-            nAlign = 0; // default
-        }
-        else
-        {
-            throw xml::sax::SAXException("invalid align value!", Reference< XInterface >(), Any() );
-        }
+    if (aAlign.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
-        return true;
+    sal_Int16 nAlign;
+    if ( aAlign == "left" )
+    {
+        nAlign = 0;
     }
-    return false;
+    else if ( aAlign == "center" )
+    {
+        nAlign = 1;
+    }
+    else if ( aAlign == "right" )
+    {
+        nAlign = 2;
+    }
+    else if ( aAlign == "none" )
+    {
+        nAlign = 0; // default
+    }
+    else
+    {
+        throw xml::sax::SAXException("invalid align value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+    return true;
 }
 
 bool ImportContext::importVerticalAlignProperty(
@@ -814,31 +813,30 @@ bool ImportContext::importVerticalAlignProperty(
     OUString aAlign(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aAlign.isEmpty())
+    if (aAlign.isEmpty())
+        return false;
+
+    style::VerticalAlignment eAlign;
+
+    if ( aAlign == "top" )
     {
-        style::VerticalAlignment eAlign;
-
-        if ( aAlign == "top" )
-        {
-            eAlign = style::VerticalAlignment_TOP;
-        }
-        else if ( aAlign == "center" )
-        {
-            eAlign = style::VerticalAlignment_MIDDLE;
-        }
-        else if ( aAlign == "bottom" )
-        {
-            eAlign = style::VerticalAlignment_BOTTOM;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid vertical align value!", Reference< XInterface >(), Any() );
-        }
-
-        _xControlModel->setPropertyValue( rPropName, makeAny( eAlign ) );
-        return true;
+        eAlign = style::VerticalAlignment_TOP;
     }
-    return false;
+    else if ( aAlign == "center" )
+    {
+        eAlign = style::VerticalAlignment_MIDDLE;
+    }
+    else if ( aAlign == "bottom" )
+    {
+        eAlign = style::VerticalAlignment_BOTTOM;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid vertical align value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( eAlign ) );
+    return true;
 }
 
 bool ImportContext::importGraphicOrImageProperty(
@@ -846,50 +844,50 @@ bool ImportContext::importGraphicOrImageProperty(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     OUString sURL = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rAttrName );
-    if ( !sURL.isEmpty() )
+    if ( sURL.isEmpty() )
+        return false;
+
+    Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
+    if ( xDocStorage.is() )
     {
-        Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
-
-        uno::Reference<graphic::XGraphic> xGraphic;
-
-        uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-        if ( xDocStorage.is() )
+        uno::Sequence< Any > aArgs{ Any(xDocStorage->getDocumentStorage()) };
+        xGraphicStorageHandler.set(
+            _pImport->getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.comp.Svx.GraphicImportHelper" , aArgs, _pImport->getComponentContext() ),
+            UNO_QUERY );
+        if (xGraphicStorageHandler.is())
         {
-            uno::Sequence< Any > aArgs{ Any(xDocStorage->getDocumentStorage()) };
-            xGraphicStorageHandler.set(
-                _pImport->getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.comp.Svx.GraphicImportHelper" , aArgs, _pImport->getComponentContext() ),
-                UNO_QUERY );
-            if (xGraphicStorageHandler.is())
+            try
             {
-                try
-                {
-                    xGraphic = xGraphicStorageHandler->loadGraphic(sURL);
-                }
-                catch( const uno::Exception& )
-                {
-                    return false;
-                }
+                xGraphic = xGraphicStorageHandler->loadGraphic(sURL);
+            }
+            catch( const uno::Exception& )
+            {
+                return false;
             }
         }
-        if (xGraphic.is())
+    }
+    if (xGraphic.is())
+    {
+        Reference<beans::XPropertySet> xProps = getControlModel();
+        if (xProps.is())
         {
-            Reference<beans::XPropertySet> xProps = getControlModel();
-            if (xProps.is())
-            {
-                xProps->setPropertyValue("Graphic", makeAny(xGraphic));
-                return true;
-            }
+            xProps->setPropertyValue("Graphic", makeAny(xGraphic));
+            return true;
         }
-        else if (!sURL.isEmpty())
+    }
+    else if (!sURL.isEmpty())
+    {
+        // tdf#130793 Above fails if the dialog is not part of a document.
+        // In this case we need to set the ImageURL.
+        Reference<beans::XPropertySet> xProps = getControlModel();
+        if (xProps.is())
         {
-            // tdf#130793 Above fails if the dialog is not part of a document.
-            // In this case we need to set the ImageURL.
-            Reference<beans::XPropertySet> xProps = getControlModel();
-            if (xProps.is())
-            {
-                xProps->setPropertyValue("ImageURL", makeAny(sURL));
-                return true;
-            }
+            xProps->setPropertyValue("ImageURL", makeAny(sURL));
+            return true;
         }
     }
     return false;
@@ -958,34 +956,33 @@ bool ImportContext::importImageAlignProperty(
     OUString aAlign(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aAlign.isEmpty())
-    {
-        sal_Int16 nAlign;
-        if ( aAlign == "left" )
-        {
-            nAlign = 0;
-        }
-        else if ( aAlign == "top" )
-        {
-            nAlign = 1;
-        }
-        else if ( aAlign == "right" )
-        {
-            nAlign = 2;
-        }
-        else if ( aAlign == "bottom" )
-        {
-            nAlign = 3;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid image align value!", Reference< XInterface >(), Any() );
-        }
+    if (aAlign.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
-        return true;
+    sal_Int16 nAlign;
+    if ( aAlign == "left" )
+    {
+        nAlign = 0;
     }
-    return false;
+    else if ( aAlign == "top" )
+    {
+        nAlign = 1;
+    }
+    else if ( aAlign == "right" )
+    {
+        nAlign = 2;
+    }
+    else if ( aAlign == "bottom" )
+    {
+        nAlign = 3;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid image align value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+    return true;
 }
 
 bool ImportContext::importImagePositionProperty(
@@ -995,70 +992,69 @@ bool ImportContext::importImagePositionProperty(
     OUString aPosition(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aPosition.isEmpty())
-    {
-        sal_Int16 nPosition;
-        if ( aPosition == "left-top" )
-        {
-            nPosition = awt::ImagePosition::LeftTop;
-        }
-        else if ( aPosition == "left-center" )
-        {
-            nPosition = awt::ImagePosition::LeftCenter;
-        }
-        else if ( aPosition == "left-bottom" )
-        {
-            nPosition = awt::ImagePosition::LeftBottom;
-        }
-        else if ( aPosition == "right-top" )
-        {
-            nPosition = awt::ImagePosition::RightTop;
-        }
-        else if ( aPosition == "right-center" )
-        {
-            nPosition = awt::ImagePosition::RightCenter;
-        }
-        else if ( aPosition == "right-bottom" )
-        {
-            nPosition = awt::ImagePosition::RightBottom;
-        }
-        else if ( aPosition == "top-left" )
-        {
-            nPosition = awt::ImagePosition::AboveLeft;
-        }
-        else if ( aPosition == "top-center" )
-        {
-            nPosition = awt::ImagePosition::AboveCenter;
-        }
-        else if ( aPosition == "top-right" )
-        {
-            nPosition = awt::ImagePosition::AboveRight;
-        }
-        else if ( aPosition == "bottom-left" )
-        {
-            nPosition = awt::ImagePosition::BelowLeft;
-        }
-        else if ( aPosition == "bottom-center" )
-        {
-            nPosition = awt::ImagePosition::BelowCenter;
-        }
-        else if ( aPosition == "bottom-right" )
-        {
-            nPosition = awt::ImagePosition::BelowRight;
-        }
-        else if ( aPosition == "center" )
-        {
-            nPosition = awt::ImagePosition::Centered;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid image position value!", Reference< XInterface >(), Any() );
-        }
+    if (aPosition.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nPosition ) );
-        return true;
+    sal_Int16 nPosition;
+    if ( aPosition == "left-top" )
+    {
+        nPosition = awt::ImagePosition::LeftTop;
     }
-    return false;
+    else if ( aPosition == "left-center" )
+    {
+        nPosition = awt::ImagePosition::LeftCenter;
+    }
+    else if ( aPosition == "left-bottom" )
+    {
+        nPosition = awt::ImagePosition::LeftBottom;
+    }
+    else if ( aPosition == "right-top" )
+    {
+        nPosition = awt::ImagePosition::RightTop;
+    }
+    else if ( aPosition == "right-center" )
+    {
+        nPosition = awt::ImagePosition::RightCenter;
+    }
+    else if ( aPosition == "right-bottom" )
+    {
+        nPosition = awt::ImagePosition::RightBottom;
+    }
+    else if ( aPosition == "top-left" )
+    {
+        nPosition = awt::ImagePosition::AboveLeft;
+    }
+    else if ( aPosition == "top-center" )
+    {
+        nPosition = awt::ImagePosition::AboveCenter;
+    }
+    else if ( aPosition == "top-right" )
+    {
+        nPosition = awt::ImagePosition::AboveRight;
+    }
+    else if ( aPosition == "bottom-left" )
+    {
+        nPosition = awt::ImagePosition::BelowLeft;
+    }
+    else if ( aPosition == "bottom-center" )
+    {
+        nPosition = awt::ImagePosition::BelowCenter;
+    }
+    else if ( aPosition == "bottom-right" )
+    {
+        nPosition = awt::ImagePosition::BelowRight;
+    }
+    else if ( aPosition == "center" )
+    {
+        nPosition = awt::ImagePosition::Centered;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid image position value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nPosition ) );
+    return true;
 }
 
 bool ImportContext::importButtonTypeProperty(
@@ -1068,34 +1064,33 @@ bool ImportContext::importButtonTypeProperty(
     OUString buttonType(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!buttonType.isEmpty())
-    {
-        awt::PushButtonType nButtonType;
-        if ( buttonType == "standard" )
-        {
-            nButtonType = awt::PushButtonType_STANDARD;
-        }
-        else if ( buttonType == "ok" )
-        {
-            nButtonType = awt::PushButtonType_OK;
-        }
-        else if ( buttonType == "cancel" )
-        {
-            nButtonType = awt::PushButtonType_CANCEL;
-        }
-        else if ( buttonType == "help" )
-        {
-            nButtonType = awt::PushButtonType_HELP;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid button-type value!", Reference< XInterface >(), Any() );
-        }
+    if (buttonType.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( static_cast<sal_Int16>(nButtonType) ) );
-        return true;
+    awt::PushButtonType nButtonType;
+    if ( buttonType == "standard" )
+    {
+        nButtonType = awt::PushButtonType_STANDARD;
     }
-    return false;
+    else if ( buttonType == "ok" )
+    {
+        nButtonType = awt::PushButtonType_OK;
+    }
+    else if ( buttonType == "cancel" )
+    {
+        nButtonType = awt::PushButtonType_CANCEL;
+    }
+    else if ( buttonType == "help" )
+    {
+        nButtonType = awt::PushButtonType_HELP;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid button-type value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( static_cast<sal_Int16>(nButtonType) ) );
+    return true;
 }
 
 bool ImportContext::importDateFormatProperty(
@@ -1105,66 +1100,65 @@ bool ImportContext::importDateFormatProperty(
     OUString aFormat(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aFormat.isEmpty())
-    {
-        sal_Int16 nFormat;
-        if ( aFormat == "system_short" )
-        {
-            nFormat = 0;
-        }
-        else if ( aFormat == "system_short_YY" )
-        {
-            nFormat = 1;
-        }
-        else if ( aFormat == "system_short_YYYY" )
-        {
-            nFormat = 2;
-        }
-        else if ( aFormat == "system_long" )
-        {
-            nFormat = 3;
-        }
-        else if ( aFormat == "short_DDMMYY" )
-        {
-            nFormat = 4;
-        }
-        else if ( aFormat == "short_MMDDYY" )
-        {
-            nFormat = 5;
-        }
-        else if ( aFormat == "short_YYMMDD" )
-        {
-            nFormat = 6;
-        }
-        else if ( aFormat == "short_DDMMYYYY" )
-        {
-            nFormat = 7;
-        }
-        else if ( aFormat == "short_MMDDYYYY" )
-        {
-            nFormat = 8;
-        }
-        else if ( aFormat == "short_YYYYMMDD" )
-        {
-            nFormat = 9;
-        }
-        else if ( aFormat == "short_YYMMDD_DIN5008" )
-        {
-            nFormat = 10;
-        }
-        else if ( aFormat == "short_YYYYMMDD_DIN5008" )
-        {
-            nFormat = 11;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid date-format value!", Reference< XInterface >(), Any() );
-        }
+    if (aFormat.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
-        return true;
+    sal_Int16 nFormat;
+    if ( aFormat == "system_short" )
+    {
+        nFormat = 0;
     }
-    return false;
+    else if ( aFormat == "system_short_YY" )
+    {
+        nFormat = 1;
+    }
+    else if ( aFormat == "system_short_YYYY" )
+    {
+        nFormat = 2;
+    }
+    else if ( aFormat == "system_long" )
+    {
+        nFormat = 3;
+    }
+    else if ( aFormat == "short_DDMMYY" )
+    {
+        nFormat = 4;
+    }
+    else if ( aFormat == "short_MMDDYY" )
+    {
+        nFormat = 5;
+    }
+    else if ( aFormat == "short_YYMMDD" )
+    {
+        nFormat = 6;
+    }
+    else if ( aFormat == "short_DDMMYYYY" )
+    {
+        nFormat = 7;
+    }
+    else if ( aFormat == "short_MMDDYYYY" )
+    {
+        nFormat = 8;
+    }
+    else if ( aFormat == "short_YYYYMMDD" )
+    {
+        nFormat = 9;
+    }
+    else if ( aFormat == "short_YYMMDD_DIN5008" )
+    {
+        nFormat = 10;
+    }
+    else if ( aFormat == "short_YYYYMMDD_DIN5008" )
+    {
+        nFormat = 11;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid date-format value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+    return true;
 }
 
 bool ImportContext::importTimeProperty(
@@ -1208,42 +1202,41 @@ bool ImportContext::importTimeFormatProperty(
     OUString aFormat(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aFormat.isEmpty())
-    {
-        sal_Int16 nFormat;
-        if ( aFormat == "24h_short" )
-        {
-            nFormat = 0;
-        }
-        else if ( aFormat == "24h_long" )
-        {
-            nFormat = 1;
-        }
-        else if ( aFormat == "12h_short" )
-        {
-            nFormat = 2;
-        }
-        else if ( aFormat == "12h_long" )
-        {
-            nFormat = 3;
-        }
-        else if ( aFormat == "Duration_short" )
-        {
-            nFormat = 4;
-        }
-        else if ( aFormat == "Duration_long" )
-        {
-            nFormat = 5;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid time-format value!", Reference< XInterface >(), Any() );
-        }
+    if (aFormat.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
-        return true;
+    sal_Int16 nFormat;
+    if ( aFormat == "24h_short" )
+    {
+        nFormat = 0;
     }
-    return false;
+    else if ( aFormat == "24h_long" )
+    {
+        nFormat = 1;
+    }
+    else if ( aFormat == "12h_short" )
+    {
+        nFormat = 2;
+    }
+    else if ( aFormat == "12h_long" )
+    {
+        nFormat = 3;
+    }
+    else if ( aFormat == "Duration_short" )
+    {
+        nFormat = 4;
+    }
+    else if ( aFormat == "Duration_long" )
+    {
+        nFormat = 5;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid time-format value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+    return true;
 }
 
 bool ImportContext::importOrientationProperty(
@@ -1253,26 +1246,25 @@ bool ImportContext::importOrientationProperty(
     OUString aOrient(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aOrient.isEmpty())
-    {
-        sal_Int32 nOrient;
-        if ( aOrient == "horizontal" )
-        {
-            nOrient = 0;
-        }
-        else if ( aOrient == "vertical" )
-        {
-            nOrient = 1;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid orientation value!", Reference< XInterface >(), Any() );
-        }
+    if (aOrient.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nOrient ) );
-        return true;
+    sal_Int32 nOrient;
+    if ( aOrient == "horizontal" )
+    {
+        nOrient = 0;
     }
-    return false;
+    else if ( aOrient == "vertical" )
+    {
+        nOrient = 1;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid orientation value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nOrient ) );
+    return true;
 }
 
 bool ImportContext::importLineEndFormatProperty(
@@ -1282,30 +1274,29 @@ bool ImportContext::importLineEndFormatProperty(
     OUString aFormat(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aFormat.isEmpty())
-    {
-        sal_Int16 nFormat;
-        if ( aFormat == "carriage-return" )
-        {
-            nFormat = awt::LineEndFormat::CARRIAGE_RETURN;
-        }
-        else if ( aFormat == "line-feed" )
-        {
-            nFormat = awt::LineEndFormat::LINE_FEED;
-        }
-        else if ( aFormat == "carriage-return-line-feed" )
-        {
-            nFormat = awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid line end format value!", Reference< XInterface >(), Any() );
-        }
+    if (aFormat.isEmpty())
+        return false;
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
-        return true;
+    sal_Int16 nFormat;
+    if ( aFormat == "carriage-return" )
+    {
+        nFormat = awt::LineEndFormat::CARRIAGE_RETURN;
     }
-    return false;
+    else if ( aFormat == "line-feed" )
+    {
+        nFormat = awt::LineEndFormat::LINE_FEED;
+    }
+    else if ( aFormat == "carriage-return-line-feed" )
+    {
+        nFormat = awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid line end format value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+    return true;
 }
 
 bool ImportContext::importSelectionTypeProperty(
@@ -1315,35 +1306,34 @@ bool ImportContext::importSelectionTypeProperty(
     OUString aSelectionType(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aSelectionType.isEmpty())
+    if (aSelectionType.isEmpty())
+        return false;
+
+    view::SelectionType eSelectionType;
+
+    if ( aSelectionType == "none" )
     {
-        view::SelectionType eSelectionType;
-
-        if ( aSelectionType == "none" )
-        {
-            eSelectionType = view::SelectionType_NONE;
-        }
-        else if ( aSelectionType == "single" )
-        {
-            eSelectionType = view::SelectionType_SINGLE;
-        }
-        else if ( aSelectionType == "multi" )
-        {
-            eSelectionType = view::SelectionType_MULTI;
-        }
-        else  if ( aSelectionType == "range" )
-        {
-            eSelectionType = view::SelectionType_RANGE;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid selection type value!", Reference< XInterface >(), Any() );
-        }
-
-        _xControlModel->setPropertyValue( rPropName, makeAny( eSelectionType ) );
-        return true;
+        eSelectionType = view::SelectionType_NONE;
     }
-    return false;
+    else if ( aSelectionType == "single" )
+    {
+        eSelectionType = view::SelectionType_SINGLE;
+    }
+    else if ( aSelectionType == "multi" )
+    {
+        eSelectionType = view::SelectionType_MULTI;
+    }
+    else  if ( aSelectionType == "range" )
+    {
+        eSelectionType = view::SelectionType_RANGE;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid selection type value!", Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( eSelectionType ) );
+    return true;
 }
 
 bool ImportContext::importImageScaleModeProperty(
@@ -1353,32 +1343,31 @@ bool ImportContext::importImageScaleModeProperty(
     OUString aImageScaleMode(
         xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
-    if (!aImageScaleMode.isEmpty())
+    if (aImageScaleMode.isEmpty())
+        return false;
+
+    sal_Int16 nImageScaleMode;
+
+    if (aImageScaleMode == "none")
     {
-        sal_Int16 nImageScaleMode;
-
-        if (aImageScaleMode == "none")
-        {
-            nImageScaleMode = awt::ImageScaleMode::NONE;
-        }
-        else if (aImageScaleMode == "isotropic")
-        {
-            nImageScaleMode = awt::ImageScaleMode::ISOTROPIC;
-        }
-        else if (aImageScaleMode == "anisotropic")
-        {
-            nImageScaleMode = awt::ImageScaleMode::ANISOTROPIC;
-        }
-        else
-        {
-            throw xml::sax::SAXException( "invalid scale image mode value!",
-                Reference< XInterface >(), Any() );
-        }
-
-        _xControlModel->setPropertyValue( rPropName, makeAny( nImageScaleMode ) );
-        return true;
+        nImageScaleMode = awt::ImageScaleMode::NONE;
     }
-    return false;
+    else if (aImageScaleMode == "isotropic")
+    {
+        nImageScaleMode = awt::ImageScaleMode::ISOTROPIC;
+    }
+    else if (aImageScaleMode == "anisotropic")
+    {
+        nImageScaleMode = awt::ImageScaleMode::ANISOTROPIC;
+    }
+    else
+    {
+        throw xml::sax::SAXException( "invalid scale image mode value!",
+            Reference< XInterface >(), Any() );
+    }
+
+    _xControlModel->setPropertyValue( rPropName, makeAny( nImageScaleMode ) );
+    return true;
 }
 
 StringTriple const s_aEventTranslations[] =

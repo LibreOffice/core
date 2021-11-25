@@ -485,39 +485,38 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
 bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrlModel,
         const ControlConverter& rConv, sal_Int32 nCtrlIndex ) const
 {
-    if( rxCtrlModel.is() && mxSiteModel && mxCtrlModel )
+    if( !rxCtrlModel || !mxSiteModel || !mxCtrlModel )
+        return false;
+
+    const OUString& rCtrlName = mxSiteModel->getName();
+    OSL_ENSURE( !rCtrlName.isEmpty(), "VbaFormControl::convertProperties - control without name" );
+    if( rCtrlName.isEmpty() )
+        return false;
+
+    // convert all properties
+    PropertyMap aPropMap;
+    mxSiteModel->convertProperties( aPropMap, rConv, mxCtrlModel->getControlType(), nCtrlIndex );
+    rConv.bindToSources( rxCtrlModel, mxSiteModel->getControlSource(), mxSiteModel->getRowSource() );
+    mxCtrlModel->convertProperties( aPropMap, rConv );
+    mxCtrlModel->convertSize( aPropMap, rConv );
+    PropertySet aPropSet( rxCtrlModel );
+    aPropSet.setProperties( aPropMap );
+
+    // create and convert all embedded controls
+    if( !maControls.empty() ) try
     {
-        const OUString& rCtrlName = mxSiteModel->getName();
-        OSL_ENSURE( !rCtrlName.isEmpty(), "VbaFormControl::convertProperties - control without name" );
-        if( !rCtrlName.isEmpty() )
-        {
-            // convert all properties
-            PropertyMap aPropMap;
-            mxSiteModel->convertProperties( aPropMap, rConv, mxCtrlModel->getControlType(), nCtrlIndex );
-            rConv.bindToSources( rxCtrlModel, mxSiteModel->getControlSource(), mxSiteModel->getRowSource() );
-            mxCtrlModel->convertProperties( aPropMap, rConv );
-            mxCtrlModel->convertSize( aPropMap, rConv );
-            PropertySet aPropSet( rxCtrlModel );
-            aPropSet.setProperties( aPropMap );
-
-            // create and convert all embedded controls
-            if( !maControls.empty() ) try
-            {
-                Reference< XNameContainer > xCtrlModelNC( rxCtrlModel, UNO_QUERY_THROW );
-                /*  Call conversion for all controls. Pass vector index as new
-                    tab order to make option button groups work correctly. */
-                maControls.forEachMemWithIndex( &VbaFormControl::createAndConvert,
-                    ::std::cref( xCtrlModelNC ), ::std::cref( rConv ) );
-            }
-            catch(const Exception& )
-            {
-                OSL_FAIL( "VbaFormControl::convertProperties - cannot get control container interface" );
-            }
-
-            return true;
-        }
+        Reference< XNameContainer > xCtrlModelNC( rxCtrlModel, UNO_QUERY_THROW );
+        /*  Call conversion for all controls. Pass vector index as new
+            tab order to make option button groups work correctly. */
+        maControls.forEachMemWithIndex( &VbaFormControl::createAndConvert,
+            ::std::cref( xCtrlModelNC ), ::std::cref( rConv ) );
     }
-    return false;
+    catch(const Exception& )
+    {
+        OSL_FAIL( "VbaFormControl::convertProperties - cannot get control container interface" );
+    }
+
+    return true;
 }
 
 // private --------------------------------------------------------------------

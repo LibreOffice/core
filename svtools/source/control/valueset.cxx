@@ -177,25 +177,25 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
         return VALUESET_ITEM_NONEITEM;
     }
 
-    if (maItemListRect.Contains(rPos))
-    {
-        const int xc = rPos.X() - maItemListRect.Left();
-        const int yc = rPos.Y() - maItemListRect.Top();
-        // The point is inside the area of item list,
-        // let's find the containing item.
-        const int col = xc / (mnItemWidth + mnSpacing);
-        const int x = xc % (mnItemWidth + mnSpacing);
-        const int row = yc / (mnItemHeight + mnSpacing);
-        const int y = yc % (mnItemHeight + mnSpacing);
+    if (!maItemListRect.Contains(rPos))
+        return VALUESET_ITEM_NOTFOUND;
 
-        if (x < mnItemWidth && y < mnItemHeight)
+    const int xc = rPos.X() - maItemListRect.Left();
+    const int yc = rPos.Y() - maItemListRect.Top();
+    // The point is inside the area of item list,
+    // let's find the containing item.
+    const int col = xc / (mnItemWidth + mnSpacing);
+    const int x = xc % (mnItemWidth + mnSpacing);
+    const int row = yc / (mnItemHeight + mnSpacing);
+    const int y = yc % (mnItemHeight + mnSpacing);
+
+    if (x < mnItemWidth && y < mnItemHeight)
+    {
+        // the point is inside item rect and not inside spacing
+        const size_t item = (mnFirstLine + row) * static_cast<size_t>(mnCols) + col;
+        if (item < mItemList.size())
         {
-            // the point is inside item rect and not inside spacing
-            const size_t item = (mnFirstLine + row) * static_cast<size_t>(mnCols) + col;
-            if (item < mItemList.size())
-            {
-                return item;
-            }
+            return item;
         }
     }
 
@@ -1191,24 +1191,24 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
         const bool bHover = pSelectedItem == pHighlightItem;
         ImplDrawSelect(rRenderContext, aSelectedRect, pSelectedItem, bFocus, !mbNoSelection, true, bHover);
     }
-    if (pHighlightItem && (pSelectedItem != pHighlightItem || mbNoSelection))
-    {
-        // For the case that there isn't a selected item, but due to wanting to
-        // show focus is in the valueset, the above block will have drawn the
-        // first item with a focus rect. For that situation; if the valueset is
-        // the thin WB_MENUSTYLEVALUESET case then blend this highlight border
-        // on top of that focus rect and it will appear with a highlighted
-        // focus rect. If it's the other case of a thicker border then redraw
-        // the focus rect highlighted with the hover color.
-        bool bDrawFocus;
-        WinBits nStyle = GetStyle();
-        if (nStyle & WB_MENUSTYLEVALUESET)
-            bDrawFocus = false;
-        else
-            bDrawFocus = pSelectedItem == pHighlightItem && mbNoSelection;
+    if (!pHighlightItem || (pSelectedItem == pHighlightItem && !mbNoSelection))
+        return;
 
-        ImplDrawSelect(rRenderContext, aHoverRect, pHighlightItem, bDrawFocus, mbHighlight, false, true);
-    }
+    // For the case that there isn't a selected item, but due to wanting to
+    // show focus is in the valueset, the above block will have drawn the
+    // first item with a focus rect. For that situation; if the valueset is
+    // the thin WB_MENUSTYLEVALUESET case then blend this highlight border
+    // on top of that focus rect and it will appear with a highlighted
+    // focus rect. If it's the other case of a thicker border then redraw
+    // the focus rect highlighted with the hover color.
+    bool bDrawFocus;
+    WinBits nStyle = GetStyle();
+    if (nStyle & WB_MENUSTYLEVALUESET)
+        bDrawFocus = false;
+    else
+        bDrawFocus = pSelectedItem == pHighlightItem && mbNoSelection;
+
+    ImplDrawSelect(rRenderContext, aHoverRect, pHighlightItem, bDrawFocus, mbHighlight, false, true);
 }
 
 ValueSetItem* ValueSet::ImplGetDrawSelectItem(sal_uInt16 nItemId, const bool bFocus, tools::Rectangle& rRect)

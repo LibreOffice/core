@@ -607,32 +607,30 @@ bool Content::exchangeIdentity( const css::uno::Reference< css::ucb::XContentIde
     OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
     // Exchange own identity.
-    if ( exchange( xNewId ) )
+    if ( !exchange( xNewId ) )
+        return false;
+
+    // Process instantiated children...
+    ContentRefList aChildren;
+    queryChildren( aChildren );
+
+    for ( const auto& rChild : aChildren )
     {
-        // Process instantiated children...
-        ContentRefList aChildren;
-        queryChildren( aChildren );
+        ContentRef xChild = rChild;
 
-        for ( const auto& rChild : aChildren )
-        {
-            ContentRef xChild = rChild;
+        // Create new content identifier for the child...
+        css::uno::Reference< css::ucb::XContentIdentifier > xOldChildId = xChild->getIdentifier();
+        OUString aOldChildURL = xOldChildId->getContentIdentifier();
+        OUString aNewChildURL = aOldChildURL.replaceAt(
+            0, aOldURL.getLength(), xNewId->getContentIdentifier() );
 
-            // Create new content identifier for the child...
-            css::uno::Reference< css::ucb::XContentIdentifier > xOldChildId = xChild->getIdentifier();
-            OUString aOldChildURL = xOldChildId->getContentIdentifier();
-            OUString aNewChildURL = aOldChildURL.replaceAt(
-                0, aOldURL.getLength(), xNewId->getContentIdentifier() );
+        css::uno::Reference< css::ucb::XContentIdentifier > xNewChildId
+            = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
-            css::uno::Reference< css::ucb::XContentIdentifier > xNewChildId
-                = new ::ucbhelper::ContentIdentifier( aNewChildURL );
-
-            if ( !xChild->exchangeIdentity( xNewChildId ) )
-                return false;
-        }
-        return true;
+        if ( !xChild->exchangeIdentity( xNewChildId ) )
+            return false;
     }
-
-    return false;
+    return true;
 }
 
 void Content::getFileInfo(

@@ -231,29 +231,29 @@ std::unique_ptr< css::uno::ContextLayer > EnsureJavaContext()
 void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     // ControllerItem is the Impl class
-    if ( pImpl )
-    {
+    if ( !pImpl )
+        return;
+
 #if HAVE_FEATURE_JAVA
-        std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
+    std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
-        utl::MediaDescriptor aDescriptor(aArgs);
-        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
-        if (bOnMainThread)
-        {
-            // Make sure that we own the solar mutex, otherwise later
-            // vcl::SolarThreadExecutor::execute() will release the solar mutex, even if it's owned by
-            // an other thread, leading to an std::abort() at the end.
-            SolarMutexGuard aGuard;
-            vcl::solarthread::syncExecute([this, &aURL, &aArgs]() {
-                pImpl->dispatch(aURL, aArgs,
-                                css::uno::Reference<css::frame::XDispatchResultListener>());
-            });
-        }
-        else
-        {
+    utl::MediaDescriptor aDescriptor(aArgs);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+    if (bOnMainThread)
+    {
+        // Make sure that we own the solar mutex, otherwise later
+        // vcl::SolarThreadExecutor::execute() will release the solar mutex, even if it's owned by
+        // an other thread, leading to an std::abort() at the end.
+        SolarMutexGuard aGuard;
+        vcl::solarthread::syncExecute([this, &aURL, &aArgs]() {
             pImpl->dispatch(aURL, aArgs,
                             css::uno::Reference<css::frame::XDispatchResultListener>());
-        }
+        });
+    }
+    else
+    {
+        pImpl->dispatch(aURL, aArgs,
+                        css::uno::Reference<css::frame::XDispatchResultListener>());
     }
 }
 

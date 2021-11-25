@@ -770,26 +770,26 @@ sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int32 nChildIn
         xContext = xAcc->getAccessibleContext();
     }
 
-    if( xContext.is() )
-    {
-        if( xContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-        {
-            uno::Reference< css::accessibility::XAccessibleText >
-                xText(xAcc, uno::UNO_QUERY);
-            if( xText.is() )
-            {
-                if( xText->getSelectionStart() >= 0 ) return true;
-            }
-        }
-        else if( xContext->getAccessibleRole() == AccessibleRole::SHAPE )
-        {
-            Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
-            if( !pRState.is() )
-                return false;
+    if( !xContext )
+        return false;
 
-            const uno::Sequence<short> aStates = pRState->getStates();
-            return std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end();
+    if( xContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
+    {
+        uno::Reference< css::accessibility::XAccessibleText >
+            xText(xAcc, uno::UNO_QUERY);
+        if( xText.is() )
+        {
+            if( xText->getSelectionStart() >= 0 ) return true;
         }
+    }
+    else if( xContext->getAccessibleRole() == AccessibleRole::SHAPE )
+    {
+        Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
+        if( !pRState.is() )
+            return false;
+
+        const uno::Sequence<short> aStates = pRState->getStates();
+        return std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end();
     }
 
     return false;

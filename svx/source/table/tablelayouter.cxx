@@ -385,7 +385,10 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
     rOriginX = nMergedX;
     rOriginY = nMergedY;
 
-    if( xTable.is() ) try
+    if( !xTable )
+        return false;
+
+    try
     {
         // check if this cell already the origin or not merged at all
         Reference< XMergeableCell > xCell( xTable->getCellByPosition( nMergedX, nMergedY ), UNO_QUERY_THROW );

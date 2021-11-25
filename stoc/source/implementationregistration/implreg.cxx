@@ -320,29 +320,29 @@ void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
 bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, const OUString& value)
     // throw ( InvalidRegistryException, RuntimeException )
 {
-    if (xSuperKey->getValueType() == RegistryValueType_ASCIILIST)
+    if (xSuperKey->getValueType() != RegistryValueType_ASCIILIST)
+        return false;
+
+    const Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
+    sal_Int32 length = implEntries.getLength();
+    sal_Int32 equals = static_cast<sal_Int32>(std::count(implEntries.begin(), implEntries.end(), value));
+    bool hasNoImplementations = false;
+
+    if (equals == length)
     {
-        const Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
-        sal_Int32 length = implEntries.getLength();
-        sal_Int32 equals = static_cast<sal_Int32>(std::count(implEntries.begin(), implEntries.end(), value));
-        bool hasNoImplementations = false;
+        hasNoImplementations = true;
+    } else
+    {
+        Sequence<OUString> implEntriesNew(length - equals);
 
-        if (equals == length)
-        {
-            hasNoImplementations = true;
-        } else
-        {
-            Sequence<OUString> implEntriesNew(length - equals);
+        std::copy_if(implEntries.begin(), implEntries.end(), implEntriesNew.getArray(),
+            [&value](const OUString& rEntry) { return rEntry != value; });
+        xSuperKey->setAsciiListValue(implEntriesNew);
+    }
 
-            std::copy_if(implEntries.begin(), implEntries.end(), implEntriesNew.getArray(),
-                [&value](const OUString& rEntry) { return rEntry != value; });
-            xSuperKey->setAsciiListValue(implEntriesNew);
-        }
-
-        if (hasNoImplementations)
-        {
-            return true;
-        }
+    if (hasNoImplementations)
+    {
+        return true;
     }
     return false;
 }

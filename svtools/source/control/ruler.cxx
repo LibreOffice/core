@@ -1649,48 +1649,48 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
     }
 
     // test tabs again
-    if ( !mpData->pTabs.empty() )
+    if ( mpData->pTabs.empty() )
+        return false;
+
+    aRect.SetTop( RULER_OFF );
+    aRect.SetBottom( nHitBottom );
+
+    for ( i = mpData->pTabs.size() - 1; i >= 0; i-- )
     {
-        aRect.SetTop( RULER_OFF );
-        aRect.SetBottom( nHitBottom );
-
-        for ( i = mpData->pTabs.size() - 1; i >= 0; i-- )
+        nStyle = mpData->pTabs[i].nStyle;
+        if ( !(nStyle & RULER_STYLE_INVISIBLE) )
         {
-            nStyle = mpData->pTabs[i].nStyle;
-            if ( !(nStyle & RULER_STYLE_INVISIBLE) )
+            nStyle &= RULER_TAB_STYLE;
+
+            // default tabs are only shown (no action)
+            if ( nStyle != RULER_TAB_DEFAULT )
             {
-                nStyle &= RULER_TAB_STYLE;
+                n1 = mpData->pTabs[i].nPos;
 
-                // default tabs are only shown (no action)
-                if ( nStyle != RULER_TAB_DEFAULT )
+                if ( nStyle == RULER_TAB_LEFT )
                 {
-                    n1 = mpData->pTabs[i].nPos;
+                    aRect.SetLeft( n1 );
+                    aRect.SetRight( n1 + ruler_tab.width - 1 );
+                }
+                else if ( nStyle == RULER_TAB_RIGHT )
+                {
+                    aRect.SetRight( n1 );
+                    aRect.SetLeft( n1 - ruler_tab.width - 1 );
+                }
+                else
+                {
+                    aRect.SetLeft( n1 - ruler_tab.cwidth2 + 1 );
+                    aRect.SetRight( n1 - ruler_tab.cwidth2 + ruler_tab.cwidth );
+                }
 
-                    if ( nStyle == RULER_TAB_LEFT )
-                    {
-                        aRect.SetLeft( n1 );
-                        aRect.SetRight( n1 + ruler_tab.width - 1 );
-                    }
-                    else if ( nStyle == RULER_TAB_RIGHT )
-                    {
-                        aRect.SetRight( n1 );
-                        aRect.SetLeft( n1 - ruler_tab.width - 1 );
-                    }
-                    else
-                    {
-                        aRect.SetLeft( n1 - ruler_tab.cwidth2 + 1 );
-                        aRect.SetRight( n1 - ruler_tab.cwidth2 + ruler_tab.cwidth );
-                    }
+                aRect.AdjustLeft( -1 );
+                aRect.AdjustRight( 1 );
 
-                    aRect.AdjustLeft( -1 );
-                    aRect.AdjustRight( 1 );
-
-                    if ( aRect.Contains( Point( nX, nY ) ) )
-                    {
-                        pHitTest->eType   = RulerType::Tab;
-                        pHitTest->nAryPos = i;
-                        return true;
-                    }
+                if ( aRect.Contains( Point( nX, nY ) ) )
+                {
+                    pHitTest->eType   = RulerType::Tab;
+                    pHitTest->nAryPos = i;
+                    return true;
                 }
             }
         }
@@ -2230,67 +2230,67 @@ void Ruler::Deactivate()
 
 bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
 {
-    if ( !mbDrag )
+    if ( mbDrag )
+        return false;
+
+    Point          aMousePos = rMEvt.GetPosPixel();
+    sal_uInt16     nMouseClicks = rMEvt.GetClicks();
+    sal_uInt16     nMouseModifier = rMEvt.GetModifier();
+    RulerSelection aHitTest;
+
+    if(eDragType != RulerType::DontKnow)
+        aHitTest.bExpandTest = true;
+
+    // update ruler
+    if ( mbFormat )
     {
-        Point          aMousePos = rMEvt.GetPosPixel();
-        sal_uInt16     nMouseClicks = rMEvt.GetClicks();
-        sal_uInt16     nMouseModifier = rMEvt.GetModifier();
-        RulerSelection aHitTest;
-
-        if(eDragType != RulerType::DontKnow)
-            aHitTest.bExpandTest = true;
-
-        // update ruler
-        if ( mbFormat )
+        if (!IsReallyVisible())
         {
-            if (!IsReallyVisible())
-            {
-                // set mpData for ImplDocHitTest()
-                ImplFormat(*GetOutDev());
-            }
-
-            Invalidate(InvalidateFlags::NoErase);
+            // set mpData for ImplDocHitTest()
+            ImplFormat(*GetOutDev());
         }
 
-        if ( nMouseClicks == 1 )
+        Invalidate(InvalidateFlags::NoErase);
+    }
+
+    if ( nMouseClicks == 1 )
+    {
+        if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest ) )
         {
-            if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest ) )
-            {
-                PointerStyle aPtr = PointerStyle::Arrow;
+            PointerStyle aPtr = PointerStyle::Arrow;
 
-                if ( aHitTest.bSize )
-                {
-                    if ( mnWinStyle & WB_HORZ )
-                        aPtr = PointerStyle::ESize;
-                    else
-                        aPtr = PointerStyle::SSize;
-                }
-                else if ( aHitTest.bSizeBar )
-                {
-                    if ( mnWinStyle & WB_HORZ )
-                        aPtr = PointerStyle::HSizeBar;
-                    else
-                        aPtr = PointerStyle::VSizeBar;
-                }
-                SetPointer( aPtr );
-                return ImplStartDrag( &aHitTest, nMouseModifier );
+            if ( aHitTest.bSize )
+            {
+                if ( mnWinStyle & WB_HORZ )
+                    aPtr = PointerStyle::ESize;
+                else
+                    aPtr = PointerStyle::SSize;
             }
+            else if ( aHitTest.bSizeBar )
+            {
+                if ( mnWinStyle & WB_HORZ )
+                    aPtr = PointerStyle::HSizeBar;
+                else
+                    aPtr = PointerStyle::VSizeBar;
+            }
+            SetPointer( aPtr );
+            return ImplStartDrag( &aHitTest, nMouseModifier );
         }
-        else if ( nMouseClicks == 2 )
+    }
+    else if ( nMouseClicks == 2 )
+    {
+        if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest ) )
         {
-            if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest ) )
-            {
-                mnDragPos    = aHitTest.nPos;
-                mnDragAryPos = aHitTest.nAryPos;
-            }
-
-            DoubleClick();
-
-            mnDragPos       = 0;
-            mnDragAryPos    = 0;
-
-            return true;
+            mnDragPos    = aHitTest.nPos;
+            mnDragAryPos = aHitTest.nAryPos;
         }
+
+        DoubleClick();
+
+        mnDragPos       = 0;
+        mnDragAryPos    = 0;
+
+        return true;
     }
 
     return false;

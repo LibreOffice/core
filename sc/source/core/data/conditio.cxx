@@ -76,61 +76,61 @@ void ScFormatEntry::endRendering()
 
 static bool lcl_HasRelRef( ScDocument* pDoc, const ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
-    if (pFormula)
+    if (!pFormula)
+        return false;
+
+    FormulaTokenArrayPlainIterator aIter( *pFormula );
+    FormulaToken* t;
+    for( t = aIter.Next(); t; t = aIter.Next() )
     {
-        FormulaTokenArrayPlainIterator aIter( *pFormula );
-        FormulaToken* t;
-        for( t = aIter.Next(); t; t = aIter.Next() )
+        switch( t->GetType() )
         {
-            switch( t->GetType() )
+            case svDoubleRef:
             {
-                case svDoubleRef:
-                {
-                    ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
-                    if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
-                        return true;
-                    [[fallthrough]];
-                }
+                ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+                if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
+                    return true;
+                [[fallthrough]];
+            }
 
-                case svSingleRef:
-                {
-                    ScSingleRefData& rRef1 = *t->GetSingleRef();
-                    if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
-                        return true;
-                }
-                break;
+            case svSingleRef:
+            {
+                ScSingleRefData& rRef1 = *t->GetSingleRef();
+                if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
+                    return true;
+            }
+            break;
 
-                case svIndex:
-                {
-                    if( t->GetOpCode() == ocName )      // DB areas always absolute
-                        if( ScRangeData* pRangeData = pDoc->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex()) )
-                            if( (nRecursion < 42) && lcl_HasRelRef( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
-                                return true;
-                }
-                break;
-
-                // #i34474# function result dependent on cell position
-                case svByte:
-                {
-                    switch( t->GetOpCode() )
-                    {
-                        case ocRow:     // ROW() returns own row index
-                        case ocColumn:  // COLUMN() returns own column index
-                        case ocSheet:   // SHEET() returns own sheet index
-                        case ocCell:    // CELL() may return own cell address
+            case svIndex:
+            {
+                if( t->GetOpCode() == ocName )      // DB areas always absolute
+                    if( ScRangeData* pRangeData = pDoc->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex()) )
+                        if( (nRecursion < 42) && lcl_HasRelRef( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
                             return true;
-                        default:
-                        {
-                            // added to avoid warnings
-                        }
+            }
+            break;
+
+            // #i34474# function result dependent on cell position
+            case svByte:
+            {
+                switch( t->GetOpCode() )
+                {
+                    case ocRow:     // ROW() returns own row index
+                    case ocColumn:  // COLUMN() returns own column index
+                    case ocSheet:   // SHEET() returns own sheet index
+                    case ocCell:    // CELL() may return own cell address
+                        return true;
+                    default:
+                    {
+                        // added to avoid warnings
                     }
                 }
-                break;
+            }
+            break;
 
-                default:
-                {
-                    // added to avoid warnings
-                }
+            default:
+            {
+                // added to avoid warnings
             }
         }
     }

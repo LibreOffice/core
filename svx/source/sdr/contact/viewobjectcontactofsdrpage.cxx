@@ -118,31 +118,30 @@ void ViewObjectContactOfPageBackground::createPrimitive2DSequence(const DisplayI
     // old renderers for export (html, pdf, gallery, ...) set the page to not visible (SetPageVisible(false)). They expect the
     // given OutputDevice to be initialized with the ApplicationDocumentColor then.
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+    if(!pPageView)
+        return;
 
-    if(pPageView)
+    const SdrView& rView = pPageView->GetView();
+    Color aInitColor;
+
+    if(rView.IsPageVisible())
     {
-        const SdrView& rView = pPageView->GetView();
-        Color aInitColor;
-
-        if(rView.IsPageVisible())
-        {
-            aInitColor = pPageView->GetApplicationBackgroundColor();
-        }
-        else
-        {
-            aInitColor = pPageView->GetApplicationDocumentColor();
-
-            if(COL_AUTO == aInitColor)
-            {
-                const svtools::ColorConfig aColorConfig;
-                aInitColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
-            }
-        }
-
-        // init background with InitColor
-        const basegfx::BColor aRGBColor(aInitColor.getBColor());
-        rVisitor.visit(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor, (255 - aInitColor.GetAlpha()) / 255.0));
+        aInitColor = pPageView->GetApplicationBackgroundColor();
     }
+    else
+    {
+        aInitColor = pPageView->GetApplicationDocumentColor();
+
+        if(COL_AUTO == aInitColor)
+        {
+            const svtools::ColorConfig aColorConfig;
+            aInitColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+        }
+    }
+
+    // init background with InitColor
+    const basegfx::BColor aRGBColor(aInitColor.getBColor());
+    rVisitor.visit(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor, (255 - aInitColor.GetAlpha()) / 255.0));
 }
 
 ViewObjectContactOfMasterPage::ViewObjectContactOfMasterPage(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -206,29 +205,28 @@ bool ViewObjectContactOfPageFill::isPrimitiveVisible(const DisplayInfo& rDisplay
 void ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+    if(!pPageView)
+        return;
 
-    if(pPageView)
+    const SdrPage& rPage = getPage();
+
+    const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
+    const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
+    Color aPageFillColor;
+
+    if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
     {
-        const SdrPage& rPage = getPage();
-
-        const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
-        const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
-        Color aPageFillColor;
-
-        if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
-        {
-            aPageFillColor = pPageView->GetApplicationDocumentColor();
-        }
-        else
-        {
-            const svtools::ColorConfig aColorConfig;
-            aPageFillColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
-        }
-
-        // create and add primitive
-        const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
-        rVisitor.visit(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
+        aPageFillColor = pPageView->GetApplicationDocumentColor();
     }
+    else
+    {
+        const svtools::ColorConfig aColorConfig;
+        aPageFillColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    }
+
+    // create and add primitive
+    const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
+    rVisitor.visit(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
 }
 
 ViewObjectContactOfPageShadow::ViewObjectContactOfPageShadow(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -418,31 +416,30 @@ bool ViewObjectContactOfPageGrid::isPrimitiveVisible(const DisplayInfo& rDisplay
 void ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+    if(!pPageView)
+        return;
 
-    if(pPageView)
-    {
-        const SdrView& rView = pPageView->GetView();
-        const SdrPage& rPage = getPage();
-        const Color aGridColor(rView.GetGridColor());
-        const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
+    const SdrView& rView = pPageView->GetView();
+    const SdrPage& rPage = getPage();
+    const Color aGridColor(rView.GetGridColor());
+    const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
 
-        basegfx::B2DHomMatrix aGridMatrix;
-        aGridMatrix.set(0, 0, static_cast<double>(rPage.GetWidth() - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
-        aGridMatrix.set(1, 1, static_cast<double>(rPage.GetHeight() - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
-        aGridMatrix.set(0, 2, static_cast<double>(rPage.GetLeftBorder()));
-        aGridMatrix.set(1, 2, static_cast<double>(rPage.GetUpperBorder()));
+    basegfx::B2DHomMatrix aGridMatrix;
+    aGridMatrix.set(0, 0, static_cast<double>(rPage.GetWidth() - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
+    aGridMatrix.set(1, 1, static_cast<double>(rPage.GetHeight() - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
+    aGridMatrix.set(0, 2, static_cast<double>(rPage.GetLeftBorder()));
+    aGridMatrix.set(1, 2, static_cast<double>(rPage.GetUpperBorder()));
 
-        const Size aRaw(rView.GetGridCoarse());
-        const Size aFine(rView.GetGridFine());
-        const double fWidthX(aRaw.getWidth());
-        const double fWidthY(aRaw.getHeight());
-        const sal_uInt32 nSubdivisionsX(aFine.getWidth() ? aRaw.getWidth() / aFine.getWidth() : 0);
-        const sal_uInt32 nSubdivisionsY(aFine.getHeight() ? aRaw.getHeight() / aFine.getHeight() : 0);
+    const Size aRaw(rView.GetGridCoarse());
+    const Size aFine(rView.GetGridFine());
+    const double fWidthX(aRaw.getWidth());
+    const double fWidthY(aRaw.getHeight());
+    const sal_uInt32 nSubdivisionsX(aFine.getWidth() ? aRaw.getWidth() / aFine.getWidth() : 0);
+    const sal_uInt32 nSubdivisionsY(aFine.getHeight() ? aRaw.getHeight() / aFine.getHeight() : 0);
 
-        rVisitor.visit(new drawinglayer::primitive2d::GridPrimitive2D(
-            aGridMatrix, fWidthX, fWidthY, 10.0, 3.0, nSubdivisionsX, nSubdivisionsY, aRGBGridColor,
-            drawinglayer::primitive2d::createDefaultCross_3x3(aRGBGridColor)));
-    }
+    rVisitor.visit(new drawinglayer::primitive2d::GridPrimitive2D(
+        aGridMatrix, fWidthX, fWidthY, 10.0, 3.0, nSubdivisionsX, nSubdivisionsY, aRGBGridColor,
+        drawinglayer::primitive2d::createDefaultCross_3x3(aRGBGridColor)));
 }
 
 ViewObjectContactOfPageHelplines::ViewObjectContactOfPageHelplines(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -493,46 +490,45 @@ void ViewObjectContactOfPageHelplines::createPrimitive2DSequence(const DisplayIn
 {
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
 
-    if(pPageView)
+    if(!pPageView)
+        return;
+
+    const SdrHelpLineList& rHelpLineList = pPageView->GetHelpLines();
+    const sal_uInt32 nCount(rHelpLineList.GetCount());
+    if(!nCount)
+        return;
+
+    const basegfx::BColor aRGBColorA(1.0, 1.0, 1.0);
+    const basegfx::BColor aRGBColorB(0.0, 0.0, 0.0);
+
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        const SdrHelpLineList& rHelpLineList = pPageView->GetHelpLines();
-        const sal_uInt32 nCount(rHelpLineList.GetCount());
+        const SdrHelpLine& rHelpLine = rHelpLineList[static_cast<sal_uInt16>(a)];
+        const basegfx::B2DPoint aPosition(static_cast<double>(rHelpLine.GetPos().X()), static_cast<double>(rHelpLine.GetPos().Y()));
+        const double fDiscreteDashLength(4.0);
 
-        if(nCount)
+        switch(rHelpLine.GetKind())
         {
-            const basegfx::BColor aRGBColorA(1.0, 1.0, 1.0);
-            const basegfx::BColor aRGBColorB(0.0, 0.0, 0.0);
-
-            for(sal_uInt32 a(0); a < nCount; a++)
+            default : // SdrHelpLineKind::Point
             {
-                const SdrHelpLine& rHelpLine = rHelpLineList[static_cast<sal_uInt16>(a)];
-                const basegfx::B2DPoint aPosition(static_cast<double>(rHelpLine.GetPos().X()), static_cast<double>(rHelpLine.GetPos().Y()));
-                const double fDiscreteDashLength(4.0);
-
-                switch(rHelpLine.GetKind())
-                {
-                    default : // SdrHelpLineKind::Point
-                    {
-                        rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                            aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Point,
-                            aRGBColorA, aRGBColorB, fDiscreteDashLength));
-                        break;
-                    }
-                    case SdrHelpLineKind::Vertical :
-                    {
-                        rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                            aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
-                            aRGBColorA, aRGBColorB, fDiscreteDashLength));
-                        break;
-                    }
-                    case SdrHelpLineKind::Horizontal :
-                    {
-                        rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                            aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
-                            aRGBColorA, aRGBColorB, fDiscreteDashLength));
-                        break;
-                    }
-                }
+                rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
+                    aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Point,
+                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
+                break;
+            }
+            case SdrHelpLineKind::Vertical :
+            {
+                rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
+                    aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
+                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
+                break;
+            }
+            case SdrHelpLineKind::Horizontal :
+            {
+                rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
+                    aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
+                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
+                break;
             }
         }
     }

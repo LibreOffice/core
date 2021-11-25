@@ -2348,92 +2348,90 @@ ScDPMember* ScDPMembers::getByIndex(sal_Int32 nIndex) const
     //  result of GetColumnEntries must not change between ScDPMembers ctor
     //  and all calls to getByIndex
 
-    if ( nIndex >= 0 && nIndex < nMbrCount )
+    if ( nIndex < 0 || nIndex >= nMbrCount )
+        return nullptr;    //TODO: exception?
+
+    if (maMembers.empty())
+        maMembers.resize(nMbrCount);
+
+    if (!maMembers[nIndex])
     {
-        if (maMembers.empty())
-            maMembers.resize(nMbrCount);
-
-        if (!maMembers[nIndex])
+        rtl::Reference<ScDPMember> pNew;
+        sal_Int32 nSrcDim = pSource->GetSourceDim( nDim );
+        if ( pSource->IsDataLayoutDimension(nSrcDim) )
         {
-            rtl::Reference<ScDPMember> pNew;
-            sal_Int32 nSrcDim = pSource->GetSourceDim( nDim );
-            if ( pSource->IsDataLayoutDimension(nSrcDim) )
+            // empty name (never shown, not used for lookup)
+            pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, 0));
+        }
+        else if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
+        {
+            sal_Int32 nGroupBy = 0;
+            sal_Int32 nVal = 0;
+            OUString aName;
+
+            if ( nLev == SC_DAPI_LEVEL_YEAR )   // YEAR is in both hierarchies
             {
-                // empty name (never shown, not used for lookup)
-                pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, 0));
+                //TODO: cache year range here!
+
+                double fFirstVal = pSource->GetData()->GetMemberByIndex( nSrcDim, 0 )->GetValue();
+                tools::Long nFirstYear = pSource->GetData()->GetDatePart(
+                                    static_cast<tools::Long>(::rtl::math::approxFloor( fFirstVal )),
+                                    nHier, nLev );
+
+                nVal = nFirstYear + nIndex;
             }
-            else if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
+            else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
             {
-                sal_Int32 nGroupBy = 0;
-                sal_Int32 nVal = 0;
-                OUString aName;
-
-                if ( nLev == SC_DAPI_LEVEL_YEAR )   // YEAR is in both hierarchies
-                {
-                    //TODO: cache year range here!
-
-                    double fFirstVal = pSource->GetData()->GetMemberByIndex( nSrcDim, 0 )->GetValue();
-                    tools::Long nFirstYear = pSource->GetData()->GetDatePart(
-                                        static_cast<tools::Long>(::rtl::math::approxFloor( fFirstVal )),
-                                        nHier, nLev );
-
-                    nVal = nFirstYear + nIndex;
-                }
-                else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
-                {
-                    nVal = nIndex;              // DayOfWeek is 0-based
-                    aName = ScGlobal::GetCalendar().getDisplayName(
-                        css::i18n::CalendarDisplayIndex::DAY,
-                        sal::static_int_cast<sal_Int16>(nVal), 0 );
-                }
-                else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
-                {
-                    nVal = nIndex;              // Month is 0-based
-                    aName = ScGlobal::GetCalendar().getDisplayName(
-                        css::i18n::CalendarDisplayIndex::MONTH,
-                        sal::static_int_cast<sal_Int16>(nVal), 0 );
-                }
-                else
-                    nVal = nIndex + 1;          // Quarter, Day, Week are 1-based
-
-                switch (nLev)
-                {
-                    case SC_DAPI_LEVEL_YEAR:
-                        nGroupBy = sheet::DataPilotFieldGroupBy::YEARS;
-                    break;
-                    case SC_DAPI_LEVEL_QUARTER:
-                    case SC_DAPI_LEVEL_WEEK:
-                        nGroupBy = sheet::DataPilotFieldGroupBy::QUARTERS;
-                    break;
-                    case SC_DAPI_LEVEL_MONTH:
-                    case SC_DAPI_LEVEL_WEEKDAY:
-                        nGroupBy = sheet::DataPilotFieldGroupBy::MONTHS;
-                    break;
-                    case SC_DAPI_LEVEL_DAY:
-                        nGroupBy = sheet::DataPilotFieldGroupBy::DAYS;
-                    break;
-                    default:
-                        ;
-                }
-                if (aName.isEmpty())
-                    aName = OUString::number(nVal);
-
-                ScDPItemData aData(nGroupBy, nVal);
-                SCROW nId = pSource->GetCache()->GetIdByItemData(nDim, aData);
-                pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, nId));
+                nVal = nIndex;              // DayOfWeek is 0-based
+                aName = ScGlobal::GetCalendar().getDisplayName(
+                    css::i18n::CalendarDisplayIndex::DAY,
+                    sal::static_int_cast<sal_Int16>(nVal), 0 );
+            }
+            else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
+            {
+                nVal = nIndex;              // Month is 0-based
+                aName = ScGlobal::GetCalendar().getDisplayName(
+                    css::i18n::CalendarDisplayIndex::MONTH,
+                    sal::static_int_cast<sal_Int16>(nVal), 0 );
             }
             else
-            {
-                const std::vector<SCROW>& memberIndexs = pSource->GetData()->GetColumnEntries(nSrcDim);
-                pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, memberIndexs[nIndex]));
-            }
-            maMembers[nIndex] = pNew;
-        }
+                nVal = nIndex + 1;          // Quarter, Day, Week are 1-based
 
-        return maMembers[nIndex].get();
+            switch (nLev)
+            {
+                case SC_DAPI_LEVEL_YEAR:
+                    nGroupBy = sheet::DataPilotFieldGroupBy::YEARS;
+                break;
+                case SC_DAPI_LEVEL_QUARTER:
+                case SC_DAPI_LEVEL_WEEK:
+                    nGroupBy = sheet::DataPilotFieldGroupBy::QUARTERS;
+                break;
+                case SC_DAPI_LEVEL_MONTH:
+                case SC_DAPI_LEVEL_WEEKDAY:
+                    nGroupBy = sheet::DataPilotFieldGroupBy::MONTHS;
+                break;
+                case SC_DAPI_LEVEL_DAY:
+                    nGroupBy = sheet::DataPilotFieldGroupBy::DAYS;
+                break;
+                default:
+                    ;
+            }
+            if (aName.isEmpty())
+                aName = OUString::number(nVal);
+
+            ScDPItemData aData(nGroupBy, nVal);
+            SCROW nId = pSource->GetCache()->GetIdByItemData(nDim, aData);
+            pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, nId));
+        }
+        else
+        {
+            const std::vector<SCROW>& memberIndexs = pSource->GetData()->GetColumnEntries(nSrcDim);
+            pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, memberIndexs[nIndex]));
+        }
+        maMembers[nIndex] = pNew;
     }
 
-    return nullptr;    //TODO: exception?
+    return maMembers[nIndex].get();
 }
 
 ScDPMember::ScDPMember(
