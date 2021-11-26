@@ -16,6 +16,23 @@
       "message": "Rizal: you had changed this file (and others) for tdf#140029 in February this year, do you remember if this file was indeed used or you just git grepped the string \"Text frame\"?\n\nAt least, git grep confirms this and building works.\nAlso, opening navigator in Writer then clicking \"Navigate by\" dropdown menu works too.",
       "revId": "20424ed5b8443e8f87eafba7c166534272fc1739",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c7a94e1_bac848eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-26T13:13:42Z",
+      "side": 1,
+      "message": "I think this became unused with:\n\ncommit 350bf42540ff810a142538c5fd8ec2a78d430091\nAuthor: Jim Raykowski \u003craykowj@gmail..com\u003e\nDate:   Fri Jan 17 21:19:08 2020 -0900\n\n    tdf#89566 Replace navigation toolbox in Writer navigator\n    \n    Replaces the navigation toolbox with the navigate by elements control.\n\nand its safe and good to remove the leftovers.\n",
+      "revId": "20424ed5b8443e8f87eafba7c166534272fc1739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
