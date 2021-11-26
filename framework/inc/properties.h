@@ -34,43 +34,12 @@ inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_URL = u"URL";
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
-// Don't forget updating of define FRAME_PROPCOUNT below!!!
 #define FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER       0
 #define FRAME_PROPHANDLE_ISHIDDEN                       1
 #define FRAME_PROPHANDLE_LAYOUTMANAGER                  2
 #define FRAME_PROPHANDLE_TITLE                          3
 #define FRAME_PROPHANDLE_INDICATORINTERCEPTION          4
 #define FRAME_PROPHANDLE_URL 5
-
-#define FRAME_PROPCOUNT 6
-
-/** properties for "PathSettings" class */
-
-#define PATHSETTINGS_PROPNAME_ASCII_ADDIN               "Addin"
-#define PATHSETTINGS_PROPNAME_ASCII_AUTOCORRECT         "AutoCorrect"
-#define PATHSETTINGS_PROPNAME_ASCII_AUTOTEXT            "AutoText"
-#define PATHSETTINGS_PROPNAME_ASCII_BACKUP              "Backup"
-#define PATHSETTINGS_PROPNAME_ASCII_BASIC               "Basic"
-#define PATHSETTINGS_PROPNAME_ASCII_BITMAP              "Bitmap"
-#define PATHSETTINGS_PROPNAME_ASCII_CONFIG              "Config"
-#define PATHSETTINGS_PROPNAME_ASCII_DICTIONARY          "Dictionary"
-#define PATHSETTINGS_PROPNAME_ASCII_FAVORITE            "Favorite"
-#define PATHSETTINGS_PROPNAME_ASCII_FILTER              "Filter"
-#define PATHSETTINGS_PROPNAME_ASCII_GALLERY             "Gallery"
-#define PATHSETTINGS_PROPNAME_ASCII_GRAPHIC             "Graphic"
-#define PATHSETTINGS_PROPNAME_ASCII_HELP                "Help"
-#define PATHSETTINGS_PROPNAME_ASCII_LINGUISTIC          "Linguistic"
-#define PATHSETTINGS_PROPNAME_ASCII_MODULE              "Module"
-#define PATHSETTINGS_PROPNAME_ASCII_PALETTE             "Palette"
-#define PATHSETTINGS_PROPNAME_ASCII_PLUGIN              "Plugin"
-#define PATHSETTINGS_PROPNAME_ASCII_STORAGE             "Storage"
-#define PATHSETTINGS_PROPNAME_ASCII_TEMP                "Temp"
-#define PATHSETTINGS_PROPNAME_ASCII_TEMPLATE            "Template"
-#define PATHSETTINGS_PROPNAME_ASCII_UICONFIG            "UIConfig"
-#define PATHSETTINGS_PROPNAME_ASCII_USERCONFIG          "UserConfig"
-#define PATHSETTINGS_PROPNAME_ASCII_USERDICTIONARY      "UserDictionary"
-#define PATHSETTINGS_PROPNAME_ASCII_WORK                "Work"
-
 
 /** properties for "LayoutManager" class */
 
@@ -112,8 +81,6 @@ inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_CRASHED = u"Crashed
 #define AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA      1
 #define AUTORECOVERY_PROPHANDLE_CRASHED                 2
 
-#define AUTORECOVERY_PROPCOUNT                          3
-
 /** properties for Filter config */
 
 inline constexpr OUStringLiteral FILTER_PROPNAME_ASCII_DOCUMENTSERVICE = u"DocumentService";
@@ -122,18 +89,6 @@ inline constexpr OUStringLiteral FILTER_PROPNAME_ASCII_DOCUMENTSERVICE = u"Docum
 
 inline constexpr OUStringLiteral OFFICEFACTORY_PROPNAME_ASCII_UINAME = u"ooSetupFactoryUIName";
 inline constexpr OUStringLiteral OFFICEFACTORY_PROPNAME_ASCII_ICON = u"ooSetupFactoryIcon";
-
-/** properties for tab window (old) */
-#define TABWINDOW_PROPNAME_ASCII_PARENTWINDOW           "ParentWindow"
-#define TABWINDOW_PROPNAME_ASCII_TOPWINDOW              "TopWindow"
-#define TABWINDOW_PROPNAME_PARENTWINDOW                 TABWINDOW_PROPNAME_ASCII_PARENTWINDOW
-#define TABWINDOW_PROPNAME_TOPWINDOW                    TABWINDOW_PROPNAME_ASCII_TOPWINDOW
-
-#define TABWINDOW_PROPHANDLE_PARENTWINDOW               0
-#define TABWINDOW_PROPHANDLE_TOPWINDOW                  1
-#define TABWINDOW_PROPCOUNT                             2
-
-#define TABWINDOWSERVICE_PROPHANDLE_WINDOW              0
 
 /** provides some helper methods to implement property sets. */
 
