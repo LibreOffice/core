@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -34,6 +35,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/clipboard/CurrentViewClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
@@ -422,13 +424,14 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
             "non-empty SalInstance::CreateClipboard arguments", {}, -1);
     }
     if (comphelper::LibreOfficeKit::isActive()) {
-        // In LOK, each document view shall have its own clipboard instance, and the way that
-        // (happens to?) work is that apparently this function is called at most once for each such
-        // document view, so it is OK if we hand out a fresh instance on each call in LOK (whereas
+        // In LOK, each document view shall have its own clipboard instance (whereas
         // in non-LOK below we keep handing out one single instance; see also
         // <https://lists.freedesktop.org/archives/libreoffice/2020-April/084824.html> "Re: Linux
         // SAL_USE_VCLPLUGIN=svp and the clipboard"):
-        return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+            css::datatransfer::clipboard::CurrentViewClipboard::create(
+                comphelper::getProcessComponentContext());
+        return xClipboard;
     }
     DBG_TESTSOLARMUTEX();
     if (!m_clipboard.is()) {

@@ -16,13 +16,13 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XCurrentViewClipboard.hpp>
 
 using namespace css::uno;
 
 /// A clipboard implementation for LibreOfficeKit.
 class LOKClipboard final
-    : public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+    : public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XCurrentViewClipboard,
                                            css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
