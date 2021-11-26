@@ -989,8 +989,9 @@ auto CurlProcessor::ProcessRequestImpl(
     {
         switch (statusCode)
         {
+            // coverity[dead_error_begin] - following condition exists to avoid compiler warning
             case SC_NONE:
-                assert(false); // ??? should be error returned from perform?
+                assert(false && "SC_NONE is 0, so cannot be reached in this branch");
                 break;
             case SC_REQUEST_TIMEOUT:
             {
