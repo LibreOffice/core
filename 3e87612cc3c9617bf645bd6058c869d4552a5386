@@ -16,6 +16,23 @@
       "message": "I\u0027ll let Eike respond because I don\u0027t understand how to know if the typo can be fixed or not. For the moment, I only understood that we\u0027re stuck if it\u0027s in an idl file.\n(still wonder too if filenames can be fixed or not)",
       "revId": "3e87612cc3c9617bf645bd6058c869d4552a5386",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c83e1c79_39e2644a",
+        "filename": "filter/source/config/fragments/internalgraphicfilters/png_Import.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-26T16:37:11Z",
+      "side": 1,
+      "message": "but this change was ok, so should keep that piece",
+      "revId": "3e87612cc3c9617bf645bd6058c869d4552a5386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
