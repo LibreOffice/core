@@ -86,6 +86,42 @@
       "parentUuid": "aeca7fd2_a00ee580",
       "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c408631_3d8e45a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-26T15:14:36Z",
+      "side": 1,
+      "message": "Thank you for demystifying the matter.\nWhen using the proleptic Gregorian, I\u0027ll shift nDays value when the date precedes 1582-10-15 to get proper dow values and in case of the two dates being on opposite sides of 1582-10-15 I will have to separate the calculation of whole weeks from determining if the partial week contains a week crossing (all just in case of mode 1).\nI will expand the Doxygen comment too.",
+      "parentUuid": "1a223d21_4e8f7abf",
+      "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa8fd6c_8775fb33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2021-11-26T15:14:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3b3e4eb7_6fda2682",
+      "revId": "6282104a63c2ad5447c531d57aadeb864cc41e52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
