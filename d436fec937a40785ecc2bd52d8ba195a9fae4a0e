@@ -16,6 +16,24 @@
       "message": "Build successful for me now.\n\nShould the FIXME in sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx:32 now be removed?",
       "revId": "d436fec937a40785ecc2bd52d8ba195a9fae4a0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9e0ae1e_b143dd9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-11-26T09:02:13Z",
+      "side": 1,
+      "message": "That whole comment is IMHO bogus. The first line states what the code does, which seems obvious, and I don\u0027t see this FIXME. Just \"sorting\" the version list from largest to smallest is fine and correct for a \"\u003e\u003d\" test; no other checks needed. But none is related to this patch, so feel free to send and additional one, which removes it.",
+      "parentUuid": "4cb41ffc_cb5c2724",
+      "revId": "d436fec937a40785ecc2bd52d8ba195a9fae4a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
