@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering, \
     editeng \
     sal \
     sfx \
+    sot \
     svl \
     svt \
     svxcore \
