@@ -39,7 +39,7 @@ private:
     /// read timeout in milliseconds (connection timeout is stored in m_pCurl)
     int m_nReadTimeout = 0;
     /// flag to signal abort to transferring thread
-    ::std::atomic<bool> m_AbortFlag;
+    ::std::atomic<bool> m_AbortFlag = false;
 
     /// libcurl multi handle
     ::std::unique_ptr<CURLM, deleter_from_fn<CURLM, curl_multi_cleanup>> m_pCurlMulti;
