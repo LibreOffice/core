@@ -2497,7 +2497,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         {
             // ofz#34749 we shouldn't anchor anything into an 'extra' paragraph scheduled for
             // removal at end of import, but check if that scenario is happening
-            m_aExtraneousParas.check_anchor_destination(m_pPaM->GetNode().GetTextNode());
+            m_aExtraneousParas.remove_if_present(m_pPaM->GetNode().GetTextNode());
             m_xSFlyPara->SetFlyFormat(m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
                                                             m_pPaM->GetPoint(), &aFlySet));
             OSL_ENSURE(m_xSFlyPara->GetFlyFormat()->GetAnchor().GetAnchorId() ==

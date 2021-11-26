@@ -909,30 +909,38 @@ public:
 //Safest thing is to not delete SwTextNodes from a document during import, and
 //remove these extraneous paragraphs at the end after all SwFltControlStack are
 //destroyed.
-class wwExtraneousParas
+class wwExtraneousParas : public SwClient
 {
 private:
+    struct TextNodeListener : public SwClient
+    {
+        TextNodeListener(SwTextNode* pTextNode, wwExtraneousParas* pOwner)
+            : m_pTextNode(pTextNode)
+            , m_pOwner(pOwner)
+        {
+        }
+        bool operator<(const TextNodeListener& rOther) const
+        {
+            return m_pTextNode->GetIndex() < rOther.m_pTextNode->GetIndex();
+        }
+        virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+
+        SwTextNode *m_pTextNode;
+        wwExtraneousParas* m_pOwner;
+    };
     /*
     A vector of SwTextNodes to erase from a document after import is complete
     */
-    std::set<SwTextNode*, SwWW8::ltnode> m_aTextNodes;
+    std::set<TextNodeListener> m_aTextNodes;
     SwDoc& m_rDoc;
 
     wwExtraneousParas(wwExtraneousParas const&) = delete;
     wwExtraneousParas& operator=(wwExtraneousParas const&) = delete;
-
 public:
     explicit wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
     ~wwExtraneousParas() { delete_all_from_doc(); }
-    void insert(SwTextNode *pTextNode) { m_aTextNodes.insert(pTextNode); }
-    void check_anchor_destination(SwTextNode *pTextNode)
-    {
-        auto it = m_aTextNodes.find(pTextNode);
-        if (it == m_aTextNodes.end())
-            return;
-        SAL_WARN("sw.ww8", "It is unexpected to anchor something in a para scheduled for removal");
-        m_aTextNodes.erase(it);
-    }
+    void insert(SwTextNode *pTextNode);
+    void remove_if_present(SwTextNode *pTextNode);
     void delete_all_from_doc();
 };
 

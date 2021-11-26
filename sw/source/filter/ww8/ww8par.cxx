@@ -4692,12 +4692,49 @@ void wwExtraneousParas::delete_all_from_doc()
     auto aEnd = m_aTextNodes.rend();
     for (auto aI = m_aTextNodes.rbegin(); aI != aEnd; ++aI)
     {
-        SwTextNode *pTextNode = *aI;
+        const TextNodeListener& rListener = *aI;
+        SwTextNode *pTextNode = rListener.m_pTextNode;
+        pTextNode->Remove(const_cast<TextNodeListener*>(&rListener));
+
         SwNodeIndex aIdx(*pTextNode);
         SwPaM aTest(aIdx);
         m_rDoc.getIDocumentContentOperations().DelFullPara(aTest);
     }
     m_aTextNodes.clear();
+}
+
+void wwExtraneousParas::insert(SwTextNode *pTextNode)
+{
+    auto it = m_aTextNodes.emplace(pTextNode, this).first;
+    const TextNodeListener& rListener = *it;
+    pTextNode->Add(const_cast<TextNodeListener*>(&rListener));
+}
+
+void wwExtraneousParas::remove_if_present(SwTextNode *pTextNode)
+{
+    auto it = std::find_if(m_aTextNodes.begin(), m_aTextNodes.end(),
+        [pTextNode](const wwExtraneousParas::TextNodeListener& rEntry) { return rEntry.m_pTextNode == pTextNode; });
+    if (it == m_aTextNodes.end())
+        return;
+    SAL_WARN("sw.ww8", "It is unexpected to drop a para scheduled for removal");
+    const TextNodeListener& rListener = *it;
+    pTextNode->Remove(const_cast<TextNodeListener*>(&rListener));
+    m_aTextNodes.erase(it);
+}
+
+void wwExtraneousParas::TextNodeListener::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    // ofz#41398 drop a para scheduled for deletion if something else deletes it
+    // before wwExtraneousParas gets its chance to do so. Not the usual scenario,
+    // indicates an underlying bug.
+    if (pLegacy->GetWhich() == RES_OBJECTDYING)
+    {
+        const SwTextNode& rNode(static_cast<SwTextNode const&>(rModify));
+        m_pOwner->remove_if_present(const_cast<SwTextNode*>(&rNode));
+    }
 }
 
 void SwWW8ImplReader::StoreMacroCmds()
