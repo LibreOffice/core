@@ -16,6 +16,24 @@
       "message": "I think there will not be heap use after free, however leak can be there, i am afraid. Maybe a smart pointer can be the solution, i think.",
       "revId": "ba0d840a94cfeacb5aacf73b12661678369155a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "217e5452_e67cfd18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-26T12:19:52Z",
+      "side": 1,
+      "message": "I have no idea about this code, but if you even think you\u0027re introducing a memory leak with this fix, I think it would be better to rather revert the problematic \u003chttps://gerrit.libreoffice.org/c/core/+/124657\u003e \"tdf#129183 sw: textboxes in group shapes - part 3\".",
+      "parentUuid": "d49ffa70_406cec6d",
+      "revId": "ba0d840a94cfeacb5aacf73b12661678369155a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
