@@ -2308,8 +2308,8 @@ public:
     bool                IsTrackFormulasPending() const { return mbTrackFormulasPending; }
     void                FinalTrackFormulas( SfxHintId nHintId );
     bool                IsFinalTrackFormulas() const { return mbFinalTrackFormulas; }
-    bool                IsInFormulaTree( const ScFormulaCell* pCell ) const;
-    bool                IsInFormulaTrack( const ScFormulaCell* pCell ) const;
+    inline bool         IsInFormulaTree( const ScFormulaCell* pCell ) const;
+    inline bool         IsInFormulaTrack( const ScFormulaCell* pCell ) const;
     HardRecalcState     GetHardRecalcState() const { return eHardRecalcState; }
     void                SetHardRecalcState( HardRecalcState eVal ) { eHardRecalcState = eVal; }
     void                StartAllListeners();
