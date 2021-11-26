@@ -77,7 +77,7 @@ class ScInputCfg final : public ScInputOptions,
                   public utl::ConfigItem
 {
     static css::uno::Sequence<OUString> GetPropertyNames();
-
+    void ReadCfg();
     virtual void    ImplCommit() override;
 
 public:
