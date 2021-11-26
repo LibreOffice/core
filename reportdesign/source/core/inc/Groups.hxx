@@ -22,7 +22,7 @@
 #include <com/sun/star/report/XGroups.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vector>
 
@@ -38,7 +38,7 @@ namespace reportdesign
                     public GroupsBase
     {
         typedef ::std::vector< css::uno::Reference< css::report::XGroup > > TGroups;
-        ::comphelper::OInterfaceContainerHelper2                            m_aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
         css::uno::Reference< css::uno::XComponentContext >            m_xContext;
         css::uno::WeakReference< css::report::XReportDefinition >     m_xParent;
         TGroups                                                       m_aGroups;

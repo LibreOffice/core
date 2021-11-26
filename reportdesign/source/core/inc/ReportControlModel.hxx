@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 
 namespace reportdesign
@@ -73,7 +73,7 @@ namespace reportdesign
         OReportControlModel(OReportControlModel const &) = delete;
         void operator =(OReportControlModel const &) = delete;
     public:
-        ::comphelper::OInterfaceContainerHelper2                  aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> aContainerListeners;
         OReportComponentProperties                          aComponent;
         OFormatProperties                                   aFormatProperties;
         css::container::XContainer*                         m_pOwner;

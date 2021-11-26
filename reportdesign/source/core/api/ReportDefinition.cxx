@@ -91,6 +91,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -451,11 +452,11 @@ uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Seque
 struct OReportDefinitionImpl
 {
     uno::WeakReference< uno::XInterface >                   m_xParent;
-    ::comphelper::OInterfaceContainerHelper2                      m_aStorageChangeListeners;
-    ::comphelper::OInterfaceContainerHelper2                      m_aCloseListener;
-    ::comphelper::OInterfaceContainerHelper2                      m_aModifyListeners;
-    ::comphelper::OInterfaceContainerHelper2                      m_aLegacyEventListeners;
-    ::comphelper::OInterfaceContainerHelper2                      m_aDocEventListeners;
+    ::comphelper::OInterfaceContainerHelper3<document::XStorageChangeListener> m_aStorageChangeListeners;
+    ::comphelper::OInterfaceContainerHelper3<util::XCloseListener> m_aCloseListener;
+    ::comphelper::OInterfaceContainerHelper3<util::XModifyListener> m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper3<document::XEventListener> m_aLegacyEventListeners;
+    ::comphelper::OInterfaceContainerHelper3<document::XDocumentEventListener> m_aDocEventListeners;
     ::std::vector< uno::Reference< frame::XController> >    m_aControllers;
     uno::Sequence< beans::PropertyValue >                   m_aArgs;
 
@@ -1069,7 +1070,7 @@ void SAL_CALL OReportDefinition::close(sal_Bool bDeliverOwnership)
     // notify our container listeners
     lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
     aGuard.clear();
-    m_pImpl->m_aCloseListener.forEach<util::XCloseListener>(
+    m_pImpl->m_aCloseListener.forEach(
         [&aEvt, &bDeliverOwnership] (uno::Reference<util::XCloseListener> const& xListener) {
             return xListener->queryClosing(aEvt, bDeliverOwnership);
         });
@@ -1418,7 +1419,7 @@ void SAL_CALL OReportDefinition::switchToStorage(
         m_pImpl->m_pObjectContainer->SwitchPersistence(m_pImpl->m_xStorage);
     }
     // notify our container listeners
-    m_pImpl->m_aStorageChangeListeners.forEach<document::XStorageChangeListener>(
+    m_pImpl->m_aStorageChangeListeners.forEach(
         [this, &xStorage] (uno::Reference<document::XStorageChangeListener> const& xListener) {
             return xListener->notifyStorageChange(static_cast<OWeakObject*>(this), xStorage);
         });

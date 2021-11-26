@@ -22,7 +22,7 @@
 #include <com/sun/star/report/XFunctions.hpp>
 #include <com/sun/star/report/XFunctionsSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vector>
@@ -39,7 +39,7 @@ namespace reportdesign
                     public FunctionsBase
     {
         typedef ::std::vector< css::uno::Reference< css::report::XFunction > >  TFunctions;
-        ::comphelper::OInterfaceContainerHelper2                            m_aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
         css::uno::Reference< css::uno::XComponentContext >            m_xContext;
         css::uno::WeakReference< css::report::XFunctionsSupplier >    m_xParent;
         TFunctions                                                    m_aFunctions;
