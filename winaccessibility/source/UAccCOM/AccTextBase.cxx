@@ -882,7 +882,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface
     LEAVE_PROTECTED_BLOCK
 }
 
-static OUString ReplaceOneChar(OUString const & oldOUString, sal_Unicode replacedChar, OUString const & replaceStr)
+static OUString ReplaceOneChar(OUString const & oldOUString, sal_Unicode replacedChar, std::u16string_view replaceStr)
 {
     auto s = oldOUString;
     int iReplace = s.lastIndexOf(replacedChar);
@@ -900,11 +900,11 @@ static OUString ReplaceOneChar(OUString const & oldOUString, sal_Unicode replace
 static OUString ReplaceFourChar(OUString const & oldOUString)
 {
     auto s = oldOUString;
-    s = ReplaceOneChar(s, '\\', "\\\\");
-    s = ReplaceOneChar(s, ';', "\\;");
-    s = ReplaceOneChar(s, '=', "\\=");
-    s = ReplaceOneChar(s, ',', "\\,");
-    s = ReplaceOneChar(s, ':', "\\:");
+    s = ReplaceOneChar(s, '\\', u"\\\\");
+    s = ReplaceOneChar(s, ';', u"\\;");
+    s = ReplaceOneChar(s, '=', u"\\=");
+    s = ReplaceOneChar(s, ',', u"\\,");
+    s = ReplaceOneChar(s, ':', u"\\:");
     return s;
 }
 
