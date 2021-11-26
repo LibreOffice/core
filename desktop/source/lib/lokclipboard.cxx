@@ -10,9 +10,11 @@
 #include "lokclipboard.hxx"
 #include <unordered_map>
 #include <vcl/lazydelete.hxx>
+#include <vcl/svapp.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -67,7 +69,7 @@ uno::Reference<uno::XInterface>
 }
 
 LOKClipboard::LOKClipboard()
-    : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+    : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XCurrentViewClipboard,
                                     css::lang::XServiceInfo>(m_aMutex)
 {
     // Encourage 'paste' menu items to always show up.
@@ -77,11 +79,14 @@ LOKClipboard::LOKClipboard()
 
 Sequence<OUString> LOKClipboard::getSupportedServiceNames_static()
 {
-    Sequence<OUString> aRet{ "com.sun.star.datatransfer.clipboard.SystemClipboard" };
+    Sequence<OUString> aRet{ "com.sun.star.datatransfer.clipboard.CurrentViewClipboard" };
     return aRet;
 }
 
-OUString LOKClipboard::getImplementationName() { return "com.sun.star.datatransfer.LOKClipboard"; }
+OUString LOKClipboard::getImplementationName()
+{
+    return "com.sun.star.datatransfer.CurrentViewClipboard";
+}
 
 Sequence<OUString> LOKClipboard::getSupportedServiceNames()
 {
@@ -226,6 +231,19 @@ sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::Dat
                             return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
                         })
            != m_aFlavors.end();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_LOKClipboard_get_implementation(css::uno::XComponentContext*,
+                                        css::uno::Sequence<css::uno::Any> const& /*args*/)
+{
+    SolarMutexGuard aGuard;
+
+    auto pClipboard
+        = static_cast<cppu::OWeakObject*>(LOKClipboardFactory::getClipboardForCurView().get());
+
+    pClipboard->acquire();
+    return pClipboard;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
