@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e6c8006_cbd1b0bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-26T12:49:57Z",
+      "side": 1,
+      "message": "Good catch!\n   1333 TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const\n   1334 {\n   1335     // string resource IDs for each image (in order of the IID_PRE_* image IDs)\n   1336     static const TranslateId pnStrIds[] \u003d\n   1337     {\n   1338         RID_SVXSTR_TABLE_PRESET_NONE,\n   1339         RID_SVXSTR_PARA_PRESET_ALL,\n   1340         RID_SVXSTR_PARA_PRESET_LEFTRIGHT,\n   1341         RID_SVXSTR_PARA_PRESET_TOPBOTTOM,\n   1342         RID_SVXSTR_PARA_PRESET_ONLYLEFT,\n   1343         RID_SVXSTR_PARA_PRESET_DIAGONAL,\n\n\nIt seems the same case at line 1401\nm_xWndShadows-\u003eSetItemText( nVSIdx, CuiResId( pnStrIds[ nVSIdx - 1 ] ) );\n   1336     static const TranslateId pnStrIds[] \u003d\n   1337     {\n   1338         RID_SVXSTR_TABLE_PRESET_NONE,\n   1339         RID_SVXSTR_PARA_PRESET_ALL,\n   1340         RID_SVXSTR_PARA_PRESET_LEFTRIGHT,\n   1341         RID_SVXSTR_PARA_PRESET_TOPBOTTOM,\n   1342         RID_SVXSTR_PARA_PRESET_ONLYLEFT,\n   1343         RID_SVXSTR_PARA_PRESET_DIAGONAL,\n...\n\nCaolán: I know that it was before 2155e04d6343638ca9815d394cbc4f78c2b17c3a \"make string translation loading more uniform\" but thought you might have some opinion here.\n",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
