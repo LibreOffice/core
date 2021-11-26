@@ -3210,6 +3210,7 @@ bool ScTable::ValidQuery(
         else if( pBlockPos )
         {   // hinted mdds access
             ScColumn* column = FetchColumn(nCol);
+            assert(column);
             aCell = column->GetCellValue(*pBlockPos->getBlockPosition( nCol ), nRow);
         }
         else
