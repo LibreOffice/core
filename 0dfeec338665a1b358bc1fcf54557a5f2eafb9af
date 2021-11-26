@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdfaabb6_c14317b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-26T14:07:57Z",
+      "side": 1,
+      "message": "The name of the define doesn\u0027t \"matter\" to translators IIRC. The \"context\" which is the string before the translatable string does matter I believe, so changing the \"context\" would invalidate the translation for translators and make them translate it again. Though I think their tooling would auto-suggest what the translation was the last time such a string was translated. That \"context\" string was initially seeded as the same name as the define when we moved to this scheme, but there\u0027s no reason, except for consistency, for it to match the define\n\nSo changing\n#define RID_SVXSTR_SHADOW_STYLE_NONE                NC_(\"RID_SVXSTR_SHADOW_STYLE_NONE\", \"No Shadow\")\nto\n#define RID_CUISTR_SHADOW_STYLE_NONE                NC_(\"RID_SVXSTR_SHADOW_STYLE_NONE\", \"No Shadow\")\nshould be \"free\" and changing to\n#define RID_CUISTR_SHADOW_STYLE_NONE                NC_(\"RID_CUISTR_SHADOW_STYLE_NONE\", \"No Shadow\")\nwould have a small cost for translators",
+      "parentUuid": "41aa9dff_46abe4ec",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
