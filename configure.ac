@@ -4245,7 +4245,6 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
     [AC_MSG_RESULT([no])])
 AC_SUBST(COM_IS_CLANG)
 
-CC_PLAIN=$CC
 CLANGVER=
 if test "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether Clang is new enough])
@@ -4263,23 +4262,11 @@ if test "$COM_IS_CLANG" = TRUE; then
         if test "$_os" = WINNT; then
             dnl In which case, assume clang-cl:
             my_args="/EP /TC"
-            dnl Filter out -FIIntrin.h, which needs to be explicitly stated for
-            dnl clang-cl:
-            CC_PLAIN=
-            for i in $CC; do
-                case $i in
-                -FIIntrin.h)
-                    ;;
-                *)
-                    CC_PLAIN="$CC_PLAIN $i"
-                    ;;
-                esac
-            done
         else
             my_args="-E -P"
         fi
-        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args - | sed 's/ //g'`
-        CLANG_FULL_VERSION=`echo __clang_version__ | $CC_PLAIN $my_args -`
+        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC $my_args - | sed 's/ //g'`
+        CLANG_FULL_VERSION=`echo __clang_version__ | $CC $my_args -`
         CLANGVER=`echo $clang_version \
             | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
         if test "$CLANGVER" -ge 50002; then
@@ -4298,7 +4285,7 @@ if test "$_os" = WINNT; then
     dnl localized
     AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
     echo "#include <stdlib.h>" > conftest.c
-    SHOWINCLUDES_PREFIX=`$CC_PLAIN $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
+    SHOWINCLUDES_PREFIX=`$CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
         grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
     rm -f conftest.c conftest.obj
     if test -z "$SHOWINCLUDES_PREFIX"; then

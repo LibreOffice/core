@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#if !defined _CRT_RAND_S
 #define _CRT_RAND_S
-#endif
 
 #include <stdlib.h>
 #include <memory.h>
