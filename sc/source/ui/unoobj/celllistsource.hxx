@@ -22,7 +22,7 @@
 #include <com/sun/star/form/binding/XListEntryTypedSource.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -62,7 +62,7 @@ namespace calc
                     m_xDocument;            /// the document where our cell lives
         css::uno::Reference< css::table::XCellRange >
                     m_xRange;               /// the range of cells we're bound to
-        ::comphelper::OInterfaceContainerHelper2
+        ::comphelper::OInterfaceContainerHelper3<css::form::binding::XListEntryListener>
                     m_aListEntryListeners;  /// our listeners
         bool        m_bInitialized;         /// has XInitialization::initialize been called?
 
