@@ -68,7 +68,7 @@ namespace o3tl {
     template<> struct typed_flags<FileDialogFlags> : is_typed_flags<FileDialogFlags, 0xFF> {};
 }
 
-#define FILEDIALOG_FILTER_ALL   "*.*"
+inline constexpr OUStringLiteral FILEDIALOG_FILTER_ALL = u"*.*";
 
 namespace sfx2 {
 
