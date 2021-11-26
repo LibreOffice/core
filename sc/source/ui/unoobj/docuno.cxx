@@ -3177,12 +3177,12 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
             rChange.ReplacedElement <<= xRangeObj;
         }
 
-        ::comphelper::OInterfaceIteratorHelper2 aIter( maChangesListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( maChangesListeners );
         while ( aIter.hasMoreElements() )
         {
             try
             {
-                static_cast< util::XChangesListener* >( aIter.next() )->changesOccurred( aEvent );
+                aIter.next()->changesOccurred( aEvent );
             }
             catch( uno::Exception& )
             {
