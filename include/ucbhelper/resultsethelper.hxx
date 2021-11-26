@@ -37,7 +37,7 @@ namespace cppu {
 namespace ucbhelper {
 
 
-#define DYNAMICRESULTSET_SERVICE_NAME "com.sun.star.ucb.DynamicResultSet"
+inline constexpr OUStringLiteral DYNAMICRESULTSET_SERVICE_NAME = u"com.sun.star.ucb.DynamicResultSet";
 
 
 /**
