@@ -104,6 +104,24 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+/// Gets one child of xShape, which one is specified by nIndex.
+uno::Reference<drawing::XShape> getChildShape(const uno::Reference<drawing::XShape>& xShape,
+                                              sal_Int32 nIndex)
+{
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    CPPUNIT_ASSERT(xGroup->getCount() > nIndex);
+
+    uno::Reference<drawing::XShape> xRet(xGroup->getByIndex(nIndex), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xRet.is());
+
+    return xRet;
+}
+}
+
 namespace com::sun::star::uno {
 
 template<class T>
@@ -186,6 +204,7 @@ public:
     void testTdf93124();
     void testTdf99729();
     void testTdf89927();
+    void testTdf145873size();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -253,6 +272,7 @@ public:
     CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
+    CPPUNIT_TEST(testTdf145873size);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1934,6 +1954,26 @@ void SdImportTest::testTdf89927()
     Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, nCharColor );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf145873size()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf145873.pptx"),
+        PPTX);
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xImage = getChildShape(xDiagram, 1);
+    uno::Reference<drawing::XShape> xShape(xImage, uno::UNO_QUERY);
+
+    css::awt::Size size = xShape->getSize();
+    sal_Int32 height = size.Height;
+    sal_Int32 width = size.Width;
+
+    CPPUNIT_ASSERT_EQUAL(height, 2513);
+    CPPUNIT_ASSERT_EQUAL(width, 16086);
 
     xDocShRef->DoClose();
 }
