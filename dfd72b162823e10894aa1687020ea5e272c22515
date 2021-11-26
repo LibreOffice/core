@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87b2c7b8_30afde6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-26T09:43:09Z",
+      "side": 1,
+      "message": "@Tibi: very nice fix! There is a redundancy here, which must be resolved before integration, based on the interoperability, see in the next comment.",
+      "revId": "dfd72b162823e10894aa1687020ea5e272c22515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b72587d_89b976f6",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2863,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-26T09:43:09Z",
+      "side": 1,
+      "message": "This seems to be redundant. GetProperty(rXPropSet, \"ParaLineSpacing\") covers this, too.\n\nLikely we don\u0027t want convert the default 100% line spacing to direct paragraph\nformatting, so it\u0027s better to export only the different values:\n\n    if ((GetPropertyAndState(rXPropSet, rXPropState, \"ParaLineSpacing\", eState)\n         \u0026\u0026 ( mAny \u003e\u003e\u003d aLineSpacing ) \u0026\u0026 (eState \u003d\u003d beans::PropertyState_DIRECT_VALUE ||\n              // only export if it differs from the default 100% line spacing\n              rSpacing.Mode !\u003d LineSpacingMode::PROP || rSpacing.Height !\u003d 100 ))\n    {\n        bHasLinespacing \u003d true;\n    }\n\nor – if DIRECT_VALUE (direct formatting) doesn\u0027t matter for interoperability (it seems, paragraph style settings converted to direct paragraph formatting during PPTX export):\n\n    bool bHasLinespacing \u003d\n        ((GetProperty(rXPropSet, \"ParaLineSpacing\") \u0026\u0026 ( mAny \u003e\u003e\u003d aLineSpacing ) \u0026\u0026\n              // only export if it differs from the default 100% line spacing\n              ( rSpacing.Mode !\u003d LineSpacingMode::PROP || rSpacing.Height !\u003d 100 ));",
+      "range": {
+        "startLine": 2862,
+        "startChar": 8,
+        "endLine": 2863,
+        "endChar": 56
+      },
+      "revId": "dfd72b162823e10894aa1687020ea5e272c22515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
