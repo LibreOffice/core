@@ -74,6 +74,7 @@ void ReservedId::postRun() {
                     // extensions/source/activex/StdAfx2.h
                 && id != "_ATL_STATIC_REGISTRY"
                     // extensions/source/activex/StdAfx2.h
+                && id != "_CRT_RAND_S" // sal/osl/w32/random.cxx
                 && id != "_GLIBCXX_CDTOR_CALLABI"
                 && id != "_HAS_AUTO_PTR_ETC" // unotools/source/i18n/resmgr.cxx
                 && id != "_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR" // unotools/source/i18n/resmgr.cxx

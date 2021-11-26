@@ -21,9 +21,7 @@
 */
 
 #if defined(_WIN32)
-#if !defined _CRT_RAND_S
 #define _CRT_RAND_S
-#endif
 #endif
 
 #include <sal/config.h>

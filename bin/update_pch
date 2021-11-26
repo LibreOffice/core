@@ -888,9 +888,7 @@ def generate(includes, libname, filename, module):
         if module == 'sal' and libname == 'sal':
             sal_define = """
 #if defined(_WIN32)
-#if !defined _CRT_RAND_S
 #define _CRT_RAND_S
-#endif
 #endif
 """
             f.write(sal_define)
