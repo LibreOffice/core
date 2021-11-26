@@ -59,44 +59,6 @@
 
 namespace
 {
-    basegfx::B2DRange getClipBox(cairo_t* cr)
-    {
-        double x1, y1, x2, y2;
-
-        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-
-        // support B2DRange::isEmpty()
-        if(0.0 != x1 || 0.0 != y1 || 0.0 != x2 || 0.0 != y2)
-        {
-            return basegfx::B2DRange(x1, y1, x2, y2);
-        }
-
-        return basegfx::B2DRange();
-    }
-
-    basegfx::B2DRange getFillDamage(cairo_t* cr)
-    {
-        double x1, y1, x2, y2;
-
-        // this is faster than cairo_fill_extents, at the cost of some overdraw
-        cairo_path_extents(cr, &x1, &y1, &x2, &y2);
-
-        // support B2DRange::isEmpty()
-        if(0.0 != x1 || 0.0 != y1 || 0.0 != x2 || 0.0 != y2)
-        {
-            return basegfx::B2DRange(x1, y1, x2, y2);
-        }
-
-        return basegfx::B2DRange();
-    }
-
-    basegfx::B2DRange getClippedFillDamage(cairo_t* cr)
-    {
-        basegfx::B2DRange aDamageRect(getFillDamage(cr));
-        aDamageRect.intersect(getClipBox(cr));
-        return aDamageRect;
-    }
-
     basegfx::B2DRange getStrokeDamage(cairo_t* cr)
     {
         double x1, y1, x2, y2;
@@ -914,27 +876,6 @@ void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVec
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = rDPIY = 96;
-}
-
-void SvpSalGraphics::drawPixel( tools::Long nX, tools::Long nY )
-{
-    if (m_aCairoCommon.m_aLineColor != SALCOLOR_NONE)
-    {
-        drawPixel(nX, nY, m_aCairoCommon.m_aLineColor);
-    }
-}
-
-void SvpSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color aColor )
-{
-    cairo_t* cr = m_aCairoCommon.getCairoContext(true, getAntiAlias());
-    clipRegion(cr);
-
-    cairo_rectangle(cr, nX, nY, 1, 1);
-    m_aCairoCommon.applyColor(cr, aColor, 0.0);
-    cairo_fill(cr);
-
-    basegfx::B2DRange extents = getClippedFillDamage(cr);
-    m_aCairoCommon.releaseCairoContext(cr, true, extents);
 }
 
 void SvpSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )

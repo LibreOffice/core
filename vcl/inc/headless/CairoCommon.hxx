@@ -68,6 +68,10 @@ VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, d
 VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t* surface, double* x_scale,
                                                      double* y_scale);
 
+VCL_DLLPUBLIC basegfx::B2DRange getFillDamage(cairo_t* cr);
+VCL_DLLPUBLIC basegfx::B2DRange getClipBox(cairo_t* cr);
+VCL_DLLPUBLIC basegfx::B2DRange getClippedFillDamage(cairo_t* cr);
+
 enum class PaintMode
 {
     Over,
