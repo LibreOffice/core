@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac44889f_4c1d6951",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-26T10:17:27Z",
+      "side": 1,
+      "message": "https://en.cppreference.com/w/cpp/atomic/atomic/atomic says it\u0027s initialized in C++20 but not in C++17 or older, fun...",
+      "revId": "cdbaac24e1022787b8fa3b0e7e50c7047e7cb4c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
