@@ -91,8 +91,12 @@ class formatCell(UITestCase):
                 xSizeFontEast.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
                 xSizeFontCTL.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xSizeFontCTL.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
+                xNoteBook = xDialog.getChild("notebook")
+                select_pos(xNoteBook, "0")
                 select_pos(xLangFont, "0")
+                select_pos(xNoteBook, "1")
                 select_pos(xLangFontEast, "0")
+                select_pos(xNoteBook, "2")
                 select_pos(xLangFontCTL, "0")
 
             #Verify - select cell A1

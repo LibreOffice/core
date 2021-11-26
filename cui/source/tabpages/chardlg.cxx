@@ -189,7 +189,7 @@ struct SvxCharNamePage_Impl
 SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
     : SvxCharBasePage(pPage, pController, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
-    , m_xEastFrame(m_xBuilder->weld_widget("asian"))
+    , m_xLangNotebook(m_xBuilder->weld_notebook("notebook"))
     , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
     , m_xEastFontNameLB(m_xBuilder->weld_combo_box("eastfontnamelb"))
     , m_xEastFontStyleFT(m_xBuilder->weld_label("eaststyleft"))
@@ -200,7 +200,6 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("eastlanglb")))
     , m_xEastFontTypeFT(m_xBuilder->weld_label("eastfontinfo"))
     , m_xEastFontFeaturesButton(m_xBuilder->weld_button("east_features_button"))
-    , m_xCTLFrame(m_xBuilder->weld_widget("ctl"))
     , m_xCTLFontNameFT(m_xBuilder->weld_label("ctlfontnameft"))
     , m_xCTLFontNameLB(m_xBuilder->weld_combo_box("ctlfontnamelb"))
     , m_xCTLFontStyleFT(m_xBuilder->weld_label("ctlstyleft"))
@@ -293,8 +292,10 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     m_xCTLFontStyleFT->set_label(sFontStyleString);
 
     m_xWestFrame->show();
-    m_xEastFrame->set_visible(bShowCJK);
-    m_xCTLFrame->set_visible(bShowCTL);
+    if (!bShowCJK)
+        m_xLangNotebook->remove_page("lbAsian");
+    if (!bShowCTL)
+        m_xLangNotebook->remove_page("lbComplex");
 
     m_xWestFontLanguageLB->SetLanguageList(SvxLanguageListFlags::WESTERN, true, false, true, true,
                                            LANGUAGE_SYSTEM, css::i18n::ScriptType::LATIN);

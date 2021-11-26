@@ -76,8 +76,8 @@ private:
     std::unique_ptr<SvxLanguageBox> m_xWestFontLanguageLB;
     std::unique_ptr<weld::Label> m_xWestFontTypeFT;
     std::unique_ptr<weld::Button> m_xWestFontFeaturesButton;
+    std::unique_ptr<weld::Notebook> m_xLangNotebook;
 
-    std::unique_ptr<weld::Widget> m_xEastFrame;
     std::unique_ptr<weld::Label> m_xEastFontNameFT;
     std::unique_ptr<weld::ComboBox> m_xEastFontNameLB;
     std::unique_ptr<weld::Label> m_xEastFontStyleFT;
@@ -89,7 +89,6 @@ private:
     std::unique_ptr<weld::Label> m_xEastFontTypeFT;
     std::unique_ptr<weld::Button> m_xEastFontFeaturesButton;
 
-    std::unique_ptr<weld::Widget> m_xCTLFrame;
     std::unique_ptr<weld::Label> m_xCTLFontNameFT;
     std::unique_ptr<weld::ComboBox> m_xCTLFontNameLB;
     std::unique_ptr<weld::Label> m_xCTLFontStyleFT;
