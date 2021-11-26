@@ -2350,7 +2350,7 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
     if ( m_pRedlineData && m_pRedlineData->GetType() == RedlineType::Delete )
         nTextToken = XML_delInstrText;
 
-    m_pSerializer->startElementNS(XML_w, nTextToken);
+    m_pSerializer->startElementNS(XML_w, nTextToken, FSNS(XML_xml, XML_space), "preserve");
     m_pSerializer->writeEscaped( rCmd );
     m_pSerializer->endElementNS( XML_w, nTextToken );
 
