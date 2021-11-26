@@ -28,6 +28,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
@@ -2888,8 +2889,9 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, ImportHdl, weld::Button&, void)
             false);
     }
 
-    aImportDialog.SetCurrentFilter(
-        "PNG - Portable Network Graphics");
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    sal_uInt16 nFilter = rFilter.GetImportFormatNumberForShortName(u"png");
+    aImportDialog.SetCurrentFilter(rFilter.GetImportFormatName(nFilter));
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {
