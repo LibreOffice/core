@@ -83,7 +83,7 @@ public:
 };
 
 
-#define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedResultSet"
+inline constexpr OUStringLiteral RESULTSET_SERVICE_NAME = u"com.sun.star.ucb.SortedResultSet";
 
 
 class SortedResultSet: public cppu::WeakImplHelper <
