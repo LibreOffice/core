@@ -16,6 +16,23 @@
       "message": "Good catch!\n   1333 TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const\n   1334 {\n   1335     // string resource IDs for each image (in order of the IID_PRE_* image IDs)\n   1336     static const TranslateId pnStrIds[] \u003d\n   1337     {\n   1338         RID_SVXSTR_TABLE_PRESET_NONE,\n   1339         RID_SVXSTR_PARA_PRESET_ALL,\n   1340         RID_SVXSTR_PARA_PRESET_LEFTRIGHT,\n   1341         RID_SVXSTR_PARA_PRESET_TOPBOTTOM,\n   1342         RID_SVXSTR_PARA_PRESET_ONLYLEFT,\n   1343         RID_SVXSTR_PARA_PRESET_DIAGONAL,\n\n\nIt seems the same case at line 1401\nm_xWndShadows-\u003eSetItemText( nVSIdx, CuiResId( pnStrIds[ nVSIdx - 1 ] ) );\n   1336     static const TranslateId pnStrIds[] \u003d\n   1337     {\n   1338         RID_SVXSTR_TABLE_PRESET_NONE,\n   1339         RID_SVXSTR_PARA_PRESET_ALL,\n   1340         RID_SVXSTR_PARA_PRESET_LEFTRIGHT,\n   1341         RID_SVXSTR_PARA_PRESET_TOPBOTTOM,\n   1342         RID_SVXSTR_PARA_PRESET_ONLYLEFT,\n   1343         RID_SVXSTR_PARA_PRESET_DIAGONAL,\n...\n\nCaolán: I know that it was before 2155e04d6343638ca9815d394cbc4f78c2b17c3a \"make string translation loading more uniform\" but thought you might have some opinion here.\n",
       "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc487e0_b392caf1",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-26T13:04:41Z",
+      "side": 1,
+      "message": "GetPresetStringId returns Translation Ids like RID_SVXSTR_TABLE_PRESET_NONE which are in include/svx/strings.hrc and the ones in that header are saved in svx.mo, which needs the SvxResId route to load them.\n\nThe other one in FillShadowVS of CuiResId pnStrIds uses translation ids like RID_SVXSTR_SHADOW_STYLE_NONE, those are in cui/inc/strings.hrc so they are found in cui.mo, and that needs the CuiResId route.\n\nThe defines are confusing as svx got split up and pieces moved around.",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
