@@ -34,6 +34,6 @@ class tdf126673(UITestCase):
             #row height
             with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual("1.2365 cm", get_state_as_dict(xvalue)["Text"])
+                self.assertEqual("1.24 cm", get_state_as_dict(xvalue)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

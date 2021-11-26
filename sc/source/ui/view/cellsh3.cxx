@@ -690,9 +690,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
-                        eMetric,
-                        nCurHeight == ScGlobal::nStdRowHeight ? 2 : 4, //use 4 digits for user-defined values
-                        MAX_ROW_HEIGHT));
+                        eMetric, 2, MAX_ROW_HEIGHT));
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -790,9 +788,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "ColWidthDialog", nCurHeight,
-                        STD_COL_WIDTH, eMetric,
-                        nCurHeight == STD_COL_WIDTH ? 2 : 4, //use 4 digits for user-defined values
-                        MAX_COL_WIDTH));
+                        STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
                     if ( pDlg->Execute() == RET_OK )
                     {
                         tools::Long nVal = pDlg->GetInputValue();

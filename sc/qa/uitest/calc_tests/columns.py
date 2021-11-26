@@ -42,7 +42,7 @@ class CalcColumns(UITestCase):
             #verify
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth", close_button="cancel") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
 
 
     def test_column_width_two_columns(self):
@@ -67,12 +67,12 @@ class CalcColumns(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
 
 
     def test_column_width_copy(self):
@@ -103,7 +103,7 @@ class CalcColumns(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
 
 
     def test_column_hide_show(self):
@@ -195,32 +195,32 @@ class CalcColumns(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.0003 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.00 cm")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "E1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.0004 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.00 cm")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "F1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "G1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.0003 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.00 cm")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "H1"}))
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.0004 cm")
+                self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.00 cm")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
