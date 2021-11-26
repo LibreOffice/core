@@ -42,7 +42,7 @@
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase5.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/transfer.hxx>
@@ -77,7 +77,7 @@ namespace rptui
                                 ,public ::comphelper::OPropertyArrayUsageHelper < OReportController_BASE >
     {
     private:
-        ::comphelper::OInterfaceContainerHelper2
+        ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener>
                                 m_aSelectionListeners;
         css::uno::Sequence< css::beans::PropertyValue>
                                 m_aCollapsedSections;

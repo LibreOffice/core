@@ -2577,7 +2577,7 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
         InvalidateAll();
     }
     lang::EventObject aEvent(*this);
-    m_aSelectionListeners.forEach<view::XSelectionChangeListener>(
+    m_aSelectionListeners.forEach(
         [&aEvent] (uno::Reference<view::XSelectionChangeListener> const& xListener) {
             return xListener->selectionChanged(aEvent);
         });
