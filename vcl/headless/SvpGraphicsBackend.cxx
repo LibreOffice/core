@@ -98,9 +98,26 @@ void SvpGraphicsBackend::SetROPFillColor(SalROPColor nROPColor)
     }
 }
 
-void SvpGraphicsBackend::drawPixel(tools::Long /*nX*/, tools::Long /*nY*/) {}
+void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY)
+{
+    if (m_rCairoCommon.m_aLineColor != SALCOLOR_NONE)
+    {
+        drawPixel(nX, nY, m_rCairoCommon.m_aLineColor);
+    }
+}
 
-void SvpGraphicsBackend::drawPixel(tools::Long /*nX*/, tools::Long /*nY*/, Color /*aColor*/) {}
+void SvpGraphicsBackend::drawPixel(tools::Long nX, tools::Long nY, Color aColor)
+{
+    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+    m_rCairoCommon.clipRegion(cr);
+
+    cairo_rectangle(cr, nX, nY, 1, 1);
+    m_rCairoCommon.applyColor(cr, aColor, 0.0);
+    cairo_fill(cr);
+
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+    m_rCairoCommon.releaseCairoContext(cr, true, extents);
+}
 
 void SvpGraphicsBackend::drawLine(tools::Long /*nX1*/, tools::Long /*nY1*/, tools::Long /*nX2*/,
                                   tools::Long /*nY2*/)
