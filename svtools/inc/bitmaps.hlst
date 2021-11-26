@@ -9,118 +9,118 @@
 
 #pragma once
 
-#define BMP_IMPRESS_SC              "res/sx03123.png"
-#define BMP_BITMAP_SC               "res/sx03125.png"
-#define BMP_CALC_SC                 "res/sx03126.png"
-#define BMP_CALCTEMPLATE_SC         "res/sx03127.png"
-#define BMP_DATABASE_SC             "res/sx03129.png"
-#define BMP_IMPRESSTEMPLATE_SC      "res/sx03130.png"
-#define BMP_GIF_SC                  "res/sx03137.png"
-#define BMP_HTML_SC                 "res/sx03139.png"
-#define BMP_JPG_SC                  "res/sx03140.png"
-#define BMP_MATH_SC                 "res/sx03144.png"
-#define BMP_MATHTEMPLATE_SC         "res/sx03145.png"
-#define BMP_FILE_SC                 "res/sx03150.png"
-#define BMP_PCD_SC                  "res/sx03152.png"
-#define BMP_PCT_SC                  "res/sx03153.png"
-#define BMP_PCX_SC                  "res/sx03154.png"
-#define BMP_SIM_SC                  "res/sx03155.png"
-#define BMP_TEXTFILE_SC             "res/sx03156.png"
-#define BMP_TIFF_SC                 "res/sx03158.png"
-#define BMP_WMF_SC                  "res/sx03160.png"
-#define BMP_WRITER_SC               "res/sx03162.png"
-#define BMP_WRITERTEMPLATE_SC       "res/sx03163.png"
-#define BMP_FIXEDDEV_SC             "res/sx03164.png"
-#define BMP_REMOVABLEDEV_SC         "res/sx03165.png"
-#define BMP_CDROMDEV_SC             "res/sx03166.png"
-#define BMP_NETWORKDEV_SC           "res/sx03167.png"
-#define BMP_TABLE_SC                "res/sx03188.png"
-#define BMP_DXF_SC                  "res/sx03217.png"
-#define BMP_MET_SC                  "res/sx03218.png"
-#define BMP_PNG_SC                  "res/sx03219.png"
-#define BMP_SVM_SC                  "res/sx03222.png"
-#define BMP_GLOBAL_DOC_SC           "res/sx03226.png"
-#define BMP_DRAW_SC                 "res/sx03227.png"
-#define BMP_DRAWTEMPLATE_SC         "res/sx03228.png"
-#define BMP_OO_DATABASE_DOC_SC      "res/sx03245.png"
-#define BMP_OO_DRAW_DOC_SC          "res/sx03246.png"
-#define BMP_OO_MATH_DOC_SC          "res/sx03247.png"
-#define BMP_OO_GLOBAL_DOC_SC        "res/sx03248.png"
-#define BMP_OO_IMPRESS_DOC_SC       "res/sx03249.png"
-#define BMP_OO_CALC_DOC_SC          "res/sx03250.png"
-#define BMP_OO_WRITER_DOC_SC        "res/sx03251.png"
-#define BMP_OO_DRAW_TEMPLATE_SC     "res/sx03252.png"
-#define BMP_OO_IMPRESS_TEMPLATE_SC  "res/sx03253.png"
-#define BMP_OO_CALC_TEMPLATE_SC     "res/sx03254.png"
-#define BMP_OO_WRITER_TEMPLATE_SC   "res/sx03255.png"
-#define BMP_EXTENSION_SC            "res/sx03256.png"
-#define BMP_IMPRESS_LC              "res/lx03123.png"
-#define BMP_BITMAP_LC               "res/lx03125.png"
-#define BMP_CALC_LC                 "res/lx03126.png"
-#define BMP_CALCTEMPLATE_LC         "res/lx03127.png"
-#define BMP_DATABASE_LC             "res/lx03129.png"
-#define BMP_IMPRESSTEMPLATE_LC      "res/lx03130.png"
-#define BMP_GIF_LC                  "res/lx03137.png"
-#define BMP_HTML_LC                 "res/lx03139.png"
-#define BMP_JPG_LC                  "res/lx03140.png"
-#define BMP_MATH_LC                 "res/lx03144.png"
-#define BMP_MATHTEMPLATE_LC         "res/lx03145.png"
-#define BMP_FILE_LC                 "res/lx03150.png"
-#define BMP_PCD_LC                  "res/lx03152.png"
-#define BMP_PCT_LC                  "res/lx03153.png"
-#define BMP_PCX_LC                  "res/lx03154.png"
-#define BMP_SIM_LC                  "res/lx03155.png"
-#define BMP_TEXTFILE_LC             "res/lx03156.png"
-#define BMP_TIFF_LC                 "res/lx03158.png"
-#define BMP_WMF_LC                  "res/lx03160.png"
-#define BMP_WRITER_LC               "res/lx03162.png"
-#define BMP_WRITERTEMPLATE_LC       "res/lx03163.png"
-#define BMP_FIXEDDEV_LC             "res/lx03164.png"
-#define BMP_REMOVABLEDEV_LC         "res/lx03165.png"
-#define BMP_CDROMDEV_LC             "res/lx03166.png"
-#define BMP_NETWORKDEV_LC           "res/lx03167.png"
-#define BMP_TABLE_LC                "res/lx03188.png"
-#define BMP_FOLDER_LC               "res/lx03189.png"
-#define BMP_DXF_LC                  "res/lx03217.png"
-#define BMP_MET_LC                  "res/lx03218.png"
-#define BMP_PNG_LC                  "res/lx03219.png"
-#define BMP_SVM_LC                  "res/lx03222.png"
-#define BMP_GLOBAL_DOC_LC           "res/lx03226.png"
-#define BMP_DRAW_LC                 "res/lx03227.png"
-#define BMP_DRAWTEMPLATE_LC         "res/lx03228.png"
-#define BMP_OO_DATABASE_DOC_LC      "res/lx03245.png"
-#define BMP_OO_DRAW_DOC_LC          "res/lx03246.png"
-#define BMP_OO_MATH_DOC_LC          "res/lx03247.png"
-#define BMP_OO_GLOBAL_DOC_LC        "res/lx03248.png"
-#define BMP_OO_IMPRESS_DOC_LC       "res/lx03249.png"
-#define BMP_OO_CALC_DOC_LC          "res/lx03250.png"
-#define BMP_OO_WRITER_DOC_LC        "res/lx03251.png"
-#define BMP_OO_DRAW_TEMPLATE_LC     "res/lx03252.png"
-#define BMP_OO_IMPRESS_TEMPLATE_LC  "res/lx03253.png"
-#define BMP_OO_CALC_TEMPLATE_LC     "res/lx03254.png"
-#define BMP_OO_WRITER_TEMPLATE_LC   "res/lx03255.png"
-#define BMP_EXTENSION_LC            "res/lx03256.png"
-#define BMP_HTML_32                 "res/lx03139_32.png"
-#define BMP_OO_DATABASE_DOC_32      "res/lx03245_32.png"
-#define BMP_OO_DRAW_DOC_32          "res/lx03246_32.png"
-#define BMP_OO_MATH_DOC_32          "res/lx03247_32.png"
-#define BMP_OO_GLOBAL_DOC_32        "res/lx03248_32.png"
-#define BMP_OO_IMPRESS_DOC_32       "res/lx03249_32.png"
-#define BMP_OO_CALC_DOC_32          "res/lx03250_32.png"
-#define BMP_OO_WRITER_DOC_32        "res/lx03251_32.png"
-#define BMP_OO_WRITER_TEMPLATE_32   "res/lx03255_32.png"
-#define BMP_PLUGIN                  "res/plugin.png"
-#define RID_BMP_FOLDER              "svtools/res/folder.png"
-#define BMP_CURRENT                 "svtools/res/ed01.png"
-#define BMP_MODIFIED                "svtools/res/ed02.png"
-#define BMP_NEW                     "svtools/res/ed03.png"
-#define BMP_DELETED                 "svtools/res/ed04.png"
-#define BMP_CURRENTNEW              "svtools/res/ed05.png"
-#define BMP_PRIMARYKEY              "svtools/res/ed06.png"
-#define BMP_CURRENT_PRIMARYKEY      "svtools/res/ed07.png"
-#define BMP_FILTER                  "svtools/res/ed08.png"
-#define BMP_HEADERFOOTER            "svtools/res/ed09.png"
+inline constexpr OUStringLiteral BMP_IMPRESS_SC = u"res/sx03123.png";
+inline constexpr OUStringLiteral BMP_BITMAP_SC = u"res/sx03125.png";
+inline constexpr OUStringLiteral BMP_CALC_SC = u"res/sx03126.png";
+inline constexpr OUStringLiteral BMP_CALCTEMPLATE_SC = u"res/sx03127.png";
+inline constexpr OUStringLiteral BMP_DATABASE_SC = u"res/sx03129.png";
+inline constexpr OUStringLiteral BMP_IMPRESSTEMPLATE_SC = u"res/sx03130.png";
+inline constexpr OUStringLiteral BMP_GIF_SC = u"res/sx03137.png";
+inline constexpr OUStringLiteral BMP_HTML_SC = u"res/sx03139.png";
+inline constexpr OUStringLiteral BMP_JPG_SC = u"res/sx03140.png";
+inline constexpr OUStringLiteral BMP_MATH_SC = u"res/sx03144.png";
+inline constexpr OUStringLiteral BMP_MATHTEMPLATE_SC = u"res/sx03145.png";
+inline constexpr OUStringLiteral BMP_FILE_SC = u"res/sx03150.png";
+inline constexpr OUStringLiteral BMP_PCD_SC = u"res/sx03152.png";
+inline constexpr OUStringLiteral BMP_PCT_SC = u"res/sx03153.png";
+inline constexpr OUStringLiteral BMP_PCX_SC = u"res/sx03154.png";
+inline constexpr OUStringLiteral BMP_SIM_SC = u"res/sx03155.png";
+inline constexpr OUStringLiteral BMP_TEXTFILE_SC = u"res/sx03156.png";
+inline constexpr OUStringLiteral BMP_TIFF_SC = u"res/sx03158.png";
+inline constexpr OUStringLiteral BMP_WMF_SC = u"res/sx03160.png";
+inline constexpr OUStringLiteral BMP_WRITER_SC = u"res/sx03162.png";
+inline constexpr OUStringLiteral BMP_WRITERTEMPLATE_SC = u"res/sx03163.png";
+inline constexpr OUStringLiteral BMP_FIXEDDEV_SC = u"res/sx03164.png";
+inline constexpr OUStringLiteral BMP_REMOVABLEDEV_SC = u"res/sx03165.png";
+inline constexpr OUStringLiteral BMP_CDROMDEV_SC = u"res/sx03166.png";
+inline constexpr OUStringLiteral BMP_NETWORKDEV_SC = u"res/sx03167.png";
+inline constexpr OUStringLiteral BMP_TABLE_SC = u"res/sx03188.png";
+inline constexpr OUStringLiteral BMP_DXF_SC = u"res/sx03217.png";
+inline constexpr OUStringLiteral BMP_MET_SC = u"res/sx03218.png";
+inline constexpr OUStringLiteral BMP_PNG_SC = u"res/sx03219.png";
+inline constexpr OUStringLiteral BMP_SVM_SC = u"res/sx03222.png";
+inline constexpr OUStringLiteral BMP_GLOBAL_DOC_SC = u"res/sx03226.png";
+inline constexpr OUStringLiteral BMP_DRAW_SC = u"res/sx03227.png";
+inline constexpr OUStringLiteral BMP_DRAWTEMPLATE_SC = u"res/sx03228.png";
+inline constexpr OUStringLiteral BMP_OO_DATABASE_DOC_SC = u"res/sx03245.png";
+inline constexpr OUStringLiteral BMP_OO_DRAW_DOC_SC = u"res/sx03246.png";
+inline constexpr OUStringLiteral BMP_OO_MATH_DOC_SC = u"res/sx03247.png";
+inline constexpr OUStringLiteral BMP_OO_GLOBAL_DOC_SC = u"res/sx03248.png";
+inline constexpr OUStringLiteral BMP_OO_IMPRESS_DOC_SC = u"res/sx03249.png";
+inline constexpr OUStringLiteral BMP_OO_CALC_DOC_SC = u"res/sx03250.png";
+inline constexpr OUStringLiteral BMP_OO_WRITER_DOC_SC = u"res/sx03251.png";
+inline constexpr OUStringLiteral BMP_OO_DRAW_TEMPLATE_SC = u"res/sx03252.png";
+inline constexpr OUStringLiteral BMP_OO_IMPRESS_TEMPLATE_SC = u"res/sx03253.png";
+inline constexpr OUStringLiteral BMP_OO_CALC_TEMPLATE_SC = u"res/sx03254.png";
+inline constexpr OUStringLiteral BMP_OO_WRITER_TEMPLATE_SC = u"res/sx03255.png";
+inline constexpr OUStringLiteral BMP_EXTENSION_SC = u"res/sx03256.png";
+inline constexpr OUStringLiteral BMP_IMPRESS_LC = u"res/lx03123.png";
+inline constexpr OUStringLiteral BMP_BITMAP_LC = u"res/lx03125.png";
+inline constexpr OUStringLiteral BMP_CALC_LC = u"res/lx03126.png";
+inline constexpr OUStringLiteral BMP_CALCTEMPLATE_LC = u"res/lx03127.png";
+inline constexpr OUStringLiteral BMP_DATABASE_LC = u"res/lx03129.png";
+inline constexpr OUStringLiteral BMP_IMPRESSTEMPLATE_LC = u"res/lx03130.png";
+inline constexpr OUStringLiteral BMP_GIF_LC = u"res/lx03137.png";
+inline constexpr OUStringLiteral BMP_HTML_LC = u"res/lx03139.png";
+inline constexpr OUStringLiteral BMP_JPG_LC = u"res/lx03140.png";
+inline constexpr OUStringLiteral BMP_MATH_LC = u"res/lx03144.png";
+inline constexpr OUStringLiteral BMP_MATHTEMPLATE_LC = u"res/lx03145.png";
+inline constexpr OUStringLiteral BMP_FILE_LC = u"res/lx03150.png";
+inline constexpr OUStringLiteral BMP_PCD_LC = u"res/lx03152.png";
+inline constexpr OUStringLiteral BMP_PCT_LC = u"res/lx03153.png";
+inline constexpr OUStringLiteral BMP_PCX_LC = u"res/lx03154.png";
+inline constexpr OUStringLiteral BMP_SIM_LC = u"res/lx03155.png";
+inline constexpr OUStringLiteral BMP_TEXTFILE_LC = u"res/lx03156.png";
+inline constexpr OUStringLiteral BMP_TIFF_LC = u"res/lx03158.png";
+inline constexpr OUStringLiteral BMP_WMF_LC = u"res/lx03160.png";
+inline constexpr OUStringLiteral BMP_WRITER_LC = u"res/lx03162.png";
+inline constexpr OUStringLiteral BMP_WRITERTEMPLATE_LC = u"res/lx03163.png";
+inline constexpr OUStringLiteral BMP_FIXEDDEV_LC = u"res/lx03164.png";
+inline constexpr OUStringLiteral BMP_REMOVABLEDEV_LC = u"res/lx03165.png";
+inline constexpr OUStringLiteral BMP_CDROMDEV_LC = u"res/lx03166.png";
+inline constexpr OUStringLiteral BMP_NETWORKDEV_LC = u"res/lx03167.png";
+inline constexpr OUStringLiteral BMP_TABLE_LC = u"res/lx03188.png";
+inline constexpr OUStringLiteral BMP_FOLDER_LC = u"res/lx03189.png";
+inline constexpr OUStringLiteral BMP_DXF_LC = u"res/lx03217.png";
+inline constexpr OUStringLiteral BMP_MET_LC = u"res/lx03218.png";
+inline constexpr OUStringLiteral BMP_PNG_LC = u"res/lx03219.png";
+inline constexpr OUStringLiteral BMP_SVM_LC = u"res/lx03222.png";
+inline constexpr OUStringLiteral BMP_GLOBAL_DOC_LC = u"res/lx03226.png";
+inline constexpr OUStringLiteral BMP_DRAW_LC = u"res/lx03227.png";
+inline constexpr OUStringLiteral BMP_DRAWTEMPLATE_LC = u"res/lx03228.png";
+inline constexpr OUStringLiteral BMP_OO_DATABASE_DOC_LC = u"res/lx03245.png";
+inline constexpr OUStringLiteral BMP_OO_DRAW_DOC_LC = u"res/lx03246.png";
+inline constexpr OUStringLiteral BMP_OO_MATH_DOC_LC = u"res/lx03247.png";
+inline constexpr OUStringLiteral BMP_OO_GLOBAL_DOC_LC = u"res/lx03248.png";
+inline constexpr OUStringLiteral BMP_OO_IMPRESS_DOC_LC = u"res/lx03249.png";
+inline constexpr OUStringLiteral BMP_OO_CALC_DOC_LC = u"res/lx03250.png";
+inline constexpr OUStringLiteral BMP_OO_WRITER_DOC_LC = u"res/lx03251.png";
+inline constexpr OUStringLiteral BMP_OO_DRAW_TEMPLATE_LC = u"res/lx03252.png";
+inline constexpr OUStringLiteral BMP_OO_IMPRESS_TEMPLATE_LC = u"res/lx03253.png";
+inline constexpr OUStringLiteral BMP_OO_CALC_TEMPLATE_LC = u"res/lx03254.png";
+inline constexpr OUStringLiteral BMP_OO_WRITER_TEMPLATE_LC = u"res/lx03255.png";
+inline constexpr OUStringLiteral BMP_EXTENSION_LC = u"res/lx03256.png";
+inline constexpr OUStringLiteral BMP_HTML_32 = u"res/lx03139_32.png";
+inline constexpr OUStringLiteral BMP_OO_DATABASE_DOC_32 = u"res/lx03245_32.png";
+inline constexpr OUStringLiteral BMP_OO_DRAW_DOC_32 = u"res/lx03246_32.png";
+inline constexpr OUStringLiteral BMP_OO_MATH_DOC_32 = u"res/lx03247_32.png";
+inline constexpr OUStringLiteral BMP_OO_GLOBAL_DOC_32 = u"res/lx03248_32.png";
+inline constexpr OUStringLiteral BMP_OO_IMPRESS_DOC_32 = u"res/lx03249_32.png";
+inline constexpr OUStringLiteral BMP_OO_CALC_DOC_32 = u"res/lx03250_32.png";
+inline constexpr OUStringLiteral BMP_OO_WRITER_DOC_32 = u"res/lx03251_32.png";
+inline constexpr OUStringLiteral BMP_OO_WRITER_TEMPLATE_32 = u"res/lx03255_32.png";
+inline constexpr OUStringLiteral BMP_PLUGIN = u"res/plugin.png";
+inline constexpr OUStringLiteral RID_BMP_FOLDER = u"svtools/res/folder.png";
+inline constexpr OUStringLiteral BMP_CURRENT = u"svtools/res/ed01.png";
+inline constexpr OUStringLiteral BMP_MODIFIED = u"svtools/res/ed02.png";
+inline constexpr OUStringLiteral BMP_NEW = u"svtools/res/ed03.png";
+inline constexpr OUStringLiteral BMP_DELETED = u"svtools/res/ed04.png";
+inline constexpr OUStringLiteral BMP_CURRENTNEW = u"svtools/res/ed05.png";
+inline constexpr OUStringLiteral BMP_PRIMARYKEY = u"svtools/res/ed06.png";
+inline constexpr OUStringLiteral BMP_CURRENT_PRIMARYKEY = u"svtools/res/ed07.png";
+inline constexpr OUStringLiteral BMP_FILTER = u"svtools/res/ed08.png";
+inline constexpr OUStringLiteral BMP_HEADERFOOTER = u"svtools/res/ed09.png";
 
-#define BMP_TAB_LOCK "cmd/sc_lock.png"
+inline constexpr OUStringLiteral BMP_TAB_LOCK = u"cmd/sc_lock.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

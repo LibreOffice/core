@@ -48,8 +48,8 @@
 
 #include <memory>
 
-#define SERVICE_NAME "com.sun.star.security.AccessController"
-#define USER_CREDS "access-control.user-credentials"
+constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.security.AccessController";
+constexpr OUStringLiteral USER_CREDS  = u"access-control.user-credentials.id";
 
 
 using namespace ::std;
@@ -350,7 +350,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     // to something other than "off" depending on various UNO_AC* bootstrap
     // variables that are no longer supported, so this is mostly dead code now:
     OUString mode;
-    if (m_xComponentContext->getValueByName( "/services/" SERVICE_NAME "/mode" ) >>= mode)
+    if (m_xComponentContext->getValueByName( "/services/" + SERVICE_NAME + "/mode" ) >>= mode)
     {
         if ( mode == "off" )
         {
@@ -367,12 +367,12 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
         else if ( mode == "single-user" )
         {
             m_xComponentContext->getValueByName(
-                "/services/" SERVICE_NAME "/single-user-id" ) >>= m_singleUserId;
+                "/services/" + SERVICE_NAME + "/single-user-id" ) >>= m_singleUserId;
             if (m_singleUserId.isEmpty())
             {
                 throw RuntimeException(
                     "expected a user id in component context entry "
-                    "\"/services/" SERVICE_NAME "/single-user-id\"!",
+                    "\"/services/" + SERVICE_NAME + "/single-user-id\"!",
                     static_cast<OWeakObject *>(this) );
             }
             m_mode = Mode::SingleUser;
@@ -389,7 +389,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
 
     sal_Int32 cacheSize = 0; // multi-user cache size
     if (! (m_xComponentContext->getValueByName(
-        "/services/" SERVICE_NAME "/user-cache-size" ) >>= cacheSize))
+        "/services/" + SERVICE_NAME + "/user-cache-size" ) >>= cacheSize))
     {
         cacheSize = 128; // reasonable default?
     }
@@ -574,7 +574,7 @@ PermissionCollection AccessController::getEffectivePermissions(
     {
         if (xContext.is())
         {
-            xContext->getValueByName( USER_CREDS ".id" ) >>= userId;
+            xContext->getValueByName( USER_CREDS ) >>= userId;
         }
         if ( userId.isEmpty() )
         {
