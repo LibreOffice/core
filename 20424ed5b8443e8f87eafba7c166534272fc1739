@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cbd79fd_4e74e7b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-26T13:04:08Z",
+      "side": 1,
+      "message": "Rizal: you had changed this file (and others) for tdf#140029 in February this year, do you remember if this file was indeed used or you just git grepped the string \"Text frame\"?\n\nAt least, git grep confirms this and building works.\nAlso, opening navigator in Writer then clicking \"Navigate by\" dropdown menu works too.",
+      "revId": "20424ed5b8443e8f87eafba7c166534272fc1739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
