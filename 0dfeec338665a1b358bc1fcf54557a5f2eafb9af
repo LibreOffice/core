@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "414eda92_6e699b96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-26T15:10:56Z",
+      "side": 1,
+      "message": "Argh!\n\nI dislike the free solution since it would stay incoherent and would prefer the other one but I wouldn\u0027t like to give even more work for translators.\nFor some languages, there are teams who may deal with this quite easily with suggestions but some have less members.\nNow it\u0027s just my opinion! :-)\n\nIMHO, for the moment, we should just abandon this patch or just put instead a quick comment to explain why this isn\u0027t a mistake here.",
+      "parentUuid": "cdfaabb6_c14317b2",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
