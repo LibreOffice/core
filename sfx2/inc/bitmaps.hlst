@@ -22,45 +22,21 @@ inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_COPY = u"sfx2/res/sc05711.png"
 inline constexpr OUStringLiteral BMP_HELP_CONTENT_BOOK_OPEN = u"sfx2/res/hlpbookopen.png";
 inline constexpr OUStringLiteral BMP_HELP_CONTENT_BOOK_CLOSED = u"sfx2/res/hlpbookclosed.png";
 inline constexpr OUStringLiteral BMP_HELP_CONTENT_DOC = u"sfx2/res/hlpdoc.png";
-#define BMP_HELP_TOOLBOX_L_INDEX_ON         "sfx2/res/indexon_big.png"
-#define BMP_HELP_TOOLBOX_L_INDEX_OFF        "sfx2/res/indexoff_big.png"
-#define BMP_HELP_TOOLBOX_L_START            "res/lc06303.png"
-#define BMP_HELP_TOOLBOX_L_PREV             "res/lc06301.png"
-#define BMP_HELP_TOOLBOX_L_NEXT             "res/lc06300.png"
-#define BMP_HELP_TOOLBOX_L_PRINT            "res/lc05504.png"
-#define BMP_HELP_TOOLBOX_L_BOOKMARKS        "sfx2/res/favourite_big.png"
-#define BMP_HELP_TOOLBOX_L_SEARCHDIALOG     "res/lc05961.png"
 
 //start, sfx2/source/sidebar/Theme.cxx
-#define CHEVRON                             "sfx2/res/chevron.png"
 inline constexpr OUStringLiteral CLOSEDOC = u"sfx2/res/closedoc.png";
 #define GRIP                                "sfx2/res/grip.png"
 #define OPEN_MORE                           "sfx2/res/symphony/open_more.png"
 #define MOREBUTTON                          "sfx2/res/symphony/morebutton.png"
-#define SIDEBAR_3D_LARGE                    "sfx2/res/symphony/sidebar-3d-large.png"
-#define SIDEBAR_3D_SMALL                    "sfx2/res/symphony/sidebar-3d-small.png"
 #define SIDEBAR_ANIMATION_LARGE             "sfx2/res/symphony/sidebar-animation-large.png"
-#define SIDEBAR_ANIMATION_SMALL             "sfx2/res/symphony/sidebar-animation-small.png"
-#define SIDEBAR_COLORS_LARGE                "sfx2/res/symphony/sidebar-colors-large.png"
-#define SIDEBAR_COLORS_SMALL                "sfx2/res/symphony/sidebar-colors-small.png"
-#define SIDEBAR_EYEDROPPER_LARGE            "sfx2/res/symphony/sidebar-eyedropper-large.png"
-#define SIDEBAR_EYEDROPPER_SMALL            "sfx2/res/symphony/sidebar-eyedropper-small.png"
 #define SIDEBAR_GALLERY_LARGE               "sfx2/res/symphony/sidebar-gallery-large.png"
-#define SIDEBAR_GALLERY_SMALL               "sfx2/res/symphony/sidebar-gallery-small.png"
-#define SIDEBAR_IMGANIM_LARGE               "sfx2/res/symphony/sidebar-imganim-large.png"
-#define SIDEBAR_IMGANIM_SMALL               "sfx2/res/symphony/sidebar-imganim-small.png"
 #define SIDEBAR_NAVIGATOR_LARGE             "sfx2/res/symphony/sidebar-navigator-large.png"
-#define SIDEBAR_NAVIGATOR_SMALL             "sfx2/res/symphony/sidebar-navigator-small.png"
 #define SIDEBAR_PROPERTY_LARGE              "sfx2/res/symphony/sidebar-property-large.png"
 #define SIDEBAR_PROPERTY_SMALL              "sfx2/res/symphony/sidebar-property-small.png"
 #define SIDEBAR_STYLE_LARGE                 "sfx2/res/symphony/sidebar-style-large.png"
-#define SIDEBAR_STYLE_SMALL                 "sfx2/res/symphony/sidebar-style-small.png"
 #define SIDEBAR_TEMPLATE_LARGE              "sfx2/res/symphony/sidebar-template-large.png"
-#define SIDEBAR_TEMPLATE_SMALL              "sfx2/res/symphony/sidebar-template-small.png"
 #define SIDEBAR_TRANSITION_LARGE            "sfx2/res/symphony/sidebar-transition-large.png"
-#define SIDEBAR_TRANSITION_SMALL            "sfx2/res/symphony/sidebar-transition-small.png"
 #define SIDEBAR_FUNCTIONS_LARGE             "sfx2/res/symphony/sidebar-functions-large.png"
-#define SIDEBAR_FUNCTIONS_SMALL             "sfx2/res/symphony/sidebar-functions-small.png"
 //end, sfx2/source/sidebar/Theme.cxx
 
 inline constexpr OUStringLiteral SFX_THUMBNAIL_TEXT = u"res/ott_96_8.png";
@@ -74,8 +50,8 @@ inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DRAWING = u"res/odg_48_8.png
 inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DATABASE = u"res/odb_48_8.png";
 inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_MATH = u"res/odf_48_8.png";
 inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DEFAULT = u"res/mainapp_48_8.png";
-#define SFX_THUMBNAIL_BASE_192              "res/base_thumbnail_192.png"
-#define SFX_THUMBNAIL_BASE_256              "res/base_thumbnail_256.png"
+inline constexpr OUStringLiteral SFX_THUMBNAIL_BASE_192 = u"res/base_thumbnail_192.png";
+inline constexpr OUStringLiteral SFX_THUMBNAIL_BASE_256 = u"res/base_thumbnail_256.png";
 
 inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE = u"res/recentdoc_remove.png";
 inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE_HIGHLIGHTED = u"res/recentdoc_remove_highlighted.png";
@@ -95,9 +71,7 @@ inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_WRITER = u"res/odt_16_8.png"
 inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_CALC = u"res/ods_16_8.png";
 inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_IMPRESS = u"res/odp_16_8.png";
 inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_DRAW = u"res/odg_16_8.png";
-#define BMP_ACTION_MOVE                     "cmd/sc_move.png"
 inline constexpr OUStringLiteral BMP_ACTION_IMPORT = u"cmd/sc_dataimport.png";
-#define BMP_ACTION_EXPORT                   "cmd/sc_exportto.png"
 inline constexpr OUStringLiteral BMP_ACTION_EXTENSIONS = u"cmd/sc_additionsdialog.png";
 inline constexpr OUStringLiteral BMP_ACTION_DELETE_CATEGORY = u"cmd/sc_delete.png";
 inline constexpr OUStringLiteral BMP_ACTION_NEW_CATEGORY = u"cmd/sc_add.png";
