@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41aa9dff_46abe4ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-26T13:10:53Z",
+      "side": 1,
+      "message": "Thank you for the feedback!\nDo you think we may change the define string name in order to make this clearer, eg:\nrenaming RID_SVXSTR_SHADOW_STYLE_NONE into RID_CUISTR_SHADOW_STYLE_NONE\nsince we got:\ngit grep -n RID_SVXSTR_SHADOW_STYLE_NONE\ncui/inc/strings.hrc:357:#define RID_SVXSTR_SHADOW_STYLE_NONE                NC_(\"RID_SVXSTR_SHADOW_STYLE_NONE\", \"No Shadow\")\ncui/source/tabpages/border.cxx:1394:        { RID_SVXSTR_SHADOW_STYLE_NONE, RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT, RID_SVXSTR_SHADOW_STYLE_TOPRIGHT, RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT, RID_SVXSTR_SHADOW_STYLE_TOPLEFT };\n\nor would it break translation process?\n\nMore tricky the other one, eg RID_SVXSTR_TABLE_PRESET_NONE :\ngit grep -n RID_SVXSTR_TABLE_PRESET_NONE\ncui/source/tabpages/border.cxx:1338:        RID_SVXSTR_TABLE_PRESET_NONE,\ncui/source/tabpages/border.cxx:1345:        RID_SVXSTR_TABLE_PRESET_NONE,\ncui/source/tabpages/border.cxx:1351:        RID_SVXSTR_TABLE_PRESET_NONE,\ncui/source/tabpages/border.cxx:1357:        RID_SVXSTR_TABLE_PRESET_NONE,\ninclude/svx/strings.hrc:1785:#define RID_SVXSTR_TABLE_PRESET_NONE                NC_(\"RID_SVXSTR_TABLE_PRESET_NONE\", \"No Borders\")\nsvx/source/tbxctrls/tbcontrl.cxx:2442:        {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},\n\nSo it\u0027s used in cui and svx part :-(",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
