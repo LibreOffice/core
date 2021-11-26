@@ -39,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "persistence.hxx"
 
@@ -398,6 +399,11 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
         void* p = static_cast<lang::XServiceInfo*>(this);
         return uno::Any(&p, rType);
     }
+    else if (rType == cppu::UnoType<lang::XInitialization>::get())
+    {
+        void* p = static_cast<lang::XInitialization*>(this);
+        return uno::Any(&p, rType);
+    }
     else if (rType == cppu::UnoType<lang::XTypeProvider>::get())
     {
         void* p = static_cast<lang::XTypeProvider*>(this);
@@ -671,6 +677,7 @@ uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
         cppu::UnoType<container::XChild>::get(),
         cppu::UnoType<chart2::XDefaultSizeTransmitter>::get(),
         cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XInitialization>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
     };
     return aTypes;
@@ -679,6 +686,21 @@ uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
 uno::Sequence<sal_Int8> SAL_CALL OCommonEmbeddedObject::getImplementationId()
 {
     return uno::Sequence<sal_Int8>();
+}
+
+void SAL_CALL OCommonEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)
+{
+    if (!rArguments.hasElements())
+    {
+        return;
+    }
+
+    comphelper::SequenceAsHashMap aMap(rArguments[0]);
+    auto it = aMap.find("ReadOnly");
+    if (it != aMap.end())
+    {
+        it->second >>= m_bReadOnly;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
