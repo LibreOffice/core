@@ -1474,10 +1474,10 @@ class ScopedFontHDC final
 {
 public:
     explicit ScopedFontHDC(WinSalGraphics& rGraphics, const vcl::font::PhysicalFontFace& rFontFace)
-        : m_hDC(nullptr)
-        , m_hOrigFont(nullptr)
         // use height=1000 for easier debugging (to match psprint's font units)
-        , m_aFSP(rFontFace, Size(0,1000), 1000.0, 0, false)
+        : m_aFSP(rFontFace, Size(0,1000), 1000.0, 0, false)
+        , m_hDC(nullptr)
+        , m_hOrigFont(nullptr)
     {
         m_hDC = CreateCompatibleDC(rGraphics.getHDC());
         if (!m_hDC)
