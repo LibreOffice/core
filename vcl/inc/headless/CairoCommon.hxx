@@ -30,6 +30,7 @@
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //Using formats that match cairo's formats. For android we patch cairo,
 //which is internal in that case, to swap the rgb components so that
@@ -71,6 +72,17 @@ VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t* surface, d
 VCL_DLLPUBLIC basegfx::B2DRange getFillDamage(cairo_t* cr);
 VCL_DLLPUBLIC basegfx::B2DRange getClipBox(cairo_t* cr);
 VCL_DLLPUBLIC basegfx::B2DRange getClippedFillDamage(cairo_t* cr);
+VCL_DLLPUBLIC basegfx::B2DRange getClippedStrokeDamage(cairo_t* cr);
+VCL_DLLPUBLIC basegfx::B2DRange getStrokeDamage(cairo_t* cr);
+
+VCL_DLLPUBLIC size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
+                                      const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
+                                      bool bPixelSnapHairline);
+
+VCL_DLLPUBLIC basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon,
+                                             const basegfx::B2DHomMatrix& rObjectToDevice,
+                                             basegfx::B2DHomMatrix& rObjectToDeviceInv,
+                                             sal_uInt32 nIndex);
 
 enum class PaintMode
 {
