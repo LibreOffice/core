@@ -136,8 +136,7 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
-    virtual void            drawPixel( tools::Long nX, tools::Long nY ) override;
-    virtual void            drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
+
     virtual void            drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
     virtual void            drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 

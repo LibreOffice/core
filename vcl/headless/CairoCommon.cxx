@@ -53,6 +53,44 @@ void dl_cairo_surface_get_device_scale(cairo_surface_t* surface, double* x_scale
 #endif
 }
 
+basegfx::B2DRange getFillDamage(cairo_t* cr)
+{
+    double x1, y1, x2, y2;
+
+    // this is faster than cairo_fill_extents, at the cost of some overdraw
+    cairo_path_extents(cr, &x1, &y1, &x2, &y2);
+
+    // support B2DRange::isEmpty()
+    if (0.0 != x1 || 0.0 != y1 || 0.0 != x2 || 0.0 != y2)
+    {
+        return basegfx::B2DRange(x1, y1, x2, y2);
+    }
+
+    return basegfx::B2DRange();
+}
+
+basegfx::B2DRange getClipBox(cairo_t* cr)
+{
+    double x1, y1, x2, y2;
+
+    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+
+    // support B2DRange::isEmpty()
+    if (0.0 != x1 || 0.0 != y1 || 0.0 != x2 || 0.0 != y2)
+    {
+        return basegfx::B2DRange(x1, y1, x2, y2);
+    }
+
+    return basegfx::B2DRange();
+}
+
+basegfx::B2DRange getClippedFillDamage(cairo_t* cr)
+{
+    basegfx::B2DRange aDamageRect(getFillDamage(cr));
+    aDamageRect.intersect(getClipBox(cr));
+    return aDamageRect;
+}
+
 cairo_user_data_key_t* CairoCommon::getDamageKey()
 {
     static cairo_user_data_key_t aDamageKey;
