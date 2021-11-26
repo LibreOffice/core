@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d0bebc_12cb5c06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-26T14:23:16Z",
+      "side": 1,
+      "message": "(that -Werror,-Wreorder-ctor is rather harmless, but if Xisco thinks it should be cherry-picked to libreoffice-7-3...)",
+      "revId": "7ff59f510ff708e4041bbbc2fcb121c2986a1f7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
