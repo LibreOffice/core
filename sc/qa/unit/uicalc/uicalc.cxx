@@ -345,6 +345,34 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145085)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
+{
+    ScModelObj* pModelObj = createDoc("tdf144244.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
+
+    // Select column A and B
+    goToCell("A:B");
+
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // Without the fix in place, this test would have crashed
+    pModelObj = saveAndReload(mxComponent, "calc8");
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    xPage.set(pModelObj->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
 {
     ScModelObj* pModelObj = createDoc("tdf100582.xls");
