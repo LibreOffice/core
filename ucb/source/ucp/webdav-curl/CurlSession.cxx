@@ -989,9 +989,6 @@ auto CurlProcessor::ProcessRequestImpl(
     {
         switch (statusCode)
         {
-            case SC_NONE:
-                assert(false); // ??? should be error returned from perform?
-                break;
             case SC_REQUEST_TIMEOUT:
             {
                 throw DAVException(
