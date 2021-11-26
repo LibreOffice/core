@@ -54,7 +54,7 @@ namespace http_dav_ucp
 
 
 // UNO service name for the content.
-#define WEBDAV_CONTENT_SERVICE_NAME "com.sun.star.ucb.WebDAVContent"
+inline constexpr OUStringLiteral WEBDAV_CONTENT_SERVICE_NAME = u"com.sun.star.ucb.WebDAVContent";
 
 
 class ContentProvider;

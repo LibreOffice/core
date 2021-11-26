@@ -44,14 +44,14 @@ namespace com::sun::star::frame {
 namespace tdoc_ucp {
 
 
-#define TDOC_ROOT_CONTENT_TYPE \
-                u"application/" TDOC_URL_SCHEME "-root"
-#define TDOC_DOCUMENT_CONTENT_TYPE \
-                u"application/" TDOC_URL_SCHEME "-document"
-#define TDOC_FOLDER_CONTENT_TYPE \
-                u"application/" TDOC_URL_SCHEME "-folder"
-#define TDOC_STREAM_CONTENT_TYPE \
-                u"application/" TDOC_URL_SCHEME "-stream"
+inline constexpr OUStringLiteral TDOC_ROOT_CONTENT_TYPE =
+                u"application/" TDOC_URL_SCHEME "-root";
+inline constexpr OUStringLiteral TDOC_DOCUMENT_CONTENT_TYPE =
+                u"application/" TDOC_URL_SCHEME "-document";
+inline constexpr OUStringLiteral TDOC_FOLDER_CONTENT_TYPE =
+                u"application/" TDOC_URL_SCHEME "-folder";
+inline constexpr OUStringLiteral TDOC_STREAM_CONTENT_TYPE =
+                u"application/" TDOC_URL_SCHEME "-stream";
 
 
 class StorageElementFactory;
