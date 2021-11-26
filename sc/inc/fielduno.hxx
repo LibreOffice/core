@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -40,8 +41,6 @@
 #include <osl/mutex.hxx>
 
 #include <memory>
-
-namespace comphelper { class OInterfaceContainerHelper2; }
 
 class ScEditSource;
 class SvxFieldItem;
@@ -64,7 +63,7 @@ private:
     ScAddress               aCellPos;
     std::unique_ptr<ScEditSource> mpEditSource;
     /// List of refresh listeners.
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2> mpRefreshListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener>> mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex              aMutex;
 
@@ -118,7 +117,7 @@ private:
     std::unique_ptr<ScEditSource> mpEditSource;
 
     /// List of refresh listeners.
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2> mpRefreshListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener>> mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex                  aMutex;
 
