@@ -318,11 +318,6 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
     }
 }
 
-bool ScDocument::IsInFormulaTree( const ScFormulaCell* pCell ) const
-{
-    return pCell->GetPrevious() || pFormulaTree == pCell;
-}
-
 void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSetAllDirty )
 {
     OSL_ENSURE( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
@@ -496,11 +491,6 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
     pCell->SetPreviousTrack( nullptr );
     pCell->SetNextTrack( nullptr );
     --nFormulaTrackCount;
-}
-
-bool ScDocument::IsInFormulaTrack( const ScFormulaCell* pCell ) const
-{
-    return pCell->GetPreviousTrack() || pFormulaTrack == pCell;
 }
 
 void ScDocument::FinalTrackFormulas( SfxHintId nHintId )
