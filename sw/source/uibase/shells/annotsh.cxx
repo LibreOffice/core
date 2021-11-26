@@ -774,7 +774,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         if( nLSpace == static_cast<const SvxLineSpacingItem*>(pLSpace)->GetPropLineSpace() )
                             rSet.Put( SfxBoolItem( nWhich, true ));
                         else
-                            rSet.InvalidateItem( nWhich );
+                            rSet.Put( SfxBoolItem( nWhich, false ));
                     }
                     break;
                 }
