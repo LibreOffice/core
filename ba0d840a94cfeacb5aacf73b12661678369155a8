@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d49ffa70_406cec6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-26T11:37:25Z",
+      "side": 1,
+      "message": "I think there will not be heap use after free, however leak can be there, i am afraid. Maybe a smart pointer can be the solution, i think.",
+      "revId": "ba0d840a94cfeacb5aacf73b12661678369155a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
