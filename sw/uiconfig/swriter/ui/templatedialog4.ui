@@ -3,6 +3,7 @@
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="TemplateDialog4">
+    <property name="resizable">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="templatedialog4|TemplateDialog4">Frame Style</property>
