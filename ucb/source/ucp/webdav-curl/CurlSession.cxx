@@ -1588,25 +1588,17 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
     // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList(
-        curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
-    if (!pList)
-    {
-        throw uno::RuntimeException("curl_slist_append failed");
-    }
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>> pList;
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "PROPPATCH",
-                                               "CURLOPT_CUSTOMREQUEST" } };
-
     // generate XML document for PROPPATCH
-    uno::Reference<io::XInputStream> const xRequestInStream(io::Pipe::create(m_xContext));
-    uno::Reference<io::XOutputStream> const xRequestOutStream(xRequestInStream, uno::UNO_QUERY);
-    assert(xRequestInStream.is());
+    uno::Reference<io::XSequenceOutputStream> const xSeqOutStream(
+        io::SequenceOutputStream::create(m_xContext));
+    uno::Reference<io::XOutputStream> const xRequestOutStream(xSeqOutStream);
     assert(xRequestOutStream.is());
     uno::Reference<xml::sax::XWriter> const xWriter(xml::sax::Writer::create(m_xContext));
     xWriter->setOutputStream(xRequestOutStream);
@@ -1657,7 +1649,19 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     }
     xWriter->endElement("propertyupdate");
     xWriter->endDocument();
-    xRequestOutStream->closeOutput();
+
+    uno::Reference<io::XInputStream> const xRequestInStream(
+        io::SequenceInputStream::createStreamFromSequence(m_xContext,
+                                                          xSeqOutStream->getWrittenBytes()));
+    assert(xRequestInStream.is());
+
+    curl_off_t const len(xSeqOutStream->getWrittenBytes().getLength());
+
+    ::std::vector<CurlOption> const options{
+        { CURLOPT_CUSTOMREQUEST, "PROPPATCH", "CURLOPT_CUSTOMREQUEST" },
+        // note: Sharepoint cannot handle "Transfer-Encoding: chunked"
+        { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
+    };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), nullptr,
                                   &xRequestInStream, nullptr);
