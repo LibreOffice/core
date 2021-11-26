@@ -24,7 +24,9 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
@@ -484,8 +486,16 @@ Reference<XClipboard> GetSystemClipboard()
     Reference<XClipboard> xClipboard;
     try
     {
-        xClipboard = css::datatransfer::clipboard::SystemClipboard::create(
-            comphelper::getProcessComponentContext());
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            xClipboard = css::datatransfer::clipboard::LokClipboard::create(
+                    comphelper::getProcessComponentContext());
+        }
+        else
+        {
+            xClipboard = css::datatransfer::clipboard::SystemClipboard::create(
+                comphelper::getProcessComponentContext());
+        }
     }
     catch (DeploymentException const &) {}
     return xClipboard;

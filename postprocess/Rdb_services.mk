@@ -339,6 +339,22 @@ $(eval $(call gb_Rdb_add_components,services,\
 ))
 endif
 
+# lokclipboard.component
+ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
+$(if $(filter-out $(OS),IOS), \
+    $(eval $(call gb_Rdb_add_components,services,\
+		desktop/lokclipboard)))
+else
+ifeq ($(USING_X11),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	desktop/lokclipboard))
+endif
+ifeq ($(DISABLE_GUI),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	desktop/lokclipboard))
+endif
+endif
+
 endif # $(gb_Side),host
 
 # vim: set noet sw=4 ts=4:

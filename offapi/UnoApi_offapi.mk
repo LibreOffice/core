@@ -108,6 +108,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/datatransfer,\
 	MimeContentTypeFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/datatransfer/clipboard,\
+	LokClipboard \
 	SystemClipboard \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/deployment,\

@@ -16,7 +16,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1740,14 +1740,14 @@ void ScTiledRenderingTest::testMultiViewCopyPaste()
     ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView1);
     // emulate clipboard
-    pView1->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext()));
+    pView1->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::LokClipboard::create(comphelper::getProcessComponentContext()));
 
     // view #2
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     // emulate clipboard
-    pView2->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext()));
+    pView2->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::LokClipboard::create(comphelper::getProcessComponentContext()));
     CPPUNIT_ASSERT(pView2);
     CPPUNIT_ASSERT(pView1 != pView2);
     CPPUNIT_ASSERT(pView1->GetViewData().GetActiveWin()->GetClipboard() != pView2->GetViewData().GetActiveWin()->GetClipboard());
@@ -2566,7 +2566,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
 
     // Set Wrap text in A3
     pDoc->ApplyAttr(0, 2, 0, ScLineBreakCell(true));
-    const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK));
+    const SfxBoolItem* pItem = pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK);
     CPPUNIT_ASSERT(pItem->GetValue());
 
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -2578,6 +2578,27 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
 
+    // create source text in A1
+    OUString sCopyContent("Very long text to copy");
+    pDoc->SetString(0, 0, 0, sCopyContent);
+
+    // copy A1
+    pView->SetCursor(0, 0);
+    Scheduler::ProcessEventsToIdle();
+    pView->GetViewFrame()->GetBindings().Execute(SID_COPY);
+    Scheduler::ProcessEventsToIdle();
+
+    // verify clipboard
+    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard1 = pView->GetViewData().GetActiveWin()->GetClipboard();
+    uno::Reference< datatransfer::XTransferable > xDataObj =
+        xClipboard1->getContents();
+    datatransfer::DataFlavor aFlavor;
+    SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
+    uno::Any aData = xDataObj->getTransferData(aFlavor);
+    OUString aTmpText;
+    aData >>= aTmpText;
+    CPPUNIT_ASSERT_EQUAL(sCopyContent, aTmpText.trim());
+
     // Go to A2 and paste.
     pView->SetCursor(0, 1);
     Scheduler::ProcessEventsToIdle();
@@ -2585,8 +2606,27 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     pView->GetViewFrame()->GetBindings().Execute(SID_PASTE);
     Scheduler::ProcessEventsToIdle();
 
-    // No SG invalidations
-    CPPUNIT_ASSERT_EQUAL(OString(""), aView.m_sInvalidateSheetGeometry);
+    CPPUNIT_ASSERT_EQUAL(sCopyContent, pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OString("rows sizes"), aView.m_sInvalidateSheetGeometry);
+
+    // create new source text in A2
+    OUString sCopyContent2("Very long text to copy 2");
+    pDoc->SetString(0, 1, 0, sCopyContent2);
+    Scheduler::ProcessEventsToIdle();
+
+    // cut from A2
+    pView->GetViewFrame()->GetBindings().Execute(SID_CUT);
+    Scheduler::ProcessEventsToIdle();
+
+    // verify clipboard
+    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard2
+        = pView->GetViewData().GetActiveWin()->GetClipboard();
+    xDataObj = xClipboard2->getContents();
+    SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
+    aData = xDataObj->getTransferData(aFlavor);
+    aData >>= aTmpText;
+    CPPUNIT_ASSERT_EQUAL(xClipboard1, xClipboard2);
+    CPPUNIT_ASSERT_EQUAL(sCopyContent2, aTmpText.trim());
 
     // Go to A3 and paste.
     pView->SetCursor(0, 2);
@@ -2596,6 +2636,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     Scheduler::ProcessEventsToIdle();
 
     // SG invalidations for all
+    CPPUNIT_ASSERT_EQUAL(sCopyContent2, pDoc->GetString(0, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OString("all"), aView.m_sInvalidateSheetGeometry);
 
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
