@@ -136,6 +136,8 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	$(if $(filter $(OS),ANDROID), \
 		desktop/source/lib/lokandroid) \
 ))
+$(if $(filter-out $(OS),IOS), \
+    $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/lokclipboard,services)))
 else
 ifneq ($(filter TRUE,$(USING_X11) $(DISABLE_GUI))($filter EMSCRIPTEN,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
@@ -143,6 +145,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/lokinteractionhandler \
 	desktop/source/lib/lokclipboard \
 ))
+$(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/lokclipboard,services))
 endif
 endif
 
