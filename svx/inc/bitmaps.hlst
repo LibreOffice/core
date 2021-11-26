@@ -85,8 +85,6 @@ inline constexpr OUStringLiteral RID_SVXBMP_OTHER = u"res/da06.png";
 
 inline constexpr OUStringLiteral RID_SVXBMP_FORM = u"res/sx10593.png";
 inline constexpr OUStringLiteral RID_SVXBMP_CONTROL = u"res/sx10144.png";
-#define RID_SVXBMP_COLLAPSEDNODE                    "res/sx18002.png"
-#define RID_SVXBMP_EXPANDEDNODE                     "res/sx18003.png"
 inline constexpr OUStringLiteral RID_SVXBMP_BUTTON = u"res/sx10594.png";
 inline constexpr OUStringLiteral RID_SVXBMP_RADIOBUTTON = u"res/sx10595.png";
 inline constexpr OUStringLiteral RID_SVXBMP_CHECKBOX = u"res/sx10596.png";

@@ -19,376 +19,376 @@ inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_FONTWORK = u"private://gal
 inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_FONTWORK_VERTICAL = u"private://gallery/hidden/fontworkvertical";
 
 // Reference-strings for standardcolor-table
-#define RID_SVXSTR_COLOR_BLACK_DEF                  "Black"
-#define RID_SVXSTR_COLOR_BLUE_DEF                   "Blue"
-#define RID_SVXSTR_COLOR_GREEN_DEF                  "Green"
-#define RID_SVXSTR_COLOR_RED_DEF                    "Red"
-#define RID_SVXSTR_COLOR_GREY_DEF                   "Gray"
-#define RID_SVXSTR_COLOR_YELLOW_DEF                 "Yellow"
-#define RID_SVXSTR_COLOR_WHITE_DEF                  "White"
-#define RID_SVXSTR_COLOR_BLUEGREY_DEF               "Blue gray"
-#define RID_SVXSTR_COLOR_ORANGE_DEF                 "Orange"
-#define RID_SVXSTR_COLOR_MAGENTA_DEF                "Magenta"
-#define RID_SVXSTR_COLOR_BORDEAUX_DEF               "Bordeaux"
-#define RID_SVXSTR_COLOR_PALE_YELLOW_DEF            "Pale yellow"
-#define RID_SVXSTR_COLOR_PALE_GREEN_DEF             "Pale green"
-#define RID_SVXSTR_COLOR_DARKVIOLET_DEF             "Dark violet"
-#define RID_SVXSTR_COLOR_SALMON_DEF                 "Salmon"
-#define RID_SVXSTR_COLOR_SEABLUE_DEF                "Sea blue"
-#define RID_SVXSTR_COLOR_CHART_DEF                  "Chart"
-#define RID_SVXSTR_COLOR_PURPLE_DEF                 "Purple"
-#define RID_SVXSTR_COLOR_SKYBLUE_DEF                "Sky blue"
-#define RID_SVXSTR_COLOR_YELLOWGREEN_DEF            "Yellow green"
-#define RID_SVXSTR_COLOR_PINK_DEF                   "Pink"
-#define RID_SVXSTR_COLOR_TURQUOISE_DEF              "Turquoise"
-#define RID_SVXSTR_COLOR_BLUE_CLASSIC_DEF           "Blue classic"
-#define RID_SVXSTR_COLOR_GOLD_DEF                   "Gold"
-#define RID_SVXSTR_COLOR_BRICK_DEF                  "Brick"
-#define RID_SVXSTR_COLOR_INDIGO_DEF                 "Indigo"
-#define RID_SVXSTR_COLOR_TEAL_DEF                   "Teal"
-#define RID_SVXSTR_COLOR_LIME_DEF                   "Lime"
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_BLACK_DEF                  = u"Black";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_BLUE_DEF                   = u"Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_GREEN_DEF                  = u"Green";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_RED_DEF                    = u"Red";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_GREY_DEF                   = u"Gray";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_YELLOW_DEF                 = u"Yellow";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_WHITE_DEF                  = u"White";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_BLUEGREY_DEF               = u"Blue gray";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_ORANGE_DEF                 = u"Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MAGENTA_DEF                = u"Magenta";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_BORDEAUX_DEF               = u"Bordeaux";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_PALE_YELLOW_DEF            = u"Pale yellow";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_PALE_GREEN_DEF             = u"Pale green";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKVIOLET_DEF             = u"Dark violet";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_SALMON_DEF                 = u"Salmon";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_SEABLUE_DEF                = u"Sea blue";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_CHART_DEF                  = u"Chart";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_PURPLE_DEF                 = u"Purple";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_SKYBLUE_DEF                = u"Sky blue";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_YELLOWGREEN_DEF            = u"Yellow green";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_PINK_DEF                   = u"Pink";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_TURQUOISE_DEF              = u"Turquoise";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_BLUE_CLASSIC_DEF           = u"Blue classic";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_GOLD_DEF                   = u"Gold";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_BRICK_DEF                  = u"Brick";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_INDIGO_DEF                 = u"Indigo";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_TEAL_DEF                   = u"Teal";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIME_DEF                   = u"Lime";
 // Reference strings: Light variants of the standard color palette
-#define RID_SVXSTR_COLOR_LIGHTGRAY_DEF              "Light Gray"
-#define RID_SVXSTR_COLOR_LIGHTYELLOW_DEF            "Light Yellow"
-#define RID_SVXSTR_COLOR_LIGHTGOLD_DEF              "Light Gold"
-#define RID_SVXSTR_COLOR_LIGHTORANGE_DEF            "Light Orange"
-#define RID_SVXSTR_COLOR_LIGHTBRICK_DEF             "Light Brick"
-#define RID_SVXSTR_COLOR_LIGHTRED_DEF               "Light Red"
-#define RID_SVXSTR_COLOR_LIGHTMAGENTA_DEF           "Light Magenta"
-#define RID_SVXSTR_COLOR_LIGHTPURPLE_DEF            "Light Purple"
-#define RID_SVXSTR_COLOR_LIGHTINDIGO_DEF            "Light Indigo"
-#define RID_SVXSTR_COLOR_LIGHTBLUE_DEF              "Light Blue"
-#define RID_SVXSTR_COLOR_LIGHTTEAL_DEF              "Light Teal"
-#define RID_SVXSTR_COLOR_LIGHTGREEN_DEF             "Light Green"
-#define RID_SVXSTR_COLOR_LIGHTLIME_DEF              "Light Lime"
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTGRAY_DEF              = u"Light Gray";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTYELLOW_DEF            = u"Light Yellow";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTGOLD_DEF              = u"Light Gold";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTORANGE_DEF            = u"Light Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTBRICK_DEF             = u"Light Brick";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTRED_DEF               = u"Light Red";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTMAGENTA_DEF           = u"Light Magenta";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTPURPLE_DEF            = u"Light Purple";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTINDIGO_DEF            = u"Light Indigo";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTBLUE_DEF              = u"Light Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTTEAL_DEF              = u"Light Teal";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTGREEN_DEF             = u"Light Green";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIGHTLIME_DEF              = u"Light Lime";
 // Reference strings: Dark variants of the standard color palette
-#define RID_SVXSTR_COLOR_DARKGRAY_DEF               "Dark Gray"
-#define RID_SVXSTR_COLOR_DARKYELLOW_DEF             "Dark Yellow"
-#define RID_SVXSTR_COLOR_DARKGOLD_DEF               "Dark Gold"
-#define RID_SVXSTR_COLOR_DARKORANGE_DEF             "Dark Orange"
-#define RID_SVXSTR_COLOR_DARKBRICK_DEF              "Dark Brick"
-#define RID_SVXSTR_COLOR_DARKRED_DEF                "Dark Red"
-#define RID_SVXSTR_COLOR_DARKMAGENTA_DEF            "Dark Magenta"
-#define RID_SVXSTR_COLOR_DARKPURPLE_DEF             "Dark Purple"
-#define RID_SVXSTR_COLOR_DARKINDIGO_DEF             "Dark Indigo"
-#define RID_SVXSTR_COLOR_DARKBLUE_DEF               "Dark Blue"
-#define RID_SVXSTR_COLOR_DARKTEAL_DEF               "Dark Teal"
-#define RID_SVXSTR_COLOR_DARKGREEN_DEF              "Dark Green"
-#define RID_SVXSTR_COLOR_DARKLIME_DEF               "Dark Lime"
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKGRAY_DEF               = u"Dark Gray";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKYELLOW_DEF             = u"Dark Yellow";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKGOLD_DEF               = u"Dark Gold";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKORANGE_DEF             = u"Dark Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKBRICK_DEF              = u"Dark Brick";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKRED_DEF                = u"Dark Red";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKMAGENTA_DEF            = u"Dark Magenta";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKPURPLE_DEF             = u"Dark Purple";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKINDIGO_DEF             = u"Dark Indigo";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKBLUE_DEF               = u"Dark Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKTEAL_DEF               = u"Dark Teal";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKGREEN_DEF              = u"Dark Green";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_DARKLIME_DEF               = u"Dark Lime";
 // Reference strings for the Tonal palette
-#define RID_SVXSTR_COLOR_VIOLET_DEF                 "Violet"
-#define RID_SVXSTR_COLOR_VIOLET_OUG_DEF             "Violet (Out of Gamut)"
-#define RID_SVXSTR_COLOR_BLUE_OUG_DEF               "Blue (Out of Gamut)"
-#define RID_SVXSTR_COLOR_AZURE_OUG_DEF              "Azure (Out of Gamut)"
-#define RID_SVXSTR_COLOR_SPRINGGREEN_OUG_DEF        "Spring Green (Out of Gamut)"
-#define RID_SVXSTR_COLOR_GREEN_OUG_DEF              "Green (Out of Gamut)"
-#define RID_SVXSTR_COLOR_CHARTREUSEGREEN_OUG_DEF    "Chartreuse Green (Out of Gamut)"
-#define RID_SVXSTR_COLOR_ORANGE_OUG_DEF             "Orange (Out of Gamut)"
-#define RID_SVXSTR_COLOR_RED_OUG_DEF                "Red (Out of Gamut)"
-#define RID_SVXSTR_COLOR_ROSE_OUG_DEF               "Rose (Out of Gamut)"
-#define RID_SVXSTR_COLOR_AZURE_DEF                  "Azure"
-#define RID_SVXSTR_COLOR_CYAN_DEF                   "Cyan"
-#define RID_SVXSTR_COLOR_SPRINGGREEN_DEF            "Spring Green"
-#define RID_SVXSTR_COLOR_CHARTREUSEGREEN_DEF        "Chartreuse Green"
-#define RID_SVXSTR_COLOR_ROSE_DEF                   "Rose"
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_VIOLET_DEF                 = u"Violet";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_VIOLET_OUG_DEF             = u"Violet (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_BLUE_OUG_DEF               = u"Blue (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_AZURE_OUG_DEF              = u"Azure (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_SPRINGGREEN_OUG_DEF        = u"Spring Green (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_GREEN_OUG_DEF              = u"Green (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_CHARTREUSEGREEN_OUG_DEF    = u"Chartreuse Green (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_ORANGE_OUG_DEF             = u"Orange (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_RED_OUG_DEF                = u"Red (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_ROSE_OUG_DEF               = u"Rose (Out of Gamut)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_AZURE_DEF                  = u"Azure";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_CYAN_DEF                   = u"Cyan";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_SPRINGGREEN_DEF            = u"Spring Green";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_CHARTREUSEGREEN_DEF        = u"Chartreuse Green";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_ROSE_DEF                   = u"Rose";
 // Reference strings for the Material palette
-#define RID_SVXSTR_COLOR_MATERIAL_GRAY_A_DEF        "Gray A"
-#define RID_SVXSTR_COLOR_MATERIAL_YELLOW_A_DEF      "Yellow A"
-#define RID_SVXSTR_COLOR_MATERIAL_AMBER_A_DEF       "Amber A"
-#define RID_SVXSTR_COLOR_MATERIAL_AMBER_DEF         "Amber"
-#define RID_SVXSTR_COLOR_MATERIAL_ORANGE_A_DEF      "Orange A"
-#define RID_SVXSTR_COLOR_MATERIAL_DEEP_ORANGE_A_DEF "Deep Orange A"
-#define RID_SVXSTR_COLOR_MATERIAL_DEEP_ORANGE_DEF   "Deep Orange"
-#define RID_SVXSTR_COLOR_MATERIAL_RED_A_DEF         "Red A"
-#define RID_SVXSTR_COLOR_MATERIAL_PINK_A_DEF        "Pink A"
-#define RID_SVXSTR_COLOR_MATERIAL_PURPLE_A_DEF      "Purple A"
-#define RID_SVXSTR_COLOR_MATERIAL_DEEP_PURPLE_A_DEF "Deep Purple A"
-#define RID_SVXSTR_COLOR_MATERIAL_DEEP_PURPLE_DEF   "Deep Purple"
-#define RID_SVXSTR_COLOR_MATERIAL_INDIGO_A_DEF      "Indigo A"
-#define RID_SVXSTR_COLOR_MATERIAL_BLUE_A_DEF        "Blue A"
-#define RID_SVXSTR_COLOR_MATERIAL_LIGHT_BLUE_A_DEF  "Light Blue A"
-#define RID_SVXSTR_COLOR_MATERIAL_CYAN_A_DEF        "Cyan A"
-#define RID_SVXSTR_COLOR_MATERIAL_TEAL_A_DEF        "Teal A"
-#define RID_SVXSTR_COLOR_MATERIAL_GREEN_A_DEF       "Green A"
-#define RID_SVXSTR_COLOR_MATERIAL_LIGHT_GREEN_A_DEF "Light Green A"
-#define RID_SVXSTR_COLOR_MATERIAL_LIME_A_DEF        "Lime A"
-#define RID_SVXSTR_COLOR_MATERIAL_BROWN_A_DEF       "Brown A"
-#define RID_SVXSTR_COLOR_MATERIAL_BROWN_DEF         "Brown"
-#define RID_SVXSTR_COLOR_MATERIAL_BLUE_GRAY_A_DEF   "Blue Gray A"
-#define RID_SVXSTR_COLOR_MATERIAL_BLUE_GRAY_DEF     "Blue Gray"
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_GRAY_A_DEF        = u"Gray A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_YELLOW_A_DEF      = u"Yellow A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_AMBER_A_DEF       = u"Amber A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_AMBER_DEF         = u"Amber";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_ORANGE_A_DEF      = u"Orange A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_DEEP_ORANGE_A_DEF = u"Deep Orange A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_DEEP_ORANGE_DEF   = u"Deep Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_RED_A_DEF         = u"Red A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_PINK_A_DEF        = u"Pink A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_PURPLE_A_DEF      = u"Purple A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_DEEP_PURPLE_A_DEF = u"Deep Purple A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_DEEP_PURPLE_DEF   = u"Deep Purple";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_INDIGO_A_DEF      = u"Indigo A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_BLUE_A_DEF        = u"Blue A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_LIGHT_BLUE_A_DEF  = u"Light Blue A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_CYAN_A_DEF        = u"Cyan A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_TEAL_A_DEF        = u"Teal A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_GREEN_A_DEF       = u"Green A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_LIGHT_GREEN_A_DEF = u"Light Green A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_LIME_A_DEF        = u"Lime A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_BROWN_A_DEF       = u"Brown A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_BROWN_DEF         = u"Brown";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_BLUE_GRAY_A_DEF   = u"Blue Gray A";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_MATERIAL_BLUE_GRAY_DEF     = u"Blue Gray";
 // Reference-strings for standard-gradient-table
-#define RID_SVXSTR_GRDT0_DEF                        "Gradient"
-#define RID_SVXSTR_GRDT1_DEF                        "Linear blue/white"
-#define RID_SVXSTR_GRDT2_DEF                        "Linear magenta/green"
-#define RID_SVXSTR_GRDT3_DEF                        "Linear yellow/brown"
-#define RID_SVXSTR_GRDT4_DEF                        "Radial green/black"
-#define RID_SVXSTR_GRDT5_DEF                        "Radial red/yellow"
-#define RID_SVXSTR_GRDT6_DEF                        "Rectangular red/white"
-#define RID_SVXSTR_GRDT7_DEF                        "Square yellow/white"
-#define RID_SVXSTR_GRDT8_DEF                        "Ellipsoid blue grey/light blue"
-#define RID_SVXSTR_GRDT9_DEF                        "Axial light red/white"
-#define RID_SVXSTR_GRDT10_DEF                       "Diagonal 1l"
-#define RID_SVXSTR_GRDT11_DEF                       "Diagonal 1r"
-#define RID_SVXSTR_GRDT12_DEF                       "Diagonal 2l"
-#define RID_SVXSTR_GRDT13_DEF                       "Diagonal 2r"
-#define RID_SVXSTR_GRDT14_DEF                       "Diagonal 3l"
-#define RID_SVXSTR_GRDT15_DEF                       "Diagonal 3r"
-#define RID_SVXSTR_GRDT16_DEF                       "Diagonal 4l"
-#define RID_SVXSTR_GRDT17_DEF                       "Diagonal 4r"
-#define RID_SVXSTR_GRDT18_DEF                       "Diagonal Blue"
-#define RID_SVXSTR_GRDT19_DEF                       "Diagonal Green"
-#define RID_SVXSTR_GRDT20_DEF                       "Diagonal Orange"
-#define RID_SVXSTR_GRDT21_DEF                       "Diagonal Red"
-#define RID_SVXSTR_GRDT22_DEF                       "Diagonal Turquoise"
-#define RID_SVXSTR_GRDT23_DEF                       "Diagonal Violet"
-#define RID_SVXSTR_GRDT24_DEF                       "From a Corner"
-#define RID_SVXSTR_GRDT25_DEF                       "From a Corner, Blue"
-#define RID_SVXSTR_GRDT26_DEF                       "From a Corner, Green"
-#define RID_SVXSTR_GRDT27_DEF                       "From a Corner, Orange"
-#define RID_SVXSTR_GRDT28_DEF                       "From a Corner, Red"
-#define RID_SVXSTR_GRDT29_DEF                       "From a Corner, Turquoise"
-#define RID_SVXSTR_GRDT30_DEF                       "From a Corner, Violet"
-#define RID_SVXSTR_GRDT31_DEF                       "From the Middle"
-#define RID_SVXSTR_GRDT32_DEF                       "From the Middle, Blue"
-#define RID_SVXSTR_GRDT33_DEF                       "From the Middle, Green"
-#define RID_SVXSTR_GRDT34_DEF                       "From the Middle, Orange"
-#define RID_SVXSTR_GRDT35_DEF                       "From the Middle, Red"
-#define RID_SVXSTR_GRDT36_DEF                       "From the Middle, Turquoise"
-#define RID_SVXSTR_GRDT37_DEF                       "From the Middle, Violet"
-#define RID_SVXSTR_GRDT38_DEF                       "Horizontal"
-#define RID_SVXSTR_GRDT39_DEF                       "Horizontal Blue"
-#define RID_SVXSTR_GRDT40_DEF                       "Horizontal Green"
-#define RID_SVXSTR_GRDT41_DEF                       "Horizontal Orange"
-#define RID_SVXSTR_GRDT42_DEF                       "Horizontal Red"
-#define RID_SVXSTR_GRDT43_DEF                       "Horizontal Turquoise"
-#define RID_SVXSTR_GRDT44_DEF                       "Horizontal Violet"
-#define RID_SVXSTR_GRDT45_DEF                       "Radial"
-#define RID_SVXSTR_GRDT46_DEF                       "Radial Blue"
-#define RID_SVXSTR_GRDT47_DEF                       "Radial Green"
-#define RID_SVXSTR_GRDT48_DEF                       "Radial Orange"
-#define RID_SVXSTR_GRDT49_DEF                       "Radial Red"
-#define RID_SVXSTR_GRDT50_DEF                       "Radial Turquoise"
-#define RID_SVXSTR_GRDT51_DEF                       "Radial Violet"
-#define RID_SVXSTR_GRDT52_DEF                       "Vertical"
-#define RID_SVXSTR_GRDT53_DEF                       "Vertical Blue"
-#define RID_SVXSTR_GRDT54_DEF                       "Vertical Green"
-#define RID_SVXSTR_GRDT55_DEF                       "Vertical Orange"
-#define RID_SVXSTR_GRDT56_DEF                       "Vertical Red"
-#define RID_SVXSTR_GRDT57_DEF                       "Vertical Turquoise"
-#define RID_SVXSTR_GRDT58_DEF                       "Vertical Violet"
-#define RID_SVXSTR_GRDT59_DEF                       "Gray Gradient"
-#define RID_SVXSTR_GRDT60_DEF                       "Yellow Gradient"
-#define RID_SVXSTR_GRDT61_DEF                       "Orange Gradient"
-#define RID_SVXSTR_GRDT62_DEF                       "Red Gradient"
-#define RID_SVXSTR_GRDT63_DEF                       "Pink Gradient"
-#define RID_SVXSTR_GRDT64_DEF                       "Sky"
-#define RID_SVXSTR_GRDT65_DEF                       "Cyan Gradient"
-#define RID_SVXSTR_GRDT66_DEF                       "Blue Gradient"
-#define RID_SVXSTR_GRDT67_DEF                       "Purple Pipe"
-#define RID_SVXSTR_GRDT68_DEF                       "Night"
-#define RID_SVXSTR_GRDT69_DEF                       "Green Gradient"
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT0_DEF                        = u"Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT1_DEF                        = u"Linear blue/white";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT2_DEF                        = u"Linear magenta/green";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT3_DEF                        = u"Linear yellow/brown";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT4_DEF                        = u"Radial green/black";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT5_DEF                        = u"Radial red/yellow";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT6_DEF                        = u"Rectangular red/white";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT7_DEF                        = u"Square yellow/white";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT8_DEF                        = u"Ellipsoid blue grey/light blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT9_DEF                        = u"Axial light red/white";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT10_DEF                       = u"Diagonal 1l";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT11_DEF                       = u"Diagonal 1r";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT12_DEF                       = u"Diagonal 2l";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT13_DEF                       = u"Diagonal 2r";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT14_DEF                       = u"Diagonal 3l";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT15_DEF                       = u"Diagonal 3r";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT16_DEF                       = u"Diagonal 4l";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT17_DEF                       = u"Diagonal 4r";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT18_DEF                       = u"Diagonal Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT19_DEF                       = u"Diagonal Green";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT20_DEF                       = u"Diagonal Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT21_DEF                       = u"Diagonal Red";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT22_DEF                       = u"Diagonal Turquoise";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT23_DEF                       = u"Diagonal Violet";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT24_DEF                       = u"From a Corner";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT25_DEF                       = u"From a Corner, Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT26_DEF                       = u"From a Corner, Green";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT27_DEF                       = u"From a Corner, Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT28_DEF                       = u"From a Corner, Red";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT29_DEF                       = u"From a Corner, Turquoise";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT30_DEF                       = u"From a Corner, Violet";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT31_DEF                       = u"From the Middle";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT32_DEF                       = u"From the Middle, Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT33_DEF                       = u"From the Middle, Green";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT34_DEF                       = u"From the Middle, Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT35_DEF                       = u"From the Middle, Red";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT36_DEF                       = u"From the Middle, Turquoise";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT37_DEF                       = u"From the Middle, Violet";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT38_DEF                       = u"Horizontal";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT39_DEF                       = u"Horizontal Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT40_DEF                       = u"Horizontal Green";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT41_DEF                       = u"Horizontal Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT42_DEF                       = u"Horizontal Red";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT43_DEF                       = u"Horizontal Turquoise";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT44_DEF                       = u"Horizontal Violet";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT45_DEF                       = u"Radial";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT46_DEF                       = u"Radial Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT47_DEF                       = u"Radial Green";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT48_DEF                       = u"Radial Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT49_DEF                       = u"Radial Red";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT50_DEF                       = u"Radial Turquoise";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT51_DEF                       = u"Radial Violet";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT52_DEF                       = u"Vertical";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT53_DEF                       = u"Vertical Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT54_DEF                       = u"Vertical Green";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT55_DEF                       = u"Vertical Orange";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT56_DEF                       = u"Vertical Red";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT57_DEF                       = u"Vertical Turquoise";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT58_DEF                       = u"Vertical Violet";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT59_DEF                       = u"Gray Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT60_DEF                       = u"Yellow Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT61_DEF                       = u"Orange Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT62_DEF                       = u"Red Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT63_DEF                       = u"Pink Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT64_DEF                       = u"Sky";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT65_DEF                       = u"Cyan Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT66_DEF                       = u"Blue Gradient";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT67_DEF                       = u"Purple Pipe";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT68_DEF                       = u"Night";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT69_DEF                       = u"Green Gradient";
 //actual gradients defined for 6.1
-#define RID_SVXSTR_GRDT70_DEF                       "Pastel Bouquet"
-#define RID_SVXSTR_GRDT71_DEF                       "Pastel Dream"
-#define RID_SVXSTR_GRDT72_DEF                       "Blue Touch"
-#define RID_SVXSTR_GRDT73_DEF                       "Blank with Gray"
-#define RID_SVXSTR_GRDT74_DEF                       "Spotted Gray"
-#define RID_SVXSTR_GRDT75_DEF                       "London Mist"
-#define RID_SVXSTR_GRDT76_DEF                       "Teal to Blue"
-#define RID_SVXSTR_GRDT77_DEF                       "Midnight"
-#define RID_SVXSTR_GRDT78_DEF                       "Deep Ocean"
-#define RID_SVXSTR_GRDT79_DEF                       "Submarine"
-#define RID_SVXSTR_GRDT80_DEF                       "Green Grass"
-#define RID_SVXSTR_GRDT81_DEF                       "Neon Light"
-#define RID_SVXSTR_GRDT82_DEF                       "Sunshine"
-#define RID_SVXSTR_GRDT83_DEF                       "Present"
-#define RID_SVXSTR_GRDT84_DEF                       "Mahogany"
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT70_DEF                       = u"Pastel Bouquet";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT71_DEF                       = u"Pastel Dream";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT72_DEF                       = u"Blue Touch";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT73_DEF                       = u"Blank with Gray";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT74_DEF                       = u"Spotted Gray";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT75_DEF                       = u"London Mist";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT76_DEF                       = u"Teal to Blue";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT77_DEF                       = u"Midnight";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT78_DEF                       = u"Deep Ocean";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT79_DEF                       = u"Submarine";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT80_DEF                       = u"Green Grass";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT81_DEF                       = u"Neon Light";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT82_DEF                       = u"Sunshine";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT83_DEF                       = u"Present";
+inline constexpr OUStringLiteral RID_SVXSTR_GRDT84_DEF                       = u"Mahogany";
 // Reference-strings for standard-hatch-table
-#define RID_SVXSTR_HATCH0_DEF                       "Black 0 Degrees"
-#define RID_SVXSTR_HATCH1_DEF                       "Black 90 Degrees"
-#define RID_SVXSTR_HATCH2_DEF                       "Black 180 Degrees Crossed"
-#define RID_SVXSTR_HATCH3_DEF                       "Blue 45 Degrees"
-#define RID_SVXSTR_HATCH4_DEF                       "Blue -45 Degrees"
-#define RID_SVXSTR_HATCH5_DEF                       "Blue 45 Degrees Crossed"
-#define RID_SVXSTR_HATCH6_DEF                       "Green 30 Degrees"
-#define RID_SVXSTR_HATCH7_DEF                       "Green 60 Degrees"
-#define RID_SVXSTR_HATCH8_DEF                       "Green 90 Degrees Triple"
-#define RID_SVXSTR_HATCH9_DEF                       "Red 45 Degrees"
-#define RID_SVXSTR_HATCH10_DEF                      "Red 90 Degrees Crossed"
-#define RID_SVXSTR_HATCH11_DEF                      "Red -45 Degrees Triple"
-#define RID_SVXSTR_HATCH12_DEF                      "Yellow 45 Degrees"
-#define RID_SVXSTR_HATCH13_DEF                      "Yellow 45 Degrees Crossed"
-#define RID_SVXSTR_HATCH14_DEF                      "Yellow 45 Degrees Triple"
-#define RID_SVXSTR_HATCH15_DEF                      "Hatching"
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH0_DEF                       = u"Black 0 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH1_DEF                       = u"Black 90 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH2_DEF                       = u"Black 180 Degrees Crossed";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH3_DEF                       = u"Blue 45 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH4_DEF                       = u"Blue -45 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH5_DEF                       = u"Blue 45 Degrees Crossed";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH6_DEF                       = u"Green 30 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH7_DEF                       = u"Green 60 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH8_DEF                       = u"Green 90 Degrees Triple";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH9_DEF                       = u"Red 45 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH10_DEF                      = u"Red 90 Degrees Crossed";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH11_DEF                      = u"Red -45 Degrees Triple";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH12_DEF                      = u"Yellow 45 Degrees";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH13_DEF                      = u"Yellow 45 Degrees Crossed";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH14_DEF                      = u"Yellow 45 Degrees Triple";
+inline constexpr OUStringLiteral RID_SVXSTR_HATCH15_DEF                      = u"Hatching";
 // Reference-strings for standard-bitmap-table
-#define RID_SVXSTR_BMP0_DEF                         "Empty"
-#define RID_SVXSTR_BMP1_DEF                         "Painted White"
-#define RID_SVXSTR_BMP2_DEF                         "Paper Texture"
-#define RID_SVXSTR_BMP3_DEF                         "Paper Crumpled"
-#define RID_SVXSTR_BMP4_DEF                         "Paper Graph"
-#define RID_SVXSTR_BMP5_DEF                         "Parchment Paper"
-#define RID_SVXSTR_BMP6_DEF                         "Fence"
-#define RID_SVXSTR_BMP7_DEF                         "Wooden Board"
-#define RID_SVXSTR_BMP8_DEF                         "Maple Leaves"
-#define RID_SVXSTR_BMP9_DEF                         "Lawn"
-#define RID_SVXSTR_BMP10_DEF                        "Colorful Pebbles"
-#define RID_SVXSTR_BMP11_DEF                        "Coffee Beans"
-#define RID_SVXSTR_BMP12_DEF                        "Little Clouds"
-#define RID_SVXSTR_BMP13_DEF                        "Bathroom Tiles"
-#define RID_SVXSTR_BMP14_DEF                        "Wall of Rock"
-#define RID_SVXSTR_BMP15_DEF                        "Zebra"
-#define RID_SVXSTR_BMP16_DEF                        "Color Stripes"
-#define RID_SVXSTR_BMP17_DEF                        "Gravel"
-#define RID_SVXSTR_BMP18_DEF                        "Parchment Studio"
-#define RID_SVXSTR_BMP19_DEF                        "Night Sky"
-#define RID_SVXSTR_BMP20_DEF                        "Pool"
-#define RID_SVXSTR_BMP21_DEF                        "Bitmap"
-#define RID_SVXSTR_BMP79_DEF                        "Invoice Paper"
-#define RID_SVXSTR_BMP80_DEF                        "Concrete"
-#define RID_SVXSTR_BMP81_DEF                        "Brick Wall"
-#define RID_SVXSTR_BMP82_DEF                        "Stone Wall"
-#define RID_SVXSTR_BMP83_DEF                        "Floral"
-#define RID_SVXSTR_BMP84_DEF                        "Space"
-#define RID_SVXSTR_BMP85_DEF                        "Ice light"
-#define RID_SVXSTR_BMP86_DEF                        "Marble"
-#define RID_SVXSTR_BMP87_DEF                        "Sand light"
-#define RID_SVXSTR_BMP88_DEF                        "Stone"
-#define RID_SVXSTR_BMP89_DEF                        "White Diffusion"
-#define RID_SVXSTR_BMP90_DEF                        "Surface"
-#define RID_SVXSTR_BMP91_DEF                        "Cardboard"
-#define RID_SVXSTR_BMP92_DEF                        "Studio"
+inline constexpr OUStringLiteral RID_SVXSTR_BMP0_DEF                         = u"Empty";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP1_DEF                         = u"Painted White";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP2_DEF                         = u"Paper Texture";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP3_DEF                         = u"Paper Crumpled";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP4_DEF                         = u"Paper Graph";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP5_DEF                         = u"Parchment Paper";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP6_DEF                         = u"Fence";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP7_DEF                         = u"Wooden Board";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP8_DEF                         = u"Maple Leaves";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP9_DEF                         = u"Lawn";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP10_DEF                        = u"Colorful Pebbles";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP11_DEF                        = u"Coffee Beans";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP12_DEF                        = u"Little Clouds";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP13_DEF                        = u"Bathroom Tiles";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP14_DEF                        = u"Wall of Rock";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP15_DEF                        = u"Zebra";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP16_DEF                        = u"Color Stripes";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP17_DEF                        = u"Gravel";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP18_DEF                        = u"Parchment Studio";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP19_DEF                        = u"Night Sky";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP20_DEF                        = u"Pool";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP21_DEF                        = u"Bitmap";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP79_DEF                        = u"Invoice Paper";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP80_DEF                        = u"Concrete";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP81_DEF                        = u"Brick Wall";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP82_DEF                        = u"Stone Wall";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP83_DEF                        = u"Floral";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP84_DEF                        = u"Space";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP85_DEF                        = u"Ice light";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP86_DEF                        = u"Marble";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP87_DEF                        = u"Sand light";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP88_DEF                        = u"Stone";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP89_DEF                        = u"White Diffusion";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP90_DEF                        = u"Surface";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP91_DEF                        = u"Cardboard";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP92_DEF                        = u"Studio";
 // Reference strings for patterns - they are a variation of bitmaps
-#define RID_SVXSTR_BMP22_DEF                        "5 Percent"
-#define RID_SVXSTR_BMP23_DEF                        "10 Percent"
-#define RID_SVXSTR_BMP24_DEF                        "20 Percent"
-#define RID_SVXSTR_BMP25_DEF                        "25 Percent"
-#define RID_SVXSTR_BMP26_DEF                        "30 Percent"
-#define RID_SVXSTR_BMP27_DEF                        "40 Percent"
-#define RID_SVXSTR_BMP28_DEF                        "50 Percent"
-#define RID_SVXSTR_BMP29_DEF                        "60 Percent"
-#define RID_SVXSTR_BMP30_DEF                        "70 Percent"
-#define RID_SVXSTR_BMP31_DEF                        "75 Percent"
-#define RID_SVXSTR_BMP32_DEF                        "80 Percent"
-#define RID_SVXSTR_BMP33_DEF                        "90 Percent"
-#define RID_SVXSTR_BMP34_DEF                        "Light Downward Diagonal"
-#define RID_SVXSTR_BMP35_DEF                        "Light Upward Diagonal"
-#define RID_SVXSTR_BMP36_DEF                        "Dark Downward Diagonal"
-#define RID_SVXSTR_BMP37_DEF                        "Dark Upward Diagonal"
-#define RID_SVXSTR_BMP38_DEF                        "Wide Downward Diagonal"
-#define RID_SVXSTR_BMP39_DEF                        "Wide Upward Diagonal"
-#define RID_SVXSTR_BMP40_DEF                        "Light Vertical"
-#define RID_SVXSTR_BMP41_DEF                        "Light Horizontal"
-#define RID_SVXSTR_BMP42_DEF                        "Narrow Vertical"
-#define RID_SVXSTR_BMP43_DEF                        "Narrow Horizontal"
-#define RID_SVXSTR_BMP44_DEF                        "Dark Vertical"
-#define RID_SVXSTR_BMP45_DEF                        "Dark Horizontal"
-#define RID_SVXSTR_BMP46_DEF                        "Dashed Downward Diagonal"
-#define RID_SVXSTR_BMP47_DEF                        "Dashed Upward Diagonal"
-#define RID_SVXSTR_BMP48_DEF                        "Dashed Horizontal"
-#define RID_SVXSTR_BMP49_DEF                        "Dashed Vertical"
-#define RID_SVXSTR_BMP50_DEF                        "Small Confetti"
-#define RID_SVXSTR_BMP51_DEF                        "Large Confetti"
-#define RID_SVXSTR_BMP52_DEF                        "Zig Zag"
-#define RID_SVXSTR_BMP53_DEF                        "Wave"
-#define RID_SVXSTR_BMP54_DEF                        "Diagonal Brick"
-#define RID_SVXSTR_BMP55_DEF                        "Horizontal Brick"
-#define RID_SVXSTR_BMP56_DEF                        "Weave"
-#define RID_SVXSTR_BMP57_DEF                        "Plaid"
-#define RID_SVXSTR_BMP58_DEF                        "Divot"
-#define RID_SVXSTR_BMP59_DEF                        "Dotted Grid"
-#define RID_SVXSTR_BMP60_DEF                        "Dotted Diamond"
-#define RID_SVXSTR_BMP61_DEF                        "Shingle"
-#define RID_SVXSTR_BMP62_DEF                        "Trellis"
-#define RID_SVXSTR_BMP63_DEF                        "Sphere"
-#define RID_SVXSTR_BMP64_DEF                        "Small Grid"
-#define RID_SVXSTR_BMP65_DEF                        "Large Grid"
-#define RID_SVXSTR_BMP66_DEF                        "Small Checker Board"
-#define RID_SVXSTR_BMP67_DEF                        "Large Checker Board"
-#define RID_SVXSTR_BMP68_DEF                        "Outlined Diamond"
-#define RID_SVXSTR_BMP69_DEF                        "Solid Diamond"
-#define RID_SVXSTR_BMP70_DEF                        "Vertical"
-#define RID_SVXSTR_BMP71_DEF                        "Horizontal"
-#define RID_SVXSTR_BMP72_DEF                        "Downward Diagonal"
-#define RID_SVXSTR_BMP73_DEF                        "Upward Diagonal"
-#define RID_SVXSTR_BMP74_DEF                        "Cross"
-#define RID_SVXSTR_BMP75_DEF                        "Diagonal Cross"
-#define RID_SVXSTR_BMP76_DEF                        "Dashed Dotted"
-#define RID_SVXSTR_BMP77_DEF                        "Dashed Dotted Upward Diagonal"
-#define RID_SVXSTR_BMP78_DEF                        "Solid Dotted"
-// Reference-strings for standard-dash-table
-#define RID_SVXSTR_DASH0_DEF                        "Dot"
-#define RID_SVXSTR_DASH1_DEF                        "Long Dot"
-#define RID_SVXSTR_DASH2_DEF                        "Dot (Rounded)"
-#define RID_SVXSTR_DASH3_DEF                        "Dash"
-#define RID_SVXSTR_DASH4_DEF                        "Long Dash"
-#define RID_SVXSTR_DASH5_DEF                        "Double Dash"
-#define RID_SVXSTR_DASH6_DEF                        "Long Dash Dot"
-#define RID_SVXSTR_DASH7_DEF                        "Double Dash Dot"
-#define RID_SVXSTR_DASH8_DEF                        "Double Dash Dot Dot"
-#define RID_SVXSTR_DASH9_DEF                        "Ultrafine Dotted (var)"
-#define RID_SVXSTR_DASH10_DEF                       "Fine Dotted"
-#define RID_SVXSTR_DASH11_DEF                       "Ultrafine Dashed"
-#define RID_SVXSTR_DASH12_DEF                       "Fine Dashed"
-#define RID_SVXSTR_DASH13_DEF                       "Fine Dashed (var)"
-#define RID_SVXSTR_DASH14_DEF                       "Dashed (var)"
-#define RID_SVXSTR_DASH15_DEF                       "Line Style 9"
-#define RID_SVXSTR_DASH16_DEF                       "3 Dashes 3 Dots (var)"
-#define RID_SVXSTR_DASH17_DEF                       "Ultrafine 2 Dots 3 Dashes"
-#define RID_SVXSTR_DASH18_DEF                       "2 Dots 1 Dash"
-#define RID_SVXSTR_DASH19_DEF                       "Line with Fine Dots"
-#define RID_SVXSTR_DASH20_DEF                       "Dash Dot"
-#define RID_SVXSTR_DASH21_DEF                       "Long Dot (Rounded)"
-#define RID_SVXSTR_DASH22_DEF                       "Dash Dot Dot"
-#define RID_SVXSTR_DASH23_DEF                       "Dash (Rounded)"
-#define RID_SVXSTR_DASH24_DEF                       "Long Dash (Rounded)"
-#define RID_SVXSTR_DASH25_DEF                       "Double Dash (Rounded)"
-#define RID_SVXSTR_DASH26_DEF                       "Dash Dot (Rounded)"
-#define RID_SVXSTR_DASH27_DEF                       "Long Dash Dot (Rounded)"
-#define RID_SVXSTR_DASH28_DEF                       "Double Dash Dot (Rounded)"
-#define RID_SVXSTR_DASH29_DEF                       "Dash Dot Dot (Rounded)"
-#define RID_SVXSTR_DASH30_DEF                       "Double Dash Dot Dot (Rounded)"
+inline constexpr OUStringLiteral RID_SVXSTR_BMP22_DEF                        = u"5 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP23_DEF                        = u"10 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP24_DEF                        = u"20 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP25_DEF                        = u"25 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP26_DEF                        = u"30 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP27_DEF                        = u"40 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP28_DEF                        = u"50 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP29_DEF                        = u"60 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP30_DEF                        = u"70 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP31_DEF                        = u"75 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP32_DEF                        = u"80 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP33_DEF                        = u"90 Percent";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP34_DEF                        = u"Light Downward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP35_DEF                        = u"Light Upward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP36_DEF                        = u"Dark Downward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP37_DEF                        = u"Dark Upward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP38_DEF                        = u"Wide Downward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP39_DEF                        = u"Wide Upward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP40_DEF                        = u"Light Vertical";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP41_DEF                        = u"Light Horizontal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP42_DEF                        = u"Narrow Vertical";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP43_DEF                        = u"Narrow Horizontal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP44_DEF                        = u"Dark Vertical";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP45_DEF                        = u"Dark Horizontal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP46_DEF                        = u"Dashed Downward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP47_DEF                        = u"Dashed Upward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP48_DEF                        = u"Dashed Horizontal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP49_DEF                        = u"Dashed Vertical";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP50_DEF                        = u"Small Confetti";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP51_DEF                        = u"Large Confetti";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP52_DEF                        = u"Zig Zag";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP53_DEF                        = u"Wave";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP54_DEF                        = u"Diagonal Brick";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP55_DEF                        = u"Horizontal Brick";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP56_DEF                        = u"Weave";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP57_DEF                        = u"Plaid";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP58_DEF                        = u"Divot";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP59_DEF                        = u"Dotted Grid";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP60_DEF                        = u"Dotted Diamond";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP61_DEF                        = u"Shingle";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP62_DEF                        = u"Trellis";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP63_DEF                        = u"Sphere";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP64_DEF                        = u"Small Grid";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP65_DEF                        = u"Large Grid";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP66_DEF                        = u"Small Checker Board";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP67_DEF                        = u"Large Checker Board";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP68_DEF                        = u"Outlined Diamond";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP69_DEF                        = u"Solid Diamond";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP70_DEF                        = u"Vertical";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP71_DEF                        = u"Horizontal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP72_DEF                        = u"Downward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP73_DEF                        = u"Upward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP74_DEF                        = u"Cross";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP75_DEF                        = u"Diagonal Cross";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP76_DEF                        = u"Dashed Dotted";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP77_DEF                        = u"Dashed Dotted Upward Diagonal";
+inline constexpr OUStringLiteral RID_SVXSTR_BMP78_DEF                        = u"Solid Dotted";
+// Reference-strings for standard-dash-table;
+inline constexpr OUStringLiteral RID_SVXSTR_DASH0_DEF                        = u"Dot";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH1_DEF                        = u"Long Dot";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH2_DEF                        = u"Dot (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH3_DEF                        = u"Dash";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH4_DEF                        = u"Long Dash";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH5_DEF                        = u"Double Dash";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH6_DEF                        = u"Long Dash Dot";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH7_DEF                        = u"Double Dash Dot";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH8_DEF                        = u"Double Dash Dot Dot";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH9_DEF                        = u"Ultrafine Dotted (var)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH10_DEF                       = u"Fine Dotted";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH11_DEF                       = u"Ultrafine Dashed";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH12_DEF                       = u"Fine Dashed";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH13_DEF                       = u"Fine Dashed (var)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH14_DEF                       = u"Dashed (var)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH15_DEF                       = u"Line Style 9";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH16_DEF                       = u"3 Dashes 3 Dots (var)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH17_DEF                       = u"Ultrafine 2 Dots 3 Dashes";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH18_DEF                       = u"2 Dots 1 Dash";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH19_DEF                       = u"Line with Fine Dots";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH20_DEF                       = u"Dash Dot";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH21_DEF                       = u"Long Dot (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH22_DEF                       = u"Dash Dot Dot";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH23_DEF                       = u"Dash (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH24_DEF                       = u"Long Dash (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH25_DEF                       = u"Double Dash (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH26_DEF                       = u"Dash Dot (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH27_DEF                       = u"Long Dash Dot (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH28_DEF                       = u"Double Dash Dot (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH29_DEF                       = u"Dash Dot Dot (Rounded)";
+inline constexpr OUStringLiteral RID_SVXSTR_DASH30_DEF                       = u"Double Dash Dot Dot (Rounded)";
 
 // Reference-strings for standard-line-end-table
-#define RID_SVXSTR_LEND0_DEF                        "Concave short"
-#define RID_SVXSTR_LEND1_DEF                        "Square 45"
-#define RID_SVXSTR_LEND2_DEF                        "Arrow short"
-#define RID_SVXSTR_LEND3_DEF                        "Dimension Lines"
-#define RID_SVXSTR_LEND4_DEF                        "Double Arrow"
-#define RID_SVXSTR_LEND5_DEF                        "Triangle"
-#define RID_SVXSTR_LEND6_DEF                        "Concave"
-#define RID_SVXSTR_LEND7_DEF                        "Arrow large"
-#define RID_SVXSTR_LEND8_DEF                        "Dimension Line"
-#define RID_SVXSTR_LEND9_DEF                        "Circle"
-#define RID_SVXSTR_LEND10_DEF                       "Square"
-#define RID_SVXSTR_LEND11_DEF                       "Arrow"
-#define RID_SVXSTR_LEND12_DEF                       "Half Circle"
-#define RID_SVXSTR_LEND13_DEF                       "Triangle unfilled"
-#define RID_SVXSTR_LEND14_DEF                       "Diamond unfilled"
-#define RID_SVXSTR_LEND15_DEF                       "Diamond"
-#define RID_SVXSTR_LEND16_DEF                       "Circle unfilled"
-#define RID_SVXSTR_LEND17_DEF                       "Square 45 unfilled"
-#define RID_SVXSTR_LEND18_DEF                       "Square unfilled"
-#define RID_SVXSTR_LEND19_DEF                       "Half Circle unfilled"
-#define RID_SVXSTR_LEND20_DEF                       "Dimension Line Arrow"
-#define RID_SVXSTR_LEND21_DEF                       "Line short"
-#define RID_SVXSTR_LEND22_DEF                       "Line"
-#define RID_SVXSTR_LEND23_DEF                       "Half Arrow left"
-#define RID_SVXSTR_LEND24_DEF                       "Half Arrow right"
-#define RID_SVXSTR_LEND25_DEF                       "Reversed Arrow"
-#define RID_SVXSTR_LEND26_DEF                       "CF One"
-#define RID_SVXSTR_LEND27_DEF                       "CF Only One"
-#define RID_SVXSTR_LEND28_DEF                       "CF Many"
-#define RID_SVXSTR_LEND29_DEF                       "CF Many One"
-#define RID_SVXSTR_LEND30_DEF                       "CF Zero One"
-#define RID_SVXSTR_LEND31_DEF                       "CF Zero Many"
+inline constexpr OUStringLiteral RID_SVXSTR_LEND0_DEF                        = u"Concave short";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND1_DEF                        = u"Square 45";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND2_DEF                        = u"Arrow short";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND3_DEF                        = u"Dimension Lines";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND4_DEF                        = u"Double Arrow";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND5_DEF                        = u"Triangle";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND6_DEF                        = u"Concave";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND7_DEF                        = u"Arrow large";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND8_DEF                        = u"Dimension Line";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND9_DEF                        = u"Circle";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND10_DEF                       = u"Square";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND11_DEF                       = u"Arrow";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND12_DEF                       = u"Half Circle";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND13_DEF                       = u"Triangle unfilled";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND14_DEF                       = u"Diamond unfilled";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND15_DEF                       = u"Diamond";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND16_DEF                       = u"Circle unfilled";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND17_DEF                       = u"Square 45 unfilled";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND18_DEF                       = u"Square unfilled";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND19_DEF                       = u"Half Circle unfilled";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND20_DEF                       = u"Dimension Line Arrow";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND21_DEF                       = u"Line short";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND22_DEF                       = u"Line";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND23_DEF                       = u"Half Arrow left";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND24_DEF                       = u"Half Arrow right";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND25_DEF                       = u"Reversed Arrow";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND26_DEF                       = u"CF One";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND27_DEF                       = u"CF Only One";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND28_DEF                       = u"CF Many";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND29_DEF                       = u"CF Many One";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND30_DEF                       = u"CF Zero One";
+inline constexpr OUStringLiteral RID_SVXSTR_LEND31_DEF                       = u"CF Zero Many";
 // Reference-strings for standard transparence gradients
-#define RID_SVXSTR_TRASNGR0_DEF                     "Transparency"
-#define RID_SVXSTR_COLOR_LIBRE_GREEN_1_DEF          "Green 1 (%PRODUCTNAME Main Color)"
-#define RID_SVXSTR_COLOR_LIBRE_GREEN_ACCENT_DEF     "Green Accent"
-#define RID_SVXSTR_COLOR_LIBRE_BLUE_ACCENT_DEF      "Blue Accent"
-#define RID_SVXSTR_COLOR_LIBRE_ORANGE_ACCENT_DEF    "Orange Accent"
-#define RID_SVXSTR_COLOR_LIBRE_PURPLE_DEF           "Purple"
-#define RID_SVXSTR_COLOR_LIBRE_PURPLE_ACCENT_DEF    "Purple Accent"
-#define RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT_DEF    "Yellow Accent"
+inline constexpr OUStringLiteral RID_SVXSTR_TRASNGR0_DEF                     = u"Transparency";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIBRE_GREEN_1_DEF          = u"Green 1 (%PRODUCTNAME Main Color)";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIBRE_GREEN_ACCENT_DEF     = u"Green Accent";;
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIBRE_BLUE_ACCENT_DEF      = u"Blue Accent";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIBRE_ORANGE_ACCENT_DEF    = u"Orange Accent";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIBRE_PURPLE_DEF           = u"Purple";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIBRE_PURPLE_ACCENT_DEF    = u"Purple Accent";
+inline constexpr OUStringLiteral RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT_DEF    = u"Yellow Accent";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
