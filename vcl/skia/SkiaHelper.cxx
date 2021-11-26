@@ -644,11 +644,75 @@ tools::Long maxImageCacheSize()
     return officecfg::Office::Common::Cache::Skia::ImageCacheSize::get();
 }
 
+static sk_sp<SkBlender> invertBlender;
+static sk_sp<SkBlender> xorBlender;
+
+// This does the invert operation, i.e. result = color(255-R,255-G,255-B,A).
+void setBlenderInvert(SkPaint* paint)
+{
+    if (!invertBlender)
+    {
+        // Note that the colors are premultiplied, so '1 - dst.r' must be
+        // written as 'dst.a - dst.r', since premultiplied R is in the range (0-A).
+        const char* const diff = R"(
+            vec4 main( vec4 src, vec4 dst )
+            {
+                return vec4( dst.a - dst.r, dst.a - dst.g, dst.a - dst.b, dst.a );
+            }
+        )";
+        auto effect = SkRuntimeEffect::MakeForBlender(SkString(diff));
+        if (!effect.effect)
+        {
+            SAL_WARN("vcl.skia",
+                     "SKRuntimeEffect::MakeForBlender failed: " << effect.errorText.c_str());
+            abort();
+        }
+        invertBlender = effect.effect->makeBlender(nullptr);
+    }
+    paint->setBlender(invertBlender);
+}
+
+// This does the xor operation, i.e. bitwise xor of RGB values of both colors.
+void setBlenderXor(SkPaint* paint)
+{
+    if (!xorBlender)
+    {
+        // Note that the colors are premultiplied, converting to 0-255 range
+        // must also unpremultiply.
+        const char* const diff = R"(
+            vec4 main( vec4 src, vec4 dst )
+            {
+                return vec4(
+                    float(int(src.r * src.a * 255.0) ^ int(dst.r * dst.a * 255.0)) / 255.0 / dst.a,
+                    float(int(src.g * src.a * 255.0) ^ int(dst.g * dst.a * 255.0)) / 255.0 / dst.a,
+                    float(int(src.b * src.a * 255.0) ^ int(dst.b * dst.a * 255.0)) / 255.0 / dst.a,
+                    dst.a );
+            }
+        )";
+        SkRuntimeEffect::Options opts;
+        // Skia does not allow binary operators in the default ES2Strict mode, but that's only
+        // because of OpenGL support. We don't use OpenGL, and it's safe for all modes that we do use.
+        // https://groups.google.com/g/skia-discuss/c/EPLuQbg64Kc/m/2uDXFIGhAwAJ
+        opts.enforceES2Restrictions = false;
+        auto effect = SkRuntimeEffect::MakeForBlender(SkString(diff), opts);
+        if (!effect.effect)
+        {
+            SAL_WARN("vcl.skia",
+                     "SKRuntimeEffect::MakeForBlender failed: " << effect.errorText.c_str());
+            abort();
+        }
+        xorBlender = effect.effect->makeBlender(nullptr);
+    }
+    paint->setBlender(xorBlender);
+}
+
 void cleanup()
 {
     sharedWindowContext.reset();
     imageCache.clear();
     imageCacheSize = 0;
+    invertBlender.reset();
+    xorBlender.reset();
 }
 
 static SkSurfaceProps commonSurfaceProps;

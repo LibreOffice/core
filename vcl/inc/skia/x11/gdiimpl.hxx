@@ -14,6 +14,10 @@
 
 #include <unx/salgdi.h>
 #include <unx/x11/x11gdiimpl.h>
+// X11 headers
+constexpr int XNone = None;
+#undef None
+constexpr int None = XNone;
 #include <skia/gdiimpl.hxx>
 
 class VCL_PLUGIN_PUBLIC X11SkiaSalGraphicsImpl final : public SkiaSalGraphicsImpl,
