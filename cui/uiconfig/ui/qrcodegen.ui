@@ -115,7 +115,7 @@
                         <property name="placeholder-text" translatable="yes" context="qrcodegen|edit_name">www.libreoffice.org</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_text-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="qr text">The text from which to generate the QR code.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="qr text">The text from which to generate the code.</property>
                           </object>
                         </child>
                       </object>
@@ -177,11 +177,11 @@
                         <property name="active">0</property>
                         <items>
                           <item translatable="yes" context="qrcodegen|QrCode">QR Code</item>
-                          <item translatable="yes" context="qrcodegen|BarCode">Bar Code</item>
+                          <item translatable="yes" context="qrcodegen|BarCode">Barcode</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="choose_type-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="type">The type which is to be generated.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="type">The type of code to generate.</property>
                           </object>
                         </child>
                       </object>
@@ -202,7 +202,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="qrcodegen|label_ecc" comments="Error Correction Level of QR code">Error Correction:</property>
+                            <property name="label" translatable="yes" context="qrcodegen|label_ecc" comments="Error Correction Level of QR code">Error correction:</property>
                             <property name="use-underline">True</property>
                             <property name="xalign">0</property>
                             <accessibility>
@@ -234,7 +234,7 @@
                         <property name="numeric">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_margin-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="edit margin">The margin surrounding the QR code.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="edit margin">The margin surrounding the code.</property>
                           </object>
                         </child>
                       </object>
@@ -381,7 +381,7 @@
     </action-widgets>
     <child internal-child="accessible">
       <object class="AtkObject" id="QrCodeGenDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="qr code dialog title">Generate QR Code for any text or URL.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="qr code dialog title">Generate linear and matrix codes for any text or URL.</property>
       </object>
     </child>
   </object>

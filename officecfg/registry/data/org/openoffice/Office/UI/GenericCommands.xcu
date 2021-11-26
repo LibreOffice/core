@@ -7203,7 +7203,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:InsertQrCode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Bar Code...</value>
+          <value xml:lang="en-US">QR and ~Barcode...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -7211,7 +7211,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:EditQrCode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Edit Bar Code...</value>
+          <value xml:lang="en-US">~Edit Barcode...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
