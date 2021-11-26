@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ceb10e6_d59c7d0e",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-11-26T22:11:11Z",
+      "side": 1,
+      "message": "I only changed the UI strings, and left translation context (msgctxt in PO files) such as this alone.  The original context strings were not that good to begin with; for example they should follow the convention and use prefix like \"qrdialog|extended_tip|\" for extended tooltips.  Since I\u0027m making these changes in a text editor instead of in Glade, and I don\u0027t have a environment to build and test changes, I\u0027d rather make them minimal.",
+      "range": {
+        "startLine": 118,
+        "startChar": 98,
+        "endLine": 118,
+        "endChar": 115
+      },
+      "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
