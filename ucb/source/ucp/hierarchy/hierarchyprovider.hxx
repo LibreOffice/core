@@ -41,10 +41,10 @@ namespace hierarchy_ucp {
                 "vnd.sun.star.hier"
 #define HIERARCHY_URL_SCHEME_LENGTH 17
 
-#define HIERARCHY_FOLDER_CONTENT_TYPE \
-                "application/" HIERARCHY_URL_SCHEME "-folder"
-#define HIERARCHY_LINK_CONTENT_TYPE \
-                "application/" HIERARCHY_URL_SCHEME "-link"
+inline constexpr OUStringLiteral HIERARCHY_FOLDER_CONTENT_TYPE =
+                u"application/" HIERARCHY_URL_SCHEME "-folder";
+inline constexpr OUStringLiteral HIERARCHY_LINK_CONTENT_TYPE =
+                u"application/" HIERARCHY_URL_SCHEME "-link";
 
 struct ConfigProviderMapEntry
 {
