@@ -54,6 +54,7 @@
 #include <colorscale.hxx>
 #include <olinetab.hxx>
 #include <patattr.hxx>
+#include <postit.hxx>
 #include <scitems.hxx>
 #include <docsh.hxx>
 #include <editutil.hxx>
@@ -203,6 +204,7 @@ public:
     void testDrawCircleInMergeCells();
     void testDeleteCirclesInRowAndCol();
     void testTdf129940();
+    void testTdf119190();
     void testTdf139612();
     void testTdf144740();
     void testTdf139763ShapeAnchor();
@@ -310,6 +312,7 @@ public:
     CPPUNIT_TEST(testDrawCircleInMergeCells);
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
     CPPUNIT_TEST(testTdf129940);
+    CPPUNIT_TEST(testTdf119190);
     CPPUNIT_TEST(testTdf139612);
     CPPUNIT_TEST(testTdf144740);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
@@ -2834,6 +2837,22 @@ void ScFiltersTest2::testTdf129940()
     // Multiple text:span within text:ruby-base
     aStr = rDoc.GetString(ScAddress(2, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString(u"注音符號"), aStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf119190()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf119190.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf119190.xlsx", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(rDoc.HasNote(ScAddress(2, 0, 0)));
+
+    ScPostIt* pNote = rDoc.GetNote(ScAddress(2, 0, 0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(true, pNote->IsCaptionShown());
 
     xDocSh->DoClose();
 }
