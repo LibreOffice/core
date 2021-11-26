@@ -534,6 +534,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
         // set the document mode to embedded as the first step!!!
         EmbedAndReparentDoc_Impl( xDocument );
 
+        if (m_bReadOnly)
+        {
+            aLoadArgs.put("ReadOnly", true);
+        }
+
         if ( xDoc.is() )
         {
             xDoc->loadFromStorage( xSourceStorage, aLoadArgs.getPropertyValues() );

@@ -34,6 +34,7 @@
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <com/sun/star/io/XTempFile.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 #include <map>
@@ -81,6 +82,7 @@ class OCommonEmbeddedObject : public css::embed::XEmbeddedObject
                             , public css::container::XChild
                             , public css::chart2::XDefaultSizeTransmitter
                             , public css::lang::XServiceInfo
+                            , public css::lang::XInitialization
                             , public css::lang::XTypeProvider
                             , public ::cppu::OWeakObject
 {
@@ -407,6 +409,9 @@ public:
     OUString SAL_CALL getImplementationName() override;
     sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // XTypeProvider
     css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
