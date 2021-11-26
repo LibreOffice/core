@@ -16,6 +16,24 @@
       "message": "i don\u0027t think it makes sense to have two unittest for the same issue. could you please reuse the first unittest to check the size in this patch?",
       "revId": "f23ca5569c7585b09385d9024b158ea2e8fd8a1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f245703_5629386d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-26T20:53:51Z",
+      "side": 1,
+      "message": "The SVG export can not differentiate the situations that happen here.\nIn the LibreOffice UI, I \"Ungroup\" the only shape group, and then invoke \"Break\" on the first shape. After that, I can measure the size of the sub-shapes. How can I do this in the C++ test case? If I can do the \"Break\" here, maybe I can replace the old test with this one. Could you please help?",
+      "parentUuid": "9f0b7230_410ac35c",
+      "revId": "f23ca5569c7585b09385d9024b158ea2e8fd8a1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
