@@ -519,6 +519,7 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
     if (m_nInReschedule != 0)
         return;
 
+    // coverity[missing_lock: FALSE] - coverity fails to see the aRescheduleGuard ctor as taking a lock
     ++m_nInReschedule;
     aRescheduleGuard.unlock();
     // <- SAFE
