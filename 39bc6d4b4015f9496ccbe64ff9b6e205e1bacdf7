@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "776d9bf8_8072df96",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-26T16:54:08Z",
+      "side": 1,
+      "message": "FWIW this is the dialog from tools, customize, toolbar, right lick on assigned command, and change icon and import. I think this change here is good vs the old version because I think it should indeed be the UIName, but that suggests that this should be setting the CurrentFilter in a more robust way, I\u0027ll do a follow up for that",
+      "revId": "39bc6d4b4015f9496ccbe64ff9b6e205e1bacdf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
