@@ -35,8 +35,8 @@
 #endif
 
 static boost::rational<sal_Int32> rational_FromDouble(double dVal);
-
 static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits);
+static int impl_NumberOfBits( sal_uInt32 nNum );
 
 static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
 {
@@ -163,15 +163,24 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
 
 namespace
 {
-    template<typename T> bool checked_multiply_by(boost::rational<T>& i, const boost::rational<T>& r)
+    bool checked_multiply_by(boost::rational<sal_Int32>& i, const boost::rational<sal_Int32>& r)
     {
         // Protect against self-modification
-        T num = r.numerator();
-        T den = r.denominator();
+        sal_Int32 num = r.numerator();
+        sal_Int32 den = r.denominator();
+
+        // Fast-path if the number of bits in input is < the number of bits in the output, overflow cannot happen
+        // This is considerably faster than repeated std::gcd() operations
+        if ((impl_NumberOfBits(std::abs(i.numerator())) + impl_NumberOfBits(std::abs(r.numerator()))) < 32 &&
+            (impl_NumberOfBits(std::abs(i.denominator())) + impl_NumberOfBits(std::abs(r.denominator()))) < 32)
+        {
+            i *= r;
+            return false;
+        }
 
         // Avoid overflow and preserve normalization
-        T gcd1 = std::gcd(i.numerator(), den);
-        T gcd2 = std::gcd(num, i.denominator());
+        sal_Int32 gcd1 = std::gcd(i.numerator(), den);
+        sal_Int32 gcd2 = std::gcd(num, i.denominator());
 
         bool fail = false;
         fail |= o3tl::checked_multiply(i.numerator() / gcd1, num / gcd2, num);
