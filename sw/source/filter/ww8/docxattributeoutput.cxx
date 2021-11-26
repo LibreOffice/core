@@ -1772,7 +1772,7 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
         m_aSeqBookmarksNames[sSeqName].push_back(m_sLastOpenedBookmark);
     }
     // Write the Field command
-    m_pSerializer->startElementNS( XML_w, XML_instrText, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_instrText, FSNS(XML_xml, XML_space), "preserve" );
     m_pSerializer->writeEscaped( rCmd );
     m_pSerializer->endElementNS( XML_w, XML_instrText );
 
