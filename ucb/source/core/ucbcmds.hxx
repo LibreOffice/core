@@ -23,13 +23,13 @@
 // Definitions for the commands supported by the UCB.
 
 
-#define GETCOMMANDINFO_NAME     "getCommandInfo"
+inline constexpr OUStringLiteral GETCOMMANDINFO_NAME = u"getCommandInfo";
 #define GETCOMMANDINFO_HANDLE   1024
 
-#define GLOBALTRANSFER_NAME     "globalTransfer"
+inline constexpr OUStringLiteral GLOBALTRANSFER_NAME = u"globalTransfer";
 #define GLOBALTRANSFER_HANDLE   1025
 
-#define CHECKIN_NAME            "checkin"
+inline constexpr OUStringLiteral CHECKIN_NAME = u"checkin";
 #define CHECKIN_HANDLE          1026
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

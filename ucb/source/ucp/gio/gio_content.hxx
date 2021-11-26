@@ -49,8 +49,8 @@ namespace gio
 {
 
 
-#define GIO_FILE_TYPE   "application/vnd.sun.staroffice.gio-file"
-#define GIO_FOLDER_TYPE "application/vnd.sun.staroffice.gio-folder"
+inline constexpr OUStringLiteral GIO_FILE_TYPE = u"application/vnd.sun.staroffice.gio-file";
+inline constexpr OUStringLiteral GIO_FOLDER_TYPE = u"application/vnd.sun.staroffice.gio-folder";
 
 css::uno::Any convertToException(GError *pError,
     const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow=true);
