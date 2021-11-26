@@ -103,6 +103,11 @@ enum DirectImage
     No
 };
 
+// Sets SkBlender that will do an invert operation.
+void setBlenderInvert(SkPaint* paint);
+// Sets SkBlender that will do a xor operation.
+void setBlenderXor(SkPaint* paint);
+
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void

@@ -221,8 +221,8 @@ protected:
     void preDraw();
     // To be called after any drawing.
     void postDraw();
-    // The canvas to draw to. Will be diverted to a temporary for Xor mode.
-    SkCanvas* getDrawCanvas() { return mXorMode ? getXorCanvas() : mSurface->getCanvas(); }
+    // The canvas to draw to.
+    SkCanvas* getDrawCanvas() { return mSurface->getCanvas(); }
     // Call before makeImageSnapshot(), ensures the content is up to date.
     void flushDrawing();
 
@@ -261,22 +261,10 @@ protected:
     // Get the global HiDPI scaling factor.
     virtual int getWindowScaling() const;
 
-    SkCanvas* getXorCanvas();
-    void applyXor();
-    // NOTE: This must be called before the operation does any drawing.
     void addUpdateRegion(const SkRect& rect)
     {
         // Make slightly larger, just in case (rounding, antialiasing,...).
         SkIRect addedRect = rect.makeOutset(2, 2).round();
-        if (mXorMode)
-        {
-            // Two xor operations should cancel each other out. We batch xor operations,
-            // but if they can overlap, apply xor now, since applyXor() does the operation
-            // just once.
-            if (mXorRegion.intersects(addedRect))
-                applyXor();
-            mXorRegion.op(addedRect, SkRegion::kUnion_Op);
-        }
         // Using SkIRect should be enough, SkRegion would be too slow with many operations
         // and swapping to the screen is not _that_slow.
         mDirtyRect.join(addedRect);
@@ -308,31 +296,22 @@ protected:
     void performDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency,
                                 bool useAA);
 
+    // Create SkPaint to use when drawing to the surface. It is not to be used
+    // when doing internal drawing such as when merging two bitmaps together.
+    // This may apply some default settings to the paint as necessary.
+    SkPaint makePaintInternal() const;
     // Create SkPaint set up for drawing lines (using mLineColor etc.).
-    SkPaint makeLinePaint(double transparency = 0) const
-    {
-        assert(mLineColor != SALCOLOR_NONE);
-        SkPaint paint;
-        paint.setColor(transparency == 0
-                           ? SkiaHelper::toSkColor(mLineColor)
-                           : SkiaHelper::toSkColorWithTransparency(mLineColor, transparency));
-        paint.setStyle(SkPaint::kStroke_Style);
-        return paint;
-    }
+    SkPaint makeLinePaint(double transparency = 0) const;
     // Create SkPaint set up for filling (using mFillColor etc.).
-    SkPaint makeFillPaint(double transparency = 0) const
-    {
-        assert(mFillColor != SALCOLOR_NONE);
-        SkPaint paint;
-        paint.setColor(transparency == 0
-                           ? SkiaHelper::toSkColor(mFillColor)
-                           : SkiaHelper::toSkColorWithTransparency(mFillColor, transparency));
-        if (mLineColor == mFillColor)
-            paint.setStyle(SkPaint::kStrokeAndFill_Style);
-        else
-            paint.setStyle(SkPaint::kFill_Style);
-        return paint;
-    }
+    SkPaint makeFillPaint(double transparency = 0) const;
+    // Create SkPaint set up for bitmap drawing.
+    SkPaint makeBitmapPaint() const;
+    // Create SkPaint set up for gradient drawing.
+    SkPaint makeGradientPaint() const;
+    // Create SkPaint set up for text drawing.
+    SkPaint makeTextPaint(Color color) const;
+    // Create SkPaint for unspecified pixel drawing. Avoid if possible.
+    SkPaint makePixelPaint(Color color) const;
 
     template <typename charT, typename traits>
     friend inline std::basic_ostream<charT, traits>&
@@ -360,12 +339,15 @@ protected:
     // Note that we generally use VCL coordinates, which is not mSurface coordinates if mScaling!=1.
     SkIRect mDirtyRect; // The area that has been changed since the last performFlush().
     vcl::Region mClipRegion;
-    SkRegion mXorRegion; // The area that needs updating for the xor operation.
     Color mLineColor;
     Color mFillColor;
-    bool mXorMode;
-    SkBitmap mXorBitmap;
-    std::unique_ptr<SkCanvas> mXorCanvas;
+    enum class XorMode
+    {
+        None,
+        Invert,
+        Xor
+    };
+    XorMode mXorMode;
     std::unique_ptr<SkiaFlushIdle> mFlush;
     // Info about pending polygons to draw (we try to merge adjacent polygons into one).
     struct LastPolyPolygonInfo
@@ -378,6 +360,65 @@ protected:
     int mPendingOperationsToFlush;
     int mScaling; // The scale factor for HiDPI screens.
 };
+
+inline SkPaint SkiaSalGraphicsImpl::makePaintInternal() const
+{
+    SkPaint paint;
+    // Invert could be done using a blend mode like invert() does, but
+    // intentionally use SkBlender to make sure it's not overwritten
+    // by a blend mode set later (which would be probably a mistake),
+    // and so that the drawing color does not actually matter.
+    if (mXorMode == XorMode::Invert)
+        SkiaHelper::setBlenderInvert(&paint);
+    else if (mXorMode == XorMode::Xor)
+        SkiaHelper::setBlenderXor(&paint);
+    return paint;
+}
+
+inline SkPaint SkiaSalGraphicsImpl::makeLinePaint(double transparency) const
+{
+    assert(mLineColor != SALCOLOR_NONE);
+    SkPaint paint = makePaintInternal();
+    paint.setColor(transparency == 0
+                       ? SkiaHelper::toSkColor(mLineColor)
+                       : SkiaHelper::toSkColorWithTransparency(mLineColor, transparency));
+    paint.setStyle(SkPaint::kStroke_Style);
+    return paint;
+}
+
+inline SkPaint SkiaSalGraphicsImpl::makeFillPaint(double transparency) const
+{
+    assert(mFillColor != SALCOLOR_NONE);
+    SkPaint paint = makePaintInternal();
+    paint.setColor(transparency == 0
+                       ? SkiaHelper::toSkColor(mFillColor)
+                       : SkiaHelper::toSkColorWithTransparency(mFillColor, transparency));
+    if (mLineColor == mFillColor)
+        paint.setStyle(SkPaint::kStrokeAndFill_Style);
+    else
+        paint.setStyle(SkPaint::kFill_Style);
+    return paint;
+}
+
+inline SkPaint SkiaSalGraphicsImpl::makeBitmapPaint() const { return makePaintInternal(); }
+
+inline SkPaint SkiaSalGraphicsImpl::makeGradientPaint() const { return makePaintInternal(); }
+
+inline SkPaint SkiaSalGraphicsImpl::makeTextPaint(Color color) const
+{
+    assert(color != SALCOLOR_NONE);
+    SkPaint paint = makePaintInternal();
+    paint.setColor(SkiaHelper::toSkColor(color));
+    return paint;
+}
+
+inline SkPaint SkiaSalGraphicsImpl::makePixelPaint(Color color) const
+{
+    assert(color != SALCOLOR_NONE);
+    SkPaint paint = makePaintInternal();
+    paint.setColor(SkiaHelper::toSkColor(color));
+    return paint;
+}
 
 #endif
 

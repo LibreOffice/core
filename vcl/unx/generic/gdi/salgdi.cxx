@@ -105,7 +105,7 @@ void X11SalGraphics::freeResources()
     if( mpClipRegion )
     {
         XDestroyRegion( mpClipRegion );
-        mpClipRegion = None;
+        mpClipRegion = nullptr;
     }
 
     mxImpl->freeResources();
