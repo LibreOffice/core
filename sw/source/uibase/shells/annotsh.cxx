@@ -774,7 +774,10 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         if( nLSpace == static_cast<const SvxLineSpacingItem*>(pLSpace)->GetPropLineSpace() )
                             rSet.Put( SfxBoolItem( nWhich, true ));
                         else
-                            rSet.InvalidateItem( nWhich );
+                        {
+                            // tdf#114631 - disable non selected line spacing
+                            rSet.Put(SfxBoolItem(nWhich, false));
+                        }
                     }
                     break;
                 }

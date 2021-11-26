@@ -814,7 +814,11 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                          == static_cast<const SvxLineSpacingItem*>(pLSpace)->GetPropLineSpace())
                     bFlag = true;
                 else
+                {
+                    // tdf#114631 - disable non selected line spacing
+                    rSet.Put(SfxBoolItem(nWhich, false));
                     nSlotId = 0;
+                }
             }
             break;
 
