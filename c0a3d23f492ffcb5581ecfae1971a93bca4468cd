@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe2832c_b1f1abac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-26T10:36:27Z",
+      "side": 1,
+      "message": "I do confirm this patch fixes the unittest added in https://gerrit.libreoffice.org/c/core/+/125872",
+      "revId": "c0a3d23f492ffcb5581ecfae1971a93bca4468cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
