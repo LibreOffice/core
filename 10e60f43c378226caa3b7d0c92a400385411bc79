@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "517f0539_03fb13ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-26T07:53:27Z",
+      "side": 1,
+      "message": "No idea, but seeing that Jenkins\u0027 \u003chttps://ci.libreoffice.org/job/gerrit_mac/106715/\u003e successfully\n  [build OCX] lingucomponent/source/spellcheck/macosxspell/macspellimp.mm\nlets assume this is good.",
+      "revId": "10e60f43c378226caa3b7d0c92a400385411bc79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
