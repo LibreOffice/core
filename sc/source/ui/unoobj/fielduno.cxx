@@ -406,7 +406,7 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
     {
         SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
-            mpRefreshListeners.reset( new comphelper::OInterfaceContainerHelper2(aMutex) );
+            mpRefreshListeners.reset( new comphelper::OInterfaceContainerHelper3<util::XRefreshListener>(aMutex) );
         mpRefreshListeners->addInterface(xListener);
     }
 }
@@ -557,7 +557,7 @@ void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util:
     {
         SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
-            mpRefreshListeners.reset(new comphelper::OInterfaceContainerHelper2(aMutex));
+            mpRefreshListeners.reset(new comphelper::OInterfaceContainerHelper3<util::XRefreshListener>(aMutex));
         mpRefreshListeners->addInterface(xListener);
     }
 }

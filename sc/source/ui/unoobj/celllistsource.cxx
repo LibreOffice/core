@@ -315,12 +315,12 @@ namespace calc
         EventObject aEvent;
         aEvent.Source.set(*this);
 
-        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aListEntryListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aListEntryListeners );
         while ( aIter.hasMoreElements() )
         {
             try
             {
-                static_cast< XListEntryListener* >( aIter.next() )->allEntriesChanged( aEvent );
+                aIter.next()->allEntriesChanged( aEvent );
             }
             catch( const RuntimeException& )
             {

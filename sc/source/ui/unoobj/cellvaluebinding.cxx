@@ -456,12 +456,12 @@ namespace calc
         EventObject aEvent;
         aEvent.Source.set(*this);
 
-        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aModifyListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aModifyListeners );
         while ( aIter.hasMoreElements() )
         {
             try
             {
-                static_cast< XModifyListener* >( aIter.next() )->modified( aEvent );
+                aIter.next()->modified( aEvent );
             }
             catch( const RuntimeException& )
             {
