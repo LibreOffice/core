@@ -18,6 +18,8 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 
+#include <o3tl/safeint.hxx>
+
 #include <officecfg/Inet.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -89,12 +91,13 @@ struct DownloadTarget
 
 struct UploadSource
 {
-    uno::Reference<io::XInputStream> xInStream;
+    uno::Sequence<sal_Int8> const& rInData;
     ResponseHeaders const& rHeaders;
-    UploadSource(uno::Reference<io::XInputStream> const& i_xInStream,
-                 ResponseHeaders const& i_rHeaders)
-        : xInStream(i_xInStream)
+    size_t nPosition;
+    UploadSource(uno::Sequence<sal_Int8> const& i_rInData, ResponseHeaders const& i_rHeaders)
+        : rInData(i_rInData)
         , rHeaders(i_rHeaders)
+        , nPosition(0)
     {
     }
 };
@@ -348,15 +351,14 @@ static size_t read_callback(char* const buffer, size_t const size, size_t const 
 {
     auto* const pSource(static_cast<UploadSource*>(userdata));
     assert(pSource);
-    assert(pSource->xInStream.is());
     size_t const nBytes(size * nitems);
     size_t nRet(0);
     try
     {
-        uno::Sequence<sal_Int8> data;
-        data.realloc(nBytes);
-        nRet = pSource->xInStream->readSomeBytes(data, nBytes);
-        ::std::memcpy(buffer, data.getConstArray(), nRet);
+        assert(pSource->nPosition <= o3tl::make_unsigned(pSource->rInData.getLength()));
+        nRet = ::std::min<size_t>(pSource->rInData.getLength() - pSource->nPosition, nBytes);
+        ::std::memcpy(buffer, pSource->rInData.getConstArray() + pSource->nPosition, nRet);
+        pSource->nPosition += nRet;
     }
     catch (...)
     {
@@ -737,7 +739,7 @@ struct CurlProcessor
     static auto ProcessRequestImpl(
         CurlSession& rSession, CurlUri const& rURI, curl_slist* pRequestHeaderList,
         uno::Reference<io::XOutputStream> const* pxOutStream,
-        uno::Reference<io::XInputStream> const* pxInStream,
+        uno::Sequence<sal_Int8> const* pInData,
         ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders,
         ResponseHeaders& rHeaders) -> void;
 
@@ -792,7 +794,7 @@ auto CurlProcessor::URIReferenceToURI(CurlSession& rSession, OUString const& rUR
 auto CurlProcessor::ProcessRequestImpl(
     CurlSession& rSession, CurlUri const& rURI, curl_slist* const pRequestHeaderList,
     uno::Reference<io::XOutputStream> const* const pxOutStream,
-    uno::Reference<io::XInputStream> const* const pxInStream,
+    uno::Sequence<sal_Int8> const* const pInData,
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders,
     ResponseHeaders& rHeaders) -> void
 {
@@ -805,7 +807,7 @@ auto CurlProcessor::ProcessRequestImpl(
             rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_WRITEDATA, nullptr);
             assert(rc == CURLE_OK);
         }
-        if (pxInStream)
+        if (pInData)
         {
             rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_READDATA, nullptr);
             assert(rc == CURLE_OK);
@@ -839,9 +841,9 @@ auto CurlProcessor::ProcessRequestImpl(
         assert(rc == CURLE_OK);
     }
     ::std::optional<UploadSource> oUploadSource;
-    if (pxInStream)
+    if (pInData)
     {
-        oUploadSource.emplace(*pxInStream, rHeaders);
+        oUploadSource.emplace(*pInData, rHeaders);
         rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_READDATA, &*oUploadSource);
         assert(rc == CURLE_OK);
         // libcurl won't upload without setting this
@@ -1103,6 +1105,45 @@ auto CurlProcessor::ProcessRequest(
         }
     }
 
+    uno::Sequence<sal_Int8> data;
+    if (pxInStream)
+    {
+        uno::Reference<io::XSeekable> const xSeekable(*pxInStream, uno::UNO_QUERY);
+        if (xSeekable.is())
+        {
+            auto const len(xSeekable->getLength() - xSeekable->getPosition());
+            if ((**pxInStream).readBytes(data, len) != len)
+            {
+                throw uno::RuntimeException("short readBytes");
+            }
+        }
+        else
+        {
+            ::std::vector<uno::Sequence<sal_Int8>> bufs;
+            bool isDone(false);
+            do
+            {
+                bufs.emplace_back();
+                isDone = (**pxInStream).readSomeBytes(bufs.back(), 65536) == 0;
+            } while (!isDone);
+            sal_Int32 nSize(0);
+            for (auto const& rBuf : bufs)
+            {
+                if (o3tl::checked_add(nSize, rBuf.getLength(), nSize))
+                {
+                    throw std::bad_alloc(); // too large for Sequence
+                }
+            }
+            data.realloc(nSize);
+            size_t nCopied(0);
+            for (auto const& rBuf : bufs)
+            {
+                ::std::memcpy(data.getArray() + nCopied, rBuf.getConstArray(), rBuf.getLength());
+                nCopied += rBuf.getLength(); // can't overflow
+            }
+        }
+    }
+
     // Clear flag before transfer starts; only a transfer started before
     // calling abort() will be aborted, not one started later.
     rSession.m_AbortFlag.store(false);
@@ -1227,8 +1268,8 @@ auto CurlProcessor::ProcessRequest(
 
         try
         {
-            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(), pxOutStream, pxInStream,
-                               pRequestedHeaders, headers);
+            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(), pxOutStream,
+                               pxInStream ? &data : nullptr, pRequestedHeaders, headers);
         }
         catch (DAVException const& rException)
         {
