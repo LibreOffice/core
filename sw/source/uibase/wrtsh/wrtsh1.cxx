@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <hintids.hxx>
 #include <sot/exchange.hxx>
@@ -98,6 +99,7 @@
 #include <svtools/embedhlp.hxx>
 #include <svx/postattr.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <memory>
 
 using namespace sw::mark;
@@ -621,6 +623,14 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         SfxInPlaceClient* pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
         if ( !pCli )
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
+
+        uno::Reference<lang::XInitialization> xOLEInit(xRef.GetObject(), uno::UNO_QUERY);
+        if (xOLEInit.is())
+        {
+            uno::Sequence<beans::PropertyValue> aArguments
+                = { comphelper::makePropertyValue("ReadOnly", pCli->IsProtected()) };
+            xOLEInit->initialize({ uno::makeAny(aArguments) });
+        }
 
         static_cast<SwOleClient*>(pCli)->SetInDoVerb( true );
 
