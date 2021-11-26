@@ -509,4 +509,7 @@ public:
 #endif
 };
 
+inline bool ScDocument::IsInFormulaTree( const ScFormulaCell* pCell ) const { return pCell->GetPrevious() || pFormulaTree == pCell; }
+inline bool ScDocument::IsInFormulaTrack( const ScFormulaCell* pCell ) const { return pCell->GetPreviousTrack() || pFormulaTrack == pCell; }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
