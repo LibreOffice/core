@@ -4614,7 +4614,8 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
 
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
     {
-        aScope.addMessage("group calc disabled");
+        static constexpr OUStringLiteral MESSAGE = u"group calc disabled";
+        aScope.addMessage(MESSAGE);
         return false;
     }
 
