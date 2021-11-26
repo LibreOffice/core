@@ -20,33 +20,33 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 
-#define FMURL_FORM_POSITION                ".uno:FormController/positionForm"
-#define FMURL_FORM_RECORDCOUNT             ".uno:FormController/RecordCount"
-#define FMURL_RECORD_MOVEFIRST             ".uno:FormController/moveToFirst"
-#define FMURL_RECORD_MOVEPREV              ".uno:FormController/moveToPrev"
-#define FMURL_RECORD_MOVENEXT              ".uno:FormController/moveToNext"
-#define FMURL_RECORD_MOVELAST              ".uno:FormController/moveToLast"
-#define FMURL_RECORD_MOVETONEW             ".uno:FormController/moveToNew"
-#define FMURL_RECORD_UNDO                  ".uno:FormController/undoRecord"
-#define FMURL_RECORD_SAVE                  ".uno:FormController/saveRecord"
-#define FMURL_RECORD_DELETE                ".uno:FormController/deleteRecord"
-#define FMURL_FORM_REFRESH                 ".uno:FormController/refreshForm"
-#define FMURL_FORM_REFRESH_CURRENT_CONTROL ".uno:FormController/refreshCurrentControl"
-#define FMURL_FORM_SORT_UP                 ".uno:FormController/sortUp"
-#define FMURL_FORM_SORT_DOWN               ".uno:FormController/sortDown"
-#define FMURL_FORM_SORT                    ".uno:FormController/sort"
-#define FMURL_FORM_AUTO_FILTER             ".uno:FormController/autoFilter"
-#define FMURL_FORM_FILTER                  ".uno:FormController/filter"
-#define FMURL_FORM_APPLY_FILTER            ".uno:FormController/applyFilter"
-#define FMURL_FORM_REMOVE_FILTER           ".uno:FormController/removeFilterOrder"
-#define FMURL_CONFIRM_DELETION             ".uno:FormSlots/ConfirmDeletion"
-#define FMURL_COMPONENT_FORMGRIDVIEW       ".component:DB/FormGridView"
-#define FMURL_GRIDVIEW_CLEARVIEW           ".uno:FormSlots/ClearView"
-#define FMURL_GRIDVIEW_ADDCOLUMN           ".uno:FormSlots/AddGridColumn"
-#define FMURL_GRIDVIEW_ATTACHTOFORM        ".uno:FormSlots/AttachToForm"
-#define FMARG_ATTACHTO_MASTERFORM          "MasterForm"
-#define FMARG_ADDCOL_COLUMNTYPE            "ColumnType"
-#define FMARG_ADDCOL_COLUMNPOS             "ColumnPosition"
+inline constexpr OUStringLiteral FMURL_FORM_POSITION = u".uno:FormController/positionForm";
+inline constexpr OUStringLiteral FMURL_FORM_RECORDCOUNT = u".uno:FormController/RecordCount";
+inline constexpr OUStringLiteral FMURL_RECORD_MOVEFIRST = u".uno:FormController/moveToFirst";
+inline constexpr OUStringLiteral FMURL_RECORD_MOVEPREV = u".uno:FormController/moveToPrev";
+inline constexpr OUStringLiteral FMURL_RECORD_MOVENEXT = u".uno:FormController/moveToNext";
+inline constexpr OUStringLiteral FMURL_RECORD_MOVELAST = u".uno:FormController/moveToLast";
+inline constexpr OUStringLiteral FMURL_RECORD_MOVETONEW = u".uno:FormController/moveToNew";
+inline constexpr OUStringLiteral FMURL_RECORD_UNDO = u".uno:FormController/undoRecord";
+inline constexpr OUStringLiteral FMURL_RECORD_SAVE = u".uno:FormController/saveRecord";
+inline constexpr OUStringLiteral FMURL_RECORD_DELETE = u".uno:FormController/deleteRecord";
+inline constexpr OUStringLiteral FMURL_FORM_REFRESH = u".uno:FormController/refreshForm";
+inline constexpr OUStringLiteral FMURL_FORM_REFRESH_CURRENT_CONTROL = u".uno:FormController/refreshCurrentControl";
+inline constexpr OUStringLiteral FMURL_FORM_SORT_UP = u".uno:FormController/sortUp";
+inline constexpr OUStringLiteral FMURL_FORM_SORT_DOWN = u".uno:FormController/sortDown";
+inline constexpr OUStringLiteral FMURL_FORM_SORT = u".uno:FormController/sort";
+inline constexpr OUStringLiteral FMURL_FORM_AUTO_FILTER = u".uno:FormController/autoFilter";
+inline constexpr OUStringLiteral FMURL_FORM_FILTER = u".uno:FormController/filter";
+inline constexpr OUStringLiteral FMURL_FORM_APPLY_FILTER = u".uno:FormController/applyFilter";
+inline constexpr OUStringLiteral FMURL_FORM_REMOVE_FILTER = u".uno:FormController/removeFilterOrder";
+inline constexpr OUStringLiteral FMURL_CONFIRM_DELETION = u".uno:FormSlots/ConfirmDeletion";
+inline constexpr OUStringLiteral FMURL_COMPONENT_FORMGRIDVIEW = u".component:DB/FormGridView";
+inline constexpr OUStringLiteral FMURL_GRIDVIEW_CLEARVIEW = u".uno:FormSlots/ClearView";
+inline constexpr OUStringLiteral FMURL_GRIDVIEW_ADDCOLUMN = u".uno:FormSlots/AddGridColumn";
+inline constexpr OUStringLiteral FMURL_GRIDVIEW_ATTACHTOFORM = u".uno:FormSlots/AttachToForm";
+inline constexpr OUStringLiteral FMARG_ATTACHTO_MASTERFORM = u"MasterForm";
+inline constexpr OUStringLiteral FMARG_ADDCOL_COLUMNTYPE = u"ColumnType";
+inline constexpr OUStringLiteral FMARG_ADDCOL_COLUMNPOS = u"ColumnPosition";
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 

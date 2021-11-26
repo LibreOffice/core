@@ -52,7 +52,7 @@
 using namespace ::com::sun::star;
 
 
-const std::pair<sal_uInt16, const char*> aUnlocalized[] =
+const std::pair<sal_uInt16, rtl::OUStringConstExpr> aUnlocalized[] =
 {
     { GALLERY_THEME_HOMEPAGE, RID_GALLERYSTR_THEME_HTMLBUTTONS },
     { GALLERY_THEME_POWERPOINT, RID_GALLERYSTR_THEME_POWERPOINT },
@@ -140,7 +140,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         {
             if (aUnlocalized[i].first == nId)
             {
-                aName = OUString::createFromAscii(aUnlocalized[i].second);
+                aName = aUnlocalized[i].second;
                 break;
             }
         }
@@ -180,7 +180,7 @@ std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryStorageEngi
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
-        rListBox.append_text(OUString::createFromAscii(aUnlocalized[i].second));
+        rListBox.append_text(aUnlocalized[i].second);
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
         rListBox.append_text(SvxResId(aLocalized[i].second));
