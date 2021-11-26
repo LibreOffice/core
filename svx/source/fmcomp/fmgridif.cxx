@@ -1549,10 +1549,10 @@ Reference< XIndexContainer >  FmXGridPeer::getColumns()
 
 void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 {
-    static const std::u16string_view aPropsListenedTo[] =
+    static const rtl::OUStringConstExpr aPropsListenedTo[] =
     {
-        u"" FM_PROP_LABEL, u"" FM_PROP_WIDTH, u"" FM_PROP_HIDDEN, u"" FM_PROP_ALIGN,
-        u"" FM_PROP_FORMATKEY
+        FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN,
+        FM_PROP_FORMATKEY
     };
 
     // as not all properties have to be supported by all columns we have to check this
@@ -1560,11 +1560,11 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
     for (size_t i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
     {
-        if ( xInfo->hasPropertyByName( OUString(aPropsListenedTo[i]) ) )
+        if ( xInfo->hasPropertyByName( aPropsListenedTo[i] ) )
         {
-            Property aPropDesc = xInfo->getPropertyByName( OUString(aPropsListenedTo[i]) );
+            Property aPropDesc = xInfo->getPropertyByName( aPropsListenedTo[i] );
             if ( 0 != ( aPropDesc.Attributes & PropertyAttribute::BOUND ) )
-                xCol->addPropertyChangeListener( OUString(aPropsListenedTo[i]), this );
+                xCol->addPropertyChangeListener( aPropsListenedTo[i], this );
         }
     }
 }
@@ -1574,16 +1574,16 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
     // the same props as in addColumnListeners... linux has problems with global static UStrings, so
     // we have to do it this way...
-    static const std::u16string_view aPropsListenedTo[] =
+    static const rtl::OUStringConstExpr aPropsListenedTo[] =
     {
-        u"" FM_PROP_LABEL, u"" FM_PROP_WIDTH, u"" FM_PROP_HIDDEN, u"" FM_PROP_ALIGN,
-        u"" FM_PROP_FORMATKEY
+        FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN,
+        FM_PROP_FORMATKEY
     };
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();
     for (const auto & i : aPropsListenedTo)
-        if (xInfo->hasPropertyByName(OUString(i)))
-            xCol->removePropertyChangeListener(OUString(i), this);
+        if (xInfo->hasPropertyByName(i))
+            xCol->removePropertyChangeListener(i, this);
 }
 
 
@@ -2636,7 +2636,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
 {
     static Sequence< css::util::URL> aSupported = []()
     {
-        static const char* sSupported[] = {
+        static const rtl::OUStringConstExpr sSupported[] = {
             FMURL_RECORD_MOVEFIRST,
             FMURL_RECORD_MOVEPREV,
             FMURL_RECORD_MOVENEXT,
@@ -2648,7 +2648,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
         css::util::URL* pSupported = tmp.getArray();
 
         for ( sal_Int32 i = 0; i < tmp.getLength(); ++i, ++pSupported)
-            pSupported->Complete = OUString::createFromAscii(sSupported[i]);
+            pSupported->Complete = sSupported[i];
 
         // let a css::util::URL-transformer normalize the URLs
         Reference< css::util::XURLTransformer >  xTransformer(

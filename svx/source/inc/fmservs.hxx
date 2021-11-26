@@ -26,55 +26,55 @@
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-#define FM_COMPONENT_EDIT               "stardiv.one.form.component.Edit"
-#define FM_COMPONENT_TEXTFIELD          "stardiv.one.form.component.TextField"
-#define FM_COMPONENT_LISTBOX            "stardiv.one.form.component.ListBox"
-#define FM_COMPONENT_COMBOBOX           "stardiv.one.form.component.ComboBox"
-#define FM_COMPONENT_RADIOBUTTON        "stardiv.one.form.component.RadioButton"
-#define FM_COMPONENT_GROUPBOX           "stardiv.one.form.component.GroupBox"
-#define FM_COMPONENT_FIXEDTEXT          "stardiv.one.form.component.FixedText"
-#define FM_COMPONENT_COMMANDBUTTON      "stardiv.one.form.component.CommandButton"
-#define FM_COMPONENT_CHECKBOX           "stardiv.one.form.component.CheckBox"
-#define FM_COMPONENT_GRID               "stardiv.one.form.component.Grid"
-#define FM_COMPONENT_GRIDCONTROL        "stardiv.one.form.component.GridControl"
-#define FM_COMPONENT_IMAGEBUTTON        "stardiv.one.form.component.ImageButton"
-#define FM_COMPONENT_FILECONTROL        "stardiv.one.form.component.FileControl"
-#define FM_COMPONENT_TIMEFIELD          "stardiv.one.form.component.TimeField"
-#define FM_COMPONENT_DATEFIELD          "stardiv.one.form.component.DateField"
-#define FM_COMPONENT_NUMERICFIELD       "stardiv.one.form.component.NumericField"
-#define FM_COMPONENT_CURRENCYFIELD      "stardiv.one.form.component.CurrencyField"
-#define FM_COMPONENT_PATTERNFIELD       "stardiv.one.form.component.PatternField"
-#define FM_COMPONENT_FORMATTEDFIELD     "stardiv.one.form.component.FormattedField"
-#define FM_COMPONENT_HIDDEN             "stardiv.one.form.component.Hidden"
-#define FM_COMPONENT_HIDDENCONTROL      "stardiv.one.form.component.HiddenControl"
-#define FM_COMPONENT_IMAGECONTROL       "stardiv.one.form.component.ImageControl"
-#define FM_CONTROL_GRID                 "stardiv.one.form.control.Grid"
-#define FM_CONTROL_GRIDCONTROL          "stardiv.one.form.control.GridControl"
-#define SRV_SDB_CONNECTION              "com.sun.star.sdb.Connection"
-#define FM_SUN_COMPONENT_FORM           "com.sun.star.form.component.Form"
-#define FM_SUN_COMPONENT_TEXTFIELD      "com.sun.star.form.component.TextField"
-#define FM_SUN_COMPONENT_LISTBOX        "com.sun.star.form.component.ListBox"
-#define FM_SUN_COMPONENT_COMBOBOX       "com.sun.star.form.component.ComboBox"
-#define FM_SUN_COMPONENT_RADIOBUTTON    "com.sun.star.form.component.RadioButton"
-#define FM_SUN_COMPONENT_GROUPBOX       "com.sun.star.form.component.GroupBox"
-#define FM_SUN_COMPONENT_FIXEDTEXT      "com.sun.star.form.component.FixedText"
-#define FM_SUN_COMPONENT_COMMANDBUTTON  "com.sun.star.form.component.CommandButton"
-#define FM_SUN_COMPONENT_CHECKBOX       "com.sun.star.form.component.CheckBox"
-#define FM_SUN_COMPONENT_GRIDCONTROL    "com.sun.star.form.component.GridControl"
-#define FM_SUN_COMPONENT_IMAGEBUTTON    "com.sun.star.form.component.ImageButton"
-#define FM_SUN_COMPONENT_FILECONTROL    "com.sun.star.form.component.FileControl"
-#define FM_SUN_COMPONENT_TIMEFIELD      "com.sun.star.form.component.TimeField"
-#define FM_SUN_COMPONENT_DATEFIELD      "com.sun.star.form.component.DateField"
-#define FM_SUN_COMPONENT_NUMERICFIELD   "com.sun.star.form.component.NumericField"
-#define FM_SUN_COMPONENT_CURRENCYFIELD  "com.sun.star.form.component.CurrencyField"
-#define FM_SUN_COMPONENT_PATTERNFIELD   "com.sun.star.form.component.PatternField"
-#define FM_SUN_COMPONENT_HIDDENCONTROL  "com.sun.star.form.component.HiddenControl"
-#define FM_SUN_COMPONENT_IMAGECONTROL   "com.sun.star.form.component.DatabaseImageControl"
-#define FM_SUN_COMPONENT_FORMATTEDFIELD "com.sun.star.form.component.FormattedField"
-#define FM_SUN_COMPONENT_SCROLLBAR      "com.sun.star.form.component.ScrollBar"
-#define FM_SUN_COMPONENT_SPINBUTTON     "com.sun.star.form.component.SpinButton"
-#define FM_SUN_COMPONENT_NAVIGATIONBAR  "com.sun.star.form.component.NavigationToolBar"
-#define FM_SUN_CONTROL_GRIDCONTROL      "com.sun.star.form.control.GridControl"
+inline constexpr OUStringLiteral FM_COMPONENT_EDIT = u"stardiv.one.form.component.Edit";
+inline constexpr OUStringLiteral FM_COMPONENT_TEXTFIELD = u"stardiv.one.form.component.TextField";
+inline constexpr OUStringLiteral FM_COMPONENT_LISTBOX = u"stardiv.one.form.component.ListBox";
+inline constexpr OUStringLiteral FM_COMPONENT_COMBOBOX = u"stardiv.one.form.component.ComboBox";
+inline constexpr OUStringLiteral FM_COMPONENT_RADIOBUTTON = u"stardiv.one.form.component.RadioButton";
+inline constexpr OUStringLiteral FM_COMPONENT_GROUPBOX = u"stardiv.one.form.component.GroupBox";
+inline constexpr OUStringLiteral FM_COMPONENT_FIXEDTEXT = u"stardiv.one.form.component.FixedText";
+inline constexpr OUStringLiteral FM_COMPONENT_COMMANDBUTTON = u"stardiv.one.form.component.CommandButton";
+inline constexpr OUStringLiteral FM_COMPONENT_CHECKBOX = u"stardiv.one.form.component.CheckBox";
+inline constexpr OUStringLiteral FM_COMPONENT_GRID = u"stardiv.one.form.component.Grid";
+inline constexpr OUStringLiteral FM_COMPONENT_GRIDCONTROL = u"stardiv.one.form.component.GridControl";
+inline constexpr OUStringLiteral FM_COMPONENT_IMAGEBUTTON = u"stardiv.one.form.component.ImageButton";
+inline constexpr OUStringLiteral FM_COMPONENT_FILECONTROL = u"stardiv.one.form.component.FileControl";
+inline constexpr OUStringLiteral FM_COMPONENT_TIMEFIELD = u"stardiv.one.form.component.TimeField";
+inline constexpr OUStringLiteral FM_COMPONENT_DATEFIELD = u"stardiv.one.form.component.DateField";
+inline constexpr OUStringLiteral FM_COMPONENT_NUMERICFIELD = u"stardiv.one.form.component.NumericField";
+inline constexpr OUStringLiteral FM_COMPONENT_CURRENCYFIELD = u"stardiv.one.form.component.CurrencyField";
+inline constexpr OUStringLiteral FM_COMPONENT_PATTERNFIELD = u"stardiv.one.form.component.PatternField";
+inline constexpr OUStringLiteral FM_COMPONENT_FORMATTEDFIELD = u"stardiv.one.form.component.FormattedField";
+inline constexpr OUStringLiteral FM_COMPONENT_HIDDEN = u"stardiv.one.form.component.Hidden";
+inline constexpr OUStringLiteral FM_COMPONENT_HIDDENCONTROL = u"stardiv.one.form.component.HiddenControl";
+inline constexpr OUStringLiteral FM_COMPONENT_IMAGECONTROL = u"stardiv.one.form.component.ImageControl";
+inline constexpr OUStringLiteral FM_CONTROL_GRID = u"stardiv.one.form.control.Grid";
+inline constexpr OUStringLiteral FM_CONTROL_GRIDCONTROL = u"stardiv.one.form.control.GridControl";
+inline constexpr OUStringLiteral SRV_SDB_CONNECTION = u"com.sun.star.sdb.Connection";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_FORM = u"com.sun.star.form.component.Form";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_TEXTFIELD = u"com.sun.star.form.component.TextField";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_LISTBOX = u"com.sun.star.form.component.ListBox";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_COMBOBOX = u"com.sun.star.form.component.ComboBox";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_RADIOBUTTON = u"com.sun.star.form.component.RadioButton";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_GROUPBOX = u"com.sun.star.form.component.GroupBox";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_FIXEDTEXT = u"com.sun.star.form.component.FixedText";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_COMMANDBUTTON = u"com.sun.star.form.component.CommandButton";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_CHECKBOX = u"com.sun.star.form.component.CheckBox";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_GRIDCONTROL = u"com.sun.star.form.component.GridControl";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_IMAGEBUTTON = u"com.sun.star.form.component.ImageButton";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_FILECONTROL = u"com.sun.star.form.component.FileControl";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_TIMEFIELD = u"com.sun.star.form.component.TimeField";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_DATEFIELD = u"com.sun.star.form.component.DateField";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_NUMERICFIELD = u"com.sun.star.form.component.NumericField";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_CURRENCYFIELD = u"com.sun.star.form.component.CurrencyField";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_PATTERNFIELD = u"com.sun.star.form.component.PatternField";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_HIDDENCONTROL = u"com.sun.star.form.component.HiddenControl";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_IMAGECONTROL = u"com.sun.star.form.component.DatabaseImageControl";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_FORMATTEDFIELD = u"com.sun.star.form.component.FormattedField";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_SCROLLBAR = u"com.sun.star.form.component.ScrollBar";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_SPINBUTTON = u"com.sun.star.form.component.SpinButton";
+inline constexpr OUStringLiteral FM_SUN_COMPONENT_NAVIGATIONBAR = u"com.sun.star.form.component.NavigationToolBar";
+inline constexpr OUStringLiteral FM_SUN_CONTROL_GRIDCONTROL = u"com.sun.star.form.control.GridControl";
 
 namespace svxform
 {

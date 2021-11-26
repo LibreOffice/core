@@ -6,167 +6,167 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#pragma once
 
-#ifndef INCLUDED_SVX_INC_BITMAPS_HRC
-#define INCLUDED_SVX_INC_BITMAPS_HRC
+#include <rtl/ustring.hxx>
 
-#define RID_SVXCTRL_RECTBTNS                        "svx/res/rectbtns.png"
+inline constexpr OUStringLiteral RID_SVXCTRL_RECTBTNS = u"svx/res/rectbtns.png";
 
-#define RID_SVXBMP_FRMSEL_ARROW1                    "svx/res/frmsel1.png"
-#define RID_SVXBMP_FRMSEL_ARROW2                    "svx/res/frmsel2.png"
-#define RID_SVXBMP_FRMSEL_ARROW3                    "svx/res/frmsel3.png"
-#define RID_SVXBMP_FRMSEL_ARROW4                    "svx/res/frmsel4.png"
-#define RID_SVXBMP_FRMSEL_ARROW5                    "svx/res/frmsel5.png"
-#define RID_SVXBMP_FRMSEL_ARROW6                    "svx/res/frmsel6.png"
-#define RID_SVXBMP_FRMSEL_ARROW7                    "svx/res/frmsel7.png"
-#define RID_SVXBMP_FRMSEL_ARROW8                    "svx/res/frmsel8.png"
-#define RID_SVXBMP_FRMSEL_ARROW9                    "svx/res/frmsel9.png"
-#define RID_SVXBMP_FRMSEL_ARROW10                   "svx/res/frmsel10.png"
-#define RID_SVXBMP_FRMSEL_ARROW11                   "svx/res/frmsel11.png"
-#define RID_SVXBMP_FRMSEL_ARROW12                   "svx/res/frmsel12.png"
-#define RID_SVXBMP_FRMSEL_ARROW13                   "svx/res/frmsel13.png"
-#define RID_SVXBMP_FRMSEL_ARROW14                   "svx/res/frmsel14.png"
-#define RID_SVXBMP_FRMSEL_ARROW15                   "svx/res/frmsel15.png"
-#define RID_SVXBMP_FRMSEL_ARROW16                   "svx/res/frmsel16.png"
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW1 = u"svx/res/frmsel1.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW2 = u"svx/res/frmsel2.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW3 = u"svx/res/frmsel3.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW4 = u"svx/res/frmsel4.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW5 = u"svx/res/frmsel5.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW6 = u"svx/res/frmsel6.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW7 = u"svx/res/frmsel7.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW8 = u"svx/res/frmsel8.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW9 = u"svx/res/frmsel9.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW10 = u"svx/res/frmsel10.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW11 = u"svx/res/frmsel11.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW12 = u"svx/res/frmsel12.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW13 = u"svx/res/frmsel13.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW14 = u"svx/res/frmsel14.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW15 = u"svx/res/frmsel15.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRMSEL_ARROW16 = u"svx/res/frmsel16.png";
 
-#define RID_SVXBMP_NOTCHECKED                       "svx/res/notcheck.png"
-#define RID_SVXBMP_CHECKED                          "svx/res/lngcheck.png"
+inline constexpr OUStringLiteral RID_SVXBMP_NOTCHECKED = u"svx/res/notcheck.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CHECKED = u"svx/res/lngcheck.png";
 
-#define RID_SVXBMP_GREENCHECK                       "svx/res/nu01.png"
-#define RID_SVXBMP_YELLOWCHECK                      "svx/res/nu04.png"
-#define RID_SVXBMP_REDCROSS                         "svx/res/nu02.png"
-#define RID_SVXBMP_SHADOW_ANGLE                     "svx/res/fw018.png"
-#define RID_SVXBMP_SHADOW_SIZE                      "svx/res/fw019.png"
-#define RID_SVXBMP_SHADOW_XDIST                     "svx/res/fw016.png"
-#define RID_SVXBMP_SHADOW_YDIST                     "svx/res/fw017.png"
+inline constexpr OUStringLiteral RID_SVXBMP_GREENCHECK = u"svx/res/nu01.png";
+inline constexpr OUStringLiteral RID_SVXBMP_YELLOWCHECK = u"svx/res/nu04.png";
+inline constexpr OUStringLiteral RID_SVXBMP_REDCROSS = u"svx/res/nu02.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_ANGLE = u"svx/res/fw018.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_SIZE = u"svx/res/fw019.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_XDIST = u"svx/res/fw016.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SHADOW_YDIST = u"svx/res/fw017.png";
 
-#define RID_SVXBMP_DIRECTION_DIRECTION_NW           "svx/res/directionnorthwest_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_N            "svx/res/directionnorth_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_NE           "svx/res/directionnortheast_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_W            "svx/res/directionwest_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_NONE         "svx/res/directionstraight_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_E            "svx/res/directioneast_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_SW           "svx/res/directionsouthwest_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_S            "svx/res/directionsouth_22.png"
-#define RID_SVXBMP_DIRECTION_DIRECTION_SE           "svx/res/directionsoutheast_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_TOP_LEFT          "svx/res/lightofffromtopleft_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_TOP               "svx/res/lightofffromtop_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_TOP_RIGHT         "svx/res/lightofffromtopright_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_LEFT              "svx/res/lightofffromleft_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_RIGHT             "svx/res/lightofffromright_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_LEFT       "svx/res/lightofffrombottomleft_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM            "svx/res/lightofffrombottom_22.png"
-#define RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_RIGHT      "svx/res/lightofffrombottomright_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_TOP_LEFT           "svx/res/lightonfromtopleft_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_TOP                "svx/res/lightonfromtop_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_TOP_RIGHT          "svx/res/lightonfromtopright_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_LEFT               "svx/res/lightonfromleft_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_RIGHT              "svx/res/lightonfromright_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_LEFT        "svx/res/lightonfrombottomleft_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_BOTTOM             "svx/res/lightonfrombottom_22.png"
-#define RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_RIGHT       "svx/res/lightonfrombottomright_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_LEFT      "svx/res/lightfromtopleft_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP           "svx/res/lightfromtop_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_RIGHT     "svx/res/lightfromtopright_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_LEFT          "svx/res/lightfromleft_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_RIGHT         "svx/res/lightfromright_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_FRONT         "svx/res/lightfromfront_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_LEFT   "svx/res/lightfrombottomleft_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM        "svx/res/lightfrombottom_22.png"
-#define RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_RIGHT  "svx/res/lightfrombottomright_22.png"
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_NW = u"svx/res/directionnorthwest_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_N = u"svx/res/directionnorth_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_NE = u"svx/res/directionnortheast_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_W = u"svx/res/directionwest_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_NONE = u"svx/res/directionstraight_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_E = u"svx/res/directioneast_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_SW = u"svx/res/directionsouthwest_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_S = u"svx/res/directionsouth_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DIRECTION_DIRECTION_SE = u"svx/res/directionsoutheast_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_TOP_LEFT = u"svx/res/lightofffromtopleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_TOP = u"svx/res/lightofffromtop_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_TOP_RIGHT = u"svx/res/lightofffromtopright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_LEFT = u"svx/res/lightofffromleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_RIGHT = u"svx/res/lightofffromright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_LEFT = u"svx/res/lightofffrombottomleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM = u"svx/res/lightofffrombottom_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_RIGHT = u"svx/res/lightofffrombottomright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_TOP_LEFT = u"svx/res/lightonfromtopleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_TOP = u"svx/res/lightonfromtop_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_TOP_RIGHT = u"svx/res/lightonfromtopright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_LEFT = u"svx/res/lightonfromleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_RIGHT = u"svx/res/lightonfromright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_LEFT = u"svx/res/lightonfrombottomleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_BOTTOM = u"svx/res/lightonfrombottom_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_RIGHT = u"svx/res/lightonfrombottomright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_LEFT = u"svx/res/lightfromtopleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP = u"svx/res/lightfromtop_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_RIGHT = u"svx/res/lightfromtopright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_LEFT = u"svx/res/lightfromleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_RIGHT = u"svx/res/lightfromright_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_FRONT = u"svx/res/lightfromfront_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_LEFT = u"svx/res/lightfrombottomleft_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM = u"svx/res/lightfrombottom_22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_RIGHT = u"svx/res/lightfrombottomright_22.png";
 
-#define RID_SVXBMP_LAMP_ON                          "svx/res/lighton.png"
-#define RID_SVXBMP_LAMP_OFF                         "svx/res/light.png"
+inline constexpr OUStringLiteral RID_SVXBMP_LAMP_ON = u"svx/res/lighton.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LAMP_OFF = u"svx/res/light.png";
 
-#define RID_SVXBMP_ELEMENT                          "res/da03.png"
-#define RID_SVXBMP_ATTRIBUTE                        "res/da04.png"
-#define RID_SVXBMP_TEXT                             "res/da05.png"
-#define RID_SVXBMP_OTHER                            "res/da06.png"
+inline constexpr OUStringLiteral RID_SVXBMP_ELEMENT = u"res/da03.png";
+inline constexpr OUStringLiteral RID_SVXBMP_ATTRIBUTE = u"res/da04.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TEXT = u"res/da05.png";
+inline constexpr OUStringLiteral RID_SVXBMP_OTHER = u"res/da06.png";
 
-#define RID_SVXBMP_FORM                             "res/sx10593.png"
-#define RID_SVXBMP_CONTROL                          "res/sx10144.png"
+inline constexpr OUStringLiteral RID_SVXBMP_FORM = u"res/sx10593.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CONTROL = u"res/sx10144.png";
 #define RID_SVXBMP_COLLAPSEDNODE                    "res/sx18002.png"
 #define RID_SVXBMP_EXPANDEDNODE                     "res/sx18003.png"
-#define RID_SVXBMP_BUTTON                           "res/sx10594.png"
-#define RID_SVXBMP_RADIOBUTTON                      "res/sx10595.png"
-#define RID_SVXBMP_CHECKBOX                         "res/sx10596.png"
-#define RID_SVXBMP_FIXEDTEXT                        "res/sx10597.png"
-#define RID_SVXBMP_GROUPBOX                         "res/sx10598.png"
-#define RID_SVXBMP_EDITBOX                          "res/sx10599.png"
-#define RID_SVXBMP_LISTBOX                          "res/sx10600.png"
-#define RID_SVXBMP_COMBOBOX                         "res/sx10601.png"
-#define RID_SVXBMP_FORMS                            "res/sx18013.png"
-#define RID_SVXBMP_IMAGEBUTTON                      "res/sx10604.png"
-#define RID_SVXBMP_IMAGECONTROL                     "res/sx10710.png"
-#define RID_SVXBMP_FILECONTROL                      "res/sx10605.png"
-#define RID_SVXBMP_DATEFIELD                        "res/sx10704.png"
-#define RID_SVXBMP_TIMEFIELD                        "res/sx10705.png"
-#define RID_SVXBMP_NUMERICFIELD                     "res/sx10706.png"
-#define RID_SVXBMP_CURRENCYFIELD                    "res/sx10707.png"
-#define RID_SVXBMP_PATTERNFIELD                     "res/sx10708.png"
-#define RID_SVXBMP_HIDDEN                           "res/sx18022.png"
-#define RID_SVXBMP_GRID                             "res/sx10603.png"
-#define RID_SVXBMP_FORMATTEDFIELD                   "res/sx10728.png"
-#define RID_SVXBMP_FILTER                           "res/sx10715.png"
-#define RID_SVXBMP_DATE_N_TIME_FIELDS               "res/sx10757.png"
-#define RID_SVXBMP_FIELD                            "res/sx18027.png"
-#define RID_SVXBMP_SCROLLBAR                        "res/sx10768.png"
-#define RID_SVXBMP_SPINBUTTON                       "res/sx10769.png"
-#define RID_SVXBMP_NAVIGATIONBAR                    "res/sx10607.png"
+inline constexpr OUStringLiteral RID_SVXBMP_BUTTON = u"res/sx10594.png";
+inline constexpr OUStringLiteral RID_SVXBMP_RADIOBUTTON = u"res/sx10595.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CHECKBOX = u"res/sx10596.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FIXEDTEXT = u"res/sx10597.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GROUPBOX = u"res/sx10598.png";
+inline constexpr OUStringLiteral RID_SVXBMP_EDITBOX = u"res/sx10599.png";
+inline constexpr OUStringLiteral RID_SVXBMP_LISTBOX = u"res/sx10600.png";
+inline constexpr OUStringLiteral RID_SVXBMP_COMBOBOX = u"res/sx10601.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FORMS = u"res/sx18013.png";
+inline constexpr OUStringLiteral RID_SVXBMP_IMAGEBUTTON = u"res/sx10604.png";
+inline constexpr OUStringLiteral RID_SVXBMP_IMAGECONTROL = u"res/sx10710.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FILECONTROL = u"res/sx10605.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DATEFIELD = u"res/sx10704.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TIMEFIELD = u"res/sx10705.png";
+inline constexpr OUStringLiteral RID_SVXBMP_NUMERICFIELD = u"res/sx10706.png";
+inline constexpr OUStringLiteral RID_SVXBMP_CURRENCYFIELD = u"res/sx10707.png";
+inline constexpr OUStringLiteral RID_SVXBMP_PATTERNFIELD = u"res/sx10708.png";
+inline constexpr OUStringLiteral RID_SVXBMP_HIDDEN = u"res/sx18022.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRID = u"res/sx10603.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FORMATTEDFIELD = u"res/sx10728.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FILTER = u"res/sx10715.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DATE_N_TIME_FIELDS = u"res/sx10757.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FIELD = u"res/sx18027.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SCROLLBAR = u"res/sx10768.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SPINBUTTON = u"res/sx10769.png";
+inline constexpr OUStringLiteral RID_SVXBMP_NAVIGATIONBAR = u"res/sx10607.png";
 
-#define RID_SVXBMP_THEME_NORMAL                     "svx/res/galnors.png"
-#define RID_SVXBMP_THEME_READONLY                   "svx/res/galrdos.png"
-#define RID_SVXBMP_THEME_DEFAULT                    "svx/res/galdefs.png"
-#define RID_SVXBMP_GALLERY_MEDIA                    "svx/res/galmedia.png"
-#define RID_SVXBMP_GALLERY_SOUND_1                  "svx/res/galsnd1.png"
-#define RID_SVXBMP_GALLERY_SOUND_2                  "svx/res/galsnd2.png"
-#define RID_SVXBMP_GALLERY_SOUND_3                  "svx/res/galsnd3.png"
-#define RID_SVXBMP_GALLERY_SOUND_4                  "svx/res/galsnd4.png"
-#define RID_SVXBMP_GALLERY_SOUND_5                  "svx/res/galsnd5.png"
-#define RID_SVXBMP_GALLERY_SOUND_6                  "svx/res/galsnd6.png"
-#define RID_SVXBMP_GALLERY_SOUND_7                  "svx/res/galsnd7.png"
+inline constexpr OUStringLiteral RID_SVXBMP_THEME_NORMAL = u"svx/res/galnors.png";
+inline constexpr OUStringLiteral RID_SVXBMP_THEME_READONLY = u"svx/res/galrdos.png";
+inline constexpr OUStringLiteral RID_SVXBMP_THEME_DEFAULT = u"svx/res/galdefs.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_MEDIA = u"svx/res/galmedia.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_1 = u"svx/res/galsnd1.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_2 = u"svx/res/galsnd2.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_3 = u"svx/res/galsnd3.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_4 = u"svx/res/galsnd4.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_5 = u"svx/res/galsnd5.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_6 = u"svx/res/galsnd6.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GALLERY_SOUND_7 = u"svx/res/galsnd7.png";
 
-#define BMP_NONE_ICON                               "svx/res/symphony/blank.png"
-#define BMP_WIDTH1_ICON                             "svx/res/symphony/width1.png"
-#define BMP_WIDTH2_ICON                             "svx/res/symphony/width2.png"
-#define BMP_WIDTH3_ICON                             "svx/res/symphony/width3.png"
-#define BMP_WIDTH4_ICON                             "svx/res/symphony/width4.png"
-#define BMP_WIDTH5_ICON                             "svx/res/symphony/width5.png"
-#define BMP_WIDTH6_ICON                             "svx/res/symphony/width6.png"
-#define BMP_WIDTH7_ICON                             "svx/res/symphony/width7.png"
-#define BMP_WIDTH8_ICON                             "svx/res/symphony/width8.png"
-#define RID_SVXBMP_WIDTH_CUSTOM                     "svx/res/symphony/last_custom_common.png"
-#define RID_SVXBMP_WIDTH_CUSTOM_GRAY                "svx/res/symphony/last_custom_common_grey.png"
+inline constexpr OUStringLiteral BMP_NONE_ICON = u"svx/res/symphony/blank.png";
+inline constexpr OUStringLiteral BMP_WIDTH1_ICON = u"svx/res/symphony/width1.png";
+inline constexpr OUStringLiteral BMP_WIDTH2_ICON = u"svx/res/symphony/width2.png";
+inline constexpr OUStringLiteral BMP_WIDTH3_ICON = u"svx/res/symphony/width3.png";
+inline constexpr OUStringLiteral BMP_WIDTH4_ICON = u"svx/res/symphony/width4.png";
+inline constexpr OUStringLiteral BMP_WIDTH5_ICON = u"svx/res/symphony/width5.png";
+inline constexpr OUStringLiteral BMP_WIDTH6_ICON = u"svx/res/symphony/width6.png";
+inline constexpr OUStringLiteral BMP_WIDTH7_ICON = u"svx/res/symphony/width7.png";
+inline constexpr OUStringLiteral BMP_WIDTH8_ICON = u"svx/res/symphony/width8.png";
+inline constexpr OUStringLiteral RID_SVXBMP_WIDTH_CUSTOM = u"svx/res/symphony/last_custom_common.png";
+inline constexpr OUStringLiteral RID_SVXBMP_WIDTH_CUSTOM_GRAY = u"svx/res/symphony/last_custom_common_grey.png";
 
-#define BMP_AXIAL                                   "svx/res/symphony/axial.png"
-#define BMP_ELLI                                    "svx/res/symphony/ellipsoid.png"
-#define BMP_QUAD                                    "svx/res/symphony/Quadratic.png"
-#define BMP_RADIAL                                  "svx/res/symphony/radial.png"
-#define BMP_SQUARE                                  "svx/res/symphony/Square.png"
-#define BMP_LINEAR                                  "svx/res/symphony/linear.png"
+inline constexpr OUStringLiteral BMP_AXIAL = u"svx/res/symphony/axial.png";
+inline constexpr OUStringLiteral BMP_ELLI = u"svx/res/symphony/ellipsoid.png";
+inline constexpr OUStringLiteral BMP_QUAD = u"svx/res/symphony/Quadratic.png";
+inline constexpr OUStringLiteral BMP_RADIAL = u"svx/res/symphony/radial.png";
+inline constexpr OUStringLiteral BMP_SQUARE = u"svx/res/symphony/Square.png";
+inline constexpr OUStringLiteral BMP_LINEAR = u"svx/res/symphony/linear.png";
 
-#define RID_SVXBMP_STANDARD_SELECTION               "svx/res/standard-selection_10x22.png"
-#define RID_SVXBMP_EXTENDING_SELECTION              "svx/res/extending-selection_10x22.png"
-#define RID_SVXBMP_ADDING_SELECTION                 "svx/res/adding-selection_10x22.png"
-#define RID_SVXBMP_BLOCK_SELECTION                  "svx/res/block-selection_10x22.png"
-#define RID_SVXBMP_POSITION                         "res/sc10223.png"
-#define RID_SVXBMP_SIZE                             "res/sc10224.png"
-#define RID_SVXBMP_SIGNET                           "svx/res/signet_11x16.png"
-#define RID_SVXBMP_SIGNET_BROKEN                    "svx/res/caution_11x16.png"
-#define RID_SVXBMP_SIGNET_NOTVALIDATED              "svx/res/notcertificate_16.png"
-#define RID_SVXBMP_SLIDERBUTTON                     "svx/res/slidezoombutton_10.png"
-#define RID_SVXBMP_SLIDERDECREASE                   "svx/res/slidezoomout_10.png"
-#define RID_SVXBMP_SLIDERINCREASE                   "svx/res/slidezoomin_10.png"
-#define RID_SVXBMP_DOC_MODIFIED_YES                 "svx/res/doc_modified_yes_14.png"
-#define RID_SVXBMP_DOC_MODIFIED_NO                  "svx/res/doc_modified_no_14.png"
-#define RID_SVXBMP_DOC_MODIFIED_FEEDBACK            "svx/res/doc_modified_feedback.png"
-#define RID_SVXBMP_ZOOM_PAGE                        "svx/res/zoom_page_statusbar.png"
+inline constexpr OUStringLiteral RID_SVXBMP_STANDARD_SELECTION = u"svx/res/standard-selection_10x22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_EXTENDING_SELECTION = u"svx/res/extending-selection_10x22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_ADDING_SELECTION = u"svx/res/adding-selection_10x22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_BLOCK_SELECTION = u"svx/res/block-selection_10x22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_POSITION = u"res/sc10223.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SIZE = u"res/sc10224.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SIGNET = u"svx/res/signet_11x16.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SIGNET_BROKEN = u"svx/res/caution_11x16.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SIGNET_NOTVALIDATED = u"svx/res/notcertificate_16.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SLIDERBUTTON = u"svx/res/slidezoombutton_10.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SLIDERDECREASE = u"svx/res/slidezoomout_10.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SLIDERINCREASE = u"svx/res/slidezoomin_10.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DOC_MODIFIED_YES = u"svx/res/doc_modified_yes_14.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DOC_MODIFIED_NO = u"svx/res/doc_modified_no_14.png";
+inline constexpr OUStringLiteral RID_SVXBMP_DOC_MODIFIED_FEEDBACK = u"svx/res/doc_modified_feedback.png";
+inline constexpr OUStringLiteral RID_SVXBMP_ZOOM_PAGE = u"svx/res/zoom_page_statusbar.png";
 
-#define BMAP_GrafikEi                               "res/grafikei.png"
-#define SIP_SA_PAGESHADOW35X35                      "svx/res/pageshadow35x35.png"
-#define SIP_SA_MARKERS                              "svx/res/markers.png"
-#define BMP_SVXOLEOBJ                               "res/oleobj.png"
-#define SIP_SA_CROP_MARKERS                         "svx/res/cropmarkers.png"
+inline constexpr OUStringLiteral BMAP_GrafikEi = u"res/grafikei.png";
+inline constexpr OUStringLiteral SIP_SA_PAGESHADOW35X35 = u"svx/res/pageshadow35x35.png";
+inline constexpr OUStringLiteral SIP_SA_MARKERS = u"svx/res/markers.png";
+inline constexpr OUStringLiteral BMP_SVXOLEOBJ = u"res/oleobj.png";
+inline constexpr OUStringLiteral SIP_SA_CROP_MARKERS = u"svx/res/cropmarkers.png";
 #define BMP_MARKER_ANCHOR                           "svx/res/marker-anchor.png"
 #define BMP_MARKER_ANCHOR_PRESSED                   "svx/res/marker-anchor-pressed.png"
 #define BMP_MARKER_CIRC7_1                          "svx/res/marker-circ7-1.png"
@@ -260,33 +260,31 @@
 /*
  * Bitmaps for SvxFrameWindow
  */
-#define RID_SVXBMP_FRAME1                           "svx/res/fr01.png"
-#define RID_SVXBMP_FRAME2                           "svx/res/fr02.png"
-#define RID_SVXBMP_FRAME3                           "svx/res/fr03.png"
-#define RID_SVXBMP_FRAME4                           "svx/res/fr04.png"
-#define RID_SVXBMP_FRAME5                           "svx/res/fr05.png"
-#define RID_SVXBMP_FRAME6                           "svx/res/fr06.png"
-#define RID_SVXBMP_FRAME7                           "svx/res/fr07.png"
-#define RID_SVXBMP_FRAME8                           "svx/res/fr08.png"
-#define RID_SVXBMP_FRAME9                           "svx/res/fr09.png"
-#define RID_SVXBMP_FRAME10                          "svx/res/fr010.png"
-#define RID_SVXBMP_FRAME11                          "svx/res/fr011.png"
-#define RID_SVXBMP_FRAME12                          "svx/res/fr012.png"
-#define RID_SVXBMP_FRAME13                          "svx/res/fr013.png"
-#define RID_SVXBMP_FRAME14                          "svx/res/fr014.png"
-#define RID_SVXBMP_FRAME15                          "svx/res/fr015.png"
-#define RID_SVXBMP_GRAF_RED                         "res/sc10865.png"
-#define RID_SVXBMP_GRAF_GREEN                       "res/sc10866.png"
-#define RID_SVXBMP_GRAF_BLUE                        "res/sc10867.png"
-#define RID_SVXBMP_GRAF_LUMINANCE                   "res/sc10863.png"
-#define RID_SVXBMP_GRAF_CONTRAST                    "res/sc10864.png"
-#define RID_SVXBMP_GRAF_GAMMA                       "res/sc10868.png"
-#define RID_SVXBMP_GRAF_TRANSPARENCE                "res/sc10869.png"
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME1 = u"svx/res/fr01.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME2 = u"svx/res/fr02.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME3 = u"svx/res/fr03.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME4 = u"svx/res/fr04.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME5 = u"svx/res/fr05.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME6 = u"svx/res/fr06.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME7 = u"svx/res/fr07.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME8 = u"svx/res/fr08.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME9 = u"svx/res/fr09.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME10 = u"svx/res/fr010.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME11 = u"svx/res/fr011.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME12 = u"svx/res/fr012.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME13 = u"svx/res/fr013.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME14 = u"svx/res/fr014.png";
+inline constexpr OUStringLiteral RID_SVXBMP_FRAME15 = u"svx/res/fr015.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRAF_RED = u"res/sc10865.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRAF_GREEN = u"res/sc10866.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRAF_BLUE = u"res/sc10867.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRAF_LUMINANCE = u"res/sc10863.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRAF_CONTRAST = u"res/sc10864.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRAF_GAMMA = u"res/sc10868.png";
+inline constexpr OUStringLiteral RID_SVXBMP_GRAF_TRANSPARENCE = u"res/sc10869.png";
 
-#define RID_UNODRAW_OBJECTS                         "svx/res/objects.png"
-#define RID_UNODRAW_OLE2                            "svx/res/ole.png"
-#define RID_UNODRAW_GRAPHICS                        "svx/res/graphic.png"
-
-#endif
+inline constexpr OUStringLiteral RID_UNODRAW_OBJECTS = u"svx/res/objects.png";
+inline constexpr OUStringLiteral RID_UNODRAW_OLE2 = u"svx/res/ole.png";
+inline constexpr OUStringLiteral RID_UNODRAW_GRAPHICS = u"svx/res/graphic.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -6,17 +6,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#pragma once
 
-#ifndef INCLUDED_SVX_INC_STRINGS_HXX
-#define INCLUDED_SVX_INC_STRINGS_HXX
+#include <rtl/ustring.hxx>
 
-#define RID_GALLERYSTR_THEME_HTMLBUTTONS            "private://gallery/hidden/HtmlExportButtons"
-#define RID_GALLERYSTR_THEME_POWERPOINT             "private://gallery/hidden/imgppt"
-#define RID_GALLERYSTR_THEME_RULERS                 "Rulers"
-#define RID_GALLERYSTR_THEME_USERSOUNDS             "private://gallery/hidden/usersounds"
-#define RID_GALLERYSTR_THEME_DUMMY5                 "Dummy 5"
-#define RID_GALLERYSTR_THEME_FONTWORK               "private://gallery/hidden/fontwork"
-#define RID_GALLERYSTR_THEME_FONTWORK_VERTICAL      "private://gallery/hidden/fontworkvertical"
+inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_HTMLBUTTONS = u"private://gallery/hidden/HtmlExportButtons";
+inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_POWERPOINT = u"private://gallery/hidden/imgppt";
+inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_RULERS = u"Rulers";
+inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_USERSOUNDS = u"private://gallery/hidden/usersounds";
+inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_DUMMY5 = u"Dummy 5";
+inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_FONTWORK = u"private://gallery/hidden/fontwork";
+inline constexpr OUStringLiteral RID_GALLERYSTR_THEME_FONTWORK_VERTICAL = u"private://gallery/hidden/fontworkvertical";
 
 // Reference-strings for standardcolor-table
 #define RID_SVXSTR_COLOR_BLACK_DEF                  "Black"
@@ -390,7 +390,5 @@
 #define RID_SVXSTR_COLOR_LIBRE_PURPLE_DEF           "Purple"
 #define RID_SVXSTR_COLOR_LIBRE_PURPLE_ACCENT_DEF    "Purple Accent"
 #define RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT_DEF    "Yellow Accent"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

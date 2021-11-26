@@ -37,25 +37,25 @@
 #define RECOVERY_CMDPART_DO_RECOVERY                "/doAutoRecovery"
 #define RECOVERY_CMDPART_DO_BRINGTOFRONT            "/doBringToFront"
 
-#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      "vnd.sun.star.autorecovery:/doPrepareEmergencySave"
-#define RECOVERY_CMD_DO_EMERGENCY_SAVE              "vnd.sun.star.autorecovery:/doEmergencySave"
-#define RECOVERY_CMD_DO_RECOVERY                    "vnd.sun.star.autorecovery:/doAutoRecovery"
-#define RECOVERY_CMD_DO_ENTRY_BACKUP                "vnd.sun.star.autorecovery:/doEntryBackup"
-#define RECOVERY_CMD_DO_ENTRY_CLEANUP               "vnd.sun.star.autorecovery:/doEntryCleanUp"
+inline constexpr OUStringLiteral RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE = u"vnd.sun.star.autorecovery:/doPrepareEmergencySave";
+inline constexpr OUStringLiteral RECOVERY_CMD_DO_EMERGENCY_SAVE = u"vnd.sun.star.autorecovery:/doEmergencySave";
+inline constexpr OUStringLiteral RECOVERY_CMD_DO_RECOVERY = u"vnd.sun.star.autorecovery:/doAutoRecovery";
+inline constexpr OUStringLiteral RECOVERY_CMD_DO_ENTRY_BACKUP = u"vnd.sun.star.autorecovery:/doEntryBackup";
+inline constexpr OUStringLiteral RECOVERY_CMD_DO_ENTRY_CLEANUP = u"vnd.sun.star.autorecovery:/doEntryCleanUp";
 
-#define PROP_STATUSINDICATOR                        "StatusIndicator"
-#define PROP_DISPATCHASYNCHRON                      "DispatchAsynchron"
-#define PROP_SAVEPATH                               "SavePath"
-#define PROP_ENTRYID                                "EntryID"
+inline constexpr OUStringLiteral PROP_STATUSINDICATOR = u"StatusIndicator";
+inline constexpr OUStringLiteral PROP_DISPATCHASYNCHRON = u"DispatchAsynchron";
+inline constexpr OUStringLiteral PROP_SAVEPATH = u"SavePath";
+inline constexpr OUStringLiteral PROP_ENTRYID = u"EntryID";
 
-#define STATEPROP_ID                                "ID"
-#define STATEPROP_STATE                             "DocumentState"
-#define STATEPROP_ORGURL                            "OriginalURL"
-#define STATEPROP_TEMPURL                           "TempURL"
-#define STATEPROP_FACTORYURL                        "FactoryURL"
-#define STATEPROP_TEMPLATEURL                       "TemplateURL"
-#define STATEPROP_TITLE                             "Title"
-#define STATEPROP_MODULE                            "Module"
+inline constexpr OUStringLiteral STATEPROP_ID = u"ID";
+inline constexpr OUStringLiteral STATEPROP_STATE = u"DocumentState";
+inline constexpr OUStringLiteral STATEPROP_ORGURL = u"OriginalURL";
+inline constexpr OUStringLiteral STATEPROP_TEMPURL = u"TempURL";
+inline constexpr OUStringLiteral STATEPROP_FACTORYURL = u"FactoryURL";
+inline constexpr OUStringLiteral STATEPROP_TEMPLATEURL = u"TemplateURL";
+inline constexpr OUStringLiteral STATEPROP_TITLE = u"Title";
+inline constexpr OUStringLiteral STATEPROP_MODULE = u"Module";
 
 #define RECOVERY_OPERATIONSTATE_START               "start"
 #define RECOVERY_OPERATIONSTATE_STOP                "stop"
