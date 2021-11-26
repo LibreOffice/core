@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c867667a_5cf5c9a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-26T10:52:06Z",
+      "side": 1,
+      "message": "@Attila, Xisco, Dani: thanks for your work! The unit test works as intended.",
+      "revId": "3a8ca8e9f9f04a156055b1b364629b9d0741801c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
