@@ -91,6 +91,213 @@ basegfx::B2DRange getClippedFillDamage(cairo_t* cr)
     return aDamageRect;
 }
 
+basegfx::B2DRange getStrokeDamage(cairo_t* cr)
+{
+    double x1, y1, x2, y2;
+
+    // less accurate, but much faster
+    cairo_path_extents(cr, &x1, &y1, &x2, &y2);
+
+    // support B2DRange::isEmpty()
+    if (0.0 != x1 || 0.0 != y1 || 0.0 != x2 || 0.0 != y2)
+    {
+        return basegfx::B2DRange(x1, y1, x2, y2);
+    }
+
+    return basegfx::B2DRange();
+}
+
+basegfx::B2DRange getClippedStrokeDamage(cairo_t* cr)
+{
+    basegfx::B2DRange aDamageRect(getStrokeDamage(cr));
+    aDamageRect.intersect(getClipBox(cr));
+    return aDamageRect;
+}
+
+// Remove bClosePath: Checked that the already used mechanism for Win using
+// Gdiplus already relies on rPolygon.isClosed(), so should be safe to replace
+// this.
+// For PixelSnap we need the ObjectToDevice transformation here now. This is a
+// special case relative to the also executed LineDraw-Offset of (0.5, 0.5) in
+// DeviceCoordinates: The LineDraw-Offset is applied *after* the snap, so we
+// need the ObjectToDevice transformation *without* that offset here to do the
+// same. The LineDraw-Offset will be applied by the callers using a linear
+// transformation for Cairo now
+// For support of PixelSnapHairline we also need the ObjectToDevice transformation
+// and a method (same as in gdiimpl.cxx for Win and Gdiplus). This is needed e.g.
+// for Chart-content visualization. CAUTION: It's not the same as PixelSnap (!)
+// tdf#129845 add reply value to allow counting a point/byte/size measurement to
+// be included
+size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
+                        const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
+                        bool bPixelSnapHairline)
+{
+    // short circuit if there is nothing to do
+    const sal_uInt32 nPointCount(rPolygon.count());
+    size_t nSizeMeasure(0);
+
+    if (0 == nPointCount)
+    {
+        return nSizeMeasure;
+    }
+
+    const bool bHasCurves(rPolygon.areControlPointsUsed());
+    const bool bClosePath(rPolygon.isClosed());
+    const bool bObjectToDeviceUsed(!rObjectToDevice.isIdentity());
+    basegfx::B2DHomMatrix aObjectToDeviceInv;
+    basegfx::B2DPoint aLast;
+
+    for (sal_uInt32 nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++)
+    {
+        int nClosedIdx = nPointIdx;
+        if (nPointIdx >= nPointCount)
+        {
+            // prepare to close last curve segment if needed
+            if (bClosePath && (nPointIdx == nPointCount))
+            {
+                nClosedIdx = 0;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(nClosedIdx));
+
+        if (bPixelSnap)
+        {
+            // snap device coordinates to full pixels
+            if (bObjectToDeviceUsed)
+            {
+                // go to DeviceCoordinates
+                aPoint *= rObjectToDevice;
+            }
+
+            // snap by rounding
+            aPoint.setX(basegfx::fround(aPoint.getX()));
+            aPoint.setY(basegfx::fround(aPoint.getY()));
+
+            if (bObjectToDeviceUsed)
+            {
+                if (aObjectToDeviceInv.isIdentity())
+                {
+                    aObjectToDeviceInv = rObjectToDevice;
+                    aObjectToDeviceInv.invert();
+                }
+
+                // go back to ObjectCoordinates
+                aPoint *= aObjectToDeviceInv;
+            }
+        }
+
+        if (bPixelSnapHairline)
+        {
+            // snap horizontal and vertical lines (mainly used in Chart for
+            // 'nicer' AAing)
+            aPoint = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, nClosedIdx);
+        }
+
+        if (!nPointIdx)
+        {
+            // first point => just move there
+            cairo_move_to(cr, aPoint.getX(), aPoint.getY());
+            aLast = aPoint;
+            continue;
+        }
+
+        bool bPendingCurve(false);
+
+        if (bHasCurves)
+        {
+            bPendingCurve = rPolygon.isNextControlPointUsed(nPrevIdx);
+            bPendingCurve |= rPolygon.isPrevControlPointUsed(nClosedIdx);
+        }
+
+        if (!bPendingCurve) // line segment
+        {
+            cairo_line_to(cr, aPoint.getX(), aPoint.getY());
+            nSizeMeasure++;
+        }
+        else // cubic bezier segment
+        {
+            basegfx::B2DPoint aCP1 = rPolygon.getNextControlPoint(nPrevIdx);
+            basegfx::B2DPoint aCP2 = rPolygon.getPrevControlPoint(nClosedIdx);
+
+            // tdf#99165 if the control points are 'empty', create the mathematical
+            // correct replacement ones to avoid problems with the graphical sub-system
+            // tdf#101026 The 1st attempt to create a mathematically correct replacement control
+            // vector was wrong. Best alternative is one as close as possible which means short.
+            if (aCP1.equal(aLast))
+            {
+                aCP1 = aLast + ((aCP2 - aLast) * 0.0005);
+            }
+
+            if (aCP2.equal(aPoint))
+            {
+                aCP2 = aPoint + ((aCP1 - aPoint) * 0.0005);
+            }
+
+            cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(), aPoint.getX(),
+                           aPoint.getY());
+            // take some bigger measure for curve segments - too expensive to subdivide
+            // here and that precision not needed, but four (2 points, 2 control-points)
+            // would be a too low weight
+            nSizeMeasure += 10;
+        }
+
+        aLast = aPoint;
+    }
+
+    if (bClosePath)
+    {
+        cairo_close_path(cr);
+    }
+
+    return nSizeMeasure;
+}
+
+basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon,
+                               const basegfx::B2DHomMatrix& rObjectToDevice,
+                               basegfx::B2DHomMatrix& rObjectToDeviceInv, sal_uInt32 nIndex)
+{
+    const sal_uInt32 nCount(rPolygon.count());
+
+    // get the data
+    const basegfx::B2ITuple aPrevTuple(
+        basegfx::fround(rObjectToDevice * rPolygon.getB2DPoint((nIndex + nCount - 1) % nCount)));
+    const basegfx::B2DPoint aCurrPoint(rObjectToDevice * rPolygon.getB2DPoint(nIndex));
+    const basegfx::B2ITuple aCurrTuple(basegfx::fround(aCurrPoint));
+    const basegfx::B2ITuple aNextTuple(
+        basegfx::fround(rObjectToDevice * rPolygon.getB2DPoint((nIndex + 1) % nCount)));
+
+    // get the states
+    const bool bPrevVertical(aPrevTuple.getX() == aCurrTuple.getX());
+    const bool bNextVertical(aNextTuple.getX() == aCurrTuple.getX());
+    const bool bPrevHorizontal(aPrevTuple.getY() == aCurrTuple.getY());
+    const bool bNextHorizontal(aNextTuple.getY() == aCurrTuple.getY());
+    const bool bSnapX(bPrevVertical || bNextVertical);
+    const bool bSnapY(bPrevHorizontal || bNextHorizontal);
+
+    if (bSnapX || bSnapY)
+    {
+        basegfx::B2DPoint aSnappedPoint(bSnapX ? aCurrTuple.getX() : aCurrPoint.getX(),
+                                        bSnapY ? aCurrTuple.getY() : aCurrPoint.getY());
+
+        if (rObjectToDeviceInv.isIdentity())
+        {
+            rObjectToDeviceInv = rObjectToDevice;
+            rObjectToDeviceInv.invert();
+        }
+
+        aSnappedPoint *= rObjectToDeviceInv;
+
+        return aSnappedPoint;
+    }
+
+    return rPolygon.getB2DPoint(nIndex);
+}
+
 cairo_user_data_key_t* CairoCommon::getDamageKey()
 {
     static cairo_user_data_key_t aDamageKey;
