@@ -129,13 +129,10 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction,
 
     mxMenu->show();
     mxMenu->append_text(rText);
-    if (mbCanHaveSubMenu)
-    {
-        if (bIndicateSubMenu)
-            mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
-        else
-            mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
-    }
+    if (bIndicateSubMenu)
+        mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
+    else
+        mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
 }
 
 void ScCheckListMenuControl::addSeparator()
@@ -148,7 +145,6 @@ void ScCheckListMenuControl::addSeparator()
 
 IMPL_LINK(ScCheckListMenuControl, TreeSizeAllocHdl, const Size&, rSize, void)
 {
-    assert(mbCanHaveSubMenu);
     std::vector<int> aWidths
     {
         o3tl::narrowing<int>(rSize.Width() - (mxMenu->get_text_height() * 3) / 4 - 6)
@@ -168,8 +164,6 @@ void ScCheckListMenuControl::CreateDropDown()
 
 ScListSubMenuControl* ScCheckListMenuControl::addSubMenuItem(const OUString& rText, bool bEnabled)
 {
-    assert(mbCanHaveSubMenu);
-
     MenuItemData aItem;
     aItem.mbEnabled = bEnabled;
 
@@ -178,9 +172,7 @@ ScListSubMenuControl* ScCheckListMenuControl::addSubMenuItem(const OUString& rTe
 
     mxMenu->show();
     mxMenu->append_text(rText);
-    if (mbCanHaveSubMenu)
-        mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
-
+    mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
     return maMenuItems.back().mxSubMenuWin.get();
 }
 
@@ -443,8 +435,7 @@ ScCheckListMember::ScCheckListMember()
 // the value of border-width of FilterDropDown
 constexpr int nBorderWidth = 4;
 
-ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent,
-                                               ScDocument* pDoc, bool bCanHaveSubMenu,
+ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScDocument* pDoc,
                                                bool bHasDates, int nWidth, vcl::ILibreOfficeKitNotifier* pNotifier)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/filterdropdown.ui"))
     , mxPopover(mxBuilder->weld_popover("FilterDropDown"))
@@ -471,7 +462,6 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent,
     , mnAsyncPostPopdownId(nullptr)
     , mpNotifier(pNotifier)
     , mbHasDates(bHasDates)
-    , mbCanHaveSubMenu(bCanHaveSubMenu)
     , mbIsPoppedUp(false)
     , maOpenTimer(this)
     , maCloseTimer(this)
@@ -540,11 +530,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent,
     mxBtnSelectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
     mxBtnUnselectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
 
-    if (mbCanHaveSubMenu)
-    {
-        CreateDropDown();
-        mxMenu->connect_size_allocate(LINK(this, ScCheckListMenuControl, TreeSizeAllocHdl));
-    }
+    CreateDropDown();
+    mxMenu->connect_size_allocate(LINK(this, ScCheckListMenuControl, TreeSizeAllocHdl));
 
     // determine what width the checklist will end up with
     mnCheckWidthReq = mxContainer->get_preferred_size().Width();
