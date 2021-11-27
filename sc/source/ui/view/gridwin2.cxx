@@ -475,7 +475,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     weld::Window* pPopupParent = GetFrameWeld();
     mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, &mrViewData.GetDocument(),
-                                                    bDimOrientNotPage, false, -1, pNotifier));
+                                                    false, -1, pNotifier));
 
     mpDPFieldPopup->setExtendedData(std::move(pDPData));
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
