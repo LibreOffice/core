@@ -150,17 +150,6 @@ public:
     virtual void            drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
 
-    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,
-                                                const Point* pPtAry,
-                                                const PolyFlags* pFlgAry ) override;
-    virtual bool        drawPolygonBezier( sal_uInt32 nPoints,
-                                               const Point* pPtAry,
-                                               const PolyFlags* pFlgAry ) override;
-    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
-                                                   const sal_uInt32* pPoints,
-                                                   const Point* const* pPtAry,
-                                                   const PolyFlags* const* pFlgAry ) override;
-
     virtual bool drawGradient(tools::PolyPolygon const & rPolyPolygon, Gradient const & rGradient) override;
 
     virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;

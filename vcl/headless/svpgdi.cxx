@@ -1202,31 +1202,6 @@ bool SvpSalGraphics::drawPolyLine(
     return true;
 }
 
-bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
-                                         const Point*,
-                                         const PolyFlags* )
-{
-    SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLineBezier case");
-    return false;
-}
-
-bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
-                                        const Point*,
-                                        const PolyFlags* )
-{
-    SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolygonBezier case");
-    return false;
-}
-
-bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
-                                            const sal_uInt32*,
-                                            const Point* const*,
-                                            const PolyFlags* const* )
-{
-    SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygonBezier case");
-    return false;
-}
-
 bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient)
 {
     if (rGradient.GetStyle() != GradientStyle::Linear
