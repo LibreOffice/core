@@ -365,7 +365,7 @@ IMPL_LINK_NOARG(MenuBarUpdateIconManager, UserEventHdl, void*, void)
         AddMenuBarIcon( pActiveSysWin, true );
 }
 
-IMPL_LINK_NOARG(MenuBarUpdateIconManager, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool)
+IMPL_LINK_NOARG(MenuBarUpdateIconManager, ClickHdl, MenuBarButtonCallbackArg&, bool)
 {
     maWaitIdle.Stop();
     if ( mpBubbleWin )
@@ -376,7 +376,7 @@ IMPL_LINK_NOARG(MenuBarUpdateIconManager, ClickHdl, MenuBar::MenuBarButtonCallba
     return false;
 }
 
-IMPL_LINK(MenuBarUpdateIconManager, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, rData, bool)
+IMPL_LINK(MenuBarUpdateIconManager, HighlightHdl, MenuBarButtonCallbackArg&, rData, bool)
 {
     if ( rData.bHighlight )
         maWaitIdle.Start();

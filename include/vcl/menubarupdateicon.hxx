@@ -22,12 +22,13 @@
 #include <tools/link.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/menu.hxx>
 
 class BubbleWindow;
+class MenuBar;
 class SystemWindow;
 class VclSimpleEvent;
 class VclWindowEvent;
+struct MenuBarButtonCallbackArg;
 
 class VCL_DLLPUBLIC MenuBarUpdateIconManager
 {
@@ -57,8 +58,8 @@ private:
     DECL_DLLPRIVATE_LINK(WindowEventHdl, VclWindowEvent&, void);
     DECL_DLLPRIVATE_LINK(ApplicationEventHdl, VclSimpleEvent&, void);
     DECL_DLLPRIVATE_LINK(WaitTimeOutHdl, Timer*, void);
-    DECL_DLLPRIVATE_LINK(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-    DECL_DLLPRIVATE_LINK(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
+    DECL_DLLPRIVATE_LINK(ClickHdl, MenuBarButtonCallbackArg&, bool);
+    DECL_DLLPRIVATE_LINK(HighlightHdl, MenuBarButtonCallbackArg&, bool);
 
     VclPtr<BubbleWindow> GetBubbleWindow();
     void SetBubbleChanged();
