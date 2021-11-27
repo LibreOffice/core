@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba0f5dc8_42fbe1f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-11-27T03:05:10Z",
+      "side": 1,
+      "message": "Patchset 2 placement of SwWrtShell::Edit function in the SwEditWin::GetFocus function causes unit test failure for most likely good reason, although I can not explain why, but can repro the failure locally by doing SAL_USE_VCLPLUGIN\u003dsvp make CppunitTest_desktop_lib. Patchset 5 places the Edit function in the annotate shell destructor SwAnnotationShell::~SwAnnotationShell. This is taken from what is done in the draw base shell destructor SwDrawBaseShell::~SwDrawBaseShell(). Perhaps this is the best placement as of yet.  \n",
+      "revId": "d906a52dacfc001b10e6ffadf553a0edc51d1b9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
