@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b79a03e_f7ae5bde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-27T22:48:53Z",
+      "side": 1,
+      "message": "FYI I\u0027m not going to review this, because I don\u0027t see much to review. The code is a copy\u0026paste of operator++, so there\u0027s basically nothing to review there. And I can\u0027t review the API addition, because I have no information to base that on.\n",
+      "revId": "2a64c6e89de4a36afc3b386e51d025740419a609",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
