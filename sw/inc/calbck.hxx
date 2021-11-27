@@ -69,7 +69,7 @@ namespace sw
     class ClientIteratorBase;
     class ListenerEntry;
     void ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet& aOld, SwAttrSet& aNew);
-    struct LegacyModifyHint final: SfxHint
+    struct SAL_DLLPUBLIC_RTTI LegacyModifyHint final: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : SfxHint(SfxHintId::SwLegacyModify), m_pOld(pOld), m_pNew(pNew) {};
         sal_uInt16 GetWhich() const { return m_pOld ? m_pOld->Which() : m_pNew ? m_pNew->Which() : 0; };
