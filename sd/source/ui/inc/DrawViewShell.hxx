@@ -471,19 +471,18 @@ private:
         can not be selected the index of the snap line/point for which the
         popup menu is opened has to be passed to the processing slot
         handlers.  This can be done only by manually showing the popup menu.
+        @param pParent
+            The parent for the context menu.
+        @param rRect
+            The location at which to display the context menu.
         @param rPageView
             The page view is used to access the help lines.
         @param nSnapLineIndex
             Index of the snap line or snap point for which to show the
             context menu.
-        @param rMouseLocation
-            The mouse location defines the location at which to display the
-            context menu.
     */
-    void ShowSnapLineContextMenu (
-        SdrPageView& rPageView,
-        const sal_uInt16 nSnapLineIndex,
-        const Point& rMouseLocation);
+    void ShowSnapLineContextMenu(weld::Window* pParent, const ::tools::Rectangle& rRect,
+        SdrPageView& rPageView, const sal_uInt16 nSnapLineIndex);
 
     using ViewShell::Notify;
 
