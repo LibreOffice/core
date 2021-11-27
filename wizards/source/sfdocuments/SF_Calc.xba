@@ -2548,7 +2548,7 @@ Try:
 		&apos;	Manage the height of the area to shift
 		&apos;	The insertCells() method inserts a number of rows equal to the height of the cell range to shift
 		lHeight = .Height
-		If Rows = 0 Then Rows = lHeight
+		If Rows &lt;= 0 Then Rows = lHeight
 		If _LastCell(.XSpreadsheet)(1) + Rows &gt; MAXROWS Then GoTo Catch
 		If Rows &lt;&gt; lHeight Then
 			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, Rows, 0).XCellRange.RangeAddress
@@ -2630,7 +2630,7 @@ Try:
 		&apos;	Manage the width of the area to delete
 		&apos;	The removeRange() method erases a number of columns equal to the width of the cell range to delete
 		lWidth = .Width
-		If Columns = 0 Then Columns = lWidth
+		If Columns &lt;= 0 Then Columns = lWidth
 		If Columns &lt; lWidth Then
 			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, 0, Columns).XCellRange.RangeAddress
 		Else						&apos;	Columns is capped at the range width
@@ -2710,7 +2710,7 @@ Try:
 		&apos;	Manage the width of the area to Shift
 		&apos;	The insertCells() method inserts a number of columns equal to the width of the cell range to Shift
 		lWidth = .Width
-		If Columns = 0 Then Columns = lWidth
+		If Columns &lt;= 0 Then Columns = lWidth
 		If _LastCell(.XSpreadsheet)(0) + Columns &gt; MAXCOLS Then GoTo Catch
 		If Columns &lt;&gt; lWidth Then
 			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, 0, Columns).XCellRange.RangeAddress
@@ -2792,7 +2792,7 @@ Try:
 		&apos;	Manage the height of the area to delete
 		&apos;	The removeRange() method erases a number of rows equal to the height of the cell range to delete
 		lHeight = .Height
-		If Rows = 0 Then Rows = lHeight
+		If Rows &lt;= 0 Then Rows = lHeight
 		If Rows &lt; lHeight Then
 			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, Rows, 0).XCellRange.RangeAddress
 		Else						&apos;	Rows is capped at the range height
