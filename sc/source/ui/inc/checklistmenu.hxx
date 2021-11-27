@@ -124,7 +124,7 @@ public:
     };
 
     ScCheckListMenuControl(weld::Widget* pParent, ScDocument* pDoc,
-                           bool bCanHaveSubMenu, bool bTreeMode, int nWidth,
+                           bool bTreeMode, int nWidth,
                            vcl::ILibreOfficeKitNotifier* pNotifier);
     ~ScCheckListMenuControl();
 
@@ -293,7 +293,6 @@ private:
     vcl::ILibreOfficeKitNotifier* mpNotifier;
 
     bool mbHasDates;
-    bool mbCanHaveSubMenu;
     bool mbIsPoppedUp;
 
     struct SubMenuItemData
