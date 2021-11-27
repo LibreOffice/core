@@ -151,9 +151,40 @@ void SvpGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long 
     m_rCairoCommon.releaseCairoContext(cr, false, extents);
 }
 
-void SvpGraphicsBackend::drawRect(tools::Long /*nX*/, tools::Long /*nY*/, tools::Long /*nWidth*/,
-                                  tools::Long /*nHeight*/)
+void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                  tools::Long nHeight)
 {
+    // because of the -1 hack we have to do fill and draw separately
+    Color aOrigFillColor = m_rCairoCommon.m_aFillColor;
+    Color aOrigLineColor = m_rCairoCommon.m_aLineColor;
+    m_rCairoCommon.m_aFillColor = SALCOLOR_NONE;
+    m_rCairoCommon.m_aLineColor = SALCOLOR_NONE;
+
+    if (aOrigFillColor != SALCOLOR_NONE)
+    {
+        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
+            basegfx::B2DRectangle(nX, nY, nX + nWidth, nY + nHeight));
+        m_rCairoCommon.m_aFillColor = aOrigFillColor;
+
+        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0);
+
+        m_rCairoCommon.m_aFillColor = SALCOLOR_NONE;
+    }
+
+    if (aOrigLineColor != SALCOLOR_NONE)
+    {
+        // need same -1 hack as X11SalGraphicsImpl::drawRect
+        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
+            basegfx::B2DRectangle(nX, nY, nX + nWidth - 1, nY + nHeight - 1));
+        m_rCairoCommon.m_aLineColor = aOrigLineColor;
+
+        drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aRect), 0.0);
+
+        m_rCairoCommon.m_aLineColor = SALCOLOR_NONE;
+    }
+
+    m_rCairoCommon.m_aFillColor = aOrigFillColor;
+    m_rCairoCommon.m_aLineColor = aOrigLineColor;
 }
 
 void SvpGraphicsBackend::drawPolyLine(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/) {}
@@ -165,11 +196,72 @@ void SvpGraphicsBackend::drawPolyPolygon(sal_uInt32 /*nPoly*/, const sal_uInt32*
 {
 }
 
-bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& /*rObjectToDevice*/,
-                                         const basegfx::B2DPolyPolygon& /*rPolyPolygon*/,
-                                         double /*fTransparency*/)
+bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+                                         const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                         double fTransparency)
 {
-    return false;
+    const bool bHasFill(m_rCairoCommon.m_aFillColor != SALCOLOR_NONE);
+    const bool bHasLine(m_rCairoCommon.m_aLineColor != SALCOLOR_NONE);
+
+    if (0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0
+        || fTransparency >= 1.0)
+    {
+        return true;
+    }
+
+    cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+    m_rCairoCommon.clipRegion(cr);
+
+    // Set full (Object-to-Device) transformation - if used
+    if (!rObjectToDevice.isIdentity())
+    {
+        cairo_matrix_t aMatrix;
+
+        cairo_matrix_init(&aMatrix, rObjectToDevice.get(0, 0), rObjectToDevice.get(1, 0),
+                          rObjectToDevice.get(0, 1), rObjectToDevice.get(1, 1),
+                          rObjectToDevice.get(0, 2), rObjectToDevice.get(1, 2));
+        cairo_set_matrix(cr, &aMatrix);
+    }
+
+    // To make releaseCairoContext work, use empty extents
+    basegfx::B2DRange extents;
+
+    if (bHasFill)
+    {
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
+
+        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
+        // Get FillDamage (will be extended for LineDamage below)
+        extents = getClippedFillDamage(cr);
+
+        cairo_fill(cr);
+    }
+
+    if (bHasLine)
+    {
+        // PixelOffset used: Set PixelOffset as linear transformation
+        cairo_matrix_t aMatrix;
+        cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
+        cairo_set_matrix(cr, &aMatrix);
+
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
+
+        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aLineColor, fTransparency);
+
+        // expand with possible StrokeDamage
+        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
+        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+        extents.expand(stroke_extents);
+
+        cairo_stroke(cr);
+    }
+
+    // if transformation has been applied, transform also extents (ranges)
+    // of damage so they can be correctly redrawn
+    extents.transform(rObjectToDevice);
+    m_rCairoCommon.releaseCairoContext(cr, true, extents);
+
+    return true;
 }
 
 bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& /*rObjectToDevice*/,

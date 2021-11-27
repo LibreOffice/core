@@ -25,6 +25,8 @@
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
 
+#include <basegfx/utils/systemdependentdata.hxx>
+
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -72,6 +74,33 @@ VCL_DLLPUBLIC basegfx::B2DRange getClippedFillDamage(cairo_t* cr);
 VCL_DLLPUBLIC basegfx::B2DRange getClippedStrokeDamage(cairo_t* cr);
 VCL_DLLPUBLIC basegfx::B2DRange getStrokeDamage(cairo_t* cr);
 
+class SystemDependentData_CairoPath : public basegfx::SystemDependentData
+{
+private:
+    // the path data itself
+    cairo_path_t* mpCairoPath;
+
+    // all other values the path data  is based on and
+    // need to be compared with to check for data validity
+    bool mbNoJoin;
+    bool mbAntiAlias;
+    std::vector<double> maStroke;
+
+public:
+    SystemDependentData_CairoPath(basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+                                  size_t nSizeMeasure, cairo_t* cr, bool bNoJoin, bool bAntiAlias,
+                                  const std::vector<double>* pStroke); // MM01
+    virtual ~SystemDependentData_CairoPath() override;
+
+    // read access
+    cairo_path_t* getCairoPath() { return mpCairoPath; }
+    bool getNoJoin() const { return mbNoJoin; }
+    bool getAntiAlias() const { return mbAntiAlias; }
+    const std::vector<double>& getStroke() const { return maStroke; }
+
+    virtual sal_Int64 estimateUsageInBytes() const override;
+};
+
 VCL_DLLPUBLIC size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
                                       const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
                                       bool bPixelSnapHairline);
@@ -80,6 +109,9 @@ VCL_DLLPUBLIC basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon
                                              const basegfx::B2DHomMatrix& rObjectToDevice,
                                              basegfx::B2DHomMatrix& rObjectToDeviceInv,
                                              sal_uInt32 nIndex);
+
+VCL_DLLPUBLIC void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                    const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap);
 
 enum class PaintMode
 {
