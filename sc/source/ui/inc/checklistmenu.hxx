@@ -128,7 +128,7 @@ public:
                            vcl::ILibreOfficeKitNotifier* pNotifier);
     ~ScCheckListMenuControl();
 
-    void addMenuItem(const OUString& rText, Action* pAction);
+    void addMenuItem(const OUString& rText, Action* pAction, bool bIndicateSubMenu = false);
     void addSeparator();
     ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled);
     void resizeToFitMenuItems();
