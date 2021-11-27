@@ -594,7 +594,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     weld::Window* pPopupParent = GetFrameWeld();
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), mrViewData.GetPPTX());
-    mpAutoFilterPopup.reset(new ScCheckListMenuControl(pPopupParent, &rDoc, false,
+    mpAutoFilterPopup.reset(new ScCheckListMenuControl(pPopupParent, &rDoc, true,
                                                        aFilterEntries.mbHasDates, nColWidth, pNotifier));
 
     int nMaxTextWidth = 0;
@@ -736,9 +736,9 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor));
+        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor), true);
     mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor));
+        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor), true);
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
