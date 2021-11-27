@@ -885,32 +885,6 @@ void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
         0.0);
 }
 
-void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
-                                     const sal_uInt32* pPointCounts,
-                                     const Point**   pPtAry)
-{
-    basegfx::B2DPolyPolygon aPolyPoly;
-    for(sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
-    {
-        sal_uInt32 nPoints = pPointCounts[nPolygon];
-        if (nPoints)
-        {
-            const Point* pPoints = pPtAry[nPolygon];
-            basegfx::B2DPolygon aPoly;
-            aPoly.append( basegfx::B2DPoint(pPoints->getX(), pPoints->getY()), nPoints);
-            for (sal_uInt32 i = 1; i < nPoints; ++i)
-                aPoly.setB2DPoint(i, basegfx::B2DPoint( pPoints[i].getX(), pPoints[i].getY()));
-
-            aPolyPoly.append(aPoly);
-        }
-    }
-
-    GetImpl()->drawPolyPolygon(
-        basegfx::B2DHomMatrix(),
-        aPolyPoly,
-        0.0);
-}
-
 bool SvpSalGraphics::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,

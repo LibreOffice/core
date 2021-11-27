@@ -149,9 +149,7 @@ public:
                                 bool bPixelSnapHairline) override;
     virtual void            drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
-    virtual void            drawPolyPolygon( sal_uInt32 nPoly,
-                                             const sal_uInt32* pPoints,
-                                             const Point** pPtAry ) override;
+
     virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,
                                                 const Point* pPtAry,
                                                 const PolyFlags* pFlgAry ) override;
