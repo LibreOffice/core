@@ -574,7 +574,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         // helper line
         if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow()->GetOutDev(), nHelpLine, pPV) )
         {
-            ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
+            ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(10, 10));
+            weld::Window* pParent = weld::GetPopupParent(*pWin, aRect);
+            ShowSnapLineContextMenu(pParent, aRect, *pPV, nHelpLine);
             return;
         }
         // is gluepoint under cursor marked?
@@ -928,41 +930,27 @@ void DrawViewShell::UnlockInput()
         mnLockCount--;
 }
 
-void DrawViewShell::ShowSnapLineContextMenu (
-    SdrPageView& rPageView,
-    const sal_uInt16 nSnapLineIndex,
-    const Point& rMouseLocation)
+void DrawViewShell::ShowSnapLineContextMenu(weld::Window* pParent, const ::tools::Rectangle& rRect,
+                                            SdrPageView& rPageView, const sal_uInt16 nSnapLineIndex)
 {
     const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
-    ScopedVclPtrInstance<PopupMenu> pMenu;
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/snapmenu.ui"));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
 
     if (rHelpLine.GetKind() == SdrHelpLineKind::Point)
     {
-        pMenu->InsertItem(
-            SID_SET_SNAPITEM,
-            SdResId(STR_POPUP_EDIT_SNAPPOINT));
-        pMenu->InsertSeparator();
-        pMenu->InsertItem(
-            SID_DELETE_SNAPITEM,
-            SdResId(STR_POPUP_DELETE_SNAPPOINT));
+        xMenu->append(OUString::number(SID_SET_SNAPITEM), SdResId(STR_POPUP_EDIT_SNAPPOINT));
+        xMenu->append_separator("separator");
+        xMenu->append(OUString::number(SID_DELETE_SNAPITEM), SdResId(STR_POPUP_DELETE_SNAPPOINT));
     }
     else
     {
-        pMenu->InsertItem(
-            SID_SET_SNAPITEM,
-            SdResId(STR_POPUP_EDIT_SNAPLINE));
-        pMenu->InsertSeparator();
-        pMenu->InsertItem(
-            SID_DELETE_SNAPITEM,
-            SdResId(STR_POPUP_DELETE_SNAPLINE));
+        xMenu->append(OUString::number(SID_SET_SNAPITEM), SdResId(STR_POPUP_EDIT_SNAPLINE));
+        xMenu->append_separator("separator");
+        xMenu->append(OUString::number(SID_DELETE_SNAPITEM), SdResId(STR_POPUP_DELETE_SNAPLINE));
     }
 
-    pMenu->RemoveDisabledEntries(false);
-
-    const sal_uInt16 nResult = pMenu->Execute(
-        GetActiveWindow(),
-        ::tools::Rectangle(rMouseLocation, Size(10,10)),
-        PopupMenuFlags::ExecuteDown);
+    const int nResult = xMenu->popup_at_rect(pParent, rRect).toInt32();
     switch (nResult)
     {
         case SID_SET_SNAPITEM:
