@@ -852,45 +852,6 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-void SvpSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
-{
-    // because of the -1 hack we have to do fill and draw separately
-    Color aOrigFillColor = m_aCairoCommon.m_aFillColor;
-    Color aOrigLineColor = m_aCairoCommon.m_aLineColor;
-    m_aCairoCommon.m_aFillColor = SALCOLOR_NONE;
-    m_aCairoCommon.m_aLineColor = SALCOLOR_NONE;
-
-    if (aOrigFillColor != SALCOLOR_NONE)
-    {
-        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
-        m_aCairoCommon.m_aFillColor = aOrigFillColor;
-
-        drawPolyPolygon(
-            basegfx::B2DHomMatrix(),
-            basegfx::B2DPolyPolygon(aRect),
-            0.0);
-
-        m_aCairoCommon.m_aFillColor = SALCOLOR_NONE;
-    }
-
-    if (aOrigLineColor != SALCOLOR_NONE)
-    {
-        // need same -1 hack as X11SalGraphicsImpl::drawRect
-        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
-        m_aCairoCommon.m_aLineColor = aOrigLineColor;
-
-        drawPolyPolygon(
-            basegfx::B2DHomMatrix(),
-            basegfx::B2DPolyPolygon(aRect),
-            0.0);
-
-        m_aCairoCommon.m_aLineColor = SALCOLOR_NONE;
-    }
-
-    m_aCairoCommon.m_aFillColor = aOrigFillColor;
-    m_aCairoCommon.m_aLineColor = aOrigLineColor;
-}
-
 void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
 {
     basegfx::B2DPolygon aPoly;
@@ -918,7 +879,7 @@ void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
     for (sal_uInt32 i = 1; i < nPoints; ++i)
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
 
-    drawPolyPolygon(
+    GetImpl()->drawPolyPolygon(
         basegfx::B2DHomMatrix(),
         basegfx::B2DPolyPolygon(aPoly),
         0.0);
@@ -944,98 +905,10 @@ void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
         }
     }
 
-    drawPolyPolygon(
+    GetImpl()->drawPolyPolygon(
         basegfx::B2DHomMatrix(),
         aPolyPoly,
         0.0);
-}
-
-namespace {
-
-class SystemDependentData_CairoPath : public basegfx::SystemDependentData
-{
-private:
-    // the path data itself
-    cairo_path_t*       mpCairoPath;
-
-    // all other values the path data  is based on and
-    // need to be compared with to check for data validity
-    bool                mbNoJoin;
-    bool                mbAntiAlias;
-    std::vector< double >                       maStroke;
-
-public:
-    SystemDependentData_CairoPath(
-        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-        size_t nSizeMeasure,
-        cairo_t* cr,
-        bool bNoJoin,
-        bool bAntiAlias,
-        const std::vector< double >* pStroke); // MM01
-    virtual ~SystemDependentData_CairoPath() override;
-
-    // read access
-    cairo_path_t* getCairoPath() { return mpCairoPath; }
-    bool getNoJoin() const { return mbNoJoin; }
-    bool getAntiAlias() const { return mbAntiAlias; }
-    const std::vector< double >& getStroke() const { return maStroke; }
-
-    virtual sal_Int64 estimateUsageInBytes() const override;
-};
-
-}
-
-SystemDependentData_CairoPath::SystemDependentData_CairoPath(
-    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-    size_t nSizeMeasure,
-    cairo_t* cr,
-    bool bNoJoin,
-    bool bAntiAlias,
-    const std::vector< double >* pStroke)
-:   basegfx::SystemDependentData(rSystemDependentDataManager),
-    mpCairoPath(nullptr),
-    mbNoJoin(bNoJoin),
-    mbAntiAlias(bAntiAlias)
-{
-    // tdf#129845 only create a copy of the path when nSizeMeasure is
-    // bigger than some decent threshold
-    if(nSizeMeasure > 50)
-    {
-        mpCairoPath = cairo_copy_path(cr);
-
-        if(nullptr != pStroke)
-        {
-            maStroke = *pStroke;
-        }
-    }
-}
-
-SystemDependentData_CairoPath::~SystemDependentData_CairoPath()
-{
-    if(nullptr != mpCairoPath)
-    {
-        cairo_path_destroy(mpCairoPath);
-        mpCairoPath = nullptr;
-    }
-}
-
-sal_Int64 SystemDependentData_CairoPath::estimateUsageInBytes() const
-{
-    // tdf#129845 by using the default return value of zero when no path
-    // was created, SystemDependentData::calculateCombinedHoldCyclesInSeconds
-    // will do the right thing and not buffer this entry at all
-    sal_Int64 nRetval(0);
-
-    if(nullptr != mpCairoPath)
-    {
-        // per node
-        // - num_data incarnations of
-        // - sizeof(cairo_path_data_t) which is a union of defines and point data
-        //   thus may 2 x sizeof(double)
-        nRetval = mpCairoPath->num_data * sizeof(cairo_path_data_t);
-    }
-
-    return nRetval;
 }
 
 bool SvpSalGraphics::drawPolyLine(
@@ -1378,122 +1251,6 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
 {
     SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygonBezier case");
     return false;
-}
-
-namespace
-{
-    void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap)
-    {
-        // try to access buffered data
-        std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-            rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
-
-        if(pSystemDependentData_CairoPath)
-        {
-            // re-use data
-            cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
-        }
-        else
-        {
-            // create data
-            size_t nSizeMeasure(0);
-
-            for (const auto & rPoly : rPolyPolygon)
-            {
-                // PixelOffset used: Was dependent of 'm_aLineColor != SALCOLOR_NONE'
-                // Adapt setupPolyPolygon-users to set a linear transformation to achieve PixelOffset
-                nSizeMeasure += AddPolygonToPath(
-                    cr,
-                    rPoly,
-                    rObjectToDevice,
-                    bPixelSnap,
-                    false);
-            }
-
-            // copy and add to buffering mechanism
-            // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
-            pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-                ImplGetSystemDependentDataManager(),
-                nSizeMeasure,
-                cr,
-                false,
-                false,
-                nullptr);
-        }
-    }
-}
-
-bool SvpSalGraphics::drawPolyPolygon(
-    const basegfx::B2DHomMatrix& rObjectToDevice,
-    const basegfx::B2DPolyPolygon& rPolyPolygon,
-    double fTransparency)
-{
-    const bool bHasFill(m_aCairoCommon.m_aFillColor != SALCOLOR_NONE);
-    const bool bHasLine(m_aCairoCommon.m_aLineColor != SALCOLOR_NONE);
-
-    if(0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0 || fTransparency >= 1.0)
-    {
-        return true;
-    }
-
-    cairo_t* cr = m_aCairoCommon.getCairoContext(true, getAntiAlias());
-    clipRegion(cr);
-
-    // Set full (Object-to-Device) transformation - if used
-    if(!rObjectToDevice.isIdentity())
-    {
-        cairo_matrix_t aMatrix;
-
-        cairo_matrix_init(
-            &aMatrix,
-            rObjectToDevice.get( 0, 0 ),
-            rObjectToDevice.get( 1, 0 ),
-            rObjectToDevice.get( 0, 1 ),
-            rObjectToDevice.get( 1, 1 ),
-            rObjectToDevice.get( 0, 2 ),
-            rObjectToDevice.get( 1, 2 ));
-        cairo_set_matrix(cr, &aMatrix);
-    }
-
-    // To make releaseCairoContext work, use empty extents
-    basegfx::B2DRange extents;
-
-    if (bHasFill)
-    {
-        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
-
-        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aFillColor, fTransparency);
-        // Get FillDamage (will be extended for LineDamage below)
-        extents = getClippedFillDamage(cr);
-
-        cairo_fill(cr);
-    }
-
-    if (bHasLine)
-    {
-        // PixelOffset used: Set PixelOffset as linear transformation
-        cairo_matrix_t aMatrix;
-        cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
-        cairo_set_matrix(cr, &aMatrix);
-
-        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
-
-        m_aCairoCommon.applyColor(cr, m_aCairoCommon.m_aLineColor, fTransparency);
-
-        // expand with possible StrokeDamage
-        basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
-        extents.expand(stroke_extents);
-
-        cairo_stroke(cr);
-    }
-
-    // if transformation has been applied, transform also extents (ranges)
-    // of damage so they can be correctly redrawn
-    extents.transform(rObjectToDevice);
-    m_aCairoCommon.releaseCairoContext(cr, true, extents);
-
-    return true;
 }
 
 bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient)
