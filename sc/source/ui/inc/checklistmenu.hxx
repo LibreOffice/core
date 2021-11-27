@@ -294,6 +294,7 @@ private:
 
     bool mbHasDates;
     bool mbCanHaveSubMenu;
+    bool mbIsPoppedUp;
 
     struct SubMenuItemData
     {

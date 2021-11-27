@@ -396,12 +396,18 @@ void ScCheckListMenuControl::setSubMenuFocused(const ScListSubMenuControl* pSubM
 
 void ScCheckListMenuControl::EndPopupMode()
 {
+    if (!mbIsPoppedUp)
+        return;
+    mxPopover->connect_closed(Link<weld::Popover&, void>());
     mxPopover->popdown();
+    PopupModeEndHdl(*mxPopover);
+    assert(mbIsPoppedUp == false);
 }
 
 void ScCheckListMenuControl::StartPopupMode(weld::Widget* pParent, const tools::Rectangle& rRect)
 {
     mxPopover->connect_closed(LINK(this, ScCheckListMenuControl, PopupModeEndHdl));
+    mbIsPoppedUp = true;
     mxPopover->popup_at_rect(pParent, rRect);
     GrabFocus();
 }
@@ -461,6 +467,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent,
     , mpNotifier(pNotifier)
     , mbHasDates(bHasDates)
     , mbCanHaveSubMenu(bCanHaveSubMenu)
+    , mbIsPoppedUp(false)
     , maOpenTimer(this)
     , maCloseTimer(this)
 {
@@ -1400,8 +1407,8 @@ void ScCheckListMenuControl::setPopupEndAction(Action* p)
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PopupModeEndHdl, weld::Popover&, void)
 {
-    if (mxMenu)
-        clearSelectedMenuItem();
+    mbIsPoppedUp = false;
+    clearSelectedMenuItem();
     if (mxPopupEndAction)
         mxPopupEndAction->execute();
 
