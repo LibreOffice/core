@@ -409,7 +409,7 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
 
         aSequence.clear();
     }
-    else if ( (aConvertedName == ELEMENT_ENCRYPTIONMETHOD
+    else if ( (aConvertedName == ELEMENT_ENCRYPTEDKEY
                || aConvertedName == ELEMENT_ENCRYPTEDKEY13)
               && aStack.back().m_bValid ) {
         if ( !bIgnoreEncryptData )
