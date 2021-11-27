@@ -466,6 +466,7 @@ public:
                         return aCol[rPos.Col()].GetCellType( rPos.Row() );
                     }
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
+    ScRefCellValue GetCellValue( SCCOL nCol, sc::ColumnBlockPosition& rBlockPos, SCROW nRow );
     ScRefCellValue GetCellValue( SCCOL nCol, SCROW nRow ) const;
 
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
@@ -954,21 +955,7 @@ public:
 
     void Reorder( const sc::ReorderParam& rParam );
 
-    // Internal cache that can be repeatedly used for a sequence of related ValidQuery()
-    // calls (related meaning done in a loop for the same document and query data).
-    struct ValidQueryCache
-    {
-        std::unordered_map<FormulaError, svl::SharedString> mCachedSharedErrorStrings;
-        std::vector<double> mCachedSortedItemValues;
-        std::vector<const rtl_uString*> mCachedSortedItemStrings;
-        bool mCachedSortedItemValuesReady = false;
-        bool mCachedSortedItemStringsReady = false;
-    };
-    bool ValidQuery(
-        SCROW nRow, const ScQueryParam& rQueryParam, const ScRefCellValue* pCell = nullptr,
-        bool* pbTestEqualCondition = nullptr, const ScInterpreterContext* pContext = nullptr,
-        sc::TableColumnBlockPositionSet* pBlockPos = nullptr,
-        ValidQueryCache* pQueryCache = nullptr );
+    // For ValidQuery() see ScQueryEvalutor class.
     void        TopTenQuery( ScQueryParam& );
     void        PrepareQuery( ScQueryParam& rQueryParam );
     SCSIZE      Query(const ScQueryParam& rQueryParam, bool bKeepSub);
