@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COMPHELPER_INTERFACECONTAINER3_H
-#define INCLUDED_COMPHELPER_INTERFACECONTAINER3_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -323,6 +322,5 @@ void OInterfaceContainerHelper4<ListenerT>::disposeAndClear(std::unique_lock<std
 
 template <class ListenerT> void OInterfaceContainerHelper4<ListenerT>::clear() { maData->clear(); }
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
