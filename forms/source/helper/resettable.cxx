@@ -48,12 +48,12 @@ namespace frm
 
     bool ResetHelper::approveReset()
     {
-        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aResetListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aResetListeners );
         EventObject aResetEvent( m_rParent );
 
         bool bContinue = true;
         while ( aIter.hasMoreElements() && bContinue )
-            bContinue = static_cast< XResetListener* >( aIter.next() )->approveReset( aResetEvent );
+            bContinue = aIter.next()->approveReset( aResetEvent );
 
         return bContinue;
     }

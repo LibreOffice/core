@@ -21,7 +21,7 @@
 
 #include <com/sun/star/form/XResetListener.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 namespace cppu
 {
@@ -52,7 +52,7 @@ namespace frm
 
     private:
         ::cppu::OWeakObject&                m_rParent;
-        ::comphelper::OInterfaceContainerHelper2  m_aResetListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::form::XResetListener>  m_aResetListeners;
     };
 
 

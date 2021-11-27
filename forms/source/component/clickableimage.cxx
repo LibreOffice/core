@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/ActionEvent.hpp>
-#include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/util/VetoException.hpp>
@@ -174,11 +173,11 @@ namespace frm
         bool bCancelled = false;
         EventObject aEvent( static_cast< XWeak* >( this ) );
 
-        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aApproveActionListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aApproveActionListeners );
         while( !bCancelled && aIter.hasMoreElements() )
         {
             // Every approveAction method must be thread-safe!
-            if( !static_cast< XApproveActionListener* >( aIter.next() )->approveAction( aEvent ) )
+            if( !aIter.next()->approveAction( aEvent ) )
                 bCancelled = true;
         }
 

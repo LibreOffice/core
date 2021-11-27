@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <connectivity/FValue.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -245,8 +246,8 @@ class OListBoxControl   :public OBoundControl
                         ,public IEventProcessor
 {
 private:
-    ::comphelper::OInterfaceContainerHelper2       m_aChangeListeners;
-    ::comphelper::OInterfaceContainerHelper2       m_aItemListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XChangeListener> m_aChangeListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XItemListener> m_aItemListeners;
 
     css::uno::Any                           m_aCurrentSelection;
     Idle                                    m_aChangeIdle;

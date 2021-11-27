@@ -29,6 +29,7 @@
 #include <com/sun/star/sdb/XRowSetChangeBroadcaster.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase7.hxx>
 
 
@@ -54,9 +55,9 @@ class OGridControlModel final :public OControlModel
                         ,public FontControlModel
                         ,public OGridControlModel_BASE
 {
-    ::comphelper::OInterfaceContainerHelper2       m_aSelectListeners,
-                                            m_aResetListeners,
-                                            m_aRowSetChangeListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener> m_aSelectListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XResetListener> m_aResetListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::sdb::XRowSetChangeListener> m_aRowSetChangeListeners;
 
 // [properties]
     css::uno::Any                    m_aRowHeight; // Row height

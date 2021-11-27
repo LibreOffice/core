@@ -23,6 +23,7 @@
 #include "EditBase.hxx"
 
 #include <tools/link.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase3.hxx>
 
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
@@ -126,7 +127,7 @@ typedef ::cppu::ImplHelper3<    css::awt::XFocusListener,
 class OEditControl : public OBoundControl
                       ,public OEditControl_BASE
 {
-    ::comphelper::OInterfaceContainerHelper2
+    ::comphelper::OInterfaceContainerHelper3<css::form::XChangeListener>
                         m_aChangeListeners;
 
     OUString         m_aHtmlChangeValue;

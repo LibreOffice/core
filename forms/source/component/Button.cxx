@@ -460,7 +460,7 @@ IMPL_LINK_NOARG(OButtonControl, OnClick, void*, void)
         if (FormButtonType_PUSH == *o3tl::doAccess<FormButtonType>(xSet->getPropertyValue(PROPERTY_BUTTONTYPE)))
         {
             // notify the action listeners for a push button
-            ::comphelper::OInterfaceIteratorHelper2 aIter(m_aActionListeners);
+            ::comphelper::OInterfaceIteratorHelper3 aIter(m_aActionListeners);
             ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
             while(aIter.hasMoreElements() )
             {
@@ -469,7 +469,7 @@ IMPL_LINK_NOARG(OButtonControl, OnClick, void*, void)
                 // to get notified
                 try
                 {
-                    static_cast< XActionListener* >( aIter.next() )->actionPerformed(aEvt);
+                    aIter.next()->actionPerformed(aEvt);
                 }
 #ifdef DBG_UTIL
                 catch( const RuntimeException& )

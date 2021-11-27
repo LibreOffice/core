@@ -21,7 +21,7 @@
 #include <FormComponent.hxx>
 #include <formcontrolfont.hxx>
 #include "richtextunowrapper.hxx"
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
@@ -101,7 +101,7 @@ namespace frm
                                     m_pEngine;
         bool                        m_bSettingEngineText;
 
-        ::comphelper::OInterfaceContainerHelper2
+        ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>
                                     m_aModifyListeners;
 
     public:

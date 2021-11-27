@@ -24,7 +24,7 @@
 #include <com/sun/star/form/binding/XListEntryListener.hpp>
 
 #include <cppuhelper/implbase3.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 
 namespace frm
@@ -53,7 +53,7 @@ namespace frm
                         m_aStringItems;     /// "overridden" StringItemList property value
         css::uno::Sequence< css::uno::Any >
                         m_aTypedItems;      /// "overridden" TypedItemList property value
-        ::comphelper::OInterfaceContainerHelper2
+        ::comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener>
                         m_aRefreshListeners;
 
 

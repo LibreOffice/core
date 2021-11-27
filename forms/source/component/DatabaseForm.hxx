@@ -63,6 +63,7 @@
 #include <connectivity/warningscontainer.hxx>
 
 #include <listenercontainers.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase12.hxx>
@@ -149,10 +150,10 @@ class ODatabaseForm :public OFormComponents
     friend class OFormSubmitResetThread;
 
     // listener administration
-    ::comphelper::OInterfaceContainerHelper2   m_aLoadListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aRowSetApproveListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aSubmitListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aErrorListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XLoadListener>   m_aLoadListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::sdb::XRowSetApproveListener>   m_aRowSetApproveListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XSubmitListener>   m_aSubmitListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::sdb::XSQLErrorListener>   m_aErrorListeners;
     ResetListeners                      m_aResetListeners;
     ::osl::Mutex                        m_aResetSafety;
     css::uno::Any                       m_aCycle;

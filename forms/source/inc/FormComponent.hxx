@@ -49,6 +49,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
@@ -536,8 +537,10 @@ private:
     bool                                m_bValuePropertyMayBeVoid;
 
     ResetHelper                         m_aResetHelper;
-    ::comphelper::OInterfaceContainerHelper2   m_aUpdateListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aFormComponentListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XUpdateListener>
+                                        m_aUpdateListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::validation::XFormComponentValidityListener>
+                                        m_aFormComponentListeners;
 
     css::uno::Reference< css::form::binding::XValueBinding >
                                         m_xExternalBinding;
