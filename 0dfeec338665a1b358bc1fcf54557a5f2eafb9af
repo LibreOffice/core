@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b31004e_d293f416",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-11-27T18:01:07Z",
+      "side": 1,
+      "message": "I\u0027d like to chime in as a translator -- the added burden for a few repeated strings like this (exactly how many are we talking here?) is not new to translators and we are used to it.\n\nGenerally speaking LibO l10n takes a \"default to duplicated strings\" approach as most strings have a unique gettext context (\"msgctxt\") and the developers need to take extra effort to reuse a single string in different places.  Also AFAIK it\u0027s not possible to reuse a string defined by .ui file in C++ code, or vice versa.\n\nThere are already dozens of \"Style\", \"Size\", and \"Width\" to translate individually.  So a couple more (again, assuming this change doesn\u0027t introduce more than a dozen) strings a month before string freeze isn\u0027t a big deal in my opinion.",
+      "parentUuid": "414eda92_6e699b96",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
