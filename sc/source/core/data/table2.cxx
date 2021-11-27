@@ -1935,6 +1935,14 @@ ScRefCellValue ScTable::GetCellValue( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].GetCellValue(nRow);
 }
 
+ScRefCellValue ScTable::GetCellValue( SCCOL nCol, sc::ColumnBlockPosition& rBlockPos, SCROW nRow )
+{
+    if (!ValidColRow(nCol, nRow) || nCol >= GetAllocatedColumnsCount())
+        return ScRefCellValue();
+
+    return aCol[nCol].GetCellValue(rBlockPos, nRow);
+}
+
 void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
 {
     rCol = 0;

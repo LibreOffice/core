@@ -19,16 +19,12 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/colritem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <stdlib.h>
-#include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <sal/log.hxx>
@@ -45,7 +41,6 @@
 #include <stlpool.hxx>
 #include <patattr.hxx>
 #include <subtotal.hxx>
-#include <docoptio.hxx>
 #include <markdata.hxx>
 #include <rangelst.hxx>
 #include <userlist.hxx>
@@ -69,7 +64,7 @@
 #include <reordermap.hxx>
 #include <drwlayer.hxx>
 #include <conditio.hxx>
-#include <colorscale.hxx>
+#include <queryevaluator.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -2317,6 +2312,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     return bSpaceLeft;
 }
 
+<<<<<<< HEAD   (c9d107 Check pointer to prevent crash)
 namespace {
 
 class QueryEvaluator
@@ -3257,6 +3253,8 @@ bool ScTable::ValidQuery(
     return bRet;
 }
 
+=======
+>>>>>>> CHANGE (9e0d47 move entire ScTable::ValidQuery() into (Sc)QueryEvaluator)
 void ScTable::TopTenQuery( ScQueryParam& rParam )
 {
     bool bSortCollatorInitialized = false;
@@ -3530,13 +3528,13 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
     }
 
     sc::TableColumnBlockPositionSet blockPos( GetDoc(), nTab ); // cache mdds access
-    ValidQueryCache validQueryCache;
+    ScQueryEvaluator queryEvaluator(GetDoc(), *this, aParam);
 
     SCROW nRealRow2 = aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
     {
         bool bResult;                                   // Filter result
-        bool bValid = ValidQuery(j, aParam, nullptr, nullptr, nullptr, &blockPos, &validQueryCache);
+        bool bValid = queryEvaluator.ValidQuery(j, nullptr, &blockPos);
         if (!bValid && bKeepSub)                        // Keep subtotals
         {
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
@@ -3929,9 +3927,10 @@ void ScTable::GetFilteredFilterEntries(
     aParam.RemoveEntryByField(nCol);
 
     lcl_PrepareQuery(&rDocument, this, aParam, true);
+    ScQueryEvaluator queryEvaluator(GetDoc(), *this, aParam);
     for ( SCROW j = nRow1; j <= nRow2; ++j )
     {
-        if (ValidQuery(j, aParam))
+        if (queryEvaluator.ValidQuery(j))
         {
             aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering);
         }
