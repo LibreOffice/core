@@ -34,7 +34,6 @@
 #include <strings.hrc>
 
 #include <filtdlg.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
