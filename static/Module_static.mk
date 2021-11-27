@@ -18,7 +18,6 @@ $(eval $(call gb_Module_add_targets,static,\
 ifeq (EMSCRIPTEN,$(OS))
 $(eval $(call gb_Module_add_targets,static,\
     CustomTarget_wasm_fs_image \
-    Package_wasm_fs_image \
 ))
 endif
 
