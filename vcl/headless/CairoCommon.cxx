@@ -20,8 +20,8 @@
 #include <headless/CairoCommon.hxx>
 #include <dlfcn.h>
 #include <vcl/BitmapTools.hxx>
+#include <svdata.hxx>
 #include <basegfx/utils/canvastools.hxx>
-
 void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale, double y_scale)
 {
 #ifdef ANDROID
@@ -296,6 +296,87 @@ basegfx::B2DPoint impPixelSnap(const basegfx::B2DPolygon& rPolygon,
     }
 
     return rPolygon.getB2DPoint(nIndex);
+}
+
+SystemDependentData_CairoPath::SystemDependentData_CairoPath(
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager, size_t nSizeMeasure,
+    cairo_t* cr, bool bNoJoin, bool bAntiAlias, const std::vector<double>* pStroke)
+    : basegfx::SystemDependentData(rSystemDependentDataManager)
+    , mpCairoPath(nullptr)
+    , mbNoJoin(bNoJoin)
+    , mbAntiAlias(bAntiAlias)
+{
+    // tdf#129845 only create a copy of the path when nSizeMeasure is
+    // bigger than some decent threshold
+    if (nSizeMeasure > 50)
+    {
+        mpCairoPath = cairo_copy_path(cr);
+
+        if (nullptr != pStroke)
+        {
+            maStroke = *pStroke;
+        }
+    }
+}
+
+SystemDependentData_CairoPath::~SystemDependentData_CairoPath()
+{
+    if (nullptr != mpCairoPath)
+    {
+        cairo_path_destroy(mpCairoPath);
+        mpCairoPath = nullptr;
+    }
+}
+
+sal_Int64 SystemDependentData_CairoPath::estimateUsageInBytes() const
+{
+    // tdf#129845 by using the default return value of zero when no path
+    // was created, SystemDependentData::calculateCombinedHoldCyclesInSeconds
+    // will do the right thing and not buffer this entry at all
+    sal_Int64 nRetval(0);
+
+    if (nullptr != mpCairoPath)
+    {
+        // per node
+        // - num_data incarnations of
+        // - sizeof(cairo_path_data_t) which is a union of defines and point data
+        //   thus may 2 x sizeof(double)
+        nRetval = mpCairoPath->num_data * sizeof(cairo_path_data_t);
+    }
+
+    return nRetval;
+}
+
+void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon,
+                      const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap)
+{
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+        rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
+
+    if (pSystemDependentData_CairoPath)
+    {
+        // re-use data
+        cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
+    }
+    else
+    {
+        // create data
+        size_t nSizeMeasure(0);
+
+        for (const auto& rPoly : rPolyPolygon)
+        {
+            // PixelOffset used: Was dependent of 'm_aLineColor != SALCOLOR_NONE'
+            // Adapt setupPolyPolygon-users to set a linear transformation to achieve PixelOffset
+            nSizeMeasure += AddPolygonToPath(cr, rPoly, rObjectToDevice, bPixelSnap, false);
+        }
+
+        // copy and add to buffering mechanism
+        // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
+        pSystemDependentData_CairoPath
+            = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+                ImplGetSystemDependentDataManager(), nSizeMeasure, cr, false, false, nullptr);
+    }
 }
 
 cairo_user_data_key_t* CairoCommon::getDamageKey()

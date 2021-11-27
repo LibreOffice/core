@@ -137,13 +137,6 @@ public:
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 
-    virtual void            drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-
-    virtual bool            drawPolyPolygon(
-                                const basegfx::B2DHomMatrix& rObjectToDevice,
-                                const basegfx::B2DPolyPolygon&,
-                                double fTransparency ) override;
-
     virtual bool            drawPolyLine(
                                 const basegfx::B2DHomMatrix& rObjectToDevice,
                                 const basegfx::B2DPolygon&,
