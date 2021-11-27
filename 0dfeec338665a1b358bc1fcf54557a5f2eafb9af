@@ -89,6 +89,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6382350d_9aa966c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-27T18:13:33Z",
+      "side": 1,
+      "message": "There\u0027s still the pb of strings present in both modules SVX and CUI like RID_SVXSTR_TABLE_PRESET_NONE.\nIt seems we\u0027re stuck here except if we duplicate strings (IMHO ugly solution).\n\u003d\u003e uncc myself",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
