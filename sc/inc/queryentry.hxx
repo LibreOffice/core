@@ -30,7 +30,7 @@
 /**
  * Each instance of this struct represents a single filtering criteria.
  */
-struct SC_DLLPUBLIC ScQueryEntry
+struct SC_DLLPUBLIC ScQueryEntry final
 {
     enum QueryType
     {

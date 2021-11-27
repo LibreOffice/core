@@ -38,17 +38,17 @@ class FindByField
     SCCOLROW mnField;
 public:
     explicit FindByField(SCCOLROW nField) : mnField(nField) {}
-    bool operator() (const std::unique_ptr<ScQueryEntry>& rpEntry) const
+    bool operator() (const ScQueryEntry& rpEntry) const
     {
-        return rpEntry->bDoQuery && rpEntry->nField == mnField;
+        return rpEntry.bDoQuery && rpEntry.nField == mnField;
     }
 };
 
 struct FindUnused
 {
-    bool operator() (const std::unique_ptr<ScQueryEntry>& rpEntry) const
+    bool operator() (const ScQueryEntry& rpEntry) const
     {
-        return !rpEntry->bDoQuery;
+        return !rpEntry.bDoQuery;
     }
 };
 
@@ -73,18 +73,14 @@ ScQueryParamBase::ScQueryParamBase() :
     bDuplicate(false),
     mbRangeLookup(false)
 {
-    for (size_t i = 0; i < MAXQUERY; ++i)
-        m_Entries.push_back(std::make_unique<ScQueryEntry>());
+    m_Entries.resize(MAXQUERY);
 }
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
     eSearchType(r.eSearchType), bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace),
-    bCaseSens(r.bCaseSens), bDuplicate(r.bDuplicate), mbRangeLookup(r.mbRangeLookup)
+    bCaseSens(r.bCaseSens), bDuplicate(r.bDuplicate), mbRangeLookup(r.mbRangeLookup),
+    m_Entries(r.m_Entries)
 {
-    for (auto const& it : r.m_Entries)
-    {
-        m_Entries.push_back(std::make_unique<ScQueryEntry>(*it));
-    }
 }
 
 ScQueryParamBase& ScQueryParamBase::operator=(const ScQueryParamBase& r)
@@ -98,12 +94,7 @@ ScQueryParamBase& ScQueryParamBase::operator=(const ScQueryParamBase& r)
         bCaseSens = r.bCaseSens;
         bDuplicate = r.bDuplicate;
         mbRangeLookup = r.mbRangeLookup;
-
-        m_Entries.clear();
-        for (auto const& it : r.m_Entries)
-        {
-            m_Entries.push_back(std::make_unique<ScQueryEntry>(*it));
-        }
+        m_Entries = r.m_Entries;
     }
     return *this;
 }
@@ -124,12 +115,12 @@ SCSIZE ScQueryParamBase::GetEntryCount() const
 
 const ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n) const
 {
-    return *m_Entries[n];
+    return m_Entries[n];
 }
 
 ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
 {
-    return *m_Entries[n];
+    return m_Entries[n];
 }
 
 ScQueryEntry& ScQueryParamBase::AppendEntry()
@@ -140,11 +131,11 @@ ScQueryEntry& ScQueryParamBase::AppendEntry()
 
     if (itr != m_Entries.end())
         // Found!
-        return **itr;
+        return *itr;
 
     // Add a new entry to the end.
-    m_Entries.push_back(std::make_unique<ScQueryEntry>());
-    return *m_Entries.back();
+    m_Entries.push_back(ScQueryEntry());
+    return m_Entries.back();
 }
 
 ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
@@ -155,7 +146,7 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
     if (itr != m_Entries.end())
     {
         // existing entry found!
-        return (*itr).get();
+        return &*itr;
     }
 
     if (!bNew)
@@ -171,9 +162,9 @@ std::vector<ScQueryEntry*> ScQueryParamBase::FindAllEntriesByField(SCCOLROW nFie
 
     auto fFind = FindByField(nField);
 
-    for (const auto& rxEntry : m_Entries)
+    for (auto& rxEntry : m_Entries)
         if (fFind(rxEntry))
-            aEntries.push_back(rxEntry.get());
+            aEntries.push_back(&rxEntry);
 
     return aEntries;
 }
@@ -190,7 +181,7 @@ bool ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
         if (m_Entries.size() < MAXQUERY)
             // Make sure that we have at least MAXQUERY number of entries at
             // all times.
-            m_Entries.push_back(std::make_unique<ScQueryEntry>());
+            m_Entries.resize(MAXQUERY);
         bRet = true;
     }
 
@@ -207,18 +198,7 @@ void ScQueryParamBase::Resize(size_t nNew)
     if (nNew < MAXQUERY)
         nNew = MAXQUERY;                // never less than MAXQUERY
 
-    if (nNew < m_Entries.size())
-    {
-        size_t n = m_Entries.size() - nNew;
-        for (size_t i = 0; i < n; ++i)
-            m_Entries.pop_back();
-    }
-    else if (nNew > m_Entries.size())
-    {
-        size_t n = nNew - m_Entries.size();
-        for (size_t i = 0; i < n; ++i)
-            m_Entries.push_back(std::make_unique<ScQueryEntry>());
-    }
+    m_Entries.resize(nNew);
 }
 
 void ScQueryParamBase::FillInExcelSyntax(
@@ -340,7 +320,7 @@ void ScQueryParam::Clear()
 
     for (auto & itr : m_Entries)
     {
-        itr->Clear();
+        itr.Clear();
     }
 
     ClearDestParams();
@@ -366,8 +346,8 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
     SCSIZE nEntryCount = GetEntryCount();
     SCSIZE nOtherEntryCount = rOther.GetEntryCount();
 
-    while (nUsed<nEntryCount && m_Entries[nUsed]->bDoQuery) ++nUsed;
-    while (nOtherUsed<nOtherEntryCount && rOther.m_Entries[nOtherUsed]->bDoQuery)
+    while (nUsed<nEntryCount && m_Entries[nUsed].bDoQuery) ++nUsed;
+    while (nOtherUsed<nOtherEntryCount && rOther.m_Entries[nOtherUsed].bDoQuery)
         ++nOtherUsed;
 
     if (   (nUsed       == nOtherUsed)
@@ -389,7 +369,7 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
     {
         bEqual = true;
         for ( SCSIZE i=0; i<nUsed && bEqual; i++ )
-            bEqual = *m_Entries[i] == *rOther.m_Entries[i];
+            bEqual = m_Entries[i] == rOther.m_Entries[i];
     }
     return bEqual;
 }
@@ -409,7 +389,7 @@ void ScQueryParam::MoveToDest()
         nTab  = sal::static_int_cast<SCTAB>( nTab  + nDifZ );
         size_t n = m_Entries.size();
         for (size_t i=0; i<n; i++)
-            m_Entries[i]->nField += nDifX;
+            m_Entries[i].nField += nDifX;
 
         bInplace = true;
     }
