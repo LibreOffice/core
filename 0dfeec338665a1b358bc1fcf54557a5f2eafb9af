@@ -141,6 +141,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9807398b_3ecaeee9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-11-27T19:59:54Z",
+      "side": 1,
+      "message": "\u003e the change considered above would change the msgctxt of 297 entries\n\nUgh.\n\nThanks for the answer.  Then we probably shouldn\u0027t do such a change without giving a heads-up on l10n mailing list first.  I do almost all my translations through Weblate\u0027s web interface, and my estimate is that 297 entries would take me 30 to 60 minutes with a great Internet connection (meaning checking past translations of the same string is instantaneous, which it usually isn\u0027t from China here).\n\nFor 297 entries I\u0027ll probably just switch to downloading and uploading .po file and use gettext locally.  But I suspect most translators don\u0027t know how to do that.",
+      "parentUuid": "e87a208c_b417784d",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
