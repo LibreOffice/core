@@ -109,9 +109,9 @@ namespace frm
     void ORichTextFeatureDispatcher::invalidateFeatureState_Broadcast()
     {
         FeatureStateEvent aEvent( buildStatusEvent() );
-        ::comphelper::OInterfaceIteratorHelper2 aIter( getStatusListeners() );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( getStatusListeners() );
         while ( aIter.hasMoreElements() )
-            doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
+            doNotify( aIter.next(), aEvent );
     }
 
 

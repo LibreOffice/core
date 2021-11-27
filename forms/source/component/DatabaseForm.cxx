@@ -2116,12 +2116,12 @@ static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLT
 void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::awt::MouseEvent& MouseEvt)
 {
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aSubmitListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aSubmitListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
     bool bCanceled = false;
     while (aIter.hasMoreElements() && !bCanceled)
     {
-        if (!static_cast<XSubmitListener*>(aIter.next())->approveSubmit(aEvt))
+        if (!aIter.next()->approveSubmit(aEvt))
             bCanceled = true;
     }
 
@@ -2924,11 +2924,11 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
         // the approval is done by the aggregate
         if (!m_aRowSetApproveListeners.getLength())
         {
-            ::comphelper::OInterfaceIteratorHelper2 aIter(m_aLoadListeners);
+            ::comphelper::OInterfaceIteratorHelper3 aIter(m_aLoadListeners);
             aGuard.clear();
 
             while (aIter.hasMoreElements())
-                static_cast<XLoadListener*>(aIter.next())->reloading(aEvent);
+                aIter.next()->reloading(aEvent);
 
             aGuard.reset();
         }
@@ -2947,10 +2947,10 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
 
     if (bSuccess)
     {
-        ::comphelper::OInterfaceIteratorHelper2 aIter(m_aLoadListeners);
+        ::comphelper::OInterfaceIteratorHelper3 aIter(m_aLoadListeners);
         aGuard.clear();
         while (aIter.hasMoreElements())
-            static_cast<XLoadListener*>(aIter.next())->reloaded(aEvent);
+            aIter.next()->reloaded(aEvent);
 
         // if we are on the insert row, we have to reset all controls
         // to set the default values
@@ -3027,14 +3027,11 @@ void SAL_CALL ODatabaseForm::rowSetChanged(const EventObject& /*event*/)
 bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, const bool _bAllowSQLException,
     ::osl::ClearableMutexGuard& _rGuard )
 {
-    ::comphelper::OInterfaceIteratorHelper2 aIter( m_aRowSetApproveListeners );
+    ::comphelper::OInterfaceIteratorHelper3 aIter( m_aRowSetApproveListeners );
     _rGuard.clear();
     while ( aIter.hasMoreElements() )
     {
-        Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );
-        if ( !xListener.is() )
-            continue;
-
+        Reference< XRowSetApproveListener > xListener( aIter.next() );
         try
         {
             if ( !xListener->approveRowSetChange( _rEvent ) )
@@ -3072,13 +3069,10 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event)
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
         // So we have to multiplex this approve request.
-        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aRowSetApproveListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aRowSetApproveListeners );
         while ( aIter.hasMoreElements() )
         {
-            Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );
-            if ( !xListener.is() )
-                continue;
-
+            Reference< XRowSetApproveListener > xListener( aIter.next() );
             try
             {
                 if ( !xListener->approveCursorMove( event ) )
@@ -3121,13 +3115,10 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event)
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
         // So we have to multiplex this approve request.
-        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aRowSetApproveListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aRowSetApproveListeners );
         while ( aIter.hasMoreElements() )
         {
-            Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );
-            if ( !xListener.is() )
-                continue;
-
+            Reference< XRowSetApproveListener > xListener( aIter.next() );
             try
             {
                 if ( !xListener->approveRowChange( event ) )

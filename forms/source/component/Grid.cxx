@@ -340,11 +340,11 @@ css::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes()
 // XReset
 void SAL_CALL OGridControlModel::reset()
 {
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aResetListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
     bool bContinue = true;
     while (aIter.hasMoreElements() && bContinue)
-        bContinue = static_cast<XResetListener*>(aIter.next())->approveReset(aEvt);
+        bContinue = aIter.next()->approveReset(aEvt);
     if (bContinue)
     {
         _reset();

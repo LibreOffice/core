@@ -103,9 +103,9 @@ namespace frm
         OSL_ENSURE( _nAttributeId == m_nAttributeId, "OAttributeDispatcher::onAttributeStateChanged: wrong attribute!" );
 
         FeatureStateEvent aEvent( buildStatusEvent() );
-        ::comphelper::OInterfaceIteratorHelper2 aIter( getStatusListeners() );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( getStatusListeners() );
         while ( aIter.hasMoreElements() )
-            doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
+            doNotify( aIter.next(), aEvent );
     }
 
 

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -38,7 +38,7 @@ namespace frm
     {
     private:
         css::util::URL                      m_aFeatureURL;
-        ::comphelper::OInterfaceContainerHelper2  m_aStatusListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener> m_aStatusListeners;
         EditView*                           m_pEditView;
         bool                                m_bDisposed;
 
@@ -48,7 +48,7 @@ namespace frm
 
     protected:
         const css::util::URL&       getFeatureURL() const { return m_aFeatureURL; }
-        ::comphelper::OInterfaceContainerHelper2& getStatusListeners() { return m_aStatusListeners; }
+        ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>& getStatusListeners() { return m_aStatusListeners; }
         bool                               isDisposed() const { return m_bDisposed; }
         void                               checkDisposed() const { if ( isDisposed() ) throw css::lang::DisposedException(); }
 

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <FormComponent.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 
 namespace frm
@@ -29,7 +30,7 @@ class OFileControlModel
                 :public OControlModel
                 ,public css::form::XReset
 {
-    ::comphelper::OInterfaceContainerHelper2       m_aResetListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XResetListener> m_aResetListeners;
     OUString                         m_sDefaultValue;
 
 protected:

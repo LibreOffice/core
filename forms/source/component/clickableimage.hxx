@@ -24,7 +24,9 @@
 #include "EventThread.hxx"
 #include "imgprod.hxx"
 #include <tools/link.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propmultiplex.hxx>
+#include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/XApproveActionListener.hpp>
@@ -186,13 +188,14 @@ namespace frm
 
     private:
         rtl::Reference<OImageProducerThread_Impl>  m_pThread;
-        ::comphelper::OInterfaceContainerHelper2   m_aSubmissionVetoListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::form::submission::XSubmissionVetoListener>
+                                                   m_aSubmissionVetoListeners;
         ::std::unique_ptr< ControlFeatureInterception >
                                                    m_pFeatureInterception;
 
     protected:
-        ::comphelper::OInterfaceContainerHelper2 m_aApproveActionListeners;
-        ::comphelper::OInterfaceContainerHelper2 m_aActionListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::form::XApproveActionListener> m_aApproveActionListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::awt::XActionListener> m_aActionListeners;
         OUString m_aActionCommand;
 
         // XSubmission

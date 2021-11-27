@@ -1854,14 +1854,14 @@ sal_Bool SAL_CALL OBoundControlModel::commit()
         // we reach this only if we're not working with an external binding
     if ( !hasField() )
         return true;
-    ::comphelper::OInterfaceIteratorHelper2 aIter( m_aUpdateListeners );
+    ::comphelper::OInterfaceIteratorHelper3 aIter( m_aUpdateListeners );
     EventObject aEvent;
     aEvent.Source = static_cast< XWeak* >( this );
     bool bSuccess = true;
     aLock.release();
     // UNSAFE >
     while (aIter.hasMoreElements() && bSuccess)
-        bSuccess = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvent );
+        bSuccess = aIter.next()->approveUpdate( aEvent );
     // < UNSAFE
     aLock.acquire();
     if ( bSuccess )

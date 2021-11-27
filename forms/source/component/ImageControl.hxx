@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ref.hxx>
 
@@ -145,7 +146,7 @@ class OImageControlControl  : public OBoundControl
                             , public OImageControlControl_Base
 {
 private:
-    ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;

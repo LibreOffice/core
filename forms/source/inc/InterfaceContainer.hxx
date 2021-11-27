@@ -34,7 +34,7 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <osl/mutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase8.hxx>
@@ -89,7 +89,7 @@ protected:
 
     OInterfaceArray                         m_aItems;
     OInterfaceMap                           m_aMap;
-    ::comphelper::OInterfaceContainerHelper2      m_aContainerListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
 
     const css::uno::Type                    m_aElementType;
 
