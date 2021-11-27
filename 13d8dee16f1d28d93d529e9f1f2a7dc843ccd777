@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e15f769c_3aee8063",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-27T07:12:05Z",
+      "side": 1,
+      "message": "Thanks for taking this. Nice work.",
+      "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9ceb10e6_d59c7d0e",
         "filename": "cui/uiconfig/ui/qrcodegen.ui",
         "patchSetId": 1
@@ -19,6 +36,52 @@
         "startChar": 98,
         "endLine": 118,
         "endChar": 115
+      },
+      "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14f0e7a9_4f976e3d",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-27T07:12:05Z",
+      "side": 1,
+      "message": "How about using \"bar\" here instead of \"1D\"?",
+      "range": {
+        "startLine": 384,
+        "startChar": 118,
+        "endLine": 384,
+        "endChar": 120
+      },
+      "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54dee523_259daf6a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 7214,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-11-27T07:12:05Z",
+      "side": 1,
+      "message": "The command refers to a particular item that is being edited so any \"or\" sounds a bit awkward here and I\u0027d go with this term. And not \"Edit QR or Barcode\" as you discuss on BZ.",
+      "range": {
+        "startLine": 7214,
+        "startChar": 40,
+        "endLine": 7214,
+        "endChar": 47
       },
       "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
