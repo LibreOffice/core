@@ -124,7 +124,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
     setSelectedMenuItem(nSelectedMenu, true);
 }
 
-void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
+void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction, bool bIndicateSubMenu)
 {
     MenuItemData aItem;
     aItem.mbEnabled = true;
@@ -134,7 +134,12 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
     mxMenu->show();
     mxMenu->append_text(rText);
     if (mbCanHaveSubMenu)
-        mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
+    {
+        if (bIndicateSubMenu)
+            mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
+        else
+            mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
+    }
 }
 
 void ScCheckListMenuControl::addSeparator()

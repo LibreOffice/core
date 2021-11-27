@@ -602,7 +602,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         pNotifier = SfxViewShell::Current();
 
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), mrViewData.GetPPTX());
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, false,
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, true,
                                                                   aFilterEntries.mbHasDates, nColWidth,
                                                                   nullptr, pNotifier));
     ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
@@ -746,9 +746,9 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
     rControl.addSeparator();
     rControl.addMenuItem(
-        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor));
+        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor), true);
     rControl.addMenuItem(
-        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor));
+        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor), true);
     rControl.addSeparator();
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
