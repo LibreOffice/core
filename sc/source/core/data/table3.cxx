@@ -3185,9 +3185,9 @@ bool ScTable::ValidQuery(
     tools::Long    nPos = -1;
     QueryEvaluator aEval(rDocument, *this, rParam, pbTestEqualCondition != nullptr, pValidQueryCache);
     ScQueryParam::const_iterator it, itBeg = rParam.begin(), itEnd = rParam.end();
-    for (it = itBeg; it != itEnd && (*it)->bDoQuery; ++it)
+    for (it = itBeg; it != itEnd && it->bDoQuery; ++it)
     {
-        const ScQueryEntry& rEntry = **it;
+        const ScQueryEntry& rEntry = *it;
 
         // Short-circuit the test at the end of the loop - if this is SC_AND
         // and the previous value is false, this value will not be needed.
