@@ -399,6 +399,12 @@ public:
     const OUString& get_id() const { return maID; }
 };
 
+struct MenuBarButtonCallbackArg
+{
+    sal_uInt16 nId;    // Id of the button
+    bool bHighlight;   // highlight on/off
+};
+
 class VCL_DLLPUBLIC MenuBar final : public Menu
 {
     Link<void*,void> maCloseHdl;
@@ -456,19 +462,14 @@ public:
     void SetDisplayable( bool bDisplayable );
     bool IsDisplayable() const                       { return mbDisplayable; }
 
-    struct MenuBarButtonCallbackArg
-    {
-        sal_uInt16 nId;    // Id of the button
-        bool bHighlight;   // highlight on/off
-    };
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
-    sal_uInt16 AddMenuBarButton( const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString& );
+    sal_uInt16 AddMenuBarButton( const Image&, const Link<MenuBarButtonCallbackArg&,bool>&, const OUString& );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
-    void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& );
+    void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBarButtonCallbackArg&,bool>& );
     // returns the rectangle occupied by the additional button named nId
     // coordinates are relative to the systemwindow the menubar is attached to
     // if the menubar is unattached an empty rectangle is returned

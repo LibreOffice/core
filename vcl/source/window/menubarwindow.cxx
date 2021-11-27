@@ -229,7 +229,7 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
         std::map<sal_uInt16,AddButtonEntry>::iterator it = m_aAddButtons.find(sal_uInt16(m_aCloseBtn->GetCurItemId()));
         if( it != m_aAddButtons.end() )
         {
-            MenuBar::MenuBarButtonCallbackArg aArg;
+            MenuBarButtonCallbackArg aArg;
             aArg.nId = it->first;
             aArg.bHighlight = (sal_uInt16(m_aCloseBtn->GetHighlightItemId()) == it->first);
             it->second.m_aSelectLink.Call( aArg );
@@ -242,7 +242,7 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
     if( ! m_pMenu )
         return;
 
-    MenuBar::MenuBarButtonCallbackArg aArg;
+    MenuBarButtonCallbackArg aArg;
     aArg.nId = 0xffff;
     aArg.bHighlight = (rEvent.GetId() == VclEventId::ToolboxHighlight);
     if( rEvent.GetId() == VclEventId::ToolboxHighlight )
@@ -1125,7 +1125,7 @@ css::uno::Reference<css::accessibility::XAccessible> MenuBarWindow::CreateAccess
     return xAcc;
 }
 
-sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& i_rLink, const OUString& i_rToolTip )
+sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<MenuBarButtonCallbackArg&,bool>& i_rLink, const OUString& i_rToolTip )
 {
     // find first free button id
     sal_uInt16 nId = IID_DOCUMENTCLOSE;
@@ -1149,7 +1149,7 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<Me
     return nId;
 }
 
-void MenuBarWindow::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& rLink )
+void MenuBarWindow::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBarButtonCallbackArg&,bool>& rLink )
 {
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( nId );
     if( it != m_aAddButtons.end() )
@@ -1198,7 +1198,7 @@ bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( i_nButtonId );
     if( it != m_aAddButtons.end() )
     {
-        MenuBar::MenuBarButtonCallbackArg aArg;
+        MenuBarButtonCallbackArg aArg;
         aArg.nId = it->first;
         aArg.bHighlight = true;
         return it->second.m_aSelectLink.Call( aArg );

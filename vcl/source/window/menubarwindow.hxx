@@ -64,8 +64,8 @@ class MenuBarWindow : public vcl::Window, public MenuWindow
 private:
     struct AddButtonEntry
     {
-        Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aSelectLink;
-        Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aHighlightLink;
+        Link<MenuBarButtonCallbackArg&,bool>  m_aSelectLink;
+        Link<MenuBarButtonCallbackArg&,bool>  m_aHighlightLink;
     };
 
     VclPtr<Menu>           m_pMenu;
@@ -131,8 +131,8 @@ public:
     Size const & MinCloseButtonSize() const;
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
-    sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString&);
-    void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&);
+    sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBarButtonCallbackArg&,bool>&, const OUString&);
+    void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<MenuBarButtonCallbackArg&,bool>&);
     tools::Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
     void RemoveMenuBarButton(sal_uInt16 nId);
     bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId);
