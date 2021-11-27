@@ -57,4 +57,7 @@ def change_measurement_unit(UITestCase, unit):
         xApplyBtn.executeAction("CLICK", tuple())
         UITestCase.assertEqual(unit, get_state_as_dict(xUnit)['SelectEntryText'])
 
+        xToolkit = UITestCase.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
