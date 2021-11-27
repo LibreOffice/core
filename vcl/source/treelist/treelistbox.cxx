@@ -2588,6 +2588,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     Size aRectSize(0, nTempEntryHeight);
 
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
+    const bool bSeparator(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
 
     const size_t nTabCount = aTabs.size();
     const size_t nItemCount = rEntry.ItemCount();
@@ -2720,8 +2721,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
         rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
 
-        // division line between tabs
-        if (pNextTab && rItem.GetType() == SvLBoxItemType::String &&
+        // division line between tabs (but not if this is a separator line)
+        if (!bSeparator && pNextTab && rItem.GetType() == SvLBoxItemType::String &&
             // not at the right edge of the window!
             aRect.Right() < nMaxRight)
         {
