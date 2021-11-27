@@ -106,6 +106,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e87a208c_b417784d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-27T19:11:49Z",
+      "side": 1,
+      "message": "re \"exactly how many are we talking here?\" the change considered above would change the msgctxt of 297 entries in (cui/inc/strings.hrc) from e.g. RID_SVXSTR_KEY_TEMP_PATH to RID_CUISTR_KEY_TEMP_PATH",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79acb35a_fa0fed9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-27T19:11:49Z",
+      "side": 1,
+      "message": "\"I wouldn\u0027t like to give even more work for translators. For some languages, there are teams who may deal with this quite easily with suggestions but some have less members.\"\n\nYeah, I have no real knowledge if its an issue for translators, or so small that it doesn\u0027t matter to them if the context changes.",
+      "parentUuid": "414eda92_6e699b96",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
