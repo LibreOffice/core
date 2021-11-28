@@ -161,13 +161,13 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
         // shape hit, and shape is visible. Raise
         // event.
 
-        std::shared_ptr<comphelper::OInterfaceContainerHelper2> const pCont(
-            aCurrBroadcaster->second );
+        std::shared_ptr<comphelper::OInterfaceContainerHelper3<css::presentation::XShapeEventListener>> const & pCont =
+            aCurrBroadcaster->second;
         uno::Reference<drawing::XShape> const xShape(
             aCurrBroadcaster->first->getXShape() );
 
         // DON'T do anything with /this/ after this point!
-        pCont->forEach<presentation::XShapeEventListener>(
+        pCont->forEach(
             [&xShape, &e]( const uno::Reference< presentation::XShapeEventListener >& rListener )
             { return rListener->click( xShape, e ); } );
 
@@ -297,9 +297,8 @@ void ShapeManagerImpl::revokeSubset( const AttributableShapeSharedPtr& rOrigShap
 bool ShapeManagerImpl::listenerAdded(
     const uno::Reference<drawing::XShape>& xShape )
 {
-    ShapeEventListenerMap::const_iterator aIter;
-    if( (aIter = mrGlobalListenersMap.find( xShape )) ==
-        mrGlobalListenersMap.end() )
+    ShapeEventListenerMap::const_iterator aIter = mrGlobalListenersMap.find( xShape );
+    if( aIter == mrGlobalListenersMap.end() )
     {
         ENSURE_OR_RETURN_FALSE(false,
                           "ShapeManagerImpl::listenerAdded(): global "

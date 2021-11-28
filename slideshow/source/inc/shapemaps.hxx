@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEMAPS_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEMAPS_HXX
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/presentation/XShapeEventListener.hpp>
 
 #include <memory>
 #include <map>
@@ -34,7 +35,7 @@ namespace slideshow::internal
     {
         /// Maps XShape to shape listener
         typedef ::std::map< css::uno::Reference< css::drawing::XShape>,
-                            std::shared_ptr< ::comphelper::OInterfaceContainerHelper2 >
+                            std::shared_ptr< ::comphelper::OInterfaceContainerHelper3<css::presentation::XShapeEventListener> >
                             >                  ShapeEventListenerMap;
 
         /// Maps XShape to mouse cursor
