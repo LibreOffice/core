@@ -118,7 +118,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_COMPILERDEPFLAGS) \
 		$(5) \
 		-c $(3) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(6)),$(1),$(3))
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -I$(dir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) \
+		$(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(6)),$(1),$(3))
 	$(call gb_Trace_EndRange,$(2),PCH)
 endef
 
