@@ -729,7 +729,7 @@ const ScAppOptions& ScModule::GetAppOptions()
     if ( !m_pAppCfg )
         m_pAppCfg.reset( new ScAppCfg );
 
-    return *m_pAppCfg;
+    return m_pAppCfg->GetOptions();
 }
 
 void ScModule::SetDefaultsOptions( const ScDefaultsOptions& rOpt )
@@ -898,11 +898,13 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //  SfxGetpApp()->SetOptions( rOptSet );
 
+    ScAppOptions aAppOptions = m_pAppCfg->GetOptions();
+
     // No more linguistics
     if (rOptSet.HasItem(SID_ATTR_METRIC, &pItem))
     {
         PutItem( *pItem );
-        m_pAppCfg->SetAppMetric( static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue()) );
+        aAppOptions.SetAppMetric( static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue()) );
         bSaveAppOptions = true;
     }
 
@@ -914,18 +916,18 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if (rOptSet.HasItem(SID_SC_OPT_SYNCZOOM, &pItem))
     {
-        m_pAppCfg->SetSynchronizeZoom( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aAppOptions.SetSynchronizeZoom( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveAppOptions = true;
     }
 
     if (rOptSet.HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, &pItem))
     {
         sal_uInt16 nVal = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        ScOptionsUtil::KeyBindingType eOld = m_pAppCfg->GetKeyBindingType();
+        ScOptionsUtil::KeyBindingType eOld = aAppOptions.GetKeyBindingType();
         ScOptionsUtil::KeyBindingType eNew = static_cast<ScOptionsUtil::KeyBindingType>(nVal);
         if (eOld != eNew)
         {
-            m_pAppCfg->SetKeyBindingType(eNew);
+            aAppOptions.SetKeyBindingType(eNew);
             bSaveAppOptions = true;
             ScDocShell::ResetKeyBindings(eNew);
         }
@@ -1210,7 +1212,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     if ( bSaveAppOptions )
-        m_pAppCfg->OptionsChanged();
+        m_pAppCfg->SetOptions(aAppOptions);
 
     if ( bSaveInputOptions )
         m_pInputCfg->SetOptions(aInputOptions);

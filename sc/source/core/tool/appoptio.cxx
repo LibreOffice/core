@@ -24,7 +24,7 @@
 #include <userlist.hxx>
 #include <formula/compiler.hxx>
 #include <miscuno.hxx>
-#include <memory>
+#include <vector>
 #include <osl/diagnose.h>
 
 using namespace utl;
@@ -121,24 +121,6 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
 
 //  Config Item containing app options
 
-static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
-{
-    Sequence<sal_Int32> aSeq;
-    if ( !(rValue >>= aSeq) )
-        return;
-
-    sal_Int32 nCount = aSeq.getLength();
-    if ( nCount < SAL_MAX_UINT16 )
-    {
-        const sal_Int32* pArray = aSeq.getConstArray();
-        std::unique_ptr<sal_uInt16[]> pUShorts(new sal_uInt16[nCount]);
-        for (sal_Int32 i=0; i<nCount; i++)
-            pUShorts[i] = static_cast<sal_uInt16>(pArray[i]);
-
-        rOpt.SetLRUFuncList( pUShorts.get(), sal::static_int_cast<sal_uInt16>(nCount) );
-    }
-}
-
 static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 {
     tools::Long nCount = rOpt.GetLRUFuncListCount();
@@ -153,34 +135,6 @@ static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
     }
     else
         rDest <<= Sequence<sal_Int32>(0);   // empty
-}
-
-static void lcl_SetSortList( const Any& rValue )
-{
-    Sequence<OUString> aSeq;
-    if ( !(rValue >>= aSeq) )
-        return;
-
-    tools::Long nCount = aSeq.getLength();
-    const OUString* pArray = aSeq.getConstArray();
-    ScUserList aList;
-
-    //  if setting is "default", keep default values from ScUserList ctor
-    //TODO: mark "default" in a safe way
-    bool bDefault = ( nCount == 1 && pArray[0] == "NULL" );
-
-    if (!bDefault)
-    {
-        aList.clear();
-
-        for (const auto& rStr : std::as_const(aSeq))
-        {
-            ScUserListData* pNew = new ScUserListData( rStr );
-            aList.push_back(pNew);
-        }
-    }
-
-    ScGlobal::SetUserList( &aList );
 }
 
 static void lcl_GetSortList( Any& rDest )
@@ -316,227 +270,191 @@ ScAppCfg::ScAppCfg() :
     aMiscItem( CFGPATH_MISC ),
     aCompatItem( CFGPATH_COMPAT )
 {
-    sal_Int32 nIntVal = 0;
-
-    Sequence<OUString> aNames;
-    Sequence<Any> aValues;
-    const Any* pValues = nullptr;
-
-    aNames = GetLayoutPropertyNames();
-    aValues = aLayoutItem.GetProperties(aNames);
-    aLayoutItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        sal_uInt32 nStatusBarFuncSingle = 0;
-        sal_uInt32 nStatusBarFuncMulti = 0;
-        sal_uInt32 nUIntValTmp = 0;
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
-            {
-                switch(nProp)
-                {
-                    case SCLAYOUTOPT_MEASURE:
-                        if (pValues[nProp] >>= nIntVal) SetAppMetric( static_cast<FieldUnit>(nIntVal) );
-                        break;
-                    case SCLAYOUTOPT_STATUSBAR:
-                        if ( pValues[SCLAYOUTOPT_STATUSBAR] >>= nUIntValTmp )
-                            nStatusBarFuncSingle = nUIntValTmp;
-                        break;
-                    case SCLAYOUTOPT_STATUSBARMULTI:
-                        if ( pValues[SCLAYOUTOPT_STATUSBARMULTI] >>= nUIntValTmp )
-                            nStatusBarFuncMulti = nUIntValTmp;
-                        break;
-                    case SCLAYOUTOPT_ZOOMVAL:
-                        if (pValues[nProp] >>= nIntVal) SetZoom( static_cast<sal_uInt16>(nIntVal) );
-                        break;
-                    case SCLAYOUTOPT_ZOOMTYPE:
-                        if (pValues[nProp] >>= nIntVal) SetZoomType( static_cast<SvxZoomType>(nIntVal) );
-                        break;
-                    case SCLAYOUTOPT_SYNCZOOM:
-                        SetSynchronizeZoom( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                }
-            }
-        }
-
-        if ( nStatusBarFuncMulti != SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL )
-            SetStatusFunc( nStatusBarFuncMulti );
-        else if ( nStatusBarFuncSingle != SCLAYOUTOPT_STATUSBAR_DEFAULTVAL &&
-                  nStatusBarFuncSingle != SCLAYOUTOPT_STATUSBAR_DEFAULTVAL_LEGACY )
-        {
-            if ( nStatusBarFuncSingle )
-                SetStatusFunc( 1 << nStatusBarFuncSingle );
-            else
-                SetStatusFunc( 0 );
-        }
-        else
-            SetStatusFunc( SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL );
-    }
+    aLayoutItem.EnableNotification(GetLayoutPropertyNames());
+    ReadLayoutCfg();
     aLayoutItem.SetCommitLink( LINK( this, ScAppCfg, LayoutCommitHdl ) );
+    aLayoutItem.SetNotifyLink( LINK( this, ScAppCfg, LayoutNotifyHdl ) );
 
-    aNames = GetInputPropertyNames();
-    aValues = aInputItem.GetProperties(aNames);
-    aInputItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
-            {
-                switch(nProp)
-                {
-                    case SCINPUTOPT_LASTFUNCS:
-                        lcl_SetLastFunctions( *this, pValues[nProp] );
-                        break;
-                    case SCINPUTOPT_AUTOINPUT:
-                        SetAutoComplete( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCINPUTOPT_DET_AUTO:
-                        SetDetectiveAuto( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                }
-            }
-        }
-    }
+    aInputItem.EnableNotification(GetInputPropertyNames());
+    ReadInputCfg();
     aInputItem.SetCommitLink( LINK( this, ScAppCfg, InputCommitHdl ) );
+    aInputItem.SetNotifyLink( LINK( this, ScAppCfg, InputNotifyHdl ) );
 
-    aNames = GetRevisionPropertyNames();
-    aValues = aRevisionItem.GetProperties(aNames);
-    aRevisionItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
-            {
-                switch(nProp)
-                {
-                    case SCREVISOPT_CHANGE:
-                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( Color(ColorTransparency, nIntVal) );
-                        break;
-                    case SCREVISOPT_INSERTION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( Color(ColorTransparency, nIntVal) );
-                        break;
-                    case SCREVISOPT_DELETION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( Color(ColorTransparency, nIntVal) );
-                        break;
-                    case SCREVISOPT_MOVEDENTRY:
-                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( Color(ColorTransparency, nIntVal) );
-                        break;
-                }
-            }
-        }
-    }
+    aRevisionItem.EnableNotification(GetRevisionPropertyNames());
+    ReadRevisionCfg();
     aRevisionItem.SetCommitLink( LINK( this, ScAppCfg, RevisionCommitHdl ) );
+    aRevisionItem.SetNotifyLink( LINK( this, ScAppCfg, RevisionNotifyHdl ) );
 
-    aNames = GetContentPropertyNames();
-    aValues = aContentItem.GetProperties(aNames);
-    aContentItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
-            {
-                switch(nProp)
-                {
-                    case SCCONTENTOPT_LINK:
-                        if (pValues[nProp] >>= nIntVal) SetLinkMode( static_cast<ScLkUpdMode>(nIntVal) );
-                        break;
-                }
-            }
-        }
-    }
+    aContentItem.EnableNotification(GetContentPropertyNames());
+    ReadContentCfg();
     aContentItem.SetCommitLink( LINK( this, ScAppCfg, ContentCommitHdl ) );
+    aContentItem.SetNotifyLink( LINK( this, ScAppCfg, ContentNotifyHdl ) );
 
-    aNames = GetSortListPropertyNames();
-    aValues = aSortListItem.GetProperties(aNames);
-    aSortListItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
-            {
-                switch(nProp)
-                {
-                    case SCSORTLISTOPT_LIST:
-                        lcl_SetSortList( pValues[nProp] );
-                        break;
-                }
-            }
-        }
-    }
+    aSortListItem.EnableNotification(GetSortListPropertyNames());
+    ReadSortListCfg();
     aSortListItem.SetCommitLink( LINK( this, ScAppCfg, SortListCommitHdl ) );
+    aSortListItem.SetNotifyLink( LINK( this, ScAppCfg, SortListNotifyHdl ) );
 
-    aNames = GetMiscPropertyNames();
-    aValues = aMiscItem.GetProperties(aNames);
-    aMiscItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
-            {
-                switch(nProp)
-                {
-                    case SCMISCOPT_DEFOBJWIDTH:
-                        if (pValues[nProp] >>= nIntVal) SetDefaultObjectSizeWidth( nIntVal );
-                        break;
-                    case SCMISCOPT_DEFOBJHEIGHT:
-                        if (pValues[nProp] >>= nIntVal) SetDefaultObjectSizeHeight( nIntVal );
-                        break;
-                    case SCMISCOPT_SHOWSHAREDDOCWARN:
-                        SetShowSharedDocumentWarning( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                }
-            }
-        }
-    }
+    aMiscItem.EnableNotification(GetMiscPropertyNames());
+    ReadMiscCfg();
     aMiscItem.SetCommitLink( LINK( this, ScAppCfg, MiscCommitHdl ) );
+    aMiscItem.SetNotifyLink( LINK( this, ScAppCfg, MiscNotifyHdl ) );
 
-    aNames = GetCompatPropertyNames();
-    aValues = aCompatItem.GetProperties(aNames);
-    aCompatItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    if (aValues.getLength() == aNames.getLength())
+    aCompatItem.EnableNotification(GetCompatPropertyNames());
+    ReadCompatCfg();
+    aCompatItem.SetCommitLink( LINK(this, ScAppCfg, CompatCommitHdl) );
+    aCompatItem.SetNotifyLink( LINK(this, ScAppCfg, CompatNotifyHdl) );
+}
+
+void ScAppCfg::ReadLayoutCfg()
+{
+    const Sequence<OUString> aNames = GetLayoutPropertyNames();
+    const Sequence<Any> aValues = aLayoutItem.GetProperties(aNames);
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    sal_uInt32 nStatusBarFuncSingle = 0;
+    sal_uInt32 nStatusBarFuncMulti = 0;
+
+    if (sal_Int32 nIntVal; aValues[SCLAYOUTOPT_MEASURE] >>= nIntVal)
+        SetAppMetric(static_cast<FieldUnit>(nIntVal));
+    if (sal_uInt32 nUIntVal; aValues[SCLAYOUTOPT_STATUSBAR] >>= nUIntVal)
+        nStatusBarFuncSingle = nUIntVal;
+    if (sal_uInt32 nUIntVal; aValues[SCLAYOUTOPT_STATUSBARMULTI] >>= nUIntVal)
+        nStatusBarFuncMulti = nUIntVal;
+    if (sal_Int32 nIntVal; aValues[SCLAYOUTOPT_ZOOMVAL] >>= nIntVal)
+        SetZoom(static_cast<sal_uInt16>(nIntVal));
+    if (sal_Int32 nIntVal; aValues[SCLAYOUTOPT_ZOOMTYPE] >>= nIntVal)
+        SetZoomType(static_cast<SvxZoomType>(nIntVal));
+    SetSynchronizeZoom(ScUnoHelpFunctions::GetBoolFromAny(aValues[SCLAYOUTOPT_SYNCZOOM]));
+
+    if (nStatusBarFuncMulti != SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL)
+        SetStatusFunc(nStatusBarFuncMulti);
+    else if (nStatusBarFuncSingle != SCLAYOUTOPT_STATUSBAR_DEFAULTVAL
+             && nStatusBarFuncSingle != SCLAYOUTOPT_STATUSBAR_DEFAULTVAL_LEGACY)
     {
-        for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
+        if (nStatusBarFuncSingle)
+            SetStatusFunc(1 << nStatusBarFuncSingle);
+        else
+            SetStatusFunc(0);
+    }
+    else
+        SetStatusFunc(SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL);
+}
+
+void ScAppCfg::ReadInputCfg()
+{
+    const Sequence<OUString> aNames = GetInputPropertyNames();
+    const Sequence<Any> aValues = aInputItem.GetProperties(aNames);
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    if (Sequence<sal_Int32> aSeq; aValues[SCINPUTOPT_LASTFUNCS] >>= aSeq)
+    {
+        sal_Int32 nCount = aSeq.getLength();
+        if (nCount < SAL_MAX_UINT16)
         {
-            switch (nProp)
-            {
-                case SCCOMPATOPT_KEY_BINDING:
-                {
-                    nIntVal = 0; // 0 = 'Default'
-                    pValues[nProp] >>= nIntVal;
-                    SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
-                }
-                break;
-            }
+            std::vector<sal_uInt16> pUShorts(nCount);
+            for (sal_Int32 i = 0; i < nCount; i++)
+                pUShorts[i] = aSeq[i];
+
+            SetLRUFuncList(pUShorts.data(), nCount);
         }
     }
-    aCompatItem.SetCommitLink( LINK(this, ScAppCfg, CompatCommitHdl) );
+    SetAutoComplete(ScUnoHelpFunctions::GetBoolFromAny(aValues[SCINPUTOPT_AUTOINPUT]));
+    SetDetectiveAuto(ScUnoHelpFunctions::GetBoolFromAny(aValues[SCINPUTOPT_DET_AUTO]));
 }
- IMPL_LINK_NOARG(ScAppCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
+
+void ScAppCfg::ReadRevisionCfg()
+{
+    const Sequence<OUString> aNames = GetRevisionPropertyNames();
+    const Sequence<Any> aValues = aRevisionItem.GetProperties(aNames);
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    if (sal_Int32 nIntVal; aValues[SCREVISOPT_CHANGE] >>= nIntVal)
+        SetTrackContentColor(Color(ColorTransparency, nIntVal));
+    if (sal_Int32 nIntVal; aValues[SCREVISOPT_INSERTION] >>= nIntVal)
+        SetTrackInsertColor(Color(ColorTransparency, nIntVal));
+    if (sal_Int32 nIntVal; aValues[SCREVISOPT_DELETION] >>= nIntVal)
+        SetTrackDeleteColor(Color(ColorTransparency, nIntVal));
+    if (sal_Int32 nIntVal; aValues[SCREVISOPT_MOVEDENTRY] >>= nIntVal)
+        SetTrackMoveColor(Color(ColorTransparency, nIntVal));
+}
+
+void ScAppCfg::ReadContentCfg()
+{
+    const Sequence<OUString> aNames = GetContentPropertyNames();
+    const Sequence<Any> aValues = aContentItem.GetProperties(aNames);
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    if (sal_Int32 nIntVal; aValues[SCCONTENTOPT_LINK] >>= nIntVal)
+        SetLinkMode(static_cast<ScLkUpdMode>(nIntVal));
+}
+
+void ScAppCfg::ReadSortListCfg()
+{
+    const Sequence<OUString> aNames = GetSortListPropertyNames();
+    const Sequence<Any> aValues = aSortListItem.GetProperties(aNames);
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    if (Sequence<OUString> aSeq; aValues[SCSORTLISTOPT_LIST] >>= aSeq)
+    {
+        ScUserList aList;
+
+        //  if setting is "default", keep default values from ScUserList ctor
+        //TODO: mark "default" in a safe way
+        const bool bDefault = (aSeq.getLength() == 1 && aSeq[0] == "NULL");
+
+        if (!bDefault)
+        {
+            for (const OUString& rStr : std::as_const(aSeq))
+            {
+                ScUserListData* pNew = new ScUserListData(rStr);
+                aList.push_back(pNew);
+            }
+        }
+
+        ScGlobal::SetUserList(&aList);
+    }
+}
+
+void ScAppCfg::ReadMiscCfg()
+{
+    const Sequence<OUString> aNames = GetMiscPropertyNames();
+    const Sequence<Any> aValues = aMiscItem.GetProperties(aNames);
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    if (sal_Int32 nIntVal; aValues[SCMISCOPT_DEFOBJWIDTH] >>= nIntVal)
+        SetDefaultObjectSizeWidth(nIntVal);
+    if (sal_Int32 nIntVal; aValues[SCMISCOPT_DEFOBJHEIGHT] >>= nIntVal)
+        SetDefaultObjectSizeHeight(nIntVal);
+    SetShowSharedDocumentWarning(
+        ScUnoHelpFunctions::GetBoolFromAny(aValues[SCMISCOPT_SHOWSHAREDDOCWARN]));
+}
+
+void ScAppCfg::ReadCompatCfg()
+{
+    const Sequence<OUString> aNames = GetCompatPropertyNames();
+    const Sequence<Any> aValues = aCompatItem.GetProperties(aNames);
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    sal_Int32 nIntVal = 0; // 0 = 'Default'
+    aValues[SCCOMPATOPT_KEY_BINDING] >>= nIntVal;
+    SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
+}
+
+IMPL_LINK_NOARG(ScAppCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -569,6 +487,8 @@ ScAppCfg::ScAppCfg() :
     aLayoutItem.PutProperties(aNames, aValues);
 }
 
+IMPL_LINK_NOARG(ScAppCfg, LayoutNotifyHdl, ScLinkConfigItem&, void) { ReadLayoutCfg(); }
+
 IMPL_LINK_NOARG(ScAppCfg, InputCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetInputPropertyNames();
@@ -592,6 +512,8 @@ IMPL_LINK_NOARG(ScAppCfg, InputCommitHdl, ScLinkConfigItem&, void)
     }
     aInputItem.PutProperties(aNames, aValues);
 }
+
+IMPL_LINK_NOARG(ScAppCfg, InputNotifyHdl, ScLinkConfigItem&, void) { ReadInputCfg(); }
 
 IMPL_LINK_NOARG(ScAppCfg, RevisionCommitHdl, ScLinkConfigItem&, void)
 {
@@ -620,6 +542,8 @@ IMPL_LINK_NOARG(ScAppCfg, RevisionCommitHdl, ScLinkConfigItem&, void)
     aRevisionItem.PutProperties(aNames, aValues);
 }
 
+IMPL_LINK_NOARG(ScAppCfg, RevisionNotifyHdl, ScLinkConfigItem&, void) { ReadRevisionCfg(); }
+
 IMPL_LINK_NOARG(ScAppCfg, ContentCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetContentPropertyNames();
@@ -638,6 +562,8 @@ IMPL_LINK_NOARG(ScAppCfg, ContentCommitHdl, ScLinkConfigItem&, void)
     aContentItem.PutProperties(aNames, aValues);
 }
 
+IMPL_LINK_NOARG(ScAppCfg, ContentNotifyHdl, ScLinkConfigItem&, void) { ReadContentCfg(); }
+
 IMPL_LINK_NOARG(ScAppCfg, SortListCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetSortListPropertyNames();
@@ -655,6 +581,8 @@ IMPL_LINK_NOARG(ScAppCfg, SortListCommitHdl, ScLinkConfigItem&, void)
     }
     aSortListItem.PutProperties(aNames, aValues);
 }
+
+IMPL_LINK_NOARG(ScAppCfg, SortListNotifyHdl, ScLinkConfigItem&, void) { ReadSortListCfg(); }
 
 IMPL_LINK_NOARG(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
 {
@@ -680,6 +608,8 @@ IMPL_LINK_NOARG(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
     aMiscItem.PutProperties(aNames, aValues);
 }
 
+IMPL_LINK_NOARG(ScAppCfg, MiscNotifyHdl, ScLinkConfigItem&, void) { ReadMiscCfg(); }
+
 IMPL_LINK_NOARG(ScAppCfg, CompatCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetCompatPropertyNames();
@@ -698,14 +628,12 @@ IMPL_LINK_NOARG(ScAppCfg, CompatCommitHdl, ScLinkConfigItem&, void)
     aCompatItem.PutProperties(aNames, aValues);
 }
 
+IMPL_LINK_NOARG(ScAppCfg, CompatNotifyHdl, ScLinkConfigItem&, void) { ReadCompatCfg(); }
+
 void ScAppCfg::SetOptions( const ScAppOptions& rNew )
 {
     *static_cast<ScAppOptions*>(this) = rNew;
-    OptionsChanged();
-}
 
-void ScAppCfg::OptionsChanged()
-{
     aLayoutItem.SetModified();
     aInputItem.SetModified();
     aRevisionItem.SetModified();
@@ -713,6 +641,14 @@ void ScAppCfg::OptionsChanged()
     aSortListItem.SetModified();
     aMiscItem.SetModified();
     aCompatItem.SetModified();
+
+    aLayoutItem.Commit();
+    aInputItem.Commit();
+    aRevisionItem.Commit();
+    aContentItem.Commit();
+    aSortListItem.Commit();
+    aMiscItem.Commit();
+    aCompatItem.Commit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

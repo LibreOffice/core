@@ -37,11 +37,13 @@ public:
 class SC_DLLPUBLIC ScLinkConfigItem final : public utl::ConfigItem
 {
     Link<ScLinkConfigItem&,void>  aCommitLink;
+    Link<ScLinkConfigItem&,void>  aNotifyLink;
 
 public:
             ScLinkConfigItem( const OUString& rSubTree );
             ScLinkConfigItem( const OUString& rSubTree, ConfigItemMode nMode );
     void    SetCommitLink( const Link<ScLinkConfigItem&,void>& rLink );
+    void    SetNotifyLink( const Link<ScLinkConfigItem&,void>& rLink );
 
     virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
     virtual void    ImplCommit() override;

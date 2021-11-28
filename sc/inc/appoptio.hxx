@@ -103,7 +103,7 @@ private:
 
 //  Config Item containing app options
 
-class ScAppCfg : public ScAppOptions
+class ScAppCfg : private ScAppOptions
 {
     //  spread about 5 config paths
     //! split ScAppOptions into different classes
@@ -116,6 +116,14 @@ class ScAppCfg : public ScAppOptions
     ScLinkConfigItem    aMiscItem;
     ScLinkConfigItem    aCompatItem;
 
+    void ReadLayoutCfg();
+    void ReadInputCfg();
+    void ReadRevisionCfg();
+    void ReadContentCfg();
+    void ReadSortListCfg();
+    void ReadMiscCfg();
+    void ReadCompatCfg();
+
     DECL_LINK( LayoutCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK( InputCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK( RevisionCommitHdl, ScLinkConfigItem&, void );
@@ -123,6 +131,14 @@ class ScAppCfg : public ScAppOptions
     DECL_LINK( SortListCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK( MiscCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK( CompatCommitHdl, ScLinkConfigItem&, void );
+
+    DECL_LINK( LayoutNotifyHdl, ScLinkConfigItem&, void );
+    DECL_LINK( InputNotifyHdl, ScLinkConfigItem&, void );
+    DECL_LINK( RevisionNotifyHdl, ScLinkConfigItem&, void );
+    DECL_LINK( ContentNotifyHdl, ScLinkConfigItem&, void );
+    DECL_LINK( SortListNotifyHdl, ScLinkConfigItem&, void );
+    DECL_LINK( MiscNotifyHdl, ScLinkConfigItem&, void );
+    DECL_LINK( CompatNotifyHdl, ScLinkConfigItem&, void );
 
     static css::uno::Sequence<OUString> GetLayoutPropertyNames();
     static css::uno::Sequence<OUString> GetInputPropertyNames();
@@ -135,8 +151,8 @@ class ScAppCfg : public ScAppOptions
 public:
             ScAppCfg();
 
+    const ScAppOptions& GetOptions() const { return *this; }
     void    SetOptions( const ScAppOptions& rNew );
-    void    OptionsChanged();   // after direct access to ScAppOptions base class
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
