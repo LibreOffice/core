@@ -54,16 +54,69 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
-    PropertyListeners_impl;
-
 class fileaccess::PropertyListeners
-    : public PropertyListeners_impl
 {
+    typedef comphelper::OInterfaceContainerHelper3<beans::XPropertiesChangeListener> ContainerHelper;
+    osl::Mutex& rMutex;
+    std::unordered_map<OUString, ContainerHelper> m_aMap;
 public:
     explicit PropertyListeners( ::osl::Mutex& aMutex )
-        : PropertyListeners_impl( aMutex )
+        : rMutex( aMutex )
     {
+    }
+    void disposeAndClear(const lang::EventObject& rEvt)
+    {
+        // create a copy, because do not fire event in a guarded section
+        std::unordered_map<OUString, ContainerHelper> tempMap;
+        {
+            ::osl::MutexGuard aGuard(rMutex);
+            tempMap = std::move(m_aMap);
+        }
+        for (auto& rPair : tempMap)
+            rPair.second.disposeAndClear(rEvt);
+    }
+    void addInterface(const OUString& rKey, const uno::Reference<beans::XPropertiesChangeListener>& rListener)
+    {
+        ::osl::MutexGuard aGuard(rMutex);
+        auto iter = m_aMap.find(rKey);
+        if (iter == m_aMap.end())
+        {
+            auto ret = m_aMap.emplace(rKey, rMutex);
+            ret.first->second.addInterface(rListener);
+        }
+        else
+            iter->second.addInterface(rListener);
+    }
+    void removeInterface(const OUString& rKey, const uno::Reference<beans::XPropertiesChangeListener>& rListener)
+    {
+        ::osl::MutexGuard aGuard(rMutex);
+
+        // search container with id rKey
+        auto iter = m_aMap.find(rKey);
+        // container found?
+        if (iter != m_aMap.end())
+            iter->second.removeInterface(rListener);
+    }
+    std::vector< OUString > getContainedTypes() const
+    {
+        ::osl::MutexGuard aGuard(rMutex);
+        std::vector<OUString> aInterfaceTypes;
+        aInterfaceTypes.reserve(m_aMap.size());
+        for (const auto& rPair : m_aMap)
+            // are interfaces added to this container?
+            if (rPair.second.getLength())
+                // yes, put the type in the array
+                aInterfaceTypes.push_back(rPair.first);
+        return aInterfaceTypes;
+    }
+    comphelper::OInterfaceContainerHelper3<beans::XPropertiesChangeListener>* getContainer(const OUString& rKey)
+    {
+        ::osl::MutexGuard aGuard(rMutex);
+
+        auto iter = m_aMap.find(rKey);
+        if (iter != m_aMap.end())
+            return &iter->second;
+        return nullptr;
     }
 };
 
@@ -1153,7 +1206,7 @@ BaseContent::cPCL()
     ListenerMap listener;
     for( const auto& rName : seqNames )
     {
-        comphelper::OInterfaceContainerHelper2* pContainer = m_pPropertyListener->getContainer(rName);
+        comphelper::OInterfaceContainerHelper3<beans::XPropertiesChangeListener>* pContainer = m_pPropertyListener->getContainer(rName);
         if (!pContainer)
             continue;
         listener[rName] = pContainer->getElements();
