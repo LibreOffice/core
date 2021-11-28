@@ -577,6 +577,8 @@ bool SwDoc::SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
 
     getIDocumentState().SetModified();
 
+    //SwTextBoxHelper::syncFlyFrameAttr(rFlyFormat, rSet);
+
     return bRet;
 }
 
@@ -918,9 +920,12 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     pNd->InsertItem( aFormat, aPos.nContent.GetIndex(), 0 );
 
                     // Has a textbox attached to the format? Sync it as well!
-                    SwTextBoxHelper::syncFlyFrameAttr(*pContact->GetFormat(),
-                                                      pContact->GetFormat()->GetAttrSet(), pObj);
-
+                    if (SwTextBoxHelper::getOtherTextBoxFormat(pContact->GetFormat(),
+                                                               RES_DRAWFRMFMT))
+                    {
+                        SwTextBoxHelper::syncFlyFrameAttr(*pContact->GetFormat(),
+                                                          pContact->GetFormat()->GetAttrSet(), pObj);
+                    }
                 }
                 break;
             default:

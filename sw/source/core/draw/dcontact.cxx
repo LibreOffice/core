@@ -1250,9 +1250,10 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();
 
-                    SwTextBoxHelper::handleTextBoxGroup(
-                        GetFormat(),
-                        SwTextBoxHelper::GroupTextBoxActionType::POSITION_SIZE_AND_ANCHOR_CHANGE);
+                    for (size_t i = 0; i < pGroupObj->getChildrenOfSdrObject()->GetObjCount(); ++i )
+                    {
+                        SwTextBoxHelper::doTextBoxPositioning(GetFormat(), pGroupObj->getChildrenOfSdrObject()->GetObj(i));
+                    }
 
                 }
                 SwTwips nXPosDiff(0);
@@ -1369,9 +1370,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     aSet.Put(aSyncSet);
                     aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));
                     SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSet, pSdrObj);
-                    SwTextBoxHelper::handleTextBoxGroup(
-                        GetFormat(),
-                        SwTextBoxHelper::GroupTextBoxActionType::POSITION_SIZE_AND_ANCHOR_CHANGE);
+                    SwTextBoxHelper::changeAnchor(GetFormat(), pSdrObj);
                 }
                 else
                     SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());
