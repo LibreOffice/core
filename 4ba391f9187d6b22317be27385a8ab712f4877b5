@@ -16,6 +16,23 @@
       "message": "probably best to leave these alone, jmux likes this style",
       "revId": "4ba391f9187d6b22317be27385a8ab712f4877b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95cfb9dd_5473d6bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-28T20:26:41Z",
+      "side": 1,
+      "message": "IHMO meta programming with macro is a very bad choice, there are lots of links which explain why. I didn\u0027t know that people were fond of this style. But let\u0027s not waste time here, I\u0027m not a C++ expert prefer abandoning the patch.\n",
+      "revId": "4ba391f9187d6b22317be27385a8ab712f4877b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
