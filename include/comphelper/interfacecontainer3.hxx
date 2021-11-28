@@ -166,6 +166,9 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 removeInterface(const css::uno::Reference<ListenerT>& rxIFace);
+    /** Return an interface by index
+    */
+    const css::uno::Reference<ListenerT>& getInterface(sal_Int32 nIndex) const;
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.
@@ -317,6 +320,15 @@ sal_Int32 OInterfaceContainerHelper3<ListenerT>::removeInterface(
         maData->erase(it);
 
     return maData->size();
+}
+
+template <class ListenerT>
+const css::uno::Reference<ListenerT>&
+OInterfaceContainerHelper3<ListenerT>::getInterface(sal_Int32 nIndex) const
+{
+    osl::MutexGuard aGuard(rMutex);
+
+    return (*maData)[nIndex];
 }
 
 template <class ListenerT>
