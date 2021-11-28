@@ -580,7 +580,7 @@ void SAL_CALL OLESimpleStorage::addEventListener(
         throw lang::DisposedException();
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
+        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutex );
 
     m_pListenersContainer->addInterface( xListener );
 }
