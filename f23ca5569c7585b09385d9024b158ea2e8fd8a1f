@@ -34,6 +34,24 @@
       "parentUuid": "9f0b7230_410ac35c",
       "revId": "f23ca5569c7585b09385d9024b158ea2e8fd8a1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "238a6558_b0344360",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-28T20:46:59Z",
+      "side": 1,
+      "message": "Now the PPTX-\u003ePDF export and then loading the PDF file is used to test the situation. The previous test is now removed. The new test covers both the previous test, and the new situation.",
+      "parentUuid": "8f245703_5629386d",
+      "revId": "f23ca5569c7585b09385d9024b158ea2e8fd8a1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
