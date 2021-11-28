@@ -4302,7 +4302,7 @@ IMPL_LINK(FmXListBoxCell, ChangedHdl, bool, bInteractive, void)
 
 void FmXListBoxCell::OnDoubleClick()
 {
-    ::comphelper::OInterfaceIteratorHelper2 aIt( m_aActionListeners );
+    ::comphelper::OInterfaceIteratorHelper3 aIt( m_aActionListeners );
 
     css::awt::ActionEvent aEvent;
     aEvent.Source = *this;
@@ -4310,7 +4310,7 @@ void FmXListBoxCell::OnDoubleClick()
     aEvent.ActionCommand = rBox.get_active_text();
 
     while( aIt.hasMoreElements() )
-        static_cast< css::awt::XActionListener *>(aIt.next())->actionPerformed( aEvent );
+        aIt.next()->actionPerformed( aEvent );
 }
 
 FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl )
@@ -4621,11 +4621,11 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ )
 
 IMPL_LINK_NOARG(FmXFilterCell, OnCommit, DbFilterField&, void)
 {
-    ::comphelper::OInterfaceIteratorHelper2 aIt( m_aTextListeners );
+    ::comphelper::OInterfaceIteratorHelper3 aIt( m_aTextListeners );
     css::awt::TextEvent aEvt;
     aEvt.Source = *this;
     while( aIt.hasMoreElements() )
-        static_cast< css::awt::XTextListener *>(aIt.next())->textChanged( aEvt );
+        aIt.next()->textChanged( aEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

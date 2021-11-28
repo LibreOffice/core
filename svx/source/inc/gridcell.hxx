@@ -41,7 +41,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <comphelper/propmultiplex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <cppuhelper/component.hxx>
@@ -693,11 +693,11 @@ protected:
     std::unique_ptr<DbCellControl> m_pCellControl;
 
 private:
-    ::comphelper::OInterfaceContainerHelper2   m_aWindowListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aFocusListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aKeyListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aMouseListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aMouseMotionListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XWindowListener> m_aWindowListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XFocusListener> m_aFocusListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XKeyListener> m_aKeyListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XMouseListener> m_aMouseListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XMouseMotionListener> m_aMouseMotionListeners;
 
 protected:
     virtual ~FmXGridCell() override;
@@ -877,8 +877,8 @@ private:
     void onTextChanged();
 
     OUString                            m_sValueOnEnter;
-    ::comphelper::OInterfaceContainerHelper2   m_aTextListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aChangeListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XTextListener> m_aTextListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XChangeListener> m_aChangeListeners;
     ::svt::IEditImplementation*         m_pEditImplementation;
     bool                                m_bOwnEditImplementation;
 };
@@ -889,8 +889,8 @@ typedef ::cppu::ImplHelper2 <   css::awt::XCheckBox
 class FmXCheckBoxCell final : public FmXDataCell,
                         public FmXCheckBoxCell_Base
 {
-    ::comphelper::OInterfaceContainerHelper2   m_aItemListeners;
-    ::comphelper::OInterfaceContainerHelper2   m_aActionListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XItemListener> m_aItemListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XActionListener> m_aActionListeners;
     OUString                            m_aActionCommand;
     VclPtr<::svt::CheckBoxControl> m_pBox;
 
@@ -972,8 +972,8 @@ private:
 
     void OnDoubleClick();
 
-    ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
-                                        m_aActionListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XItemListener> m_aItemListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XActionListener> m_aActionListeners;
     VclPtr<::svt::ListBoxControl> m_pBox;
     sal_uInt16 m_nLines;
     bool m_bMulti;
@@ -986,8 +986,8 @@ class FmXComboBoxCell final : public FmXTextCell
                             , public FmXComboBoxCell_Base
 {
 private:
-    ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
-                                        m_aActionListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XItemListener> m_aItemListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XActionListener> m_aActionListeners;
     VclPtr<::svt::ComboBoxControl> m_pComboBox;
     sal_uInt16 m_nLines;
 
@@ -1067,7 +1067,7 @@ private:
     DECL_LINK( OnCommit, DbFilterField&, void );
     virtual ~FmXFilterCell() override;
 
-    ::comphelper::OInterfaceContainerHelper2 m_aTextListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XTextListener> m_aTextListeners;
 };
 
 #endif // INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX

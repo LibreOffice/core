@@ -3589,13 +3589,13 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aRowSetApproveListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aRowSetApproveListeners);
     bool bValid = true;
     if (aIter.hasMoreElements())
     {
         RowChangeEvent aEvt( _rEvent );
         aEvt.Source = *this;
-        bValid = static_cast<XRowSetApproveListener*>(aIter.next())->approveRowChange(aEvt);
+        bValid = aIter.next()->approveRowChange(aEvt);
     }
 
     if ( !bValid )
@@ -3677,12 +3677,12 @@ sal_Bool SAL_CALL FormController::approveCursorMove(const EventObject& event)
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aRowSetApproveListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
     {
         EventObject aEvt(event);
         aEvt.Source = *this;
-        return static_cast<XRowSetApproveListener*>(aIter.next())->approveCursorMove(aEvt);
+        return aIter.next()->approveCursorMove(aEvt);
     }
 
     return true;
@@ -3694,12 +3694,12 @@ sal_Bool SAL_CALL FormController::approveRowSetChange(const EventObject& event)
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aRowSetApproveListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
     {
         EventObject aEvt(event);
         aEvt.Source = *this;
-        return static_cast<XRowSetApproveListener*>(aIter.next())->approveRowSetChange(aEvt);
+        return aIter.next()->approveRowSetChange(aEvt);
     }
 
     return true;
@@ -3731,12 +3731,12 @@ void SAL_CALL FormController::errorOccured(const SQLErrorEvent& aEvent)
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aErrorListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aErrorListeners);
     if (aIter.hasMoreElements())
     {
         SQLErrorEvent aEvt(aEvent);
         aEvt.Source = *this;
-        static_cast<XSQLErrorListener*>(aIter.next())->errorOccured(aEvt);
+        aIter.next()->errorOccured(aEvt);
     }
     else
     {
@@ -3804,12 +3804,12 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aParameterListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aParameterListeners);
     if (aIter.hasMoreElements())
     {
         DatabaseParameterEvent aEvt(aEvent);
         aEvt.Source = *this;
-        return static_cast<XDatabaseParameterListener*>(aIter.next())->approveParameter(aEvt);
+        return aIter.next()->approveParameter(aEvt);
     }
     else
     {
@@ -3899,12 +3899,12 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aDeleteListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_aDeleteListeners);
     if (aIter.hasMoreElements())
     {
         RowChangeEvent aEvt(aEvent);
         aEvt.Source = *this;
-        return static_cast<XConfirmDeleteListener*>(aIter.next())->confirmDelete(aEvt);
+        return aIter.next()->confirmDelete(aEvt);
     }
     // default handling: instantiate an interaction handler and let it handle the request
 
