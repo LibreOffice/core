@@ -30,6 +30,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/shapepropertynotifier.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -123,7 +124,7 @@ struct SvxShapeImpl
     ::tools::WeakReference< SdrObject > mpCreatedObj;
 
     // for xComponent
-    ::comphelper::OInterfaceContainerHelper2   maDisposeListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> maDisposeListeners;
     svx::PropertyChangeNotifier       maPropertyNotifier;
 
     SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )

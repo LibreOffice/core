@@ -96,14 +96,14 @@ namespace svx
         }
         else
         {
-            ::comphelper::OInterfaceIteratorHelper2 aIter( m_aStatusListeners );
+            ::comphelper::OInterfaceIteratorHelper3 aIter( m_aStatusListeners );
             _rFreeForNotification.clear();
 
             while ( aIter.hasMoreElements() )
             {
                 try
                 {
-                    static_cast< XStatusListener* >( aIter.next() )->statusChanged( aUnoState );
+                    aIter.next()->statusChanged( aUnoState );
                 }
                 catch( const DisposedException& )
                 {

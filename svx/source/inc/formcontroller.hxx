@@ -61,7 +61,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <rtl/ref.hxx>
@@ -136,13 +136,19 @@ namespace svxform
         css::uno::Reference< css::form::runtime::XFormControllerContext > m_xFormControllerContext;
 
         css::uno::Sequence< css::uno::Reference< css::awt::XControl> >   m_aControls;
-        ::comphelper::OInterfaceContainerHelper2
-                                    m_aActivateListeners,
-                                    m_aModifyListeners,
-                                    m_aErrorListeners,
-                                    m_aDeleteListeners,
-                                    m_aRowSetApproveListeners,
-                                    m_aParameterListeners,
+        ::comphelper::OInterfaceContainerHelper3<css::form::XFormControllerListener>
+                                    m_aActivateListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>
+                                    m_aModifyListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::sdb::XSQLErrorListener>
+                                    m_aErrorListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::form::XConfirmDeleteListener>
+                                    m_aDeleteListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::sdb::XRowSetApproveListener>
+                                    m_aRowSetApproveListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::form::XDatabaseParameterListener>
+                                    m_aParameterListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::form::runtime::XFilterControllerListener>
                                     m_aFilterListeners;
 
         std::vector< css::uno::Reference< css::form::runtime::XFormController > >
