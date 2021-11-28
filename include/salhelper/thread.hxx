@@ -65,12 +65,14 @@ public:
     using osl::Thread::wait;
     using osl::Thread::yield;
 
+#if !defined LIBO_INTERNAL_ONLY
     static void* operator new(std::size_t size)
     {
         return SimpleReferenceObject::operator new(size);
     }
 
     static void operator delete(void* pointer) { SimpleReferenceObject::operator delete(pointer); }
+#endif
 
 protected:
     virtual ~Thread() SAL_OVERRIDE;

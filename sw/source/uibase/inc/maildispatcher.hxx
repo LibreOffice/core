@@ -45,9 +45,6 @@ class SW_DLLPUBLIC MailDispatcher final : public salhelper::SimpleReferenceObjec
                                           private ::osl::Thread
 {
 public:
-    // bringing operator new/delete into scope
-    using osl::Thread::operator new;
-    using osl::Thread::operator delete;
     using osl::Thread::join;
 
     /**

@@ -63,6 +63,7 @@ public:
     */
     virtual ~WeakComponentImplHelperBase() SAL_OVERRIDE;
 
+#if !defined LIBO_INTERNAL_ONLY
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
@@ -72,6 +73,7 @@ public:
         { return pMem; }
     static void SAL_CALL operator delete( void *, void * )
         {}
+#endif
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & rType ) SAL_OVERRIDE;
