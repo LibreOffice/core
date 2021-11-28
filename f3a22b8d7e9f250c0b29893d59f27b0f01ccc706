@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd4cfbe8_32f9b86d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-28T15:36:25Z",
+      "side": 1,
+      "message": "Not only in asan:\nhttps://buildd.debian.org/status/fetch.php?pkg\u003dlibreoffice\u0026arch\u003damd64\u0026ver\u003d1%3A7.3.0%7Ebeta1-1\u0026stamp\u003d1637916025\u0026raw\u003d1\nhttps://buildd.debian.org/status/fetch.php?pkg\u003dlibreoffice\u0026arch\u003darm64\u0026ver\u003d1%3A7.3.0%7Ebeta1-1\u0026stamp\u003d1637946364\u0026raw\u003d1\n\nRevert of course works ;-)\n\nPlease also backport to libreoffice-7-3",
+      "revId": "f3a22b8d7e9f250c0b29893d59f27b0f01ccc706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
