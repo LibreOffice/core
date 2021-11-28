@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer2.hxx>
 
 #include <com/sun/star/task/XJob.hpp>
@@ -76,8 +77,8 @@ class SwXMailMerge final :
 {
     friend class MailMergeExecuteFinalizer;
 
-    comphelper::OInterfaceContainerHelper2     m_aEvtListeners;
-    comphelper::OInterfaceContainerHelper2     m_aMergeListeners;
+    comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>  m_aEvtListeners;
+    comphelper::OInterfaceContainerHelper2 m_aMergeListeners;
     OPropertyListenerContainerHelper     m_aPropListeners;
 
     const SfxItemPropertySet*   m_pPropSet;

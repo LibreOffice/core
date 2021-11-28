@@ -62,7 +62,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XShapeEventBroadcaster.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <pagepreviewlayout.hxx>
 #include <dcontact.hxx>
 #include <svx/unoapi.hxx>
@@ -133,7 +133,7 @@ class SwDrawModellListener_Impl : public SfxListener,
     public ::cppu::WeakImplHelper< document::XShapeEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
-    ::comphelper::OInterfaceContainerHelper2 maEventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::document::XEventListener> maEventListeners;
     std::unordered_multimap<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 protected:
@@ -224,14 +224,12 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
         return;
 
-    ::comphelper::OInterfaceIteratorHelper2 aIter( maEventListeners );
+    ::comphelper::OInterfaceIteratorHelper3 aIter( maEventListeners );
     while( aIter.hasMoreElements() )
     {
-        uno::Reference < document::XEventListener > xListener( aIter.next(),
-                                                uno::UNO_QUERY );
         try
         {
-            xListener->notifyEvent( aEvent );
+            aIter.next()->notifyEvent( aEvent );
         }
         catch( uno::RuntimeException const & )
         {

@@ -738,8 +738,13 @@ void SwXTextView::NotifyDBChanged()
     URL aURL;
     aURL.Complete = OUString::createFromAscii(SwXDispatch::GetDBChangeURL());
 
-    m_SelChangedListeners.forEach<XDispatch>(
-            DispatchListener(aURL, {}));
+    m_SelChangedListeners.forEach(
+        [&aURL] (const uno::Reference<XSelectionChangeListener>& xListener)
+        {
+            uno::Reference<XDispatch> xDispatch(xListener, UNO_QUERY);
+            if (xDispatch)
+                xDispatch->dispatch(aURL, {});
+        });
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetInfo(  )
