@@ -765,26 +765,64 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_ROWCOL_SELCOUNT:
                 {
-                    ScRange aMarkRange;
-                    GetViewData().GetSimpleArea( aMarkRange );
-                    SCCOL nCol1, nCol2;
-                    SCROW nRow1, nRow2;
-                    nCol1 = aMarkRange.aStart.Col();
-                    nRow1 = aMarkRange.aStart.Row();
-                    nCol2 = aMarkRange.aEnd.Col();
-                    nRow2 = aMarkRange.aEnd.Row();
-                    if( nCol2 != nCol1 || nRow1 != nRow2 )
+                    ScRangeListRef aMarkRanges;
+                    GetViewData().GetMultiArea(aMarkRanges);
+                    SCCOL nCol1 = aMarkRanges->front().aStart.Col();
+                    SCROW nRow1 = aMarkRanges->front().aStart.Row();
+                    SCCOL nCol2 = aMarkRanges->front().aEnd.Col();
+                    SCROW nRow2 = aMarkRanges->front().aEnd.Row();
+                    size_t nRanges = aMarkRanges->size();
+
+                    if ((nRanges == 1 && (nCol2 != nCol1 || nRow1 != nRow2)) || nRanges > 1)
                     {
-                        const auto nRows
-                            = rDoc.CountNonFilteredRows(nRow1, nRow2, aMarkRange.aStart.Tab());
-                        const auto nCols = nCol2 - nCol1 + 1;
-                        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
-                        OUString aRowArg = ScResId(STR_SELCOUNT_ROWARG, nRows).replaceAll("$1", rLocaleData.getNum(nRows, 0));
-                        OUString aColArg = ScResId(STR_SELCOUNT_COLARG, nCols).replaceAll("$1", rLocaleData.getNum(nCols, 0));
-                        OUString aStr = ScResId(STR_SELCOUNT);
-                        aStr = aStr.replaceAll("$1", aRowArg);
-                        aStr = aStr.replaceAll("$2", aColArg);
-                        rSet.Put( SfxStringItem( nWhich, aStr ) );
+                        bool bSameRows = true;
+                        bool bSameCols = true;
+                        SCROW nRowsSum = 0;
+                        SCCOL nColsSum = 0;
+                        for (size_t i = 0; i < nRanges; ++i)
+                        {
+                            const ScRange& aRange = (*aMarkRanges)[i];
+                            SCCOL nRangeCol1 = aRange.aStart.Col();
+                            SCROW nRangeRow1 = aRange.aStart.Row();
+                            SCCOL nRangeCol2 = aRange.aEnd.Col();
+                            SCROW nRangeRow2 = aRange.aEnd.Row();
+                            const auto nRows = rDoc.CountNonFilteredRows(nRangeRow1, nRangeRow2,
+                                                                         aRange.aStart.Tab());
+                            const auto nCols = nRangeCol2 - nRangeCol1 + 1;
+                            bSameRows &= (nRow1 == nRangeRow1 && nRow2 == nRangeRow2);
+                            bSameCols &= (nCol1 == nRangeCol1 && nCol2 == nRangeCol2);
+                            // Sum rows if the number of cols is the same or
+                            // sum columns if the number of rows is the same,
+                            // otherwise do not show any count of selected cells.
+                            if (bSameRows)
+                            {
+                                nRowsSum = nRows;
+                                nColsSum += nCols;
+                            }
+                            else if (bSameCols)
+                            {
+                                nRowsSum += nRows;
+                                nColsSum = nCols;
+                            }
+                            else
+                                break;
+                        }
+                        // Either the rows or columns are the same among selections
+                        if (bSameRows || bSameCols)
+                        {
+                            const LocaleDataWrapper& rLocaleData
+                                = Application::GetSettings().GetUILocaleDataWrapper();
+                            OUString aRowArg
+                                = ScResId(STR_SELCOUNT_ROWARG, nRowsSum)
+                                      .replaceAll("$1", rLocaleData.getNum(nRowsSum, 0));
+                            OUString aColArg
+                                = ScResId(STR_SELCOUNT_COLARG, nColsSum)
+                                      .replaceAll("$1", rLocaleData.getNum(nColsSum, 0));
+                            OUString aStr = ScResId(STR_SELCOUNT);
+                            aStr = aStr.replaceAll("$1", aRowArg);
+                            aStr = aStr.replaceAll("$2", aColArg);
+                            rSet.Put(SfxStringItem(nWhich, aStr));
+                        }
                     }
                     else
                     {
