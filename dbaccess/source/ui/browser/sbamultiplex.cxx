@@ -25,7 +25,7 @@ using namespace dbaui;
 // XStatusListener
 SbaXStatusMultiplexer::SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -49,15 +49,15 @@ void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStat
 {
     m_aLastKnownStatus = e;
     m_aLastKnownStatus.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
+    ::comphelper::OInterfaceIteratorHelper3 aIt( *this );
     while ( aIt.hasMoreElements() )
-        static_cast< css::frame::XStatusListener* >( aIt.next() )->statusChanged( m_aLastKnownStatus );
+        aIt.next()->statusChanged( m_aLastKnownStatus );
 }
 
 // LoadListener
 SbaXLoadMultiplexer::SbaXLoadMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -80,51 +80,51 @@ void SAL_CALL SbaXLoadMultiplexer::loaded(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::form::XLoadListener*>(aIt.next())->loaded(aMulti);
+        aIt.next()->loaded(aMulti);
 }
 void SAL_CALL SbaXLoadMultiplexer::unloaded(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::form::XLoadListener*>(aIt.next())->unloaded(aMulti);
+        aIt.next()->unloaded(aMulti);
 }
 
 void SAL_CALL SbaXLoadMultiplexer::unloading(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::form::XLoadListener*>(aIt.next())->unloading(aMulti);
+        aIt.next()->unloading(aMulti);
 }
 
 void SAL_CALL SbaXLoadMultiplexer::reloading(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::form::XLoadListener*>(aIt.next())->reloading(aMulti);
+        aIt.next()->reloading(aMulti);
 }
 
 void SAL_CALL SbaXLoadMultiplexer::reloaded(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::form::XLoadListener*>(aIt.next())->reloaded(aMulti);
+        aIt.next()->reloaded(aMulti);
 }
 
 
 // css::sdbc::XRowSetListener
 SbaXRowSetMultiplexer::SbaXRowSetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -147,33 +147,33 @@ void SAL_CALL SbaXRowSetMultiplexer::cursorMoved(const css::lang::EventObject& e
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::sdbc::XRowSetListener*>(aIt.next())->cursorMoved(aMulti);
+        aIt.next()->cursorMoved(aMulti);
 }
 
 void SAL_CALL SbaXRowSetMultiplexer::rowChanged(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::sdbc::XRowSetListener*>(aIt.next())->rowChanged(aMulti);
+        aIt.next()->rowChanged(aMulti);
 }
 
 void SAL_CALL SbaXRowSetMultiplexer::rowSetChanged(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::sdbc::XRowSetListener*>(aIt.next())->rowSetChanged(aMulti);
+        aIt.next()->rowSetChanged(aMulti);
 }
 
 // css::sdb::XRowSetApproveListener
 SbaXRowSetApproveMultiplexer::SbaXRowSetApproveMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -196,10 +196,10 @@ sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveCursorMove(const css::lan
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     bool bResult = true;
     while (bResult && aIt.hasMoreElements())
-        bResult = static_cast< css::sdb::XRowSetApproveListener*>(aIt.next())->approveCursorMove(aMulti);
+        bResult = aIt.next()->approveCursorMove(aMulti);
     return bResult;
 }
 
@@ -207,10 +207,10 @@ sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveRowChange(const css::sdb:
 {
     css::sdb::RowChangeEvent aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     bool bResult = true;
     while (bResult && aIt.hasMoreElements())
-        bResult = static_cast< css::sdb::XRowSetApproveListener*>(aIt.next())->approveRowChange(aMulti);
+        bResult = aIt.next()->approveRowChange(aMulti);
     return bResult;
 }
 
@@ -218,17 +218,17 @@ sal_Bool SAL_CALL SbaXRowSetApproveMultiplexer::approveRowSetChange(const css::l
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     bool bResult = true;
     while (bResult && aIt.hasMoreElements())
-        bResult = static_cast< css::sdb::XRowSetApproveListener*>(aIt.next())->approveRowSetChange(aMulti);
+        bResult = aIt.next()->approveRowSetChange(aMulti);
     return bResult;
 }
 
 // css::sdb::XSQLErrorListener
 SbaXSQLErrorMultiplexer::SbaXSQLErrorMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -251,15 +251,15 @@ void SAL_CALL SbaXSQLErrorMultiplexer::errorOccured(const css::sdb::SQLErrorEven
 {
     css::sdb::SQLErrorEvent aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::sdb::XSQLErrorListener*>(aIt.next())->errorOccured(aMulti);
+        aIt.next()->errorOccured(aMulti);
 }
 
 // css::form::XDatabaseParameterListener
 SbaXParameterMultiplexer::SbaXParameterMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -282,17 +282,17 @@ sal_Bool SAL_CALL SbaXParameterMultiplexer::approveParameter(const css::form::Da
 {
     css::form::DatabaseParameterEvent aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     bool bResult = true;
     while (bResult && aIt.hasMoreElements())
-        bResult = static_cast< css::form::XDatabaseParameterListener*>(aIt.next())->approveParameter(aMulti);
+        bResult = aIt.next()->approveParameter(aMulti);
     return bResult;
 }
 
 // css::form::XSubmitListener
 SbaXSubmitMultiplexer::SbaXSubmitMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -317,17 +317,17 @@ sal_Bool SAL_CALL SbaXSubmitMultiplexer::approveSubmit(const css::lang::EventObj
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     bool bResult = true;
     while (bResult && aIt.hasMoreElements())
-        bResult = static_cast< css::form::XSubmitListener*>(aIt.next())->approveSubmit(aMulti);
+        bResult = aIt.next()->approveSubmit(aMulti);
     return bResult;
 }
 
 // css::form::XResetListener
 SbaXResetMultiplexer::SbaXResetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -351,10 +351,10 @@ sal_Bool SAL_CALL SbaXResetMultiplexer::approveReset(const css::lang::EventObjec
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     bool bResult = true;
     while (bResult && aIt.hasMoreElements())
-        bResult = static_cast< css::form::XResetListener*>(aIt.next())->approveReset(aMulti);
+        bResult = aIt.next()->approveReset(aMulti);
     return bResult;
 }
 
@@ -362,9 +362,9 @@ void SAL_CALL SbaXResetMultiplexer::resetted(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::form::XResetListener*>(aIt.next())->resetted(aMulti);
+        aIt.next()->resetted(aMulti);
 }
 
 // css::beans::XPropertyChangeListener
@@ -518,7 +518,7 @@ void SbaXVetoableChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelp
 // css::beans::XPropertiesChangeListener
 SbaXPropertiesChangeMultiplexer::SbaXPropertiesChangeMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)
     :OSbaWeakSubObject(rSource)
-    ,OInterfaceContainerHelper2(_rMutex)
+    ,OInterfaceContainerHelper3(_rMutex)
 {
 }
 
@@ -546,9 +546,9 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence<
     for (css::beans::PropertyChangeEvent & rEvent : asNonConstRange(aMulti))
         rEvent.Source = &m_rParent;
 
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< css::beans::XPropertiesChangeListener*>(aIt.next())->propertiesChange(aMulti);
+        aIt.next()->propertiesChange(aMulti);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

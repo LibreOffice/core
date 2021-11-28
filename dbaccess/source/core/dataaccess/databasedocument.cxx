@@ -1506,7 +1506,7 @@ void SAL_CALL ODatabaseDocument::close(sal_Bool bDeliverOwnership)
     {
         // allow listeners to veto
         lang::EventObject aEvent( *this );
-        m_aCloseListener.forEach< XCloseListener >(
+        m_aCloseListener.forEach(
             [&aEvent, &bDeliverOwnership] (uno::Reference<XCloseListener> const& xListener) {
                 return xListener->queryClosing(aEvent, bDeliverOwnership);
             });
@@ -1776,7 +1776,7 @@ void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference<
 {
     Reference< XInterface > xMe( *this );
 
-    m_aStorageListeners.forEach< XStorageChangeListener >(
+    m_aStorageListeners.forEach(
         [&xMe, &xNewRootStorage] (uno::Reference<XStorageChangeListener> const& xListener) {
             return xListener->notifyStorageChange(xMe, xNewRootStorage);
         });

@@ -22,7 +22,7 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 
 #include <comphelper/asyncnotification.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
@@ -52,8 +52,8 @@ namespace dbaccess
         bool                                                    m_bInitialized;
         bool                                                    m_bDisposed;
         std::shared_ptr<::comphelper::AsyncEventNotifierAutoJoin> m_pEventBroadcaster;
-        ::comphelper::OInterfaceContainerHelper2                      m_aLegacyEventListeners;
-        ::comphelper::OInterfaceContainerHelper2                      m_aDocumentEventListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::document::XEventListener> m_aLegacyEventListeners;
+        ::comphelper::OInterfaceContainerHelper3<XDocumentEventListener>  m_aDocumentEventListeners;
 
     public:
         DocumentEventNotifier_Impl( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex )

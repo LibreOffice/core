@@ -1091,13 +1091,13 @@ void ORowSet::notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,
 bool ORowSet::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard)
 {
     EventObject aEvt(*m_pMySelf);
-    std::vector< Reference< XInterface > > aListenerSeq = m_aApproveListeners.getElements();
+    std::vector< Reference< css::sdb::XRowSetApproveListener > > aListenerSeq = m_aApproveListeners.getElements();
     _rGuard.clear();
     bool bCheck = std::all_of(aListenerSeq.rbegin(), aListenerSeq.rend(),
-        [&aEvt](Reference<XInterface>& rxItem) {
+        [&aEvt](Reference<css::sdb::XRowSetApproveListener>& rxItem) {
             try
             {
-                return static_cast<bool>(static_cast<XRowSetApproveListener*>(rxItem.get())->approveCursorMove(aEvt));
+                return static_cast<bool>(rxItem->approveCursorMove(aEvt));
             }
             catch( RuntimeException& )
             {
@@ -1110,13 +1110,13 @@ bool ORowSet::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _r
 
 void ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const RowChangeEvent &aEvt)
 {
-    std::vector< Reference< XInterface > > aListenerSeq = m_aApproveListeners.getElements();
+    std::vector< Reference< css::sdb::XRowSetApproveListener > > aListenerSeq = m_aApproveListeners.getElements();
     _rGuard.clear();
     bool bCheck = std::all_of(aListenerSeq.rbegin(), aListenerSeq.rend(),
-        [&aEvt](Reference<XInterface>& rxItem) {
+        [&aEvt](Reference<css::sdb::XRowSetApproveListener>& rxItem) {
             try
             {
-                return static_cast<bool>(static_cast<XRowSetApproveListener*>(rxItem.get())->approveRowChange(aEvt));
+                return static_cast<bool>(rxItem->approveRowChange(aEvt));
             }
             catch( RuntimeException& )
             {
@@ -1517,13 +1517,13 @@ void ORowSet::approveExecution()
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     EventObject aEvt(*this);
 
-    OInterfaceIteratorHelper2 aApproveIter( m_aApproveListeners );
+    OInterfaceIteratorHelper3 aApproveIter( m_aApproveListeners );
     while ( aApproveIter.hasMoreElements() )
     {
-        Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aApproveIter.next() ) );
+        Reference< XRowSetApproveListener > xListener( aApproveIter.next() );
         try
         {
-            if ( xListener.is() && !xListener->approveRowSetChange( aEvt ) )
+            if ( !xListener->approveRowSetChange( aEvt ) )
                 throw RowSetVetoException();
         }
         catch ( const DisposedException& e )
