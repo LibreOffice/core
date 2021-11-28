@@ -67,7 +67,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/fileformat.h>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequence.hxx>
@@ -239,7 +239,7 @@ protected:
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /// for notification
-    ::comphelper::OInterfaceContainerHelper2 m_NotifyListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_NotifyListeners;
     /// flag: false means not initialized yet, or disposed
     bool m_isInitialized;
     /// flag
@@ -2123,11 +2123,10 @@ void SfxDocumentMetaData::createUserDefined()
         m_xUserDefined, css::uno::UNO_QUERY);
     if (xMB.is())
     {
-        const std::vector<css::uno::Reference<css::uno::XInterface> >
+        const std::vector<css::uno::Reference<css::util::XModifyListener> >
             listeners(m_NotifyListeners.getElements());
         for (const auto& l : listeners) {
-            xMB->addModifyListener(
-                css::uno::Reference< css::util::XModifyListener >(l, css::uno::UNO_QUERY) );
+            xMB->addModifyListener(l);
         }
     }
 }

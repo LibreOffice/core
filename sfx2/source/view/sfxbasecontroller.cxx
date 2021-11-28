@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
@@ -354,7 +354,7 @@ struct IMPL_SfxBaseController_DataContainer
     Reference< XCloseListener >             m_xCloseListener        ;
     ::sfx2::UserInputInterception           m_aUserInputInterception;
     ::comphelper::OMultiTypeInterfaceContainerHelper2      m_aListenerContainer    ;
-    ::comphelper::OInterfaceContainerHelper2               m_aInterceptorContainer ;
+    ::comphelper::OInterfaceContainerHelper3<ui::XContextMenuInterceptor> m_aInterceptorContainer ;
     Reference< XStatusIndicator >           m_xIndicator            ;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
