@@ -231,26 +231,16 @@ namespace comphelper
     {
         // see salhelper::Thread::launch
         xThis->m_xImpl->pKeepThisAlive = xThis;
-        try {
-            if (!xThis->create()) {
-                throw std::runtime_error("osl::Thread::create failed");
-            }
-        } catch (...) {
-            xThis->m_xImpl->pKeepThisAlive.reset();
-            throw;
+        if (!xThis->create()) {
+            throw std::runtime_error("osl::Thread::create failed");
         }
     }
 
     void AsyncEventNotifierAutoJoin::run()
     {
         // see salhelper::Thread::run
-        try {
-            setName(m_xImpl->name);
-            execute();
-        } catch (...) {
-            onTerminated();
-            throw;
-        }
+        setName(m_xImpl->name);
+        execute();
     }
 
     void AsyncEventNotifierAutoJoin::onTerminated()

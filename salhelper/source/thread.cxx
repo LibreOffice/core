@@ -22,28 +22,16 @@ void salhelper::Thread::launch() {
     // Assumption is that osl::Thread::create returns normally with a true
     // return value iff it causes osl::Thread::run to start executing:
     acquire();
-    try {
-        if (!create()) {
-            throw std::runtime_error("osl::Thread::create failed");
-        }
-    } catch (...) {
-        release();
-        throw;
+    if (!create()) {
+        throw std::runtime_error("osl::Thread::create failed");
     }
 }
 
 salhelper::Thread::~Thread() {}
 
 void salhelper::Thread::run() {
-    try {
-        setName(name_);
-        execute();
-    } catch (...) {
-        // Work around the problem that onTerminated is not called if run throws
-        // an exception:
-        onTerminated();
-        throw;
-    }
+    setName(name_);
+    execute();
 }
 
 void salhelper::Thread::onTerminated() { release(); }
