@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05dd2dff_a426b926",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-11-28T17:41:02Z",
+      "side": 1,
+      "message": "Updated this patch to use “linear” instead of “1D”.",
+      "revId": "aa492aba562476384dbc289bbfc6f5e35a4ac5c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
