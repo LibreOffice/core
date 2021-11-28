@@ -199,7 +199,7 @@ void SAL_CALL SortedResultSet::addEventListener(
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners =
-                    new OInterfaceContainerHelper2( getContainerMutex() );
+                    new OInterfaceContainerHelper3<XEventListener>( getContainerMutex() );
 
     mpDisposeEventListeners->addInterface( Listener );
 }

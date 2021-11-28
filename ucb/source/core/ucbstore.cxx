@@ -1086,7 +1086,7 @@ void SAL_CALL PersistentPropertySet::addEventListener(
 {
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper2( m_aMutex ) );
+                    new OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -1636,7 +1636,7 @@ void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
 {
     if ( !m_pPropSetChangeListeners )
         m_pPropSetChangeListeners.reset(
-                    new OInterfaceContainerHelper2( m_aMutex ) );
+                    new OInterfaceContainerHelper3<XPropertySetInfoChangeListener>( m_aMutex ) );
 
     m_pPropSetChangeListeners->addInterface( Listener );
 }
@@ -1937,14 +1937,11 @@ void PersistentPropertySet::notifyPropertySetInfoChange(
         return;
 
     // Notify event listeners.
-    OInterfaceIteratorHelper2 aIter( *m_pPropSetChangeListeners );
+    OInterfaceIteratorHelper3 aIter( *m_pPropSetChangeListeners );
     while ( aIter.hasMoreElements() )
     {
         // Propagate event.
-        Reference< XPropertySetInfoChangeListener >
-                            xListener( aIter.next(), UNO_QUERY );
-        if ( xListener.is() )
-            xListener->propertySetInfoChange( evt );
+        aIter.next()->propertySetInfoChange( evt );
     }
 }
 

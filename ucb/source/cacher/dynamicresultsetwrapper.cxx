@@ -163,7 +163,7 @@ void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEvent
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper2( m_aContainerMutex ) );
+                    new OInterfaceContainerHelper3<XEventListener>( m_aContainerMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

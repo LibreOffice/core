@@ -20,7 +20,7 @@
 
 #include <vector>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
@@ -398,9 +398,9 @@ namespace ftp {
                                             m_sProperty;
 
         osl::Mutex                          m_aMutex;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pDisposeEventListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pRowCountListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pIsFinalListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pDisposeEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::beans::XPropertyChangeListener>> m_pRowCountListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::beans::XPropertyChangeListener>> m_pIsFinalListeners;
     };
 
 
