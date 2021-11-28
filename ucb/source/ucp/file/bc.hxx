@@ -22,7 +22,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
@@ -206,9 +206,9 @@ namespace fileaccess {
         osl::Mutex                         m_aMutex;
 
         osl::Mutex                          m_aEventListenerMutex;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pDisposeEventListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pContentEventListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pPropertySetInfoChangeListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>>   m_pDisposeEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener>> m_pContentEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::beans::XPropertySetInfoChangeListener>> m_pPropertySetInfoChangeListeners;
         std::unique_ptr<PropertyListeners>                  m_pPropertyListener;
 
 

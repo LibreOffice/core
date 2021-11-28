@@ -33,7 +33,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -159,8 +159,8 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
     OUString                    m_aKey;
     OUString                    m_aFullKey;
     osl::Mutex                  m_aMutex;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2>  m_pDisposeEventListeners;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2>  m_pPropSetChangeListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>>  m_pDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::beans::XPropertySetInfoChangeListener>>  m_pPropSetChangeListeners;
     std::unique_ptr<PropertyListeners_Impl>      m_pPropertyChangeListeners;
 
 private:

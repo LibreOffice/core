@@ -127,7 +127,7 @@ BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener
 
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
+            new comphelper::OInterfaceContainerHelper3<lang::XEventListener>( m_aEventListenerMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -147,9 +147,9 @@ void SAL_CALL
 BaseContent::dispose()
 {
     lang::EventObject aEvt;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2> pDisposeEventListeners;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2> pContentEventListeners;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2> pPropertySetInfoChangeListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<lang::XEventListener>> pDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<XContentEventListener>> pContentEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<beans::XPropertySetInfoChangeListener>> pPropertySetInfoChangeListeners;
     std::unique_ptr<PropertyListeners> pPropertyListener;
 
     {
@@ -427,7 +427,7 @@ BaseContent::addContentEventListener(
 
     if ( ! m_pContentEventListeners )
         m_pContentEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
+            new comphelper::OInterfaceContainerHelper3<XContentEventListener>( m_aEventListenerMutex ) );
 
 
     m_pContentEventListeners->addInterface( Listener );
@@ -545,7 +545,7 @@ BaseContent::addPropertySetInfoChangeListener(
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( ! m_pPropertySetInfoChangeListeners )
-        m_pPropertySetInfoChangeListeners.reset( new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
+        m_pPropertySetInfoChangeListeners.reset( new comphelper::OInterfaceContainerHelper3<beans::XPropertySetInfoChangeListener>( m_aEventListenerMutex ) );
 
     m_pPropertySetInfoChangeListeners->addInterface( Listener );
 }

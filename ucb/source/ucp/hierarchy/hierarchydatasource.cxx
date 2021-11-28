@@ -243,7 +243,7 @@ void SAL_CALL HierarchyDataSource::addEventListener(
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper2( m_aMutex ) );
+            new comphelper::OInterfaceContainerHelper3<lang::XEventListener>( m_aMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

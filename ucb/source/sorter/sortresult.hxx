@@ -31,14 +31,11 @@
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/ListAction.hpp>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <deque>
 #include <memory>
-
-namespace comphelper {
-    class OInterfaceContainerHelper2;
-}
 
 
 struct  SortInfo;
@@ -96,7 +93,7 @@ class SortedResultSet: public cppu::WeakImplHelper <
     css::sdbc::XResultSetMetaDataSupplier,
     css::beans::XPropertySet >
 {
-    comphelper::OInterfaceContainerHelper2 *mpDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> *mpDisposeEventListeners;
     std::unique_ptr<PropertyChangeListeners_Impl>    mpPropChangeListeners;
     std::unique_ptr<PropertyChangeListeners_Impl>    mpVetoChangeListeners;
 
