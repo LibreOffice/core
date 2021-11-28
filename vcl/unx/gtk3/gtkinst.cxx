@@ -9797,24 +9797,27 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectan
 
     GdkGravity rect_anchor;
     GdkGravity menu_anchor;
+    GdkAnchorHints anchor_hints;
 
     if (ePlace == weld::Placement::Under)
     {
         rect_anchor = !bSwapForRTL ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
         menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+        anchor_hints = static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_Y |
+                                                   GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_RESIZE_X);
     }
     else
     {
         rect_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
         menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+        anchor_hints = static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP_X | GDK_ANCHOR_RESIZE_Y |
+                                                   GDK_ANCHOR_SLIDE_Y | GDK_ANCHOR_RESIZE_X);
     }
 
     GdkRectangle rect {x, y, rAnchor.width, rAnchor.height};
     GdkSurface* toplevel = widget_get_surface(GTK_WIDGET(pMenu));
 
-    window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor, static_cast<GdkAnchorHints>(0),
-                        /*static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_Y |
-                                                    GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_RESIZE_X),*/
+    window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor, anchor_hints,
                         0, 0);
 
     return true;
