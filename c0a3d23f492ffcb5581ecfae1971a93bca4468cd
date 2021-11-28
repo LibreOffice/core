@@ -16,6 +16,23 @@
       "message": "I do confirm this patch fixes the unittest added in https://gerrit.libreoffice.org/c/core/+/125872",
       "revId": "c0a3d23f492ffcb5581ecfae1971a93bca4468cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9a55169_babe40c9",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-11-28T15:35:32Z",
+      "side": 1,
+      "message": "Any reason for creating ScAddress copies instead of directly using pNoRotatedAnchor-\u003emaStart and maEnd? Like\n\n  if (pNoRotatedAnchor-\u003emaStart.IsValid() \u0026\u0026 IsInBlock( pNoRotatedAnchor-\u003emaStart, nCol1,nRow1, nCol2,nRow2 ))",
+      "revId": "c0a3d23f492ffcb5581ecfae1971a93bca4468cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
