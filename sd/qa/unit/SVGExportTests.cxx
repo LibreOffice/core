@@ -343,7 +343,7 @@ public:
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
-        // Witout the fix in place, it would have filed with:
+        // Without the fix in place, it would have filed with:
         // - Expected: 22 - Actual  : 3 - number of child-nodes is incorrect
         assertXPathChildren(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[6]/SVG_FONT ), 22);
     }
