@@ -26,7 +26,7 @@
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -47,7 +47,7 @@ class SvxShapeCollection :
     public SvxShapeCollectionMutex
 {
 private:
-    comphelper::OInterfaceContainerHelper2 maShapeContainer;
+    comphelper::OInterfaceContainerHelper3<drawing::XShape> maShapeContainer;
 
     cppu::OBroadcastHelper mrBHelper;
 
@@ -213,8 +213,8 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
-    Reference< uno::XInterface> xInterface = maShapeContainer.getInterface(Index);
-    return uno::makeAny( Reference< drawing::XShape>(static_cast< drawing::XShape* >( xInterface.get())) );
+    Reference<drawing::XShape> xShape = maShapeContainer.getInterface(Index);
+    return uno::makeAny( xShape );
 }
 
 // XElementAccess
