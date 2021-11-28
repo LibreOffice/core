@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -110,13 +110,13 @@ class SwXTextSection::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
     SwXTextSection &            m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
     const SfxItemPropertySet &  m_rPropSet;
-    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
     const bool                  m_bIndexHeader;
     bool                        m_bIsDescriptor;
     OUString             m_sName;

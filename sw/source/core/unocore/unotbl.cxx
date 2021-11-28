@@ -96,7 +96,7 @@
 #include <sortopt.hxx>
 #include <sal/log.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -148,7 +148,7 @@ namespace
 
     void lcl_SendChartEvent(
             uno::Reference<uno::XInterface> const& xSource,
-            ::comphelper::OInterfaceContainerHelper2& rListeners)
+            ::comphelper::OInterfaceContainerHelper3<chart::XChartDataChangeEventListener>& rListeners)
     {
         rListeners.notifyEach(
                 &chart::XChartDataChangeEventListener::chartDataChanged,
@@ -1905,7 +1905,7 @@ class SwXTextTable::Impl
 {
 private:
     SwFrameFormat* m_pFrameFormat;
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
@@ -3114,12 +3114,12 @@ class SwXCellRange::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
     SwFrameFormat* m_pFrameFormat;
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper2 m_ChartListeners;
+    ::comphelper::OInterfaceContainerHelper3<chart::XChartDataChangeEventListener> m_ChartListeners;
 
     sw::UnoCursorPointer m_pTableCursor;
 

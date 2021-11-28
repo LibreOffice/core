@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UNOTXVW_HXX
 
 #include <sfx2/sfxbasecontroller.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextViewTextRangeSupplier.hpp>
@@ -61,7 +61,7 @@ class SwXTextView final :
     public css::datatransfer::XTransferableTextSupplier,
     public SfxBaseController
 {
-    ::comphelper::OInterfaceContainerHelper2 m_SelChangedListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener> m_SelChangedListeners;
 
     SwView*                     m_pView;
     const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties
