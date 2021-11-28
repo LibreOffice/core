@@ -90,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bc0c8ad_8e5946b2",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-11-28T06:42:52Z",
+      "side": 1,
+      "message": "you have my blessing to proceed with “linear”, I agree it’s better",
+      "parentUuid": "e5b08a38_7b50c3bf",
+      "range": {
+        "startLine": 384,
+        "startChar": 118,
+        "endLine": 384,
+        "endChar": 120
+      },
+      "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54dee523_259daf6a",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 1
