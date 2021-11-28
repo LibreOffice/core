@@ -20,7 +20,7 @@
 #include <memory>
 #include <utility>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -64,11 +64,11 @@ class SwXReferenceMark::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
     bool m_bIsDescriptor;
     SwDoc* m_pDoc;
     const SwFormatRefMark* m_pMarkFormat;
@@ -603,11 +603,11 @@ SwXMetaText::createTextCursorByRange(
 class SwXMeta::Impl : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
     std::unique_ptr<const TextRangeList_t> m_pTextPortions;
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;

@@ -43,7 +43,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -405,11 +405,11 @@ class SwXFieldMaster::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
 
     SwDoc*          m_pDoc;
     SwFieldType* m_pType;
@@ -1085,13 +1085,13 @@ class SwXTextField::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
     SwFieldType* m_pFieldType;
     SwFormatField* m_pFormatField;
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
 
     SwDoc* m_pDoc;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
@@ -2828,10 +2828,10 @@ sal_Bool SwXTextFieldMasters::hasElements()
 class SwXTextFieldTypes::Impl
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
-    ::comphelper::OInterfaceContainerHelper2 m_RefreshListeners;
+    ::comphelper::OInterfaceContainerHelper3<util::XRefreshListener> m_RefreshListeners;
 
     Impl() : m_RefreshListeners(m_Mutex) { }
 };
