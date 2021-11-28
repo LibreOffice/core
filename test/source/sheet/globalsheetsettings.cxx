@@ -83,18 +83,21 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     DoCheck("UsePrinterMetrics", false, true, node, "UsePrinterMetrics");
     DoCheck("ReplaceCellsWarning", true, false, node, "ReplaceCellsWarning");
 
+    node = "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit";
+    DoCheck("Metric", sal_Int16(8), sal_Int16(1), node, "NonMetric"); // Test uses en-US locale
+
+    node = "/org.openoffice.Office.Calc/Input";
+    DoCheck("DoAutoComplete", true, false, node, "AutoInput");
+
+    node = "/org.openoffice.Office.Calc/Content/Update";
+    DoCheck("LinkUpdateMode", sal_Int16(2), sal_Int16(1), node, "Link");
+
+    node = "/org.openoffice.Office.Calc/Print/";
+    DoCheck("PrintAllSheets", false, true, node + "Other", "AllSheets");
+    DoCheck("PrintEmptyPages", false, true, node + "Page", "EmptyPages");
+
     OUString propName;
     uno::Any aNewValue;
-
-    propName = "Metric";
-    sal_Int16 aMetric = 42;
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aMetric);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue Metric", sal_Int16(8), aMetric);
-
-    aNewValue <<= sal_Int16(1);
-    xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aMetric);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Metric", sal_Int16(1), aMetric);
 
     propName = "Scale";
     sal_Int16 aScale = 42;
@@ -105,16 +108,6 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aScale);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Scale", sal_Int16(-1), aScale);
-
-    propName = "DoAutoComplete";
-    bool aDoAutoComplete = false;
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aDoAutoComplete);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue DoAutoComplete", aDoAutoComplete);
-
-    aNewValue <<= false;
-    xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aDoAutoComplete);
-    CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue DoAutoComplete", !aDoAutoComplete);
 
     propName = "StatusBarFunction";
     sal_Int16 aStatusBarFunction = 42;
@@ -151,22 +144,6 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aUserLists);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue UserLists", !aUserLists.hasElements());
-
-    propName = "LinkUpdateMode";
-    sal_Int16 aLinkUpdateMode = 42;
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aLinkUpdateMode);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue LinkUpdateMode", sal_Int16(2),
-                                 aLinkUpdateMode);
-
-    aNewValue <<= sal_Int16(1);
-    xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aLinkUpdateMode);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue LinkUpdateMode", sal_Int16(1),
-                                 aLinkUpdateMode);
-
-    node = "/org.openoffice.Office.Calc/Print/";
-    DoCheck("PrintAllSheets", false, true, node + "Other", "AllSheets");
-    DoCheck("PrintEmptyPages", false, true, node + "Page", "EmptyPages");
 }
 }
 
