@@ -19,7 +19,7 @@
 
 #include <unoparagraph.hxx>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
@@ -113,12 +113,12 @@ class SwXParagraph::Impl
     : public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
     SwXParagraph& m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
     SfxItemPropertySet const& m_rPropSet;
     bool m_bIsDescriptor;
     sal_Int32 m_nSelectionStartPos;
