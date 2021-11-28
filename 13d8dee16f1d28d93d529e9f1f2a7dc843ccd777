@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5b08a38_7b50c3bf",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-11-28T02:45:17Z",
+      "side": 1,
+      "message": "I am not content with \"1D and matrix codes\" either, but personally \"linear\" flows better for me.  We can even do \"linear and matrix barcodes\".",
+      "parentUuid": "14f0e7a9_4f976e3d",
+      "range": {
+        "startLine": 384,
+        "startChar": 118,
+        "endLine": 384,
+        "endChar": 120
+      },
+      "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54dee523_259daf6a",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 1
@@ -77,6 +101,30 @@
       "writtenOn": "2021-11-27T07:12:05Z",
       "side": 1,
       "message": "The command refers to a particular item that is being edited so any \"or\" sounds a bit awkward here and I\u0027d go with this term. And not \"Edit QR or Barcode\" as you discuss on BZ.",
+      "range": {
+        "startLine": 7214,
+        "startChar": 40,
+        "endLine": 7214,
+        "endChar": 47
+      },
+      "revId": "13d8dee16f1d28d93d529e9f1f2a7dc843ccd777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53f96726_9f1e3f26",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 7214,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-11-28T02:45:17Z",
+      "side": 1,
+      "message": "Sure, as I\u0027ve said, I can always make adjustment in the Chinese translation.",
+      "parentUuid": "54dee523_259daf6a",
       "range": {
         "startLine": 7214,
         "startChar": 40,
