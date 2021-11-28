@@ -32,7 +32,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/UnitConversion.hxx>
@@ -1478,7 +1478,7 @@ lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
 class SwXDocumentIndexMark::Impl final: public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
     SwXDocumentIndexMark & m_rThis;
     bool m_bInReplaceMark;
 
@@ -1487,7 +1487,7 @@ public:
     uno::WeakReference<uno::XInterface> m_wThis;
     SfxItemPropertySet const& m_rPropSet;
     const TOXTypes m_eTOXType;
-    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_EventListeners;
     bool m_bIsDescriptor;
     const SwTOXType* m_pTOXType;
     const SwTOXMark* m_pTOXMark;

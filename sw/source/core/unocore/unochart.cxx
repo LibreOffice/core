@@ -156,17 +156,13 @@ static osl::Mutex &    GetChartMutex()
 }
 
 static void LaunchModifiedEvent(
-        ::comphelper::OInterfaceContainerHelper2 &rICH,
+        ::comphelper::OInterfaceContainerHelper3<util::XModifyListener> &rICH,
         const uno::Reference< uno::XInterface > &rxI )
 {
     lang::EventObject aEvtObj( rxI );
-    comphelper::OInterfaceIteratorHelper2 aIt( rICH );
+    comphelper::OInterfaceIteratorHelper3 aIt( rICH );
     while (aIt.hasMoreElements())
-    {
-        uno::Reference< util::XModifyListener > xRef( aIt.next(), uno::UNO_QUERY );
-        if (xRef.is())
-            xRef->modified( aEvtObj );
-    }
+        aIt.next()->modified( aEvtObj );
 }
 
 /**

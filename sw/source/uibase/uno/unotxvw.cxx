@@ -718,28 +718,18 @@ void SwXTextView::NotifySelChanged()
             &view::XSelectionChangeListener::selectionChanged, aEvent);
 }
 
-namespace {
-    struct DispatchListener
-    {
-        URL const & m_rURL;
-        Sequence<PropertyValue> const& m_rSeq;
-        explicit DispatchListener(URL const& rURL,
-                Sequence<PropertyValue> const& rSeq)
-            : m_rURL(rURL), m_rSeq(rSeq) { }
-        void operator()(uno::Reference<XDispatch> const & xListener) const
-        {
-            xListener->dispatch(m_rURL, m_rSeq);
-        }
-    };
-}
-
 void SwXTextView::NotifyDBChanged()
 {
     URL aURL;
     aURL.Complete = OUString::createFromAscii(SwXDispatch::GetDBChangeURL());
 
-    m_SelChangedListeners.forEach<XDispatch>(
-            DispatchListener(aURL, {}));
+    m_SelChangedListeners.forEach(
+        [&aURL] (const uno::Reference<XSelectionChangeListener>& xListener)
+        {
+            uno::Reference<XDispatch> xDispatch(xListener, UNO_QUERY);
+            if (xDispatch)
+                xDispatch->dispatch(aURL, {});
+        });
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetInfo(  )

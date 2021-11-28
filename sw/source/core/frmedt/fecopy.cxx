@@ -1204,7 +1204,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     EndAllAction();
 }
 
-comphelper::OInterfaceContainerHelper2& SwFEShell::GetPasteListeners() { return m_aPasteListeners; }
+comphelper::OInterfaceContainerHelper3<css::text::XPasteListener>& SwFEShell::GetPasteListeners() { return m_aPasteListeners; }
 
 bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf ) const
 {
