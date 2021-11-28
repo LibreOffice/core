@@ -887,7 +887,7 @@ void SAL_CALL FSStorage::addEventListener(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper2( m_aMutex ));
+        m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutex ));
 
     m_pListenersContainer->addInterface( xListener );
 }

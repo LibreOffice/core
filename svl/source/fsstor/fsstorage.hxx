@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <ucbhelper/content.hxx>
@@ -42,7 +42,7 @@ class FSStorage : public css::lang::XTypeProvider
     OUString  m_aURL;
     ::ucbhelper::Content m_aContent;
     sal_Int32 m_nMode;
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pListenersContainer; // list of listeners
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
