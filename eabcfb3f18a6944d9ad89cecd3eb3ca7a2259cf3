@@ -88,6 +88,23 @@
       "parentUuid": "42085aba_d9864cfc",
       "revId": "eabcfb3f18a6944d9ad89cecd3eb3ca7a2259cf3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33868f78_60bb6293",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-28T14:27:57Z",
+      "side": 1,
+      "message": "sent a revert now as \u003chttps://gerrit.libreoffice.org/c/core/+/125977\u003e \"Revert \u0027tdf#129183 sw: textboxes in group shapes - part 3\u0027\"; would be good to get \u003chttps://ci.libreoffice.org/job/lo_ubsan/\u003e (which started to suffer from various breakages recently) green again",
+      "revId": "eabcfb3f18a6944d9ad89cecd3eb3ca7a2259cf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
