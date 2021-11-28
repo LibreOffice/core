@@ -37,6 +37,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/interfacecontainer3.hxx>
 #include <mutex>
 #include <vector>
 
@@ -78,7 +79,7 @@ public:
 
 protected:
     ContainerListenerMultiplexer        maContainerListeners;
-    ::comphelper::OInterfaceContainerHelper2   maChangeListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XChangesListener>   maChangeListeners;
     UnoControlModelHolderVector           maModels;
 
     AllGroups                           maGroups;

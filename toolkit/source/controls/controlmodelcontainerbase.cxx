@@ -870,12 +870,9 @@ void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAcce
     aEvent.Changes.getArray()[ 0 ].Accessor <<= _rAccessor;
 
 
-    std::vector< Reference< XInterface > > aChangeListeners( maChangeListeners.getElements() );
+    std::vector< Reference< css::util::XChangesListener > > aChangeListeners( maChangeListeners.getElements() );
     for ( const auto& rListener : aChangeListeners )
-    {
-        if ( rListener.is() )
-            static_cast< XChangesListener* >( rListener.get() )->changesOccurred( aEvent );
-    }
+        rListener->changesOccurred( aEvent );
 }
 
 
