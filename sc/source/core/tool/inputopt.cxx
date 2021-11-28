@@ -31,25 +31,20 @@ using namespace com::sun::star::uno;
 // ScInputOptions - input options
 
 ScInputOptions::ScInputOptions()
+    : nMoveDir(DIR_BOTTOM)
+    , bMoveSelection(true)
+    , bEnterEdit(false)
+    , bExtendFormat(false)
+    , bRangeFinder(true)
+    , bExpandRefs(false)
+    , mbSortRefUpdate(true)
+    , bMarkHeader(true)
+    , bUseTabCol(false)
+    , bTextWysiwyg(false)
+    , bReplCellsWarn(true)
+    , bLegacyCellSelection(false)
+    , bEnterPasteMode(false)
 {
-    SetDefaults();
-}
-
-void ScInputOptions::SetDefaults()
-{
-    nMoveDir        = DIR_BOTTOM;
-    bMoveSelection  = true;
-    bEnterEdit      = false;
-    bExtendFormat   = false;
-    bRangeFinder    = true;
-    bExpandRefs     = false;
-    mbSortRefUpdate = true;
-    bMarkHeader     = true;
-    bUseTabCol      = false;
-    bTextWysiwyg    = false;
-    bReplCellsWarn  = true;
-    bLegacyCellSelection = false;
-    bEnterPasteMode = false;
 }
 
 //  Config Item containing input options
@@ -161,12 +156,6 @@ void ScInputCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 void ScInputCfg::SetOptions( const ScInputOptions& rNew )
 {
     *static_cast<ScInputOptions*>(this) = rNew;
-    SetModified();
-    Commit();
-}
-
-void ScInputCfg::OptionsChanged()
-{
     SetModified();
     Commit();
 }

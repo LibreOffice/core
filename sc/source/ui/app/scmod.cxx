@@ -777,7 +777,7 @@ const ScInputOptions& ScModule::GetInputOptions()
     if ( !m_pInputCfg )
         m_pInputCfg.reset( new ScInputCfg );
 
-    return *m_pInputCfg;
+    return m_pInputCfg->GetOptions();
 }
 
 void ScModule::SetPrintOptions( const ScPrintOptions& rOpt )
@@ -1128,73 +1128,74 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     // InputOptions
+    ScInputOptions aInputOptions = m_pInputCfg->GetOptions();
     if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,&pItem) )
     {
-        m_pInputCfg->SetMoveDir( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
+        aInputOptions.SetMoveDir( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_SELECTION,&pItem) )
     {
-        m_pInputCfg->SetMoveSelection( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetMoveSelection( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_EDITMODE,&pItem) )
     {
-        m_pInputCfg->SetEnterEdit( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetEnterEdit( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_FMT_EXPAND,&pItem) )
     {
-        m_pInputCfg->SetExtendFormat( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetExtendFormat( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_RANGEFINDER,&pItem) )
     {
-        m_pInputCfg->SetRangeFinder( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetRangeFinder( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_REF_EXPAND,&pItem) )
     {
-        m_pInputCfg->SetExpandRefs( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetExpandRefs( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
     if (rOptSet.HasItem(SID_SC_OPT_SORT_REF_UPDATE, &pItem))
     {
-        m_pInputCfg->SetSortRefUpdate(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        aInputOptions.SetSortRefUpdate(static_cast<const SfxBoolItem*>(pItem)->GetValue());
         bSaveInputOptions = true;
     }
 
     if ( rOptSet.HasItem(SID_SC_INPUT_MARK_HEADER,&pItem) )
     {
-        m_pInputCfg->SetMarkHeader( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetMarkHeader( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
         bUpdateMarks = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_TEXTWYSIWYG,&pItem) )
     {
         bool bNew = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        if ( bNew != m_pInputCfg->GetTextWysiwyg() )
+        if ( bNew != aInputOptions.GetTextWysiwyg() )
         {
-            m_pInputCfg->SetTextWysiwyg( bNew );
+            aInputOptions.SetTextWysiwyg( bNew );
             bSaveInputOptions = true;
             bUpdateRefDev = true;
         }
     }
     if( rOptSet.HasItem( SID_SC_INPUT_REPLCELLSWARN, &pItem ) )
     {
-        m_pInputCfg->SetReplaceCellsWarn( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetReplaceCellsWarn( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
 
     if( rOptSet.HasItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, &pItem ) )
     {
-        m_pInputCfg->SetLegacyCellSelection( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetLegacyCellSelection( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
 
     if( rOptSet.HasItem( SID_SC_INPUT_ENTER_PASTE_MODE, &pItem ) )
     {
-        m_pInputCfg->SetEnterPasteMode( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        aInputOptions.SetEnterPasteMode( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
         bSaveInputOptions = true;
     }
 
@@ -1212,7 +1213,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         m_pAppCfg->OptionsChanged();
 
     if ( bSaveInputOptions )
-        m_pInputCfg->OptionsChanged();
+        m_pInputCfg->SetOptions(aInputOptions);
 
     // Kick off recalculation?
     if (pDoc && bCompileErrorCells)

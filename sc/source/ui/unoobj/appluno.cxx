@@ -291,7 +291,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions   aAppOpt = pScMod->GetAppOptions();
-    ScInputOptions aInpOpt = pScMod->GetInputOptions();
+    const ScInputOptions& aInpOpt = pScMod->GetInputOptions();
     // print options aren't loaded until needed
 
     if (aPropertyName == SC_UNONAME_DOAUTOCP) aRet <<= aAppOpt.GetAutoComplete();
