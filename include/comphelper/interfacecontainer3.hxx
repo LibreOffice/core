@@ -85,7 +85,9 @@ public:
 
 private:
     OInterfaceContainerHelper3<ListenerT>& rCont;
-    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>> maData;
+    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                      o3tl::ThreadSafeRefCountingPolicy>
+        maData;
     sal_Int32 nRemain;
 
     OInterfaceIteratorHelper3(const OInterfaceIteratorHelper3&) = delete;
@@ -217,7 +219,9 @@ public:
 
 private:
     friend class OInterfaceIteratorHelper3<ListenerT>;
-    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>> maData;
+    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                      o3tl::ThreadSafeRefCountingPolicy>
+        maData;
     ::osl::Mutex& rMutex;
     OInterfaceContainerHelper3(const OInterfaceContainerHelper3&) = delete;
     OInterfaceContainerHelper3& operator=(const OInterfaceContainerHelper3&) = delete;
