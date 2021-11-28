@@ -187,15 +187,9 @@ void PropertyChangeNotifier::notifyPropertyChanged(
     auto it = m_aListeners.find( OUString() );
     if (it != m_aListeners.end())
     {
-        const std::vector< uno::Reference< uno::XInterface > >& seqList = it->second;
+        const std::vector< uno::Reference< beans::XPropertiesChangeListener > >& seqList = it->second;
         for( const auto& rListener : seqList )
-        {
-            uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
-            if( aListener.is() )
-            {
-                aListener->propertiesChange( Changes );
-            }
-        }
+            rListener->propertiesChange( Changes );
     }
 
     for( const auto& rChange : std::as_const(Changes) )
@@ -204,15 +198,9 @@ void PropertyChangeNotifier::notifyPropertyChanged(
         it = m_aListeners.find( rChange.PropertyName );
         if (it != m_aListeners.end())
         {
-            const std::vector< uno::Reference< uno::XInterface > >& seqList = it->second;
+            const std::vector< uno::Reference< beans::XPropertiesChangeListener > >& seqList = it->second;
             for( const auto& rListener : seqList )
-            {
-                uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
-                if( aListener.is() )
-                {
-                    aListener->propertiesChange( seq );
-                }
-            }
+                rListener->propertiesChange( seq );
         }
     }
 }

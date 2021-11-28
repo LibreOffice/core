@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertySetInfoChangeListener.hpp>
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <memory>
@@ -79,7 +80,7 @@ namespace fileaccess {
 
 
     typedef std::unordered_map< OUString,
-                           std::vector< css::uno::Reference< css::uno::XInterface > > >  ListenerMap;
+                           std::vector< css::uno::Reference< css::beans::XPropertiesChangeListener > > >  ListenerMap;
 
     class PropertyChangeNotifier
     {
