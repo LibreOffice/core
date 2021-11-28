@@ -88,32 +88,24 @@ ScPrintCfg::ScPrintCfg() :
     ConfigItem( CFGPATH_PRINT )
 {
     Sequence<OUString> aNames = GetPropertyNames();
-    Sequence<Any> aValues = GetProperties(aNames);
-    const Any* pValues = aValues.getConstArray();
+    EnableNotification(aNames);
+    ReadCfg();
+}
+
+void ScPrintCfg::ReadCfg()
+{
+    const Sequence<OUString> aNames = GetPropertyNames();
+    const Sequence<Any> aValues = GetProperties(aNames);
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() != aNames.getLength())
         return;
 
-    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-    {
-        OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-        if(pValues[nProp].hasValue())
-        {
-            switch(nProp)
-            {
-                case SCPRINTOPT_EMPTYPAGES:
-                    // reversed
-                    SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                    break;
-                case SCPRINTOPT_ALLSHEETS:
-                    SetAllSheets( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                    break;
-                case SCPRINTOPT_FORCEBREAKS:
-                    SetForceBreaks( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                    break;
-            }
-        }
-    }
+    if (bool bVal; aValues[SCPRINTOPT_EMPTYPAGES] >>= bVal)
+        SetSkipEmpty(!bVal); // reversed
+    if (bool bVal; aValues[SCPRINTOPT_ALLSHEETS] >>= bVal)
+        SetAllSheets(bVal);
+    if (bool bVal; aValues[SCPRINTOPT_FORCEBREAKS] >>= bVal)
+        SetForceBreaks(bVal);
 }
 
 void ScPrintCfg::ImplCommit()
@@ -122,22 +114,9 @@ void ScPrintCfg::ImplCommit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-    {
-        switch(nProp)
-        {
-            case SCPRINTOPT_EMPTYPAGES:
-                // reversed
-                pValues[nProp] <<= !GetSkipEmpty();
-                break;
-            case SCPRINTOPT_ALLSHEETS:
-                pValues[nProp] <<= GetAllSheets();
-                break;
-            case SCPRINTOPT_FORCEBREAKS:
-                pValues[nProp] <<= GetForceBreaks();
-                break;
-        }
-    }
+    pValues[SCPRINTOPT_EMPTYPAGES] <<= !GetSkipEmpty(); // reversed
+    pValues[SCPRINTOPT_ALLSHEETS] <<= GetAllSheets();
+    pValues[SCPRINTOPT_FORCEBREAKS] <<= GetForceBreaks();
     PutProperties(aNames, aValues);
 }
 
@@ -145,8 +124,9 @@ void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
 {
     *static_cast<ScPrintOptions*>(this) = rNew;
     SetModified();
+    Commit();
 }
 
-void ScPrintCfg::Notify( const css::uno::Sequence< OUString >& ) {}
+void ScPrintCfg::Notify( const css::uno::Sequence< OUString >& ) { ReadCfg(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
