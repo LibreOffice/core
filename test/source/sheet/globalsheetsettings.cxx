@@ -30,23 +30,24 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     uno::Reference<beans::XPropertySet> xGlobalSheetSettings(init(), UNO_QUERY_THROW);
     auto configProvider
         = css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext());
-    css::uno::Sequence<css::uno::Any> args{ css::uno::Any(css::beans::NamedValue(
-        "nodepath", css::uno::makeAny(OUString("/org.openoffice.Office.Calc/Input")))) };
-    css::uno::Reference<beans::XPropertySet> xRegNodeRO(
-        configProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess", args),
-        css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<beans::XPropertySet> xRegNodeRW(
-        configProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationUpdateAccess", args),
-        css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::util::XChangesBatch> xBatch(xRegNodeRW, css::uno::UNO_QUERY_THROW);
 
-    auto DoCheck = [&xGlobalSheetSettings, &xRegNodeRO, &xRegNodeRW,
-                    &xBatch](const OUString& propName, const auto& origValue, const auto& newValue,
-                             const OUString& regValueName) {
+    auto DoCheck = [&xGlobalSheetSettings, &configProvider](
+                       const OUString& propName, const auto& origValue, const auto& newValue,
+                       const OUString& regNodeName, const OUString& regValueName) {
         OString sMessage = "PropertyValue " + propName.toUtf8();
         css::uno::Any aOrigValue(origValue), aNewValue(newValue);
+
+        css::uno::Sequence<css::uno::Any> args{ css::uno::Any(
+            css::beans::NamedValue("nodepath", css::uno::makeAny(regNodeName))) };
+        css::uno::Reference<beans::XPropertySet> xRegNodeRO(
+            configProvider->createInstanceWithArguments(
+                "com.sun.star.configuration.ConfigurationAccess", args),
+            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<beans::XPropertySet> xRegNodeRW(
+            configProvider->createInstanceWithArguments(
+                "com.sun.star.configuration.ConfigurationUpdateAccess", args),
+            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::util::XChangesBatch> xBatch(xRegNodeRW, css::uno::UNO_QUERY_THROW);
 
         // 1. Check initial value
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aOrigValue,
@@ -70,16 +71,17 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
                                      xGlobalSheetSettings->getPropertyValue(propName));
     };
 
-    DoCheck("MoveSelection", true, false, "MoveSelection");
-    DoCheck("MoveDirection", sal_Int16(0), sal_Int16(1), "MoveSelectionDirection");
-    DoCheck("EnterEdit", false, true, "SwitchToEditMode");
-    DoCheck("ExtendFormat", false, true, "ExpandFormatting");
-    DoCheck("RangeFinder", true, false, "ShowReference");
-    DoCheck("ExpandReferences", false, true, "ExpandReference");
-    DoCheck("MarkHeader", true, false, "HighlightSelection");
-    DoCheck("UseTabCol", false, true, "UseTabCol");
-    DoCheck("UsePrinterMetrics", false, true, "UsePrinterMetrics");
-    DoCheck("ReplaceCellsWarning", true, false, "ReplaceCellsWarning");
+    OUString node = "/org.openoffice.Office.Calc/Input";
+    DoCheck("MoveSelection", true, false, node, "MoveSelection");
+    DoCheck("MoveDirection", sal_Int16(0), sal_Int16(1), node, "MoveSelectionDirection");
+    DoCheck("EnterEdit", false, true, node, "SwitchToEditMode");
+    DoCheck("ExtendFormat", false, true, node, "ExpandFormatting");
+    DoCheck("RangeFinder", true, false, node, "ShowReference");
+    DoCheck("ExpandReferences", false, true, node, "ExpandReference");
+    DoCheck("MarkHeader", true, false, node, "HighlightSelection");
+    DoCheck("UseTabCol", false, true, node, "UseTabCol");
+    DoCheck("UsePrinterMetrics", false, true, node, "UsePrinterMetrics");
+    DoCheck("ReplaceCellsWarning", true, false, node, "ReplaceCellsWarning");
 
     OUString propName;
     uno::Any aNewValue;
@@ -162,25 +164,9 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue LinkUpdateMode", sal_Int16(1),
                                  aLinkUpdateMode);
 
-    propName = "PrintAllSheets";
-    bool aPrintAllSheets = true;
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aPrintAllSheets);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue PrintAllSheets", !aPrintAllSheets);
-
-    aNewValue <<= true;
-    xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aPrintAllSheets);
-    CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue PrintAllSheets", aPrintAllSheets);
-
-    propName = "PrintEmptyPages";
-    bool aPrintEmptyPages = true;
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aPrintEmptyPages);
-    CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue PrintEmptyPages", !aPrintEmptyPages);
-
-    aNewValue <<= true;
-    xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
-    CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aPrintEmptyPages);
-    CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue PrintEmptyPages", aPrintEmptyPages);
+    node = "/org.openoffice.Office.Calc/Print/";
+    DoCheck("PrintAllSheets", false, true, node + "Other", "AllSheets");
+    DoCheck("PrintEmptyPages", false, true, node + "Page", "EmptyPages");
 }
 }
 

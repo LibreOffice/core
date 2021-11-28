@@ -793,7 +793,7 @@ const ScPrintOptions& ScModule::GetPrintOptions()
     if ( !m_pPrintCfg )
         m_pPrintCfg.reset( new ScPrintCfg );
 
-    return *m_pPrintCfg;
+    return m_pPrintCfg->GetOptions();
 }
 
 ScNavipiCfg& ScModule::GetNavipiCfg()

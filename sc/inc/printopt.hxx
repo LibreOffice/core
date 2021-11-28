@@ -69,16 +69,17 @@ private:
 
 // config item
 
-class ScPrintCfg final : public ScPrintOptions, public utl::ConfigItem
+class ScPrintCfg final : private ScPrintOptions, public utl::ConfigItem
 {
 private:
     static css::uno::Sequence<OUString> GetPropertyNames();
-
+    void ReadCfg();
     virtual void    ImplCommit() override;
 
 public:
             ScPrintCfg();
 
+    const ScPrintOptions& GetOptions() const { return *this; }
     void            SetOptions( const ScPrintOptions& rNew );
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
