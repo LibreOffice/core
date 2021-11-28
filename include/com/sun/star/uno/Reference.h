@@ -233,6 +233,7 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
     }
 
 public:
+#if !defined LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new ( ::size_t nSize )
@@ -244,6 +245,7 @@ public:
     static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
+#endif
 
     /** Destructor: Releases interface if set.
     */
