@@ -105,7 +105,7 @@ protected:
         // recreated afterwards. So it's our (the context's) responsibility to store the session-persistent
         // properties.
 
-    ::comphelper::OInterfaceContainerHelper2       m_aContainerListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener>  m_aContainerListeners;
     rtl::Reference<DatabaseDocumentLoader>         m_xDatabaseDocumentLoader;
 
 public:

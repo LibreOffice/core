@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer2.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
@@ -56,7 +57,7 @@ namespace dbaui
     class SbaXStatusMultiplexer
             :public OSbaWeakSubObject
             ,public css::frame::XStatusListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>
     {
     public:
         SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -81,7 +82,7 @@ namespace dbaui
     class SbaXLoadMultiplexer
             :public OSbaWeakSubObject
             ,public css::form::XLoadListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::form::XLoadListener>
     {
     public:
         SbaXLoadMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -105,7 +106,7 @@ namespace dbaui
     class SbaXParameterMultiplexer
             :public OSbaWeakSubObject
             ,public css::form::XDatabaseParameterListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::form::XDatabaseParameterListener>
     {
     public:
         SbaXParameterMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -124,7 +125,7 @@ namespace dbaui
     class SbaXSubmitMultiplexer
             :public OSbaWeakSubObject
             ,public css::form::XSubmitListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::form::XSubmitListener>
     {
     public:
         SbaXSubmitMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -143,7 +144,7 @@ namespace dbaui
     class SbaXResetMultiplexer
             :public OSbaWeakSubObject
             ,public css::form::XResetListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::form::XResetListener>
     {
     public:
         SbaXResetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -163,7 +164,7 @@ namespace dbaui
     class SbaXRowSetMultiplexer
             :public OSbaWeakSubObject
             ,public css::sdbc::XRowSetListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::sdbc::XRowSetListener>
     {
     public:
         SbaXRowSetMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -184,7 +185,7 @@ namespace dbaui
     class SbaXRowSetApproveMultiplexer
             :public OSbaWeakSubObject
             ,public css::sdb::XRowSetApproveListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::sdb::XRowSetApproveListener>
     {
     public:
         SbaXRowSetApproveMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -205,7 +206,7 @@ namespace dbaui
     class SbaXSQLErrorMultiplexer
             :public OSbaWeakSubObject
             ,public css::sdb::XSQLErrorListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::sdb::XSQLErrorListener>
     {
     public:
         SbaXSQLErrorMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
@@ -288,7 +289,7 @@ namespace dbaui
     class SbaXPropertiesChangeMultiplexer
             :public OSbaWeakSubObject
             ,public css::beans::XPropertiesChangeListener
-            ,public ::comphelper::OInterfaceContainerHelper2
+            ,public ::comphelper::OInterfaceContainerHelper3<css::beans::XPropertiesChangeListener>
     {
     public:
         SbaXPropertiesChangeMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);

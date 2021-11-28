@@ -249,9 +249,9 @@ void SbaXFormAdapter::AttachForm(const Reference< css::sdbc::XRowSet >& xNewMast
         if (xLoadable->isLoaded())
         {
             css::lang::EventObject aEvt(*this);
-            ::comphelper::OInterfaceIteratorHelper2 aIt(m_aLoadListeners);
+            ::comphelper::OInterfaceIteratorHelper3 aIt(m_aLoadListeners);
             while (aIt.hasMoreElements())
-                static_cast< css::form::XLoadListener*>(aIt.next())->unloaded(aEvt);
+                aIt.next()->unloaded(aEvt);
         }
     }
 
@@ -267,9 +267,9 @@ void SbaXFormAdapter::AttachForm(const Reference< css::sdbc::XRowSet >& xNewMast
     if (xLoadable->isLoaded())
     {
         css::lang::EventObject aEvt(*this);
-        ::comphelper::OInterfaceIteratorHelper2 aIt(m_aLoadListeners);
+        ::comphelper::OInterfaceIteratorHelper3 aIt(m_aLoadListeners);
         while (aIt.hasMoreElements())
-            static_cast< css::form::XLoadListener*>(aIt.next())->loaded(aEvt);
+            aIt.next()->loaded(aEvt);
     }
 
     // TODO : perhaps _all_ of our listeners should be notified about our new state
@@ -1649,9 +1649,9 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     aEvt.Source = *this;
     aEvt.Accessor <<= nIndex;
     aEvt.Element <<= xElement;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aContainerListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        static_cast< css::container::XContainerListener*>(aIt.next())->elementInserted(aEvt);
+        aIt.next()->elementInserted(aEvt);
 }
 
 sal_Int32 SbaXFormAdapter::implGetPos(const OUString& rName)
@@ -1754,9 +1754,9 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
     css::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Element <<= xAffected;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aContainerListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        static_cast< css::container::XContainerListener*>(aIt.next())->elementRemoved(aEvt);
+        aIt.next()->elementRemoved(aEvt);
 
 }
 
@@ -1817,9 +1817,9 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     aEvt.Element <<= xElement;
     aEvt.ReplacedElement <<= xOld;
 
-    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aContainerListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        static_cast< css::container::XContainerListener*>(aIt.next())->elementReplaced(aEvt);
+        aIt.next()->elementReplaced(aEvt);
 }
 
 // css::container::XIndexAccess

@@ -37,7 +37,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -124,7 +124,7 @@ namespace dbaui
     public:
         ::dbtools::SQLExceptionInfo     m_aCurrentError;
 
-        ::comphelper::OInterfaceContainerHelper2
+        ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>
                                         m_aModifyListeners;
 
         // <properties>

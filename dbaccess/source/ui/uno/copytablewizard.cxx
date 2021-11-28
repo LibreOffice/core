@@ -59,7 +59,7 @@
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <svtools/genericunodialog.hxx>
@@ -338,7 +338,7 @@ private:
 
         // other
         Reference< XInteractionHandler > m_xInteractionHandler;
-        ::comphelper::OInterfaceContainerHelper2
+        ::comphelper::OInterfaceContainerHelper3<XCopyTableListener>
                                         m_aCopyTableListeners;
         sal_Int16                       m_nOverrideExecutionResult;
     };
@@ -983,13 +983,12 @@ namespace
 
 bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _rEvent )
 {
-    Reference< XCopyTableListener > xListener;
     try
     {
-        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aCopyTableListeners );
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aCopyTableListeners );
         while ( aIter.hasMoreElements() )
         {
-            xListener.set( aIter.next(), UNO_QUERY_THROW );
+            Reference< XCopyTableListener > xListener( aIter.next() );
             sal_Int16 nListenerChoice = xListener->copyRowError( _rEvent );
             switch ( nListenerChoice )
             {
