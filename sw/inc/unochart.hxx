@@ -39,7 +39,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -125,7 +125,7 @@ class SwChartDataProvider final :
     // all tables of the document.
     mutable Map_Set_DataSequenceRef_t       m_aDataSequences;
 
-    ::comphelper::OInterfaceContainerHelper2      m_aEventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListeners;
     const SwDoc *                           m_pDoc;
     bool                                    m_bDisposed;
 
@@ -232,8 +232,8 @@ class SwChartDataSequence final :
     public SvtListener
 {
     SwFrameFormat* m_pFormat;
-    ::comphelper::OInterfaceContainerHelper2          m_aEvtListeners;
-    ::comphelper::OInterfaceContainerHelper2          m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
     css::chart2::data::DataSequenceRole               m_aRole;
 
     OUString  m_aRowLabelText;
@@ -328,8 +328,8 @@ SwChartLabeledDataSequenceBaseClass;
 class SwChartLabeledDataSequence final :
     public SwChartLabeledDataSequenceBaseClass
 {
-    ::comphelper::OInterfaceContainerHelper2                           m_aEventListeners;
-    ::comphelper::OInterfaceContainerHelper2                           m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
 
     css::uno::Reference< css::chart2::data::XDataSequence >     m_xData;
     css::uno::Reference< css::chart2::data::XDataSequence >     m_xLabels;
