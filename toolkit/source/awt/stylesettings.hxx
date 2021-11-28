@@ -22,7 +22,7 @@
 
 #include <com/sun/star/awt/XStyleSettings.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/link.hxx>
 
@@ -171,7 +171,7 @@ namespace toolkit
         DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 
         VCLXWindow*                                pOwningWindow;
-        ::comphelper::OInterfaceContainerHelper2   aStyleChangeListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::awt::XStyleChangeListener> aStyleChangeListeners;
     };
 
 
