@@ -132,6 +132,7 @@
 #include <awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 
@@ -444,9 +445,9 @@ class VCLXToolkit : public VCLXToolkitMutexHelper,
     oslModule           hSvToolsLib;
     FN_SvtCreateWindow  fnSvtCreateWindow;
 
-    ::comphelper::OInterfaceContainerHelper2 m_aTopWindowListeners;
-    ::comphelper::OInterfaceContainerHelper2 m_aKeyHandlers;
-    ::comphelper::OInterfaceContainerHelper2 m_aFocusListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XTopWindowListener> m_aTopWindowListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XKeyHandler> m_aKeyHandlers;
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XFocusListener> m_aFocusListeners;
     ::Link<VclSimpleEvent&,void> m_aEventListenerLink;
     ::Link<VclWindowEvent&,bool> m_aKeyListenerLink;
     bool m_bEventListener;
@@ -2416,17 +2417,15 @@ void VCLXToolkit::callTopWindowListeners(
     if (!pWindow->IsTopWindow())
         return;
 
-    std::vector< css::uno::Reference< css::uno::XInterface > >
+    std::vector< css::uno::Reference< css::awt::XTopWindowListener > >
           aListeners(m_aTopWindowListeners.getElements());
     if (aListeners.empty())
         return;
 
     css::lang::EventObject aAwtEvent(
         static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
-    for (const css::uno::Reference<XInterface> & i : aListeners)
+    for (const css::uno::Reference<css::awt::XTopWindowListener> & xListener : aListeners)
     {
-        css::uno::Reference< css::awt::XTopWindowListener >
-              xListener(i, css::uno::UNO_QUERY);
         try
         {
             (xListener.get()->*pFn)(aAwtEvent);
@@ -2441,7 +2440,7 @@ void VCLXToolkit::callTopWindowListeners(
 bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                                   bool bPressed)
 {
-    std::vector< css::uno::Reference< css::uno::XInterface > >
+    std::vector< css::uno::Reference< css::awt::XKeyHandler > >
           aHandlers(m_aKeyHandlers.getElements());
 
     if (!aHandlers.empty())
@@ -2464,10 +2463,8 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
             sal::static_int_cast< sal_Int16 >(
                 pKeyEvent->GetKeyCode().GetFunction()));
-        for (const css::uno::Reference<XInterface> & i : aHandlers)
+        for (const css::uno::Reference<css::awt::XKeyHandler> & xHandler : aHandlers)
         {
-            css::uno::Reference< css::awt::XKeyHandler > xHandler(
-                i, css::uno::UNO_QUERY);
             try
             {
                 if (bPressed ? xHandler->keyPressed(aAwtEvent)
@@ -2491,7 +2488,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
     if (!pWindow->IsTopWindow())
         return;
 
-    std::vector< css::uno::Reference< css::uno::XInterface > >
+    std::vector< css::uno::Reference< css::awt::XFocusListener > >
           aListeners(m_aFocusListeners.getElements());
     if (aListeners.empty())
         return;
@@ -2513,10 +2510,8 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
         static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
         static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
         xNext, false);
-    for (const css::uno::Reference<XInterface> & i : aListeners)
+    for (const css::uno::Reference<css::awt::XFocusListener> & xListener : aListeners)
     {
-        css::uno::Reference< css::awt::XFocusListener > xListener(
-            i, css::uno::UNO_QUERY);
         try
         {
             bGained ? xListener->focusGained(aAwtEvent)

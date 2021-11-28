@@ -29,7 +29,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/componentguard.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -88,7 +88,7 @@ public:
 private:
     typedef ::std::vector< css::uno::Reference< css::awt::grid::XGridColumn > >   Columns;
 
-    ::comphelper::OInterfaceContainerHelper2   m_aContainerListeners;
+    ::comphelper::OInterfaceContainerHelper3<XContainerListener> m_aContainerListeners;
     Columns                             m_aColumns;
 };
 
