@@ -65,6 +65,7 @@ public:
     */
     inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
 
+#if !defined LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new ( size_t nSize )
@@ -76,6 +77,7 @@ public:
     static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
+#endif
 
     /** Constructor: acquires given environment
 

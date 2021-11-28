@@ -47,6 +47,7 @@ class ReferenceObject
     ReferenceObject& operator= (const ReferenceObject&) SAL_DELETED_FUNCTION;
 
 public:
+#if !defined LIBO_INTERNAL_ONLY
     /** Allocation.
      */
     static void* operator new (size_t n)
@@ -63,6 +64,7 @@ public:
     }
     static void operator delete (void*, void*)
     {}
+#endif
 
 public:
     /** Construction.
