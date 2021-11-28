@@ -124,7 +124,7 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper2( getContainerMutex() ) );
+                    new OInterfaceContainerHelper3<XEventListener>( getContainerMutex() ) );
 
     mpDisposeEventListeners->addInterface( Listener );
 }

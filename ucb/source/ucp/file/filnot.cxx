@@ -34,7 +34,7 @@ using namespace com::sun::star::ucb;
 ContentEventNotifier::ContentEventNotifier( TaskManager* pMyShell,
                                             const uno::Reference< XContent >& xCreatorContent,
                                             const uno::Reference< XContentIdentifier >& xCreatorId,
-                                            std::vector< uno::Reference< uno::XInterface > >&& sListeners )
+                                            std::vector< uno::Reference< ucb::XContentEventListener > >&& sListeners )
     : m_pMyShell( pMyShell ),
       m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
@@ -47,7 +47,7 @@ ContentEventNotifier::ContentEventNotifier( TaskManager* pMyShell,
                                             const uno::Reference< XContent >& xCreatorContent,
                                             const uno::Reference< XContentIdentifier >& xCreatorId,
                                             const uno::Reference< XContentIdentifier >& xOldId,
-                                            std::vector< uno::Reference< uno::XInterface > >&& sListeners )
+                                            std::vector< uno::Reference< ucb::XContentEventListener > >&& sListeners )
     : m_pMyShell( pMyShell ),
       m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
@@ -68,29 +68,20 @@ void ContentEventNotifier::notifyChildInserted( const OUString& aChildName ) con
                        xChildContent,
                        m_xCreatorId );
 
-    for( const auto& r : m_sListeners )
-    {
-        uno::Reference< XContentEventListener > ref( r, uno::UNO_QUERY );
-        if( ref.is() )
-            ref->contentEvent( aEvt );
-    }
+    for( const auto& ref : m_sListeners )
+        ref->contentEvent( aEvt );
 }
 
 void ContentEventNotifier::notifyDeleted() const
 {
-
     ContentEvent aEvt( m_xCreatorContent,
                        ContentAction::DELETED,
                        m_xCreatorContent,
                        m_xCreatorId );
 
 
-    for( const auto& r : m_sListeners )
-    {
-        uno::Reference< XContentEventListener > ref( r, uno::UNO_QUERY );
-        if( ref.is() )
-            ref->contentEvent( aEvt );
-    }
+    for( const auto& ref : m_sListeners )
+        ref->contentEvent( aEvt );
 }
 
 
@@ -109,12 +100,8 @@ void ContentEventNotifier::notifyRemoved( const OUString& aChildName ) const
                        pp,
                        m_xCreatorId );
 
-    for( const auto& r : m_sListeners )
-    {
-        uno::Reference< XContentEventListener > ref( r, uno::UNO_QUERY );
-        if( ref.is() )
-            ref->contentEvent( aEvt );
-    }
+    for( const auto& ref : m_sListeners )
+        ref->contentEvent( aEvt );
 }
 
 void ContentEventNotifier::notifyExchanged() const
@@ -124,12 +111,8 @@ void ContentEventNotifier::notifyExchanged() const
                        m_xCreatorContent,
                        m_xOldId );
 
-    for( const auto& r : m_sListeners )
-    {
-        uno::Reference< XContentEventListener > ref( r, uno::UNO_QUERY );
-        if( ref.is() )
-            ref->contentEvent( aEvt );
-    }
+    for( const auto& ref : m_sListeners )
+        ref->contentEvent( aEvt );
 }
 
 /*********************************************************************************/
@@ -141,7 +124,7 @@ void ContentEventNotifier::notifyExchanged() const
 
 PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
     const uno::Reference< XContent >& xCreatorContent,
-    std::vector< uno::Reference< uno::XInterface > >&& sListeners )
+    std::vector< uno::Reference< beans::XPropertySetInfoChangeListener > >&& sListeners )
     : m_xCreatorContent( xCreatorContent ),
       m_sListeners( std::move(sListeners) )
 {
@@ -157,12 +140,8 @@ PropertySetInfoChangeNotifier::notifyPropertyAdded( const OUString & aPropertyNa
                                             -1,
                                             beans::PropertySetInfoChange::PROPERTY_INSERTED );
 
-    for( const auto& r : m_sListeners )
-    {
-        uno::Reference< beans::XPropertySetInfoChangeListener > ref( r, uno::UNO_QUERY );
-        if( ref.is() )
-            ref->propertySetInfoChange( aEvt );
-    }
+    for( const auto& ref : m_sListeners )
+        ref->propertySetInfoChange( aEvt );
 }
 
 
@@ -174,12 +153,8 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aProperty
                                             -1,
                                             beans::PropertySetInfoChange::PROPERTY_REMOVED );
 
-    for( const auto& r : m_sListeners )
-    {
-        uno::Reference< beans::XPropertySetInfoChangeListener > ref( r, uno::UNO_QUERY );
-        if( ref.is() )
-            ref->propertySetInfoChange( aEvt );
-    }
+    for( const auto& ref : m_sListeners )
+        ref->propertySetInfoChange( aEvt );
 }
 
 

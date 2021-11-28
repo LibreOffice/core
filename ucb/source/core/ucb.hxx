@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include "providermap.hxx"
@@ -36,8 +37,6 @@
 
 #include <memory>
 
-
-namespace comphelper { class OInterfaceContainerHelper2; }
 
 namespace com::sun::star::ucb {
     class XCommandInfo;
@@ -154,7 +153,7 @@ private:
     css::uno::Sequence< css::uno::Any > m_aArguments;
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper2> m_pDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pDisposeEventListeners;
     sal_Int32 m_nCommandId;
 };
 

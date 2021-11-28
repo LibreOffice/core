@@ -265,7 +265,7 @@ void SAL_CALL UniversalContentBroker::addEventListener(
                             const Reference< XEventListener >& Listener )
 {
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners.reset( new OInterfaceContainerHelper2( m_aMutex ) );
+        m_pDisposeEventListeners.reset( new OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

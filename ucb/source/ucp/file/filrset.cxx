@@ -100,7 +100,7 @@ XResultSet_impl::addEventListener(
 
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
+            new comphelper::OInterfaceContainerHelper3<lang::XEventListener>( m_aEventListenerMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -143,7 +143,7 @@ XResultSet_impl::dispose()
 void XResultSet_impl::rowCountChanged()
 {
     sal_Int32 aOldValue,aNewValue;
-    std::vector< uno::Reference< uno::XInterface > > seq;
+    std::vector< uno::Reference< beans::XPropertyChangeListener > > seq;
     {
         osl::MutexGuard aGuard( m_aMutex );
         if( m_pRowCountListeners )
@@ -157,19 +157,14 @@ void XResultSet_impl::rowCountChanged()
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= aOldValue;
     aEv.NewValue <<= aNewValue;
-    for( const auto& r : seq )
-    {
-        uno::Reference< beans::XPropertyChangeListener > listener(
-            r, uno::UNO_QUERY );
-        if( listener.is() )
-            listener->propertyChange( aEv );
-    }
+    for( const auto& listener : seq )
+        listener->propertyChange( aEv );
 }
 
 
 void XResultSet_impl::isFinalChanged()
 {
-    std::vector< uno::Reference< XInterface > > seq;
+    std::vector< uno::Reference< beans::XPropertyChangeListener > > seq;
     {
         osl::MutexGuard aGuard( m_aMutex );
         if( m_pIsFinalListeners )
@@ -182,13 +177,8 @@ void XResultSet_impl::isFinalChanged()
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= false;
     aEv.NewValue <<= true;
-    for( const auto& r : seq )
-    {
-        uno::Reference< beans::XPropertyChangeListener > listener(
-            r, uno::UNO_QUERY );
-        if( listener.is() )
-            listener->propertyChange( aEv );
-    }
+    for( const auto& listener : seq )
+        listener->propertyChange( aEv );
 }
 
 
@@ -661,7 +651,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
             m_pIsFinalListeners.reset(
-                new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
+                new comphelper::OInterfaceContainerHelper3<beans::XPropertyChangeListener>( m_aEventListenerMutex ) );
 
         m_pIsFinalListeners->addInterface( xListener );
     }
@@ -670,7 +660,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
             m_pRowCountListeners.reset(
-                new comphelper::OInterfaceContainerHelper2( m_aEventListenerMutex ) );
+                new comphelper::OInterfaceContainerHelper3<beans::XPropertyChangeListener>( m_aEventListenerMutex ) );
         m_pRowCountListeners->addInterface( xListener );
     }
     else
