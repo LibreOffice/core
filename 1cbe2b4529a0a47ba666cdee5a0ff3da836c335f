@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1d438f2_f13818e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-28T16:16:32Z",
+      "side": 1,
+      "message": "@Christian:\n\nas I said in the master change, not only on asan:\n\n\"Not only in asan:\nhttps://buildd.debian.org/status/fetch.php?pkg\u003dlibreoffice\u0026arch\u003damd64\u0026ver\u003d1%3A7.3.0%7Ebeta1-1\u0026stamp\u003d1637916025\u0026raw\u003d1\nhttps://buildd.debian.org/status/fetch.php?pkg\u003dlibreoffice\u0026arch\u003darm64\u0026ver\u003d1%3A7.3.0%7Ebeta1-1\u0026stamp\u003d1637946364\u0026raw\u003d1\"\n\nThus I think that should be cherry-picked to libreoffice-7-3",
+      "revId": "1cbe2b4529a0a47ba666cdee5a0ff3da836c335f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
