@@ -186,8 +186,6 @@ namespace comphelper
         virtual void SAL_CALL terminate() override;
 
         using osl::Thread::join;
-        using osl::Thread::operator new;
-        using osl::Thread::operator delete; // clang really wants this?
 
         static void launch(std::shared_ptr<AsyncEventNotifierAutoJoin> const&);
     };

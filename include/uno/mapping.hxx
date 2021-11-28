@@ -59,6 +59,7 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
+#if !defined LIBO_INTERNAL_ONLY
     // these are here to force memory de/allocation to sal lib.
     /// @cond INTERNAL
     static void * SAL_CALL operator new ( size_t nSize )
@@ -70,6 +71,7 @@ public:
     static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
+#endif
 
     /** Holds a mapping from the specified source to the specified destination by environment
         type names.

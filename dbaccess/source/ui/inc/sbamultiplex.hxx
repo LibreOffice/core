@@ -72,9 +72,6 @@ namespace dbaui
         css::frame::FeatureStateEvent  m_aLastKnownStatus;
     public:
         const css::frame::FeatureStateEvent& getLastEvent( ) const { return m_aLastKnownStatus; }
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::form::XLoadListener
@@ -96,9 +93,6 @@ namespace dbaui
         virtual void SAL_CALL unloading(const css::lang::EventObject& e) override;
         virtual void SAL_CALL reloading(const css::lang::EventObject& e) override;
         virtual void SAL_CALL reloaded(const css::lang::EventObject& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::form::XDatabaseParameterListener
@@ -115,9 +109,6 @@ namespace dbaui
         /* css::lang::XEventListener */
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
         virtual sal_Bool SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::form::XSubmitListener
@@ -134,9 +125,6 @@ namespace dbaui
         /* css::lang::XEventListener */
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
         virtual sal_Bool SAL_CALL approveSubmit(const css::lang::EventObject& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::form::XResetListener
@@ -154,9 +142,6 @@ namespace dbaui
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
         virtual sal_Bool SAL_CALL approveReset(const css::lang::EventObject& e) override;
         virtual void SAL_CALL resetted(const css::lang::EventObject& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::sdbc::XRowSetListener
@@ -175,9 +160,6 @@ namespace dbaui
         virtual void SAL_CALL cursorMoved(const css::lang::EventObject& e) override;
         virtual void SAL_CALL rowChanged(const css::lang::EventObject& e) override;
         virtual void SAL_CALL rowSetChanged(const css::lang::EventObject& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::sdb::XRowSetApproveListener
@@ -196,9 +178,6 @@ namespace dbaui
         virtual sal_Bool SAL_CALL approveCursorMove(const css::lang::EventObject& e) override;
         virtual sal_Bool SAL_CALL approveRowChange(const css::sdb::RowChangeEvent& e) override;
         virtual sal_Bool SAL_CALL approveRowSetChange(const css::lang::EventObject& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::sdb::XSQLErrorListener
@@ -215,9 +194,6 @@ namespace dbaui
         /* css::lang::XEventListener */
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
         virtual void SAL_CALL errorOccured(const css::sdb::SQLErrorEvent& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
 
     // css::beans::XPropertyChangeListener
@@ -298,9 +274,6 @@ namespace dbaui
         /* css::lang::XEventListener */
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
         virtual void SAL_CALL propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent >& e) override;
-        /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */
-        using OSbaWeakSubObject::operator new;
-        using OSbaWeakSubObject::operator delete;
     };
     // the SbaXPropertiesChangeMultiplexer doesn't care about the property names a listener logs on for, it simply
     // forwards _all_ changes to _all_ listeners

@@ -43,6 +43,7 @@ class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OTypeCollection
     css::uno::Sequence< css::uno::Type > _aTypes;
 
 public:
+#if !defined LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
     static void * SAL_CALL operator new( size_t nSize )
@@ -54,6 +55,7 @@ public:
     static void SAL_CALL operator delete( void *, void * )
         {}
     /// @endcond
+#endif
 
     OTypeCollection(
         const css::uno::Type & rType1,
@@ -179,6 +181,7 @@ class SAL_DEPRECATED("Uses broken double checked locking") SAL_WARN_UNUSED CPPUH
     sal_Bool _bUseEthernetAddress;
 
 public:
+#if !defined LIBO_INTERNAL_ONLY
     /// @cond INTERNAL
 
     // these are here to force memory de/allocation to sal lib.
@@ -190,6 +193,7 @@ public:
         { return pMem; }
     static void SAL_CALL operator delete( void *, void * )
         {}
+#endif
 
     ~OImplementationId();
 
