@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_FESH_HXX
 
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/XPasteListener.hpp>
 
 #include <svx/svdobj.hxx>
 #include "swdllapi.h"
@@ -30,7 +31,7 @@
 #include <sot/formats.hxx>
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 #include <vector>
 #include <memory>
@@ -205,7 +206,7 @@ private:
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainTo;
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
-    comphelper::OInterfaceContainerHelper2 m_aPasteListeners;
+    comphelper::OInterfaceContainerHelper3<css::text::XPasteListener> m_aPasteListeners;
     /// insert table rows or columns instead of overwriting the existing table cells
     SwTable::SearchType m_eTableInsertMode;
     /// table copied to the clipboard by the last private copy
@@ -566,7 +567,7 @@ public:
     void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
 
-    comphelper::OInterfaceContainerHelper2& GetPasteListeners();
+    comphelper::OInterfaceContainerHelper3<css::text::XPasteListener>& GetPasteListeners();
 
     bool IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);

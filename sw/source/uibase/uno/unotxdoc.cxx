@@ -259,10 +259,10 @@ static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell const * pDocShel
 class SwXTextDocument::Impl
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper3
 
 public:
-    ::comphelper::OInterfaceContainerHelper2 m_RefreshListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener> m_RefreshListeners;
 
     Impl() : m_RefreshListeners(m_Mutex) { }
 
@@ -2166,14 +2166,16 @@ void SAL_CALL SwXTextDocument::addRefreshListener(
         const Reference<util::XRefreshListener> & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_RefreshListeners.addInterface(xListener);
+    if (xListener)
+        m_pImpl->m_RefreshListeners.addInterface(xListener);
 }
 
 void SAL_CALL SwXTextDocument::removeRefreshListener(
         const Reference<util::XRefreshListener> & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_RefreshListeners.removeInterface(xListener);
+    if (xListener)
+        m_pImpl->m_RefreshListeners.removeInterface(xListener);
 }
 
 void SwXTextDocument::updateLinks(  )
