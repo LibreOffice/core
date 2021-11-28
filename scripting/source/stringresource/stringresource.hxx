@@ -28,7 +28,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <osl/mutex.hxx>
 
 #include <unordered_map>
@@ -94,7 +94,7 @@ protected:
     LocaleItem*                                               m_pDefaultLocaleItem;
     bool                                                      m_bDefaultModified;
 
-    ::comphelper::OInterfaceContainerHelper2                        m_aListenerContainer;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aListenerContainer;
 
     std::vector< std::unique_ptr<LocaleItem> >                m_aLocaleItemVector;
     std::vector< std::unique_ptr<LocaleItem> >                m_aDeletedLocaleItemVector;

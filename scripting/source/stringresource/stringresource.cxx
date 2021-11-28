@@ -115,8 +115,7 @@ void StringResourceImpl::addModifyListener( const Reference< XModifyListener >& 
     if( !aListener.is() )
         throw RuntimeException();
 
-    ::osl::MutexGuard aGuard( getMutex() );
-    m_aListenerContainer.addInterface( Reference<XInterface>( aListener, UNO_QUERY ) );
+    m_aListenerContainer.addInterface( aListener );
 }
 
 void StringResourceImpl::removeModifyListener( const Reference< XModifyListener >& aListener )
@@ -124,8 +123,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
     if( !aListener.is() )
         throw RuntimeException();
 
-    ::osl::MutexGuard aGuard( getMutex() );
-    m_aListenerContainer.removeInterface( Reference<XInterface>( aListener, UNO_QUERY ) );
+    m_aListenerContainer.removeInterface( aListener );
 }
 
 
@@ -615,14 +613,12 @@ void StringResourceImpl::implNotifyListeners()
     EventObject aEvent;
     aEvent.Source = static_cast< XInterface* >( static_cast<OWeakObject*>(this) );
 
-    ::comphelper::OInterfaceIteratorHelper2 it( m_aListenerContainer );
+    ::comphelper::OInterfaceIteratorHelper3 it( m_aListenerContainer );
     while( it.hasMoreElements() )
     {
-        Reference< XInterface > xIface = it.next();
-        Reference< XModifyListener > xListener( xIface, UNO_QUERY );
         try
         {
-            xListener->modified( aEvent );
+            it.next()->modified( aEvent );
         }
         catch(RuntimeException&)
         {
