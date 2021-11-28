@@ -125,7 +125,7 @@ class SbaXDataBrowserController::FormControllerImpl
                                          css::frame::XFrameActionListener >
 {
     friend class SbaXDataBrowserController;
-    ::comphelper::OInterfaceContainerHelper2   m_aActivateListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XFormControllerListener>   m_aActivateListeners;
     SbaXDataBrowserController*          m_pOwner;
 
 public:
@@ -902,9 +902,9 @@ void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/)
 {
     // notify our activate listeners (registered on the form controller aggregate)
     EventObject aEvt(*this);
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_xFormControllerImpl->m_aActivateListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_xFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
-        static_cast<XFormControllerListener*>(aIter.next())->formActivated(aEvt);
+        aIter.next()->formActivated(aEvt);
 }
 
 void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e)
@@ -928,9 +928,9 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e)
 
     // notify the listeners that the "form" we represent has been deactivated
     EventObject aEvt(*this);
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_xFormControllerImpl->m_aActivateListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIter(m_xFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
-        static_cast<XFormControllerListener*>(aIter.next())->formDeactivated(aEvt);
+        aIter.next()->formDeactivated(aEvt);
 
     // commit the changes of the grid control (as we're deactivated)
     Reference< XBoundComponent >  xCommitable(getBrowserView()->getGridControl(), UNO_QUERY);

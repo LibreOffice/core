@@ -63,6 +63,7 @@
 #include <vcl/transfer.hxx>
 #include <svtools/cliplistener.hxx>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
@@ -157,7 +158,7 @@ class SelectionGuard;
 class SelectionNotifier
 {
 private:
-    ::comphelper::OInterfaceContainerHelper2   m_aSelectionListeners;
+    ::comphelper::OInterfaceContainerHelper3<XSelectionChangeListener> m_aSelectionListeners;
     ::cppu::OWeakObject&                m_rContext;
     sal_Int32                           m_nSelectionNestingLevel;
 

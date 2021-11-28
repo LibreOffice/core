@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer2.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -93,7 +94,7 @@ namespace dbaccess
         void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
 
     protected:
-        ::comphelper::OInterfaceContainerHelper2      m_aContentListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener> m_aContentListeners;
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
         css::uno::Reference< css::uno::XInterface >
                                                 m_xParentContainer;

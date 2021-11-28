@@ -57,6 +57,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <rtl/ref.hxx>
@@ -168,9 +169,9 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     typedef std::map< OUString, css::uno::Reference< css::frame::XUntitledNumbers > > TNumberedController;
     css::uno::Reference< css::ui::XUIConfigurationManager2>                                     m_xUIConfigurationManager;
 
-    ::comphelper::OInterfaceContainerHelper2                                                    m_aModifyListeners;
-    ::comphelper::OInterfaceContainerHelper2                                                    m_aCloseListener;
-    ::comphelper::OInterfaceContainerHelper2                                                    m_aStorageListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>                        m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XCloseListener>                         m_aCloseListener;
+    ::comphelper::OInterfaceContainerHelper3<css::document::XStorageChangeListener>             m_aStorageListeners;
 
     std::unique_ptr<DocumentEvents>                                                             m_pEventContainer;
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;

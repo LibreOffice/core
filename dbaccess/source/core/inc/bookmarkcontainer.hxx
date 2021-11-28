@@ -24,7 +24,7 @@
 #include <map>
 #include <vector>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -58,7 +58,7 @@ class OBookmarkContainer final
     MapIteratorVector       m_aBookmarksIndexed;    // for index access to the
 
     ::cppu::OWeakObject&    m_rParent;      // for the ref counting
-    ::comphelper::OInterfaceContainerHelper2
+    ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener>
                             m_aContainerListeners;
     ::osl::Mutex&           m_rMutex;
 
