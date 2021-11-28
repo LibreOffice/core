@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <shape.hxx>
 #include <subsettableshapemanager.hxx>
 #include <eventmultiplexer.hxx>
@@ -157,7 +158,7 @@ private:
 
 
     typedef std::map<ShapeSharedPtr,
-                     std::shared_ptr< ::comphelper::OInterfaceContainerHelper2 >,
+                     std::shared_ptr< ::comphelper::OInterfaceContainerHelper3<css::presentation::XShapeEventListener> >,
                      Shape::lessThanShape>        ShapeToListenersMap;
     typedef std::map<ShapeSharedPtr, sal_Int16,
                        Shape::lessThanShape>      ShapeToCursorMap;
