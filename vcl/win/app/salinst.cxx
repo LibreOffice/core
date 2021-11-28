@@ -527,36 +527,6 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return bDidWork;
 }
 
-#define CASE_NOYIELDLOCK( salmsg, function ) \
-    case salmsg: \
-        if (bIsOtherThreadMessage) \
-        { \
-            ++pInst->m_nNoYieldLock; \
-            function; \
-            --pInst->m_nNoYieldLock; \
-        } \
-        else \
-        { \
-            DBG_TESTSOLARMUTEX(); \
-            function; \
-        } \
-        break;
-
-#define CASE_NOYIELDLOCK_RESULT( salmsg, function ) \
-    case salmsg: \
-        if (bIsOtherThreadMessage) \
-        { \
-            ++pInst->m_nNoYieldLock; \
-            nRet = reinterpret_cast<LRESULT>( function ); \
-            --pInst->m_nNoYieldLock; \
-        } \
-        else \
-        { \
-            DBG_TESTSOLARMUTEX(); \
-            nRet = reinterpret_cast<LRESULT>( function ); \
-        } \
-        break;
-
 LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
     const bool bIsOtherThreadMessage = InSendMessage();
@@ -599,13 +569,97 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             pTimer->ImplStop();
             break;
 
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEFRAME, ImplSalCreateFrame( GetSalData()->mpInstance,
-            reinterpret_cast<HWND>(lParam), static_cast<SalFrameStyleFlags>(wParam)) )
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATEHWND, ImplSalReCreateHWND(
-            reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false) )
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATECHILDHWND, ImplSalReCreateHWND(
-            reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true) )
-        CASE_NOYIELDLOCK( SAL_MSG_DESTROYFRAME, delete reinterpret_cast<SalFrame*>(lParam) )
+        case SAL_MSG_CREATEFRAME:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                nRet = reinterpret_cast<LRESULT>(
+                     ImplSalCreateFrame(
+                         GetSalData()->mpInstance,
+                         reinterpret_cast<HWND>(lParam),
+                         static_cast<SalFrameStyleFlags>(wParam)
+                     )
+                );
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                nRet = reinterpret_cast<LRESULT>(
+                     ImplSalCreateFrame(
+                         GetSalData()->mpInstance,
+                         reinterpret_cast<HWND>(lParam),
+                         static_cast<SalFrameStyleFlags>(wParam)
+                     )
+                );
+            }
+            break;
+
+        case SAL_MSG_RECREATEHWND:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                nRet = reinterpret_cast<LRESULT>(
+                    ImplSalReCreateHWND(
+                        reinterpret_cast<HWND>(wParam),
+                        reinterpret_cast<HWND>(lParam),
+                        false
+                    )
+                );
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                nRet = reinterpret_cast<LRESULT>(
+                    ImplSalReCreateHWND(
+                        reinterpret_cast<HWND>(wParam),
+                        reinterpret_cast<HWND>(lParam),
+                        false
+                    )
+                );
+            }
+            break;
+
+        case SAL_MSG_RECREATECHILDHWND:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                nRet = reinterpret_cast<LRESULT>(
+                    ImplSalReCreateHWND(
+                        reinterpret_cast<HWND>(wParam),
+                        reinterpret_cast<HWND>(lParam),
+                        true
+                    )
+                );
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                nRet = reinterpret_cast<LRESULT>(
+                    ImplSalReCreateHWND(
+                        reinterpret_cast<HWND>(wParam),
+                        reinterpret_cast<HWND>(lParam),
+                        true
+                    )
+                );
+            }
+            break;
+
+        case SAL_MSG_DESTROYFRAME:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                delete reinterpret_cast<SalFrame*>(lParam);
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                delete reinterpret_cast<SalFrame*>(lParam);
+            }
+            break;
 
         case SAL_MSG_DESTROYHWND:
             // We only destroy the native window here. We do NOT destroy the SalFrame contained
@@ -619,13 +673,83 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             }
             break;
 
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEOBJECT, ImplSalCreateObject(
-            GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)) )
-        CASE_NOYIELDLOCK( SAL_MSG_DESTROYOBJECT, delete reinterpret_cast<SalObject*>(lParam) )
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_GETCACHEDDC, GetDCEx(
-            reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE) )
-        CASE_NOYIELDLOCK( SAL_MSG_RELEASEDC, ReleaseDC(
-            reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam)) )
+        case SAL_MSG_CREATEOBJECT:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                nRet = reinterpret_cast<LRESULT>(
+                     ImplSalCreateObject(
+                         GetSalData()->mpInstance,
+                         reinterpret_cast<WinSalFrame*>(lParam)
+                     )
+                );
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                nRet = reinterpret_cast<LRESULT>(
+                     ImplSalCreateObject(
+                         GetSalData()->mpInstance,
+                         reinterpret_cast<WinSalFrame*>(lParam)
+                     )
+                );
+            }
+            break;
+
+        case SAL_MSG_DESTROYOBJECT:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                delete reinterpret_cast<SalObject*>(lParam);
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                delete reinterpret_cast<SalObject*>(lParam)
+            }
+            break;
+
+        case SAL_MSG_GETCACHEDDC:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                nRet = reinterpret_cast<LRESULT>(
+                     GetDCEx(
+                         reinterpret_cast<HWND>(wParam)
+                         nullptr,
+                         DCX_CACHE
+                     )
+                );
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                nRet = reinterpret_cast<LRESULT>(
+                     GetDCEx(
+                         reinterpret_cast<HWND>(wParam)
+                         nullptr,
+                         DCX_CACHE
+                     )
+                );
+            }
+            break;
+
+        case SAL_MSG_RELEASEDC:
+            if (bIsOtherThreadMessage)
+            {
+                ++pInst->m_nNoYieldLock;
+                ReleaseDC(reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam));
+                --pInst->m_nNoYieldLock;
+            }
+            else
+            {
+                DBG_TESTSOLARMUTEX();
+                ReleaseDC(reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam));
+            }
+            break;
 
         case SAL_MSG_TIMER_CALLBACK:
             assert( pTimer != nullptr );
@@ -652,9 +776,6 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
 
     return nRet;
 }
-
-#undef CASE_NOYIELDLOCK
-#undef CASE_NOYIELDLOCK_RESULT
 
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
