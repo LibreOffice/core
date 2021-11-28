@@ -41,8 +41,6 @@ private:
 public:
                 ScInputOptions();
 
-    void        SetDefaults();
-
     void        SetMoveDir(sal_uInt16 nNew)         { nMoveDir = nNew;       }
     sal_uInt16      GetMoveDir() const              { return nMoveDir;       }
     void        SetMoveSelection(bool bSet)     { bMoveSelection = bSet; }
@@ -73,7 +71,7 @@ public:
 
 // CfgItem for input options
 
-class ScInputCfg final : public ScInputOptions,
+class ScInputCfg final : private ScInputOptions,
                   public utl::ConfigItem
 {
     static css::uno::Sequence<OUString> GetPropertyNames();
@@ -83,8 +81,8 @@ class ScInputCfg final : public ScInputOptions,
 public:
             ScInputCfg();
 
+    const ScInputOptions& GetOptions() const { return *this; }
     void            SetOptions( const ScInputOptions& rNew );
-    void            OptionsChanged();   // after direct access to SetOptions base class
 
     virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
 };
