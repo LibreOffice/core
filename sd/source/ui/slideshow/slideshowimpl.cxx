@@ -3185,7 +3185,7 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
 
     if( maListeners.getLength() >= 0 )
     {
-        maListeners.forEach<XSlideShowListener>(
+        maListeners.forEach(
             [&] (Reference<XAnimationListener> const& xListener) {
                 return xListener->beginEvent(xNode);
             } );
@@ -3198,7 +3198,7 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
 
     if( maListeners.getLength() >= 0 )
     {
-        maListeners.forEach<XSlideShowListener>(
+        maListeners.forEach(
             [&] (Reference<XAnimationListener> const& xListener) {
                 return xListener->endEvent(xNode);
             } );
@@ -3211,7 +3211,7 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
 
     if( maListeners.getLength() >= 0 )
     {
-        maListeners.forEach<XSlideShowListener>(
+        maListeners.forEach(
             [&] (Reference<XAnimationListener> const& xListener) {
                 return xListener->repeat(xNode, nRepeat);
             } );
@@ -3224,7 +3224,7 @@ void SAL_CALL SlideShowListenerProxy::paused(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>(
+    maListeners.forEach(
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->paused();
@@ -3235,7 +3235,7 @@ void SAL_CALL SlideShowListenerProxy::resumed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>(
+    maListeners.forEach(
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->resumed();
@@ -3246,7 +3246,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>(
+    maListeners.forEach(
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->slideTransitionStarted();
@@ -3257,7 +3257,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>(
+    maListeners.forEach(
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->slideTransitionEnded ();
@@ -3268,7 +3268,7 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>(
+    maListeners.forEach(
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->slideAnimationsEnded ();
@@ -3282,7 +3282,7 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse)
 
         if( maListeners.getLength() >= 0 )
         {
-            maListeners.forEach<XSlideShowListener>(
+            maListeners.forEach(
                 [&] (Reference<XSlideShowListener> const& xListener) {
                     return xListener->slideEnded(bReverse);
                 } );
@@ -3303,7 +3303,7 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink )
 
         if( maListeners.getLength() >= 0 )
         {
-            maListeners.forEach<XSlideShowListener>(
+            maListeners.forEach(
                 [&] (Reference<XSlideShowListener> const& xListener) {
                     return xListener->hyperLinkClicked(aHyperLink);
                 } );
