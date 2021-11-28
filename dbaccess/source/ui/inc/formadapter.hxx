@@ -53,6 +53,7 @@
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase12.hxx>
@@ -133,8 +134,8 @@ namespace dbaui
         SbaXVetoableChangeMultiplexer       m_aVetoablePropertyChangeListeners;
         SbaXPropertiesChangeMultiplexer     m_aPropertiesChangeListeners;
 
-        ::comphelper::OInterfaceContainerHelper2   m_aDisposeListeners;
-        ::comphelper::OInterfaceContainerHelper2   m_aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aDisposeListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
 
         // hierarchy administration
         css::uno::Reference< css::uno::XInterface >                           m_xParent;

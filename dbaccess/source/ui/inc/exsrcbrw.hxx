@@ -21,6 +21,7 @@
 
 #include "brwctrlr.hxx"
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/uno3.hxx>
 
 // SbaExternalSourceBrowser
@@ -32,7 +33,7 @@ namespace dbaui
                 :public SbaXDataBrowserController
                 ,public css::util::XModifyBroadcaster
     {
-        ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
+        ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>  m_aModifyListeners;
             // for multiplexing the modify events
         rtl::Reference<SbaXFormAdapter>            m_pDataSourceImpl;
         bool                            m_bInQueryDispatch;

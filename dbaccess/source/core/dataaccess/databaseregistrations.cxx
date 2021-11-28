@@ -26,7 +26,7 @@
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/diagnose.h>
 #include <unotools/pathoptions.hxx>
@@ -136,7 +136,7 @@ namespace dbaccess
     private:
         Reference<XComponentContext>        m_aContext;
         ::utl::OConfigurationTreeRoot       m_aConfigurationRoot;
-        ::comphelper::OInterfaceContainerHelper2  m_aRegistrationListeners;
+        ::comphelper::OInterfaceContainerHelper3<XDatabaseRegistrationsListener>  m_aRegistrationListeners;
     };
 
     }

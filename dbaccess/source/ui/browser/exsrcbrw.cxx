@@ -104,9 +104,9 @@ void SbaExternalSourceBrowser::modified(const css::lang::EventObject& aEvent)
 
     // multiplex this event to all my listeners
     css::lang::EventObject aEvt(*this);
-    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aModifyListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(m_aModifyListeners);
     while (aIt.hasMoreElements())
-        static_cast< css::util::XModifyListener*>(aIt.next())->modified(aEvt);
+        aIt.next()->modified(aEvt);
 }
 
 void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, const Sequence< css::beans::PropertyValue>& aArgs)

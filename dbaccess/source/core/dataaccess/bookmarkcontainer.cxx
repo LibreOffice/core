@@ -97,9 +97,9 @@ void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const An
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sNewLink), Any());
-        OInterfaceIteratorHelper2 aListenerIterator(m_aContainerListeners);
+        OInterfaceIteratorHelper3 aListenerIterator(m_aContainerListeners);
         while (aListenerIterator.hasMoreElements())
-            static_cast< XContainerListener* >(aListenerIterator.next())->elementInserted(aEvent);
+            aListenerIterator.next()->elementInserted(aEvent);
     }
 }
 
@@ -127,9 +127,9 @@ void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName )
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sOldBookmark), Any());
-        OInterfaceIteratorHelper2 aListenerIterator(m_aContainerListeners);
+        OInterfaceIteratorHelper3 aListenerIterator(m_aContainerListeners);
         while (aListenerIterator.hasMoreElements())
-            static_cast< XContainerListener* >(aListenerIterator.next())->elementRemoved(aEvent);
+            aListenerIterator.next()->elementRemoved(aEvent);
     }
 }
 
@@ -162,9 +162,9 @@ void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const A
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sNewLink), makeAny(sOldLink));
-        OInterfaceIteratorHelper2 aListenerIterator(m_aContainerListeners);
+        OInterfaceIteratorHelper3 aListenerIterator(m_aContainerListeners);
         while (aListenerIterator.hasMoreElements())
-            static_cast< XContainerListener* >(aListenerIterator.next())->elementReplaced(aEvent);
+            aListenerIterator.next()->elementReplaced(aEvent);
     }
 }
 

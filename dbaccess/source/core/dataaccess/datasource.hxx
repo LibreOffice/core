@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppuhelper/propshlp.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -83,7 +84,7 @@ private:
     using ODatabaseSource_Base::rBHelper;
     // note: this thing uses the ref-count of "this", see OBookmarkContainer::acquire!
     OBookmarkContainer m_Bookmarks;
-    ::comphelper::OInterfaceContainerHelper2 m_aFlushListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::util::XFlushListener> m_aFlushListeners;
 
 private:
     virtual ~ODatabaseSource() override;
