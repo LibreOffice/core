@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
@@ -58,8 +58,8 @@ namespace sfx2
     {
     public:
         ::cppu::OWeakObject&                m_rControllerImpl;
-        ::comphelper::OInterfaceContainerHelper2   m_aKeyHandlers;
-        ::comphelper::OInterfaceContainerHelper2   m_aMouseClickHandlers;
+        ::comphelper::OInterfaceContainerHelper3<XKeyHandler> m_aKeyHandlers;
+        ::comphelper::OInterfaceContainerHelper3<XMouseClickHandler> m_aMouseClickHandlers;
 
     public:
         UserInputInterception_Data( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex )
@@ -186,13 +186,10 @@ namespace sfx2
                 if ( _rEvent.GetWindow() )
                     aEvent.Source = _rEvent.GetWindow()->GetComponentInterface();
 
-                ::comphelper::OInterfaceIteratorHelper2 aIterator( m_pData->m_aKeyHandlers );
+                ::comphelper::OInterfaceIteratorHelper3 aIterator( m_pData->m_aKeyHandlers );
                 while ( aIterator.hasMoreElements() )
                 {
-                    Reference< XKeyHandler > xHandler( static_cast< XKeyHandler* >( aIterator.next() ) );
-                    if ( !xHandler.is() )
-                        continue;
-
+                    Reference< XKeyHandler > xHandler( aIterator.next() );
                     try
                     {
                         if ( nType == MouseNotifyEvent::KEYINPUT )
@@ -224,13 +221,10 @@ namespace sfx2
                 if ( _rEvent.GetWindow() )
                     aEvent.Source = _rEvent.GetWindow()->GetComponentInterface();
 
-                ::comphelper::OInterfaceIteratorHelper2 aIterator( m_pData->m_aMouseClickHandlers );
+                ::comphelper::OInterfaceIteratorHelper3 aIterator( m_pData->m_aMouseClickHandlers );
                 while ( aIterator.hasMoreElements() )
                 {
-                    Reference< XMouseClickHandler > xHandler( static_cast< XMouseClickHandler* >( aIterator.next() ) );
-                    if ( !xHandler.is() )
-                        continue;
-
+                    Reference< XMouseClickHandler > xHandler( aIterator.next() );
                     try
                     {
                         if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
