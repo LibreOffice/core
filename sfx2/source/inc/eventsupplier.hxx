@@ -24,8 +24,8 @@
 
 #include <com/sun/star/document/DocumentEvent.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -40,17 +40,17 @@ class SfxObjectShell;
 class SvxMacro;
 
 
-class SfxEvents_Impl final : public ::cppu::WeakImplHelper< css::container::XNameReplace, css::document::XEventListener  >
+class SfxEvents_Impl final : public ::cppu::WeakImplHelper< css::container::XNameReplace, css::document::XDocumentEventListener >
 {
     css::uno::Sequence< OUString >     maEventNames;
     std::vector< css::uno::Any >       maEventData;
-    css::uno::Reference< css::document::XEventBroadcaster >  mxBroadcaster;
+    css::uno::Reference< css::document::XDocumentEventBroadcaster >  mxBroadcaster;
     ::osl::Mutex                    maMutex;
     SfxObjectShell                 *mpObjShell;
 
 public:
                                 SfxEvents_Impl( SfxObjectShell* pShell,
-                                                css::uno::Reference< css::document::XEventBroadcaster > const & xBroadcaster );
+                                                css::uno::Reference< css::document::XDocumentEventBroadcaster > const & xBroadcaster );
                                virtual ~SfxEvents_Impl() override;
 
     //  --- XNameReplace ---
@@ -65,8 +65,8 @@ public:
     virtual css::uno::Type SAL_CALL    getElementType() override;
     virtual sal_Bool SAL_CALL   hasElements() override;
 
-    // --- ::document::XEventListener ---
-    virtual void SAL_CALL       notifyEvent( const css::document::EventObject& aEvent ) override;
+    // --- ::document::XDocumentEventListener ---
+    virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& aEvent) override;
 
     // --- ::lang::XEventListener ---
     virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) override;
