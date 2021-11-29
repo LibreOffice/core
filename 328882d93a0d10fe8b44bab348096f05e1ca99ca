@@ -16,6 +16,24 @@
       "message": "I reverted almost the whole previous part and tried to apply what you indicated.\nI kept SfxGetpApp()-\u003eNotifyEvent( SfxEventHint(SfxEventHintId::PrintDoc, GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ), mpObjectShell ) );\nbut I still got 2 messages which display.\n\n",
       "revId": "328882d93a0d10fe8b44bab348096f05e1ca99ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d926d3_3536b084",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-29T13:15:17Z",
+      "side": 1,
+      "message": "\u003e but I still got 2 messages which display\n\nGreat!\n\nAnd that kooks nice and correct - and changing the original code like this:\n\nSub Main(e)\n  If (e.Supplement \u003d com.sun.star.view.PrintableState.JOB_STARTED) Then\n    msgBox(\"Macro executed for Job Started\")\n  ElseIf (e.Supplement \u003d com.sun.star.view.PrintableState.JOB_COMPLETED) Then\n    msgBox(\"Macro executed for Job Completed\")\n  ElseIf ...\n    ...\n  EndIf\nEnd Sub\n\nthat would behave as intended.",
+      "parentUuid": "5e98af34_6739991f",
+      "revId": "328882d93a0d10fe8b44bab348096f05e1ca99ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
