@@ -1195,7 +1195,9 @@ $(wasm_fs_image_WORKDIR)/soffice.data.js.link: $(wasm_fs_image_WORKDIR)/soffice.
 	$(call gb_Helper_replace_if_different_and_touch,$^.tmp,$@)
 
 $(wasm_fs_image_WORKDIR)/soffice.data.filelist: $(gb_wasm_image_filelist) | $(wasm_fs_image_WORKDIR)/.dir
-	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$^))) && \
+	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1,\
+	    $(subst @,@@,$(subst $(BUILDDIR)/,,$(filter $(BUILDDIR)%,$^))) \
+	    $(foreach item,$(filter-out $(BUILDDIR)%,$^),$(subst @,@@,$(item))@$(subst @,@@,$(subst $(SRCDIR)/,,$(item))))) && \
 	    mv $$TEMPFILE $@.tmp
 	$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@)
 
