@@ -94,14 +94,14 @@ public:
     int xOffset() const { return m_nXOffset; }
 };
 
-VCL_DLLPUBLIC bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
-                                                tools::Rectangle& rRect) const
+bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
+                                  tools::Rectangle& rRect) const
 {
     return pFontInstance->GetGlyphBoundRect(m_aGlyphId, rRect, IsVertical());
 }
 
-VCL_DLLPUBLIC bool GlyphItem::GetGlyphOutline(const LogicalFontInstance* pFontInstance,
-                                              basegfx::B2DPolyPolygon& rPoly) const
+bool GlyphItem::GetGlyphOutline(const LogicalFontInstance* pFontInstance,
+                                basegfx::B2DPolyPolygon& rPoly) const
 {
     return pFontInstance->GetGlyphOutline(m_aGlyphId, rPoly, IsVertical());
 }
