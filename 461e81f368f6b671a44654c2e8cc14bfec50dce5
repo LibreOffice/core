@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6436af_170e7b5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-29T15:01:33Z",
+      "side": 1,
+      "message": "rene@frodo:~/LibreOffice/git/libreoffice-7-3/connectivity$ make -rj1 CppunitTest_connectivity_mysql_test CONNECTIVITY_TEST_MYSQL_DRIVER\u003d\"x\" verbose\u003dt \n[CXX] connectivity/qa/connectivity/mysql/mysql.cxx\nS\u003d/home/rene/LibreOffice/git/libreoffice-7-3 \u0026\u0026 I\u003d$S/instdir \u0026\u0026 W\u003d$S/workdir \u0026\u0026  mkdir -p $W/CxxObject/connectivity/qa/connectivity/mysql/ $W/Dep/CxxObject/connectivity/qa/connectivity/mysql/ \u0026\u0026 cd /home/rene/LibreOffice/git/libreoffice-7-3 \u0026\u0026   \t  /usr/bin/ccache x86_64-linux-gnu-g++ -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED -DCPPU_ENV\u003dgcc3 -DLINUX -DNDEBUG -DOSL_DEBUG_LEVEL\u003d0 -DUNIX -DUNX -DX86_64 -D_PTHREADS -D_REENTRANT  -DCPPUNIT_PLUGIN_EXPORT\u003d\u0027extern \"C\" SAL_DLLPUBLIC_EXPORT\u0027  -flto\u003d8 -fuse-linker-plugin -O2 -fvisibility\u003dhidden    -Wall -Wno-missing-braces -Wnon-virtual-dtor -Wendif-labels -Wextra -Wundef -Wunreachable-code -Wshadow -Wunused-macros  -finput-charset\u003dUTF-8 -fmessage-length\u003d0 -fno-common -pipe -fstack-protector-strong -fdiagnostics-color\u003dalways  -Wdeprecated-copy-dtor -Wduplicated-cond -Wlogical-op -Wshift-overflow\u003d2 -Wunused-const-variable\u003d1 -Wno-cast-function-type -fvisibility-inlines-hidden -fPIC -Wshadow -Woverloaded-virtual -std\u003dc++17 -pthread  -O2 -ffile-prefix-map\u003d/home/rene/LibreOffice/git/libreoffice-7-3\u003d. -fstack-protector-strong -Wformat -Werror\u003dformat-security  -DEXCEPTIONS_ON -fexceptions -fno-enforce-eh-specs    -DLIBO_INTERNAL_ONLY  -c $S/connectivity/qa/connectivity/mysql/mysql.cxx -o $W/CxxObject/connectivity/qa/connectivity/mysql/mysql.o -MMD -MT $W/CxxObject/connectivity/qa/connectivity/mysql/mysql.o -MP -MF $W/Dep/CxxObject/connectivity/qa/connectivity/mysql/mysql.d_ -I$W/UnpackedTarball/cppunit/include -I$S/include  -I/usr/lib/jvm/default-java/include -I/usr/lib/jvm/default-java/include/linux -I$S/config_host     -I/usr/include  -I$W/UnoApiHeadersTarget/offapi/normal -I$W/UnoApiHeadersTarget/oovbaapi/normal -I$W/UnoApiHeadersTarget/udkapi/normal  \u0026\u0026 mv $W/Dep/CxxObject/connectivity/qa/connectivity/mysql/mysql.d_ $W/Dep/CxxObject/connectivity/qa/connectivity/mysql/mysql.d \n/home/rene/LibreOffice/git/libreoffice-7-3/connectivity/qa/connectivity/mysql/mysql.cxx: In member function \u0027virtual void MysqlTestDriver::setUp()\u0027:\n/home/rene/LibreOffice/git/libreoffice-7-3/connectivity/qa/connectivity/mysql/mysql.cxx:112:47: error: could not convert \u0027{\"user\", com::sun::star::uno::makeAny(const C\u0026) [with C \u003d rtl::OUString]()}\u0027 from \u0027\u003cbrace-enclosed initializer list\u003e\u0027 to \u0027std::initializer_list\u003cstd::pair\u003crtl::OUString, com::sun::star::uno::Any\u003e \u003e\u0027\n  112 |     m_infos \u003d comphelper::InitPropertySequence( { \"user\", makeAny(sUsername) },\n      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n      |                                               |\n      |                                               \u003cbrace-enclosed initializer list\u003e\n  113 |                                                 { \"password\", makeAny(sPassword) } );\n      |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nmake: *** [/home/rene/LibreOffice/git/libreoffice-7-3/solenv/gbuild/LinkTarget.mk:333: /home/rene/LibreOffice/git/libreoffice-7-3/workdir/CxxObject/connectivity/qa/connectivity/mysql/mysql.o] Error 1\n",
+      "revId": "461e81f368f6b671a44654c2e8cc14bfec50dce5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
