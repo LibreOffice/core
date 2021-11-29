@@ -934,13 +934,18 @@ private:
     std::set<TextNodeListener> m_aTextNodes;
     SwDoc& m_rDoc;
 
+    void remove_if_present(SwModify* pModify);
+
     wwExtraneousParas(wwExtraneousParas const&) = delete;
     wwExtraneousParas& operator=(wwExtraneousParas const&) = delete;
 public:
     explicit wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
     ~wwExtraneousParas() { delete_all_from_doc(); }
     void insert(SwTextNode *pTextNode);
-    void remove_if_present(SwTextNode *pTextNode);
+    void remove_if_present(SwTextNode *pTextNode)
+    {
+        remove_if_present(static_cast<SwModify*>(pTextNode));
+    }
     void delete_all_from_doc();
 };
 
