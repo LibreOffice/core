@@ -153,9 +153,6 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     // setup font size array
     m_aHeightArray.clear();
 
-    const int* pTempAry;
-    const int* pAry = FontList::GetStdSizeAry();
-
     sal_uInt16 nPos = 0; // Id is nPos+1
     static const OUStringLiteral aFontHeightCommand( u".uno:FontHeight?FontHeight.Height:float=" );
 
@@ -163,54 +160,30 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     OUString   aCommand;
 
-    if ( !aFontSizeNames.IsEmpty() )
+    if (!aFontSizeNames.IsEmpty())
     {
-        if ( pAry == FontList::GetStdSizeAry() )
+        // for scalable fonts all font size names
+        sal_Int32 nCount = aFontSizeNames.Count();
+        for( sal_Int32 i = 0; i < nCount; i++ )
         {
-            // for scalable fonts all font size names
-            sal_Int32 nCount = aFontSizeNames.Count();
-            for( sal_Int32 i = 0; i < nCount; i++ )
-            {
-                OUString aSizeName = aFontSizeNames.GetIndexName( i );
-                sal_Int32 nSize = aFontSizeNames.GetIndexSize( i );
-                m_aHeightArray.push_back(nSize);
-                rPopupMenu->insertItem(nPos + 1, aSizeName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, nPos);
+            OUString aSizeName = aFontSizeNames.GetIndexName( i );
+            sal_Int32 nSize = aFontSizeNames.GetIndexSize( i );
+            m_aHeightArray.push_back(nSize);
+            rPopupMenu->insertItem(nPos + 1, aSizeName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, nPos);
 
-                // Create dispatchable .uno command and set it
-                float fPoint = float(nSize) / 10;
-                aCommand = aFontHeightCommand + OUString::number( fPoint );
-                rPopupMenu->setCommand(nPos + 1, aCommand);
+            // Create dispatchable .uno command and set it
+            float fPoint = float(nSize) / 10;
+            aCommand = aFontHeightCommand + OUString::number( fPoint );
+            rPopupMenu->setCommand(nPos + 1, aCommand);
 
-                ++nPos;
-            }
-        }
-        else
-        {
-            // for fixed size fonts only selectable font size names
-            pTempAry = pAry;
-            while ( *pTempAry )
-            {
-                OUString aSizeName = aFontSizeNames.Size2Name( *pTempAry );
-                if ( !aSizeName.isEmpty() )
-                {
-                    m_aHeightArray.push_back(*pTempAry);
-                    rPopupMenu->insertItem(nPos + 1, aSizeName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, nPos);
-
-                    // Create dispatchable .uno command and set it
-                    float fPoint = float(*pTempAry) / 10;
-                    aCommand = aFontHeightCommand + OUString::number( fPoint );
-                    rPopupMenu->setCommand(nPos + 1, aCommand);
-
-                    ++nPos;
-                }
-                pTempAry++;
-            }
+            ++nPos;
         }
     }
 
     // then insert numerical font size values
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    pTempAry = pAry;
+    const int* pAry = FontList::GetStdSizeAry();
+    const int* pTempAry = pAry;
     while ( *pTempAry )
     {
         m_aHeightArray.push_back(*pTempAry);
