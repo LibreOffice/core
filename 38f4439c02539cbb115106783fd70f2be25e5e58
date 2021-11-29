@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2954c53d_404f68c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-29T15:19:22Z",
+      "side": 1,
+      "message": "this builds, thanks. (Didn\u0027t execute the test though, don\u0027t have a test mysql around here, the test I ran initially does it itself: https://salsa.debian.org/libreoffice-team/libreoffice/libreoffice/-/blob/debian-experimental-7.3/tests/cppunit-connectivity-mysql\n\n(maybe Author: should be updated?)",
+      "revId": "38f4439c02539cbb115106783fd70f2be25e5e58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
