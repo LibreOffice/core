@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34565f22_5c924d52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-29T09:53:54Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix for an annoying problem! Note: Default list styles are not supported, but that is a different problem.",
+      "revId": "2a24bfdc382afb63e82cb6386a59a0892174182d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
