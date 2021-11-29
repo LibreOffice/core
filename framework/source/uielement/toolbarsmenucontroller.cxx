@@ -43,14 +43,12 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -396,15 +394,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         m_xPopupMenu->insertItem( nIndex, aSortedTbs[i].aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
         if ( aSortedTbs[i].bVisible )
             m_xPopupMenu->checkItem( nIndex, true );
-
-        {
-            SolarMutexGuard aGuard;
-            VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu ));
-            PopupMenu* pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
-            assert(pVCLPopupMenu);
-            if (pVCLPopupMenu)
-                pVCLPopupMenu->SetUserValue( nIndex, reinterpret_cast<void*>( aSortedTbs[i].bContextSensitive ? 1 : 0 ));
-        }
 
         // use VCL popup menu pointer to set vital information that are not part of the awt implementation
         OUStringBuffer aStrBuf( aStaticCmdPart );
