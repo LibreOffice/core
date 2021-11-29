@@ -82,6 +82,7 @@
 #include <textsh.hxx>
 #include <frmatr.hxx>
 #include <frmmgr.hxx>
+#include <fesh.hxx>
 #include <tblafmt.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
@@ -274,6 +275,7 @@ public:
     void testTdf133524();
     void testTdf133524_Romanian();
     void testTdf128860();
+    void testNestedGroupTextBox();
     void testTdf123786();
     void testTdf133589();
     void testTdf143176();
@@ -394,6 +396,7 @@ public:
     CPPUNIT_TEST(testTdf133524);
     CPPUNIT_TEST(testTdf133524_Romanian);
     CPPUNIT_TEST(testTdf128860);
+    CPPUNIT_TEST(testNestedGroupTextBox);
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
     CPPUNIT_TEST(testTdf143176);
@@ -3718,6 +3721,78 @@ void SwUiWriterTest4::testTdf128860()
     pWrtShell->AutoCorrect(corr, '\'');
     sReplaced += u" word.‘";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest4::testNestedGroupTextBox()
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ComplexGroupShapeTest.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    auto xGroup1 = getShape(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xGroup1->getShapeType());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:LeaveGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    auto pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SelectObj(Point(), 0x000, pPage->GetObj(0));
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(2));
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pWrtShell->GetMarkList()->GetMarkCount());
+
+    dispatchCommand(mxComponent, ".uno:FormatGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetMarkList()->GetMarkCount());
+
+    for (int i = 0; i < 30; ++i)
+    {
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    dispatchCommand(mxComponent, ".uno:FormatUnGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    pWrtShell->SelectObj(Point(), 0x000, pPage->GetObj(2));
+
+    dispatchCommand(mxComponent, ".uno:FormatUnGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (int i = 1; i < 4; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(getShape(i), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("This must be a textbox!", true,
+                                     xShapeProps->getPropertyValue("TextBox").get<bool>());
+    }
 }
 
 void SwUiWriterTest4::testTdf123786()
