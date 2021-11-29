@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ea85789_68906b68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-29T08:12:49Z",
+      "side": 1,
+      "message": "ooooh, when that lands that will make PPTX import significantly faster for some documents",
+      "revId": "e0886927b63cf69f10a480a108e300b7c13a9bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
