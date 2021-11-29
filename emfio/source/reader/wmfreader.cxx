@@ -1690,12 +1690,17 @@ namespace emfio
                     bRet = false;
                     break;
                 }
-                else if ( nFunction == W_META_EOF )
+                else if ( nRSize == 3 && nFunction == W_META_EOF )
                 {
                     break;
                 }
                 switch( nFunction )
                 {
+                    case W_META_EOF:
+                    {
+                        return;
+                    }
+
                     case W_META_SETWINDOWORG:
                     {
                         aWinOrg = ReadYX();

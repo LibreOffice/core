@@ -2837,6 +2837,41 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145873)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    saveAsPDF(u"tdf145873.pptx");
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    // tdf#145873: Without the fix #1 in place, this test would have failed with
+    // - Expected: 318
+    // - Actual  : 3
+    CPPUNIT_ASSERT_EQUAL(318, nPageObjectCount);
+
+    auto pObject = pPdfPage->getObject(4);
+    CPPUNIT_ASSERT_MESSAGE("no object", pObject != nullptr);
+
+    // tdf#145873: Without the fix #2 in place, this test would have failed with
+    // - Expected: 3.23
+    // - Actual  : 3.57...
+    // - Delta   : 0.1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.23, pObject->getBounds().getWidth(), 0.1);
+    // - Expected: 3.49
+    // - Actual  : 3.74...
+    // - Delta   : 0.1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.49, pObject->getBounds().getHeight(), 0.1);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
