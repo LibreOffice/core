@@ -230,4 +230,36 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
     B = sal_uInt8(std::lround(aBColor.getBlue()  * 255.0));
 }
 
+void Color::ApplyLumModOff(sal_Int16 nMod, sal_Int16 nOff)
+{
+    if (nMod == 10000 && nOff == 0)
+    {
+        return;
+    }
+    // Switch to HSL, where applying these transforms is easier.
+    basegfx::BColor aBColor = basegfx::utils::rgb2hsl(getBColor());
+
+    // 50% is half luminance, 200% is double luminance. Unit is 100th percent.
+    aBColor.setBlue(std::clamp(aBColor.getBlue() * nMod / 10000, 0.0, 1.0));
+    // If color changes to black or white, it will stay gray if luminance changes again.
+    if ((aBColor.getBlue() == 0.0) || (aBColor.getBlue() == 1.0))
+    {
+        aBColor.setGreen(0.0);
+    }
+
+    // Luminance offset means hue and saturation is left unchanged. Unit is 100th percent.
+    aBColor.setBlue(std::clamp(aBColor.getBlue() + static_cast<double>(nOff) / 10000, 0.0, 1.0));
+    // If color changes to black or white, it will stay gray if luminance changes again.
+    if ((aBColor.getBlue() == 0.0) || (aBColor.getBlue() == 1.0))
+    {
+        aBColor.setGreen(0.0);
+    }
+
+    // Switch back to RGB.
+    aBColor = basegfx::utils::hsl2rgb(aBColor);
+    R = sal_uInt8(std::lround(aBColor.getRed()   * 255.0));
+    G = sal_uInt8(std::lround(aBColor.getGreen() * 255.0));
+    B = sal_uInt8(std::lround(aBColor.getBlue()  * 255.0));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
