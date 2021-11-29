@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <officecfg/Office/Common.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <osl/mutex.hxx>
@@ -74,24 +73,17 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > cons
     if (bMacrosDisabled)
         return;
 
-    VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-    PopupMenu*     pPopupMenu    = nullptr;
-
     SolarMutexGuard aSolarMutexGuard;
 
-    resetPopupMenu( rPopupMenu );
-    if ( pVCLPopupMenu )
-        pPopupMenu = static_cast<PopupMenu *>(pVCLPopupMenu->GetMenu());
-
-    if (!pPopupMenu)
-        return;
+    resetPopupMenu(rPopupMenu);
+    assert(rPopupMenu->getItemCount() == 0);
 
     // insert basic
     OUString aCommand(".uno:MacroDialog");
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, m_aModuleName);
     OUString aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand(aProperties);
-    pPopupMenu->InsertItem( 2, aDisplayName );
-    pPopupMenu->SetItemCommand( 2, aCommand );
+    rPopupMenu->insertItem(2, aDisplayName, 0, 0);
+    rPopupMenu->setCommand(2, aCommand);
 
     // insert providers but not basic or java
     addScriptItems(rPopupMenu, 4);
