@@ -1195,7 +1195,7 @@ $(wasm_fs_image_WORKDIR)/soffice.data.js.link: $(wasm_fs_image_WORKDIR)/soffice.
 	$(call gb_Helper_replace_if_different_and_touch,$^.tmp,$@)
 
 $(wasm_fs_image_WORKDIR)/soffice.data.filelist: $(gb_wasm_image_filelist) | $(wasm_fs_image_WORKDIR)/.dir
-	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1,$(subst $(SRCDIR)/,,$(subst $(BUILDDIR)/,,$^))) && \
+	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1,$(subst example3.odt,example3.odt@android/default-document/example3.odt,$(subst $(BUILDDIR)/,,$^))) && \
 	    mv $$TEMPFILE $@.tmp
 	$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@)
 
