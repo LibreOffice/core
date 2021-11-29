@@ -232,8 +232,6 @@ public:
     void testDeleteTableRedlines();
     void testXFlatParagraph();
     void testTdf81995();
-    void testForcepoint3();
-    void testForcepoint80();
     void testExportToPicture();
     void testTdf77340();
     void testTdf79236();
@@ -353,8 +351,6 @@ public:
     CPPUNIT_TEST(testDeleteTableRedlines);
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
-    CPPUNIT_TEST(testForcepoint3);
-    CPPUNIT_TEST(testForcepoint80);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testTdf77340);
     CPPUNIT_TEST(testTdf79236);
@@ -2015,38 +2011,6 @@ void SwUiWriterTest::testTdf81995()
                     CPPUNIT_FAIL("Property Name not matched");
             }
         }
-    }
-}
-
-void SwUiWriterTest::testForcepoint3()
-{
-    createSwDoc(DATA_DIRECTORY, "flowframe_null_ptr_deref.sample");
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
-    }));
-    utl::TempFile aTempFile;
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    // printing asserted in SwFrame::GetNextSctLeaf()
-    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-    aTempFile.EnableKillingFile();
-}
-
-void SwUiWriterTest::testForcepoint80()
-{
-    try
-    {
-        createSwDoc(DATA_DIRECTORY, "forcepoint80-1.rtf");
-        uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
-        }));
-        utl::TempFile aTempFile;
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        // printing asserted in SwCellFrame::FindStartEndOfRowSpanCell
-        xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
-        aTempFile.EnableKillingFile();
-    }
-    catch(...)
-    {
     }
 }
 

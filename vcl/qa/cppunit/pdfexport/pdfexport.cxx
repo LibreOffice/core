@@ -1547,6 +1547,20 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint71)
     saveAsPDF(u"forcepoint71.key");
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint80)
+{
+    // printing asserted in SwCellFrame::FindStartEndOfRowSpanCell
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"forcepoint80-1.rtf");
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint3)
+{
+    // printing asserted in SwFrame::GetNextSctLeaf()
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"flowframe_null_ptr_deref.sample");
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf84283)
 {
     // Without the fix in place, this test would have crashed
