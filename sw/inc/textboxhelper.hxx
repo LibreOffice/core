@@ -65,7 +65,8 @@ public:
     /// to the given pObject shape.
     static void destroy(const SwFrameFormat* pShape, const SdrObject* pObject);
     /// Get interface of a shape's TextBox, if there is any.
-    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
+    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType,
+                                        SdrObject* pObj);
 
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
@@ -106,6 +107,9 @@ public:
     /// because if not, layout breaks, but this situation also handled by
     /// this function, and returns true in that case too.
     static std::optional<bool> isAnchorTypeDifferent(const SwFrameFormat* pShape);
+
+    /// Sets the correct size of textframe depending on the given SdrObject.
+    static bool syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj);
 
     /// Returns true if the given shape has a valid textframe.
     static bool isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShape);
@@ -177,6 +181,14 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+
+    /// Calls the method given by pFunc with every textboxes of the group given by pFormat.
+    static void synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
+                                                SwFrameFormat* pFormat, SdrObject* pObj);
+    /// Collect all textboxes of the group given by the pGoupObj Parameter. Returns with a
+    /// vector filled with the textboxes.
+    static std::vector<SwFrameFormat*> CollectTextBoxes(SdrObject* pGroupObject,
+                                                        SwFrameFormat* pFormat);
 };
 
 /// Textboxes are basically textframe + shape pairs. This means one shape has one frame.
@@ -242,6 +254,8 @@ public:
     SwFrameFormat* GetOwnerShape() { return m_pOwnerShapeFormat; };
     // This will give the current number of textboxes.
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
+    // Returns with a const collection of textboxes owned by this node.
+    std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
