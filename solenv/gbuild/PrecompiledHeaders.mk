@@ -159,7 +159,8 @@ gb_PrecompiledHeader_ignore_flags_system := \
 -DGLM_FORCE_CTOR_INIT \
 -DVCL_INTERNALS \
 -DZLIB_CONST \
--include $(SRCDIR)/pch/inc/clangfix.hxx \
+$(gb_CXXFLAGS_include)$(SRCDIR)/pch/inc/clangfix.hxx \
+$(gb_CXXFLAGS_no_pch_warnings) \
 $(gb_PrecompiledHeader_ignore_flags_for_flags_file) \
 
 # Probably also update pch/inc/clangfix.hxx if you extend the list.
