@@ -22,6 +22,7 @@ public:
     void testVariables();
     void test_asRGBColor();
     void test_ApplyTintOrShade();
+    void test_ApplyLumModOff();
     void testGetColorError();
     void testInvert();
     void testBColor();
@@ -31,6 +32,7 @@ public:
     CPPUNIT_TEST(testVariables);
     CPPUNIT_TEST(test_asRGBColor);
     CPPUNIT_TEST(test_ApplyTintOrShade);
+    CPPUNIT_TEST(test_ApplyLumModOff);
     CPPUNIT_TEST(testGetColorError);
     CPPUNIT_TEST(testInvert);
     CPPUNIT_TEST(testBColor);
@@ -161,6 +163,17 @@ void Test::test_ApplyTintOrShade()
     CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x80, 0x80, 0x80, u"808080",  -5000));
     // 100% shade
     CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0x80, 0x80, 0x80, u"808080", -10000));
+}
+
+void Test::test_ApplyLumModOff()
+{
+    // Kind of blue.
+    Color aColor(0x44, 0x72, 0xC4);
+
+    // PowerPoint calls this "Ligher 40%".
+    aColor.ApplyLumModOff(6000, 4000);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("8faadc"), aColor.AsRGBHexString());
 }
 
 void Test::testGetColorError()

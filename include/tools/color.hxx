@@ -335,6 +335,14 @@ public:
      **/
     void ApplyTintOrShade(sal_Int16 n100thPercent);
 
+    /**
+     * Apply luminance offset and/or modulation.
+     *
+     * The input values are in percentages (in 100th percents). 100% modulation and 0% offset
+     * results in no change.
+     */
+    void ApplyLumModOff(sal_Int16 nMod, sal_Int16 nOff);
+
     /** Inverts color. 1 and 0 are switched.
       * Note that the result will be the complementary color.
       * For example, if you have red, you will get cyan: FF0000 -> 00FFFF.
