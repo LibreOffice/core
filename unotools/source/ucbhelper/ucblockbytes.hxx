@@ -59,7 +59,7 @@ namespace utl
 class UcbLockBytes;
 typedef tools::SvRef<UcbLockBytes> UcbLockBytesRef;
 
-class UcbLockBytes : public virtual SvLockBytes
+class UcbLockBytes : public SvLockBytes
 {
     osl::Condition          m_aInitialized;
     osl::Condition          m_aTerminated;
