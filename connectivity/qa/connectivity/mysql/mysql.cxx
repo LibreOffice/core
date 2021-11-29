@@ -101,15 +101,15 @@ void MysqlTestDriver::setUp()
     CPPUNIT_ASSERT_MESSAGE("no mysqlc component!", m_xMysqlcComponent.is());
 
     // set user name and password
-    m_infos = Sequence<PropertyValue>{ 2 };
-    m_infos[0].Name = OUString{ "user" };
     sal_Int32 nPer = m_sUrl.indexOf("/");
-    m_infos[0].Value = makeAny(m_sUrl.copy(0, nPer));
+    OUString sUsername = m_sUrl.copy(0, nPer);
     m_sUrl = m_sUrl.copy(nPer + 1);
-    m_infos[1].Name = OUString{ "password" };
     sal_Int32 nAt = m_sUrl.indexOf("@");
-    m_infos[1].Value = makeAny(m_sUrl.copy(0, nAt));
+    OUString sPassword = m_sUrl.copy(0, nAt);
     m_sUrl = m_sUrl.copy(nAt + 1);
+
+    m_infos = Sequence<PropertyValue>{ { "user", makeAny(sUsername) },
+                                       { "password", makeAny(sPassword) } };
 
     m_xDriver.set(m_xMysqlcComponent, UNO_QUERY);
     if (!m_xDriver.is())
