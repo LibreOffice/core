@@ -66,6 +66,8 @@ published service Events
             <dt>OnPrepareUnload</dt>
             <dt>OnPrepareViewClosing</dt>
             <dt>OnPrint</dt>
+            <dt>OnPrintDone</dt>
+            <dt>OnPrintFailed</dt>
             <dt>OnResize</dt>
             <dt>OnSave</dt>
             <dt>OnSaveAs</dt>

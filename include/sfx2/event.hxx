@@ -126,6 +126,8 @@ enum class SfxEventHintId {
     PrepareCloseDoc,
     PrepareCloseView,
     PrintDoc,
+    PrintDocDone,
+    PrintDocFailed,
     SaveAsDoc,
     SaveAsDocDone,
     SaveAsDocFailed,
@@ -166,6 +168,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxEventHintId::PrepareCloseDoc: return stream << "PrepareCloseDoc";
     case SfxEventHintId::PrepareCloseView: return stream << "PrepareCloseView";
     case SfxEventHintId::PrintDoc: return stream << "PrintDoc";
+    case SfxEventHintId::PrintDocDone: return stream << "PrintDocDone";
+    case SfxEventHintId::PrintDocFailed: return stream << "PrintDocFailed";
     case SfxEventHintId::SaveAsDoc: return stream << "SaveAsDoc";
     case SfxEventHintId::SaveAsDocDone: return stream << "SaveAsDocDone";
     case SfxEventHintId::SaveAsDocFailed: return stream << "SaveAsDocFailed";
@@ -242,18 +246,37 @@ public:
                 SfxObjectShell *pObj,
                 const css::uno::Reference< css::frame::XController2 >& xController )
         : SfxViewEventHint(
-            SfxEventHintId::PrintDoc,
-            GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ),
+            (nState == css::view::PrintableState_JOB_COMPLETED || nState == css::view::PrintableState_JOB_SPOOLED)?
+                SfxEventHintId::PrintDocDone :
+                (nState == css::view::PrintableState_JOB_FAILED || nState == css::view::PrintableState_JOB_SPOOLING_FAILED)?
+                    SfxEventHintId::PrintDocFailed : SfxEventHintId::PrintDoc
+            ,
+            (nState == css::view::PrintableState_JOB_COMPLETED || nState == css::view::PrintableState_JOB_SPOOLED)?
+                GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOCDONE) :
+                (nState == css::view::PrintableState_JOB_FAILED || nState == css::view::PrintableState_JOB_SPOOLING_FAILED)?
+                    GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOCFAILED ) :
+                    GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC )
+            ,
             pObj,
-            xController )
+            xController
+          )
         , mnPrintableState( nState )
         , aOpts( rOpts )
         {}
 
         SfxPrintingHint( css::view::PrintableState nState )
         : SfxViewEventHint(
-            SfxEventHintId::PrintDoc,
-            GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ),
+            (nState == css::view::PrintableState_JOB_COMPLETED || nState == css::view::PrintableState_JOB_SPOOLED)?
+                SfxEventHintId::PrintDocDone :
+                (nState == css::view::PrintableState_JOB_FAILED || nState == css::view::PrintableState_JOB_SPOOLING_FAILED)?
+                    SfxEventHintId::PrintDocFailed : SfxEventHintId::PrintDoc
+            ,
+            (nState == css::view::PrintableState_JOB_COMPLETED || nState == css::view::PrintableState_JOB_SPOOLED)?
+                GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOCDONE) :
+                (nState == css::view::PrintableState_JOB_FAILED || nState == css::view::PrintableState_JOB_SPOOLING_FAILED)?
+                    GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOCFAILED ) :
+                    GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC )
+            ,
             nullptr,
             css::uno::Reference< css::frame::XController >() )
         , mnPrintableState( nState )

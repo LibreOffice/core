@@ -128,6 +128,8 @@
 #define RID_SVXSTR_EVENT_ACTIVATEDOC                NC_("RID_SVXSTR_EVENT_ACTIVATEDOC", "Activate Document")
 #define RID_SVXSTR_EVENT_DEACTIVATEDOC              NC_("RID_SVXSTR_EVENT_DEACTIVATEDOC", "Deactivate Document")
 #define RID_SVXSTR_EVENT_PRINTDOC                   NC_("RID_SVXSTR_EVENT_PRINTDOC", "Print Document")
+#define RID_SVXSTR_EVENT_PRINTDOCDONE               NC_("RID_SVXSTR_EVENT_PRINTDOC", "Document printed")
+#define RID_SVXSTR_EVENT_PRINTDOCFAILED             NC_("RID_SVXSTR_EVENT_PRINTDOC", "Document printing failed")
 #define RID_SVXSTR_EVENT_MODIFYCHANGED              NC_("RID_SVXSTR_EVENT_MODIFYCHANGED", "'Modified' status was changed")
 #define RID_SVXSTR_EVENT_MAILMERGE                  NC_("RID_SVXSTR_EVENT_MAILMERGE", "Printing of form letters started")
 #define RID_SVXSTR_EVENT_MAILMERGE_END              NC_("RID_SVXSTR_EVENT_MAILMERGE_END", "Printing of form letters finished")

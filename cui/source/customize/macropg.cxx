@@ -112,6 +112,8 @@ void SvxMacroTabPage_::InitResources()
     aDisplayNames.emplace_back( "OnCopyToDone",          RID_SVXSTR_EVENT_COPYTODOCDONE );
     aDisplayNames.emplace_back( "OnCopyToFailed",        RID_SVXSTR_EVENT_COPYTODOCFAILED );
     aDisplayNames.emplace_back( "OnPrint",               RID_SVXSTR_EVENT_PRINTDOC );
+    aDisplayNames.emplace_back( "OnPrintDone",           RID_SVXSTR_EVENT_PRINTDOCDONE );
+    aDisplayNames.emplace_back( "OnPrintFailed",         RID_SVXSTR_EVENT_PRINTDOCFAILED );
     aDisplayNames.emplace_back( "OnModifyChanged",       RID_SVXSTR_EVENT_MODIFYCHANGED );
     aDisplayNames.emplace_back( "OnTitleChanged",        RID_SVXSTR_EVENT_TITLECHANGED );
 

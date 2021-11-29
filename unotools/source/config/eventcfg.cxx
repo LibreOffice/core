@@ -68,6 +68,8 @@ static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
 "OnFocus",
 "OnUnfocus",
 "OnPrint",
+"OnPrintDone",
+"OnPrintFailed",
 "OnViewCreated",
 "OnPrepareViewClosing",
 "OnViewClosed",
