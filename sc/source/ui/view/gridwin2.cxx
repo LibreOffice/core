@@ -474,7 +474,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
         pNotifier = SfxViewShell::Current();
 
     weld::Window* pPopupParent = GetFrameWeld();
-    mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, &mrViewData.GetDocument(),
+    mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, mrViewData,
                                                     false, -1, pNotifier));
 
     mpDPFieldPopup->setExtendedData(std::move(pDPData));
@@ -519,7 +519,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
             ScResId(STR_MENU_SORT_DESC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::DESCENDING, 0, pViewShell));
 
-        ScListSubMenuControl* pSubMenu = mpDPFieldPopup->addSubMenuItem(ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
+        ScListSubMenuControl* pSubMenu = mpDPFieldPopup->addSubMenuItem(ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty(), false);
         if (pSubMenu)
         {
             size_t n = aUserSortNames.size();

@@ -2,14 +2,20 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkTreeStore" id="liststore1">
+  <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name text -->
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+      <!-- column-name text1 -->
       <column type="gchararray"/>
-      <!-- column-name image1 -->
-      <column type="GdkPixbuf"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkPopover" id="FilterSubDropDown">
@@ -52,9 +58,10 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <object class="GtkCellRendererToggle" id="cellrenderertoggle"/>
                       <attributes>
-                        <attribute name="text">0</attribute>
+                        <attribute name="visible">4</attribute>
+                        <attribute name="active">0</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -62,9 +69,19 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                     <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrenderertext55"/>
+                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf"/>
                       <attributes>
-                        <attribute name="pixbuf">1</attribute>
+                        <attribute name="surface">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
                       </attributes>
                     </child>
                   </object>
