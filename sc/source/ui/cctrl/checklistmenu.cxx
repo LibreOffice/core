@@ -218,16 +218,12 @@ void ScCheckListMenuControl::handleMenuTimeout(const SubMenuItemData* pTimer)
         // end submenu.
         if (maCloseTimer.mpSubMenu)
         {
-            maOpenTimer.mpSubMenu = nullptr;
-
             maCloseTimer.mpSubMenu->EndPopupMode();
             maCloseTimer.mpSubMenu = nullptr;
 
             // EndPopup sends a user event, and we want this focus to be set after that has done its conflicting focus-setting work
             if (!mnAsyncPostPopdownId)
                 mnAsyncPostPopdownId = Application::PostUserEvent(LINK(this, ScCheckListMenuControl, PostPopdownHdl));
-
-            maOpenTimer.mnMenuPos = MENU_NOT_SELECTED;
         }
     }
 }
