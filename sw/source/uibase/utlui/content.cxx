@@ -5281,8 +5281,8 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
 // Now even the matching text::Bookmark
 NaviContentBookmark::NaviContentBookmark()
     :
-    nDocSh(0),
-    nDefDrag( RegionMode::NONE )
+    m_nDocSh(0),
+    m_nDefaultDrag( RegionMode::NONE )
 {
 }
 
@@ -5290,10 +5290,10 @@ NaviContentBookmark::NaviContentBookmark( const OUString &rUrl,
                     const OUString& rDesc,
                     RegionMode nDragType,
                     const SwDocShell* pDocSh ) :
-    aUrl( rUrl ),
-    aDescr(rDesc),
-    nDocSh(reinterpret_cast<sal_IntPtr>(pDocSh)),
-    nDefDrag( nDragType )
+    m_aUrl( rUrl ),
+    m_aDescription(rDesc),
+    m_nDocSh(reinterpret_cast<sal_IntPtr>(pDocSh)),
+    m_nDefaultDrag( nDragType )
 {
 }
 
@@ -5301,10 +5301,10 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 {
     rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
 
-    OString sStrBuf(OUStringToOString(aUrl, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
-                    OUStringToOString(aDescr, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
-                    OString::number(static_cast<int>(nDefDrag)) + OStringChar(NAVI_BOOKMARK_DELIM) +
-                    OString::number(nDocSh));
+    OString sStrBuf(OUStringToOString(m_aUrl, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
+                    OUStringToOString(m_aDescription, eSysCSet) + OStringChar(NAVI_BOOKMARK_DELIM) +
+                    OString::number(static_cast<int>(m_nDefaultDrag)) + OStringChar(NAVI_BOOKMARK_DELIM) +
+                    OString::number(m_nDocSh));
     rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }
 
@@ -5315,10 +5315,10 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData )
     if( bRet )
     {
         sal_Int32 nPos = 0;
-        aUrl    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        aDescr  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        nDefDrag= static_cast<RegionMode>( sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32() );
-        nDocSh  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
+        m_aUrl    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        m_aDescription  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        m_nDefaultDrag= static_cast<RegionMode>( sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32() );
+        m_nDocSh  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
     }
     return bRet;
 }

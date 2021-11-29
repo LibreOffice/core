@@ -176,13 +176,13 @@ namespace {
 
 class SwTransferDdeLink : public ::sfx2::SvBaseLink
 {
-    OUString sName;
-    ::sfx2::SvLinkSourceRef refObj;
-    SwTransferable& rTrnsfr;
-    SwDocShell* pDocShell;
-    sal_uLong nOldTimeOut;
-    bool bDelBookmark : 1;
-    bool bInDisconnect : 1;
+    OUString m_sName;
+    ::sfx2::SvLinkSourceRef m_xRefObj;
+    SwTransferable& m_rTransfer;
+    SwDocShell* m_pDocShell;
+    sal_uLong m_nOldTimeOut;
+    bool m_bDelBookmark : 1;
+    bool m_bInDisconnect : 1;
 
     bool FindDocShell();
 
@@ -4212,18 +4212,18 @@ SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper&
 }
 
 SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
-    : rTrnsfr(rTrans)
-    , pDocShell(nullptr)
-    , nOldTimeOut(0)
-    , bDelBookmark(false)
-    , bInDisconnect(false)
+    : m_rTransfer(rTrans)
+    , m_pDocShell(nullptr)
+    , m_nOldTimeOut(0)
+    , m_bDelBookmark(false)
+    , m_bInDisconnect(false)
 {
     // we only end up here with table- or text selection
     if( SelectionType::TableCell & rSh.GetSelectionType() )
     {
         SwFrameFormat* pFormat = rSh.GetTableFormat();
         if( pFormat )
-            sName = pFormat->GetName();
+            m_sName = pFormat->GetName();
     }
     else
     {
@@ -4238,36 +4238,36 @@ SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
             IDocumentMarkAccess::MarkType::DDE_BOOKMARK);
         if(pMark)
         {
-            sName = pMark->GetName();
-            bDelBookmark = true;
+            m_sName = pMark->GetName();
+            m_bDelBookmark = true;
             if( !bIsModified )
                 rSh.ResetModified();
         }
         else
-            sName.clear();
+            m_sName.clear();
         rSh.DoUndo( bUndo );
     }
 
-    if( sName.isEmpty() ||
-        nullptr == ( pDocShell = rSh.GetDoc()->GetDocShell() ))
+    if( m_sName.isEmpty() ||
+        nullptr == ( m_pDocShell = rSh.GetDoc()->GetDocShell() ))
         return;
 
     // then we create our "server" and connect to it
-    refObj = pDocShell->DdeCreateLinkSource( sName );
-    if( refObj.is() )
+    m_xRefObj = m_pDocShell->DdeCreateLinkSource( m_sName );
+    if( m_xRefObj.is() )
     {
-        refObj->AddConnectAdvise( this );
-        refObj->AddDataAdvise( this,
+        m_xRefObj->AddConnectAdvise( this );
+        m_xRefObj->AddDataAdvise( this,
                         OUString(),
                         ADVISEMODE_NODATA | ADVISEMODE_ONLYONCE );
-        nOldTimeOut = refObj->GetUpdateTimeout();
-        refObj->SetUpdateTimeout( 0 );
+        m_nOldTimeOut = m_xRefObj->GetUpdateTimeout();
+        m_xRefObj->SetUpdateTimeout( 0 );
     }
 }
 
 SwTransferDdeLink::~SwTransferDdeLink()
 {
-    if( refObj.is() )
+    if( m_xRefObj.is() )
         Disconnect( true );
 }
 
@@ -4275,10 +4275,10 @@ SwTransferDdeLink::~SwTransferDdeLink()
                                     const uno::Any& )
 {
     // well, that's it with the link
-    if( !bInDisconnect )
+    if( !m_bInDisconnect )
     {
-        if( FindDocShell() && pDocShell->GetView() )
-            rTrnsfr.RemoveDDELinkFormat( pDocShell->GetView()->GetEditWin() );
+        if( FindDocShell() && m_pDocShell->GetView() )
+            m_rTransfer.RemoveDDELinkFormat( m_pDocShell->GetView()->GetEditWin() );
         Disconnect( false );
     }
     return SUCCESS;
@@ -4286,15 +4286,15 @@ SwTransferDdeLink::~SwTransferDdeLink()
 
 bool SwTransferDdeLink::WriteData( SvStream& rStrm )
 {
-    if( !refObj.is() || !FindDocShell() )
+    if( !m_xRefObj.is() || !FindDocShell() )
         return false;
 
     rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     const OString aAppNm(OUStringToOString(
         Application::GetAppName(), eEncoding));
     const OString aTopic(OUStringToOString(
-        pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
-    const OString aName(OUStringToOString(sName, eEncoding));
+        m_pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
+    const OString aName(OUStringToOString(m_sName, eEncoding));
 
     std::unique_ptr<char[]> pMem(new char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ]);
 
@@ -4312,15 +4312,15 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
     rStrm.WriteBytes( pMem.get(), nLen );
     pMem.reset();
 
-    IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
+    IDocumentMarkAccess* const pMarkAccess = m_pDocShell->GetDoc()->getIDocumentMarkAccess();
+    IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(m_sName);
     if(ppMark != pMarkAccess->getAllMarksEnd()
         && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::MarkType::BOOKMARK)
     {
         // the mark is still a DdeBookmark
         // we replace it with a Bookmark, so it will get saved etc.
         ::sw::mark::IMark* const pMark = *ppMark;
-        ::sfx2::SvLinkSource* p = refObj.get();
+        ::sfx2::SvLinkSource* p = m_xRefObj.get();
         SwServerObject& rServerObject = dynamic_cast<SwServerObject&>(*p);
 
         // collecting state of old mark
@@ -4347,7 +4347,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
         rServerObject.SetDdeBookmark(*pNewMark);
     }
 
-    bDelBookmark = false;
+    m_bDelBookmark = false;
     return true;
 }
 
@@ -4355,13 +4355,13 @@ void SwTransferDdeLink::Disconnect( bool bRemoveDataAdvise )
 {
     //  don't accept DataChanged anymore, when already in Disconnect!
     //  (DTOR from Bookmark sends a DataChanged!)
-    bool bOldDisconnect = bInDisconnect;
-    bInDisconnect = true;
+    bool bOldDisconnect = m_bInDisconnect;
+    m_bInDisconnect = true;
 
     // destroy the unused bookmark again (without Undo!)?
-    if( bDelBookmark && refObj.is() && FindDocShell() )
+    if( m_bDelBookmark && m_xRefObj.is() && FindDocShell() )
     {
-        SwDoc* pDoc = pDocShell->GetDoc();
+        SwDoc* pDoc = m_pDocShell->GetDoc();
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         // #i58448#
@@ -4371,29 +4371,29 @@ void SwTransferDdeLink::Disconnect( bool bRemoveDataAdvise )
         bool bIsModified = pDoc->getIDocumentState().IsModified();
 
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        pMarkAccess->deleteMark(pMarkAccess->findMark(sName));
+        pMarkAccess->deleteMark(pMarkAccess->findMark(m_sName));
 
         if( !bIsModified )
             pDoc->getIDocumentState().ResetModified();
         // #i58448#
         pDoc->SetOle2Link( aSavedOle2Link );
 
-        bDelBookmark = false;
+        m_bDelBookmark = false;
     }
 
-    if( refObj.is() )
+    if( m_xRefObj.is() )
     {
-        refObj->SetUpdateTimeout( nOldTimeOut );
-        refObj->RemoveConnectAdvise( this );
+        m_xRefObj->SetUpdateTimeout( m_nOldTimeOut );
+        m_xRefObj->RemoveConnectAdvise( this );
         if( bRemoveDataAdvise )
             // in a DataChanged the SelectionObject must NEVER be deleted
             // is already handled by the base class
             // (ADVISEMODE_ONLYONCE!!!!)
             // but always in normal Disconnect!
-            refObj->RemoveAllDataAdvise( this );
-        refObj.clear();
+            m_xRefObj->RemoveAllDataAdvise( this );
+        m_xRefObj.clear();
     }
-    bInDisconnect = bOldDisconnect;
+    m_bInDisconnect = bOldDisconnect;
 }
 
 bool SwTransferDdeLink::FindDocShell()
@@ -4401,26 +4401,26 @@ bool SwTransferDdeLink::FindDocShell()
     SfxObjectShell* pTmpSh = SfxObjectShell::GetFirst( checkSfxObjectShell<SwDocShell> );
     while( pTmpSh )
     {
-        if( pTmpSh == pDocShell )       // that's what we want to have
+        if( pTmpSh == m_pDocShell )       // that's what we want to have
         {
-            if( pDocShell->GetDoc() )
+            if( m_pDocShell->GetDoc() )
                 return true;
             break;      // the Doc is not there anymore, so leave!
         }
         pTmpSh = SfxObjectShell::GetNext( *pTmpSh, checkSfxObjectShell<SwDocShell> );
     }
 
-    pDocShell = nullptr;
+    m_pDocShell = nullptr;
     return false;
 }
 
 void SwTransferDdeLink::Closed()
 {
-    if( !bInDisconnect && refObj.is() )
+    if( !m_bInDisconnect && m_xRefObj.is() )
     {
-        refObj->RemoveAllDataAdvise( this );
-        refObj->RemoveConnectAdvise( this );
-        refObj.clear();
+        m_xRefObj->RemoveAllDataAdvise( this );
+        m_xRefObj->RemoveConnectAdvise( this );
+        m_xRefObj.clear();
     }
 }
 

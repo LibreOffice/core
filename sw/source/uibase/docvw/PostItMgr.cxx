@@ -1408,8 +1408,8 @@ public:
 //Fields more than once.
 class FieldDocWatchingStack : public SfxListener
 {
-    std::vector<std::unique_ptr<SwSidebarItem>>& sidebarItemVector;
-    std::vector<const SwFormatField*> v;
+    std::vector<std::unique_ptr<SwSidebarItem>>& m_aSidebarItems;
+    std::vector<const SwFormatField*> m_aFormatFields;
     SwDocShell& m_rDocShell;
     FilterFunctor& m_rFilter;
 
@@ -1427,7 +1427,7 @@ class FieldDocWatchingStack : public SfxListener
             if (!bAllInvalidated && m_rFilter(pField))
             {
                 EndListening(const_cast<SwFormatField&>(*pField));
-                v.erase(std::remove(v.begin(), v.end(), pField), v.end());
+                m_aFormatFields.erase(std::remove(m_aFormatFields.begin(), m_aFormatFields.end(), pField), m_aFormatFields.end());
             }
         }
         else if (pHint->Which() == SwFormatFieldHintWhich::INSERTED)
@@ -1437,7 +1437,7 @@ class FieldDocWatchingStack : public SfxListener
             if (!bAllInvalidated && m_rFilter(pField))
             {
                 StartListening(const_cast<SwFormatField&>(*pField));
-                v.push_back(pField);
+                m_aFormatFields.push_back(pField);
             }
         }
 
@@ -1449,7 +1449,7 @@ class FieldDocWatchingStack : public SfxListener
 
 public:
     FieldDocWatchingStack(std::vector<std::unique_ptr<SwSidebarItem>>& in, SwDocShell &rDocShell, FilterFunctor& rFilter)
-        : sidebarItemVector(in)
+        : m_aSidebarItems(in)
         , m_rDocShell(rDocShell)
         , m_rFilter(rFilter)
     {
@@ -1459,20 +1459,20 @@ public:
     void FillVector()
     {
         EndListeningToAllFields();
-        v.clear();
-        v.reserve(sidebarItemVector.size());
-        for (auto const& p : sidebarItemVector)
+        m_aFormatFields.clear();
+        m_aFormatFields.reserve(m_aSidebarItems.size());
+        for (auto const& p : m_aSidebarItems)
         {
             const SwFormatField& rField = p->GetFormatField();
             if (!m_rFilter(&rField))
                 continue;
             StartListening(const_cast<SwFormatField&>(rField));
-            v.push_back(&rField);
+            m_aFormatFields.push_back(&rField);
         }
     }
     void EndListeningToAllFields()
     {
-        for (auto const& pField : v)
+        for (auto const& pField : m_aFormatFields)
         {
             EndListening(const_cast<SwFormatField&>(*pField));
         }
@@ -1484,11 +1484,11 @@ public:
     }
     const SwFormatField* pop()
     {
-        if (v.empty())
+        if (m_aFormatFields.empty())
             return nullptr;
-        const SwFormatField* p = v.back();
+        const SwFormatField* p = m_aFormatFields.back();
         EndListening(const_cast<SwFormatField&>(*p));
-        v.pop_back();
+        m_aFormatFields.pop_back();
         return p;
     }
 };
