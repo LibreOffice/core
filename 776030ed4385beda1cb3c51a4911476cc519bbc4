@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3643e41_1e8972b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-29T09:25:34Z",
+      "side": 1,
+      "message": "Hard English string \u0026 UI freeze is \"Week 51 , Dec 20, 2021 - Dec 26, 2021\", so we looks good for that",
+      "revId": "776030ed4385beda1cb3c51a4911476cc519bbc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
