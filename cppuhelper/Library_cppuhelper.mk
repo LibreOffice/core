@@ -20,7 +20,7 @@ $(eval $(call gb_Library_use_internal_comprehensive_api,cppuhelper,\
 	offapi \
 ))
 
-$(eval $(call gb_Library_set_is_ure_library,cppuhelper))
+$(eval $(call gb_Library_set_is_ure_library_or_dependency,cppuhelper))
 
 $(eval $(call gb_Library_add_defs,cppuhelper,\
 	-DCPPUHELPER_DLLIMPLEMENTATION \

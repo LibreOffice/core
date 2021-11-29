@@ -32,6 +32,8 @@ $(eval $(call gb_Library_set_include,unoidl, \
     -I$(SRCDIR)/unoidl/source \
 ))
 
+$(eval $(call gb_Library_set_is_ure_library_or_dependency,unoidl))
+
 $(eval $(call gb_Library_use_libraries,unoidl, \
     reg \
     sal \

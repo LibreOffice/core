@@ -14,7 +14,7 @@ $(eval $(call gb_Library_add_defs,salhelper,\
 	-DSALHELPER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_is_ure_library,salhelper))
+$(eval $(call gb_Library_set_is_ure_library_or_dependency,salhelper))
 
 $(eval $(call gb_Library_use_libraries,salhelper,\
 	sal \
