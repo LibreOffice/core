@@ -26,8 +26,8 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
+#include <vcl/dialoghelper.hxx>
 #include <vcl/event.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/svapp.hxx>
 
@@ -934,7 +934,7 @@ IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
         {
             pEmptyWin->bEndAutoHide = false;
             if ( !Application::IsInModalMode() &&
-                  !PopupMenu::IsInExecute() &&
+                  !vcl::IsInPopupMenuExecute() &&
                   !pEmptyWin->bSplit && !HasChildPathFocus( true ) )
             {
                 // While a modal dialog or a popup menu is open or while the
