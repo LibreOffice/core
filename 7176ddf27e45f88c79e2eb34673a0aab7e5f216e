@@ -16,6 +16,23 @@
       "message": "FTR: in tdf#117280, I suggested to not add new events, but to put the \"clarification\" data to the com.sun.star.document.DocumentEvent\u0027s Supplement, so that the handler could disambiguate the calls, without the need to change current code maybe relying on the current behavior.\n\nJulien: I *suppose* that your change *could* potentially break some such user code. Is there an upside for this approach, compared to passing JOB_STARTED/JOB_COMPLETED/etc. in the Supplement?",
       "revId": "7176ddf27e45f88c79e2eb34673a0aab7e5f216e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ba0fb36_dd9a27d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-29T11:52:12Z",
+      "side": 1,
+      "message": "I see \"Supplement\" in https://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/document/DocumentEvent.idl?r\u003d2b383d19#41 but where to use it in the code?\n\ngit grep -n \u0027DocumentEvent.hpp\u0027\nconnectivity/source/drivers/firebird/Connection.hxx:32:#include \u003ccom/sun/star/document/DocumentEvent.hpp\u003e\nsfx2/source/inc/eventsupplier.hxx:25:#include \u003ccom/sun/star/document/DocumentEvent.hpp\u003e\nunoxml/inc/pch/precompiled_unoxml.hxx:45:#include \u003ccom/sun/star/xml/dom/events/XDocumentEvent.hpp\u003e\nunoxml/source/dom/characterdata.cxx:29:#include \u003ccom/sun/star/xml/dom/events/XDocumentEvent.hpp\u003e\nunoxml/source/dom/document.hxx:38:#include \u003ccom/sun/star/xml/dom/events/XDocumentEvent.hpp\u003e\nso nothing related to the code I changed.",
+      "revId": "7176ddf27e45f88c79e2eb34673a0aab7e5f216e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
