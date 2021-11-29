@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8450ed56_ff9cfa6b",
+        "filename": "include/comphelper/interfacecontainer3.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-29T10:17:01Z",
+      "side": 1,
+      "message": "so the Iterator class doesn\u0027t need to be thread-safe?",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 22
+      },
+      "revId": "682de511c98d9686a011e521cb5f5217639d76b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
