@@ -29,7 +29,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -81,8 +80,6 @@ HeaderMenuController::~HeaderMenuController()
 // private function
 void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >& rModel, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    VCLXPopupMenu*       pPopupMenu        = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
@@ -139,15 +136,15 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
                         else
                             aStrBuf.append( "false" );
                         OUString aCommand( aStrBuf.makeStringAndClear() );
-                        pPopupMenu->insertItem(nId, aDisplayName, css::awt::MenuItemStyle::CHECKABLE, nCount);
+                        rPopupMenu->insertItem(nId, aDisplayName, css::awt::MenuItemStyle::CHECKABLE, nCount);
                         if ( !bFirstItemInserted )
                         {
                             bFirstItemInserted = true;
                             bFirstChecked      = bHeaderIsOn;
                         }
 
-                        pPopupMenu->setCommand(nId, aCommand);
-                        pPopupMenu->checkItem(nId, bHeaderIsOn);
+                        rPopupMenu->setCommand(nId, aCommand);
+                        rPopupMenu->checkItem(nId, bHeaderIsOn);
                         ++nId;
 
                         // Check if all entries have the same state
@@ -162,7 +159,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
             if ( bAllOneState && ( nCount > 1 ))
             {
                 // Insert special item for all command
-                pPopupMenu->insertItem(ALL_MENUITEM_ID, FwkResId(STR_MENU_HEADFOOTALL), 0, 0);
+                rPopupMenu->insertItem(ALL_MENUITEM_ID, FwkResId(STR_MENU_HEADFOOTALL), 0, 0);
 
                 OUStringBuffer aStrBuf( aCmd );
                 aStrBuf.append( "?On:bool=" );
@@ -173,8 +170,8 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
                 else
                     aStrBuf.append( "false" );
 
-                pPopupMenu->setCommand(1, aStrBuf.makeStringAndClear());
-                pPopupMenu->insertSeparator(1);
+                rPopupMenu->setCommand(1, aStrBuf.makeStringAndClear());
+                rPopupMenu->insertSeparator(1);
             }
         }
     }
