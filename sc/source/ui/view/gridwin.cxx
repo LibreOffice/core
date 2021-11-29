@@ -40,8 +40,8 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <vcl/inputctx.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weldutils.hxx>
@@ -1617,7 +1617,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     SfxInPlaceClient* pClient = pViewSh->GetIPClient();
     if ( pClient &&
          pClient->IsObjectInPlaceActive() &&
-         PopupMenu::IsInExecute() )
+         vcl::IsInPopupMenuExecute() )
         return;
 
     aCurMousePos = rMEvt.GetPosPixel();

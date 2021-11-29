@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/lok.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/image.hxx>
@@ -2714,9 +2715,12 @@ void PopupMenu::ClosePopup(Menu* pMenu)
         p->KillActivePopup(pPopup);
 }
 
-bool PopupMenu::IsInExecute()
+namespace vcl
 {
-    return GetActivePopupMenu() != nullptr;
+    bool IsInPopupMenuExecute()
+    {
+        return PopupMenu::GetActivePopupMenu() != nullptr;
+    }
 }
 
 PopupMenu* PopupMenu::GetActivePopupMenu()
@@ -2808,7 +2812,7 @@ void PopupMenu::ImplFlushPendingSelect()
 
 sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
 {
-    if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
+    if ( !pSFrom && ( vcl::IsInPopupMenuExecute() || !GetItemCount() ) )
         return 0;
 
     mpLayoutData.reset();

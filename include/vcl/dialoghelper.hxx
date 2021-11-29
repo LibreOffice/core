@@ -18,8 +18,12 @@ class Window;
    extensions/source/activex/SOActiveX.cxx see extensions/source/activex/README.txt
    possibly dubious if this actually works as expected
 */
-
 VCL_DLLPUBLIC void EndAllDialogs(vcl::Window const* pParent);
+
+/* returns true if a vcl PopupMenu is executing. Uses of this outside of vcl/toolkit
+   are possibly dubious.
+*/
+VCL_DLLPUBLIC bool IsInPopupMenuExecute();
 
 /* for LibreOffice kit */
 VCL_DLLPUBLIC void EnableDialogInput(vcl::Window* pDialog);

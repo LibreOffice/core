@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:56:42 using:
+ Generated on 2021-11-29 09:45:10 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <cassert>
 #include <chrono>
+#include <condition_variable>
 #include <cstddef>
 #include <cstdlib>
 #include <deque>
@@ -34,10 +35,10 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
-#include <set>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -83,7 +84,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/backtrace.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -102,7 +102,10 @@
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
+#include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
@@ -112,7 +115,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
@@ -120,6 +122,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -154,8 +157,6 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -167,7 +168,6 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -192,7 +192,6 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
@@ -275,11 +274,13 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -291,15 +292,13 @@
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <framework/fwkdllapi.h>
@@ -308,6 +307,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -387,7 +387,6 @@
 #include <appbaslib.hxx>
 #include <appdata.hxx>
 #include <appopen.hxx>
-#include <asyncfunc.hxx>
 #include <eventsupplier.hxx>
 #include <helper.hxx>
 #include <helpids.h>
@@ -397,6 +396,7 @@
 #include <openflag.hxx>
 #include <openuriexternally.hxx>
 #include <openurlhint.hxx>
+#include <sfx2/StyleManager.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -422,12 +422,12 @@
 #include <sfx2/inputdlg.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <sfx2/listview.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/newstyle.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objitem.hxx>
@@ -446,7 +446,6 @@
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
@@ -471,6 +470,8 @@
 #include <sfxurlrelocator.hxx>
 #include <splitwin.hxx>
 #include <statcach.hxx>
+#include <templdgi.hxx>
+#include <tplcitem.hxx>
 #include <workwin.hxx>
 #endif // PCH_LEVEL >= 4
 
