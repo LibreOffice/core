@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce6f1b32_f1686ebe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-29T09:47:21Z",
+      "side": 1,
+      "message": "From what I understand, probably yes; although there can be some exceptions for the tests that are more related to sd to sw. But I will follow the current placement of tests for now, as you\u0027ve said.\nWhat do you think?",
+      "parentUuid": "86ea7efe_dab1cfb5",
+      "revId": "412a96c73911761cd4fe7df26e021f04e9a46374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c23f08e2_5dfa01b9",
         "filename": "sd/qa/unit/PDFExportTests.cxx",
         "patchSetId": 3
