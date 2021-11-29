@@ -50,7 +50,7 @@ public:
 
     InspectorTextPanel(weld::Widget* pParent);
 
-    void updateEntries(const std::vector<TreeNode>& rStore);
+    void updateEntries(const std::vector<TreeNode>& rStore, const sal_Int32 nParIdx);
 
 private:
     std::unique_ptr<weld::TreeView> mpListBoxStyles;

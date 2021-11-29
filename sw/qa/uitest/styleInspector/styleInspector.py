@@ -171,10 +171,10 @@ class styleNavigator(UITestCase):
             self.xUITest.executeCommand(".uno:GoRight")
 
             # The cursor is on text with annotated text range
-            xDirFormatting = xListBox.getChild('3')
-            self.assertEqual(2, len(xDirFormatting.getChildren()))
+            xDirFormatting = xListBox.getChild('0')
+            self.assertEqual("Fields\t", get_state_as_dict(xListBox.getChild('0'))['Text'])
+            self.assertEqual(1, len(xDirFormatting.getChildren()))
             self.assertEqual("Metadata Reference\t", get_state_as_dict(xDirFormatting.getChild('0'))['Text'])
-            self.assertEqual("Nested Text Content\tAnnotated text range", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
 
             xMetadata = xDirFormatting.getChild('0')
             self.assertEqual(4, len(xMetadata.getChildren()))
@@ -183,8 +183,12 @@ class styleNavigator(UITestCase):
             self.assertEqual("http://www.w3.org/2000/01/rdf-schema#comment\tComment...", get_state_as_dict(xMetadata.getChild('2'))['Text'])
             self.assertEqual("http://www.w3.org/2000/01/rdf-schema#label\tAnnotated paragraph portion", get_state_as_dict(xMetadata.getChild('3'))['Text'])
 
-            self.assertEqual(0, len(xListBox.getChild('1').getChildren()))
+            xDirFormatting = xListBox.getChild('4')
+            self.assertEqual(1, len(xDirFormatting.getChildren()))
+            self.assertEqual("Nested Text Content\tAnnotated text range", get_state_as_dict(xDirFormatting.getChild('0'))['Text'])
+
             self.assertEqual(0, len(xListBox.getChild('2').getChildren()))
+            self.assertEqual(0, len(xListBox.getChild('3').getChildren()))
 
             self.xUITest.executeCommand(".uno:Sidebar")
 
@@ -209,19 +213,20 @@ class styleNavigator(UITestCase):
             self.xUITest.executeCommand(".uno:GoDown")
 
             # The cursor is on text with paragraph metadata showed under direct paragraph formatting
-            self.assertEqual(1, len(xListBox.getChild('0').getChildren()))
-            self.assertEqual("Default Paragraph Style\t", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
-            self.assertEqual(137, len(xListBox.getChild('0').getChild('0').getChildren()))
+            self.assertEqual(1, len(xListBox.getChild('1').getChildren()))
+            self.assertEqual("Default Paragraph Style\t", get_state_as_dict(xListBox.getChild('1').getChild('0'))['Text'])
+            self.assertEqual(137, len(xListBox.getChild('1').getChild('0').getChildren()))
 
             # Outer bookmark
-            xBookmarkFormatting = xListBox.getChild('4')
+            xBookmarkFormatting = xListBox.getChild('0')
+            self.assertEqual("Bookmarks\t", get_state_as_dict(xBookmarkFormatting)['Text'])
             self.assertEqual(1, len(xBookmarkFormatting.getChildren()))
             self.assertEqual("Bookmark 1\t", get_state_as_dict(xBookmarkFormatting.getChild('0'))['Text'])
 
             self.xUITest.executeCommand(".uno:GoDown")
 
             # Inner bookmark
-            xBookmarkFormatting = xListBox.getChild('4')
+            xBookmarkFormatting = xListBox.getChild('0')
             self.assertEqual(2, len(xBookmarkFormatting.getChildren()))
 
             self.assertEqual("Bookmark 1\t", get_state_as_dict(xBookmarkFormatting.getChild('0'))['Text'])
@@ -238,7 +243,7 @@ class styleNavigator(UITestCase):
 
             # Only in outer bookmark again
             self.xUITest.executeCommand(".uno:GoDown")
-            xBookmarkFormatting = xListBox.getChild('4')
+            xBookmarkFormatting = xListBox.getChild('0')
             self.assertEqual(1, len(xBookmarkFormatting.getChildren()))
             self.assertEqual("Bookmark 1\t", get_state_as_dict(xBookmarkFormatting.getChild('0'))['Text'])
 
@@ -270,10 +275,10 @@ class styleNavigator(UITestCase):
             self.xUITest.executeCommand(".uno:GoRight")
 
             # The cursor is on text with annotated text range
-            xDirFormatting = xListBox.getChild('3')
-            self.assertEqual(2, len(xDirFormatting.getChildren()))
+            xDirFormatting = xListBox.getChild('0')
+            self.assertEqual(1, len(xDirFormatting.getChildren()))
             self.assertEqual("Metadata Reference\t", get_state_as_dict(xDirFormatting.getChild('0'))['Text'])
-            self.assertEqual("Nested Text Content\tipsum", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
+            self.assertEqual("Nested Text Content\tipsum", get_state_as_dict(xListBox.getChild(4).getChild('0'))['Text'])
 
             xMetadata = xDirFormatting.getChild('0')
             self.assertEqual(2, len(xMetadata.getChildren()))
@@ -281,8 +286,8 @@ class styleNavigator(UITestCase):
             # RGB code of the custom shading color of the annotated text range is FFB7E9
             self.assertEqual("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#shading\tFFB7E9", get_state_as_dict(xMetadata.getChild('1'))['Text'])
 
-            self.assertEqual(0, len(xListBox.getChild('1').getChildren()))
             self.assertEqual(0, len(xListBox.getChild('2').getChildren()))
+            self.assertEqual(0, len(xListBox.getChild('3').getChildren()))
 
             # go to next word with RDF annotation
             self.xUITest.executeCommand(".uno:GoToNextWord")
@@ -291,10 +296,10 @@ class styleNavigator(UITestCase):
             self.xUITest.executeCommand(".uno:GoRight")
 
             # The cursor is on text with annotated text range
-            xDirFormatting = xListBox.getChild('3')
-            self.assertEqual(2, len(xDirFormatting.getChildren()))
+            xDirFormatting = xListBox.getChild('0')
+            self.assertEqual(1, len(xDirFormatting.getChildren()))
             self.assertEqual("Metadata Reference\t", get_state_as_dict(xDirFormatting.getChild('0'))['Text'])
-            self.assertEqual("Nested Text Content\tames", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
+            self.assertEqual("Nested Text Content\tames", get_state_as_dict(xListBox.getChild(4).getChild('0'))['Text'])
 
             xMetadata = xDirFormatting.getChild('0')
             self.assertEqual(2, len(xMetadata.getChildren()))
@@ -302,8 +307,8 @@ class styleNavigator(UITestCase):
             # RGB code of the custom shading color of the annotated text range is 97E1E9 (the code can be lower case, see STRtoRGB)
             self.assertEqual("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#shading\t97e1e9", get_state_as_dict(xMetadata.getChild('1'))['Text'])
 
-            self.assertEqual(0, len(xListBox.getChild('1').getChildren()))
             self.assertEqual(0, len(xListBox.getChild('2').getChildren()))
+            self.assertEqual(0, len(xListBox.getChild('3').getChildren()))
 
             # add a new annotated text range and check it in the Style Inspector
             self.xUITest.executeCommand(".uno:GoToStartOfDoc")
@@ -337,7 +342,7 @@ class styleNavigator(UITestCase):
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            xDirFormatting = xListBox.getChild('3')
+            xDirFormatting = xListBox.getChild('0')
             xMetadata = xDirFormatting.getChild('0')
             self.assertEqual(2, len(xMetadata.getChildren()))
             # RGB code of the custom shading color of the annotated text range is BBFF88

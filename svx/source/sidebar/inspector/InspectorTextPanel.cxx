@@ -132,7 +132,7 @@ static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurren
         FillBox_Impl(rListBoxStyles, rChildNode, pResult.get());
 }
 
-void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
+void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore, const sal_Int32 nParIdx)
 {
     mpListBoxStyles->freeze();
     mpListBoxStyles->clear();
@@ -149,12 +149,21 @@ void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
         return false;
     });
 
+    // Collapse "Default Paragraph Style"
+
     std::unique_ptr<weld::TreeIter> pEntry = mpListBoxStyles->make_iterator();
     if (!mpListBoxStyles->get_iter_first(*pEntry))
         return;
+    // skip the optional metadata items before "Default Paragraph Style"
+    for (sal_Int32 i = 0; i < nParIdx; ++i)
+    {
+        if (!mpListBoxStyles->iter_next_sibling(*pEntry))
+            return;
+    }
     if (!mpListBoxStyles->iter_next(*pEntry))
         return;
-    mpListBoxStyles->collapse_row(*pEntry); // Collapse "Default Paragraph Style"
+
+    mpListBoxStyles->collapse_row(*pEntry);
 }
 
 InspectorTextPanel::~InspectorTextPanel() {}
