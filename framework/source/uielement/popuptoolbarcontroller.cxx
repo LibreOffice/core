@@ -693,11 +693,11 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     OUString aURL, aTarget;
     if ( m_xPopupMenu.is() && m_nMenuId )
     {
-        // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
         SolarMutexGuard aSolarMutexGuard;
-        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
-        aURL = pVclMenu->GetItemCommand( m_nMenuId );
+        aURL = m_xPopupMenu->getCommand(m_nMenuId);
 
+        // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
+        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
         MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );
         if ( pMenuAttributes )
             aTarget = pMenuAttributes->aTargetFrame;
@@ -723,12 +723,11 @@ sal_uInt16 NewToolbarController::getMenuIdForCommand( std::u16string_view rComma
 {
     if ( m_xPopupMenu.is() && !rCommand.empty() )
     {
-        Menu* pVclMenu( comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu() );
-        sal_uInt16 nCount = pVclMenu->GetItemCount();
+        sal_uInt16 nCount = m_xPopupMenu->getItemCount();
         for ( sal_uInt16 n = 0; n < nCount; ++n )
         {
-            sal_uInt16 nId = pVclMenu->GetItemId( n );
-            OUString aCmd( pVclMenu->GetItemCommand( nId ) );
+            sal_uInt16 nId = m_xPopupMenu->getItemId(n);
+            OUString aCmd(m_xPopupMenu->getCommand(nId));
 
             // match even if the menu command is more detailed
             // (maybe an additional query) #i28667#
@@ -750,9 +749,8 @@ void SAL_CALL NewToolbarController::updateImage()
     OUString aURL, aImageId;
     if ( m_xPopupMenu.is() && m_nMenuId )
     {
+        aURL = m_xPopupMenu->getCommand(m_nMenuId);
         Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
-        aURL = pVclMenu->GetItemCommand( m_nMenuId );
-
         MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );
         if ( pMenuAttributes )
             aImageId = pMenuAttributes->aImageId;
