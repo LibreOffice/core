@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f10d4d69_57c3bc66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-29T10:30:08Z",
+      "side": 1,
+      "message": "FTR: in tdf#117280, I suggested to not add new events, but to put the \"clarification\" data to the com.sun.star.document.DocumentEvent\u0027s Supplement, so that the handler could disambiguate the calls, without the need to change current code maybe relying on the current behavior.\n\nJulien: I *suppose* that your change *could* potentially break some such user code. Is there an upside for this approach, compared to passing JOB_STARTED/JOB_COMPLETED/etc. in the Supplement?",
+      "revId": "7176ddf27e45f88c79e2eb34673a0aab7e5f216e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
