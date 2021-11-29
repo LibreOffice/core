@@ -45,7 +45,7 @@ class SidebarWinAccessible : public VCLXWindow
         sw::annotation::SwAnnotationWin& mrSidebarWin;
         SwViewShell& mrViewShell;
         const SwFrame* mpAnchorFrame;
-        bool bAccContextCreated;
+        bool m_bAccContextCreated;
 };
 
 } // end of namespace sw::sidebarwindows

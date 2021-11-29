@@ -34,19 +34,19 @@ enum class RegionMode;
 
 class NaviContentBookmark
 {
-    OUString        aUrl;       // URL including jump mark
-    OUString        aDescr;     // description
-    tools::Long            nDocSh;     // address of DocShell
-    RegionMode      nDefDrag;   // description contains defaultDragType
+    OUString        m_aUrl;       // URL including jump mark
+    OUString        m_aDescription;     // description
+    tools::Long            m_nDocSh;     // address of DocShell
+    RegionMode      m_nDefaultDrag;   // description contains defaultDragType
 
 public:
     NaviContentBookmark();
     NaviContentBookmark( const OUString &rUrl, const OUString& rDesc,
                             RegionMode nDragType, const SwDocShell* );
 
-    const OUString& GetURL() const              { return aUrl; }
-    const OUString& GetDescription() const      { return aDescr; }
-    RegionMode      GetDefaultDragType() const  { return nDefDrag; }
+    const OUString& GetURL() const              { return m_aUrl; }
+    const OUString& GetDescription() const      { return m_aDescription; }
+    RegionMode      GetDefaultDragType() const  { return m_nDefaultDrag; }
     void            Copy( TransferDataContainer& rData ) const;
     bool            Paste( const TransferableDataHelper& rData );
 };

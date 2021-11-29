@@ -100,7 +100,7 @@ SidebarWinAccessible::SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSi
     : mrSidebarWin( rSidebarWin )
     , mrViewShell( rViewShell )
     , mpAnchorFrame( rSidebarItem.maLayoutInfo.mpAnchorFrame )
-    , bAccContextCreated( false )
+    , m_bAccContextCreated( false )
 {
     SetWindow( &mrSidebarWin );
 }
@@ -111,7 +111,7 @@ SidebarWinAccessible::~SidebarWinAccessible()
 
 void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem )
 {
-    if ( !bAccContextCreated )
+    if ( !m_bAccContextCreated )
         return;
 
     css::uno::Reference< css::accessibility::XAccessibleContext > xAcc
@@ -133,7 +133,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessib
                                 new SidebarWinAccessibleContext( mrSidebarWin,
                                                                  mrViewShell,
                                                                  mpAnchorFrame );
-    bAccContextCreated = true;
+    m_bAccContextCreated = true;
     return pAccContext;
 }
 
