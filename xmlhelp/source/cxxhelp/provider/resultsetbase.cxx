@@ -88,7 +88,7 @@ ResultSetBase::addEventListener(
 
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper2( m_aMutex ));
+            new comphelper::OInterfaceContainerHelper3<lang::XEventListener>( m_aMutex ));
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -440,7 +440,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
             m_pIsFinalListeners.reset(
-                new comphelper::OInterfaceContainerHelper2( m_aMutex ));
+                new comphelper::OInterfaceContainerHelper3<beans::XPropertyChangeListener>( m_aMutex ));
 
         m_pIsFinalListeners->addInterface( xListener );
     }
@@ -449,7 +449,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
             m_pRowCountListeners.reset(
-                new comphelper::OInterfaceContainerHelper2( m_aMutex ));
+                new comphelper::OInterfaceContainerHelper3<beans::XPropertyChangeListener>( m_aMutex ));
         m_pRowCountListeners->addInterface( xListener );
     }
     else
