@@ -1533,10 +1533,18 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     grab_focus();
 
+    // select clicked entry or limit selection to root entry if needed
     if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
             rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
                 rCEvt.GetMousePosPixel(), xEntry.get(), false))
-        m_xTreeView->set_cursor(*xEntry);
+    {
+        // if clicked entry is not currently selected then clear selections and select it
+        if (!m_xTreeView->is_selected(*xEntry))
+            m_xTreeView->set_cursor(*xEntry);
+        // if root entry is selected then clear selections and select it
+        else if (m_xTreeView->is_selected(0))
+            m_xTreeView->set_cursor(0);
+    }
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/swriter/ui/navigatorcontextmenu.ui"));
     std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu("navmenu");
