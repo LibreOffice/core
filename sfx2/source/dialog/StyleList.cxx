@@ -68,7 +68,6 @@
 
 #include <StyleList.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/menu.hxx>
 
 using namespace css;
 using namespace css::beans;
