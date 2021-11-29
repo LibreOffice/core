@@ -21,11 +21,11 @@
 
 #include <services.h>
 
+#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svl/languageoptions.hxx>
@@ -159,17 +159,13 @@ void LanguageSelectionMenuController::impl_setPopupMenu()
 
 void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu , const Mode eMode )
 {
-    VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-    PopupMenu*     pPopupMenu    = nullptr;
-
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if (!m_bShowMenu)
         return;
 
-    if ( pVCLPopupMenu )
-        pPopupMenu = static_cast<PopupMenu *>(pVCLPopupMenu->GetMenu());
+    VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
 
     OUString aCmd_Dialog;
     OUString aCmd_Language;
@@ -197,8 +193,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     // now add menu entries
     // the different menus purpose will be handled by the different string
     // for aCmd_Dialog and aCmd_Language
-
-    sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
+    sal_Int16 nItemId = 0;  // in this control the item id is not important for executing the command
     static const OUStringLiteral sAsterisk(u"*");  // multiple languages in current selection
     const OUString sNone( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ));
     for (auto const& langItem : aLangItems)
@@ -207,34 +202,32 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
             langItem != sAsterisk &&
             !langItem.isEmpty()) // 'no language found' from language guessing
         {
-            pPopupMenu->InsertItem( nItemId, langItem);
-            OUString aCmd = aCmd_Language + langItem;
-            pPopupMenu->SetItemCommand( nItemId, aCmd );
-            if (langItem == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
-            {
-                //make a sign for the current language
-                pPopupMenu->CheckItem( nItemId );
-            }
             ++nItemId;
+            pVCLPopupMenu->insertItem(nItemId, langItem, css::awt::MenuItemStyle::CHECKABLE, nItemId - 1);
+            OUString aCmd = aCmd_Language + langItem;
+            pVCLPopupMenu->setCommand(nItemId, aCmd);
+            bool bChecked = langItem == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu;
+            //make a sign for the current language
+            pVCLPopupMenu->checkItem(nItemId, bChecked);
         }
     }
 
     // entry for LANGUAGE_NONE
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, FwkResId(STR_LANGSTATUS_NONE) );
+    pVCLPopupMenu->insertItem(nItemId, FwkResId(STR_LANGSTATUS_NONE), 0, nItemId - 1);
     OUString aCmd = aCmd_Language + "LANGUAGE_NONE";
-    pPopupMenu->SetItemCommand( nItemId, aCmd );
+    pVCLPopupMenu->setCommand(nItemId, aCmd);
 
     // entry for 'Reset to default language'
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE) );
+    pVCLPopupMenu->insertItem(nItemId, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, nItemId - 1);
     aCmd = aCmd_Language + "RESET_LANGUAGES";
-    pPopupMenu->SetItemCommand( nItemId, aCmd );
+    pVCLPopupMenu->setCommand(nItemId, aCmd);
 
     // entry for opening the Format/Character dialog
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, FwkResId(STR_LANGSTATUS_MORE));
-    pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
+    pVCLPopupMenu->insertItem(nItemId, FwkResId(STR_LANGSTATUS_MORE), 0, nItemId - 1);
+    pVCLPopupMenu->setCommand(nItemId, aCmd_Dialog);
 }
 
 void SAL_CALL LanguageSelectionMenuController::updatePopupMenu()
