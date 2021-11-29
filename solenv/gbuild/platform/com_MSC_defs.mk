@@ -166,6 +166,11 @@ ifeq ($(HAVE_DLLEXPORTINLINES),TRUE)
 gb_CXXFLAGS += -Zc:dllexportInlines-
 endif
 
+gb_CXXFLAGS_include := -FI
+ifeq ($(COM_IS_CLANG),TRUE)
+gb_CXXFLAGS_no_pch_warnings := -Wno-clang-cl-pch
+endif
+
 ifneq ($(COM_IS_CLANG),TRUE)
 
 # clang-cl doesn't support -Wv:18 for now

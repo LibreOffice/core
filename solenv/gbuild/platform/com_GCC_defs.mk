@@ -107,6 +107,8 @@ endif
 
 gb_CXXFLAGS_Wundef = -Wno-undef
 
+gb_CXXFLAGS_include := -include$(gb_SPACE)
+
 ifeq ($(strip $(gb_GCOV)),YES)
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
