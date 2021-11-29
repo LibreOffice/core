@@ -185,19 +185,14 @@ void ToolbarsMenuController::addCommand(
 
     SolarMutexGuard aSolarMutexGuard;
 
-    Image                aImage;
+    css::uno::Reference<css::graphic::XGraphic> xGraphic;
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommandURL, m_xFrame);
+        xGraphic = vcl::CommandInfoProvider::GetXGraphicForCommand(rCommandURL, m_xFrame);
 
-    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-    if ( pPopupMenu )
-    {
-        PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-        if ( !!aImage )
-            pVCLPopupMenu->SetItemImage( nItemId, aImage );
-    }
+    if (xGraphic.is())
+        rPopupMenu->setItemImage(nItemId, xGraphic, false);
 
     m_aCommandVector.push_back( rCommandURL );
 }
