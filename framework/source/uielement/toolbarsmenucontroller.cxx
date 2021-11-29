@@ -395,7 +395,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         if ( aSortedTbs[i].bVisible )
             m_xPopupMenu->checkItem( nIndex, true );
 
-        // use VCL popup menu pointer to set vital information that are not part of the awt implementation
         OUStringBuffer aStrBuf( aStaticCmdPart );
 
         sal_Int32 n = aSortedTbs[i].aCommand.lastIndexOf( '/' );
