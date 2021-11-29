@@ -34,6 +34,24 @@
       "parentUuid": "e3ea1d32_2d795f83",
       "revId": "a4691c7d5eb494c242305936428086940f90d83a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fd2e8ea_20a95622",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-29T16:18:01Z",
+      "side": 1,
+      "message": "The PDF export code is shared between modules. vcl/source/gdi/pdfwriter* is the shared code, but then Writer/Calc/Impress/etc adds its own bits, so technically there are separate PDF export filters for the apps. I guess it would make sense to add the test wherever the fix is: if it was shared code, then vcl/ is fine, but if the test was in sc/, then it would be nice to have a place in sc/ to host such tests. (But this is somewhat subjective, one could argue that this now means there is no single place where the PDF export tests are...)\n\nThe whole topic is probably not important enough to re-arrange lost of existing tests (at least I would not ask anyone to do so), but if the fix+test is already in the same module, then introducing more \"butterfly effect\" than what we already have is probably to be avoided. :-)",
+      "parentUuid": "37b81181_68790a4e",
+      "revId": "a4691c7d5eb494c242305936428086940f90d83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
