@@ -96,7 +96,7 @@ struct SvLockBytesStat
     SvLockBytesStat() : nSize(0) {}
 };
 
-class TOOLS_DLLPUBLIC SvLockBytes: public virtual SvRefBase
+class TOOLS_DLLPUBLIC SvLockBytes: public SvRefBase
 {
     SvStream * m_pStream;
     bool m_bOwner;
