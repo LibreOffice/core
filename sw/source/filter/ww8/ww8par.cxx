@@ -4712,15 +4712,15 @@ void wwExtraneousParas::insert(SwTextNode *pTextNode)
     pTextNode->Add(const_cast<TextNodeListener*>(&rListener));
 }
 
-void wwExtraneousParas::remove_if_present(SwTextNode *pTextNode)
+void wwExtraneousParas::remove_if_present(SwModify* pModify)
 {
     auto it = std::find_if(m_aTextNodes.begin(), m_aTextNodes.end(),
-        [pTextNode](const wwExtraneousParas::TextNodeListener& rEntry) { return rEntry.m_pTextNode == pTextNode; });
+        [pModify](const wwExtraneousParas::TextNodeListener& rEntry) { return rEntry.m_pTextNode == pModify; });
     if (it == m_aTextNodes.end())
         return;
     SAL_WARN("sw.ww8", "It is unexpected to drop a para scheduled for removal");
     const TextNodeListener& rListener = *it;
-    pTextNode->Remove(const_cast<TextNodeListener*>(&rListener));
+    pModify->Remove(const_cast<TextNodeListener*>(&rListener));
     m_aTextNodes.erase(it);
 }
 
@@ -4734,8 +4734,7 @@ void wwExtraneousParas::TextNodeListener::SwClientNotify(const SwModify& rModify
     // indicates an underlying bug.
     if (pLegacy->GetWhich() == RES_OBJECTDYING)
     {
-        const SwTextNode& rNode(static_cast<SwTextNode const&>(rModify));
-        m_pOwner->remove_if_present(const_cast<SwTextNode*>(&rNode));
+        m_pOwner->remove_if_present(const_cast<SwModify*>(&rModify));
     }
 }
 
