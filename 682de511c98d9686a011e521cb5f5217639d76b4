@@ -22,6 +22,30 @@
       },
       "revId": "682de511c98d9686a011e521cb5f5217639d76b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42a44f55_6d9bca1c",
+        "filename": "include/comphelper/interfacecontainer3.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-29T10:56:16Z",
+      "side": 1,
+      "message": "not really, no. It is thread-safe in the sense that it can share data with the main object via the o3tl::wrapper, since the data it is pointing to is effectively immutable.",
+      "parentUuid": "8450ed56_ff9cfa6b",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 22
+      },
+      "revId": "682de511c98d9686a011e521cb5f5217639d76b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
