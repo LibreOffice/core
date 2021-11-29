@@ -94,7 +94,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > cons
     pPopupMenu->SetItemCommand( 2, aCommand );
 
     // insert providers but not basic or java
-    addScriptItems( pPopupMenu, 4);
+    addScriptItems(rPopupMenu, 4);
 }
 
 // XEventListener
@@ -124,7 +124,7 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& )
     }
 }
 
-void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
+void MacrosMenuController::addScriptItems(const Reference<css::awt::XPopupMenu>& rPopupMenu, sal_uInt16 startItemId)
 {
     static const OUStringLiteral aCmdBase(u".uno:ScriptOrganizer?ScriptOrganizer.Language:string=");
     static const OUStringLiteral ellipsis( u"..." );
@@ -132,6 +132,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess( m_xContext->getServiceManager(), UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( "com.sun.star.script.provider.LanguageScriptProvider" );
+
+    sal_Int16 nPos = rPopupMenu->getItemCount();
 
     while ( xEnum->hasMoreElements() )
     {
@@ -155,8 +157,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
                 }
                 aCommand += aDisplayName;
                 aDisplayName += ellipsis;
-                pPopupMenu->InsertItem( itemId, aDisplayName );
-                pPopupMenu->SetItemCommand( itemId, aCommand );
+                rPopupMenu->insertItem(itemId, aDisplayName, 0, nPos++);
+                rPopupMenu->setCommand(itemId, aCommand);
                 itemId++;
                 break;
             }
