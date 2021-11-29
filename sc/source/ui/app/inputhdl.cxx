@@ -96,9 +96,6 @@
 
 using namespace formula;
 
-bool ScInputHandler::bOptLoaded = false;            // Evaluate App options
-bool ScInputHandler::bAutoComplete = false;         // Is set in KeyInput
-
 namespace {
 
 // Formula data replacement character for a pair of parentheses at end of
@@ -846,12 +843,6 @@ ScInputHandler::ScInputHandler()
     pDelayTimer.reset( new Timer( "ScInputHandlerDelay timer" ) );
     pDelayTimer->SetTimeout( 500 ); // 500 ms delay
     pDelayTimer->SetInvokeHandler( LINK( this, ScInputHandler, DelayTimer ) );
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        ScInputHandler::bOptLoaded = true;            // Evaluate App options
-        ScInputHandler::bAutoComplete = true;         // Is set in KeyInput
-    }
 }
 
 ScInputHandler::~ScInputHandler()
@@ -2543,7 +2534,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
             UpdateAdjust( cTyped );
 
-            if ( bAutoComplete )
+            if ( SC_MOD()->GetAppOptions().GetAutoComplete() )
                 GetColData();
 
             if ( !aStr.isEmpty() && ( aStr[0] == '=' || aStr[0] == '+' || aStr[0] == '-' ) &&
@@ -2757,13 +2748,14 @@ void ScInputHandler::UpdateFormulaMode()
             bFormulaMode = true;
             pRefViewSh = pActiveViewSh;
             pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
-            SC_MOD()->SetRefInputHdl(this);
+            ScModule* pMod = SC_MOD();
+            pMod->SetRefInputHdl(this);
             if (pInputWin)
                 pInputWin->SetFormulaMode(true);
 
             // in LOK, we always need to perform the GetFormulaData() call so
             // that the formula insertion works
-            if (bAutoComplete || comphelper::LibreOfficeKit::isActive())
+            if (comphelper::LibreOfficeKit::isActive() || pMod->GetAppOptions().GetAutoComplete())
                 GetFormulaData();
 
             UpdateParenthesis();
@@ -3210,7 +3202,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             mpEditEngine->ClearSpellErrors();
             pObject = mpEditEngine->CreateTextObject();
         }
-        else if (bAutoComplete) // Adjust Upper/Lower case
+        else if (SC_MOD()->GetAppOptions().GetAutoComplete()) // Adjust Upper/Lower case
         {
             // Perform case-matching only when the typed text is partial.
             if (pColumnData && aAutoSearch.getLength() < aString.getLength())
@@ -3629,12 +3621,6 @@ void ScInputHandler::ClearText()
 
 bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false */ )
 {
-    if (!bOptLoaded)
-    {
-        bAutoComplete = SC_MOD()->GetAppOptions().GetAutoComplete();
-        bOptLoaded = true;
-    }
-
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     sal_uInt16 nModi  = aCode.GetModifier();
     bool bShift   = aCode.IsShift();
@@ -3855,7 +3841,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 }
 
                 // AutoInput:
-                if ( bUsed && bAutoComplete )
+                if ( bUsed && SC_MOD()->GetAppOptions().GetAutoComplete() )
                 {
                     bUseTab = false;
                     if (pFormulaData)
@@ -3999,12 +3985,6 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
     }
     else
     {
-        if (!bOptLoaded)
-        {
-            bAutoComplete = SC_MOD()->GetAppOptions().GetAutoComplete();
-            bOptLoaded = true;
-        }
-
         HideTip();
         HideTipBelow();
 

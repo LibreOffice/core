@@ -1195,6 +1195,11 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
 {
     SolarMutexGuard aGuard;
 
+    // enable word autocompletion
+    ScAppOptions aAppOptions(SC_MOD()->GetAppOptions());
+    aAppOptions.SetAutoComplete(true);
+    SC_MOD()->SetAppOptions(aAppOptions);
+
     for (const beans::PropertyValue& rValue : rArguments)
     {
         if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
