@@ -274,6 +274,7 @@ public:
     void testTdf133524();
     void testTdf133524_Romanian();
     void testTdf128860();
+    void testNestedGroupTextBox();
     void testTdf123786();
     void testTdf133589();
     void testTdf143176();
@@ -394,6 +395,7 @@ public:
     CPPUNIT_TEST(testTdf133524);
     CPPUNIT_TEST(testTdf133524_Romanian);
     CPPUNIT_TEST(testTdf128860);
+    CPPUNIT_TEST(testNestedGroupTextBox);
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
     CPPUNIT_TEST(testTdf143176);
