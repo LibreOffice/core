@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5faf952d_6c72c3bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-11-29T16:57:37Z",
+      "side": 1,
+      "message": "Hi Xisco, do you think this one needs an uitest?",
+      "revId": "d5a91dec170fd6710aa039f371853426318179f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
