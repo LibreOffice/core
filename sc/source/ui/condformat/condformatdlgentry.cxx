@@ -1287,7 +1287,8 @@ ScFormatEntry* ScDateFrmtEntry::GetEntry() const
 
 OUString ScDateFrmtEntry::GetExpressionString()
 {
-    return ScCondFormatHelper::GetExpression(DATE, 0);
+    // tdf#124412 - set actual condition for an inactive date entry
+    return ScCondFormatHelper::GetExpression(DATE, mxLbDateEntry->get_active());
 }
 
 IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl, weld::ComboBox&, void )
