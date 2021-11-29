@@ -65,7 +65,7 @@ using namespace ::com::sun::star::xml::sax;
 #include "drawdef.h"
 #include "attributes.hxx"
 
-#define WRITER_IMPORTER_NAME "com.sun.star.comp.Writer.XMLImporter"
+inline constexpr OUStringLiteral WRITER_IMPORTER_NAME = u"com.sun.star.comp.Writer.XMLImporter";
 
 struct HwpReaderPrivate;
 /**
