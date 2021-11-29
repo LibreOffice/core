@@ -27,8 +27,6 @@
 
 
 #include <officecfg/Office/Common.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -183,39 +181,33 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
         return;
 
     SolarMutexGuard aGuard;
-    VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( xPopupMenu ));
-    PopupMenu*     pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
-
-    SAL_WARN_IF(!pVCLPopupMenu, "fwk.uielement", "worrying lack of popup menu");
-    if (!pVCLPopupMenu)
-        return;
 
     bool bSetCheckmark      = false;
     bool bCheckmark         = false;
-    for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
+    for (sal_Int16 i = 0, nCount = xPopupMenu->getItemCount(); i < nCount; ++i)
     {
-        sal_uInt16 nId = pVCLPopupMenu->GetItemId( i );
+        sal_Int16 nId = xPopupMenu->getItemId(i);
         if ( nId == 0 )
             continue;
 
-        OUString aCmd = pVCLPopupMenu->GetItemCommand( nId );
+        OUString aCmd = xPopupMenu->getCommand(nId);
         if ( aCmd == aFeatureURL )
         {
             // Enable/disable item
-            pVCLPopupMenu->EnableItem( nId, Event.IsEnabled );
+            xPopupMenu->enableItem(nId, Event.IsEnabled);
 
             // Checkmark
             if ( Event.State >>= bCheckmark )
                 bSetCheckmark = true;
 
             if ( bSetCheckmark )
-                pVCLPopupMenu->CheckItem( nId, bCheckmark );
+                xPopupMenu->checkItem(nId, bCheckmark);
             else
             {
                 OUString aItemText;
 
                 if ( Event.State >>= aItemText )
-                    pVCLPopupMenu->SetItemText( nId, aItemText );
+                    xPopupMenu->setItemText(nId, aItemText);
             }
         }
     }
