@@ -575,7 +575,7 @@ namespace
         return aImage;
     }
 
-    /** Copied from svtools/inc/acceleratorexecute.hxx */
+    /** Copied from include/svtools/acceleratorexecute.hxx */
     css::awt::KeyEvent lcl_VCLKey2AWTKey(
         const vcl::KeyCode& aVCLKey)
     {

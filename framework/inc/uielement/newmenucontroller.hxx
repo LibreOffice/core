@@ -60,8 +60,8 @@ namespace framework
             void retrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                      const css::uno::Sequence< OUString >& rCommands,
                                                      std::vector< vcl::KeyCode >& aMenuShortCuts );
-            void setAccelerators( PopupMenu* pPopupMenu );
-            void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const vcl::KeyCode& rKeyCode );
+            void setAccelerators();
+            void determineAndSetNewDocAccel(const css::awt::KeyEvent& rKeyCode);
             void setMenuImages( PopupMenu* pPopupMenu, bool bSetImages );
 
         private:
