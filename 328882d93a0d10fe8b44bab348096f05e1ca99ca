@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e98af34_6739991f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-29T12:51:46Z",
+      "side": 1,
+      "message": "I reverted almost the whole previous part and tried to apply what you indicated.\nI kept SfxGetpApp()-\u003eNotifyEvent( SfxEventHint(SfxEventHintId::PrintDoc, GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ), mpObjectShell ) );\nbut I still got 2 messages which display.\n\n",
+      "revId": "328882d93a0d10fe8b44bab348096f05e1ca99ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
