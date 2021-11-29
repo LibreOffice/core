@@ -963,10 +963,19 @@ SwXShape::~SwXShape()
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
-    if (aRet.hasValue())
-        return aRet;
+    uno::Any aRet;
+    SdrObject* pObj = nullptr;
 
+    if ((aType == cppu::UnoType<text::XText>::get())
+        || (aType == cppu::UnoType<text::XTextRange>::get())
+        || (aType == cppu::UnoType<text::XTextAppend>::get()))
+    {
+        pObj = SdrObject::getSdrObjectFromXShape(mxShape);
+
+        aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType, pObj);
+        if (aRet.hasValue())
+            return aRet;
+    }
     aRet = SwXShapeBaseClass::queryInterface(aType);
     // #i53320# - follow-up of #i31698#
     // interface drawing::XShape is overloaded. Thus, provide
