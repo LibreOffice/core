@@ -34,6 +34,23 @@
       "parentUuid": "5e98af34_6739991f",
       "revId": "328882d93a0d10fe8b44bab348096f05e1ca99ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4195eed_9322ee00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-29T13:30:49Z",
+      "side": 1,
+      "message": "Ok I understand better what you meant, the call to the macro needs to be changed to test the supplement. The user can now test all the Printable states and define a specific message for each one.\n\nThank you a lot for your help, I was completely lost!",
+      "revId": "328882d93a0d10fe8b44bab348096f05e1ca99ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
