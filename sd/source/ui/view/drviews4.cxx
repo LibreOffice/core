@@ -38,7 +38,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/cursor.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
 
@@ -324,7 +324,7 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
-    if ( bIsOleActive && PopupMenu::IsInExecute() )
+    if (bIsOleActive && vcl::IsInPopupMenuExecute())
         return;
 
     if ( IsInputLocked() )

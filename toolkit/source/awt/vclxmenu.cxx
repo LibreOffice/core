@@ -661,7 +661,7 @@ sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu && IsPopupMenu() )
-        return PopupMenu::IsInExecute();
+        return vcl::IsInPopupMenuExecute();
     else
         return false;
 }
