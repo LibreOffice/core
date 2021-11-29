@@ -22,11 +22,14 @@
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="vexpand">True</property>
             <property name="hscrollbar-policy">never</property>
             <property name="vscrollbar-policy">never</property>
             <property name="shadow-type">in</property>
@@ -34,6 +37,8 @@
               <object class="GtkTreeView" id="menu">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="valign">center</property>
+                <property name="vexpand">True</property>
                 <property name="model">liststore1</property>
                 <property name="headers-visible">False</property>
                 <property name="headers-clickable">False</property>
