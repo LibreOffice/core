@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1798505_b3173fa7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-29T09:23:35Z",
+      "side": 1,
+      "message": "PDF export tests are already located in vcl/qa/cppunit/pdfexport/pdfexport.cxx no need to create a new module in sd/",
+      "revId": "412a96c73911761cd4fe7df26e021f04e9a46374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c23f08e2_5dfa01b9",
