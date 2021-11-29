@@ -33,6 +33,23 @@
       "message": "I see \"Supplement\" in https://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/document/DocumentEvent.idl?r\u003d2b383d19#41 but where to use it in the code?\n\ngit grep -n \u0027DocumentEvent.hpp\u0027\nconnectivity/source/drivers/firebird/Connection.hxx:32:#include \u003ccom/sun/star/document/DocumentEvent.hpp\u003e\nsfx2/source/inc/eventsupplier.hxx:25:#include \u003ccom/sun/star/document/DocumentEvent.hpp\u003e\nunoxml/inc/pch/precompiled_unoxml.hxx:45:#include \u003ccom/sun/star/xml/dom/events/XDocumentEvent.hpp\u003e\nunoxml/source/dom/characterdata.cxx:29:#include \u003ccom/sun/star/xml/dom/events/XDocumentEvent.hpp\u003e\nunoxml/source/dom/document.hxx:38:#include \u003ccom/sun/star/xml/dom/events/XDocumentEvent.hpp\u003e\nso nothing related to the code I changed.",
       "revId": "7176ddf27e45f88c79e2eb34673a0aab7e5f216e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98fd2338_cd34eb43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-29T12:00:35Z",
+      "side": 1,
+      "message": "I re read your comment but don\u0027t know at all how to begin with.\nI also noticed you talked about comphelper/SetFlagContextHelper that I don\u0027t know.\nI probably won\u0027t make it.\nSo let\u0027s forget it.",
+      "revId": "7176ddf27e45f88c79e2eb34673a0aab7e5f216e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
