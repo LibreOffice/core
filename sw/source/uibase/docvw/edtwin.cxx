@@ -29,6 +29,7 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/ui/ContextMenuExecuteEvent.hpp>
 
+#include <vcl/dialoghelper.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
@@ -2769,7 +2770,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
     bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
-    if ( bIsOleActive && PopupMenu::IsInExecute() )
+    if (bIsOleActive && vcl::IsInPopupMenuExecute())
         return;
 
     MouseEvent aMEvt(_rMEvt);

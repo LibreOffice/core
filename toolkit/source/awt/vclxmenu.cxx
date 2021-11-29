@@ -28,6 +28,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/keycod.hxx>
@@ -661,7 +662,7 @@ sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu && IsPopupMenu() )
-        return PopupMenu::IsInExecute();
+        return vcl::IsInPopupMenuExecute();
     else
         return false;
 }

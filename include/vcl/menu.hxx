@@ -526,7 +526,6 @@ public:
 
     css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface();
 
-    static bool IsInExecute();
     static PopupMenu* GetActivePopupMenu();
 
     PopupMenu& operator=( const PopupMenu& rMenu );

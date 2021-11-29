@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-10-06 19:41:09 using:
+ Generated on 2021-11-29 09:46:20 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <atomic>
 #include <cassert>
 #include <chrono>
@@ -42,6 +43,7 @@
 #include <memory>
 #include <mutex>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -183,6 +185,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
@@ -209,6 +212,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/salhelperdllapi.h>
@@ -330,6 +334,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/lazydelete.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
