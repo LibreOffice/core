@@ -50,6 +50,24 @@
       "message": "I re read your comment but don\u0027t know at all how to begin with.\nI also noticed you talked about comphelper/SetFlagContextHelper that I don\u0027t know.\nI probably won\u0027t make it.\nSo let\u0027s forget it.",
       "revId": "7176ddf27e45f88c79e2eb34673a0aab7e5f216e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cefd1fb_8e292a16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-29T12:17:01Z",
+      "side": 1,
+      "message": "Heh, you are too fast with abandoning your changes! I feel guilty discouraging you, while I did not want that; I simply got no chance replying your questions and helping you.\n\nWrt comphelper/SetFlagContextHelper - it was just a possible suggestion in case if you would need to pass \"do not run document events\" info down some call stack; and I didn\u0027t look into the code carefully, so I didn\u0027t even know if that would be actually required. It was a kind of \"brain dump\", to not forget a thought for later.\n\nThe construction of the DocumentEvent struct happens in SfxBaseModel::postEvent_Impl; the latter gets called from SfxBaseModel::Notify, and SfxBaseModel::Notify receives rHint, which is this specific case is SfxPrintingHint, having mnPrintableState holding the wanted data.\n\nI would suggest you to add an Any argument to SfxBaseModel::postEvent_Impl, that would be used for the Supplement; in SfxBaseModel::Notify, you could construct a default empty Any for all cases except for printing object, in which case it would hold the mnPrintableState value.\n\nDoes it make sense? Please do not treat my comments as discouraging!",
+      "parentUuid": "98fd2338_cd34eb43",
+      "revId": "7176ddf27e45f88c79e2eb34673a0aab7e5f216e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
