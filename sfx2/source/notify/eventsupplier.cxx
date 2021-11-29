@@ -280,7 +280,7 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
 
 // --- ::document::XEventListener ---
 
-void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
+void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEvent& aEvent )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
 
@@ -292,7 +292,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 
     uno::Any aEventData = maEventData[ nIndex ];
     aGuard.clear();
-    Execute( aEventData, document::DocumentEvent(aEvent.Source, aEvent.EventName, nullptr, uno::Any()), mpObjShell );
+    Execute( aEventData, aEvent, mpObjShell );
 }
 
 
@@ -304,14 +304,14 @@ void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ )
 
     if ( mxBroadcaster.is() )
     {
-        mxBroadcaster->removeEventListener( this );
+        mxBroadcaster->removeDocumentEventListener( this );
         mxBroadcaster = nullptr;
     }
 }
 
 
 SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
-                                uno::Reference< document::XEventBroadcaster > const & xBroadcaster )
+                                uno::Reference< document::XDocumentEventBroadcaster > const & xBroadcaster )
 {
     // get the list of supported events and store it
     if ( pShell )
@@ -325,7 +325,7 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
     mxBroadcaster   = xBroadcaster;
 
     if ( mxBroadcaster.is() )
-        mxBroadcaster->addEventListener( this );
+        mxBroadcaster->addDocumentEventListener( this );
 }
 
 
