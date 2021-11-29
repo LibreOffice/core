@@ -79,6 +79,8 @@ namespace std {
 }
 
 class Idle;
+
+/// A toolbar: contains all those icons, typically below the menu bar.
 class VCL_DLLPUBLIC ToolBox : public DockingWindow
 {
     friend class FloatingWindow;
