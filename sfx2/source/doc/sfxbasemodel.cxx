@@ -2895,14 +2895,11 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         default: break;
         }
 
+        Any aSupplement;
+        if (const SfxPrintingHint* pPrintingHint = dynamic_cast<const SfxPrintingHint*>(&rHint))
+            aSupplement <<= pPrintingHint->GetWhich();
         const SfxViewEventHint* pViewHint = dynamic_cast<const SfxViewEventHint*>(&rHint);
-        if (pViewHint)
-        {
-            const SfxPrintingHint* pPrintingHint = dynamic_cast<const SfxPrintingHint*>(&rHint);
-            postEvent_Impl( pNamedHint->GetEventName(), pViewHint->GetController(), pPrintingHint? Any(pPrintingHint->GetWhich()) : Any() );
-        }
-        else
-            postEvent_Impl( pNamedHint->GetEventName(), Reference< frame::XController2 >() );
+        postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >(), aSupplement );
     }
 
     if ( rHint.GetId() == SfxHintId::TitleChanged )
