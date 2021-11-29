@@ -7652,9 +7652,7 @@ fi
 AC_SUBST([HAVE_BROKEN_GCC_WSTRINGOP_OVERFLOW])
 
 HAVE_DLLEXPORTINLINES=
-dnl At least for Clang 14 trunk, -Zc:dllexportInlines- would cause lots of unresolved symbols when
-dnl linking e.g. Library_cppuhelper, for whatever reason:
-if test "$_os" = "WINNT" && test "$COM_IS_CLANG" != TRUE; then
+if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether $CXX_BASE supports -Zc:dllexportInlines-])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS

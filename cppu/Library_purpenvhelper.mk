@@ -16,7 +16,7 @@ $(eval $(call gb_Library_add_defs,purpenvhelper,\
 	-DPURPENV_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_is_ure_library,purpenvhelper))
+$(eval $(call gb_Library_set_is_ure_library_or_dependency,purpenvhelper))
 
 $(eval $(call gb_Library_use_udk_api,purpenvhelper))
 

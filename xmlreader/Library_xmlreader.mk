@@ -23,6 +23,8 @@ $(eval $(call gb_Library_add_defs,xmlreader,\
 	-DOOO_DLLIMPLEMENTATION_XMLREADER \
 ))
 
+$(eval $(call gb_Library_set_is_ure_library_or_dependency,xmlreader))
+
 $(eval $(call gb_Library_use_external,xmlreader,boost_headers))
 
 $(eval $(call gb_Library_use_libraries,xmlreader,\
