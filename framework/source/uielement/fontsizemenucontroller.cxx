@@ -23,13 +23,13 @@
 
 #include <services.h>
 
+#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/print.hxx>
@@ -132,14 +132,8 @@ void FontSizeMenuController::setCurHeight( tools::Long nHeight, Reference< css::
 void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-    PopupMenu*     pVCLPopupMenu = nullptr;
 
     resetPopupMenu( rPopupMenu );
-    if ( pPopupMenu )
-        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-
-    if ( !pVCLPopupMenu )
-        return;
 
     std::unique_ptr<FontList> pFontList;
     ScopedVclPtr<Printer>  pInfoPrinter;
@@ -168,11 +162,10 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     while ( pAry[nSizeCount] )
         nSizeCount++;
 
-    sal_uInt16 nPos = 0;
+    sal_uInt16 nPos = 0; // Id is nPos+1
     static const OUStringLiteral aFontHeightCommand( u".uno:FontHeight?FontHeight.Height:float=" );
 
     // first insert font size names (for simplified/traditional chinese)
-    float           fPoint;
     FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     m_pHeightArray.reset(new tools::Long[nSizeCount + aFontSizeNames.Count()]);
     OUString   aCommand;
@@ -185,16 +178,17 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
             sal_Int32 nCount = aFontSizeNames.Count();
             for( sal_Int32 i = 0; i < nCount; i++ )
             {
-                OUString  aSizeName = aFontSizeNames.GetIndexName( i );
+                OUString aSizeName = aFontSizeNames.GetIndexName( i );
                 sal_Int32 nSize = aFontSizeNames.GetIndexSize( i );
                 m_pHeightArray[nPos] = nSize;
-                nPos++; // Id is nPos+1
-                pVCLPopupMenu->InsertItem( nPos, aSizeName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
-                fPoint = float( m_pHeightArray[nPos-1] ) / 10;
+                pPopupMenu->insertItem(nPos + 1, aSizeName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, nPos);
 
                 // Create dispatchable .uno command and set it
+                float fPoint = float(nSize) / 10;
                 aCommand = aFontHeightCommand + OUString::number( fPoint );
-                pVCLPopupMenu->SetItemCommand( nPos, aCommand );
+                pPopupMenu->setCommand(nPos + 1, aCommand);
+
+                ++nPos;
             }
         }
         else
@@ -207,13 +201,14 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
                 if ( !aSizeName.isEmpty() )
                 {
                     m_pHeightArray[nPos] = *pTempAry;
-                    nPos++; // Id is nPos+1
-                    pVCLPopupMenu->InsertItem( nPos, aSizeName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
-                    fPoint = float( m_pHeightArray[nPos-1] ) / 10;
+                    pPopupMenu->insertItem(nPos + 1, aSizeName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, nPos);
 
                     // Create dispatchable .uno command and set it
+                    float fPoint = float(*pTempAry) / 10;
                     aCommand = aFontHeightCommand + OUString::number( fPoint );
-                    pVCLPopupMenu->SetItemCommand( nPos, aCommand );
+                    pPopupMenu->setCommand(nPos + 1, aCommand);
+
+                    ++nPos;
                 }
                 pTempAry++;
             }
@@ -226,14 +221,15 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     while ( *pTempAry )
     {
         m_pHeightArray[nPos] = *pTempAry;
-        nPos++; // Id is nPos+1
-        pVCLPopupMenu->InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
-        fPoint = float( m_pHeightArray[nPos-1] ) / 10;
+        pPopupMenu->insertItem(nPos + 1, rI18nHelper.GetNum(*pTempAry, 1, true, false),
+                               css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, nPos);
 
         // Create dispatchable .uno command and set it
+        float fPoint = float(*pTempAry) / 10;
         aCommand = aFontHeightCommand + OUString::number( fPoint );
-        pVCLPopupMenu->SetItemCommand( nPos, aCommand );
+        pPopupMenu->setCommand(nPos + 1, aCommand);
 
+        ++nPos;
         pTempAry++;
     }
 
