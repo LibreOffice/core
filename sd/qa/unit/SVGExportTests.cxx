@@ -35,7 +35,6 @@
 #define SVG_USE *[name()='use']
 #define SVG_PATTERN *[name()='pattern']
 #define SVG_RECT *[name()='rect']
-#define SVG_FONT *[name()='font']
 
 using namespace css;
 
@@ -335,19 +334,6 @@ public:
         assertXPathContent(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<number>");
     }
 
-    void testTdf145873()
-    {
-        load( u"/sd/qa/unit/data/pptx/", "tdf145873.pptx" );
-        save();
-
-        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
-        CPPUNIT_ASSERT(svgDoc);
-
-        // Witout the fix in place, it would have filed with:
-        // - Expected: 22 - Actual  : 3 - number of child-nodes is incorrect
-        assertXPathChildren(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[6]/SVG_FONT ), 22);
-    }
-
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
     CPPUNIT_TEST(testSVGExportTextDecorations);
     CPPUNIT_TEST(testSVGExportJavascriptURL);
@@ -356,7 +342,6 @@ public:
     CPPUNIT_TEST(testSVGExportSlideBitmapBackground);
     CPPUNIT_TEST(testSVGExportSlideTileBitmapBackground);
     CPPUNIT_TEST(testSVGPlaceholderLocale);
-    CPPUNIT_TEST(testTdf145873);
     CPPUNIT_TEST_SUITE_END();
 };
 
