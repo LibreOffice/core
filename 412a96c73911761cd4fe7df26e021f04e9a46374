@@ -107,6 +107,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47baeb1c_9f7e5e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-29T13:53:40Z",
+      "side": 1,
+      "message": "Done. In patch set 4, the new test is placed in \u0027vcl/qa/cppunit/pdfexport/pdfexport.cxx\u0027.",
+      "parentUuid": "22963293_397b1a23",
+      "revId": "412a96c73911761cd4fe7df26e021f04e9a46374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c23f08e2_5dfa01b9",
@@ -124,6 +142,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48ceb329_0f267adb",
+        "filename": "sd/qa/unit/PDFExportTests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-29T13:53:40Z",
+      "side": 1,
+      "message": "Done. This is fixed in the patch set 4.",
+      "parentUuid": "c23f08e2_5dfa01b9",
+      "revId": "412a96c73911761cd4fe7df26e021f04e9a46374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc9aeb5c_abcfc55e",
@@ -137,6 +173,24 @@
       "writtenOn": "2021-11-29T09:23:31Z",
       "side": 1,
       "message": "this comment is incorrect",
+      "revId": "412a96c73911761cd4fe7df26e021f04e9a46374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb3fcb8d_7a142619",
+        "filename": "sd/qa/unit/PDFExportTests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-29T13:53:40Z",
+      "side": 1,
+      "message": "Done. This is is also fixed in the patch set 4.",
+      "parentUuid": "dc9aeb5c_abcfc55e",
       "revId": "412a96c73911761cd4fe7df26e021f04e9a46374",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
