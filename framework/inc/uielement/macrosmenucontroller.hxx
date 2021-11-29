@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <vcl/menu.hxx>
 
 namespace framework
 {
