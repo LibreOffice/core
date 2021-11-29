@@ -16,6 +16,24 @@
       "message": "ooooh, when that lands that will make PPTX import significantly faster for some documents",
       "revId": "e0886927b63cf69f10a480a108e300b7c13a9bd5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ef38aac_cd551e27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-29T08:18:02Z",
+      "side": 1,
+      "message": "Definitely want to get rid of the similar code in oox/source/drawingml/color.cxx in the long run, but that\u0027ll take a while, just to set your expectations. :-)\n\nInitially the user of this code will be just UI, so when you set a new theme for a master page, then we can re-color the slides using that master page according to the theme. We still calculate the actual color at import time for now.",
+      "parentUuid": "7ea85789_68906b68",
+      "revId": "e0886927b63cf69f10a480a108e300b7c13a9bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
