@@ -128,7 +128,7 @@ public:
                            vcl::ILibreOfficeKitNotifier* pNotifier);
     ~ScCheckListMenuControl();
 
-    void addMenuItem(const OUString& rText, Action* pAction, bool bIndicateSubMenu = false);
+    void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
     ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled);
     void resizeToFitMenuItems();
@@ -167,6 +167,8 @@ public:
      * Get the store auxiliary data, or NULL if no such data is stored.
      */
     ExtendedData* getExtendedData();
+
+    ScDocument& GetDocument() const { return *mpDoc; }
 
     void GrabFocus();
 
@@ -319,6 +321,8 @@ class ScListSubMenuControl final
 public:
     ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, vcl::ILibreOfficeKitNotifier* pNotifier);
 
+    void setPopupStartAction(ScCheckListMenuControl::Action* p);
+
     void GrabFocus();
     bool IsVisible() const;
 
@@ -326,9 +330,13 @@ public:
     void EndPopupMode();
 
     void addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction);
+    void clearMenuItems();
     void resizeToFitMenuItems();
 
     void setSelectedMenuItem(size_t nPos);
+
+    ScDocument& GetDocument() const { return mrParentControl.GetDocument(); }
+    ScCheckListMenuControl::ExtendedData* getExtendedData() { return mrParentControl.getExtendedData(); }
 
     /**
      * Dismiss all visible popup menus and set focus back to the application
@@ -342,6 +350,7 @@ private:
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<weld::TreeView> mxMenu;
     std::unique_ptr<weld::TreeIter> mxScratchIter;
+    std::unique_ptr<ScCheckListMenuControl::Action> mxPopupStartAction;
     std::vector<ScCheckListMenuControl::MenuItemData> maMenuItems;
     ScCheckListMenuControl& mrParentControl;
     vcl::ILibreOfficeKitNotifier* mpNotifier;

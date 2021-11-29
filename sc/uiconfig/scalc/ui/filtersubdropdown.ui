@@ -4,12 +4,18 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name image1 -->
       <column type="GdkPixbuf"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkPopover" id="FilterSubDropDown">
@@ -52,9 +58,16 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                     <child>
+                      <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                      <attributes>
+                        <attribute name="visible">4</attribute>
+                        <attribute name="active">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
                       <object class="GtkCellRendererText" id="cellrenderertext1"/>
                       <attributes>
-                        <attribute name="text">0</attribute>
+                        <attribute name="text">1</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -64,7 +77,7 @@
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cellrenderertext55"/>
                       <attributes>
-                        <attribute name="pixbuf">1</attribute>
+                        <attribute name="pixbuf">2</attribute>
                       </attributes>
                     </child>
                   </object>

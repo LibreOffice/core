@@ -120,7 +120,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
     setSelectedMenuItem(nSelectedMenu, true);
 }
 
-void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction, bool bIndicateSubMenu)
+void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
 {
     MenuItemData aItem;
     aItem.mbEnabled = true;
@@ -129,10 +129,7 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction,
 
     mxMenu->show();
     mxMenu->append_text(rText);
-    if (bIndicateSubMenu)
-        mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
-    else
-        mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
+    mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
 }
 
 void ScCheckListMenuControl::addSeparator()
@@ -244,7 +241,9 @@ void ScCheckListMenuControl::queueLaunchSubMenu(size_t nPos, ScListSubMenuContro
         else
         {
             if (pMenu == maCloseTimer.mpSubMenu)
+            {
                 maCloseTimer.reset();
+            }
         }
     }
 
@@ -356,7 +355,9 @@ void ScCheckListMenuControl::selectMenuItem(size_t nPos, bool bSubMenuTimer)
             queueLaunchSubMenu(nPos, pSubMenu);
         }
         else
+        {
             queueCloseSubMenu();
+        }
     }
 }
 
@@ -1437,6 +1438,9 @@ ScListSubMenuControl::ScListSubMenuControl(weld::Widget* pParent, ScCheckListMen
 
 void ScListSubMenuControl::StartPopupMode(weld::Widget* pParent, const tools::Rectangle& rRect)
 {
+    if (mxPopupStartAction)
+        mxPopupStartAction->execute();
+
     mxPopover->popup_at_rect(pParent, rRect, weld::Placement::End);
 
     mxMenu->set_cursor(0);
@@ -1473,6 +1477,12 @@ void ScListSubMenuControl::addMenuItem(const OUString& rText, ScCheckListMenuCon
     maMenuItems.emplace_back(std::move(aItem));
     mxMenu->show();
     mxMenu->append_text(rText);
+}
+
+void ScListSubMenuControl::clearMenuItems()
+{
+    maMenuItems.clear();
+    mxMenu->clear();
 }
 
 IMPL_LINK(ScListSubMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
@@ -1512,6 +1522,11 @@ void ScListSubMenuControl::executeMenuItem(size_t nPos)
     const bool bClosePopup = maMenuItems[nPos].mxAction->execute();
     if (bClosePopup)
         terminateAllPopupMenus();
+}
+
+void ScListSubMenuControl::setPopupStartAction(ScCheckListMenuControl::Action* p)
+{
+    mxPopupStartAction.reset(p);
 }
 
 void ScListSubMenuControl::terminateAllPopupMenus()
