@@ -1067,10 +1067,20 @@ short Dialog::Execute()
         OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );
     }
 
-    tools::Long nRet = mpDialogImpl->mnResult;
-    mpDialogImpl->mnResult = -1;
+    assert(mpDialogImpl);
 
-    return static_cast<short>(nRet);
+    if (mpDialogImpl)
+    {
+        tools::Long nRet = mpDialogImpl->mnResult;
+        mpDialogImpl->mnResult = -1;
+
+        return static_cast<short>(nRet);
+    }
+    else
+    {
+        SAL_WARN( "vcl", "Dialog::Execute() : missing mpDialogImpl " );
+        return 0;
+    }
 }
 
 // virtual
