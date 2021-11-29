@@ -126,8 +126,6 @@ private:
     std::unique_ptr<ScRangeFindList>
                             pRangeFindList;
 
-    static bool             bAutoComplete;              // from app options
-    static bool             bOptLoaded;
     ::std::set< sal_Unicode >    maFormulaChar;  //fdo 75264
 
 private:
@@ -290,8 +288,6 @@ public:
                          const std::vector<ReferenceMark>& rReferenceMarks );
 
     void SetDocumentDisposing( bool b );
-
-    static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
 
     static ReferenceMark GetReferenceMark( const ScViewData& rViewData, ScDocShell* pDocSh,
                                     tools::Long nX1, tools::Long nX2, tools::Long nY1, tools::Long nY2,

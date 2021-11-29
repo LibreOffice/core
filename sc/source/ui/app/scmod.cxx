@@ -392,7 +392,6 @@ void ScModule::Execute( SfxRequest& rReq )
                 bool bNew = !aNewOpts.GetAutoComplete();
                 aNewOpts.SetAutoComplete( bNew );
                 SetAppOptions( aNewOpts );
-                ScInputHandler::SetAutoComplete( bNew );
                 if (pBindings)
                     pBindings->Invalidate( FID_AUTOCOMPLETE );
                 rReq.Done();
