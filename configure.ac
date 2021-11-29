@@ -6014,10 +6014,11 @@ if test -n "$BUILDING_PCH_WITH_OBJ"; then
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror ${fpch_prefix}-fpch-codegen"
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],
-        [
-        PCH_CODEGEN="${fpch_prefix}-fpch-codegen"
-        PCH_NO_CODEGEN="${fpch_prefix}-fno-pch-codegen"
-        ],[])
+        [ PCH_CODEGEN="${fpch_prefix}-fpch-codegen" ],[])
+    CFLAGS=$save_CFLAGS
+    CFLAGS="$CFLAGS -Werror ${fpch_prefix}-fno-pch-codegen"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],
+        [ PCH_NO_CODEGEN="${fpch_prefix}-fno-pch-codegen" ],[])
     CFLAGS=$save_CFLAGS
     if test -n "$PCH_CODEGEN"; then
         AC_MSG_RESULT(yes)
