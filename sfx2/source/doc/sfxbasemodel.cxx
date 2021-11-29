@@ -2896,7 +2896,13 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         }
 
         const SfxViewEventHint* pViewHint = dynamic_cast<const SfxViewEventHint*>(&rHint);
-        postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >() );
+        if (pViewHint)
+        {
+            const SfxPrintingHint* pPrintingHint = dynamic_cast<const SfxPrintingHint*>(&rHint);
+            postEvent_Impl( pNamedHint->GetEventName(), pViewHint->GetController(), pPrintingHint? Any(pPrintingHint->GetWhich()) : Any() );
+        }
+        else
+            postEvent_Impl( pNamedHint->GetEventName(), Reference< frame::XController2 >() );
     }
 
     if ( rHint.GetId() == SfxHintId::TitleChanged )
@@ -3223,7 +3229,7 @@ public:
 };
 } // anonymous namespace
 
-void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame::XController2 >& xController )
+void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame::XController2 >& xController, const Any& supplement )
 {
     // object already disposed?
     if ( impl_isDisposed() )
@@ -3245,7 +3251,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     {
         SAL_INFO("sfx.doc", "SfxDocumentEvent: " + aName);
 
-        document::DocumentEvent aDocumentEvent( static_cast<frame::XModel*>(this), aName, xController, Any() );
+        document::DocumentEvent aDocumentEvent( static_cast<frame::XModel*>(this), aName, xController, supplement );
 
         pIC->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
             NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
