@@ -16,6 +16,24 @@
       "message": "FWIW I think there was some value in having those in sw. SwUiWriterTest::testForcepoint3() was added in 5e18136a01208f5df7c5f554bbcdab2ef661e136, the testcase went to sw/qa and the fix was in sw/source, these pair of source + qa changes in the same module has the benefit that if you touch a module (sw/source), then you can run just the sw/ tests for quick feedback before you wait for 1h till \u0027make check\u0027 tells you if your change managed to break something or not.\n\nIt\u0027s not a big deal, so no need to revert, but if you could avoid similar changes in the future (now removing a line of code in sw/ will break a test in vcl/), that would be nice. Thanks. :-)",
       "revId": "a4691c7d5eb494c242305936428086940f90d83a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37b81181_68790a4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-29T15:56:42Z",
+      "side": 1,
+      "message": "\u003e FWIW I think there was some value in having those in sw. SwUiWriterTest::testForcepoint3() was added in 5e18136a01208f5df7c5f554bbcdab2ef661e136, the testcase went to sw/qa and the fix was in sw/source, these pair of source + qa changes in the same module has the benefit that if you touch a module (sw/source), then you can run just the sw/ tests for quick feedback before you wait for 1h till \u0027make check\u0027 tells you if your change managed to break something or not.\n\u003e \n\u003e It\u0027s not a big deal, so no need to revert, but if you could avoid similar changes in the future (now removing a line of code in sw/ will break a test in vcl/), that would be nice. Thanks. :-)\n\nI see, this makes me think, should vcl/qa/cppunit/pdfexport/pdfexport.cxx be divided by modules instead? at the moment I see different tests exporting to writer_pdf_Export, others to calc_pdf_Export and others to impress_pdf_Export ?",
+      "parentUuid": "e3ea1d32_2d795f83",
+      "revId": "a4691c7d5eb494c242305936428086940f90d83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
