@@ -274,6 +274,7 @@ public:
     void testTdf133524();
     void testTdf133524_Romanian();
     void testTdf128860();
+    //void testNestedGroupTextBox();
     void testTdf123786();
     void testTdf133589();
     void testTdf143176();
@@ -394,6 +395,7 @@ public:
     CPPUNIT_TEST(testTdf133524);
     CPPUNIT_TEST(testTdf133524_Romanian);
     CPPUNIT_TEST(testTdf128860);
+    //CPPUNIT_TEST(testNestedGroupTextBox);
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
     CPPUNIT_TEST(testTdf143176);
@@ -3719,6 +3721,134 @@ void SwUiWriterTest4::testTdf128860()
     sReplaced += u" word.‘";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
+
+// FIXME: Dispatcher in this test works randomly :(
+//void SwUiWriterTest4::testNestedGroupTextBox()
+//{
+//    // Load this bugdoc: it has a shape with textbox (like WPS) and
+//    // a groupshape whitout textbox with two member shapes.
+//    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ComplexGroupShapeTest.odt");
+//    // Is it loaded sucessfuly?
+//    CPPUNIT_ASSERT(pDoc);
+//
+//    // First get the groupShape, and check if it is a real group shape.
+//    auto xGroup1 = getShape(2);
+//    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xGroup1->getShapeType());
+//
+//    // two shapes assumed:
+//    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+//
+//    // Then select the groupShape
+//    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    // Go inside the group
+//    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+//    CPPUNIT_ASSERT(pXTextDocument);
+//
+//    // Select the first member shape
+//    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+//    Scheduler::ProcessEventsToIdle();
+//
+//    // Add a tetbox to it
+//    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    // Do the same with the other member
+//    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+//    Scheduler::ProcessEventsToIdle();
+//
+//    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    // Leave the group.
+//    dispatchCommand(mxComponent, ".uno:LeaveGroup", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    // Check now the shapes!
+//    auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+//    auto xShape1 = getShape(1);
+//    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShape1->getShapeType());
+//    auto xShape2 = getShape(2);
+//    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShape2->getShapeType());
+//    // and select them
+//    pWrtShell->SelectObj(Point(), 0x000, SdrObject::getSdrObjectFromXShape(xShape1));
+//    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, SdrObject::getSdrObjectFromXShape(xShape2));
+//    // must two shapes be selected!
+//    CPPUNIT_ASSERT_EQUAL(size_t(2), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+//
+//    // Do grouping with the two shapes (the WPS like and the WPG like ones)
+//    // From now there must be only one group shape in the doc. It has two
+//    // members a textbox shape and a groupshape. The nested group shape has
+//    // two text box shape inside. So this is a nested group of textboxes.
+//    // Whithout the fix Writer at this pint crashed before or, the shapes
+//    // had lost their textboxes.
+//    dispatchCommand(mxComponent, ".uno:FormatGroup", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    // Deselect
+//    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+//    Scheduler::ProcessEventsToIdle();
+//    CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+//
+//    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+//
+//    // Get the only group shape, test that if it is a real group shape and select.
+//    auto xShape3 = getShape(1);
+//    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShape3->getShapeType());
+//    pWrtShell->SelectObj(Point(), 0x000, SdrObject::getSdrObjectFromXShape(xShape3));
+//
+//    // Make sure there is one shape selected.
+//    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+//
+//    // Move the shape down a bit... Before the textboxes were out of sync.
+//    for (int i = 0; i < 30; ++i)
+//    {
+//        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+//        Scheduler::ProcessEventsToIdle();
+//    }
+//
+//    // Explode the group
+//    dispatchCommand(mxComponent, ".uno:FormatUnGroup", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+//    Scheduler::ProcessEventsToIdle();
+//
+//    // and the nested group too.
+//    auto xShape4 = getShape(2);
+//    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShape4->getShapeType());
+//    pWrtShell->SelectObj(Point(), 0x000, SdrObject::getSdrObjectFromXShape(xShape4));
+//
+//    dispatchCommand(mxComponent, ".uno:FormatUnGroup", {});
+//    Scheduler::ProcessEventsToIdle();
+//
+//    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+//
+//    // Let's check if there are still 3 textbox shape in the bugdoc as it desired.
+//    for (int i = 1; i < 5; ++i)
+//    {
+//        uno::Reference<beans::XPropertySet> xShapeProps(getShape(i), uno::UNO_QUERY);
+//        if (xShapeProps->getPropertySetInfo()->hasPropertyByName("TextBox"))
+//        {
+//            std::string sName
+//                = SdrObject::getSdrObjectFromXShape(getShape(i))->GetName().toUtf8().pData->buffer;
+//            CPPUNIT_ASSERT_EQUAL_MESSAGE(sName + " must be a textbox!", true,
+//                                         xShapeProps->getPropertyValue("TextBox").get<bool>());
+//        }
+//    }
+//    // Without the fix the following might be happened before:
+//    // - Adding textbox to a group shape member resulted in crash
+//    // - Making nested group resulted in lost textbox shape connection
+//    // - Moving nested group shape with textboxes were out of sync
+//    // - Ungrouping resulted in simple shapes there were no textboxes.
+//}
 
 void SwUiWriterTest4::testTdf123786()
 {
