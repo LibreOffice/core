@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ee906f6_e30f1fce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-11-29T12:44:47Z",
+      "side": 1,
+      "message": "Looks good to me as/when CI is plausibly happy - thanks Szymon \u003d)",
+      "revId": "eb01b49989e90ccad9aae901358f842e071ccb2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
