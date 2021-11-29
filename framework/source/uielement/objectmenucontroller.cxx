@@ -23,10 +23,8 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -81,17 +79,10 @@ ObjectMenuController::ObjectMenuController( const css::uno::Reference< css::uno:
 void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     const css::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
-    VCLXPopupMenu*                    pPopupMenu        = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-    PopupMenu*                        pVCLPopupMenu     = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
-    if ( pPopupMenu )
-        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-
-    if ( !pVCLPopupMenu )
-        return;
 
     static const OUStringLiteral aVerbCommand( u".uno:ObjectMenue?VerbID:short=" );
     for ( sal_Int32 i = 0; i < rVerbCommandSeq.getLength(); i++ )
@@ -100,10 +91,8 @@ void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescri
         if ( rVerb.VerbAttributes & css::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
         {
             m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );
-            // use VCL popup menu pointer to set vital information that are not part of the awt implementation
-
             OUString aCommand = aVerbCommand + OUString::number( rVerb.VerbID );
-            pVCLPopupMenu->SetItemCommand( i+1, aCommand ); // Store verb command
+            m_xPopupMenu->setCommand( i+1, aCommand ); // Store verb command
         }
     }
 }
