@@ -2876,7 +2876,7 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
                     if (pLangT)
                     {
                         const char* pLang = lt_lang_get_tag( pLangT);
-                        if (pLang && strcmp( pLang, I18NLANGTAG_QLT) == 0)
+                        if (pLang && strcmp( pLang, I18NLANGTAG_QLT_ASCII) == 0)
                         {
                             // Disallow 'qlt' privateuse code to prevent
                             // confusion with our internal usage.
