@@ -38,6 +38,8 @@
 #include <vcl/jsdialog/executor.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
+#include <viewdata.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -120,7 +122,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
     setSelectedMenuItem(nSelectedMenu, true);
 }
 
-void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction, bool bIndicateSubMenu)
+void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
 {
     MenuItemData aItem;
     aItem.mbEnabled = true;
@@ -129,10 +131,7 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction,
 
     mxMenu->show();
     mxMenu->append_text(rText);
-    if (bIndicateSubMenu)
-        mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
-    else
-        mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
+    mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
 }
 
 void ScCheckListMenuControl::addSeparator()
@@ -180,12 +179,12 @@ void ScCheckListMenuControl::CreateDropDown()
                          DrawSymbolFlags::NONE);
 }
 
-ScListSubMenuControl* ScCheckListMenuControl::addSubMenuItem(const OUString& rText, bool bEnabled)
+ScListSubMenuControl* ScCheckListMenuControl::addSubMenuItem(const OUString& rText, bool bEnabled, bool bCheckList)
 {
     MenuItemData aItem;
     aItem.mbEnabled = bEnabled;
 
-    aItem.mxSubMenuWin.reset(new ScListSubMenuControl(mxMenu.get(), *this, mpNotifier));
+    aItem.mxSubMenuWin.reset(new ScListSubMenuControl(mxMenu.get(), *this, bCheckList, mpNotifier));
     maMenuItems.emplace_back(std::move(aItem));
 
     mxMenu->show();
@@ -451,7 +450,7 @@ constexpr int nBorderWidth = 4;
 // number of rows visible in checklist
 constexpr int nCheckListVisibleRows = 8;
 
-ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScDocument* pDoc,
+ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData& rViewData,
                                                bool bHasDates, int nWidth, vcl::ILibreOfficeKitNotifier* pNotifier)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/filterdropdown.ui"))
     , mxPopover(mxBuilder->weld_popover("FilterDropDown"))
@@ -474,7 +473,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScDocument
     , mnWndWidth(0)
     , mePrevToggleAllState(TRISTATE_INDET)
     , mnSelectedMenu(MENU_NOT_SELECTED)
-    , mpDoc(pDoc)
+    , mrViewData(rViewData)
     , mnAsyncPostPopdownId(nullptr)
     , mnAsyncSetDropdownPosId(nullptr)
     , mpNotifier(pNotifier)
@@ -890,7 +889,7 @@ void ScCheckListMenuControl::setMemberSize(size_t n)
 
 void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, bool bVisible)
 {
-    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    SvNumberFormatter* pFormatter = mrViewData.GetDocument().GetFormatTable();
 
     // Convert the numeric date value to a date object.
     Date aDate = pFormatter->GetNullDate();
@@ -1448,7 +1447,7 @@ int ScCheckListMenuControl::IncreaseWindowWidthToFitText(int nMaxTextWidth)
     return mnCheckWidthReq + nBorder;
 }
 
-ScListSubMenuControl::ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, vcl::ILibreOfficeKitNotifier* pNotifier)
+ScListSubMenuControl::ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bCheckList, vcl::ILibreOfficeKitNotifier* pNotifier)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/filtersubdropdown.ui"))
     , mxPopover(mxBuilder->weld_popover("FilterSubDropDown"))
     , mxContainer(mxBuilder->weld_container("container"))
@@ -1457,12 +1456,22 @@ ScListSubMenuControl::ScListSubMenuControl(weld::Widget* pParent, ScCheckListMen
     , mrParentControl(rParentControl)
     , mpNotifier(pNotifier)
 {
+    if (bCheckList)
+    {
+        mxMenu->set_clicks_to_toggle(1);
+        mxMenu->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+    }
+
     mxMenu->connect_row_activated(LINK(this, ScListSubMenuControl, RowActivatedHdl));
+    mxMenu->connect_toggled(LINK(this, ScListSubMenuControl, CheckToggledHdl));
     mxMenu->connect_key_press(LINK(this, ScListSubMenuControl, MenuKeyInputHdl));
 }
 
 void ScListSubMenuControl::StartPopupMode(weld::Widget* pParent, const tools::Rectangle& rRect)
 {
+    if (mxPopupStartAction)
+        mxPopupStartAction->execute();
+
     mxPopover->popup_at_rect(pParent, rRect, weld::Placement::End);
 
     mxMenu->set_cursor(0);
@@ -1491,14 +1500,31 @@ void ScListSubMenuControl::resizeToFitMenuItems()
     mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height() + 2);
 }
 
-void ScListSubMenuControl::addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction)
+void ScListSubMenuControl::addItem(ScCheckListMenuControl::Action* pAction)
 {
     ScCheckListMenuControl::MenuItemData aItem;
     aItem.mbEnabled = true;
     aItem.mxAction.reset(pAction);
     maMenuItems.emplace_back(std::move(aItem));
-    mxMenu->show();
+}
+
+void ScListSubMenuControl::addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction)
+{
+    addItem(pAction);
     mxMenu->append_text(rText);
+}
+
+void ScListSubMenuControl::addMenuCheckItem(const OUString& rText, bool bActive, VirtualDevice& rImage, ScCheckListMenuControl::Action* pAction)
+{
+    addItem(pAction);
+    mxMenu->insert(nullptr, -1, &rText, nullptr, nullptr, &rImage, false, mxScratchIter.get());
+    mxMenu->set_toggle(*mxScratchIter, bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
+}
+
+void ScListSubMenuControl::clearMenuItems()
+{
+    maMenuItems.clear();
+    mxMenu->clear();
 }
 
 IMPL_LINK(ScListSubMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
@@ -1515,6 +1541,13 @@ IMPL_LINK(ScListSubMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
             bConsumed = true;
             break;
         }
+        case KEY_SPACE:
+        case KEY_RETURN:
+        {
+            // don't toggle checkbutton, go straight to activating entry
+            bConsumed = RowActivatedHdl(*mxMenu);
+            break;
+        }
     }
 
     return bConsumed;
@@ -1524,6 +1557,16 @@ IMPL_LINK_NOARG(ScListSubMenuControl, RowActivatedHdl, weld::TreeView&, bool)
 {
     executeMenuItem(mxMenu->get_selected_index());
     return true;
+}
+
+IMPL_LINK(ScListSubMenuControl, CheckToggledHdl, const weld::TreeView::iter_col&, rRowCol, void)
+{
+    mxMenu->all_foreach([this, &rRowCol](weld::TreeIter& rEntry){
+        bool bToggledEntry = mxMenu->iter_compare(rEntry, rRowCol.first) == 0;
+        if (!bToggledEntry)
+            mxMenu->set_toggle(rEntry, TRISTATE_FALSE);
+        return false;
+    });
 }
 
 void ScListSubMenuControl::executeMenuItem(size_t nPos)
@@ -1538,6 +1581,11 @@ void ScListSubMenuControl::executeMenuItem(size_t nPos)
     const bool bClosePopup = maMenuItems[nPos].mxAction->execute();
     if (bClosePopup)
         terminateAllPopupMenus();
+}
+
+void ScListSubMenuControl::setPopupStartAction(ScCheckListMenuControl::Action* p)
+{
+    mxPopupStartAction.reset(p);
 }
 
 void ScListSubMenuControl::terminateAllPopupMenus()

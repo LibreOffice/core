@@ -11,6 +11,7 @@
 
 #include <vcl/dockwin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
@@ -18,10 +19,8 @@
 #include <map>
 #include <set>
 
-class ScDocument;
-
 class ScCheckListMenuControl;
-
+class ScViewData;
 struct ScCheckListMember;
 
 struct ScCheckListMember
@@ -123,14 +122,14 @@ public:
         Config();
     };
 
-    ScCheckListMenuControl(weld::Widget* pParent, ScDocument* pDoc,
+    ScCheckListMenuControl(weld::Widget* pParent, ScViewData& rViewData,
                            bool bTreeMode, int nWidth,
                            vcl::ILibreOfficeKitNotifier* pNotifier);
     ~ScCheckListMenuControl();
 
-    void addMenuItem(const OUString& rText, Action* pAction, bool bIndicateSubMenu = false);
+    void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
-    ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled);
+    ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled, bool bCheckList);
     void resizeToFitMenuItems();
 
     void selectMenuItem(size_t nPos, bool bSubMenuTimer);
@@ -167,6 +166,8 @@ public:
      * Get the store auxiliary data, or NULL if no such data is stored.
      */
     ExtendedData* getExtendedData();
+
+    ScViewData& GetViewData() const { return mrViewData; }
 
     void GrabFocus();
 
@@ -292,7 +293,7 @@ private:
 
     size_t  mnSelectedMenu;
 
-    ScDocument* mpDoc;
+    ScViewData& mrViewData;
 
     ImplSVEvent* mnAsyncPostPopdownId;
     ImplSVEvent* mnAsyncSetDropdownPosId;
@@ -323,7 +324,9 @@ private:
 class ScListSubMenuControl final
 {
 public:
-    ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, vcl::ILibreOfficeKitNotifier* pNotifier);
+    ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bCheckList, vcl::ILibreOfficeKitNotifier* pNotifier);
+
+    void setPopupStartAction(ScCheckListMenuControl::Action* p);
 
     void GrabFocus();
     bool IsVisible() const;
@@ -332,9 +335,15 @@ public:
     void EndPopupMode();
 
     void addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction);
+    void addMenuCheckItem(const OUString& rText, bool bActive, VirtualDevice& rImage, ScCheckListMenuControl::Action* pAction);
+    void clearMenuItems();
     void resizeToFitMenuItems();
 
     void setSelectedMenuItem(size_t nPos);
+
+    ScViewData& GetViewData() const { return mrParentControl.GetViewData(); }
+    ScCheckListMenuControl::ExtendedData* getExtendedData() { return mrParentControl.getExtendedData(); }
+    VclPtr<VirtualDevice> create_virtual_device() const { return mxMenu->create_virtual_device(); }
 
     /**
      * Dismiss all visible popup menus and set focus back to the application
@@ -348,15 +357,18 @@ private:
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<weld::TreeView> mxMenu;
     std::unique_ptr<weld::TreeIter> mxScratchIter;
+    std::unique_ptr<ScCheckListMenuControl::Action> mxPopupStartAction;
     std::vector<ScCheckListMenuControl::MenuItemData> maMenuItems;
     ScCheckListMenuControl& mrParentControl;
     vcl::ILibreOfficeKitNotifier* mpNotifier;
 
     DECL_LINK(RowActivatedHdl, weld::TreeView& rMEvt, bool);
+    DECL_LINK(CheckToggledHdl, const weld::TreeView::iter_col&, void);
     DECL_LINK(MenuKeyInputHdl, const KeyEvent&, bool);
 
     void NotifyCloseLOK();
     void executeMenuItem(size_t nPos);
+    void addItem(ScCheckListMenuControl::Action* pAction);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
