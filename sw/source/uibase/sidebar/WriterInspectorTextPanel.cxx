@@ -26,6 +26,7 @@
 #include <unoprnms.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -36,6 +37,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/container/XChild.hpp>
 
 #include <unotextrange.hxx>
 #include <comphelper/string.hxx>
@@ -48,7 +50,8 @@
 
 namespace sw::sidebar
 {
-static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore);
+static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore,
+                       sal_Int32& rParIdx);
 
 std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pParent)
 {
@@ -60,6 +63,7 @@ std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pPar
 
 WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
     : InspectorTextPanel(pParent)
+    , m_nParIdx(0)
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     m_pShell = pDocSh ? pDocSh->GetWrtShell() : nullptr;
@@ -72,8 +76,8 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
     // Update panel on start
     std::vector<svx::sidebar::TreeNode> aStore;
     if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
-        UpdateTree(pDocSh, aStore);
-    updateEntries(aStore);
+        UpdateTree(pDocSh, aStore, m_nParIdx);
+    updateEntries(aStore, m_nParIdx);
 }
 
 WriterInspectorTextPanel::~WriterInspectorTextPanel() { m_pShell->SetChgLnk(m_oldLink); }
@@ -390,6 +394,16 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
     if (!xMeta.is() || xMeta->getMetadataReference().Second.isEmpty())
         return;
 
+    // add metadata of parents for nested annotated text ranges
+    uno::Reference<container::XChild> xChild(rSource, uno::UNO_QUERY);
+    if (xChild.is())
+    {
+        uno::Reference<container::XEnumerationAccess> xParentMeta(xChild->getParent(),
+                                                                  uno::UNO_QUERY);
+        if (xParentMeta.is())
+            MetadataToTreeNode(xParentMeta, rNode);
+    }
+
     svx::sidebar::TreeNode aCurNode;
     aCurNode.sNodeName = PropertyNametoRID("MetadataReference");
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
@@ -449,7 +463,8 @@ PropertyToTreeNode(const css::beans::Property& rProperty,
 static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSource,
                          std::unordered_map<OUString, bool>& rIsDefined,
                          svx::sidebar::TreeNode& rNode, const bool isRoot,
-                         const std::vector<OUString>& rHiddenProperty)
+                         const std::vector<OUString>& rHiddenProperty,
+                         svx::sidebar::TreeNode& rFieldsNode)
 {
     uno::Reference<beans::XPropertySet> xPropertiesSet(rSource, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertyState> xPropertiesState(rSource, uno::UNO_QUERY_THROW);
@@ -476,7 +491,7 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
             {
                 uno::Reference<container::XEnumerationAccess> xMeta;
                 if (aCurNode.aValue >>= xMeta)
-                    MetadataToTreeNode(xMeta, rNode);
+                    MetadataToTreeNode(xMeta, rFieldsNode);
                 aCurNode.aValue <<= NestedTextContentToText(aCurNode.aValue);
             }
 
@@ -495,7 +510,8 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
         });
 }
 
-static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore)
+static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore,
+                       sal_Int32& rParIdx)
 {
     SwDoc* pDoc = pDocSh->GetDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
@@ -504,17 +520,23 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     svx::sidebar::TreeNode aParaNode;
     svx::sidebar::TreeNode aParaDFNode;
     svx::sidebar::TreeNode aBookmarksNode;
+    svx::sidebar::TreeNode aFieldsNode;
+    svx::sidebar::TreeNode aTextSectionsNode;
 
     aCharNode.sNodeName = SwResId(STR_CHARACTERSTYLEFAMILY);
     aParaNode.sNodeName = SwResId(STR_PARAGRAPHSTYLEFAMILY);
     aCharDFNode.sNodeName = SwResId(RID_CHAR_DIRECTFORMAT);
     aParaDFNode.sNodeName = SwResId(RID_PARA_DIRECTFORMAT);
     aBookmarksNode.sNodeName = SwResId(STR_CONTENT_TYPE_BOOKMARK);
+    aFieldsNode.sNodeName = SwResId(STR_CONTENT_TYPE_TEXTFIELD);
+    aTextSectionsNode.sNodeName = SwResId(STR_CONTENT_TYPE_REGION);
     aCharDFNode.NodeType = svx::sidebar::TreeNode::Category;
     aCharNode.NodeType = svx::sidebar::TreeNode::Category;
     aParaNode.NodeType = svx::sidebar::TreeNode::Category;
     aParaDFNode.NodeType = svx::sidebar::TreeNode::Category;
     aBookmarksNode.NodeType = svx::sidebar::TreeNode::Category;
+    aFieldsNode.NodeType = svx::sidebar::TreeNode::Category;
+    aTextSectionsNode.NodeType = svx::sidebar::TreeNode::Category;
 
     uno::Reference<text::XTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
@@ -533,7 +555,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                                                    UNO_NAME_NUMBERING_LEVEL,
                                                    UNO_NAME_PARRSID };
 
-    InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties);
+    InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties, aFieldsNode);
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
                                                                          uno::UNO_QUERY);
@@ -554,7 +576,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, {});
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, {}, aFieldsNode);
 
         aCharNode.children.push_back(aCurrentChild);
     }
@@ -567,7 +589,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     {
         // Collect metadata of the current paragraph
         MetadataToTreeNode(xThisParagraphRange, aParaDFNode);
-        InsertValues(xThisParagraphRange, aIsDefined, aParaDFNode, false, aHiddenProperties);
+        InsertValues(xThisParagraphRange, aIsDefined, aParaDFNode, false, aHiddenProperties,
+                     aFieldsNode);
     }
 
     xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
@@ -583,7 +606,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(), {});
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(), {},
+                     aFieldsNode);
 
         aParaNode.children.push_back(aCurrentChild);
         sCurrentParaStyle = aParentParaStyle;
@@ -618,7 +642,45 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                 aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
                 MetadataToTreeNode(xBookmark, aCurNode);
-                aBookmarksNode.children.push_back(aCurNode);
+                // show bookmark only if it has RDF metadata
+                if (aCurNode.children.size() > 0)
+                    aBookmarksNode.children.push_back(aCurNode);
+            }
+        }
+        catch (const lang::IllegalArgumentException&)
+        {
+        }
+    }
+
+    // Collect sections at character position
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(pDocSh->GetBaseModel(),
+                                                                      uno::UNO_QUERY);
+
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
+                                                          uno::UNO_QUERY);
+    for (sal_Int32 i = 0; i < xTextSections->getCount(); ++i)
+    {
+        svx::sidebar::TreeNode aCurNode;
+        uno::Reference<text::XTextContent> section;
+        xTextSections->getByIndex(i) >>= section;
+        uno::Reference<container::XNamed> xTextSection(section, uno::UNO_QUERY);
+
+        try
+        {
+            uno::Reference<text::XTextRange> sectionRange = section->getAnchor();
+            uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
+                                                                      uno::UNO_QUERY);
+            if (xTextRangeCompare.is()
+                && xTextRangeCompare->compareRegionStarts(sectionRange, xRange) != -1
+                && xTextRangeCompare->compareRegionEnds(xRange, sectionRange) != -1)
+            {
+                aCurNode.sNodeName = xTextSection->getName();
+                aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
+
+                MetadataToTreeNode(xTextSection, aCurNode);
+                // show section only if it has RDF metadata
+                if (aCurNode.children.size() > 0)
+                    aTextSectionsNode.children.push_back(aCurNode);
             }
         }
         catch (const lang::IllegalArgumentException&)
@@ -628,18 +690,35 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
     /*
     Display Order :-
+    SECTIONS with RDF metadata (optional)
+    BOOKMARKS with RDF metadata (optional)
+    FIELDS with RDF metadata (optional)
     PARAGRAPH STYLE
     PARAGRAPH DIRECT FORMATTING
     CHARACTER STYLE
     DIRECT FORMATTING
-    BOOKMARKS
     */
+    rParIdx = 0;
+    // show sections, bookmarks and fields only if they have RDF metadata
+    if (aTextSectionsNode.children.size() > 0)
+    {
+        aStore.push_back(aTextSectionsNode);
+        rParIdx++;
+    }
+    if (aBookmarksNode.children.size() > 0)
+    {
+        aStore.push_back(aBookmarksNode);
+        rParIdx++;
+    }
+    if (aFieldsNode.children.size() > 0)
+    {
+        aStore.push_back(aFieldsNode);
+        rParIdx++;
+    }
     aStore.push_back(aParaNode);
     aStore.push_back(aParaDFNode);
     aStore.push_back(aCharNode);
     aStore.push_back(aCharDFNode);
-    if (aBookmarksNode.children.size() > 0)
-        aStore.push_back(aBookmarksNode);
 }
 
 IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, void)
@@ -651,9 +730,9 @@ IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, vo
     std::vector<svx::sidebar::TreeNode> aStore;
 
     if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
-        UpdateTree(pDocSh, aStore);
+        UpdateTree(pDocSh, aStore, m_nParIdx);
 
-    updateEntries(aStore);
+    updateEntries(aStore, m_nParIdx);
 }
 
 } // end of namespace svx::sidebar

@@ -36,6 +36,7 @@ public:
 private:
     SwWrtShell* m_pShell;
     Link<LinkParamNone*, void> m_oldLink;
+    sal_Int32 m_nParIdx; // count optional metadata tree items to collapse default paragraph styles
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
