@@ -50,7 +50,7 @@ namespace o3tl
     template<> struct typed_flags<QuickHelpFlags> : is_typed_flags<QuickHelpFlags, 0x77f> {};
 }
 
-#define OOO_HELP_INDEX          ".help:index"
+#define OOO_HELP_INDEX ".help:index"
 
 namespace weld
 {
