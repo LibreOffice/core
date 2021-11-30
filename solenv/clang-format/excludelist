@@ -3837,10 +3837,10 @@ external/skia/inc/skia_opts.hxx
 external/skia/source/skia_opts.cxx
 external/skia/source/skia_opts_internal.hxx
 external/skia/source/skia_opts_ssse3.cxx
-external/unixODBC/inc/odbc/sql.h
-external/unixODBC/inc/odbc/sqlext.h
-external/unixODBC/inc/odbc/sqltypes.h
-external/unixODBC/inc/odbc/sqlucode.h
+external/iODBC/inc/odbc/sql.h
+external/iODBC/inc/odbc/sqlext.h
+external/iODBC/inc/odbc/sqltypes.h
+external/iODBC/inc/odbc/sqlucode.h
 filter/inc/strings.hxx
 filter/qa/cppunit/msfilter-test.cxx
 filter/qa/cppunit/priority-test.cxx
