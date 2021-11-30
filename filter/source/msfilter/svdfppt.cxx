@@ -2911,7 +2911,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 if ( pObj )
                                                 {
                                                     if ( aProcessData.pTableRowProperties )
-                                                        pObj = CreateTable(pObj, aProcessData.pTableRowProperties.get(), aProcessData.rPersistEntry.xSolverContainer.get());
+                                                        pObj = CreateTable(pObj, aProcessData.pTableRowProperties.get(), aProcessData.rPersistEntry.xSolverContainer.get(), aProcessData.aBackgroundColoredObjects);
 
                                                     pRet->NbcInsertObject( pObj );
 
@@ -7506,7 +7506,7 @@ static void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >
     }
 }
 
-SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer )
+SdrObject* SdrPowerPointImport::CreateTable(SdrObject* pGroup, const sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer, std::vector<SdrObject*>& rBackgroundColoredObjects)
 {
     SdrObject* pRet = pGroup;
 
@@ -7659,7 +7659,9 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
         while( aIter.IsMore() )
         {
             SdrObject* pPartObj = aIter.Next();
-            removeShapeId( pPartObj );
+            removeShapeId(pPartObj);
+            // ofz#41510 make sure rBackgroundColoredObjects doesn't contain deleted objects
+            std::replace(rBackgroundColoredObjects.begin(), rBackgroundColoredObjects.end(), pPartObj, pRet);
         }
 
         SdrObject::Free( pGroup );
