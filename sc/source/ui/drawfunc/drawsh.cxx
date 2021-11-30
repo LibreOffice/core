@@ -59,6 +59,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <tools/UnitConversion.hxx>
+#include <comphelper/lok.hxx>
 #include <vcl/unohelp2.hxx>
 
 using namespace css;
@@ -219,7 +220,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 const sal_uLong handleNum = handleNumItem->GetValue();
                 const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
                 const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
-                pView->MoveShapeHandle(handleNum, Point(newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
+
+                bool bNegateX = comphelper::LibreOfficeKit::isActive() && rViewData.GetDocument().IsLayoutRTL(rViewData.GetTabNo());
+                pView->MoveShapeHandle(handleNum, Point(bNegateX ? -static_cast<tools::Long>(newPosX) : newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
             }
         }
         break;
