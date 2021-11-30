@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88c1c5f6_2b2c5e65",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10189,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-30T12:11:38Z",
+      "side": 1,
+      "message": "hrm.\n\nhttps://packages.debian.org/sid/amd64/libiodbc2-dev/filelist:\n\n/usr/bin/iodbc-config\n/usr/include/iodbc/iodbcext.h\n/usr/include/iodbc/iodbcinst.h\n/usr/include/iodbc/iodbcunix.h\n/usr/include/iodbc/isql.h\n/usr/include/iodbc/isqlext.h\n/usr/include/iodbc/isqltypes.h\n/usr/include/iodbc/odbcinst.h\n/usr/include/iodbc/sql.h\n/usr/include/iodbc/sqlext.h\n/usr/include/iodbc/sqltypes.h\n/usr/include/iodbc/sqlucode.h\n[...]\n\nwhereas unixodbc-dev had/s:\n\nhttps://packages.debian.org/sid/amd64/unixodbc-dev/filelist:\n\n/usr/include/autotest.h\n/usr/include/odbcinst.h\n/usr/include/odbcinstext.h\n/usr/include/sql.h\n/usr/include/sqlext.h\n/usr/include/sqlspi.h\n/usr/include/sqltypes.h\n/usr/include/sqlucode.h\n/usr/include/uodbc_extras.h\n/usr/include/uodbc_stats.h\n\nso at least that probably needs either iodbc/sqlext.h or (better!, see below) a -isystem /usr/include/iodbc.Thankfully iodbc has a pkg-config file so it\u0027s probably a matter of using PKG_CHECK_MODULES and using the _CFLAGS variable:\n\n# pkg-config --cflags libiodbc\n-I/usr/include/iodbc",
+      "revId": "234b8271c822c7a5644ccb1c83f70742fa1b0997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
