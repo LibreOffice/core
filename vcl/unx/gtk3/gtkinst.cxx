@@ -13057,7 +13057,7 @@ int get_height_rows(GtkTreeView* pTreeView, GList* pColumns, int nRows)
 {
     gint nMaxRowHeight = get_height_row(pTreeView, pColumns);
     gint nVerticalSeparator = get_height_row_separator(pTreeView);
-    return (nMaxRowHeight * nRows) + (nVerticalSeparator * (nRows + 1));
+    return (nMaxRowHeight * nRows) + (nVerticalSeparator * nRows) / 2;
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
