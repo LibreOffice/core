@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c24e23f5_59d8eb68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2021-11-30T13:15:25Z",
+      "side": 1,
+      "message": "ODBC is a standard AFAIK. E.g. on Windows we use neither unixODBC, nor iODBC but something from Windows SDK. All implementations should provide the same macros, typedefs, etc. essentially.",
+      "parentUuid": "d4612d5b_c0b262a0",
+      "revId": "234b8271c822c7a5644ccb1c83f70742fa1b0997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c1c5f6_2b2c5e65",
         "filename": "configure.ac",
         "patchSetId": 2
