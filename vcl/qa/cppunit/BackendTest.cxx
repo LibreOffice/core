@@ -18,6 +18,7 @@
 
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <salgdi.hxx>
 
 #include <test/outputdevice.hxx>
 
@@ -1395,6 +1396,100 @@ public:
 #endif
     }
 
+    void testTdf145811()
+    {
+// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
+        // VCL may call copyArea()/copyBits() of backends even with coordinates partially
+        // outside of the device, so try various copying like that.
+        ScopedVclPtr<VirtualDevice> device1 = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        device1->SetOutputSizePixel(Size(100, 100));
+        device1->SetBackground(Wallpaper(COL_YELLOW));
+        device1->Erase();
+        device1->SetLineColor(COL_BLUE);
+        device1->DrawPixel(Point(0, 0), COL_BLUE);
+        device1->DrawPixel(Point(99, 99), COL_BLUE);
+
+        // Plain 1:1 copy device1->device2.
+        ScopedVclPtr<VirtualDevice> device2 = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        device2->SetOutputSizePixel(Size(100, 100));
+        device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
+        exportDevice("tdf145811-1.png", device2);
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(1, 1)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(98, 98)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(99, 99)));
+
+        // For the rest call directly SalGraphics, because OutputDevice does range checking,
+        // but other code may call copyArea()/copyBits() of SalGraphics directly without range checking.
+        SalGraphics* graphics1 = device1->GetGraphics();
+        SalGraphics* graphics2 = device2->GetGraphics();
+
+        device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
+        // Copy device1->device2 offset by 10,10.
+        graphics2->CopyBits(SalTwoRect(0, 0, 100, 100, 10, 10, 100, 100), *graphics1, *device2,
+                            *device1);
+        exportDevice("tdf145811-2.png", device2);
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(0, 0))); // unmodified
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(9, 9)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(10, 10)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(11, 11)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(99, 99)));
+
+        device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
+        // Copy area of device2 offset by 10,10.
+        graphics2->CopyArea(10, 10, 0, 0, 100, 100, *device1);
+        exportDevice("tdf145811-3.png", device2);
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(0, 0))); // unmodified
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(9, 9)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(10, 10)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(11, 11)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(99, 99)));
+
+        device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
+        // Copy device1->device2 offset by -20,-20.
+        graphics2->CopyBits(SalTwoRect(0, 0, 100, 100, -20, -20, 100, 100), *graphics1, *device2,
+                            *device1);
+        exportDevice("tdf145811-4.png", device2);
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(78, 78)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(79, 79)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(80, 80)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(99, 99))); // unmodified
+
+        device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
+        // Copy area of device2 offset by -20,-20.
+        graphics2->CopyArea(-20, -20, 0, 0, 100, 100, *device1);
+        exportDevice("tdf145811-5.png", device2);
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(78, 78)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(79, 79)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(80, 80)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(99, 99))); // unmodified
+
+        device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
+        // Copy device1->device2 offset by -10,-10 starting from -20,-20 at 150x150 size
+        // (i.e. outside in all directions).
+        graphics2->CopyBits(SalTwoRect(-20, -20, 150, 150, -30, -30, 150, 150), *graphics1,
+                            *device2, *device1);
+        exportDevice("tdf145811-6.png", device2);
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(88, 88)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(89, 89)));
+        // (90,90) and further originate from outside and may be garbage.
+
+        device2->DrawOutDev(Point(0, 0), Size(100, 100), Point(0, 0), Size(100, 100), *device1);
+        // Copy area of device2 offset by -10,-10 starting from -20,-20 at 150x150 size
+        // (i.e. outside in all directions).
+        graphics2->CopyArea(-30, -30, -20, -20, 150, 150, *device1);
+        exportDevice("tdf145811-7.png", device2);
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(88, 88)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(89, 89)));
+        // (90,90) and further originate from outside and may be garbage.
+#endif
+    }
+
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);
     CPPUNIT_TEST(testDrawRectWithPixel);
@@ -1516,6 +1611,7 @@ public:
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
+    CPPUNIT_TEST(testTdf145811);
 
     CPPUNIT_TEST_SUITE_END();
 };
