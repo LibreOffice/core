@@ -104,19 +104,8 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         double fDX = aRet.X-aP0.X;
         double fDY = aRet.Y-aP0.Y;
         fDY*=-1.0;//drawing layer has inverse y values
-        if( fDX != 0.0 )
-        {
-            fAngleDegree = basegfx::rad2deg(atan(fDY/fDX));
-            if(fDX<0.0)
-                fAngleDegree+=180.0;
-        }
-        else
-        {
-            if(fDY>0.0)
-                fAngleDegree = 90.0;
-            else
-                fAngleDegree = 270.0;
-        }
+
+        fAngleDegree = basegfx::rad2deg(atan2(fDY,fDX));
     }
     //set LabelAlignment
     if( !bCenter )
