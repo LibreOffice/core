@@ -207,6 +207,127 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     }
 }
 
+void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
+                          uno::Reference<text::XTextFrame> xNew)
+{
+    // Do not set invalid data
+    assert(pShapeFormat && pObj && xNew);
+    // Firstly find the format of the new textbox.
+    SwFrameFormat* pFormat = nullptr;
+    if (auto pTextFrame = dynamic_cast<SwXTextFrame*>(xNew.get()))
+        pFormat = pTextFrame->GetFrameFormat();
+    if (!pFormat)
+        return;
+    std::vector<std::pair<beans::Property, uno::Any>> aOldProps;
+    // If there is a format, check if the shape already has a textbox assigned to.
+    if (auto pTextBoxNode = pShapeFormat->GetOtherTextBoxFormat())
+    {
+        // If it has a texbox, destroy it.
+        if (pTextBoxNode->GetTextBox(pObj))
+        {
+            auto xOldFrame
+                = pObj->getUnoShape()->queryInterface(cppu::UnoType<text::XTextRange>::get());
+            if (xOldFrame.hasValue())
+            {
+                uno::Reference<beans::XPropertySet> xOldprops(xOldFrame, uno::UNO_QUERY);
+                uno::Reference<beans::XPropertyState> xOldPropStates(xOldFrame, uno::UNO_QUERY);
+                for (auto& rProp : xOldprops->getPropertySetInfo()->getProperties())
+                {
+                    try
+                    {
+                        if (xOldPropStates->getPropertyState(rProp.Name)
+                            == beans::PropertyState::PropertyState_DIRECT_VALUE)
+                            aOldProps.push_back(
+                                std::pair(rProp, xOldprops->getPropertyValue(rProp.Name)));
+                    }
+                    catch (...)
+                    {
+                    }
+                }
+            }
+            destroy(pShapeFormat, pObj);
+        }
+        // And set the new one.
+        pTextBoxNode->AddTextBox(pObj, pFormat);
+        pFormat->SetOtherTextBoxFormat(pTextBoxNode);
+    }
+    else
+    {
+        // If the shape do not have a texbox node and textbox,
+        // create that for the shape.
+        auto* pTextBox = new SwTextBoxNode(pShapeFormat);
+        pTextBox->AddTextBox(pObj, pFormat);
+        pShapeFormat->SetOtherTextBoxFormat(pTextBox);
+        pFormat->SetOtherTextBoxFormat(pTextBox);
+    }
+    // Initialize its properties
+    uno::Reference<beans::XPropertySet> xPropertySet(xNew, uno::UNO_QUERY);
+    uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+    xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
+    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGH));
+    // Add a new name to it
+    uno::Reference<container::XNamed> xNamed(xNew, uno::UNO_QUERY);
+    xNamed->setName(pShapeFormat->GetDoc()->GetUniqueFrameName());
+    // And sync. properties.
+    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+    syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()),
+                 pObj);
+    uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+    syncProperty(pShapeFormat, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_ANCHOR_TYPE), pObj);
+    syncProperty(pShapeFormat, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT), pObj);
+    syncProperty(pShapeFormat, RES_HORI_ORIENT, MID_HORIORIENT_RELATION,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_RELATION), pObj);
+    syncProperty(pShapeFormat, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT), pObj);
+    syncProperty(pShapeFormat, RES_VERT_ORIENT, MID_VERTORIENT_RELATION,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_RELATION), pObj);
+    syncProperty(pShapeFormat, RES_HORI_ORIENT, MID_HORIORIENT_POSITION,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_POSITION), pObj);
+    syncProperty(pShapeFormat, RES_VERT_ORIENT, MID_VERTORIENT_POSITION,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_POSITION), pObj);
+    syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT), pObj);
+    drawing::TextVerticalAdjust aVertAdj = drawing::TextVerticalAdjust_CENTER;
+    if ((uno::Reference<beans::XPropertyState>(xShape, uno::UNO_QUERY_THROW))
+            ->getPropertyState(UNO_NAME_TEXT_VERT_ADJUST)
+        != beans::PropertyState::PropertyState_DEFAULT_VALUE)
+    {
+        aVertAdj = xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_VERT_ADJUST)
+                       .get<drawing::TextVerticalAdjust>();
+    }
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_VERT_ADJUST, uno::makeAny(aVertAdj));
+    text::WritingMode eMode;
+    if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
+        syncProperty(pShapeFormat, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)), pObj);
+    if (aOldProps.size())
+    {
+        for (auto& rProp : aOldProps)
+        {
+            try
+            {
+                xPropertySet->setPropertyValue(rProp.first.Name, rProp.second);
+            }
+            catch (...)
+            {
+            }
+        }
+    }
+    if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
+        && pFormat->GetAnchor().GetPageNum() == 0)
+    {
+        pFormat->SetFormatAttr(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, 1));
+    }
+    // Do sync for the new textframe.
+    syncroniseGroupTextBoxProperty(&changeAnchor, pShapeFormat, pObj);
+}
+
 void SwTextBoxHelper::destroy(const SwFrameFormat* pShape, const SdrObject* pObject)
 {
     // If a TextBox was enabled previously
