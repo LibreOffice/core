@@ -430,6 +430,8 @@ ScCheckListMember::ScCheckListMember()
 
 // the value of border-width of FilterDropDown
 constexpr int nBorderWidth = 4;
+// number of rows visible in checklist
+constexpr int nCheckListVisibleRows = 8;
 
 ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScDocument* pDoc,
                                                bool bHasDates, int nWidth, vcl::ILibreOfficeKitNotifier* pNotifier)
@@ -491,7 +493,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScDocument
         mpChecks = mxListChecks.get();
     }
 
-    int nChecksHeight = mxTreeChecks->get_height_rows(9);
+    int nChecksHeight = mxTreeChecks->get_height_rows(nCheckListVisibleRows);
     if (nWidth != -1)
     {
         mnCheckWidthReq = nWidth - nBorderWidth * 2 - 4;
@@ -1416,7 +1418,7 @@ int ScCheckListMenuControl::IncreaseWindowWidthToFitText(int nMaxTextWidth)
     if (nNewWidth > mnCheckWidthReq)
     {
         mnCheckWidthReq = nNewWidth;
-        int nChecksHeight = mpChecks->get_height_rows(9);
+        int nChecksHeight = mpChecks->get_height_rows(nCheckListVisibleRows);
         mpChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
     }
     return mnCheckWidthReq + nBorder;
