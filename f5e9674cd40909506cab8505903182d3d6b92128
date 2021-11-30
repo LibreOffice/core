@@ -16,6 +16,24 @@
       "message": "Hmm - I don\u0027t have a good solution. I missed file_packager.py\u0027s \"\u003csrc\u003e@\u003cdest\u003e\" syntax, so every @ actually needs escaping. Handling any mapping syntax with make\u0027s restrictions seems a real pain to realize, without enforcing it on every file. My untested $(SRCDIR) !\u003d $(BUILDDIR) suggestion would be:\n\n    TEMPFILE\u003d$(call gb_var2file,$(shell $(gb_MKTEMP)),1,$(foreach item,$^,$(strip \\\n                 $(if $(filter $(item),$(subst $(BUILDDIR)/,,$(item))), \\\n                     $(patsubst $(subst @,@@,$(SRCDIR))%,$(subst @,@@,$(item))@%,$(subst @,@@,$(item))), \\\n                     $(subst @,@@,$(subst $(BUILDDIR)/,,$(item))))))) \u0026\u0026 \\\n\nbecause I already have multiple files in $(SRCDIR) I install into the image.\n\nThis should correctly escape all the @ and simply map anything from $(SRCDIR) to the same place in $(BUILDDIR). For anything else, install stuff into $(BUILDDIR) and add it to the clean target.\n\nIf you can test this, feel free to push a new patch. My branch is currently a mess, but I hope I can push a rebase this evening.",
       "revId": "f5e9674cd40909506cab8505903182d3d6b92128",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4109f8c7_736f0f83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-11-30T12:48:04Z",
+      "side": 1,
+      "message": "I think that\u0027s overly complex and hard to understand what the function is supposed to do without adding additional explanations, also not sure about the need to escape the @, seems to work just fine without additional escape.\n\nSo counter-proposal: \n   TEMPFILE\u003d$(call gb_var2file,$(shell $(gb_MKTEMP)),1,$(filter-out $(SRCDIR)%,$(subst $(BUILDDIR)/,,$^)) $(foreach file,$(filter $(SRCDIR)%,$(subst $(BUILDDIR)/,,$^)),$(file)@$(subst $(SRCDIR)/,,$(file))))\n\n* strip $(BUILDDIR)/ from files and for all that don\u0027t still match $(SRCDIR)/, use in the stripped form, i.e. with relative path\n* for files that still match $(SRCDIR)/ after stripping $(BUILDDIR)/, turn it into the source@dest variant\n\nI agree that it is a little clunky in plain make, if patsubst would support multiple % in the replacement or if there were partial-match substitutions it would be a little clearer.",
+      "parentUuid": "5323e842_d5c32f73",
+      "revId": "f5e9674cd40909506cab8505903182d3d6b92128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
