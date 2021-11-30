@@ -87,6 +87,24 @@
       "message": "Hi Luboš Luňák,\nShould it be backported to libreoffice-7-3 branch or do you want to keep this fix in master only ?",
       "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf9cb02_304e1a87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-30T09:36:43Z",
+      "side": 1,
+      "message": "\u003e Hi Luboš Luňák,\n\u003e Should it be backported to libreoffice-7-3 branch or do you want to keep this fix in master only ?\n\nI\u0027m not sure. The patch is non-trivial, and the bugreport is about Writer\u0027s direct cursor, which doesn\u0027t seem to be a very often used feature to me. Do you think it\u0027s worth it?",
+      "parentUuid": "0a16c72f_27e6e861",
+      "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
