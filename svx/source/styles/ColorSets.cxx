@@ -16,13 +16,54 @@
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/util/Color.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svditer.hxx>
+#include <editeng/unoprnms.hxx>
 
 using namespace com::sun::star;
+
+namespace
+{
+void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
+{
+    svx::ColorSet* pColorSet = pTheme->GetColorSet();
+    if (!pColorSet)
+    {
+        return;
+    }
+
+    uno::Reference<text::XTextRange> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
+    while (xParagraphs->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+        while (xPortions->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
+            sal_Int16 nCharColorTheme = -1;
+            xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
+            if (nCharColorTheme < 0 || nCharColorTheme > 11)
+            {
+                continue;
+            }
+
+            Color aColor = pColorSet->getColor(nCharColorTheme);
+            xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR, uno::makeAny(static_cast<sal_Int32>(aColor)));
+        }
+    }
+}
+}
 
 namespace svx
 {
@@ -227,6 +268,24 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
     }
 
     return pTheme;
+}
+
+void Theme::UpdateSdrPage(SdrPage* pPage)
+{
+    for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+    {
+        SdrObject* pObject = pPage->GetObj(nObject);
+        UpdateSdrObject(this, pObject);
+        SdrObjList* pList = pObject->GetSubList();
+        if (pList)
+        {
+            SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
+            while (aIter.IsMore())
+            {
+                UpdateSdrObject(this, aIter.Next());
+            }
+        }
+    }
 }
 
 } // end of namespace svx
