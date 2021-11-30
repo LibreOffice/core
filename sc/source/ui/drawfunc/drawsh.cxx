@@ -60,6 +60,7 @@
 #include <svx/xflgrit.hxx>
 #include <editeng/colritem.hxx>
 #include <tools/UnitConversion.hxx>
+#include <comphelper/lok.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
@@ -216,7 +217,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 const sal_uLong handleNum = handleNumItem->GetValue();
                 const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
                 const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
-                pView->MoveShapeHandle(handleNum, Point(newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
+
+                bool bNegateX = comphelper::LibreOfficeKit::isActive() && rViewData.GetDocument().IsLayoutRTL(rViewData.GetTabNo());
+                pView->MoveShapeHandle(handleNum, Point(bNegateX ? -newPosX : newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
             }
         }
         break;
