@@ -98,6 +98,14 @@ public:
      && aOutDevTest.getRenderBackendName() != "genpsp"                                             \
      && aOutDevTest.getRenderBackendName() != "win")
 
+#ifdef MACOSX
+    static OUString getRenderBackendName(OutputDevice* device)
+    {
+        assert(device);
+        return device->GetGraphics()->getRenderBackendName();
+    }
+#endif
+
     void testDrawRectWithRectangle()
     {
         if (getDefaultDeviceBitCount() < 24)
@@ -627,11 +635,14 @@ public:
 
     void testDrawTransformedBitmapExAlpha()
     {
-// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
         if (getDefaultDeviceBitCount() < 24)
             return;
         ScopedVclPtrInstance<VirtualDevice> device;
+#ifdef MACOSX
+        // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+        if (getRenderBackendName(device) == "aqua")
+            return;
+#endif
         device->SetOutputSizePixel(Size(16, 16));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
@@ -662,7 +673,6 @@ public:
         result = device->GetBitmap(Point(0, 0), Size(16, 16));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 15));
-#endif
     }
 
     void testClipRectangle()
@@ -774,21 +784,21 @@ public:
             // Erase with white, check it's white.
             device->SetBackground(Wallpaper(COL_WHITE));
             device->Erase();
-            exportDevice("/tmp/12-01_erase.png", device);
+            exportDevice("12-01_erase.png", device);
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(5, 5)));
             // Erase with black, check it's black.
             device->SetBackground(Wallpaper(COL_BLACK));
             device->Erase();
-            exportDevice("/tmp/12-02_erase.png", device);
+            exportDevice("12-02_erase.png", device);
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(5, 5)));
             // Erase with cyan, check it's cyan.
             device->SetBackground(Wallpaper(COL_CYAN));
             device->Erase();
-            exportDevice("/tmp/12-03_erase.png", device);
+            exportDevice("12-03_erase.png", device);
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(5, 5)));
@@ -801,28 +811,28 @@ public:
             // Erase with white, check it's white.
             device->SetBackground(Wallpaper(COL_WHITE));
             device->Erase();
-            exportDevice("/tmp/12-04_erase.png", device);
+            exportDevice("12-04_erase.png", device);
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(5, 5)));
             // Erase with black, check it's black.
             device->SetBackground(Wallpaper(COL_BLACK));
             device->Erase();
-            exportDevice("/tmp/12-05_erase.png", device);
+            exportDevice("12-05_erase.png", device);
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(5, 5)));
             // Erase with cyan, check it's cyan.
             device->SetBackground(Wallpaper(COL_CYAN));
             device->Erase();
-            exportDevice("/tmp/12-06_erase.png", device);
+            exportDevice("12-06_erase.png", device);
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(0, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(9, 9)));
             CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(5, 5)));
             // Erase with transparent, check it's transparent.
             device->SetBackground(Wallpaper(COL_TRANSPARENT));
             device->Erase();
-            exportDevice("/tmp/12-07_erase.png", device);
+            exportDevice("12-07_erase.png", device);
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(0, 0)).GetAlpha());
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(9, 9)).GetAlpha());
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(5, 5)).GetAlpha());
@@ -1125,13 +1135,16 @@ public:
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
     void testDrawBlendExtended()
     {
-// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
         if (getDefaultDeviceBitCount() < 24)
             return;
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device
             = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+#ifdef MACOSX
+        // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+        if (getRenderBackendName(device) == "aqua")
+            return;
+#endif
         device->SetOutputSizePixel(Size(10, 10));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
@@ -1140,7 +1153,7 @@ public:
         // No alpha, this will actually call SalGraphics::DrawBitmap(), but still check
         // the alpha of the device is handled correctly.
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap));
-        exportDevice("/tmp/blend_extended_01.png", device);
+        exportDevice("blend_extended_01.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
         // Check pixels outside of the bitmap aren't affected.
@@ -1151,14 +1164,14 @@ public:
         AlphaMask alpha(Size(5, 5));
         alpha.Erase(0); // opaque
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
-        exportDevice("/tmp/blend_extended_02.png", device);
+        exportDevice("blend_extended_02.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
 
         device->Erase();
         alpha.Erase(255); // transparent
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
-        exportDevice("/tmp/blend_extended_03.png", device);
+        exportDevice("blend_extended_03.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
 
@@ -1171,20 +1184,22 @@ public:
         alphaWrite->SetPixelIndex(0, 0, 0); // opaque
         alpha.ReleaseAccess(alphaWrite);
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
-        exportDevice("/tmp/blend_extended_04.png", device);
+        exportDevice("blend_extended_04.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
-#endif
     }
 
     void testDrawAlphaBitmapMirrored()
     {
-// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
         if (getDefaultDeviceBitCount() < 24)
             return;
         // Normal virtual device.
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+#ifdef MACOSX
+        // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+        if (getRenderBackendName(device) == "aqua")
+            return;
+#endif
         // Virtual device with alpha.
         ScopedVclPtr<VirtualDevice> alphaDevice
             = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
@@ -1206,7 +1221,7 @@ public:
         // Normal device.
         device->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap));
         device->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap));
-        exportDevice("/tmp/draw_alpha_bitmap_mirrored_01.png", device);
+        exportDevice("draw_alpha_bitmap_mirrored_01.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, device->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(2, 2)));
@@ -1214,7 +1229,7 @@ public:
         device->Erase();
         device->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap, alpha));
         device->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap, alpha));
-        exportDevice("/tmp/draw_alpha_bitmap_mirrored_02.png", device);
+        exportDevice("draw_alpha_bitmap_mirrored_02.png", device);
         CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(2, 2)));
@@ -1223,7 +1238,7 @@ public:
         // Now with alpha device.
         alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap));
         alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap));
-        exportDevice("/tmp/draw_alpha_bitmap_mirrored_03.png", alphaDevice);
+        exportDevice("draw_alpha_bitmap_mirrored_03.png", alphaDevice);
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, alphaDevice->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(2, 2)));
@@ -1231,13 +1246,12 @@ public:
         alphaDevice->Erase();
         alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap, alpha));
         alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap, alpha));
-        exportDevice("/tmp/draw_alpha_bitmap_mirrored_04.png", alphaDevice);
+        exportDevice("draw_alpha_bitmap_mirrored_04.png", alphaDevice);
         CPPUNIT_ASSERT_EQUAL(COL_RED, alphaDevice->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, alphaDevice->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_RED, alphaDevice->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, alphaDevice->GetPixel(Point(3, 2)));
         alphaDevice->Erase();
-#endif
     }
 
     void testDrawingText()
@@ -1333,9 +1347,12 @@ public:
 
     void testTdf124848()
     {
-// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+#ifdef MACOSX
+        // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+        if (getRenderBackendName(device) == "aqua")
+            return;
+#endif
         device->SetOutputSizePixel(Size(100, 100));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
@@ -1349,7 +1366,7 @@ public:
         CPPUNIT_ASSERT(device->DrawPolyLineDirect(matrix,
                                                   basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } },
                                                   100, 0, nullptr, basegfx::B2DLineJoin::Miter));
-        exportDevice("/tmp/tdf124848-1.png", device);
+        exportDevice("tdf124848-1.png", device);
         // 100px wide line should fill the entire width of the upper half
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(2, 2)));
 
@@ -1358,18 +1375,15 @@ public:
         CPPUNIT_ASSERT(device->DrawPolyLineDirect(matrix,
                                                   basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } }, 0,
                                                   0, nullptr, basegfx::B2DLineJoin::Miter));
-        exportDevice("/tmp/tdf124848-2.png", device);
+        exportDevice("tdf124848-2.png", device);
         // 1px wide
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(50, 20)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(49, 20)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(51, 20)));
-#endif
     }
 
     void testTdf136171()
     {
-// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
         if (getDefaultDeviceBitCount() < 24)
             return;
         // Create virtual device with alpha.
@@ -1386,20 +1400,17 @@ public:
         // Draw a blue bitmap to the device. The bug was that there was no alpha, but OutputDevice::DrawTransformBitmapExDirect()
         // supplied a fully opaque alpha done with Erase() on the alpha bitmap, and Skia backend didn't handle such alpha correctly.
         device->DrawTransformedBitmapEx(matrix, BitmapEx(bitmap));
-        exportDevice("/tmp/tdf136171.png", device);
+        exportDevice("tdf136171.png", device);
         // The whole virtual device content now should be blue.
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(0, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(9, 0)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(0, 9)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(9, 9)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(4, 4)));
-#endif
     }
 
     void testTdf145811()
     {
-// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
         // VCL may call copyArea()/copyBits() of backends even with coordinates partially
         // outside of the device, so try various copying like that.
         ScopedVclPtr<VirtualDevice> device1 = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
@@ -1409,6 +1420,11 @@ public:
         device1->SetLineColor(COL_BLUE);
         device1->DrawPixel(Point(0, 0), COL_BLUE);
         device1->DrawPixel(Point(99, 99), COL_BLUE);
+#ifdef MACOSX
+        // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+        if (getRenderBackendName(device1) == "aqua")
+            return;
+#endif
 
         // Plain 1:1 copy device1->device2.
         ScopedVclPtr<VirtualDevice> device2 = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
@@ -1487,7 +1503,6 @@ public:
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, device2->GetPixel(Point(88, 88)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device2->GetPixel(Point(89, 89)));
         // (90,90) and further originate from outside and may be garbage.
-#endif
     }
 
     CPPUNIT_TEST_SUITE(BackendTest);
