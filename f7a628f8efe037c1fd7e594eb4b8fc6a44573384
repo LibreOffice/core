@@ -34,6 +34,24 @@
       "parentUuid": "144ad843_cb8f8128",
       "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fabdafea_e8716d5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-30T07:54:56Z",
+      "side": 1,
+      "message": "a shadowing scenario involving scoped enumerators is\n  int E1 \u003d 1;\n  enum class E {\n    E1 \u003d 0,\n    E2 \u003d E1 + 1\n  };",
+      "parentUuid": "a46ab605_a48fab53",
+      "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
