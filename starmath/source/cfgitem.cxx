@@ -32,7 +32,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <officecfg/Office/Math.hxx>
 #include <cfgitem.hxx>
 
 #include <starmath.hrc>
@@ -66,6 +65,23 @@ static Sequence< OUString > lcl_GetSymbolPropertyNames()
                         "Predefined",
                         "FontFormatId"
                     };
+}
+
+static Sequence<OUString> lcl_GetOtherPropertyNames()
+{
+    return Sequence<OUString>{ "LoadSave/IsSaveOnlyUsedSymbols",
+                               "Misc/AutoCloseBrackets",
+                               "Misc/DefaultSmSyntaxVersion",
+                               "Misc/IgnoreSpacesRight",
+                               "Misc/SmEditWindowZoomFactor",
+                               "Print/FormulaText",
+                               "Print/Frame",
+                               "Print/Size:",
+                               "Print/Title",
+                               "Print/ZoomFactor",
+                               "View/AutoRedraw",
+                               "View/FormulaCursor",
+                               "View/ToolboxVisible" };
 }
 
 static Sequence< OUString > lcl_GetFormatPropertyNames()
@@ -343,6 +359,7 @@ SmMathConfig::SmMathConfig() :
     , bIsOtherModified(false)
     , bIsFormatModified(false)
 {
+    EnableNotification({ {} }); // Listen to everything under the node
 }
 
 
@@ -470,6 +487,22 @@ void SmMathConfig::Save()
 }
 
 
+void SmMathConfig::UnlockCommit()
+{
+    if (--m_nCommitLock == 0)
+        Commit();
+}
+
+
+void SmMathConfig::Clear()
+{
+    // Re-read data on next request
+    pOther.reset();
+    pFormat.reset();
+    pFontFormatList.reset();
+}
+
+
 void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 {
     Sequence< OUString > aNodes(const_cast<SmMathConfig*>(this)->GetNodeNames(SYMBOL_LIST));
@@ -486,6 +519,7 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 
 void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
 {
+    CommitLocker aLock(*this);
     auto nCount = sal::static_int_cast<sal_Int32>(rNewSymbols.size());
 
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
@@ -537,7 +571,6 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     ReplaceSetProperties( SYMBOL_LIST, aValues );
 
     StripFontFormatList( rNewSymbols );
-    SaveFontFormatList();
 }
 
 
@@ -740,20 +773,68 @@ void SmMathConfig::LoadOther()
     if (!pOther)
         pOther.reset(new SmCfgOther);
 
-    pOther->bPrintTitle = officecfg::Office::Math::Print::Title::get();
-    pOther->bPrintFormulaText = officecfg::Office::Math::Print::FormulaText::get();
-    pOther->bPrintFrame = officecfg::Office::Math::Print::Frame::get();
-    pOther->ePrintSize = static_cast<SmPrintSize>(officecfg::Office::Math::Print::Size::get());
-    pOther->nSmEditWindowZoomFactor = officecfg::Office::Math::Misc::SmEditWindowZoomFactor::get();
-    pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
-    pOther->nPrintZoomFactor = officecfg::Office::Math::Print::ZoomFactor::get();
-    pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
-    pOther->bIsAutoCloseBrackets = officecfg::Office::Math::Misc::AutoCloseBrackets::get();
-    pOther->nSmSyntaxVersion = officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::get();
-    pOther->bIgnoreSpacesRight = officecfg::Office::Math::Misc::IgnoreSpacesRight::get();
-    pOther->bToolboxVisible = officecfg::Office::Math::View::ToolboxVisible::get();
-    pOther->bAutoRedraw = officecfg::Office::Math::View::AutoRedraw::get();
-    pOther->bFormulaCursor = officecfg::Office::Math::View::FormulaCursor::get();
+    const Sequence<OUString> aNames(lcl_GetOtherPropertyNames());
+    const Sequence<Any> aValues(GetProperties(aNames));
+    if (aNames.getLength() != aValues.getLength())
+        return;
+
+    const Any* pValues = aValues.getConstArray();
+    const Any* pVal = pValues;
+
+    // LoadSave/IsSaveOnlyUsedSymbols
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bIsSaveOnlyUsedSymbols = bTmp;
+    ++pVal;
+    // Misc/AutoCloseBrackets
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bIsAutoCloseBrackets = bTmp;
+    ++pVal;
+    // Misc/DefaultSmSyntaxVersion
+    if (sal_Int16 nTmp; pVal->hasValue() && (*pVal >>= nTmp))
+        pOther->nSmSyntaxVersion = nTmp;
+    ++pVal;
+    // Misc/IgnoreSpacesRight
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bIgnoreSpacesRight = bTmp;
+    ++pVal;
+    // Misc/SmEditWindowZoomFactor
+    if (sal_Int16 nTmp; pVal->hasValue() && (*pVal >>= nTmp))
+        pOther->nSmEditWindowZoomFactor = nTmp;
+    ++pVal;
+    // Print/FormulaText
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bPrintFormulaText = bTmp;
+    ++pVal;
+    // Print/Frame
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bPrintFrame = bTmp;
+    ++pVal;
+    // Print/Size:
+    if (sal_Int16 nTmp; pVal->hasValue() && (*pVal >>= nTmp))
+        pOther->ePrintSize = static_cast<SmPrintSize>(nTmp);
+    ++pVal;
+    // Print/Title
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bPrintTitle = bTmp;
+    ++pVal;
+    // Print/ZoomFactor
+    if (sal_Int16 nTmp; pVal->hasValue() && (*pVal >>= nTmp))
+        pOther->nPrintZoomFactor = nTmp;
+    ++pVal;
+    // View/AutoRedraw
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bAutoRedraw = bTmp;
+    ++pVal;
+    // View/FormulaCursor
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bFormulaCursor = bTmp;
+    ++pVal;
+    // View/ToolboxVisible
+    if (bool bTmp; pVal->hasValue() && (*pVal >>= bTmp))
+        pOther->bToolboxVisible = bTmp;
+    ++pVal;
+
+    OSL_ENSURE(pVal - pValues == aNames.getLength(), "property mismatch");
     SetOtherModified( false );
 }
 
@@ -763,23 +844,42 @@ void SmMathConfig::SaveOther()
     if (!pOther || !IsOtherModified())
         return;
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    const Sequence<OUString> aNames(lcl_GetOtherPropertyNames());
+    Sequence<Any> aValues(aNames.getLength());
 
-    officecfg::Office::Math::Print::Title::set(pOther->bPrintTitle, batch);
-    officecfg::Office::Math::Print::FormulaText::set(pOther->bPrintFormulaText, batch);
-    officecfg::Office::Math::Print::Frame::set(pOther->bPrintFrame, batch);
-    officecfg::Office::Math::Print::Size::set(pOther->ePrintSize, batch);
-    officecfg::Office::Math::Print::ZoomFactor::set(pOther->nPrintZoomFactor, batch);
-    officecfg::Office::Math::Misc::SmEditWindowZoomFactor::set(pOther->nSmEditWindowZoomFactor, batch);
-    officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::set(pOther->bIsSaveOnlyUsedSymbols, batch);
-    officecfg::Office::Math::Misc::AutoCloseBrackets::set(pOther->bIsAutoCloseBrackets, batch);
-    officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::set(pOther->nSmSyntaxVersion, batch);
-    officecfg::Office::Math::Misc::IgnoreSpacesRight::set(pOther->bIgnoreSpacesRight, batch);
-    officecfg::Office::Math::View::ToolboxVisible::set(pOther->bToolboxVisible, batch);
-    officecfg::Office::Math::View::AutoRedraw::set(pOther->bAutoRedraw, batch);
-    officecfg::Office::Math::View::FormulaCursor::set(pOther->bFormulaCursor, batch);
+    Any* pValues = aValues.getArray();
+    Any* pVal = pValues;
 
-    batch->commit();
+    // LoadSave/IsSaveOnlyUsedSymbols
+    *pVal++ <<= pOther->bIsSaveOnlyUsedSymbols;
+    // Misc/AutoCloseBrackets
+    *pVal++ <<= pOther->bIsAutoCloseBrackets;
+    // Misc/DefaultSmSyntaxVersion
+    *pVal++ <<= pOther->nSmSyntaxVersion;
+    // Misc/IgnoreSpacesRight
+    *pVal++ <<= pOther->bIgnoreSpacesRight;
+    // Misc/SmEditWindowZoomFactor
+    *pVal++ <<= pOther->nSmEditWindowZoomFactor;
+    // Print/FormulaText
+    *pVal++ <<= pOther->bPrintFormulaText;
+    // Print/Frame
+    *pVal++ <<= pOther->bPrintFrame;
+    // Print/Size:
+    *pVal++ <<= static_cast<sal_Int16>(pOther->ePrintSize);
+    // Print/Title
+    *pVal++ <<= pOther->bPrintTitle;
+    // Print/ZoomFactor
+    *pVal++ <<= pOther->nPrintZoomFactor;
+    // View/AutoRedraw
+    *pVal++ <<= pOther->bAutoRedraw;
+    // View/FormulaCursor
+    *pVal++ <<= pOther->bFormulaCursor;
+    // View/ToolboxVisible
+    *pVal++ <<= pOther->bToolboxVisible;
+
+    OSL_ENSURE(pVal - pValues == aNames.getLength(), "property mismatch");
+    PutProperties(aNames, aValues);
+
     SetOtherModified( false );
 }
 
@@ -1005,16 +1105,15 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, bool bSaveFontFor
     if (rFormat == *pFormat)
         return;
 
+    CommitLocker aLock(*this);
     *pFormat = rFormat;
     SetFormatModified( true );
-    SaveFormat();
 
     if (bSaveFontFormatList)
     {
         // needed for SmFontTypeDialog's DefaultButtonClickHdl
         if (pFontFormatList)
             pFontFormatList->SetModified( true );
-        SaveFontFormatList();
     }
 }
 
@@ -1033,6 +1132,7 @@ void SmMathConfig::SetPrintSize( SmPrintSize eSize )
         LoadOther();
     if (eSize != pOther->ePrintSize)
     {
+        CommitLocker aLock(*this);
         pOther->ePrintSize = eSize;
         SetOtherModified( true );
     }
@@ -1053,6 +1153,7 @@ void SmMathConfig::SetPrintZoomFactor( sal_uInt16 nVal )
         LoadOther();
     if (nVal != pOther->nPrintZoomFactor)
     {
+        CommitLocker aLock(*this);
         pOther->nPrintZoomFactor = nVal;
         SetOtherModified( true );
     }
@@ -1075,19 +1176,23 @@ void SmMathConfig::SetSmEditWindowZoomFactor( sal_uInt16 nVal )
         LoadOther();
     if (nVal != pOther->nSmEditWindowZoomFactor)
     {
+        CommitLocker aLock(*this);
         pOther->nSmEditWindowZoomFactor = nVal;
         SetOtherModified( true );
     }
 }
 
 
-void SmMathConfig::SetOtherIfNotEqual( bool &rbItem, bool bNewVal )
+bool SmMathConfig::SetOtherIfNotEqual( bool &rbItem, bool bNewVal )
 {
     if (bNewVal != rbItem)
     {
+        CommitLocker aLock(*this);
         rbItem = bNewVal;
         SetOtherModified( true );
+        return true;
     }
+    return false;
 }
 
 
@@ -1182,6 +1287,7 @@ void SmMathConfig::SetDefaultSmSyntaxVersion( sal_uInt16 nVal )
         LoadOther();
     if (nVal != pOther->nSmSyntaxVersion)
     {
+        CommitLocker aLock(*this);
         pOther->nSmSyntaxVersion = nVal;
         SetOtherModified( true );
     }
@@ -1201,7 +1307,12 @@ void SmMathConfig::SetIgnoreSpacesRight( bool bVal )
 {
     if (!pOther)
         LoadOther();
-    SetOtherIfNotEqual( pOther->bIgnoreSpacesRight, bVal );
+    if (SetOtherIfNotEqual( pOther->bIgnoreSpacesRight, bVal ))
+    {
+        // reformat (displayed) formulas accordingly
+        Broadcast(SfxHint(SfxHintId::MathFormatChanged));
+    }
+
 }
 
 
@@ -1236,12 +1347,17 @@ void SmMathConfig::SetShowFormulaCursor( bool bVal )
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
 }
 
-void SmMathConfig::Notify( const css::uno::Sequence< OUString >& )
-{}
+void SmMathConfig::Notify( const css::uno::Sequence< OUString >& rNames )
+{
+    Clear();
+    if (std::find(rNames.begin(), rNames.end(), "Misc/IgnoreSpacesRight") != rNames.end())
+        Broadcast(SfxHint(SfxHintId::MathFormatChanged));
+}
 
 
 void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
 {
+    CommitLocker aLock(*this);
     const SfxPoolItem *pItem     = nullptr;
 
     sal_uInt16 nU16;
@@ -1276,13 +1392,7 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
     }
     if (rSet.GetItemState(SID_NO_RIGHT_SPACES, true, &pItem) == SfxItemState::SET)
     {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
-        if (IsIgnoreSpacesRight() != bVal)
-        {
-            SetIgnoreSpacesRight( bVal );
-
-            // reformat (displayed) formulas accordingly
-            Broadcast(SfxHint(SfxHintId::MathFormatChanged));
-        }
+        SetIgnoreSpacesRight( bVal );
     }
     if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, true, &pItem) == SfxItemState::SET)
     {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
@@ -1300,8 +1410,6 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
         nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
         SetDefaultSmSyntaxVersion( nU16 );
     }
-
-    SaveOther();
 }
 
 
