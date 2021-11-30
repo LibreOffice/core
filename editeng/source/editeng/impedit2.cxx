@@ -611,8 +611,11 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
             Point aLogicClick = rOutDev.PixelToLogic(rMEvt.GetPosPixel());
             if (const SvxFieldItem* pFld = pView->GetField(aLogicClick))
             {
+                bool bUrlOpened = GetEditEnginePtr()->FieldClicked( *pFld );
+                auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField());
+
                 // tdf#121039 When in edit mode, editeng is responsible for opening the URL on mouse click
-                if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
+                if (!bUrlOpened && pUrlField)
                 {
                     bool bCtrlClickHappened = rMEvt.IsMod1();
                     bool bCtrlClickSecOption
@@ -627,7 +630,6 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
                                       css::system::SystemShellExecuteFlags::DEFAULTS);
                     }
                 }
-                GetEditEnginePtr()->FieldClicked( *pFld );
             }
         }
     }

@@ -516,7 +516,8 @@ public:
                              const Color& rTextLineColor);
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual bool    SpellNextDocument();
-    virtual void    FieldClicked( const SvxFieldItem& rField );
+    /** @return true, when click was consumed. false otherwise. */
+    virtual bool    FieldClicked( const SvxFieldItem& rField );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor );
 
     // override this if access to bullet information needs to be provided
