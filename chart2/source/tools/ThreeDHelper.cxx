@@ -640,11 +640,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
                 //siny == 0 && cosx == 0 && cosz != 0 && sinz != 0
                 //element 11 && 13
                 double f13 = sin(x)*sin(z);
-                R = atan( f13/f11 );
-
-                if(f11<0)
-                    R+=M_PI;
-
+                R = atan2( f13, f11 );
                 //element 23
                 double f23 = cos(z)*sin(x);
                 if( f23/cos(R) > 0 )
@@ -741,11 +737,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 sinX=0 sinZ=0
             double f13 = cos(x)*cos(z)*sin(y);
-            R = atan( f13/f11 );
-            //R = asin(f13);
-            if( f11<0 )
-                R+=M_PI;
-
+            R = atan2( f13, f11 );
             double f22 = cos(x)*cos(z);
             if( f22>0 )
                 E = 0.0;
@@ -769,11 +761,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 sinX=0 sinZ!=0 cosZ!=0
             double f13 = cos(x)*cos(z)*sin(y);
-            R = atan( f13/f11 );
-
-            if( f11<0 )
-                R+=M_PI;
-
+            R = atan2( f13, f11 );
             double f21 = cos(y)*sin(z);
             double f22 = cos(x)*cos(z);
             E = atan(f21/(f22*sin(R)) );
@@ -816,10 +804,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 cosX=0 sinZ!=0 cosZ!=0
             //element 13/11
-            R = atan( sin(x)*sin(z)/(cos(y)*cos(z)) );
-            //use 13 for 'sign'
-            if( (sin(x)*sin(z))<0.0 )
-                R += M_PI;
+            R = atan2( sin(x)*sin(z), (cos(y)*cos(z)) );
             //element 22
             E = acos(sin(x)*sin(y)*sin(z) );
             //use 21 for sign
@@ -860,9 +845,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         //cosY!=0 sinY!=0 sinX!=0 cosX!=0 sinZ!=0 cosZ!=0
         //13/11:
         double f13 = sin(x)*sin(z)+cos(x)*cos(z)*sin(y);
-        R = atan( f13/ f11 );
-        if(f11<0.0)
-            R+=M_PI;
+        R = atan2( f13, f11 );
         double f22 = cos(x)*cos(z)+sin(x)*sin(y)*sin(z);
         double f23 = cos(x)*sin(y)*sin(z)-cos(z)*sin(x);
         //23/22:
