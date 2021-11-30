@@ -146,7 +146,8 @@ void SwView::ImpSetVerb( SelectionType nSelType )
     if ( !GetViewFrame()->GetFrame().IsInPlace() &&
          (SelectionType::Ole|SelectionType::Graphic) & nSelType )
     {
-        if ( m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE )
+        FlyProtectFlags eProtectFlags = m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content);
+        if (eProtectFlags == FlyProtectFlags::NONE || nSelType & SelectionType::Ole)
         {
             if ( nSelType & SelectionType::Ole )
             {
