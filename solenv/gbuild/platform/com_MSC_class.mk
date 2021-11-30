@@ -116,6 +116,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(if $(filter YES,$(LIBRARY_X64)), ,$(gb_LTOFLAGS)) \
 		$(gb_COMPILERDEPFLAGS) \
+		$(gb_NO_PCH_TIMESTAMP) \
 		$(5) \
 		-c $(3) \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -I$(dir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) \
@@ -123,6 +124,13 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Trace_EndRange,$(2),PCH)
 endef
 
+ifeq ($(COM_IS_CLANG),TRUE)
+# Clang has -fno-pch-timestamp, just checksum the file for CCACHE_PCH_EXTSUM
+# $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
+define gb_PrecompiledHeader__sum_command
+	$(SHA256SUM) $(1) >$(1).sum
+endef
+else
 # MSVC does not generate the same .pch for the same input, so checksum the (preprocessed) input
 # $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
 define gb_PrecompiledHeader__sum_command
@@ -139,6 +147,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		2>&1 | $(SHA256SUM) >$(1).sum \
 		)
 endef
+endif
 
 # When building a PCH, MSVC also creates a .pdb file with debug info. So for reuse
 # add the .pdb to the PCH's files and then use the .pdb also for linktargets that reuse the PCH.
