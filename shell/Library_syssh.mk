@@ -43,6 +43,12 @@ $(eval $(call gb_Library_add_exception_objects,syssh,\
 	shell/source/unix/exec/shellexec \
 ))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Library_add_exception_objects,syssh,\
+    shell/source/unix/exec/shellexec_em \
+))
+endif
+
 endif # OS
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

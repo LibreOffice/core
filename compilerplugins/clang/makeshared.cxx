@@ -242,7 +242,7 @@ bool MakeShared::VisitVarDecl(VarDecl const* varDecl)
     return true;
 }
 
-loplugin::Plugin::Registration<MakeShared> makeshared("makeshared");
+loplugin::Plugin::Registration<MakeShared> makeshared("makeshared", false);
 
 } // namespace
 

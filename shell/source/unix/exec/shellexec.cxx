@@ -39,6 +39,11 @@
 #include <sys/stat.h>
 #endif
 
+#ifdef EMSCRIPTEN
+#include <rtl/uri.hxx>
+extern void execute_browser(const char* sUrl);
+#endif
+
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
 
@@ -47,6 +52,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
 using namespace cppu;
 
+#ifndef EMSCRIPTEN
 namespace
 {
     void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
@@ -63,6 +69,7 @@ namespace
         }
     }
 }
+#endif
 
 ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
     m_xContext(xContext)
@@ -71,6 +78,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
 {
+#ifndef EMSCRIPTEN
     OStringBuffer aBuffer, aLaunchBuffer;
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -228,6 +236,22 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     int nerr = errno;
     throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
         static_cast < XSystemShellExecute * > (this), nerr );
+#else // EMSCRIPTEN
+    (void)nFlags;
+
+    css::uno::Reference< css::uri::XUriReference > uri(
+        css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
+    if (!uri.is() || !uri->isAbsolute())
+        throw SystemShellExecuteException("Emscripten can just open absolute URIs.",
+                                          static_cast<XSystemShellExecute*>(this), 42);
+    if (!aParameter.isEmpty())
+        throw SystemShellExecuteException("Emscripten can't process parameters; encode in URI.",
+                                          static_cast<XSystemShellExecute*>(this), 42);
+
+    OUString sEscapedURI(rtl::Uri::encode(aCommand, rtl_UriCharClassUric,
+                                          rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8));
+    execute_browser(sEscapedURI.toUtf8().getStr());
+#endif
 }
 
 // XServiceInfo
