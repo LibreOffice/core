@@ -69,7 +69,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
-       return; // initial import, no futher checks
+       return; // initial import, no further checks
 
     // Ensure that we have <w:placeholder><w:docPart v:val="xxxx"/></w:placeholder>
     OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:placeholder/w:docPart", "val");

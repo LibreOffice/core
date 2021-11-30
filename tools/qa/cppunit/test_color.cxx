@@ -170,7 +170,7 @@ void Test::test_ApplyLumModOff()
     // Kind of blue.
     Color aColor(0x44, 0x72, 0xC4);
 
-    // PowerPoint calls this "Ligher 40%".
+    // PowerPoint calls this "Lighter 40%".
     aColor.ApplyLumModOff(6000, 4000);
 
     CPPUNIT_ASSERT_EQUAL(OUString("8faadc"), aColor.AsRGBHexString());
