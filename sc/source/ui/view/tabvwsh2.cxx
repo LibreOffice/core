@@ -337,12 +337,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         ScViewData& rViewData = GetViewData();
+        tools::Long nLayoutSign = rViewData.GetDocument().IsLayoutRTL(rViewData.GetTabNo()) ? -1 : 1;
         aInsertPos = rViewData.getLOKVisibleArea().Center();
         if (comphelper::LibreOfficeKit::isCompatFlagSet(
                 comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
             aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);
 
-        aInsertPos.setX(convertTwipToMm100(aInsertPos.X()));
+        aInsertPos.setX(nLayoutSign * convertTwipToMm100(aInsertPos.X()));
         aInsertPos.setY(convertTwipToMm100(aInsertPos.Y()));
 
         aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
