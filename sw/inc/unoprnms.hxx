@@ -74,6 +74,7 @@
 #define UNO_NAME_FOOTER_RIGHT_MARGIN "FooterRightMargin"
 #define UNO_NAME_TEXT_RANGE "TextRange"
 #define UNO_NAME_TEXT_BOX "TextBox"
+#define UNO_NAME_TEXT_BOX_CONTENT "TextBoxContent"
 #define UNO_NAME_NAME "Name"
 #define UNO_NAME_CHAR_STYLE_NAME "CharStyleName"
 #define UNO_NAME_ANCHOR_CHAR_STYLE_NAME "AnchorCharStyleName"

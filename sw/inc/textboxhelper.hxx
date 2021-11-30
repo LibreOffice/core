@@ -60,6 +60,9 @@ public:
     /// the original text in the shape will be copied to the frame
     /// The textbox is created for the shape given by the pObject parameter.
     static void create(SwFrameFormat* pShape, SdrObject* pObject, bool bCopyText = false);
+    /// Sets the given textframe as textbox for the given (group member) shape.
+    static void set(SwFrameFormat* pShape, SdrObject* pObject,
+                    css::uno::Reference<css::text::XTextFrame> xNew);
     /// Destroy a TextBox for a shape. If the format has more textboxes
     /// like group shapes, it will destroy only that textbox what belongs
     /// to the given pObject shape.
