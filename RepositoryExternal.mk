@@ -50,7 +50,7 @@ else # !SYSTEM_ODBC_HEADERS
 
 define gb_LinkTarget__use_odbc_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/external/unixODBC/inc \
+	-I$(SRCDIR)/external/iODBC/inc \
 	$$(INCLUDE) \
 )
 

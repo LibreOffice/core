@@ -301,7 +301,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
          * ODBC Programmer's reference > Developing Applications > Programming Considerations > Unicode >  Unicode Function Arguments
          *            http://support.microsoft.com/kb/294169
          *
-         * UnixODBC can be configured at compile-time so that the "W" variants expect
+         * iODBC can be configured at compile-time so that the "W" variants expect
          * UTF-16 or UTF-32 encoded strings, and character lengths are number of codepoints.
          * However, UTF-16 is the default, what all/most distributions do
          * and the established API that most drivers implement.

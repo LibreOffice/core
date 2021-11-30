@@ -11419,6 +11419,7 @@ elif test "$enable_database_connectivity" = no; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ODBC_HEADERS=
+    BUILD_TYPE="$BUILD_TYPE IODBC"
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
