@@ -105,6 +105,42 @@
       "parentUuid": "0a16c72f_27e6e861",
       "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32fb52a8_61fc419d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-30T10:31:40Z",
+      "side": 1,
+      "message": "That\u0027s why I asked. Then I think it\u0027s better to keep it master only. We can reconsider later on if users ask for it.",
+      "parentUuid": "7cf9cb02_304e1a87",
+      "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f60dc2cd_2966ff90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-30T10:31:40Z",
+      "side": 1,
+      "message": "That\u0027s why I asked. Then I think it\u0027s better to keep it master only. We can reconsider later on if users ask for it.",
+      "parentUuid": "7cf9cb02_304e1a87",
+      "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
