@@ -1557,6 +1557,47 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf141220)
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTextBoxChangeViaUNO)
+{
+    CPPUNIT_ASSERT(createSwDoc(DATA_DIRECTORY, "TextBoxFrame.odt"));
+    // this file has a shape and a frame inside. Try to set up
+    // the frame for the shape as textbox. Before this was not
+    // implemented. This will be necesary for proper WPG import.
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be a shape and a frame!", 2, getShapes());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This must be a custom shape!",
+                                 OUString("com.sun.star.drawing.CustomShape"),
+                                 getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This must be a frame shape!", OUString("FrameShape"),
+                                 getShape(2)->getShapeType());
+
+    CPPUNIT_ASSERT_MESSAGE("This is not supposed to be a textbox!",
+                           !uno::Reference<beans::XPropertySet>(getShape(1), uno::UNO_QUERY_THROW)
+                                ->getPropertyValue("TextBox")
+                                .get<bool>());
+    // Without the fix it will crash at this line:
+    CPPUNIT_ASSERT_MESSAGE("This is not supposed to be a textbox!",
+                           !uno::Reference<beans::XPropertySet>(getShape(1), uno::UNO_QUERY_THROW)
+                                ->getPropertyValue("TextBoxContent")
+                                .hasValue());
+
+    // So now set the frame as textbox for the shape!
+    uno::Reference<beans::XPropertySet>(getShape(1), uno::UNO_QUERY_THROW)
+        ->setPropertyValue("TextBoxContent", uno::Any(uno::Reference<text::XTextFrame>(
+                                                 getShape(2), uno::UNO_QUERY_THROW)));
+
+    CPPUNIT_ASSERT_MESSAGE("This is supposed to be a textbox!",
+                           uno::Reference<beans::XPropertySet>(getShape(1), uno::UNO_QUERY_THROW)
+                               ->getPropertyValue("TextBox")
+                               .get<bool>());
+
+    CPPUNIT_ASSERT_MESSAGE("This is supposed to be a textbox!",
+                           uno::Reference<beans::XPropertySet>(getShape(1), uno::UNO_QUERY_THROW)
+                               ->getPropertyValue("TextBoxContent")
+                               .hasValue());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
 {
     auto pDoc = createSwDoc(DATA_DIRECTORY, "Tdf121509.odt");
