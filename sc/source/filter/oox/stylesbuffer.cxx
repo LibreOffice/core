@@ -1976,10 +1976,10 @@ void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
     maModel.mnFillId = rAttribs.getInteger( XML_fillId, -1 );
 
 
+    maModel.mbAlignUsed = maModel.mbCellXf || rAttribs.getBool(XML_applyAlignment, true);
+    maModel.mbProtUsed = maModel.mbCellXf || rAttribs.getBool(XML_applyProtection, true);
     /*  Default value of the apply*** attributes is dependent on context:
         true in cellStyleXfs element, false in cellXfs element... */
-    maModel.mbAlignUsed  = rAttribs.getBool( XML_applyAlignment,    !maModel.mbCellXf );
-    maModel.mbProtUsed   = rAttribs.getBool( XML_applyProtection,   !maModel.mbCellXf );
     maModel.mbFontUsed   = rAttribs.getBool( XML_applyFont,         !maModel.mbCellXf );
     maModel.mbNumFmtUsed = rAttribs.getBool( XML_applyNumberFormat, !maModel.mbCellXf );
     maModel.mbBorderUsed = rAttribs.getBool( XML_applyBorder,       !maModel.mbCellXf );
