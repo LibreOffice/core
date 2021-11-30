@@ -1668,6 +1668,11 @@ static const NameToConvertMapType& lcl_GetConverters()
 {
     static NameToConvertMapType const shape_converters
     {
+        // tdf#98736 export CaptionShape as TextShape, because it is non-ooxml shape and
+        //           we can't export this shape as CustomShape
+        // TODO: WriteCaptionShape
+        { "com.sun.star.drawing.CaptionShape"              , &ShapeExport::WriteTextShape },
+
         { "com.sun.star.drawing.ClosedBezierShape"         , &ShapeExport::WriteClosedPolyPolygonShape },
         { "com.sun.star.drawing.ConnectorShape"            , &ShapeExport::WriteConnectorShape },
         { "com.sun.star.drawing.CustomShape"               , &ShapeExport::WriteCustomShape },

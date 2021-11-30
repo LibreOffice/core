@@ -290,6 +290,7 @@ public:
     void testInsertPdf();
     void testTdf143760WrapContourToOff();
     void testTdf127989();
+    void testCaptionShape();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
@@ -413,6 +414,7 @@ public:
     CPPUNIT_TEST(testInsertPdf);
     CPPUNIT_TEST(testTdf143760WrapContourToOff);
     CPPUNIT_TEST(testTdf127989);
+    CPPUNIT_TEST(testCaptionShape);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -4065,6 +4067,27 @@ void SwUiWriterTest4::testTdf127989()
 
     // Without fix this had failed, because the background of the hatch was not set as 'no background'.
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "FillBackground"));
+}
+
+void SwUiWriterTest4::testCaptionShape()
+{
+    createSwDoc();
+
+    // Add a caption shape to the document.
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.CaptionShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    xShape->setPosition(awt::Point(1000, 1000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    xDrawPage->add(xShape);
+
+    // Save it as DOCX and load it again.
+    reload("Office Open XML Text", "captionshape.docx");
+
+    // Without fix in place, the shape was lost on export.
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest4);
