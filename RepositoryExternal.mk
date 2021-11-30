@@ -1269,9 +1269,15 @@ $(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
 
 endef
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+    libfontconfig_data \
+))
+endif
+
 gb_ExternalProject__use_fontconfig :=
 
-else
+else # SYSTEM_FONTCONFIG
 
 define gb_LinkTarget__use_fontconfig
 $(call gb_LinkTarget_use_external_project,$(1),fontconfig)

@@ -1104,6 +1104,7 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/wizard/form/styles/red.css \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/wizard/form/styles/violet.css \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/wizard/form/styles/water.css \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/fonts/truetype/fc_local.conf \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/gallery/fontwork.sdg \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/gallery/fontwork.sdv \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/gallery/fontwork.thm \
@@ -1140,6 +1141,7 @@ gb_emscripten_fs_image_autoinstall += $(call gb_AutoInstall_get_target,ooo_fonts
 endif
 
 gb_emscripten_fs_image_filelists += $(call gb_Package_get_target,liblangtag_data)
+gb_emscripten_fs_image_filelists += $(call gb_Package_get_target,fontconfig_data)
 
 #
 # Ruleset
