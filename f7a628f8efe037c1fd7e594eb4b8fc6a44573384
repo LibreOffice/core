@@ -16,6 +16,24 @@
       "message": "see \u003chttps://ci.libreoffice.org//job/lo_callgrind_linux/11741/\u003e,\n  In file included from /home/buildslave/lode/jenkins/workspace/lo_callgrind_linux/vcl/inc/skia/x11/gdiimpl.hxx:21,\n                   from /home/buildslave/lode/jenkins/workspace/lo_callgrind_linux/vcl/skia/x11/gdiimpl.cxx:19:\n  /home/buildslave/lode/jenkins/workspace/lo_callgrind_linux/vcl/inc/skia/gdiimpl.hxx:346:9: error: declaration of ‘None’ shadows a global declaration [-Werror\u003dshadow]\n    346 |         None,\n        |         ^~~~\n  In file included from /home/buildslave/lode/jenkins/workspace/lo_callgrind_linux/vcl/skia/x11/gdiimpl.cxx:19:\n  /home/buildslave/lode/jenkins/workspace/lo_callgrind_linux/vcl/inc/skia/x11/gdiimpl.hxx:20:15: note: shadowed declaration is here\n     20 | constexpr int None \u003d XNone;\n        |               ^~~~",
       "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a46ab605_a48fab53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-30T07:48:43Z",
+      "side": 1,
+      "message": "That\u0027s rubbish, enum class cannot possibly shadow anything :(.",
+      "parentUuid": "144ad843_cb8f8128",
+      "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
