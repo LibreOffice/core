@@ -384,33 +384,8 @@ void PageObjectPainter::PaintBackgroundDetail (
     const Color aBottomColor(mpTheme->GetGradientColor(eColorType, Theme::GradientColorClass::Fill2));
     if (aTopColor != aBottomColor)
     {
-        const sal_Int32 nHeight (aPageObjectBox.GetHeight());
-        const sal_Int32 nDefaultConstantSize(nHeight/4);
-        const sal_Int32 nMinimalGradientSize(40);
-        const sal_Int32 nY1 (
-            ::std::max<sal_Int32>(
-                0,
-                ::std::min<sal_Int32>(
-                    nDefaultConstantSize,
-                    (nHeight - nMinimalGradientSize)/2)));
-        const sal_Int32 nY2 (nHeight-nY1);
-        const sal_Int32 nTop (aPageObjectBox.Top());
-        for (sal_Int32 nY=0; nY<nHeight; ++nY)
-        {
-            if (nY<=nY1)
-                rDevice.SetLineColor(aTopColor);
-            else if (nY>=nY2)
-                rDevice.SetLineColor(aBottomColor);
-            else
-            {
-                Color aColor (aTopColor);
-                aColor.Merge(aBottomColor, 255 * (nY2-nY) / (nY2-nY1));
-                rDevice.SetLineColor(aColor);
-            }
-            rDevice.DrawLine(
-                Point(aPageObjectBox.Left(), nY+nTop),
-                Point(aPageObjectBox.Right(), nY+nTop));
-        }
+        Gradient gradient(GradientStyle::Linear, aTopColor, aBottomColor);
+        rDevice.DrawGradient(aPageObjectBox, gradient);
     }
     else
     {
