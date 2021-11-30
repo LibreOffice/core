@@ -28,6 +28,8 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
+#include <sal/types.h>
 
 #include <stdio.h>
 #include <string_view>
@@ -236,16 +238,16 @@ namespace logging
             }
 
             // ISO 8601
-            char buffer[ 31 ];
+            char buffer[ SAL_N_ELEMENTS("-32768-65535-65535T65535:65535:65535.4294967295") ];
             const size_t buffer_size = sizeof( buffer );
-            snprintf( buffer, buffer_size, "%04i-%02i-%02iT%02i:%02i:%02i.%09i",
+            snprintf( buffer, buffer_size, "%04i-%02u-%02uT%02u:%02u:%02u.%09" SAL_PRIuUINT32,
                 static_cast<int>(record.LogTime.Year),
-                static_cast<int>(record.LogTime.Month),
-                static_cast<int>(record.LogTime.Day),
-                static_cast<int>(record.LogTime.Hours),
-                static_cast<int>(record.LogTime.Minutes),
-                static_cast<int>(record.LogTime.Seconds),
-                static_cast<int>(record.LogTime.NanoSeconds) );
+                static_cast<unsigned int>(record.LogTime.Month),
+                static_cast<unsigned int>(record.LogTime.Day),
+                static_cast<unsigned int>(record.LogTime.Hours),
+                static_cast<unsigned int>(record.LogTime.Minutes),
+                static_cast<unsigned int>(record.LogTime.Seconds),
+                record.LogTime.NanoSeconds );
             aLogEntry.appendAscii( buffer );
             aLogEntry.append(comma_char);
         }
