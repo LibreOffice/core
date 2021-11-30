@@ -103,6 +103,7 @@ class SmMathConfig final : public utl::ConfigItem, public SfxBroadcaster
     bool bIsOtherModified;
     bool bIsFormatModified;
     SmFontPickList vFontPickList[7];
+    sal_Int32 m_nCommitLock = 0;
 
     SmMathConfig(const SmMathConfig&) = delete;
     SmMathConfig& operator=(const SmMathConfig&) = delete;
@@ -137,6 +138,22 @@ class SmMathConfig final : public utl::ConfigItem, public SfxBroadcaster
     }
 
     virtual void ImplCommit() override;
+    void LockCommit() { ++m_nCommitLock; }
+    void UnlockCommit();
+    // Used to avoid tens of atomic commits in e.g. ItemSetToConfig that calls individual setters
+    friend struct CommitLocker;
+    struct CommitLocker
+    {
+        SmMathConfig& m_rConfig;
+        CommitLocker(SmMathConfig& rConfig)
+            : m_rConfig(rConfig)
+        {
+            m_rConfig.LockCommit();
+        }
+        ~CommitLocker() { m_rConfig.UnlockCommit(); }
+    };
+
+    void Clear();
 
 public:
     SmMathConfig();

@@ -343,6 +343,7 @@ SmMathConfig::SmMathConfig() :
     , bIsOtherModified(false)
     , bIsFormatModified(false)
 {
+    EnableNotification({ {} }); // Listen to everything under the node
 }
 
 
@@ -470,6 +471,22 @@ void SmMathConfig::Save()
 }
 
 
+void SmMathConfig::UnlockCommit()
+{
+    if (--m_nCommitLock == 0)
+        Commit();
+}
+
+
+void SmMathConfig::Clear()
+{
+    // Re-read data on next request
+    pOther.reset();
+    pFormat.reset();
+    pFontFormatList.reset();
+}
+
+
 void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 {
     Sequence< OUString > aNodes(const_cast<SmMathConfig*>(this)->GetNodeNames(SYMBOL_LIST));
@@ -486,6 +503,7 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 
 void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
 {
+    CommitLocker aLock(*this);
     auto nCount = sal::static_int_cast<sal_Int32>(rNewSymbols.size());
 
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
@@ -537,7 +555,6 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     ReplaceSetProperties( SYMBOL_LIST, aValues );
 
     StripFontFormatList( rNewSymbols );
-    SaveFontFormatList();
 }
 
 
@@ -1005,16 +1022,15 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, bool bSaveFontFor
     if (rFormat == *pFormat)
         return;
 
+    CommitLocker aLock(*this);
     *pFormat = rFormat;
     SetFormatModified( true );
-    SaveFormat();
 
     if (bSaveFontFormatList)
     {
         // needed for SmFontTypeDialog's DefaultButtonClickHdl
         if (pFontFormatList)
             pFontFormatList->SetModified( true );
-        SaveFontFormatList();
     }
 }
 
@@ -1033,6 +1049,7 @@ void SmMathConfig::SetPrintSize( SmPrintSize eSize )
         LoadOther();
     if (eSize != pOther->ePrintSize)
     {
+        CommitLocker aLock(*this);
         pOther->ePrintSize = eSize;
         SetOtherModified( true );
     }
@@ -1053,6 +1070,7 @@ void SmMathConfig::SetPrintZoomFactor( sal_uInt16 nVal )
         LoadOther();
     if (nVal != pOther->nPrintZoomFactor)
     {
+        CommitLocker aLock(*this);
         pOther->nPrintZoomFactor = nVal;
         SetOtherModified( true );
     }
@@ -1075,6 +1093,7 @@ void SmMathConfig::SetSmEditWindowZoomFactor( sal_uInt16 nVal )
         LoadOther();
     if (nVal != pOther->nSmEditWindowZoomFactor)
     {
+        CommitLocker aLock(*this);
         pOther->nSmEditWindowZoomFactor = nVal;
         SetOtherModified( true );
     }
@@ -1085,6 +1104,7 @@ void SmMathConfig::SetOtherIfNotEqual( bool &rbItem, bool bNewVal )
 {
     if (bNewVal != rbItem)
     {
+        CommitLocker aLock(*this);
         rbItem = bNewVal;
         SetOtherModified( true );
     }
@@ -1182,6 +1202,7 @@ void SmMathConfig::SetDefaultSmSyntaxVersion( sal_uInt16 nVal )
         LoadOther();
     if (nVal != pOther->nSmSyntaxVersion)
     {
+        CommitLocker aLock(*this);
         pOther->nSmSyntaxVersion = nVal;
         SetOtherModified( true );
     }
@@ -1236,12 +1257,12 @@ void SmMathConfig::SetShowFormulaCursor( bool bVal )
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
 }
 
-void SmMathConfig::Notify( const css::uno::Sequence< OUString >& )
-{}
+void SmMathConfig::Notify( const css::uno::Sequence< OUString >& ) { Clear(); }
 
 
 void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
 {
+    CommitLocker aLock(*this);
     const SfxPoolItem *pItem     = nullptr;
 
     sal_uInt16 nU16;
@@ -1300,8 +1321,6 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
         nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
         SetDefaultSmSyntaxVersion( nU16 );
     }
-
-    SaveOther();
 }
 
 
