@@ -16,6 +16,24 @@
       "message": "This still does not work,\n  [build LNK] Library/utllo.dll\n  ucblockbytes.o : error LNK2019: unresolved external symbol \"__declspec(dllimport) const SvLockBytes::`vbtable\u0027\" (__imp_??_8SvLockBytes@@7B@) referenced in function \"public: __cdecl SvLockBytes::SvLockBytes(void)\" (??0SvLockBytes@@QEAA@XZ)\n  C:\\lo-clang\\core\\instdir\\program\\utllo.dll : fatal error LNK1120: 1 unresolved externals\n  \n  mt.exe : general error c101008d: Failed to write the updated manifest to the resource of file \"C:/lo-clang/core/instdir/program/utllo.dll\". The system cannot find the file specified.\n  make[1]: *** [C:/lo-clang/core/unotools/Library_utl.mk:12: C:/lo-clang/core/instdir/program/utllo.dll] Error 96",
       "revId": "323ac2834710d723483e6c0feee7480b23e41e49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03f4bf3b_4810400c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-30T09:40:24Z",
+      "side": 1,
+      "message": "That seems like a clang-cl bug related to visibility of virtual base classes, but fortunately it\u0027s easy to deal with: https://gerrit.libreoffice.org/c/core/+/126074\n\nI\u0027m still waiting for the build to finish, so I don\u0027t know yet if there are perhaps more similar problems.",
+      "parentUuid": "722ab34e_3e350676",
+      "revId": "323ac2834710d723483e6c0feee7480b23e41e49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
