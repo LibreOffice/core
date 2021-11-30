@@ -4046,16 +4046,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 double rotate, skewX ;
 
                 /* 2 - rotation angle calculation */
-                if( pt[1].x == pt[0].x ){
-                         if( pt[1].y > pt[0].y )
-                             rotate = M_PI_2;
-                         else
-                             rotate = -M_PI_2;
-                }
-                else
-                    rotate = atan(static_cast<double>( pt[1].y - pt[0].y )/(pt[1].x - pt[0].x ));
-                if( pt[1].x < pt[0].x )
-                    rotate += M_PI;
+                rotate = atan2( pt[1].y - pt[0].y, pt[1].x - pt[0].x );
 
                 for( i = 0 ; i < 3 ; i++){
                          r_pt[i].x = static_cast<int>(pt[i].x * cos(-rotate) - pt[i].y * sin(-rotate));
@@ -4071,6 +4062,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                          skewX -= M_PI;
                 if( skewX <= -M_PI_2 )
                          skewX += M_PI;
+
 
                 OUString trans;
                 if( skewX != 0.0 && rotate != 0.0 ){
@@ -4261,33 +4253,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 double start_angle, end_angle;
                                 ZZParall *pal = &drawobj->property.parall;
 
-                                if( pal->pt[1].x == pal->pt[0].x ){
-                                    if( pal->pt[0].y < pal->pt[1].y )
-                                        start_angle = 3 * M_PI_2;
-                                    else
-                                        start_angle = M_PI_2;
-                                }
-                                else{
-                                     start_angle = atan(static_cast<double>( pal->pt[0].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[0].x ));
-                                     if( pal->pt[1].x < pal->pt[0].x )
-                                         start_angle += M_PI;
-                                }
-                                if( pal->pt[1].x == pal->pt[2].x ){
-                                    if( pal->pt[2].y < pal->pt[1].y )
-                                        end_angle = 3 * M_PI_2;
-                                    else
-                                        end_angle = M_PI_2;
-                                }
-                                else{
-                                     end_angle = atan(static_cast<double>( pal->pt[2].y - pal->pt[1].y )/( pal->pt[1].x - pal->pt[2].x ));
-                                     if( pal->pt[1].x < pal->pt[2].x )
-                                         end_angle += M_PI;
-                                }
+                                start_angle = atan2(pal->pt[0].y - pal->pt[1].y,pal->pt[1].x - pal->pt[0].x );
+                                end_angle = atan2(pal->pt[2].y - pal->pt[1].y, pal->pt[1].x - pal->pt[2].x);
 
-                                if( start_angle >= 2 * M_PI )
-                                    start_angle -= 2 * M_PI;
-                                if( end_angle >= 2 * M_PI )
-                                    end_angle -= 2 * M_PI;
                                 if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI )){
                                     double tmp_angle = start_angle;
                                     start_angle = end_angle;
