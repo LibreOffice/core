@@ -34,6 +34,23 @@
       "parentUuid": "722ab34e_3e350676",
       "revId": "323ac2834710d723483e6c0feee7480b23e41e49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b20be8ea_6ad5f656",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-30T20:43:45Z",
+      "side": 1,
+      "message": "I think this should now work with master after https://gerrit.libreoffice.org/c/core/+/126149 .\n",
+      "revId": "323ac2834710d723483e6c0feee7480b23e41e49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
