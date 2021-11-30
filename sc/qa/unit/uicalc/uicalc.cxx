@@ -16,11 +16,13 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <conditio.hxx>
 #include <dbfunc.hxx>
@@ -169,6 +171,39 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    css::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
+        = css::sheet::GlobalSheetSettings::create(::comphelper::getProcessComponentContext());
+    bool bOldValue = xGlobalSheetSettings->getDoAutoComplete();
+
+    xGlobalSheetSettings->setDoAutoComplete(true);
+
+    pDoc->SetString(ScAddress(0, 0, 0), "ABC");
+
+    insertStringToCell(*pModelObj, "A2", "A");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("ABC"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    xGlobalSheetSettings->setDoAutoComplete(false);
+
+    insertStringToCell(*pModelObj, "A3", "A");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: A
+    // - Actual  : ABC
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), pDoc->GetString(ScAddress(0, 2, 0)));
+
+    // Restore the previous value
+    xGlobalSheetSettings->setDoAutoComplete(bOldValue);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
