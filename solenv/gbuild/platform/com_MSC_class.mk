@@ -318,7 +318,6 @@ endef
 # Flags common for PE executables (EXEs and DLLs).
 # Enable incremental only when debugging to speed up relinking.
 gb_Windows_PE_TARGETTYPEFLAGS := \
-	-release \
 	-opt:noref \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)), -incremental:no) \
 	$(if $(filter NO,$(LIBRARY_X64)), -safeseh) \
