@@ -63,6 +63,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <formula/grammar.hxx>
 #include <unotools/useroptions.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -185,6 +186,7 @@ public:
     void testTdf121718_UseFirstPageNumberXLSX();
     void testHeaderFontStyleXLSX();
     void testTdf135828_Shape_Rect();
+    void testTdf123139XLSX();
     void testTdf123353();
     void testTdf140098();
     void testTdf133688_precedents();
@@ -298,6 +300,7 @@ public:
     CPPUNIT_TEST(testTdf121718_UseFirstPageNumberXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
     CPPUNIT_TEST(testTdf135828_Shape_Rect);
+    CPPUNIT_TEST(testTdf123139XLSX);
     CPPUNIT_TEST(testTdf123353);
     CPPUNIT_TEST(testTdf140098);
     CPPUNIT_TEST(testTdf133688_precedents);
@@ -2167,6 +2170,64 @@ void ScExportTest2::testTdf135828_Shape_Rect()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-570600, nYPosOfTopleft, 10000);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(294840, nWidth, 10000);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1988280, nHeight, 10000);
+}
+
+void ScExportTest2::testTdf123139XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf123139_applyAlignment.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScPatternAttr* pAttr = rDoc.GetPattern(0, 0, 0); //A1
+
+    {
+        const SvxHorJustifyItem& rJustify = pAttr->GetItem(ATTR_HOR_JUSTIFY);
+        CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Repeat, rJustify.GetValue());
+    }
+
+    pAttr = rDoc.GetPattern(0, 1, 0); //A2
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
+        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Center, rJustify.GetValue());
+    }
+
+    {
+        const ScProtectionAttr& rItem = pAttr->GetItem(ATTR_PROTECTION);
+        CPPUNIT_ASSERT(rItem.GetProtection());
+        CPPUNIT_ASSERT(!rItem.GetHideFormula());
+    }
+
+    pAttr = rDoc.GetPattern(2, 0, 0); //C1
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
+        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Standard, rJustify.GetValue());
+    }
+
+    {
+        const ScProtectionAttr& rItem = pAttr->GetItem(ATTR_PROTECTION);
+        CPPUNIT_ASSERT(rItem.GetProtection());
+        CPPUNIT_ASSERT(rItem.GetHideFormula());
+    }
+
+    pAttr = rDoc.GetPattern(2, 1, 0); //C2
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
+        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Block, rJustify.GetValue());
+    }
+
+    {
+        const ScProtectionAttr& rItem = pAttr->GetItem(ATTR_PROTECTION);
+        CPPUNIT_ASSERT(!rItem.GetProtection());
+        CPPUNIT_ASSERT(!rItem.GetHideFormula());
+    }
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest2::testTdf123353()
