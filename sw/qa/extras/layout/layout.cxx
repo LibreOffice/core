@@ -3427,6 +3427,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf145826)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf145826.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/root/page/body/section/column", 2);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    assertXPath(pXmlDoc, "/root/page/body/section/column[1]/ftncont", 1);
+    assertXPath(pXmlDoc, "/root/page/body/section/column[2]/ftncont", 1);
+    assertXPath(pXmlDoc, "/root/page/body/section/column[1]/ftncont/ftn", 3);
+    assertXPath(pXmlDoc, "/root/page/body/section/column[2]/ftncont/ftn", 3);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf105481)
 {
     createSwDoc(DATA_DIRECTORY, "tdf105481.odt");
