@@ -3840,17 +3840,18 @@ void SwContentTree::UpdateTracking()
                                                   aContentAtPos.pFndTextAttr);
             return;
         }
-        // fields
+        // fields, comments
         if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::TEXTFIELD))
+                !(m_bIsRoot &&
+                  m_nRootType != ContentTypeId::TEXTFIELD &&
+                  m_nRootType != ContentTypeId::POSTIT))
         {
-            if (m_bFieldTracking)
-            {
-                ContentTypeId nContentTypeId =
-                        pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
-                                                                          ContentTypeId::TEXTFIELD;
+            ContentTypeId nContentTypeId =
+                    pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
+                                                                      ContentTypeId::TEXTFIELD;
+            if ((m_bFieldTracking && nContentTypeId == ContentTypeId::TEXTFIELD) ||
+                    (m_bCommentTracking && nContentTypeId == ContentTypeId::POSTIT))
                 lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
-            }
             return;
         }
         // table
