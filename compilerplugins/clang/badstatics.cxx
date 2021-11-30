@@ -226,6 +226,11 @@ public:
                    // sfx2/source/view/frame.cxx, vector of pointer, so not a problem, nothing is going to happen on shutdown
                 || name == "g_pOLELRU_Cache" || name == "s_aTableColumnsMap"
                    // TODO
+                || name == "SINGLETON"
+                   // TheAquaA11yFocusTracker in vcl/osx/a11yfocustracker.cxx,
+                   // AquaA11yFocusTracker::m_aDocumentWindowList elements symmetrically added and
+                   // removed in AquaA11yFocusTracker::window_got_focus and
+                   // AquaA11yFocusTracker::WindowEventHandler (TODO: is that guaranteed?)
                ) // these variables appear unproblematic
             {
                 return true;
