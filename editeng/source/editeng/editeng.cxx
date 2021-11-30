@@ -2588,8 +2588,9 @@ OUString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, 
     return OUString(' ');
 }
 
-void EditEngine::FieldClicked( const SvxFieldItem& )
+bool EditEngine::FieldClicked( const SvxFieldItem& )
 {
+    return false;
 }
 
 
