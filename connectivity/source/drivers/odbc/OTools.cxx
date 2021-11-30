@@ -65,7 +65,7 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
         return sizeof(SQLBIGINT);
     case SQL_C_UBIGINT:
         return sizeof(SQLUBIGINT);
-    /* UnixODBC gives this the same value as SQL_C_UBIGINT
+    /* iODBC gives this the same value as SQL_C_UBIGINT
     case SQL_C_BOOKMARK:
         return sizeof(BOOKMARK); */
     case SQL_C_TYPE_DATE:
@@ -99,7 +99,7 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
     case SQL_C_CHAR:
     case SQL_C_WCHAR:
     case SQL_C_BINARY:
-    // UnixODBC gives this the same value as SQL_C_BINARY
+    // iODBC gives this the same value as SQL_C_BINARY
     //case SQL_C_VARBOOKMARK:
     // Unknown datatype -> cannot predict length
     default:
