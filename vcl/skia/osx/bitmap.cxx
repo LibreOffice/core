@@ -66,9 +66,18 @@ CGImageRef createCGImage(const Image& rImage)
         assert(dynamic_cast<SkiaSalBitmap*>(alphaBitmap.ImplGetSalBitmap().get()) != nullptr);
         SkiaSalBitmap* skiaAlpha
             = static_cast<SkiaSalBitmap*>(alphaBitmap.ImplGetSalBitmap().get());
+#if 0
+        // Drawing to a bitmap using a shader from a GPU-backed image fails silently.
+        // https://bugs.chromium.org/p/skia/issues/detail?id=12685
         paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut,
                                          skiaBitmap->GetSkShader(SkSamplingOptions()),
                                          skiaAlpha->GetAlphaSkShader(SkSamplingOptions())));
+#else
+        sk_sp<SkImage> imB = skiaBitmap->GetSkImage()->makeNonTextureImage();
+        sk_sp<SkImage> imA = skiaAlpha->GetAlphaSkImage()->makeNonTextureImage();
+        paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, imB->makeShader(SkSamplingOptions()),
+                                         imA->makeShader(SkSamplingOptions())));
+#endif
         SkCanvas canvas(targetBitmap);
         canvas.concat(matrix);
         canvas.drawPaint(paint);
