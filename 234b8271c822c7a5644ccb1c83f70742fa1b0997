@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "645b7226_73c5823b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-30T12:12:41Z",
+      "side": 1,
+      "message": "oops, didn\u0027t notice this was a collabora-only branch until it was too late. Still, I think it should best be correctly so I keep the vote :)",
+      "revId": "234b8271c822c7a5644ccb1c83f70742fa1b0997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88c1c5f6_2b2c5e65",
