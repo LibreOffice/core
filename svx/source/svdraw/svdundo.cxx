@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svdoashp.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 
@@ -970,6 +971,48 @@ OUString SdrUndoObjOrdNum::GetComment() const
     return ImpGetDescriptionStr(STR_UndoObjOrdNum);
 }
 
+SdrUndoSort::SdrUndoSort(SdrPage & rPage,
+        ::std::vector<sal_Int32> const& rSortOrder)
+    : SdrUndoAction(rPage.getSdrModelFromSdrPage())
+    , m_OldSortOrder(rSortOrder.size())
+    , m_NewSortOrder(rSortOrder)
+    , m_nPage(rPage.GetPageNum())
+{
+    // invert order
+    for (size_t i = 0; i < rSortOrder.size(); ++i)
+    {
+        m_OldSortOrder[rSortOrder[i]] = i;
+    }
+}
+
+void SdrUndoSort::Do(::std::vector<sal_Int32> & rSortOrder)
+{
+    SdrPage & rPage(*rMod.GetPage(m_nPage));
+    if (rPage.GetObjCount() != rSortOrder.size())
+    {
+        // can probably happen with sw's cursed SdrVirtObj mess - no good solution for that
+        SAL_WARN("svx", "SdrUndoSort size mismatch");
+        return;
+    }
+
+    // hopefully this can't throw
+    rPage.sort(rSortOrder);
+}
+
+void SdrUndoSort::Undo()
+{
+    Do(m_OldSortOrder);
+}
+
+void SdrUndoSort::Redo()
+{
+    Do(m_NewSortOrder);
+}
+
+OUString SdrUndoSort::GetComment() const
+{
+    return SvxResId(STR_SortShapes);
+}
 
 SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
     : SdrUndoObj(rNewObj)
@@ -1666,6 +1709,11 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoCopyObject( SdrObject& 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
 {
     return std::make_unique<SdrUndoObjOrdNum>( rObject, nOldOrdNum1, nNewOrdNum1 );
+}
+
+std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoSort(SdrPage & rPage, ::std::vector<sal_Int32> const& rSortOrder)
+{
+    return std::make_unique<SdrUndoSort>(rPage, rSortOrder);
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
