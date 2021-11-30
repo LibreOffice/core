@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2599b07d_dc5302ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-30T15:08:40Z",
+      "side": 1,
+      "message": "May be off topic, but I do suggest we group some of the autofilter sub menus.\nCurrently we have:\n\nSort Asending\nSort Desending\nTop 10\nEmpty\nNot Empty\nText Color\nBackground Color\nStandard Filter...\n\u003can input field\u003e\n\u003cALL checkbox\u003e\n\u003cactual filter items\u003e\n\nI suggest we do:\nSort\n    Asending\n    Desending\nValue Is\n    Top 10\n    Empty\n    Not Empty\n    \u003cmore may be added here\u003e\nColor:\n    Text Color\n    Background Color\nReset AutoFilter\n\u003can input field\u003e\n\u003cALL checkbox\u003e\n\u003cactual filter items\u003e\n\nThis way we may save some space.",
+      "revId": "ae46523a98b5697e907a02de1b5207c9ea15c4ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
