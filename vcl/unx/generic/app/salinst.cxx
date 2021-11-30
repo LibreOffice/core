@@ -19,6 +19,14 @@
 
 #include <stdlib.h>
 
+#include <config_features.h>
+#include <vcl/skia/SkiaHelper.hxx>
+#include <config_skia.h>
+#if HAVE_FEATURE_SKIA
+#include <skia/x11/gdiimpl.hxx>
+#include <skia/salbmp.hxx>
+#endif
+
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salinst.h>
@@ -32,14 +40,6 @@
 #include <vcl/inputtypes.hxx>
 
 #include <salwtype.hxx>
-
-#include <config_features.h>
-#include <vcl/skia/SkiaHelper.hxx>
-#include <config_skia.h>
-#if HAVE_FEATURE_SKIA
-#include <skia/x11/gdiimpl.hxx>
-#include <skia/salbmp.hxx>
-#endif
 
 // plugin factory function
 extern "C"

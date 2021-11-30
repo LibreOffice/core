@@ -17,6 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <vcl/skia/SkiaHelper.hxx>
+#if HAVE_FEATURE_SKIA
+#include <skia/x11/gdiimpl.hxx>
+#include <skia/x11/textrender.hxx>
+#endif
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
@@ -49,13 +56,6 @@
 #include <unx/x11/xrender_peer.hxx>
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
-
-#include <config_features.h>
-#include <vcl/skia/SkiaHelper.hxx>
-#if HAVE_FEATURE_SKIA
-#include <skia/x11/gdiimpl.hxx>
-#include <skia/x11/textrender.hxx>
-#endif
 
 X11SalGraphics::X11SalGraphics():
     m_pFrame(nullptr),
