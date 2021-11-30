@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_vcl,vcl_backend_test))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_backend_test,\
     boost_headers\
+    harfbuzz \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_backend_test,\
