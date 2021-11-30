@@ -214,10 +214,10 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     // Setup context state for drawing (performDrawNativeControl() e.g. fills background in some cases).
     CGContextSetFillColorSpace(context, GetSalData()->mxRGBSpace);
     CGContextSetStrokeColorSpace(context, GetSalData()->mxRGBSpace);
-    RGBAColor lineColor = RGBAColor(mLineColor);
+    RGBAColor lineColor(mLineColor);
     CGContextSetRGBStrokeColor(context, lineColor.GetRed(), lineColor.GetGreen(),
                                lineColor.GetBlue(), lineColor.GetAlpha());
-    RGBAColor fillColor = RGBAColor(mFillColor);
+    RGBAColor fillColor(mFillColor);
     CGContextSetRGBFillColor(context, fillColor.GetRed(), fillColor.GetGreen(), fillColor.GetBlue(),
                              fillColor.GetAlpha());
     // Adjust for our drawn-to coordinates in the bitmap.
