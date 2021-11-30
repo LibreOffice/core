@@ -1277,7 +1277,26 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
     ImpPageChange(*mpSdrPage);
 }
 
-void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme) { mpTheme = std::move(pTheme); }
+void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme)
+{
+    mpTheme = std::move(pTheme);
+
+    if (mpTheme && mpSdrPage->IsMasterPage())
+    {
+        SdrModel& rModel = mpSdrPage->getSdrModelFromSdrPage();
+        sal_uInt16 nPageCount = rModel.GetPageCount();
+        for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+        {
+            SdrPage* pPage = rModel.GetPage(nPage);
+            if (!pPage->TRG_HasMasterPage() || &pPage->TRG_GetMasterPage() != mpSdrPage)
+            {
+                continue;
+            }
+
+            mpTheme->UpdateSdrPage(pPage);
+        }
+    }
+}
 
 svx::Theme* SdrPageProperties::GetTheme() { return mpTheme.get(); }
 
