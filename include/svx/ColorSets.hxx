@@ -19,6 +19,7 @@
 #include <tools/color.hxx>
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
+class SdrPage;
 
 namespace svx
 {
@@ -89,6 +90,8 @@ public:
     void ToAny(css::uno::Any& rVal) const;
 
     static std::unique_ptr<Theme> FromAny(const css::uno::Any& rVal);
+
+    void UpdateSdrPage(SdrPage* pPage);
 };
 
 } // end of namespace svx
