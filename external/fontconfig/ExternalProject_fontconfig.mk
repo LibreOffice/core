@@ -30,8 +30,13 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
 			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			$(if $(filter EMSCRIPTEN,$(OS)),ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no) \
-		&& $(MAKE) -C src \
+			$(if $(filter EMSCRIPTEN,$(OS)), \
+			    --with-baseconfigdir=/instdir/share/fontconfig \
+			    --with-cache-dir=/instdir/share/fontconfig/cache \
+			    --with-add-fonts=/instdir/share/fonts \
+			    ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no \
+			) \
+		&& $(MAKE) -C src && $(MAKE) fonts.conf \
 	)
 	$(call gb_Trace_EndRange,fontconfig,EXTERNAL)
 

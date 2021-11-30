@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,fontconfig))
 
 $(eval $(call gb_Module_add_targets,fontconfig,\
 	ExternalProject_fontconfig \
+	$(if $(filter EMSCRIPTEN,$(OS)),ExternalPackage_fontconfig_data) \
 	UnpackedTarball_fontconfig \
 ))
 
