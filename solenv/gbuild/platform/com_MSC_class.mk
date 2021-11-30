@@ -296,8 +296,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter Executable,$(TARGETTYPE)),&& mt.exe $(MTFLAGS) -nologo -manifest $(SRCDIR)/solenv/gbuild/platform/DeclareDPIAware.manifest -updateresource:$(1)\;1 ) \
 	$(if $(filter Library,$(TARGETTYPE)),&& \
 		echo $(notdir $(1)) > $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
-		$(gb_LINK) \
-			-dump -exports $(ILIBTARGET) \
+		$(gb_DUMPBIN) \
+			-exports $(ILIBTARGET) \
 			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp,$(WORKDIR)/LinkTarget/$(2).exports,$(1))) \
 	; \

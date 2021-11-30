@@ -26,6 +26,7 @@ include $(GBUILDDIR)/platform/windows.mk
 gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
+gb_DUMPBIN := dumpbin
 gb_AWK := awk
 gb_CLASSPATHSEP := ;
 gb_RC := rc
