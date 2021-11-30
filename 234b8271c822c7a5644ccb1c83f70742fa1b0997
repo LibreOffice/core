@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4612d5b_c0b262a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-30T13:03:13Z",
+      "side": 1,
+      "message": "true, indeed.\n\nBut (assuming this was a general change) consistency would be good, and system-unixodbc and internal iodbc isn\u0027t consistency :-)\n\nOr you check both of them in configure.ac and use whatever is present ;-)",
+      "parentUuid": "fb262b8e_36430481",
+      "revId": "234b8271c822c7a5644ccb1c83f70742fa1b0997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c1c5f6_2b2c5e65",
         "filename": "configure.ac",
         "patchSetId": 2
