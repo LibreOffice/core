@@ -251,12 +251,12 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyE
 
     VclPtr<vcl::Window> pParent = xUIElement->GetParent();
 
-    while (!pParent->IsTopWindow())
+    while (pParent && !pParent->IsTopWindow())
     {
         pParent = pParent->GetParent();
     }
 
-    OUString aParentID = pParent->get_id();
+    OUString aParentID = pParent ? pParent->get_id() : OUString();
 
     OUString aContent;
 
