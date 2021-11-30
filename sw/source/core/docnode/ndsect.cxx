@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <hintids.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/linkmgr.hxx>
@@ -1321,6 +1323,24 @@ bool SwSectionNode::IsContentHidden() const
         ++aTmp;
     }
     return true; // Hide everything
+}
+
+void SwSectionNode::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("section"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("type"),
+        BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                                      BAD_CAST(OString::number(sal_Int32(GetIndex())).getStr()));
+
+    if (m_pSection)
+    {
+        m_pSection->dumpAsXml(pWriter);
+    }
+
+    // (void)xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
 }
 
 void SwSectionNode::NodesArrChgd()

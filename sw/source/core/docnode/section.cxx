@@ -1021,6 +1021,7 @@ bool SwSectionFormat::supportsFullDrawingLayerFillAttributeSet() const
 void SwSectionFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormat"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
     GetAttrSet().dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
@@ -1519,6 +1520,15 @@ void SwSection::BreakLink()
     // reset linked file data
     SetLinkFileName( OUString() );
     SetLinkFilePassword( OUString() );
+}
+
+void SwSection::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwSection"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("registered-in"), "%p",
+                                            GetRegisteredIn());
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const { return m_rSectFormat.GetSectionNode(); }
