@@ -945,7 +945,10 @@ auto CurlProcessor::ProcessRequestImpl(
             case CURLE_SSL_ISSUER_ERROR:
             case CURLE_SSL_PINNEDPUBKEYNOTMATCH:
             case CURLE_SSL_INVALIDCERTSTATUS:
+            case CURLE_FAILED_INIT:
+#if CURL_AT_LEAST_VERSION(7, 69, 0)
             case CURLE_QUIC_CONNECT_ERROR:
+#endif
                 throw DAVException(
                     DAVException::DAV_HTTP_CONNECT,
                     ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
