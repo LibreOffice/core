@@ -450,7 +450,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  * mode 1 calculates the difference by week adhering to ISO8601.
  *
  * The International Standard IS-8601 states that Monday is the first
- * day of the week. The Gregorian Calender is used for all dates,
+ * day of the week. The Gregorian Calendar is used for all dates,
  * proleptic in case of dates before 1582-10-15.
  *
  * The (consecutive) week number of a date is

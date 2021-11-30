@@ -3737,7 +3737,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf54465_ColumnsWithFootnoteDoNotOccupy
 {
     // Old odt files should keep their original layout, as it was before Tdf139336 fix.
     // The new odt file is only 1 page long, while the old odt file (with the same content)
-    // was more then 1 page long.
+    // was more than 1 page long.
     // Note: Somewhy this test miscalculates the layout of the old odt file.
     // It will be 4 pages long, while opened in Writer it is 5 pages long.
     SwDoc* pDoc
