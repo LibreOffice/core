@@ -43,6 +43,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -196,7 +197,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                 aFactName = m_pImpl->aFactoryName;
             else
             {
-                OSL_FAIL("Missing argument!");
+                SAL_WARN("sfx.view", "Missing argument!");
                 break;
             }
 
