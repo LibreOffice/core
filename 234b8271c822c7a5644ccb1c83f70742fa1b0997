@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb262b8e_36430481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2021-11-30T12:58:26Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t understand your comment. If you use system ODBC headers, then nothing changes with this patch. You can continue to use unixODBC from the system, if you like.",
+      "parentUuid": "645b7226_73c5823b",
+      "revId": "234b8271c822c7a5644ccb1c83f70742fa1b0997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c1c5f6_2b2c5e65",
         "filename": "configure.ac",
         "patchSetId": 2
