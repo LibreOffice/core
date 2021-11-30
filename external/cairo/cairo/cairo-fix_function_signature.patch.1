@@ -1,0 +1,334 @@
+diff --git a/src/cairo-clip-boxes.c b/src/cairo-clip-boxes.c
+index aaddeb7..0d85051 100644
+--- a/src/cairo-clip-boxes.c
++++ b/src/cairo-clip-boxes.c
+@@ -481,8 +481,9 @@ _add_edge (struct reduce *r,
+ }
+ 
+ static cairo_status_t
+-_reduce_line_to (void *closure,
+-		       const cairo_point_t *point)
++_reduce_add_point (void *closure,
++                       const cairo_point_t *point,
++                       const struct _cairo_slope *slope)
+ {
+     struct reduce *r = closure;
+ 
+@@ -492,6 +493,13 @@ _reduce_line_to (void *closure,
+     return CAIRO_STATUS_SUCCESS;
+ }
+ 
++static cairo_status_t
++_reduce_line_to (void *closure,
++		       const cairo_point_t *point)
++{
++    return _reduce_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ _reduce_close (void *closure)
+ {
+@@ -547,6 +555,7 @@ _cairo_clip_reduce_to_boxes (cairo_clip_t *clip)
+ 	status = _cairo_path_fixed_interpret_flat (&clip_path->path,
+ 						   _reduce_move_to,
+ 						   _reduce_line_to,
++						   _reduce_add_point,
+ 						   _reduce_close,
+ 						   &r,
+ 						   clip_path->tolerance);
+diff --git a/src/cairo-path-fill.c b/src/cairo-path-fill.c
+index 4000c9c..dd11a91 100644
+--- a/src/cairo-path-fill.c
++++ b/src/cairo-path-fill.c
+@@ -54,8 +54,9 @@ typedef struct cairo_filler {
+ } cairo_filler_t;
+ 
+ static cairo_status_t
+-_cairo_filler_line_to (void *closure,
+-		       const cairo_point_t *point)
++_cairo_filler_add_point (void *closure,
++			const cairo_point_t *point,
++			const struct _cairo_slope *slope)
+ {
+     cairo_filler_t *filler = closure;
+     cairo_status_t status;
+@@ -69,6 +70,13 @@ _cairo_filler_line_to (void *closure,
+     return status;
+ }
+ 
++static cairo_status_t
++_cairo_filler_line_to (void *closure,
++		       const cairo_point_t *point)
++{
++    return _cairo_filler_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ _cairo_filler_close (void *closure)
+ {
+@@ -113,7 +121,7 @@ _cairo_filler_curve_to (void		*closure,
+     }
+ 
+     if (! _cairo_spline_init (&spline,
+-			      (cairo_spline_add_point_func_t)_cairo_filler_line_to, filler,
++			      _cairo_filler_add_point, filler,
+ 			      &filler->current_point, p1, p2, p3))
+     {
+ 	return _cairo_filler_line_to (closure, p3);
+@@ -164,8 +172,9 @@ typedef struct cairo_filler_rectilinear_aligned {
+ } cairo_filler_ra_t;
+ 
+ static cairo_status_t
+-_cairo_filler_ra_line_to (void *closure,
+-			  const cairo_point_t *point)
++_cairo_filler_ra_add_point (void *closure,
++			  const cairo_point_t *point,
++			  const struct _cairo_slope *slope)
+ {
+     cairo_filler_ra_t *filler = closure;
+     cairo_status_t status;
+@@ -183,6 +192,13 @@ _cairo_filler_ra_line_to (void *closure,
+     return status;
+ }
+ 
++static cairo_status_t
++_cairo_filler_ra_line_to (void *closure,
++			  const cairo_point_t *point)
++{
++    return _cairo_filler_ra_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ _cairo_filler_ra_close (void *closure)
+ {
+@@ -234,6 +250,7 @@ _cairo_path_fixed_fill_rectilinear_to_polygon (const cairo_path_fixed_t *path,
+     status = _cairo_path_fixed_interpret_flat (path,
+ 					       _cairo_filler_ra_move_to,
+ 					       _cairo_filler_ra_line_to,
++					       _cairo_filler_ra_add_point,
+ 					       _cairo_filler_ra_close,
+ 					       &filler,
+ 					       0.);
+diff --git a/src/cairo-path-fixed.c b/src/cairo-path-fixed.c
+index d741823..ea7fb9e 100644
+--- a/src/cairo-path-fixed.c
++++ b/src/cairo-path-fixed.c
+@@ -1108,6 +1108,7 @@ typedef struct cairo_path_flattener {
+     cairo_point_t current_point;
+     cairo_path_fixed_move_to_func_t	*move_to;
+     cairo_path_fixed_line_to_func_t	*line_to;
++    cairo_spline_add_point_func_t        add_point;
+     cairo_path_fixed_close_path_func_t	*close_path;
+     void *closure;
+ } cpf_t;
+@@ -1124,8 +1125,9 @@ _cpf_move_to (void *closure,
+ }
+ 
+ static cairo_status_t
+-_cpf_line_to (void *closure,
+-	      const cairo_point_t *point)
++_cpf_add_point (void *closure,
++	      const cairo_point_t *point,
++              const struct _cairo_slope *slope)
+ {
+     cpf_t *cpf = closure;
+ 
+@@ -1134,6 +1136,13 @@ _cpf_line_to (void *closure,
+     return cpf->line_to (cpf->closure, point);
+ }
+ 
++static cairo_status_t
++_cpf_line_to (void *closure,
++	      const cairo_point_t *point)
++{
++    return _cpf_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ _cpf_curve_to (void		*closure,
+ 	       const cairo_point_t	*p1,
+@@ -1146,7 +1155,7 @@ _cpf_curve_to (void		*closure,
+     cairo_point_t *p0 = &cpf->current_point;
+ 
+     if (! _cairo_spline_init (&spline,
+-			      (cairo_spline_add_point_func_t)cpf->line_to,
++			      cpf->add_point,
+ 			      cpf->closure,
+ 			      p0, p1, p2, p3))
+     {
+@@ -1170,6 +1179,7 @@ cairo_status_t
+ _cairo_path_fixed_interpret_flat (const cairo_path_fixed_t		*path,
+ 				  cairo_path_fixed_move_to_func_t	*move_to,
+ 				  cairo_path_fixed_line_to_func_t	*line_to,
++				  cairo_spline_add_point_func_t		 add_point,
+ 				  cairo_path_fixed_close_path_func_t	*close_path,
+ 				  void					*closure,
+ 				  double				tolerance)
+@@ -1188,6 +1198,7 @@ _cairo_path_fixed_interpret_flat (const cairo_path_fixed_t		*path,
+     flattener.tolerance = tolerance;
+     flattener.move_to = move_to;
+     flattener.line_to = line_to;
++    flattener.add_point = *add_point;
+     flattener.close_path = close_path;
+     flattener.closure = closure;
+     return _cairo_path_fixed_interpret (path,
+diff --git a/src/cairo-path-in-fill.c b/src/cairo-path-in-fill.c
+index 1787fb1..e61500b 100644
+--- a/src/cairo-path-in-fill.c
++++ b/src/cairo-path-in-fill.c
+@@ -169,8 +169,9 @@ _cairo_in_fill_move_to (void *closure,
+ }
+ 
+ static cairo_status_t
+-_cairo_in_fill_line_to (void *closure,
+-			const cairo_point_t *point)
++_cairo_in_fill_spline_add_point (void *closure,
++				 const cairo_point_t *point,
++				 const struct _cairo_slope *slope)
+ {
+     cairo_in_fill_t *in_fill = closure;
+ 
+@@ -183,6 +184,13 @@ _cairo_in_fill_line_to (void *closure,
+     return CAIRO_STATUS_SUCCESS;
+ }
+ 
++static cairo_status_t
++_cairo_in_fill_line_to (void *closure,
++			 const cairo_point_t *point)
++{
++    return _cairo_in_fill_spline_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ _cairo_in_fill_curve_to (void *closure,
+ 			 const cairo_point_t *b,
+@@ -217,7 +225,7 @@ _cairo_in_fill_curve_to (void *closure,
+ 
+     /* XXX Investigate direct inspection of the inflections? */
+     if (! _cairo_spline_init (&spline,
+-			      (cairo_spline_add_point_func_t)_cairo_in_fill_line_to,
++			      _cairo_in_fill_spline_add_point,
+ 			      in_fill,
+ 			      &in_fill->current_point, b, c, d))
+     {
+diff --git a/src/cairo-path-stroke-traps.c b/src/cairo-path-stroke-traps.c
+index 1363ffa..6377bc1 100644
+--- a/src/cairo-path-stroke-traps.c
++++ b/src/cairo-path-stroke-traps.c
+@@ -817,7 +817,9 @@ line_to (void *closure, const cairo_point_t *point)
+  * Dashed lines.  Cap each dash end, join around turns when on
+  */
+ static cairo_status_t
+-line_to_dashed (void *closure, const cairo_point_t *point)
++_cairo_in_dashed_spline_add_point (void *closure,
++				   const cairo_point_t *point,
++				   const struct _cairo_slope *slope)
+ {
+     struct stroker *stroker = closure;
+     double mag, remain, step_length = 0;
+@@ -930,6 +932,12 @@ line_to_dashed (void *closure, const cairo_point_t *point)
+     return CAIRO_STATUS_SUCCESS;
+ }
+ 
++static cairo_status_t
++line_to_dashed (void *closure, const cairo_point_t *point)
++{
++    return _cairo_in_dashed_spline_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ spline_to (void *closure,
+ 	   const cairo_point_t *point,
+@@ -1042,7 +1050,7 @@ curve_to_dashed (void *closure,
+     cairo_spline_add_point_func_t func;
+     cairo_status_t status;
+ 
+-    func = (cairo_spline_add_point_func_t)line_to_dashed;
++    func = _cairo_in_dashed_spline_add_point;
+ 
+     if (stroker->has_bounds &&
+ 	! _cairo_spline_intersects (&stroker->current_face.point, b, c, d,
+diff --git a/src/cairo-path.c b/src/cairo-path.c
+index 566e86f..5a8f5d6 100644
+--- a/src/cairo-path.c
++++ b/src/cairo-path.c
+@@ -70,8 +70,9 @@ _cpc_move_to (void *closure,
+ }
+ 
+ static cairo_status_t
+-_cpc_line_to (void *closure,
+-	      const cairo_point_t *point)
++_cpc_add_point (void *closure,
++	      const cairo_point_t *point,
++	      const struct _cairo_slope *slope)
+ {
+     cpc_t *cpc = closure;
+ 
+@@ -80,6 +81,13 @@ _cpc_line_to (void *closure,
+     return CAIRO_STATUS_SUCCESS;
+ }
+ 
++static cairo_status_t
++_cpc_line_to (void *closure,
++	      const cairo_point_t *point)
++{
++    return _cpc_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ _cpc_curve_to (void		*closure,
+ 	       const cairo_point_t	*p1,
+@@ -118,6 +126,7 @@ _cairo_path_count (cairo_path_t		*path,
+ 	status = _cairo_path_fixed_interpret_flat (path_fixed,
+ 						   _cpc_move_to,
+ 						   _cpc_line_to,
++						   _cpc_add_point,
+ 						   _cpc_close_path,
+ 						   &cpc,
+ 						   tolerance);
+@@ -168,8 +177,9 @@ _cpp_move_to (void *closure,
+ }
+ 
+ static cairo_status_t
+-_cpp_line_to (void *closure,
+-	      const cairo_point_t *point)
++_cpp_add_point (void *closure,
++	      const cairo_point_t *point,
++	      const struct _cairo_slope *slope)
+ {
+     cpp_t *cpp = closure;
+     cairo_path_data_t *data = cpp->data;
+@@ -192,6 +202,13 @@ _cpp_line_to (void *closure,
+     return CAIRO_STATUS_SUCCESS;
+ }
+ 
++static cairo_status_t
++_cpp_line_to (void *closure,
++	      const cairo_point_t *point)
++{
++    return _cpp_add_point(closure, point, NULL);
++}
++
+ static cairo_status_t
+ _cpp_curve_to (void			*closure,
+ 	       const cairo_point_t	*p1,
+@@ -264,6 +281,7 @@ _cairo_path_populate (cairo_path_t		*path,
+ 	status = _cairo_path_fixed_interpret_flat (path_fixed,
+ 						   _cpp_move_to,
+ 						   _cpp_line_to,
++						   _cpp_add_point,
+ 						   _cpp_close_path,
+ 						   &cpp,
+ 						   cairo_get_tolerance (cr));
+diff --git a/src/cairoint.h b/src/cairoint.h
+index 7f6a252..edbfe52 100644
+--- a/src/cairoint.h
++++ b/src/cairoint.h
+@@ -1022,6 +1022,7 @@ cairo_private cairo_status_t
+ _cairo_path_fixed_interpret_flat (const cairo_path_fixed_t *path,
+ 		       cairo_path_fixed_move_to_func_t	  *move_to,
+ 		       cairo_path_fixed_line_to_func_t	  *line_to,
++		       cairo_spline_add_point_func_t       add_point,
+ 		       cairo_path_fixed_close_path_func_t *close_path,
+ 		       void				  *closure,
+ 		       double				  tolerance);

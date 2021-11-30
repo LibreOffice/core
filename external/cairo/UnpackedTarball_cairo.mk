@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo.oldfreetype.patch \
 	external/cairo/cairo/san.patch.0 \
 	external/cairo/cairo/0001-Fix-mask-usage-in-image-compositor.patch.1 \
+    external/cairo/cairo/cairo-fix_function_signature.patch.1 \
 ))
 
 ifeq ($(OS),iOS)
