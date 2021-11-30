@@ -718,23 +718,13 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
     bool const isUndo(rModel.IsUndoEnabled());
     if (isUndo)
     {
-        rModel.BegUndo(SvxResId(STR_SortShapes));
+        rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoSort(*getSdrPageFromSdrObjList(), sortOrder));
     }
 
     for (size_t i = 0; i < aNewSortOrder.size(); ++i)
     {
         aNewList[i] = maList[ aNewSortOrder[i] ];
-        if (isUndo && i != sal::static_int_cast<size_t>(aNewSortOrder[i]))
-        {
-            rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoObjectOrdNum(
-                        *aNewList[i], aNewSortOrder[i], i));
-        }
         aNewList[i]->SetOrdNum(i);
-    }
-
-    if (isUndo)
-    {
-        rModel.EndUndo();
     }
 
     std::swap(aNewList, maList);
