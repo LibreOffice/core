@@ -210,6 +210,13 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 
 gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
+ifneq ($(gb_ENABLE_PCH),)
+ifeq ($(COM_IS_CLANG),TRUE)
+# the same as in com_GCC_defs.mk
+gb_NO_PCH_TIMESTAMP := -Xclang -fno-pch-timestamp
+endif
+endif
+
 gb_LinkTarget_LDFLAGS := \
 	$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-nologo,) \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
