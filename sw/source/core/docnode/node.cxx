@@ -992,9 +992,6 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     case SwNodeType::Table:
         pName = "table";
         break;
-    case SwNodeType::Section:
-        pName = "section";
-        break;
     default:
         switch(GetStartNodeType())
         {

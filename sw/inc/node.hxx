@@ -568,6 +568,8 @@ public:
        a hidden sub-area. */
     bool IsContentHidden() const;
 
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
 };
 
 /** This class is internal, used only during DocumentContentOperationsManager::CopyWithFlyInFly(), and for undo.

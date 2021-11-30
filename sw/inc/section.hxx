@@ -244,6 +244,7 @@ public:
 
     void BreakLink();
 
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 // #i117863#
