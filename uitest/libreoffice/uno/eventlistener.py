@@ -6,8 +6,6 @@
 #
 
 try:
-    import pyuno
-    import uno
     import unohelper
     from com.sun.star.document import XDocumentEventListener
 except ImportError:
