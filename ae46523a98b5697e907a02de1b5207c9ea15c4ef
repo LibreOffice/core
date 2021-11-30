@@ -16,6 +16,24 @@
       "message": "May be off topic, but I do suggest we group some of the autofilter sub menus.\nCurrently we have:\n\nSort Asending\nSort Desending\nTop 10\nEmpty\nNot Empty\nText Color\nBackground Color\nStandard Filter...\n\u003can input field\u003e\n\u003cALL checkbox\u003e\n\u003cactual filter items\u003e\n\nI suggest we do:\nSort\n    Asending\n    Desending\nValue Is\n    Top 10\n    Empty\n    Not Empty\n    \u003cmore may be added here\u003e\nColor:\n    Text Color\n    Background Color\nReset AutoFilter\n\u003can input field\u003e\n\u003cALL checkbox\u003e\n\u003cactual filter items\u003e\n\nThis way we may save some space.",
       "revId": "ae46523a98b5697e907a02de1b5207c9ea15c4ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a7d6a0_9b118049",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-30T20:43:28Z",
+      "side": 1,
+      "message": "Yeah, I agree. Not sure where \"standard filter...\" should live (under Value Is?). For the proposed arrangement of \"color\" above I think that leads to a 3 level menu structure which might mean some technical tweaks on my side. A bug on the topic with heiko on cc to thrash out what it should look like (with reference to what competitors do if possible) sounds a good idea, especially now that the dropdown requires a more space with the extra color entries.\n\nBefore looking at the above I\u0027d like to make the \"color menus\" work the same as the \"date sort\" submenu in the data pilot version of this dropdown which is auto-raised on hover.",
+      "parentUuid": "2599b07d_dc5302ee",
+      "revId": "ae46523a98b5697e907a02de1b5207c9ea15c4ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
