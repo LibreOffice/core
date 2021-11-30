@@ -343,7 +343,7 @@ protected:
     Color mFillColor;
     enum class XorMode
     {
-        None,
+        NONE,
         Invert,
         Xor
     };

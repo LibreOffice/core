@@ -263,7 +263,7 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
     , mIsGPU(false)
     , mLineColor(SALCOLOR_NONE)
     , mFillColor(SALCOLOR_NONE)
-    , mXorMode(XorMode::None)
+    , mXorMode(XorMode::NONE)
     , mFlush(new SkiaFlushIdle(this))
     , mPendingOperationsToFlush(0)
     , mScaling(1)
@@ -645,7 +645,7 @@ void SkiaSalGraphicsImpl::SetFillColor(Color nColor)
 
 void SkiaSalGraphicsImpl::SetXORMode(bool set, bool invert)
 {
-    XorMode newMode = set ? (invert ? XorMode::Invert : XorMode::Xor) : XorMode::None;
+    XorMode newMode = set ? (invert ? XorMode::Invert : XorMode::Xor) : XorMode::NONE;
     if (newMode == mXorMode)
         return;
     checkPendingDrawing();
@@ -1192,7 +1192,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     else
     {
         src = this;
-        assert(mXorMode == XorMode::None);
+        assert(mXorMode == XorMode::NONE);
     }
     auto srcDebug = [&]() -> std::string {
         if (src == this)
@@ -1211,7 +1211,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
 
 void SkiaSalGraphicsImpl::privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGraphicsImpl* src)
 {
-    assert(mXorMode == XorMode::None);
+    assert(mXorMode == XorMode::NONE);
     addUpdateRegion(SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                                      rPosAry.mnDestHeight));
     SkPaint paint;
@@ -1401,7 +1401,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
 {
     preDraw();
     SAL_INFO("vcl.skia.trace", "invert(" << this << "): " << rPoly << ":" << int(eFlags));
-    assert(mXorMode == XorMode::None);
+    assert(mXorMode == XorMode::NONE);
     SkPath aPath;
     aPath.incReserve(rPoly.count());
     addPolygonToPath(rPoly, aPath);
