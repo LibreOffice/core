@@ -176,9 +176,9 @@ IMPL_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
         uno::Any exc(cppu::getCaughtException());
         OUString msg(comphelper::anyToString(exc));
         SolarMutexGuard g;
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg));
+        std::shared_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg));
         xErrorBox->set_title(rHyperlink.GetText());
-        xErrorBox->run();
+        xErrorBox->runAsync(xErrorBox, [](sal_Int32){});
     }
 }
 
