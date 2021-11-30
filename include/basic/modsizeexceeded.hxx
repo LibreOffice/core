@@ -28,7 +28,7 @@
 
 namespace com::sun::star::task { class XInteractionContinuation; }
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && !defined(__clang__)
 // MSVC automatically applies dllexport to template instantiations if they are a base class
 // of a dllexport class, and this template instantiation is a case of that. If we don't
 // dllimport here, MSVC will complain about duplicate symbols in a mergelibs build.
