@@ -70,6 +70,23 @@
       "parentUuid": "fabdafea_e8716d5f",
       "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a16c72f_27e6e861",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-30T08:31:26Z",
+      "side": 1,
+      "message": "Hi Luboš Luňák,\nShould it be backported to libreoffice-7-3 branch or do you want to keep this fix in master only ?",
+      "revId": "f7a628f8efe037c1fd7e594eb4b8fc6a44573384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
