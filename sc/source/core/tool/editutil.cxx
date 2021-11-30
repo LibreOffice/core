@@ -870,14 +870,17 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return ScEditUtil::GetCellFieldValue(*pFieldData, mpDoc, &rTxtColor);
 }
 
-void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField )
+bool ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField )
 {
     if (!bExecuteURL)
-        return;
+        return false;
+
     if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(rField.GetField()))
     {
         ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame());
+        return true;
     }
+    return false;
 }
 
 ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
