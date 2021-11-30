@@ -1220,14 +1220,35 @@ void SkiaSalGraphicsImpl::privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGrap
                                         rPosAry.mnSrcHeight);
     SkRect destRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                                        rPosAry.mnDestHeight);
-    // Scaling for source coordinates must be done manually.
-    if (src->mScaling != 1)
-        srcRect = scaleRect(srcRect, src->mScaling);
+
+    if (!SkIRect::Intersects(srcRect, SkIRect::MakeWH(src->GetWidth(), src->GetHeight()))
+        || !SkRect::Intersects(destRect, SkRect::MakeWH(GetWidth(), GetHeight())))
+        return;
+
     if (src == this)
     {
         // Copy-to-self means that we'd take a snapshot, which would refcount the data,
         // and then drawing would result in copy in write, copying the entire surface.
         // Try to copy less by making a snapshot of only what is needed.
+        // A complication here is that drawImageRect() can handle coordinates outside
+        // of surface fine, but makeImageSnapshot() will crop to the surface area,
+        // so do that manually here in order to adjust also destination rectangle.
+        if (srcRect.x() < 0 || srcRect.y() < 0)
+        {
+            destRect.fLeft += -srcRect.x();
+            destRect.fTop += -srcRect.y();
+            srcRect.adjust(-srcRect.x(), -srcRect.y(), 0, 0);
+        }
+        // Note that right() and bottom() are not inclusive (are outside of the rect).
+        if (srcRect.right() - 1 > GetWidth() || srcRect.bottom() - 1 > GetHeight())
+        {
+            destRect.fRight += GetWidth() - srcRect.right();
+            destRect.fBottom += GetHeight() - srcRect.bottom();
+            srcRect.adjust(0, 0, GetWidth() - srcRect.right(), GetHeight() - srcRect.bottom());
+        }
+        // Scaling for source coordinates must be done manually.
+        if (src->mScaling != 1)
+            srcRect = scaleRect(srcRect, src->mScaling);
         sk_sp<SkImage> image = makeCheckedImageSnapshot(src->mSurface, srcRect);
         srcRect.offset(-srcRect.x(), -srcRect.y());
         getDrawCanvas()->drawImageRect(image, SkRect::Make(srcRect), destRect,
@@ -1236,6 +1257,9 @@ void SkiaSalGraphicsImpl::privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGrap
     }
     else
     {
+        // Scaling for source coordinates must be done manually.
+        if (src->mScaling != 1)
+            srcRect = scaleRect(srcRect, src->mScaling);
         // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
         getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(src->mSurface),
                                        SkRect::Make(srcRect), destRect,
