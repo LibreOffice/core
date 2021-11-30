@@ -170,36 +170,15 @@ public:
      */
     inline void disposeAndClear(const css::lang::EventObject& rEvt)
     {
-        typename InterfaceMap::size_type nSize = 0;
-        OInterfaceContainerHelper2** ppListenerContainers = nullptr;
+        // create a copy, because do not fire event in a guarded section
+        InterfaceMap tempMap;
         {
             ::osl::MutexGuard aGuard(rMutex);
-            nSize = m_aMap.size();
-            if (nSize)
-            {
-                typedef OInterfaceContainerHelper2* ppp;
-                ppListenerContainers = new ppp[nSize];
-
-                typename InterfaceMap::iterator iter = m_aMap.begin();
-                typename InterfaceMap::iterator end = m_aMap.end();
-
-                typename InterfaceMap::size_type i = 0;
-                while (iter != end)
-                {
-                    ppListenerContainers[i++] = (*iter).second.get();
-                    ++iter;
-                }
-            }
+            tempMap = std::move(m_aMap);
         }
 
-        // create a copy, because do not fire event in a guarded section
-        for (typename InterfaceMap::size_type i = 0; i < nSize; i++)
-        {
-            if (ppListenerContainers[i])
-                ppListenerContainers[i]->disposeAndClear(rEvt);
-        }
-
-        delete[] ppListenerContainers;
+        for (auto& rPair : m_aMap)
+            rPair.second->disposeAndClear(rEvt);
     }
 
     /**
