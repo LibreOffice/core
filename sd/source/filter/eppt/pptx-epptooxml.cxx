@@ -1490,8 +1490,15 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                                           OUString::number(nPageNum + 1) + ".xml",
                                          "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml");
 
+    SdrPage* pMasterPage = SdPage::getImplementation(mXDrawPage);
+    svx::Theme* pTheme = nullptr;
+    if (pMasterPage)
+    {
+        pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+    }
+
     // write theme per master
-    WriteTheme(nPageNum);
+    WriteTheme(nPageNum, pTheme);
 
     // add implicit relation to the presentation theme
     addRelation(pFS->getOutputStream(),
@@ -2138,6 +2145,48 @@ void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
     }
 }
 
+bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme)
+{
+    static std::map<PredefinedClrSchemeId, sal_Int32> aPredefinedClrTokens =
+    {
+        // dk1 and lt1 is intentionally missing.
+        { dk2, XML_dk2 },
+        { lt2, XML_lt2 },
+        { accent1, XML_accent1 },
+        { accent2, XML_accent2 },
+        { accent3, XML_accent3 },
+        { accent4, XML_accent4 },
+        { accent5, XML_accent5 },
+        { accent6, XML_accent6 },
+        { hlink, XML_hlink },
+        { folHlink, XML_folHlink }
+    };
+
+    if (!pTheme)
+    {
+        return false;
+    }
+
+    svx::ColorSet* pColorSet = pTheme->GetColorSet();
+    if (!pColorSet)
+    {
+        return false;
+    }
+
+    for (int nId = PredefinedClrSchemeId::dk2; nId < PredefinedClrSchemeId::Count; nId++)
+    {
+        // dk1 and lt1 are not written here.
+        int nIndex = nId + 2;
+
+        sal_Int32 nToken = aPredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
+        pFS->startElementNS(XML_a, nToken);
+        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(static_cast<sal_Int32>(pColorSet->getColor(nIndex))));
+        pFS->endElementNS(XML_a, nToken);
+    }
+
+    return true;
+}
+
 bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString& rThemePath)
 {
     try
@@ -2195,23 +2244,37 @@ bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString&
     return false;
 }
 
-void PowerPointExport::WriteTheme(sal_Int32 nThemeNum)
+void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, svx::Theme* pTheme)
 {
     OUString sThemePath = "ppt/theme/theme" + OUString::number(nThemeNum + 1) + ".xml";
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(sThemePath,
                       "application/vnd.openxmlformats-officedocument.theme+xml");
 
+    OUString aThemeName("Office Theme");
+    if (pTheme)
+    {
+        aThemeName = pTheme->GetName();
+    }
     pFS->startElementNS(XML_a, XML_theme,
                         FSNS(XML_xmlns, XML_a), this->getNamespaceURL(OOX_NS(dml)),
-                        XML_name, "Office Theme");
+                        XML_name, aThemeName);
 
     pFS->startElementNS(XML_a, XML_themeElements);
-    pFS->startElementNS(XML_a, XML_clrScheme, XML_name, "Office");
+    OUString aColorSchemeName("Office");
+    if (pTheme)
+    {
+        svx::ColorSet* pColorSet = pTheme->GetColorSet();
+        if (pColorSet)
+        {
+            aColorSchemeName = pColorSet->getName();
+        }
+    }
+    pFS->startElementNS(XML_a, XML_clrScheme, XML_name, aColorSchemeName);
 
     pFS->write(SYS_COLOR_SCHEMES);
 
-    if (!WriteColorSchemes(pFS, sThemePath))
+    if (!WriteColorSets(pFS, pTheme) && !WriteColorSchemes(pFS, sThemePath))
     {
         // if style is not defined, try to use first one
         if (!WriteColorSchemes(pFS, "ppt/theme/theme1.xml"))
@@ -2268,7 +2331,7 @@ void PowerPointExport::WriteNotesMaster()
         openFragmentStreamWithSerializer("ppt/notesMasters/notesMaster1.xml",
                                          "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml");
     // write theme per master
-    WriteTheme(mnMasterPages);
+    WriteTheme(mnMasterPages, nullptr);
 
     // add implicit relation to the presentation theme
     addRelation(pFS->getOutputStream(),

@@ -1608,6 +1608,13 @@ void SdOOXMLExportTest2::testAccentColor()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val", "70ad47");
     xmlDocUniquePtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val", "deb340");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Motyw pakietu Office
+    // - Actual  : Office Theme
+    // i.e. the theme and color scheme name was lost on export.
+    assertXPath(pXmlDocTheme1, "/a:theme", "name", "Motyw pakietu Office");
+    assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme", "name", "Pakiet Office");
 }
 
 void SdOOXMLExportTest2::testThemeColors()
