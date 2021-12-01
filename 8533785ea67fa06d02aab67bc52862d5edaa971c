@@ -16,6 +16,23 @@
       "message": "I might just merge this with the extended comment into the original VFS build patch. The WASM branch is a mess. I\u0027m currently cleaning up the patches (producing even more) and upstreaming stuff, now that libreoffice-7-3 is branched.",
       "revId": "8533785ea67fa06d02aab67bc52862d5edaa971c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5587662a_a918949e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-01T13:24:47Z",
+      "side": 1,
+      "message": "feel free to integrate into your branch, no problem abandoning this one.\n\nHowever if there are no explanations from the commit message in the form of git blame/makefile history, then it might make sense to add some comments into the makefile itself (re srcdir !\u003d builddir, the src@dest syntax and quoting of @ as @@ in filenames, commandline length as reason for handling them differently)",
+      "revId": "8533785ea67fa06d02aab67bc52862d5edaa971c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
