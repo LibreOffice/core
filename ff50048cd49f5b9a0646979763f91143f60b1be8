@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a6a7a15_099f0e6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-01T14:47:23Z",
+      "side": 1,
+      "message": "Hi Gülsah,\nBefore you backport it to libreoffice-7-2 you have to backport it to libreoffice-7-3 and from there, to libreoffice-7-2.\nMy question is, tdf#140912 is inherit from OOo, why do you want to backport it to libreoffice-7-2 branch ?",
+      "revId": "ff50048cd49f5b9a0646979763f91143f60b1be8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
