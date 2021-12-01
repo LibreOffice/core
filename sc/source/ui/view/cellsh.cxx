@@ -767,11 +767,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 {
                     ScRangeListRef aMarkRanges;
                     GetViewData().GetMultiArea(aMarkRanges);
-                    SCCOL nCol1 = aMarkRanges->front().aStart.Col();
-                    SCROW nRow1 = aMarkRanges->front().aStart.Row();
-                    SCCOL nCol2 = aMarkRanges->front().aEnd.Col();
-                    SCROW nRow2 = aMarkRanges->front().aEnd.Row();
-                    size_t nRanges = aMarkRanges->size();
+                    const SCCOL nCol1 = aMarkRanges->front().aStart.Col();
+                    const SCROW nRow1 = aMarkRanges->front().aStart.Row();
+                    const SCCOL nCol2 = aMarkRanges->front().aEnd.Col();
+                    const SCROW nRow2 = aMarkRanges->front().aEnd.Row();
+                    const size_t nRanges = aMarkRanges->size();
 
                     if ((nRanges == 1 && (nCol2 != nCol1 || nRow1 != nRow2)) || nRanges > 1)
                     {
@@ -781,28 +781,32 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         SCCOL nColsSum = 0;
                         for (size_t i = 0; i < nRanges; ++i)
                         {
-                            const ScRange& aRange = (*aMarkRanges)[i];
-                            SCCOL nRangeCol1 = aRange.aStart.Col();
-                            SCROW nRangeRow1 = aRange.aStart.Row();
-                            SCCOL nRangeCol2 = aRange.aEnd.Col();
-                            SCROW nRangeRow2 = aRange.aEnd.Row();
-                            const auto nRows = rDoc.CountNonFilteredRows(nRangeRow1, nRangeRow2,
-                                                                         aRange.aStart.Tab());
-                            const auto nCols = nRangeCol2 - nRangeCol1 + 1;
+                            const ScRange& rRange = (*aMarkRanges)[i];
+                            const SCCOL nRangeCol1 = rRange.aStart.Col();
+                            const SCROW nRangeRow1 = rRange.aStart.Row();
+                            const SCCOL nRangeCol2 = rRange.aEnd.Col();
+                            const SCROW nRangeRow2 = rRange.aEnd.Row();
                             bSameRows &= (nRow1 == nRangeRow1 && nRow2 == nRangeRow2);
                             bSameCols &= (nCol1 == nRangeCol1 && nCol2 == nRangeCol2);
                             // Sum rows if the number of cols is the same or
                             // sum columns if the number of rows is the same,
                             // otherwise do not show any count of selected cells.
-                            if (bSameRows)
+                            if (bSameRows || bSameCols)
                             {
-                                nRowsSum = nRows;
-                                nColsSum += nCols;
-                            }
-                            else if (bSameCols)
-                            {
-                                nRowsSum += nRows;
-                                nColsSum = nCols;
+                                const auto nCols = nRangeCol2 - nRangeCol1 + 1;
+                                const auto nRows = (bSameCols || nRowsSum == 0) ?
+                                    rDoc.CountNonFilteredRows( nRangeRow1, nRangeRow2, rRange.aStart.Tab()) :
+                                    nRowsSum;
+                                if (bSameRows)
+                                {
+                                    nRowsSum = nRows;
+                                    nColsSum += nCols;
+                                }
+                                else if (bSameCols)
+                                {
+                                    nRowsSum += nRows;
+                                    nColsSum = nCols;
+                                }
                             }
                             else
                                 break;
