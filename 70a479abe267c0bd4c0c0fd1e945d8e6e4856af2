@@ -16,6 +16,24 @@
       "message": "is it intentional that the conditional block include the throw as well as the CURLE_QUIC_CONNECT_ERROR: line ? I\u0027d have thought it should just cover the one line.",
       "revId": "70a479abe267c0bd4c0c0fd1e945d8e6e4856af2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02285235_4babcc79",
+        "filename": "ucb/source/ucp/webdav-curl/CurlSession.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-01T08:57:03Z",
+      "side": 1,
+      "message": "Upps - https://gerrit.libreoffice.org/c/core/+/126170",
+      "parentUuid": "8f8d9c27_ba865c5d",
+      "revId": "70a479abe267c0bd4c0c0fd1e945d8e6e4856af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
