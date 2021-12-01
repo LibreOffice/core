@@ -145,11 +145,29 @@ void ScCheckListMenuControl::addSeparator()
 
 IMPL_LINK(ScCheckListMenuControl, TreeSizeAllocHdl, const Size&, rSize, void)
 {
+    maAllocatedSize = rSize;
+    SetDropdownPos();
+    if (!mnAsyncSetDropdownPosId && Application::GetToolkitName().startsWith("gtk"))
+    {
+        // for gtk retry again later in case it didn't work (wayland)
+        mnAsyncSetDropdownPosId  = Application::PostUserEvent(LINK(this, ScCheckListMenuControl, SetDropdownPosHdl));
+    }
+}
+
+void ScCheckListMenuControl::SetDropdownPos()
+{
     std::vector<int> aWidths
     {
-        o3tl::narrowing<int>(rSize.Width() - (mxMenu->get_text_height() * 3) / 4 - 6)
+        o3tl::narrowing<int>(maAllocatedSize.Width() - (mxMenu->get_text_height() * 3) / 4 - 6)
     };
     mxMenu->set_column_fixed_widths(aWidths);
+}
+
+IMPL_LINK_NOARG(ScCheckListMenuControl, SetDropdownPosHdl, void*, void)
+{
+    mnAsyncSetDropdownPosId = nullptr;
+    SetDropdownPos();
+    mxMenu->queue_resize();
 }
 
 void ScCheckListMenuControl::CreateDropDown()
@@ -458,6 +476,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScDocument
     , mnSelectedMenu(MENU_NOT_SELECTED)
     , mpDoc(pDoc)
     , mnAsyncPostPopdownId(nullptr)
+    , mnAsyncSetDropdownPosId(nullptr)
     , mpNotifier(pNotifier)
     , mbHasDates(bHasDates)
     , mbIsPoppedUp(false)
@@ -559,6 +578,11 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
     {
         Application::RemoveUserEvent(mnAsyncPostPopdownId);
         mnAsyncPostPopdownId = nullptr;
+    }
+    if (mnAsyncSetDropdownPosId)
+    {
+        Application::RemoveUserEvent(mnAsyncSetDropdownPosId);
+        mnAsyncSetDropdownPosId = nullptr;
     }
 }
 
