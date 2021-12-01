@@ -103,7 +103,9 @@ private:
 
     css::uno::Sequence< OUString >      m_aInterceptedURL;
 
-    std::unique_ptr<PropertyChangeListenerContainer>           m_pStatCL;
+    typedef comphelper::OMultiTypeInterfaceContainerHelperVar3<css::frame::XStatusListener, OUString>
+        StatusListenerContainer;
+    std::unique_ptr<StatusListenerContainer>           m_pStatCL;
 };
 
 }   // namespace dbaccess
