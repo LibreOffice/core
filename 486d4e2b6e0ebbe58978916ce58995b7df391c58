@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d824905a_8e07d52b",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-01T15:26:22Z",
+      "side": 1,
+      "message": "Thank you for the information. Of course if this is enough to be a CppUnittest, i\u0027ll do it. On the other hand not really understood why it fails on mac and Linux platforms however i\u0027ll take a look, and try to solve the issue. It might be because this is incomplete, but i think it should work...",
+      "parentUuid": "cf78db74_b1134309",
+      "revId": "486d4e2b6e0ebbe58978916ce58995b7df391c58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91b038c1_6b305d69",
         "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
         "patchSetId": 6
