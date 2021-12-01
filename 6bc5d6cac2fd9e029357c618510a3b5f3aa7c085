@@ -88,6 +88,24 @@
       "parentUuid": "4d17890b_5e3e272b",
       "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "071fffd2_e682a179",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-01T08:58:10Z",
+      "side": 1,
+      "message": "because the original rationale still stands - to wit - making it easier to debug problems when jenkins has a crash, we can see the whole stack leading all the way to the point that actually raised an exception.",
+      "parentUuid": "f903c491_e84aa5e1",
+      "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
