@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8adc834d_df14f823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-01T10:57:42Z",
+      "side": 1,
+      "message": "See also: https://gerrit.libreoffice.org/c/core/+/126174 (so this one should be merged together with that one backported)",
+      "revId": "02c37819b7c16b94fa0e9bd7d8ca7a84f4f04acd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
