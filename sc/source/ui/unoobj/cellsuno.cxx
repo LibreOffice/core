@@ -472,7 +472,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {u"" SC_UNONAME_CELLVJUS, ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {u"" SC_UNONAME_CELLVJUS_METHOD, ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {u"" SC_UNONAME_WRITING,  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
-        {u"" UNO_NAME_EDIT_CHAR_ESCAPEMENT,   EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int32>::get(),            0, 0 },
+        { UNO_NAME_EDIT_CHAR_ESCAPEMENT,   EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int32>::get(),            0, 0 },
         {u"" SC_UNONAME_HYPERLINK,  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
         {u"" SC_UNONAME_FORMATID,  SC_WID_UNO_FORMATID, cppu::UnoType<sal_uInt64>::get(),        0, 0 },
         { u"", 0, css::uno::Type(), 0, 0 }
