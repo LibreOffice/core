@@ -545,8 +545,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 {
                     if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadcaster())) // SwPostit
                     {
-                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc() &&
-                            (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
+                        if (pFormatField->GetTextField())
                         {
                             OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
@@ -555,6 +554,9 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                                                 sEntry,
                                                 pFormatField,
                                                 m_nMemberCount));
+                            if (!pFormatField->GetTextField()->GetTextNode().
+                                    getLayoutFrame(m_pWrtShell->GetLayout()))
+                                pCnt->SetInvisible();
                             m_pMember->insert(std::move(pCnt));
                             m_nMemberCount++;
                         }
@@ -1000,8 +1002,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 {
                     if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadcaster())) // SwPostit
                     {
-                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc() &&
-                            (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
+                        if (pFormatField->GetTextField())
                         {
                             OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
@@ -1010,6 +1011,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                                                 sEntry,
                                                 pFormatField,
                                                 m_nMemberCount));
+                            if (!pFormatField->GetTextField()->GetTextNode().
+                                    getLayoutFrame(m_pWrtShell->GetLayout()))
+                                pCnt->SetInvisible();
                             m_pMember->insert(std::move(pCnt));
                             m_nMemberCount++;
                         }
