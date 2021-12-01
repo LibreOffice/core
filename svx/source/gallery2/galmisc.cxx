@@ -484,7 +484,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     }
     else if( ( SotClipboardFormatId::SIMPLE_FILE == nFormat ) && mpURL )
     {
-        bRet = SetString( mpURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ), rFlavor );
+        bRet = SetString( mpURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
     else if( ( SotClipboardFormatId::SVXB == nFormat ) && mpGraphicObject )
     {
