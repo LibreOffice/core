@@ -16,6 +16,24 @@
       "message": "What are \"static builds\"?  What is the issue that this commit is solving?",
       "revId": "e050b09c7ef193da9da4441d9984c793e35b5a8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c4a9159_01fef65b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-01T12:38:55Z",
+      "side": 1,
+      "message": "Linking optimized WASM binaries uses all CPUs cores, takes a while and used 64GB+ RAM for linking. If you generate multiple binaries, small machines simply OOM. The \"gb_LinkTarget__command_dynamiclink\" function is also used to Link executables; that\u0027s what is referenced by the commit summary.",
+      "parentUuid": "a1dd8dbd_ea60587b",
+      "revId": "e050b09c7ef193da9da4441d9984c793e35b5a8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
