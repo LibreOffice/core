@@ -51,6 +51,24 @@
       "message": "When creating new source files, please always copy the header/footer boilerplate from TEMPLATE.SOURCECODE.HEADER (in the root of the git repo).  (The above lacks the\n\n  # This file is part of the LibreOffice project.\n\nline.)",
       "revId": "486d4e2b6e0ebbe58978916ce58995b7df391c58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "111c7ab5_2b34bcea",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-01T15:30:49Z",
+      "side": 1,
+      "message": "oh, well i forgot it, you are right. sorry. next time of course i will use that.",
+      "parentUuid": "91b038c1_6b305d69",
+      "revId": "486d4e2b6e0ebbe58978916ce58995b7df391c58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
