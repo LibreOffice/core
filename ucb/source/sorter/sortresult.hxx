@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/ListAction.hpp>
+#include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -41,7 +42,6 @@
 struct  SortInfo;
 struct  SortListData;
 class   SRSPropertySetInfo;
-class   PropertyChangeListeners_Impl;
 
 
 class SortedEntryList
@@ -94,8 +94,8 @@ class SortedResultSet: public cppu::WeakImplHelper <
     css::beans::XPropertySet >
 {
     comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> *mpDisposeEventListeners;
-    std::unique_ptr<PropertyChangeListeners_Impl>    mpPropChangeListeners;
-    std::unique_ptr<PropertyChangeListeners_Impl>    mpVetoChangeListeners;
+    std::unique_ptr<comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString>>    mpPropChangeListeners;
+    std::unique_ptr<comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XVetoableChangeListener, OUString>>    mpVetoChangeListeners;
 
     css::uno::Reference < css::sdbc::XResultSet >            mxOriginal;
     css::uno::Reference < css::sdbc::XResultSet >            mxOther;
