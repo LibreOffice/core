@@ -52,6 +52,23 @@
       "parentUuid": "2bd4693e_8c394844",
       "revId": "4ea931baed841763b444b0cc6ee3020a93e3d5b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a49091_590d82f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-01T14:30:57Z",
+      "side": 1,
+      "message": "LGTM. I just wonder if there shouldn\u0027t be a more general approach, like probably all CJK languages are affected (are they?) and maybe some CTL languages as well, i.e. at least all languages/scripts that use ideographs.",
+      "revId": "4ea931baed841763b444b0cc6ee3020a93e3d5b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
