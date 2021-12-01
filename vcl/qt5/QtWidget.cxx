@@ -54,8 +54,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11)                                      \
-    || (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && QT6_USING_X11)
+#if CHECK_ANY_QT_USING_X11
 #define XK_MISCELLANY
 #include <X11/keysymdef.h>
 #endif
@@ -462,8 +461,7 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
         aModEvt.mbDown = eState == ButtonKeyState::Pressed;
         aModEvt.mnModKeyCode = ModKeyFlags::NONE;
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11)                                      \
-    || (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && QT6_USING_X11)
+#if CHECK_ANY_QT_USING_X11
         if (QGuiApplication::platformName() == "xcb")
         {
             // pressing just the ctrl key leads to a keysym of XK_Control but
@@ -534,8 +532,10 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
         return false;
     }
 
+#if CHECK_ANY_QT_USING_X11
     // prevent interference of writing direction switch (Ctrl + L/R-Shift) with "normal" shortcuts
     rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
+#endif
 
     SalKeyEvent aEvent;
     aEvent.mnCharCode = (pEvent->text().isEmpty() ? 0 : pEvent->text().at(0).unicode());
@@ -610,7 +610,9 @@ void QtWidget::closePopup()
 
 void QtWidget::focusOutEvent(QFocusEvent*)
 {
+#if CHECK_ANY_QT_USING_X11
     m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
+#endif
     endExtTextInput();
     m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr);
     closePopup();
