@@ -33,6 +33,24 @@
       "message": "(here and potentially elsewhere---I didn\u0027t look at all the files in this Gerrit change:) it looks a bit odd to address consistency of headers but not of footers with TEMPLATE.SOURCECODE.HEADER",
       "revId": "4a7a3ed074cb1e8c921c9af6186ef0c5131657ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6858f1c_db19addb",
+        "filename": "sc/qa/uitest/calc_tests7/tdf117987.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-01T16:49:37Z",
+      "side": 1,
+      "message": "good point. Addressed in https://gerrit.libreoffice.org/c/core/+/126187",
+      "parentUuid": "f9840683_2a347dee",
+      "revId": "4a7a3ed074cb1e8c921c9af6186ef0c5131657ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
