@@ -70,7 +70,4 @@
 #define UNO_NAME_SEARCH_CASE        "SearchCaseSensitive"
 #define UNO_NAME_SEARCH_WORDS       "SearchWords"
 
-#define UNO_NAME_LINKDISPLAYNAME                "LinkDisplayName"
-#define UNO_NAME_LINKDISPLAYBITMAP              "LinkDisplayBitmap"
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
