@@ -149,7 +149,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoParaStyleProper
         { u"" UNO_NAME_PARA_STYLE_NAME, RES_FRMATR_STYLE_NAME,        cppu::UnoType<OUString>::get(),                PropertyAttribute::MAYBEVOID,     0},
         { u"" UNO_NAME_PAGE_STYLE_NAME, FN_UNO_PAGE_STYLE,        cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
         { u"" UNO_NAME_NUMBERING_IS_NUMBER, FN_UNO_IS_NUMBER,     cppu::UnoType<bool>::get()  ,       PropertyAttribute::MAYBEVOID,     0},
-        { u"" UNO_NAME_NUMBERING_LEVEL, FN_UNO_NUM_LEVEL,     cppu::UnoType<sal_Int16>::get(),           PropertyAttribute::MAYBEVOID, 0},
+        { UNO_NAME_NUMBERING_LEVEL, FN_UNO_NUM_LEVEL,     cppu::UnoType<sal_Int16>::get(),           PropertyAttribute::MAYBEVOID, 0},
         { u"" UNO_NAME_NUMBERING_START_VALUE, FN_UNO_NUM_START_VALUE, cppu::UnoType<sal_Int16>::get(),           PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
         { u"" UNO_NAME_DOCUMENT_INDEX, FN_UNO_DOCUMENT_INDEX, cppu::UnoType<css::text::XDocumentIndex>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
         { u"" UNO_NAME_TEXT_TABLE, FN_UNO_TEXT_TABLE,     cppu::UnoType<css::text::XTextTable>::get(),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
@@ -187,7 +187,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         { u"" UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
         { u"" UNO_NAME_CHAR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_BACK_COLOR },
         { u"" UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},
-        { u"" UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},
+        { UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_TRANSPARENCE, RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_COLOR_ALPHA},
         { u"" UNO_NAME_CHAR_STRIKEOUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<sal_Int16>::get(),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},
         { u"" UNO_NAME_CHAR_CROSSED_OUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<bool>::get()  ,        PROPERTY_NONE, 0},
@@ -198,7 +198,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         STANDARD_FONT_PROPERTIES
         CJK_FONT_PROPERTIES
         CTL_FONT_PROPERTIES
-        { u"" UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
+        { UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
         { u"" UNO_NAME_CHAR_UNDERLINE_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},
         { u"" UNO_NAME_CHAR_UNDERLINE_HAS_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
         { u"" UNO_NAME_CHAR_OVERLINE, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE, MID_TL_STYLE},
@@ -206,7 +206,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         { u"" UNO_NAME_CHAR_OVERLINE_HAS_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<bool>::get(),            PROPERTY_NONE, MID_TL_HASCOLOR},
         { u"" UNO_NAME_CHAR_KERNING, RES_CHRATR_KERNING    ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,  CONVERT_TWIPS},
         { u"" UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
-        { u"" UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},
+        { UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_CONTOURED, RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_WORD_MODE, RES_CHRATR_WORDLINEMODE,cppu::UnoType<bool>::get()  ,    PROPERTY_NONE,     0},
         { u"" UNO_NAME_USER_DEFINED_ATTRIBUTES, RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },
@@ -250,7 +250,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoCharStyleProper
         { u"" UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
         { u"" UNO_NAME_CHAR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_BACK_COLOR },
         { u"" UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},
-        { u"" UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},
+        { UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_TRANSPARENCE, RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_COLOR_ALPHA},
         { u"" UNO_NAME_CHAR_STRIKEOUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<sal_Int16>::get(),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},
         { u"" UNO_NAME_CHAR_CROSSED_OUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<bool>::get()  ,        PROPERTY_NONE, 0},
@@ -261,7 +261,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoCharStyleProper
         STANDARD_FONT_PROPERTIES
         CJK_FONT_PROPERTIES
         CTL_FONT_PROPERTIES
-        { u"" UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
+        { UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
         { u"" UNO_NAME_CHAR_UNDERLINE_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},
         { u"" UNO_NAME_CHAR_UNDERLINE_HAS_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
         { u"" UNO_NAME_CHAR_OVERLINE, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},
@@ -269,7 +269,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoCharStyleProper
         { u"" UNO_NAME_CHAR_OVERLINE_HAS_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},
         { u"" UNO_NAME_CHAR_KERNING, RES_CHRATR_KERNING    ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,  CONVERT_TWIPS},
         { u"" UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
-        { u"" UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},
+        { UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_CONTOURED, RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_WORD_MODE, RES_CHRATR_WORDLINEMODE,cppu::UnoType<bool>::get()  ,    PROPERTY_NONE,     0},
         { u"" UNO_NAME_USER_DEFINED_ATTRIBUTES, RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },
@@ -831,7 +831,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetGraphicPropertyMap(
         { u"" UNO_NAME_GAMMA, RES_GRFATR_GAMMA,        cppu::UnoType<double>::get(),     0,   0},
         { u"" UNO_NAME_GRAPHIC_IS_INVERTED, RES_GRFATR_INVERT,         cppu::UnoType<bool>::get(),    0,   0},
         { u"" UNO_NAME_TRANSPARENCY, RES_GRFATR_TRANSPARENCY, cppu::UnoType<sal_Int16>::get(),   0,   0},
-        { u"" UNO_NAME_GRAPHIC_COLOR_MODE, RES_GRFATR_DRAWMODE,    cppu::UnoType<css::drawing::ColorMode>::get(),      0,   0},
+        { UNO_NAME_GRAPHIC_COLOR_MODE, RES_GRFATR_DRAWMODE,    cppu::UnoType<css::drawing::ColorMode>::get(),      0,   0},
 
         // added FillProperties for SW, same as FILL_PROPERTIES in svx
         // but need own defines in Writer due to later association of strings
