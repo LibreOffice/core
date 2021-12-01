@@ -25,7 +25,7 @@ namespace writerperfect
 {
 class WPXSvInputStreamImpl;
 
-class WPXSvInputStream final : public librevenge::RVNGInputStream
+class SAL_DLLPUBLIC_RTTI WPXSvInputStream final : public librevenge::RVNGInputStream
 {
 public:
     WRITERPERFECT_DLLPUBLIC

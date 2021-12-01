@@ -28,7 +28,7 @@
 #include <vcl/BitmapAccessMode.hxx>
 #include <vcl/BitmapInfoAccess.hxx>
 
-class BitmapReadAccess : public BitmapInfoAccess
+class SAL_DLLPUBLIC_RTTI BitmapReadAccess : public BitmapInfoAccess
 {
     friend class BitmapWriteAccess;
 
