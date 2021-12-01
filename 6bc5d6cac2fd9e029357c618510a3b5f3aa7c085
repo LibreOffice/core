@@ -124,6 +124,24 @@
       "parentUuid": "071fffd2_e682a179",
       "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "512bcece_e7af5316",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-01T09:13:31Z",
+      "side": 1,
+      "message": "\u003e ...in code that never caused such a Jenkins crash? \n\nYes, it did.\n\nI made the change because I was debugging a series of jenkins crashes which frustratingly did not include the whole stack trace because of the rethrow.\n\nHad I been able to see the whole stack trace, leading to the actual throw site, I would have solved the crash several days earlier.",
+      "parentUuid": "1c011195_07c3d4f4",
+      "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
