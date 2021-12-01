@@ -13,7 +13,7 @@ $(eval $(call gb_Rdb_Rdb_install,services))
 # "minimal" list of services for cross-compiling build tools
 #
 $(eval $(call gb_Rdb_add_components,services,\
-	$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia) \
+	$(if $(DISABLE_GUI),,$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia)) \
 	$(call gb_Helper_optional,SCRIPTING,basic/util/sb) \
 	canvas/source/factory/canvasfactory \
 	canvas/source/simplecanvas/simplecanvas \
