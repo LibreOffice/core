@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84fdb14d_278c1f09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-01T12:03:09Z",
+      "side": 1,
+      "message": "I might just merge this with the extended comment into the original VFS build patch. The WASM branch is a mess. I\u0027m currently cleaning up the patches (producing even more) and upstreaming stuff, now that libreoffice-7-3 is branched.",
+      "revId": "8533785ea67fa06d02aab67bc52862d5edaa971c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

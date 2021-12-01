@@ -70,6 +70,24 @@
       "parentUuid": "385db0d2_fbe0c5e8",
       "revId": "f5e9674cd40909506cab8505903182d3d6b92128",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e38ff0c_61738f4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-01T12:03:09Z",
+      "side": 1,
+      "message": "I just happen to build with BUILDDIR as subdir of SRCDIR and that actually caught this very quickly.\n\nHonestly, none of our versions is \"easy enough to decipher\". But I think it\u0027s not possible to make it any \"better\". While testing new versions of that code I managed to exceed the cmdline length already, when using \"\u003csrc\u003e@\u003cdest\u003e\" for BUILDDIR too accidentally.",
+      "parentUuid": "2b07aef7_3f581fbf",
+      "revId": "f5e9674cd40909506cab8505903182d3d6b92128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
