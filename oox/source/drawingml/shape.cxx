@@ -88,6 +88,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <svx/svdtrans.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
@@ -1335,6 +1336,28 @@ Reference< XShape > const & Shape::createAndInsert(
                 pGrabBag[length + 2 ].Name = "Txbx-Seq";
                 pGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
                 propertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aGrabBag));
+            }
+
+            if (aServiceName == "com.sun.star.presentation.GraphicObjectShape" && !bClearText)
+            {
+                aShapeProps.setProperty(PROP_TextContourFrame, false);
+                uno::Reference<beans::XPropertySet> xGraphic(xSet->getPropertyValue("Graphic"), uno::UNO_QUERY);
+                if (xGraphic.is())
+                {
+                    awt::Size aBitmapSize;
+                    xGraphic->getPropertyValue("Size100thMM") >>= aBitmapSize;
+                    sal_Int32 nXMargin = (aShapeRectHmm.Width - aBitmapSize.Width) / 2;
+                    sal_Int32 nYMargin = (aShapeRectHmm.Height - aBitmapSize.Height) / 2;
+                    if (nXMargin > 0 && nYMargin > 0)
+                    {
+                        text::GraphicCrop aGraphicCrop;
+                        aGraphicCrop.Top = nYMargin * -1;
+                        aGraphicCrop.Bottom = nYMargin * -1;
+                        aGraphicCrop.Left = nXMargin * -1;
+                        aGraphicCrop.Right = nXMargin * -1;
+                        aShapeProps.setProperty(PROP_GraphicCrop, aGraphicCrop);
+                    }
+                }
             }
 
             PropertySet( xSet ).setProperties( aShapeProps );
