@@ -541,6 +541,7 @@ TextBreak
 TextCameraZRotateAngle
 TextColor
 TextColumns
+TextContourFrame
 TextFitToSize
 TextFrames
 TextHorizontalAdjust
