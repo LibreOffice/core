@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05fbbe2e_d080766b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-01T17:14:04Z",
+      "side": 1,
+      "message": "Looks like it meets Stephan\u0027s concerns; thanks for the CC \u003d)",
+      "revId": "5e2fa735c5e4f704e0f171c7a9033f83615191b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
