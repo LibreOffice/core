@@ -142,6 +142,24 @@
       "parentUuid": "1c011195_07c3d4f4",
       "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ba76f66_b839456a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-01T09:17:10Z",
+      "side": 1,
+      "message": "OK, must have misinterpreted you then, thought all of this had been just-in-case,\n  Nov 29 11:46:05 \u003csberg\u003e\tnoelgrandin, but have you seen any actual throws from salhelper::Thread::launch? why touch it at all?\n  Nov 29 11:46:32 \u003cnoelgrandin\u003e\tbecause I was in the area and it seemed equally silly",
+      "parentUuid": "512bcece_e7af5316",
+      "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
