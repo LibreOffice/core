@@ -177,7 +177,7 @@ public:
             tempMap = std::move(m_aMap);
         }
 
-        for (auto& rPair : m_aMap)
+        for (auto& rPair : tempMap)
             rPair.second->disposeAndClear(rEvt);
     }
 
