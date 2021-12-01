@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41042d20_7d777318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-01T08:51:26Z",
+      "side": 1,
+      "message": "could you please not #ifdef a bunch of unrelated errors into throw HTTP_AUTH_FAILED\n",
+      "revId": "b42cbffc03e4642271d0242d3f164518acfce9f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
