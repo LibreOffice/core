@@ -60,27 +60,9 @@
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_SW_EXPORTONLY_TEST(TestName, filename, password, BaseClass) \
-    class TestName : public BaseClass { \
-        protected:\
-    virtual OUString getTestName() override { return #TestName; } \
-        public:\
-    CPPUNIT_TEST_SUITE(TestName); \
-    CPPUNIT_TEST(Load_Reload_Verify); \
-    CPPUNIT_TEST_SUITE_END(); \
-    \
-    void Load_Reload_Verify() {\
-        executeLoadReloadVerify(filename, password);\
-    }\
-    void verify() override;\
-    }; \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
-    void TestName::verify()
-
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
-#define DECLARE_ODFEXPORT_EXPORTONLY_TEST(TestName, filename) DECLARE_SW_EXPORTONLY_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_FODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 
