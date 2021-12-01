@@ -54,7 +54,7 @@ namespace svt
     {
         SotClipboardFormatId nFormat = SotExchange::GetFormat( _rFlavor );
         if (SotClipboardFormatId::STRING == nFormat)
-            return SetString( m_sContent, _rFlavor );
+            return SetString( m_sContent );
 
         return false;
     }
