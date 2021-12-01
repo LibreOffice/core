@@ -249,6 +249,10 @@ private:
 
     DECL_LINK(PostPopdownHdl, void*, void);
 
+    void SetDropdownPos();
+
+    DECL_LINK(SetDropdownPosHdl, void*, void);
+
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Popover> mxPopover;
@@ -281,6 +285,7 @@ private:
     std::unique_ptr<Action>       mxPopupEndAction;
 
     Config maConfig;
+    Size maAllocatedSize;
     int mnCheckWidthReq; /// matching width request for mxChecks
     int mnWndWidth;  /// whole window width.
     TriState mePrevToggleAllState;
@@ -290,6 +295,7 @@ private:
     ScDocument* mpDoc;
 
     ImplSVEvent* mnAsyncPostPopdownId;
+    ImplSVEvent* mnAsyncSetDropdownPosId;
     vcl::ILibreOfficeKitNotifier* mpNotifier;
 
     bool mbHasDates;
