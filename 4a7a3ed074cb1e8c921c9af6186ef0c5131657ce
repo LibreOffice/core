@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adb6470c_4620a722",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-01T16:15:47Z",
+      "side": 1,
+      "message": "Hi Stephan,\nI created this patch based on your comment in https://gerrit.libreoffice.org/c/core/+/126052. If needed, I can split it into smaller parts",
+      "revId": "4a7a3ed074cb1e8c921c9af6186ef0c5131657ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
