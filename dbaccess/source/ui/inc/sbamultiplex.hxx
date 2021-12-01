@@ -259,7 +259,7 @@ namespace dbaui
             :public OSbaWeakSubObject
             ,public css::beans::XVetoableChangeListener
     {
-        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString >  ListenerContainerMap;
+        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XVetoableChangeListener, OUString >  ListenerContainerMap;
         ListenerContainerMap    m_aListeners;
 
     public:
@@ -272,18 +272,18 @@ namespace dbaui
 
         virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& e) override;
 
-        void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
-        void removeInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
+        void addInterface(const OUString& rName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rListener);
+        void removeInterface(const OUString& rName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rListener);
 
         void disposeAndClear();
 
         sal_Int32 getOverallLen() const;
 
-        ::comphelper::OInterfaceContainerHelper2* getContainer(const OUString& rName)
+        ::comphelper::OInterfaceContainerHelper3<css::beans::XVetoableChangeListener>* getContainer(const OUString& rName)
             { return m_aListeners.getContainer(rName); }
 
     private:
-        void Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const css::beans::PropertyChangeEvent& e);
+        void Notify(::comphelper::OInterfaceContainerHelper3<css::beans::XVetoableChangeListener>& rListeners, const css::beans::PropertyChangeEvent& e);
     };
 
     // css::beans::XPropertiesChangeListener
