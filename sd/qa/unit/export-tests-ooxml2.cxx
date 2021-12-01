@@ -216,6 +216,7 @@ public:
     void testTdf59323_slideFooters();
     void testTdf143222_embeddedWorksheet();
     void testTdf143315();
+    void testTdf140912_PicturePlaceholder();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -344,6 +345,7 @@ public:
     CPPUNIT_TEST(testTdf59323_slideFooters);
     CPPUNIT_TEST(testTdf143222_embeddedWorksheet);
     CPPUNIT_TEST(testTdf143315);
+    CPPUNIT_TEST(testTdf140912_PicturePlaceholder);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3348,6 +3350,24 @@ void SdOOXMLExportTest2::testTdf143315()
     assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buSzPct", 0);
     assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buFont", 0);
     assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buChar", 0);
+}
+
+void SdOOXMLExportTest2::testTdf140912_PicturePlaceholder()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdfpictureplaceholder.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0, xDocShRef));
+
+    bool bTextContourFrame = true;
+    xShapeProps->getPropertyValue("TextContourFrame") >>= bTextContourFrame;
+    CPPUNIT_ASSERT_EQUAL(false, bTextContourFrame);
+
+    text::GraphicCrop aGraphicCrop;
+    xShapeProps->getPropertyValue("GraphicCrop") >>= aGraphicCrop;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-8490), aGraphicCrop.Top);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
