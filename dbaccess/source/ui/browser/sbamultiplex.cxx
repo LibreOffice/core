@@ -390,7 +390,7 @@ void SAL_CALL SbaXPropertyChangeMultiplexer::disposing(const css::lang::EventObj
 }
 void SAL_CALL SbaXPropertyChangeMultiplexer::propertyChange(const css::beans::PropertyChangeEvent& e)
 {
-    ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(e.PropertyName);
+    ::comphelper::OInterfaceContainerHelper3<XPropertyChangeListener>* pListeners = m_aListeners.getContainer(e.PropertyName);
     if (pListeners)
         Notify(*pListeners, e);
 
@@ -401,13 +401,13 @@ void SAL_CALL SbaXPropertyChangeMultiplexer::propertyChange(const css::beans::Pr
 }
 
 void SbaXPropertyChangeMultiplexer::addInterface(const OUString& rName,
-    const css::uno::Reference< css::uno::XInterface > & rListener)
+    const css::uno::Reference< css::beans::XPropertyChangeListener > & rListener)
 {
     m_aListeners.addInterface(rName, rListener);
 }
 
 void SbaXPropertyChangeMultiplexer::removeInterface(const OUString& rName,
-    const css::uno::Reference< css::uno::XInterface > & rListener)
+    const css::uno::Reference< css::beans::XPropertyChangeListener > & rListener)
 {
     m_aListeners.removeInterface(rName, rListener);
 }
@@ -424,7 +424,7 @@ sal_Int32 SbaXPropertyChangeMultiplexer::getOverallLen() const
     const std::vector< OUString > aContained = m_aListeners.getContainedTypes();
     for ( OUString const & s : aContained)
     {
-        ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(s);
+        ::comphelper::OInterfaceContainerHelper3<XPropertyChangeListener>* pListeners = m_aListeners.getContainer(s);
         if (!pListeners)
             continue;
         nLen += pListeners->getLength();
@@ -432,13 +432,13 @@ sal_Int32 SbaXPropertyChangeMultiplexer::getOverallLen() const
     return nLen;
 }
 
-void SbaXPropertyChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const css::beans::PropertyChangeEvent& e)
+void SbaXPropertyChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelper3<XPropertyChangeListener>& rListeners, const css::beans::PropertyChangeEvent& e)
 {
     css::beans::PropertyChangeEvent aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(rListeners);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(rListeners);
     while (aIt.hasMoreElements())
-        static_cast< css::beans::XPropertyChangeListener*>(aIt.next())->propertyChange(aMulti);
+        aIt.next()->propertyChange(aMulti);
 }
 
 // css::beans::XVetoableChangeListener

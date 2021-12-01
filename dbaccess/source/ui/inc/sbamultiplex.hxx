@@ -34,6 +34,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer3.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -226,7 +227,7 @@ namespace dbaui
             :public OSbaWeakSubObject
             ,public css::beans::XPropertyChangeListener
     {
-        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString >  ListenerContainerMap;
+        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString>  ListenerContainerMap;
         ListenerContainerMap    m_aListeners;
 
     public:
@@ -239,18 +240,18 @@ namespace dbaui
 
         virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& e) override;
 
-        void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
-        void removeInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);
+        void addInterface(const OUString& rName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rListener);
+        void removeInterface(const OUString& rName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rListener);
 
         void disposeAndClear();
 
         sal_Int32 getOverallLen() const;
 
-        ::comphelper::OInterfaceContainerHelper2* getContainer(const OUString& rName)
+        ::comphelper::OInterfaceContainerHelper3<css::beans::XPropertyChangeListener>* getContainer(const OUString& rName)
             { return m_aListeners.getContainer(rName); }
 
     private:
-        void Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const css::beans::PropertyChangeEvent& e);
+        void Notify(::comphelper::OInterfaceContainerHelper3<css::beans::XPropertyChangeListener>& rListeners, const css::beans::PropertyChangeEvent& e);
     };
 
     // css::beans::XVetoableChangeListener
