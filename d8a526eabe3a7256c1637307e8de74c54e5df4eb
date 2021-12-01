@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa43a52_320c13fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-01T07:25:59Z",
+      "side": 1,
+      "message": "When I see such changes, I feel the greatest aesthetical pleasure.",
+      "revId": "d8a526eabe3a7256c1637307e8de74c54e5df4eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
