@@ -649,24 +649,9 @@ bool TransferableHelper::SetAny( const Any& rAny )
 }
 
 
-bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& rFlavor )
+bool TransferableHelper::SetString( const OUString& rString )
 {
-    DataFlavor aFileFlavor;
-
-    if( !rString.isEmpty() &&
-        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::SIMPLE_FILE, aFileFlavor ) &&
-        TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
-    {
-        const OString aByteStr(OUStringToOString(rString, osl_getThreadTextEncoding()));
-        Sequence< sal_Int8 >    aSeq( aByteStr.getLength() + 1 );
-
-        memcpy( aSeq.getArray(), aByteStr.getStr(), aByteStr.getLength() );
-        aSeq[ aByteStr.getLength() ] = 0;
-        maAny <<= aSeq;
-    }
-    else
-        maAny <<= rString;
-
+    maAny <<= rString;
     return maAny.hasValue();
 }
 

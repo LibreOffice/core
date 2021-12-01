@@ -520,7 +520,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
         else if( ( nFormat == SotClipboardFormatId::STRING ) && mpBookmark )
         {
-            bOK = SetString( mpBookmark->GetURL(), rFlavor );
+            bOK = SetString( mpBookmark->GetURL() );
         }
         else if( ( nFormat == SotClipboardFormatId::SVXB ) && mpGraphic )
         {
