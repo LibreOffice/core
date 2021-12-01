@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39c5862_6ca8bf15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-01T13:59:52Z",
+      "side": 1,
+      "message": "https://ci.libreoffice.org/job/gerrit_master/102083/ shows that all buildbots succeeded, and the \"failure\" is no space left for Jenkins; verifying.",
+      "revId": "e48cffa85c7dfe66394238dd23d25591a65d9242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
