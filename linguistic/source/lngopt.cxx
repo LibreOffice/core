@@ -192,14 +192,14 @@ LinguProps::LinguProps() :
 
 void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
 {
-    comphelper::OInterfaceContainerHelper2 *pContainer =
+    comphelper::OInterfaceContainerHelper3<XPropertyChangeListener> *pContainer =
             aPropListeners.getContainer( rEvt.PropertyHandle );
     if (pContainer)
     {
-        comphelper::OInterfaceIteratorHelper2 aIt( *pContainer );
+        comphelper::OInterfaceIteratorHelper3 aIt( *pContainer );
         while (aIt.hasMoreElements())
         {
-            static_cast< XPropertyChangeListener* >( aIt.next() )->propertyChange( rEvt );
+            aIt.next()->propertyChange( rEvt );
         }
     }
 }
