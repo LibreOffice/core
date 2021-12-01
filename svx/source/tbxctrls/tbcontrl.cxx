@@ -4032,7 +4032,9 @@ void ColorListBox::ShowPreview(const NamedColor &rColor)
     {
         const Color aW(COL_WHITE);
         const Color aG(0xef, 0xef, 0xef);
-        xDevice->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), 8, aW, aG);
+        int nMinDim = std::min(aImageSize.Width(), aImageSize.Height()) + 1;
+        int nCheckSize = nMinDim / 3;
+        xDevice->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), std::min(nCheckSize, 8), aW, aG);
         xDevice->SetFillColor();
     }
     else
