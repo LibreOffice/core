@@ -52,6 +52,24 @@
       "parentUuid": "4109f8c7_736f0f83",
       "revId": "f5e9674cd40909506cab8505903182d3d6b92128",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b07aef7_3f581fbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-01T11:48:57Z",
+      "side": 1,
+      "message": "didn\u0027t think about using a subdirectory of SRCDIR as buildirectory, good catch, updated the patch with your revision.\n\nI think that is as simple as it gets with only makefile functions without putting restrictions on builddir/srcdir paths or using separate variables for the dependencies. I think it is still easy enough to decipher ;-)",
+      "parentUuid": "385db0d2_fbe0c5e8",
+      "revId": "f5e9674cd40909506cab8505903182d3d6b92128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
