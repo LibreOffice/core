@@ -34,6 +34,24 @@
       "parentUuid": "9901881e_07951131",
       "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de640caa_337beaf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-01T08:08:46Z",
+      "side": 1,
+      "message": "Any reason not to do\n  Nov 29 11:52:42 \u003cllunak\u003e\tnoelgrandin: why don\u0027t you change those rethrows to a destructor that does whatever that block is doing?\n  Nov 29 11:53:03 \u003cnoelgrandin\u003e\tllunak, good idea",
+      "parentUuid": "7bf8720b_f35c4998",
+      "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
