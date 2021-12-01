@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8d341ad_346e98e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-01T14:04:59Z",
+      "side": 1,
+      "message": "Actually, will probably be better to not just revert, but to make the behaviour depend on a setting or environment variable. With that new setting not touched, and without the new environment variable, it would work as it does now. Otherwise it would work as it did before the patch.",
+      "revId": "5f000fba682cdf0bf661c8079724b426a6b38c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
