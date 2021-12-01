@@ -36,3 +36,4 @@ class GoToPage_dialog(UITestCase):
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "3")
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

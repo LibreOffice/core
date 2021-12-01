@@ -48,3 +48,4 @@ class tdf93068(UITestCase):
             # Check the table is no longer selected
             self.assertNotEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

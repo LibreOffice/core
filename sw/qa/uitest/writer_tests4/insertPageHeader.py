@@ -61,4 +61,4 @@ class WriterInsertPageHeader(UITestCase):
 
             self.delete_header()
 
-
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -121,3 +121,4 @@ frog, dogg, catt"""
             # correctly without the redline containing a deleted "o"
             self.assertEqual(output_text, 'goood baaadbaaed eeend')
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

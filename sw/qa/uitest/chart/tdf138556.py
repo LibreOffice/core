@@ -44,3 +44,4 @@ class tdf138556( UITestCase ):
                 CoordinateSystems[0].ChartTypes[0].DataSeries[0].DataSequences )
             self.assertEqual( nSequences, 3 )
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

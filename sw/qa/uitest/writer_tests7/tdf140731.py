@@ -51,4 +51,3 @@ class tdf140731(UITestCase):
             self.assertEqual(document.Text.String[0:26], "LOREM IPSUM DOLOR SIT AMET")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

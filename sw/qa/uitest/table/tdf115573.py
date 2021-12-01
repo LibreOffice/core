@@ -107,4 +107,3 @@ class tdf115573(UITestCase):
                 self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

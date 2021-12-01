@@ -50,3 +50,4 @@ class Tdf137637(UITestCase):
             # AssertionError: '0' != '1'
             self.assertEqual('0', get_state_as_dict(xAnimationList)['Children'])
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

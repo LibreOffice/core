@@ -41,4 +41,3 @@ class tdf132169(UITestCase):
             self.assertEqual(shape.LineWidth, 176)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

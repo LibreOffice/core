@@ -35,3 +35,4 @@ class Tdf113571(UITestCase):
             self.assertEqual('<?xml version="1.0" encoding="UTF-8"?>\n<test>\n  <hello>world</hello>\n</test>',
                     writer_document.Text.String)
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

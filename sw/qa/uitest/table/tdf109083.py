@@ -58,5 +58,5 @@ class tdf109083(UITestCase):
                     else:
                         self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffffff")
                 self.xUITest.executeCommand(".uno:GoRight")
-# vim: set shiftwidth=4 softtabstop=4 expandtab:
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -41,3 +41,5 @@ class Tdf95554(UITestCase):
 
             self.assertEqual('A\n\nC\n\nE\nF',
                     writer_document.Text.String)
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
