@@ -201,7 +201,6 @@
                 <property name="tooltip-text" translatable="yes" context="numparapage|checkCB_NEW_START">For ordered lists and List Styles with numbering</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="inconsistent">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
@@ -326,7 +325,6 @@
                 <property name="receives-default">False</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="inconsistent">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
@@ -349,7 +347,6 @@
                 <property name="receives-default">False</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="inconsistent">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
