@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b3b0c73_1ce3efd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-01T13:11:30Z",
+      "side": 1,
+      "message": "Thanks, patch set 2 adds the documentation (the \"why\") that I was missing in patch set 1. :-)",
+      "revId": "2da7ad132d8dc61cbdfe88c201ae1741331644f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
