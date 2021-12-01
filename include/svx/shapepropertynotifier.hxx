@@ -22,7 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
-#include <comphelper/multiinterfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer3.hxx>
 #include <rtl/ustring.hxx>
 
 #include <memory>
@@ -141,7 +141,7 @@ namespace svx
             PropertyProviders;
         ::cppu::OWeakObject&            m_rContext;
         PropertyProviders               m_aProviders;
-        comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString> m_aPropertyChangeListeners;
+        comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString> m_aPropertyChangeListeners;
     };
 
 
