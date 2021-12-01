@@ -218,7 +218,7 @@ namespace svx
         {
             case SotClipboardFormatId::SBA_FIELDDATAEXCHANGE:
             case SotClipboardFormatId::SBA_CTRLDATAEXCHANGE:
-                return SetString(m_sCompatibleFormat, _rFlavor);
+                return SetString(m_sCompatibleFormat);
             default: break;
         }
         if (nFormatId == getDescriptorFormatId())
@@ -432,7 +432,7 @@ namespace svx
                 return SetAny( makeAny(m_aDescriptor.createPropertyValueSequence()) );
 
             case SotClipboardFormatId::SBA_DATAEXCHANGE:
-                return SetString(m_sCompatibleObjectDescription, rFlavor);
+                return SetString(m_sCompatibleObjectDescription);
             default: break;
         }
         return false;
