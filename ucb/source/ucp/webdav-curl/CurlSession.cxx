@@ -948,10 +948,10 @@ auto CurlProcessor::ProcessRequestImpl(
             case CURLE_FAILED_INIT:
 #if CURL_AT_LEAST_VERSION(7, 69, 0)
             case CURLE_QUIC_CONNECT_ERROR:
+#endif
                 throw DAVException(
                     DAVException::DAV_HTTP_CONNECT,
                     ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
-#endif
             case CURLE_REMOTE_ACCESS_DENIED:
             case CURLE_LOGIN_DENIED:
             case CURLE_AUTH_ERROR:
