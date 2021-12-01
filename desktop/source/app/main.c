@@ -21,6 +21,7 @@
 
 #include "sofficemain.h"
 
+#ifndef NOTEST_xmlCleanupParser
 #ifdef DBG_UTIL
 #ifdef __gnu_linux__
 #include <stdio.h>
@@ -43,13 +44,16 @@ __attribute__((visibility("default"))) void xmlCleanupParser(void)
 }
 #endif
 #endif
+#endif // NOTEST_xmlCleanupParser
 
 SAL_IMPLEMENT_MAIN()
 {
     int ret = soffice_main();
+#ifndef NOTEST_xmlCleanupParser
 #ifdef DBG_UTIL
 #ifdef __gnu_linux__
     g_Exiting = 1;
+#endif
 #endif
 #endif
     return ret;
