@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf78db74_b1134309",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-01T15:09:34Z",
+      "side": 1,
+      "message": "Idieally, this should be implemented as a CppUnittest, there is no reason why a UItest is needed. In fact, I converted your previous uitest from part 1 and part 2 in https://gerrit.libreoffice.org/c/core/+/125808. Mysteriously, jenkins fails on mac and linux release ( not with a debug build ) so something fishy is going on... is it because the feature is incomplete ?",
+      "revId": "486d4e2b6e0ebbe58978916ce58995b7df391c58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
