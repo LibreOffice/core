@@ -503,14 +503,14 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         return;
 
     // First, notify listeners interested in changes of every property.
-    comphelper::OInterfaceContainerHelper2* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
+    comphelper::OInterfaceContainerHelper3<XPropertiesChangeListener>* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
     if ( pAllPropsContainer )
     {
-        comphelper::OInterfaceIteratorHelper2 aIter( *pAllPropsContainer );
+        comphelper::OInterfaceIteratorHelper3 aIter( *pAllPropsContainer );
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
-            static_cast< XPropertiesChangeListener* >( aIter.next() )->propertiesChange( evt );
+            aIter.next()->propertiesChange( evt );
         }
     }
 
@@ -524,15 +524,15 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         const PropertyChangeEvent& rEvent = *propertyChangeEvent;
         const OUString& rName = rEvent.PropertyName;
 
-        comphelper::OInterfaceContainerHelper2* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
+        comphelper::OInterfaceContainerHelper3<XPropertiesChangeListener>* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
         if ( pPropsContainer )
         {
-            comphelper::OInterfaceIteratorHelper2 aIter( *pPropsContainer );
+            comphelper::OInterfaceIteratorHelper3 aIter( *pPropsContainer );
             while ( aIter.hasMoreElements() )
             {
                 Sequence< PropertyChangeEvent >* propertyEvents;
 
-                XPropertiesChangeListener* pListener = static_cast< XPropertiesChangeListener * >( aIter.next() );
+                XPropertiesChangeListener* pListener = aIter.next().get();
                 PropertiesEventListenerMap::iterator it = aListeners.find( pListener );
                 if ( it == aListeners.end() )
                 {

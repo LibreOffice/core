@@ -208,7 +208,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL.reset( new PropertyChangeListenerContainer(m_aMutex) );
+                m_pStatCL.reset( new StatusListenerContainer(m_aMutex) );
         }
 
         m_pStatCL->addInterface(URL.Complete,Control);
@@ -225,7 +225,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL.reset( new PropertyChangeListenerContainer(m_aMutex) );
+                m_pStatCL.reset( new StatusListenerContainer(m_aMutex) );
         }
 
         m_pStatCL->addInterface(URL.Complete,Control);
@@ -249,7 +249,7 @@ void SAL_CALL OInterceptor::addStatusListener(
             {
                 osl::MutexGuard aGuard(m_aMutex);
                 if(!m_pStatCL)
-                    m_pStatCL.reset( new PropertyChangeListenerContainer(m_aMutex) );
+                    m_pStatCL.reset( new StatusListenerContainer(m_aMutex) );
             }
 
             m_pStatCL->addInterface(URL.Complete,Control);
