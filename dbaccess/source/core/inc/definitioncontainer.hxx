@@ -36,6 +36,7 @@
 #include "ContentHelper.hxx"
 #include "containerapprove.hxx"
 #include <comphelper/uno3.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 namespace dbaccess
 {
