@@ -1486,40 +1486,49 @@ bool SwFieldMgr::InsertField(
     // insert
     pCurShell->StartAllAction();
 
-    pCurShell->Insert(*pField, rData.m_pAnnotationRange.get());
+    bool const isSuccess = pCurShell->InsertField2(*pField, rData.m_pAnnotationRange.get());
 
-    if (SwFieldTypesEnum::Input == rData.m_nTypeId)
+    if (isSuccess)
     {
-        pCurShell->Push();
+        if (SwFieldTypesEnum::Input == rData.m_nTypeId)
+        {
+            pCurShell->Push();
 
-        // start dialog, not before the field is inserted tdf#99529
-        pCurShell->Left(CRSR_SKIP_CHARS, false,
-            (INP_VAR == (nSubType & 0xff) || pCurShell->GetViewOptions()->IsFieldName()) ? 1 : 2,
-            false);
-        pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent);
+            // start dialog, not before the field is inserted tdf#99529
+            pCurShell->Left(CRSR_SKIP_CHARS, false,
+                (INP_VAR == (nSubType & 0xff) || pCurShell->GetViewOptions()->IsFieldName()) ? 1 : 2,
+                false);
+            pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent);
 
-        pCurShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+            pCurShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        }
+
+        if (bExp && m_bEvalExp)
+        {
+            pCurShell->UpdateExpFields(true);
+        }
+
+        if (bTable)
+        {
+            pCurShell->Left(CRSR_SKIP_CHARS, false, 1, false );
+            pCurShell->UpdateOneField(*pField);
+            pCurShell->Right(CRSR_SKIP_CHARS, false, 1, false );
+        }
+        else if (bPageVar)
+        {
+            static_cast<SwRefPageGetFieldType*>(pCurShell->GetFieldType(0, SwFieldIds::RefPageGet))->UpdateFields();
+        }
+        else if (SwFieldTypesEnum::GetRef == rData.m_nTypeId)
+        {
+            pField->GetTyp()->UpdateFields();
+        }
     }
-
-    if(bExp && m_bEvalExp)
-        pCurShell->UpdateExpFields(true);
-
-    if(bTable)
-    {
-        pCurShell->Left(CRSR_SKIP_CHARS, false, 1, false );
-        pCurShell->UpdateOneField(*pField);
-        pCurShell->Right(CRSR_SKIP_CHARS, false, 1, false );
-    }
-    else if( bPageVar )
-        static_cast<SwRefPageGetFieldType*>(pCurShell->GetFieldType( 0, SwFieldIds::RefPageGet ))->UpdateFields();
-    else if( SwFieldTypesEnum::GetRef == rData.m_nTypeId )
-        pField->GetTyp()->UpdateFields();
 
     // delete temporary field
     pField.reset();
 
     pCurShell->EndAllAction();
-    return true;
+    return isSuccess;
 }
 
 // fields update

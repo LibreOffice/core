@@ -2367,7 +2367,7 @@ void SwTiledRenderingTest::testRedlineField()
 
     SwDateTimeField aDate(static_cast<SwDateTimeFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::DateTime)));
     //aDate->SetDateTime(::DateTime(::DateTime::SYSTEM));
-    pWrtShell->Insert(aDate);
+    pWrtShell->InsertField2(aDate);
 
     // Get the redline just created
     const SwRedlineTable& rTable = pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
