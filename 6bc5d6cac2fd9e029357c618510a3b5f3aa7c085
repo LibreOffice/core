@@ -106,6 +106,24 @@
       "parentUuid": "f903c491_e84aa5e1",
       "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c011195_07c3d4f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-01T09:02:26Z",
+      "side": 1,
+      "message": "...in code that never caused such a Jenkins crash?  Really, I\u0027m having a hard time understanding how you found time to make this just-in-case drive-by change, which leads to a discussion of how this change is sub-optimal, and then claim you don\u0027t have time to improve it.",
+      "parentUuid": "071fffd2_e682a179",
+      "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
