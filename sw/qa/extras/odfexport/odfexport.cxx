@@ -252,8 +252,9 @@ DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf133487, "MadeByLO7.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf133487)
 {
+    loadAndReload("MadeByLO7.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
@@ -268,8 +269,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf133487, "MadeByLO7.odt")
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[3]/draw:custom-shape[@draw:z-index = '1']/attribute::draw:style-name]/style:graphic-properties", "run-through", "foreground");
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf141467, "Formcontrol needs high z-index.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf141467)
 {
+    loadAndReload("Formcontrol needs high z-index.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
@@ -353,8 +355,9 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32( 408), rect.Height);
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testUserFieldDecl, "user-field-decl.odt")
+CPPUNIT_TEST_FIXTURE(Test, testUserFieldDecl)
 {
+    loadAndReload("user-field-decl.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
@@ -363,8 +366,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testUserFieldDecl, "user-field-decl.odt")
     assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
+CPPUNIT_TEST_FIXTURE(Test, testUserFieldDeclFly)
 {
+    loadAndReload("user-field-decl-fly.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
@@ -1940,8 +1944,9 @@ DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, "FillTransparence"));
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeOOo, "pagestyle_background_ooo33.odt")
+CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeOOo)
 {
+    loadAndReload("pagestyle_background_ooo33.odt");
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Standard
@@ -1997,8 +2002,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeOOo, "pagestyle
         "]/style:drawing-page-properties", "fill-image-ref-point", "top-left");
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO64, "pagestyle_background_lo64.odt")
+CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeLO64)
 {
+    loadAndReload("pagestyle_background_lo64.odt");
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Standard
@@ -2105,8 +2111,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO64, "pagestyl
         "]/style:drawing-page-properties", "opacity", "100%");
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO70, "pagestyle_background_lo70.odt")
+CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeLO70)
 {
+    loadAndReload("pagestyle_background_lo70.odt");
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Standard
@@ -2213,8 +2220,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO70, "pagestyl
         "]/style:drawing-page-properties", "opacity", "100%");
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testFillBitmapUnused, "fillbitmap3.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFillBitmapUnused)
 {
+    loadAndReload("fillbitmap3.odt");
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // nav_5f_home and all its references are completely gone
@@ -2574,8 +2582,9 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTableStyles3, "table_styles_3.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTableStyles3)
 {
+    loadAndReload("table_styles_3.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This test checks if default valued attributes aren't exported.
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
@@ -2648,8 +2657,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
     CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), Color(ColorTransparency, getProperty<sal_Int32>(xCell1Style, "BackColor")));
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTableStyles5, "table_styles_5.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTableStyles5)
 {
+    loadAndReload("table_styles_5.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test if cell styles doesn't have a style:parent-style-name attribute.
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
@@ -2704,8 +2714,9 @@ DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextT
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 2 pages", 2, getPages());
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testImageMimetype, "image-mimetype.odt")
+CPPUNIT_TEST_FIXTURE(Test, testImageMimetype)
 {
+    loadAndReload("image-mimetype.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202
@@ -2714,8 +2725,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testImageMimetype, "image-mimetype.odt")
     assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@draw:mime-type='image/svg+xml']");
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testEmbeddedFontProps, "embedded-font-props.odt")
+CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
 {
+    loadAndReload("embedded-font-props.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 #if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
@@ -2809,8 +2821,9 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     }
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(testRubyPosition, "ruby-position.odt")
+CPPUNIT_TEST_FIXTURE(Test, testRubyPosition)
 {
+    loadAndReload("ruby-position.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
@@ -2997,8 +3010,9 @@ DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
     CPPUNIT_ASSERT(xReplacementGraphic.is());
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf99631, "tdf99631.docx")
+CPPUNIT_TEST_FIXTURE(Test, tdf99631)
 {
+    loadAndReload("tdf99631.docx");
     // check import of VisualArea settings of the embedded XLSX OLE objects
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/settings.xml");
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", "4516");
@@ -3116,8 +3130,9 @@ DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
+CPPUNIT_TEST_FIXTURE(Test, tdf124470)
 {
+    loadAndReload("tdf124470TableAndEmbeddedUsedFonts.odt");
     // Table styles were exported out of place, inside font-face-decls.
     // Without the fix in place, this will fail already in ODF validation:
     // "content.xml[2,2150]:  Error: tag name "style:style" is not allowed. Possible tag names are: <font-face>"
@@ -3132,8 +3147,9 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']", 1);
 }
 
-DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf135942, "nestedTableInFooter.odt")
+CPPUNIT_TEST_FIXTURE(Test, tdf135942)
 {
+    loadAndReload("nestedTableInFooter.odt");
     // All table autostyles should be collected, including nested, and must not crash.
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
