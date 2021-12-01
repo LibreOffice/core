@@ -52,6 +52,24 @@
       "parentUuid": "7bf8720b_f35c4998",
       "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d17890b_5e3e272b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-01T08:19:15Z",
+      "side": 1,
+      "message": "Oh feel free to make that change if you think it\u0027s worthwhile, I\u0027ve got enough other stuff on my plate right now :-)",
+      "parentUuid": "de640caa_337beaf3",
+      "revId": "6bc5d6cac2fd9e029357c618510a3b5f3aa7c085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
