@@ -303,7 +303,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     int     IntelligentCut(SelectionType nSelectionType, bool bCut = true);
 
     // edit
-    void    Insert(SwField const &, SwPaM* pAnnotationRange = nullptr);
+    bool    InsertField2(SwField const &, SwPaM* pAnnotationRange = nullptr);
     void    Insert(const OUString &);
     // graphic
     void    Insert( const OUString &rPath, const OUString &rFilter,

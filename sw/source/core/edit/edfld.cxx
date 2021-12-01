@@ -140,7 +140,7 @@ void SwEditShell::FieldToText( SwFieldType const * pType )
 }
 
 /// add a field at the cursor position
-void SwEditShell::Insert2(SwField const & rField, const bool bForceExpandHints)
+bool SwEditShell::InsertField(SwField const & rField, const bool bForceExpandHints)
 {
     CurrShell aCurr( this );
     StartAllAction();
@@ -150,13 +150,15 @@ void SwEditShell::Insert2(SwField const & rField, const bool bForceExpandHints)
         ? SetAttrMode::FORCEHINTEXPAND
         : SetAttrMode::DEFAULT;
 
+    bool bSuccess(false);
     for(const SwPaM& rPaM : GetCursor()->GetRingContainer()) // for each PaM
     {
-        const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aField, nInsertFlags));
+        bSuccess |= GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aField, nInsertFlags);
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
     }
 
     EndAllAction();
+    return bSuccess;
 }
 
 /// Are the PaMs positioned on fields?

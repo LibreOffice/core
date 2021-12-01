@@ -2705,7 +2705,7 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
             {
                 // insert
                 SwDDEField aSwDDEField( pDDETyp );
-                rWrtShell.Insert( aSwDDEField );
+                rWrtShell.InsertField2( aSwDDEField );
             }
 
         } while( false );

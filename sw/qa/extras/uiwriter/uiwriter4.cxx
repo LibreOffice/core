@@ -2882,7 +2882,7 @@ void SwUiWriterTest4::testTdf115013()
 
         // Insert the field into document
         SwDBField aField(pFieldType);
-        pWrtShell->Insert(aField);
+        pWrtShell->InsertField2(aField);
     }
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "mm-field.docx");
