@@ -68,6 +68,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -418,8 +419,8 @@ private:
     typedef std::unordered_map<OUString, css::beans::Property> TPropInfoHash;
     TPropInfoHash m_lProps;
 
-    ListenerHash m_lSimpleChangeListener;
-    ListenerHash m_lVetoChangeListener;
+    comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString> m_lSimpleChangeListener;
+    comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XVetoableChangeListener, OUString> m_lVetoChangeListener;
 
     // hold it weak ... otherwise this helper has to be "killed" explicitly .-)
     css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
@@ -2860,19 +2861,16 @@ bool XFrameImpl::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)
         The used helper is threadsafe and it lives for the whole lifetime of
         our own object.
     */
-    ::comphelper::OInterfaceContainerHelper2* pVetoListener = m_lVetoChangeListener.getContainer(aEvent.PropertyName);
+    ::comphelper::OInterfaceContainerHelper3<css::beans::XVetoableChangeListener>* pVetoListener = m_lVetoChangeListener.getContainer(aEvent.PropertyName);
     if (! pVetoListener)
         return false;
 
-    ::comphelper::OInterfaceIteratorHelper2 pListener(*pVetoListener);
+    ::comphelper::OInterfaceIteratorHelper3 pListener(*pVetoListener);
     while (pListener.hasMoreElements())
     {
         try
         {
-            css::uno::Reference< css::beans::XVetoableChangeListener > xListener(
-                static_cast<css::beans::XVetoableChangeListener*>(pListener.next()),
-                css::uno::UNO_QUERY_THROW);
-            xListener->vetoableChange(aEvent);
+            pListener.next()->vetoableChange(aEvent);
         }
         catch(const css::uno::RuntimeException&)
             { pListener.remove(); }
@@ -2889,19 +2887,16 @@ void XFrameImpl::impl_notifyChangeListener(const css::beans::PropertyChangeEvent
         The used helper is threadsafe and it lives for the whole lifetime of
         our own object.
     */
-    ::comphelper::OInterfaceContainerHelper2* pSimpleListener = m_lSimpleChangeListener.getContainer(aEvent.PropertyName);
+    ::comphelper::OInterfaceContainerHelper3<css::beans::XPropertyChangeListener>* pSimpleListener = m_lSimpleChangeListener.getContainer(aEvent.PropertyName);
     if (! pSimpleListener)
         return;
 
-    ::comphelper::OInterfaceIteratorHelper2 pListener(*pSimpleListener);
+    ::comphelper::OInterfaceIteratorHelper3 pListener(*pSimpleListener);
     while (pListener.hasMoreElements())
     {
         try
         {
-            css::uno::Reference< css::beans::XPropertyChangeListener > xListener(
-                static_cast<css::beans::XVetoableChangeListener*>(pListener.next()),
-                css::uno::UNO_QUERY_THROW);
-            xListener->propertyChange(aEvent);
+            pListener.next()->propertyChange(aEvent);
         }
         catch(const css::uno::RuntimeException&)
             { pListener.remove(); }

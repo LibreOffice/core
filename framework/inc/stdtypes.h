@@ -21,7 +21,6 @@
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 
-#include <comphelper/multiinterfacecontainer2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework{
@@ -54,14 +53,6 @@ struct KeyEventEqualsFunc
                );
     }
 };
-
-/**
-    It can be used to map names (e.g. of properties) to her corresponding handles.
-    Our helper class OPropertySetHelper works optimized with handles but sometimes we have only a property name.
-    Mapping between these two parts of a property should be done in the fastest way :-)
-*/
-
-typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString> ListenerHash;
 
 }       // namespace framework
 

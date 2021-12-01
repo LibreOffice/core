@@ -75,6 +75,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/evntpost.hxx>
@@ -419,7 +420,7 @@ private:
 
     /** @short  contains all status listener registered at this instance.
      */
-    ListenerHash m_lListener;
+    comphelper::OMultiTypeInterfaceContainerHelperVar3<css::frame::XStatusListener, OUString> m_lListener;
 
     /** @descr  This member is used to prevent us against re-entrance problems.
                 A mutex can't help to prevent us from concurrent using of members
@@ -3477,7 +3478,7 @@ void AutoRecovery::implts_informListener(      Job                      eJob  ,
                                          const css::frame::FeatureStateEvent& aEvent)
 {
     // Helper shares mutex with us -> threadsafe!
-    ::comphelper::OInterfaceContainerHelper2* pListenerForURL = nullptr;
+    ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>* pListenerForURL = nullptr;
     OUString                           sJob            = AutoRecovery::implst_getJobDescription(eJob);
 
     // inform listener, which are registered for any URLs(!)
@@ -3485,12 +3486,12 @@ void AutoRecovery::implts_informListener(      Job                      eJob  ,
     if(pListenerForURL == nullptr)
         return;
 
-    ::comphelper::OInterfaceIteratorHelper2 pIt(*pListenerForURL);
+    ::comphelper::OInterfaceIteratorHelper3 pIt(*pListenerForURL);
     while(pIt.hasMoreElements())
     {
         try
         {
-            static_cast<css::frame::XStatusListener*>(pIt.next())->statusChanged(aEvent);
+            pIt.next()->statusChanged(aEvent);
         }
         catch(const css::uno::RuntimeException&)
         {
