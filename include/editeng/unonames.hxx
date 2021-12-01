@@ -11,41 +11,41 @@
 #define INCLUDED_EDITENG_UNONAMES_HXX
 
 // Common across fields
-#define UNO_TC_PROP_ANCHOR               "Anchor"
-#define UNO_TC_PROP_TEXTFIELD_TYPE       "TextFieldType"
-#define UNO_TC_PROP_IS_FIXED             "IsFixed"
-#define UNO_TC_PROP_CURRENT_PRESENTATION "CurrentPresentation"
-#define UNO_TC_PROP_NAME                 "Name"
-#define UNO_TC_PROP_IS_FIXED_LANGUAGE    "IsFixedLanguage"
-#define UNO_TC_PROP_NUMFORMAT            "NumberFormat"
+inline constexpr OUStringLiteral UNO_TC_PROP_ANCHOR = u"Anchor";
+inline constexpr OUStringLiteral UNO_TC_PROP_TEXTFIELD_TYPE = u"TextFieldType";
+inline constexpr OUStringLiteral UNO_TC_PROP_IS_FIXED = u"IsFixed";
+inline constexpr OUStringLiteral UNO_TC_PROP_CURRENT_PRESENTATION = u"CurrentPresentation";
+inline constexpr OUStringLiteral UNO_TC_PROP_NAME = u"Name";
+inline constexpr OUStringLiteral UNO_TC_PROP_IS_FIXED_LANGUAGE = u"IsFixedLanguage";
+inline constexpr OUStringLiteral UNO_TC_PROP_NUMFORMAT = u"NumberFormat";
 #define UNO_TC_PROP_USED                 "IsFieldUsed"
 #define UNO_TC_PROP_DISPLAYED            "IsFieldDisplayed"
 
 // Date & Time
-#define UNO_TC_PROP_IS_DATE   "IsDate"
-#define UNO_TC_PROP_DATE_TIME "DateTime"
+inline constexpr OUStringLiteral UNO_TC_PROP_IS_DATE = u"IsDate";
+inline constexpr OUStringLiteral UNO_TC_PROP_DATE_TIME = u"DateTime";
 
 // URL
-#define UNO_TC_PROP_URL_FORMAT         "Format"
-#define UNO_TC_PROP_URL_REPRESENTATION "Representation"
-#define UNO_TC_PROP_URL_TARGET         "TargetFrame"
-#define UNO_TC_PROP_URL                "URL"
+inline constexpr OUStringLiteral UNO_TC_PROP_URL_FORMAT = u"Format";
+inline constexpr OUStringLiteral UNO_TC_PROP_URL_REPRESENTATION = u"Representation";
+inline constexpr OUStringLiteral UNO_TC_PROP_URL_TARGET = u"TargetFrame";
+inline constexpr OUStringLiteral UNO_TC_PROP_URL = u"URL";
 
 // Table
-#define UNO_TC_PROP_TABLE_POSITION "TablePosition"
+inline constexpr OUStringLiteral UNO_TC_PROP_TABLE_POSITION = u"TablePosition";
 
 // File
-#define UNO_TC_PROP_FILE_FORMAT "FileFormat"
+inline constexpr OUStringLiteral UNO_TC_PROP_FILE_FORMAT = u"FileFormat";
 
 // Author
-#define UNO_TC_PROP_AUTHOR_CONTENT  "Content"
-#define UNO_TC_PROP_AUTHOR_FORMAT   "AuthorFormat"
-#define UNO_TC_PROP_AUTHOR_FULLNAME "FullName"
+inline constexpr OUStringLiteral UNO_TC_PROP_AUTHOR_CONTENT = u"Content";
+inline constexpr OUStringLiteral UNO_TC_PROP_AUTHOR_FORMAT = u"AuthorFormat";
+inline constexpr OUStringLiteral UNO_TC_PROP_AUTHOR_FULLNAME = u"FullName";
 
 // Measure
-#define UNO_TC_PROP_MEASURE_KIND "Kind"
+inline constexpr OUStringLiteral UNO_TC_PROP_MEASURE_KIND = u"Kind";
 
-#define UNO_TR_PROP_SELECTION "Selection"
+inline constexpr OUStringLiteral UNO_TR_PROP_SELECTION = u"Selection";
 
 #endif // INCLUDED_EDITENG_UNONAMES_HXX
 

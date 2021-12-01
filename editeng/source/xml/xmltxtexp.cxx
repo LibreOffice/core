@@ -275,9 +275,9 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
-        { u"" UNO_NAME_NUMBERING_RULES,        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 },
-        { u"" UNO_NAME_NUMBERING,              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 },
-        { u"" UNO_NAME_NUMBERING_LEVEL,        EE_PARA_OUTLLEVEL,  ::cppu::UnoType<sal_Int16>::get(), 0, 0 },
+        { UNO_NAME_NUMBERING_RULES,        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 },
+        { UNO_NAME_NUMBERING,              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 },
+        { UNO_NAME_NUMBERING_LEVEL,        EE_PARA_OUTLLEVEL,  ::cppu::UnoType<sal_Int16>::get(), 0, 0 },
         SVX_UNOEDIT_PARA_PROPERTIES,
         { u"", 0, css::uno::Type(), 0, 0 }
     };

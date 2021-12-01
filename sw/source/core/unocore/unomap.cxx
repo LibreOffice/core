@@ -141,7 +141,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aNumStyleMap        [] =
                 {
-                    { u"" UNO_NAME_NUMBERING_RULES, FN_UNO_NUM_RULES, cppu::UnoType<css::container::XIndexReplace>::get(), PROPERTY_NONE, CONVERT_TWIPS},
+                    { UNO_NAME_NUMBERING_RULES, FN_UNO_NUM_RULES, cppu::UnoType<css::container::XIndexReplace>::get(), PROPERTY_NONE, CONVERT_TWIPS},
                     { u"" UNO_NAME_IS_PHYSICAL, FN_UNO_IS_PHYSICAL,     cppu::UnoType<bool>::get(), PropertyAttribute::READONLY, 0},
                     { u"" UNO_NAME_DISPLAY_NAME, FN_UNO_DISPLAY_NAME, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { u"" UNO_NAME_HIDDEN, FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
@@ -1505,24 +1505,24 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     // SvxAdjustItem
                     { u"" UNO_NAME_PARA_ADJUST,            RES_PARATR_ADJUST, cppu::UnoType<sal_Int16>::get(),PropertyAttribute::MAYBEVOID,  MID_PARA_ADJUST                      },
                     // SvxColorItem
-                    { u"" UNO_NAME_CHAR_COLOR,             RES_CHRATR_COLOR,  cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  0                                    },
+                    { UNO_NAME_CHAR_COLOR,             RES_CHRATR_COLOR,  cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  0                                    },
                     // SvxShadowedItem
-                    { u"" UNO_NAME_CHAR_SHADOWED,          RES_CHRATR_SHADOWED,    cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
+                    { UNO_NAME_CHAR_SHADOWED,          RES_CHRATR_SHADOWED,    cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
                     // SvxContouredItem
                     { u"" UNO_NAME_CHAR_CONTOURED,         RES_CHRATR_CONTOUR,     cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
                     // SvxCrossedOutItem
                     { u"" UNO_NAME_CHAR_STRIKEOUT,     RES_CHRATR_CROSSEDOUT, cppu::UnoType<sal_Int16>::get(),PropertyAttribute::MAYBEVOID,  MID_CROSS_OUT                        },
                     // SvxUnderlineItem
-                    { u"" UNO_NAME_CHAR_UNDERLINE,      RES_CHRATR_UNDERLINE, cppu::UnoType<sal_Int16>::get(),               PROPERTY_NONE,  MID_TL_STYLE                         },
+                    { UNO_NAME_CHAR_UNDERLINE,      RES_CHRATR_UNDERLINE, cppu::UnoType<sal_Int16>::get(),               PROPERTY_NONE,  MID_TL_STYLE                         },
                     { u"" UNO_NAME_CHAR_UNDERLINE_COLOR, RES_CHRATR_UNDERLINE,cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  MID_TL_COLOR                         },
                     { u"" UNO_NAME_CHAR_UNDERLINE_HAS_COLOR, RES_CHRATR_UNDERLINE, cppu::UnoType<bool>::get(),               PROPERTY_NONE,  MID_TL_HASCOLOR                      },
                     // standard font
                     // SvxFontHeightItem
-                    { u"" UNO_NAME_CHAR_HEIGHT,            RES_CHRATR_FONTSIZE,   cppu::UnoType<float>::get(),PropertyAttribute::MAYBEVOID,  MID_FONTHEIGHT|CONVERT_TWIPS         },
+                    { UNO_NAME_CHAR_HEIGHT,            RES_CHRATR_FONTSIZE,   cppu::UnoType<float>::get(),PropertyAttribute::MAYBEVOID,  MID_FONTHEIGHT|CONVERT_TWIPS         },
                     // SvxWeightItem
-                    { u"" UNO_NAME_CHAR_WEIGHT,            RES_CHRATR_WEIGHT,     cppu::UnoType<float>::get(),PropertyAttribute::MAYBEVOID,  MID_WEIGHT                           },
+                    { UNO_NAME_CHAR_WEIGHT,            RES_CHRATR_WEIGHT,     cppu::UnoType<float>::get(),PropertyAttribute::MAYBEVOID,  MID_WEIGHT                           },
                     // SvxPostureItem
-                    { u"" UNO_NAME_CHAR_POSTURE, RES_CHRATR_POSTURE, cppu::UnoType<css::awt::FontSlant>::get(),PropertyAttribute::MAYBEVOID, MID_POSTURE                          },
+                    { UNO_NAME_CHAR_POSTURE, RES_CHRATR_POSTURE, cppu::UnoType<css::awt::FontSlant>::get(),PropertyAttribute::MAYBEVOID, MID_POSTURE                          },
                     // SvxFontItem
                     { u"" UNO_NAME_CHAR_FONT_NAME,         RES_CHRATR_FONT,   cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID,  MID_FONT_FAMILY_NAME                 },
                     { u"" UNO_NAME_CHAR_FONT_STYLE_NAME,   RES_CHRATR_FONT,   cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID,  MID_FONT_STYLE_NAME                  },
