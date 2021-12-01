@@ -26,14 +26,14 @@
 #endif
 
 #define STANDARD_FONT_PROPERTIES \
-    { u"" UNO_NAME_CHAR_HEIGHT, RES_CHRATR_FONTSIZE  ,  cppu::UnoType<float>::get(),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},      \
-    { u"" UNO_NAME_CHAR_WEIGHT, RES_CHRATR_WEIGHT    ,  cppu::UnoType<float>::get(),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},                    \
+    { UNO_NAME_CHAR_HEIGHT, RES_CHRATR_FONTSIZE  ,  cppu::UnoType<float>::get(),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},      \
+    { UNO_NAME_CHAR_WEIGHT, RES_CHRATR_WEIGHT    ,  cppu::UnoType<float>::get(),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},                    \
     { u"" UNO_NAME_CHAR_FONT_NAME, RES_CHRATR_FONT,       cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },                  \
     { u"" UNO_NAME_CHAR_FONT_STYLE_NAME, RES_CHRATR_FONT,     cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },                    \
     { u"" UNO_NAME_CHAR_FONT_FAMILY, RES_CHRATR_FONT,     cppu::UnoType<sal_Int16>::get(),                   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },    \
     { u"" UNO_NAME_CHAR_FONT_CHAR_SET, RES_CHRATR_FONT,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },                    \
     { u"" UNO_NAME_CHAR_FONT_PITCH, RES_CHRATR_FONT,      cppu::UnoType<sal_Int16>::get(),                   PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
-    { u"" UNO_NAME_CHAR_POSTURE, RES_CHRATR_POSTURE   ,  cppu::UnoType<css::awt::FontSlant>::get(),        PropertyAttribute::MAYBEVOID, MID_POSTURE},                   \
+    { UNO_NAME_CHAR_POSTURE, RES_CHRATR_POSTURE   ,  cppu::UnoType<css::awt::FontSlant>::get(),        PropertyAttribute::MAYBEVOID, MID_POSTURE},                   \
     { u"" UNO_NAME_RSID, RES_CHRATR_RSID, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, 0 }, \
     { u"" UNO_NAME_CHAR_LOCALE,           RES_CHRATR_LANGUAGE,    cppu::UnoType<css::lang::Locale>::get(),          PropertyAttribute::MAYBEVOID,   MID_LANG_LOCALE }, \
     { u"" UNO_NAME_CHAR_INTEROP_GRAB_BAG, RES_CHRATR_GRABBAG,     cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),   PROPERTY_NONE,                  0               }, \
@@ -80,8 +80,8 @@
         { u"" UNO_NAME_PARA_STYLE_NAME, FN_UNO_PARA_STYLE,        cppu::UnoType<OUString>::get(),                PropertyAttribute::MAYBEVOID,     0},                                                       \
         { u"" UNO_NAME_PAGE_STYLE_NAME, FN_UNO_PAGE_STYLE,        cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
         { u"" UNO_NAME_NUMBERING_IS_NUMBER, FN_UNO_IS_NUMBER,     cppu::UnoType<bool>::get()  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { u"" UNO_NAME_NUMBERING_LEVEL, FN_UNO_NUM_LEVEL,     cppu::UnoType<sal_Int16>::get(),           PropertyAttribute::MAYBEVOID, 0},                                                            \
-        { u"" UNO_NAME_NUMBERING_RULES, FN_UNO_NUM_RULES,     cppu::UnoType<css::container::XIndexReplace>::get(),  PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                        \
+        { UNO_NAME_NUMBERING_LEVEL, FN_UNO_NUM_LEVEL,     cppu::UnoType<sal_Int16>::get(),           PropertyAttribute::MAYBEVOID, 0},                                                            \
+        { UNO_NAME_NUMBERING_RULES, FN_UNO_NUM_RULES,     cppu::UnoType<css::container::XIndexReplace>::get(),  PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                        \
         { u"" UNO_NAME_NUMBERING_START_VALUE, FN_UNO_NUM_START_VALUE, cppu::UnoType<sal_Int16>::get(),           PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                                                \
         { u"" UNO_NAME_DOCUMENT_INDEX, FN_UNO_DOCUMENT_INDEX, cppu::UnoType<css::text::XDocumentIndex>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },            \
         { u"" UNO_NAME_TEXT_TABLE, FN_UNO_TEXT_TABLE,     cppu::UnoType<css::text::XTextTable>::get(),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },               \
@@ -121,7 +121,7 @@
         { u"" UNO_NAME_CHAR_HIGHLIGHT,                      RES_CHRATR_HIGHLIGHT,          cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, MID_BACK_COLOR                         }, \
         { u"" UNO_NAME_PARA_BACK_COLOR,                     RES_BACKGROUND,                cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_BACK_COLOR                         }, \
         { u"" UNO_NAME_CHAR_CASE_MAP,                       RES_CHRATR_CASEMAP,            cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
-        { u"" UNO_NAME_CHAR_COLOR,                          RES_CHRATR_COLOR,              cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { UNO_NAME_CHAR_COLOR,                          RES_CHRATR_COLOR,              cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
         { u"" UNO_NAME_CHAR_TRANSPARENCE,                   RES_CHRATR_COLOR,              cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_COLOR_ALPHA }, \
         { u"" UNO_NAME_CHAR_STRIKEOUT,                      RES_CHRATR_CROSSEDOUT,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_CROSS_OUT                          }, \
         { u"" UNO_NAME_CHAR_CROSSED_OUT,                    RES_CHRATR_CROSSEDOUT,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_CROSSED_OUT                        }, \
@@ -130,7 +130,7 @@
         { u"" UNO_NAME_CHAR_AUTO_ESCAPEMENT,                RES_CHRATR_ESCAPEMENT,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_AUTO_ESC                           }, \
         { u"" UNO_NAME_CHAR_FLASH,                          RES_CHRATR_BLINK,              cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { u"" UNO_NAME_CHAR_HIDDEN,                         RES_CHRATR_HIDDEN,             cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
-        { u"" UNO_NAME_CHAR_UNDERLINE,                      RES_CHRATR_UNDERLINE,          cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_TL_STYLE                           }, \
+        { UNO_NAME_CHAR_UNDERLINE,                      RES_CHRATR_UNDERLINE,          cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_TL_STYLE                           }, \
         { u"" UNO_NAME_CHAR_UNDERLINE_COLOR,                RES_CHRATR_UNDERLINE,          cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_TL_COLOR                           }, \
         { u"" UNO_NAME_CHAR_UNDERLINE_HAS_COLOR,            RES_CHRATR_UNDERLINE,          cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_TL_HASCOLOR                        }, \
         { u"" UNO_NAME_CHAR_OVERLINE,                       RES_CHRATR_OVERLINE,           cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_TL_STYLE                           }, \
@@ -149,7 +149,7 @@
         CTL_FONT_PROPERTIES \
         { u"" UNO_NAME_CHAR_KERNING,                        RES_CHRATR_KERNING,            cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
         { u"" UNO_NAME_CHAR_NO_HYPHENATION,                 RES_CHRATR_NOHYPHEN,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
-        { u"" UNO_NAME_CHAR_SHADOWED,                       RES_CHRATR_SHADOWED,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { UNO_NAME_CHAR_SHADOWED,                       RES_CHRATR_SHADOWED,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { u"" UNO_NAME_CHAR_CONTOURED,                      RES_CHRATR_CONTOUR,            cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { u"" UNO_NAME_DROP_CAP_FORMAT,                     RES_PARATR_DROP,               cppu::UnoType<css::style::DropCapFormat>::get(),    PropertyAttribute::MAYBEVOID, MID_DROPCAP_FORMAT     | CONVERT_TWIPS }, \
         { u"" UNO_NAME_DROP_CAP_WHOLE_WORD,                 RES_PARATR_DROP,               cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_DROPCAP_WHOLE_WORD                 }, \
@@ -363,7 +363,7 @@
                     { u"" UNO_NAME_PARA_GRAPHIC_FILTER, RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },\
                     { u"" UNO_NAME_PARA_GRAPHIC_LOCATION, RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION}, \
                     { u"" UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},\
-                    { u"" UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},\
+                    { UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},\
                     { u"" UNO_NAME_CHAR_TRANSPARENCE, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_ALPHA},\
                     { u"" UNO_NAME_CHAR_STRIKEOUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<sal_Int16>::get(),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},\
                     { u"" UNO_NAME_CHAR_CROSSED_OUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<bool>::get()  ,        PROPERTY_NONE, 0},\
@@ -374,7 +374,7 @@
                     STANDARD_FONT_PROPERTIES\
                     CJK_FONT_PROPERTIES\
                     CTL_FONT_PROPERTIES\
-                    { u"" UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},\
+                    { UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},\
                     { u"" UNO_NAME_CHAR_UNDERLINE_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},\
                     { u"" UNO_NAME_CHAR_UNDERLINE_HAS_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},\
                     { u"" UNO_NAME_CHAR_OVERLINE, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},\
@@ -389,7 +389,7 @@
                     { u"" UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE, RES_LR_SPACE,         cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_FIRST_LINE_REL_INDENT|CONVERT_TWIPS},\
                     { u"" UNO_NAME_CHAR_KERNING, RES_CHRATR_KERNING    ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,  CONVERT_TWIPS},\
                     { u"" UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
-                    { u"" UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
+                    { UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
                     { u"" UNO_NAME_CHAR_CONTOURED, RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
                     { u"" UNO_NAME_DROP_CAP_FORMAT, RES_PARATR_DROP,        cppu::UnoType<css::style::DropCapFormat>::get()  , PROPERTY_NONE, MID_DROPCAP_FORMAT|CONVERT_TWIPS     },\
                     { u"" UNO_NAME_DROP_CAP_WHOLE_WORD, RES_PARATR_DROP,        cppu::UnoType<bool>::get()  ,         PROPERTY_NONE, MID_DROPCAP_WHOLE_WORD },\
@@ -438,7 +438,7 @@
                     { u"" UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS, RES_PARATR_HYPHENZONE,        cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },\
                     { u"" UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},\
                     { u"" UNO_NAME_NUMBERING_STYLE_NAME, RES_PARATR_NUMRULE,  cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID,   0},\
-                    { u"" UNO_NAME_NUMBERING_LEVEL, RES_PARATR_LIST_LEVEL,    cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID,   0},\
+                    { UNO_NAME_NUMBERING_LEVEL, RES_PARATR_LIST_LEVEL,    cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID,   0},\
                     { u"" UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES, RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },\
                     { u"" UNO_NAME_PARA_SHADOW_FORMAT, RES_SHADOW,    cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},\
                     { u"" UNO_NAME_CHAR_COMBINE_IS_ON, RES_CHRATR_TWO_LINES,          cppu::UnoType<bool>::get(),     PROPERTY_NONE, MID_TWOLINES},\
@@ -470,21 +470,21 @@
 
 #define COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE \
                     { u"" UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        }, \
-                    { u"" UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},  \
+                    { UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},  \
                     { u"" UNO_NAME_CHAR_TRANSPARENCE, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_ALPHA },  \
                     { u"" UNO_NAME_CHAR_CONTOURED, RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},  \
                     { u"" UNO_NAME_CHAR_EMPHASIS, RES_CHRATR_EMPHASIS_MARK,           cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, MID_EMPHASIS},   \
                     { u"" UNO_NAME_CHAR_ESCAPEMENT, RES_CHRATR_ESCAPEMENT,  cppu::UnoType<sal_Int16>::get(),             PROPERTY_NONE, MID_ESC          },  \
                     { u"" UNO_NAME_CHAR_FONT_NAME, RES_CHRATR_FONT,       cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME }, \
-                    { u"" UNO_NAME_CHAR_HEIGHT, RES_CHRATR_FONTSIZE  ,  cppu::UnoType<float>::get(),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},    \
-                    { u"" UNO_NAME_CHAR_POSTURE, RES_CHRATR_POSTURE   ,  cppu::UnoType<css::awt::FontSlant>::get(),        PropertyAttribute::MAYBEVOID, MID_POSTURE}, \
-                    { u"" UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},  \
+                    { UNO_NAME_CHAR_HEIGHT, RES_CHRATR_FONTSIZE  ,  cppu::UnoType<float>::get(),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},    \
+                    { UNO_NAME_CHAR_POSTURE, RES_CHRATR_POSTURE   ,  cppu::UnoType<css::awt::FontSlant>::get(),        PropertyAttribute::MAYBEVOID, MID_POSTURE}, \
+                    { UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},  \
                     { u"" UNO_NAME_CHAR_STRIKEOUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<sal_Int16>::get(),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},   \
                     { u"" UNO_NAME_CHAR_UNDERLINE_COLOR, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int32>::get(),            PropertyAttribute::MAYBEVOID, MID_TL_COLOR},    \
-                    { u"" UNO_NAME_CHAR_WEIGHT, RES_CHRATR_WEIGHT    ,  cppu::UnoType<float>::get(),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},  \
-                    { u"" UNO_NAME_NUMBERING_LEVEL, RES_PARATR_LIST_LEVEL,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, 0}, \
-                    { u"" UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),              PropertyAttribute::MAYBEVOID, MID_TL_STYLE},    \
-                    { u"" UNO_NAME_NUMBERING_RULES, RES_PARATR_NUMRULE,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},    \
+                    { UNO_NAME_CHAR_WEIGHT, RES_CHRATR_WEIGHT    ,  cppu::UnoType<float>::get(),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},  \
+                    { UNO_NAME_NUMBERING_LEVEL, RES_PARATR_LIST_LEVEL,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, 0}, \
+                    { UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),              PropertyAttribute::MAYBEVOID, MID_TL_STYLE},    \
+                    { UNO_NAME_NUMBERING_RULES, RES_PARATR_NUMRULE,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},    \
                     { u"" UNO_NAME_PARA_ADJUST, RES_PARATR_ADJUST,      cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_PARA_ADJUST}, \
                     { u"" UNO_NAME_PARA_BOTTOM_MARGIN, RES_UL_SPACE,          cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_LO_MARGIN|CONVERT_TWIPS}, \
                     { u"" UNO_NAME_PARA_FIRST_LINE_INDENT, RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),      PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS}, \
@@ -494,38 +494,38 @@
                     { u"" UNO_NAME_TABSTOPS, RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
 
 #define FILL_PROPERTIES_SW_BMP \
-    { u"" UNO_NAME_SW_FILLBMP_LOGICAL_SIZE,               XATTR_FILLBMP_SIZELOG,      cppu::UnoType<bool>::get(),       0,  0}, \
-    { u"" UNO_NAME_SW_FILLBMP_OFFSET_X,                   XATTR_FILLBMP_TILEOFFSETX,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
-    { u"" UNO_NAME_SW_FILLBMP_OFFSET_Y,                   XATTR_FILLBMP_TILEOFFSETY,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
-    { u"" UNO_NAME_SW_FILLBMP_POSITION_OFFSET_X,          XATTR_FILLBMP_POSOFFSETX,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
-    { u"" UNO_NAME_SW_FILLBMP_POSITION_OFFSET_Y,          XATTR_FILLBMP_POSOFFSETY,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
-    { u"" UNO_NAME_SW_FILLBMP_RECTANGLE_POINT,            XATTR_FILLBMP_POS,          cppu::UnoType<css::drawing::RectanglePoint>::get(), 0,  0}, \
-    { u"" UNO_NAME_SW_FILLBMP_SIZE_X,                     XATTR_FILLBMP_SIZEX,        cppu::UnoType<sal_Int32>::get(),   0,  0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"" UNO_NAME_SW_FILLBMP_SIZE_Y,                     XATTR_FILLBMP_SIZEY,        cppu::UnoType<sal_Int32>::get(),   0,  0, PropertyMoreFlags::METRIC_ITEM},    \
-    { u"" UNO_NAME_SW_FILLBMP_STRETCH,                    XATTR_FILLBMP_STRETCH,      cppu::UnoType<bool>::get(),       0,  0}, \
-    { u"" UNO_NAME_SW_FILLBMP_TILE,                       XATTR_FILLBMP_TILE,         cppu::UnoType<bool>::get(),       0,  0},\
-    { u"" UNO_NAME_SW_FILLBMP_MODE,                       OWN_ATTR_FILLBMP_MODE,      cppu::UnoType<drawing::BitmapMode>::get(), 0,  0}, \
+    { UNO_NAME_SW_FILLBMP_LOGICAL_SIZE,               XATTR_FILLBMP_SIZELOG,      cppu::UnoType<bool>::get(),       0,  0}, \
+    { UNO_NAME_SW_FILLBMP_OFFSET_X,                   XATTR_FILLBMP_TILEOFFSETX,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { UNO_NAME_SW_FILLBMP_OFFSET_Y,                   XATTR_FILLBMP_TILEOFFSETY,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { UNO_NAME_SW_FILLBMP_POSITION_OFFSET_X,          XATTR_FILLBMP_POSOFFSETX,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { UNO_NAME_SW_FILLBMP_POSITION_OFFSET_Y,          XATTR_FILLBMP_POSOFFSETY,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { UNO_NAME_SW_FILLBMP_RECTANGLE_POINT,            XATTR_FILLBMP_POS,          cppu::UnoType<css::drawing::RectanglePoint>::get(), 0,  0}, \
+    { UNO_NAME_SW_FILLBMP_SIZE_X,                     XATTR_FILLBMP_SIZEX,        cppu::UnoType<sal_Int32>::get(),   0,  0, PropertyMoreFlags::METRIC_ITEM}, \
+    { UNO_NAME_SW_FILLBMP_SIZE_Y,                     XATTR_FILLBMP_SIZEY,        cppu::UnoType<sal_Int32>::get(),   0,  0, PropertyMoreFlags::METRIC_ITEM},    \
+    { UNO_NAME_SW_FILLBMP_STRETCH,                    XATTR_FILLBMP_STRETCH,      cppu::UnoType<bool>::get(),       0,  0}, \
+    { UNO_NAME_SW_FILLBMP_TILE,                       XATTR_FILLBMP_TILE,         cppu::UnoType<bool>::get(),       0,  0},\
+    { UNO_NAME_SW_FILLBMP_MODE,                       OWN_ATTR_FILLBMP_MODE,      cppu::UnoType<drawing::BitmapMode>::get(), 0,  0}, \
 
 #define FILL_PROPERTIES_SW_DEFAULTS \
-    { u"" UNO_NAME_SW_FILLCOLOR,                          XATTR_FILLCOLOR,            cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { UNO_NAME_SW_FILLCOLOR,                          XATTR_FILLCOLOR,            cppu::UnoType<sal_Int32>::get(),   0,  0}, \
 
 #define FILL_PROPERTIES_SW \
     FILL_PROPERTIES_SW_BMP \
     FILL_PROPERTIES_SW_DEFAULTS \
-    { u"" UNO_NAME_SW_FILLBACKGROUND,                 XATTR_FILLBACKGROUND,           cppu::UnoType<bool>::get(),        0, 0}, \
-    { u"" UNO_NAME_SW_FILLBITMAP,                     XATTR_FILLBITMAP,               cppu::UnoType<css::awt::XBitmap>::get(), 0, MID_BITMAP}, \
-    { u"" UNO_NAME_SW_FILLBITMAPURL,                  XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),          0, MID_BITMAP }, \
-    { u"" UNO_NAME_SW_FILLBITMAPNAME,                 XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),    0,  MID_NAME }, \
-    { u"" UNO_NAME_SW_FILLGRADIENTSTEPCOUNT,          XATTR_GRADIENTSTEPCOUNT,        cppu::UnoType<sal_Int16>::get(),   0,  0}, \
-    { u"" UNO_NAME_SW_FILLGRADIENT,                   XATTR_FILLGRADIENT,             cppu::UnoType<css::awt::Gradient>::get(), 0, MID_FILLGRADIENT}, \
-    { u"" UNO_NAME_SW_FILLGRADIENTNAME,               XATTR_FILLGRADIENT,             cppu::UnoType<OUString>::get(),    0, MID_NAME }, \
-    { u"" UNO_NAME_SW_FILLHATCH,                      XATTR_FILLHATCH,                cppu::UnoType<css::drawing::Hatch>::get(), 0, MID_FILLHATCH}, \
-    { u"" UNO_NAME_SW_FILLHATCHNAME,                  XATTR_FILLHATCH,                cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
-    { u"" UNO_NAME_SW_FILLSTYLE,                      XATTR_FILLSTYLE,                cppu::UnoType<css::drawing::FillStyle>::get(), 0, 0}, \
-    { u"" UNO_NAME_SW_FILL_TRANSPARENCE,              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int16>::get(), 0, 0}, \
-    { u"" UNO_NAME_SW_FILLTRANSPARENCEGRADIENT,       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient>::get(), 0,  MID_FILLGRADIENT}, \
-    { u"" UNO_NAME_SW_FILLTRANSPARENCEGRADIENTNAME,   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
-    { u"" UNO_NAME_SW_FILLCOLOR_2,                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(), 0,  0}, \
+    { UNO_NAME_SW_FILLBACKGROUND,                 XATTR_FILLBACKGROUND,           cppu::UnoType<bool>::get(),        0, 0}, \
+    { UNO_NAME_SW_FILLBITMAP,                     XATTR_FILLBITMAP,               cppu::UnoType<css::awt::XBitmap>::get(), 0, MID_BITMAP}, \
+    { UNO_NAME_SW_FILLBITMAPURL,                  XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),          0, MID_BITMAP }, \
+    { UNO_NAME_SW_FILLBITMAPNAME,                 XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),    0,  MID_NAME }, \
+    { UNO_NAME_SW_FILLGRADIENTSTEPCOUNT,          XATTR_GRADIENTSTEPCOUNT,        cppu::UnoType<sal_Int16>::get(),   0,  0}, \
+    { UNO_NAME_SW_FILLGRADIENT,                   XATTR_FILLGRADIENT,             cppu::UnoType<css::awt::Gradient>::get(), 0, MID_FILLGRADIENT}, \
+    { UNO_NAME_SW_FILLGRADIENTNAME,               XATTR_FILLGRADIENT,             cppu::UnoType<OUString>::get(),    0, MID_NAME }, \
+    { UNO_NAME_SW_FILLHATCH,                      XATTR_FILLHATCH,                cppu::UnoType<css::drawing::Hatch>::get(), 0, MID_FILLHATCH}, \
+    { UNO_NAME_SW_FILLHATCHNAME,                  XATTR_FILLHATCH,                cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
+    { UNO_NAME_SW_FILLSTYLE,                      XATTR_FILLSTYLE,                cppu::UnoType<css::drawing::FillStyle>::get(), 0, 0}, \
+    { UNO_NAME_SW_FILL_TRANSPARENCE,              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int16>::get(), 0, 0}, \
+    { UNO_NAME_SW_FILLTRANSPARENCEGRADIENT,       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient>::get(), 0,  MID_FILLGRADIENT}, \
+    { UNO_NAME_SW_FILLTRANSPARENCEGRADIENTNAME,   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
+    { UNO_NAME_SW_FILLCOLOR_2,                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(), 0,  0}, \
 
 #endif
 
