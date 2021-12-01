@@ -1276,7 +1276,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             }
                             pField->SetInitialized();
 
-                            rSh.Insert( *pField );
+                            rSh.InsertField2( *pField );
                         }
                         break;
 
@@ -1340,7 +1340,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     break;
 
                 if( m_xRbAsField->get_active() )
-                    rSh.Insert( aNxtDBField );
+                    rSh.InsertField2( aNxtDBField );
 
                 if( !rSh.IsSttPara() )
                     rSh.SwEditShell::SplitNode();
