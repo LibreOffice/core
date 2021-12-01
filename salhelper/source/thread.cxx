@@ -22,8 +22,13 @@ void salhelper::Thread::launch() {
     // Assumption is that osl::Thread::create returns normally with a true
     // return value iff it causes osl::Thread::run to start executing:
     acquire();
-    if (!create()) {
-        throw std::runtime_error("osl::Thread::create failed");
+    try {
+        if (!create()) {
+            throw std::runtime_error("osl::Thread::create failed");
+        }
+    } catch (...) {
+        release();
+        throw;
     }
 }
 
