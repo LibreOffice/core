@@ -51,7 +51,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11
+#if CHECK_QT5_USING_X11
 #include <QtX11Extras/QX11Info>
 #include <xcb/xproto.h>
 #if QT5_HAVE_XCB_ICCCM
@@ -68,7 +68,7 @@
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
+#if CHECK_QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
 static bool g_bNeedsWmHintsWindowGroup = true;
 static xcb_atom_t g_aXcbClientLeaderAtom = 0;
 #endif
@@ -115,8 +115,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bDefaultPos(true)
     , m_bFullScreen(false)
     , m_bFullScreenSpanAll(false)
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11)                                      \
-    || (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && QT6_USING_X11)
+#if CHECK_ANY_QT_USING_X11
     , m_nKeyModifiers(ModKeyFlags::NONE)
 #endif
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
@@ -211,7 +210,7 @@ void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidge
 
 void QtFrame::fixICCCMwindowGroup()
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
+#if CHECK_QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
     // older Qt5 just sets WM_CLIENT_LEADER, but not the XCB_ICCCM_WM_HINT_WINDOW_GROUP
     // see Qt commit 0de4b326d8 ("xcb: fix issue with dialogs hidden by other windows")
     // or QTBUG-46626. So LO has to set this itself to help some WMs.
@@ -795,7 +794,7 @@ void QtFrame::StartPresentation(bool bStart)
 {
 // meh - so there's no Qt platform independent solution
 // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11
+#if CHECK_QT5_USING_X11
     std::optional<unsigned int> aRootWindow;
     std::optional<Display*> aDisplay;
 
@@ -1319,7 +1318,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
 
 void QtFrame::SetApplicationID(const OUString& rWMClass)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11
+#if CHECK_QT5_USING_X11
     if (m_aSystemData.platform != SystemEnvData::Platform::Xcb || !m_pTopLevel)
         return;
 
