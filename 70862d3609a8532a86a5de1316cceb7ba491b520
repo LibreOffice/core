@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "739806e3_8a51dacc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-01T15:27:38Z",
+      "side": 1,
+      "message": "1st try, solved conflicts, does NOT build since I get not over autoconf:\n-\u003e configure: error: Use --disable-gui instead. How can we get rid of this option? No idea where it comes from.\nAfter removing that check from configure.ac I get:\n-\u003e config.status: error: cannot find input file: `solenv/lockfile/autoconf.h.in\u0027",
+      "revId": "70862d3609a8532a86a5de1316cceb7ba491b520",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
