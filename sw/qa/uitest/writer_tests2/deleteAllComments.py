@@ -47,5 +47,4 @@ class DeleteAllComments(UITestCase):
             self.xUITest.executeCommand(".uno:TrackChanges")
             self.xUITest.executeCommand(".uno:DeleteAllNotes")
 
-
-
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

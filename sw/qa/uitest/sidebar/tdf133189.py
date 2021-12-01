@@ -72,6 +72,4 @@ class tdf133189(UITestCase):
 
             self.xUITest.executeCommand(".uno:Sidebar")
 
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

@@ -55,6 +55,4 @@ class tdf133348(UITestCase):
             # all comments have been deleted
             self.assertFalse(document.TextFields.createEnumeration().hasMoreElements())
 
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

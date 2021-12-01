@@ -38,3 +38,4 @@ class Tdf1254400(UITestCase):
             self.assertEqual("", get_cell_by_position(calc_document, 0, 2, 0).getString())
             self.assertEqual("50", get_cell_by_position(calc_document, 0, 3, 0).getString())
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

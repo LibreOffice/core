@@ -169,3 +169,4 @@ class navigator(UITestCase):
 
             self.xUITest.executeCommand(".uno:Sidebar")
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

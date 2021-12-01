@@ -19,4 +19,3 @@ class tdf134243(UITestCase):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

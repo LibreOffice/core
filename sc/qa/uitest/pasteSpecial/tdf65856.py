@@ -85,4 +85,3 @@ class tdf65856(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 3).getFormula(), "=F4")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

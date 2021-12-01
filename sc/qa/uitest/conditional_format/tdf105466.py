@@ -26,7 +26,4 @@ class tdf105466(UITestCase):
                         xTypeLstBox = xCondFormatDlg.getChild("type")
                         xTypeLstBox.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
 
-
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

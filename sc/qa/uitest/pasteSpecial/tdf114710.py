@@ -42,4 +42,3 @@ class tdf114710(UITestCase):
             self.assertEqual(1, writer_document.GraphicObjects.getCount())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

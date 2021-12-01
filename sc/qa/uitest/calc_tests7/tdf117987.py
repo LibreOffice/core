@@ -25,3 +25,5 @@ class tdf117987(UITestCase):
             self.xUITest.executeCommandWithParameters(".uno:BackgroundColor", colorProperty)
 
             self.assertEqual(get_cell_by_position(document, 0, 0, 1).CellBackColor, 16776960)
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

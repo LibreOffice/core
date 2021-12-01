@@ -175,4 +175,3 @@ class mergedRowsColumns(UITestCase):
             self.assertEqual(get_state_as_dict(gridwin)["CurrentRow"], "0")     #position A1
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

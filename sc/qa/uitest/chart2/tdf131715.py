@@ -25,4 +25,4 @@ class tdf131715(UITestCase):
 
                 self.assertEqual(get_state_as_dict(xWizard)['CurrentStep'], "2")
 
-
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

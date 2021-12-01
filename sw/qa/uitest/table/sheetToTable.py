@@ -88,3 +88,5 @@ class sheetToTable(UITestCase):
             self.assertEqual(table.getCellByName("A2").getString(), "Test 2")
             self.assertEqual(table.getCellByName("A3").getString(), "Test 3")
             self.assertEqual(table.getCellByName("A4").getString(), "Test 4")
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

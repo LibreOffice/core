@@ -25,4 +25,4 @@ class Tdf126226(UITestCase):
                 self.assertEqual("Autor desconocido, 07/04/2019 13:43:52",
                         get_state_as_dict(xDialog.getChild("lastedit"))["Text"])
 
-
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

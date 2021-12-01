@@ -57,6 +57,4 @@ class tdf139301(UITestCase):
 
                 self.assertEqual(style, self.styles[i] + style_name_extension)
 
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

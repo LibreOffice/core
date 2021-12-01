@@ -42,5 +42,5 @@ class tdf51352(UITestCase):
             self.assertEqual(document.TextTables.getCount(), 2)
             self.xUITest.executeCommand(".uno:Redo")
             self.assertEqual(document.TextTables.getCount(), 0)
-# vim: set shiftwidth=4 softtabstop=4 expandtab:
 
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

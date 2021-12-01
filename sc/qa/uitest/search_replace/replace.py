@@ -53,5 +53,4 @@ class ReplaceTest(UITestCase):
 
                 xReplaceBtn.executeAction("CLICK", tuple())
 
-
-
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

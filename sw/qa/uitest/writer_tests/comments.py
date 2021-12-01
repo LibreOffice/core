@@ -150,6 +150,4 @@ class Comments(UITestCase):
             self.assertTrue("Comment2" not in xMainWindow.getChildren())
             self.assertTrue("Comment3" not in xMainWindow.getChildren())
 
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-

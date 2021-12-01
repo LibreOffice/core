@@ -24,6 +24,4 @@ class tdf121949 (UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:Copy"):
                 pass
 
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
-
