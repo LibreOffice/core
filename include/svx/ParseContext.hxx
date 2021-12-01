@@ -31,7 +31,7 @@ namespace svxform
 
     //= OSystemParseContext
 
-    class OSystemParseContext final : public ::connectivity::IParseContext
+    class SAL_DLLPUBLIC_RTTI OSystemParseContext final : public ::connectivity::IParseContext
     {
     private:
 
