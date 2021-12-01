@@ -1421,8 +1421,6 @@ void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
     }
 }
 
-constexpr int ImageBorder = 4;
-
 Size Menu::ImplCalcSize( vcl::Window* pWin )
 {
     // | Check/Radio/Image| Text| Accel/Popup|
@@ -1489,8 +1487,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
 
-                aImgSz.AdjustHeight(ImageBorder); // add a border for native marks
-                aImgSz.AdjustWidth(ImageBorder); // add a border for native marks
+                aImgSz.AdjustHeight(4 ); // add a border for native marks
+                aImgSz.AdjustWidth(4 ); // add a border for native marks
                 if ( aImgSz.Width() > aMaxImgSz.Width() )
                     aMaxImgSz.setWidth( aImgSz.Width() );
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
@@ -1922,15 +1920,11 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                 // Image:
                 if (!bLayout && !IsMenuBar() && ((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
                 {
-                    Image aImage = pData->aImage;
-
-                    auto nImgWidth = aImage.GetSizePixel().Width() + ImageBorder;
-                    if (nImgWidth > aOuterCheckRect.GetWidth())
-                        aOuterCheckRect.setWidth(nImgWidth);
-
                     // Don't render an image for a check thing
                     if (pData->bChecked)
                         ImplPaintCheckBackground(rRenderContext, *pWindow, aOuterCheckRect, pThisItemOnly && bHighlighted);
+
+                    Image aImage = pData->aImage;
 
                     aTmpPos = aOuterCheckRect.TopLeft();
                     aTmpPos.AdjustX((aOuterCheckRect.GetWidth() - aImage.GetSizePixel().Width()) / 2 );
