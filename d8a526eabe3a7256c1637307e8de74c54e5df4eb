@@ -39,6 +39,30 @@
       },
       "revId": "d8a526eabe3a7256c1637307e8de74c54e5df4eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ffc60a8_3e3390c3",
+        "filename": "include/comphelper/multiinterfacecontainer2.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-01T07:54:01Z",
+      "side": 1,
+      "message": "doh! fixed in \n     https://gerrit.libreoffice.org/c/core/+/126166",
+      "parentUuid": "ef5a3399_1b8d5c38",
+      "range": {
+        "startLine": 180,
+        "startChar": 27,
+        "endLine": 180,
+        "endChar": 33
+      },
+      "revId": "d8a526eabe3a7256c1637307e8de74c54e5df4eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
