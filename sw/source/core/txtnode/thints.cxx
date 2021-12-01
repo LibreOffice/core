@@ -1180,6 +1180,12 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
                 SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pAttr));
                 SwFieldType* pFieldType = pAttr->GetFormatField().GetField()->GetTyp();
 
+                if (SwFieldIds::Dde != pFieldType->Which()
+                    && !pTextField->GetpTextNode())
+                {
+                    break; // was not yet inserted
+                }
+
                 //JP 06-08-95: DDE-fields are an exception
                 assert(SwFieldIds::Dde == pFieldType->Which() ||
                        this == pTextField->GetpTextNode());
@@ -1599,6 +1605,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             if ( pAttr->End() == nullptr )
             {
                 bInsertHint = false;
+                DestroyAttr(pAttr);
             }
             else
             {
@@ -2971,6 +2978,7 @@ bool SwpHints::TryInsertHint(
     if ( MAX_HINTS <= Count() ) // we're sorry, this flight is overbooked...
     {
         OSL_FAIL("hints array full :-(");
+        rNode.DestroyAttr(pHint);
         return false;
     }
 
