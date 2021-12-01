@@ -794,15 +794,15 @@ void SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< cs
 
 void SfxDispatchController_Impl::sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent)
 {
-    ::comphelper::OInterfaceContainerHelper2* pContnr = pDispatch->GetListeners().getContainer(rURL);
+    ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>* pContnr = pDispatch->GetListeners().getContainer(rURL);
     if (!pContnr)
         return;
-    ::comphelper::OInterfaceIteratorHelper2 aIt(*pContnr);
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*pContnr);
     while (aIt.hasMoreElements())
     {
         try
         {
-            static_cast<css::frame::XStatusListener*>(aIt.next())->statusChanged(rEvent);
+            aIt.next()->statusChanged(rEvent);
         }
         catch (const css::uno::RuntimeException&)
         {
