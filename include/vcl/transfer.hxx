@@ -232,7 +232,7 @@ protected:
     void                ClearFormats();
 
     bool                SetAny( const css::uno::Any& rAny );
-    bool                SetString( const OUString& rString, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetString( const OUString& rString );
     bool                SetBitmapEx( const BitmapEx& rBitmap, const css::datatransfer::DataFlavor& rFlavor );
     bool                SetGDIMetaFile( const GDIMetaFile& rMtf );
     bool                SetGraphic( const Graphic& rGraphic );

@@ -376,7 +376,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             {
                 OUString aString;
                 if ( aObj.ExportString( aString, nFormat ) )
-                    bOK = SetString( aString, rFlavor );
+                    bOK = SetString( aString );
             }
             else if ( rFlavor.DataType.equals( cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ) )
             {
