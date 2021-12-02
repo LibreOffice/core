@@ -118,7 +118,8 @@ bool RtfExport::CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich)
     return true;
 }
 
-void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen)
+void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen,
+                                const SwRedlineData* /*pRedlineData*/)
 {
     std::vector<OUString> aStarts;
     std::vector<OUString> aEnds;

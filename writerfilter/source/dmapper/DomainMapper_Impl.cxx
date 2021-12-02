@@ -7051,10 +7051,14 @@ void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
             }
         }
 
-        aBookmarkIter->second.m_sBookmarkName = rBookmarkName;
+        aBookmarkIter->second.m_sBookmarkName = m_sCurrentBkmkPrefix + rBookmarkName;
+        m_sCurrentBkmkPrefix.clear();
     }
     else
+    {
         m_sCurrentBkmkName = rBookmarkName;
+        m_sCurrentBkmkPrefix.clear();
+    }
 }
 
 // This method was used as-is for DomainMapper_Impl::startOrEndPermissionRange() implementation.
@@ -7101,7 +7105,10 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                 // then  move the bookmark-End to the earlier paragraph
                 if (IsOutsideAParagraph())
                 {
+                    // keep bookmark range
+                    uno::Reference< text::XTextRange > xStart = xCursor->getStart();
                     xCursor->goLeft( 1, false );
+                    xCursor->gotoRange(xStart, true );
                 }
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
                 SAL_WARN_IF(aBookmarkIter->second.m_sBookmarkName.isEmpty(), "writerfilter.dmapper", "anonymous bookmark");
@@ -7141,6 +7148,16 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
     {
         //TODO: What happens to bookmarks where start and end are at different XText objects?
     }
+}
+
+void DomainMapper_Impl::SetMoveBookmark( bool bIsFrom )
+{
+    static constexpr OUStringLiteral MoveFrom_Bookmark_NamePrefix = u"__RefMoveFrom__";
+    static constexpr OUStringLiteral MoveTo_Bookmark_NamePrefix = u"__RefMoveTo__";
+    if ( bIsFrom )
+        m_sCurrentBkmkPrefix = MoveFrom_Bookmark_NamePrefix;
+    else
+        m_sCurrentBkmkPrefix = MoveTo_Bookmark_NamePrefix;
 }
 
 void DomainMapper_Impl::setPermissionRangeEd(const OUString& user)
