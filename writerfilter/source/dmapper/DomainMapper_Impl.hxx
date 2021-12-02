@@ -488,6 +488,7 @@ private:
     BookmarkMap_t                                                                   m_aBookmarkMap;
     OUString                                                                        m_sCurrentBkmkId;
     OUString                                                                        m_sCurrentBkmkName;
+    OUString                                                                        m_sCurrentBkmkPrefix;
 
     PermMap_t                                                                       m_aPermMap;
     sal_Int32                                                                       m_sCurrentPermId;
@@ -912,6 +913,8 @@ public:
 
     void SetBookmarkName( const OUString& rBookmarkName );
     void StartOrEndBookmark( const OUString& rId );
+
+    void SetMoveBookmark( bool IsFrom );
 
     void setPermissionRangeEd(const OUString& user);
     void setPermissionRangeEdGrp(const OUString& group);

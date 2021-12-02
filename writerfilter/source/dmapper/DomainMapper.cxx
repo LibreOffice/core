@@ -2500,10 +2500,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
     break;
     case NS_ooxml::LN_EG_RangeMarkupElements_moveFromRangeStart:
+        m_pImpl->SetMoveBookmark(/*bIsFrom=*/true);
         if (m_pImpl->hasTableManager())
             m_pImpl->getTableManager().setMoved( getPropertyName(PROP_TABLE_ROW_DELETE) );
     break;
     case NS_ooxml::LN_EG_RangeMarkupElements_moveToRangeStart:
+        m_pImpl->SetMoveBookmark(/*bIsFrom=*/false);
         if (m_pImpl->hasTableManager())
             m_pImpl->getTableManager().setMoved( getPropertyName(PROP_TABLE_ROW_INSERT) );
     break;
