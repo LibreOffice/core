@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07112027_351835f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-02T18:04:42Z",
+      "side": 1,
+      "message": "This is a patch for the atan2 easyhack. I believe I have changed the instances where it would make sense to change it. Other instances of atan with a division do not add pi whenever the denominator is negative, so I have not changed them.",
+      "revId": "2c32a1fbf7f078fd27dafaa492170839666ed2ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
