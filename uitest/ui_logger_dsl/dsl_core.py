@@ -19,8 +19,6 @@ except ImportError:
     sys.exit(1)
 
 tab = "    "
-double_tab = "        "
-
 
 def parse_args():
     """
@@ -73,7 +71,14 @@ class ul_Compiler:
             )
             sys.exit(1)
         line = (
-            "# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-\n\n"
+            "# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-\n"
+            + "#\n"
+            + "# This file is part of the LibreOffice project.\n"
+            + "#\n"
+            + "# This Source Code Form is subject to the terms of the Mozilla Public\n"
+            + "# License, v. 2.0. If a copy of the MPL was not distributed with this\n"
+            + "# file, You can obtain one at http://mozilla.org/MPL/2.0/\n"
+            + "#\n\n"
             + "from uitest.framework import UITestCase\n"
             + "from libreoffice.uno.propertyvalue import mkPropertyValues\n"
             + "from uitest.uihelper.common import get_state_as_dict\n"
@@ -161,7 +166,7 @@ class ul_Compiler:
         else:
             self.objects[self.current_app] = 1
             line = (
-                double_tab
+                tab * 4
                 + self.current_app
                 + ' = MainWindow.getChild("'
                 + self.current_app
@@ -176,7 +181,7 @@ class ul_Compiler:
         else:
             self.objects[Id_of_Object] = 1
             line = (
-                double_tab
+                tab * 4
                 + Id_of_Object
                 + " = "
                 + Obj_parent
@@ -189,7 +194,7 @@ class ul_Compiler:
 
     def write_line_without_parameters(self, Action_holder, Action, Action_type):
         line = (
-            double_tab
+            tab * 4
             + Action_holder
             + '.executeAction("'
             + Action
@@ -203,7 +208,7 @@ class ul_Compiler:
         self, Action_holder, Action, Parameter_name, parameter_value
     ):
         line = (
-            double_tab
+            tab * 4
             + Action_holder
             + '.executeAction("'
             + Action
@@ -226,7 +231,7 @@ class ul_Compiler:
     ):
 
         line = (
-            double_tab
+            tab * 3
             + Action_holder
             + '.executeAction("'
             + Action
@@ -245,7 +250,7 @@ class ul_Compiler:
     def handle_uno(self, UNOCommand):
         if UNOCommand.parameters == None:
             line = (
-                double_tab
+                tab * 3
                 + 'self.xUITest.executeCommand("'
                 + UNOCommand.uno_command_name
                 + '")\n'
@@ -257,7 +262,7 @@ class ul_Compiler:
             parameters = parameters[:-1]
 
             line = (
-                double_tab
+                tab * 3
                 + 'self.xUITest.executeCommandWithParameters("'
                 + UNOCommand.uno_command_name
                 + '", mkPropertyValues({'
@@ -270,14 +275,14 @@ class ul_Compiler:
 
     def handle_start(self, StarterCommand):
         line = (
-            double_tab
-            + 'MainDoc = self.ui_test.create_doc_in_start_center("'
+            tab * 2
+            + 'with self.ui_test.create_doc_in_start_center("'
             + StarterCommand.program_name
-            + '")\n'
+            + '") as document:\n'
         )
         self.variables.append(line)
 
-        line = double_tab + "MainWindow = self.xUITest.getTopFocusWindow()\n"
+        line = tab * 3 + "MainWindow = self.xUITest.getTopFocusWindow()\n"
         self.variables.append(line)
         app = {
             "writer": "writer_edit",
@@ -315,18 +320,14 @@ class ul_Compiler:
 
                 if key_word == "Dialog":
                     old_line = (
-                        double_tab
-                        + 'self.ui_test.execute_dialog_through_command("'
+                        tab * 3
+                        + 'with self.ui_test.execute_dialog_through_command("'
                         + self.prev_command.uno_command_name
-                        + '")\n'
+                        + '") as '
+                        + DialogCommand.dialog_name
+                        + ':\n'
                     )
                 self.variables.append(old_line)
-                line = (
-                    double_tab
-                    + DialogCommand.dialog_name
-                    + " = self.xUITest.getTopFocusWindow()\n"
-                )
-                self.variables.append(line)
                 self.last_parent.append(DialogCommand.dialog_name)
                 self.parent_hierarchy_count = self.parent_hierarchy_count + 1
 
@@ -342,18 +343,14 @@ class ul_Compiler:
 
             if key_word == "Dialog":
                 old_line = (
-                    double_tab
-                    + 'self.ui_test.execute_modeless_dialog_through_command("'
+                    tab * 3
+                    + 'with self.ui_test.execute_modeless_dialog_through_command("'
                     + self.prev_command.uno_command_name
-                    + '")\n'
+                    + '") as '
+                    + DialogCommand.dialog_name
+                    + ':\n'
                 )
             self.variables.append(old_line)
-            line = (
-                double_tab
-                + DialogCommand.dialog_name
-                + "  = self.xUITest.getTopFocusWindow()\n"
-            )
-            self.variables.append(line)
             self.last_parent.append(DialogCommand.dialog_name)
             self.parent_hierarchy_count = self.parent_hierarchy_count + 1
 
@@ -367,14 +364,14 @@ class ul_Compiler:
                     line = ""
                     if keyword.iskeyword(self.prev_command.ui_button):
                         line = (
-                            double_tab
+                            tab * 4
                             + "self.ui_test.close_dialog_through_button(x"
                             + self.prev_command.ui_button
                             + ")\n"
                         )
                     else:
                         line = (
-                            double_tab
+                            tab * 4
                             + "self.ui_test.close_dialog_through_button("
                             + self.prev_command.ui_button
                             + ")\n"
@@ -833,7 +830,7 @@ class ul_Compiler:
         self.init_app()
 
         line = (
-            double_tab
+            tab * 3
             + self.current_app
             + '.executeAction("LAUNCH", mkPropertyValues'
             + '({"AUTOFILTER": "", "COL": "'
@@ -850,7 +847,7 @@ class ul_Compiler:
     def handle_calc_Open_Comment(self, calc_Open_Comment):
 
         line = (
-            double_tab
+            tab * 3
             + self.current_app
             + '.executeAction("COMMENT", mkPropertyValues'
             + '({"OPEN": " "}))\n'
@@ -863,7 +860,7 @@ class ul_Compiler:
     def handle_calc_Close_Comment(self, calc_Close_Comment):
 
         line = (
-            double_tab
+            tab * 3
             + self.current_app
             + '.executeAction("COMMENT", mkPropertyValues'
             + '({"CLOSE": " "}))\n'
@@ -878,7 +875,7 @@ class ul_Compiler:
         self.init_app()
 
         line = (
-            double_tab
+            tab * 3
             + self.current_app
             + '.executeAction("LAUNCH", mkPropertyValues'
             + '({"SELECTMENU": "", "COL": "'
@@ -962,7 +959,7 @@ class ul_Compiler:
             # This part to initialize the element selector in math application
             self.math_element_selector_initializer = True
             line = (
-                double_tab
+                tab * 4
                 + "element_selector"
                 + ' = MainWindow.getChild("'
                 + "element_selector"
@@ -1062,9 +1059,6 @@ class ul_Compiler:
         self.prev_command = setZoom_command
 
     def Generate_UI_test(self):
-        line = double_tab + "self.ui_test.close_doc()"
-        self.variables.append(line)
-
         line = "\n\n# vim: set shiftwidth=4 softtabstop=4 expandtab:"
         self.variables.append(line)
 
