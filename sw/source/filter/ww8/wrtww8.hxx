@@ -704,7 +704,7 @@ public:
     /// has two
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) = 0;
 
-    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen ) = 0;
+    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* pSwRedline = nullptr ) = 0;
 
     virtual void AppendBookmark( const OUString& rName ) = 0;
 
@@ -1074,7 +1074,7 @@ public:
                              const tools::SvRef<SotStorage>& xObjStg, OUString const& rStorageName,
                              SwOLENode* pOLENd);
 
-    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
+    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* pRedlineData = nullptr ) override;
     virtual void AppendBookmark( const OUString& rName ) override;
     void AppendBookmarkEndWithCorrection( const OUString& rName );
 
@@ -1633,7 +1633,7 @@ public:
 sal_Int16 GetWordFirstLineOffset(const SwNumFormat &rFormat);
 // A bit of a bag on the side for now
 OUString FieldString(ww::eField eIndex);
-OUString BookmarkToWord(const OUString &rBookmark);
+OUString BookmarkToWord(const OUString &rBookmark, bool* pIsMove = nullptr, bool* pIsFrom = nullptr);
 
 class WW8SHDLong
 {
