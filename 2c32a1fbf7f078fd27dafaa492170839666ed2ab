@@ -16,6 +16,23 @@
       "message": "This is a patch for the atan2 easyhack. I believe I have changed the instances where it would make sense to change it. Other instances of atan with a division do not add pi whenever the denominator is negative, so I have not changed them.",
       "revId": "2c32a1fbf7f078fd27dafaa492170839666ed2ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62582d0d_8ce93e80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-02T18:15:10Z",
+      "side": 1,
+      "message": "Could you please fix the merge conflict?\n\nFor this:\n- make your local repo without ongoing changes\n- retrieve your patch locally\n- git pull -r // to retrieve last sources\n\u003d\u003e git will indicate there are conflicts locally\n- fix conflicts\n- git commit -a\n- ./logerrit submit",
+      "revId": "2c32a1fbf7f078fd27dafaa492170839666ed2ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
