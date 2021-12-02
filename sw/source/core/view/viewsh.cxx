@@ -84,6 +84,9 @@
 #include <vcl/sysdata.hxx>
 #endif
 
+#include <frameformats.hxx>
+#include <fmtcntnt.hxx>
+
 bool SwViewShell::sbLstAct = false;
 ShellResource *SwViewShell::spShellRes = nullptr;
 vcl::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::spCareDialog {};
@@ -716,6 +719,44 @@ void SwViewShell::UpdateFields(bool bCloseDB)
         pCursorShell->EndAction();
     else
         EndAction();
+}
+
+void SwViewShell::UpdateOleObjectPreviews()
+{
+    SwDoc* pDoc = GetDoc();
+    const SwFrameFormats* const pFormats = pDoc->GetSpzFrameFormats();
+    if (pFormats->empty())
+    {
+        return;
+    }
+
+    for (size_t i = 0; i < pFormats->size(); ++i)
+    {
+        SwFrameFormat* pFormat = (*pFormats)[i];
+        if (pFormat->Which() != RES_FLYFRMFMT)
+        {
+            continue;
+        }
+
+        const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
+        if (!pNodeIndex || !pNodeIndex->GetNodes().IsDocNodes())
+        {
+            continue;
+        }
+
+        SwNode* pNode = pDoc->GetNodes()[pNodeIndex->GetIndex() + 1];
+        SwOLENode* pOleNode = pNode->GetOLENode();
+        if (!pOleNode)
+        {
+            continue;
+        }
+
+        SwOLEObj& rOleObj = pOleNode->GetOLEObj();
+        svt::EmbeddedObjectRef& rObject = rOleObj.GetObject();
+        rObject.UpdateReplacement();
+        // Trigger the repaint.
+        pOleNode->SetChanged();
+    }
 }
 
 /** update all charts for which any table exists */

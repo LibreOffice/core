@@ -24,6 +24,7 @@
 #include <editeng/editobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <cmdid.h>
@@ -131,6 +132,28 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
     // replacements were not generated, even after UpdateAll.
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 1"));
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 2"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOlePreviewUpdate)
+{
+    // Given a document with an embedded Writer object:
+    load(DATA_DIRECTORY, "ole-preview-update.odt");
+
+    // When updating "all" (including OLE previews):
+    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+
+    // Then make sure the preview is no longer a 0-sized stream:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), {});
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(
+        xNameAccess->getByName("ObjectReplacements/Object 1"), uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    // Without the accompanying fix in place, this test would have failed, the stream was still
+    // empty.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt64>(0), pStream->remainingSize());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
