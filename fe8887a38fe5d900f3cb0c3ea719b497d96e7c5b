@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed8de31f_016098e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-02T22:47:40Z",
+      "side": 1,
+      "message": "I think I fixed the merge conflict and got rid of .gitignore.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
