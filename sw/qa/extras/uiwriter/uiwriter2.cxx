@@ -391,6 +391,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
     rUndoManager.Undo();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136452)
+{
+    SwDoc* const pDoc(createDoc("tdf136452.fodt"));
+
+    auto const nNodes(pDoc->GetNodes().Count());
+
+    SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+
+    // first deletion spanning 2 sections
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->SetMark();
+    pWrtShell->Up(true, 2);
+    pWrtShell->Delete();
+
+    // 2 paragraphs deleted, last section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 4, pDoc->GetNodes().Count());
+
+    // second deletion spanning 2 sections
+    pWrtShell->SetMark();
+    pWrtShell->Up(true, 3);
+    pWrtShell->Delete();
+
+    // 3 paragraphs deleted, 2nd section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 9, pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    // 2 paragraphs deleted, last section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 4, pDoc->GetNodes().Count());
+
+    // this crashed
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    pWrtShell->Redo();
+
+    // 2 paragraphs deleted, last section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 4, pDoc->GetNodes().Count());
+
+    pWrtShell->Redo();
+
+    // 3 paragraphs deleted, 2nd section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 9, pDoc->GetNodes().Count());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
 {
     SwDoc* const pDoc(createDoc());
