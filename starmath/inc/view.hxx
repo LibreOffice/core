@@ -210,6 +210,10 @@ public:
     virtual void StateChanged( StateChangedType nStateChange ) override;
     virtual void Command(const CommandEvent& rCEvt) override;
 
+    Point WidgetToWindowPos(const weld::Widget& rWidget, const Point& rPos);
+
+    void ShowContextMenu(const Point& rPos);
+
     void AdjustPosition();
 
     SmEditWindow& GetEditWindow()
