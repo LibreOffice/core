@@ -13,11 +13,9 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -86,11 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
     loadAndSave(aURL, "Office Open XML Text");
 
     // Then make sure polyline and connector have the correct position.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, getTempFile().GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "word/document.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
 
     // For child elements of groups in Writer the position has to be adapted to be relative
@@ -117,11 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     loadAndSave(aURL, "Office Open XML Text");
 
     // Then make sure the rotated child shape has the correct position.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, getTempFile().GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "word/document.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
 
     // For a group itself and for shapes outside of groups, the position calculation is done in
@@ -142,11 +132,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
 
     // Then make sure that the group shape, the group shape's child size and the child shape's size
     // match:
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, getTempFile().GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "word/document.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:ext", "cx", "5328360");
     // Without the accompanying fix in place, this test would have failed, the <a:chExt> element was
@@ -163,11 +149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
     loadAndSave(aURL, "Office Open XML Text");
 
     // Then the shapes should retain their correct control values.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, getTempFile().GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "word/document.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
 
     // Without the fix the output OOXML would have no <a:prstGeom> tags in it.
@@ -343,6 +325,25 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
                 "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
                 "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
                 "fmla", "val 66660");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
+{
+    // Given a PPTX file that contains references to a theme:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "refer-to-theme.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the shape text color is a scheme color:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr' number of nodes is incorrect
+    // i.e. the <a:schemeClr> element was not written.
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val", "accent1");
 }
 }
 
