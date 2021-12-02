@@ -1719,7 +1719,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                             static_cast<SwTextFrame*>(pPrv)->Prepare( PREP_QUOVADIS, nullptr, false );
                     }
                 }
-                if (nIndex + 1 == nEndIndex)
+
+                if (nIndex + 1 == nEndIndex
+                        // tdf#136452 may also be needed at end of section
+                    || pNode->EndOfSectionIndex() - 1 == nEndIndex)
                 {   // tdf#131684 tdf#132236 fix upper of frame moved in
                     // SwUndoDelete; can't be done there unfortunately
                     // because empty section frames are deleted here
