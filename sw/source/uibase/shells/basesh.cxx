@@ -734,6 +734,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rDis.Execute( FN_UPDATE_TOX );
                 rDis.Execute( FN_UPDATE_CHARTS );
                 rSh.CalcLayout();
+                rSh.UpdateOleObjectPreviews();
             }
             break;
 

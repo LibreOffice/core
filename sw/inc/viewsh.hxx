@@ -370,6 +370,10 @@ public:
     // All about fields.
     void UpdateFields(bool bCloseDB = false);
     bool IsAnyFieldInDoc() const;
+
+    /// Update the previews of all OLE objects.
+    void UpdateOleObjectPreviews();
+
     // Update all charts, for that exists any table.
     void UpdateAllCharts();
     bool HasCharts() const;
