@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "085b16f3_8f3d116e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-02T09:18:39Z",
+      "side": 1,
+      "message": "FTR (and *not* to initiate a revert, since I do not think it needs reverting):\n\nOne consequence is having *customized menus/toolbars* not showing elements. I believe that is what happened in tdf#145982: a user has menu customizations from some older LO version; the customized menu in user profile lists older UNO URL for the \"No-width no break\", and now it doesn\u0027t show neither old menu item (for invalid URL), nor the new one (because it\u0027s not in the customized menu).\n\nOf course, it would also impact Basic code (like recorded macros, that use dispatcher to dispatch UNO commands in form of such URLs).\n\nI have no suggestion how to mitigate those, other than maybe keep old URLs as (hidden) aliases for the new ones.",
+      "revId": "b1cbc2e27a5a5434ca8097fa7586912cf0b857c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
