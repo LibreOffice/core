@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20e81778_5280d595",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-02T08:38:27Z",
+      "side": 1,
+      "message": "Winfried,\n\nsorry to notify you here, but unfortunately I constantly receive \"Undelivered Mail Returned to Sender\" after a few days after sending you a PM, so I never know if you received my mails (but sometimes they pass!). Something is configured at your side, so that it tends to reject my mails (either from my .hotmail.com account, or my .mail.ru, or .collabora.com). I don\u0027t know how to communicate with you properly ;-) - just wanted to notify you that your mails were not left unnoticed and unreplied.",
+      "revId": "105196aa00bc0d3e426796f6729a8e7e51271e56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
