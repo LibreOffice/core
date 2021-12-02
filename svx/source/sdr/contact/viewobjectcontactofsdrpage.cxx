@@ -376,22 +376,7 @@ void ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayIn
     if(!nSubHierarchyCount)
         return;
 
-    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
-
-    if(xRetval.empty())
-        return;
-
-    // get ranges
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-    const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
-
-    // check geometrical visibility
-    if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
-        // not visible, release
-        return;
-
-    rVisitor.append(xRetval);
+    getPrimitive2DSequenceSubHierarchy(rDisplayInfo, rVisitor);
 }
 
 ViewObjectContactOfPageGrid::ViewObjectContactOfPageGrid(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -596,30 +581,13 @@ void ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rD
         rDisplayInfo.ClearGhostedDrawMode();
     }
 
-    // create object hierarchy
-    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
-
-    if(!xRetval.empty())
-    {
-        // get ranges
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-        const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-        const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
-
-        // check geometrical visibility
-        if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
-        {
-            // not visible, release
-            xRetval.clear();
-        }
-    }
+    // visit object hierarchy
+    getPrimitive2DSequenceSubHierarchy(rDisplayInfo, rVisitor);
 
     if(bDoGhostedDisplaying)
     {
         rDisplayInfo.SetGhostedDrawMode();
     }
-
-    rVisitor.append(xRetval);
 }
 
 }
