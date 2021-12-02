@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea5593d5_7a3c332a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-02T07:22:46Z",
+      "side": 1,
+      "message": "\u003e error: ‘GraphicCrop’ is not a member of ‘com::sun::star::text’ in file /home/collabora/jenkins/workspace/gerrit_linux_co-2021_debug/sd/qa/unit/export-tests-ooxml2.cxx\n\nMissing include?",
+      "revId": "39f6b741ce58d53d46d2e3895d227bccfb331fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
