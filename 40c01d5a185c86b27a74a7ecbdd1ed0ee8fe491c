@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15635689_1c95aceb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-02T11:27:47Z",
+      "side": 1,
+      "message": "New try. Now I don\u0027t revert the change from 2019 outright, but instead introduce the possibility to revert it at run-time, with an environment variable. Ideally should be possible to do it using a document custom property, too, but it seems hard to get access to those from the basic module (I mean the C++ code).",
+      "revId": "40c01d5a185c86b27a74a7ecbdd1ed0ee8fe491c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
