@@ -1415,7 +1415,7 @@ WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
     return nFc + m_Pcts.back()->GetStartCp();
 }
 
-void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen )
+void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* /*pRedlineData*/ )
 {
     std::vector< const ::sw::mark::IMark* > aArr;
     sal_uInt16 nContent;

@@ -1573,7 +1573,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     // XML_r node should be surrounded with bookmark-begin and bookmark-end nodes if it has bookmarks.
     // The same is applied for permission ranges.
     // But due to unit test "testFdo85542" let's output bookmark-begin with bookmark-end.
-    DoWriteBookmarksStart(m_rBookmarksStart);
+    DoWriteBookmarksStart(m_rBookmarksStart, m_pMoveRedlineData);
     DoWriteBookmarksEnd(m_rBookmarksEnd);
     DoWritePermissionsStart();
     DoWriteAnnotationMarks();
@@ -1763,6 +1763,29 @@ void DocxAttributeOutput::DoWriteBookmarkTagEnd(sal_Int32 const nId)
         FSNS(XML_w, XML_id), OString::number(nId));
 }
 
+void DocxAttributeOutput::DoWriteMoveRangeTagStart(const OString & bookmarkName,
+    bool bFrom, const SwRedlineData* pRedlineData)
+{
+    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
+    OString aDate( DateTimeToOString( pRedlineData->GetTimeStamp() ) );
+
+    m_pSerializer->singleElementNS(XML_w, bFrom
+                ? XML_moveFromRangeStart
+                : XML_moveToRangeStart,
+        FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
+        FSNS(XML_w, XML_author ), OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8),
+        FSNS(XML_w, XML_date ), aDate,
+        FSNS(XML_w, XML_name), bookmarkName);
+}
+
+void DocxAttributeOutput::DoWriteMoveRangeTagEnd(sal_Int32 const nId, bool bFrom)
+{
+    m_pSerializer->singleElementNS(XML_w, bFrom
+            ? XML_moveFromRangeEnd
+            : XML_moveToRangeEnd,
+        FSNS(XML_w, XML_id), OString::number(nId));
+}
+
 void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nRunPos)
 {
     auto aRange = m_aBookmarksOfParagraphStart.equal_range(nRunPos);
@@ -1792,15 +1815,29 @@ void DocxAttributeOutput::DoWriteBookmarkEndIfExist(sal_Int32 nRunPos)
 }
 
 /// Write the start bookmarks
-void DocxAttributeOutput::DoWriteBookmarksStart(std::vector<OUString>& rStarts)
+void DocxAttributeOutput::DoWriteBookmarksStart(std::vector<OUString>& rStarts, const SwRedlineData* pRedlineData)
 {
     for (const OUString & bookmarkName : rStarts)
     {
-        // Output the bookmark
-        DoWriteBookmarkTagStart(bookmarkName);
+        // Output the bookmark (including MoveBookmark of the tracked moving)
+        bool bMove = false;
+        bool bFrom = false;
+        OString sBookmarkName = OUStringToOString(
+                BookmarkToWord(bookmarkName, &bMove, &bFrom), RTL_TEXTENCODING_UTF8);
+        if ( bMove )
+        {
+            // TODO: redline data of MoveBookmark is restored from the first redline of the bookmark
+            // range. But a later deletion within a tracked moving is still imported as plain
+            // deletion, so check IsMoved() and skip the export of the tracked moving to avoid
+            // export with bad author or date
+            if ( pRedlineData && pRedlineData->IsMoved() )
+                DoWriteMoveRangeTagStart(sBookmarkName, bFrom, pRedlineData);
+        }
+        else
+            DoWriteBookmarkTagStart(bookmarkName);
 
         m_rOpenedBookmarksIds[bookmarkName] = m_nNextBookmarkId;
-        m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(bookmarkName), RTL_TEXTENCODING_UTF8);
+        m_sLastOpenedBookmark = sBookmarkName;
         m_nNextBookmarkId++;
     }
     rStarts.clear();
@@ -1813,10 +1850,17 @@ void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds)
     {
         // Get the id of the bookmark
         auto pPos = m_rOpenedBookmarksIds.find(bookmarkName);
+
         if (pPos != m_rOpenedBookmarksIds.end())
         {
-            // Output the bookmark
-            DoWriteBookmarkTagEnd(pPos->second);
+            bool bMove = false;
+            bool bFrom = false;
+            BookmarkToWord(bookmarkName, &bMove, &bFrom);
+            // Output the bookmark (including MoveBookmark of the tracked moving)
+            if ( bMove )
+                DoWriteMoveRangeTagEnd(pPos->second, bFrom);
+            else
+                DoWriteBookmarkTagEnd(pPos->second);
 
             m_rOpenedBookmarksIds.erase(bookmarkName);
         }
@@ -2956,10 +3000,13 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     const sal_Unicode *pBegin = rText.getStr();
     const sal_Unicode *pEnd = pBegin + rText.getLength();
 
-    // the text run is usually XML_t, with the exception of the deleted text
+    // the text run is usually XML_t, with the exception of the deleted (and not moved) text
     sal_Int32 nTextToken = XML_t;
-    if ( m_pRedlineData && m_pRedlineData->GetType() == RedlineType::Delete )
+    if ( m_pRedlineData && !m_pRedlineData->IsMoved() &&
+            m_pRedlineData->GetType() == RedlineType::Delete )
+    {
         nTextToken = XML_delText;
+    }
 
     sal_Unicode prevUnicode = *pBegin;
 
@@ -3350,17 +3397,18 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
             ? DateTime(Date( 1, 1, 1970 )) // Epoch time
             : pRedlineData->GetTimeStamp() ) );
 
+    bool bMoved = pRedlineData->IsMoved();
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
-            m_pSerializer->startElementNS( XML_w, XML_ins,
+            m_pSerializer->startElementNS( XML_w, bMoved ? XML_moveTo : XML_ins,
                     FSNS( XML_w, XML_id ), aId,
                     FSNS( XML_w, XML_author ), aAuthor,
                     FSNS( XML_w, XML_date ), aDate );
             break;
 
         case RedlineType::Delete:
-            m_pSerializer->startElementNS( XML_w, XML_del,
+            m_pSerializer->startElementNS( XML_w, bMoved ? XML_moveFrom : XML_del,
                     FSNS( XML_w, XML_id ), aId,
                     FSNS( XML_w, XML_author ), aAuthor,
                     FSNS( XML_w, XML_date ), aDate );
@@ -3379,14 +3427,15 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
     if ( !pRedlineData || m_bWritingField )
         return;
 
+    bool bMoved = pRedlineData->IsMoved();
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
-            m_pSerializer->endElementNS( XML_w, XML_ins );
+            m_pSerializer->endElementNS( XML_w, bMoved ? XML_moveTo : XML_ins );
             break;
 
         case RedlineType::Delete:
-            m_pSerializer->endElementNS( XML_w, XML_del );
+            m_pSerializer->endElementNS( XML_w, bMoved ? XML_moveFrom : XML_del );
             break;
 
         case RedlineType::Format:
@@ -8341,7 +8390,7 @@ void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::IFieldmark& rFie
         m_Fields.begin()->pFieldmark = &rFieldmark;
 }
 
-void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds )
+void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds, const SwRedlineData* pRedlineData )
 {
     for ( const OUString & name : rStarts )
     {
@@ -8353,6 +8402,7 @@ void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
         else
         {
             m_rBookmarksStart.push_back(name);
+            m_pMoveRedlineData = const_cast<SwRedlineData*>(pRedlineData);
         }
     }
     rStarts.clear();
@@ -10212,6 +10262,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
       m_nEmbedFlyLevel(0),
+      m_pMoveRedlineData(nullptr),
       m_pCurrentFrame( nullptr ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
