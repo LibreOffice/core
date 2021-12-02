@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1524ab6a_81188cc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-02T12:20:41Z",
+      "side": 1,
+      "message": "\u003e equality assertion failed\n\u003e - Expected: -8490\n\u003e - Actual  : -9429\n\nCould you please check if the test has to be adjusted in this branch or the fix needs changing? Thanks.",
+      "revId": "872228a7e59107406eb90c61d6cb1de21c936154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
