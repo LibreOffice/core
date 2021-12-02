@@ -444,17 +444,6 @@ class SdModelTestBaseXML
 {
 
 public:
-    std::unique_ptr<SvStream> parseExportStream(utl::TempFile const & rTempFile, const OUString& rStreamName)
-    {
-        // Read the stream we're interested in.
-        OUString const url(rTempFile.GetURL());
-        uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(packages::zip::ZipFileAccess::createWithURL(
-                                                                        comphelper::getComponentContext(m_xSFactory), url));
-        uno::Reference<io::XInputStream> const xInputStream(xZipNames->getByName(rStreamName), uno::UNO_QUERY);
-        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-        return pStream;
-    }
-
     xmlDocUniquePtr parseExport(utl::TempFile const & rTempFile, OUString const& rStreamName)
     {
         std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
