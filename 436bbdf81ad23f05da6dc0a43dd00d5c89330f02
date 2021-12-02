@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "804b20f8_c7ea17c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-12-02T15:26:26Z",
+      "side": 1,
+      "message": "jenkins AWOL, local builds are fine, this LGTM",
+      "revId": "436bbdf81ad23f05da6dc0a43dd00d5c89330f02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
