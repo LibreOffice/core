@@ -784,10 +784,11 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         case SotClipboardFormatId::NETSCAPE_BOOKMARK:
         {
             Sequence< sal_Int8 > aSeq( 2048 );
+            char* pSeq = reinterpret_cast< char* >( aSeq.getArray() );
 
-            memset( aSeq.getArray(), 0, 2048 );
-            strcpy( reinterpret_cast< char* >( aSeq.getArray() ), OUStringToOString(rBmk.GetURL(), eSysCSet).getStr() );
-            strcpy( reinterpret_cast< char* >( aSeq.getArray() ) + 1024, OUStringToOString(rBmk.GetDescription(), eSysCSet).getStr() );
+            // strncpy fills the rest with nulls, as we need
+            strncpy( pSeq, OUStringToOString(rBmk.GetURL(), eSysCSet).getStr(), 1024 );
+            strncpy( pSeq + 1024, OUStringToOString(rBmk.GetDescription(), eSysCSet).getStr(), 1024 );
 
             maAny <<= aSeq;
         }
