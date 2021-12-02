@@ -149,7 +149,7 @@ void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("text"));
     OUString aText = GetText();
     // TODO share code with sax_fastparser::FastSaxSerializer::write().
-    (void)xmlTextWriterWriteString(pWriter, BAD_CAST(aText.replaceAll("", "&#9;").toUtf8().getStr()));
+    (void)xmlTextWriterWriteString(pWriter, BAD_CAST(aText.replaceAll("\x01", "&#1;").toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
     aParaAttribs.dumpAsXml(pWriter);
     for (size_t i=0; i<maCharAttribs.size(); ++i)
