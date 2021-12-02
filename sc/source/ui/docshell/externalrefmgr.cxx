@@ -457,9 +457,10 @@ ScExternalRefCache::CellFormat::CellFormat() :
 {
 }
 
-ScExternalRefCache::ScExternalRefCache()
- : mxFakeDoc(new ScDocument())
-{}
+ScExternalRefCache::ScExternalRefCache(const ScDocument& rDoc)
+    : mrDoc(rDoc)
+{
+}
 
 ScExternalRefCache::~ScExternalRefCache() {}
 
@@ -688,7 +689,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
             ScMatrixToken aToken(xMat);
             if (!pArray)
-                pArray = std::make_shared<ScTokenArray>(*mxFakeDoc);
+                pArray = std::make_shared<ScTokenArray>(mrDoc);
             pArray->AddToken(aToken);
 
             bFirstTab = false;
@@ -1638,6 +1639,7 @@ bool isLinkUpdateAllowedInDoc(const ScDocument& rDoc)
 
 ScExternalRefManager::ScExternalRefManager(ScDocument& rDoc) :
     mrDoc(rDoc),
+    maRefCache(rDoc),
     mbInReferenceMarking(false),
     mbUserInteractionEnabled(true),
     mbDocTimerEnabled(true),
@@ -1849,7 +1851,7 @@ void putRangeDataIntoCache(
     else
     {
         // Array is empty.  Fill it with an empty matrix of the required size.
-        pArray = lcl_fillEmptyMatrix(*rRefCache.getFakeDoc(), rCacheRange);
+        pArray = lcl_fillEmptyMatrix(rRefCache.getDoc(), rCacheRange);
 
         // Make sure to set this range 'cached', to prevent unnecessarily
         // accessing the src document time and time again.
@@ -2052,7 +2054,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     if (!pSrcDoc)
     {
         // Source document is not reachable.  Throw a reference error.
-        pArray = std::make_shared<ScTokenArray>(*maRefCache.getFakeDoc());
+        pArray = std::make_shared<ScTokenArray>(maRefCache.getDoc());
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
