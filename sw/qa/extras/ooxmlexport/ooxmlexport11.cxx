@@ -885,9 +885,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
     // check moveFrom and moveTo
     CPPUNIT_ASSERT_EQUAL( OUString( "Will this sentence be duplicated?" ), getParagraph( 1 )->getString());
     CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 1 )->getString());
-    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 2), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(1), 2), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(1), 2), "IsStart"));
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(1), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(1), 3), "IsStart"));
     CPPUNIT_ASSERT_EQUAL( OUString( "This is a filler sentence. Will this sentence be duplicated ADDED STUFF?" ),
             getParagraph( 2 )->getString());
     CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 1 )->getString());
@@ -897,23 +897,39 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(2), 3), "RedlineType"));
     CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(2), 3), "IsStart"));
 
+    CPPUNIT_ASSERT_EQUAL( OUString( " " ), getRun( getParagraph( 2 ), 4 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 5 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 6), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(2), 6), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 7 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 7), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(2), 7), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "Will this sentence be duplicated" ), getRun( getParagraph( 2 ), 8 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( " ADDED STUFF" ), getRun( getParagraph( 2 ), 11 )->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "?" ), getRun( getParagraph( 2 ), 14 )->getString());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     if (mbExported)
     {
-        // TODO fix export of moved text
-        CPPUNIT_ASSERT_EQUAL( OUString( " Will this sentence be duplicated ADDED STUFF?" ), getRun( getParagraph( 2 ), 4 )->getString());
-    }
-    else
-    {
-        CPPUNIT_ASSERT_EQUAL( OUString( " " ), getRun( getParagraph( 2 ), 4 )->getString());
-        CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 5 )->getString());
-        CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 5), "RedlineType"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(2), 5), "RedlineType"));
-        CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 6 )->getString());
-        CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 6), "RedlineType"));
-        CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(2), 6), "IsStart"));
-        CPPUNIT_ASSERT_EQUAL( OUString( "Will this sentence be duplicated" ), getRun( getParagraph( 2 ), 7 )->getString());
-        CPPUNIT_ASSERT_EQUAL( OUString( " ADDED STUFF" ), getRun( getParagraph( 2 ), 10 )->getString());
-        CPPUNIT_ASSERT_EQUAL( OUString( "?" ), getRun( getParagraph( 2 ), 13 )->getString());
+        // These were 0 (missing move*FromRange* elements)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeEnd", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeEnd", 1);
+
+        // paired names
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "name", "move471382752");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "name", "move471382752");
+
+        // mandatory authors and dates
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author", u"Tekijä");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author", u"Tekijä");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "date", "0-00-00T00:00:00Z");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "date", "0-00-00T00:00:00Z");
     }
 }
 
@@ -1113,8 +1129,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
     loadAndSave("tdf132271.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in floating tables
-    assertXPath(pXmlDoc, "//w:del", 2);
-    assertXPath(pXmlDoc, "//w:ins", 2);
+    if (!mbExported)
+    {
+        assertXPath(pXmlDoc, "//w:del", 2);
+        assertXPath(pXmlDoc, "//w:ins", 2);
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
+    }
+    else
+    {
+        assertXPath(pXmlDoc, "//w:del", 1);
+        assertXPath(pXmlDoc, "//w:ins", 1);
+        // tracked text moving recognized during the import
+        assertXPath(pXmlDoc, "//w:moveFrom", 1);
+        assertXPath(pXmlDoc, "//w:moveTo", 1);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
@@ -1122,8 +1151,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
     loadAndSave("tdf136667.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in floating tables
-    assertXPath(pXmlDoc, "//w:del", 2);
-    assertXPath(pXmlDoc, "//w:ins", 4);
+    if (!mbExported)
+    {
+        assertXPath(pXmlDoc, "//w:del", 2);
+        assertXPath(pXmlDoc, "//w:ins", 4);
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
+    }
+    else
+    {
+        assertXPath(pXmlDoc, "//w:del", 1);
+        assertXPath(pXmlDoc, "//w:ins", 3);
+        // tracked text moving recognized during the import
+        assertXPath(pXmlDoc, "//w:moveFrom", 1);
+        assertXPath(pXmlDoc, "//w:moveTo", 1);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136850)

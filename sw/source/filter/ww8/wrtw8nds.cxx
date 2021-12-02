@@ -1208,10 +1208,28 @@ bool WW8AttributeOutput::EndURL(bool const)
     return true;
 }
 
-OUString BookmarkToWord(const OUString &rBookmark)
+OUString BookmarkToWord(const OUString &rBookmark, bool* pIsMove, bool* pIsFrom)
 {
+    sal_Int32 nTrim = 0; // position to remove "__RefMoveRange" from bookmark names
+    if ( pIsMove )
+    {
+        static constexpr OUStringLiteral MoveFrom_Bookmark_NamePrefix = u"__RefMoveFrom__";
+        static constexpr OUStringLiteral MoveTo_Bookmark_NamePrefix = u"__RefMoveTo__";
+        if ( rBookmark.startsWith(MoveFrom_Bookmark_NamePrefix) )
+        {
+            *pIsMove = true;
+            *pIsFrom = true;
+            nTrim = MoveFrom_Bookmark_NamePrefix.getLength();
+        }
+        else if ( rBookmark.startsWith(MoveTo_Bookmark_NamePrefix) )
+        {
+            *pIsMove = true;
+            *pIsFrom = false;
+            nTrim = MoveTo_Bookmark_NamePrefix.getLength();
+        }
+    }
     OUString sRet(INetURLObject::encode(
-        rBookmark.replace(' ', '_'), // Spaces are prohibited in bookmark name
+        rBookmark.copy(nTrim).replace(' ', '_'), // Spaces are prohibited in bookmark name
         INetURLObject::PART_REL_SEGMENT_EXTRA,
         INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US));
     // Unicode letters are allowed
@@ -2418,7 +2436,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
-            AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos );
+            AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos, pRedlineData );
             // Sadly only possible for main or glossary document parts: ECMA-376 Part 1 sect. 11.3.2
             if ( m_nTextTyp == TXT_MAINTEXT )
                 AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);

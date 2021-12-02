@@ -28,6 +28,7 @@
 #include <IMark.hxx>
 #include "docxexport.hxx"
 #include <wrtswtbl.hxx>
+#include <redline.hxx>
 
 #include <editeng/boxitem.hxx>
 #include <sax/fshelper.hxx>
@@ -362,7 +363,7 @@ public:
             OUString const* pBookmarkName = nullptr);
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
-    void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
+    void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds, const SwRedlineData* pRedlineData = nullptr );
     void WriteFinalBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void PushRelIdCache();
@@ -698,7 +699,10 @@ private:
 
     void DoWriteBookmarkTagStart(const OUString & bookmarkName);
     void DoWriteBookmarkTagEnd(sal_Int32 nId);
-    void DoWriteBookmarksStart(std::vector<OUString>& rStarts);
+    void DoWriteMoveRangeTagStart(const OString & bookmarkName,
+            bool bFrom, const SwRedlineData* pRedlineData);
+    void DoWriteMoveRangeTagEnd(sal_Int32 nId, bool bFrom);
+    void DoWriteBookmarksStart(std::vector<OUString>& rStarts, const SwRedlineData* pRedlineData = nullptr);
     void DoWriteBookmarksEnd(std::vector<OUString>& rEnds);
     void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
     void DoWriteBookmarkEndIfExist(sal_Int32 nRunPos);
@@ -817,6 +821,7 @@ private:
     /// Bookmarks to output
     std::vector<OUString> m_rBookmarksStart;
     std::vector<OUString> m_rBookmarksEnd;
+    SwRedlineData* m_pMoveRedlineData;
 
     /// Bookmarks to output at the end
     std::vector<OUString> m_rFinalBookmarksStart;

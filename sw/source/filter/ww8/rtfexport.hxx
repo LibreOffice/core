@@ -67,7 +67,8 @@ public:
     /// Guess the script (asian/western).
     bool CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich) override;
 
-    void AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen) override;
+    void AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen,
+                         const SwRedlineData* pSwRedlineData = nullptr) override;
 
     void AppendBookmark(const OUString& rName) override;
 
