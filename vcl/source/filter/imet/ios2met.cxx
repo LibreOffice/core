@@ -1375,17 +1375,26 @@ void OS2METReader::ReadFillet(bool bGivenPos, sal_uInt16 nOrderLen)
 
 void OS2METReader::ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen)
 {
-    sal_uInt16 i,nNumPoints;
-
     if (bGivenPos) {
         aAttr.aCurPos=ReadPoint();
         if (bCoord32) nOrderLen-=8; else nOrderLen-=4;
     }
+
+    sal_uInt16 nNumPoints;
     if (bCoord32) nNumPoints=1+nOrderLen/10;
     else nNumPoints=1+nOrderLen/6;
+
     tools::Polygon aPolygon(nNumPoints);
-    aPolygon.SetPoint(aAttr.aCurPos,0);
-    for (i=1; i<nNumPoints; i++) aPolygon.SetPoint(ReadPoint(),i);
+    aPolygon.SetPoint(aAttr.aCurPos, 0);
+    for (sal_uInt16 i = 1; i <nNumPoints; ++i)
+        aPolygon.SetPoint(ReadPoint(), i);
+
+    if (!pOS2MET->good())
+    {
+        SAL_WARN("filter.os2met", "OS2METReader::ReadFilletSharp: short read");
+        return;
+    }
+
     aAttr.aCurPos=aPolygon.GetPoint(nNumPoints-1);
     if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
     else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
