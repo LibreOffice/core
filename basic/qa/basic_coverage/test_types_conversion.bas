@@ -11,6 +11,21 @@ Dim nTotalCount As Integer
 Dim nPassCount As Integer
 Dim nFailCount As Integer
 
+' See LibreOffice6FloatingPointMode in basic/source/runtime/methods1.cxx
+Function LibreOffice6FloatingPointMode() As Boolean
+    Dim bMode As Boolean
+    bMode = Environ("LIBREOFFICE6FLOATINGPOINTMODE") <> ""
+    If (Not bMode) Then
+	Dim oConfigProvider As Object, aNodePath(0) As New com.sun.star.beans.PropertyValue, oRegistryKey As Object
+	oConfigProvider = createUnoService("com.sun.star.configuration.ConfigurationProvider")
+	aNodePath(0).Name = "nodepath"
+	aNodePath(0).Value = "org.openoffice.Office.Scripting/Basic/Compatibility"
+	oRegistryKey = oConfigProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aNodePath)
+	bMode = oRegistryKey.getPropertyValue("UseLibreOffice6FloatingPointConversion")
+    End If
+    LibreOffice6FloatingPointMode = bMode
+End Function
+
 ' For the following tests the en-US (English - United States) locale is required
 Function doUnitTest() As String
     nTotalCount = 0
@@ -39,10 +54,17 @@ Function doUnitTest() As String
     nVal = " -123.456 "
     AssertTest(nVal = -123.456)
 
-    ' Wrong decimal separator (interpreted as group separator)
-    StartTest()
-    nVal = " -123,456 "
-    AssertTest(nVal = -123456)
+    If LibreOffice6FloatingPointMode() Then
+        ' Wrong decimal separator (and not even interpreted as group separator)
+         StartTest()
+        nVal = " -123,45 "
+        AssertTest(nVal = -123)
+    Else
+        ' Wrong decimal separator (interpreted as group separator)
+        StartTest()
+        nVal = " -123,456 "
+        AssertTest(nVal = -123456)
+    End If
 
     If ((nFailCount > 0) Or (nPassCount <> nTotalCount)) Then
         doUnitTest = "FAIL"
