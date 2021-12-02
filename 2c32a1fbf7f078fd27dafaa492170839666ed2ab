@@ -33,6 +33,23 @@
       "message": "Could you please fix the merge conflict?\n\nFor this:\n- make your local repo without ongoing changes\n- retrieve your patch locally\n- git pull -r // to retrieve last sources\n\u003d\u003e git will indicate there are conflicts locally\n- fix conflicts\n- git commit -a\n- ./logerrit submit",
       "revId": "2c32a1fbf7f078fd27dafaa492170839666ed2ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9605e726_7e0bed3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-02T18:15:27Z",
+      "side": 1,
+      "message": "Thanks for your submission.\nThere is a merge conflict here. Could you please fix that?\nAlso, I think you should not change \u0027.gitignore\u0027 here. ",
+      "revId": "2c32a1fbf7f078fd27dafaa492170839666ed2ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
