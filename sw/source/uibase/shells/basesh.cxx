@@ -823,6 +823,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rDis.Execute( FN_UPDATE_TOX );
                 rDis.Execute( FN_UPDATE_CHARTS );
                 rSh.Reformat();
+                rSh.UpdateOleObjectPreviews();
             }
             break;
 
