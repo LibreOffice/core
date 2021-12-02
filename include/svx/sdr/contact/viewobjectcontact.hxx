@@ -48,11 +48,6 @@ private:
     // This range defines the object's BoundRect
     basegfx::B2DRange                               maObjectRange;
 
-    // PrimitiveSequence of the ViewContact. This contains all necessary information
-    // for the graphical visualisation and needs to be supported by all VCs which
-    // can be visualized.
-    drawinglayer::primitive2d::Primitive2DContainer  mxPrimitive2DSequence;
-
     // the PrimitiveAnimation if Primitive2DContainer contains animations
     std::unique_ptr<sdr::animation::PrimitiveAnimation> mpPrimitiveAnimation;
 
@@ -69,7 +64,7 @@ protected:
 
     // Called from getPrimitive2DSequence() when vector has changed. Evaluate object animation
     // and setup accordingly
-    void checkForPrimitive2DAnimations();
+    void checkForPrimitive2DAnimations(const drawinglayer::primitive2d::Primitive2DContainer& );
 
     // This method is responsible for creating the graphical visualisation data which is
     // stored/cached in the local primitive. Default gets view-independent Primitive
@@ -77,9 +72,6 @@ protected:
     // visibility, handles glue and ghosted.
     // This method will not handle included hierarchies and not check geometric visibility.
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
-
-    // method for flushing Primitive2DContainer for VOC implementations
-    void flushPrimitive2DSequence() { mxPrimitive2DSequence.clear(); }
 
 public:
     // basic constructor.
@@ -111,7 +103,7 @@ public:
     // access to the local primitive. This will ensure that the local primitive is
     // current in comparing the local one with a fresh created incarnation
     // This method will not handle included hierarchies and not check visibility.
-    drawinglayer::primitive2d::Primitive2DContainer const & getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+    drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
     // test this VOC for visibility concerning model-view stuff like e.g. Layer
     virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
