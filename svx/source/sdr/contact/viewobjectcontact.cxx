@@ -367,10 +367,10 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
             const basegfx::B2DHomMatrix aTranslateGridOffset(
                 basegfx::utils::createTranslateB2DHomMatrix(
                     rGridOffset));
-            const drawinglayer::primitive2d::Primitive2DReference aEmbed(
+            drawinglayer::primitive2d::Primitive2DReference aEmbed(
                  new drawinglayer::primitive2d::TransformPrimitive2D(
                     aTranslateGridOffset,
-                    drawinglayer::primitive2d::Primitive2DContainer(mxPrimitive2DSequence)));
+                    std::move(const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence)));
 
             // Set values at local data. So for now, the mechanism is to reset some of the
             // defining things (mxPrimitive2DSequence, maGridOffset) and re-create the
