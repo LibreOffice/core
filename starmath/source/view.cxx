@@ -831,15 +831,29 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
     aInitialFocusTimer.SetTimeout(100);
 }
 
+Point SmCmdBoxWindow::WidgetToWindowPos(const weld::Widget& rWidget, const Point& rPos)
+{
+    Point aRet(rPos);
+    int x(0), y(0), width(0), height(0);
+    rWidget.get_extents_relative_to(*m_xContainer, x, y, width, height);
+    aRet.Move(x, y);
+    aRet.Move(m_xBox->GetPosPixel().X(), m_xBox->GetPosPixel().Y());
+    return aRet;
+}
+
+void SmCmdBoxWindow::ShowContextMenu(const Point& rPos)
+{
+    ToTop();
+    SmViewShell *pViewSh = GetView();
+    if (pViewSh)
+        pViewSh->GetViewFrame()->GetDispatcher()->ExecutePopup("edit", this, &rPos);
+}
+
 void SmCmdBoxWindow::Command(const CommandEvent& rCEvt)
 {
     if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        ToTop();
-        Point aPoint = rCEvt.GetMousePosPixel();
-        SmViewShell *pViewSh = GetView();
-        if (pViewSh)
-            pViewSh->GetViewFrame()->GetDispatcher()->ExecutePopup("edit", this, &aPoint);
+        ShowContextMenu(rCEvt.GetMousePosPixel());
         return;
     }
 
