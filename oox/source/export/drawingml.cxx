@@ -154,6 +154,21 @@ sal_Int32 GetAlphaFromTransparenceGradient(const awt::Gradient& rGradient, bool 
     // drawingML alpha is a percentage on a 0..100000 scale.
     return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
 }
+
+const char* g_aPredefinedClrNames[] = {
+    "dk1",
+    "lt1",
+    "dk2",
+    "lt2",
+    "accent1",
+    "accent2",
+    "accent3",
+    "accent4",
+    "accent5",
+    "accent6",
+    "hlink",
+    "folHlink",
+};
 }
 
 namespace oox::drawingml {
@@ -400,6 +415,40 @@ void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTra
             }
         }
     }
+}
+
+bool DrawingML::WriteCharColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet)
+{
+    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("CharColorTheme"))
+    {
+        return false;
+    }
+
+    sal_Int32 nCharColorTheme = -1;
+    xPropertySet->getPropertyValue("CharColorTheme") >>= nCharColorTheme;
+    if (nCharColorTheme < 0 || nCharColorTheme > 11)
+    {
+        return false;
+    }
+
+    const char* pColorName = g_aPredefinedClrNames[nCharColorTheme];
+
+    sal_Int32 nCharColorLumMod{};
+    xPropertySet->getPropertyValue("CharColorLumMod") >>= nCharColorLumMod;
+    sal_Int32 nCharColorLumOff{};
+    xPropertySet->getPropertyValue("CharColorLumOff") >>= nCharColorLumOff;
+    sal_Int32 nCharColorTintOrShade{};
+    xPropertySet->getPropertyValue("CharColorTintOrShade") >>= nCharColorTintOrShade;
+    if (nCharColorLumMod != 10000 || nCharColorLumOff != 0 || nCharColorTintOrShade != 0)
+    {
+        return false;
+    }
+
+    mpFS->startElementNS(XML_a, XML_solidFill);
+    mpFS->singleElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
+    mpFS->endElementNS(XML_a, XML_solidFill);
+
+    return true;
 }
 
 void DrawingML::WriteSolidFill( ::Color nColor, sal_Int32 nAlpha )
@@ -2160,7 +2209,10 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             {
                 color.SetAlpha(255);
                 // TODO: special handle embossed/engraved
-                WriteSolidFill(color, nTransparency);
+                if (!WriteCharColor(rXPropSet))
+                {
+                    WriteSolidFill(color, nTransparency);
+                }
             }
         }
     }
