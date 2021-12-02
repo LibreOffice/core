@@ -1749,12 +1749,6 @@ namespace sdr::contact {
     {
         // graphical invalidate at all views
         ActionChanged();
-
-        // #i93318# flush Primitive2DContainer to force recreation with updated XControlModel
-        // since e.g. background color has changed and existing decompositions are possibly no
-        // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
-        // since it only has a uno reference to the XControlModel
-        flushPrimitive2DSequence();
     }
 
     UnoControlPrintOrPreviewContact::UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )

@@ -263,13 +263,13 @@ void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
     // GetObjectContact().InvalidatePartOfView(rChildVOC.getObjectRange());
 }
 
-void ViewObjectContact::checkForPrimitive2DAnimations()
+void ViewObjectContact::checkForPrimitive2DAnimations(const drawinglayer::primitive2d::Primitive2DContainer& xPrimitive2DSequence)
 {
     // remove old one
     mpPrimitiveAnimation.reset();
 
     // check for animated primitives
-    if(mxPrimitive2DSequence.empty())
+    if(xPrimitive2DSequence.empty())
         return;
 
     const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
@@ -279,7 +279,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
     {
         AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
             bTextAnimationAllowed, bGraphicAnimationAllowed);
-        aAnimatedExtractor.process(mxPrimitive2DSequence);
+        aAnimatedExtractor.process(xPrimitive2DSequence);
 
         if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
         {
@@ -327,7 +327,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimiti
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
 
@@ -343,19 +343,12 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         xNewPrimitiveSequence = createPrimitive2DSequence(rDisplayInfo);
     }
 
-    // local up-to-date checks. New list different from local one?
-    if(mxPrimitive2DSequence == xNewPrimitiveSequence)
-        return mxPrimitive2DSequence;
-
-    // has changed, copy content
-    const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = std::move(xNewPrimitiveSequence);
-
     // check for animated stuff
-    const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
+    const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations(xNewPrimitiveSequence);
 
     // always update object range when PrimitiveSequence changes
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
+    const_cast< ViewObjectContact* >(this)->maObjectRange = xNewPrimitiveSequence.getB2DRange(rViewInformation2D);
 
     // check and eventually embed to GridOffset transform primitive
     if(GetObjectContact().supportsGridOffsets())
@@ -370,7 +363,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
             drawinglayer::primitive2d::Primitive2DReference aEmbed(
                  new drawinglayer::primitive2d::TransformPrimitive2D(
                     aTranslateGridOffset,
-                    std::move(const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence)));
+                    std::move(xNewPrimitiveSequence)));
 
             // Set values at local data. So for now, the mechanism is to reset some of the
             // defining things (mxPrimitive2DSequence, maGridOffset) and re-create the
@@ -381,13 +374,13 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
             // just allow re-creation of the PrimitiveSequence (and removing buffered
             // decomposed content of it). May be optimized, though. OTOH it only happens
             // in calc which traditionally does not have a huge amount of DrawObjects anyways.
-            const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
+            xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
             const_cast< ViewObjectContact* >(this)->maObjectRange.transform(aTranslateGridOffset);
         }
     }
 
     // return current Primitive2DContainer
-    return mxPrimitive2DSequence;
+    return xNewPrimitiveSequence;
 }
 
 bool ViewObjectContact::isPrimitiveVisible(const DisplayInfo& /*rDisplayInfo*/) const
@@ -458,7 +451,6 @@ void ViewObjectContact::resetGridOffset()
     maGridOffset.setY(0.0);
 
     // also reset sequence to get a re-calculation when GridOffset changes
-    mxPrimitive2DSequence.clear();
     maObjectRange.reset();
 }
 
