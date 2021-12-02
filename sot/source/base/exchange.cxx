@@ -156,7 +156,7 @@ const DataFlavorRepresentation* FormatArray_Impl()
         /*101 SotClipboardFormatId::NETSCAPE_IMAGE*/         { "application/x-openoffice-netscape-image;windows_formatname=\"Netscape Image Format\"", "Netscape Image Format", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /*102 SotClipboardFormatId::SBA_FORMEXCHANGE*/       { "application/x-openoffice-sba-formexchange;windows_formatname=\"SBA_FORMEXCHANGE\"", "SBA_FORMEXCHANGE", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /*103 SotClipboardFormatId::SBA_REPORTEXCHANGE*/     { "application/x-openoffice-sba-reportexchange;windows_formatname=\"SBA_REPORTEXCHANGE\"", "SBA_REPORTEXCHANGE", &cppu::UnoType<Sequence<sal_Int8>>::get() },
-        /*104 SotClipboardFormatId::UNIFORMRESOURCELOCATOR*/ { "application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocator\"", "UniformResourceLocator", &cppu::UnoType<Sequence<sal_Int8>>::get() },
+        /*104 SotClipboardFormatId::UNIFORMRESOURCELOCATOR*/ { "application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocator", &cppu::UnoType<OUString>::get() },
         /*105 SotClipboardFormatId::STARCHARTDOCUMENT_50*/   { "application/x-openoffice-starchartdocument-50;windows_formatname=\"StarChartDocument 5.0\"", "StarChartDocument 5.0", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /*106 SotClipboardFormatId::GRAPHOBJ*/               { "application/x-openoffice-graphobj;windows_formatname=\"Graphic Object\"", "Graphic Object", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /*107 SotClipboardFormatId::STARWRITER_60*/          { MIMETYPE_VND_SUN_XML_WRITER_ASCII, "Writer 6.0", &cppu::UnoType<Sequence<sal_Int8>>::get() },

@@ -302,10 +302,11 @@ const std::vector< FormatEntry > g_TranslTable {
     //SotClipboardFormatId::NETSCAPE_IMAGE
         FormatEntry("application/x-openoffice-netscape-image;windows_formatname=\"Netscape Image Format\"", "Netscape Image Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::SBA_FORMEXCHANGE
-        FormatEntry("application/x-openoffice-sba-formexchange;windows_formatname=\"SBA_FORMEXCHANGE\"", "SBA_FORMEXCHANGE", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),  //SotClipboardFormatId::SBA_REPORTEXCHANGE
+        FormatEntry("application/x-openoffice-sba-formexchange;windows_formatname=\"SBA_FORMEXCHANGE\"", "SBA_FORMEXCHANGE", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+    //SotClipboardFormatId::SBA_REPORTEXCHANGE
         FormatEntry("application/x-openoffice-sba-reportexchange;windows_formatname=\"SBA_REPORTEXCHANGE\"", "SBA_REPORTEXCHANGE", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::UNIFORMRESOURCELOCATOR
-        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocator\"", "UniformResourceLocator", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocatorW\"", "UniformResourceLocator", nullptr, CF_INVALID, CppuType_String),
     //SotClipboardFormatId::STARCHARTDOCUMENT_50
         FormatEntry("application/x-openoffice-starchartdocument-50;windows_formatname=\"StarChartDocument 5.0\"", "StarChartDocument 5.0", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::GRAPHOBJ

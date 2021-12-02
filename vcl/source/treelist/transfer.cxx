@@ -777,17 +777,9 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         break;
 
         case SotClipboardFormatId::STRING:
+        case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
             maAny <<= rBmk.GetURL();
             break;
-
-        case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
-        {
-            OString sURL(OUStringToOString(rBmk.GetURL(), eSysCSet));
-            Sequence< sal_Int8 > aSeq( sURL.getLength() );
-            memcpy( aSeq.getArray(), sURL.getStr(), sURL.getLength() );
-            maAny <<= aSeq;
-        }
-        break;
 
         case SotClipboardFormatId::NETSCAPE_BOOKMARK:
         {
