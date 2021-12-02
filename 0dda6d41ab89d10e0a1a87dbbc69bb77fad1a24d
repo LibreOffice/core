@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e802e8_528b907f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-02T20:10:56Z",
+      "side": 1,
+      "message": "is there any reason we can\u0027t do this, and avoid an extra ScDocument just for its SheetLimits?",
+      "revId": "0dda6d41ab89d10e0a1a87dbbc69bb77fad1a24d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
