@@ -800,8 +800,6 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     m_xIncludeDiacritics->set_active( !aOpt.IsIgnoreDiacritics_CTL() );
     if ( m_xIncludeKashida->get_visible() )
         m_xIncludeKashida->set_active( !aOpt.IsIgnoreKashida_CTL() );
-    if ( SvxSearchDialog::IsOtherOptionsExpanded() )
-        m_xOtherOptionsExpander->set_expanded( true );
     ApplyTransliterationFlags_Impl( pSearchItem->GetTransliterationFlags() );
 
     ShowOptionalControls_Impl();
@@ -1754,8 +1752,12 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
     }
 
     if ( pSearchItem )
+    {
         Init_Impl( pSearchItem->GetPattern() &&
                    ( !pSearchList || !pSearchList->Count() ) );
+        if (SvxSearchDialog::IsOtherOptionsExpanded())
+            m_xOtherOptionsExpander->set_expanded(true);
+    }
 }
 
 void SvxSearchDialog::EnableControl_Impl(const weld::Widget& rCtrl)
