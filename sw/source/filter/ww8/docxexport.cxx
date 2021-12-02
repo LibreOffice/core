@@ -66,6 +66,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
+#include <redline.hxx>
 #include <swdbdata.hxx>
 
 #include <editeng/unoprnms.hxx>
@@ -145,7 +146,7 @@ bool DocxExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich
     return true;
 }
 
-void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen )
+void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* pRedlineData )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
@@ -172,7 +173,7 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
     if ( nCurrentPos == nEnd )
         m_pAttrOutput->WriteFinalBookmarks_Impl( aStarts, aEnds );
     else
-        m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
+        m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds, pRedlineData );
 }
 
 void DocxExport::AppendBookmark( const OUString& rName )
