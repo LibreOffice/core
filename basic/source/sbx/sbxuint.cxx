@@ -23,6 +23,7 @@
 #include <vcl/errcode.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
+#include <rtlproto.hxx>
 
 sal_uInt16 ImpGetUShort( const SbxValues* p )
 {
@@ -136,7 +137,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, true ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr, !LibreOffice6FloatingPointMode() ) != ERRCODE_NONE )
                     nRes = 0;
                 else
                     nRes = ImpDoubleToUShort(d);
