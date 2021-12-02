@@ -266,10 +266,9 @@ bool SmEditTextWindow::Command(const CommandEvent& rCEvt)
 
     if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        // purely for "ExecutePopup" taking a vcl::Window and
-        // we assume SmEditTextWindow 0,0 is at SmEditWindow 0,0
         ReleaseMouse();
-        mrEditWindow.GetCmdBox().Command(rCEvt);
+        SmCmdBoxWindow& rCmdBox = mrEditWindow.GetCmdBox();
+        rCmdBox.ShowContextMenu(rCmdBox.WidgetToWindowPos(*GetDrawingArea(), rCEvt.GetMousePosPixel()));
         GrabFocus();
         return true;
     }
