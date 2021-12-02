@@ -39,10 +39,17 @@ Function doUnitTest() As String
     nVal = " -123.456 "
     AssertTest(nVal = -123.456)
 
-    ' Wrong decimal separator (interpreted as group separator)
-    StartTest()
-    nVal = " -123,456 "
-    AssertTest(nVal = -123456)
+    If LibreOffice6FloatingPointMode() Then
+        ' Wrong decimal separator (and not even interpreted as group separator)
+         StartTest()
+        nVal = " -123,45 "
+        AssertTest(nVal = -123)
+    Else
+        ' Wrong decimal separator (interpreted as group separator)
+        StartTest()
+        nVal = " -123,456 "
+        AssertTest(nVal = -123456)
+    End If
 
     If ((nFailCount > 0) Or (nPassCount <> nTotalCount)) Then
         doUnitTest = "FAIL"

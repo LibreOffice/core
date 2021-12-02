@@ -350,10 +350,12 @@ extern void SbRtl_CDateFromUnoDateTime(StarBASIC * pBasic, SbxArray & rPar, bool
 extern void SbRtl_CDateToIso(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_CDateFromIso(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_CompatibilityMode(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
+extern void SbRtl_LibreOffice6FloatingPointMode(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_CDec(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
 extern void SbRtl_Partition(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
+extern bool LibreOffice6FloatingPointMode();
 extern double Now_Impl();
 extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );
 

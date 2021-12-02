@@ -61,6 +61,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
+
+#include <officecfg/Office/Scripting.hxx>
+
 #include <memory>
 
 using namespace comphelper;
@@ -2968,6 +2971,21 @@ void SbRtl_CompatibilityMode(StarBASIC *, SbxArray & rPar, bool)
         bEnabled = pInst->IsCompatibility();
     }
     rPar.Get(0)->PutBool(bEnabled);
+}
+
+bool LibreOffice6FloatingPointMode()
+{
+    static bool bMode = std::getenv("LIBREOFFICE6FLOATINGPOINTMODE") != nullptr;
+
+    return bMode || officecfg::Office::Scripting::Basic::Compatibility::UseLibreOffice6FloatingPointConversion::get();
+}
+
+void SbRtl_LibreOffice6FloatingPointMode(StarBASIC *, SbxArray & rPar, bool)
+{
+    if ( rPar.Count() != 1 )
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    rPar.Get(0)->PutBool( LibreOffice6FloatingPointMode() );
 }
 
 void SbRtl_Input(StarBASIC *, SbxArray & rPar, bool)

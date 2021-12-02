@@ -21,6 +21,7 @@
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 #include "sbxres.hxx"
+#include <rtlproto.hxx>
 
 enum SbxBOOL ImpGetBool( const SbxValues* p )
 {
@@ -80,7 +81,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                     double n;
                     SbxDataType t;
                     sal_uInt16 nLen = 0;
-                    if( ImpScan( *p->pOUString, n, t, &nLen, true ) == ERRCODE_NONE )
+                    if( ImpScan( *p->pOUString, n, t, &nLen, !LibreOffice6FloatingPointMode() ) == ERRCODE_NONE )
                     {
                         if( nLen == p->pOUString->getLength() )
                         {

@@ -216,6 +216,8 @@ constexpr Method aMethods[] = {
 { u"CompatibilityMode",             SbxBOOL,     1 | FUNCTION_,        SbRtl_CompatibilityMode    },
     arg(u"bEnable", SbxBOOL),
 
+{ u"LibreOffice6FloatingPointMode", SbxBOOL,     0 | FUNCTION_,        SbRtl_LibreOffice6FloatingPointMode },
+
 { u"ConvertFromUrl",                SbxSTRING,   1 | FUNCTION_,        SbRtl_ConvertFromUrl       },
     arg(u"Url", SbxSTRING),
 

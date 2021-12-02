@@ -26,6 +26,7 @@
 #include <vcl/errcode.hxx>
 #include <unotools/resmgr.hxx>
 #include "sbxconv.hxx"
+#include <rtlproto.hxx>
 
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
@@ -400,7 +401,7 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     {
         double n;
         SbxDataType t;
-        eRes = ImpScan( rSrc, n, t, pLen, true );
+        eRes = ImpScan( rSrc, n, t, pLen, !LibreOffice6FloatingPointMode() );
         if( eRes == ERRCODE_NONE )
         {
             if( !IsFixed() )
