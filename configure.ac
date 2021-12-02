@@ -5703,7 +5703,7 @@ dnl ===================================================================
 if test -z "$CROSS_COMPILING"; then
     test -n "$LOCKFILE" -a "${with_system_lockfile+set}" != set && with_system_lockfile="$LOCKFILE"
     test "${with_system_lockfile+set}" = set || with_system_lockfile=no
-    AC_MSG_CHECKING([whick lockfile binary to use])
+    AC_MSG_CHECKING([which lockfile binary to use])
     case "$with_system_lockfile" in
     yes)
         AC_MSG_RESULT([external])
