@@ -13,11 +13,9 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -142,11 +140,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
 
     // Then make sure that the group shape, the group shape's child size and the child shape's size
     // match:
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, getTempFile().GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"),
-                                                  uno::UNO_QUERY);
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "word/document.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:ext", "cx", "5328360");
     // Without the accompanying fix in place, this test would have failed, the <a:chExt> element was
