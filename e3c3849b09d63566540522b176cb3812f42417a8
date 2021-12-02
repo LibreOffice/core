@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5fbe6d8_091cf94c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-02T13:32:52Z",
+      "side": 1,
+      "message": "Thanks Andras \u003d) a shame not to have it in master too; but if Rene doesn\u0027t like it that\u0027s fine of course though I imagine iODBC is packaged for Debian - and that we could just use that instead of unixODBC as a trivial drop-in replacement and share this.",
+      "revId": "e3c3849b09d63566540522b176cb3812f42417a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
