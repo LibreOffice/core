@@ -8,6 +8,7 @@
 #
 
 import six
+import gdb
 from libreoffice.util import printing
 
 class SwPositionPrinter(object):
@@ -194,7 +195,7 @@ class BigPtrArrayPrinter(object):
     class _iterator(six.Iterator):
 
         def __init__(self, array):
-            self.blocks = array['m_ppInf']['_M_t']['_M_t']['_M_head_impl']
+            self.blocks = array['m_ppInf']['_M_t']['_M_t'].cast(gdb.lookup_type("std::_Head_base<0, BlockInfo**, false>"))['_M_head_impl']
             self.count = array['m_nSize']
             self.pos = 0
             self.block_count = array['m_nBlock']
