@@ -16,6 +16,24 @@
       "message": "Thanks Andras \u003d) a shame not to have it in master too; but if Rene doesn\u0027t like it that\u0027s fine of course though I imagine iODBC is packaged for Debian - and that we could just use that instead of unixODBC as a trivial drop-in replacement and share this.",
       "revId": "e3c3849b09d63566540522b176cb3812f42417a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eba6b71a_7b4b26d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-12-02T14:19:03Z",
+      "side": 1,
+      "message": "\"a shame not to have it in master too; but if Rene doesn\u0027t like it that\u0027s fine of course\"\n\n?? Please read what I wrote. Again.\n\nI have no objection to use iodbc *if* you do it correctly (aka with fixing the build with system-iodbc) and make it consistent. That is why I commented on this issue in the first place before I saw it was on a collabora change.\n\nAlso possible is to check for both unixodbc and iodbc although that might create build failurews if one of them changed header behaviour...\n\n\u003e  though I imagine iODBC is packaged for Debian -\n\n... which I even referenced ...\n\n\u003e and that we could just use that instead of unixODBC as a trivial drop-in replacement and share this.\"\n\nTrue.\n\nThe -2 was purely for that technical carelessnes, not a general \"no, don\u0027t do that\".",
+      "parentUuid": "c5fbe6d8_091cf94c",
+      "revId": "e3c3849b09d63566540522b176cb3812f42417a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
