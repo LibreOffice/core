@@ -425,19 +425,16 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     rVisitor.append(xRetval);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const
+void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
-    drawinglayer::primitive2d::Primitive2DContainer xSeqRetval;
 
     for(sal_uInt32 a(0); a < nSubHierarchyCount; a++)
     {
         const ViewObjectContact& rCandidate(GetViewContact().GetViewContact(a).GetViewObjectContact(GetObjectContact()));
 
-        rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo, xSeqRetval);
+        rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo, rVisitor);
     }
-
-    return xSeqRetval;
 }
 
 // Support getting a GridOffset per object and view for non-linear ViewToDevice
