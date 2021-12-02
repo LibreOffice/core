@@ -352,7 +352,7 @@ extern void SbRtl_CDateFromIso(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 extern void SbRtl_CompatibilityMode(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_CDec(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
-extern void SbRtl_Partition(StarBASIC * pBasic, SbxArray & rPar, bool bWrite); // Fong
+extern void SbRtl_Partition(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
 extern double Now_Impl();
 extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );
