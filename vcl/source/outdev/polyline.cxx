@@ -118,7 +118,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
 
     // #i101491#
     // Try direct Fallback to B2D-Version of DrawPolyLine
-    if(LineStyle::Solid == rLineInfo.GetStyle())
+    if (LineStyle::Solid == rLineInfo.GetStyle() && IsDeviceOutputNecessary())
     {
         DrawPolyLine(
             rPoly.getB2DPolygon(),
