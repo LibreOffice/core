@@ -133,11 +133,6 @@
 
 #include <breakit.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <iostream>
-#include <dbgoutsw.hxx>
-#endif
-
 #include <sfx2/docfile.hxx>
 #include <swdll.hxx>
 #include "WW8Sttbf.hxx"
@@ -3449,10 +3444,6 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
 
     if (addString.isEmpty())
         return;
-
-#if OSL_DEBUG_LEVEL > 1
-    SAL_INFO("sw.ww8", "<addTextToParagraph>" << addString << "</addTextToParagraph>");
-#endif
 
     const SwContentNode *pCntNd = m_pPaM->GetContentNode();
     const SwTextNode* pNd = pCntNd ? pCntNd->GetTextNode() : nullptr;
