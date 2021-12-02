@@ -570,6 +570,25 @@ CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
     assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
     assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
+{
+    // Given a PPTX file that contains references to a theme:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "refer-to-theme.pptx";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the shape text color is a scheme color:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr' number of nodes is incorrect
+    // i.e. the <a:schemeClr> element was not written.
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr", "val", "accent1");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
