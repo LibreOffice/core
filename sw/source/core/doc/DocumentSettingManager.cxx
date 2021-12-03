@@ -100,7 +100,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbProtectFields(false),
     mbHeaderSpacingBelowLastPara(false),
     mbFrameAutowidthWithMorePara(false),
-    mbGutterAtTop(false)
+    mbGutterAtTop(false),
+    mnImagePreferredDPI(0)
 
     // COMPATIBILITY FLAGS END
 {

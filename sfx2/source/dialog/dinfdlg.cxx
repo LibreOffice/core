@@ -53,6 +53,7 @@
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/CmisProperty.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
@@ -704,6 +705,8 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     , m_xUseThumbnailSaveCB(m_xBuilder->weld_check_button("thumbnailsavecb"))
     , m_xTemplFt(m_xBuilder->weld_label("templateft"))
     , m_xTemplValFt(m_xBuilder->weld_label("showtemplate"))
+    , m_xImagePreferredDpiCheckButton(m_xBuilder->weld_check_button("image-preferred-dpi-checkbutton"))
+    , m_xImagePreferredDpiComboBox(m_xBuilder->weld_combo_box("image-preferred-dpi-combobox"))
 {
     m_aUnknownSize = m_xShowSizeFT->get_label();
     m_xShowSizeFT->set_label(OUString());
@@ -716,6 +719,7 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     m_xChangePassBtn->connect_clicked( LINK( this, SfxDocumentPage, ChangePassHdl ) );
     m_xSignatureBtn->connect_clicked( LINK( this, SfxDocumentPage, SignatureHdl ) );
     m_xDeleteBtn->connect_clicked( LINK( this, SfxDocumentPage, DeleteHdl ) );
+    m_xImagePreferredDpiCheckButton->connect_toggled(LINK(this, SfxDocumentPage, ImagePreferredDPICheckBoxClicked));
 
     // [i96288] Check if the document signature command is enabled
     // on the main list enable/disable the pushbutton accordingly
@@ -754,6 +758,12 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl, weld::Button&, void)
 
         ImplUpdateSignatures();
     }
+}
+
+IMPL_LINK_NOARG(SfxDocumentPage, ImagePreferredDPICheckBoxClicked, weld::ToggleButton&, void)
+{
+    bool bEnabled = m_xImagePreferredDpiCheckButton->get_state() == TRISTATE_TRUE;
+    m_xImagePreferredDpiComboBox->set_sensitive(bEnabled);
 }
 
 IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
@@ -903,6 +913,26 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
             const_cast<SfxDocumentInfoItem*>(pInfoItem)->SetUseThumbnailSave( bUseThumbnail );
             rSet->Put( *pInfoItem );
             bRet = true;
+        }
+    }
+
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    if (pDocSh)
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFac(pDocSh->GetModel(), uno::UNO_QUERY);
+        if (xFac.is())
+        {
+            uno::Reference<beans::XPropertySet> xProps(xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+            if (xProps.is())
+            {
+                sal_Int32 nImagePreferredDPI = 0;
+                if (m_xImagePreferredDpiCheckButton->get_state() == TRISTATE_TRUE)
+                {
+                    OUString aImagePreferredDPIString = m_xImagePreferredDpiComboBox->get_active_text();
+                    nImagePreferredDPI = aImagePreferredDPIString.toInt32();
+                }
+                xProps->setPropertyValue("ImagePreferredDPI", uno::makeAny(nImagePreferredDPI));
+            }
         }
     }
 
@@ -1060,6 +1090,35 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_xDeleteBtn->set_sensitive( bEnableUseUserData );
     m_xUseThumbnailSaveCB->set_active(bUseThumbnailSave);
     m_xUseThumbnailSaveCB->save_state();
+
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    sal_Int32 nImagePreferredDPI = 0;
+    if (pDocSh)
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW );
+
+            xProps->getPropertyValue("ImagePreferredDPI") >>= nImagePreferredDPI;
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    if (nImagePreferredDPI > 0)
+    {
+        m_xImagePreferredDpiCheckButton->set_state(TRISTATE_TRUE);
+        m_xImagePreferredDpiComboBox->set_sensitive(true);
+        m_xImagePreferredDpiComboBox->set_entry_text(OUString::number(nImagePreferredDPI));
+    }
+    else
+    {
+        m_xImagePreferredDpiCheckButton->set_state(TRISTATE_FALSE);
+        m_xImagePreferredDpiComboBox->set_sensitive(false);
+        m_xImagePreferredDpiComboBox->set_entry_text("");
+    }
+
 }
 
 SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet)
