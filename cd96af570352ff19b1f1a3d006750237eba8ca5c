@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c5ed605_1dd298fc",
+        "filename": "dbaccess/source/ui/browser/sbagrid.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-03T06:41:15Z",
+      "side": 1,
+      "message": "I hope that we could omit the template argument, that would be deduced (if using auto to not specify the whole type is not an option)?",
+      "range": {
+        "startLine": 283,
+        "startChar": 48,
+        "endLine": 283,
+        "endChar": 77
+      },
+      "revId": "cd96af570352ff19b1f1a3d006750237eba8ca5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
