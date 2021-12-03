@@ -676,8 +676,8 @@ void FrameSelectorImpl::DrawAllFrameBorders()
             rBottomStyle.Type(), rBottomStyle.PatternScale() );
     maArray.SetRowStyleBottom( mbHor ? 1 : 0, rInvertedBottom );
 
-    for( size_t nCol = 0; nCol < maArray.GetColCount(); ++nCol )
-        for( size_t nRow = 0; nRow < maArray.GetRowCount(); ++nRow )
+    for( sal_Int32 nCol = 0; nCol < maArray.GetColCount(); ++nCol )
+        for( sal_Int32 nRow = 0; nRow < maArray.GetRowCount(); ++nRow )
             maArray.SetCellStyleDiag( nCol, nRow, maTLBR.GetUIStyle(), maBLTR.GetUIStyle() );
 
     // This is used in the dialog/control for 'Border' attributes. When using
