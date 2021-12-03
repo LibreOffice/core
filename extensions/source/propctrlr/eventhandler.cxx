@@ -541,7 +541,7 @@ namespace pcr
         aEvent.PropertyName = _rPropertyName;
         aEvent.OldValue <<= aOldScriptEvent;
         aEvent.NewValue <<= aNewScriptEvent;
-        m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
+        m_aPropertyListeners.notifyEach( &XPropertyChangeListener::propertyChange, aEvent );
     }
 
     Any SAL_CALL EventHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
@@ -642,13 +642,13 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !_rxListener.is() )
             throw NullPointerException();
-        m_aPropertyListeners.addListener( _rxListener );
+        m_aPropertyListeners.addInterface( _rxListener );
     }
 
     void SAL_CALL EventHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        m_aPropertyListeners.removeListener( _rxListener );
+        m_aPropertyListeners.removeInterface( _rxListener );
     }
 
     Sequence< Property > SAL_CALL EventHandler::getSupportedProperties()

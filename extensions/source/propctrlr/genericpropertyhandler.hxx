@@ -29,6 +29,7 @@
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
