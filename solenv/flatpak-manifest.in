@@ -418,11 +418,11 @@
                     "dest-filename": "noto-fonts-20171024.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/openldap-2.4.45.tgz",
-                    "sha256": "cdd6cffdebcd95161a73305ec13fc7a78e9707b46ca9f84fb897cd5626df3824",
+                    "url": "https://dev-www.libreoffice.org/src/openldap-2.4.59.tgz",
+                    "sha256": "99f37d6747d88206c470067eda624d5e48c1011e943ec0ab217bae8712e22f34",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "openldap-2.4.45.tgz"
+                    "dest-filename": "openldap-2.4.59.tgz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liborcus-0.16.1.tar.bz2",
@@ -432,11 +432,11 @@
                     "dest-filename": "liborcus-0.16.1.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/poppler-21.01.0.tar.xz",
-                    "sha256": "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3",
+                    "url": "https://dev-www.libreoffice.org/src/poppler-21.11.0.tar.xz",
+                    "sha256": "31b76b5cac0a48612fdd154c02d9eca01fd38fb8eaa77c1196840ecdeb53a584",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "poppler-21.01.0.tar.xz"
+                    "dest-filename": "poppler-21.11.0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/poppler-data-0.4.10.tar.gz",
@@ -446,11 +446,11 @@
                     "dest-filename": "poppler-data-0.4.10.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/postgresql-13.1.tar.bz2",
-                    "sha256": "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f",
+                    "url": "https://dev-www.libreoffice.org/src/postgresql-13.5.tar.bz2",
+                    "sha256": "9b81067a55edbaabc418aacef457dd8477642827499560b00615a6ea6c13f6b3",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "postgresql-13.1.tar.bz2"
+                    "dest-filename": "postgresql-13.5.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/a39f6c07ddb20d7dd2ff1f95fa21e2cd-raptor2-2.0.15.tar.gz",
