@@ -64,7 +64,7 @@ Option Explicit
 &apos;&apos;&apos;				End With
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation:
-&apos;&apos;&apos;			Dim ui As ObjectoDoc As Object, myMenu As Object
+&apos;&apos;&apos;			Dim ui As Object, oDoc As Object, myMenu As Object
 &apos;&apos;&apos;				Set ui = CreateScriptService(&quot;UI&quot;)
 &apos;&apos;&apos;				Set oDoc = ui.GetDocument(ThisComponent)
 &apos;&apos;&apos;				Set myMenu = oDoc.CreateMenu(&quot;My own menu&quot;)
@@ -178,7 +178,7 @@ Public Function AddCheckBox(Optional ByVal MenuItem As Variant _
 &apos;&apos;&apos;				- the menu header
 &apos;&apos;&apos;				- the name of the clicked menu item
 &apos;&apos;&apos;				- the numeric identifier of the clicked menu item
-&apos;&apos;&apos;				- &quot;1&quot; when the status is &quot;checked&quot;, otherwide &quot;0&quot;
+&apos;&apos;&apos;				- &quot;1&quot; when the status is &quot;checked&quot;, otherwise &quot;0&quot;
 &apos;&apos;&apos;		Arguments Command and Script are mutually exclusive.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The numeric identification of the newly inserted item
@@ -340,7 +340,7 @@ Public Function AddRadioButton(Optional ByVal MenuItem As Variant _
 &apos;&apos;&apos;				- the menu header
 &apos;&apos;&apos;				- the name of the clicked menu item
 &apos;&apos;&apos;				- the numeric identifier of theclicked menu item
-&apos;&apos;&apos;				- &quot;1&quot; when the status is &quot;checked&quot;, otherwide &quot;0&quot;
+&apos;&apos;&apos;				- &quot;1&quot; when the status is &quot;checked&quot;, otherwise &quot;0&quot;
 &apos;&apos;&apos;		Arguments Command and Script are mutually exclusive.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The numeric identification of the newly inserted item
