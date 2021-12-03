@@ -35,7 +35,7 @@ namespace sdr::contact
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             const basegfx::B2DPolygon aEdgeTrack(GetEdgeObj().getEdgeTrack());
 
@@ -57,7 +57,7 @@ namespace sdr::contact
                     aAttribute,
                     aEdgeTrack));
 
-            return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+            rVisitor.visit(xReference);
         }
 
 } // end of namespace

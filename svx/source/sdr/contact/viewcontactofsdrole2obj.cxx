@@ -71,7 +71,7 @@ basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
         aObjectRange.getMinX(), aObjectRange.getMinY());
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
+void ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // get object transformation
     const basegfx::B2DHomMatrix aObjectMatrix(createObjectTransform());
@@ -140,7 +140,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
             aObjectMatrix,
             aAttribute));
 
-    return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+    rVisitor.visit(xReference);
 }
 
 basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const
@@ -169,9 +169,9 @@ basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometr
     return drawinglayer::primitive2d::getB2DRangeFromPrimitive2DReference(xReference, rViewInfo2D);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
-    return createPrimitive2DSequenceWithParameters();
+    createPrimitive2DSequenceWithParameters(rVisitor);
 }
 
 }

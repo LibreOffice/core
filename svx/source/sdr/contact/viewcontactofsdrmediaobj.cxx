@@ -96,7 +96,7 @@ void ViewContactOfSdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaIte
     static_cast< SdrMediaObj& >(GetSdrObject()).mediaPropertiesChanged(rNewState);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
@@ -121,7 +121,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMediaObj::create
             aTransform, rURL, aBackgroundColor, nPixelBorder,
             GetSdrMediaObj().getSnapshot()));
 
-    return drawinglayer::primitive2d::Primitive2DContainer { xRetval };
+    rVisitor.visit(xRetval);
 }
 
 }

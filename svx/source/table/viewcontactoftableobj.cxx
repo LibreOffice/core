@@ -201,7 +201,7 @@ namespace sdr::contact
             return svx::frame::Style();
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfTableObj::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfTableObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             const sdr::table::SdrTableObj& rTableObj = static_cast<const sdr::table::SdrTableObj&>(GetSdrObject());
             const uno::Reference< css::table::XTable > xTable = rTableObj.getTable();
@@ -427,7 +427,7 @@ namespace sdr::contact
                     }
                 }
 
-                return aRetval;
+                rVisitor.visit(std::move(aRetval));
             }
             else
             {
@@ -447,7 +447,7 @@ namespace sdr::contact
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                         aObjectMatrix));
 
-                return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                rVisitor.visit(xReference);
             }
         }
 

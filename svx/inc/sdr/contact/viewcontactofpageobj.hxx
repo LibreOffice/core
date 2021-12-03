@@ -34,8 +34,8 @@ class ViewContactOfPageObj final : public ViewContactOfSdrObj
     CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
     // create graphical visualisation data
-    virtual drawinglayer::primitive2d::Primitive2DContainer
-    createViewIndependentPrimitive2DSequence() const override;
+    virtual void createViewIndependentPrimitive2DSequence(
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
 public:
     // basic constructor, used from SdrObject.

@@ -59,8 +59,8 @@ void ViewContactOfPageObj::ActionChanged()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DContainer
-ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfPageObj::createViewIndependentPrimitive2DSequence(
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // create graphical visualisation data. Since this is the view-independent version which should not be used,
     // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly
@@ -72,7 +72,7 @@ ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
 
-    return drawinglayer::primitive2d::Primitive2DContainer{ xReference };
+    rVisitor.visit(xReference);
 }
 }
 

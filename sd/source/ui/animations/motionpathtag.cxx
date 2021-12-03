@@ -300,8 +300,9 @@ void SdPathHdl::CreateB2dIAObject()
             if (xManager.is() && mpPathObj)
             {
                 const sdr::contact::ViewContact& rVC = mpPathObj->GetViewContact();
-                const drawinglayer::primitive2d::Primitive2DContainer& aSequence = rVC.getViewIndependentPrimitive2DContainer();
-                std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(drawinglayer::primitive2d::Primitive2DContainer(aSequence)));
+                drawinglayer::primitive2d::Primitive2DContainer aSequence;
+                rVC.getViewIndependentPrimitive2DContainer(aSequence);
+                std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(std::move(aSequence)));
 
                 // OVERLAYMANAGER
                 insertNewlyCreatedOverlayObjectForSdrHdl(

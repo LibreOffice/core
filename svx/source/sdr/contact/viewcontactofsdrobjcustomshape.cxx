@@ -102,9 +102,8 @@ namespace sdr::contact
             return aTextRange;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObjCustomShape::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfSdrObjCustomShape::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SfxItemSet& rItemSet = GetCustomShapeObj().GetMergedItemSet();
 
             // #i98072# Get shadow and text; eventually suppress the text if it's
@@ -138,9 +137,7 @@ namespace sdr::contact
                 // only visible when transparency involved, but runtime-expensive).
                 // Thus: Just do not iterate, will check behaviour deeply.
                 b3DShape = (nullptr != dynamic_cast< const E3dObject* >(pSdrObjRepresentation));
-                const drawinglayer::primitive2d::Primitive2DContainer& xNew(
-                    pSdrObjRepresentation->GetViewContact().getViewIndependentPrimitive2DContainer());
-                xGroup.insert(xGroup.end(), xNew.begin(), xNew.end());
+                pSdrObjRepresentation->GetViewContact().getViewIndependentPrimitive2DContainer(xGroup);
             }
 
             if(bHasText || !xGroup.empty())
@@ -232,10 +229,8 @@ namespace sdr::contact
                         bWordWrap,
                         b3DShape,
                         aObjectMatrix));
-                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                rVisitor.visit(xReference);
             }
-
-            return xRetval;
         }
 
 } // end of namespace
