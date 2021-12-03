@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d6b27ac_a9059725",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-03T08:58:54Z",
+      "side": 1,
+      "message": "\u003e /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/i18npool/source/collator/gencoll_rule.cxx:124: error: undefined reference to \u0027icu_50::RuleBasedCollator::cloneBinary(unsigned char*, int, UErrorCode\u0026)\u0027\n\non tb85, let\u0027s try again.",
+      "revId": "f0463a5d4638e05716e530819bdc944fd443ad18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
