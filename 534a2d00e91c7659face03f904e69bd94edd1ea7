@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc166bc8_ea53102d",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-03T14:57:01Z",
+      "side": 1,
+      "message": "If you define size as sal_Int32, it\u0027s better because then you don\u0027t need to cast it in the assertion.",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35af4043_5c22bdb5",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-03T14:57:01Z",
+      "side": 1,
+      "message": "It should be rtl::OUStringBuffer and it should be with previous line written in one line.",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efd99445_b024b3dc",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-03T14:57:01Z",
+      "side": 1,
+      "message": "Could you please define i here?",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba2e8dd_a4d9d691",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-03T14:57:01Z",
+      "side": 1,
+      "message": "You forgot to insert the text into paragraph before this.\n    pWrtShell-\u003eInsert(OUString(s));",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69d1aeb2_0f0f2773",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-03T14:57:01Z",
+      "side": 1,
+      "message": "You have defined the size variable. Please use that instead of 30000.",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
