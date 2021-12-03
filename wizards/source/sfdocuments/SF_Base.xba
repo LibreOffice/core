@@ -120,7 +120,7 @@ Check:
 	If IsMissing(SaveAsk) Or IsEmpty(SaveAsk) Then SaveAsk = True
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive(True) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(SaveAsk, &quot;SaveAsk&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(SaveAsk, &quot;SaveAsk&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
 
 Try:
@@ -442,12 +442,15 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;CloseFormDocument&quot; _
+					, &quot;CreateMenu&quot; _
 					, &quot;FormDocuments&quot; _
 					, &quot;Forms&quot; _
 					, &quot;GetDatabase&quot; _
 					, &quot;IsLoaded&quot; _
 					, &quot;OpenFormDocument&quot; _
 					, &quot;PrintOut&quot; _
+					, &quot;RemoveMenu&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
 					, &quot;SaveAs&quot; _
@@ -790,6 +793,19 @@ REM ----------------------------------------------------------------------------
 Public Function Activate() As Boolean
 	Activate = [_Super].Activate()
 End Function    &apos;   SFDocuments.SF_Base.Activate
+
+REM -----------------------------------------------------------------------------
+Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
+								, Optional ByVal Before As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								) As Object
+	Set CreateMenu = [_Super].CreateMenu(MenuHeader, Before, SubmenuChar)
+End Function	&apos;	SFDocuments.SF_Base.CreateMenu
+
+REM -----------------------------------------------------------------------------
+Public Function RemoveMenu(Optional ByVal MenuHeader As Variant) As Boolean
+	RemoveMenu = [_Super].RemoveMenu(MenuHeader)
+End Function	&apos;	SFDocuments.SF_Base.RemoveMenu
 
 REM -----------------------------------------------------------------------------
 Public Sub RunCommand(Optional ByVal Command As Variant)

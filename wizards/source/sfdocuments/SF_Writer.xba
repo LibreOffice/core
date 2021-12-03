@@ -219,9 +219,11 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;CreateMenu&quot; _
 					, &quot;ExportAsPDF&quot; _
 					, &quot;Forms&quot; _
 					, &quot;PrintOut&quot; _
+					, &quot;RemoveMenu&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
 					, &quot;SaveAs&quot; _
@@ -493,6 +495,14 @@ Public Function CloseDocument(Optional ByVal SaveAsk As Variant) As Boolean
 End Function   &apos;   SFDocuments.SF_Writer.CloseDocument
 
 REM -----------------------------------------------------------------------------
+Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
+								, Optional ByVal Before As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								) As Object
+	Set CreateMenu = [_Super].CreateMenu(MenuHeader, Before, SubmenuChar)
+End Function	&apos;	SFDocuments.SF_Writer.CreateMenu
+
+REM -----------------------------------------------------------------------------
 Public Function ExportAsPDF(Optional ByVal FileName As Variant _
 							, Optional ByVal Overwrite As Variant _
 							, Optional ByVal Pages As Variant _
@@ -501,6 +511,11 @@ Public Function ExportAsPDF(Optional ByVal FileName As Variant _
 							) As Boolean
 	ExportAsPDF = [_Super].ExportAsPDF(FileName, Overwrite, Pages, Password, Watermark)
 End Function   &apos;   SFDocuments.SF_Writer.ExportAsPDF
+
+REM -----------------------------------------------------------------------------
+Public Function RemoveMenu(Optional ByVal MenuHeader As Variant) As Boolean
+	RemoveMenu = [_Super].RemoveMenu(MenuHeader)
+End Function	&apos;	SFDocuments.SF_Writer.RemoveMenu
 
 REM -----------------------------------------------------------------------------
 Public Sub RunCommand(Optional ByVal Command As Variant)

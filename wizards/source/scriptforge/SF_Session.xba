@@ -994,12 +994,13 @@ REM =========================================================== PRIVATE FUNCTION
 
 REM -----------------------------------------------------------------------------
 Private Function _ExecuteScript(ByVal psScript As String _
-									, ByRef poEvent As Object _
+									, Optional ByRef pvArg As Variant _
 									) As Variant
 &apos;&apos;&apos;	Execute the script expressed in the scripting framework_URI notation
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psScript: read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
-&apos;&apos;&apos;		poEvent: the event object which triggered the execution. It is given as argument to the called script
+&apos;&apos;&apos;		pvArg: the unique argument to pass to the called script.
+&apos;&apos;&apos;			It is often an event object that triggered the execution of the script.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The return value after the script execution. May be ignored for events
 
@@ -1020,9 +1021,9 @@ Try:
 		sScript = vStrings(0)	:	sLanguage = vStrings(1)	:	sScope = vStrings(2)
 		&apos;	Execute script
 		If UCase(sLanguage) = &quot;BASIC&quot; Then
-			_ExecuteScript = ExecuteBasicScript(sScope, sScript, poEvent)
+			_ExecuteScript = ExecuteBasicScript(sScope, sScript, pvArg)
 		Else	&apos;	Python
-			_ExecuteScript = ExecutePythonScript(sScope, sScript, poEvent)
+			_ExecuteScript = ExecutePythonScript(sScope, sScript, pvArg)
 		End If
 	End If
 
