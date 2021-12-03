@@ -102,7 +102,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbProtectFields(false),
     mbHeaderSpacingBelowLastPara(false),
     mbFrameAutowidthWithMorePara(false),
-    mbGutterAtTop(false)
+    mbGutterAtTop(false),
+    mnImagePreferredDPI(0)
 
     // COMPATIBILITY FLAGS END
 {
@@ -996,6 +997,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbGutterAtTop"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbGutterAtTop).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mnImagePreferredDPI"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::number(mnImagePreferredDPI).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

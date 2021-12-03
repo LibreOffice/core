@@ -557,6 +557,8 @@ private:
     bool mbEmbedFontScriptAsian : 1;
     bool mbEmbedFontScriptComplex : 1;
 
+    sal_Int32 mnImagenPreferredDPI;
+
     std::unique_ptr<sc::IconSetBitmapMap> m_pIconSetBitmapMap;
 
     bool                mbTrackFormulasPending  : 1;
@@ -581,6 +583,9 @@ public:
     void SetEmbedFontScriptLatin(bool bUse) { mbEmbedFontScriptLatin = bUse; }
     void SetEmbedFontScriptAsian(bool bUse) { mbEmbedFontScriptAsian = bUse; }
     void SetEmbedFontScriptComplex(bool bUse) { mbEmbedFontScriptComplex = bUse; }
+
+    void SetImagePreferredDPI(sal_Int32 nValue) { mnImagenPreferredDPI = nValue; }
+    sal_Int32 GetImagePreferredDPI() { return mnImagenPreferredDPI; }
 
     SC_DLLPUBLIC sal_uLong   GetCellCount() const;       // all cells
     SC_DLLPUBLIC sal_uLong   GetFormulaGroupCount() const;       // all cells
