@@ -23,7 +23,7 @@
 #include <sysformats.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/fileformat.h>
-
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <tools/globname.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -1359,12 +1359,12 @@ static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxT
 
                             if( aSeq.getLength() )
                             {
-                                FILEGROUPDESCRIPTOR const * pFDesc = reinterpret_cast<FILEGROUPDESCRIPTOR const *>(aSeq.getConstArray());
+                                FILEGROUPDESCRIPTORW const * pFDesc = reinterpret_cast<FILEGROUPDESCRIPTORW const *>(aSeq.getConstArray());
 
                                 if( pFDesc->cItems )
                                 {
-                                    OString sDesc( pFDesc->fgd[ 0 ].cFileName );
-                                    bRet = 4 < sDesc.getLength() && sDesc.copy(sDesc.getLength()-4).equalsIgnoreAsciiCase(".URL");
+                                    OUString sDesc( o3tl::toU(pFDesc->fgd[ 0 ].cFileName) );
+                                    bRet = 4 < sDesc.getLength() && sDesc.endsWithIgnoreAsciiCase(".URL");
                                 }
                             }
                         }
