@@ -251,6 +251,9 @@ public:
     */
     virtual void Setn32DummyCompatibilityOptions2(const sal_uInt32 CompatibilityOptions2) = 0;
 
+    virtual sal_Int32 getImagePreferredDPI() = 0;
+    virtual void setImagePreferredDPI(sal_Int32 nValue) = 0;
+
 protected:
     virtual ~IDocumentSettingAccess(){};
 };

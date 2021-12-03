@@ -183,10 +183,14 @@ private:
 
     std::unique_ptr<weld::Label> m_xTemplFt;
     std::unique_ptr<weld::Label> m_xTemplValFt;
+    std::unique_ptr<weld::CheckButton> m_xImagePreferredDpiCheckButton;
+    std::unique_ptr<weld::ComboBox> m_xImagePreferredDpiComboBox;
 
     DECL_LINK(DeleteHdl, weld::Button&, void);
     DECL_LINK(SignatureHdl, weld::Button&, void);
     DECL_LINK(ChangePassHdl, weld::Button&, void);
+    DECL_LINK(ImagePreferredDPICheckBoxClicked, weld::ToggleButton&, void);
+
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
