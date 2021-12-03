@@ -2759,7 +2759,18 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         rRenderContext.Push();
         rRenderContext.SetLineColor(rSettings.GetDeactiveColor());
         rRenderContext.SetFillColor(rSettings.GetDeactiveColor());
-        rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine), Size(nWidth, 2)));
+
+        const bool bAsTree = GetStyle() & (WB_HASLINES | WB_HASLINESATROOT);
+        if (bAsTree)
+        {
+            rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine + nTempEntryHeight - 2), Size(nWidth, 2)));
+            rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine), Size(nWidth, 2)));
+        }
+        else
+        {
+            rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine), Size(nWidth, 2)));
+        }
+
         rRenderContext.Pop();
     }
 
