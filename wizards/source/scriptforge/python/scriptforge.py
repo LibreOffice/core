@@ -1774,11 +1774,17 @@ class SFDocuments:
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
+        def CreateMenu(self, menuheader, before = '', submenuchar = '>'):
+            return self.ExecMethod(self.vbMethod, 'CreateMenu', menuheader, before, submenuchar)
+
         def ExportAsPDF(self, filename, overwrite = False, pages = '', password = '', watermark = ''):
             return self.ExecMethod(self.vbMethod, 'ExportAsPDF', filename, overwrite, pages, password, watermark)
 
         def PrintOut(self, pages = '', copies = 1):
             return self.ExecMethod(self.vbMethod, 'PrintOut', pages, copies)
+
+        def RemoveMenu(self, menuheader):
+            return self.ExecMethod(self.vbMethod, 'RemoveMenu', menuheader)
 
         def RunCommand(self, command):
             return self.ExecMethod(self.vbMethod, 'RunCommand', command)
@@ -2228,6 +2234,39 @@ class SFWidgets:
         The SFWidgets class manages toolbars and popup menus
         """
     pass
+
+    # #########################################################################
+    # SF_Menu CLASS
+    # #########################################################################
+    class SF_Menu(SFServices):
+        """
+            Display a menu in the menubar of a document or a form document.
+            After use, the menu will not be saved neither in the application settings, nor in the document.
+            The menu will be displayed, as usual, when its header in the menubar is clicked.
+            When one of its items is selected, there are 3 alternative options:
+            - a UNO command (like ".uno:About") is triggered
+            - a user script is run receiving a standard argument defined in this service
+            - one of above combined with a toggle of the status of the item
+            The menu is described from top to bottom. Each menu item receives a numeric and a string identifier.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFWidgets.Menu'
+        servicesynonyms = ('menu', 'sfwidgets.menu')
+        serviceproperties = dict(ShortcutCharacter = False, SubmenuCharacter = False)
+
+        def AddCheckBox(self, menuitem, name = '', status = False, icon = '', tooltip = '',
+                        command = '', script = ''):
+            return self.ExecMethod(self.vbMethod, 'AddCheckBox', menuitem, name, status, icon, tooltip,
+                                   command, script)
+
+        def AddItem(self, menuitem, name = '', icon = '', tooltip = '', command = '', script = ''):
+            return self.ExecMethod(self.vbMethod, 'AddItem', menuitem, name, icon, tooltip, command, script)
+
+        def AddRadioButton(self, menuitem, name = '', status = False, icon = '', tooltip = '',
+                           command = '', script = ''):
+            return self.ExecMethod(self.vbMethod, 'AddRadioButton', menuitem, name, status, icon, tooltip,
+                                   command, script)
 
     # #########################################################################
     # SF_PopupMenu CLASS

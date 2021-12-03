@@ -436,7 +436,7 @@ Check:
 	If IsMissing(SaveAsk) Or IsEmpty(SaveAsk) Then SaveAsk = True
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(SaveAsk, &quot;SaveAsk&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(SaveAsk, &quot;SaveAsk&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
 
 Try:
@@ -458,6 +458,63 @@ Finally:
 Catch:
 	GoTo Finally
 End Function   &apos;   SFDocuments.SF_Document.CloseDocument
+
+REM -----------------------------------------------------------------------------
+Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
+								, Optional ByVal Before As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								, Optional ByRef _Document As Variant _
+								) As Object
+&apos;&apos;&apos; Create a new menu entry in the document&apos;s menubar
+&apos;&apos;&apos;	The menu is not intended to be saved neither in the LibreOffice global environment, nor in the document
+&apos;&apos;&apos;	The method returns a SFWidgets.Menu instance. Its methods let define the menu further.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		MenuHeader: the name/header of the menu
+&apos;&apos;&apos;		Before: the place where to put the new menu on the menubar (string or number &gt;= 1)
+&apos;&apos;&apos;			When not found =&gt; last position
+&apos;&apos;&apos;		SubmenuChar: the delimiter used in menu trees. Default = &quot;&gt;&quot;
+&apos;&apos;&apos;		_Document: undocumented argument to designate the document where the menu will be located
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A SFWidgets.Menu instance or Nothing
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim oMenu As Object
+&apos;&apos;&apos;		Set oMenu = oDoc.CreateMenu(&quot;My menu&quot;, Before := &quot;Styles&quot;)
+&apos;&apos;&apos;		With oMenu
+&apos;&apos;&apos;			.AddItem(&quot;Item 1&quot;, Command := &quot;About&quot;)
+&apos;&apos;&apos;			&apos;...
+&apos;&apos;&apos;			.Dispose()	&apos;	When definition is complete, the menu instance may be disposed
+&apos;&apos;&apos;		End With
+&apos;&apos;&apos;			&apos; ...
+
+Dim oMenu As Object			&apos;	return value
+Const cstThisSub = &quot;SFDocuments.Document.CreateMenu&quot;
+Const cstSubArgs = &quot;MenuHeader, [Before=&quot;&quot;&quot;&quot;], [SubmenuChar=&quot;&quot;&gt;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oMenu = Nothing
+
+Check:
+	If IsMissing(Before) Or IsEmpty(Before) Then Before = &quot;&quot;
+	If IsMissing(SubmenuChar) Or IsEmpty(SubmenuChar) Then SubmenuChar = &quot;&quot;
+	If IsMissing(_Document) Or IsEmpty(_Document) Or IsNull(_Document) Then Set _Document = _Component
+
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(MenuHeader, &quot;MenuHeader&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Before, &quot;Before&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(SubmenuChar, &quot;SubmenuChar&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	Set oMenu = ScriptForge.SF_Services.CreateScriptService(&quot;SFWidgets.Menu&quot;, _Document, MenuHeader, Before, SubmenuChar)
+
+Finally:
+	Set CreateMenu = oMenu
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Document.CreateMenu
 
 REM -----------------------------------------------------------------------------
 Public Function ExportAsPDF(Optional ByVal FileName As Variant _
@@ -502,7 +559,7 @@ Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
-		If Not SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 		If Not SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(Password, &quot;Password&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(Watermark, &quot;Watermark&quot;, V_STRING) Then GoTo Finally
@@ -596,8 +653,10 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;CreateMenu&quot; _
 					, &quot;ExportAsPDF&quot; _
 					, &quot;PrintOut&quot; _
+					, &quot;RemoveMenu&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
 					, &quot;SaveAs&quot; _
@@ -685,6 +744,73 @@ Public Function Properties() As Variant
 					)
 
 End Function	&apos;	SFDocuments.SF_Document.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function RemoveMenu(Optional ByVal MenuHeader As Variant _
+							, Optional ByRef _Document As Variant _
+) As Boolean
+&apos;&apos;&apos; Remove a menu entry in the document&apos;s menubar
+&apos;&apos;&apos;	The removal is not intended to be saved neither in the LibreOffice global environment, nor in the document
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		MenuHeader: the name/header of the menu, without tilde &quot;~&quot;, as a case-sensitive string
+&apos;&apos;&apos;		_Document: undocumented argument to designate the document where the menu is located
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.RemoveMenu(&quot;File&quot;)
+&apos;&apos;&apos;			&apos; ...
+
+Dim bRemove As Boolean			&apos;	Return value
+Dim oLayout As Object			&apos;	com.sun.star.comp.framework.LayoutManager
+Dim oMenuBar As Object			&apos;	com.sun.star.awt.XMenuBar or stardiv.Toolkit.VCLXMenuBar
+Dim sName As String				&apos;	Menu name
+Dim iMenuId As Integer			&apos;	Menu identifier
+Dim iMenuPosition As Integer	&apos;	Menu position &gt;= 0
+Dim i As Integer
+Const cstTilde = &quot;~&quot;
+
+Const cstThisSub = &quot;SFDocuments.Document.RemoveMenu&quot;
+Const cstSubArgs = &quot;MenuHeader&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bRemove = False
+
+Check:
+	If IsMissing(_Document) Or IsEmpty(_Document) Or IsNull(_Document) Then Set _Document = _Component
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(MenuHeader, &quot;MenuHeader&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	Set oLayout = _Document.CurrentController.Frame.LayoutManager
+	Set oMenuBar = oLayout.getElement(&quot;private:resource/menubar/menubar&quot;).XMenuBar
+
+	&apos;	Search the menu identifier to remove by its name, Mark its position
+	With oMenuBar
+		iMenuPosition = -1
+		For i = 0 To .ItemCount - 1
+			iMenuId = .getItemId(i)
+			sName = Replace(.getItemText(iMenuId), cstTilde, &quot;&quot;)
+			If MenuHeader= sName Then
+				iMenuPosition = i
+				Exit For
+			End If
+		Next i
+		&apos;	Remove the found menu item
+		If iMenuPosition &gt;= 0 Then
+			.removeItem(iMenuPosition, 1)
+			bRemove = True
+		End If
+	End With
+
+Finally:
+	RemoveMenu = bRemove
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Document.RemoveMenu
 
 REM -----------------------------------------------------------------------------
 Public Sub RunCommand(Optional ByVal Command As Variant)
@@ -811,7 +937,7 @@ Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
-		If Not SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 		If Not SF_Utils._Validate(Password, &quot;Password&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(FilterName, &quot;FilterName&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(FilterOptions, &quot;FilterOptions&quot;, V_STRING) Then GoTo Finally
@@ -910,7 +1036,7 @@ Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
-		If Not SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 		If Not SF_Utils._Validate(Password, &quot;Password&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(FilterName, &quot;FilterName&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(FilterOptions, &quot;FilterOptions&quot;, V_STRING) Then GoTo Finally

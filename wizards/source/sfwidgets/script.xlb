@@ -4,4 +4,6 @@
  <library:element library:name="__License"/>
  <library:element library:name="SF_Register"/>
  <library:element library:name="SF_PopupMenu"/>
+ <library:element library:name="SF_Menu"/>
+ <library:element library:name="SF_MenuListener"/>
 </library:library>

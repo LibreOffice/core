@@ -1647,6 +1647,7 @@ Public Function Methods() As Variant
 					, &quot;CopyToCell&quot; _
 					, &quot;CopyToRange&quot; _
 					, &quot;CreateChart&quot; _
+					, &quot;CreateMenu&quot; _
 					, &quot;DAvg&quot; _
 					, &quot;DCount&quot; _
 					, &quot;DMax&quot; _
@@ -1665,6 +1666,7 @@ Public Function Methods() As Variant
 					, &quot;OpenRangeSelector&quot; _
 					, &quot;Printf&quot; _
 					, &quot;PrintOut&quot; _
+					, &quot;RemoveMenu&quot; _
 					, &quot;RemoveSheet&quot; _
 					, &quot;RenameSheet&quot; _
 					, &quot;RunCommand&quot; _
@@ -2889,9 +2891,9 @@ Check:
 		If Not ScriptForge.SF_Utils._ValidateArray(SortKeys, &quot;SortKeys&quot;, 1, V_NUMERIC, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DestinationCell, &quot;DestinationCell&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._ValidateArray(SortOrder, &quot;SortOrder&quot;, 1, V_STRING, True) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(ContainsHeader, &quot;ContainsHeader&quot;, V_BOOLEAN) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(CaseSensitive, &quot;CaseSensitive&quot;, V_BOOLEAN) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(SortColumns, &quot;SortColumns&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ContainsHeader, &quot;ContainsHeader&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(CaseSensitive, &quot;CaseSensitive&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(SortColumns, &quot;SortColumns&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
 	Set oRangeAddress = _ParseAddress(Range)
 	If Len(DestinationCell) &gt; 0 Then Set oDestRange = _ParseAddress(DestinationCell)
@@ -3068,6 +3070,14 @@ Public Function CloseDocument(Optional ByVal SaveAsk As Variant) As Boolean
 End Function   &apos;   SFDocuments.SF_Calc.CloseDocument
 
 REM -----------------------------------------------------------------------------
+Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
+								, Optional ByVal Before As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								) As Object
+	Set CreateMenu = [_Super].CreateMenu(MenuHeader, Before, SubmenuChar)
+End Function	&apos;	SFDocuments.SF_Calc.CreateMenu
+
+REM -----------------------------------------------------------------------------
 Public Function ExportAsPDF(Optional ByVal FileName As Variant _
 							, Optional ByVal Overwrite As Variant _
 							, Optional ByVal Pages As Variant _
@@ -3076,6 +3086,11 @@ Public Function ExportAsPDF(Optional ByVal FileName As Variant _
 							) As Boolean
 	ExportAsPDF = [_Super].ExportAsPDF(FileName, Overwrite, Pages, Password, Watermark)
 End Function   &apos;   SFDocuments.SF_Calc.ExportAsPDF
+
+REM -----------------------------------------------------------------------------
+Public Function RemoveMenu(Optional ByVal MenuHeader As Variant) As Boolean
+	RemoveMenu = [_Super].RemoveMenu(MenuHeader)
+End Function	&apos;	SFDocuments.SF_Calc.RemoveMenu
 
 REM -----------------------------------------------------------------------------
 Public Sub RunCommand(Optional ByVal Command As Variant)

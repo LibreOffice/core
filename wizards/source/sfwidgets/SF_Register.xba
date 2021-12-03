@@ -20,8 +20,12 @@ Option Explicit
 &apos;&apos;&apos;		The main methods in this module allow the current library to cling to ScriptForge
 &apos;&apos;&apos;			- RegisterScriptServices
 &apos;&apos;&apos;				Register the list of services implemented by the current library
+&apos;&apos;&apos;			- _NewMenu
+&apos;&apos;&apos;				Create a new menu service instance.
+&apos;&apos;&apos;				Called from SFDocuments services with CreateMenu()
 &apos;&apos;&apos;			- _NewPopupMenu
-&apos;&apos;&apos;				Create a new popup menu service instance
+&apos;&apos;&apos;				Create a new popup menu service instance.
+&apos;&apos;&apos;				Called from CreateScriptService()
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS
@@ -46,7 +50,8 @@ Public Sub RegisterScriptServices() As Variant
 &apos;&apos;&apos;				&quot;libraryname.modulename.function&quot;
 
 	With GlobalScope.ScriptForge.SF_Services
-		.RegisterService(&quot;PopupMenu&quot;,			&quot;SFWidgets.SF_Register._NewPopupMenu&quot;)		&apos;	Reference to the function initializing the service
+		.RegisterService(&quot;Menu&quot;,				&quot;SFWidgets.SF_Register._NewMenu&quot;)			&apos;	Reference to the function initializing the service
+		.RegisterService(&quot;PopupMenu&quot;,			&quot;SFWidgets.SF_Register._NewPopupMenu&quot;)		&apos;	id.
 	End With
 
 End Sub			&apos;	SFWidgets.SF_Register.RegisterScriptServices
@@ -54,13 +59,63 @@ End Sub			&apos;	SFWidgets.SF_Register.RegisterScriptServices
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------
+Public Function _NewMenu(Optional ByVal pvArgs As Variant) As Object
+&apos;&apos;&apos;	Create a new instance of the SF_Menu class
+&apos;&apos;&apos;	[called internally from SFDocuments.Document.CreateMenu() ONLY]
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Component: the com.sun.star.lang.XComponent where to find the menubar to plug the new menu in
+&apos;&apos;&apos;		Header: the name/header of the menu
+&apos;&apos;&apos;		Before: the place where to put the new menu on the menubar (string or number &gt;= 1)
+&apos;&apos;&apos;			When not found =&gt; last position
+&apos;&apos;&apos;		SubmenuChar: the delimiter used in menu trees. Default = &quot;&gt;&quot;
+&apos;&apos;&apos;	Returns: the instance or Nothing
+
+Dim oMenu As Object					&apos;	Return value
+Dim oComponent As Object			&apos;	The document or formdocument&apos;s component - com.sun.star.lang.XComponent
+Dim sHeader As String				&apos;	Menu header
+Dim sBefore As String				&apos;	Position of menu	as a string
+Dim iBefore As Integer				&apos;						as a number
+Dim sSubmenuChar As String			&apos;	Delimiter in menu trees
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oMenu = Nothing
+
+Check:
+	&apos;	Types and number of arguments are not checked because internal call only
+	Set oComponent = pvArgs(0)
+	sHeader = pvArgs(1)
+	Select Case VarType(pvArgs(2))
+		Case V_STRING		:		sBefore = pvArgs(2)
+									iBefore = 0
+		Case Else			:		sBefore = &quot;&quot;
+									iBefore = pvArgs(2)
+	End Select
+	sSubmenuChar = pvArgs(3)
+
+Try:
+	If Not IsNull(oComponent) Then
+		Set oMenu = New SF_Menu
+		With oMenu
+			Set .[Me] = oMenu
+			._Initialize(oComponent, sHeader, sBefore, iBefore, sSubmenuChar)
+		End With
+	End If
+
+Finally:
+	Set _NewMenu = oMenu
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFWidgets.SF_Register._NewMenu
+
+REM -----------------------------------------------------------------------------
 Public Function _NewPopupMenu(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;	Create a new instance of the SF_PopupMenu class
-&apos;	Args:
+&apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Event: a mouse event
 &apos;&apos;&apos;			If the event has no source or is not a mouse event, the menu is displayed above ThisComponent
 &apos;&apos;&apos;		X, Y: forced coordinates
-&apos;&apos;&apos;		SubmenuChar: Delimiter in menu trees
+&apos;&apos;&apos;		SubmenuChar: Delimiter used in menu trees
 &apos;&apos;&apos;	Returns: the instance or Nothing
 
 Dim oMenu As Object					&apos;	Return value
@@ -86,6 +141,7 @@ Check:
 	If Not ScriptForge.SF_Utils._Validate(Event, &quot;Event&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(X, &quot;X&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(Y, &quot;Y&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(SubmenuChar, &quot;SubmenuChar&quot;, V_STRING) Then GoTo Finally
 	Set oMenu = Nothing
 
 Try:
