@@ -29,9 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-
-#include <comphelper/listenernotification.hxx>
-
+#include <comphelper/interfacecontainer3.hxx>
 
 namespace pcr
 {
@@ -45,8 +43,7 @@ namespace pcr
 
     //= types
 
-    typedef ::comphelper::OSimpleListenerContainer  <   css::beans::XPropertyChangeListener
-                                                    ,   css::beans::PropertyChangeEvent
+    typedef ::comphelper::OInterfaceContainerHelper3  <   css::beans::XPropertyChangeListener
                                                     >   PropertyChangeListeners;
 
 

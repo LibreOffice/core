@@ -338,17 +338,6 @@ void ModifiableHelper::setModified( bool _bModified )
 }
 
 
-VBAScriptListenerContainer::VBAScriptListenerContainer( ::osl::Mutex& rMutex ) :
-    VBAScriptListenerContainer_BASE( rMutex )
-{
-}
-
-bool VBAScriptListenerContainer::implTypedNotify( const Reference< vba::XVBAScriptListener >& rxListener, const vba::VBAScriptEvent& rEvent )
-{
-    rxListener->notifyVBAScriptEvent( rEvent );
-    return true;    // notify all other listeners too
-}
-
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer()
     : SfxLibraryContainer_BASE( m_aMutex )
@@ -2675,7 +2664,7 @@ void SAL_CALL SfxLibraryContainer::disposing()
 {
     Reference< XModel > xModel = mxOwnerDocument;
     EventObject aEvent( xModel );
-    maVBAScriptListeners.disposing( aEvent );
+    maVBAScriptListeners.disposeAndClear( aEvent );
     stopAllComponentListening();
     mxOwnerDocument.clear();
 }
@@ -2850,12 +2839,12 @@ sal_Int32 SAL_CALL SfxLibraryContainer::getRunningVBAScripts()
 
 void SAL_CALL SfxLibraryContainer::addVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
-    maVBAScriptListeners.addTypedListener( rxListener );
+    maVBAScriptListeners.addInterface( rxListener );
 }
 
 void SAL_CALL SfxLibraryContainer::removeVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
-    maVBAScriptListeners.removeTypedListener( rxListener );
+    maVBAScriptListeners.removeInterface( rxListener );
 }
 
 void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
@@ -2875,7 +2864,7 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
 
     Reference< XModel > xModel = mxOwnerDocument;  // weak-ref -> ref
     vba::VBAScriptEvent aEvent( Reference<XInterface>(xModel, UNO_QUERY), nIdentifier, rModuleName );
-    maVBAScriptListeners.notify( aEvent );
+    maVBAScriptListeners.notifyEach( &css::script::vba::XVBAScriptListener::notifyVBAScriptEvent, aEvent );
 }
 
 // Methods XServiceInfo

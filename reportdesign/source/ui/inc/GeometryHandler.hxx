@@ -38,8 +38,8 @@
 #include <memory>
 #include <string_view>
 
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/listenernotification.hxx>
 
 
 namespace rptui
@@ -60,9 +60,7 @@ namespace rptui
     class OPropertyInfoService;
     typedef ::std::pair< css::uno::Reference< css::report::XFunction>, css::uno::Reference< css::report::XFunctionsSupplier> > TFunctionPair;
     typedef ::std::multimap< OUString,TFunctionPair, ::comphelper::UStringMixLess > TFunctions;
-    typedef ::comphelper::OSimpleListenerContainer  <   css::beans::XPropertyChangeListener
-                                                    ,   css::beans::PropertyChangeEvent
-                                                    >   PropertyChangeListeners;
+    typedef ::comphelper::OInterfaceContainerHelper3< css::beans::XPropertyChangeListener >   PropertyChangeListeners;
     typedef ::cppu::WeakComponentImplHelper<   css::inspection::XPropertyHandler
                                             ,   css::beans::XPropertyChangeListener
                                             ,   css::lang::XServiceInfo> GeometryHandler_Base;

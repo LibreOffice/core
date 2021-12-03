@@ -488,7 +488,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                         m_sScope.clear();
                         aEvent.NewValue <<= m_sScope;
                         aGuard.clear();
-                        m_aPropertyListeners.notify( aEvent, &beans::XPropertyChangeListener::propertyChange );
+                        m_aPropertyListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aEvent );
                     }
                     else if ( m_nDataFieldType == USER_DEF_FUNCTION )
                     {
@@ -1242,14 +1242,14 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
 void SAL_CALL GeometryHandler::addPropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & _rxListener)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_aPropertyListeners.addListener( _rxListener );
+    m_aPropertyListeners.addInterface( _rxListener );
     m_xFormComponentHandler->addPropertyChangeListener(_rxListener);
 }
 
 void SAL_CALL GeometryHandler::removePropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & _rxListener)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_aPropertyListeners.removeListener( _rxListener );
+    m_aPropertyListeners.removeInterface( _rxListener );
     m_xFormComponentHandler->removePropertyChangeListener(_rxListener);
 }
 
@@ -1444,7 +1444,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
             beans::PropertyChangeEvent aScopeEvent;
             aScopeEvent.PropertyName = PROPERTY_FILLCOLOR;
             aScopeEvent.NewValue = xShape->getPropertyValue(PROPERTY_FILLCOLOR);
-            m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
+            m_aPropertyListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aScopeEvent );
         }
         return eResult;
     }
@@ -1954,7 +1954,7 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
             m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny( impl_convertToFormula( uno::makeAny(sQuotedFunctionName) )));
             aEvent.NewValue <<= m_sScope;
             _aGuard.clear();
-            m_aPropertyListeners.notify( aEvent, &beans::XPropertyChangeListener::propertyChange );
+            m_aPropertyListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aEvent );
         }
     }
     catch(uno::Exception&)
@@ -1996,7 +1996,7 @@ void GeometryHandler::resetOwnProperties(::osl::ResettableMutexGuard& _aGuard,co
         aScopeEvent.PropertyName = PROPERTY_TYPE;
         aScopeEvent.OldValue <<= _nOldDataFieldType;
         aScopeEvent.NewValue <<= nNewDataFieldType;
-        m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
+        m_aPropertyListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aScopeEvent );
     }
     if ( _sOldFunctionName != sNewFunction )
     {
@@ -2005,7 +2005,7 @@ void GeometryHandler::resetOwnProperties(::osl::ResettableMutexGuard& _aGuard,co
         aFormulaEvent.OldValue <<= _sOldFunctionName;
         aFormulaEvent.NewValue <<= sNewFunction;
 
-        m_aPropertyListeners.notify( aFormulaEvent, &beans::XPropertyChangeListener::propertyChange );
+        m_aPropertyListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aFormulaEvent );
     }
     if ( _sOldScope != sNewScope )
     {
@@ -2013,7 +2013,7 @@ void GeometryHandler::resetOwnProperties(::osl::ResettableMutexGuard& _aGuard,co
         aScopeEvent.PropertyName = PROPERTY_SCOPE;
         aScopeEvent.OldValue <<= _sOldScope;
         aScopeEvent.NewValue <<= sNewScope;
-        m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
+        m_aPropertyListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aScopeEvent );
     }
 
     _aGuard.reset();
