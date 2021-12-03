@@ -172,6 +172,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     else if ( pPV )
     {
+        Size aSizePixel = rGraphic.GetSizePixel();
+
         // create  new object
         Size aSize;
 
@@ -194,15 +196,30 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                                                 MapMode( MapUnit::Map100thMM ) );
         }
 
-        pNewGrafObj = new SdrGrafObj(
-            getSdrModelFromSdrView(),
-            rGraphic,
-            ::tools::Rectangle(rPos, aSize));
-        SdrPage* pPage = pPV->GetPage();
-        Size aPageSize( pPage->GetSize() );
-        aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
-        aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
-        pNewGrafObj->AdjustToMaxRect( ::tools::Rectangle( Point(), aPageSize ), true );
+        sal_Int32 nPreferredDPI = mrDoc.getImagePreferredDPI();
+        if (nPreferredDPI > 0)
+        {
+            auto nWidth = o3tl::convert(aSizePixel.Width() / double(nPreferredDPI), o3tl::Length::in, o3tl::Length::mm100);
+            auto nHeight = o3tl::convert(aSizePixel.Height() / double(nPreferredDPI), o3tl::Length::in, o3tl::Length::mm100);
+            if (nWidth > 0 && nHeight > 0)
+                aSize = Size(nWidth, nHeight);
+        }
+
+        pNewGrafObj = new SdrGrafObj(getSdrModelFromSdrView(), rGraphic, ::tools::Rectangle(rPos, aSize));
+
+        if (nPreferredDPI > 0)
+        {
+            // move to the center of insertion point
+            pNewGrafObj->NbcMove(Size(-aSize.Width() / 2, -aSize.Height() / 2));
+        }
+        else
+        {
+            SdrPage* pPage = pPV->GetPage();
+            Size aPageSize( pPage->GetSize() );
+            aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
+            aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+            pNewGrafObj->AdjustToMaxRect( ::tools::Rectangle( Point(), aPageSize ), true );
+        }
 
         SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
         bool    bIsPresTarget = false;

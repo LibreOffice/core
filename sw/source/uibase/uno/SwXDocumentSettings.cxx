@@ -150,6 +150,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_FRAME_AUTOWIDTH_WITH_MORE_PARA,
     HANDLE_GUTTER_AT_TOP,
     HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND,
+    HANDLE_IMAGE_PREFERRED_DPI,
 };
 
 }
@@ -246,6 +247,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("FrameAutowidthWithMorePara"), HANDLE_FRAME_AUTOWIDTH_WITH_MORE_PARA, cppu::UnoType<bool>::get(), 0 },
         { OUString("GutterAtTop"), HANDLE_GUTTER_AT_TOP, cppu::UnoType<bool>::get(), 0 },
         { OUString("FootnoteInColumnToPageEnd"), HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND, cppu::UnoType<bool>::get(), 0 },
+        { OUString("ImagePreferredDPI"), HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1028,6 +1030,15 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_IMAGE_PREFERRED_DPI:
+        {
+            sal_uInt32 nValue = 0;
+            if (rValue >>= nValue)
+            {
+                mpDoc->getIDocumentSettingAccess().setImagePreferredDPI(nValue);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1538,6 +1549,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND);
+        }
+        break;
+        case HANDLE_IMAGE_PREFERRED_DPI:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().getImagePreferredDPI();
         }
         break;
         default:

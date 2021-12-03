@@ -137,6 +137,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mbEmbedFontScriptLatin(true)
 , mbEmbedFontScriptAsian(true)
 , mbEmbedFontScriptComplex(true)
+, mnImagePreferredDPI(0)
 {
     mpDrawPageListWatcher.reset(new ImpDrawPageListWatcher(*this));
     mpMasterPageListWatcher.reset(new ImpMasterPageListWatcher(*this));
