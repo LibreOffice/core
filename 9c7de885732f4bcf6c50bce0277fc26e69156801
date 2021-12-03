@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "544c3cb1_3b5efe9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-03T16:55:42Z",
+      "side": 1,
+      "message": "@noel: No idea, if this could have measurable performance impact, but since you\u0027re always interested in it. We could apply it just for EMSCRIPTEN…\n\n@sberg: I honestly have never seen this in C, to call a two argument function with an ignored 3rd one…",
+      "revId": "9c7de885732f4bcf6c50bce0277fc26e69156801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
