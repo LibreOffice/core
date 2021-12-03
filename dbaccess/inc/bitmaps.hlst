@@ -10,10 +10,10 @@
 #ifndef INCLUDED_DBACCESS_INC_BITMAPS_HRC
 #define INCLUDED_DBACCESS_INC_BITMAPS_HRC
 
-#define BMP_FORMFOLDER_TREE_L           "dbaccess/res/forms_32.png"
-#define BMP_REPORTFOLDER_TREE_L         "dbaccess/res/reports_32.png"
-#define BMP_QUERYFOLDER_TREE_L          "dbaccess/res/queries_32.png"
-#define BMP_TABLEFOLDER_TREE_L          "dbaccess/res/tables_32.png"
+inline constexpr OUStringLiteral BMP_FORMFOLDER_TREE_L = u"dbaccess/res/forms_32.png";
+inline constexpr OUStringLiteral BMP_REPORTFOLDER_TREE_L = u"dbaccess/res/reports_32.png";
+inline constexpr OUStringLiteral BMP_QUERYFOLDER_TREE_L = u"dbaccess/res/queries_32.png";
+inline constexpr OUStringLiteral BMP_TABLEFOLDER_TREE_L = u"dbaccess/res/tables_32.png";
 inline constexpr OUStringLiteral DATABASE_TREE_ICON = u"dbaccess/res/db.png";
 inline constexpr OUStringLiteral TABLE_TREE_ICON = u"res/sx03188.png";
 inline constexpr OUStringLiteral TABLEFOLDER_TREE_ICON = u"res/sx03187.png";

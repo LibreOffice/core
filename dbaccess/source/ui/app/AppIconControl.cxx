@@ -73,7 +73,7 @@ void OApplicationIconControl::Fill()
     {
         TranslateId pLabelResId;
         ElementType eType;
-        const char* aImageResId;
+        rtl::OUStringConstExpr aImageResId;
     } aCategories[] = { { RID_STR_TABLES_CONTAINER, E_TABLE, BMP_TABLEFOLDER_TREE_L },
                         { RID_STR_QUERIES_CONTAINER, E_QUERY, BMP_QUERYFOLDER_TREE_L },
                         { RID_STR_FORMS_CONTAINER, E_FORM, BMP_FORMFOLDER_TREE_L },
@@ -85,7 +85,7 @@ void OApplicationIconControl::Fill()
         std::unique_ptr<ThumbnailViewItem> xItem(
             new ThumbnailViewItem(*this, aCategorie.eType + 1));
         xItem->mbBorder = false;
-        xItem->maPreview1 = BitmapEx(OUString::createFromAscii(aCategorie.aImageResId));
+        xItem->maPreview1 = BitmapEx(aCategorie.aImageResId);
         const Size& rSize = xItem->maPreview1.GetSizePixel();
         m_nMaxWidth = std::max(m_nMaxWidth, rSize.Width());
         m_nMaxHeight = std::max(m_nMaxHeight, rSize.Height());
