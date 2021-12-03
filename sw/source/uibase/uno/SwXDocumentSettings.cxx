@@ -148,6 +148,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CONTINUOUS_ENDNOTES,
     HANDLE_HEADER_SPACING_BELOW_LAST_PARA,
     HANDLE_GUTTER_AT_TOP,
+    HANDLE_IMAGE_PREFERRED_DPI,
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -237,6 +238,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("ContinuousEndnotes"), HANDLE_CONTINUOUS_ENDNOTES, cppu::UnoType<bool>::get(), 0 },
         { OUString("HeaderSpacingBelowLastPara"), HANDLE_HEADER_SPACING_BELOW_LAST_PARA, cppu::UnoType<bool>::get(), 0 },
         { OUString("GutterAtTop"), HANDLE_GUTTER_AT_TOP, cppu::UnoType<bool>::get(), 0 },
+        { OUString("ImagePreferredDPI"), HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -977,6 +979,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_IMAGE_PREFERRED_DPI:
+        {
+            sal_uInt32 nValue = 0;
+            if (rValue >>= nValue)
+            {
+                mpDoc->getIDocumentSettingAccess().setImagePreferredDPI(nValue);
+            }
+        }
+        break;
+
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1458,6 +1470,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_GUTTER_AT_TOP:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP);
+        }
+        break;
+        case HANDLE_IMAGE_PREFERRED_DPI:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().getImagePreferredDPI();
         }
         break;
         default:

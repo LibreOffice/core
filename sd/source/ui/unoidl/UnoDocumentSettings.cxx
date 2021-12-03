@@ -142,6 +142,7 @@ enum SdDocumentSettingsPropertyHandles
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL,
     HANDLE_EMBED_FONTS, HANDLE_EMBED_USED_FONTS,
     HANDLE_EMBED_LATIN_SCRIPT_FONTS, HANDLE_EMBED_ASIAN_SCRIPT_FONTS, HANDLE_EMBED_COMPLEX_SCRIPT_FONTS,
+    HANDLE_IMAGE_PREFERRED_DPI
 };
 
 #define MID_PRINTER 1
@@ -210,6 +211,7 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("EmbedLatinScriptFonts"),   HANDLE_EMBED_LATIN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
             { OUString("EmbedAsianScriptFonts"),   HANDLE_EMBED_ASIAN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
             { OUString("EmbedComplexScriptFonts"), HANDLE_EMBED_COMPLEX_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0,  0 },
+            { OUString("ImagePreferredDPI"), HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0,  0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
@@ -1019,6 +1021,18 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
             }
             break;
 
+            case HANDLE_IMAGE_PREFERRED_DPI:
+            {
+                if (pValues->has<sal_Int32>())
+                {
+                    auto nNewValue = pValues->get<sal_Int32>();
+                    bChanged = (pDoc->getImagePreferredDPI() != nNewValue);
+                    pDoc->setImagePreferredDPI(nNewValue);
+                    bOk = true;
+                }
+            }
+            break;
+
             default:
                 throw UnknownPropertyException( OUString::number((*ppEntries)->mnHandle), static_cast<cppu::OWeakObject*>(this));
         }
@@ -1290,6 +1304,12 @@ DocumentSettings::_getPropertyValues(
             case HANDLE_EMBED_COMPLEX_SCRIPT_FONTS:
             {
                 *pValue <<= pDoc->IsEmbedFontScriptComplex();
+            }
+            break;
+
+            case HANDLE_IMAGE_PREFERRED_DPI:
+            {
+                *pValue <<= pDoc->getImagePreferredDPI();
             }
             break;
 
