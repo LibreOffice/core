@@ -75,8 +75,8 @@ protected:
     // visualisation method and will also be used for BoundRect computations in the long run.
     // This means it's always an error when the default implementation is called and thus gets
     // asserted there
-    virtual drawinglayer::primitive2d::Primitive2DContainer
-    createViewIndependentPrimitive2DSequence() const;
+    virtual void createViewIndependentPrimitive2DSequence(
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const;
 
     // basic constructor. Since this is a base class only, it shall
     // never be called directly
@@ -118,7 +118,8 @@ public:
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
-    drawinglayer::primitive2d::Primitive2DContainer getViewIndependentPrimitive2DContainer() const;
+    void getViewIndependentPrimitive2DContainer(
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const;
 
     // add Gluepoints (if available)
     virtual drawinglayer::primitive2d::Primitive2DContainer

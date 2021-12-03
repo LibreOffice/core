@@ -480,8 +480,10 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
                         pSdrGrafObj->ForceSwapIn();
                     }
 
+                    drawinglayer::primitive2d::Primitive2DContainer xRetval;
+                    pCandidate->GetViewContact().getViewIndependentPrimitive2DContainer(xRetval);
                     xPrimitives[a] = new drawinglayer::primitive2d::GroupPrimitive2D(
-                        pCandidate->GetViewContact().getViewIndependentPrimitive2DContainer());
+                        std::move(xRetval));
                 }
 
                 // get logic range

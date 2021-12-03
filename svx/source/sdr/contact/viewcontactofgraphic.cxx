@@ -281,7 +281,7 @@ namespace sdr::contact
             return xRetval;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfGraphic::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
@@ -386,7 +386,7 @@ namespace sdr::contact
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     aObjectMatrix));
 
-            return xRetval;
+            rVisitor.visit(std::move(xRetval));
         }
 
         bool ViewContactOfGraphic::visualisationUsesPresObj() const

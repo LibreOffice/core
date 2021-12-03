@@ -320,17 +320,13 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfE3dScene::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
     if(GetObjectCount())
     {
         // create a default ScenePrimitive2D (without visibility test of members)
-        xRetval = createScenePrimitive2DSequence(nullptr);
+        rVisitor.visit(createScenePrimitive2DSequence(nullptr));
     }
-
-    return xRetval;
 }
 
 void ViewContactOfE3dScene::ActionChanged()

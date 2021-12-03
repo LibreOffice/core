@@ -56,7 +56,6 @@ namespace sdr::contact
 
         void ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             drawinglayer::primitive2d::Primitive2DContainer xMasterPageSequence;
             const sdr::MasterPageDescriptor& rDescriptor = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).GetMasterPageDescriptor();
 
@@ -86,7 +85,7 @@ namespace sdr::contact
                 if(!GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())
                 {
                     // if visible, create the default background primitive sequence
-                    xRetval = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DContainer();
+                    static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DContainer(rVisitor);
                 }
             }
 
@@ -113,7 +112,7 @@ namespace sdr::contact
                 if (rPageFillRange.isInside(aSubHierarchyRange))
                 {
                     // completely inside, just render MasterPage content. Add to target
-                    xRetval.append(xMasterPageSequence);
+                    rVisitor.visit(xMasterPageSequence);
                 }
                 else if (rPageFillRange.overlaps(aSubHierarchyRange))
                 {
@@ -124,12 +123,9 @@ namespace sdr::contact
                     // need to create a clip primitive, add clipped list to target
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
                         basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), std::move(xMasterPageSequence)));
-                    xRetval.push_back(xReference);
+                    rVisitor.visit(xReference);
                 }
             }
-
-            // return grouped primitive
-            rVisitor.visit(xRetval);
         }
 } // end of namespace
 

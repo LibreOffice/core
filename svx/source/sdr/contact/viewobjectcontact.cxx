@@ -292,7 +292,8 @@ void ViewObjectContact::checkForPrimitive2DAnimations(const drawinglayer::primit
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     // get the view-independent Primitive from the viewContact
-    drawinglayer::primitive2d::Primitive2DContainer xRetval(GetViewContact().getViewIndependentPrimitive2DContainer());
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
+    GetViewContact().getViewIndependentPrimitive2DContainer(xRetval);
 
     if(!xRetval.empty())
     {
@@ -415,7 +416,7 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!bVisible)
         return;
 
-    rVisitor.visit(xRetval);
+    rVisitor.visit(std::move(xRetval));
 }
 
 void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const

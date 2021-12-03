@@ -90,7 +90,7 @@ namespace sdr::contact
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+            virtual void createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             /// basic constructor, used from SdrObject.
@@ -102,10 +102,9 @@ namespace sdr::contact
 
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        void VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor&) const
         {
             // currently gets not visualized, return empty sequence
-            return drawinglayer::primitive2d::Primitive2DContainer();
         }
 
 } // end of namespace sdr::contact
@@ -260,7 +259,7 @@ namespace sdr::contact
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+            virtual void createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             /// basic constructor, used from SdrObject.
@@ -281,9 +280,8 @@ namespace sdr::contact
 
 namespace sdr::contact
 {
-        drawinglayer::primitive2d::Primitive2DContainer VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        void VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SdrObject& rReferencedObject = GetSwVirtFlyDrawObj().GetReferencedObj();
 
             if(dynamic_cast<const SwFlyDrawObj*>( &rReferencedObject) !=  nullptr)
@@ -299,12 +297,10 @@ namespace sdr::contact
                             GetSwVirtFlyDrawObj(),
                             aOuterRange));
 
-                    xRetval = drawinglayer::primitive2d::Primitive2DContainer { xPrimitive };
+                    rVisitor.visit(xPrimitive);
                 }
             }
-
-            return xRetval;
-        }
+       }
 
 } // end of namespace sdr::contact
 

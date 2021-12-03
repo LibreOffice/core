@@ -294,7 +294,8 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
     }
 
     // get primitives
-    const drawinglayer::primitive2d::Primitive2DContainer & xSequence(GetViewContact().getViewIndependentPrimitive2DContainer());
+    drawinglayer::primitive2d::Primitive2DContainer xSequence;
+    GetViewContact().getViewIndependentPrimitive2DContainer(xSequence);
 
     if(!xSequence.empty())
     {

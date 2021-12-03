@@ -37,9 +37,8 @@ namespace sdr::contact
             return *(new ViewObjectContactOfMasterPageDescriptor(rObjectContact, *this));
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             drawinglayer::attribute::SdrFillAttribute aFill;
             const SdrPageProperties* pCorrectProperties = GetMasterPageDescriptor().getCorrectSdrPageProperties();
 
@@ -69,10 +68,8 @@ namespace sdr::contact
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute()));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xReference };
+                rVisitor.visit(xReference);
             }
-
-            return xRetval;
         }
 
         // basic constructor

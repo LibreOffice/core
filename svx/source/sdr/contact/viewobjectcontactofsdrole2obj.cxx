@@ -99,7 +99,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
 
         // create OLE primitive stuff directly at VC with HC as parameter
         const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
-        xRetval = rVC.createPrimitive2DSequenceWithParameters();
+        rVC.createPrimitive2DSequenceWithParameters(xRetval);
 
         if(bIsOutplaceActive)
         {

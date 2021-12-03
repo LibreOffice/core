@@ -51,7 +51,8 @@ public:
     // scaling (e.g. for EmptyPresObj's), the correct graphic and other stuff. It is used from
     // createViewIndependentPrimitive2DSequence with false, and with evtl. HighContrast true
     // from the VOC which knows that
-    drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceWithParameters() const;
+    void createPrimitive2DSequenceWithParameters(
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const;
 
     virtual basegfx::B2DRange
     getRange(const drawinglayer::geometry::ViewInformation2D& rViewInfo2D) const override;
@@ -59,8 +60,8 @@ public:
 private:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data, just wraps to call createPrimitive2DSequenceWithParameters(false)
-    virtual drawinglayer::primitive2d::Primitive2DContainer
-    createViewIndependentPrimitive2DSequence() const override;
+    virtual void createViewIndependentPrimitive2DSequence(
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 };
 }
 

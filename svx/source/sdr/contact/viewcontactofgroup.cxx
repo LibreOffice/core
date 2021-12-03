@@ -47,9 +47,8 @@ namespace sdr::contact
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGroup::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfGroup::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const sal_uInt32 nObjectCount(GetObjectCount());
 
             if(nObjectCount)
@@ -58,9 +57,7 @@ namespace sdr::contact
                 for(sal_uInt32 a(0); a < nObjectCount; a++)
                 {
                     const ViewContact& rCandidate(GetViewContact(a));
-                    const drawinglayer::primitive2d::Primitive2DContainer& aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer());
-
-                    xRetval.insert(xRetval.end(), aCandSeq.begin(), aCandSeq.end());
+                    rCandidate.getViewIndependentPrimitive2DContainer(rVisitor);
                 }
             }
             else
@@ -72,10 +69,8 @@ namespace sdr::contact
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                         false, aCurrentRange));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                rVisitor.visit(xReference);
             }
-
-            return xRetval;
         }
 
 } // end of namespace

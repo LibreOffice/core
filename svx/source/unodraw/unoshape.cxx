@@ -709,8 +709,8 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     }
     else
     {
-        drawinglayer::primitive2d::Primitive2DContainer xPrimitives(
-            GetSdrObject()->GetViewContact().getViewIndependentPrimitive2DContainer());
+        drawinglayer::primitive2d::Primitive2DContainer xPrimitives;
+        GetSdrObject()->GetViewContact().getViewIndependentPrimitive2DContainer(xPrimitives);
 
         if(!xPrimitives.empty())
         {

@@ -174,12 +174,12 @@ drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3d::getViewIndepen
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfE3d::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // also need to create a 2D embedding when the view-independent part is requested,
     // see view-dependent part in ViewObjectContactOfE3d::createPrimitive2DSequence
     // get 3d primitive vector, isPrimitiveVisible() is done in 3d creator
-    return impCreateWithGivenPrimitive3DContainer(getViewIndependentPrimitive3DContainer());
+    return rVisitor.visit(impCreateWithGivenPrimitive3DContainer(getViewIndependentPrimitive3DContainer()));
 }
 
 ViewObjectContact& ViewContactOfE3d::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)

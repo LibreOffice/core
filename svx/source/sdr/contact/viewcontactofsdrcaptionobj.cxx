@@ -54,9 +54,8 @@ namespace sdr::contact
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCaptionObj::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfSdrCaptionObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SdrCaptionObj& rCaptionObj(static_cast<const SdrCaptionObj&>(GetSdrObject()));
             const SfxItemSet& rItemSet = rCaptionObj.GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
@@ -86,15 +85,13 @@ namespace sdr::contact
 
             // create primitive. Always create one (even if invisible) to let the decomposition
             // of SdrCaptionPrimitive2D create needed invisible elements for HitTest and BoundRect
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
+            drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrCaptionPrimitive2D(
                     aObjectMatrix,
                     aAttribute,
                     aTail,
                     fCornerRadiusX,
                     fCornerRadiusY));
-
-            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
 
             if(!aAttribute.isDefault() && rCaptionObj.GetSpecialTextBoxShadow())
             {
@@ -181,14 +178,11 @@ namespace sdr::contact
                 {
                     // if we really got a special shadow, create a two-element retval with the shadow
                     // behind the standard object's geometry
-                    xRetval.resize(2);
-
-                    xRetval[0] = xSpecialShadow;
-                    xRetval[1] = xReference;
+                    rVisitor.visit(std::move(xSpecialShadow));
                 }
             }
 
-            return xRetval;
+            rVisitor.visit(std::move(xReference));
         }
 
 } // end of namespace

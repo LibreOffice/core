@@ -69,7 +69,7 @@ ViewObjectContact& ViewContactOfPageBackground::CreateObjectSpecificViewObjectCo
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageBackground::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfPageBackground::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // We have only the page information, not the view information. Use the
     // svtools::DOCCOLOR color for initialisation
@@ -79,7 +79,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageBackground::cre
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor));
 
-    return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+    rVisitor.visit(xReference);
 }
 
 ViewContactOfPageBackground::ViewContactOfPageBackground(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -99,7 +99,7 @@ ViewObjectContact& ViewContactOfPageShadow::CreateObjectSpecificViewObjectContac
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     static bool bUseOldPageShadow(false); // loplugin:constvars:ignore
     const SdrPage& rPage = getPage();
@@ -131,7 +131,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createV
                 basegfx::B2DPolyPolygon(aPageShadowPolygon),
                 aRGBShadowColor));
 
-        return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+        rVisitor.visit(xReference);
     }
     else
     {
@@ -145,10 +145,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createV
                     aPageMatrix,
                     *aDiscreteShadow.get()));
 
-            return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+            rVisitor.visit(xReference);
         }
-
-        return drawinglayer::primitive2d::Primitive2DContainer();
     }
 }
 
@@ -169,10 +167,8 @@ ViewObjectContact& ViewContactOfMasterPage::CreateObjectSpecificViewObjectContac
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfMasterPage::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
     // this class is used when the page is a MasterPage and is responsible to
     // create a visualisation for the MPBGO, if exists. This needs to be suppressed
     // when a SdrPage which uses a MasterPage creates it's output. Suppression
@@ -219,12 +215,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createV
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute()));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                rVisitor.visit(xReference);
             }
         }
     }
-
-    return xRetval;
 }
 
 ViewContactOfMasterPage::ViewContactOfMasterPage(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -244,7 +238,7 @@ ViewObjectContact& ViewContactOfPageFill::CreateObjectSpecificViewObjectContact(
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageFill::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfPageFill::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPage& rPage = getPage();
     const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
@@ -257,9 +251,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageFill::createVie
 
     // create and add primitive
     const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
-    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
-
-    return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+    rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor)));
 }
 
 ViewContactOfPageFill::ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -279,9 +271,8 @@ ViewObjectContact& ViewContactOfOuterPageBorder::CreateObjectSpecificViewObjectC
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPage& rPage = getPage();
     const basegfx::B2DRange aPageBorderRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
 
@@ -309,18 +300,14 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfOuterPageBorder::cr
         aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMinY()));
         aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMaxY()));
 
-        xRetval.resize(2);
-        xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aLeft, aRGBBorderColor));
-        xRetval[1] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aRight, aRGBBorderColor));
+        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aLeft, aRGBBorderColor)));
+        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aRight, aRGBBorderColor)));
     }
     else
     {
-        xRetval.resize(1);
         const basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
-        xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor));
+        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor)));
     }
-
-    return xRetval;
 }
 
 ViewContactOfOuterPageBorder::ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -340,7 +327,7 @@ ViewObjectContact& ViewContactOfInnerPageBorder::CreateObjectSpecificViewObjectC
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPage& rPage = getPage();
     const basegfx::B2DRange aPageBorderRange(
@@ -366,9 +353,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfInnerPageBorder::cr
 
     // create page outer border primitive
     const basegfx::BColor aRGBBorderColor(aBorderColor.getBColor());
-    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor));
-
-    return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+    rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor)));
 }
 
 ViewContactOfInnerPageBorder::ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -388,22 +373,17 @@ ViewObjectContact& ViewContactOfPageHierarchy::CreateObjectSpecificViewObjectCon
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageHierarchy::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfPageHierarchy::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // collect sub-hierarchy
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const sal_uInt32 nObjectCount(GetObjectCount());
 
     // collect all sub-primitives
     for(sal_uInt32 a(0); a < nObjectCount; a++)
     {
         const ViewContact& rCandidate(GetViewContact(a));
-        const drawinglayer::primitive2d::Primitive2DContainer& aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer());
-
-        xRetval.insert(xRetval.end(), aCandSeq.begin(), aCandSeq.end());
+        rCandidate.getViewIndependentPrimitive2DContainer(rVisitor);
     }
-
-    return xRetval;
 }
 
 ViewContactOfPageHierarchy::ViewContactOfPageHierarchy(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -435,11 +415,10 @@ ViewObjectContact& ViewContactOfGrid::CreateObjectSpecificViewObjectContact(Obje
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGrid::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfGrid::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor&) const
 {
     // We have only the page information, not the view information and thus no grid settings. Create empty
     // default. For the view-dependent implementation, see ViewObjectContactOfPageGrid::createPrimitive2DSequence
-    return drawinglayer::primitive2d::Primitive2DContainer();
 }
 
 ViewContactOfGrid::ViewContactOfGrid(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront)
@@ -460,11 +439,10 @@ ViewObjectContact& ViewContactOfHelplines::CreateObjectSpecificViewObjectContact
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfHelplines::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfHelplines::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor&) const
 {
     // We have only the page information, not the view information and thus no helplines. Create empty
     // default. For the view-dependent implementation, see ViewObjectContactOfPageHelplines::createPrimitive2DSequence
-    return drawinglayer::primitive2d::Primitive2DContainer();
 }
 
 ViewContactOfHelplines::ViewContactOfHelplines(ViewContactOfSdrPage& rParentViewContactOfSdrPage, bool bFront)
@@ -580,31 +558,27 @@ void ViewContactOfSdrPage::ActionChanged()
     maViewContactOfHelplinesFront.ActionChanged();
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPage::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfSdrPage::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
     // collect all sub-sequences including sub hierarchy.
-    xRetval.append(maViewContactOfPageBackground.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfPageShadow.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfPageFill.getViewIndependentPrimitive2DContainer());
+    maViewContactOfPageBackground.getViewIndependentPrimitive2DContainer(rVisitor);
+    maViewContactOfPageShadow.getViewIndependentPrimitive2DContainer(rVisitor);
+    maViewContactOfPageFill.getViewIndependentPrimitive2DContainer(rVisitor);
 
     const SdrPage& rPage = GetSdrPage();
 
     if(rPage.TRG_HasMasterPage())
     {
-        xRetval.append(
-            rPage.TRG_GetMasterPageDescriptorViewContact().getViewIndependentPrimitive2DContainer());
+        rPage.TRG_GetMasterPageDescriptorViewContact().getViewIndependentPrimitive2DContainer(rVisitor);
     }
     else if(rPage.IsMasterPage())
     {
-        xRetval.append(
-            maViewContactOfMasterPage.getViewIndependentPrimitive2DContainer());
+        maViewContactOfMasterPage.getViewIndependentPrimitive2DContainer(rVisitor);
     }
 
-    xRetval.append(maViewContactOfOuterPageBorder.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfInnerPageBorder.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfPageHierarchy.getViewIndependentPrimitive2DContainer());
+    maViewContactOfOuterPageBorder.getViewIndependentPrimitive2DContainer(rVisitor);
+    maViewContactOfInnerPageBorder.getViewIndependentPrimitive2DContainer(rVisitor);
+    maViewContactOfPageHierarchy.getViewIndependentPrimitive2DContainer(rVisitor);
 
     // Only add front versions of grid and helplines since no visibility test is done,
     // so adding the back incarnations is not necessary. This makes the Front
@@ -617,8 +591,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPage::createView
 
     // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfGridFront.getViewIndependentPrimitive2DContainer());
     // drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, maViewContactOfHelplinesFront.getViewIndependentPrimitive2DContainer());
-
-    return xRetval;
 }
 
 }
