@@ -556,22 +556,22 @@ class ImplB2DPolygon
 private:
     // The point vector. This vector exists always and defines the
     // count of members.
-    CoordinateDataArray2D                           maPoints;
+    CoordinateDataArray2D                         maPoints;
 
     // The control point vectors. This vectors are created on demand
     // and may be zero.
-    std::unique_ptr< ControlVectorArray2D >       mpControlVector;
+    std::optional< ControlVectorArray2D >         moControlVector;
 
     // buffered data for e.g. default subdivision and range
     std::unique_ptr< ImplBufferedData >           mpBufferedData;
 
     // flag which decides if this polygon is opened or closed
-    bool                                            mbIsClosed;
+    bool                                          mbIsClosed;
 
 public:
     const basegfx::B2DPolygon& getDefaultAdaptiveSubdivision(const basegfx::B2DPolygon& rSource) const
     {
-        if(!mpControlVector || !mpControlVector->isUsed())
+        if(!moControlVector || !moControlVector->isUsed())
         {
             return rSource;
         }
@@ -604,9 +604,9 @@ public:
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using copy
-        if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
+        if(rToBeCopied.moControlVector && rToBeCopied.moControlVector->isUsed())
         {
-            mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector) );
+            moControlVector.emplace( *rToBeCopied.moControlVector );
         }
     }
 
@@ -615,12 +615,12 @@ public:
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using partly copy
-        if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
+        if(rToBeCopied.moControlVector && rToBeCopied.moControlVector->isUsed())
         {
-            mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector, nIndex, nCount) );
+            moControlVector.emplace( *rToBeCopied.moControlVector, nIndex, nCount );
 
-            if(!mpControlVector->isUsed())
-                mpControlVector.reset();
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
         }
     }
 
@@ -628,16 +628,16 @@ public:
     {
         if (this != &rOther)
         {
-            mpControlVector.reset();
+            moControlVector.reset();
             mpBufferedData.reset();
             maPoints = rOther.maPoints;
             mbIsClosed = rOther.mbIsClosed;
-            if (rOther.mpControlVector && rOther.mpControlVector->isUsed())
+            if (rOther.moControlVector && rOther.moControlVector->isUsed())
             {
-                mpControlVector.reset( new ControlVectorArray2D(*rOther.mpControlVector) );
+                moControlVector.emplace( *rOther.moControlVector );
 
-                if(!mpControlVector->isUsed())
-                    mpControlVector.reset();
+                if(!moControlVector->isUsed())
+                    moControlVector.reset();
             }
         }
         return *this;
@@ -670,24 +670,24 @@ public:
             {
                 bool bControlVectorsAreEqual(true);
 
-                if(mpControlVector)
+                if(moControlVector)
                 {
-                    if(rCandidate.mpControlVector)
+                    if(rCandidate.moControlVector)
                     {
-                        bControlVectorsAreEqual = ((*mpControlVector) == (*rCandidate.mpControlVector));
+                        bControlVectorsAreEqual = ((*moControlVector) == (*rCandidate.moControlVector));
                     }
                     else
                     {
                         // candidate has no control vector, so it's assumed all unused.
-                        bControlVectorsAreEqual = !mpControlVector->isUsed();
+                        bControlVectorsAreEqual = !moControlVector->isUsed();
                     }
                 }
                 else
                 {
-                    if(rCandidate.mpControlVector)
+                    if(rCandidate.moControlVector)
                     {
                         // we have no control vector, so it's assumed all unused.
-                        bControlVectorsAreEqual = !rCandidate.mpControlVector->isUsed();
+                        bControlVectorsAreEqual = !rCandidate.moControlVector->isUsed();
                     }
                 }
 
@@ -723,10 +723,10 @@ public:
         const CoordinateData2D aCoordinate(rPoint);
         maPoints.append(aCoordinate);
 
-        if(mpControlVector)
+        if(moControlVector)
         {
             const ControlVectorPair2D aVectorPair;
-            mpControlVector->append(aVectorPair);
+            moControlVector->append(aVectorPair);
         }
     }
 
@@ -738,19 +738,19 @@ public:
             CoordinateData2D aCoordinate(rPoint);
             maPoints.insert(nIndex, aCoordinate, nCount);
 
-            if(mpControlVector)
+            if(moControlVector)
             {
                 ControlVectorPair2D aVectorPair;
-                mpControlVector->insert(nIndex, aVectorPair, nCount);
+                moControlVector->insert(nIndex, aVectorPair, nCount);
             }
         }
     }
 
     const basegfx::B2DVector& getPrevControlVector(sal_uInt32 nIndex) const
     {
-        if(mpControlVector)
+        if(moControlVector)
         {
-            return mpControlVector->getPrevVector(nIndex);
+            return moControlVector->getPrevVector(nIndex);
         }
         else
         {
@@ -760,30 +760,30 @@ public:
 
     void setPrevControlVector(sal_uInt32 nIndex, const basegfx::B2DVector& rValue)
     {
-        if(!mpControlVector)
+        if(!moControlVector)
         {
             if(!rValue.equalZero())
             {
                 mpBufferedData.reset();
-                mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
-                mpControlVector->setPrevVector(nIndex, rValue);
+                moControlVector.emplace(maPoints.count());
+                moControlVector->setPrevVector(nIndex, rValue);
             }
         }
         else
         {
             mpBufferedData.reset();
-            mpControlVector->setPrevVector(nIndex, rValue);
+            moControlVector->setPrevVector(nIndex, rValue);
 
-            if(!mpControlVector->isUsed())
-                mpControlVector.reset();
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
         }
     }
 
     const basegfx::B2DVector& getNextControlVector(sal_uInt32 nIndex) const
     {
-        if(mpControlVector)
+        if(moControlVector)
         {
-            return mpControlVector->getNextVector(nIndex);
+            return moControlVector->getNextVector(nIndex);
         }
         else
         {
@@ -793,34 +793,34 @@ public:
 
     void setNextControlVector(sal_uInt32 nIndex, const basegfx::B2DVector& rValue)
     {
-        if(!mpControlVector)
+        if(!moControlVector)
         {
             if(!rValue.equalZero())
             {
                 mpBufferedData.reset();
-                mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
-                mpControlVector->setNextVector(nIndex, rValue);
+                moControlVector.emplace(maPoints.count());
+                moControlVector->setNextVector(nIndex, rValue);
             }
         }
         else
         {
             mpBufferedData.reset();
-            mpControlVector->setNextVector(nIndex, rValue);
+            moControlVector->setNextVector(nIndex, rValue);
 
-            if(!mpControlVector->isUsed())
-                mpControlVector.reset();
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
         }
     }
 
     bool areControlPointsUsed() const
     {
-        return (mpControlVector && mpControlVector->isUsed());
+        return (moControlVector && moControlVector->isUsed());
     }
 
     void resetControlVectors()
     {
         mpBufferedData.reset();
-        mpControlVector.reset();
+        moControlVector.reset();
     }
 
     void setControlVectors(sal_uInt32 nIndex, const basegfx::B2DVector& rPrev, const basegfx::B2DVector& rNext)
@@ -852,24 +852,24 @@ public:
 
         mpBufferedData.reset();
 
-        if(rSource.mpControlVector && rSource.mpControlVector->isUsed() && !mpControlVector)
+        if(rSource.moControlVector && rSource.moControlVector->isUsed() && !moControlVector)
         {
-            mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
+            moControlVector.emplace(maPoints.count());
         }
 
         maPoints.insert(nIndex, rSource.maPoints);
 
-        if(rSource.mpControlVector)
+        if(rSource.moControlVector)
         {
-            mpControlVector->insert(nIndex, *rSource.mpControlVector);
+            moControlVector->insert(nIndex, *rSource.moControlVector);
 
-            if(!mpControlVector->isUsed())
-                mpControlVector.reset();
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
         }
-        else if(mpControlVector)
+        else if(moControlVector)
         {
             ControlVectorPair2D aVectorPair;
-            mpControlVector->insert(nIndex, aVectorPair, nCount);
+            moControlVector->insert(nIndex, aVectorPair, nCount);
         }
     }
 
@@ -881,12 +881,12 @@ public:
         mpBufferedData.reset();
         maPoints.remove(nIndex, nCount);
 
-        if(mpControlVector)
+        if(moControlVector)
         {
-            mpControlVector->remove(nIndex, nCount);
+            moControlVector->remove(nIndex, nCount);
 
-            if(!mpControlVector->isUsed())
-                mpControlVector.reset();
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
         }
     }
 
@@ -900,10 +900,10 @@ public:
         // flip points
         maPoints.flip(mbIsClosed);
 
-        if(mpControlVector)
+        if(moControlVector)
         {
             // flip control vector
-            mpControlVector->flip(mbIsClosed);
+            moControlVector->flip(mbIsClosed);
         }
     }
 
@@ -916,9 +916,9 @@ public:
 
             if(maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex))
             {
-                if(mpControlVector)
+                if(moControlVector)
                 {
-                    if(mpControlVector->getNextVector(nIndex).equalZero() && mpControlVector->getPrevVector(0).equalZero())
+                    if(moControlVector->getNextVector(nIndex).equalZero() && moControlVector->getPrevVector(0).equalZero())
                     {
                         return true;
                     }
@@ -935,9 +935,9 @@ public:
         {
             if(maPoints.getCoordinate(a) == maPoints.getCoordinate(a + 1))
             {
-                if(mpControlVector)
+                if(moControlVector)
                 {
-                    if(mpControlVector->getNextVector(a).equalZero() && mpControlVector->getPrevVector(a + 1).equalZero())
+                    if(moControlVector->getNextVector(a).equalZero() && moControlVector->getPrevVector(a + 1).equalZero())
                     {
                         return true;
                     }
@@ -960,7 +960,7 @@ public:
 
         mpBufferedData.reset();
 
-        if(mpControlVector)
+        if(moControlVector)
         {
             bool bRemove;
 
@@ -974,9 +974,9 @@ public:
 
                     if(maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex))
                     {
-                        if(mpControlVector)
+                        if(moControlVector)
                         {
-                            if(mpControlVector->getNextVector(nIndex).equalZero() && mpControlVector->getPrevVector(0).equalZero())
+                            if(moControlVector->getNextVector(nIndex).equalZero() && moControlVector->getPrevVector(0).equalZero())
                             {
                                 bRemove = true;
                             }
@@ -992,9 +992,9 @@ public:
                 {
                     const sal_uInt32 nIndex(maPoints.count() - 1);
 
-                    if(mpControlVector && !mpControlVector->getPrevVector(nIndex).equalZero())
+                    if(moControlVector && !moControlVector->getPrevVector(nIndex).equalZero())
                     {
-                        mpControlVector->setPrevVector(0, mpControlVector->getPrevVector(nIndex));
+                        moControlVector->setPrevVector(0, moControlVector->getPrevVector(nIndex));
                     }
 
                     remove(nIndex, 1);
@@ -1012,7 +1012,7 @@ public:
     {
         mpBufferedData.reset();
 
-        if(mpControlVector)
+        if(moControlVector)
         {
             sal_uInt32 nIndex(0);
 
@@ -1022,9 +1022,9 @@ public:
             {
                 bool bRemove(maPoints.getCoordinate(nIndex) == maPoints.getCoordinate(nIndex + 1));
 
-                if(bRemove && mpControlVector)
+                if(bRemove && moControlVector)
                 {
-                    if(!mpControlVector->getNextVector(nIndex).equalZero() || !mpControlVector->getPrevVector(nIndex + 1).equalZero())
+                    if(!moControlVector->getNextVector(nIndex).equalZero() || !moControlVector->getPrevVector(nIndex + 1).equalZero())
                     {
                         bRemove = false;
                     }
@@ -1032,9 +1032,9 @@ public:
 
                 if(bRemove)
                 {
-                    if(mpControlVector && !mpControlVector->getPrevVector(nIndex).equalZero())
+                    if(moControlVector && !moControlVector->getPrevVector(nIndex).equalZero())
                     {
-                        mpControlVector->setPrevVector(nIndex + 1, mpControlVector->getPrevVector(nIndex));
+                        moControlVector->setPrevVector(nIndex + 1, moControlVector->getPrevVector(nIndex));
                     }
 
                     // if next is same as index and the control vectors are unused, delete index
@@ -1057,27 +1057,27 @@ public:
     {
         mpBufferedData.reset();
 
-        if(mpControlVector)
+        if(moControlVector)
         {
             for(sal_uInt32 a(0); a < maPoints.count(); a++)
             {
                 basegfx::B2DPoint aCandidate = maPoints.getCoordinate(a);
 
-                if(mpControlVector->isUsed())
+                if(moControlVector->isUsed())
                 {
-                    const basegfx::B2DVector& rPrevVector(mpControlVector->getPrevVector(a));
-                    const basegfx::B2DVector& rNextVector(mpControlVector->getNextVector(a));
+                    const basegfx::B2DVector& rPrevVector(moControlVector->getPrevVector(a));
+                    const basegfx::B2DVector& rNextVector(moControlVector->getNextVector(a));
 
                     if(!rPrevVector.equalZero())
                     {
                         basegfx::B2DVector aPrevVector(rMatrix * rPrevVector);
-                        mpControlVector->setPrevVector(a, aPrevVector);
+                        moControlVector->setPrevVector(a, aPrevVector);
                     }
 
                     if(!rNextVector.equalZero())
                     {
                         basegfx::B2DVector aNextVector(rMatrix * rNextVector);
-                        mpControlVector->setNextVector(a, aNextVector);
+                        moControlVector->setNextVector(a, aNextVector);
                     }
                 }
 
@@ -1085,8 +1085,8 @@ public:
                 maPoints.setCoordinate(a, aCandidate);
             }
 
-            if(!mpControlVector->isUsed())
-                mpControlVector.reset();
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
         }
         else
         {
