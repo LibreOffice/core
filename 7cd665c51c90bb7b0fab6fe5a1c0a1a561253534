@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f42610c_8e542b5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-03T07:13:20Z",
+      "side": 1,
+      "message": "All buildbots succeeded; let me verify it myself on Jenkins\u0027 behalf.",
+      "revId": "7cd665c51c90bb7b0fab6fe5a1c0a1a561253534",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
