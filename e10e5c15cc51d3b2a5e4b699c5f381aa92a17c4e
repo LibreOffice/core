@@ -16,6 +16,24 @@
       "message": "UBSan often requires additional RTTI symbols, cf. \u003chttps://gerrit.libreoffice.org/c/core/+/126201\u003e \"UBSan still needs RTTI of some types to be exported\", so I wonder if it would be possible to rather run this script on a UBSan build to avoid that kind of catch-up?",
       "revId": "e10e5c15cc51d3b2a5e4b699c5f381aa92a17c4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae3353f_b6325c62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-03T07:50:13Z",
+      "side": 1,
+      "message": "I thought my asan build was a debug build, but I see it\u0027s a \"normal\" build, so I\u0027ll switch to using that workspace for work like this in future.",
+      "parentUuid": "4844b9f8_baf74a8c",
+      "revId": "e10e5c15cc51d3b2a5e4b699c5f381aa92a17c4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
