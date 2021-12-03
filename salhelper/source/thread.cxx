@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <string>
 
+#include <comphelper/scopeguard.hxx>
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 
@@ -22,21 +23,21 @@ void salhelper::Thread::launch() {
     // Assumption is that osl::Thread::create returns normally with a true
     // return value iff it causes osl::Thread::run to start executing:
     acquire();
-    try {
-        if (!create()) {
-            throw std::runtime_error("osl::Thread::create failed");
-        }
-    } catch (...) {
-        release();
-        throw;
+    comphelper::ScopeGuard g([this] { release(); });
+    if (!create()) {
+        throw std::runtime_error("osl::Thread::create failed");
     }
+    g.dismiss();
 }
 
 salhelper::Thread::~Thread() {}
 
 void salhelper::Thread::run() {
+    // Work around the problem that onTerminated is not called if run throws an exception:
+    comphelper::ScopeGuard g([this] { onTerminated(); });
     setName(name_);
     execute();
+    g.dismiss();
 }
 
 void salhelper::Thread::onTerminated() { release(); }
