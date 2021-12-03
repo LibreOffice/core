@@ -129,7 +129,7 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     // disable modify buttons
     // Color palettes can't be modified
     m_xBtnDelete->set_sensitive(false);
-    m_xBtnDelete->set_tooltip_text( SvxResId(RID_CUISTR_DELETEUSERCOLOR1) );
+    m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR1) );
 
     m_xMoreColors->set_from_icon_name("cmd/sc_additionsdialog.png");
     m_xMoreColors->connect_clicked(LINK(this, SvxColorTabPage, OnMoreColorsClick));
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_xValSetColorList->InsertItem( nId + 1 , aCurrentColor, aName );
         m_xValSetColorList->SelectItem( nId + 1 );
         m_xBtnDelete->set_sensitive(false);
-        m_xBtnDelete->set_tooltip_text( SvxResId(RID_CUISTR_DELETEUSERCOLOR2) );
+        m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR2) );
         ImpColorCountChanged();
     }
 
@@ -436,7 +436,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
     else
     {
         m_xBtnDelete->set_sensitive(false);
-        m_xBtnDelete->set_tooltip_text( SvxResId(RID_CUISTR_DELETEUSERCOLOR2) );
+        m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR2) );
     }
 }
 
@@ -472,7 +472,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
     if (nPos != 0)
     {
         m_xBtnDelete->set_sensitive(false);
-        m_xBtnDelete->set_tooltip_text( SvxResId(RID_CUISTR_DELETEUSERCOLOR1) );
+        m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR1) );
     }
 
     m_xValSetColorList->Resize();
@@ -502,14 +502,14 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
         else
         {
             m_xBtnDelete->set_sensitive(false);
-            m_xBtnDelete->set_tooltip_text( SvxResId(RID_CUISTR_DELETEUSERCOLOR1) );
+            m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR1) );
         }
     }
     if (pValSet == m_xValSetRecentList.get())
     {
         m_xValSetColorList->SetNoSelection();
         m_xBtnDelete->set_sensitive(false);
-        m_xBtnDelete->set_tooltip_text( SvxResId(RID_CUISTR_DELETEUSERCOLOR2) );
+        m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR2) );
     }
 }
 
