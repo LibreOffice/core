@@ -782,8 +782,6 @@
                     <property name="halign">center</property>
                     <property name="valign">start</property>
                     <property name="margin_bottom">5</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
                     <property name="image">image3</property>
                     <property name="always_show_image">True</property>
                     <child internal-child="accessible">
@@ -818,8 +816,6 @@
                     <property name="halign">center</property>
                     <property name="valign">end</property>
                     <property name="margin_bottom">5</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
                     <property name="image">image4</property>
                     <property name="always_show_image">True</property>
                     <child internal-child="accessible">
