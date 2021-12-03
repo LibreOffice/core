@@ -73,7 +73,7 @@ namespace drawinglayer::primitive2d
             /// data read access
             const Primitive2DContainer& getChildren() const { return maChildren; }
 
-            void getChildren(Primitive2DDecompositionVisitor& rVisitor) const { rVisitor.append(maChildren); }
+            void getChildren(Primitive2DDecompositionVisitor& rVisitor) const { rVisitor.visit(maChildren); }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;

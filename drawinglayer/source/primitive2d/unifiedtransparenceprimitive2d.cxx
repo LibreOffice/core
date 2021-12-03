@@ -93,7 +93,7 @@ namespace drawinglayer::primitive2d
                 aTransparenceContent[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aGray));
 
                 // create sub-transparence group with a gray-colored rectangular fill polygon
-                rVisitor.append(new TransparencePrimitive2D(Primitive2DContainer(getChildren()), std::move(aTransparenceContent)));
+                rVisitor.visit(new TransparencePrimitive2D(Primitive2DContainer(getChildren()), std::move(aTransparenceContent)));
             }
             else
             {

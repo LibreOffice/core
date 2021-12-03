@@ -415,7 +415,7 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!bVisible)
         return;
 
-    rVisitor.append(xRetval);
+    rVisitor.visit(xRetval);
 }
 
 void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const

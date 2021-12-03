@@ -442,7 +442,7 @@ namespace drawinglayer::primitive2d
 
             if (aRetval.is())
             {
-                rVisitor.append(aRetval);
+                rVisitor.visit(aRetval);
                 return;
             }
 
@@ -461,14 +461,14 @@ namespace drawinglayer::primitive2d
 
             if (aRetval.is())
             {
-                rVisitor.append(aRetval);
+                rVisitor.visit(aRetval);
                 return;
             }
 
             // did not work (not buffered and not 1st frame), create from buffer
             aRetval = createFromBuffer();
 
-            rVisitor.append(aRetval);
+            rVisitor.visit(aRetval);
         }
 
 } // end of namespace
