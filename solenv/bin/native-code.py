@@ -613,7 +613,7 @@ calc_factory_list = [
 
 calc_constructor_list = [
 # avmedia/util/avmedia.component
-    "com_sun_star_comp_framework_SoundHandler_get_implementation",
+    ("com_sun_star_comp_framework_SoundHandler_get_implementation", "#if HAVE_FEATURE_AVMEDIA"),
 # sc/util/sc.component
     "ScPanelFactory_get_implementation",
     "Calc_SpreadsheetDocument_get_implementation",
