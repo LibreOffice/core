@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a4264e7_cb19f4a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-03T07:46:59Z",
+      "side": 1,
+      "message": "Didn\u0027t had time for a build yet; no Jenkins does mergelib...",
+      "revId": "7b8403b33e0fb3e4ef4ee4a11239e165967f2111",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
