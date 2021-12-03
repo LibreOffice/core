@@ -62,7 +62,6 @@
 #include <connectivity/filtermanager.hxx>
 #include <connectivity/warningscontainer.hxx>
 
-#include <listenercontainers.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
@@ -154,7 +153,7 @@ class ODatabaseForm :public OFormComponents
     ::comphelper::OInterfaceContainerHelper3<css::sdb::XRowSetApproveListener>   m_aRowSetApproveListeners;
     ::comphelper::OInterfaceContainerHelper3<css::form::XSubmitListener>   m_aSubmitListeners;
     ::comphelper::OInterfaceContainerHelper3<css::sdb::XSQLErrorListener>   m_aErrorListeners;
-    ResetListeners                      m_aResetListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::form::XResetListener> m_aResetListeners;
     ::osl::Mutex                        m_aResetSafety;
     css::uno::Any                       m_aCycle;
     css::uno::Any                       m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row

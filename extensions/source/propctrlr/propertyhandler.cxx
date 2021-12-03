@@ -79,11 +79,11 @@ namespace pcr
             return;
 
         // remove all old property change listeners
-        ::comphelper::OInterfaceIteratorHelper2 removeListener = m_aPropertyListeners.createIterator();
-        ::comphelper::OInterfaceIteratorHelper2 readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
+        ::comphelper::OInterfaceIteratorHelper3 removeListener(m_aPropertyListeners);
+        ::comphelper::OInterfaceIteratorHelper3 readdListener(m_aPropertyListeners);  // will copy the container as needed
         while ( removeListener.hasMoreElements() )
-            removePropertyChangeListener( static_cast< XPropertyChangeListener* >( removeListener.next() ) );
-        OSL_ENSURE( m_aPropertyListeners.empty(), "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );
+            removePropertyChangeListener( removeListener.next() );
+        OSL_ENSURE( m_aPropertyListeners.getLength() == 0, "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );
 
         // remember the new component, and give derived classes the chance to react on it
         m_xComponent = xNewComponent;
@@ -91,7 +91,7 @@ namespace pcr
 
         // add the listeners, again
         while ( readdListener.hasMoreElements() )
-            addPropertyChangeListener( static_cast< XPropertyChangeListener* >( readdListener.next() ) );
+            addPropertyChangeListener( readdListener.next() );
     }
 
     void PropertyHandler::onNewComponent()
@@ -228,13 +228,13 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !_rxListener.is() )
             throw NullPointerException();
-        m_aPropertyListeners.addListener( _rxListener );
+        m_aPropertyListeners.addInterface( _rxListener );
     }
 
     void SAL_CALL PropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        m_aPropertyListeners.removeListener( _rxListener );
+        m_aPropertyListeners.removeInterface( _rxListener );
     }
 
     sal_Bool SAL_CALL PropertyHandler::suspend( sal_Bool /*_bSuspend*/ )
@@ -260,7 +260,7 @@ namespace pcr
         aEvent.PropertyName = _rPropName;
         aEvent.OldValue = _rOldValue;
         aEvent.NewValue = _rNewValue;
-        m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
+        m_aPropertyListeners.notifyEach( &XPropertyChangeListener::propertyChange, aEvent );
     }
 
     const Property* PropertyHandler::impl_getPropertyFromId_nothrow( PropertyId _nPropId ) const

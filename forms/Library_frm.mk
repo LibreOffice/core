@@ -106,7 +106,6 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/misc/componenttools \
     forms/source/misc/InterfaceContainer \
     forms/source/misc/limitedformats \
-    forms/source/misc/listenercontainers \
     forms/source/misc/property \
     forms/source/resource/frm_resource \
     forms/source/richtext/attributedispatcher \
