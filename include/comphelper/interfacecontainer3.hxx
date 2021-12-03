@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COMPHELPER_INTERFACECONTAINER3_H
-#define INCLUDED_COMPHELPER_INTERFACECONTAINER3_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -129,7 +128,7 @@ public:
        of this object.
      */
     OInterfaceContainerHelper3(::osl::Mutex& rMutex_)
-        : rMutex(rMutex_)
+        : mrMutex(rMutex_)
     {
     }
     /**
@@ -222,7 +221,7 @@ private:
     o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
                       o3tl::ThreadSafeRefCountingPolicy>
         maData;
-    ::osl::Mutex& rMutex;
+    ::osl::Mutex& mrMutex;
     OInterfaceContainerHelper3(const OInterfaceContainerHelper3&) = delete;
     OInterfaceContainerHelper3& operator=(const OInterfaceContainerHelper3&) = delete;
 
@@ -278,7 +277,7 @@ inline void OInterfaceContainerHelper3<ListenerT>::notifyEach(
 
 template <class ListenerT> sal_Int32 OInterfaceContainerHelper3<ListenerT>::getLength() const
 {
-    osl::MutexGuard aGuard(rMutex);
+    osl::MutexGuard aGuard(mrMutex);
     return maData->size();
 }
 
@@ -287,7 +286,7 @@ std::vector<css::uno::Reference<ListenerT>>
 OInterfaceContainerHelper3<ListenerT>::getElements() const
 {
     std::vector<css::uno::Reference<ListenerT>> rVec;
-    osl::MutexGuard aGuard(rMutex);
+    osl::MutexGuard aGuard(mrMutex);
     rVec = *maData;
     return rVec;
 }
@@ -297,7 +296,7 @@ sal_Int32
 OInterfaceContainerHelper3<ListenerT>::addInterface(const css::uno::Reference<ListenerT>& rListener)
 {
     assert(rListener.is());
-    osl::MutexGuard aGuard(rMutex);
+    osl::MutexGuard aGuard(mrMutex);
 
     maData->push_back(rListener);
     return maData->size();
@@ -308,7 +307,7 @@ sal_Int32 OInterfaceContainerHelper3<ListenerT>::removeInterface(
     const css::uno::Reference<ListenerT>& rListener)
 {
     assert(rListener.is());
-    osl::MutexGuard aGuard(rMutex);
+    osl::MutexGuard aGuard(mrMutex);
 
     // It is not valid to compare the pointer directly, but it's faster.
     auto it = std::find_if(maData->begin(), maData->end(),
@@ -330,7 +329,7 @@ template <class ListenerT>
 const css::uno::Reference<ListenerT>&
 OInterfaceContainerHelper3<ListenerT>::getInterface(sal_Int32 nIndex) const
 {
-    osl::MutexGuard aGuard(rMutex);
+    osl::MutexGuard aGuard(mrMutex);
 
     return (*maData)[nIndex];
 }
@@ -338,7 +337,7 @@ OInterfaceContainerHelper3<ListenerT>::getInterface(sal_Int32 nIndex) const
 template <class ListenerT>
 void OInterfaceContainerHelper3<ListenerT>::disposeAndClear(const css::lang::EventObject& rEvt)
 {
-    osl::ClearableMutexGuard aGuard(rMutex);
+    osl::ClearableMutexGuard aGuard(mrMutex);
     OInterfaceIteratorHelper3<ListenerT> aIt(*this);
     maData->clear();
     aGuard.clear();
@@ -358,10 +357,9 @@ void OInterfaceContainerHelper3<ListenerT>::disposeAndClear(const css::lang::Eve
 
 template <class ListenerT> void OInterfaceContainerHelper3<ListenerT>::clear()
 {
-    osl::MutexGuard aGuard(rMutex);
+    osl::MutexGuard aGuard(mrMutex);
     maData->clear();
 }
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
