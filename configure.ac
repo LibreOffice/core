@@ -982,6 +982,7 @@ ios*) # iOS
     enable_coinmp=no
     enable_lpsolve=no
     enable_extension_integration=no
+    enable_scripting=no
     enable_xmlhelp=no
     with_ppds=no
     if test "$enable_ios_simulator" = "yes"; then
@@ -1111,6 +1112,7 @@ emscripten)
     test_webdav=no
     enable_database_connectivity=no
     enable_lpsolve=no
+    enable_scripting=no
     enable_xmlhelp=no
     with_system_zlib=no
     with_theme="breeze"
@@ -1400,8 +1402,8 @@ libo_FUZZ_ARG_ENABLE(extensions,
 
 AC_ARG_ENABLE(scripting,
     AS_HELP_STRING([--disable-scripting],
-        [Disable BASIC, Java and Python. Work in progress, use only if you are hacking on it.])
-)
+        [Disable BASIC, Java and Python. Work in progress, use only if you are hacking on it.]),
+,test "${enable_scripting+set}" = set || enable_scripting=yes)
 
 # This is mainly for Android and iOS, but could potentially be used in some
 # special case otherwise, too, so factored out as a separate setting
@@ -2975,14 +2977,6 @@ if test "$enable_extensions" = yes; then
 else
     enable_extension_integration=no
     enable_extension_update=no
-fi
-
-if test -z "$enable_scripting"; then
-    # Disable scripting for iOS unless specifically overridden
-    # with --enable-scripting.
-    if test $_os != iOS -o $_os = Emscripten; then
-        enable_scripting=yes
-    fi
 fi
 
 DISABLE_SCRIPTING=''
@@ -5485,7 +5479,6 @@ if test "$cross_compiling" = "yes"; then
     # While we don't need scripting support, we don't have a PYTHON_FOR_BUILD Java equivalent, so must enable scripting for Java
     if test -n "$ENABLE_JAVA"; then
         case "$_os" in
-        iOS) sub_conf_opts="$sub_conf_opts --disable-scripting" ;; # force it off, as it used to be
         Android)
             # Hack for Android - the build doesn't need a host JDK, so just forward to build for convenience
             test -n "$with_jdk_home" && sub_conf_opts="$sub_conf_opts --with-jdk-home=$with_jdk_home"
