@@ -33,6 +33,23 @@
       "message": "I was probably just being over-cautious, I was running out of enthusiam towards the end of that patch series and kept having trouble with the lifetime of various bits being longer than the underlying ScDocument.\nBut assuming nothing crashes, this is probably fine",
       "revId": "0dda6d41ab89d10e0a1a87dbbc69bb77fad1a24d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8331b03e_20d46c36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-03T09:01:36Z",
+      "side": 1,
+      "message": "lets give it a go then",
+      "revId": "0dda6d41ab89d10e0a1a87dbbc69bb77fad1a24d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
