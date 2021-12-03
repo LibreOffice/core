@@ -82,7 +82,7 @@ Try:
 	oMenu = poEvent.Source
 
 	With oMenu
-		&apos;	Collect command (script or menu command) and status radiobttons and checkboxes
+		&apos;	Collect command (script or menu command) and status radiobuttons and checkboxes
 		sCommand = .getCommand(iMenuId)
 		bStatus = .isItemChecked(iMenuId)
 	End With
