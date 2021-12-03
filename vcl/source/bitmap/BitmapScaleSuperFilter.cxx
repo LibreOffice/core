@@ -29,6 +29,28 @@
 #include <svdata.hxx>
 #include <sal/log.hxx>
 
+/*
+A scaling algorithm that uses bilinear if not downscaling too much,
+and averaging otherwise (bilinear would produce poor results for big downscaling).
+Description taken from commit message of 53d51dbee6d4037c4cfc3fa743de8dac76da48c6 :
+
+One pass scale, rotate and crop using bilinear filtering and averaging.
+
+With this commit I reintroduce one pass scale, rotate and crop that
+was located in grfmgr2.cxx (now in Bitmap class) and was used for
+preparing bitmaps for displaying on screen. By default the combination
+of two filters is used: bilinear, which is a similar algorithm than
+the "old" one, but with the same result, and averaging algorithm. Bilinear
+filtering is used for bitmap enlarging and shrinking till factor 0.6. Below
+this bilinear gives bad results because of limited sampling. For such cases
+averaging is used which is a simple algorithm for shrinking. In averaging
+the algorithm calculates the average of samples which result is the new
+pixel. Currently both algorithms are not optimised.
+
+One pass scale, rotate and crop should only be used for displaying of
+images.
+*/
+
 namespace {
 
 constexpr int MAP_PRECISION = 7;
