@@ -135,6 +135,16 @@ inline bool isUnitTestRunning(const char* name = nullptr)
     return testname != nullptr && std::string_view(name) == testname;
 }
 
+// Scaling done on the GPU is fast, but bicubic done in raster mode can be slow
+// if done too much, and it generally shouldn't be needed for to-screen drawing.
+// In that case use only BmpScaleFlag::Default, which is bilinear+mipmap,
+// which should be good enough (and that's what the "super" bitmap scaling
+// algorithm done by VCL does as well).
+inline BmpScaleFlag goodScalingQuality(bool isGPU)
+{
+    return isGPU ? BmpScaleFlag::BestQuality : BmpScaleFlag::Default;
+}
+
 // Normal scaling algorithms have a poor quality when downscaling a lot.
 // https://bugs.chromium.org/p/skia/issues/detail?id=11810 suggests to use mipmaps
 // in such a case, which is annoying to do explicitly instead of Skia deciding which
@@ -156,7 +166,9 @@ inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scalingType, SkMatrix 
                 return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear);
             return SkSamplingOptions(SkCubicResampler::Mitchell());
         case BmpScaleFlag::Default:
-            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kNone);
+            // Use SkMipmapMode::kNearest for better quality when downscaling. SkMipmapMode::kLinear
+            // would be even better, but it is not specially optimized in raster mode.
+            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kNearest);
         case BmpScaleFlag::Fast:
         case BmpScaleFlag::NearestNeighbor:
             return SkSamplingOptions(SkFilterMode::kNearest, SkMipmapMode::kNone);
@@ -179,7 +191,8 @@ inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scalingType, const Siz
                 return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear);
             return SkSamplingOptions(SkCubicResampler::Mitchell());
         case BmpScaleFlag::Default:
-            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kNone);
+            // As in the first overload, use kNearest.
+            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kNearest);
         case BmpScaleFlag::Fast:
         case BmpScaleFlag::NearestNeighbor:
             return SkSamplingOptions(SkFilterMode::kNearest, SkMipmapMode::kNone);
@@ -190,7 +203,7 @@ inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scalingType, const Siz
 }
 
 inline SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry, int scalingFactor,
-                                             int srcScalingFactor = 1)
+                                             int srcScalingFactor, bool isGPU)
 {
     // If there will be scaling, make it smooth, but not in unittests, as those often
     // require exact color values and would be confused by this.
@@ -203,12 +216,7 @@ inline SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry, int scal
     if (srcScalingFactor != 1)
         srcSize *= srcScalingFactor;
     if (srcSize != destSize)
-    {
-        if (srcSize.Width() / destSize.Width() >= downscaleRatioThreshold
-            || srcSize.Height() / destSize.Height() >= downscaleRatioThreshold)
-            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear);
-        return SkSamplingOptions(SkCubicResampler::Mitchell()); // best
-    }
+        return makeSamplingOptions(goodScalingQuality(isGPU), srcSize, destSize, 1);
     return SkSamplingOptions(); // none
 }
 
