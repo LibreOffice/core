@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/asyncnotification.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <mutex>
 #include <condition_variable>
 #include <osl/mutex.hxx>
@@ -231,16 +232,20 @@ namespace comphelper
     {
         // see salhelper::Thread::launch
         xThis->m_xImpl->pKeepThisAlive = xThis;
+        comphelper::ScopeGuard g([&xThis] { xThis->m_xImpl->pKeepThisAlive.reset(); });
         if (!xThis->create()) {
             throw std::runtime_error("osl::Thread::create failed");
         }
+        g.dismiss();
     }
 
     void AsyncEventNotifierAutoJoin::run()
     {
         // see salhelper::Thread::run
+        comphelper::ScopeGuard g([this] { onTerminated(); });
         setName(m_xImpl->name);
         execute();
+        g.dismiss();
     }
 
     void AsyncEventNotifierAutoJoin::onTerminated()
