@@ -95,7 +95,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbLastBrowseMode( false ),
     mbDisableOffPagePositioning ( false ),
     mbHeaderSpacingBelowLastPara(false),
-    mbGutterAtTop(false)
+    mbGutterAtTop(false),
+    mnImagePreferredDPI(0)
 
     // COMPATIBILITY FLAGS END
 {

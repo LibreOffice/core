@@ -166,6 +166,7 @@ class DocumentSettingManager :
     bool mbHeaderSpacingBelowLastPara;
     /// Gutter position: false means left (not a compatibility setting).
     bool mbGutterAtTop;
+    sal_Int32 mnImagePreferredDPI;
 
 public:
 
@@ -186,6 +187,14 @@ public:
     virtual CharCompressType getCharacterCompressionType() const override;
     virtual void setCharacterCompressionType( /*[in]*/CharCompressType nType ) override;
 
+    sal_Int32 getImagePreferredDPI() override
+    {
+         return mnImagePreferredDPI;
+    }
+    void setImagePreferredDPI(sal_Int32 nValue) override
+    {
+         mnImagePreferredDPI = nValue;
+    }
 
 // Replace all compatibility options with those from rSource.
     void ReplaceCompatibilityOptions(const DocumentSettingManager& rSource);
