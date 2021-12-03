@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1031bb11_1b66ade2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-03T14:16:36Z",
+      "side": 1,
+      "message": "which means we then discover some places where we are looking in the wrong .mo then fixed with https://gerrit.libreoffice.org/c/core/+/126318/1",
+      "revId": "96b92a38ffd9b08bb77b6996d6b341a52ef49d14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
