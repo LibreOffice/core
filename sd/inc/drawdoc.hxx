@@ -187,6 +187,8 @@ private:
     bool mbEmbedFontScriptAsian : 1;
     bool mbEmbedFontScriptComplex : 1;
 
+    sal_Int32 mnImagePreferredDPI;
+
     SAL_DLLPRIVATE virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 
 public:
@@ -613,6 +615,9 @@ public:
     SAL_DLLPRIVATE void SetEmbedFontScriptLatin(bool bUse) { mbEmbedFontScriptLatin = bUse; }
     SAL_DLLPRIVATE void SetEmbedFontScriptAsian(bool bUse) { mbEmbedFontScriptAsian = bUse; }
     SAL_DLLPRIVATE void SetEmbedFontScriptComplex(bool bUse) { mbEmbedFontScriptComplex = bUse; }
+
+    sal_Int32 getImagePreferredDPI() { return mnImagePreferredDPI; }
+    void setImagePreferredDPI(sal_Int32 nValue) { mnImagePreferredDPI = nValue; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
