@@ -46,6 +46,30 @@
       },
       "revId": "cd96af570352ff19b1f1a3d006750237eba8ca5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92b2469e_16b5f045",
+        "filename": "dbaccess/source/ui/browser/sbagrid.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-03T07:48:07Z",
+      "side": 1,
+      "message": "Interesting! Maybe it requires function-style initialization for that?",
+      "parentUuid": "f823da54_59151367",
+      "range": {
+        "startLine": 283,
+        "startChar": 48,
+        "endLine": 283,
+        "endChar": 77
+      },
+      "revId": "cd96af570352ff19b1f1a3d006750237eba8ca5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
