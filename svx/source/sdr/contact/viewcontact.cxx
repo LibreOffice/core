@@ -194,7 +194,10 @@ void ViewContact::ActionChanged()
         DBG_ASSERT(pCandidate,
                    "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
 
-        pCandidate->ActionChanged();
+        if (pCandidate)
+        {
+            pCandidate->ActionChanged();
+        }
     }
 }
 
