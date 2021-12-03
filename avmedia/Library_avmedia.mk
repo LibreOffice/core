@@ -16,8 +16,13 @@ $(eval $(call gb_Library_set_include,avmedia,\
 ))
 
 $(eval $(call gb_Library_use_libraries,avmedia,\
+    comphelper \
+    cppu \
+    cppuhelper \
     sal \
     svl \
+    ucbhelper \
+    vcl \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,avmedia,))
@@ -44,16 +49,11 @@ $(eval $(call gb_Library_use_externals,avmedia,\
 $(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
 
 $(eval $(call gb_Library_use_libraries,avmedia,\
-	comphelper \
-	ucbhelper \
-	cppu \
-	cppuhelper \
 	i18nlangtag \
 	sfx \
 	svt \
 	tl \
 	utl \
-	vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmedia,\

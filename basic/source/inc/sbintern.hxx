@@ -104,6 +104,7 @@ struct SbiGlobals
 {
     static SbiGlobals* pGlobals;
     SbiInstance*    pInst;          // all active runtime instances
+#if HAVE_FEATURE_SCRIPTING
     std::unique_ptr<SbiFactory>   pSbFac;    // StarBASIC-Factory
     std::unique_ptr<SbUnoFactory> pUnoFac;   // Factory for Uno-Structs at DIM AS NEW
     std::unique_ptr<SbTypeFactory>
@@ -114,6 +115,8 @@ struct SbiGlobals
                     pOLEFac;        // Factory for OLE types
     std::unique_ptr<SbFormFactory>
                     pFormFac;       // Factory for user forms
+    std::unique_ptr<BasicManager> pAppBasMgr;
+#endif
     SbModule*       pMod;           // currently active module
     SbModule*       pCompMod;       // currently compiled module
     short           nInst;          // number of BASICs
@@ -128,9 +131,6 @@ struct SbiGlobals
     OUString        aErrMsg;        // buffer for GetErrorText()
     std::unique_ptr<::utl::TransliterationWrapper> pTransliterationWrapper;    // For StrComp
     bool            bBlockCompilerError;
-#if HAVE_FEATURE_SCRIPTING
-    std::unique_ptr<BasicManager>   pAppBasMgr;
-#endif
     StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
 
     SbiGlobals();
