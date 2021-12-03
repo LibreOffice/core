@@ -6,9 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#pragma once
 
-#ifndef INCLUDED_DBACCESS_INC_STRINGS_HXX
-#define INCLUDED_DBACCESS_INC_STRINGS_HXX
+#include <rtl/ustring.hxx>
 
 // property names
 
@@ -169,97 +169,109 @@
 
 // service names
 
-#define SERVICE_SDBC_RESULTSET "com.sun.star.sdbc.ResultSet"
-#define SERVICE_SDBC_ROWSET "com.sun.star.sdbc.RowSet"
-#define SERVICE_SDBC_STATEMENT "com.sun.star.sdbc.Statement"
-#define SERVICE_SDBC_PREPAREDSTATEMENT "com.sun.star.sdbc.PreparedStatement"
-#define SERVICE_SDBC_CALLABLESTATEMENT "com.sun.star.sdbc.CallableStatement"
+inline constexpr OUStringLiteral SERVICE_SDBC_RESULTSET = u"com.sun.star.sdbc.ResultSet";
+inline constexpr OUStringLiteral SERVICE_SDBC_ROWSET = u"com.sun.star.sdbc.RowSet";
+inline constexpr OUStringLiteral SERVICE_SDBC_STATEMENT = u"com.sun.star.sdbc.Statement";
+inline constexpr OUStringLiteral SERVICE_SDBC_PREPAREDSTATEMENT
+    = u"com.sun.star.sdbc.PreparedStatement";
+inline constexpr OUStringLiteral SERVICE_SDBC_CALLABLESTATEMENT
+    = u"com.sun.star.sdbc.CallableStatement";
 #define SERVICE_SDBC_CONNECTION "com.sun.star.sdbc.Connection"
-#define SERVICE_SDBCX_CONTAINER "com.sun.star.sdbcx.Container"
-#define SERVICE_SDBCX_TABLE "com.sun.star.sdbcx.Table"
-#define SERVICE_SDBCX_RESULTSET "com.sun.star.sdbcx.ResultSet"
-#define SERVICE_SDB_CONNECTION "com.sun.star.sdb.Connection"
-#define SERVICE_SDBCX_COLUMN "com.sun.star.sdbcx.Column"
-#define SERVICE_SDBCX_COLUMNDESCRIPTOR "com.sun.star.sdbcx.ColumnDescriptor"
-#define SERVICE_SDB_COLUMNSETTINGS "com.sun.star.sdb.ColumnSettings"
-#define SERVICE_SDB_RESULTCOLUMN "com.sun.star.sdb.ResultColumn"
-#define SERVICE_SDB_DATACOLUMN "com.sun.star.sdb.DataColumn"
-#define SERVICE_SDB_DATASOURCE "com.sun.star.sdb.DataSource"
-#define SERVICE_SDB_RESULTSET "com.sun.star.sdb.ResultSet"
-#define SERVICE_SDB_ROWSET "com.sun.star.sdb.RowSet"
-#define SERVICE_SDB_PREPAREDSTATMENT "com.sun.star.sdb.PreparedStatement"
-#define SERVICE_SDB_CALLABLESTATEMENT "com.sun.star.sdb.CallableStatement"
-#define SERVICE_SDB_SQLQUERYCOMPOSER "com.sun.star.sdb.SQLQueryComposer"
-#define SERVICE_SDB_DATASETTINGS "com.sun.star.sdb.DefinitionSettings"
-#define SERVICE_SDB_QUERYDESCRIPTOR "com.sun.star.sdb.QueryDescriptor"
-#define SERVICE_SDB_QUERY "com.sun.star.sdb.Query"
+inline constexpr OUStringLiteral SERVICE_SDBCX_CONTAINER = u"com.sun.star.sdbcx.Container";
+inline constexpr OUStringLiteral SERVICE_SDBCX_TABLE = u"com.sun.star.sdbcx.Table";
+inline constexpr OUStringLiteral SERVICE_SDBCX_RESULTSET = u"com.sun.star.sdbcx.ResultSet";
+inline constexpr OUStringLiteral SERVICE_SDB_CONNECTION = u"com.sun.star.sdb.Connection";
+inline constexpr OUStringLiteral SERVICE_SDBCX_COLUMN = u"com.sun.star.sdbcx.Column";
+inline constexpr OUStringLiteral SERVICE_SDBCX_COLUMNDESCRIPTOR
+    = u"com.sun.star.sdbcx.ColumnDescriptor";
+inline constexpr OUStringLiteral SERVICE_SDB_COLUMNSETTINGS = u"com.sun.star.sdb.ColumnSettings";
+inline constexpr OUStringLiteral SERVICE_SDB_RESULTCOLUMN = u"com.sun.star.sdb.ResultColumn";
+inline constexpr OUStringLiteral SERVICE_SDB_DATACOLUMN = u"com.sun.star.sdb.DataColumn";
+inline constexpr OUStringLiteral SERVICE_SDB_DATASOURCE = u"com.sun.star.sdb.DataSource";
+inline constexpr OUStringLiteral SERVICE_SDB_RESULTSET = u"com.sun.star.sdb.ResultSet";
+inline constexpr OUStringLiteral SERVICE_SDB_ROWSET = u"com.sun.star.sdb.RowSet";
+inline constexpr OUStringLiteral SERVICE_SDB_PREPAREDSTATMENT
+    = u"com.sun.star.sdb.PreparedStatement";
+inline constexpr OUStringLiteral SERVICE_SDB_CALLABLESTATEMENT
+    = u"com.sun.star.sdb.CallableStatement";
+inline constexpr OUStringLiteral SERVICE_SDB_SQLQUERYCOMPOSER
+    = u"com.sun.star.sdb.SQLQueryComposer";
+inline constexpr OUStringLiteral SERVICE_SDB_DATASETTINGS = u"com.sun.star.sdb.DefinitionSettings";
+inline constexpr OUStringLiteral SERVICE_SDB_QUERYDESCRIPTOR = u"com.sun.star.sdb.QueryDescriptor";
+inline constexpr OUStringLiteral SERVICE_SDB_QUERY = u"com.sun.star.sdb.Query";
 #define SERVICE_SDBCX_COLUMNS "com.sun.star.sdbcx.Columns"
-#define SERVICE_SDBCX_TABLES "com.sun.star.sdbcx.Tables"
-#define SERVICE_SDB_QUERIES "com.sun.star.sdb.Queries"
+inline constexpr OUStringLiteral SERVICE_SDBCX_TABLES = u"com.sun.star.sdbcx.Tables";
+inline constexpr OUStringLiteral SERVICE_SDB_QUERIES = u"com.sun.star.sdb.Queries";
 #define SERVICE_SDBCX_INDEXCOLUMN "com.sun.star.sdbcx.IndexColumn"
 #define SERVICE_SDBCX_KEYCOLUMN "com.sun.star.sdbcx.KeyColumn"
-#define SERVICE_SDB_DOCUMENTDEFINITION "com.sun.star.sdb.DocumentDefinition"
+inline constexpr OUStringLiteral SERVICE_SDB_DOCUMENTDEFINITION
+    = u"com.sun.star.sdb.DocumentDefinition";
 #define SERVICE_NAME_FORM "com.sun.star.sdb.Form"
-#define SERVICE_NAME_FORM_COLLECTION "com.sun.star.sdb.Forms"
+inline constexpr OUStringLiteral SERVICE_NAME_FORM_COLLECTION = u"com.sun.star.sdb.Forms";
 #define SERVICE_NAME_REPORT "com.sun.star.sdb.Report"
-#define SERVICE_NAME_REPORT_COLLECTION "com.sun.star.sdb.Reports"
-#define SERVICE_NAME_QUERY_COLLECTION "com.sun.star.sdb.Queries"
+inline constexpr OUStringLiteral SERVICE_NAME_REPORT_COLLECTION = u"com.sun.star.sdb.Reports";
+inline constexpr OUStringLiteral SERVICE_NAME_QUERY_COLLECTION = u"com.sun.star.sdb.Queries";
 #define SERVICE_NAME_TABLE_COLLECTION "com.sun.star.sdb.Tables"
-#define SERVICE_NAME_SINGLESELECTQUERYCOMPOSER "com.sun.star.sdb.SingleSelectQueryComposer"
-#define SERVICE_SDB_APPLICATIONCONTROLLER "org.openoffice.comp.dbu.OApplicationController"
+inline constexpr OUStringLiteral SERVICE_NAME_SINGLESELECTQUERYCOMPOSER
+    = u"com.sun.star.sdb.SingleSelectQueryComposer";
+inline constexpr OUStringLiteral SERVICE_SDB_APPLICATIONCONTROLLER
+    = u"org.openoffice.comp.dbu.OApplicationController";
 
 // info properties
-#define INFO_JDBCDRIVERCLASS "JavaDriverClass"
-#define INFO_TEXTFILEEXTENSION "Extension"
-#define INFO_CHARSET "CharSet"
-#define INFO_TEXTFILEHEADER "HeaderLine"
-#define INFO_FIELDDELIMITER "FieldDelimiter"
-#define INFO_TEXTDELIMITER "StringDelimiter"
-#define INFO_DECIMALDELIMITER "DecimalDelimiter"
-#define INFO_THOUSANDSDELIMITER "ThousandDelimiter"
-#define INFO_SHOWDELETEDROWS "ShowDeleted"
-#define INFO_ALLOWLONGTABLENAMES "NoNameLengthLimit"
-#define INFO_ADDITIONALOPTIONS "SystemDriverSettings"
-#define INFO_AUTORETRIEVEVALUE "AutoRetrievingStatement"
-#define INFO_AUTORETRIEVEENABLED "IsAutoRetrievingEnabled"
-#define INFO_APPEND_TABLE_ALIAS "AppendTableAliasName"
-#define INFO_AS_BEFORE_CORRELATION_NAME "GenerateASBeforeCorrelationName"
-#define INFO_FORMS_CHECK_REQUIRED_FIELDS "FormsCheckRequiredFields"
-#define INFO_PARAMETERNAMESUBST "ParameterNameSubstitution"
-#define INFO_IGNOREDRIVER_PRIV "IgnoreDriverPrivileges"
-#define INFO_USECATALOG "UseCatalog"
-#define INFO_CONN_LDAP_BASEDN "BaseDN"
-#define INFO_CONN_LDAP_ROWCOUNT "MaxRowCount"
-#define INFO_PREVIEW "Preview"
-#define INFO_MEDIATYPE "MediaType"
-#define INFO_ESCAPE_DATETIME "EscapeDateTime"
+inline constexpr OUStringLiteral INFO_JDBCDRIVERCLASS = u"JavaDriverClass";
+inline constexpr OUStringLiteral INFO_TEXTFILEEXTENSION = u"Extension";
+inline constexpr OUStringLiteral INFO_CHARSET = u"CharSet";
+inline constexpr OUStringLiteral INFO_TEXTFILEHEADER = u"HeaderLine";
+inline constexpr OUStringLiteral INFO_FIELDDELIMITER = u"FieldDelimiter";
+inline constexpr OUStringLiteral INFO_TEXTDELIMITER = u"StringDelimiter";
+inline constexpr OUStringLiteral INFO_DECIMALDELIMITER = u"DecimalDelimiter";
+inline constexpr OUStringLiteral INFO_THOUSANDSDELIMITER = u"ThousandDelimiter";
+inline constexpr OUStringLiteral INFO_SHOWDELETEDROWS = u"ShowDeleted";
+inline constexpr OUStringLiteral INFO_ALLOWLONGTABLENAMES = u"NoNameLengthLimit";
+inline constexpr OUStringLiteral INFO_ADDITIONALOPTIONS = u"SystemDriverSettings";
+inline constexpr OUStringLiteral INFO_AUTORETRIEVEVALUE = u"AutoRetrievingStatement";
+inline constexpr OUStringLiteral INFO_AUTORETRIEVEENABLED = u"IsAutoRetrievingEnabled";
+inline constexpr OUStringLiteral INFO_APPEND_TABLE_ALIAS = u"AppendTableAliasName";
+inline constexpr OUStringLiteral INFO_AS_BEFORE_CORRELATION_NAME
+    = u"GenerateASBeforeCorrelationName";
+inline constexpr OUStringLiteral INFO_FORMS_CHECK_REQUIRED_FIELDS = u"FormsCheckRequiredFields";
+inline constexpr OUStringLiteral INFO_PARAMETERNAMESUBST = u"ParameterNameSubstitution";
+inline constexpr OUStringLiteral INFO_IGNOREDRIVER_PRIV = u"IgnoreDriverPrivileges";
+inline constexpr OUStringLiteral INFO_USECATALOG = u"UseCatalog";
+inline constexpr OUStringLiteral INFO_CONN_LDAP_BASEDN = u"BaseDN";
+inline constexpr OUStringLiteral INFO_CONN_LDAP_ROWCOUNT = u"MaxRowCount";
+inline constexpr OUStringLiteral INFO_PREVIEW = u"Preview";
+inline constexpr OUStringLiteral INFO_MEDIATYPE = u"MediaType";
+inline constexpr OUStringLiteral INFO_ESCAPE_DATETIME = u"EscapeDateTime";
 
 // other
-#define INFO_POOLURL "PoolURL"
+inline constexpr OUStringLiteral INFO_POOLURL = u"PoolURL";
 #define URL_INTERACTIVE "Interactive"
 
 // URLs
 
-#define URL_COMPONENT_QUERYDESIGN ".component:DB/QueryDesign"
-#define URL_COMPONENT_VIEWDESIGN ".component:DB/ViewDesign"
-#define URL_COMPONENT_TABLEDESIGN ".component:DB/TableDesign"
-#define URL_COMPONENT_FORMGRIDVIEW ".component:DB/FormGridView"
-#define URL_COMPONENT_DATASOURCEBROWSER ".component:DB/DataSourceBrowser"
-#define URL_COMPONENT_RELATIONDESIGN ".component:DB/RelationDesign"
+inline constexpr OUStringLiteral URL_COMPONENT_QUERYDESIGN = u".component:DB/QueryDesign";
+inline constexpr OUStringLiteral URL_COMPONENT_VIEWDESIGN = u".component:DB/ViewDesign";
+inline constexpr OUStringLiteral URL_COMPONENT_TABLEDESIGN = u".component:DB/TableDesign";
+inline constexpr OUStringLiteral URL_COMPONENT_FORMGRIDVIEW = u".component:DB/FormGridView";
+inline constexpr OUStringLiteral URL_COMPONENT_DATASOURCEBROWSER
+    = u".component:DB/DataSourceBrowser";
+inline constexpr OUStringLiteral URL_COMPONENT_RELATIONDESIGN = u".component:DB/RelationDesign";
 #define URL_COMPONENT_APPLICATION ".component:DB/Application"
 #define URL_COMPONENT_REPORTDESIGN ".component:DB/ReportDesign"
 
 // service names
 
-#define SERVICE_SDB_DIRECTSQLDIALOG "org.openoffice.comp.dbu.DirectSqlDialog"
+inline constexpr OUStringLiteral SERVICE_SDB_DIRECTSQLDIALOG
+    = u"org.openoffice.comp.dbu.DirectSqlDialog";
 
 // other DBU relevant strings
 
-#define FRAME_NAME_QUERY_PREVIEW "QueryPreview"
-#define SERVICE_CONTROLDEFAULT "com.sun.star.comp.dbu.OColumnControl"
 #define PROPERTY_QUERYDESIGNVIEW "QueryDesignView"
 #define PROPERTY_GRAPHICAL_DESIGN "GraphicalDesign"
 #define PROPERTY_HELP_URL "HelpURL"
+inline constexpr OUStringLiteral FRAME_NAME_QUERY_PREVIEW = u"QueryPreview";
+inline constexpr OUStringLiteral SERVICE_CONTROLDEFAULT = u"com.sun.star.comp.dbu.OColumnControl";
 
 // other DBU properties
 
@@ -270,14 +282,12 @@
 #define PROPERTY_ENABLED "Enabled"
 #define PROPERTY_MOUSE_WHEEL_BEHAVIOR "MouseWheelBehavior"
 
-#define SQLSTATE_GENERAL "01000"
+inline constexpr OUStringLiteral SQLSTATE_GENERAL = u"01000";
 
 #define PROPERTY_APPLYFORMDESIGNMODE "ApplyFormDesignMode"
 #define PROPERTY_IS_FORM "IsForm"
 #define PROPERTY_PERSISTENT_PATH "PersistentPath"
 
-#define STR_AUTOTEXTSEPARATORLIST "\"\t34\t'\t39"
-
-#endif
+inline constexpr OUStringLiteral STR_AUTOTEXTSEPARATORLIST = u"\"\t34\t'\t39";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
