@@ -46,6 +46,9 @@ protected:
     // ObjectContact. Always needs to return something.
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
+    // Override and add object embedding information
+    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+
 public:
     // access to SdrObject
     SdrObject& GetSdrObject() const
@@ -77,7 +80,7 @@ public:
     // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
     // is a helper normally used from getViewIndependentPrimitive2DContainer(), but there is one exception
     // for 3D scenes
-    virtual drawinglayer::primitive2d::Primitive2DContainer embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer aSource) const override;
+    drawinglayer::primitive2d::Primitive2DContainer embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer aSource) const;
 };
 
 }

@@ -223,16 +223,8 @@ ViewContact::createViewIndependentPrimitive2DSequence() const
 drawinglayer::primitive2d::Primitive2DContainer
 ViewContact::getViewIndependentPrimitive2DContainer() const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xNew(
-        createViewIndependentPrimitive2DSequence());
-
-    if (!xNew.empty())
-    {
-        // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
-        xNew = embedToObjectSpecificInformation(std::move(xNew));
-    }
-
-    return xNew;
+    // TODO this method can be removed and callers can just call createViewIndependentPrimitive2DSequence
+    return createViewIndependentPrimitive2DSequence();
 }
 
 // add Gluepoints (if available)
@@ -241,13 +233,6 @@ ViewContact::createGluePointPrimitive2DSequence() const
 {
     // default returns empty reference
     return drawinglayer::primitive2d::Primitive2DContainer();
-}
-
-drawinglayer::primitive2d::Primitive2DContainer ViewContact::embedToObjectSpecificInformation(
-    drawinglayer::primitive2d::Primitive2DContainer aSource) const
-{
-    // nothing to do for default
-    return aSource;
 }
 
 basegfx::B2DRange
