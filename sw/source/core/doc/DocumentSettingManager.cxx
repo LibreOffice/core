@@ -103,7 +103,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbHeaderSpacingBelowLastPara(false),
     mbFrameAutowidthWithMorePara(false),
     mbGutterAtTop(false),
-    mbFootnoteInColumnToPageEnd(false)
+    mbFootnoteInColumnToPageEnd(false),
+    mnImagePreferredDPI(0)
 
     // COMPATIBILITY FLAGS END
 {
@@ -1007,6 +1008,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbFootnoteInColumnToPageEnd"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbFootnoteInColumnToPageEnd).getStr()));
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mnImagePreferredDPI"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::number(mnImagePreferredDPI).getStr()));
+
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
