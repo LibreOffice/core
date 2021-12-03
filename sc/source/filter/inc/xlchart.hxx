@@ -37,114 +37,114 @@ class XclRoot;
 // Property names =============================================================
 
 // service names
-#define SERVICE_DRAWING_BITMAPTABLE         "com.sun.star.drawing.BitmapTable"
-#define SERVICE_DRAWING_DASHTABLE           "com.sun.star.drawing.DashTable"
-#define SERVICE_DRAWING_GRADIENTTABLE       "com.sun.star.drawing.GradientTable"
-#define SERVICE_DRAWING_HATCHTABLE          "com.sun.star.drawing.HatchTable"
+inline constexpr OUStringLiteral SERVICE_DRAWING_BITMAPTABLE = u"com.sun.star.drawing.BitmapTable";
+inline constexpr OUStringLiteral SERVICE_DRAWING_DASHTABLE = u"com.sun.star.drawing.DashTable";
+inline constexpr OUStringLiteral SERVICE_DRAWING_GRADIENTTABLE = u"com.sun.star.drawing.GradientTable";
+inline constexpr OUStringLiteral SERVICE_DRAWING_HATCHTABLE = u"com.sun.star.drawing.HatchTable";
 
-#define SERVICE_CHART2_AXIS                 "com.sun.star.chart2.Axis"
-#define SERVICE_CHART2_DATAPROVIDER         "com.sun.star.chart2.data.DataProvider"
-#define SERVICE_CHART2_DATASERIES           "com.sun.star.chart2.DataSeries"
-#define SERVICE_CHART2_DIAGRAM              "com.sun.star.chart2.Diagram"
-#define SERVICE_CHART2_ERRORBAR             "com.sun.star.chart2.ErrorBar"
-#define SERVICE_CHART2_LEGEND               "com.sun.star.chart2.Legend"
-#define SERVICE_CHART2_TITLE                "com.sun.star.chart2.Title"
+inline constexpr OUStringLiteral SERVICE_CHART2_AXIS = u"com.sun.star.chart2.Axis";
+inline constexpr OUStringLiteral SERVICE_CHART2_DATAPROVIDER = u"com.sun.star.chart2.data.DataProvider";
+inline constexpr OUStringLiteral SERVICE_CHART2_DATASERIES = u"com.sun.star.chart2.DataSeries";
+inline constexpr OUStringLiteral SERVICE_CHART2_DIAGRAM = u"com.sun.star.chart2.Diagram";
+inline constexpr OUStringLiteral SERVICE_CHART2_ERRORBAR = u"com.sun.star.chart2.ErrorBar";
+inline constexpr OUStringLiteral SERVICE_CHART2_LEGEND = u"com.sun.star.chart2.Legend";
+inline constexpr OUStringLiteral SERVICE_CHART2_TITLE = u"com.sun.star.chart2.Title";
 
 // property names
-#define EXC_CHPROP_ADDITIONALSHAPES         "AdditionalShapes"
-#define EXC_CHPROP_ANCHORPOSITION           "AnchorPosition"
-#define EXC_CHPROP_ARRANGEORDER             "ArrangeOrder"
-#define EXC_CHPROP_ATTAXISINDEX             "AttachedAxisIndex"
-#define EXC_CHPROP_ATTRIBDATAPOINTS         "AttributedDataPoints"
-#define EXC_CHPROP_BLACKDAY                 "BlackDay"
-#define EXC_CHPROP_COLOR                    "Color"
-#define EXC_CHPROP_CONNECTBARS              "ConnectBars"
-#define EXC_CHPROP_CROSSOVERPOSITION        "CrossoverPosition"
-#define EXC_CHPROP_CROSSOVERVALUE           "CrossoverValue"
-#define EXC_CHPROP_CURVESTYLE               "CurveStyle"
-#define EXC_CHPROP_CURVENAME                "CurveName"
-#define EXC_CHPROP_D3DSCENEAMBIENTCOLOR     "D3DSceneAmbientColor"
-#define EXC_CHPROP_D3DSCENELIGHTON1         "D3DSceneLightOn1"
-#define EXC_CHPROP_D3DSCENELIGHTCOLOR2      "D3DSceneLightColor2"
-#define EXC_CHPROP_D3DSCENELIGHTDIR2        "D3DSceneLightDirection2"
-#define EXC_CHPROP_D3DSCENELIGHTON2         "D3DSceneLightOn2"
-#define EXC_CHPROP_D3DSCENEPERSPECTIVE      "D3DScenePerspective"
-#define EXC_CHPROP_D3DSCENESHADEMODE        "D3DSceneShadeMode"
-#define EXC_CHPROP_DISPLAYLABELS            "DisplayLabels"
-#define EXC_CHPROP_ERRORBARSTYLE            "ErrorBarStyle"
-#define EXC_CHPROP_ERRORBARX                "ErrorBarX"
-#define EXC_CHPROP_ERRORBARY                "ErrorBarY"
-#define EXC_CHPROP_EXPANSION                "Expansion"
-#define EXC_CHPROP_EXPTIMEINCREMENT         "ExplicitTimeIncrement"
-#define EXC_CHPROP_EXTRAPOLATE_FORWARD      "ExtrapolateForward"
-#define EXC_CHPROP_EXTRAPOLATE_BACKWARD     "ExtrapolateBackward"
-#define EXC_CHPROP_FORCE_INTERCEPT          "ForceIntercept"
-#define EXC_CHPROP_GAPWIDTHSEQ              "GapwidthSequence"
-#define EXC_CHPROP_GEOMETRY3D               "Geometry3D"
-#define EXC_CHPROP_INCLUDEHIDDENCELLS       "IncludeHiddenCells"
-#define EXC_CHPROP_INTERCEPT_VALUE          "InterceptValue"
-#define EXC_CHPROP_JAPANESE                 "Japanese"
-#define EXC_CHPROP_LABEL                    "Label"
-#define EXC_CHPROP_LABELPLACEMENT           "LabelPlacement"
-#define EXC_CHPROP_LABELPOSITION            "LabelPosition"
-#define EXC_CHPROP_LABELSEPARATOR           "LabelSeparator"
-#define EXC_CHPROP_SHOWLEGENDENTRY          "ShowLegendEntry"
-#define EXC_CHPROP_MAJORTICKS               "MajorTickmarks"
-#define EXC_CHPROP_MARKPOSITION             "MarkPosition"
-#define EXC_CHPROP_MINORTICKS               "MinorTickmarks"
-#define EXC_CHPROP_MISSINGVALUETREATMENT    "MissingValueTreatment"
-#define EXC_CHPROP_MOVING_AVERAGE_PERIOD    "MovingAveragePeriod"
-#define EXC_CHPROP_NEGATIVEERROR            "NegativeError"
-#define EXC_CHPROP_NUMBERFORMAT             "NumberFormat"
-#define EXC_CHPROP_NUMBERFORMAT_LINKSRC     "LinkNumberFormatToSource"
-#define EXC_CHPROP_OFFSET                   "Offset"
-#define EXC_CHPROP_OVERLAPSEQ               "OverlapSequence"
-#define EXC_CHPROP_PERCENTAGENUMFMT         "PercentageNumberFormat"
-#define EXC_CHPROP_PERCENTDIAGONAL          "PercentDiagonal"
-#define EXC_CHPROP_PERSPECTIVE              "Perspective"
-#define EXC_CHPROP_POSITIVEERROR            "PositiveError"
-#define EXC_CHPROP_POLYNOMIAL_DEGREE        "PolynomialDegree"
-#define EXC_CHPROP_RELATIVEPOSITION         "RelativePosition"
-#define EXC_CHPROP_RELATIVESIZE             "RelativeSize"
-#define EXC_CHPROP_RIGHTANGLEDAXES          "RightAngledAxes"
-#define EXC_CHPROP_ROLE                     "Role"
-#define EXC_CHPROP_ROTATIONHORIZONTAL       "RotationHorizontal"
-#define EXC_CHPROP_ROTATIONVERTICAL         "RotationVertical"
-#define EXC_CHPROP_3DRELATIVEHEIGHT         "3DRelativeHeight"
-#define EXC_CHPROP_SHOW                     "Show"
-#define EXC_CHPROP_SHOWCORRELATION          "ShowCorrelationCoefficient"
-#define EXC_CHPROP_SHOWEQUATION             "ShowEquation"
-#define EXC_CHPROP_SHOWFIRST                "ShowFirst"
-#define EXC_CHPROP_SHOWHIGHLOW              "ShowHighLow"
-#define EXC_CHPROP_SHOWNEGATIVEERROR        "ShowNegativeError"
-#define EXC_CHPROP_SHOWPOSITIVEERROR        "ShowPositiveError"
-#define EXC_CHPROP_STACKCHARACTERS          "StackCharacters"
-#define EXC_CHPROP_STACKINGDIR              "StackingDirection"
-#define EXC_CHPROP_STARTINGANGLE            "StartingAngle"
-#define EXC_CHPROP_SWAPXANDYAXIS            "SwapXAndYAxis"
-#define EXC_CHPROP_SYMBOL                   "Symbol"
-#define EXC_CHPROP_TEXTBREAK                "TextBreak"
-#define EXC_CHPROP_TEXTOVERLAP              "TextOverlap"
-#define EXC_CHPROP_TEXTROTATION             "TextRotation"
-#define EXC_CHPROP_USERINGS                 "UseRings"
-#define EXC_CHPROP_VARYCOLORSBY             "VaryColorsByPoint"
-#define EXC_CHPROP_WEIGHT                   "Weight"
-#define EXC_CHPROP_WHITEDAY                 "WhiteDay"
+inline constexpr OUStringLiteral EXC_CHPROP_ADDITIONALSHAPES = u"AdditionalShapes";
+inline constexpr OUStringLiteral EXC_CHPROP_ANCHORPOSITION = u"AnchorPosition";
+inline constexpr OUStringLiteral EXC_CHPROP_ARRANGEORDER = u"ArrangeOrder";
+inline constexpr OUStringLiteral EXC_CHPROP_ATTAXISINDEX = u"AttachedAxisIndex";
+inline constexpr OUStringLiteral EXC_CHPROP_ATTRIBDATAPOINTS = u"AttributedDataPoints";
+inline constexpr OUStringLiteral EXC_CHPROP_BLACKDAY = u"BlackDay";
+inline constexpr OUStringLiteral EXC_CHPROP_COLOR = u"Color";
+inline constexpr OUStringLiteral EXC_CHPROP_CONNECTBARS = u"ConnectBars";
+inline constexpr OUStringLiteral EXC_CHPROP_CROSSOVERPOSITION = u"CrossoverPosition";
+inline constexpr OUStringLiteral EXC_CHPROP_CROSSOVERVALUE = u"CrossoverValue";
+inline constexpr OUStringLiteral EXC_CHPROP_CURVESTYLE = u"CurveStyle";
+inline constexpr OUStringLiteral EXC_CHPROP_CURVENAME = u"CurveName";
+inline constexpr OUStringLiteral EXC_CHPROP_D3DSCENEAMBIENTCOLOR = u"D3DSceneAmbientColor";
+inline constexpr OUStringLiteral EXC_CHPROP_D3DSCENELIGHTON1 = u"D3DSceneLightOn1";
+inline constexpr OUStringLiteral EXC_CHPROP_D3DSCENELIGHTCOLOR2 = u"D3DSceneLightColor2";
+inline constexpr OUStringLiteral EXC_CHPROP_D3DSCENELIGHTDIR2 = u"D3DSceneLightDirection2";
+inline constexpr OUStringLiteral EXC_CHPROP_D3DSCENELIGHTON2 = u"D3DSceneLightOn2";
+inline constexpr OUStringLiteral EXC_CHPROP_D3DSCENEPERSPECTIVE = u"D3DScenePerspective";
+inline constexpr OUStringLiteral EXC_CHPROP_D3DSCENESHADEMODE = u"D3DSceneShadeMode";
+inline constexpr OUStringLiteral EXC_CHPROP_DISPLAYLABELS = u"DisplayLabels";
+inline constexpr OUStringLiteral EXC_CHPROP_ERRORBARSTYLE = u"ErrorBarStyle";
+inline constexpr OUStringLiteral EXC_CHPROP_ERRORBARX = u"ErrorBarX";
+inline constexpr OUStringLiteral EXC_CHPROP_ERRORBARY = u"ErrorBarY";
+inline constexpr OUStringLiteral EXC_CHPROP_EXPANSION = u"Expansion";
+inline constexpr OUStringLiteral EXC_CHPROP_EXPTIMEINCREMENT = u"ExplicitTimeIncrement";
+inline constexpr OUStringLiteral EXC_CHPROP_EXTRAPOLATE_FORWARD = u"ExtrapolateForward";
+inline constexpr OUStringLiteral EXC_CHPROP_EXTRAPOLATE_BACKWARD = u"ExtrapolateBackward";
+inline constexpr OUStringLiteral EXC_CHPROP_FORCE_INTERCEPT = u"ForceIntercept";
+inline constexpr OUStringLiteral EXC_CHPROP_GAPWIDTHSEQ = u"GapwidthSequence";
+inline constexpr OUStringLiteral EXC_CHPROP_GEOMETRY3D = u"Geometry3D";
+inline constexpr OUStringLiteral EXC_CHPROP_INCLUDEHIDDENCELLS = u"IncludeHiddenCells";
+inline constexpr OUStringLiteral EXC_CHPROP_INTERCEPT_VALUE = u"InterceptValue";
+inline constexpr OUStringLiteral EXC_CHPROP_JAPANESE = u"Japanese";
+inline constexpr OUStringLiteral EXC_CHPROP_LABEL = u"Label";
+inline constexpr OUStringLiteral EXC_CHPROP_LABELPLACEMENT = u"LabelPlacement";
+inline constexpr OUStringLiteral EXC_CHPROP_LABELPOSITION = u"LabelPosition";
+inline constexpr OUStringLiteral EXC_CHPROP_LABELSEPARATOR = u"LabelSeparator";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOWLEGENDENTRY = u"ShowLegendEntry";
+inline constexpr OUStringLiteral EXC_CHPROP_MAJORTICKS = u"MajorTickmarks";
+inline constexpr OUStringLiteral EXC_CHPROP_MARKPOSITION = u"MarkPosition";
+inline constexpr OUStringLiteral EXC_CHPROP_MINORTICKS = u"MinorTickmarks";
+inline constexpr OUStringLiteral EXC_CHPROP_MISSINGVALUETREATMENT = u"MissingValueTreatment";
+inline constexpr OUStringLiteral EXC_CHPROP_MOVING_AVERAGE_PERIOD = u"MovingAveragePeriod";
+inline constexpr OUStringLiteral EXC_CHPROP_NEGATIVEERROR = u"NegativeError";
+inline constexpr OUStringLiteral EXC_CHPROP_NUMBERFORMAT = u"NumberFormat";
+inline constexpr OUStringLiteral EXC_CHPROP_NUMBERFORMAT_LINKSRC = u"LinkNumberFormatToSource";
+inline constexpr OUStringLiteral EXC_CHPROP_OFFSET = u"Offset";
+inline constexpr OUStringLiteral EXC_CHPROP_OVERLAPSEQ = u"OverlapSequence";
+inline constexpr OUStringLiteral EXC_CHPROP_PERCENTAGENUMFMT = u"PercentageNumberFormat";
+inline constexpr OUStringLiteral EXC_CHPROP_PERCENTDIAGONAL = u"PercentDiagonal";
+inline constexpr OUStringLiteral EXC_CHPROP_PERSPECTIVE = u"Perspective";
+inline constexpr OUStringLiteral EXC_CHPROP_POSITIVEERROR = u"PositiveError";
+inline constexpr OUStringLiteral EXC_CHPROP_POLYNOMIAL_DEGREE = u"PolynomialDegree";
+inline constexpr OUStringLiteral EXC_CHPROP_RELATIVEPOSITION = u"RelativePosition";
+inline constexpr OUStringLiteral EXC_CHPROP_RELATIVESIZE = u"RelativeSize";
+inline constexpr OUStringLiteral EXC_CHPROP_RIGHTANGLEDAXES = u"RightAngledAxes";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE = u"Role";
+inline constexpr OUStringLiteral EXC_CHPROP_ROTATIONHORIZONTAL = u"RotationHorizontal";
+inline constexpr OUStringLiteral EXC_CHPROP_ROTATIONVERTICAL = u"RotationVertical";
+inline constexpr OUStringLiteral EXC_CHPROP_3DRELATIVEHEIGHT = u"3DRelativeHeight";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOW = u"Show";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOWCORRELATION = u"ShowCorrelationCoefficient";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOWEQUATION = u"ShowEquation";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOWFIRST = u"ShowFirst";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOWHIGHLOW = u"ShowHighLow";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOWNEGATIVEERROR = u"ShowNegativeError";
+inline constexpr OUStringLiteral EXC_CHPROP_SHOWPOSITIVEERROR = u"ShowPositiveError";
+inline constexpr OUStringLiteral EXC_CHPROP_STACKCHARACTERS = u"StackCharacters";
+inline constexpr OUStringLiteral EXC_CHPROP_STACKINGDIR = u"StackingDirection";
+inline constexpr OUStringLiteral EXC_CHPROP_STARTINGANGLE = u"StartingAngle";
+inline constexpr OUStringLiteral EXC_CHPROP_SWAPXANDYAXIS = u"SwapXAndYAxis";
+inline constexpr OUStringLiteral EXC_CHPROP_SYMBOL = u"Symbol";
+inline constexpr OUStringLiteral EXC_CHPROP_TEXTBREAK = u"TextBreak";
+inline constexpr OUStringLiteral EXC_CHPROP_TEXTOVERLAP = u"TextOverlap";
+inline constexpr OUStringLiteral EXC_CHPROP_TEXTROTATION = u"TextRotation";
+inline constexpr OUStringLiteral EXC_CHPROP_USERINGS = u"UseRings";
+inline constexpr OUStringLiteral EXC_CHPROP_VARYCOLORSBY = u"VaryColorsByPoint";
+inline constexpr OUStringLiteral EXC_CHPROP_WEIGHT = u"Weight";
+inline constexpr OUStringLiteral EXC_CHPROP_WHITEDAY = u"WhiteDay";
 
 // data series roles
-#define EXC_CHPROP_ROLE_CATEG               u"categories"
-#define EXC_CHPROP_ROLE_ERRORBARS_NEGX      u"error-bars-x-negative"
-#define EXC_CHPROP_ROLE_ERRORBARS_NEGY      u"error-bars-y-negative"
-#define EXC_CHPROP_ROLE_ERRORBARS_POSX      u"error-bars-x-positive"
-#define EXC_CHPROP_ROLE_ERRORBARS_POSY      u"error-bars-y-positive"
-#define EXC_CHPROP_ROLE_LABEL               u"label"
-#define EXC_CHPROP_ROLE_XVALUES             u"values-x"
-#define EXC_CHPROP_ROLE_YVALUES             u"values-y"
-#define EXC_CHPROP_ROLE_OPENVALUES          u"values-first"
-#define EXC_CHPROP_ROLE_CLOSEVALUES         u"values-last"
-#define EXC_CHPROP_ROLE_LOWVALUES           u"values-min"
-#define EXC_CHPROP_ROLE_HIGHVALUES          u"values-max"
-#define EXC_CHPROP_ROLE_SIZEVALUES          u"values-size"
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_CATEG = u"categories";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_ERRORBARS_NEGX = u"error-bars-x-negative";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_ERRORBARS_NEGY = u"error-bars-y-negative";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_ERRORBARS_POSX = u"error-bars-x-positive";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_ERRORBARS_POSY = u"error-bars-y-positive";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_LABEL = u"label";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_XVALUES = u"values-x";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_YVALUES = u"values-y";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_OPENVALUES = u"values-first";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_CLOSEVALUES = u"values-last";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_LOWVALUES = u"values-min";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_HIGHVALUES = u"values-max";
+inline constexpr OUStringLiteral EXC_CHPROP_ROLE_SIZEVALUES = u"values-size";
 
 // Constants and Enumerations =================================================
 

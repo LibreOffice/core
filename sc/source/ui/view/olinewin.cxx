@@ -603,16 +603,16 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
-const std::u16string_view aLevelBmps[]=
+constexpr rtl::OUStringConstExpr aLevelBmps[]=
 {
-    u"" RID_BMP_LEVEL1,
-    u"" RID_BMP_LEVEL2,
-    u"" RID_BMP_LEVEL3,
-    u"" RID_BMP_LEVEL4,
-    u"" RID_BMP_LEVEL5,
-    u"" RID_BMP_LEVEL6,
-    u"" RID_BMP_LEVEL7,
-    u"" RID_BMP_LEVEL8
+    RID_BMP_LEVEL1,
+    RID_BMP_LEVEL2,
+    RID_BMP_LEVEL3,
+    RID_BMP_LEVEL4,
+    RID_BMP_LEVEL5,
+    RID_BMP_LEVEL6,
+    RID_BMP_LEVEL7,
+    RID_BMP_LEVEL8
 };
 
 void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
