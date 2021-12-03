@@ -163,6 +163,11 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::createGlueP
     return xRetval;
 }
 
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::createViewIndependentPrimitive2DSequence() const
+{
+    return embedToObjectSpecificInformation(ViewContact::createViewIndependentPrimitive2DSequence());
+}
+
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer aSource) const
 {
     if(!aSource.empty() &&

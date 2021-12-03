@@ -124,14 +124,6 @@ public:
     virtual drawinglayer::primitive2d::Primitive2DContainer
     createGluePointPrimitive2DSequence() const;
 
-    // Allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
-    // is a helper normally used from getViewIndependentPrimitive2DContainer(), but there is one exception
-    // for 3D scenes.
-    // We take the param by value, since, for the common case, we can just std::move into the param, and
-    // std::move the result out, avoiding copying.
-    virtual drawinglayer::primitive2d::Primitive2DContainer
-    embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer rSource) const;
-
     virtual basegfx::B2DRange
     getRange(const drawinglayer::geometry::ViewInformation2D& rViewInfo2D) const;
 
