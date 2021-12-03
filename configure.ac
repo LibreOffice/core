@@ -9055,6 +9055,24 @@ else
     AC_MSG_RESULT([no])
 fi
 
+dnl ==================================================================
+dnl libfuzzer
+dnl ==================================================================
+AC_MSG_CHECKING([whether to enable fuzzers])
+if test "$enable_fuzzers" != yes; then
+    AC_MSG_RESULT([no])
+else
+    if test -z $LIB_FUZZING_ENGINE; then
+      AC_MSG_ERROR(['LIB_FUZZING_ENGINE' must be set when using --enable-fuzzers. Examples include '-fsanitize=fuzzer'.])
+    fi
+    AC_MSG_RESULT([yes])
+    ENABLE_FUZZERS="TRUE"
+    AC_DEFINE([ENABLE_FUZZERS],1)
+    BUILD_TYPE="$BUILD_TYPE FUZZERS"
+fi
+AC_SUBST(LIB_FUZZING_ENGINE)
+AC_SUBST(ENABLE_FUZZERS)
+
 dnl ===================================================================
 dnl Check for system zlib
 dnl ===================================================================
@@ -9563,7 +9581,7 @@ else
         LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/win32/bin.msvc/libxml2.lib"
     else
         LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/libxml2/.libs -lxml2"
-        if test "$DISABLE_DYNLOADING" = TRUE; then
+        if test "$DISABLE_DYNLOADING" = TRUE -a "$ENABLE_FUZZERS" != "TRUE"; then
             LIBXML_LIBS="$LIBXML_LIBS -lm"
         fi
     fi
@@ -10683,24 +10701,6 @@ else
 fi
 AC_SUBST(ENABLE_BREAKPAD)
 AC_SUBST(DEFAULT_CRASHDUMP_VALUE)
-
-dnl ==================================================================
-dnl libfuzzer
-dnl ==================================================================
-AC_MSG_CHECKING([whether to enable fuzzers])
-if test "$enable_fuzzers" != yes; then
-    AC_MSG_RESULT([no])
-else
-    if test -z $LIB_FUZZING_ENGINE; then
-      AC_MSG_ERROR(['LIB_FUZZING_ENGINE' must be set when using --enable-fuzzers. Examples include '-fsanitize=fuzzer'.])
-    fi
-    AC_MSG_RESULT([yes])
-    ENABLE_FUZZERS="TRUE"
-    AC_DEFINE([ENABLE_FUZZERS],1)
-    BUILD_TYPE="$BUILD_TYPE FUZZERS"
-fi
-AC_SUBST(LIB_FUZZING_ENGINE)
-AC_SUBST(ENABLE_FUZZERS)
 
 dnl ===================================================================
 dnl Orcus
