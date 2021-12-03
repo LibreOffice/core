@@ -308,6 +308,24 @@ protected:
     void performDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency,
                                 bool useAA);
 
+<<<<<<< HEAD   (3b94b7 Resolves: tdf#140254 don't expand the column with buttons if)
+=======
+    BmpScaleFlag goodScalingQuality() const { return SkiaHelper::goodScalingQuality(isGPU()); }
+    SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry, int scalingFactor,
+                                          int srcScalingFactor = 1)
+    {
+        return SkiaHelper::makeSamplingOptions(rPosAry, scalingFactor, srcScalingFactor, isGPU());
+    }
+    SkSamplingOptions makeSamplingOptions(const SkMatrix& matrix, int scalingFactor)
+    {
+        return SkiaHelper::makeSamplingOptions(goodScalingQuality(), matrix, scalingFactor);
+    }
+
+    // Create SkPaint to use when drawing to the surface. It is not to be used
+    // when doing internal drawing such as when merging two bitmaps together.
+    // This may apply some default settings to the paint as necessary.
+    SkPaint makePaintInternal() const;
+>>>>>>> CHANGE (0a596f only bilinear+mipmap for Skia/raster to-screen drawing (tdf#)
     // Create SkPaint set up for drawing lines (using mLineColor etc.).
     SkPaint makeLinePaint(double transparency = 0) const
     {
