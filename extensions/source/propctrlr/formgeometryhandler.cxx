@@ -41,6 +41,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/componentbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>

@@ -22,7 +22,7 @@
 #include <memory>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/listenernotification.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
@@ -86,44 +86,30 @@ private:
 };
 
 // SlideShowViewPaintListeners
-typedef ::comphelper::OListenerContainerBase< css::awt::XPaintListener,
-                                                css::awt::PaintEvent >         SlideShowViewPaintListeners_Base;
+typedef ::comphelper::OInterfaceContainerHelper3< css::awt::XPaintListener >  SlideShowViewPaintListeners;
 
-class SlideShowViewPaintListeners : public SlideShowViewPaintListeners_Base
-{
-public:
-    SlideShowViewPaintListeners( ::osl::Mutex& rMutex );
-
-protected:
-    virtual bool implTypedNotify( const css::uno::Reference< css::awt::XPaintListener >& rListener, const css::awt::PaintEvent& rEvent ) override;
-};
 
 // SlideShowViewMouseListeners
-typedef ::comphelper::OListenerContainerBase< css::awt::XMouseListener, WrappedMouseEvent > SlideShowViewMouseListeners_Base;
+typedef ::comphelper::OInterfaceContainerHelper3< css::awt::XMouseListener > SlideShowViewMouseListeners_Base;
 
 class SlideShowViewMouseListeners : public SlideShowViewMouseListeners_Base
 {
 public:
-    SlideShowViewMouseListeners( ::osl::Mutex& rMutex );
+    SlideShowViewMouseListeners( ::osl::Mutex& rMutex ) : SlideShowViewMouseListeners_Base(rMutex) {}
 
-protected:
-    virtual bool implTypedNotify( const css::uno::Reference< css::awt::XMouseListener >&  rListener,
-                             const WrappedMouseEvent&                   rEvent ) override;
+    void notify(const WrappedMouseEvent& rEvent);
 };
 
 
 // SlideShowViewMouseMotionListeners
-typedef ::comphelper::OListenerContainerBase< css::awt::XMouseMotionListener,
-                                                WrappedMouseMotionEvent > SlideShowViewMouseMotionListeners_Base;
+typedef ::comphelper::OInterfaceContainerHelper3< css::awt::XMouseMotionListener > SlideShowViewMouseMotionListeners_Base;
 
 class SlideShowViewMouseMotionListeners : public SlideShowViewMouseMotionListeners_Base
 {
 public:
-    SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex );
+    SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex ) : SlideShowViewMouseMotionListeners_Base(rMutex) {}
 
-protected:
-    virtual bool implTypedNotify( const css::uno::Reference< css::awt::XMouseMotionListener >&    rListener,
-                             const WrappedMouseMotionEvent&                 rEvent ) override;
+    void notify( const WrappedMouseMotionEvent& rEvent );
 };
 
 // SlideShowView

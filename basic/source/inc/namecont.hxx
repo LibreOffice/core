@@ -50,7 +50,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/interfacecontainer3.hxx>
-#include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 
@@ -158,21 +157,8 @@ public:
 };
 
 
-typedef ::comphelper::OListenerContainerBase<
-    css::script::vba::XVBAScriptListener,
-    css::script::vba::VBAScriptEvent > VBAScriptListenerContainer_BASE;
-
-class VBAScriptListenerContainer final : public VBAScriptListenerContainer_BASE
-{
-public:
-    explicit VBAScriptListenerContainer( ::osl::Mutex& rMutex );
-
-private:
-    virtual bool implTypedNotify(
-        const css::uno::Reference< css::script::vba::XVBAScriptListener >& rxListener,
-        const css::script::vba::VBAScriptEvent& rEvent ) override;
-};
-
+typedef ::comphelper::OInterfaceContainerHelper3<
+    css::script::vba::XVBAScriptListener > VBAScriptListenerContainer;
 
 class SfxLibrary;
 

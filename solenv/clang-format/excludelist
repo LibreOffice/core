@@ -1398,7 +1398,6 @@ comphelper/source/misc/hash.cxx
 comphelper/source/misc/instancelocker.cxx
 comphelper/source/misc/instancelocker.hxx
 comphelper/source/misc/interaction.cxx
-comphelper/source/misc/listenernotification.cxx
 comphelper/source/misc/logging.cxx
 comphelper/source/misc/lok.cxx
 comphelper/source/misc/mimeconfighelper.cxx
@@ -4954,7 +4953,6 @@ include/comphelper/guarding.hxx
 include/comphelper/hash.hxx
 include/comphelper/interaction.hxx
 include/comphelper/interfacecontainer2.hxx
-include/comphelper/listenernotification.hxx
 include/comphelper/logging.hxx
 include/comphelper/mimeconfighelper.hxx
 include/comphelper/namedvaluecollection.hxx

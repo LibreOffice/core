@@ -229,7 +229,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
     ,m_aRowSetApproveListeners(m_aMutex)
     ,m_aSubmitListeners(m_aMutex)
     ,m_aErrorListeners(m_aMutex)
-    ,m_aResetListeners( *this, m_aMutex )
+    ,m_aResetListeners(m_aMutex)
     ,m_aPropertyBagHelper( *this )
     ,m_aParameterManager( m_aMutex, _rxContext )
     ,m_aFilterManager()
@@ -263,7 +263,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_aRowSetApproveListeners( m_aMutex )
     ,m_aSubmitListeners( m_aMutex )
     ,m_aErrorListeners( m_aMutex )
-    ,m_aResetListeners( *this, m_aMutex )
+    ,m_aResetListeners( m_aMutex )
     ,m_aPropertyBagHelper( *this )
     ,m_aParameterManager( m_aMutex, _cloneSource.m_xContext )
     ,m_aFilterManager()
@@ -1220,7 +1220,7 @@ void ODatabaseForm::disposing()
     EventObject aEvt(static_cast<XWeak*>(this));
     m_aLoadListeners.disposeAndClear(aEvt);
     m_aRowSetApproveListeners.disposeAndClear(aEvt);
-    m_aResetListeners.disposing();
+    m_aResetListeners.disposeAndClear(aEvt);
     m_aSubmitListeners.disposeAndClear(aEvt);
     m_aErrorListeners.disposeAndClear(aEvt);
 
@@ -1893,7 +1893,7 @@ void SAL_CALL ODatabaseForm::reset()
         return;
     }
 
-    if ( !m_aResetListeners.empty() )
+    if ( m_aResetListeners.getLength() )
     {
         ::osl::MutexGuard aResetGuard(m_aResetSafety);
         ++m_nResetsPending;
@@ -1921,8 +1921,13 @@ void SAL_CALL ODatabaseForm::reset()
 void ODatabaseForm::reset_impl(bool _bApproveByListeners)
 {
     if ( _bApproveByListeners )
-        if ( !m_aResetListeners.approveReset() )
-            return;
+    {
+        ::comphelper::OInterfaceIteratorHelper3 aIter(m_aResetListeners);
+        EventObject aEvent(*this);
+        while (aIter.hasMoreElements())
+            if (!aIter.next()->approveReset(aEvent))
+                return;
+    }
 
     ::osl::ResettableMutexGuard aResetGuard(m_aResetSafety);
     // do we have a database connected form and stay on the insert row
@@ -2026,7 +2031,8 @@ void ODatabaseForm::reset_impl(bool _bApproveByListeners)
 
     aResetGuard.clear();
     {
-        m_aResetListeners.resetted();
+        css::lang::EventObject aEvent( *this );
+        m_aResetListeners.notifyEach(&css::form::XResetListener::resetted, aEvent);
     }
 
     aResetGuard.reset();
@@ -2041,13 +2047,13 @@ void ODatabaseForm::reset_impl(bool _bApproveByListeners)
 
 void SAL_CALL ODatabaseForm::addResetListener(const Reference<XResetListener>& _rListener)
 {
-    m_aResetListeners.addTypedListener( _rListener );
+    m_aResetListeners.addInterface( _rListener );
 }
 
 
 void SAL_CALL ODatabaseForm::removeResetListener(const Reference<XResetListener>& _rListener)
 {
-    m_aResetListeners.removeTypedListener( _rListener );
+    m_aResetListeners.removeInterface( _rListener );
 }
 
 

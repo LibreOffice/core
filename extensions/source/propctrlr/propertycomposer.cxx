@@ -186,14 +186,14 @@ namespace pcr
     void SAL_CALL PropertyComposer::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         MethodGuard aGuard( *this );
-        m_aPropertyListeners.addListener( _rxListener );
+        m_aPropertyListeners.addInterface( _rxListener );
     }
 
 
     void SAL_CALL PropertyComposer::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         MethodGuard aGuard( *this );
-        m_aPropertyListeners.removeListener( _rxListener );
+        m_aPropertyListeners.removeInterface( _rxListener );
     }
 
 
@@ -432,14 +432,14 @@ namespace pcr
         {
             DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
-        m_aPropertyListeners.notify( aTranslatedEvent, &XPropertyChangeListener::propertyChange );
+        m_aPropertyListeners.notifyEach( &XPropertyChangeListener::propertyChange, aTranslatedEvent );
     }
 
 
     void SAL_CALL PropertyComposer::disposing( const EventObject& Source )
     {
         MethodGuard aGuard( *this );
-        m_aPropertyListeners.disposing( Source );
+        m_aPropertyListeners.disposeAndClear( Source );
     }
 
 
