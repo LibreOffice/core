@@ -775,7 +775,7 @@ DECLARE_OOXMLEXPORT_TEST( testSdtDatePicker, "test_sdt_datepicker.docx" )
     // Check that roundtrip for date picker field does not lose essential data
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
-       return; // initial import, no futher checks
+       return; // initial import, no further checks
 
     // Placeholder is here
     OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:placeholder/w:docPart", "val");
