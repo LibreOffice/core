@@ -30,9 +30,9 @@ class Primitive2DContainer;
 class DRAWINGLAYER_DLLPUBLIC Primitive2DDecompositionVisitor
 {
 public:
-    virtual void append(const Primitive2DReference&) = 0;
-    virtual void append(const Primitive2DContainer&) = 0;
-    virtual void append(Primitive2DContainer&&) = 0;
+    virtual void visit(const Primitive2DReference&) = 0;
+    virtual void visit(const Primitive2DContainer&) = 0;
+    virtual void visit(Primitive2DContainer&&) = 0;
     virtual ~Primitive2DDecompositionVisitor() {}
 };
 

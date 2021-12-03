@@ -80,7 +80,7 @@ namespace drawinglayer::primitive2d
             Primitive2DContainer aSequenceB { xRefA };
 
             // build transformed primitiveVector with shadow offset and add to target
-            rVisitor.append(new TransformPrimitive2D(getShadowTransform(), std::move(aSequenceB)));
+            rVisitor.visit(new TransformPrimitive2D(getShadowTransform(), std::move(aSequenceB)));
         }
 
         // provide unique ID

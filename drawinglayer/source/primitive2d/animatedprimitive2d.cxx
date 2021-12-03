@@ -77,7 +77,7 @@ namespace drawinglayer::primitive2d
             }
 
             const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_SET_THROW);
-            rVisitor.append(xRef);
+            rVisitor.visit(xRef);
         }
 
         // provide unique ID
@@ -185,7 +185,7 @@ namespace drawinglayer::primitive2d
 
                 // create new transform primitive reference, return new sequence
                 Primitive2DReference xRef(new TransformPrimitive2D(aTargetTransform, Primitive2DContainer(getChildren())));
-                rVisitor.append(xRef);
+                rVisitor.visit(xRef);
             }
             else
             {

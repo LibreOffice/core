@@ -176,9 +176,9 @@ namespace drawinglayer::processor2d
             void process(const primitive2d::BasePrimitive2D& rCandidate);
 
             // Primitive2DDecompositionVisitor
-            virtual void append(const primitive2d::Primitive2DReference&) override final;
-            virtual void append(const primitive2d::Primitive2DContainer&) override final;
-            virtual void append(primitive2d::Primitive2DContainer&&) override final;
+            virtual void visit(const primitive2d::Primitive2DReference&) override final;
+            virtual void visit(const primitive2d::Primitive2DContainer&) override final;
+            virtual void visit(primitive2d::Primitive2DContainer&&) override final;
 
         public:
             /// constructor/destructor

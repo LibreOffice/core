@@ -126,7 +126,7 @@ namespace drawinglayer::primitive2d
             {
                 // the new range is completely inside the old range (unit range),
                 // so no masking is needed
-                rVisitor.append(xTransformPrimitive);
+                rVisitor.visit(xTransformPrimitive);
             }
             else
             {
@@ -140,7 +140,7 @@ namespace drawinglayer::primitive2d
                         aMaskPolyPolygon,
                         Primitive2DContainer { xTransformPrimitive }));
 
-                rVisitor.append(xMask);
+                rVisitor.visit(xMask);
             }
         }
 

@@ -60,7 +60,7 @@ void SoftEdgePrimitive2D::get2DDecomposition(
 
     const Primitive2DReference xRef(
         new ModifiedColorPrimitive2D(Primitive2DContainer(getChildren()), aBColorModifier));
-    rVisitor.append(xRef);
+    rVisitor.visit(xRef);
 }
 
 sal_uInt32 SoftEdgePrimitive2D::getPrimitive2DID() const

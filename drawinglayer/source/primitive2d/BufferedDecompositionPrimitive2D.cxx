@@ -43,7 +43,7 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
             std::move(aNewSequence));
     }
 
-    rVisitor.append(getBuffered2DDecomposition());
+    rVisitor.visit(getBuffered2DDecomposition());
 }
 
 } // end of namespace drawinglayer::primitive2d
