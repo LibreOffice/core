@@ -301,8 +301,23 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
 
     if( bSetGrfSize )
     {
-        Size aGrfSize, aBound = GetGraphicDefaultSize();
-        GetGrfSize( aGrfSize );
+        Size aSizePixel = rGrf.GetSizePixel();
+        Size aBound = GetGraphicDefaultSize();
+
+        sal_Int32 nPreferredDPI = mxDoc->getIDocumentSettingAccess().getImagePreferredDPI();
+        Size aGrfSize;
+
+        if (nPreferredDPI > 0)
+        {
+            constexpr double fTwipsInAnInch = 1444.0;
+            auto nWidth = (aSizePixel.Width() / double(nPreferredDPI)) * fTwipsInAnInch;
+            auto nHeight = (aSizePixel.Height() / double(nPreferredDPI)) * fTwipsInAnInch;
+            aGrfSize = Size(nWidth, nHeight);
+        }
+        else
+        {
+            GetGrfSize(aGrfSize);
+        }
 
         // Add the margin attributes to GrfSize,
         // because these counts at the margin additionally

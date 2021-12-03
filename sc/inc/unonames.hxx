@@ -571,6 +571,7 @@
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
 #define SC_UNO_FILTERED_RANGE_SELECTION       "FilteredRangeSelection"
 #define SC_UNO_VISAREASCREEN        "VisibleAreaOnScreen"
+#define SC_UNO_IMAGE_PREFERRED_DPI  "ImagePreferredDPI"
 
 /*Stampit enable/disable print cancel */
 #define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"

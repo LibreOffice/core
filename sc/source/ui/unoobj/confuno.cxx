@@ -88,6 +88,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {u"" SC_UNO_EMBED_FONT_SCRIPT_LATIN,   0,  cppu::UnoType<bool>::get(), 0, 0},
         {u"" SC_UNO_EMBED_FONT_SCRIPT_ASIAN,   0,  cppu::UnoType<bool>::get(), 0, 0},
         {u"" SC_UNO_EMBED_FONT_SCRIPT_COMPLEX, 0,  cppu::UnoType<bool>::get(), 0, 0},
+        {u"" SC_UNO_IMAGE_PREFERRED_DPI,       0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
         {u"" SC_UNO_SYNTAXSTRINGREF, 0,  cppu::UnoType<sal_Int16>::get(),     0, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
@@ -388,7 +389,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             rDoc.SetCalcConfig( aCalcConfig );
         }
     }
-
+    else if (aPropertyName == SC_UNO_IMAGE_PREFERRED_DPI)
+    {
+        if (aValue.has<sal_Int32>())
+        {
+            rDoc.SetImagePreferredDPI(aValue.get<sal_Int32>());
+        }
+    }
     else
     {
         ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -589,7 +596,10 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
              }
          }
     }
-
+    else if (aPropertyName == SC_UNO_IMAGE_PREFERRED_DPI)
+    {
+        aRet <<= rDoc.GetImagePreferredDPI();
+    }
     else
     {
         const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
