@@ -159,6 +159,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82aaee8f_357d0743",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-03T13:45:47Z",
+      "side": 1,
+      "message": "well, like I said in an earlier comment, there\u0027s no reason the programmer #define and the translator message context have to be the same, to remove the confusion which is affecting programmer we can leave things unchanged for translators and change the #define.\n\nI\u0027ll have a look at doing that.",
+      "revId": "0dfeec338665a1b358bc1fcf54557a5f2eafb9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc487e0_b392caf1",
