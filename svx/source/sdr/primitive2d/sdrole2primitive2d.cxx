@@ -162,7 +162,7 @@ namespace drawinglayer::primitive2d
                     getSdrLFSTAttribute().getShadow());
             }
 
-            rVisitor.append(aRetval);
+            rVisitor.visit(aRetval);
         }
 
         // provide unique ID

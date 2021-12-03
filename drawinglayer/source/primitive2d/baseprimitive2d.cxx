@@ -112,15 +112,15 @@ public:
         : mrViewInformation(rViewInformation)
     {
     }
-    virtual void append(const Primitive2DReference& r) override
+    virtual void visit(const Primitive2DReference& r) override
     {
         maRetval.expand(getB2DRangeFromPrimitive2DReference(r, mrViewInformation));
     }
-    virtual void append(const Primitive2DContainer& r) override
+    virtual void visit(const Primitive2DContainer& r) override
     {
         maRetval.expand(r.getB2DRange(mrViewInformation));
     }
-    virtual void append(Primitive2DContainer&& r) override
+    virtual void visit(Primitive2DContainer&& r) override
     {
         maRetval.expand(r.getB2DRange(mrViewInformation));
     }

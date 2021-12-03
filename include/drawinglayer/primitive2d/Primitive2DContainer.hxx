@@ -71,9 +71,13 @@ public:
     {
     }
 
-    virtual void append(const Primitive2DReference&) override;
-    virtual void append(const Primitive2DContainer& rSource) override;
-    virtual void append(Primitive2DContainer&& rSource) override;
+    virtual void visit(const Primitive2DReference& rSource) override { append(rSource); }
+    virtual void visit(const Primitive2DContainer& rSource) override { append(rSource); }
+    virtual void visit(Primitive2DContainer&& rSource) override { append(std::move(rSource)); }
+
+    void append(const Primitive2DReference&);
+    void append(const Primitive2DContainer& rSource);
+    void append(Primitive2DContainer&& rSource);
     void append(const Primitive2DSequence& rSource);
     Primitive2DContainer& operator=(const Primitive2DContainer& r)
     {

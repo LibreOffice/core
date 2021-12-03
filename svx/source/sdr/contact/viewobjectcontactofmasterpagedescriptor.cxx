@@ -129,7 +129,7 @@ namespace sdr::contact
             }
 
             // return grouped primitive
-            rVisitor.append(xRetval);
+            rVisitor.visit(xRetval);
         }
 } // end of namespace
 
