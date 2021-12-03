@@ -3890,7 +3890,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             if ( rSetting.Value >>= nTemp16 )
                 maOptions.SetObjMode(VOBJ_TYPE_DRAW, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
         }
-        else if ( sName.compareToAscii( SC_UNO_VALUEHIGH ) == 0 )
+        else if ( sName == SC_UNO_VALUEHIGH )
             maOptions.SetOption(VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else
         {

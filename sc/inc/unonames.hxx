@@ -20,18 +20,18 @@
 #pragma once
 
 // service names
-#define SC_SERVICENAME_VALBIND          "com.sun.star.table.CellValueBinding"
-#define SC_SERVICENAME_LISTCELLBIND     "com.sun.star.table.ListPositionCellBinding"
-#define SC_SERVICENAME_LISTSOURCE       "com.sun.star.table.CellRangeListSource"
-#define SC_SERVICENAME_CELLADDRESS      "com.sun.star.table.CellAddressConversion"
-#define SC_SERVICENAME_RANGEADDRESS     "com.sun.star.table.CellRangeAddressConversion"
+inline constexpr OUStringLiteral SC_SERVICENAME_VALBIND = u"com.sun.star.table.CellValueBinding";
+inline constexpr OUStringLiteral SC_SERVICENAME_LISTCELLBIND = u"com.sun.star.table.ListPositionCellBinding";
+inline constexpr OUStringLiteral SC_SERVICENAME_LISTSOURCE = u"com.sun.star.table.CellRangeListSource";
+inline constexpr OUStringLiteral SC_SERVICENAME_CELLADDRESS = u"com.sun.star.table.CellAddressConversion";
+inline constexpr OUStringLiteral SC_SERVICENAME_RANGEADDRESS = u"com.sun.star.table.CellRangeAddressConversion";
 
-#define SC_SERVICENAME_FORMULAPARS      "com.sun.star.sheet.FormulaParser"
-#define SC_SERVICENAME_OPCODEMAPPER     "com.sun.star.sheet.FormulaOpCodeMapper"
+inline constexpr OUStringLiteral SC_SERVICENAME_FORMULAPARS = u"com.sun.star.sheet.FormulaParser";
+inline constexpr OUStringLiteral SC_SERVICENAME_OPCODEMAPPER = u"com.sun.star.sheet.FormulaOpCodeMapper";
 
-#define SC_SERVICENAME_CHDATAPROV       "com.sun.star.chart2.data.DataProvider"
-#define SC_SERVICENAME_CHRANGEHILIGHT   "com.sun.star.chart2.data.RangeHighlightListener"
-#define SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER "com.sun.star.chart2.data.PivotTableDataProvider"
+inline constexpr OUStringLiteral SC_SERVICENAME_CHDATAPROV = u"com.sun.star.chart2.data.DataProvider";
+inline constexpr OUStringLiteral SC_SERVICENAME_CHRANGEHILIGHT = u"com.sun.star.chart2.data.RangeHighlightListener";
+inline constexpr OUStringLiteral SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER = u"com.sun.star.chart2.data.PivotTableDataProvider";
 
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"
@@ -687,22 +687,22 @@
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"
-#define SC_UNO_SHAREDOC             "IsDocumentShared"
+inline constexpr OUStringLiteral SC_UNO_SHAREDOC = u"IsDocumentShared";
 
 // EventDescriptor
 #define SC_UNO_EVENTTYPE            "EventType"
 #define SC_UNO_SCRIPT               "Script"
 
 // Named ranges
-#define SC_UNO_MODIFY_BROADCAST     "ModifyAndBroadcast"
+inline constexpr OUStringLiteral SC_UNO_MODIFY_BROADCAST = u"ModifyAndBroadcast";
 
-#define SC_UNO_EMBED_FONTS               "EmbedFonts"
-#define SC_UNO_EMBED_ONLY_USED_FONTS     "EmbedOnlyUsedFonts"
-#define SC_UNO_EMBED_FONT_SCRIPT_LATIN   "EmbedLatinScriptFonts"
-#define SC_UNO_EMBED_FONT_SCRIPT_ASIAN   "EmbedAsianScriptFonts"
-#define SC_UNO_EMBED_FONT_SCRIPT_COMPLEX "EmbedComplexScriptFonts"
+inline constexpr OUStringLiteral SC_UNO_EMBED_FONTS = u"EmbedFonts";
+inline constexpr OUStringLiteral SC_UNO_EMBED_ONLY_USED_FONTS = u"EmbedOnlyUsedFonts";
+inline constexpr OUStringLiteral SC_UNO_EMBED_FONT_SCRIPT_LATIN = u"EmbedLatinScriptFonts";
+inline constexpr OUStringLiteral SC_UNO_EMBED_FONT_SCRIPT_ASIAN = u"EmbedAsianScriptFonts";
+inline constexpr OUStringLiteral SC_UNO_EMBED_FONT_SCRIPT_COMPLEX = u"EmbedComplexScriptFonts";
 
-#define SC_UNO_ODS_LOCK_SOLAR_MUTEX "ODSLockSolarMutex"
-#define SC_UNO_ODS_IMPORT_STYLES    "ODSImportStyles"
+inline constexpr OUStringLiteral SC_UNO_ODS_LOCK_SOLAR_MUTEX = u"ODSLockSolarMutex";
+inline constexpr OUStringLiteral SC_UNO_ODS_IMPORT_STYLES = u"ODSImportStyles";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
