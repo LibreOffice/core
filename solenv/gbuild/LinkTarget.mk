@@ -2125,10 +2125,6 @@ endef
 #
 # call gb_LinkTarget__set_plugin_for,linktarget,loader,nodep
 define gb_LinkTarget__set_plugin_for
-ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
-$$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk or RepositoryExternal.mk))
-endif
 ifeq (,$(filter $(1),$(foreach plugin,$(gb_Library_KNOWNPLUGINS),$(call gb_Library_get_linktarget,$(plugin)))))
 $$(eval $$(call gb_Output_error,Unknown plugin(s) '$(filter $(1),$(foreach plugin,$(gb_Library_KNOWNPLUGINS),$(call gb_Library_get_linktarget,$(plugin))))'. Plugins must be registered in Repository.mk or RepositoryExternal.mk))
 endif
@@ -2139,7 +2135,7 @@ ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
 $$(eval $$(call gb_Output_error,Plugin support for build tools not implemented))
 endif
 
-$(if $(3),,$(call gb_LinkTarget__use_libraries,$(1),$(2),$(2)))
+$(if $(3),,$(call gb_LinkTarget_use_libraries,$(1),$(2)))
 
 endef
 
