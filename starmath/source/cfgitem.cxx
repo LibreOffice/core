@@ -76,7 +76,7 @@ static Sequence<OUString> lcl_GetOtherPropertyNames()
                                "Misc/SmEditWindowZoomFactor",
                                "Print/FormulaText",
                                "Print/Frame",
-                               "Print/Size:",
+                               "Print/Size",
                                "Print/Title",
                                "Print/ZoomFactor",
                                "View/AutoRedraw",
