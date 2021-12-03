@@ -6,29 +6,29 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#pragma once
 
-#ifndef INCLUDED_REPORTDESIGN_INC_STRINGS_HXX
-#define INCLUDED_REPORTDESIGN_INC_STRINGS_HXX
+#include <rtl/ustring.hxx>
 
 // Dialog Controls
 
-#define RID_STR_CLASS_FIXEDTEXT         "Label"
-#define RID_STR_CLASS_FIXEDLINE         "Line"
-#define RID_STR_CLASS_IMAGECONTROL      "Graphic"
-#define RID_STR_CLASS_FORMATTEDFIELD    "FormattedField"
+inline constexpr OUStringLiteral RID_STR_CLASS_FIXEDTEXT = u"Label";
+inline constexpr OUStringLiteral RID_STR_CLASS_FIXEDLINE = u"Line";
+inline constexpr OUStringLiteral RID_STR_CLASS_IMAGECONTROL = u"Graphic";
+inline constexpr OUStringLiteral RID_STR_CLASS_FORMATTEDFIELD = u"FormattedField";
 
 //= service names
 
-#define SERVICE_FIXEDTEXT "com.sun.star.report.FixedText"
-#define SERVICE_FORMATTEDFIELD "com.sun.star.report.FormattedField"
-#define SERVICE_IMAGECONTROL "com.sun.star.report.ImageControl"
-#define SERVICE_FORMATCONDITION "com.sun.star.report.FormatCondition"
-#define SERVICE_FUNCTION "com.sun.star.report.Function"
-#define SERVICE_REPORTDEFINITION "com.sun.star.report.ReportDefinition"
-#define SERVICE_SHAPE "com.sun.star.report.Shape"
-#define SERVICE_FIXEDLINE "com.sun.star.report.FixedLine"
-#define SERVICE_SECTION "com.sun.star.report.Section"
-#define SERVICE_GROUP "com.sun.star.report.Group"
+inline constexpr OUStringLiteral SERVICE_FIXEDTEXT = u"com.sun.star.report.FixedText";
+inline constexpr OUStringLiteral SERVICE_FORMATTEDFIELD = u"com.sun.star.report.FormattedField";
+inline constexpr OUStringLiteral SERVICE_IMAGECONTROL = u"com.sun.star.report.ImageControl";
+inline constexpr OUStringLiteral SERVICE_FORMATCONDITION = u"com.sun.star.report.FormatCondition";
+inline constexpr OUStringLiteral SERVICE_FUNCTION = u"com.sun.star.report.Function";
+inline constexpr OUStringLiteral SERVICE_REPORTDEFINITION = u"com.sun.star.report.ReportDefinition";
+inline constexpr OUStringLiteral SERVICE_SHAPE = u"com.sun.star.report.Shape";
+inline constexpr OUStringLiteral SERVICE_FIXEDLINE = u"com.sun.star.report.FixedLine";
+inline constexpr OUStringLiteral SERVICE_SECTION = u"com.sun.star.report.Section";
+inline constexpr OUStringLiteral SERVICE_GROUP = u"com.sun.star.report.Group";
 
 //= property names
 
@@ -274,16 +274,14 @@
 #define PROPERTY_FILLCOLOR "FillColor"
 #define DBTEXTBOXBOUNDCONTENT "TextBoxBoundContent"
 
-#define SERVICE_SETTINGSIMPORTER "com.sun.star.comp.Report.XMLOasisSettingsImporter"
-#define SERVICE_STYLESIMPORTER "com.sun.star.comp.Report.XMLOasisStylesImporter"
-#define SERVICE_CONTENTIMPORTER "com.sun.star.comp.Report.XMLOasisContentImporter"
+inline constexpr OUStringLiteral SERVICE_SETTINGSIMPORTER = u"com.sun.star.comp.Report.XMLOasisSettingsImporter";
+inline constexpr OUStringLiteral SERVICE_STYLESIMPORTER = u"com.sun.star.comp.Report.XMLOasisStylesImporter";
+inline constexpr OUStringLiteral SERVICE_CONTENTIMPORTER = u"com.sun.star.comp.Report.XMLOasisContentImporter";
 #define SERVICE_IMPORTFILTER "com.sun.star.document.ImportFilter"
 #define SERVICE_METAIMPORTER "com.sun.star.comp.Report.XMLOasisMetaImporter"
 #define PROPERTY_BORDERLEFT "BorderLeft"
 #define PROPERTY_BORDERRIGHT "BorderRight"
 #define PROPERTY_BORDERTOP "BorderTop"
 #define PROPERTY_BORDERBOTTOM "BorderBottom"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
