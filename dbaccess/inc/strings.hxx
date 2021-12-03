@@ -176,7 +176,6 @@ inline constexpr OUStringLiteral SERVICE_SDBC_PREPAREDSTATEMENT
     = u"com.sun.star.sdbc.PreparedStatement";
 inline constexpr OUStringLiteral SERVICE_SDBC_CALLABLESTATEMENT
     = u"com.sun.star.sdbc.CallableStatement";
-#define SERVICE_SDBC_CONNECTION "com.sun.star.sdbc.Connection"
 inline constexpr OUStringLiteral SERVICE_SDBCX_CONTAINER = u"com.sun.star.sdbcx.Container";
 inline constexpr OUStringLiteral SERVICE_SDBCX_TABLE = u"com.sun.star.sdbcx.Table";
 inline constexpr OUStringLiteral SERVICE_SDBCX_RESULTSET = u"com.sun.star.sdbcx.ResultSet";
@@ -199,19 +198,13 @@ inline constexpr OUStringLiteral SERVICE_SDB_SQLQUERYCOMPOSER
 inline constexpr OUStringLiteral SERVICE_SDB_DATASETTINGS = u"com.sun.star.sdb.DefinitionSettings";
 inline constexpr OUStringLiteral SERVICE_SDB_QUERYDESCRIPTOR = u"com.sun.star.sdb.QueryDescriptor";
 inline constexpr OUStringLiteral SERVICE_SDB_QUERY = u"com.sun.star.sdb.Query";
-#define SERVICE_SDBCX_COLUMNS "com.sun.star.sdbcx.Columns"
 inline constexpr OUStringLiteral SERVICE_SDBCX_TABLES = u"com.sun.star.sdbcx.Tables";
 inline constexpr OUStringLiteral SERVICE_SDB_QUERIES = u"com.sun.star.sdb.Queries";
-#define SERVICE_SDBCX_INDEXCOLUMN "com.sun.star.sdbcx.IndexColumn"
-#define SERVICE_SDBCX_KEYCOLUMN "com.sun.star.sdbcx.KeyColumn"
 inline constexpr OUStringLiteral SERVICE_SDB_DOCUMENTDEFINITION
     = u"com.sun.star.sdb.DocumentDefinition";
-#define SERVICE_NAME_FORM "com.sun.star.sdb.Form"
 inline constexpr OUStringLiteral SERVICE_NAME_FORM_COLLECTION = u"com.sun.star.sdb.Forms";
-#define SERVICE_NAME_REPORT "com.sun.star.sdb.Report"
 inline constexpr OUStringLiteral SERVICE_NAME_REPORT_COLLECTION = u"com.sun.star.sdb.Reports";
 inline constexpr OUStringLiteral SERVICE_NAME_QUERY_COLLECTION = u"com.sun.star.sdb.Queries";
-#define SERVICE_NAME_TABLE_COLLECTION "com.sun.star.sdb.Tables"
 inline constexpr OUStringLiteral SERVICE_NAME_SINGLESELECTQUERYCOMPOSER
     = u"com.sun.star.sdb.SingleSelectQueryComposer";
 inline constexpr OUStringLiteral SERVICE_SDB_APPLICATIONCONTROLLER
@@ -246,7 +239,6 @@ inline constexpr OUStringLiteral INFO_ESCAPE_DATETIME = u"EscapeDateTime";
 
 // other
 inline constexpr OUStringLiteral INFO_POOLURL = u"PoolURL";
-#define URL_INTERACTIVE "Interactive"
 
 // URLs
 
@@ -257,7 +249,6 @@ inline constexpr OUStringLiteral URL_COMPONENT_FORMGRIDVIEW = u".component:DB/Fo
 inline constexpr OUStringLiteral URL_COMPONENT_DATASOURCEBROWSER
     = u".component:DB/DataSourceBrowser";
 inline constexpr OUStringLiteral URL_COMPONENT_RELATIONDESIGN = u".component:DB/RelationDesign";
-#define URL_COMPONENT_APPLICATION ".component:DB/Application"
 #define URL_COMPONENT_REPORTDESIGN ".component:DB/ReportDesign"
 
 // service names
