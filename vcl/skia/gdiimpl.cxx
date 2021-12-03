@@ -1487,7 +1487,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools:
     if (mScaling != 1)
     {
         if (!isUnitTestRunning())
-            bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, BmpScaleFlag::BestQuality);
+            bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, goodScalingQuality());
         else
         {
             // Some tests require exact pixel values and would be confused by smooth-scaling.
@@ -1495,7 +1495,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools:
             if (isUnitTestRunning("BackendTest__testDrawHaflEllipseAAWithPolyLineB2D_")
                 || isUnitTestRunning("BackendTest__testDrawRectAAWithLine_"))
             {
-                bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, BmpScaleFlag::BestQuality);
+                bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, goodScalingQuality());
             }
             else
                 bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, BmpScaleFlag::NearestNeighbor);
@@ -1760,7 +1760,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / sourceSize.Height());
         canvas->concat(matrix);
         if (!isUnitTestRunning()) // unittests want exact pixel values
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, 1);
+            samplingOptions = makeSamplingOptions(matrix, 1);
     }
     if (alphaBitmap != nullptr)
     {
@@ -2011,7 +2011,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         // If the matrix changes geometry, we need to smooth-scale. If there's mScaling,
         // that's already been handled by mergeCacheBitmaps().
         if (matrixNeedsHighQuality(matrix))
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, 1);
+            samplingOptions = makeSamplingOptions(matrix, 1);
         if (fAlpha == 1.0)
         {
             // Specify sizes to scale the image size back if needed (because of mScaling).
@@ -2046,7 +2046,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         canvas->concat(matrix);
         SkSamplingOptions samplingOptions;
         if (matrixNeedsHighQuality(matrix) || (mScaling != 1 && !isUnitTestRunning()))
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix, mScaling);
+            samplingOptions = makeSamplingOptions(matrix, mScaling);
         if (pSkiaAlphaBitmap)
         {
             SkPaint paint;

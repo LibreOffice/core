@@ -308,6 +308,17 @@ protected:
     void performDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency,
                                 bool useAA);
 
+    BmpScaleFlag goodScalingQuality() const { return SkiaHelper::goodScalingQuality(isGPU()); }
+    SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry, int scalingFactor,
+                                          int srcScalingFactor = 1)
+    {
+        return SkiaHelper::makeSamplingOptions(rPosAry, scalingFactor, srcScalingFactor, isGPU());
+    }
+    SkSamplingOptions makeSamplingOptions(const SkMatrix& matrix, int scalingFactor)
+    {
+        return SkiaHelper::makeSamplingOptions(goodScalingQuality(), matrix, scalingFactor);
+    }
+
     // Create SkPaint set up for drawing lines (using mLineColor etc.).
     SkPaint makeLinePaint(double transparency = 0) const
     {
