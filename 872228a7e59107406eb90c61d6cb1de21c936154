@@ -16,6 +16,24 @@
       "message": "\u003e equality assertion failed\n\u003e - Expected: -8490\n\u003e - Actual  : -9429\n\nCould you please check if the test has to be adjusted in this branch or the fix needs changing? Thanks.",
       "revId": "872228a7e59107406eb90c61d6cb1de21c936154",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76721fd2_df97e9f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-12-03T07:01:40Z",
+      "side": 1,
+      "message": "Miklos I\u0027ve checked it locally, The position and size seems same with master but values is different. I\u0027m changing test value for co-2021.",
+      "parentUuid": "1524ab6a_81188cc6",
+      "revId": "872228a7e59107406eb90c61d6cb1de21c936154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
