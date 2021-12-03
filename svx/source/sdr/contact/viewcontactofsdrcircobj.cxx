@@ -39,7 +39,7 @@ namespace sdr::contact
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCircObj::createViewIndependentPrimitive2DSequence() const
+        void ViewContactOfSdrCircObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             const SfxItemSet& rItemSet = GetCircObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
@@ -73,7 +73,7 @@ namespace sdr::contact
                         aObjectMatrix,
                         aAttribute));
 
-                return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                rVisitor.visit(xReference);
             }
             else
             {
@@ -93,7 +93,7 @@ namespace sdr::contact
                         bCloseSegment,
                         bCloseUsingCenter));
 
-                return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                rVisitor.visit(xReference);
             }
         }
 

@@ -57,7 +57,7 @@ sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
     return 0;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // create displacement transformation if we have content
     basegfx::B2DHomMatrix aObjectMatrix;
@@ -70,8 +70,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createView
     }
 
     // use method from referenced object to get the Primitive2DContainer
-    const drawinglayer::primitive2d::Primitive2DContainer& xSequenceVirtual(
-        GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DContainer());
+    drawinglayer::primitive2d::Primitive2DContainer xSequenceVirtual;
+    GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DContainer(xSequenceVirtual);
 
     if(!xSequenceVirtual.empty())
     {
@@ -81,7 +81,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createView
                 aObjectMatrix,
                 drawinglayer::primitive2d::Primitive2DContainer(xSequenceVirtual)));
 
-        return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+        rVisitor.visit(xReference);
     }
     else
     {
@@ -90,7 +90,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createView
             drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                 aObjectMatrix));
 
-        return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+        rVisitor.visit(xReference);
     }
 }
 

@@ -201,8 +201,8 @@ SdrObject* ViewContact::TryToGetSdrObject() const { return nullptr; }
 
 // primitive stuff
 
-drawinglayer::primitive2d::Primitive2DContainer
-ViewContact::createViewIndependentPrimitive2DSequence() const
+void ViewContact::createViewIndependentPrimitive2DSequence(
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // This is the default implementation and should never be called (see header). If this is called,
     // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
@@ -217,14 +217,14 @@ ViewContact::createViewIndependentPrimitive2DSequence() const
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
 
-    return drawinglayer::primitive2d::Primitive2DContainer{ xReference };
+    rVisitor.visit(xReference);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer
-ViewContact::getViewIndependentPrimitive2DContainer() const
+void ViewContact::getViewIndependentPrimitive2DContainer(
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // TODO this method can be removed and callers can just call createViewIndependentPrimitive2DSequence
-    return createViewIndependentPrimitive2DSequence();
+    createViewIndependentPrimitive2DSequence(rVisitor);
 }
 
 // add Gluepoints (if available)

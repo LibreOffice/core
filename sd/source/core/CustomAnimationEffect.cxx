@@ -1606,7 +1606,8 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
     {
         ::tools::Rectangle aBoundRect(0,0,0,0);
 
-        const drawinglayer::primitive2d::Primitive2DContainer& xPrimitives(pObj->GetViewContact().getViewIndependentPrimitive2DContainer());
+        drawinglayer::primitive2d::Primitive2DContainer xPrimitives;
+        pObj->GetViewContact().getViewIndependentPrimitive2DContainer(xPrimitives);
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
         const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
 

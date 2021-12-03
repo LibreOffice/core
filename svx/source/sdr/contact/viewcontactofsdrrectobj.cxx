@@ -38,7 +38,7 @@ ViewContactOfSdrRectObj::~ViewContactOfSdrRectObj()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
+void ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
     const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
@@ -80,7 +80,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
             // #i105856# use fill for HitTest when TextFrame and not PickThrough
             GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
 
-    return drawinglayer::primitive2d::Primitive2DContainer{ xReference };
+    rVisitor.visit(xReference);
 }
 
 }

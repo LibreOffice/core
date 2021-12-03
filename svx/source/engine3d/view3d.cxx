@@ -107,9 +107,7 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
                 {
                     // use the view-independent primitive representation (without
                     // evtl. GridOffset, that may be applied to the DragEntry individually)
-                    const drawinglayer::primitive2d::Primitive2DContainer& aNewSequence(
-                        pObject->GetViewContact().getViewIndependentPrimitive2DContainer());
-                    maFullOverlay.append(aNewSequence);
+                    pObject->GetViewContact().getViewIndependentPrimitive2DContainer(maFullOverlay);
                 }
             }
         }

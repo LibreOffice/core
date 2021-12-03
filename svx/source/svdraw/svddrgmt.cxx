@@ -173,7 +173,9 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPri
 
     // use the view-independent primitive representation (without
     // evtl. GridOffset, that may be applied to the DragEntry individually)
-    return pSource->GetViewContact().getViewIndependentPrimitive2DContainer();
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
+    pSource->GetViewContact().getViewIndependentPrimitive2DContainer(xRetval);
+    return xRetval;
 }
 
 
@@ -1442,10 +1444,12 @@ void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal)
 {
     // use the view-independent primitive representation (without
     // evtl. GridOffset, that may be applied to the DragEntry individually)
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
+    rOriginal.GetViewContact().getViewIndependentPrimitive2DContainer(xRetval);
     addSdrDragEntry(
         std::unique_ptr<SdrDragEntry>(
             new SdrDragEntryPrimitive2DSequence(
-                rOriginal.GetViewContact().getViewIndependentPrimitive2DContainer())));
+                std::move(xRetval))));
 
 }
 

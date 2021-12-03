@@ -64,8 +64,8 @@ private:
 
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DContainer
-    createViewIndependentPrimitive2DSequence() const override;
+    virtual void createViewIndependentPrimitive2DSequence(
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 };
 }
 

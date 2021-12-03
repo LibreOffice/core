@@ -985,7 +985,8 @@ void SdrObject::RecalcBoundRect()
 
     // Use view-independent data - we do not want any connections
     // to e.g. GridOffset in SdrObject-level
-    const drawinglayer::primitive2d::Primitive2DContainer& xPrimitives(GetViewContact().getViewIndependentPrimitive2DContainer());
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitives;
+    GetViewContact().getViewIndependentPrimitive2DContainer(xPrimitives);
 
     if(xPrimitives.empty())
         return;
@@ -1186,7 +1187,8 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
         // get sequence from clone
         const sdr::contact::ViewContact& rVC(pClone->GetViewContact());
-        const drawinglayer::primitive2d::Primitive2DContainer& xSequence(rVC.getViewIndependentPrimitive2DContainer());
+        drawinglayer::primitive2d::Primitive2DContainer xSequence;
+        rVC.getViewIndependentPrimitive2DContainer(xSequence);
 
         if(!xSequence.empty())
         {
@@ -2389,7 +2391,8 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
     {
         basegfx::B2DPolyPolygon aMergedLineFillPolyPolygon;
         basegfx::B2DPolyPolygon aMergedHairlinePolyPolygon;
-        const drawinglayer::primitive2d::Primitive2DContainer & xSequence(GetViewContact().getViewIndependentPrimitive2DContainer());
+        drawinglayer::primitive2d::Primitive2DContainer xSequence;
+        GetViewContact().getViewIndependentPrimitive2DContainer(xSequence);
 
         if(!xSequence.empty())
         {
