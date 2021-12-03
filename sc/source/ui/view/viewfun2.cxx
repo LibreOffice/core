@@ -2815,7 +2815,7 @@ void ScViewFunc::MoveTable(
 
         //  execute without SfxCallMode::RECORD, because already contained in move command
 
-        SfxStringItem aItem( SID_FILE_NAME, "private:factory/" STRING_SCAPP );
+        SfxStringItem aItem( SID_FILE_NAME, "private:factory/" + STRING_SCAPP );
         SfxStringItem aTarget( SID_TARGETNAME, "_blank" );
 
         const SfxPoolItem* pRetItem = GetViewData().GetDispatcher().ExecuteList(

@@ -9,119 +9,121 @@
 
 #pragma once
 
-#define RID_BMP_LEVEL1                          "sc/res/ou01.png"
-#define RID_BMP_LEVEL2                          "sc/res/ou02.png"
-#define RID_BMP_LEVEL3                          "sc/res/ou03.png"
-#define RID_BMP_LEVEL4                          "sc/res/ou04.png"
-#define RID_BMP_LEVEL5                          "sc/res/ou05.png"
-#define RID_BMP_LEVEL6                          "sc/res/ou06.png"
-#define RID_BMP_LEVEL7                          "sc/res/ou07.png"
-#define RID_BMP_LEVEL8                          "sc/res/ou08.png"
-#define RID_BMP_PLUS                            "sc/res/ou09.png"
-#define RID_BMP_MINUS                           "sc/res/ou010.png"
-#define RID_BMP_NOTPRESSED                      "sc/res/ou011.png"
-#define RID_BMP_PRESSED                         "sc/res/ou012.png"
+#include <rtl/ustring.hxx>
+
+inline constexpr OUStringLiteral RID_BMP_LEVEL1 = u"sc/res/ou01.png";
+inline constexpr OUStringLiteral RID_BMP_LEVEL2 = u"sc/res/ou02.png";
+inline constexpr OUStringLiteral RID_BMP_LEVEL3 = u"sc/res/ou03.png";
+inline constexpr OUStringLiteral RID_BMP_LEVEL4 = u"sc/res/ou04.png";
+inline constexpr OUStringLiteral RID_BMP_LEVEL5 = u"sc/res/ou05.png";
+inline constexpr OUStringLiteral RID_BMP_LEVEL6 = u"sc/res/ou06.png";
+inline constexpr OUStringLiteral RID_BMP_LEVEL7 = u"sc/res/ou07.png";
+inline constexpr OUStringLiteral RID_BMP_LEVEL8 = u"sc/res/ou08.png";
+inline constexpr OUStringLiteral RID_BMP_PLUS = u"sc/res/ou09.png";
+inline constexpr OUStringLiteral RID_BMP_MINUS = u"sc/res/ou010.png";
+inline constexpr OUStringLiteral RID_BMP_NOTPRESSED = u"sc/res/ou011.png";
+inline constexpr OUStringLiteral RID_BMP_PRESSED = u"sc/res/ou012.png";
 
 #define RID_BMP_SELECT_CURRENT                  "sc/res/popup_select_current.png"
 #define RID_BMP_UNSELECT_CURRENT                "sc/res/popup_unselect_current.png"
 
-#define RID_BMP_CONTENT_TABLE                   "sc/res/nc01.png"
-#define RID_BMP_CONTENT_RANGENAME               "sc/res/nc02.png"
-#define RID_BMP_CONTENT_DBAREA                  "sc/res/nc03.png"
-#define RID_BMP_CONTENT_GRAPHIC                 "sc/res/nc04.png"
-#define RID_BMP_CONTENT_OLEOBJECT               "sc/res/nc05.png"
-#define RID_BMP_CONTENT_NOTE                    "sc/res/nc06.png"
-#define RID_BMP_CONTENT_AREALINK                "sc/res/nc07.png"
-#define RID_BMP_CONTENT_DRAWING                 "sc/res/nc08.png"
-#define RID_BMP_DROP_URL                        "sc/res/dropurl.png"
-#define RID_BMP_DROP_LINK                       "sc/res/droplink.png"
-#define RID_BMP_DROP_COPY                       "sc/res/dropcopy.png"
-#define RID_BMP_ELEMENT_DEFAULT                 "sc/res/xml_element.png"
-#define RID_BMP_ELEMENT_REPEAT                  "sc/res/xml_element_repeat.png"
-#define RID_BMP_ELEMENT_ATTRIBUTE               "sc/res/xml_attribute.png"
+inline constexpr OUStringLiteral RID_BMP_CONTENT_TABLE = u"sc/res/nc01.png";
+inline constexpr OUStringLiteral RID_BMP_CONTENT_RANGENAME = u"sc/res/nc02.png";
+inline constexpr OUStringLiteral RID_BMP_CONTENT_DBAREA = u"sc/res/nc03.png";
+inline constexpr OUStringLiteral RID_BMP_CONTENT_GRAPHIC = u"sc/res/nc04.png";
+inline constexpr OUStringLiteral RID_BMP_CONTENT_OLEOBJECT = u"sc/res/nc05.png";
+inline constexpr OUStringLiteral RID_BMP_CONTENT_NOTE = u"sc/res/nc06.png";
+inline constexpr OUStringLiteral RID_BMP_CONTENT_AREALINK = u"sc/res/nc07.png";
+inline constexpr OUStringLiteral RID_BMP_CONTENT_DRAWING = u"sc/res/nc08.png";
+inline constexpr OUStringLiteral RID_BMP_DROP_URL = u"sc/res/dropurl.png";
+inline constexpr OUStringLiteral RID_BMP_DROP_LINK = u"sc/res/droplink.png";
+inline constexpr OUStringLiteral RID_BMP_DROP_COPY = u"sc/res/dropcopy.png";
+inline constexpr OUStringLiteral RID_BMP_ELEMENT_DEFAULT = u"sc/res/xml_element.png";
+inline constexpr OUStringLiteral RID_BMP_ELEMENT_REPEAT = u"sc/res/xml_element_repeat.png";
+inline constexpr OUStringLiteral RID_BMP_ELEMENT_ATTRIBUTE = u"sc/res/xml_attribute.png";
 
-#define BMP_LEFTRIGHT                           "sc/res/lftrgt.png"
-#define BMP_TOPDOWN                             "sc/res/topdown.png"
+inline constexpr OUStringLiteral BMP_LEFTRIGHT = u"sc/res/lftrgt.png";
+inline constexpr OUStringLiteral BMP_TOPDOWN = u"sc/res/topdown.png";
 
-#define RID_BMP_CELL_BORDER                     "sc/res/sidebar/CellBorder.png"
-#define RID_BMP_LINE_STYLE1                     "sc/res/sidebar/CellBorderLineStyle_005.png"
-#define RID_BMP_LINE_STYLE2                     "sc/res/sidebar/CellBorderLineStyle_250.png"
-#define RID_BMP_LINE_STYLE3                     "sc/res/sidebar/CellBorderLineStyle_400.png"
-#define RID_BMP_LINE_STYLE4                     "sc/res/sidebar/CellBorderLineStyle_500.png"
-#define RID_BMP_LINE_STYLE5                     "sc/res/sidebar/CellBorderLineStyle_110.png"
-#define RID_BMP_LINE_STYLE6                     "sc/res/sidebar/CellBorderLineStyle_260.png"
-#define RID_BMP_LINE_STYLE7                     "sc/res/sidebar/CellBorderLineStyle_450.png"
-#define RID_BMP_LINE_STYLE8                     "sc/res/sidebar/CellBorderLineStyle_505.png"
-#define RID_BMP_LINE_STYLE9                     "sc/res/sidebar/CellBorderLineStyle_750.png"
+inline constexpr OUStringLiteral RID_BMP_CELL_BORDER = u"sc/res/sidebar/CellBorder.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE1 = u"sc/res/sidebar/CellBorderLineStyle_005.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE2 = u"sc/res/sidebar/CellBorderLineStyle_250.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE3 = u"sc/res/sidebar/CellBorderLineStyle_400.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE4 = u"sc/res/sidebar/CellBorderLineStyle_500.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE5 = u"sc/res/sidebar/CellBorderLineStyle_110.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE6 = u"sc/res/sidebar/CellBorderLineStyle_260.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE7 = u"sc/res/sidebar/CellBorderLineStyle_450.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE8 = u"sc/res/sidebar/CellBorderLineStyle_505.png";
+inline constexpr OUStringLiteral RID_BMP_LINE_STYLE9 = u"sc/res/sidebar/CellBorderLineStyle_750.png";
 
-#define RID_BMP_INPUT_FUNCTION                  "sc/res/sc26047.png"
-#define RID_BMP_INPUT_SUM                       "sc/res/sc26048.png"
-#define RID_BMP_INPUT_EQUAL                     "sc/res/sc26049.png"
-#define RID_BMP_INPUT_CANCEL                    "sc/res/sc26050.png"
-#define RID_BMP_INPUT_OK                        "sc/res/sc26051.png"
+inline constexpr OUStringLiteral RID_BMP_INPUT_FUNCTION = u"sc/res/sc26047.png";
+inline constexpr OUStringLiteral RID_BMP_INPUT_SUM = u"sc/res/sc26048.png";
+inline constexpr OUStringLiteral RID_BMP_INPUT_EQUAL = u"sc/res/sc26049.png";
+inline constexpr OUStringLiteral RID_BMP_INPUT_CANCEL = u"sc/res/sc26050.png";
+inline constexpr OUStringLiteral RID_BMP_INPUT_OK = u"sc/res/sc26051.png";
 
-#define BMP_STYLES_FAMILY_CELL                  "sc/res/sf01.png"
-#define BMP_STYLES_FAMILY_PAGE                  "sc/res/sf02.png"
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_CELL = u"sc/res/sf01.png";
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_PAGE = u"sc/res/sf02.png";
 
-#define BMP_ICON_SET_CIRCLES1_GRAY              "sc/res/icon-set-circles1-gray.png"
-#define BMP_ICON_SET_CIRCLES1_GREEN             "sc/res/icon-set-circles1-green.png"
-#define BMP_ICON_SET_CIRCLES1_YELLOW            "sc/res/icon-set-circles1-yellow.png"
-#define BMP_ICON_SET_CIRCLES1_RED               "sc/res/icon-set-circles1-red.png"
-#define BMP_ICON_SET_BARS_EMPTY                 "sc/res/icon-set-bars-empty.png"
-#define BMP_ICON_SET_BARS_ONE_QUARTER           "sc/res/icon-set-bars-one-quarter.png"
-#define BMP_ICON_SET_BARS_HALF                  "sc/res/icon-set-bars-half.png"
-#define BMP_ICON_SET_BARS_THREE_QUARTER         "sc/res/icon-set-bars-three-quarters.png"
-#define BMP_ICON_SET_BARS_FULL                  "sc/res/icon-set-bars-full.png"
-#define BMP_ICON_SET_CIRCLES2_DARK_GRAY         "sc/res/icon-set-circles2-dark-gray.png"
-#define BMP_ICON_SET_CIRCLES2_LIGHT_GRAY        "sc/res/icon-set-circles2-light-gray.png"
-#define BMP_ICON_SET_CIRCLES2_LIGHT_RED         "sc/res/icon-set-circles2-light-red.png"
-#define BMP_ICON_SET_CIRCLES2_DARK_RED          "sc/res/icon-set-circles2-dark-red.png"
-#define BMP_ICON_SET_COLORARROWS_DOWN           "sc/res/icon-set-colorarrows-down.png"
-#define BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN  "sc/res/icon-set-colorarrows-slightly-down.png"
-#define BMP_ICON_SET_COLORARROWS_SAME           "sc/res/icon-set-colorarrows-same.png"
-#define BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP    "sc/res/icon-set-colorarrows-slightly-up.png"
-#define BMP_ICON_SET_COLORARROWS_UP             "sc/res/icon-set-colorarrows-up.png"
-#define BMP_ICON_SET_FLAGS_RED                  "sc/res/icon-set-flags-red.png"
-#define BMP_ICON_SET_FLAGS_YELLOW               "sc/res/icon-set-flags-yellow.png"
-#define BMP_ICON_SET_FLAGS_GREEN                "sc/res/icon-set-flags-green.png"
-#define BMP_ICON_SET_GRAYARROWS_DOWN            "sc/res/icon-set-grayarrows-down.png"
-#define BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN   "sc/res/icon-set-grayarrows-slightly-down.png"
-#define BMP_ICON_SET_GRAYARROWS_SAME            "sc/res/icon-set-grayarrows-same.png"
-#define BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP     "sc/res/icon-set-grayarrows-slightly-up.png"
-#define BMP_ICON_SET_GRAYARROWS_UP              "sc/res/icon-set-grayarrows-up.png"
-#define BMP_ICON_SET_PIES_EMPTY                 "sc/res/icon-set-pies-empty.png"
-#define BMP_ICON_SET_PIES_ONE_QUARTER           "sc/res/icon-set-pies-one-quarter.png"
-#define BMP_ICON_SET_PIES_HALF                  "sc/res/icon-set-pies-half.png"
-#define BMP_ICON_SET_PIES_THREE_QUARTER         "sc/res/icon-set-pies-three-quarters.png"
-#define BMP_ICON_SET_PIES_FULL                  "sc/res/icon-set-pies-full.png"
-#define BMP_ICON_SET_SHAPES_CIRCLE              "sc/res/icon-set-shapes-circle.png"
-#define BMP_ICON_SET_SHAPES_TRIANGLE            "sc/res/icon-set-shapes-triangle.png"
-#define BMP_ICON_SET_SHAPES_DIAMOND             "sc/res/icon-set-shapes-diamond.png"
-#define BMP_ICON_SET_SQUARES_EMPTY              "sc/res/icon-set-squares-empty.png"
-#define BMP_ICON_SET_SQUARES_ONE_QUARTER        "sc/res/icon-set-squares-one-quarter.png"
-#define BMP_ICON_SET_SQUARES_HALF               "sc/res/icon-set-squares-half.png"
-#define BMP_ICON_SET_SQUARES_THREE_QUARTER      "sc/res/icon-set-squares-three-quarters.png"
-#define BMP_ICON_SET_SQUARES_FULL               "sc/res/icon-set-squares-full.png"
-#define BMP_ICON_SET_STARS_EMPTY                "sc/res/icon-set-stars-empty.png"
-#define BMP_ICON_SET_STARS_HALF                 "sc/res/icon-set-stars-half.png"
-#define BMP_ICON_SET_STARS_FULL                 "sc/res/icon-set-stars-full.png"
-#define BMP_ICON_SET_SYMBOLS1_CHECK             "sc/res/icon-set-symbols1-check.png"
-#define BMP_ICON_SET_SYMBOLS1_EXCLAMATION_MARK  "sc/res/icon-set-symbols1-exclamation-mark.png"
-#define BMP_ICON_SET_SYMBOLS1_CROSS             "sc/res/icon-set-symbols1-cross.png"
-#define BMP_ICON_SET_TRAFFICLIGHTS_RED          "sc/res/icon-set-trafficlights-red.png"
-#define BMP_ICON_SET_TRAFFICLIGHTS_YELLOW       "sc/res/icon-set-trafficlights-yellow.png"
-#define BMP_ICON_SET_TRAFFICLIGHTS_GREEN        "sc/res/icon-set-trafficlights-green.png"
-#define BMP_ICON_SET_TRIANGLES_DOWN             "sc/res/icon-set-triangles-down.png"
-#define BMP_ICON_SET_TRIANGLES_SAME             "sc/res/icon-set-triangles-same.png"
-#define BMP_ICON_SET_TRIANGLES_UP               "sc/res/icon-set-triangles-up.png"
-#define BMP_ICON_SET_POSITIVE_GREEN_SMILIE      "sc/res/icon-set-positive-green-smilie.png"
-#define BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE      "sc/res/icon-set-neutral-yellow-smilie.png"
-#define BMP_ICON_SET_NEGATIVE_RED_SMILIE        "sc/res/icon-set-negative-red-smilie.png"
-#define BMP_ICON_SET_POSITIVE_YELLOW_SMILIE     "sc/res/icon-set-positive-yellow-smilie.png"
-#define BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE     "sc/res/icon-set-negative-yellow-smilie.png"
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES1_GRAY = u"sc/res/icon-set-circles1-gray.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES1_GREEN = u"sc/res/icon-set-circles1-green.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES1_YELLOW = u"sc/res/icon-set-circles1-yellow.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES1_RED = u"sc/res/icon-set-circles1-red.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_BARS_EMPTY = u"sc/res/icon-set-bars-empty.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_BARS_ONE_QUARTER = u"sc/res/icon-set-bars-one-quarter.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_BARS_HALF = u"sc/res/icon-set-bars-half.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_BARS_THREE_QUARTER = u"sc/res/icon-set-bars-three-quarters.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_BARS_FULL = u"sc/res/icon-set-bars-full.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES2_DARK_GRAY = u"sc/res/icon-set-circles2-dark-gray.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES2_LIGHT_GRAY = u"sc/res/icon-set-circles2-light-gray.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES2_LIGHT_RED = u"sc/res/icon-set-circles2-light-red.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES2_DARK_RED = u"sc/res/icon-set-circles2-dark-red.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_COLORARROWS_DOWN = u"sc/res/icon-set-colorarrows-down.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN = u"sc/res/icon-set-colorarrows-slightly-down.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_COLORARROWS_SAME = u"sc/res/icon-set-colorarrows-same.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP = u"sc/res/icon-set-colorarrows-slightly-up.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_COLORARROWS_UP = u"sc/res/icon-set-colorarrows-up.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_FLAGS_RED = u"sc/res/icon-set-flags-red.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_FLAGS_YELLOW = u"sc/res/icon-set-flags-yellow.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_FLAGS_GREEN = u"sc/res/icon-set-flags-green.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_GRAYARROWS_DOWN = u"sc/res/icon-set-grayarrows-down.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN = u"sc/res/icon-set-grayarrows-slightly-down.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_GRAYARROWS_SAME = u"sc/res/icon-set-grayarrows-same.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP = u"sc/res/icon-set-grayarrows-slightly-up.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_GRAYARROWS_UP = u"sc/res/icon-set-grayarrows-up.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_PIES_EMPTY = u"sc/res/icon-set-pies-empty.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_PIES_ONE_QUARTER = u"sc/res/icon-set-pies-one-quarter.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_PIES_HALF = u"sc/res/icon-set-pies-half.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_PIES_THREE_QUARTER = u"sc/res/icon-set-pies-three-quarters.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_PIES_FULL = u"sc/res/icon-set-pies-full.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SHAPES_CIRCLE = u"sc/res/icon-set-shapes-circle.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SHAPES_TRIANGLE = u"sc/res/icon-set-shapes-triangle.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SHAPES_DIAMOND = u"sc/res/icon-set-shapes-diamond.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SQUARES_EMPTY = u"sc/res/icon-set-squares-empty.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SQUARES_ONE_QUARTER = u"sc/res/icon-set-squares-one-quarter.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SQUARES_HALF = u"sc/res/icon-set-squares-half.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SQUARES_THREE_QUARTER = u"sc/res/icon-set-squares-three-quarters.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SQUARES_FULL = u"sc/res/icon-set-squares-full.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_STARS_EMPTY = u"sc/res/icon-set-stars-empty.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_STARS_HALF = u"sc/res/icon-set-stars-half.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_STARS_FULL = u"sc/res/icon-set-stars-full.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SYMBOLS1_CHECK = u"sc/res/icon-set-symbols1-check.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SYMBOLS1_EXCLAMATION_MARK = u"sc/res/icon-set-symbols1-exclamation-mark.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_SYMBOLS1_CROSS = u"sc/res/icon-set-symbols1-cross.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_TRAFFICLIGHTS_RED = u"sc/res/icon-set-trafficlights-red.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_TRAFFICLIGHTS_YELLOW = u"sc/res/icon-set-trafficlights-yellow.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_TRAFFICLIGHTS_GREEN = u"sc/res/icon-set-trafficlights-green.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_TRIANGLES_DOWN = u"sc/res/icon-set-triangles-down.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_TRIANGLES_SAME = u"sc/res/icon-set-triangles-same.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_TRIANGLES_UP = u"sc/res/icon-set-triangles-up.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_POSITIVE_GREEN_SMILIE = u"sc/res/icon-set-positive-green-smilie.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE = u"sc/res/icon-set-neutral-yellow-smilie.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_NEGATIVE_RED_SMILIE = u"sc/res/icon-set-negative-red-smilie.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_POSITIVE_YELLOW_SMILIE = u"sc/res/icon-set-positive-yellow-smilie.png";
+inline constexpr OUStringLiteral BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE = u"sc/res/icon-set-negative-yellow-smilie.png";
 
-#define RID_SVXBMP_SLIDERBUTTON                 "svx/res/slidezoombutton_10.png"
-#define RID_SVXBMP_SLIDERDECREASE               "svx/res/slidezoomout_10.png"
-#define RID_SVXBMP_SLIDERINCREASE               "svx/res/slidezoomin_10.png"
+inline constexpr OUStringLiteral RID_SVXBMP_SLIDERBUTTON = u"svx/res/slidezoombutton_10.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SLIDERDECREASE = u"svx/res/slidezoomout_10.png";
+inline constexpr OUStringLiteral RID_SVXBMP_SLIDERINCREASE = u"svx/res/slidezoomin_10.png";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
