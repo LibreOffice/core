@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 namespace xmloff
 {
 
@@ -141,12 +143,12 @@ namespace xmloff
     #define PROPERTY_RICH_TEXT "RichText"
 
     // services
-    #define SERVICE_SPREADSHEET_DOCUMENT "com.sun.star.sheet.SpreadsheetDocument"
-    #define SERVICE_CELLVALUEBINDING "com.sun.star.table.CellValueBinding"
-    #define SERVICE_LISTINDEXCELLBINDING "com.sun.star.table.ListPositionCellBinding"
-    #define SERVICE_CELLRANGELISTSOURCE "com.sun.star.table.CellRangeListSource"
-    #define SERVICE_ADDRESS_CONVERSION "com.sun.star.table.CellAddressConversion"
-    #define SERVICE_RANGEADDRESS_CONVERSION "com.sun.star.table.CellRangeAddressConversion"
+    inline constexpr OUStringLiteral SERVICE_SPREADSHEET_DOCUMENT = u"com.sun.star.sheet.SpreadsheetDocument";
+    inline constexpr OUStringLiteral SERVICE_CELLVALUEBINDING  = u"com.sun.star.table.CellValueBinding";
+    inline constexpr OUStringLiteral SERVICE_LISTINDEXCELLBINDING  = u"com.sun.star.table.ListPositionCellBinding";
+    inline constexpr OUStringLiteral SERVICE_CELLRANGELISTSOURCE = u"com.sun.star.table.CellRangeListSource";
+    inline constexpr OUStringLiteral SERVICE_ADDRESS_CONVERSION  = u"com.sun.star.table.CellAddressConversion";
+    inline constexpr OUStringLiteral SERVICE_RANGEADDRESS_CONVERSION = u"com.sun.star.table.CellRangeAddressConversion";
 
     // old service names (compatibility)
     #define SERVICE_PERSISTENT_COMPONENT_FORM "stardiv.one.form.component.Form"
@@ -171,36 +173,36 @@ namespace xmloff
     #define SERVICE_PERSISTENT_COMPONENT_FORMATTEDFIELD "stardiv.one.form.component.FormattedField"
 
     // new service names, the old ones are translated into this new ones
-    #define SERVICE_FORM "com.sun.star.form.component.Form"
-    #define SERVICE_EDIT "com.sun.star.form.component.TextField"
-    #define SERVICE_LISTBOX "com.sun.star.form.component.ListBox"
-    #define SERVICE_COMBOBOX "com.sun.star.form.component.ComboBox"
-    #define SERVICE_RADIOBUTTON "com.sun.star.form.component.RadioButton"
-    #define SERVICE_GROUPBOX "com.sun.star.form.component.GroupBox"
-    #define SERVICE_FIXEDTEXT "com.sun.star.form.component.FixedText"
-    #define SERVICE_COMMANDBUTTON "com.sun.star.form.component.CommandButton"
-    #define SERVICE_CHECKBOX "com.sun.star.form.component.CheckBox"
-    #define SERVICE_GRID "com.sun.star.form.component.GridControl"
-    #define SERVICE_IMAGEBUTTON "com.sun.star.form.component.ImageButton"
-    #define SERVICE_FILECONTROL "com.sun.star.form.component.FileControl"
-    #define SERVICE_TIMEFIELD "com.sun.star.form.component.TimeField"
-    #define SERVICE_DATEFIELD "com.sun.star.form.component.DateField"
-    #define SERVICE_NUMERICFIELD "com.sun.star.form.component.NumericField"
-    #define SERVICE_CURRENCYFIELD "com.sun.star.form.component.CurrencyField"
-    #define SERVICE_PATTERNFIELD "com.sun.star.form.component.PatternField"
-    #define SERVICE_HIDDENCONTROL "com.sun.star.form.component.HiddenControl"
-    #define SERVICE_IMAGECONTROL "com.sun.star.form.component.DatabaseImageControl"
-    #define SERVICE_FORMATTEDFIELD "com.sun.star.form.component.FormattedField"
+    inline constexpr OUStringLiteral SERVICE_FORM = u"com.sun.star.form.component.Form";
+    inline constexpr OUStringLiteral SERVICE_EDIT = u"com.sun.star.form.component.TextField";
+    inline constexpr OUStringLiteral SERVICE_LISTBOX = u"com.sun.star.form.component.ListBox";
+    inline constexpr OUStringLiteral SERVICE_COMBOBOX = u"com.sun.star.form.component.ComboBox";
+    inline constexpr OUStringLiteral SERVICE_RADIOBUTTON = u"com.sun.star.form.component.RadioButton";
+    inline constexpr OUStringLiteral SERVICE_GROUPBOX = u"com.sun.star.form.component.GroupBox";
+    inline constexpr OUStringLiteral SERVICE_FIXEDTEXT = u"com.sun.star.form.component.FixedText";
+    inline constexpr OUStringLiteral SERVICE_COMMANDBUTTON = u"com.sun.star.form.component.CommandButton";
+    inline constexpr OUStringLiteral SERVICE_CHECKBOX = u"com.sun.star.form.component.CheckBox";
+    inline constexpr OUStringLiteral SERVICE_GRID = u"com.sun.star.form.component.GridControl";
+    inline constexpr OUStringLiteral SERVICE_IMAGEBUTTON = u"com.sun.star.form.component.ImageButton";
+    inline constexpr OUStringLiteral SERVICE_FILECONTROL = u"com.sun.star.form.component.FileControl";
+    inline constexpr OUStringLiteral SERVICE_TIMEFIELD = u"com.sun.star.form.component.TimeField";
+    inline constexpr OUStringLiteral SERVICE_DATEFIELD = u"com.sun.star.form.component.DateField";
+    inline constexpr OUStringLiteral SERVICE_NUMERICFIELD = u"com.sun.star.form.component.NumericField";
+    inline constexpr OUStringLiteral SERVICE_CURRENCYFIELD = u"com.sun.star.form.component.CurrencyField";
+    inline constexpr OUStringLiteral SERVICE_PATTERNFIELD = u"com.sun.star.form.component.PatternField";
+    inline constexpr OUStringLiteral SERVICE_HIDDENCONTROL = u"com.sun.star.form.component.HiddenControl";
+    inline constexpr OUStringLiteral SERVICE_IMAGECONTROL = u"com.sun.star.form.component.DatabaseImageControl";
+    inline constexpr OUStringLiteral SERVICE_FORMATTEDFIELD = u"com.sun.star.form.component.FormattedField";
 
     // various strings
     #define EVENT_NAME_SEPARATOR "::"
-    #define EVENT_TYPE "EventType"
-    #define EVENT_LIBRARY "Library"
-    #define EVENT_LOCALMACRONAME "MacroName"
-    #define EVENT_SCRIPTURL "Script"
-    #define EVENT_STAROFFICE "StarOffice"
+    inline constexpr OUStringLiteral EVENT_TYPE = u"EventType";
+    inline constexpr OUStringLiteral EVENT_LIBRARY = u"Library";
+    inline constexpr OUStringLiteral EVENT_LOCALMACRONAME = u"MacroName";
+    inline constexpr OUStringLiteral EVENT_SCRIPTURL = u"Script";
+    inline constexpr OUStringLiteral EVENT_STAROFFICE = u"StarOffice";
     #define EVENT_STARBASIC "StarBasic"
-    #define EVENT_APPLICATION "application"
+    inline constexpr OUStringLiteral EVENT_APPLICATION = u"application";
 
 }   // namespace xmloff
 
