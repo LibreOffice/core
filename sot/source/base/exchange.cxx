@@ -141,7 +141,7 @@ const DataFlavorRepresentation* FormatArray_Impl()
         /* 86 SotClipboardFormatId::LINK_SOURCE*/            { "application/x-openoffice-link-source-xml;windows_formatname=\"Star Link Source (XML)\"", "Star Link Source (XML)", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /* 87 SotClipboardFormatId::EMBEDDED_OBJ*/           { "application/x-openoffice-embedded-obj-xml;windows_formatname=\"Star Embedded Object (XML)\"", "Star Embedded Object (XML)", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /* 88 SotClipboardFormatId::FILECONTENT*/            { "application/x-openoffice-filecontent;windows_formatname=\"FileContents\"", "FileContents", &cppu::UnoType<Sequence<sal_Int8>>::get() },
-        /* 89 SotClipboardFormatId::FILEGRPDESCRIPTOR*/      { "application/x-openoffice-filegrpdescriptor;windows_formatname=\"FileGroupDescriptor\"", "FileGroupDescriptor", &cppu::UnoType<Sequence<sal_Int8>>::get() },
+        /* 89 SotClipboardFormatId::FILEGRPDESCRIPTOR*/      { "application/x-openoffice-filegrpdescriptor;windows_formatname=\"FileGroupDescriptorW\"", "FileGroupDescriptor", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /* 90 SotClipboardFormatId::FILENAME*/               { "application/x-openoffice-filename;windows_formatname=\"FileNameW\"", "FileName", &cppu::UnoType<OUString>::get() },
         /* 91 SotClipboardFormatId::SD_OLE*/                 { "application/x-openoffice-sd-ole;windows_formatname=\"SD-OLE\"", "SD-OLE", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /* 92 SotClipboardFormatId::EMBEDDED_OBJ_OLE*/       { "application/x-openoffice-embedded-obj-ole;windows_formatname=\"Embedded Object\"", "Embedded Object", &cppu::UnoType<Sequence<sal_Int8>>::get() },

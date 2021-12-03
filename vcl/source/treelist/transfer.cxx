@@ -22,6 +22,7 @@
 #include <postwin.h>
 #include <shlobj.h>
 #endif
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
@@ -76,6 +77,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
+using namespace std::literals::string_view_literals;
 
 
 #define TOD_SIG1 0x01234567
@@ -797,23 +799,21 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 #ifdef _WIN32
         case SotClipboardFormatId::FILEGRPDESCRIPTOR:
         {
-            Sequence< sal_Int8 >    aSeq( sizeof( FILEGROUPDESCRIPTOR ) );
-            FILEGROUPDESCRIPTOR*    pFDesc = reinterpret_cast<FILEGROUPDESCRIPTOR*>(aSeq.getArray());
-            FILEDESCRIPTOR&         rFDesc1 = pFDesc->fgd[ 0 ];
+            Sequence< sal_Int8 >    aSeq( sizeof( FILEGROUPDESCRIPTORW ) );
+            FILEGROUPDESCRIPTORW*   pFDesc = reinterpret_cast<FILEGROUPDESCRIPTORW*>(aSeq.getArray());
+            FILEDESCRIPTORW&        rFDesc1 = pFDesc->fgd[ 0 ];
 
             pFDesc->cItems = 1;
-            memset( &rFDesc1, 0, sizeof( FILEDESCRIPTOR ) );
+            memset( &rFDesc1, 0, sizeof( rFDesc1 ) );
             rFDesc1.dwFlags = FD_LINKUI;
 
-            OStringBuffer aStr(OUStringToOString(
-                rBmk.GetDescription(), eSysCSet));
-            for( sal_Int32 nChar = 0; nChar < aStr.getLength(); ++nChar )
-                if( strchr( "\\/:*?\"<>|", aStr[nChar] ) )
-                    aStr.remove(nChar--, 1);
+            OUStringBuffer aStr(rBmk.GetDescription());
+            for( size_t nChar = 0; (nChar = std::u16string_view(aStr).find_first_of(u"\\/:*?\"<>|"sv, nChar)) != std::u16string_view::npos; )
+                aStr.remove(nChar, 1);
 
             aStr.insert(0, "Shortcut to ");
             aStr.append(".URL");
-            strcpy( rFDesc1.cFileName, aStr.getStr() );
+            wcscpy( rFDesc1.cFileName, o3tl::toW(aStr.getStr()) );
 
             maAny <<= aSeq;
         }
@@ -1895,16 +1895,15 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
 
             if (aSeq.getLength())
             {
-                FILEGROUPDESCRIPTOR const * pFDesc = reinterpret_cast<FILEGROUPDESCRIPTOR const *>(aSeq.getConstArray());
+                FILEGROUPDESCRIPTORW const * pFDesc = reinterpret_cast<FILEGROUPDESCRIPTORW const *>(aSeq.getConstArray());
 
                 if( pFDesc->cItems )
                 {
-                    OString aDesc( pFDesc->fgd[ 0 ].cFileName );
-                    rtl_TextEncoding    eTextEncoding = osl_getThreadTextEncoding();
+                    OUString aDesc( o3tl::toU(pFDesc->fgd[ 0 ].cFileName) );
 
-                    if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCase(".URL") )
+                    if( ( aDesc.getLength() > 4 ) && aDesc.endsWithIgnoreAsciiCase(".URL") )
                     {
-                        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+                        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( aDesc ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                                                   StreamMode::STD_READ ));
 
                         if( !pStream || pStream->GetError() )
@@ -1925,18 +1924,33 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
                         if( pStream )
                         {
                             OString aLine;
-                            bool    bSttFnd = false;
+                            bool bInA = false, bInW = false, bAFound = false;
 
                             while( pStream->ReadLine( aLine ) )
                             {
-                                if (aLine.equalsIgnoreAsciiCase("[InternetShortcut]"))
-                                    bSttFnd = true;
-                                else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCase("URL="))
+                                if (aLine.startsWithIgnoreAsciiCase("[InternetShortcut", &aLine))
                                 {
+                                    // May be [InternetShortcut], or [InternetShortcut.A], or
+                                    // [InternetShortcut.W] (the latter has UTF-7-encoded URL)
+                                    bInW = aLine.equalsIgnoreAsciiCase(".W]");
+                                    bInA = !bAFound && !bInW
+                                           && (aLine == "]" || aLine.equalsIgnoreAsciiCase(".A]"));
+                                }
+                                else if (aLine.startsWith("["))
+                                {
+                                    bInA = bInW = false;
+                                }
+                                else if ((bInA || bInW) && aLine.startsWithIgnoreAsciiCase("URL="))
+                                {
+                                    auto eTextEncoding = bInW ? RTL_TEXTENCODING_UTF7
+                                                              : osl_getThreadTextEncoding();
                                     rBmk = INetBookmark( OStringToOUString(aLine.subView(4), eTextEncoding),
-                                                         OStringToOUString(aDesc.subView(0, aDesc.getLength() - 4), eTextEncoding) );
+                                                         aDesc.copy(0, aDesc.getLength() - 4) );
                                     bRet = true;
-                                    break;
+                                    if (bInW)
+                                        break;
+                                    else
+                                        bAFound = true; // Keep looking for "W"
                                 }
                             }
                         }
