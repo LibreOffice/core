@@ -33,6 +33,38 @@ using namespace com::sun::star;
 
 namespace
 {
+/// Updates a text portion to match a new color set, in case it already uses theme colors.
+void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPortion,
+                               svx::ColorSet& rColorSet)
+{
+    sal_Int16 nCharColorTheme = -1;
+    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
+    if (nCharColorTheme < 0 || nCharColorTheme > 11)
+    {
+        return;
+    }
+
+    Color aColor = rColorSet.getColor(nCharColorTheme);
+    sal_Int32 nCharColorLumMod{};
+    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_LUM_MOD) >>= nCharColorLumMod;
+    sal_Int32 nCharColorLumOff{};
+    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_LUM_OFF) >>= nCharColorLumOff;
+    if (nCharColorLumMod != 10000 || nCharColorLumOff != 0)
+    {
+        aColor.ApplyLumModOff(nCharColorLumMod, nCharColorLumOff);
+    }
+
+    sal_Int32 nCharColorTintOrShade{};
+    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE) >>= nCharColorTintOrShade;
+    if (nCharColorTintOrShade != 0)
+    {
+        aColor.ApplyTintOrShade(nCharColorTintOrShade);
+    }
+
+    xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR,
+                               uno::makeAny(static_cast<sal_Int32>(aColor)));
+}
+
 void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
 {
     svx::ColorSet* pColorSet = pTheme->GetColorSet();
@@ -51,15 +83,7 @@ void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
         while (xPortions->hasMoreElements())
         {
             uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
-            sal_Int16 nCharColorTheme = -1;
-            xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
-            if (nCharColorTheme < 0 || nCharColorTheme > 11)
-            {
-                continue;
-            }
-
-            Color aColor = pColorSet->getColor(nCharColorTheme);
-            xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR, uno::makeAny(static_cast<sal_Int32>(aColor)));
+            UpdateTextPortionColorSet(xPortion, *pColorSet);
         }
     }
 }

@@ -49,6 +49,19 @@ void Test::tearDown()
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/svx/qa/unit/data/";
 
+/// Get the character color of the first text portion in xShape.
+sal_Int32 GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
+{
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+    sal_Int32 nColor{};
+    xPortion->getPropertyValue("CharColor") >>= nColor;
+    return nColor;
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
 {
     // Given a document, with a first slide and blue shape text from theme:
@@ -59,17 +72,14 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getByIndex(0), uno::UNO_QUERY);
-    {
-        uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xPara(
-            xText->createEnumeration()->nextElement(), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
-                                                     uno::UNO_QUERY);
-        sal_Int32 nColor{};
-        xPortion->getPropertyValue("CharColor") >>= nColor;
-        // Blue.
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), nColor);
-    }
+    // Blue.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeTextColor(xShape));
+    uno::Reference<text::XTextRange> xShape2(xDrawPageShapes->getByIndex(1), uno::UNO_QUERY);
+    // Blue, lighter.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeTextColor(xShape2));
+    uno::Reference<text::XTextRange> xShape3(xDrawPageShapes->getByIndex(2), uno::UNO_QUERY);
+    // Blue, darker.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x2f5597), GetShapeTextColor(xShape3));
 
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
@@ -80,18 +90,19 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // Then make sure the shape text color is now green:
-    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
-                                                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
-                                                 uno::UNO_QUERY);
-    sal_Int32 nColor{};
-    xPortion->getPropertyValue("CharColor") >>= nColor;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 9486886 (#90c226, green)
     // - Actual  : 4485828 (#4472c4, blue)
     // i.e. shape text was not updated on theme change.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), nColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), GetShapeTextColor(xShape));
+    // Green, lighter:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 14020002 (#d5eda2, light green)
+    // - Actual  : 9486886 (#90c226, stock green)
+    // i.e. the "light" effect on green was not applied.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd5eda2), GetShapeTextColor(xShape2));
+    // Green, darker.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x6c911d), GetShapeTextColor(xShape3));
 }
 }
 
