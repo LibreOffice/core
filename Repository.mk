@@ -486,7 +486,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     acc \
     cui \
-    gie \
     icg \
     sdui \
     $(if $(USING_X11),vclplug_gen) \
