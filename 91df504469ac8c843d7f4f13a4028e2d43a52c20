@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a1bdea0_6d27ae1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-04T16:55:28Z",
+      "side": 1,
+      "message": "Jan-Marek: can we fix the typos or is it a pb for resyncing with upstream later?",
+      "revId": "91df504469ac8c843d7f4f13a4028e2d43a52c20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
