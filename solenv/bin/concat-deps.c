@@ -944,6 +944,14 @@ static int process(struct hash* dep_hash, char* fn)
             }
             else if(*cursor == '/')
             {
+                if(cursor + 2 < end)
+                {
+                    if(!memcmp(cursor, "/./", 3))
+                    {
+                        cursor += 2;
+                        continue;
+                    }
+                }
                 if(cursor + 3 < end)
                 {
                     if(!memcmp(cursor, "/../", 4))
@@ -1008,6 +1016,7 @@ static int process(struct hash* dep_hash, char* fn)
                 *cursor_out++ = *cursor++;
             }
         }
+
         /* just in case the file did not end with a \n, there may be a pending rule */
         if(base < cursor_out)
         {
