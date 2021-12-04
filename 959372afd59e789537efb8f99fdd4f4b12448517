@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69c490e9_d15ad0fd",
+        "filename": "wizards/source/sfwidgets/SF_Menu.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-04T16:59:10Z",
+      "side": 1,
+      "message": "Reading the code, I think it should be:\nDim ui as Object, oDoc as Object...",
+      "range": {
+        "startLine": 67,
+        "startChar": 31,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "959372afd59e789537efb8f99fdd4f4b12448517",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
