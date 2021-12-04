@@ -16,6 +16,23 @@
       "message": "Right, but that attempt in 53d51dbee6d4037c4cfc3fa743de8dac76da48c6 was something different than ScaleSuper algorithm, which we got from AOO, but the algorithm is the same. All the talk about \"grfmgr2.cxx\" and one-pass scale, rotate and crop has nothing to do with this.",
       "revId": "c7976fe727686f67c7010c01c8e91109950bb876",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98a969f5_f35ce6a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-12-04T11:47:28Z",
+      "side": 1,
+      "message": "Removing everything irrelevant results in :\n\n/*\nA scaling algorithm that uses bilinear if not downscaling too much,\nand averaging otherwise (bilinear would produce poor results for big downscaling).\n\nBy default the combination of two filters is used: bilinear and averaging algorithm. \nBilinear filtering is used for bitmap enlarging and shrinking till factor 0.6. Below\nthis bilinear gives bad results because of limited sampling. For such cases averaging \nis used which is a simple algorithm for shrinking. In averaging the algorithm \ncalculates the average of samples which result is the new pixel.\n*/\n\n",
+      "revId": "c7976fe727686f67c7010c01c8e91109950bb876",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
