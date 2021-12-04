@@ -16,6 +16,23 @@
       "message": "Thank you Julien!",
       "revId": "33f3470474dd79a3a0eae1f6cb369e6400b58b6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab68702_8bf2e39c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-04T09:08:12Z",
+      "side": 1,
+      "message": "You\u0027re welcome! :-)",
+      "revId": "33f3470474dd79a3a0eae1f6cb369e6400b58b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
