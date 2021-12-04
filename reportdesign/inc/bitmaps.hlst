@@ -6,14 +6,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#ifndef INCLUDED_REPORTDESIGN_INC_BITMAPS_HRC
-#define INCLUDED_REPORTDESIGN_INC_BITMAPS_HRC
+#pragma once
 
 inline constexpr OUStringLiteral RID_SVXBMP_SELECT_REPORT = u"reportdesign/res/sx12464.png";
 inline constexpr OUStringLiteral RID_SVXBMP_FM_FIXEDTEXT = u"reportdesign/res/sx10597.png";
-#define RID_SVXBMP_INSERT_HFIXEDLINE    "reportdesign/res/sx10928.png"
-#define RID_SVXBMP_INSERT_VFIXEDLINE    "reportdesign/res/sx10929.png"
+inline constexpr OUStringLiteral RID_SVXBMP_INSERT_HFIXEDLINE = u"reportdesign/res/sx10928.png";
+inline constexpr OUStringLiteral RID_SVXBMP_INSERT_VFIXEDLINE = u"reportdesign/res/sx10929.png";
 inline constexpr OUStringLiteral RID_SVXBMP_FM_IMAGECONTROL = u"reportdesign/res/sx10710.png";
 inline constexpr OUStringLiteral RID_SVXBMP_FM_EDIT = u"reportdesign/res/sx10599.png";
 inline constexpr OUStringLiteral RID_SVXBMP_RPT_NEW_FUNCTION = u"reportdesign/res/sx12594.png";
@@ -21,15 +19,11 @@ inline constexpr OUStringLiteral RID_SVXBMP_REPORTHEADERFOOTER = u"reportdesign/
 inline constexpr OUStringLiteral RID_SVXBMP_PAGEHEADERFOOTER = u"reportdesign/res/sx12452.png";
 inline constexpr OUStringLiteral RID_SVXBMP_GROUPHEADER = u"reportdesign/res/sx12466.png";
 inline constexpr OUStringLiteral RID_SVXBMP_GROUPFOOTER = u"reportdesign/res/sx12468.png";
-#define RID_SVXBMP_COLLAPSEDNODE        "reportdesign/res/sx18002.png"
-#define RID_SVXBMP_EXPANDEDNODE         "reportdesign/res/sx18003.png"
 inline constexpr OUStringLiteral RID_SVXBMP_SORTINGANDGROUPING = u"reportdesign/res/sx12454.png";
 inline constexpr OUStringLiteral RID_SVXBMP_DRAWTBX_CS_BASIC = u"reportdesign/res/sx11047.png";
 inline constexpr OUStringLiteral RID_SVXBMP_GROUP = u"reportdesign/res/sx10454.png";
 inline constexpr OUStringLiteral RID_SVXBMP_ICON_DETAIL = u"reportdesign/res/sx12603.png";
 inline constexpr OUStringLiteral RID_BMP_TREENODE_COLLAPSED = u"res/plus.png";
 inline constexpr OUStringLiteral RID_BMP_TREENODE_EXPANDED = u"res/minus.png";
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
