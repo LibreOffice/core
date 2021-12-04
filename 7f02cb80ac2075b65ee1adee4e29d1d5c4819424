@@ -16,6 +16,24 @@
       "message": "just tagging you in case you notice a performance regression that runs through this code, in which we need to revert it. \nIt is possible that somewhere in the hierarchy some kind of Bitmap is being cached, and my change is blowing that away.",
       "revId": "7f02cb80ac2075b65ee1adee4e29d1d5c4819424",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcd350df_91f93179",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-04T11:37:48Z",
+      "side": 1,
+      "message": "Thanks. There are unfortunately no drawing performance tests, so I don\u0027t have an easy way to check. But then we have Telesto, so in case this makes something worse, I\u0027m quite sure he\u0027ll find it :).\n\nThat said, if you feel brave enough, you might want to run this past Thorsten. As I understand his reply to the ML thread from yesterday, this patch is not The Way It\u0027s Meant To Be (TM).",
+      "parentUuid": "51e49ec0_ac2040f2",
+      "revId": "7f02cb80ac2075b65ee1adee4e29d1d5c4819424",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
