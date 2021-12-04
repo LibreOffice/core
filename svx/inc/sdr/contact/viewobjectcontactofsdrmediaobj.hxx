@@ -22,6 +22,7 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <config_features.h>
 #include <tools/gen.hxx>
 #include <memory>
 
@@ -51,9 +52,9 @@ namespace sdr::contact
             void    executeMediaItem( const ::avmedia::MediaItem& rItem );
 
         private:
-
+#if HAVE_FEATURE_AVMEDIA
             std::unique_ptr<sdr::contact::SdrMediaWindow> mpMediaWindow;
-
+#endif
         };
 
 } // end of namespace sdr::contact
