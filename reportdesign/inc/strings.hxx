@@ -248,23 +248,23 @@ inline constexpr OUStringLiteral SERVICE_GROUP = u"com.sun.star.report.Group";
 #define PROPERTY_MAXROWS              "MaxRows"
 
 #define PROPERTY_REPORTNAME "ReportName"
-#define CFG_REPORTDESIGNER "SunReportBuilder"
-#define DBREPORTHEADER "ReportHeader"
-#define DBREPORTFOOTER "ReportFooter"
-#define DBPAGEHEADER "PageHeader"
-#define DBPAGEFOOTER "PageFooter"
-#define DBGROUPHEADER "GroupHeader"
-#define DBGROUPFOOTER "GroupFooter"
-#define DBDETAIL "Detail"
-#define REPORTCONTROLFORMAT "ReportControlFormat"
-#define CURRENT_WINDOW "CurrentWindow"
+inline constexpr OUStringLiteral CFG_REPORTDESIGNER = u"SunReportBuilder";
+inline constexpr OUStringLiteral DBREPORTHEADER = u"ReportHeader";
+inline constexpr OUStringLiteral DBREPORTFOOTER = u"ReportFooter";
+inline constexpr OUStringLiteral DBPAGEHEADER = u"PageHeader";
+inline constexpr OUStringLiteral DBPAGEFOOTER = u"PageFooter";
+inline constexpr OUStringLiteral DBGROUPHEADER = u"GroupHeader";
+inline constexpr OUStringLiteral DBGROUPFOOTER = u"GroupFooter";
+inline constexpr OUStringLiteral DBDETAIL = u"Detail";
+inline constexpr OUStringLiteral REPORTCONTROLFORMAT = u"ReportControlFormat";
+inline constexpr OUStringLiteral CURRENT_WINDOW = u"CurrentWindow";
 #define PROPERTY_FONTCOLOR "FontColor"
 #define PROPERTY_EMPTY_IS_NULL "ConvertEmptyToNull"
 #define PROPERTY_FILTERPROPOSAL "UseFilterValueProposal"
 #define PROPERTY_POSITION "Position"
 #define PROPERTY_FORMATKEYDATE "FormatKeyDate"
 #define PROPERTY_FORMATKEYTIME "FormatKeyTime"
-#define DBOVERLAPPEDCONTROL "OverlappedControl"
+inline constexpr OUStringLiteral DBOVERLAPPEDCONTROL = u"OverlappedControl";
 #define PROPERTY_FORMULALIST "FormulaList"
 #define PROPERTY_SCOPE "Scope"
 #define PROPERTY_CHARTTYPE "ChartType"
@@ -272,13 +272,12 @@ inline constexpr OUStringLiteral SERVICE_GROUP = u"com.sun.star.report.Group";
 #define PROPERTY_TITLE "Title"
 #define PROPERTY_AREA "Area"
 #define PROPERTY_FILLCOLOR "FillColor"
-#define DBTEXTBOXBOUNDCONTENT "TextBoxBoundContent"
+inline constexpr OUStringLiteral DBTEXTBOXBOUNDCONTENT = u"TextBoxBoundContent";
 
 inline constexpr OUStringLiteral SERVICE_SETTINGSIMPORTER = u"com.sun.star.comp.Report.XMLOasisSettingsImporter";
 inline constexpr OUStringLiteral SERVICE_STYLESIMPORTER = u"com.sun.star.comp.Report.XMLOasisStylesImporter";
 inline constexpr OUStringLiteral SERVICE_CONTENTIMPORTER = u"com.sun.star.comp.Report.XMLOasisContentImporter";
-#define SERVICE_IMPORTFILTER "com.sun.star.document.ImportFilter"
-#define SERVICE_METAIMPORTER "com.sun.star.comp.Report.XMLOasisMetaImporter"
+inline constexpr OUStringLiteral SERVICE_METAIMPORTER = u"com.sun.star.comp.Report.XMLOasisMetaImporter";
 #define PROPERTY_BORDERLEFT "BorderLeft"
 #define PROPERTY_BORDERRIGHT "BorderRight"
 #define PROPERTY_BORDERTOP "BorderTop"
