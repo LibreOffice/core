@@ -690,7 +690,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByRangeLookup(const ScRefCellValu
 }
 
 std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScRefCellValue& aCell,
-                                                     const ScQueryEntry& rEntry)
+                                                     const ScQueryEntry& rEntry, size_t nEntryIndex)
 {
     std::pair<bool, bool> aRes(false, false);
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
@@ -731,16 +731,17 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
             {
                 // Sort, cache and binary search for the value in items.
                 // Don't bother comparing approximately.
-                auto& values = mCachedSortedItemValues;
-                if (!mCachedSortedItemValuesReady)
+                if (mCachedSortedItemValues.size() <= nEntryIndex)
                 {
+                    mCachedSortedItemValues.resize(nEntryIndex + 1);
+                    auto& values = mCachedSortedItemValues[nEntryIndex];
                     values.reserve(rItems.size());
                     for (const auto& rItem : rItems)
                         if (rItem.meType == ScQueryEntry::ByValue)
                             values.push_back(rItem.mfVal);
                     std::sort(values.begin(), values.end());
-                    mCachedSortedItemValuesReady = true;
                 }
+                auto& values = mCachedSortedItemValues[nEntryIndex];
                 auto it = std::lower_bound(values.begin(), values.end(), value);
                 if (it != values.end() && *it == value)
                     return std::make_pair(true, true);
@@ -787,9 +788,10 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
                 // Sort, cache and binary search for the string in items.
                 // Since each SharedString is identified by pointer value,
                 // sorting by pointer value is enough.
-                auto& values = mCachedSortedItemStrings;
-                if (!mCachedSortedItemStringsReady)
+                if (mCachedSortedItemStrings.size() <= nEntryIndex)
                 {
+                    mCachedSortedItemStrings.resize(nEntryIndex + 1);
+                    auto& values = mCachedSortedItemStrings[nEntryIndex];
                     values.reserve(rItems.size());
                     for (const auto& rItem : rItems)
                     {
@@ -802,8 +804,8 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
                         }
                     }
                     std::sort(values.begin(), values.end());
-                    mCachedSortedItemStringsReady = true;
                 }
+                auto& values = mCachedSortedItemStrings[nEntryIndex];
                 const rtl_uString* string = mrParam.bCaseSens
                                                 ? cellSharedString->getData()
                                                 : cellSharedString->getDataIgnoreCase();
@@ -917,7 +919,7 @@ bool ScQueryEvaluator::ValidQuery(SCROW nRow, const ScRefCellValue* pCell,
         else
             aCell = mrTab.GetCellValue(nCol, nRow);
 
-        std::pair<bool, bool> aRes = processEntry(nRow, nCol, aCell, rEntry);
+        std::pair<bool, bool> aRes = processEntry(nRow, nCol, aCell, rEntry, it - itBeg);
 
         if (nPos == -1)
         {
