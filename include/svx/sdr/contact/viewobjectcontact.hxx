@@ -71,7 +71,7 @@ protected:
     // from the ViewContact using ViewContact::getViewIndependentPrimitive2DContainer(), takes care of
     // visibility, handles glue and ghosted.
     // This method will not handle included hierarchies and not check geometric visibility.
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+    virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const;
 
 public:
     // basic constructor.

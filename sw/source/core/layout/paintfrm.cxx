@@ -2970,9 +2970,10 @@ namespace
                 : mrViewShell( rSh )
             {};
 
-            virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
+            virtual void createRedirectedPrimitive2DSequence(
                                     const sdr::contact::ViewObjectContact& rOriginal,
-                                    const sdr::contact::DisplayInfo& rDisplayInfo) override
+                                    const sdr::contact::DisplayInfo& rDisplayInfo,
+                                    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
             {
                 bool bPaint( true );
 
@@ -2984,11 +2985,11 @@ namespace
 
                 if ( !bPaint )
                 {
-                    return drawinglayer::primitive2d::Primitive2DContainer();
+                    return;
                 }
 
-                return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-                                                        rOriginal, rDisplayInfo );
+                sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+                                                        rOriginal, rDisplayInfo, rVisitor );
             }
     };
 

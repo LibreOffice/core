@@ -91,7 +91,7 @@ namespace sdr::contact {
         virtual ~ViewObjectContactOfUnoControl() override;
 
         // support for Primitive2D
-        virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+        virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         // visibility check
         virtual bool isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const override;
@@ -113,7 +113,7 @@ namespace sdr::contact {
         UnoControlPrintOrPreviewContact( const UnoControlPrintOrPreviewContact& ) = delete;
         UnoControlPrintOrPreviewContact& operator=( const UnoControlPrintOrPreviewContact& ) = delete;
 
-        virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const override;
+        virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
     };
 
 

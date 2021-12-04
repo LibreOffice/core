@@ -2078,7 +2078,7 @@ namespace sdr::contact
              *
              * This method will not handle included hierarchies and not check geometric visibility.
              */
-            virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             VOCOfDrawVirtObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -2164,7 +2164,7 @@ namespace sdr::contact
             }
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        void VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             // tdf#91260 have already checked top-level one is on the right page
             assert(isPrimitiveVisible(rDisplayInfo));
@@ -2212,7 +2212,7 @@ namespace sdr::contact
                 xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
 
-            return xRetval;
+            rVisitor.visit(xRetval);
         }
 
         ViewObjectContact& VCOfDrawVirtObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)

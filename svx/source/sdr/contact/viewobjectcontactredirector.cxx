@@ -28,11 +28,11 @@ ViewObjectContactRedirector::ViewObjectContactRedirector() {}
 // The destructor.
 ViewObjectContactRedirector::~ViewObjectContactRedirector() {}
 
-drawinglayer::primitive2d::Primitive2DContainer
-ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-    const sdr::contact::ViewObjectContact& rOriginal, const sdr::contact::DisplayInfo& rDisplayInfo)
+void ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal, const sdr::contact::DisplayInfo& rDisplayInfo,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
 {
-    return rOriginal.createPrimitive2DSequence(rDisplayInfo);
+    return rOriginal.createPrimitive2DSequence(rDisplayInfo, rVisitor);
 }
 }
 

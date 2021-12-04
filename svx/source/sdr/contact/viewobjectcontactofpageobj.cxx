@@ -181,9 +181,8 @@ bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjec
 SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
 OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetOutputDevice(); }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPageObj& rPageObject(static_cast< ViewContactOfPageObj& >(GetViewContact()).GetPageObj());
     const SdrPage* pPage = rPageObject.GetReferencedPage();
     const svtools::ColorConfig aColorConfig;
@@ -263,7 +262,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
             const uno::Reference< drawing::XDrawPage > xDrawPage(GetXDrawPageForSdrPage(const_cast< SdrPage*>(pPage)));
             const drawinglayer::primitive2d::Primitive2DReference xPagePreview(new drawinglayer::primitive2d::PagePreviewPrimitive2D(
                 xDrawPage, aPageObjectTransform, fPageWidth, fPageHeight, std::move(xPageContent)));
-            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xPagePreview };
+            rVisitor.visit(xPagePreview);
         }
     }
     else if(bCreateGrayFrame)
@@ -273,7 +272,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
         const drawinglayer::primitive2d::Primitive2DReference xFrameHit(
             drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                 aPageObjectTransform));
-        xRetval = drawinglayer::primitive2d::Primitive2DContainer { xFrameHit };
+        rVisitor.visit(xFrameHit);
     }
 
     // add a gray outline frame, except not when printing
@@ -286,10 +285,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
         const drawinglayer::primitive2d::Primitive2DReference xGrayFrame(
             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOwnOutline, aFrameColor.getBColor()));
 
-        xRetval.push_back(xGrayFrame);
+        rVisitor.visit(xGrayFrame);
     }
-
-    return xRetval;
 }
 
 ViewObjectContactOfPageObj::ViewObjectContactOfPageObj(ObjectContact& rObjectContact, ViewContact& rViewContact)

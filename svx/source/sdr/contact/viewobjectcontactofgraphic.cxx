@@ -23,29 +23,24 @@
 
 namespace sdr::contact
 {
-        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfGraphic::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        void ViewObjectContactOfGraphic::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            // get return value by calling parent
-            drawinglayer::primitive2d::Primitive2DContainer xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
+            // #i103255# suppress when graphic needs draft visualisation and output
+            // is for PDF export/Printer
+            const ViewContactOfGraphic& rVCOfGraphic = static_cast< const ViewContactOfGraphic& >(GetViewContact());
 
-            if(!xRetval.empty())
+            if(rVCOfGraphic.visualisationUsesDraft())
             {
-                // #i103255# suppress when graphic needs draft visualisation and output
-                // is for PDF export/Printer
-                const ViewContactOfGraphic& rVCOfGraphic = static_cast< const ViewContactOfGraphic& >(GetViewContact());
+                const ObjectContact& rObjectContact = GetObjectContact();
 
-                if(rVCOfGraphic.visualisationUsesDraft())
+                if(rObjectContact.isOutputToPDFFile() || rObjectContact.isOutputToPrinter())
                 {
-                    const ObjectContact& rObjectContact = GetObjectContact();
-
-                    if(rObjectContact.isOutputToPDFFile() || rObjectContact.isOutputToPrinter())
-                    {
-                        xRetval = drawinglayer::primitive2d::Primitive2DContainer();
-                    }
+                    return;
                 }
             }
 
-            return xRetval;
+            // get return value by calling parent
+            ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo, rVisitor);
         }
 
         ViewObjectContactOfGraphic::ViewObjectContactOfGraphic(ObjectContact& rObjectContact, ViewContact& rViewContact)

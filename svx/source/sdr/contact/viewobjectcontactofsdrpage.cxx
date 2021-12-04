@@ -112,13 +112,12 @@ bool ViewObjectContactOfPageBackground::isPrimitiveVisible(const DisplayInfo& rD
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageBackground::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+void ViewObjectContactOfPageBackground::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // Initialize background. Dependent of IsPageVisible, use ApplicationBackgroundColor or ApplicationDocumentColor. Most
     // old renderers for export (html, pdf, gallery, ...) set the page to not visible (SetPageVisible(false)). They expect the
     // given OutputDevice to be initialized with the ApplicationDocumentColor then.
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(pPageView)
     {
@@ -141,12 +140,9 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageBackgroun
         }
 
         // init background with InitColor
-        xRetval.resize(1);
         const basegfx::BColor aRGBColor(aInitColor.getBColor());
-        xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor, (255 - aInitColor.GetAlpha()) / 255.0));
+        rVisitor.visit(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor, (255 - aInitColor.GetAlpha()) / 255.0));
     }
-
-    return xRetval;
 }
 
 ViewObjectContactOfMasterPage::ViewObjectContactOfMasterPage(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -207,10 +203,9 @@ bool ViewObjectContactOfPageFill::isPrimitiveVisible(const DisplayInfo& rDisplay
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+void ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(pPageView)
     {
@@ -231,12 +226,9 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageFill::cre
         }
 
         // create and add primitive
-        xRetval.resize(1);
         const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
-        xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
+        rVisitor.visit(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
     }
-
-    return xRetval;
 }
 
 ViewObjectContactOfPageShadow::ViewObjectContactOfPageShadow(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -423,10 +415,9 @@ bool ViewObjectContactOfPageGrid::isPrimitiveVisible(const DisplayInfo& rDisplay
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+void ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(pPageView)
     {
@@ -448,13 +439,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageGrid::cre
         const sal_uInt32 nSubdivisionsX(aFine.getWidth() ? aRaw.getWidth() / aFine.getWidth() : 0);
         const sal_uInt32 nSubdivisionsY(aFine.getHeight() ? aRaw.getHeight() / aFine.getHeight() : 0);
 
-        xRetval.resize(1);
-        xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::GridPrimitive2D(
+        rVisitor.visit(new drawinglayer::primitive2d::GridPrimitive2D(
             aGridMatrix, fWidthX, fWidthY, 10.0, 3.0, nSubdivisionsX, nSubdivisionsY, aRGBGridColor,
             drawinglayer::primitive2d::createDefaultCross_3x3(aRGBGridColor)));
     }
-
-    return xRetval;
 }
 
 ViewObjectContactOfPageHelplines::ViewObjectContactOfPageHelplines(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -501,9 +489,8 @@ bool ViewObjectContactOfPageHelplines::isPrimitiveVisible(const DisplayInfo& rDi
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+void ViewObjectContactOfPageHelplines::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
 
     if(pPageView)
@@ -515,7 +502,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines
         {
             const basegfx::BColor aRGBColorA(1.0, 1.0, 1.0);
             const basegfx::BColor aRGBColorB(0.0, 0.0, 0.0);
-            xRetval.resize(nCount);
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
@@ -527,21 +513,21 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines
                 {
                     default : // SdrHelpLineKind::Point
                     {
-                        xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
+                        rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
                             aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Point,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
                     }
                     case SdrHelpLineKind::Vertical :
                     {
-                        xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
+                        rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
                             aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
                     }
                     case SdrHelpLineKind::Horizontal :
                     {
-                        xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
+                        rVisitor.visit(new drawinglayer::primitive2d::HelplinePrimitive2D(
                             aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
@@ -550,8 +536,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines
             }
         }
     }
-
-    return xRetval;
 }
 
 ViewObjectContactOfSdrPage::ViewObjectContactOfSdrPage(ObjectContact& rObjectContact, ViewContact& rViewContact)

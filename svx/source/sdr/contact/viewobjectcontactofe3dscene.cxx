@@ -59,7 +59,7 @@ namespace sdr::contact
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfE3dScene::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        void ViewObjectContactOfE3dScene::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             // handle ghosted, else the whole 3d group will be encapsulated to a ghosted primitive set (see below)
             const bool bHandleGhostedDisplay(GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
@@ -118,7 +118,7 @@ namespace sdr::contact
                 const_cast< DisplayInfo& >(rDisplayInfo).SetGhostedDrawMode();
             }
 
-            return xRetval;
+            rVisitor.visit(xRetval);
         }
 
         void ViewObjectContactOfE3dScene::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const

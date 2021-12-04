@@ -162,9 +162,10 @@ public:
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.
-    virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
+    virtual void createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
-        const sdr::contact::DisplayInfo& rDisplayInfo) override;
+        const sdr::contact::DisplayInfo& rDisplayInfo,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override;
 };
 
 }
@@ -173,270 +174,266 @@ ViewRedirector::ViewRedirector()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirectedPrimitive2DSequence(
+void ViewRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
-    const sdr::contact::DisplayInfo& rDisplayInfo)
+    const sdr::contact::DisplayInfo& rDisplayInfo,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
-    if(pObject && pObject->getSdrPageFromSdrObject())
-    {
-        const bool bDoCreateGeometry(pObject->getSdrPageFromSdrObject()->checkVisibility( rOriginal, rDisplayInfo, true ));
-
-        if(!bDoCreateGeometry &&
-            (( pObject->GetObjInventor() != SdrInventor::Default ) || ( pObject->GetObjIdentifier() != OBJ_PAGE )) )
-            return xRetval;
-
-        PresObjKind eKind(PresObjKind::NONE);
-        const bool bSubContentProcessing(rDisplayInfo.GetSubContentActive());
-        const bool bIsMasterPageObject(pObject->getSdrPageFromSdrObject()->IsMasterPage());
-        const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter());
-        const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
-        const SdrPage* pVisualizedPage = GetSdrPageFromXDrawPage(rOriginal.GetObjectContact().getViewInformation2D().getVisualizedPage());
-        const SdPage* pObjectsSdPage = dynamic_cast< SdPage* >(pObject->getSdrPageFromSdrObject());
-        const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
-
-        // check if we need to draw a placeholder border. Never do it for
-        // objects inside a SdrPageObj and never when printing
-        if(!bIsInsidePageObj && !bIsPrinting)
-        {
-            bool bCreateOutline(false);
-
-            if( pObject->IsEmptyPresObj() && dynamic_cast< SdrTextObj *>( pObject ) !=  nullptr )
-            {
-                if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
-                {
-                    eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PresObjKind::NONE;
-                    bCreateOutline = true;
-                }
-            }
-            else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )
-            {
-                if( pObjectsSdPage )
-                {
-                    eKind = pObjectsSdPage->GetPresObjKind(pObject);
-
-                    if((eKind == PresObjKind::Footer) || (eKind == PresObjKind::Header) || (eKind == PresObjKind::DateTime) || (eKind == PresObjKind::SlideNumber) )
-                    {
-                        if( !bSubContentProcessing )
-                        {
-                            // only draw a boundary for header&footer objects on the masterpage itself
-                            bCreateOutline = true;
-                        }
-                    }
-                }
-            }
-            else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE ) )
-            {
-                // only for handout page, else this frame will be created for each
-                // page preview object in SlideSorter and PagePane
-                if(pObjectsSdPage && PageKind::Handout == pObjectsSdPage->GetPageKind())
-                {
-                    bCreateOutline = true;
-                }
-            }
-
-            if(bCreateOutline)
-            {
-                // empty presentation objects get a gray frame
-                const svtools::ColorConfig aColorConfig;
-                const svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
-
-                if( aColor.bIsVisible )
-                {
-                    // get basic object transformation
-                    const basegfx::BColor aRGBColor(aColor.nColor.getBColor());
-                    basegfx::B2DHomMatrix aObjectMatrix;
-                    basegfx::B2DPolyPolygon aObjectPolyPolygon;
-                    pObject->TRGetBaseGeometry(aObjectMatrix, aObjectPolyPolygon);
-
-                    // create dashed border
-                    {
-                        // create object polygon
-                        basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
-                        aPolygon.transform(aObjectMatrix);
-
-                        // create line and stroke attribute
-                        ::std::vector< double > aDotDashArray { 160.0, 80.0 };
-
-                        const double fFullDotDashLen(::std::accumulate(aDotDashArray.begin(), aDotDashArray.end(), 0.0));
-                        const drawinglayer::attribute::LineAttribute aLine(aRGBColor);
-                        const drawinglayer::attribute::StrokeAttribute aStroke(std::move(aDotDashArray), fFullDotDashLen);
-
-                        // create primitive and add
-                        const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-                            aPolygon,
-                            aLine,
-                            aStroke));
-                        xRetval.push_back(xRef);
-                    }
-
-                    // now paint the placeholder description, but only when masterpage
-                    // is displayed as page directly (MasterPage view)
-                    if(!bSubContentProcessing && bIsMasterPageObject)
-                    {
-                        OUString aObjectString;
-
-                        switch( eKind )
-                        {
-                            case PresObjKind::Title:
-                            {
-                                if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
-                                {
-                                    static OUString aTitleAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_TITLE));
-                                    aObjectString = aTitleAreaStr;
-                                }
-
-                                break;
-                            }
-                            case PresObjKind::Outline:
-                            {
-                                static OUString aOutlineAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_OUTLINE));
-                                aObjectString = aOutlineAreaStr;
-                                break;
-                            }
-                            case PresObjKind::Footer:
-                            {
-                                static OUString aFooterAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_FOOTER));
-                                aObjectString = aFooterAreaStr;
-                                break;
-                            }
-                            case PresObjKind::Header:
-                            {
-                                static OUString aHeaderAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_HEADER));
-                                aObjectString = aHeaderAreaStr;
-                                break;
-                            }
-                            case PresObjKind::DateTime:
-                            {
-                                static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_DATETIME));
-                                aObjectString = aDateTimeStr;
-                                break;
-                            }
-                            case PresObjKind::Notes:
-                            {
-                                static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_NOTES));
-                                aObjectString = aDateTimeStr;
-                                break;
-                            }
-                            case PresObjKind::SlideNumber:
-                            {
-                                if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
-                                {
-                                    static OUString aSlideAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_SLIDE));
-                                    aObjectString = aSlideAreaStr;
-                                }
-                                else
-                                {
-                                    static OUString aNumberAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_NUMBER));
-                                    aObjectString = aNumberAreaStr;
-                                }
-                                break;
-                            }
-                            default:
-                            {
-                                break;
-                            }
-                        }
-
-                        if( !aObjectString.isEmpty() )
-                        {
-                            // decompose object matrix to be able to place text correctly
-                            basegfx::B2DTuple aScale;
-                            basegfx::B2DTuple aTranslate;
-                            double fRotate, fShearX;
-                            aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                            // create font
-                            SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
-                            const SdrTextVertAdjust eTVA(pTextObj ? pTextObj->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_CENTER);
-                            vcl::Font aScaledVclFont;
-
-                            // use a text size factor to get more reliable text sizes from the text layouter
-                            // (and from vcl), tipp from HDU
-                            static const sal_uInt32 nTextSizeFactor(100);
-
-                            // use a factor to get more linear text size calculations
-                            aScaledVclFont.SetFontHeight( 500 * nTextSizeFactor );
-
-                            // get basic geometry and get text size
-                            drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
-                            aTextLayouter.setFont(aScaledVclFont);
-                            const sal_Int32 nTextLength(aObjectString.getLength());
-
-                            // do not forget to use the factor again to get the width for the 500
-                            const double fTextWidth(aTextLayouter.getTextWidth(aObjectString, 0, nTextLength) * (1.0 / nTextSizeFactor));
-                            const double fTextHeight(aTextLayouter.getTextHeight() * (1.0 / nTextSizeFactor));
-
-                            // calculate text primitive position. If text is at bottom, use top for
-                            // the extra text and vice versa
-                            const double fHorDist(125);
-                            const double fVerDist(125);
-                            const double fPosX((aTranslate.getX() + aScale.getX()) - fTextWidth - fHorDist);
-                            const double fPosY((SDRTEXTVERTADJUST_BOTTOM == eTVA)
-                                ? aTranslate.getY() - fVerDist + fTextHeight
-                                : (aTranslate.getY() + aScale.getY()) - fVerDist);
-
-                            // get font attributes; use normally scaled font
-                            vcl::Font aVclFont;
-                            basegfx::B2DVector aTextSizeAttribute;
-
-                            aVclFont.SetFontHeight( 500 );
-
-                            const drawinglayer::attribute::FontAttribute aFontAttribute(
-                                drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                                    aTextSizeAttribute,
-                                    aVclFont,
-                                    false,
-                                    false));
-
-                            // fill text matrix
-                            const basegfx::B2DHomMatrix aTextMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                                aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
-                                fShearX,
-                                fRotate,
-                                fPosX, fPosY));
-
-                            // create DXTextArray (can be empty one)
-                            ::std::vector< double > aDXArray{};
-
-                            // create locale; this may need some more information in the future
-                            const css::lang::Locale aLocale;
-
-                            // create primitive and add
-                            const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                    aTextMatrix,
-                                    aObjectString,
-                                    0,
-                                    nTextLength,
-                                    std::move(aDXArray),
-                                    aFontAttribute,
-                                    aLocale,
-                                    aRGBColor));
-                            xRetval.push_back(xRef);
-                        }
-                    }
-                }
-            }
-        }
-
-        if(bDoCreateGeometry)
-        {
-            xRetval.append(
-                sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-                    rOriginal,
-                    rDisplayInfo));
-        }
-    }
-    else
+    SdrPage* pSdrPage = pObject ? pObject->getSdrPageFromSdrObject() : nullptr;
+    if(!pObject || !pSdrPage)
     {
         // not a SdrObject visualisation (maybe e.g. page) or no page
-        xRetval = sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+        sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo, rVisitor);
+        return;
     }
 
-    return xRetval;
+    const bool bDoCreateGeometry(pSdrPage->checkVisibility( rOriginal, rDisplayInfo, true ));
+
+    if(!bDoCreateGeometry &&
+        (( pObject->GetObjInventor() != SdrInventor::Default ) || ( pObject->GetObjIdentifier() != OBJ_PAGE )) )
+        return;
+
+    PresObjKind eKind(PresObjKind::NONE);
+    const bool bSubContentProcessing(rDisplayInfo.GetSubContentActive());
+    const bool bIsMasterPageObject(pSdrPage->IsMasterPage());
+    const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter());
+    const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
+    const SdrPage* pVisualizedPage = GetSdrPageFromXDrawPage(rOriginal.GetObjectContact().getViewInformation2D().getVisualizedPage());
+    const SdPage* pObjectsSdPage = dynamic_cast< SdPage* >(pSdrPage);
+    const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
+
+    // check if we need to draw a placeholder border. Never do it for
+    // objects inside a SdrPageObj and never when printing
+    if(!bIsInsidePageObj && !bIsPrinting)
+    {
+        bool bCreateOutline(false);
+
+        if( pObject->IsEmptyPresObj() && dynamic_cast< SdrTextObj *>( pObject ) !=  nullptr )
+        {
+            if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
+            {
+                eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PresObjKind::NONE;
+                bCreateOutline = true;
+            }
+        }
+        else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )
+        {
+            if( pObjectsSdPage )
+            {
+                eKind = pObjectsSdPage->GetPresObjKind(pObject);
+
+                if((eKind == PresObjKind::Footer) || (eKind == PresObjKind::Header) || (eKind == PresObjKind::DateTime) || (eKind == PresObjKind::SlideNumber) )
+                {
+                    if( !bSubContentProcessing )
+                    {
+                        // only draw a boundary for header&footer objects on the masterpage itself
+                        bCreateOutline = true;
+                    }
+                }
+            }
+        }
+        else if( ( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE ) )
+        {
+            // only for handout page, else this frame will be created for each
+            // page preview object in SlideSorter and PagePane
+            if(pObjectsSdPage && PageKind::Handout == pObjectsSdPage->GetPageKind())
+            {
+                bCreateOutline = true;
+            }
+        }
+
+        if(bCreateOutline)
+        {
+            // empty presentation objects get a gray frame
+            const svtools::ColorConfig aColorConfig;
+            const svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
+
+            if( aColor.bIsVisible )
+            {
+                // get basic object transformation
+                const basegfx::BColor aRGBColor(aColor.nColor.getBColor());
+                basegfx::B2DHomMatrix aObjectMatrix;
+                basegfx::B2DPolyPolygon aObjectPolyPolygon;
+                pObject->TRGetBaseGeometry(aObjectMatrix, aObjectPolyPolygon);
+
+                // create dashed border
+                {
+                    // create object polygon
+                    basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+                    aPolygon.transform(aObjectMatrix);
+
+                    // create line and stroke attribute
+                    ::std::vector< double > aDotDashArray { 160.0, 80.0 };
+
+                    const double fFullDotDashLen(::std::accumulate(aDotDashArray.begin(), aDotDashArray.end(), 0.0));
+                    const drawinglayer::attribute::LineAttribute aLine(aRGBColor);
+                    const drawinglayer::attribute::StrokeAttribute aStroke(std::move(aDotDashArray), fFullDotDashLen);
+
+                    // create primitive and add
+                    const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+                        aPolygon,
+                        aLine,
+                        aStroke));
+                    rVisitor.visit(xRef);
+                }
+
+                // now paint the placeholder description, but only when masterpage
+                // is displayed as page directly (MasterPage view)
+                if(!bSubContentProcessing && bIsMasterPageObject)
+                {
+                    OUString aObjectString;
+
+                    switch( eKind )
+                    {
+                        case PresObjKind::Title:
+                        {
+                            if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
+                            {
+                                static OUString aTitleAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_TITLE));
+                                aObjectString = aTitleAreaStr;
+                            }
+
+                            break;
+                        }
+                        case PresObjKind::Outline:
+                        {
+                            static OUString aOutlineAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_OUTLINE));
+                            aObjectString = aOutlineAreaStr;
+                            break;
+                        }
+                        case PresObjKind::Footer:
+                        {
+                            static OUString aFooterAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_FOOTER));
+                            aObjectString = aFooterAreaStr;
+                            break;
+                        }
+                        case PresObjKind::Header:
+                        {
+                            static OUString aHeaderAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_HEADER));
+                            aObjectString = aHeaderAreaStr;
+                            break;
+                        }
+                        case PresObjKind::DateTime:
+                        {
+                            static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_DATETIME));
+                            aObjectString = aDateTimeStr;
+                            break;
+                        }
+                        case PresObjKind::Notes:
+                        {
+                            static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_NOTES));
+                            aObjectString = aDateTimeStr;
+                            break;
+                        }
+                        case PresObjKind::SlideNumber:
+                        {
+                            if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
+                            {
+                                static OUString aSlideAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_SLIDE));
+                                aObjectString = aSlideAreaStr;
+                            }
+                            else
+                            {
+                                static OUString aNumberAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_NUMBER));
+                                aObjectString = aNumberAreaStr;
+                            }
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
+
+                    if( !aObjectString.isEmpty() )
+                    {
+                        // decompose object matrix to be able to place text correctly
+                        basegfx::B2DTuple aScale;
+                        basegfx::B2DTuple aTranslate;
+                        double fRotate, fShearX;
+                        aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                        // create font
+                        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
+                        const SdrTextVertAdjust eTVA(pTextObj ? pTextObj->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_CENTER);
+                        vcl::Font aScaledVclFont;
+
+                        // use a text size factor to get more reliable text sizes from the text layouter
+                        // (and from vcl), tipp from HDU
+                        static const sal_uInt32 nTextSizeFactor(100);
+
+                        // use a factor to get more linear text size calculations
+                        aScaledVclFont.SetFontHeight( 500 * nTextSizeFactor );
+
+                        // get basic geometry and get text size
+                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+                        aTextLayouter.setFont(aScaledVclFont);
+                        const sal_Int32 nTextLength(aObjectString.getLength());
+
+                        // do not forget to use the factor again to get the width for the 500
+                        const double fTextWidth(aTextLayouter.getTextWidth(aObjectString, 0, nTextLength) * (1.0 / nTextSizeFactor));
+                        const double fTextHeight(aTextLayouter.getTextHeight() * (1.0 / nTextSizeFactor));
+
+                        // calculate text primitive position. If text is at bottom, use top for
+                        // the extra text and vice versa
+                        const double fHorDist(125);
+                        const double fVerDist(125);
+                        const double fPosX((aTranslate.getX() + aScale.getX()) - fTextWidth - fHorDist);
+                        const double fPosY((SDRTEXTVERTADJUST_BOTTOM == eTVA)
+                            ? aTranslate.getY() - fVerDist + fTextHeight
+                            : (aTranslate.getY() + aScale.getY()) - fVerDist);
+
+                        // get font attributes; use normally scaled font
+                        vcl::Font aVclFont;
+                        basegfx::B2DVector aTextSizeAttribute;
+
+                        aVclFont.SetFontHeight( 500 );
+
+                        const drawinglayer::attribute::FontAttribute aFontAttribute(
+                            drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                                aTextSizeAttribute,
+                                aVclFont,
+                                false,
+                                false));
+
+                        // fill text matrix
+                        const basegfx::B2DHomMatrix aTextMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
+                            fShearX,
+                            fRotate,
+                            fPosX, fPosY));
+
+                        // create DXTextArray (can be empty one)
+                        ::std::vector< double > aDXArray{};
+
+                        // create locale; this may need some more information in the future
+                        const css::lang::Locale aLocale;
+
+                        // create primitive and add
+                        const drawinglayer::primitive2d::Primitive2DReference xRef(
+                            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                aTextMatrix,
+                                aObjectString,
+                                0,
+                                nTextLength,
+                                std::move(aDXArray),
+                                aFontAttribute,
+                                aLocale,
+                                aRGBColor));
+                        rVisitor.visit(xRef);
+                    }
+                }
+            }
+        }
+    }
+
+    if(bDoCreateGeometry)
+    {
+        sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+            rOriginal,
+            rDisplayInfo, rVisitor);
+    }
 }
 
 /**

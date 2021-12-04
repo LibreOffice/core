@@ -37,13 +37,12 @@ using namespace com::sun::star;
 
 namespace sdr::contact {
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
-    const DisplayInfo& /*rDisplayInfo*/) const
+void ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
+    const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // override this method to do some things the old SdrOle2Obj::DoPaintObject did.
     // In the future, some of these may be solved different, but ATM try to stay compatible
     // with the old behaviour
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrOle2Obj& rSdrOle2 = static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).GetOle2Obj();
     sal_Int32 nState(-1);
 
@@ -99,7 +98,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
 
         // create OLE primitive stuff directly at VC with HC as parameter
         const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
-        rVC.createPrimitive2DSequenceWithParameters(xRetval);
+        rVC.createPrimitive2DSequenceWithParameters(rVisitor);
 
         if(bIsOutplaceActive)
         {
@@ -127,13 +126,11 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
                     COL_BLACK.getBColor(),
                     aFillHatch));
 
-                xRetval.push_back(xReference);
+                rVisitor.visit(xReference);
             }
         }
 
     }
-
-    return xRetval;
 }
 
 ViewObjectContactOfSdrOle2Obj::ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact)

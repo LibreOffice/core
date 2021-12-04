@@ -289,7 +289,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations(const drawinglayer::primit
     }
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // get the view-independent Primitive from the viewContact
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
@@ -325,7 +325,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimiti
         }
     }
 
-    return xRetval;
+    rVisitor.visit(xRetval);
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
@@ -337,11 +337,11 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
 
     if(pRedirector)
     {
-        xNewPrimitiveSequence = pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo);
+        pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo, xNewPrimitiveSequence);
     }
     else
     {
-        xNewPrimitiveSequence = createPrimitive2DSequence(rDisplayInfo);
+        createPrimitive2DSequence(rDisplayInfo, xNewPrimitiveSequence);
     }
 
     // check for animated stuff
