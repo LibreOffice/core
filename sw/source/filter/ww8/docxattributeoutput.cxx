@@ -10184,6 +10184,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
       m_nEmbedFlyLevel(0),
+      m_pMoveRedlineData(nullptr),
       m_pCurrentFrame( nullptr ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
