@@ -16,6 +16,24 @@
       "message": "Jan-Marek: can we fix the typos or is it a pb for resyncing with upstream later?",
       "revId": "91df504469ac8c843d7f4f13a4028e2d43a52c20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41aaa50b_4d6daf17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-04T17:59:05Z",
+      "side": 1,
+      "message": "No idea. There are also a lot of compiler warnings, which I \"fixed\" with\n\n$(eval $(call gb_Executable_set_warnings_not_errors,lockfile))\n\nMaybe trying to keep some \"upstream\" sync is futile anyway... it\u0027s a very simply tool and I doubt there is any real need for an update.",
+      "parentUuid": "3a1bdea0_6d27ae1a",
+      "revId": "91df504469ac8c843d7f4f13a4028e2d43a52c20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
