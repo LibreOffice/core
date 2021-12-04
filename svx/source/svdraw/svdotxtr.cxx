@@ -293,118 +293,111 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
         return nullptr;
     }
 
-    // get primitives
-    drawinglayer::primitive2d::Primitive2DContainer xSequence;
-    GetViewContact().getViewIndependentPrimitive2DContainer(xSequence);
+    // create an extractor with neutral ViewInformation
+    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
 
-    if(!xSequence.empty())
+    // extract text as polygons
+    GetViewContact().getViewIndependentPrimitive2DContainer(aExtractor);
+
+    // get results
+    const drawinglayer::processor2d::TextAsPolygonDataNodeVector& rResult = aExtractor.getTarget();
+    const sal_uInt32 nResultCount(rResult.size());
+
+    if(nResultCount)
     {
-        // create an extractor with neutral ViewInformation
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
+        // prepare own target
+        SdrObjGroup* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+        SdrObjList* pObjectList = pGroup->GetSubList();
 
-        // extract text as polygons
-        aExtractor.process(xSequence);
-
-        // get results
-        const drawinglayer::processor2d::TextAsPolygonDataNodeVector& rResult = aExtractor.getTarget();
-        const sal_uInt32 nResultCount(rResult.size());
-
-        if(nResultCount)
+        // process results
+        for(sal_uInt32 a(0); a < nResultCount; a++)
         {
-            // prepare own target
-            SdrObjGroup* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
-            SdrObjList* pObjectList = pGroup->GetSubList();
+            const drawinglayer::processor2d::TextAsPolygonDataNode& rCandidate = rResult[a];
+            basegfx::B2DPolyPolygon aPolyPolygon(rCandidate.getB2DPolyPolygon());
 
-            // process results
-            for(sal_uInt32 a(0); a < nResultCount; a++)
+            if(aPolyPolygon.count())
             {
-                const drawinglayer::processor2d::TextAsPolygonDataNode& rCandidate = rResult[a];
-                basegfx::B2DPolyPolygon aPolyPolygon(rCandidate.getB2DPolyPolygon());
-
-                if(aPolyPolygon.count())
+                // take care of wanted polygon type
+                if(bToPoly)
                 {
-                    // take care of wanted polygon type
-                    if(bToPoly)
+                    if(aPolyPolygon.areControlPointsUsed())
                     {
-                        if(aPolyPolygon.areControlPointsUsed())
-                        {
-                            aPolyPolygon = basegfx::utils::adaptiveSubdivideByAngle(aPolyPolygon);
-                        }
+                        aPolyPolygon = basegfx::utils::adaptiveSubdivideByAngle(aPolyPolygon);
                     }
-                    else
-                    {
-                        if(!aPolyPolygon.areControlPointsUsed())
-                        {
-                            aPolyPolygon = basegfx::utils::expandToCurve(aPolyPolygon);
-                        }
-                    }
-
-                    // create ItemSet with object attributes
-                    SfxItemSet aAttributeSet(GetObjectItemSet());
-                    SdrPathObj* pPathObj = nullptr;
-
-                    // always clear objectshadow; this is included in the extraction
-                    aAttributeSet.Put(makeSdrShadowItem(false));
-
-                    if(rCandidate.getIsFilled())
-                    {
-                        // set needed items
-                        aAttributeSet.Put(XFillColorItem(OUString(), Color(rCandidate.getBColor())));
-                        aAttributeSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-                        aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-
-                        // create filled SdrPathObj
-                        pPathObj = new SdrPathObj(
-                            getSdrModelFromSdrObject(),
-                            OBJ_PATHFILL,
-                            aPolyPolygon);
-                    }
-                    else
-                    {
-                        // set needed items
-                        aAttributeSet.Put(XLineColorItem(OUString(), Color(rCandidate.getBColor())));
-                        aAttributeSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
-                        aAttributeSet.Put(XLineWidthItem(0));
-                        aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
-
-                        // create line SdrPathObj
-                        pPathObj = new SdrPathObj(
-                            getSdrModelFromSdrObject(),
-                            OBJ_PATHLINE,
-                            aPolyPolygon);
-                    }
-
-                    // copy basic information from original
-                    pPathObj->ImpSetAnchorPos(GetAnchorPos());
-                    pPathObj->NbcSetLayer(GetLayer());
-                    pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
-
-                    // apply prepared ItemSet and add to target
-                    pPathObj->SetMergedItemSet(aAttributeSet);
-                    pObjectList->InsertObject(pPathObj);
                 }
-            }
+                else
+                {
+                    if(!aPolyPolygon.areControlPointsUsed())
+                    {
+                        aPolyPolygon = basegfx::utils::expandToCurve(aPolyPolygon);
+                    }
+                }
 
-            // postprocess; if no result and/or only one object, simplify
-            if(!pObjectList->GetObjCount())
-            {
-                // always use SdrObject::Free(...) for SdrObjects (!)
-                SdrObject* pTemp(pGroup);
-                SdrObject::Free(pTemp);
-            }
-            else if(1 == pObjectList->GetObjCount())
-            {
-                pRetval.reset(pObjectList->RemoveObject(0));
+                // create ItemSet with object attributes
+                SfxItemSet aAttributeSet(GetObjectItemSet());
+                SdrPathObj* pPathObj = nullptr;
 
-                // always use SdrObject::Free(...) for SdrObjects (!)
-                SdrObject* pTemp(pGroup);
-                SdrObject::Free(pTemp);
+                // always clear objectshadow; this is included in the extraction
+                aAttributeSet.Put(makeSdrShadowItem(false));
+
+                if(rCandidate.getIsFilled())
+                {
+                    // set needed items
+                    aAttributeSet.Put(XFillColorItem(OUString(), Color(rCandidate.getBColor())));
+                    aAttributeSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
+                    aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
+
+                    // create filled SdrPathObj
+                    pPathObj = new SdrPathObj(
+                        getSdrModelFromSdrObject(),
+                        OBJ_PATHFILL,
+                        aPolyPolygon);
+                }
+                else
+                {
+                    // set needed items
+                    aAttributeSet.Put(XLineColorItem(OUString(), Color(rCandidate.getBColor())));
+                    aAttributeSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
+                    aAttributeSet.Put(XLineWidthItem(0));
+                    aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
+
+                    // create line SdrPathObj
+                    pPathObj = new SdrPathObj(
+                        getSdrModelFromSdrObject(),
+                        OBJ_PATHLINE,
+                        aPolyPolygon);
+                }
+
+                // copy basic information from original
+                pPathObj->ImpSetAnchorPos(GetAnchorPos());
+                pPathObj->NbcSetLayer(GetLayer());
+                pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
+
+                // apply prepared ItemSet and add to target
+                pPathObj->SetMergedItemSet(aAttributeSet);
+                pObjectList->InsertObject(pPathObj);
             }
-            else
-            {
-                pRetval.reset(pGroup);
-            }
+        }
+
+        // postprocess; if no result and/or only one object, simplify
+        if(!pObjectList->GetObjCount())
+        {
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(pGroup);
+            SdrObject::Free(pTemp);
+        }
+        else if(1 == pObjectList->GetObjCount())
+        {
+            pRetval.reset(pObjectList->RemoveObject(0));
+
+            // always use SdrObject::Free(...) for SdrObjects (!)
+            SdrObject* pTemp(pGroup);
+            SdrObject::Free(pTemp);
+        }
+        else
+        {
+            pRetval.reset(pGroup);
         }
     }
 
