@@ -1586,33 +1586,6 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         if (reduceRatio < 10)
             return {};
     }
-    // In some cases (tdf#134237) the target size may be very large. In that case it's
-    // better to rely on Skia to clip and draw only the necessary, rather than prepare
-    // a very large image only to not use most of it.
-    const Size drawAreaSize = mClipRegion.GetBoundRect().GetSize() * mScaling;
-    if (targetSize.Width() > drawAreaSize.Width() || targetSize.Height() > drawAreaSize.Height())
-    {
-        // This is a bit tricky. The condition above just checks that at least a part of the resulting
-        // image will not be used (it's larger then our drawing area). But this may often happen
-        // when just scrolling a document with a large image, where the caching may very well be worth it.
-        // Since the problem is mainly the cost of upscaling and then the size of the resulting bitmap,
-        // compute a ratio of how much this is going to be scaled up, how much this is larger than
-        // the drawing area, and then refuse to cache if it's too much.
-        const double upscaleRatio
-            = std::max(1.0, 1.0 * targetSize.Width() / bitmap.GetSize().Width()
-                                * targetSize.Height() / bitmap.GetSize().Height());
-        const double oversizeRatio = 1.0 * targetSize.Width() / drawAreaSize.Width()
-                                     * targetSize.Height() / drawAreaSize.Height();
-        const double ratio = upscaleRatio * oversizeRatio;
-        if (ratio > 4)
-        {
-            SAL_INFO("vcl.skia.trace", "mergecachebitmaps("
-                                           << this << "): not caching, ratio:" << ratio << ", "
-                                           << bitmap.GetSize() << "->" << targetSize << " in "
-                                           << drawAreaSize);
-            return {};
-        }
-    }
     // Do not cache the result if it would take most of the cache and thus get evicted soon.
     if (targetSize.Width() * targetSize.Height() * 4 > maxImageCacheSize() * 0.7)
         return {};
@@ -1637,6 +1610,36 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     {
         assert(imageSize(image) == targetSize);
         return image;
+    }
+
+    // In some cases (tdf#134237) the target size may be very large. In that case it's
+    // better to rely on Skia to clip and draw only the necessary, rather than prepare
+    // a very large image only to not use most of it. Do this only after checking whether
+    // the image is already cached, since it might have been already cached in a previous
+    // call that had the draw area large enough to be seen as worth caching.
+    const Size drawAreaSize = mClipRegion.GetBoundRect().GetSize() * mScaling;
+    if (targetSize.Width() > drawAreaSize.Width() || targetSize.Height() > drawAreaSize.Height())
+    {
+        // This is a bit tricky. The condition above just checks that at least a part of the resulting
+        // image will not be used (it's larger then our drawing area). But this may often happen
+        // when just scrolling a document with a large image, where the caching may very well be worth it.
+        // Since the problem is mainly the cost of upscaling and then the size of the resulting bitmap,
+        // compute a ratio of how much this is going to be scaled up, how much this is larger than
+        // the drawing area, and then refuse to cache if it's too much.
+        const double upscaleRatio
+            = std::max(1.0, 1.0 * targetSize.Width() / bitmap.GetSize().Width()
+                                * targetSize.Height() / bitmap.GetSize().Height());
+        const double oversizeRatio = 1.0 * targetSize.Width() / drawAreaSize.Width()
+                                     * targetSize.Height() / drawAreaSize.Height();
+        const double ratio = upscaleRatio * oversizeRatio;
+        if (ratio > 4)
+        {
+            SAL_INFO("vcl.skia.trace", "mergecachebitmaps("
+                                           << this << "): not caching, ratio:" << ratio << ", "
+                                           << bitmap.GetSize() << "->" << targetSize << " in "
+                                           << drawAreaSize);
+            return {};
+        }
     }
 
     Size sourceSize;
