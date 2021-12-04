@@ -22,6 +22,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
@@ -31,9 +32,10 @@
 #include "embeddocaccess.hxx"
 
 
-class StatusChangeListenerContainer;
 class EmbedDocument_Impl;
 class DocumentHolder;
+
+using StatusChangeListenerContainer = comphelper::OMultiTypeInterfaceContainerHelperVar3<css::frame::XStatusListener, OUString>;
 
 class Interceptor
     : public ::cppu::WeakImplHelper<

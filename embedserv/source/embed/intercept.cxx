@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cppuhelper/weak.hxx>
-#include <comphelper/multiinterfacecontainer2.hxx>
 
 #include <embeddoc.hxx>
 #include <docholder.hxx>
@@ -36,15 +35,6 @@ constexpr OUStringLiteral IU4 = u".uno:CloseFrame";
 constexpr OUStringLiteral IU5 = u".uno:SaveAs";
 const uno::Sequence< OUString > Interceptor::m_aInterceptedURL{ IU0, IU1, IU2, IU3, IU4, IU5};
 
-class StatusChangeListenerContainer
-    : public comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
-{
-public:
-    explicit StatusChangeListenerContainer(osl::Mutex& aMutex)
-        :  comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>(aMutex)
-    {
-    }
-};
 
 
 void
@@ -210,11 +200,11 @@ void Interceptor::generateFeatureStateEvent()
             if( i == 1 || (m_bLink && i != 5) )
                 continue;
 
-            comphelper::OInterfaceContainerHelper2* pICH =
+            comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>* pICH =
                 m_pStatCL->getContainer(m_aInterceptedURL[i]);
             if(!pICH)
                 continue;
-            std::vector<uno::Reference<uno::XInterface> > aSeq = pICH->getElements();
+            std::vector<uno::Reference<css::frame::XStatusListener> > aSeq = pICH->getElements();
             if(aSeq.empty())
                 continue;
 
@@ -243,13 +233,8 @@ void Interceptor::generateFeatureStateEvent()
 
             }
 
-            for(uno::Reference<uno::XInterface> const & k : std::as_const(aSeq))
-            {
-                uno::Reference<frame::XStatusListener> Control(k,uno::UNO_QUERY);
-                if(Control.is())
-                    Control->statusChanged(aStateEvent);
-
-            }
+            for(uno::Reference<css::frame::XStatusListener> const & control : std::as_const(aSeq))
+                control->statusChanged(aStateEvent);
         }
     }
 }
