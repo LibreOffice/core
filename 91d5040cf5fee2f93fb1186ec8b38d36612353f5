@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87825aee_9d982b81",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2021-12-04T13:26:50Z",
+      "side": 1,
+      "message": "else is redundant after return",
+      "revId": "91d5040cf5fee2f93fb1186ec8b38d36612353f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
