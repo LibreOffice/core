@@ -20,6 +20,7 @@
 #include <memory>
 #include <UndoSection.hxx>
 
+#include <o3tl/deleter.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -190,7 +191,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
                 if (pLayoutToReset)
                 {
                     pLayoutToReset->SetHideRedlines(std::get<1>(*m_xTOXBase) == sw::RedlineMode::Shown);
-                    pLayoutToReset->SetFieldmarkMode(eFieldmarkMode);
+                    suppress_fun_call_w_exception(pLayoutToReset->SetFieldmarkMode(eFieldmarkMode));
                 }
             });
         o3tl::sorted_vector<SwRootFrame *> layouts(rDoc.GetAllLayouts());
