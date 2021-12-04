@@ -39,8 +39,8 @@ inline constexpr OStringLiteral HID_SC_SCENWIN_BOTTOM = "SC_HID_SC_SCENWIN_BOTTO
 
 inline constexpr OStringLiteral HID_SC_INPUTWIN = "SC_HID_SC_INPUTWIN";
 
-#define HID_SC_RENAME_NAME                                      "SC_HID_SC_RENAME_NAME"
-#define HID_SC_APPEND_NAME                                      "SC_HID_SC_APPEND_NAME"
+inline constexpr OStringLiteral HID_SC_RENAME_NAME = "SC_HID_SC_RENAME_NAME";
+inline constexpr OStringLiteral HID_SC_APPEND_NAME = "SC_HID_SC_APPEND_NAME";
 
 inline constexpr OStringLiteral HID_SC_ADD_AUTOFMT = "SC_HID_SC_ADD_AUTOFMT";
 inline constexpr OStringLiteral HID_SC_AUTOFMT_NAME = "SC_HID_SC_AUTOFMT_NAME";
