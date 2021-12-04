@@ -276,9 +276,10 @@ class ImplExportCheckVisisbilityRedirector : public sdr::contact::ViewObjectCont
 public:
     explicit ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage );
 
-    virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
+    virtual void createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
-        const sdr::contact::DisplayInfo& rDisplayInfo) override;
+        const sdr::contact::DisplayInfo& rDisplayInfo,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override;
 
 private:
     SdrPage*    mpCurrentPage;
@@ -289,9 +290,10 @@ ImplExportCheckVisisbilityRedirector::ImplExportCheckVisisbilityRedirector( SdrP
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ImplExportCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
+void ImplExportCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
-    const sdr::contact::DisplayInfo& rDisplayInfo)
+    const sdr::contact::DisplayInfo& rDisplayInfo,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
 
@@ -306,15 +308,15 @@ drawinglayer::primitive2d::Primitive2DContainer ImplExportCheckVisisbilityRedire
 
         if( (pPage == nullptr) || pPage->checkVisibility(rOriginal, rDisplayInfo, false) )
         {
-            return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+            return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo, rVisitor);
         }
 
-        return drawinglayer::primitive2d::Primitive2DContainer();
+        return;
     }
     else
     {
         // not an object, maybe a page
-        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+        sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo, rVisitor);
     }
 }
 

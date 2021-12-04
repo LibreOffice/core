@@ -29,8 +29,9 @@ namespace sdr::contact
 class ViewObjectContactOfSdrOle2Obj final : public ViewObjectContactOfSdrObj
 {
     // This method is responsible for creating the graphical visualisation data
-    virtual drawinglayer::primitive2d::Primitive2DContainer
-    createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+    virtual void createPrimitive2DSequence(
+        const DisplayInfo& rDisplayInfo,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
 public:
     ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact);

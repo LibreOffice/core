@@ -45,7 +45,7 @@ namespace sdr::contact
     {
         class ViewObjectContactOfPageBackground final : public ViewObjectContactOfPageSubObject
         {
-            virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             ViewObjectContactOfPageBackground(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -73,7 +73,7 @@ namespace sdr::contact
     {
         class ViewObjectContactOfPageFill final : public ViewObjectContactOfPageSubObject
         {
-            virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             ViewObjectContactOfPageFill(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -135,7 +135,7 @@ namespace sdr::contact
     {
         class ViewObjectContactOfPageGrid final : public ViewObjectContactOfPageSubObject
         {
-            virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             ViewObjectContactOfPageGrid(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -149,7 +149,7 @@ namespace sdr::contact
     {
         class ViewObjectContactOfPageHelplines final : public ViewObjectContactOfPageSubObject
         {
-            virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             ViewObjectContactOfPageHelplines(ObjectContact& rObjectContact, ViewContact& rViewContact);

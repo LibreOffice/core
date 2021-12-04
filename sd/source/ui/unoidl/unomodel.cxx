@@ -1519,9 +1519,10 @@ public:
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.
-    virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
+    virtual void createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
-        const sdr::contact::DisplayInfo& rDisplayInfo) override;
+        const sdr::contact::DisplayInfo& rDisplayInfo,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override;
 };
 
 }
@@ -1752,56 +1753,51 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( const Sd
     return eElement;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
+void ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
-    const sdr::contact::DisplayInfo& rDisplayInfo)
+    const sdr::contact::DisplayInfo& rDisplayInfo,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-
-    if(pObject)
-    {
-        drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
-        if(pObject->getSdrPageFromSdrObject())
-        {
-            if(pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, false))
-            {
-                if(IsVisible(pObject) && IsPrintable(pObject))
-                {
-                    const vcl::PDFWriter::StructElement eElement(ImplBegStructureTag( *pObject ));
-                    const bool bTagUsed(vcl::PDFWriter::NonStructElement != eElement);
-
-                    xRetval = sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
-
-                    if(!xRetval.empty() && bTagUsed)
-                    {
-                        // embed Primitive2DSequence in a structure tag element for
-                        // exactly this purpose (StructureTagPrimitive2D)
-
-                        const SdrPage* pSdrPage(pObject->getSdrPageFromSdrObject());
-                        const bool bBackground(nullptr != pSdrPage && pSdrPage->IsMasterPage());
-                        const bool bImage(pObject->GetObjIdentifier() == OBJ_GRAF);
-
-                        drawinglayer::primitive2d::Primitive2DReference xReference(
-                            new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                                eElement,
-                                bBackground,
-                                bImage,
-                                std::move(xRetval)));
-
-                        xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
-                    }
-                }
-            }
-        }
-
-        return xRetval;
-    }
-    else
+    if(!pObject)
     {
         // not an object, maybe a page
-        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
+        sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo, rVisitor);
+        return;
     }
+    SdrPage* pSdrPage(pObject->getSdrPageFromSdrObject());
+    if(!pSdrPage)
+        return;
+    if(!pSdrPage->checkVisibility(rOriginal, rDisplayInfo, false))
+        return;
+    if(!IsVisible(pObject) || !IsPrintable(pObject))
+        return;
+
+    const vcl::PDFWriter::StructElement eElement(ImplBegStructureTag( *pObject ));
+    const bool bTagUsed(vcl::PDFWriter::NonStructElement != eElement);
+
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
+    sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo, xRetval);
+
+    if(!xRetval.empty() && bTagUsed)
+    {
+        // embed Primitive2DSequence in a structure tag element for
+        // exactly this purpose (StructureTagPrimitive2D)
+
+        const bool bBackground(pSdrPage->IsMasterPage());
+        const bool bImage(pObject->GetObjIdentifier() == OBJ_GRAF);
+
+        drawinglayer::primitive2d::Primitive2DReference xReference(
+            new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                eElement,
+                bBackground,
+                bImage,
+                std::move(xRetval)));
+
+        xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+    }
+
+    rVisitor.visit(xRetval);
 }
 
 bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const

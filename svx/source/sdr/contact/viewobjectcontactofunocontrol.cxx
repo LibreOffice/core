@@ -1646,25 +1646,24 @@ namespace sdr::contact {
     }
 
 
-    drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+    void ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
     {
         if ( m_pImpl->isDisposed() )
             // our control already died.
             // TODO: Is it worth re-creating the control? Finally, this is a pathological situation, it means some instance
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
-            return drawinglayer::primitive2d::Primitive2DContainer();
+            return;
 
         if ( GetObjectContact().getViewInformation2D().getViewTransformation().isIdentity() )
             // remove this when #i115754# is fixed
-            return drawinglayer::primitive2d::Primitive2DContainer();
+            return;
 
         // ignore existing controls which are in alive mode and manually switched to "invisible" #i102090#
         const ControlHolder& rControl( m_pImpl->getExistentControl() );
         if ( rControl.is() && !rControl.isDesignMode() && !rControl.isVisible() )
-            return drawinglayer::primitive2d::Primitive2DContainer();
+            return;
 
-        ::drawinglayer::primitive2d::Primitive2DReference xPrimitive( new LazyControlCreationPrimitive2D( m_pImpl ) );
-        return ::drawinglayer::primitive2d::Primitive2DContainer { xPrimitive };
+        rVisitor.visit( new LazyControlCreationPrimitive2D( m_pImpl ) );
     }
 
 
@@ -1761,11 +1760,11 @@ namespace sdr::contact {
     }
 
 
-    drawinglayer::primitive2d::Primitive2DContainer UnoControlPrintOrPreviewContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const
+    void UnoControlPrintOrPreviewContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor ) const
     {
         if ( !m_pImpl->isPrintableControl() )
-            return drawinglayer::primitive2d::Primitive2DContainer();
-        return ViewObjectContactOfUnoControl::createPrimitive2DSequence( rDisplayInfo );
+            return;
+        ViewObjectContactOfUnoControl::createPrimitive2DSequence( rDisplayInfo, rVisitor );
     }
 
 

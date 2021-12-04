@@ -1003,8 +1003,9 @@ namespace { // anonymous namespace
 class ViewObjectContactOfSwNoTextFrame : public sdr::contact::ViewObjectContact
 {
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(
-        const sdr::contact::DisplayInfo& rDisplayInfo) const override;
+    virtual void createPrimitive2DSequence(
+        const sdr::contact::DisplayInfo& rDisplayInfo,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
 public:
     ViewObjectContactOfSwNoTextFrame(
@@ -1032,8 +1033,9 @@ public:
     explicit ViewContactOfSwNoTextFrame(const SwNoTextFrame& rSwNoTextFrame);
 };
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSwNoTextFrame::createPrimitive2DSequence(
-    const sdr::contact::DisplayInfo& /*rDisplayInfo*/) const
+void ViewObjectContactOfSwNoTextFrame::createPrimitive2DSequence(
+    const sdr::contact::DisplayInfo& /*rDisplayInfo*/,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // MM02 get all the parameters formally used in paintGraphicUsingPrimitivesHelper
     ViewContactOfSwNoTextFrame& rVCOfNTF(static_cast<ViewContactOfSwNoTextFrame&>(GetViewContact()));
@@ -1052,16 +1054,11 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSwNoTextFrame
         // MM02 this is the right place in the VOC-Mechanism to create
         // the primitives for visualization - these will be automatically
         // buffered and reused
-        drawinglayer::primitive2d::Primitive2DContainer aContent(1);
-        aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
+        rVisitor.visit(new drawinglayer::primitive2d::GraphicPrimitive2D(
             aGraphicTransform,
             rGrfObj,
-            aGraphicAttr);
-
-        return aContent;
+            aGraphicAttr));
     }
-
-    return drawinglayer::primitive2d::Primitive2DContainer();
 }
 
 ViewObjectContactOfSwNoTextFrame::ViewObjectContactOfSwNoTextFrame(

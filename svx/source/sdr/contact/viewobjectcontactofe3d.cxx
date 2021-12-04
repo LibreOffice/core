@@ -58,12 +58,12 @@ namespace sdr::contact
             return xRetval;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfE3d::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        void ViewObjectContactOfE3d::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             const ViewContactOfE3d& rViewContact = static_cast< const ViewContactOfE3d& >(GetViewContact());
 
             // get 3d primitive vector, isPrimitiveVisible() is done in 3d creator
-            return rViewContact.impCreateWithGivenPrimitive3DContainer(getPrimitive3DContainer(rDisplayInfo));
+            rVisitor.visit(rViewContact.impCreateWithGivenPrimitive3DContainer(getPrimitive3DContainer(rDisplayInfo)));
         }
 
 

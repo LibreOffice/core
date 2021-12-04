@@ -28,7 +28,7 @@ namespace sdr::contact
         class ViewObjectContactOfE3dScene final : public ViewObjectContactOfSdrObj
         {
             // 2d primitive creator
-            virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual void createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
         public:
             // basic constructor.
