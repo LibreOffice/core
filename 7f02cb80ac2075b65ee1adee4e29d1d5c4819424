@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e49ec0_ac2040f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-04T06:21:37Z",
+      "side": 1,
+      "message": "just tagging you in case you notice a performance regression that runs through this code, in which we need to revert it. \nIt is possible that somewhere in the hierarchy some kind of Bitmap is being cached, and my change is blowing that away.",
+      "revId": "7f02cb80ac2075b65ee1adee4e29d1d5c4819424",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
