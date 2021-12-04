@@ -2407,7 +2407,7 @@
 /* Begin PBXLegacyTarget section */
 		BEC3D91E1710B11E0030AD56 /* soffice */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "build-nocheck";
+			buildArgumentsString = "";
 			buildConfigurationList = BEC3D9211710B11E0030AD56 /* Build configuration list for PBXLegacyTarget "soffice" */;
 			buildPhases = (
 			);
