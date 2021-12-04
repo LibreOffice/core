@@ -165,7 +165,7 @@ for module in $modules; do
         then
             # Build all!
             echo "Failed to build $module with dependencies, building all..."
-            $MAKE build-nocheck > /dev/null
+            $MAKE > /dev/null
             if [ $? -ne 0 ];
             then
                 >&2 echo "Broken build. Please revert changes and try again."
