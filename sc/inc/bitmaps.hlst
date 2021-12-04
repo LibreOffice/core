@@ -24,9 +24,6 @@ inline constexpr OUStringLiteral RID_BMP_MINUS = u"sc/res/ou010.png";
 inline constexpr OUStringLiteral RID_BMP_NOTPRESSED = u"sc/res/ou011.png";
 inline constexpr OUStringLiteral RID_BMP_PRESSED = u"sc/res/ou012.png";
 
-#define RID_BMP_SELECT_CURRENT                  "sc/res/popup_select_current.png"
-#define RID_BMP_UNSELECT_CURRENT                "sc/res/popup_unselect_current.png"
-
 inline constexpr OUStringLiteral RID_BMP_CONTENT_TABLE = u"sc/res/nc01.png";
 inline constexpr OUStringLiteral RID_BMP_CONTENT_RANGENAME = u"sc/res/nc02.png";
 inline constexpr OUStringLiteral RID_BMP_CONTENT_DBAREA = u"sc/res/nc03.png";

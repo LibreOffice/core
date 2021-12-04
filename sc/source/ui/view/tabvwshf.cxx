@@ -387,20 +387,20 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OUString      aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
                     OUString aName;
                     OUString      aDlgTitle;
-                    const char* pHelpId = nullptr;
+                    OString sHelpId;
 
                     switch ( nSlot )
                     {
                         case FID_TAB_APPEND:
                             aDlgTitle = ScResId(SCSTR_APDTABLE);
                             rDoc.CreateValidTabName( aName );
-                            pHelpId = HID_SC_APPEND_NAME;
+                            sHelpId = HID_SC_APPEND_NAME;
                             break;
 
                         case FID_TAB_RENAME:
                             aDlgTitle = ScResId(SCSTR_RENAMETAB);
                             rDoc.GetName( rViewData.GetTabNo(), aName );
-                            pHelpId = HID_SC_RENAME_NAME;
+                            sHelpId = HID_SC_RENAME_NAME;
                             break;
                     }
 
@@ -409,7 +409,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
                         GetFrameWeld(), aDlgTitle, ScResId(SCSTR_NAME),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
-                        pHelpId));
+                        sHelpId));
 
 
                     while ( !bDone && nRet == RET_OK )
