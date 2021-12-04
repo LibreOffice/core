@@ -283,7 +283,6 @@ namespace sdr::contact
 
         void ViewContactOfGraphic::createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
 
             // create and fill GraphicAttr
@@ -354,7 +353,7 @@ namespace sdr::contact
             {
                 // it's an EmptyPresObj, create the SdrGrafPrimitive2D without content and another scaled one
                 // with the content which is the placeholder graphic
-                xRetval = createVIP2DSForPresObj(aObjectMatrix, aAttribute);
+                rVisitor.visit(createVIP2DSForPresObj(aObjectMatrix, aAttribute));
             }
 #ifndef IOS // Enforce swap-in for tiled rendering for now, while we have no delayed updating mechanism
             else if(visualisationUsesDraft())
@@ -364,7 +363,7 @@ namespace sdr::contact
                 // visual update mechanism for swapped-out graphics when they were loaded (see AsynchGraphicLoadingEvent
                 // and ViewObjectContactOfGraphic implementation). Not forcing the swap-in here allows faster
                 // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
-                xRetval = createVIP2DSForDraft(aObjectMatrix, aAttribute);
+                rVisitor.visit(createVIP2DSForDraft(aObjectMatrix, aAttribute));
             }
 #endif
             else
@@ -378,16 +377,14 @@ namespace sdr::contact
                         rGraphicObject,
                         aLocalGrafInfo));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
+                rVisitor.visit(xReference);
             }
 
             // always append an invisible outline for the cases where no visible content exists
-            xRetval.push_back(
+            rVisitor.visit(
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     aObjectMatrix));
-
-            rVisitor.visit(std::move(xRetval));
-        }
+       }
 
         bool ViewContactOfGraphic::visualisationUsesPresObj() const
         {
