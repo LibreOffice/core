@@ -68,10 +68,9 @@ class ScQueryEvaluator
     std::unique_ptr<bool[]> mpTestDynamic;
 
     std::unordered_map<FormulaError, svl::SharedString> mCachedSharedErrorStrings;
-    std::vector<double> mCachedSortedItemValues;
-    std::vector<const rtl_uString*> mCachedSortedItemStrings;
-    bool mCachedSortedItemValuesReady = false;
-    bool mCachedSortedItemStringsReady = false;
+    // The "outside" index in these two is the index of ScQueryEntry in ScQueryParam.
+    std::vector<std::vector<double>> mCachedSortedItemValues;
+    std::vector<std::vector<const rtl_uString*>> mCachedSortedItemStrings;
 
     static bool isPartialTextMatchOp(const ScQueryEntry& rEntry);
     static bool isTextMatchOp(const ScQueryEntry& rEntry);
@@ -109,7 +108,7 @@ class ScQueryEvaluator
                                                       const ScQueryEntry::Item& rItem);
 
     std::pair<bool, bool> processEntry(SCROW nRow, SCCOL nCol, ScRefCellValue& aCell,
-                                       const ScQueryEntry& rEntry);
+                                       const ScQueryEntry& rEntry, size_t nEntryIndex);
 
 public:
     ScQueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
