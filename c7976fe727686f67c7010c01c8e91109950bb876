@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1518e887_3465b2f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-12-04T11:39:27Z",
+      "side": 1,
+      "message": "Right, but that attempt in 53d51dbee6d4037c4cfc3fa743de8dac76da48c6 was something different than ScaleSuper algorithm, which we got from AOO, but the algorithm is the same. All the talk about \"grfmgr2.cxx\" and one-pass scale, rotate and crop has nothing to do with this.",
+      "revId": "c7976fe727686f67c7010c01c8e91109950bb876",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
