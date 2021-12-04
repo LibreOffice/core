@@ -169,6 +169,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testAutoFilterTimeValue();
+    void testAutofilterOptimizations();
     void testTdf76836();
     void testTdf76441();
     void testTdf142186();
@@ -293,6 +294,7 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testAutoFilterTimeValue);
+    CPPUNIT_TEST(testAutofilterOptimizations);
     CPPUNIT_TEST(testTdf76836);
     CPPUNIT_TEST(testTdf76441);
     CPPUNIT_TEST(testTdf142186);
@@ -3536,6 +3538,110 @@ void Test::testAutoFilterTimeValue()
     CPPUNIT_ASSERT_MESSAGE("A1 should be visible.", !m_pDoc->RowFiltered(0,0));
     CPPUNIT_ASSERT_MESSAGE("A2 should be visible.", !m_pDoc->RowFiltered(1,0));
     CPPUNIT_ASSERT_MESSAGE("A3 should be filtered out.", m_pDoc->RowFiltered(2,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testAutofilterOptimizations()
+{
+    m_pDoc->InsertTab( 0, "Test" );
+
+    constexpr SCCOL nCols = 4;
+    constexpr SCROW nRows = 200;
+    m_pDoc->SetString(0, 0, 0, "Column1");
+    m_pDoc->SetString(1, 0, 0, "Column2");
+    m_pDoc->SetString(2, 0, 0, "Column3");
+    m_pDoc->SetString(3, 0, 0, "Column4");
+
+    // Fill 1st column with 0-199, 2nd with 1-200, 3rd with "1000"-"1199", 4th with "1001-1200"
+    // (the pairs are off by one to each other to check filtering out a value filters out
+    // only the relevant column).
+    for(SCROW i = 0; i < nRows; ++i)
+    {
+        m_pDoc->SetValue(0, i + 1, 0, i);
+        m_pDoc->SetValue(1, i + 1, 0, i+1);
+        m_pDoc->SetString(2, i + 1, 0, "val" + OUString::number(i+1000));
+        m_pDoc->SetString(3, i + 1, 0, "val" + OUString::number(i+1000+1));
+    }
+
+    ScDBData* pDBData = new ScDBData("NONAME", 0, 0, 0, nCols, nRows);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
+
+    pDBData->SetAutoFilter(true);
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    m_pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                           aRange.aEnd.Col(), aRange.aStart.Row(),
+                           aRange.aStart.Tab(), ScMF::Auto);
+
+    //create the query param
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+    ScQueryEntry& rEntry0 = aParam.GetEntry(0);
+    rEntry0.bDoQuery = true;
+    rEntry0.nField = 0;
+    rEntry0.eOp = SC_EQUAL;
+    rEntry0.GetQueryItems().resize(nRows);
+    ScQueryEntry& rEntry1 = aParam.GetEntry(1);
+    rEntry1.bDoQuery = true;
+    rEntry1.nField = 1;
+    rEntry1.eOp = SC_EQUAL;
+    rEntry1.GetQueryItems().resize(nRows);
+    ScQueryEntry& rEntry2 = aParam.GetEntry(2);
+    rEntry2.bDoQuery = true;
+    rEntry2.nField = 2;
+    rEntry2.eOp = SC_EQUAL;
+    rEntry2.GetQueryItems().resize(nRows);
+    ScQueryEntry& rEntry3 = aParam.GetEntry(3);
+    rEntry3.bDoQuery = true;
+    rEntry3.nField = 3;
+    rEntry3.eOp = SC_EQUAL;
+    rEntry3.GetQueryItems().resize(nRows);
+    // Set up autofilter to select all values except one in each column.
+    // This should only filter out 2nd, 3rd, 6th and 7th rows.
+    for( int i = 0; i < nRows; ++i )
+    {
+        if(i!= 1)
+            rEntry0.GetQueryItems()[i].mfVal = i;
+        if(i!= 2)
+            rEntry1.GetQueryItems()[i].mfVal = i + 1;
+        if(i!= 5)
+        {
+            rEntry2.GetQueryItems()[i].maString = m_pDoc->GetSharedStringPool().intern("val" + OUString::number(i+1000));
+            rEntry2.GetQueryItems()[i].meType = ScQueryEntry::ByString;
+        }
+        if(i!= 6)
+        {
+            rEntry3.GetQueryItems()[i].maString = m_pDoc->GetSharedStringPool().intern("val" + OUString::number(i+1000+1));
+            rEntry3.GetQueryItems()[i].meType = ScQueryEntry::ByString;
+        }
+    }
+    // add queryParam to database range.
+    pDBData->SetQueryParam(aParam);
+
+    // perform the query.
+    m_pDoc->Query(0, aParam, true);
+
+    // check that only rows with filtered out values are hidden, and not rows that share
+    // a value in a different column
+    SCROW nRow1, nRow2;
+    CPPUNIT_ASSERT_MESSAGE("row 2 should be visible", !m_pDoc->RowHidden(1, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_MESSAGE("row 3 should be hidden", m_pDoc->RowHidden(2, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_MESSAGE("row 4 should be hidden", m_pDoc->RowHidden(3, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_MESSAGE("row 5 should be visible", !m_pDoc->RowHidden(4, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_MESSAGE("row 6 should be visible", !m_pDoc->RowHidden(5, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_MESSAGE("row 7 should be hidden", m_pDoc->RowHidden(6, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_MESSAGE("row 8 should be hidden", m_pDoc->RowHidden(7, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_MESSAGE("row 9 should be visible", !m_pDoc->RowHidden(8, 0, &nRow1, &nRow2));
+
+    // Remove filtering.
+    rEntry0.Clear();
+    rEntry1.Clear();
+    rEntry2.Clear();
+    m_pDoc->Query(0, aParam, true);
+    CPPUNIT_ASSERT_MESSAGE("All rows should be shown.", !m_pDoc->RowHidden(0, 0, &nRow1, &nRow2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(MAXROW), nRow2);
 
     m_pDoc->DeleteTab(0);
 }
