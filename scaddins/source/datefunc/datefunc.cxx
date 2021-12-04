@@ -466,14 +466,11 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
         sal_Int32 nStartDate, sal_Int32 nEndDate,
         sal_Int32 nMode )
 {
-    if (nMode != 0 && nMode != 1)
-        throw lang::IllegalArgumentException();
-
     if ( nMode  == 0 )
     {
         return ( nEndDate - nStartDate ) / 7;
     }
-    else
+    else if ( nMode == 1 )
     {
         sal_Int32 nNullDate = GetNullDate( xOptions );
         sal_Int32 nDays1 = nStartDate + nNullDate - 1;
@@ -481,6 +478,8 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
 
         return ( std::floor( nDays2 / 7.0 ) - std::floor( nDays1 / 7.0 ) );
     }
+    else
+        throw lang::IllegalArgumentException();
 }
 
 /**
