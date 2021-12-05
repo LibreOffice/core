@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68342502_f484fc05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-05T07:41:32Z",
+      "side": 1,
+      "message": "ah that\u0027s a pity, but at least you took a shot at it",
+      "revId": "2219ee7c5a76d56e418439e239a0e70a9c6683ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
