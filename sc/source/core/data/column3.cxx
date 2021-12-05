@@ -86,7 +86,7 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint 
     ScHint aHint(nHint, ScAddress(nCol, 0, nTab));
     for (const auto& rRow : rRows)
     {
-        aHint.GetAddress().SetRow(rRow);
+        aHint.SetAddressRow(rRow);
         rDocument.Broadcast(aHint);
     }
 }
