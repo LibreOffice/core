@@ -28,8 +28,8 @@
 #include <unistd.h>
 #include <time.h>
 #include <errno.h>
-#include <lockfile.h>
-#include <maillock.h>
+#include "lockfile.h"
+#include "maillock.h"
 
 #ifdef HAVE_UTIME
 #include <utime.h>
@@ -38,10 +38,6 @@
 #ifdef LIB
 static char *mlockfile;
 static int  islocked = 0;
-#endif
-
-#ifndef LIB
-extern int check_sleep(int, int);
 #endif
 
 #ifdef MAILGROUP
@@ -176,7 +172,7 @@ static int run_helper(char *opt, const char *lockfile, int retries, int flags)
 #define TMPLOCKFILENAMESZ	(TMPLOCKSTRSZ + TMPLOCKPIDSZ + \
 				 TMPLOCKTIMESZ + TMPLOCKSYSNAMESZ)
 
-static int lockfilename(const char *lockfile, char *tmplock, int tmplocksz)
+static int lockfilename(const char *lockfile, char *tmplock, size_t tmplocksz)
 {
 	char		sysname[256];
 	char		*p;
@@ -226,9 +222,9 @@ static int lockfilename(const char *lockfile, char *tmplock, int tmplocksz)
  *	Create a lockfile.
  */
 static int lockfile_create_save_tmplock(const char *lockfile,
-		char *tmplock, int tmplocksz,
+		char *tmplock, size_t tmplocksz,
 		volatile char **xtmplock,
-		int retries, int flags, struct __lockargs *args)
+		int retries, int flags, struct lockargs_s_ *args)
 {
 	struct stat	st, st1;
 	char		pidbuf[40];
@@ -241,7 +237,7 @@ static int lockfile_create_save_tmplock(const char *lockfile,
 	int		tries = retries + 1;
 
 	/* process optional flags that have arguments */
-	if (flags & __L_INTERVAL) {
+	if (flags & L_INTERVAL_D_) {
 		sleeptime = args->interval;
 	}
 
@@ -256,7 +252,7 @@ static int lockfile_create_save_tmplock(const char *lockfile,
 		}
 	}
 	pidlen = snprintf(pidbuf, sizeof(pidbuf), "%d\n", pid);
-	if (pidlen > sizeof(pidbuf) - 1) {
+	if (pidlen < 0 || pidlen > (int) sizeof(pidbuf) - 1) {
 		errno = EOVERFLOW;
 		return L_ERROR;
 	}
@@ -294,7 +290,7 @@ static int lockfile_create_save_tmplock(const char *lockfile,
 	 */
 	for (i = 0; i < tries && tries > 0; i++) {
 		if (!dontsleep) {
-			if (!(flags & __L_INTERVAL))
+			if (!(flags & L_INTERVAL_D_))
 				sleeptime += 5;
 
 			if (sleeptime > 5) sleeptime = 5;
@@ -385,10 +381,11 @@ static int lockfile_create_save_tmplock(const char *lockfile,
 #ifdef LIB
 static
 #endif
-int lockfile_create_set_tmplock(const char *lockfile, volatile char **xtmplock, int retries, int flags, struct __lockargs *args)
+int lockfile_create_set_tmplock(const char *lockfile, volatile char **xtmplock, int retries, int flags, struct lockargs_s_ *args)
 {
 	char *tmplock;
-	int l, r, e;
+	int r, e;
+	size_t l;
 
 	l = strlen(lockfile)+TMPLOCKFILENAMESZ+1;
 	if ((tmplock = (char *)malloc(l)) == NULL)
@@ -417,14 +414,14 @@ int lockfile_create(const char *lockfile, int retries, int flags)
 
 #ifdef STATIC
 int lockfile_create2(const char *lockfile, int retries,
-		int flags, struct __lockargs *args, int args_sz)
+		int flags, struct lockargs_s_ *args, int args_sz)
 {
 
-	#define FLAGS_WITH_ARGS (__L_INTERVAL)
-	#define KNOWN_FLAGS (L_PID|L_PPID|__L_INTERVAL)
+	#define FLAGS_WITH_ARGS (L_INTERVAL_D_)
+	#define KNOWN_FLAGS (L_PID|L_PPID|L_INTERVAL_D_)
 
 	/* check if size is the same (version check) */
-	if (args != NULL && sizeof(struct __lockargs) != args_sz) {
+	if (args != NULL && sizeof(struct lockargs_s_) != args_sz) {
 		errno = EINVAL;
 		return L_ERROR;
 	}
