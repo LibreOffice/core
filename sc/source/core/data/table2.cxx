@@ -2056,6 +2056,7 @@ void ScTable::SetDirtyAfterLoad()
 void ScTable::SetDirtyIfPostponed()
 {
     sc::AutoCalcSwitch aSwitch(rDocument, false);
+    ScBulkBroadcast aBulkBroadcast( rDocument.GetBASM(), SfxHintId::ScDataChanged);
     for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].SetDirtyIfPostponed();
 }
