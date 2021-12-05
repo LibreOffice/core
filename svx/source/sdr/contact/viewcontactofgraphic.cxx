@@ -319,7 +319,6 @@ namespace sdr::contact
             const bool bMirrored(GetGrafObject().IsMirrored());
 
             bool bHMirr;
-            bool bVMirr;
 
             // set mirror flags at LocalGrafInfo. Take into account that the geometry in
             // aObjectRange is already changed and rotated when bRota180 is used. To rebuild
@@ -333,18 +332,16 @@ namespace sdr::contact
                 // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
                 // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
                 bHMirr = !bHMirr;
-                bVMirr = false;
             }
             else
             {
                 const sal_uInt16 nMirrorCase(bMirrored ? 2 : 1);
                 bHMirr = 2 == nMirrorCase;
-                bVMirr = false;
             }
 
-            if(bHMirr || bVMirr)
+            if (bHMirr)
             {
-                aLocalGrafInfo.SetMirrorFlags((bHMirr ? BmpMirrorFlags::Horizontal : BmpMirrorFlags::NONE)|(bVMirr ? BmpMirrorFlags::Vertical : BmpMirrorFlags::NONE));
+                aLocalGrafInfo.SetMirrorFlags(BmpMirrorFlags::Horizontal);
             }
 
             // fill object matrix
