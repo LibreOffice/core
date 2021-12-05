@@ -328,7 +328,7 @@ namespace sdr::contact
             if (bRota180)
             {
                 const sal_uInt16 nMirrorCase(bMirrored ? 3 : 4);
-                bHMirr = ((2 == nMirrorCase ) || (4 == nMirrorCase));
+                bHMirr = 4 == nMirrorCase;
 
                 // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
                 // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
@@ -338,8 +338,8 @@ namespace sdr::contact
             else
             {
                 const sal_uInt16 nMirrorCase(bMirrored ? 2 : 1);
-                bHMirr = ((2 == nMirrorCase ) || (4 == nMirrorCase));
-                bVMirr = ((3 == nMirrorCase ) || (4 == nMirrorCase));
+                bHMirr = 2 == nMirrorCase;
+                bVMirr = false;
             }
 
             if(bHMirr || bVMirr)
