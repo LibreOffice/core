@@ -326,11 +326,9 @@ namespace sdr::contact
             // accordingly. The created bitmapPrimitive WILL use the rotation, too.
             if (bRota180)
             {
-                bHMirr = !bMirrored;
-
                 // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
                 // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
-                bHMirr = !bHMirr;
+                bHMirr = bMirrored;
             }
             else
             {
