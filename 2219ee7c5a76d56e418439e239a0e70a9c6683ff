@@ -16,6 +16,23 @@
       "message": "ah that\u0027s a pity, but at least you took a shot at it",
       "revId": "2219ee7c5a76d56e418439e239a0e70a9c6683ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0666d1c9_51b949e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-05T12:39:16Z",
+      "side": 1,
+      "message": "No idea what that build failure is. Related?",
+      "revId": "2219ee7c5a76d56e418439e239a0e70a9c6683ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
