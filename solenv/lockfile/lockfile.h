@@ -47,13 +47,13 @@ int	lockfile_check(const char *lockfile, int flags);
 /*
  * Experimental.
  */
-struct __lockargs {
+struct _s_lockargs {
 	int interval;		/* Static interval between retries	*/
 };
-#define __L_INTERVAL	64	/* Specify consistent retry interval	*/
+#define _D_L_INTERVAL	64	/* Specify consistent retry interval	*/
 #ifdef LOCKFILE_EXPERIMENTAL
-#define lockargs	__lockargs
-#define L_INTERVAL	__L_INTERVAL
+#define lockargs	_s_lockargs
+#define L_INTERVAL	_D_L_INTERVAL
 int	lockfile_create2(const char *lockfile, int retries,
 		int flags, struct lockargs *args, int args_sz);
 #endif

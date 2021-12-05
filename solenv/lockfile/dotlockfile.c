@@ -27,8 +27,8 @@
 #include <signal.h>
 #include <time.h>
 #include <errno.h>
-#include <maillock.h>
-#include <lockfile.h>
+#include "maillock.h"
+#include "lockfile.h"
 
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
@@ -42,7 +42,7 @@ extern int optind;
 
 extern int is_maillock(const char *lockfile);
 extern int lockfile_create_set_tmplock(const char *lockfile,
-			volatile char **tmplock, int retries, int flags, struct __lockargs *);
+			volatile char **tmplock, int retries, int flags, struct _s_lockargs *);
 
 static volatile char *tmplock;
 static int quiet;
@@ -61,6 +61,7 @@ void got_signal(int sig)
 
 void ignore_signal(int sig)
 {
+	(void)sig;
 }
 
 /*
@@ -92,7 +93,7 @@ int check_sleep(int sleeptime, int flags)
 
 	if (ppid == 0) ppid = getppid();
 
-	if (flags & __L_INTERVAL)
+	if (flags & _D_L_INTERVAL)
 		interval = 1;
 
 	for (i = 0; i < sleeptime; i += interval) {
@@ -177,7 +178,7 @@ void usage(void)
 int main(int argc, char **argv)
 {
 	struct passwd	*pwd;
-	struct __lockargs args = { 0 };
+	struct _s_lockargs args = { 0 };
 	gid_t		gid, egid;
 	char		*lockfile = NULL;
 	char		**cmd = NULL;
@@ -191,15 +192,17 @@ int main(int argc, char **argv)
 	int		touch = 0;
 	int		writepid = 0;
 	int		passthrough = 0;
+	int cwd_fd = -1;
+	int need_privs = 0;
+	pid_t pid = -1;
+	int e, wstatus;
 
 	/*
 	 *	Remember real and effective gid, and
 	 *	drop privs for now.
 	 */
-	if ((gid = getgid()) < 0)
-		perror_exit("getgid");
-	if ((egid = getegid()) < 0)
-		perror_exit("getegid");
+	gid = getgid();
+	egid = getegid();
 	if (gid != egid) {
 		if (setregid(-1, gid) < 0)
 			perror_exit("setregid(-1, gid)");
@@ -267,7 +270,7 @@ int main(int argc, char **argv)
 				fprintf(stderr, "dotlockfile: -i needs argument >= 0\n");
 				return L_ERROR;
 			}
-			flags |= __L_INTERVAL;
+			flags |= _D_L_INTERVAL;
 			args.interval = interval;
 			break;
 		case 't':
@@ -316,8 +319,6 @@ int main(int argc, char **argv)
 	/*
 	 *	Check if we run setgid.
 	 */
-	int cwd_fd = -1;
-	int need_privs = 0;
 #ifdef MAILGROUP
 	if (gid != egid) {
 		/*
@@ -406,7 +407,7 @@ int main(int argc, char **argv)
 	set_signal(SIGHUP, ignore_signal);
 	set_signal(SIGALRM, ignore_signal);
 
-	pid_t pid = fork();
+	pid = fork();
 	if (pid < 0) {
 		if (!quiet)
 			perror("fork");
@@ -434,7 +435,6 @@ int main(int argc, char **argv)
 	}
 
 	/* wait for child */
-	int e, wstatus;
 	while (1) {
 		if (!writepid)
 			alarm(30);
