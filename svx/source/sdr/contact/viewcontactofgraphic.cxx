@@ -326,8 +326,7 @@ namespace sdr::contact
             // accordingly. The created bitmapPrimitive WILL use the rotation, too.
             if (bRota180)
             {
-                const sal_uInt16 nMirrorCase(bMirrored ? 3 : 4);
-                bHMirr = 4 == nMirrorCase;
+                bHMirr = !bMirrored;
 
                 // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
                 // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
@@ -335,8 +334,7 @@ namespace sdr::contact
             }
             else
             {
-                const sal_uInt16 nMirrorCase(bMirrored ? 2 : 1);
-                bHMirr = 2 == nMirrorCase;
+                bHMirr = bMirrored;
             }
 
             if (bHMirr)
