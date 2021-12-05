@@ -414,7 +414,7 @@ public:
         @param rHint address is modified to adapt to the actual broadcasted
                 position on each iteration and upon return points to the last
                 position broadcasted. */
-    bool BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, ScHint& rHint );
+    bool BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, SfxHintId nHint );
 
     bool CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode );
 

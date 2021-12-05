@@ -213,7 +213,7 @@ private:
 public:
     SfxHint() : mnId(SfxHintId::NONE) {}
     explicit SfxHint( SfxHintId nId ) : mnId(nId) {}
-    virtual ~SfxHint() COVERITY_NOEXCEPT_FALSE;
+    virtual ~SfxHint() {};
 
     SfxHint(SfxHint const &) = default;
     SfxHint(SfxHint &&) = default;

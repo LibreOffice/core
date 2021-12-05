@@ -2067,14 +2067,13 @@ void ScTable::BroadcastRecalcOnRefMove()
         aCol[i].BroadcastRecalcOnRefMove();
 }
 
-bool ScTable::BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScHint& rHint )
+bool ScTable::BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SfxHintId nHint )
 {
     bool bBroadcasted = false;
     sc::AutoCalcSwitch aSwitch(rDocument, false);
-    rHint.GetAddress().SetTab(nTab);
     nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        bBroadcasted |= aCol[nCol].BroadcastBroadcasters( nRow1, nRow2, rHint);
+        bBroadcasted |= aCol[nCol].BroadcastBroadcasters( nRow1, nRow2, nHint);
     return bBroadcasted;
 }
 

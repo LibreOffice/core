@@ -2041,12 +2041,11 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // Broadcast on moved ranges. Area-broadcast only.
     ScDocument& rDocument = GetDoc();
     ScHint aHint(SfxHintId::ScDataChanged, ScAddress(nCol, 0, nTab));
-    ScAddress& rPos = aHint.GetAddress();
     for (const auto& rRange : aRanges)
     {
         for (SCROW nRow = rRange.mnRow1; nRow <= rRange.mnRow2; ++nRow)
         {
-            rPos.SetRow(nRow);
+            aHint.SetAddressRow(nRow);
             rDocument.AreaBroadcast(aHint);
         }
     }
@@ -3262,22 +3261,20 @@ namespace {
 
 class BroadcastBroadcastersHandler
 {
-    ScHint&     mrHint;
-    ScAddress&  mrAddress;
+    ScHint      maHint;
     bool        mbBroadcasted;
 
 public:
-    explicit BroadcastBroadcastersHandler( ScHint& rHint )
-        : mrHint(rHint)
-        , mrAddress(mrHint.GetAddress())
+    explicit BroadcastBroadcastersHandler( SfxHintId nHint, SCTAB nTab, SCCOL nCol )
+        : maHint(nHint, ScAddress(nCol, 0, nTab))
         , mbBroadcasted(false)
     {
     }
 
     void operator() ( size_t nRow, SvtBroadcaster* pBroadcaster )
     {
-        mrAddress.SetRow(nRow);
-        pBroadcaster->Broadcast(mrHint);
+        maHint.SetAddressRow(nRow);
+        pBroadcaster->Broadcast(maHint);
         mbBroadcasted = true;
     }
 
@@ -3286,10 +3283,9 @@ public:
 
 }
 
-bool ScColumn::BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, ScHint& rHint )
+bool ScColumn::BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, SfxHintId nHint )
 {
-    rHint.GetAddress().SetCol(nCol);
-    BroadcastBroadcastersHandler aBroadcasterHdl( rHint);
+    BroadcastBroadcastersHandler aBroadcasterHdl(nHint, nTab, nCol);
     sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aBroadcasterHdl);
     return aBroadcasterHdl.wasBroadcasted();
 }
@@ -3322,8 +3318,7 @@ void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
                 SetDirtyOnRangeHandler aHdl(*this);
                 sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
                 // Broadcast all broadcasters in range.
-                ScHint aHint( SfxHintId::ScDataChanged, ScAddress( nCol, nRow1, nTab));
-                if (BroadcastBroadcasters( nRow1, nRow2, aHint))
+                if (BroadcastBroadcasters( nRow1, nRow2, SfxHintId::ScDataChanged))
                 {
                     // SetDirtyOnRangeHandler implicitly tracks notified
                     // formulas via ScDocument::Broadcast(), which

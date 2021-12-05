@@ -26,9 +26,11 @@ class ScHint final : public SfxHint
     ScAddress   aAddress;
 
 public:
-    ScHint( SfxHintId n, const ScAddress& a );
+    ScHint( SfxHintId n, const ScAddress& a ) : SfxHint(n), aAddress(a) {}
     const ScAddress&    GetAddress() const { return aAddress; }
-          ScAddress&    GetAddress()       { return aAddress; }
+    void SetAddressTab(SCTAB nTab) { aAddress.SetTab(nTab); }
+    void SetAddressCol(SCCOL nCol) { aAddress.SetCol(nCol); }
+    void SetAddressRow(SCROW nRow) { aAddress.SetRow(nRow); }
 };
 
 class ScAreaChangedHint final : public SfxHint
