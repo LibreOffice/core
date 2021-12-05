@@ -161,15 +161,13 @@ void ScDocument::BroadcastCells( const ScRange& rRange, SfxHintId nHint, bool bB
 
         if (bBroadcastSingleBroadcasters)
         {
-            ScHint aHint(nHint, ScAddress());
-
             for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
             {
                 ScTable* pTab = FetchTable(nTab);
                 if (!pTab)
                     continue;
 
-                bIsBroadcasted |= pTab->BroadcastBroadcasters( nCol1, nRow1, nCol2, nRow2, aHint);
+                bIsBroadcasted |= pTab->BroadcastBroadcasters( nCol1, nRow1, nCol2, nRow2, nHint);
             }
         }
 
