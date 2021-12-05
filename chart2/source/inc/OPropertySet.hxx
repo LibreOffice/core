@@ -55,11 +55,14 @@ protected:
     /** implement this method to provide default values for all properties
         supporting defaults.  If a property does not have a default value, you
         may throw an UnknownPropertyException.
+        We pass the any by reference because this code is very hot and doing
+        it this way is cheaper than the two step process of constructing a new
+        any and then assigning to via a return value.
 
         @throws css::beans::UnknownPropertyException
         @throws css::uno::RuntimeException
      */
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const = 0;
+    virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const = 0;
 
     /** The InfoHelper table contains all property names and types of
         this object.
