@@ -1552,7 +1552,10 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             // At least all cells using range names pointing relative to the
             // moved range must be recalculated, and all cells marked postponed
             // dirty.
-            std::for_each(maTabs.begin(), maTabs.end(), SetDirtyIfPostponedHandler());
+            {
+                ScBulkBroadcast aBulkBroadcast(GetBASM(), SfxHintId::ScDataChanged);
+                std::for_each(maTabs.begin(), maTabs.end(), SetDirtyIfPostponedHandler());
+            }
             // Cells containing functions such as CELL, COLUMN or ROW may have
             // changed their values on relocation. Broadcast them.
             {
