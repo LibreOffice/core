@@ -170,11 +170,9 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
 
 // static
-bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile const * pMetaFile, const uno::Reference<io::XStream>& xStream)
+bool GraphicHelper::getThumbnailFormatFromBitmap_Impl(const BitmapEx& rBitmap, const uno::Reference<io::XStream>& xStream)
 {
-    bool bResult = false;
-
-    if (!pMetaFile || !xStream.is())
+    if (rBitmap.IsEmpty() || !xStream.is())
         return false;
 
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
@@ -182,16 +180,12 @@ bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile const * pMetaFile
     if (pStream->GetError())
         return false;
 
-    BitmapEx aResultBitmap;
-
-    bResult = pMetaFile->CreateThumbnail(aResultBitmap, BmpConversion::N8BitColors, BmpScaleFlag::Default);
-
-    if (!bResult || aResultBitmap.IsEmpty())
-        return false;
+    BitmapEx bitmap(rBitmap);
+    bitmap.Convert(BmpConversion::N8BitColors);
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    if (rFilter.compressAsPNG(aResultBitmap, *pStream) != ERRCODE_NONE)
+    if (rFilter.compressAsPNG(bitmap, *pStream) != ERRCODE_NONE)
         return false;
 
     pStream->Flush();
