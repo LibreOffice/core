@@ -158,7 +158,7 @@ bool SfxObjectShell::CreatePreview_Impl( bool bFullContent, VirtualDevice* pDevi
         // despite the metafile case (needlessly?) setting mapmode.
         Size aSizePix = pDevice->LogicToPixel( aTmpSize, aMode );
         // Code based on GDIMetaFile::CreateThumbnail().
-        sal_uInt32      nMaximumExtent = 256;
+        sal_uInt32      nMaximumExtent = 512;
         // determine size that has the same aspect ratio as image size and
         // fits into the rectangle determined by nMaximumExtent
         if ( aSizePix.Width() && aSizePix.Height()
