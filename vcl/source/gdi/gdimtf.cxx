@@ -2281,7 +2281,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
     const Point     aBRPix( aVDev->LogicToPixel( Point( GetPrefSize().Width() - 1, GetPrefSize().Height() - 1 ), GetPrefMapMode() ) );
     Size            aDrawSize( aVDev->LogicToPixel( GetPrefSize(), GetPrefMapMode() ) );
     Size            aSizePix( std::abs( aBRPix.X() - aTLPix.X() ) + 1, std::abs( aBRPix.Y() - aTLPix.Y() ) + 1 );
-    sal_uInt32      nMaximumExtent = 256;
+    sal_uInt32      nMaximumExtent = 512;
 
     if (!rBitmapEx.IsEmpty())
         rBitmapEx.SetEmpty();
