@@ -317,20 +317,30 @@ namespace sdr::contact
             const Degree100 nRotationAngle(rGeoStat.nRotationAngle);
             const bool bRota180(18000_deg100 == nRotationAngle);
             const bool bMirrored(GetGrafObject().IsMirrored());
-            const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
-            bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
-            bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
+
+            bool bHMirr;
+            bool bVMirr;
 
             // set mirror flags at LocalGrafInfo. Take into account that the geometry in
             // aObjectRange is already changed and rotated when bRota180 is used. To rebuild
             // that old behaviour (as long as part of the model data), correct the H/V flags
             // accordingly. The created bitmapPrimitive WILL use the rotation, too.
-            if(bRota180)
+            if (bRota180)
             {
+                const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
+                bHMirr = ((2 == nMirrorCase ) || (4 == nMirrorCase));
+                bVMirr = ((3 == nMirrorCase ) || (4 == nMirrorCase));
+
                 // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
                 // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
                 bHMirr = !bHMirr;
                 bVMirr = false;
+            }
+            else
+            {
+                const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
+                bHMirr = ((2 == nMirrorCase ) || (4 == nMirrorCase));
+                bVMirr = ((3 == nMirrorCase ) || (4 == nMirrorCase));
             }
 
             if(bHMirr || bVMirr)
