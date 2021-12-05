@@ -230,13 +230,14 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 }
 
 // ____ OPropertySet ____
-uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
+void DataSeries::GetDefaultValue( sal_Int32 nHandle, uno::Any& rDest ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rDest.clear();
+    else
+        rDest = (*aFound).second;
 }
 
 // ____ OPropertySet ____

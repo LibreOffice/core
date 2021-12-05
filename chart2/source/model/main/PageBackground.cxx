@@ -132,13 +132,14 @@ uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
 }
 
 // ____ OPropertySet ____
-uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
+void PageBackground::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticPageBackgroundDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PageBackground::getInfoHelper()

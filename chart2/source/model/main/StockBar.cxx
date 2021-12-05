@@ -139,13 +139,14 @@ uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
 }
 
 // ____ OPropertySet ____
-uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
+void StockBar::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticStockBarDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()

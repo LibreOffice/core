@@ -165,17 +165,18 @@ void SAL_CALL DataPoint::setParent(
 }
 
 // ____ OPropertySet ____
-uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
+void DataPoint::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     // the value set at the data series is the default
     uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties.get(), uno::UNO_QUERY );
     if( !xFast.is())
     {
         OSL_ENSURE( m_bNoParentPropAllowed, "data point needs a parent property set to provide values correctly" );
-        return uno::Any();
+        rAny.clear();
+        return;
     }
 
-    return xFast->getFastPropertyValue( nHandle );
+    rAny = xFast->getFastPropertyValue( nHandle );
 }
 
 void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(

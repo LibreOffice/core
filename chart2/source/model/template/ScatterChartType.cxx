@@ -196,13 +196,14 @@ uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles(
 }
 
 // ____ OPropertySet ____
-uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
+void ScatterChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticScatterChartTypeDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 // ____ OPropertySet ____
