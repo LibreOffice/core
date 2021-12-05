@@ -28,8 +28,8 @@
 #include <unistd.h>
 #include <time.h>
 #include <errno.h>
-#include <lockfile.h>
-#include <maillock.h>
+#include "lockfile.h"
+#include "maillock.h"
 
 #ifdef HAVE_UTIME
 #include <utime.h>
@@ -176,7 +176,7 @@ static int run_helper(char *opt, const char *lockfile, int retries, int flags)
 #define TMPLOCKFILENAMESZ	(TMPLOCKSTRSZ + TMPLOCKPIDSZ + \
 				 TMPLOCKTIMESZ + TMPLOCKSYSNAMESZ)
 
-static int lockfilename(const char *lockfile, char *tmplock, int tmplocksz)
+static int lockfilename(const char *lockfile, char *tmplock, size_t tmplocksz)
 {
 	char		sysname[256];
 	char		*p;
@@ -226,7 +226,7 @@ static int lockfilename(const char *lockfile, char *tmplock, int tmplocksz)
  *	Create a lockfile.
  */
 static int lockfile_create_save_tmplock(const char *lockfile,
-		char *tmplock, int tmplocksz,
+		char *tmplock, size_t tmplocksz,
 		volatile char **xtmplock,
 		int retries, int flags, struct __lockargs *args)
 {
@@ -256,7 +256,7 @@ static int lockfile_create_save_tmplock(const char *lockfile,
 		}
 	}
 	pidlen = snprintf(pidbuf, sizeof(pidbuf), "%d\n", pid);
-	if (pidlen > sizeof(pidbuf) - 1) {
+	if (pidlen < 0 || pidlen > (int) sizeof(pidbuf) - 1) {
 		errno = EOVERFLOW;
 		return L_ERROR;
 	}
@@ -388,7 +388,8 @@ static
 int lockfile_create_set_tmplock(const char *lockfile, volatile char **xtmplock, int retries, int flags, struct __lockargs *args)
 {
 	char *tmplock;
-	int l, r, e;
+	int r, e;
+	size_t l;
 
 	l = strlen(lockfile)+TMPLOCKFILENAMESZ+1;
 	if ((tmplock = (char *)malloc(l)) == NULL)
