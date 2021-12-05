@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e2ab97f_9051264c",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "b50b0e3e_388391d2",
+      "range": {
+        "startLine": 43,
+        "startChar": 39,
+        "endLine": 43,
+        "endChar": 50
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8c34f42_d22729bc",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-06T07:47:47Z",
       "side": 0,
       "message": "keep - set true.",
+      "range": {
+        "startLine": 44,
+        "startChar": 39,
+        "endLine": 44,
+        "endChar": 70
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c3d0de_498f77b6",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "f8c34f42_d22729bc",
       "range": {
         "startLine": 44,
         "startChar": 39,
@@ -70,6 +118,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4acf0ad_ce28b8ab",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "3287c365_549cd9c0",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37ad9d67_247ec7f7",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-09-06T07:47:47Z",
       "side": 0,
       "message": "keep",
+      "range": {
+        "startLine": 47,
+        "startChar": 39,
+        "endLine": 47,
+        "endChar": 60
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "677fedf8_e5ba83ab",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "37ad9d67_247ec7f7",
       "range": {
         "startLine": 47,
         "startChar": 39,
@@ -116,6 +212,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45fad666_1a558e44",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "c1bfd7f6_9f4157bc",
+      "range": {
+        "startLine": 49,
+        "startChar": 40,
+        "endLine": 49,
+        "endChar": 61
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0002cf65_0f8687b7",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-09-06T07:47:47Z",
       "side": 0,
       "message": "keep - set true.",
+      "range": {
+        "startLine": 51,
+        "startChar": 39,
+        "endLine": 51,
+        "endChar": 54
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40be2aec_316253b6",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "0002cf65_0f8687b7",
       "range": {
         "startLine": 51,
         "startChar": 39,
@@ -162,6 +306,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0fa17c4_0fa90731",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "54542188_1c840c03",
+      "range": {
+        "startLine": 58,
+        "startChar": 39,
+        "endLine": 58,
+        "endChar": 60
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25b5874a_f9f4abe3",
@@ -175,6 +343,30 @@
       "writtenOn": "2021-09-06T07:47:47Z",
       "side": 0,
       "message": "add AddParaLineSpacingToTableCells - true.",
+      "range": {
+        "startLine": 60,
+        "startChar": 39,
+        "endLine": 60,
+        "endChar": 65
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb098b0d_c54adbd8",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "25b5874a_f9f4abe3",
       "range": {
         "startLine": 60,
         "startChar": 39,
@@ -208,6 +400,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c1d4638_8d16733d",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "08e69636_38f8fb13",
+      "range": {
+        "startLine": 63,
+        "startChar": 39,
+        "endLine": 63,
+        "endChar": 59
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e4f98bd_cb91f0ec",
@@ -221,6 +437,30 @@
       "writtenOn": "2021-09-06T07:47:47Z",
       "side": 0,
       "message": "keep - set false.",
+      "range": {
+        "startLine": 66,
+        "startChar": 39,
+        "endLine": 66,
+        "endChar": 54
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d60925b_69309621",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "2e4f98bd_cb91f0ec",
       "range": {
         "startLine": 66,
         "startChar": 39,
@@ -254,6 +494,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9426b5a6_92246fac",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "d47d5e1e_cad4e887",
+      "range": {
+        "startLine": 67,
+        "startChar": 39,
+        "endLine": 67,
+        "endChar": 58
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e6cf173_cff59b44",
@@ -267,6 +531,30 @@
       "writtenOn": "2021-09-06T07:47:47Z",
       "side": 0,
       "message": "keep - set false.",
+      "range": {
+        "startLine": 73,
+        "startChar": 39,
+        "endLine": 73,
+        "endChar": 65
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba6f9024_15acf659",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "6e6cf173_cff59b44",
       "range": {
         "startLine": 73,
         "startChar": 39,
@@ -300,6 +588,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b7c2660_c01841da",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "fb2ba158_d84a55a9",
+      "range": {
+        "startLine": 75,
+        "startChar": 39,
+        "endLine": 75,
+        "endChar": 63
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9379ad12_5ca9f585",
@@ -313,6 +625,30 @@
       "writtenOn": "2021-09-06T07:47:47Z",
       "side": 0,
       "message": "keep - and leave as false.  (verified in an ODT I created that it matches the default. But we don\u0027t want to leave this empty, or it considers it to be pre-S08 and affects other settings.",
+      "range": {
+        "startLine": 80,
+        "startChar": 39,
+        "endLine": 80,
+        "endChar": 63
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a72e6f1a_ea36c09e",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-12-05T17:13:18Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "9379ad12_5ca9f585",
       "range": {
         "startLine": 80,
         "startChar": 39,
