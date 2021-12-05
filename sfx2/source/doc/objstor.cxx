@@ -3647,10 +3647,10 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, const uno::Reference<io::XS
         }
         else
         {
-            std::shared_ptr<GDIMetaFile> xMetaFile = GetPreviewMetaFile();
-            if (xMetaFile)
+            BitmapEx bitmap = GetPreviewBitmap();
+            if (!bitmap.IsEmpty())
             {
-                bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(xMetaFile.get(), xStream);
+                bResult = GraphicHelper::getThumbnailFormatFromBitmap_Impl(bitmap, xStream);
             }
         }
     }

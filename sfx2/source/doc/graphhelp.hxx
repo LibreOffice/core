@@ -53,8 +53,8 @@ public:
 #endif
     }
 
-    static bool getThumbnailFormatFromGDI_Impl(
-            GDIMetaFile const * pMetaFile,
+    static bool getThumbnailFormatFromBitmap_Impl(
+            const BitmapEx& rBitmap,
             const css::uno::Reference< css::io::XStream >& xStream );
 
     static OUString getThumbnailReplacementIDByFactoryName_Impl(
