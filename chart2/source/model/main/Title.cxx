@@ -283,13 +283,14 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 }
 
 // ____ OPropertySet ____
-uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
+void Title::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticTitleDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Title::getInfoHelper()

@@ -81,9 +81,9 @@ Reference< XCoordinateSystem > SAL_CALL
 }
 
 // ____ OPropertySet ____
-uno::Any NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/ ) const
+void NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/, uno::Any& rAny ) const
 {
-    return uno::Any();
+    rAny.clear();
 }
 
 namespace

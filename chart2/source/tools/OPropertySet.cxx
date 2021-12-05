@@ -157,7 +157,9 @@ Any SAL_CALL
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
-    return GetDefaultValue( rPH.getHandleByName( aPropertyName ) );
+    Any any;
+    GetDefaultValue( rPH.getHandleByName( aPropertyName ), any );
+    return any;
 }
 
 // ____ XMultiPropertyStates ____
@@ -198,8 +200,9 @@ Sequence< Any > SAL_CALL
 
     for( ; nI < nElements; ++nI )
     {
-        pResultArray[ nI ] = GetDefaultValue(
-            rPH.getHandleByName( aPropertyNames[ nI ] ));
+        GetDefaultValue(
+            rPH.getHandleByName( aPropertyNames[ nI ] ),
+            pResultArray[ nI ]);
     }
 
     return aResult;
@@ -256,7 +259,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     Any aDefault;
     try
     {
-        aDefault = GetDefaultValue( nHandle );
+        GetDefaultValue( nHandle, aDefault );
     }
     catch( const beans::UnknownPropertyException& )
     {
@@ -337,7 +340,7 @@ void SAL_CALL OPropertySet::getFastPropertyValue
         // => take the default value
         try
         {
-            rValue = GetDefaultValue( nHandle );
+            GetDefaultValue( nHandle, rValue );
         }
         catch( const beans::UnknownPropertyException& )
         {

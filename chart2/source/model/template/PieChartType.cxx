@@ -186,13 +186,14 @@ uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
 }
 
 // ____ OPropertySet ____
-uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
+void PieChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticPieChartTypeDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 // ____ OPropertySet ____

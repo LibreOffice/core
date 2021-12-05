@@ -162,14 +162,16 @@ LineChartTypeTemplate::LineChartTypeTemplate(
 
 LineChartTypeTemplate::~LineChartTypeTemplate()
 {}
+
 // ____ OPropertySet ____
-uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
+void LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticLineChartTypeTemplateDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL LineChartTypeTemplate::getInfoHelper()
