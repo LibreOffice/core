@@ -213,16 +213,15 @@ namespace {
 void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, SfxHintId nHint )
 {
     ScHint aHint(nHint, ScAddress());
-    ScAddress& rPos = aHint.GetAddress();
     for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
     {
-        rPos.SetTab(nTab);
+        aHint.SetAddressTab(nTab);
         for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
         {
-            rPos.SetCol(nCol);
+            aHint.SetAddressCol(nCol);
             for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
             {
-                rPos.SetRow(nRow);
+                aHint.SetAddressRow(nRow);
                 rBC.Broadcast(aHint);
             }
         }
