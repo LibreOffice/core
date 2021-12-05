@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc890d80_7c45a40f",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-05T00:10:38Z",
+      "side": 1,
+      "message": "I suggest to apply the one-liner fix of https://gerrit.libreoffice.org/c/core/+/126364 into this too",
+      "revId": "a36fd580808a7bc6ad343a778bea27833f92acdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
