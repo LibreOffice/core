@@ -2061,11 +2061,10 @@ void ScTable::SetDirtyAfterLoad()
 
 void ScTable::SetDirtyIfPostponed()
 {
-    bool bOldAutoCalc = rDocument.GetAutoCalc();
-    rDocument.SetAutoCalc( false );    // avoid multiple recalculations
+    sc::AutoCalcSwitch aSwitch(rDocument, false);
+    ScBulkBroadcast aBulkBroadcast( rDocument.GetBASM(), SfxHintId::ScDataChanged);
     for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].SetDirtyIfPostponed();
-    rDocument.SetAutoCalc( bOldAutoCalc );
 }
 
 void ScTable::BroadcastRecalcOnRefMove()
