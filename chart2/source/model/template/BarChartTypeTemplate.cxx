@@ -224,13 +224,14 @@ Reference< chart2::XChartType > SAL_CALL BarChartTypeTemplate::getChartTypeForNe
 }
 
 // ____ OPropertySet ____
-uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
+void BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticBarChartTypeTemplateDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL BarChartTypeTemplate::getInfoHelper()

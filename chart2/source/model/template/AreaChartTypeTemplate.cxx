@@ -130,13 +130,14 @@ AreaChartTypeTemplate::~AreaChartTypeTemplate()
 {}
 
 // ____ OPropertySet ____
-uno::Any AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
+void AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticAreaChartTypeTemplateDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL AreaChartTypeTemplate::getInfoHelper()

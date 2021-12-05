@@ -188,9 +188,9 @@ void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XData
 }
 
 // ____ OPropertySet ____
-uno::Any ChartType::GetDefaultValue( sal_Int32 /* nHandle */ ) const
+void ChartType::GetDefaultValue( sal_Int32 /* nHandle */, uno::Any& rAny ) const
 {
-    return uno::Any();
+    rAny.clear();
 }
 
 namespace

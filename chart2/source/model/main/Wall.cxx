@@ -127,13 +127,14 @@ uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 }
 
 // ____ OPropertySet ____
-uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
+void Wall::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticWallDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Wall::getInfoHelper()
