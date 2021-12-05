@@ -61,6 +61,7 @@ void got_signal(int sig)
 
 void ignore_signal(int sig)
 {
+	(void)sig;
 }
 
 /*
@@ -191,15 +192,17 @@ int main(int argc, char **argv)
 	int		touch = 0;
 	int		writepid = 0;
 	int		passthrough = 0;
+	int cwd_fd = -1;
+	int need_privs = 0;
+	pid_t pid = -1;
+	int e, wstatus;
 
 	/*
 	 *	Remember real and effective gid, and
 	 *	drop privs for now.
 	 */
-	if ((gid = getgid()) < 0)
-		perror_exit("getgid");
-	if ((egid = getegid()) < 0)
-		perror_exit("getegid");
+	gid = getgid();
+	egid = getegid();
 	if (gid != egid) {
 		if (setregid(-1, gid) < 0)
 			perror_exit("setregid(-1, gid)");
@@ -316,8 +319,6 @@ int main(int argc, char **argv)
 	/*
 	 *	Check if we run setgid.
 	 */
-	int cwd_fd = -1;
-	int need_privs = 0;
 #ifdef MAILGROUP
 	if (gid != egid) {
 		/*
@@ -406,7 +407,7 @@ int main(int argc, char **argv)
 	set_signal(SIGHUP, ignore_signal);
 	set_signal(SIGALRM, ignore_signal);
 
-	pid_t pid = fork();
+	pid = fork();
 	if (pid < 0) {
 		if (!quiet)
 			perror("fork");
@@ -434,7 +435,6 @@ int main(int argc, char **argv)
 	}
 
 	/* wait for child */
-	int e, wstatus;
 	while (1) {
 		if (!writepid)
 			alarm(30);
