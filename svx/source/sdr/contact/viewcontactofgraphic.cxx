@@ -315,30 +315,10 @@ namespace sdr::contact
             // look for mirroring
             const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
             const Degree100 nRotationAngle(rGeoStat.nRotationAngle);
-            const bool bRota180(18000_deg100 == nRotationAngle);
             const bool bMirrored(GetGrafObject().IsMirrored());
 
-            bool bHMirr;
-
-            // set mirror flags at LocalGrafInfo. Take into account that the geometry in
-            // aObjectRange is already changed and rotated when bRota180 is used. To rebuild
-            // that old behaviour (as long as part of the model data), correct the H/V flags
-            // accordingly. The created bitmapPrimitive WILL use the rotation, too.
-            if (bRota180)
-            {
-                // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
-                // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
-                bHMirr = bMirrored;
-            }
-            else
-            {
-                bHMirr = bMirrored;
-            }
-
-            if (bHMirr)
-            {
+            if (bMirrored)
                 aLocalGrafInfo.SetMirrorFlags(BmpMirrorFlags::Horizontal);
-            }
 
             // fill object matrix
             const double fShearX(-rGeoStat.mfTanShearAngle);
