@@ -2031,41 +2031,33 @@ void ScTable::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 
 void ScTable::SetDirty( const ScRange& rRange, ScColumn::BroadcastMode eMode )
 {
-    bool bOldAutoCalc = rDocument.GetAutoCalc();
-    rDocument.SetAutoCalc( false );    // avoid multiple recalculations
+    sc::AutoCalcSwitch aSwitch(rDocument, false);
     SCCOL nCol2 = rRange.aEnd.Col();
     nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
         aCol[i].SetDirty(rRange.aStart.Row(), rRange.aEnd.Row(), eMode);
-    rDocument.SetAutoCalc( bOldAutoCalc );
 }
 
 void ScTable::SetTableOpDirty( const ScRange& rRange )
 {
-    bool bOldAutoCalc = rDocument.GetAutoCalc();
-    rDocument.SetAutoCalc( false );    // no multiple recalculation
+    sc::AutoCalcSwitch aSwitch(rDocument, false);
     const SCCOL nCol2 = ClampToAllocatedColumns(rRange.aEnd.Col());
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
         aCol[i].SetTableOpDirty( rRange );
-    rDocument.SetAutoCalc( bOldAutoCalc );
 }
 
 void ScTable::SetDirtyAfterLoad()
 {
-    bool bOldAutoCalc = rDocument.GetAutoCalc();
-    rDocument.SetAutoCalc( false );    // avoid multiple recalculations
+    sc::AutoCalcSwitch aSwitch(rDocument, false);
     for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].SetDirtyAfterLoad();
-    rDocument.SetAutoCalc( bOldAutoCalc );
 }
 
 void ScTable::SetDirtyIfPostponed()
 {
-    bool bOldAutoCalc = rDocument.GetAutoCalc();
-    rDocument.SetAutoCalc( false );    // avoid multiple recalculations
+    sc::AutoCalcSwitch aSwitch(rDocument, false);
     for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].SetDirtyIfPostponed();
-    rDocument.SetAutoCalc( bOldAutoCalc );
 }
 
 void ScTable::BroadcastRecalcOnRefMove()
