@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbcbc087_eddc6420",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-05T15:36:40Z",
+      "side": 1,
+      "message": "@Urja: would be nice to get a comment you, if this also fixes tdf#144975 (AFAIK just tdf#128715 was yet tested).\n\n-1, because license statement is missing, because f.d.o has problems… currently erack doesn\u0027t see any mails on it (since Friday). Unclear if mails how up later or we need new ones.",
+      "revId": "028c5eb2a169aac064306e903b77f72816409438",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
