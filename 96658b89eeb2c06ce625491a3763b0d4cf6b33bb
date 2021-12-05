@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1eb7c57_90198b6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-05T09:00:37Z",
+      "side": 1,
+      "message": "Forward +1 from Jenkins.\n",
+      "revId": "96658b89eeb2c06ce625491a3763b0d4cf6b33bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
