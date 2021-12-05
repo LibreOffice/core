@@ -43,6 +43,7 @@
 #include <formulagroup.hxx>
 #include <drwlayer.hxx>
 #include <mtvelements.hxx>
+#include <bcaslot.hxx>
 
 #include <svl/numformat.hxx>
 #include <svl/poolcach.hxx>
@@ -3372,6 +3373,7 @@ void ScColumn::SetDirtyIfPostponed()
 {
     sc::AutoCalcSwitch aSwitch(GetDoc(), false);
     SetDirtyIfPostponedHandler aFunc;
+    ScBulkBroadcast aBulkBroadcast( GetDoc().GetBASM(), SfxHintId::ScDataChanged);
     sc::ProcessFormula(maCells, aFunc);
 }
 
