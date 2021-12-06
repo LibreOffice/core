@@ -1403,7 +1403,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         else
         {
             OUString aSearchFor
-                = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+                = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
             for (sal_uInt16 nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); ++nMP)
             {
@@ -1473,7 +1473,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 aTargetNewLayoutName = createNewMasterPageLayoutName(*this);
 
-                OUString aTemp = aTargetNewLayoutName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+                OUString aTemp = aTargetNewLayoutName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
                 pMaster->SetName(aTargetNewLayoutName);
                 pMaster->SetLayoutName(aTemp);
@@ -1736,7 +1736,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     {
         // Find a new name for the layout
         OUString aName(createNewMasterPageLayoutName(*this));
-        OUString aPageLayoutName(aName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE);
+        OUString aPageLayoutName(aName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE);
 
         // Generate new stylesheets
         static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutStyleSheets(aName);
