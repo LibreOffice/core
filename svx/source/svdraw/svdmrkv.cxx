@@ -179,6 +179,7 @@ SdrMarkView::SdrMarkView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbMrkPntDirty(false)
     , mbMarkedPointsRectsDirty(false)
     , mbMarkHandlesHidden(false)
+    , mbNegativeX(false)
 {
 
     BrkMarkObj();
@@ -273,6 +274,14 @@ void SdrMarkView::modelHasChangedLOKit()
         }
 
         pResultSelection = &aSelection;
+
+        if (mbNegativeX)
+        {
+            // Convert to positive X doc-coordinates
+            tools::Long nTmp = aSelection.Left();
+            aSelection.SetLeft(-aSelection.Right());
+            aSelection.SetRight(-nTmp);
+        }
     }
 
     if (SfxViewShell* pViewShell = GetSfxViewShell())
