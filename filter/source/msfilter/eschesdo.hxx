@@ -42,12 +42,12 @@ class ImplEESdrObject
     bool                mbEmptyPresObj : 1;
     bool                mbOOXML;
 
-    void Init( ImplEESdrWriter& rEx );
+    void Init();
 public:
     css::uno::Reference< css::beans::XPropertySet >   mXPropSet;
 
     ImplEESdrObject( ImplEESdrWriter& rEx, const SdrObject& rObj, bool bOOXML );
-    ImplEESdrObject( ImplEESdrWriter& rEx, const css::uno::Reference< css::drawing::XShape >& rShape );
+    ImplEESdrObject( const css::uno::Reference< css::drawing::XShape >& rShape );
     ~ImplEESdrObject();
 
     bool ImplGetPropertyValue( const OUString& rString );
@@ -100,8 +100,6 @@ class EscherExHostAppData;
 class ImplEESdrWriter
 {
     EscherEx*           mpEscherEx;
-    o3tl::Length        meUnitsSrc;
-    o3tl::Length        meUnitsDest;
     css::uno::Reference< css::drawing::XDrawPage >        mXDrawPage;
     css::uno::Reference< css::drawing::XShapes >          mXShapes;
     SvStream*           mpPicStrm;
@@ -127,8 +125,8 @@ class ImplEESdrWriter
 public:
     explicit            ImplEESdrWriter( EscherEx& rEx );
                         ~ImplEESdrWriter();
-    Point               ImplMapPoint( const Point& rPoint );
-    Size                ImplMapSize( const Size& rSize );
+    static Point        ImplMapPoint( const Point& rPoint );
+    static Size         ImplMapSize( const Size& rSize );
     EscherExHostAppData* ImplGetHostData() { return mpHostAppData; }
     bool                ImplInitPage( const SdrPage& rPage );
     bool                ImplInitUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes );

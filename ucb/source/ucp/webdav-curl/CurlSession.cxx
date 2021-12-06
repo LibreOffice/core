@@ -92,11 +92,9 @@ struct DownloadTarget
 struct UploadSource
 {
     uno::Sequence<sal_Int8> const& rInData;
-    ResponseHeaders const& rHeaders;
     size_t nPosition;
-    UploadSource(uno::Sequence<sal_Int8> const& i_rInData, ResponseHeaders const& i_rHeaders)
+    UploadSource(uno::Sequence<sal_Int8> const& i_rInData)
         : rInData(i_rInData)
-        , rHeaders(i_rHeaders)
         , nPosition(0)
     {
     }
@@ -843,7 +841,7 @@ auto CurlProcessor::ProcessRequestImpl(
     ::std::optional<UploadSource> oUploadSource;
     if (pInData)
     {
-        oUploadSource.emplace(*pInData, rHeaders);
+        oUploadSource.emplace(*pInData);
         rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_READDATA, &*oUploadSource);
         assert(rc == CURLE_OK);
         // libcurl won't upload without setting this

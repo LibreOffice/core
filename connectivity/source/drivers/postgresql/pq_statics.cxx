@@ -424,30 +424,6 @@ Statics & getStatics()
             statics.refl.indexColumnDescriptor.pProps = createPropertyArrayHelper(
                 indexColumnDescDef, SAL_N_ELEMENTS(indexColumnDescDef), 0 );
 
-            // resultset
-            statics.refl.resultSet.implName = "org.openoffice.comp.pq.ResultSet";
-            statics.refl.resultSet.serviceNames = { "com.sun.star.sdbc.ResultSet" };
-            statics.refl.resultSet.types = UpdateableResultSet::getStaticTypes( false /* updateable */ );
-            PropertyDef resultSet[] =
-                {
-                    PropertyDef( statics.CURSOR_NAME , tString ),
-                    PropertyDef( statics.ESCAPE_PROCESSING , tBool ),
-                    PropertyDef( statics.FETCH_DIRECTION , tInt ),
-                    PropertyDef( statics.FETCH_SIZE , tInt ),
-                    PropertyDef( statics.IS_BOOKMARKABLE , tBool ),
-                    PropertyDef( statics.RESULT_SET_CONCURRENCY , tInt ),
-                    PropertyDef( statics.RESULT_SET_TYPE , tInt )
-                };
-            statics.refl.resultSet.pProps = createPropertyArrayHelper(
-                resultSet, SAL_N_ELEMENTS(resultSet), 0 );
-
-            // updateableResultset
-            statics.refl.updateableResultSet.implName = "org.openoffice.comp.pq.UpdateableResultSet";
-            statics.refl.updateableResultSet.serviceNames = { "com.sun.star.sdbc.ResultSet" };
-            statics.refl.updateableResultSet.types = UpdateableResultSet::getStaticTypes( true /* updateable */ );
-            statics.refl.updateableResultSet.pProps = createPropertyArrayHelper(
-                resultSet, SAL_N_ELEMENTS(resultSet), 0 );
-
             // databasemetadata
             statics.tablesRowNames = std::vector< OUString > ( 5 );
             statics.tablesRowNames[TABLE_INDEX_CATALOG] = "TABLE_CAT";
