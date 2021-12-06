@@ -750,7 +750,7 @@ public:
     virtual std::unique_ptr<SdrUndoAction> CreateUndoNewPage(SdrPage& rPage);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoCopyPage(SdrPage& rPage);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1);
-    virtual std::unique_ptr<SdrUndoAction> CreateUndoSort(SdrPage& rPage, ::std::vector<sal_Int32> const& rSortOrder);
+    static std::unique_ptr<SdrUndoAction> CreateUndoSort(SdrPage& rPage, ::std::vector<sal_Int32> const& rSortOrder);
 
     // Master page
     virtual std::unique_ptr<SdrUndoAction> CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage);

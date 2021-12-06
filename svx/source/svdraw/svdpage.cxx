@@ -718,7 +718,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
     bool const isUndo(rModel.IsUndoEnabled());
     if (isUndo)
     {
-        rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoSort(*getSdrPageFromSdrObjList(), sortOrder));
+        rModel.AddUndo(SdrUndoFactory::CreateUndoSort(*getSdrPageFromSdrObjList(), sortOrder));
     }
 
     for (size_t i = 0; i < aNewSortOrder.size(); ++i)
