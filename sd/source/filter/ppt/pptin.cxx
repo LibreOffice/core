@@ -657,7 +657,7 @@ bool ImplSdPPTImport::Import()
                             aLayoutName = static_cast<SdPage*>( mpDoc->GetMasterPage( nMasterNum - 1 ) )->GetName();
                     }
                     pPage->SetName( aLayoutName );
-                    aLayoutName += SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+                    aLayoutName += SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
                     pPage->SetLayoutName( aLayoutName );
 
                     // set stylesheets

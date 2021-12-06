@@ -73,7 +73,7 @@ private:
 struct snewfoil_value_info
 {
     sal_uInt16 mnId;
-    const char* msBmpResId;
+    OUString msBmpResId;
     TranslateId mpStrResId;
     const char* msUnoCommand;
 };
@@ -125,7 +125,7 @@ static void fillLayoutValueSet(ValueSet* pValue, const snewfoil_value_info* pInf
     for( ; pInfo->mnId; pInfo++ )
     {
         OUString aText(SdResId(pInfo->mpStrResId));
-        BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
+        BitmapEx aBmp(pInfo->msBmpResId);
 
         pValue->InsertItem(pInfo->mnId, Image(aBmp), aText);
 
@@ -176,11 +176,11 @@ IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void 
 
     if( pControl == mxDisplayModeSet1.get() ) {
         sCommandURL = OUString::createFromAscii(editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1 ].msUnoCommand);
-        sImage = OUString::createFromAscii(editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1 ].msBmpResId);
+        sImage = editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1 ].msBmpResId;
     }
     else if( pControl == mxDisplayModeSet2.get() ) {
         sCommandURL = OUString::createFromAscii(mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5 ].msUnoCommand);
-        sImage = OUString::createFromAscii(mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5 ].msBmpResId);
+        sImage = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5 ].msBmpResId;
     }
 
     if (!sCommandURL.isEmpty())

@@ -3166,7 +3166,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             bUnique = std::find(aPageNames.begin(), aPageNames.end(), aPrefix) == aPageNames.end();
         }
 
-        OUString aLayoutName = aPrefix + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+        OUString aLayoutName = aPrefix + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
         // create styles
         static_cast<SdStyleSheetPool*>(pDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
