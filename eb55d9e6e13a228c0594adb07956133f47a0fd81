@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf25ae34_0f69e3a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-06T08:01:38Z",
+      "side": 1,
+      "message": "FWIW this is probably a timing problem: if dbgutil is slow enough to pass and release is fast enough to hang, then probably you need an --enable-symbols build to reproduce it locally. (It\u0027s likely that this is not about gcc vs clang.) Then you can attach gdb to the soffice process and get a backtrace to see where it hangs.",
+      "revId": "eb55d9e6e13a228c0594adb07956133f47a0fd81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
