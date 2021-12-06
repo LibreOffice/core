@@ -25,6 +25,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <comphelper/lok.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
 #include <strings.hrc>
@@ -49,6 +50,7 @@ ScDrawView::ScDrawView(
     pDropMarkObj( nullptr ),
     bInConstruct( true )
 {
+    SetNegativeX(comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(nTab));
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(SvtOptionsDrawinglayer::IsOverlayBuffer_Calc());
 
