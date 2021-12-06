@@ -280,7 +280,7 @@ sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
     for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )
     {
         const ScRange & rScRange = rNCRanges[ i ];
-        if( rScRange.In( rPos ) )
+        if( rScRange.Contains( rPos ) )
             return *aIt;
     }
     return EXC_XFID_NOTFOUND;

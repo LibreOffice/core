@@ -458,7 +458,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
 
     auto lIsEditable = [rRange](const ScEnhancedProtection& rEnhancedProtection) {
         return !rEnhancedProtection.hasSecurityDescriptor()
-            && rEnhancedProtection.maRangeList.is() && rEnhancedProtection.maRangeList->In( rRange)
+            && rEnhancedProtection.maRangeList.is() && rEnhancedProtection.maRangeList->Contains( rRange)
             && !rEnhancedProtection.hasPassword(); // Range is editable if no password is assigned.
     };
     if (std::any_of(maEnhancedProtection.begin(), maEnhancedProtection.end(), lIsEditable))

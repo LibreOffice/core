@@ -498,7 +498,7 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
         aSrcPos = pCondFormat->GetRange().Combine().aStart;
     ScAddress aOldSrcPos = aSrcPos;
     bool bChangedPos = false;
-    if (rCxt.meMode == URM_INSDEL && rCxt.maRange.In(aSrcPos))
+    if (rCxt.meMode == URM_INSDEL && rCxt.maRange.Contains(aSrcPos))
     {
         ScAddress aErrorPos( ScAddress::UNINITIALIZED );
         if (!aSrcPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))

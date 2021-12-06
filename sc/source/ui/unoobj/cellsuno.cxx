@@ -4714,7 +4714,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
 
         if (bFound)         // valid only if within this object's range
         {
-            if (!aRange.In(aCellRange))
+            if (!aRange.Contains(aCellRange))
                 bFound = false;
         }
 

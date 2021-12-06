@@ -862,7 +862,7 @@ void ScChangeActionDel::UpdateReference( const ScChangeTrack* /* pTrack */,
     {
         ScChangeAction* p = pL->GetAction();
         if ( p && p->GetType() == SC_CAT_CONTENT &&
-                !GetBigRange().In( p->GetBigRange() ) )
+                !GetBigRange().Contains( p->GetBigRange() ) )
         {
             switch ( GetType() )
             {
@@ -2942,7 +2942,7 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
         {
             ScChangeActionMove* pTest = static_cast<ScChangeActionMove*>(pL->GetAction());
             if ( !pTest->IsRejected() &&
-                    pTest->GetFromRange().In( rPos ) )
+                    pTest->GetFromRange().Contains( rPos ) )
             {
                 AddDependentWithNotify( pTest, pAct );
             }
@@ -3328,7 +3328,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                             p->IsDeletedInDelType( eInsType ) )
                     {   // Content in Insert Undo "Delete"
                         // Do not adjust if this Delete would be in the Insert "Delete" (was just moved)
-                        if ( aDelRange.In( p->GetBigRange().aStart ) )
+                        if ( aDelRange.Contains( p->GetBigRange().aStart ) )
                             bUpdate = false;
                         else
                         {
@@ -3337,7 +3337,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                             {
                                 const ScChangeAction* pDel = pLink->GetAction();
                                 if ( pDel && pDel->GetType() == eInsType &&
-                                        pDel->GetBigRange().In( aDelRange ) )
+                                        pDel->GetBigRange().Contains( aDelRange ) )
                                     bUpdate = false;
                                 pLink = pLink->GetNext();
                             }
@@ -3346,7 +3346,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                     if ( !bUpdate )
                         continue; // for
                 }
-                if ( aDelRange.In( p->GetBigRange() ) )
+                if ( aDelRange.Contains( p->GetBigRange() ) )
                 {
                     // Do not adjust within a just deleted range,
                     // instead assign the range.
@@ -3378,13 +3378,13 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                         case SC_CAT_INSERT_COLS :
                             if ( eActType == SC_CAT_DELETE_COLS )
                             {
-                                if ( aDelRange.In( p->GetBigRange().aStart ) )
+                                if ( aDelRange.Contains( p->GetBigRange().aStart ) )
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), 1 );
                                     p->GetBigRange().aStart.IncCol();
                                 }
-                                else if ( aDelRange.In( p->GetBigRange().aEnd ) )
+                                else if ( aDelRange.Contains( p->GetBigRange().aEnd ) )
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), -1 );
@@ -3395,13 +3395,13 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                         case SC_CAT_INSERT_ROWS :
                             if ( eActType == SC_CAT_DELETE_ROWS )
                             {
-                                if ( aDelRange.In( p->GetBigRange().aStart ) )
+                                if ( aDelRange.Contains( p->GetBigRange().aStart ) )
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), 1 );
                                     p->GetBigRange().aStart.IncRow();
                                 }
-                                else if ( aDelRange.In( p->GetBigRange().aEnd ) )
+                                else if ( aDelRange.Contains( p->GetBigRange().aEnd ) )
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), -1 );
@@ -3412,13 +3412,13 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                         case SC_CAT_INSERT_TABS :
                             if ( eActType == SC_CAT_DELETE_TABS )
                             {
-                                if ( aDelRange.In( p->GetBigRange().aStart ) )
+                                if ( aDelRange.Contains( p->GetBigRange().aStart ) )
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), 1 );
                                     p->GetBigRange().aStart.IncTab();
                                 }
-                                else if ( aDelRange.In( p->GetBigRange().aEnd ) )
+                                else if ( aDelRange.Contains( p->GetBigRange().aEnd ) )
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), -1 );
@@ -3431,13 +3431,13 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                             ScChangeActionMove* pMove = static_cast<ScChangeActionMove*>(p);
                             short nFrom = 0;
                             short nTo = 0;
-                            if ( aDelRange.In( pMove->GetBigRange().aStart ) )
+                            if ( aDelRange.Contains( pMove->GetBigRange().aStart ) )
                                 nTo = 1;
-                            else if ( aDelRange.In( pMove->GetBigRange().aEnd ) )
+                            else if ( aDelRange.Contains( pMove->GetBigRange().aEnd ) )
                                 nTo = -1;
-                            if ( aDelRange.In( pMove->GetFromRange().aStart ) )
+                            if ( aDelRange.Contains( pMove->GetFromRange().aStart ) )
                                 nFrom = 1;
-                            else if ( aDelRange.In( pMove->GetFromRange().aEnd ) )
+                            else if ( aDelRange.Contains( pMove->GetFromRange().aEnd ) )
                                 nFrom = -1;
                             if ( nFrom )
                             {
@@ -3514,7 +3514,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                     p->UpdateReference( this, eMode, aRange, nDx, nDy, nDz );
                     if ( p->GetType() == eActType && !p->IsRejected() &&
                             !pActDel->IsDeletedIn() &&
-                            p->GetBigRange().In( aDelRange ) )
+                            p->GetBigRange().Contains( aDelRange ) )
                         pActDel->SetDeletedIn( p ); // Slipped underneath it
                 }
             }
@@ -3526,7 +3526,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 if ( p == pAct )
                     continue;   // for
                 bool bUpdate = true;
-                if ( aDelRange.In( p->GetBigRange() ) )
+                if ( aDelRange.Contains( p->GetBigRange() ) )
                 {
                     // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
                     if ( GetMergeState() == SC_CTMS_UNDO && !p->IsDeletedIn( pAct ) && pAct->IsDeleteType() &&
@@ -3587,7 +3587,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 if ( p->GetType() == SC_CAT_CONTENT )
                 {
                     // Delete content in Target (Move Content to Source)
-                    if ( rTo.In( p->GetBigRange() ) )
+                    if ( rTo.Contains( p->GetBigRange() ) )
                     {
                         if ( !p->IsDeletedIn( pActMove ) )
                         {
@@ -3599,7 +3599,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                     }
                     else if ( bLastCutMove &&
                             p->GetActionNumber() > nEndLastCut &&
-                            rFrom.In( p->GetBigRange() ) )
+                            rFrom.Contains( p->GetBigRange() ) )
                     {   // Paste Cut: insert new Content inserted after stays
                         // Split up the ContentChain
                         ScChangeActionContent *pHere, *pTmp;
@@ -3651,7 +3651,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                         p->UpdateReference( this, eMode, rTo, nDx, nDy, nDz );
                     if ( bActRejected &&
                             static_cast<ScChangeActionContent*>(p)->IsTopContent() &&
-                            rFrom.In( p->GetBigRange() ) )
+                            rFrom.Contains( p->GetBigRange() ) )
                     {   // Recover dependency to write Content
                         ScChangeActionLinkEntry* pLink =
                             pActMove->AddDependent( p );

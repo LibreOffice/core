@@ -72,7 +72,7 @@ public:
     bool            operator==( const ScRangeList& ) const;
     bool            operator!=( const ScRangeList& r ) const;
     bool            Intersects( const ScRange& ) const;
-    bool            In( const ScRange& ) const;
+    bool            Contains( const ScRange& ) const;
     size_t          GetCellCount() const;
     ScAddress       GetTopLeftCorner() const;
 

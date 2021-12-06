@@ -222,7 +222,7 @@ OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument& rDoc, const OUStr
                 if (!pRangeData)
                     break;
                 ScRange aRange;
-                if( pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
+                if( pRangeData->IsReference( aRange ) && !aRangeList.Contains( aRange ) )
                 {
                     aNewName = ScGlobal::addToken(aNewName, aToken, ';');
                     aRangeList.push_back( aRange );

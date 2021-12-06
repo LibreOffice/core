@@ -394,7 +394,7 @@ void ScAccessibleCell::FillDependents(utl::AccessibleRelationSetHelper* pRelatio
             ScRange aRef;
             while ( !bFound && aIter.GetNextRef( aRef ) )
             {
-                if (aRef.In(maCellAddress))
+                if (aRef.Contains(maCellAddress))
                     bFound = true;
             }
             if (bFound)

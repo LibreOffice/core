@@ -1990,7 +1990,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                             rDoc.ExtendOverlapped( aTestRange );
                             rDoc.ExtendMerge( aTestRange, true);
                             ScRange aMergeRange( aTestRange.aStart.Col(),aTestRange.aStart.Row(), i );
-                            if( !aExtendRange.In( aMergeRange ) )
+                            if( !aExtendRange.Contains( aMergeRange ) )
                             {
                                 qIncreaseRange.push_back( aTestRange );
                                 bInsertMerge = true;
@@ -2000,7 +2000,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     else
                     {
                         ScRange aMergeRange( aRange.aStart.Col(),aRange.aStart.Row(), i );
-                        if( !aExtendRange.In( aMergeRange ) )
+                        if( !aExtendRange.Contains( aMergeRange ) )
                         {
                             qIncreaseRange.push_back( aRange );
                         }
@@ -2472,7 +2472,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                             rDoc.ExtendOverlapped( aTestRange );
                             rDoc.ExtendMerge( aTestRange, true );
                             ScRange aMergeRange( aTestRange.aStart.Col(),aTestRange.aStart.Row(), i );
-                            if( !aExtendRange.In( aMergeRange ) )
+                            if( !aExtendRange.Contains( aMergeRange ) )
                             {
                                 qDecreaseRange.push_back( aTestRange );
                                 bDeletingMerge = true;
@@ -2482,7 +2482,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     else
                     {
                         ScRange aMergeRange( aRange.aStart.Col(),aRange.aStart.Row(), i );
-                        if( !aExtendRange.In( aMergeRange ) )
+                        if( !aExtendRange.Contains( aMergeRange ) )
                         {
                             qDecreaseRange.push_back( aRange );
                         }

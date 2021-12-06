@@ -305,7 +305,7 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
-        if (rAreaRange.In( rAddress))
+        if (rAreaRange.Contains( rAddress))
         {
             if (pArea->IsGroupListening())
             {
@@ -345,7 +345,7 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
             aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
         const ScRange& rAreaRange = (*aIter).mpArea->GetRange();
-        if (rRange.In( rAreaRange))
+        if (rRange.Contains( rAreaRange))
         {
             ScBroadcastArea* pArea = (*aIter).mpArea;
             aIter = aBroadcastAreaTbl.erase(aIter);  // erase before modifying
@@ -489,7 +489,7 @@ void ScBroadcastAreaSlot::GetAllListeners(
         switch (eType)
         {
             case sc::AreaOverlapType::Inside:
-                if (!rRange.In(rAreaRange))
+                if (!rRange.Contains(rAreaRange))
                     // The range needs to be fully inside specified range.
                     continue;
                 break;
@@ -499,13 +499,13 @@ void ScBroadcastAreaSlot::GetAllListeners(
                     continue;
                 break;
             case sc::AreaOverlapType::OneRowInside:
-                if (rAreaRange.aStart.Row() != rAreaRange.aEnd.Row() || !rRange.In(rAreaRange))
+                if (rAreaRange.aStart.Row() != rAreaRange.aEnd.Row() || !rRange.Contains(rAreaRange))
                     // The range needs to be one single row and fully inside
                     // specified range.
                     continue;
                 break;
             case sc::AreaOverlapType::OneColumnInside:
-                if (rAreaRange.aStart.Col() != rAreaRange.aEnd.Col() || !rRange.In(rAreaRange))
+                if (rAreaRange.aStart.Col() != rAreaRange.aEnd.Col() || !rRange.Contains(rAreaRange))
                     // The range needs to be one single column and fully inside
                     // specified range.
                     continue;

@@ -897,7 +897,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         for ( size_t i = 0; i < ListSize; ++i )
         {
             ScHTMLGraphEntry* pE = &aGraphList[ i ];
-            if ( pE->bInCell && pE->aRange.In( aPos ) )
+            if ( pE->bInCell && pE->aRange.Contains( aPos ) )
             {
                 if ( pE->aRange.aStart == aPos )
                 {

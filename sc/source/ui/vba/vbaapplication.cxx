@@ -1020,11 +1020,11 @@ void lclAddToListOfScRange( ListOfScRange& rList, const uno::Any& rArg )
 bool lclTryJoin( ScRange& r1, const ScRange& r2 )
 {
     // 1) r2 is completely inside r1
-    if( r1.In( r2 ) )
+    if( r1.Contains( r2 ) )
         return true;
 
     // 2) r1 is completely inside r2
-    if( r2.In( r1 ) )
+    if( r2.Contains( r1 ) )
     {
         r1 = r2;
         return true;

@@ -125,7 +125,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange & rSrc, con
                                 std::vector<ScMyAddress> &vecRet, int &nSize)
 {
     //Src Must be :Src > Dest
-    if (rDest.In(rSrc))
+    if (rDest.Contains(rSrc))
     {//Here is Src In Dest,Src <= Dest
         return false;
     }
@@ -161,7 +161,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange & rSrc, con
                 return true;
             }
             ScMyAddress cell(col,nMinRow,rSrc.aStart.Tab());
-            if(!rDest.In(cell))
+            if(!rDest.Contains(cell))
             {//In Src ,Not In Dest
                 vecRet.push_back(cell);
                 ++nSize;
@@ -176,7 +176,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange & rSrc, con
                     return true;
                 }
                 ScMyAddress cell(col,nMaxRow,rSrc.aStart.Tab());
-                if(!rDest.In(cell))
+                if(!rDest.Contains(cell))
                 {//In Src ,Not In Dest
                     vecRet.push_back(cell);
                     ++nSize;
@@ -551,7 +551,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                             (::abs(m_aLastWithInMarkRange.aStart.Col() - m_aLastWithInMarkRange.aEnd.Col()) == pDoc->MaxCol() && bWholeCol);
                         bool bSelSmaller=
                             bLastIsWholeColRow &&
-                            !aMarkRange.In(m_aLastWithInMarkRange) &&
+                            !aMarkRange.Contains(m_aLastWithInMarkRange) &&
                             aMarkRange.Intersects(m_aLastWithInMarkRange);
                         if( !bSelSmaller )
                         {

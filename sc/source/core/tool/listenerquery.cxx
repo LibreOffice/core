@@ -29,7 +29,7 @@ void RefQueryFormulaGroup::add( const ScAddress& rPos )
     if (!rPos.IsValid())
         return;
 
-    if (maSkipRange.IsValid() && maSkipRange.In(rPos))
+    if (maSkipRange.IsValid() && maSkipRange.Contains(rPos))
         // This is within the skip range.  Skip it.
         return;
 

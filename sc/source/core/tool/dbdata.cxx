@@ -937,7 +937,7 @@ void ScDBData::Notify( const SfxHint& rHint )
         if (aHeaderRange.IsValid())
         {
             mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
-            if (!aHeaderRange.In( pScHint->GetAddress()))
+            if (!aHeaderRange.Contains( pScHint->GetAddress()))
                 mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
         }
         else

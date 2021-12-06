@@ -81,7 +81,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
                     else if ( eType == SC_CAT_DELETE_COLS )
                         aRange.aEnd.SetCol( aRange.aStart.Col() );
 
-                    if ( aRange.In( aCellPos ) )
+                    if ( aRange.Contains( aCellPos ) )
                     {
                         pFound = pAction;       // the last one wins
                         switch ( eType )
@@ -104,7 +104,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
                     ScRange aRange =
                         static_cast<const ScChangeActionMove*>(pAction)->
                         GetFromRange().MakeRange();
-                    if ( aRange.In( aCellPos ) )
+                    if ( aRange.Contains( aCellPos ) )
                     {
                         pFound = pAction;
                     }
