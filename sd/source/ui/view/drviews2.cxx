@@ -49,8 +49,6 @@
 #include <editeng/CustomPropertyField.hxx>
 #include <editeng/urlfieldhelper.hxx>
 
-#include <o3tl/deleter.hxx>
-
 #include <sal/log.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -501,7 +499,7 @@ public:
         OutlinerMode eOutlinerMode = pOutliner->GetOutlinerMode();
 
         comphelper::ScopeGuard const aOutlinerGuard([pOutliner, eOutlinerMode] () {
-            suppress_fun_call_w_exception(pOutliner->Init(eOutlinerMode));
+            pOutliner->Init(eOutlinerMode);
         });
 
         pOutliner->Init(OutlinerMode::TextObject);
