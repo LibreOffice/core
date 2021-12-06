@@ -1851,7 +1851,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
             xAttrCursor->gotoRange( pHint->GetEnd(), true );
             switch( pHint->GetType() )
             {
-            case XML_HINT_STYLE:
+            case XMLHintType::XML_HINT_STYLE:
                 {
                     const OUString& rStyleName =
                             static_cast<XMLStyleHint_Impl *>(pHint)->GetStyleName();
@@ -1861,7 +1861,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                                                       false );
                 }
                 break;
-            case XML_HINT_REFERENCE:
+            case XMLHintType::XML_HINT_REFERENCE:
                 {
                     const OUString& rRefName =
                             static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName();
@@ -1880,7 +1880,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                     }
                 }
                 break;
-            case XML_HINT_HYPERLINK:
+            case XMLHintType::XML_HINT_HYPERLINK:
                 {
                     const XMLHyperlinkHint_Impl *pHHint =
                         static_cast<const XMLHyperlinkHint_Impl *>(pHint);
@@ -1894,7 +1894,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                                               pHHint->GetEventsContext() );
                 }
                 break;
-            case XML_HINT_INDEX_MARK:
+            case XMLHintType::XML_HINT_INDEX_MARK:
                 {
                     Reference<beans::XPropertySet> xMark(
                         static_cast<const XMLIndexMarkHint_Impl *>(pHint)->GetMark());
@@ -1910,7 +1910,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                     }
                 }
                 break;
-            case XML_HINT_TEXT_FRAME:
+            case XMLHintType::XML_HINT_TEXT_FRAME:
                 {
                     const XMLTextFrameHint_Impl *pFHint =
                         static_cast<const XMLTextFrameHint_Impl *>(pHint);
@@ -1955,7 +1955,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
             /* Core impl. of the unification of drawing objects and
                Writer fly frames (#i26791#)
             */
-            case XML_HINT_DRAW:
+            case XMLHintType::XML_HINT_DRAW:
                 {
                     const XMLDrawHint_Impl *pDHint =
                         static_cast<const XMLDrawHint_Impl*>(pHint);
