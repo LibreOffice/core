@@ -33,6 +33,23 @@
       "message": "It might make sense to check all the items if there\u0027s a record of why they have been added and remove ones that are no longer relevant.\n",
       "revId": "12c35bc2580f6eaf75390ec9ddd6ca331a2fa7d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "065a80a0_2434c4d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-06T21:30:18Z",
+      "side": 1,
+      "message": "Ok let\u0027s push this one first.\nFor the other entries, I\u0027ll check later.\n\nShould we cherry-pick it in 7.3 branch and 7.2 branch or it doesn\u0027t worth?",
+      "revId": "12c35bc2580f6eaf75390ec9ddd6ca331a2fa7d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
