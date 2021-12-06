@@ -1042,10 +1042,10 @@ void ScInputHandler::GetFormulaData()
                 maFormulaChar.insert( c );
             }
             OUString aFuncName = *pDesc->mxFuncName + aParenthesesReplacement;
-            pFormulaData->insert(ScTypedStrData(aFuncName, 0.0, ScTypedStrData::Standard));
+            pFormulaData->insert(ScTypedStrData(aFuncName, 0.0, 0.0, ScTypedStrData::Standard));
             pDesc->initArgumentInfo();
             OUString aEntry = pDesc->getSignature();
-            pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
+            pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
         }
     }
     miAutoPosFormula = pFormulaData->end();
