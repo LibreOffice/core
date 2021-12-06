@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+2: Julien Nabet <serval2412@yahoo.fr>
+Code-Review+1: Luboš Luňák <l.lunak@collabora.com>
+Code-Review+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Julien Nabet <serval2412@yahoo.fr>
+Submitted-at: Mon, 06 Dec 2021 22:30:22 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/126461
+Project: core
+Branch: refs/heads/master
