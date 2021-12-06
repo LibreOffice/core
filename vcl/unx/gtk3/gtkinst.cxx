@@ -9627,7 +9627,7 @@ void do_grab(GtkWidget* pWidget)
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
     GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
     gdk_seat_grab(pSeat, widget_get_surface(pWidget),
-                  GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
+                  GDK_SEAT_CAPABILITY_KEYBOARD, true, nullptr, nullptr, nullptr, nullptr);
 }
 
 void do_ungrab(GtkWidget* pWidget)
