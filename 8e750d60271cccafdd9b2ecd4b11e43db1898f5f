@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05001578_1f3ee44e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-06T21:54:21Z",
+      "side": 1,
+      "message": "For the other entries, it\u0027ll need to search in git history because there\u0027s no comments about tdf.",
+      "revId": "8e750d60271cccafdd9b2ecd4b11e43db1898f5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
