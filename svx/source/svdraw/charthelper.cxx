@@ -30,6 +30,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <rtl/ref.hxx>
+#include <sdr/primitive2d/primitivefactory2d.hxx>
 
 using namespace ::com::sun::star;
 
@@ -71,10 +73,6 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
         if(xShapeAccess->getCount())
         {
             const sal_Int32 nShapeCount(xShapeAccess->getCount());
-            const uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-            const uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory =
-                graphic::PrimitiveFactory2D::create( xContext );
-
             const uno::Sequence< beans::PropertyValue > aParams;
             uno::Reference< drawing::XShape > xShape;
 
@@ -84,12 +82,10 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
 
                 if(xShape.is())
                 {
-                    const drawinglayer::primitive2d::Primitive2DSequence aNew(
-                            xPrimitiveFactory->createPrimitivesFromXShape(
-                                xShape,
-                                aParams));
-
-                    aRetval.append(aNew);
+                    PrimitiveFactory2D::createPrimitivesFromXShape(
+                        xShape,
+                        aParams,
+                        aRetval);
                 }
             }
         }
