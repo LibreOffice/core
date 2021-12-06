@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d557c553_26e71fa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-06T10:38:42Z",
+      "side": 1,
+      "message": "I failed to mention in my earlier remarks that there are two \"new\" settings that didn\u0027t exist yet. It is probably worth adding them.\n\nOne is a fairly recent EmptyDB. I suppose it could be relevant for templates in case of any mail-merge tendencies, and for creating compatible doc/x output. commit db04be037b611e296ef9f2542322c52ed82d7a2b\nAuthor: Mike Kaganski on Fri May 18 18:48:38 2018 +0300\n    tdf#35798: Hide empty Database fields\u0027 paragraphs (+ compat option)\n\n\nThe other is from 2015, and corrects an ODT oddity. commit c5cf8824a619401627f18abc7b3049551c71ac2a\nAuthor: Michael Stahl on Fri Apr 10 23:02:01 2015 +0200\n    tdf#86578: sw: fix rendering of legacy documents with fly achored at fly.\n\n\n\u003cconfig:config-item config:name\u003d\"SubtractFlysAnchoredAtFlys\" config:type\u003d\"boolean\"\u003efalse\u003c/config:config-item\u003e\n\n\u003cconfig:config-item config:name\u003d\"EmptyDbFieldHidesPara\" config:type\u003d\"boolean\"\u003etrue\u003c/config:config-item\u003e\n\n",
+      "revId": "481ef62534368e47195ce5f8249fd19b0edb8a6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
