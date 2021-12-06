@@ -33,6 +33,23 @@
       "message": "This is beyond my knowledge, but just looking at the patch it seems ok to me, and if the Skia tests still pass that I assume the Skia-related parts still work fine.\n",
       "revId": "67881b3693085e43be60e001bd5dd3e5cc1f92d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5a3cd4_bd55e1ff",
+        "filename": "vcl/inc/win/winlayout.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-06T11:40:49Z",
+      "side": 1,
+      "message": "Naming is hard. I have no good idea: something like HasAtFontname doesn\u0027t read like an improvement for me, but YMMV. I was really wondering what this function does just reading its name. So please add a comment, that \"this indicates the font name starts with an \u0027@\u0027\" or something like that.",
+      "revId": "67881b3693085e43be60e001bd5dd3e5cc1f92d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
