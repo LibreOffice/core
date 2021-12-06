@@ -843,7 +843,7 @@ bool ScValidationData::GetSelectionFromFormula(
                 }
 
                 if( nullptr != pStrings )
-                    pEntry.reset(new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard));
+                    pEntry.reset(new ScTypedStrData(aValStr, 0.0, 0.0, ScTypedStrData::Standard));
 
                 if (!rCell.isEmpty() && rMatch < 0)
                     aCondTokArr.AddString(rSPool.intern(aValStr));
@@ -880,7 +880,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     aCondTokArr.AddDouble( nMatVal.fVal );
                 }
                 if( nullptr != pStrings )
-                    pEntry.reset(new ScTypedStrData( aValStr, nMatVal.fVal, ScTypedStrData::Value));
+                    pEntry.reset(new ScTypedStrData(aValStr, nMatVal.fVal, nMatVal.fVal, ScTypedStrData::Value));
             }
 
             if (rMatch < 0 && !rCell.isEmpty() && IsEqualToTokenArray(rCell, rPos, aCondTokArr))
@@ -923,7 +923,7 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
             OUString aStr(pString);
             bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat(aStr, nFormat, fValue);
             rStrColl.emplace_back(
-                    aStr, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard);
+                    aStr, fValue, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard);
         }
         bOk = aIt.Ok();
 

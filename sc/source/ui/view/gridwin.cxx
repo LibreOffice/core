@@ -1266,10 +1266,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
             if ( rDoc.HasValueData( nCol, nRow, nTab ) )
             {
                 double fVal = rDoc.GetValue(ScAddress(nCol, nRow, nTab));
-                pNew.reset(new ScTypedStrData(aDocStr, fVal, ScTypedStrData::Value));
+                pNew.reset(new ScTypedStrData(aDocStr, fVal, fVal, ScTypedStrData::Value));
             }
             else
-                pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
+                pNew.reset(new ScTypedStrData(aDocStr, 0.0, 0.0, ScTypedStrData::Standard));
 
             if (pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING)
             {
