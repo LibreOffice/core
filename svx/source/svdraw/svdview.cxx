@@ -264,6 +264,14 @@ SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, SdrMouseEventKind nEve
     }
     Point aPnt(rMEvt.GetPosPixel());
     if (pOut!=nullptr) aPnt=pOut->PixelToLogic(aPnt);
+
+    if (mbNegativeX)
+    {
+        // Shape's x coordinates are all negated,
+        // Hence negate mouse event's x coord to match.
+        aPnt.setX(-aPnt.X());
+    }
+
     rVEvt.aLogicPos=aPnt;
     return PickAnything(aPnt,rVEvt);
 }
