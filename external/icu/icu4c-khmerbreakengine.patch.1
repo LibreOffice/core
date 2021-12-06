@@ -560,7 +560,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +            t_boundary.addElement(i, status);
 +            numBreaks++;
          }
-+        U_ASSERT(prev.elementAti(t_boundary.elementAti(numBreaks - 1)) == 0);
++        // U_ASSERT(prev.elementAti(t_boundary.elementAti(numBreaks - 1)) == 0);
 +    }
  
 -        // Look ahead for possible suffixes if a dictionary word does not follow.
