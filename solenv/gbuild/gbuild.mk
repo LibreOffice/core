@@ -68,6 +68,8 @@ gb_VERBOSE := $(verbose)
 
 include $(GBUILDDIR)/Helper.mk
 
+include $(GBUILDDIR)/Conditions.mk
+
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/pre_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/pre_*.mk)

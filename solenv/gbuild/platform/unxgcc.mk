@@ -101,7 +101,17 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 gb_LinkTarget__cmd_lockfile = $(if $(LOCKFILE),$(LOCKFILE),$(call gb_Executable_get_command,lockfile))
 gb_LinkTarget__Lock := $(WORKDIR)/LinkTarget/link.lock
-gb_LinkTarget__WantLock = $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS)),$(filter TRUE,$(DISABLE_DYNLOADING)),$(filter CppunitTest Executable,$(TARGETTYPE))),$(true))
+
+# No newline or space before endef!
+define gb_LinkTarget__WantLock
+$(if $(strip $(and \
+    $(gb_LinkTarget__cmd_lockfile), \
+    $(filter-out Executable/lockfile,$(1)), \
+    $(CROSS_COMPILING), \
+    $(DISABLE_DYNLOADING), \
+    $(filter CppunitTest Executable,$(TARGETTYPE)) \
+    )),$(true))
+endef
 
 gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(true))
 
@@ -113,7 +123,7 @@ gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTL
 # libclang_rt.ubsan_cxx-x86_64.a, and oosplash links against sal but itself only
 # contains .c sources:
 define gb_LinkTarget__command_dynamiclink
-$(if $(gb_LinkTarget__WantLock),$(gb_LinkTarget__cmd_lockfile) -r -1 $(gb_LinkTarget__Lock))
+$(if $(call gb_LinkTarget__WantLock,$2),$(gb_LinkTarget__cmd_lockfile) -r -1 $(gb_LinkTarget__Lock))
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
@@ -147,7 +157,7 @@ $(call gb_Helper_abbreviate_dirs,\
                 ) \
 		-o $(1) \
 	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)) \
-	$(if $(gb_LinkTarget__WantLock),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
+	$(if $(call gb_LinkTarget__WantLock,$(2)),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
 
 $(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
     $(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
