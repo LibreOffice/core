@@ -353,17 +353,15 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         {
             m_sTypeToken = "outline";
             m_nMemberCount = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-            if (m_nOutlineLevel < MAXLEVEL)
+            const size_t nOutlineCount = m_nMemberCount;
+            const bool bOutlineLevelFilterIsLessThanMAXLEVEL = m_nOutlineLevel < MAXLEVEL;
+            for(size_t j = 0; j < nOutlineCount; ++j)
             {
-                const size_t nOutlineCount = m_nMemberCount;
-                for(size_t j = 0; j < nOutlineCount; ++j)
-                {
-                    if (m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > m_nOutlineLevel
-                        || !m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(j, *m_pWrtShell->GetLayout()))
-                    {
-                        m_nMemberCount --;
-                    }
-                }
+                if ((bOutlineLevelFilterIsLessThanMAXLEVEL && m_pWrtShell->
+                     getIDocumentOutlineNodesAccess()->getOutlineLevel(j) >= m_nOutlineLevel)
+                        || !m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(
+                            j,*m_pWrtShell->GetLayout()))
+                    m_nMemberCount--;
             }
         }
         break;
@@ -638,20 +636,17 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         {
             const size_t nOutlineCount = m_nMemberCount =
                 m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-
+            const bool bOutlineLevelFilterIsLessThanMAXLEVEL = m_nOutlineLevel < MAXLEVEL;
             size_t nPos = 0;
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
                 const sal_uInt8 nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
-                if(nLevel >= m_nOutlineLevel )
+                if ((bOutlineLevelFilterIsLessThanMAXLEVEL && nLevel >= m_nOutlineLevel)
+                        || !m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(
+                            i,*m_pWrtShell->GetLayout()))
                     m_nMemberCount--;
                 else
                 {
-                    if (!m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
-                    {
-                        --m_nMemberCount;
-                        continue; // don't hide it, just skip it
-                    }
                     OUString aEntry(comphelper::string::stripStart(
                         m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
                                             i, m_pWrtShell->GetLayout(), true, false, false), ' '));
