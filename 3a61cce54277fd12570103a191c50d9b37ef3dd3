@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dde29bbe_787d8e8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-06T21:32:02Z",
+      "side": 1,
+      "message": "IMO this is fine for 7-3 but not important enough for 7-2.\n",
+      "revId": "3a61cce54277fd12570103a191c50d9b37ef3dd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
