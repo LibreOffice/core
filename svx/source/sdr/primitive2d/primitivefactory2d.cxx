@@ -17,48 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/unoapi.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
-#include <comphelper/sequence.hxx>
+#include <sdr/primitive2d/primitivefactory2d.hxx>
 
 using namespace com::sun::star;
-
-namespace {
-
-typedef cppu::WeakComponentImplHelper< css::graphic::XPrimitiveFactory2D, css::lang::XServiceInfo > PrimitiveFactory2DImplBase;
-
-// base class for C++ implementation of css::graphic::XPrimitiveFactory2D
-class PrimitiveFactory2D
-    :   protected cppu::BaseMutex,
-        public PrimitiveFactory2DImplBase
-{
-public:
-    PrimitiveFactory2D(): PrimitiveFactory2DImplBase(m_aMutex) {}
-
-            // Methods from XPrimitiveFactory2D
-    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) override;
-
-    OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.comp.graphic.PrimitiveFactory2D"; }
-
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
-    { return cppu::supportsService(this, ServiceName); }
-
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    {
-        return css::uno::Sequence<OUString>{
-            "com.sun.star.graphic.PrimitiveFactory2D"};
-    }
-};
 
 css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -82,6 +43,23 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
     return aRetval;
 }
 
+void PrimitiveFactory2D::createPrimitivesFromXShape(
+    const uno::Reference< drawing::XShape >& xShape,
+    const uno::Sequence< beans::PropertyValue >& /*aParms*/,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
+{
+    if(xShape.is())
+    {
+        SdrObject* pSource = SdrObject::getSdrObjectFromXShape(xShape);
+
+        if(pSource)
+        {
+            const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
+            rSource.getViewIndependentPrimitive2DContainer(rVisitor);
+        }
+    }
+}
+
 css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
     const uno::Sequence< beans::PropertyValue >& /*aParms*/ )
@@ -102,8 +80,6 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
     }
 
     return aRetval;
-}
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
