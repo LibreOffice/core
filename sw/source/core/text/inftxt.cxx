@@ -1446,7 +1446,27 @@ bool SwTextFormatInfo::IsHyphenate() const
 
     LanguageType eTmp = GetFont()->GetLanguage();
     // TODO: check for more ideographic langs w/o hyphenation as a concept
-    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp || LANGUAGE_JAPANESE == eTmp )
+    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp
+            || LANGUAGE_JAPANESE == eTmp
+            || LANGUAGE_FARSI == eTmp
+            || LANGUAGE_ARABIC_ALGERIA == eTmp
+            || LANGUAGE_ARABIC_BAHRAIN == eTmp
+            || LANGUAGE_ARABIC_EGYPT == eTmp
+            || LANGUAGE_ARABIC_IRAQ == eTmp
+            || LANGUAGE_ARABIC_JORDAN == eTmp
+            || LANGUAGE_ARABIC_KUWAIT == eTmp
+            || LANGUAGE_ARABIC_LEBANON == eTmp
+            || LANGUAGE_ARABIC_LIBYA == eTmp
+            || LANGUAGE_ARABIC_MOROCCO == eTmp
+            || LANGUAGE_ARABIC_OMAN == eTmp
+            || LANGUAGE_ARABIC_PRIMARY_ONLY == eTmp
+            || LANGUAGE_ARABIC_QATAR == eTmp
+            || LANGUAGE_ARABIC_SAUDI_ARABIA == eTmp
+            || LANGUAGE_ARABIC_SYRIA == eTmp
+            || LANGUAGE_ARABIC_TUNISIA == eTmp
+            || LANGUAGE_ARABIC_UAE == eTmp
+            || LANGUAGE_ARABIC_YEMEN == eTmp
+            || LANGUAGE_PASHTO == eTmp )
         return false;
 
     uno::Reference< XHyphenator > xHyph = ::GetHyphenator();
