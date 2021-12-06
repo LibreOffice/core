@@ -9071,7 +9071,6 @@ else
     BUILD_TYPE="$BUILD_TYPE FUZZERS"
 fi
 AC_SUBST(LIB_FUZZING_ENGINE)
-AC_SUBST(ENABLE_FUZZERS)
 
 dnl ===================================================================
 dnl Check for system zlib

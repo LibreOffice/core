@@ -140,7 +140,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 endif
 
-ifneq ($(ENABLE_FUZZERS),)
+ifneq (,$(filter FUZZERS,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_nativecore \
     CustomTarget_nativecalc \
