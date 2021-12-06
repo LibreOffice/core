@@ -2484,7 +2484,7 @@ void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, 
 bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
 {
     ScClipParam& rClipParam = const_cast<ScDocument*>(pClipDoc)->GetClipParam();
-    return rClipParam.maRanges.In(rRange);
+    return rClipParam.maRanges.Contains(rRange);
 }
 
 bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const ScDocument& rOldDoc, bool bRangeName, bool bCheckCopyArea)
@@ -3132,7 +3132,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
-    bool bCellShifted = rCxt.maRange.In(rOldPos);
+    bool bCellShifted = rCxt.maRange.Contains(rOldPos);
     if (bCellShifted)
     {
         ScAddress aErrorPos( ScAddress::UNINITIALIZED );
@@ -3160,7 +3160,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rOldPos);
 
-                        if (rCxt.isDeleted() && aSelectedRange.In(aAbs))
+                        if (rCxt.isDeleted() && aSelectedRange.Contains(aAbs))
                         {
                             // This reference is in the deleted region.
                             setRefDeleted(rRef, rCxt);
@@ -3172,7 +3172,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         {
                             // Check if the token has reference to previously deleted region.
                             ScAddress aCheckPos = rRef.toAbs(*mxSheetLimits, aNewPos);
-                            if (rCxt.maRange.In(aCheckPos))
+                            if (rCxt.maRange.Contains(aCheckPos))
                             {
                                 restoreDeletedRef(rRef, rCxt);
                                 aRes.mbValueChanged = true;
@@ -3180,7 +3180,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             }
                         }
 
-                        if (rCxt.maRange.In(aAbs))
+                        if (rCxt.maRange.Contains(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
                             if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
@@ -3198,7 +3198,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                         if (rCxt.isDeleted())
                         {
-                            if (aSelectedRange.In(aAbs))
+                            if (aSelectedRange.Contains(aAbs))
                             {
                                 // This reference is in the deleted region.
                                 setRefDeleted(rRef, rCxt);
@@ -3226,7 +3226,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                     // range means also that the other
                                     // conditions below are not met,
                                     // specifically not the
-                                    // if (rCxt.maRange.In(aAbs))
+                                    // if (rCxt.maRange.Contains(aAbs))
                                     // that is able to update the reference,
                                     // but aSelectedRange does not intersect
                                     // with rCxt.maRange so that can't happen
@@ -3241,7 +3241,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         {
                             // Check if the token has reference to previously deleted region.
                             ScRange aCheckRange = rRef.toAbs(*mxSheetLimits, aNewPos);
-                            if (aSelectedRange.In(aCheckRange))
+                            if (aSelectedRange.Contains(aCheckRange))
                             {
                                 // This reference was previously in the deleted region. Restore it.
                                 restoreDeletedRef(rRef, rCxt);
@@ -3271,7 +3271,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             }
                         }
 
-                        if (rCxt.maRange.In(aAbs))
+                        if (rCxt.maRange.Contains(aAbs))
                         {
                             // We shift either by column or by row, not both,
                             // so moving the reference has only to be done in
@@ -3397,17 +3397,17 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         // Additionally, do not update the references from cells within the moved
                         // range as they lead to #REF! errors here. These #REF! cannot by fixed
                         // later in UpdateTranspose().
-                        if (rCxt.mbTransposed && (aOldRange.In(rOldPos) || aOldRange.In(aAbs)))
+                        if (rCxt.mbTransposed && (aOldRange.Contains(rOldPos) || aOldRange.Contains(aAbs)))
                             break;
 
-                        if (aOldRange.In(aAbs))
+                        if (aOldRange.Contains(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
                             if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
                                 aAbs = aErrorPos;
                             aRes.mbReferenceModified = true;
                         }
-                        else if (rCxt.maRange.In(aAbs))
+                        else if (rCxt.maRange.Contains(aAbs))
                         {
                             // Referenced cell has been overwritten.
                             aRes.mbValueChanged = true;
@@ -3427,17 +3427,17 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         // Additionally, do not update the references from cells within the moved
                         // range as they lead to #REF! errors here. These #REF! cannot by fixed
                         // later in UpdateTranspose().
-                        if (rCxt.mbTransposed && (aOldRange.In(rOldPos) || aOldRange.In(aAbs)))
+                        if (rCxt.mbTransposed && (aOldRange.Contains(rOldPos) || aOldRange.Contains(aAbs)))
                             break;
 
-                        if (aOldRange.In(aAbs))
+                        if (aOldRange.Contains(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );
                             if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
                                 aAbs = aErrorRange;
                             aRes.mbReferenceModified = true;
                         }
-                        else if (rCxt.maRange.In(aAbs))
+                        else if (rCxt.maRange.Contains(aAbs))
                         {
                             // Referenced range has been entirely overwritten.
                             aRes.mbValueChanged = true;
@@ -3651,7 +3651,7 @@ bool adjustSingleRefInName(
         return false;
     }
 
-    if (!rCxt.maRange.In(rRef.toAbs(rCxt.mrDoc, rPos)))
+    if (!rCxt.maRange.Contains(rRef.toAbs(rCxt.mrDoc, rPos)))
         return false;
 
     bool bChanged = false;
@@ -3884,7 +3884,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                             // Sheet references not affected.
                             break;
 
-                        if (rCxt.maRange.In(aAbs))
+                        if (rCxt.maRange.Contains(aAbs))
                         {
                             // This range is entirely within the shifted region.
                             if (adjustDoubleRefInName(rRef, rCxt, rPos))
@@ -4094,10 +4094,10 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
                         // Do not update the reference in transposed case (cut paste transposed).
                         // The reference will be updated in UpdateTranspose().
-                        if (rCxt.mbTransposed && aOldRange.In(aAbs))
+                        if (rCxt.mbTransposed && aOldRange.Contains(aAbs))
                             break;
 
-                        if (aOldRange.In(aAbs))
+                        if (aOldRange.Contains(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
                             if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
@@ -4119,10 +4119,10 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
                         // Do not update the reference in transposed case (cut paste transposed).
                         // The reference will be updated in UpdateTranspose().
-                        if (rCxt.mbTransposed && aOldRange.In(aAbs))
+                        if (rCxt.mbTransposed && aOldRange.Contains(aAbs))
                             break;
 
-                        if (aOldRange.In(aAbs))
+                        if (aOldRange.Contains(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );
                             if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))

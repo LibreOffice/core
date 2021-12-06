@@ -280,7 +280,7 @@ void ScMyTables::AddMatrixRange(
 bool ScMyTables::IsPartOfMatrix(const ScAddress& rScAddress) const
 {
     if (!maMatrixRangeList.empty())
-        return maMatrixRangeList.In(rScAddress);
+        return maMatrixRangeList.Contains(rScAddress);
     return false;
 }
 

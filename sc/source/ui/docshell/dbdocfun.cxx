@@ -1205,7 +1205,7 @@ bool lcl_EmptyExcept( ScDocument& rDoc, const ScRange& rRange, const ScRange& rE
     {
         if (!aIter.isEmpty())      // real content?
         {
-            if (!rExcept.In(aIter.GetPos()))
+            if (!rExcept.Contains(aIter.GetPos()))
                 return false;       // cell found
         }
     }

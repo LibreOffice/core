@@ -5519,7 +5519,7 @@ bool ScCompiler::HandleColRowName()
     for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
     {
         const ScRangePair & rR = (*pRL)[i];
-        if ( rR.GetRange(0).In( aAbs ) )
+        if ( rR.GetRange(0).Contains( aAbs ) )
         {
             bInList = bValidName = true;
             aRange = rR.GetRange(1);

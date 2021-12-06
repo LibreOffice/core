@@ -270,7 +270,7 @@ static ScPreviewLocationEntry* lcl_GetEntryByAddress(
 {
     for (auto const& it : rEntries)
     {
-        if ( it->eType == eType && it->aCellRange.In( rPos ) )
+        if ( it->eType == eType && it->aCellRange.Contains( rPos ) )
             return it.get();
     }
 

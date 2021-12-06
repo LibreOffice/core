@@ -3122,7 +3122,7 @@ bool ScFormulaCell::UpdatePosOnShift( const sc::RefUpdateContext& rCxt )
         // No movement.
         return false;
 
-    if (!rCxt.maRange.In(aPos))
+    if (!rCxt.maRange.Contains(aPos))
         return false;
 
     // This formula cell itself is being shifted during cell range
@@ -3207,7 +3207,7 @@ bool checkCompileColRowName(
                 ScAddress aAbs = rRef.toAbs(rDoc, aPos);
                 if (rDoc.ValidAddress(aAbs))
                 {
-                    if (rCxt.maRange.In(aAbs))
+                    if (rCxt.maRange.Contains(aAbs))
                         return true;
                 }
             }
@@ -3376,7 +3376,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 
-    bool bCellInMoveTarget = rCxt.maRange.In(aPos);
+    bool bCellInMoveTarget = rCxt.maRange.Contains(aPos);
 
     if ( bCellInMoveTarget )
     {
@@ -3454,7 +3454,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
             // #i36299# Don't duplicate action during cut&paste / drag&drop
             // on a cell in the range moved, start/end listeners is done
             // via ScDocument::DeleteArea() and ScDocument::CopyFromClip().
-            && !(rDocument.IsInsertingFromOtherDoc() && rCxt.maRange.In(aPos));
+            && !(rDocument.IsInsertingFromOtherDoc() && rCxt.maRange.Contains(aPos));
 
         if ( bNewListening )
             EndListeningTo(rDocument, pOldCode.get(), aOldPos);
@@ -3507,7 +3507,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 
-    if (rCxt.maRange.In(aPos))
+    if (rCxt.maRange.Contains(aPos))
     {
         // The cell is being moved or copied to a new position. I guess the
         // position has been updated prior to this call?  Determine
@@ -3800,7 +3800,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
                 rDest.Tab() + rSource.aEnd.Tab() - rSource.aStart.Tab() ) );
 
     // cell within range
-    if ( aDestRange.In( aOldPos ) )
+    if ( aDestRange.Contains( aOldPos ) )
     {
         // References of these cells were not changed by ScTokenArray::AdjustReferenceOnMove()
         // Count back Positions

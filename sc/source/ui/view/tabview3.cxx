@@ -87,7 +87,7 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
         aResult.IncCol( static_cast< SCCOL >( nIndex % nWidth ) );
         aResult.IncRow( static_cast< SCROW >( (nIndex % nArea) / nWidth ) );
         aResult.IncTab( static_cast< SCTAB >( nIndex / nArea ) );
-        if( !rRange.In( aResult ) )
+        if( !rRange.Contains( aResult ) )
             aResult = rRange.aStart;
     }
 
@@ -1226,7 +1226,7 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
         const ScMarkData& rMark = aViewData.GetMarkData();
         ScRangeList aSelList;
         rMark.FillRangeListWithMarks(&aSelList, false);
-        if (!aSelList.In(ScRange(nCurX, nCurY, aViewData.GetTabNo())))
+        if (!aSelList.Contains(ScRange(nCurX, nCurY, aViewData.GetTabNo())))
             // Cursor not in existing selection.  Start a new selection.
             DoneBlockMode(true);
     }

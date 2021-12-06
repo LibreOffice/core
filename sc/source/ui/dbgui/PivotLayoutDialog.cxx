@@ -495,7 +495,7 @@ void ScPivotLayoutDialog::ApplyChanges()
             ScDPObject *pDPObj = nullptr;
             // FIXME: if the new range overlaps with the old one, the table actually doesn't move
             // and shouldn't therefore be deleted
-            if ( ( ( rOldRange != aDestinationRange ) && !rOldRange.In( aDestinationRange ) )
+            if ( ( ( rOldRange != aDestinationRange ) && !rOldRange.Contains( aDestinationRange ) )
                  || bToNewSheet )
             {
                 pDPObj = mrDocument.GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);

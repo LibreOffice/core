@@ -1556,15 +1556,6 @@ ScRefFlags ScAddress::Parse( const OUString& r, const ScDocument& rDoc,
     return lcl_ScAddress_Parse( r.getStr(), rDoc, *this, rDetails, pExtInfo, pExternalLinks, pSheetEndPos, pErrRef);
 }
 
-bool ScRange::Intersects( const ScRange& rRange ) const
-{
-    return !(
-        std::min( aEnd.Col(), rRange.aEnd.Col() ) < std::max( aStart.Col(), rRange.aStart.Col() )
-     || std::min( aEnd.Row(), rRange.aEnd.Row() ) < std::max( aStart.Row(), rRange.aStart.Row() )
-     || std::min( aEnd.Tab(), rRange.aEnd.Tab() ) < std::max( aStart.Tab(), rRange.aStart.Tab() )
-        );
-}
-
 ScRange ScRange::Intersection( const ScRange& rOther ) const
 {
     SCCOL nCol1 = std::max(aStart.Col(), rOther.aStart.Col());

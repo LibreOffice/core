@@ -1708,7 +1708,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
         if (pObjData)
         {
             ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nTab);
-            bObjectInArea = bObjectInArea || aClipRange.In(pObjData->maStart);
+            bObjectInArea = bObjectInArea || aClipRange.Contains(pObjData->maStart);
         }
 
         // do not copy internal objects (detective) and note captions
@@ -1758,7 +1758,7 @@ static bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector,
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
             const ScRange & rRange = rRanges[ i ];
-            if ( !rClipRange.In( rRange ) )
+            if ( !rClipRange.Contains( rRange ) )
             {
                 return false;   // at least one range is not valid
             }
@@ -1778,7 +1778,7 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
             ScRange & rRange = rRanges[ i ];
-            if ( rSourceRange.In( rRange ) )
+            if ( rSourceRange.Contains( rRange ) )
             {
                 SCCOL nDiffX = rDestPos.Col() - rSourceRange.aStart.Col();
                 SCROW nDiffY = rDestPos.Row() - rSourceRange.aStart.Row();
@@ -1897,7 +1897,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         bool bObjectInArea = rSourceRange.Contains(aObjRect);
         const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
         if (pObjData) // Consider images anchored to the copied cell
-            bObjectInArea = bObjectInArea || aClipRange.In(pObjData->maStart);
+            bObjectInArea = bObjectInArea || aClipRange.Contains(pObjData->maStart);
         if (bObjectInArea && (pOldObject->GetLayer() != SC_LAYER_INTERN)
             && !IsNoteCaption(pOldObject))
         {
@@ -2475,7 +2475,7 @@ ScDrawLayer::GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
             ScDrawObjData* pObjData = GetObjData(pObject);
-            if (pObjData && aRange.In(pObjData->maStart))
+            if (pObjData && aRange.Contains(pObjData->maStart))
                 aObjects.push_back(pObject);
         }
         pObject = aIter.Next();
@@ -2499,7 +2499,7 @@ ScDrawLayer::GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, 
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
             ScDrawObjData* pObjData = GetObjData(pObject);
-            if (pObjData && aRange.In(pObjData->maStart))
+            if (pObjData && aRange.Contains(pObjData->maStart))
                 aRowObjects[pObjData->maStart.Row()].push_back(pObject);
         }
         pObject = aIter.Next();
@@ -2523,7 +2523,7 @@ bool ScDrawLayer::HasObjectsAnchoredInRange(const ScRange& rRange)
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
             ScDrawObjData* pObjData = GetObjData(pObject);
-            if (pObjData && rRange.In(pObjData->maStart)) // Object is in given range
+            if (pObjData && rRange.Contains(pObjData->maStart)) // Object is in given range
                 return true;
         }
         pObject = aIter.Next();
@@ -2547,7 +2547,7 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCols(SCTAB nTab, SCCOL 
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
             ScDrawObjData* pObjData = GetObjData(pObject);
-            if (pObjData && aRange.In(pObjData->maStart))
+            if (pObjData && aRange.Contains(pObjData->maStart))
                 aObjects.push_back(pObject);
         }
         pObject = aIter.Next();

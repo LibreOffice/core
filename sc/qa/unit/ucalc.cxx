@@ -4143,11 +4143,11 @@ void Test::testSearchCells()
     CPPUNIT_ASSERT_MESSAGE("Search And Replace should succeed", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 3 matching cells.", size_t(3), aMatchedRanges.size());
     ScAddress aHit(0,0,0);
-    CPPUNIT_ASSERT_MESSAGE("A1 should be inside the matched range.", aMatchedRanges.In(aHit));
+    CPPUNIT_ASSERT_MESSAGE("A1 should be inside the matched range.", aMatchedRanges.Contains(aHit));
     aHit.SetRow(2);
-    CPPUNIT_ASSERT_MESSAGE("A3 should be inside the matched range.", aMatchedRanges.In(aHit));
+    CPPUNIT_ASSERT_MESSAGE("A3 should be inside the matched range.", aMatchedRanges.Contains(aHit));
     aHit.SetRow(4);
-    CPPUNIT_ASSERT_MESSAGE("A5 should be inside the matched range.", aMatchedRanges.In(aHit));
+    CPPUNIT_ASSERT_MESSAGE("A5 should be inside the matched range.", aMatchedRanges.Contains(aHit));
 
     m_pDoc->DeleteTab(0);
 }

@@ -1997,9 +1997,9 @@ void ScFiltersTest::testChartImportODS()
 
     ScRangeList aRanges = getChartRanges(rDoc, *pOleObj);
 
-    CPPUNIT_ASSERT_MESSAGE("Data series title cell not found.", aRanges.In(ScAddress(1,0,3))); // B1 on Title
-    CPPUNIT_ASSERT_MESSAGE("Data series label range not found.", aRanges.In(ScRange(0,1,2,0,3,2))); // A2:A4 on Data
-    CPPUNIT_ASSERT_MESSAGE("Data series value range not found.", aRanges.In(ScRange(1,1,2,1,3,2))); // B2:B4 on Data
+    CPPUNIT_ASSERT_MESSAGE("Data series title cell not found.", aRanges.Contains(ScAddress(1,0,3))); // B1 on Title
+    CPPUNIT_ASSERT_MESSAGE("Data series label range not found.", aRanges.Contains(ScRange(0,1,2,0,3,2))); // A2:A4 on Data
+    CPPUNIT_ASSERT_MESSAGE("Data series value range not found.", aRanges.Contains(ScRange(1,1,2,1,3,2))); // B2:B4 on Data
 
     xDocSh->DoClose();
 }
