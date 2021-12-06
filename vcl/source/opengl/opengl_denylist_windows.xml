@@ -24,20 +24,6 @@
         <entry os="all" vendor="intel" compare="less" version="10.18.14.4264">
             <device id="all"/>
         </entry>
-        <!-- tdf#99919 -->
-        <entry os="all" vendor="intel" compare="equal" version="20.19.15.4352">
-            <device id="0x1927"/>
-        </entry>
-        <!-- tdf#100243 -->
-        <!-- tdf#117477 -->
-        <entry os="all" vendor="intel" compare="equal" version="21.20.16.4664">
-            <device id="0x591b"/>
-            <device id="0x5916"/>
-        </entry>
-        <!-- tdf#115092 -->
-        <entry os="all" vendor="intel" compare="equal" version="22.20.16.4735">
-            <device id="0x1912"/>
-        </entry>
         <entry os="7" vendor="intel">
             <device id="all"/>
         </entry>
