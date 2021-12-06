@@ -23,13 +23,16 @@
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 
-#define XML_HINT_STYLE 1
-#define XML_HINT_REFERENCE 2
-#define XML_HINT_HYPERLINK 3
-#define XML_HINT_INDEX_MARK 5
-#define XML_HINT_TEXT_FRAME 6
-// Core impl. of the unification of drawing objects and Writer fly frames (#i26791#)
-#define XML_HINT_DRAW 7
+enum XMLHINT
+{
+    XML_HINT_STYLE      = 0x01,
+    XML_HINT_REFERENCE  = 0x02,
+    XML_HINT_HYPERLINK  = 0x03,
+    XML_HINT_INDEX_MARK = 0x05,
+    XML_HINT_TEXT_FRAME = 0x06,
+    // Core impl. of the unification of drawing objects and Writer fly frames (#i26791#)
+    XML_HINT_DRAW       = 0x07
+};
 
 class XMLHint_Impl
 {
