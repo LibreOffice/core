@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets_for_build,solenv,\
 	Executable_gbuildtojson \
 ))
 
-ifneq (,$(LOCKFILE))
+ifeq (,$(LOCKFILE))
 $(eval $(call gb_Module_add_targets_for_build,solenv,\
     $(if $(filter-out ANDROID MACOSX iOS WNT,$(OS)),Executable_lockfile) \
 ))
