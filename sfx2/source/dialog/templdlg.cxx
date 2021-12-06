@@ -276,7 +276,6 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     m_aStyleList.connect_ClearResource(LINK(this, SfxCommonTemplateDialog_Impl, ClearResource_Hdl));
     m_aStyleList.connect_LoadFactoryStyleFilter(LINK(this, SfxCommonTemplateDialog_Impl, LoadFactoryStyleFilter_Hdl));
     m_aStyleList.connect_SaveSelection(LINK(this, SfxCommonTemplateDialog_Impl, SaveSelection_Hdl));
-    m_aStyleList.connect_UpdateStyleDependents(LINK(this, SfxCommonTemplateDialog_Impl, UpdateStyleDependents_Hdl));
     m_aStyleList.connect_UpdateFamily(LINK(this, SfxCommonTemplateDialog_Impl, UpdateFamily_Hdl));
     m_aStyleList.connect_UpdateStyles(LINK(this, SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl));
 

@@ -423,11 +423,6 @@ void StyleList::connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rL
     m_aSaveSelection = rLink;
 }
 
-void StyleList::connect_UpdateStyleDependents(const Link<void*, void> rLink)
-{
-    m_aUpdateStyleDependents = rLink;
-}
-
 /** Drop is enabled as long as it is allowed to create a new style by example, i.e. to
     create a style out of the current selection.
 */

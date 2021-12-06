@@ -32,19 +32,13 @@ namespace http_dav_ucp
 
 struct DAVRequestEnvironment
 {
-    OUString m_aRequestURI;
     rtl::Reference< DAVAuthListener >     m_xAuthListener;
     DAVRequestHeaders                     m_aRequestHeaders;
-    css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
 
-DAVRequestEnvironment( const OUString & rRequestURI,
-                       const rtl::Reference< DAVAuthListener > & xListener,
-                       const DAVRequestHeaders & rRequestHeaders,
-                       const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv)
-    : m_aRequestURI( rRequestURI ),
-      m_xAuthListener( xListener ),
-      m_aRequestHeaders( rRequestHeaders ),
-      m_xEnv( xEnv ){}
+DAVRequestEnvironment( const rtl::Reference< DAVAuthListener > & xListener,
+                       const DAVRequestHeaders & rRequestHeaders)
+    : m_xAuthListener( xListener ),
+      m_aRequestHeaders( rRequestHeaders ) {}
 
     DAVRequestEnvironment() {}
 };

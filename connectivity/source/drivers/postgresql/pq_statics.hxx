@@ -122,9 +122,6 @@ struct ReflectionImplementations
     struct ImplementationStatics indexDescriptor;
     struct ImplementationStatics indexColumn;
     struct ImplementationStatics indexColumnDescriptor;
-
-    struct ImplementationStatics updateableResultSet;
-    struct ImplementationStatics resultSet;
 };
 
 const sal_Int32 TABLE_INDEX_CATALOG = 0;

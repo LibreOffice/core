@@ -86,7 +86,6 @@ struct ToolBarEntry
     OUString           aUIName;
     OUString           aCommand;
     bool                bVisible;
-    bool                bContextSensitive;
     const CollatorWrapper*  pCollatorWrapper;
 };
 
@@ -377,7 +376,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
             aTbEntry.aUIName = aUIName;
             aTbEntry.aCommand = toolbar.first;
             aTbEntry.bVisible = xLayoutManager->isElementVisible( toolbar.first );
-            aTbEntry.bContextSensitive = bContextSensitive;
             aTbEntry.pCollatorWrapper = m_aIntlWrapper.getCaseCollator();
             aSortedTbs.push_back( aTbEntry );
         }

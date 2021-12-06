@@ -914,7 +914,6 @@ public:
     void SetBookmarkName( const OUString& rBookmarkName );
     void StartOrEndBookmark( const OUString& rId );
 
-    OUString m_sBookmarkPrefix;
     void SetMoveBookmark( bool IsFrom );
 
     void setPermissionRangeEd(const OUString& user);
