@@ -1669,7 +1669,7 @@ void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
     if ( pRangeName )
     {
         for (const auto& rEntry : *pRangeName)
-            rStrings.insert(ScTypedStrData(rEntry.second->GetName(), 0.0, ScTypedStrData::Name));
+            rStrings.insert(ScTypedStrData(rEntry.second->GetName(), 0.0, 0.0, ScTypedStrData::Name));
     }
 
     // Database collection
@@ -1677,7 +1677,7 @@ void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
     {
         const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
         for (const auto& rxDB : rDBs)
-            rStrings.insert(ScTypedStrData(rxDB->GetName(), 0.0, ScTypedStrData::DbName));
+            rStrings.insert(ScTypedStrData(rxDB->GetName(), 0.0, 0.0, ScTypedStrData::DbName));
     }
 
     // Content of name ranges
@@ -1700,7 +1700,7 @@ void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
                     continue;
 
                 OUString aStr = aIter.getString();
-                rStrings.insert(ScTypedStrData(aStr, 0.0, ScTypedStrData::Header));
+                rStrings.insert(ScTypedStrData(aStr, 0.0, 0.0, ScTypedStrData::Header));
             }
         }
     }
