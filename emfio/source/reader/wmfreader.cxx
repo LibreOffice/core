@@ -1177,7 +1177,7 @@ namespace emfio
 
             case W_META_SELECTCLIPREGION:
             {
-                sal_uInt16 nObjIndex;
+                sal_uInt16 nObjIndex = 0;
                 mpInputStream->ReadUInt16( nObjIndex );
                 SAL_WARN( "emfio", "TODO: W_META_SELECTCLIPREGION is not implemented. Please fill the bug report" );
                 if ( !nObjIndex )
