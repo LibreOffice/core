@@ -27,8 +27,10 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Tools.hxx>
 
 using namespace com::sun::star;
 
@@ -43,7 +45,7 @@ namespace {
 // which is view-specific needs to be expanded by hand when new animated objects
 // are added. This may eventually be changed to a dynamically configurable approach
 // if necessary.
-class AnimatedExtractingProcessor2D : public drawinglayer::processor2d::BaseProcessor2D
+class AnimatedExtractingProcessor2D
 {
 protected:
     // the found animated primitives
@@ -55,15 +57,14 @@ protected:
     // graphic animation allowed?
     bool                                            mbGraphicAnimationAllowed : 1;
 
-    // as tooling, the process() implementation takes over API handling and calls this
-    // virtual render method when the primitive implementation is BasePrimitive2D-based.
-    virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate) override;
-
 public:
     AnimatedExtractingProcessor2D(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation,
         bool bTextAnimationAllowed,
         bool bGraphicAnimationAllowed);
+
+    // as tooling, the process() implementation takes over API handling and calls this
+    // virtual render method when the primitive implementation is BasePrimitive2D-based.
+    void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate);
 
     // data access
     const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
@@ -71,11 +72,9 @@ public:
 };
 
 AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation,
     bool bTextAnimationAllowed,
     bool bGraphicAnimationAllowed)
-:   drawinglayer::processor2d::BaseProcessor2D(rViewInformation),
-    mbTextAnimationAllowed(bTextAnimationAllowed),
+:   mbTextAnimationAllowed(bTextAnimationAllowed),
     mbGraphicAnimationAllowed(bGraphicAnimationAllowed)
 {
 }
@@ -100,37 +99,6 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
             }
             break;
         }
-
-        // decompose animated gifs where SdrGrafPrimitive2D produces a GraphicPrimitive2D
-        // which then produces the animation infos (all when used/needed)
-        case PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D :
-        case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D :
-
-        // decompose SdrObjects with evtl. animated text
-        case PRIMITIVE2D_ID_SDRCAPTIONPRIMITIVE2D :
-        case PRIMITIVE2D_ID_SDRCONNECTORPRIMITIVE2D :
-        case PRIMITIVE2D_ID_SDRCUSTOMSHAPEPRIMITIVE2D :
-        case PRIMITIVE2D_ID_SDRELLIPSEPRIMITIVE2D :
-        case PRIMITIVE2D_ID_SDRELLIPSESEGMENTPRIMITIVE2D :
-        case PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D :
-        case PRIMITIVE2D_ID_SDRPATHPRIMITIVE2D :
-        case PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D :
-
-        // #121194# With Graphic as Bitmap FillStyle, also check
-        // for primitives filled with animated graphics
-        case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
-        case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
-        case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
-
-        // decompose evtl. animated text contained in MaskPrimitive2D
-        // or group primitives
-        case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
-        case PRIMITIVE2D_ID_GROUPPRIMITIVE2D :
-        {
-            process(rCandidate);
-            break;
-        }
-
         default :
         {
             // nothing to do for the rest
@@ -193,7 +161,8 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
             // if range is not computed (new or LazyInvalidate objects), force it
             const DisplayInfo aDisplayInfo;
-            const drawinglayer::primitive2d::Primitive2DContainer xSequence(getPrimitive2DSequence(aDisplayInfo));
+            drawinglayer::primitive2d::Primitive2DContainer xSequence;
+            getPrimitive2DSequence(aDisplayInfo, xSequence);
 
             if(!xSequence.empty())
             {
@@ -263,31 +232,6 @@ void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
     // GetObjectContact().InvalidatePartOfView(rChildVOC.getObjectRange());
 }
 
-void ViewObjectContact::checkForPrimitive2DAnimations(const drawinglayer::primitive2d::Primitive2DContainer& xPrimitive2DSequence)
-{
-    // remove old one
-    mpPrimitiveAnimation.reset();
-
-    // check for animated primitives
-    if(xPrimitive2DSequence.empty())
-        return;
-
-    const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
-    const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
-
-    if(bTextAnimationAllowed || bGraphicAnimationAllowed)
-    {
-        AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
-            bTextAnimationAllowed, bGraphicAnimationAllowed);
-        aAnimatedExtractor.process(xPrimitive2DSequence);
-
-        if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
-        {
-            // derived primitiveList is animated, setup new PrimitiveAnimation
-            mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.extractPrimitive2DSequence()) );
-        }
-    }
-}
 
 void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
@@ -328,36 +272,116 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
     rVisitor.visit(xRetval);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+namespace
 {
-    drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
+// Called from getPrimitive2DSequence() when vector has changed. Evaluate object animation
+// and setup accordingly
+class CombinedVisitor : public drawinglayer::primitive2d::Primitive2DDecompositionVisitor
+{
+public:
+    ViewObjectContact& mrVOC;
+    const drawinglayer::geometry::ViewInformation2D& mrViewInformation;
+    basegfx::B2DRange maRange;
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& mrVisitor1;
+    std::unique_ptr<sdr::animation::PrimitiveAnimation>& mrpPrimitiveAnimation;
+    bool mbTextAnimationAllowed;
+    bool mbGraphicAnimationAllowed;
+    AnimatedExtractingProcessor2D maAnimatedExtractor;
 
-    // take care of redirectors and create new list
-    ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
-
-    if(pRedirector)
+    CombinedVisitor(ViewObjectContact& rVOC, const drawinglayer::geometry::ViewInformation2D& rViewInformation,
+            drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor1,
+            std::unique_ptr<sdr::animation::PrimitiveAnimation>& rpPrimitiveAnimation,
+            bool bTextAnimationAllowed, bool bGraphicAnimationAllowed)
+        : mrVOC(rVOC),
+        mrViewInformation(rViewInformation),
+        mrVisitor1(rVisitor1),
+        mrpPrimitiveAnimation(rpPrimitiveAnimation),
+        mbTextAnimationAllowed(bTextAnimationAllowed),
+        mbGraphicAnimationAllowed(bGraphicAnimationAllowed),
+        maAnimatedExtractor(bTextAnimationAllowed, bGraphicAnimationAllowed)
     {
-        pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo, xNewPrimitiveSequence);
+        // remove old one
+        mrpPrimitiveAnimation.reset();
     }
-    else
+
+    ~CombinedVisitor()
     {
-        createPrimitive2DSequence(rDisplayInfo, xNewPrimitiveSequence);
+        if(mbTextAnimationAllowed || mbGraphicAnimationAllowed)
+        {
+            if(!maAnimatedExtractor.getPrimitive2DSequence().empty())
+            {
+                // derived primitiveList is animated, setup new PrimitiveAnimation
+                mrpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(const_cast<ViewObjectContact&>(mrVOC), maAnimatedExtractor.extractPrimitive2DSequence()) );
+            }
+        }
     }
 
-    // check for animated stuff
-    const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations(xNewPrimitiveSequence);
+    virtual void visit(const drawinglayer::primitive2d::Primitive2DReference& r) override
+    {
+        maRange.expand(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DReference(r, mrViewInformation));
+        animatedVisit(static_cast<const drawinglayer::primitive2d::BasePrimitive2D&>(*r));
+        mrVisitor1.visit(r);
+    }
+    virtual void visit(const drawinglayer::primitive2d::Primitive2DContainer& r) override
+    {
+        maRange.expand(r.getB2DRange(mrViewInformation));
+        for (auto& rCandidate : r)
+            animatedVisit(static_cast<const drawinglayer::primitive2d::BasePrimitive2D&>(*rCandidate));
+        mrVisitor1.visit(r);
+    }
+    virtual void visit(drawinglayer::primitive2d::Primitive2DContainer&& r) override
+    {
+        maRange.expand(r.getB2DRange(mrViewInformation));
+        for (auto& rCandidate : r)
+            animatedVisit(static_cast<const drawinglayer::primitive2d::BasePrimitive2D&>(*rCandidate));
+        mrVisitor1.visit(std::move(r));
+    }
+private:
+    void animatedVisit(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate)
+    {
+        if(mbTextAnimationAllowed || mbGraphicAnimationAllowed)
+        {
+            maAnimatedExtractor.processBasePrimitive2D(rCandidate);
+        }
+    }
+};
+}
 
-    // always update object range when PrimitiveSequence changes
+
+void ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
+{
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const_cast< ViewObjectContact* >(this)->maObjectRange = xNewPrimitiveSequence.getB2DRange(rViewInformation2D);
+    ViewObjectContact& rThis = const_cast<ViewObjectContact&>(*this);
 
-    // check and eventually embed to GridOffset transform primitive
+    // slow path - check and eventually embed to GridOffset transform primitive
     if(GetObjectContact().supportsGridOffsets())
     {
         const basegfx::B2DVector& rGridOffset(getGridOffset());
 
         if(0.0 != rGridOffset.getX() || 0.0 != rGridOffset.getY())
         {
+            drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
+
+            // check for animated stuff and call the passed-in visitor
+            const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
+            const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
+            CombinedVisitor aCombinedVisitor(rThis, rViewInformation2D, xNewPrimitiveSequence, rThis.mpPrimitiveAnimation, bTextAnimationAllowed, bGraphicAnimationAllowed);
+
+            // take care of redirectors and create new list
+            ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
+
+            if(pRedirector)
+            {
+                pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo, aCombinedVisitor);
+            }
+            else
+            {
+                createPrimitive2DSequence(rDisplayInfo, aCombinedVisitor);
+            }
+
+            // always update object range when PrimitiveSequence changes
+            const_cast< ViewObjectContact* >(this)->maObjectRange = aCombinedVisitor.maRange;
+
             const basegfx::B2DHomMatrix aTranslateGridOffset(
                 basegfx::utils::createTranslateB2DHomMatrix(
                     rGridOffset));
@@ -377,11 +401,33 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
             // in calc which traditionally does not have a huge amount of DrawObjects anyways.
             xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
             const_cast< ViewObjectContact* >(this)->maObjectRange.transform(aTranslateGridOffset);
+
+            rVisitor.visit(xNewPrimitiveSequence);
+            return;
         }
     }
 
-    // return current Primitive2DContainer
-    return xNewPrimitiveSequence;
+    // optimised path that doesn't need to create intermediate container
+
+    // check for animated stuff and call the passed-in visitor
+    const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
+    const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
+    CombinedVisitor aCombinedVisitor(rThis, rViewInformation2D, rVisitor, rThis.mpPrimitiveAnimation, bTextAnimationAllowed, bGraphicAnimationAllowed);
+
+    // take care of redirectors and create new list
+    ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
+
+    if(pRedirector)
+    {
+        pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo, aCombinedVisitor);
+    }
+    else
+    {
+        createPrimitive2DSequence(rDisplayInfo, aCombinedVisitor);
+    }
+
+    // always update object range when PrimitiveSequence changes
+    const_cast< ViewObjectContact* >(this)->maObjectRange = aCombinedVisitor.maRange;
 }
 
 bool ViewObjectContact::isPrimitiveVisible(const DisplayInfo& /*rDisplayInfo*/) const
@@ -402,21 +448,7 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!isPrimitiveVisible(rDisplayInfo))
         return;
 
-    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequence(rDisplayInfo);
-    if(xRetval.empty())
-        return;
-
-    // get ranges
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-    const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
-
-    // check geometrical visibility
-    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
-    if(!bVisible)
-        return;
-
-    rVisitor.visit(std::move(xRetval));
+    getPrimitive2DSequence(rDisplayInfo, rVisitor);
 }
 
 void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const

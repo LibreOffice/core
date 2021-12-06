@@ -62,10 +62,6 @@ protected:
     // make redirector a protected friend, it needs to call createPrimitives as default action
     friend class ViewObjectContactRedirector;
 
-    // Called from getPrimitive2DSequence() when vector has changed. Evaluate object animation
-    // and setup accordingly
-    void checkForPrimitive2DAnimations(const drawinglayer::primitive2d::Primitive2DContainer& );
-
     // This method is responsible for creating the graphical visualisation data which is
     // stored/cached in the local primitive. Default gets view-independent Primitive
     // from the ViewContact using ViewContact::getViewIndependentPrimitive2DContainer(), takes care of
@@ -103,7 +99,7 @@ public:
     // access to the local primitive. This will ensure that the local primitive is
     // current in comparing the local one with a fresh created incarnation
     // This method will not handle included hierarchies and not check visibility.
-    drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+    void getPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const;
 
     // test this VOC for visibility concerning model-view stuff like e.g. Layer
     virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;

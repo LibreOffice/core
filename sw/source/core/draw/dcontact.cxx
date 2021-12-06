@@ -2135,7 +2135,8 @@ namespace sdr::contact
                     // single object, add primitives; check model-view visibility
                     if(rCandidate.isPrimitiveVisible(rDisplayInfo))
                     {
-                        drawinglayer::primitive2d::Primitive2DContainer aNewSequence(rCandidate.getPrimitive2DSequence(rDisplayInfo));
+                        drawinglayer::primitive2d::Primitive2DContainer aNewSequence;
+                        rCandidate.getPrimitive2DSequence(rDisplayInfo, aNewSequence);
 
                         if(!aNewSequence.empty())
                         {

@@ -136,35 +136,31 @@ bool ViewObjectContactPrimitiveHit(
         {
             // get primitive sequence
             sdr::contact::DisplayInfo aDisplayInfo;
-            const drawinglayer::primitive2d::Primitive2DContainer& rSequence(rVOC.getPrimitive2DSequence(aDisplayInfo));
 
-            if(!rSequence.empty())
+            // create a HitTest processor
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D = rVOC.GetObjectContact().getViewInformation2D();
+            drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
+                rViewInformation2D,
+                rHitPosition,
+                fLogicHitTolerance,
+                bTextOnly);
+
+            // ask for HitStack
+            aHitTestProcessor2D.collectHitStack(pHitContainer != nullptr);
+
+            // feed it with the primitives
+            rVOC.getPrimitive2DSequence(aDisplayInfo, aHitTestProcessor2D);
+
+            // deliver result
+            if (aHitTestProcessor2D.getHit())
             {
-                // create a HitTest processor
-                const drawinglayer::geometry::ViewInformation2D& rViewInformation2D = rVOC.GetObjectContact().getViewInformation2D();
-                drawinglayer::processor2d::HitTestProcessor2D aHitTestProcessor2D(
-                    rViewInformation2D,
-                    rHitPosition,
-                    fLogicHitTolerance,
-                    bTextOnly);
-
-                // ask for HitStack
-                aHitTestProcessor2D.collectHitStack(pHitContainer != nullptr);
-
-                // feed it with the primitives
-                aHitTestProcessor2D.process(rSequence);
-
-                // deliver result
-                if (aHitTestProcessor2D.getHit())
+                if (pHitContainer)
                 {
-                    if (pHitContainer)
-                    {
-                        // fetch HitStack primitives if requested
-                        *pHitContainer = aHitTestProcessor2D.getHitStack();
-                    }
-
-                    return true;
+                    // fetch HitStack primitives if requested
+                    *pHitContainer = aHitTestProcessor2D.getHitStack();
                 }
+
+                return true;
             }
         }
     }

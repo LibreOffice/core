@@ -1265,7 +1265,8 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                             sdr::contact::ViewObjectContact& rVOC(rVC.GetViewObjectContact(rOC));
                             sdr::contact::DisplayInfo aDisplayInfo;
 
-                            drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rVOC.getPrimitive2DSequence(aDisplayInfo));
+                            drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+                            rVOC.getPrimitive2DSequence(aDisplayInfo, aPrimitives);
                             const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
 
                             paintGraphicUsingPrimitivesHelper(
