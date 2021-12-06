@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "377fce6b_ac93584e",
+        "filename": "xmloff/source/text/txtparaimphint.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-06T22:48:54Z",
+      "side": 1,
+      "message": "Please leave these literals as they are, in decimal (1, 2 , 3, ...) and not hex (0x01, 0x2, 0x03, ...).\nIn the EasyHack example, there was a reason for the change to hex in which no applicable here.",
+      "revId": "c8ed221a92ecfaf78c651b0dccb4bb11ede2b124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b73b0f3e_a470f1eb",
         "filename": "xmloff/source/text/txtparaimphint.hxx",
         "patchSetId": 1
