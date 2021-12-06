@@ -61,10 +61,6 @@ namespace cppcanvas::tools
                     return ::Size( 0,
                                    aMetric.GetInternalLeading() + aMetric.GetAscent() );
 
-                default:
-                    ENSURE_OR_THROW( false,
-                                      "tools::getBaselineOffset(): Unexpected TextAlign value" );
-                    // FALLTHROUGH intended (to calm compiler warning - case won't happen)
                 case ALIGN_BASELINE:
                     return ::Size( 0, 0 );
 
@@ -72,6 +68,9 @@ namespace cppcanvas::tools
                     return ::Size( 0,
                                    -aMetric.GetDescent() );
 
+                default:
+                    throw css::uno::RuntimeException(
+                                      "tools::getBaselineOffset(): Unexpected TextAlign value" );
             }
         }
 
