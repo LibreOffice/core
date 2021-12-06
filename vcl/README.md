@@ -45,9 +45,6 @@ VCL provides a graphical toolkit similar to gtk+, Qt, SWING etc.
 		+ generic/
 			+ raw X11 support
 
-		+ plugadapt/
-			+ pluggable framework to select correct unx backend
-
 		+ dtrans/
 			+ "data transfer" - clipboard handling
 			+ http://stackoverflow.com/questions/3261379/getting-html-source-or-rich-text-from-the-x-clipboard

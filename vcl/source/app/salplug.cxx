@@ -178,25 +178,33 @@ SalInstance* autodetect_plugin()
 #if ENABLE_GTK3_KDE5
         "gtk3_kde5",
 #endif
-        "gtk3", "gen", nullptr
+#if ENABLE_GTK3
+        "gtk3",
+#endif
+        "gen",
+        nullptr
     };
 
     static const char* const pStandardFallbackList[] =
     {
-        "gtk3", "gen", nullptr
+#if ENABLE_GTK3
+        "gtk3",
+#endif
+        "gen",
+        nullptr
     };
 
 #ifdef HEADLESS_VCLPLUG
     static const char* const pHeadlessFallbackList[] =
     {
-        "svp", nullptr
+        "svp",
+        nullptr
     };
 #endif
 
     SalInstance* pInst = nullptr;
     DesktopType desktop = lcl_get_desktop_environment();
     const char * const * pList = pStandardFallbackList;
-    int nListEntry = 0;
 
 #ifdef HEADLESS_VCLPLUG
     // no server at all: dummy plugin
@@ -212,14 +220,11 @@ SalInstance* autodetect_plugin()
     else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_LXQT)
         pList = pKDEFallbackList;
 
-    while( pList[nListEntry] && pInst == nullptr )
+    for (int i = 0; !pInst && pList[i]; ++i)
     {
-        OUString aTry( OUString::createFromAscii( pList[nListEntry] ) );
+        OUString aTry(OUString::createFromAscii(pList[i]));
         pInst = tryInstance( aTry );
-        SAL_INFO_IF(
-            pInst, "vcl.plugadapt",
-            "plugin autodetection: " << pList[nListEntry]);
-        nListEntry++;
+        SAL_INFO_IF(pInst, "vcl.plugadapt", "plugin autodetection: " << pList[i]);
     }
     return pInst;
 #endif // !DISABLE_DYNLOADING
@@ -278,17 +283,22 @@ SalInstance *CreateSalInstance()
     // fallback, try everything
     static const char* const pPlugin[] = {
 #ifdef _WIN32
-        "win"
+        "win",
+#elif defined(MACOSX)
+        "osx",
 #else
-#ifdef MACOSX
-        "osx"
-#else
-        "gtk3", "kf5", "gen"
+#if ENABLE_GTK3
+        "gtk3",
 #endif
+#if ENABLE_KF5
+        "kf5",
 #endif
+        "gen",
+#endif
+        nullptr
      };
 
-    for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
+    for (int i = 0; !pInst && pPlugin[i]; ++i)
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
 
     if( ! pInst )
