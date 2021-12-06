@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "100934e5_6fd4082e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-06T10:57:59Z",
+      "side": 1,
+      "message": "Verified for both bugs accord to IRC. Thanks for the fix.",
+      "revId": "dab41d631d8d54413428ce45d9c874aad605ca6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
