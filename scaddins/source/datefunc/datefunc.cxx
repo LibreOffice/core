@@ -455,7 +455,8 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  *
  * The (consecutive) week number of a date is
  * std::floor( (date + NullDate - 1), 7.0 ),
- * with weeks starting on Monday.
+ * with weeks starting on Monday, and week 0
+ * starting on Monday, 0001-01-01 Gregorian.
  *
  * Weeks(d2,d1,m) is defined as -Weeks(d1,d2,m).
  *
