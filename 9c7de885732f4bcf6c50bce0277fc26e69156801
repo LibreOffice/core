@@ -34,6 +34,24 @@
       "parentUuid": "544c3cb1_3b5efe9c",
       "revId": "9c7de885732f4bcf6c50bce0277fc26e69156801",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87d2231a_efa89279",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-06T10:23:18Z",
+      "side": 1,
+      "message": "[I think this change would have been easier to review if you had quoted the actual failure in the commit message.]\n\n\u003e I honestly have never seen this in C, to call a two argument function with an \nignored 3rd one…\n\nYeah, that\u0027s a not-unheard-of idiom in good-old C code, which happens to work due to the typical C calling convention (which also makes varargs work).  These days, it is undefined behavior even in C though, I think.",
+      "parentUuid": "c6f017b1_1ecde746",
+      "revId": "9c7de885732f4bcf6c50bce0277fc26e69156801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
