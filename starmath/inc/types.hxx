@@ -20,7 +20,9 @@
 #pragma once
 
 #include <sal/types.h>
-#define FONTNAME_MATH "OpenSymbol"
+#include <rtl/ustring.hxx>
+
+inline constexpr OUStringLiteral FONTNAME_MATH = u"OpenSymbol";
 
 enum SmPrintSize
 {
