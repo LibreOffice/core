@@ -337,7 +337,7 @@ void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScA
 {
     // Determine which formula cells within the group need to be notified of this change.
     std::vector<ScFormulaCell*> aCells;
-    collectFormulaCells(rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Row() + nNumRows - 1, aCells);
+    collectFormulaCells(rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Row() + (nNumRows - 1), aCells);
     std::for_each(aCells.begin(), aCells.end(), Notifier(rHint));
 }
 
