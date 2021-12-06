@@ -198,6 +198,8 @@ $(foreach lib,$(gb_Library_KNOWNLIBS), \
     $(eval $(call gb_LinkTarget__fill_all_deps,$(call gb_Library_get_linktarget,$(lib)))))
 $(foreach exec,$(gb_Executable_KNOWN), \
     $(eval $(call gb_LinkTarget__expand_executable,$(call gb_Executable_get_linktarget,$(exec)))))
+$(foreach cppunit,$(gb_CppunitTest_KNOWN), \
+    $(eval $(call gb_LinkTarget__expand_executable,$(call gb_CppunitTest_get_linktarget,$(cppunit)))))
 $(foreach workdir_linktargetname,$(gb_LinkTarget__ALL_TOUCHED), \
     $(eval $(call gb_LinkTarget__remove_touch,$(workdir_linktargetname))))
 
@@ -235,11 +237,14 @@ endef
 endef # gb_LinkTarget__expand_executable_template
 
 ifneq (,$(gb_DEBUG_STATIC))
+$(info $(call gb_LinkTarget__expand_executable_template,CppunitTest))
 $(info $(call gb_LinkTarget__expand_executable_template,Executable))
 endif
+$(eval $(call gb_LinkTarget__expand_executable_template,CppunitTest))
 $(eval $(call gb_LinkTarget__expand_executable_template,Executable))
 
 $(foreach exec,$(gb_Executable_KNOWN),$(eval $(call gb_Executable__expand_deps,$(exec))))
+$(foreach cppunit,$(gb_CppunitTest_KNOWN),$(eval $(call gb_CppunitTest__expand_deps,$(cppunit))))
 
 endif # gb_PARTIAL_BUILD
 endif # gb_FULLDEPS

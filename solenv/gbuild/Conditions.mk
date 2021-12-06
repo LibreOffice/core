@@ -12,6 +12,10 @@
 # just end in two (!) braces, otherwise you may need to use either the $(1)
 # or the $(2) multiple times.
 
+define gb_CondCppunitMainLibOrExe
+$(if $(or $(CROSS_COMPILING),$(DISABLE_DYNLOADING)),$(1),$(2))
+endef
+
 define gb_CondExeLockfile
 $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS))),$(1),$(2))
 endef

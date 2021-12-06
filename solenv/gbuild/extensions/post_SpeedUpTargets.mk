@@ -52,7 +52,6 @@ endif
 
 endif
 
-
 ifneq (,$(filter build,$(gb_Module_SKIPTARGETS)))
 gb_Module_add_target =
 endif

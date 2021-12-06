@@ -32,7 +32,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	cfgex \
 	concat-deps \
 	cpp \
-	cppunittester \
+    $(call gb_CondCppunitMainLibOrExe,,cppunittester) \
 	gbuildtojson \
 	$(if $(filter MSC,$(COM)), \
 		gcc-wrapper \
@@ -590,6 +590,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
+    $(call gb_CondCppunitMainLibOrExe,cppunitmain) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \

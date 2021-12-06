@@ -53,6 +53,7 @@ gb_CompilerTest_get_target = $(WORKDIR)/CompilerTest/$(1)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_target_for_build = $(WORKDIR_FOR_BUILD)/ComponentTarget/$(1).component
 gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
+gb_CppunitTest_get_linktargetfile = $(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$1))
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CustomPackage_get_target = $(WORKDIR)/CustomPackage/$(1).filelist
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
