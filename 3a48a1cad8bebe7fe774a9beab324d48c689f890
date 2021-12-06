@@ -16,6 +16,29 @@
       "message": "Hi. It seems to me the problem might be the following:\nWhen the test selects/gets a shape with the getShape(int nShapeNum) method, unfortunately in the different platforms the 2nd shape for example can be different. (I do not understand why, but it seems this causes the problem, see https://gerrit.libreoffice.org/c/core/+/126052 ) In addition, if the test modifies the shape (for example grouping like in this case) the order also can be changed. So now, i think there must be a search method to find that shape what have to be tested, but i have no idea what should be the key for find method... so i think you\u0027re right this is quite fishy... But, if i have a good idea and it works with https://gerrit.libreoffice.org/c/core/+/126052 then i will do the same with this tests too (if you do not mind).",
       "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "569b426c_4947387d",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-06T12:49:56Z",
+      "side": 1,
+      "message": "In this case, according to the log, on that two platform, the test failed here. For some misty reason the selection is unsuccessful. maybe if the selection is made by the SwFEShell::SelectObj(SdrObj*) that might be work. If you don\u0027t mind i give it a try. :)",
+      "range": {
+        "startLine": 1210,
+        "startChar": 4,
+        "endLine": 1210,
+        "endChar": 75
+      },
+      "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
