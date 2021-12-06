@@ -263,13 +263,13 @@ void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
     // GetObjectContact().InvalidatePartOfView(rChildVOC.getObjectRange());
 }
 
-void ViewObjectContact::checkForPrimitive2DAnimations(const drawinglayer::primitive2d::Primitive2DContainer& xPrimitive2DSequence)
+void ViewObjectContact::checkForPrimitive2DAnimations()
 {
     // remove old one
     mpPrimitiveAnimation.reset();
 
     // check for animated primitives
-    if(xPrimitive2DSequence.empty())
+    if(mxPrimitive2DSequence.empty())
         return;
 
     const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
@@ -279,7 +279,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations(const drawinglayer::primit
     {
         AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
             bTextAnimationAllowed, bGraphicAnimationAllowed);
-        aAnimatedExtractor.process(xPrimitive2DSequence);
+        aAnimatedExtractor.process(mxPrimitive2DSequence);
 
         if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
         {
@@ -328,8 +328,14 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
     rVisitor.visit(xRetval);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
+    /**
+    This method is weird because
+    (1) we have to re-walk the primitive tree because the flushing is unreliable
+    (2) we cannot just always use the new data because the old data has cached bitmaps in it e.g. see the documents in tdf#104878
+    */
+
     drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
 
     // take care of redirectors and create new list
@@ -344,12 +350,19 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
         createPrimitive2DSequence(rDisplayInfo, xNewPrimitiveSequence);
     }
 
+    // local up-to-date checks. New list different from local one?
+    if(mxPrimitive2DSequence == xNewPrimitiveSequence)
+        return mxPrimitive2DSequence;
+
+    // has changed, copy content
+    const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = std::move(xNewPrimitiveSequence);
+
     // check for animated stuff
-    const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations(xNewPrimitiveSequence);
+    const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
 
     // always update object range when PrimitiveSequence changes
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const_cast< ViewObjectContact* >(this)->maObjectRange = xNewPrimitiveSequence.getB2DRange(rViewInformation2D);
+    const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
 
     // check and eventually embed to GridOffset transform primitive
     if(GetObjectContact().supportsGridOffsets())
@@ -364,7 +377,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
             drawinglayer::primitive2d::Primitive2DReference aEmbed(
                  new drawinglayer::primitive2d::TransformPrimitive2D(
                     aTranslateGridOffset,
-                    std::move(xNewPrimitiveSequence)));
+                    std::move(const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence)));
 
             // Set values at local data. So for now, the mechanism is to reset some of the
             // defining things (mxPrimitive2DSequence, maGridOffset) and re-create the
@@ -375,13 +388,13 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
             // just allow re-creation of the PrimitiveSequence (and removing buffered
             // decomposed content of it). May be optimized, though. OTOH it only happens
             // in calc which traditionally does not have a huge amount of DrawObjects anyways.
-            xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
+            const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
             const_cast< ViewObjectContact* >(this)->maObjectRange.transform(aTranslateGridOffset);
         }
     }
 
     // return current Primitive2DContainer
-    return xNewPrimitiveSequence;
+    return mxPrimitive2DSequence;
 }
 
 bool ViewObjectContact::isPrimitiveVisible(const DisplayInfo& /*rDisplayInfo*/) const
@@ -452,6 +465,7 @@ void ViewObjectContact::resetGridOffset()
     maGridOffset.setY(0.0);
 
     // also reset sequence to get a re-calculation when GridOffset changes
+    mxPrimitive2DSequence.clear();
     maObjectRange.reset();
 }
 
