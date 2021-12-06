@@ -45,8 +45,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
     switch( nTransformType )
     {
     default:
-        ENSURE_OR_THROW(
-            false, "AnimationTransformNode::createTransformActivity(): "
+        throw css::uno::RuntimeException(
+            "AnimationTransformNode::createTransformActivity(): "
             "Unknown transform type" );
 
     case animations::AnimationTransformType::TRANSLATE:
