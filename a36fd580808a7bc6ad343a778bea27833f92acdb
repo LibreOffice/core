@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c20a84a_18b311bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-06T10:15:41Z",
+      "side": 1,
+      "message": "@Caolán: Many thanks for the fix, I\u0027m going to apply it soon.",
+      "revId": "a36fd580808a7bc6ad343a778bea27833f92acdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc890d80_7c45a40f",
