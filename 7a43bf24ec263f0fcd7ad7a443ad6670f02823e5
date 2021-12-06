@@ -22,6 +22,30 @@
       },
       "revId": "7a43bf24ec263f0fcd7ad7a443ad6670f02823e5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c19075d_021c394e",
+        "filename": "solenv/flatpak-manifest.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-12-06T19:54:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b12cc76_3e6cf90a",
+      "range": {
+        "startLine": 697,
+        "startChar": 22,
+        "endLine": 697,
+        "endChar": 81
+      },
+      "revId": "7a43bf24ec263f0fcd7ad7a443ad6670f02823e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
