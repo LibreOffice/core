@@ -121,23 +121,38 @@ void ScDocument::Broadcast( const ScHint& rHint )
     if ( eHardRecalcState == HardRecalcState::OFF )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM.get(), rHint.GetId());     // scoped bulk broadcast
-        bool bIsBroadcasted = false;
-        SvtBroadcaster* pBC = GetBroadcaster(rHint.GetAddress());
-        if ( pBC )
-        {
-            pBC->Broadcast( rHint );
-            bIsBroadcasted = true;
-        }
+        bool bIsBroadcasted = BroadcastHintInternal(rHint);
         if ( pBASM->AreaBroadcast( rHint ) || bIsBroadcasted )
             TrackFormulas( rHint.GetId() );
     }
 
-    if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+    if ( rHint.GetStartAddress() != BCA_BRDCST_ALWAYS )
     {
-        SCTAB nTab = rHint.GetAddress().Tab();
+        SCTAB nTab = rHint.GetStartAddress().Tab();
         if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
             maTabs[nTab]->SetStreamValid(false);
     }
+}
+
+bool ScDocument::BroadcastHintInternal( const ScHint& rHint )
+{
+    bool bIsBroadcasted = false;
+    const ScAddress address(rHint.GetStartAddress());
+    SvtBroadcaster* pLastBC = nullptr;
+    // Process all broadcasters for the given row range.
+    for( SCROW nRow = address.Row(); nRow < address.Row() + rHint.GetRowCount(); ++nRow )
+    {
+        ScAddress a(address);
+        a.SetRow(nRow);
+        SvtBroadcaster* pBC = GetBroadcaster(a);
+        if ( pBC && pBC != pLastBC )
+        {
+            pBC->Broadcast( rHint );
+            bIsBroadcasted = true;
+            pLastBC = pBC;
+        }
+    }
+    return bIsBroadcasted;
 }
 
 void ScDocument::BroadcastCells( const ScRange& rRange, SfxHintId nHint, bool bBroadcastSingleBroadcasters )
@@ -526,34 +541,44 @@ void ScDocument::TrackFormulas( SfxHintId nHintId )
 
     if ( pFormulaTrack )
     {
+        // First collect all addresses and sort by tab,col,row to group them,
+        // then process adjacent rows in a column together to try to avoid repeated
+        // broadcasts for the same watched area.
+        std::vector<ScAddress> addresses;
+        for( ScFormulaCell* pTrack = pFormulaTrack; pTrack != nullptr; pTrack = pTrack->GetNextTrack())
+            addresses.push_back(pTrack->aPos);
+        std::sort(addresses.begin(), addresses.end());
         // outside the loop, check if any sheet has a "calculate" event script
         bool bCalcEvent = HasAnySheetEventScript( ScSheetEventId::CALCULATE, true );
-        ScFormulaCell* pTrack;
-        ScFormulaCell* pNext;
-        pTrack = pFormulaTrack;
-        do
+        size_t pos = 0;
+        while(pos < addresses.size())
         {
-            SvtBroadcaster* pBC = GetBroadcaster(pTrack->aPos);
-            ScHint aHint(nHintId, pTrack->aPos);
-            if (pBC)
-                pBC->Broadcast( aHint );
+            SCROW rowCount = 1;
+            ScAddress a = addresses[ pos ];
+            ++pos;
+            // Include all adjacent rows below.
+            while( pos < addresses.size() && addresses[ pos ] == ScAddress(a.Col(), a.Row() + rowCount, a.Tab()))
+            {
+                ++rowCount;
+                ++pos;
+            }
+            ScHint aHint( nHintId, a, rowCount );
+            BroadcastHintInternal( aHint );
             pBASM->AreaBroadcast( aHint );
             // for "calculate" event, keep track of which sheets are affected by tracked formulas
             if ( bCalcEvent )
-                SetCalcNotification( pTrack->aPos.Tab() );
-            pTrack = pTrack->GetNextTrack();
-        } while ( pTrack );
-        pTrack = pFormulaTrack;
+                SetCalcNotification( a.Tab() );
+        }
         bool bHaveForced = false;
-        do
+        for( ScFormulaCell* pTrack = pFormulaTrack; pTrack != nullptr;)
         {
-            pNext = pTrack->GetNextTrack();
+            ScFormulaCell* pNext = pTrack->GetNextTrack();
             RemoveFromFormulaTrack( pTrack );
             PutInFormulaTree( pTrack );
             if ( pTrack->GetCode()->IsRecalcModeForced() )
                 bHaveForced = true;
             pTrack = pNext;
-        } while ( pTrack );
+        }
         if ( bHaveForced )
         {
             SetForcedFormulas( true );

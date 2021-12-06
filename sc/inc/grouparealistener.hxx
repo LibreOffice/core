@@ -61,7 +61,7 @@ public:
     void collectFormulaCells( SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
 
 private:
-    void notifyCellChange( const SfxHint& rHint, const ScAddress& rPos );
+    void notifyCellChange( const SfxHint& rHint, const ScAddress& rPos, SCROW nNumRows );
     void notifyBulkChange( const BulkDataHint& rHint );
     const ScFormulaCell* getTopCell() const;
 };
