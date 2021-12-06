@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b12cc76_3e6cf90a",
+        "filename": "solenv/flatpak-manifest.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-06T09:16:48Z",
+      "side": 1,
+      "message": "Please just drop the `$(if ...)` completely.  For i386 we wanted to work around issues with the checks that were done during a plain default-target `make` back in the day, but we never intended to run the full `make check` test suite here.  (We could have changed this to something like `make unitcheck slowcheck` for non-i386 back when the default target changed, but it\u0027s probably not worth it and best to just keep it doing the plain default-target no-checks now.)",
+      "range": {
+        "startLine": 697,
+        "startChar": 22,
+        "endLine": 697,
+        "endChar": 81
+      },
+      "revId": "7a43bf24ec263f0fcd7ad7a443ad6670f02823e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
