@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce1c30ae_8f150802",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-06T22:44:01Z",
+      "side": 1,
+      "message": "Proposed title (after using \u0027enum class\u0027)\ntdf#145614 Convert #define to \u0027enum class\u0027\nThere is no change to \u0027constexpr\u0027 here.",
+      "revId": "c8ed221a92ecfaf78c651b0dccb4bb11ede2b124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c7d605_a3aa14d2",
+        "filename": "xmloff/source/text/txtparaimphint.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-06T22:44:01Z",
+      "side": 1,
+      "message": "Please define \u0027enum class XMLHintType\u0027 instead of the \u0027enum XMLHINT\u0027.\nThen you will have to use XMLHintType::XML_HINT_STYLE and so on.\nThis should also be done in xmloff/source/text/txtparai.cxx",
+      "revId": "c8ed221a92ecfaf78c651b0dccb4bb11ede2b124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b73b0f3e_a470f1eb",
+        "filename": "xmloff/source/text/txtparaimphint.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-06T22:44:01Z",
+      "side": 1,
+      "message": "Please define this as XMLHintType. You will also have to change some other variable types here.",
+      "revId": "c8ed221a92ecfaf78c651b0dccb4bb11ede2b124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
