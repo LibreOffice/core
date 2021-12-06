@@ -58,11 +58,7 @@ public:
     static css::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( const OUString& aClassID );
 
 
-    css::uno::Reference< css::container::XNameAccess >
-                                            GetConfigurationByPath( const OUString& aPath );
-
     css::uno::Reference< css::container::XNameAccess > GetObjConfiguration();
-
     css::uno::Reference< css::container::XNameAccess > GetVerbsConfiguration();
     css::uno::Reference< css::container::XNameAccess > GetMediaTypeConfiguration();
 

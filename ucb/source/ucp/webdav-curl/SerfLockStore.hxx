@@ -67,8 +67,6 @@ public:
     SerfLockStore();
     ~SerfLockStore();
 
-    bool finishing() const;
-
     OUString const* getLockTokenForURI(OUString const& rURI, css::ucb::Lock const* pLock);
 
     void addLock( const OUString& rURI,
@@ -78,9 +76,6 @@ public:
                   // time in seconds since Jan 1 1970
                   // -1: infinite lock, no refresh
                   sal_Int32 nLastChanceToSendRefreshRequest );
-
-    void updateLock( const OUString& rURI,
-                     sal_Int32 nLastChanceToSendRefreshRequest );
 
     void removeLock(const OUString& rURI);
 

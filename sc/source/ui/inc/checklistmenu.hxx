@@ -130,7 +130,6 @@ public:
     void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
     ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled, bool bCheckList);
-    void resizeToFitMenuItems();
 
     void selectMenuItem(size_t nPos, bool bSubMenuTimer);
     void queueLaunchSubMenu(size_t nPos, ScListSubMenuControl* pMenu);
@@ -182,8 +181,6 @@ public:
      * window.  This method is called e.g. when a menu action is fired.
      */
     void terminateAllPopupMenus();
-
-    sal_Int32 ExecuteMenu(weld::Menu& rMenu);
 
     void endSubMenu(ScListSubMenuControl& rSubMenu);
 private:
@@ -338,8 +335,6 @@ public:
     void addMenuCheckItem(const OUString& rText, bool bActive, VirtualDevice& rImage, ScCheckListMenuControl::Action* pAction);
     void clearMenuItems();
     void resizeToFitMenuItems();
-
-    void setSelectedMenuItem(size_t nPos);
 
     ScViewData& GetViewData() const { return mrParentControl.GetViewData(); }
     ScCheckListMenuControl::ExtendedData* getExtendedData() { return mrParentControl.getExtendedData(); }

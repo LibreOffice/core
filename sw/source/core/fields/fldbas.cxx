@@ -146,11 +146,6 @@ void SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 {
 }
 
-void SwFieldType::UpdateFields() const
-{
-    const_cast<SwFieldType*>(this)->SwClientNotify(*this, sw::LegacyModifyHint(nullptr, nullptr));
-}
-
 void SwFieldType::PrintHiddenPara()
 {
     const SwMsgPoolItem aHint(RES_HIDDENPARA_PRINT);
