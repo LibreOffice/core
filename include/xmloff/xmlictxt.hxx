@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

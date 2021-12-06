@@ -20,6 +20,7 @@
 #include <memory>
 #include <autoform.hxx>
 
+#include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/intitem.hxx>

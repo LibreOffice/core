@@ -60,6 +60,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>

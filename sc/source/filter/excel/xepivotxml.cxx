@@ -24,6 +24,7 @@
 #include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>
 #include <svl/numformat.hxx>

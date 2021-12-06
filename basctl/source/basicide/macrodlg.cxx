@@ -31,7 +31,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-
+#include <sal/log.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>

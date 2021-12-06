@@ -24,6 +24,8 @@
 
 #include <utility>
 
+#include <o3tl/deleter.hxx>
+
 // For some reason, Android buildbot issues -Werror like this:
 //   In file included from
 //   /home/android/lo/master-android-arm/filter/source/xmlfilteradaptor/XmlFilterAdaptor.cxx:50:
@@ -60,7 +62,7 @@ public:
     {
         if (m_bDismissed)
             return;
-        m_func();
+        suppress_fun_call_w_exception(m_func());
     }
 
     /** Dismisses the scope guard, i.e. the function won't

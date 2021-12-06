@@ -22,7 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
-
+#include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
