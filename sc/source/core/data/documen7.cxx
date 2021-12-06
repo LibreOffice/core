@@ -140,10 +140,10 @@ bool ScDocument::BroadcastHintInternal( const ScHint& rHint )
     const ScAddress address(rHint.GetStartAddress());
     SvtBroadcaster* pLastBC = nullptr;
     // Process all broadcasters for the given row range.
-    for( SCROW nRow = address.Row(); nRow < address.Row() + rHint.GetRowCount(); ++nRow )
+    for( SCROW nRow = 0; nRow < rHint.GetRowCount(); ++nRow )
     {
         ScAddress a(address);
-        a.SetRow(nRow);
+        a.SetRow(address.Row() + nRow);
         SvtBroadcaster* pBC = GetBroadcaster(a);
         if ( pBC && pBC != pLastBC )
         {
