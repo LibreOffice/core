@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "288876fc_2410efec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2021-12-06T11:20:43Z",
+      "side": 1,
+      "message": "This is related to text layout and printing. I wonder if you\u0027d be interested.",
+      "revId": "67881b3693085e43be60e001bd5dd3e5cc1f92d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
