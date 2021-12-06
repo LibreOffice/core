@@ -698,9 +698,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
             }
 
-            if (nullptr != pbLevelOrVisibilityChanged)
+            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
             {
-                assert(pOldMember);
                 // need to check visibility (and equal entry number) after
                 // creation due to a sorted list being used here (before,
                 // entries with same index were compared already at creation
@@ -751,9 +750,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
             }
 
-            if(nullptr != pbLevelOrVisibilityChanged)
+            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
             {
-                assert(pOldMember);
                 // need to check visibility (and equal entry number) after
                 // creation due to a sorted list being used here (before,
                 // entries with same index were compared already at creation
@@ -934,9 +932,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     m_pMember->insert(std::move(pCnt));
                 }
 
-                if(nullptr != pbLevelOrVisibilityChanged)
+                if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
                 {
-                    assert(pOldMember);
                     // need to check visibility (and equal entry number) after
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
@@ -1051,9 +1048,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     }
                 }
 
-                if (nullptr != pbLevelOrVisibilityChanged)
+                if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
                 {
-                    assert(pOldMember);
                     // need to check visibility (and equal entry number) after
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
@@ -2801,11 +2797,6 @@ bool SwContentTree::HasContentChanged()
 //  at the same time. Once a difference occurs it will be only replenished
 //  no longer checked. Finally, the box is filled again.
 
-    // bVisibilityChanged gets set to true if some element, like a section,
-    // changed visibility and should have its name rerendered with a new
-    // grayed-out state
-    bool bVisibilityChanged = false;
-
     if (State::HIDDEN == m_eState)
     {
         for(ContentTypeId i : o3tl::enumrange<ContentTypeId>())
@@ -2813,190 +2804,182 @@ bool SwContentTree::HasContentChanged()
             if(m_aActiveContentArr[i])
                 m_aActiveContentArr[i]->Invalidate();
         }
+        return false;
     }
+
     // root content navigation view
-    else if(m_bIsRoot)
+    if(m_bIsRoot)
     {
         std::unique_ptr<weld::TreeIter> xRootEntry(m_xTreeView->make_iterator());
         if (!m_xTreeView->get_iter_first(*xRootEntry))
-            bContentChanged = true;
-        else
-        {
-            assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xRootEntry).toInt64())));
-            const ContentTypeId nType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xRootEntry).toInt64())->GetType();
-            SwContentType* pArrType = m_aActiveContentArr[nType].get();
-            if (!pArrType)
-                bContentChanged = true;
-            else
-            {
-                // start check if first selected outline level has changed
-                bool bCheckChanged = m_nRootType == ContentTypeId::OUTLINE && !m_xTreeView->has_focus();
-                if (bCheckChanged)
-                {
-                    std::unique_ptr<weld::TreeIter> xFirstSel(m_xTreeView->make_iterator());
-                    bool bFirstSel = m_xTreeView->get_selected(xFirstSel.get());
-                    if (bFirstSel && lcl_IsContent(*xFirstSel, *m_xTreeView))
-                    {
-                        assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xFirstSel).toInt64())));
-                        const auto nSelLevel = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirstSel).toInt64())->GetOutlineLevel();
-                        SwWrtShell* pSh = GetWrtShell();
-                        const SwOutlineNodes::size_type nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
-                        if (nOutlinePos != SwOutlineNodes::npos && pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel)
-                            bContentChanged = true;
-                    }
-                }
-                // end check if first selected outline level has changed
+            return true;
 
-                pArrType->Init(&bVisibilityChanged);
-                pArrType->FillMemberList();
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pArrType)));
-                m_xTreeView->set_id(*xRootEntry, sId);
-                if (!bContentChanged)
-                {
-                    const size_t nChildCount = GetChildCount(*xRootEntry);
-                    if (nChildCount != pArrType->GetMemberCount())
-                        bContentChanged = true;
-                    else
-                    {
-                        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(xRootEntry.get()));
-                        for (size_t j = 0; j < nChildCount; ++j)
-                        {
-                            if (!m_xTreeView->iter_next(*xEntry))
-                            {
-                                SAL_WARN("sw.ui", "unexpected missing entry");
-                                break;
-                            }
-                            const SwContent* pCnt = pArrType->GetMember(j);
-                            OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
-                            m_xTreeView->set_id(*xEntry, sSubId);
-                            OUString sEntryText = m_xTreeView->get_text(*xEntry);
-                            if( sEntryText != pCnt->GetName() &&
-                                !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
-                                bContentChanged = true;
-                        }
-                    }
-                }
+        assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xRootEntry).toInt64())));
+        const ContentTypeId nType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xRootEntry).toInt64())->GetType();
+        SwContentType* pArrType = m_aActiveContentArr[nType].get();
+        assert(OUString::number(reinterpret_cast<sal_Int64>(pArrType)) == m_xTreeView->get_id(*xRootEntry));
+        if (!pArrType)
+            return true;
+
+        pArrType->FillMemberList(&bContentChanged);
+        if (bContentChanged)
+            return true;
+
+        // FillMemberList tests if member count in old member array equals member count in new
+        // member array. Test here for member count difference between array and tree.
+        const size_t nChildCount = GetChildCount(*xRootEntry);
+        if (nChildCount != pArrType->GetMemberCount())
+            return true;
+
+        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(xRootEntry.get()));
+        for (size_t j = 0; j < nChildCount; ++j)
+        {
+            if (!m_xTreeView->iter_next(*xEntry))
+            {
+                SAL_WARN("sw.ui", "unexpected missing entry");
+                return true;
+            }
+
+            // FillMemberList clears the content type member list and refills with new data.
+            // Treeview entry user data is set here to the string representation of the pointer to
+            // the member data in the array. The Display function will clear and recreate the
+            // treeview from the content type member arrays if content change is detected.
+            const SwContent* pCnt = pArrType->GetMember(j);
+            OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+            m_xTreeView->set_id(*xEntry, sSubId);
+
+            OUString sEntryText = m_xTreeView->get_text(*xEntry);
+            if (sEntryText != pCnt->GetName() &&
+                    !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
+            {
+                return true;
             }
         }
     }
     // all content navigation view
     else
     {
+        // Fill member list for each content type and check for content change. If content change
+        // is detected only fill member lists for remaining content types. The Display function
+        // will clear and recreate the treeview from the content type member arrays if content has
+        // changed.
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         bool bEntry = m_xTreeView->get_iter_first(*xEntry);
         while (bEntry)
         {
-            bool bNext = true; // at least a next must be
             assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
             SwContentType* pCntType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
             const size_t nCntCount = pCntType->GetMemberCount();
             const ContentTypeId nType = pCntType->GetType();
             SwContentType* pArrType = m_aActiveContentArr[nType].get();
-            if (!pArrType)
-                bContentChanged = true;
-            else
-            {
-                pArrType->Init(&bVisibilityChanged);
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pArrType)));
-                m_xTreeView->set_id(*xEntry, sId);
-                if (m_xTreeView->get_row_expanded(*xEntry))
-                {
-                    bool bLevelOrVisibilityChanged = false;
-                    // bLevelOrVisibilityChanged is set if outlines have changed their level
-                    // or if the visibility of objects (frames, sections, tables) has changed
-                    // i.e. in header/footer
-                    pArrType->FillMemberList(&bLevelOrVisibilityChanged);
-                    const size_t nChildCount = GetChildCount(*xEntry);
-                    if (bLevelOrVisibilityChanged)
-                    {
-                        if (nType == ContentTypeId::OUTLINE)
-                            bContentChanged = true;
-                        else
-                            bVisibilityChanged = true;
-                    }
+            assert(OUString::number(reinterpret_cast<sal_Int64>(pArrType)) == m_xTreeView->get_id(*xEntry));
 
-                    if(nChildCount != pArrType->GetMemberCount())
-                        bContentChanged = true;
-                    else
-                    {
-                        for(size_t j = 0; j < nChildCount; ++j)
-                        {
-                            bEntry = m_xTreeView->iter_next(*xEntry);
-                            bNext = false;
-                            const SwContent* pCnt = pArrType->GetMember(j);
-                            OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
-                            m_xTreeView->set_id(*xEntry, sSubId);
-                            OUString sEntryText = m_xTreeView->get_text(*xEntry);
-                            if( sEntryText != pCnt->GetName() &&
-                                !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
-                                bContentChanged = true;
-                        }
-                    }
-                }
-                // not expanded and has children
-                else if (m_xTreeView->iter_has_child(*xEntry))
-                {
-                    // was the entry once opened, then must also the
-                    // invisible records be examined.
-                    // At least the user data must be updated.
-                    bool bLevelOrVisibilityChanged = false;
-                    // bLevelOrVisibilityChanged is set if outlines have changed their level
-                    // or if the visibility of objects (frames, sections, tables) has changed
-                    // i.e. in header/footer
-                    pArrType->FillMemberList(&bLevelOrVisibilityChanged);
-                    bool bRemoveChildren = false;
-                    const size_t nOldChildCount = GetChildCount(*xEntry);
-                    const size_t nNewChildCount = pArrType->GetMemberCount();
-                    if (nOldChildCount != nNewChildCount)
-                    {
-                        bRemoveChildren = true;
-                    }
-                    else
-                    {
-                        std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xEntry.get()));
-                        (void)m_xTreeView->iter_children(*xChild);
-                        for (size_t j = 0; j < nOldChildCount; ++j)
-                        {
-                            const SwContent* pCnt = pArrType->GetMember(j);
-                            OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
-                            m_xTreeView->set_id(*xChild, sSubId);
-                            OUString sEntryText = m_xTreeView->get_text(*xChild);
-                            if( sEntryText != pCnt->GetName() &&
-                                !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
-                                bRemoveChildren = true;
-                            (void)m_xTreeView->iter_next(*xChild);
-                        }
-                    }
-                    if (bRemoveChildren)
-                    {
-                        std::unique_ptr<weld::TreeIter> xRemove(m_xTreeView->make_iterator(xEntry.get()));
-                        while (m_xTreeView->iter_children(*xRemove))
-                        {
-                            remove(*xRemove);
-                            m_xTreeView->copy_iterator(*xEntry, *xRemove);
-                        }
-                        m_xTreeView->set_children_on_demand(*xEntry, nNewChildCount != 0);
-                    }
-                }
-                else if((nCntCount != 0)
-                            != (pArrType->GetMemberCount()!=0))
+            if (!pArrType)
+            {
+                bContentChanged = true;
+                goto NEXT_CONTENT_TYPE;
+            }
+
+            // all content types must be filled!
+            if (bContentChanged)
+            {
+                // If content change has already been detected there is no need to detect
+                // other content change so no argument is supplied here to FillMemberList.
+                pArrType->FillMemberList();
+                goto NEXT_CONTENT_TYPE;
+            }
+
+            pArrType->FillMemberList(&bContentChanged);
+            if (bContentChanged)
+                goto NEXT_CONTENT_TYPE;
+
+            // does entry have childern?
+            if (m_xTreeView->get_row_expanded(*xEntry))
+            {
+                const size_t nChildCount = GetChildCount(*xEntry);
+                if(nChildCount != pArrType->GetMemberCount())
                 {
                     bContentChanged = true;
+                    goto NEXT_CONTENT_TYPE;
+                }
+
+                for(size_t j = 0; j < nChildCount; ++j)
+                {
+                    if (!m_xTreeView->iter_next(*xEntry))
+                    {
+                        SAL_WARN("sw.ui", "unexpected missing entry");
+                        bContentChanged = true;
+                        goto NEXT_CONTENT_TYPE;
+                    }
+
+                    const SwContent* pCnt = pArrType->GetMember(j);
+                    OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+                    m_xTreeView->set_id(*xEntry, sSubId);
+
+                    OUString sEntryText = m_xTreeView->get_text(*xEntry);
+                    if( sEntryText != pCnt->GetName() &&
+                            !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
+                    {
+                        bContentChanged = true;
+                        goto NEXT_CONTENT_TYPE;
+                    }
                 }
             }
-            // The Root-Entry has to be found now
-            while (bEntry && (bNext || m_xTreeView->get_iter_depth(*xEntry)))
+            // not expanded and has children
+            else if (m_xTreeView->iter_has_child(*xEntry))
             {
-                bEntry = m_xTreeView->iter_next(*xEntry);
-                bNext = false;
+                bool bRemoveChildren = false;
+                const size_t nOldChildCount = GetChildCount(*xEntry);
+                const size_t nNewChildCount = pArrType->GetMemberCount();
+                if (nOldChildCount != nNewChildCount)
+                {
+                    bRemoveChildren = true;
+                }
+                else
+                {
+                    std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xEntry.get()));
+                    (void)m_xTreeView->iter_children(*xChild);
+                    for (size_t j = 0; j < nOldChildCount; ++j)
+                    {
+                        const SwContent* pCnt = pArrType->GetMember(j);
+                        OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+                        m_xTreeView->set_id(*xChild, sSubId);
+                        OUString sEntryText = m_xTreeView->get_text(*xChild);
+                        if( sEntryText != pCnt->GetName() &&
+                                !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
+                        {
+                            bRemoveChildren = true;
+                        }
+                        (void)m_xTreeView->iter_next(*xChild);
+                    }
+                }
+                if (bRemoveChildren)
+                {
+                    std::unique_ptr<weld::TreeIter> xRemove(m_xTreeView->make_iterator(xEntry.get()));
+                    while (m_xTreeView->iter_children(*xRemove))
+                    {
+                        remove(*xRemove);
+                        m_xTreeView->copy_iterator(*xEntry, *xRemove);
+                    }
+                    m_xTreeView->set_children_on_demand(*xEntry, nNewChildCount != 0);
+                }
             }
+            else if((nCntCount != 0)
+                    != (pArrType->GetMemberCount()!=0))
+            {
+                bContentChanged = true;
+                goto NEXT_CONTENT_TYPE;
+            }
+
+NEXT_CONTENT_TYPE:
+            // find the next content type (root) entry
+            while (m_xTreeView->get_iter_depth(*xEntry))
+                m_xTreeView->iter_parent(*xEntry);
+            bEntry = m_xTreeView->iter_next_sibling(*xEntry);
         }
     }
 
-    if (!bContentChanged && bVisibilityChanged)
-        m_aUpdTimer.Start();
-
-    return bContentChanged || bVisibilityChanged;
+    return bContentChanged;
 }
 
 void SwContentTree::UpdateLastSelType()
