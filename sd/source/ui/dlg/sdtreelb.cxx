@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <sot/formats.hxx>
 #include <vcl/weld.hxx>

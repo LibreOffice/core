@@ -27,6 +27,7 @@
 #include <svx/unomid.hxx>
 
 #include <comphelper/lok.hxx>
+#include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 

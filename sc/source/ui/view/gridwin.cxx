@@ -22,6 +22,7 @@
 #include <cstdlib>
 #include <memory>
 #include <editeng/adjustitem.hxx>
+#include <sal/log.hxx>
 #include <sot/storage.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>

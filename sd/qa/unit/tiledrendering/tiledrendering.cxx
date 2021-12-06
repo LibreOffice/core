@@ -17,6 +17,7 @@
 #include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sal/log.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>
