@@ -16,6 +16,23 @@
       "message": "IMO this is fine for 7-3 but not important enough for 7-2.\n",
       "revId": "3a61cce54277fd12570103a191c50d9b37ef3dd3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22c13253_96cfaa70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-06T21:36:45Z",
+      "side": 1,
+      "message": "Thank you for your quick feedback both of you.\nFollowing Luboš\u0027s response, I cherry-picked it for 7.3 branch.",
+      "revId": "3a61cce54277fd12570103a191c50d9b37ef3dd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
