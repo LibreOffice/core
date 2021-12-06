@@ -210,25 +210,25 @@ class SwSrcEditWindow::ChangesListener:
     public cppu::WeakImplHelper< css::beans::XPropertiesChangeListener >
 {
 public:
-    explicit ChangesListener(SwSrcEditWindow & editor): editor_(editor) {}
+    explicit ChangesListener(SwSrcEditWindow & editor): m_Editor(editor) {}
 
 private:
     virtual ~ChangesListener() override {}
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &) override
     {
-        osl::MutexGuard g(editor_.mutex_);
-        editor_.m_xNotifier.clear();
+        osl::MutexGuard g(m_Editor.mutex_);
+        m_Editor.m_xNotifier.clear();
     }
 
     virtual void SAL_CALL propertiesChange(
         css::uno::Sequence< css::beans::PropertyChangeEvent > const &) override
     {
         SolarMutexGuard g;
-        editor_.SetFont();
+        m_Editor.SetFont();
     }
 
-    SwSrcEditWindow & editor_;
+    SwSrcEditWindow & m_Editor;
 };
 
 SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView ) :

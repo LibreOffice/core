@@ -58,10 +58,10 @@ enum class SdrHitKind;
 class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
                 public DropTargetHelper, public DragSourceHelper
 {
-    static  QuickHelpData* m_pQuickHlpData;
+    static  QuickHelpData* s_pQuickHlpData;
 
-    static  tools::Long    m_nDDStartPosX;
-    static  tools::Long    m_nDDStartPosY;
+    static  tools::Long    s_nDDStartPosX;
+    static  tools::Long    s_nDDStartPosY;
 
     Color m_aWaterCanTextColor;     // text color; for the watering can
     Color m_aWaterCanTextBackColor; // text background; for the watering can
@@ -246,8 +246,8 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    static tools::Long GetDDStartPosX() { return m_nDDStartPosX; }
-    static tools::Long GetDDStartPosY() { return m_nDDStartPosY; }
+    static tools::Long GetDDStartPosX() { return s_nDDStartPosX; }
+    static tools::Long GetDDStartPosY() { return s_nDDStartPosY; }
 
     static void InitStaticData();
     static void FinitStaticData();
