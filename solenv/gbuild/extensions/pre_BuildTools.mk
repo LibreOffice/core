@@ -24,7 +24,7 @@ gb_BUILD_TOOLS_executables = \
 		helpex \
 		idxdict \
 		javamaker \
-    $(if $(filter-out ANDROID MACOSX iOS WNT,$(OS)),lockfile) \
+    $(call gb_CondBuildLockfile,lockfile) \
 		makedepend \
 		propex \
 		saxparser \
