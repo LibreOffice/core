@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77229)
     Bitmap aBitmap = load("fdo77229.emf");
     Bitmap::ScopedReadAccess pAccess(aBitmap);
     // The green star was missing.
-    Color aColor(pAccess->GetPixel(142, 140));
+    Color aColor(pAccess->GetPixel(284, 280));
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), aColor.GetRed());
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), aColor.GetBlue());
     CPPUNIT_ASSERT(aColor.GetGreen() == 0xfe || aColor.GetGreen() == 0xff);
