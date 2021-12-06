@@ -168,11 +168,10 @@ inline bool ScBigRange::Contains( const ScBigRange& r ) const
 
 inline bool ScBigRange::Intersects( const ScBigRange& r ) const
 {
-    return !(
-        std::min( aEnd.Col(), r.aEnd.Col() ) < std::max( aStart.Col(), r.aStart.Col() )
-     || std::min( aEnd.Row(), r.aEnd.Row() ) < std::max( aStart.Row(), r.aStart.Row() )
-     || std::min( aEnd.Tab(), r.aEnd.Tab() ) < std::max( aStart.Tab(), r.aStart.Tab() )
-        );
+    return
+        aStart.Col() <= r.aEnd.Col() && r.aStart.Col() <= aEnd.Col() &&
+        aStart.Row() <= r.aEnd.Row() && r.aStart.Row() <= aEnd.Row() &&
+        aStart.Tab() <= r.aEnd.Tab() && r.aStart.Tab() <= aEnd.Tab();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
