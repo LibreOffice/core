@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb0fc492_37f6dc8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-06T10:28:49Z",
+      "side": 1,
+      "message": "Hi. It seems to me the problem might be the following:\nWhen the test selects/gets a shape with the getShape(int nShapeNum) method, unfortunately in the different platforms the 2nd shape for example can be different. (I do not understand why, but it seems this causes the problem, see https://gerrit.libreoffice.org/c/core/+/126052 ) In addition, if the test modifies the shape (for example grouping like in this case) the order also can be changed. So now, i think there must be a search method to find that shape what have to be tested, but i have no idea what should be the key for find method... so i think you\u0027re right this is quite fishy... But, if i have a good idea and it works with https://gerrit.libreoffice.org/c/core/+/126052 then i will do the same with this tests too (if you do not mind).",
+      "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
