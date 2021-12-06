@@ -595,7 +595,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
                 else if ( eType == SC_CAT_DELETE_COLS )
                     aRange.aEnd.SetCol( aRange.aStart.Col() );
 
-                if ( aRange.In( rPos ) )
+                if ( aRange.Contains( rPos ) )
                 {
                     pFound = pAction;       // the last one wins
                 }
@@ -605,7 +605,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
                 ScRange aRange =
                     static_cast<const ScChangeActionMove*>(pAction)->
                     GetFromRange().MakeRange();
-                if ( aRange.In( rPos ) )
+                if ( aRange.Contains( rPos ) )
                 {
                     pFound = pAction;
                 }

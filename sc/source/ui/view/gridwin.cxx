@@ -5199,7 +5199,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
                 //  search backwards so that the last repainted frame is found
                 --i;
                 ScRangeFindData& rData = pRangeFinder->GetObject(i);
-                if ( rData.aRef.In(aAddr) )
+                if ( rData.aRef.Contains(aAddr) )
                 {
                     if (pIndex)
                         *pIndex = i;

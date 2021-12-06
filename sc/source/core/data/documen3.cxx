@@ -207,7 +207,7 @@ bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, const ScAddress& r
     {
         if (rEntry.second->IsValidReference(aNameRange))
         {
-            if (aNameRange.In(rAddress))
+            if (aNameRange.Contains(rAddress))
                 return true;
         }
     }
@@ -382,7 +382,7 @@ ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
     sal_uInt16 nCount = pDPCollection->GetCount();
     ScAddress aPos( nCol, nRow, nTab );
     for (sal_uInt16 i=0; i<nCount; i++)
-        if ( (*pDPCollection)[i].GetOutRange().In( aPos ) )
+        if ( (*pDPCollection)[i].GetOutRange().Contains( aPos ) )
             return &(*pDPCollection)[i];
 
     return nullptr;
@@ -397,7 +397,7 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
      * approximation of MS Excels 'most recent' effect. */
     sal_uInt16 i = pDPCollection->GetCount();
     while ( i-- > 0 )
-        if ( (*pDPCollection)[i].GetOutRange().In( rBlock ) )
+        if ( (*pDPCollection)[i].GetOutRange().Contains( rBlock ) )
             return &(*pDPCollection)[i];
 
     return nullptr;

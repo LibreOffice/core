@@ -42,7 +42,7 @@ public:
     explicit FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
     bool operator() (const ScRange & rRange) const
     {
-        return rRange.In(mrTest);
+        return rRange.Contains(mrTest);
     }
 private:
     const T& mrTest;
@@ -55,7 +55,7 @@ public:
     FindRangeIn(const T& rTest) : mrTest(rTest) {}
     bool operator() (const ScRange& rRange) const
     {
-        return mrTest.In(rRange);
+        return mrTest.Contains(rRange);
     }
 private:
     const T& mrTest;
@@ -225,7 +225,7 @@ Label_Range_Join:
             continue;           // the same one, continue with the next
         }
         bool bJoined = false;
-        if ( rRange.In( *pOver ) )
+        if ( rRange.Contains( *pOver ) )
         {   // range pOver included in or identical to range p
             // XXX if we never used Append() before Join() we could remove
             // pOver and end processing, but it is not guaranteed and there can
@@ -238,7 +238,7 @@ Label_Range_Join:
                 break;  // for
             }
         }
-        else if ( pOver->In( rRange ) )
+        else if ( pOver->Contains( rRange ) )
         {   // range rRange included in range pOver, make pOver the new range
             rRange = *pOver;
             bJoined = true;
@@ -1091,7 +1091,7 @@ bool ScRangeList::Intersects( const ScRange& rRange ) const
     return std::any_of(maRanges.begin(), maRanges.end(), FindIntersectingRange<ScRange>(rRange));
 }
 
-bool ScRangeList::In( const ScRange& rRange ) const
+bool ScRangeList::Contains( const ScRange& rRange ) const
 {
     return std::any_of(maRanges.begin(), maRanges.end(), FindEnclosingRange<ScRange>(rRange));
 }
@@ -1292,7 +1292,7 @@ ScRangePair* ScRangePairList::Find( const ScAddress& rAdr )
 {
     for (ScRangePair & rR : maPairs)
     {
-        if ( rR.GetRange(0).In( rAdr ) )
+        if ( rR.GetRange(0).Contains( rAdr ) )
             return &rR;
     }
     return nullptr;
@@ -1435,7 +1435,7 @@ Label_RangePair_Join:
         ScRange& rp2 = rPair.GetRange(1);
         if ( rp2 == r2 )
         {   // only if Range2 is equal
-            if ( rp1.In( r1 ) )
+            if ( rp1.Contains( r1 ) )
             {   // RangePair pOver included in or identical to RangePair p
                 if ( bIsInList )
                     bJoined = true;     // do away with RangePair pOver
@@ -1445,7 +1445,7 @@ Label_RangePair_Join:
                     break;  // for
                 }
             }
-            else if ( r1.In( rp1 ) )
+            else if ( r1.Contains( rp1 ) )
             {   // RangePair p included in RangePair pOver, make pOver the new RangePair
                 rPair = *pOver;
                 bJoined = true;

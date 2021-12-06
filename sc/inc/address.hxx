@@ -547,8 +547,9 @@ public:
     {
         return aStart.IsValid() && aEnd.IsValid();
     }
-    inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
-    inline bool In( const ScRange& ) const;     ///< is Range& in Range?
+    inline bool Contains( const ScAddress& ) const;   ///< is Address& fully in Range?
+    inline bool Contains( const ScRange& ) const;     ///< is Range& fully in Range?
+    inline bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
     ScRefFlags Parse( const OUString&, const ScDocument&,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
@@ -640,7 +641,6 @@ public:
     void IncRowIfNotLessThan(const ScDocument& rDoc, SCROW nStartRow, SCROW nOffset);
 
     void ExtendTo( const ScRange& rRange );
-    bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
     ScRange Intersection( const ScRange& rOther ) const;
 
@@ -729,7 +729,7 @@ inline bool ScRange::operator<=( const ScRange& rRange ) const
     return operator<( rRange ) || operator==( rRange );
 }
 
-inline bool ScRange::In( const ScAddress& rAddress ) const
+inline bool ScRange::Contains( const ScAddress& rAddress ) const
 {
     return
         aStart.Col() <= rAddress.Col() && rAddress.Col() <= aEnd.Col() &&
@@ -737,12 +737,21 @@ inline bool ScRange::In( const ScAddress& rAddress ) const
         aStart.Tab() <= rAddress.Tab() && rAddress.Tab() <= aEnd.Tab();
 }
 
-inline bool ScRange::In( const ScRange& rRange ) const
+inline bool ScRange::Contains( const ScRange& rRange ) const
 {
     return
         aStart.Col() <= rRange.aStart.Col() && rRange.aEnd.Col() <= aEnd.Col() &&
         aStart.Row() <= rRange.aStart.Row() && rRange.aEnd.Row() <= aEnd.Row() &&
         aStart.Tab() <= rRange.aStart.Tab() && rRange.aEnd.Tab() <= aEnd.Tab();
+}
+
+inline bool ScRange::Intersects( const ScRange& rRange ) const
+{
+    return !(
+        std::min( aEnd.Col(), rRange.aEnd.Col() ) < std::max( aStart.Col(), rRange.aStart.Col() )
+     || std::min( aEnd.Row(), rRange.aEnd.Row() ) < std::max( aStart.Row(), rRange.aStart.Row() )
+     || std::min( aEnd.Tab(), rRange.aEnd.Tab() ) < std::max( aStart.Tab(), rRange.aStart.Tab() )
+        );
 }
 
 inline size_t ScRange::hashArea() const

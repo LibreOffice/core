@@ -112,9 +112,9 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
     for ( size_t i = 0; i < ListSize; ++i )
     {
         ScInterpreterTableOpParams *const pTOp = mrDoc.m_TableOpList[ i ];
-        if ( rRange.In( pTOp->aOld1 ) )
+        if ( rRange.Contains( pTOp->aOld1 ) )
             return true;
-        if ( rRange.In( pTOp->aOld2 ) )
+        if ( rRange.Contains( pTOp->aOld2 ) )
             return true;
     }
     return false;

@@ -369,7 +369,7 @@ private:
                 // Sheet ranges differ.
                 continue;
 
-            if (aOld.In(aNew))
+            if (aOld.Contains(aNew))
                 // This new range is part of an existing range.  Skip it.
                 return;
 

@@ -412,7 +412,7 @@ void ScExternalRefCache::Table::getAllNumberFormats(vector<sal_uInt32>& rNumFmts
 
 bool ScExternalRefCache::Table::isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
-    return maCachedRanges.In(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
+    return maCachedRanges.Contains(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
 }
 
 void ScExternalRefCache::Table::setCachedCell(SCCOL nCol, SCROW nRow)
@@ -433,7 +433,7 @@ void ScExternalRefCache::Table::setWholeTableCached()
 
 bool ScExternalRefCache::Table::isInCachedRanges(SCCOL nCol, SCROW nRow) const
 {
-    return maCachedRanges.In(ScRange(nCol, nRow, 0, nCol, nRow, 0));
+    return maCachedRanges.Contains(ScRange(nCol, nRow, 0, nCol, nRow, 0));
 }
 
 ScExternalRefCache::TokenRef ScExternalRefCache::Table::getEmptyOrNullToken(

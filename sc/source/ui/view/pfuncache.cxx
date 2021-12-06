@@ -131,7 +131,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
 bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation& rLocation ) const
 {
     auto aIter = std::find_if(aLocations.begin(), aLocations.end(),
-        [&rCell](const ScPrintPageLocation& rLoc) { return rLoc.aCellRange.In(rCell); });
+        [&rCell](const ScPrintPageLocation& rLoc) { return rLoc.aCellRange.Contains(rCell); });
     if (aIter != aLocations.end())
     {
         rLocation = *aIter;

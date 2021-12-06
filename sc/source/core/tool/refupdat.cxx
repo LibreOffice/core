@@ -427,7 +427,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     }
     else if (eUpdateRefMode == URM_MOVE)
     {
-        if ( rWhere.In( rWhat ) )
+        if ( rWhere.Contains( rWhat ) )
         {
             if ( nDx && (theCol1 != nInt32Min || theCol2 != nInt32Max) )
             {
@@ -541,7 +541,7 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
     ScRefUpdateRes eRet = UR_NOTHING;
     // Only references in source range must be updated, i.e. no references in destination area.
     // Otherwise existing references pointing to destination area will be wrongly transposed.
-    if (rSource.In(rRef))
+    if (rSource.Contains(rRef))
     {
         // Source range contains the reference range.
         SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();

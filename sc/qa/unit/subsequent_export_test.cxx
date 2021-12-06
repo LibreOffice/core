@@ -2541,9 +2541,11 @@ void ScExportTest::testEmbeddedChartXLS()
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
 
     ScRangeList aRanges = getChartRanges(rDoc, *pOleObj);
-    CPPUNIT_ASSERT_MESSAGE("Label range (B3:B5) not found.", aRanges.In(ScRange(1, 2, 1, 1, 4, 1)));
-    CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.", aRanges.In(ScAddress(2, 1, 1)));
-    CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.", aRanges.In(ScRange(2, 2, 1, 2, 4, 1)));
+    CPPUNIT_ASSERT_MESSAGE("Label range (B3:B5) not found.",
+                           aRanges.Contains(ScRange(1, 2, 1, 1, 4, 1)));
+    CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.", aRanges.Contains(ScAddress(2, 1, 1)));
+    CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.",
+                           aRanges.Contains(ScRange(2, 2, 1, 2, 4, 1)));
 
     xDocSh->DoClose();
 }

@@ -137,8 +137,8 @@ public:
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }
 
-    inline bool In( const ScBigAddress& ) const;    ///< is Address& in range?
-    inline bool In( const ScBigRange& ) const;      ///< is Range& in range?
+    inline bool Contains( const ScBigAddress& ) const;    ///< is Address& in range?
+    inline bool Contains( const ScBigRange& ) const;      ///< is Range& in range?
     inline bool Intersects( const ScBigRange& ) const;  ///< do two ranges overlap?
 
     ScBigRange&     operator=( const ScBigRange& r )
@@ -150,7 +150,7 @@ public:
                         { return !operator==( r ); }
 };
 
-inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
+inline bool ScBigRange::Contains( const ScBigAddress& rAddr ) const
 {
     return
         aStart.Col() <= rAddr.Col() && rAddr.Col() <= aEnd.Col() &&
@@ -158,7 +158,7 @@ inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
         aStart.Tab() <= rAddr.Tab() && rAddr.Tab() <= aEnd.Tab();
 }
 
-inline bool ScBigRange::In( const ScBigRange& r ) const
+inline bool ScBigRange::Contains( const ScBigRange& r ) const
 {
     return
         aStart.Col() <= r.aStart.Col() && r.aEnd.Col() <= aEnd.Col() &&

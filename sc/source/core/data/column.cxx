@@ -2257,7 +2257,7 @@ class UpdateRefOnNonCopy
         ScAddress aOldPos = aPos;
 
         bool bCellMoved;
-        if (mpCxt->maRange.In(aPos))
+        if (mpCxt->maRange.Contains(aPos))
         {
             bCellMoved = true;
 
