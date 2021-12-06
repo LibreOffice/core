@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "a7b96c91_d0961bd1",
         "filename": "starmath/source/document.cxx",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Isn\u0027t that changing the default export? I doubt old LO could handle the MathML import correct? And I guess it will convert on any Save op?\n\nAll this doesn\u0027t look like a good idea for LO interop. Am I missing something here?",
       "revId": "ad26a85d2ef77b8074a599ccea3108128e12f489",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "6fc61ea9_e77e17bb",
         "filename": "starmath/source/document.cxx",
@@ -32,8 +33,25 @@
       "message": "Allow me to tell you the whole history.\nStarmath isn\u0027t fully compatible with mathml.\nSo we are creating a \"starmath 6\" wich is compatible with it.\nIn order to do so we have introudced an SmMlElement type of node.\nAnd we have added a SmMLImport / SmMLExport.\nHohwever, given that starmath isn\u0027t fully compatible with mathml\nand the new version is, obviously the backguards compatibility fails.\nSo we can\u0027t update documents automatically (user manually).\nThere the need of the new SmMLExportWrapper / SmMLImportWrapper.\nThose will load and write the documents with they\u0027re specific version ( 5 or 6 ).\nSo this change won\u0027t have any effects on the old documents.\nThat functionality is blocked for the users by now.\nAnd if by interoperability you mean the other office editor\u0027s I heard that they use the mathml code in content.xml. So also is fine.\nI hope this answers your question.",
       "parentUuid": "a7b96c91_d0961bd1",
       "revId": "ad26a85d2ef77b8074a599ccea3108128e12f489",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": false
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33974a48_653d272d",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-06T11:56:37Z",
+      "side": 1,
+      "message": "Somehow I didn\u0027t reply to your answer. I was just not sure what happens on save. I don\u0027t even know, if there is a policy, like \"don\u0027t auto-update old docs\". I remember Word did show some dialog to convert a document on open, an id the user opt-out keeps the old format. I would expect that too from LO.\n\nI read your whole comment, that currently a user can\u0027t even update (\"That functionality is blocked for the users by now.\"), so from that POV all fine.",
+      "parentUuid": "6fc61ea9_e77e17bb",
+      "revId": "ad26a85d2ef77b8074a599ccea3108128e12f489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
