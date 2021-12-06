@@ -131,6 +131,9 @@ protected:
     // flag to completely disable handles at the view
     bool                        mbMarkHandlesHidden : 1;
 
+    // flag indicating whether all x coordinates are negated or not
+    bool                        mbNegativeX : 1;
+
     // Helper to get a possible GridOffset from SdrObject
     bool getPossibleGridOffsetForSdrObject(
         basegfx::B2DVector& rOffset,
@@ -240,6 +243,9 @@ public:
 
     bool HasMarkableObj() const { return MarkableObjectsExceed(0); };
 
+    /// whether all x coordinates in use are negated or not
+    void SetNegativeX(bool bOn) { mbNegativeX = bOn; }
+    bool IsNegativeX() const { return mbNegativeX; }
 
 // migrate selections
 

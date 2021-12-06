@@ -428,7 +428,8 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
 // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
 void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 {
-    if (GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    if (!bLOKActive && GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
     {
         const SvtOptionsDrawinglayer aDrawinglayerOpt;
         OutputDevice& rWindow(GetPaintWindow().GetOutputDevice());
@@ -453,15 +454,19 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         GetPageView().GetView().InvalidateOneWin(rWindow, aVCLDiscreteRectangle);
         rWindow.EnableMapMode(bWasMapModeEnabled);
     }
-    else if (comphelper::LibreOfficeKit::isActive())
+    else if (bLOKActive)
     {
         // we don't really have to have a paint window with LOK; OTOH we know
         // that the drawinglayer units are 100ths of mm, so they are easy to
         // convert to twips
+
+        // If the shapes use negative X coordinates, make them positive before sending
+        // the invalidation rectangle.
+        bool bNegativeX = mpImpl->mrPageView.GetView().IsNegativeX();
         const tools::Rectangle aRect100thMM(
-            static_cast<tools::Long>(floor(rRange.getMinX())),
+            static_cast<tools::Long>(bNegativeX ? std::max(0.0, ceil(-rRange.getMaxX())) : floor(rRange.getMinX())),
             static_cast<tools::Long>(floor(rRange.getMinY())),
-            static_cast<tools::Long>(ceil(rRange.getMaxX())),
+            static_cast<tools::Long>(bNegativeX ? std::max(0.0, floor(-rRange.getMinX())) : ceil(rRange.getMaxX())),
             static_cast<tools::Long>(ceil(rRange.getMaxY())));
 
         const tools::Rectangle aRectTwips = OutputDevice::LogicToLogic(aRect100thMM, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));

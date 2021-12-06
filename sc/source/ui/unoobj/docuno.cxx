@@ -586,7 +586,13 @@ void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
     ScTabView* pTabView = dynamic_cast< ScTabView* >( pViewData->GetView() );
 
     if (pTabView)
+    {
+        if (SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView())
+            pDrawView->SetNegativeX(comphelper::LibreOfficeKit::isActive() &&
+                pViewData->GetDocument().IsLayoutRTL(nPart));
+
         pTabView->SelectTabPage(nPart + 1);
+    }
 }
 
 int ScModelObj::getParts()
