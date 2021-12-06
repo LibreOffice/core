@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3808183c_4b4dfd46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-06T07:07:22Z",
+      "side": 1,
+      "message": "Not sure why this happened? No git hooks for some checkout?",
+      "revId": "74c5b797aa0bedf534f3c0bff7012ea321520f75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
