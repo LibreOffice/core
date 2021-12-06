@@ -431,19 +431,31 @@ bool DrawingML::WriteCharColor(const css::uno::Reference<css::beans::XPropertySe
 
     const char* pColorName = g_aPredefinedClrNames[nCharColorTheme];
 
-    sal_Int32 nCharColorLumMod{};
-    xPropertySet->getPropertyValue("CharColorLumMod") >>= nCharColorLumMod;
-    sal_Int32 nCharColorLumOff{};
-    xPropertySet->getPropertyValue("CharColorLumOff") >>= nCharColorLumOff;
     sal_Int32 nCharColorTintOrShade{};
     xPropertySet->getPropertyValue("CharColorTintOrShade") >>= nCharColorTintOrShade;
-    if (nCharColorLumMod != 10000 || nCharColorLumOff != 0 || nCharColorTintOrShade != 0)
+    if (nCharColorTintOrShade != 0)
     {
         return false;
     }
 
     mpFS->startElementNS(XML_a, XML_solidFill);
-    mpFS->singleElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
+    mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
+
+    sal_Int32 nCharColorLumMod{};
+    xPropertySet->getPropertyValue("CharColorLumMod") >>= nCharColorLumMod;
+    if (nCharColorLumMod != 10000)
+    {
+        mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(nCharColorLumMod * 10));
+    }
+
+    sal_Int32 nCharColorLumOff{};
+    xPropertySet->getPropertyValue("CharColorLumOff") >>= nCharColorLumOff;
+    if (nCharColorLumOff != 0)
+    {
+        mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(nCharColorLumOff * 10));
+    }
+
+    mpFS->endElementNS(XML_a, XML_schemeClr);
     mpFS->endElementNS(XML_a, XML_solidFill);
 
     return true;
