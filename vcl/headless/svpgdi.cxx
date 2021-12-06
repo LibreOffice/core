@@ -256,7 +256,7 @@ namespace
     {
     private:
         cairo_surface_t* pSurface;
-        std::unordered_map<unsigned long long, cairo_surface_t*> maDownscaled;
+        std::unordered_map<sal_uInt64, cairo_surface_t*> maDownscaled;
 
         SurfaceHelper(const SurfaceHelper&) = delete;
         SurfaceHelper& operator=(const SurfaceHelper&) = delete;
@@ -303,7 +303,10 @@ namespace
             nH  = (1 == nHFactor) ? nTargetHeight : nH * 2;
 
             // check if we have a downscaled version of required size
-            const unsigned long long key((nW * LONG_MAX) + nH);
+            // bail out if the multiplication for the key would overflow
+            if( nW >= SAL_MAX_UINT32 || nH >= SAL_MAX_UINT32 )
+                return pSurface;
+            const sal_uInt64 key((nW * static_cast<sal_uInt64>(SAL_MAX_UINT32)) + nH);
             auto isHit(maDownscaled.find(key));
 
             if(isHit != maDownscaled.end())
