@@ -119,7 +119,8 @@ void FormulaGroupAreaListener::Notify( const SfxHint& rHint )
     }
     else if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScTableOpDirty)
     {
-        notifyCellChange(rHint, static_cast<const ScHint*>(&rHint)->GetAddress());
+        const ScHint& rScHint = static_cast<const ScHint&>(rHint);
+        notifyCellChange(rHint, rScHint.GetStartAddress(), rScHint.GetRowCount());
     }
 }
 
@@ -332,11 +333,11 @@ const ScFormulaCell* FormulaGroupAreaListener::getTopCell() const
     return pp ? *pp : nullptr;
 }
 
-void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScAddress& rPos )
+void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScAddress& rPos, SCROW nNumRows )
 {
     // Determine which formula cells within the group need to be notified of this change.
     std::vector<ScFormulaCell*> aCells;
-    collectFormulaCells(rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Row(), aCells);
+    collectFormulaCells(rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Row() + nNumRows - 1, aCells);
     std::for_each(aCells.begin(), aCells.end(), Notifier(rHint));
 }
 
