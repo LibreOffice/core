@@ -937,11 +937,11 @@ void ScDBData::Notify( const SfxHint& rHint )
         if (aHeaderRange.IsValid())
         {
             mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
-            if (!aHeaderRange.Contains( pScHint->GetAddress()))
-                mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
+            if (!aHeaderRange.Contains( pScHint->GetRange()))
+                mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetRange());
         }
         else
-            mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
+            mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetRange());
     }
 
     // Do not refresh column names here, which might trigger unwanted

@@ -295,7 +295,7 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 
     mbHasErasedArea = false;
 
-    const ScAddress& rAddress = rHint.GetAddress();
+    const ScRange& rRange = rHint.GetRange();
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
             aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
     {
@@ -304,13 +304,13 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
-        if (rAreaRange.Contains( rAddress))
+        if (rAreaRange.Contains( rRange))
         {
             if (pArea->IsGroupListening())
             {
                 if (pBASM->IsInBulkBroadcast())
                 {
-                    pBASM->InsertBulkGroupArea(pArea, rAddress);
+                    pBASM->InsertBulkGroupArea(pArea, rRange);
                 }
                 else
                 {
@@ -808,7 +808,7 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, SfxHintId
 
 bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
 {
-    const ScAddress& rAddress = rHint.GetAddress();
+    const ScAddress& rAddress = rHint.GetStartAddress();
     if ( rAddress == BCA_BRDCST_ALWAYS )
     {
         if ( pBCAlways )
@@ -824,12 +824,24 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
         TableSlotsMap::const_iterator iTab( aTableSlotsMap.find( rAddress.Tab()));
         if (iTab == aTableSlotsMap.end())
             return false;
-        ScBroadcastAreaSlot* pSlot = (*iTab).second->getAreaSlot(
-                ComputeSlotOffset( rAddress));
-        if ( pSlot )
-            return pSlot->AreaBroadcast( rHint );
-        else
-            return false;
+        // Process all slots for the given row range, but it's enough to process
+        // each only once.
+        ScBroadcastAreaSlot* pLastSlot = nullptr;
+        ScAddress address(rAddress);
+        bool wasBroadcast = false;
+        for( SCROW nRow = rAddress.Row(); nRow < rAddress.Row() + rHint.GetRowCount(); ++nRow )
+        {
+            address.SetRow(nRow);
+            ScBroadcastAreaSlot* pSlot = (*iTab).second->getAreaSlot(
+                    ComputeSlotOffset( address));
+            if ( pSlot && pSlot != pLastSlot )
+            {
+                if(pSlot->AreaBroadcast( rHint ))
+                    wasBroadcast = true;
+                pLastSlot = pSlot;
+            }
+        }
+        return wasBroadcast;
     }
 }
 

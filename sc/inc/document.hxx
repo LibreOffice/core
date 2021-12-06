@@ -2622,6 +2622,8 @@ private:
 
     void EndListeningGroups( const std::vector<ScAddress>& rPosArray );
     void SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray );
+
+    bool BroadcastHintInternal( const ScHint &rHint );
 };
 
 typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocumentUniquePtr;

@@ -24,10 +24,14 @@
 class ScHint final : public SfxHint
 {
     ScAddress   aAddress;
+    SCROW       nRowCount;
 
 public:
-    ScHint( SfxHintId n, const ScAddress& a ) : SfxHint(n), aAddress(a) {}
-    const ScAddress&    GetAddress() const { return aAddress; }
+    ScHint( SfxHintId n, const ScAddress& a, SCROW rowCount = 1 ) : SfxHint(n), aAddress(a), nRowCount( rowCount ) {}
+    const ScAddress& GetStartAddress() const { return aAddress; }
+    SCROW GetRowCount() const { return nRowCount; }
+    ScRange GetRange() const
+        { return ScRange(aAddress, ScAddress(aAddress.Col(), aAddress.Row() + nRowCount - 1, aAddress.Tab())); }
     void SetAddressTab(SCTAB nTab) { aAddress.SetTab(nTab); }
     void SetAddressCol(SCCOL nCol) { aAddress.SetCol(nCol); }
     void SetAddressRow(SCROW nRow) { aAddress.SetRow(nRow); }
