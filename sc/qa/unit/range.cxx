@@ -69,14 +69,35 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScRangeTest);
+    CPPUNIT_TEST(testOverlap);
     CPPUNIT_TEST(testRangeParsing);
     CPPUNIT_TEST_SUITE_END();
 
+    void testOverlap();
     void testRangeParsing();
 
 private:
     ScDocShellRef m_xDocShRef;
 };
+
+void ScRangeTest::testOverlap()
+{
+    ScRange aRange1( ScAddress( 0, 0, 0 ), ScAddress( 1, 1, 1 ));
+    CPPUNIT_ASSERT(aRange1.Contains( ScAddress( 0, 0, 0 )));
+    CPPUNIT_ASSERT(aRange1.Contains( ScAddress( 1, 1, 1 )));
+    CPPUNIT_ASSERT(!aRange1.Contains( ScAddress( 2, 1, 1 )));
+    CPPUNIT_ASSERT(!aRange1.Contains( ScAddress( 1, 2, 1 )));
+    CPPUNIT_ASSERT(!aRange1.Contains( ScAddress( 1, 1, 2 )));
+
+    ScRange aRange2( ScAddress( 0, 0, 0 ), ScAddress( 10, 10, 10 ));
+    ScRange aRange3( ScAddress( 5, 5, 5 ), ScAddress( 15, 15, 15 ));
+    CPPUNIT_ASSERT(!aRange2.Contains( aRange3 ));
+    CPPUNIT_ASSERT(!aRange3.Contains( aRange2 ));
+    CPPUNIT_ASSERT(aRange2.Intersects( aRange3 ));
+    CPPUNIT_ASSERT(aRange3.Intersects( aRange2 ));
+    CPPUNIT_ASSERT(!aRange3.Intersects( aRange1 ));
+    CPPUNIT_ASSERT(!aRange1.Intersects( aRange3 ));
+}
 
 void ScRangeTest::testRangeParsing()
 {
