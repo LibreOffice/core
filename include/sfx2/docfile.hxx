@@ -302,8 +302,6 @@ private:
                                             bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
     enum class MessageDlg { LockFileIgnore, LockFileCorrupt };
     bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
-    bool ShowReadOnlyOpenDialog();
-
 };
 
 #endif

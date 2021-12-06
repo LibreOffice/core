@@ -35,12 +35,10 @@ struct DAVRequestEnvironment
     rtl::Reference< DAVAuthListener >     m_xAuthListener;
     DAVRequestHeaders                     m_aRequestHeaders;
 
-DAVRequestEnvironment( const rtl::Reference< DAVAuthListener > & xListener,
+    DAVRequestEnvironment( const rtl::Reference< DAVAuthListener > & xListener,
                        const DAVRequestHeaders & rRequestHeaders)
     : m_xAuthListener( xListener ),
       m_aRequestHeaders( rRequestHeaders ) {}
-
-    DAVRequestEnvironment() {}
 };
 
 } // namespace http_dav_ucp

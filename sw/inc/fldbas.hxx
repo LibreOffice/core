@@ -273,7 +273,6 @@ public:
 
     SwFieldIds              Which() const { return m_nWhich; }
 
-    void UpdateFields() const;
     void PrintHiddenPara();
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     SwFormatField* FindFormatForField(const SwField*) const;

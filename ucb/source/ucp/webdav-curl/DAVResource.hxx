@@ -41,9 +41,6 @@ struct DAVResource
 {
     OUString uri;
     std::vector< DAVPropertyValue > properties;
-
-    DAVResource() {}
-    explicit DAVResource( const OUString & inUri ) : uri( inUri ) {}
 };
 
 struct DAVResourceInfo

@@ -291,11 +291,6 @@ tools::Rectangle ScCheckListMenuControl::GetSubMenuParentRect()
     return mxMenu->get_row_area(*mxScratchIter);
 }
 
-sal_Int32 ScCheckListMenuControl::ExecuteMenu(weld::Menu& rMenu)
-{
-    return rMenu.popup_at_rect(mxMenu.get(), GetSubMenuParentRect(), weld::Placement::End).toInt32();
-}
-
 void ScCheckListMenuControl::launchSubMenu()
 {
     ScListSubMenuControl* pSubMenu = maOpenTimer.mpSubMenu;
@@ -341,11 +336,6 @@ void ScCheckListMenuControl::endSubMenu(ScListSubMenuControl& rSubMenu)
         mnSelectedMenu = nMenuPos;
         mxMenu->select(mnSelectedMenu);
     }
-}
-
-void ScCheckListMenuControl::resizeToFitMenuItems()
-{
-    mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height() + 2);
 }
 
 void ScCheckListMenuControl::selectMenuItem(size_t nPos, bool bSubMenuTimer)

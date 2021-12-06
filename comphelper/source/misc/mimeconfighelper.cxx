@@ -114,12 +114,6 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
 }
 
 
-uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurationByPath( const OUString& aPath )
-{
-    std::unique_lock aGuard( m_aMutex );
-    return GetConfigurationByPathImpl(aPath);
-}
-
 uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurationByPathImpl( const OUString& aPath )
 {
     uno::Reference< container::XNameAccess > xConfig;

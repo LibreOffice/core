@@ -442,14 +442,6 @@ namespace SwWW8
             return r1.compareToIgnoreAsciiCase(r2)<0;
         }
     };
-
-    struct ltnode
-    {
-        bool operator()(const SwTextNode *r1, const SwTextNode *r2) const
-        {
-            return r1->GetIndex() < r2->GetIndex();
-        }
-    };
 };
 
 class SwWW8ReferencedFltEndStack : public SwFltEndStack

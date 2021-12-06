@@ -104,11 +104,6 @@ SerfLockStore::~SerfLockStore()
     }
 }
 
-bool SerfLockStore::finishing() const
-{
-    return m_bFinishing;
-}
-
 void SerfLockStore::startTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -190,25 +185,6 @@ void SerfLockStore::addLock( const OUString& rURI,
         = LockInfo(sToken, rLock, xSession, nLastChanceToSendRefreshRequest);
 
     startTicker();
-}
-
-
-void SerfLockStore::updateLock( const OUString& rURI,
-                                sal_Int32 nLastChanceToSendRefreshRequest )
-{
-    assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
-
-    osl::MutexGuard aGuard( m_aMutex );
-
-    LockInfoMap::iterator const it(m_aLockInfoMap.find(rURI));
-    SAL_WARN_IF( it == m_aLockInfoMap.end(), "ucb.ucp.webdav",
-                "SerfLockStore::updateLock: lock not found!" );
-
-    if ( it != m_aLockInfoMap.end() )
-    {
-        (*it).second.m_nLastChanceToSendRefreshRequest
-            = nLastChanceToSendRefreshRequest;
-    }
 }
 
 
