@@ -56,9 +56,9 @@ public:
     {
         // Don't test the first import of these, for some reason those tests fail
         const char* aDenylist[] = {
-            "math-eqarray.rtf",         "math-escaping.rtf", "math-lim.rtf",
-            "math-mso2007.rtf",         "math-nary.rtf",     "math-rad.rtf",
-            "math-vertical-stacks.rtf", "math-runs.rtf",
+            "math-escaping.rtf", "math-lim.rtf", "math-mso2007.rtf",
+            "math-nary.rtf",     "math-rad.rtf", "math-vertical-stacks.rtf",
+            "math-runs.rtf",
         };
         std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
 
@@ -209,8 +209,9 @@ DECLARE_RTFEXPORT_TEST(testMathAccents, "math-accents.rtf")
         aActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testMathEqarray, "math-eqarray.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathEqarray)
 {
+    loadAndReload("math-eqarray.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(
         OUString("y = left lbrace stack { 0 , x < 0 # 1 , x = 0 # {x} ^ {2} , x > 0 } right none"),
