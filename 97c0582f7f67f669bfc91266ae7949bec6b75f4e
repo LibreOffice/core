@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3efa056f_dea3ac4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-07T07:12:45Z",
+      "side": 1,
+      "message": "related to my looking into preferring LastRU function names for tdf#92010.\n\nThe autolookup stuff is SUPPOSED to be prioritized as Standard, Names(ranges), DbNames, Headers(rows/column names). But they are all categorized as Standard because of this wrong use of the CTOR that I am fixing. So someone could complain about workflow being changed if they prefer the buggy behaviour.\n\nThis will also affect validation - where values were never considered values, but just as standard strings. Not sure what impact this has, since I don\u0027t know much about validation.",
+      "revId": "97c0582f7f67f669bfc91266ae7949bec6b75f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
