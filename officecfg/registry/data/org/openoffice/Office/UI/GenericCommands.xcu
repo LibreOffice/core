@@ -1658,7 +1658,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:FindText" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Find Text</value>
+          <value xml:lang="en-US">Find Values</value>
         </prop>
       </node>
       <node oor:name=".uno:DownSearch" oor:op="replace">
