@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0836b55_47cd2345",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-07T10:37:43Z",
+      "side": 1,
+      "message": "Thanks Lubos, a big nasty there \u003d)",
+      "revId": "a72b60b5e8c32b6ab13a4e8263762c7ee70d38e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
