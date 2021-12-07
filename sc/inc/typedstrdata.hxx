@@ -17,11 +17,12 @@ class ScTypedStrData
 {
 public:
     enum StringType {
-        Value    = 0,
-        Standard = 1,
-        Name     = 2,
-        DbName   = 3,
-        Header   = 4
+        Value,
+        MRU,
+        Standard,
+        Name,
+        DbName,
+        Header
     };
 
     ScTypedStrData( const OUString& rStr, double fVal = 0.0, double fRVal = 0.0, StringType eType = Standard,
