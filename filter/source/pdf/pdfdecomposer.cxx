@@ -13,6 +13,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>
@@ -89,8 +90,11 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
         0));
 
     // create primitive
-    return { new drawinglayer::primitive2d::BitmapPrimitive2D(
-        VCLUnoHelper::CreateVCLXBitmap(aReplacement), aBitmapTransform) };
+    return drawinglayer::primitive2d::Primitive2DContainer{
+        new drawinglayer::primitive2d::BitmapPrimitive2D(
+            VCLUnoHelper::CreateVCLXBitmap(aReplacement), aBitmapTransform)
+    }
+        .toSequence();
 }
 
 OUString SAL_CALL XPdfDecomposer::getImplementationName()

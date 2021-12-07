@@ -20,7 +20,7 @@
 #pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
@@ -39,7 +39,7 @@ namespace drawinglayer::primitive2d
         {
         private:
             const TextSimplePortionPrimitive2D&     mrSource;
-            Primitive2DContainer                       mxResult;
+            Primitive2DContainer                    mxResult;
             TextLayouterDevice                      maTextLayouter;
             basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose maDecTrans;
 

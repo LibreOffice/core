@@ -80,6 +80,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 

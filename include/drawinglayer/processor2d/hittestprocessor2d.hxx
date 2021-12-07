@@ -21,7 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_HITTESTPROCESSOR2D_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 namespace basegfx { class B2DPolygon; }

@@ -21,6 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 
@@ -70,6 +71,9 @@ public:
         : deque(first, last)
     {
     }
+    Primitive2DContainer(
+        const css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>&);
+    Primitive2DContainer(const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>&);
 
     virtual void visit(const Primitive2DReference& rSource) override { append(rSource); }
     virtual void visit(const Primitive2DContainer& rSource) override { append(rSource); }
@@ -93,6 +97,8 @@ public:
     bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
     basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
     Primitive2DContainer maybeInvert(bool bInvert = false) const;
+
+    css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> toSequence() const;
 };
 
 } // end of namespace drawinglayer::primitive2d

@@ -26,8 +26,6 @@ namespace drawinglayer::primitive2d
 {
         void DiscreteMetricDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::unique_lock aGuard( m_aMutex );
-
             // get the current DiscreteUnit, look at X and Y and use the maximum
             const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
             const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
@@ -45,7 +43,6 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
@@ -54,8 +51,6 @@ namespace drawinglayer::primitive2d
 
         void ViewportDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::unique_lock aGuard( m_aMutex );
-
             // get the current Viewport
             const basegfx::B2DRange& rViewport = rViewInformation.getViewport();
 
@@ -72,14 +67,11 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
         void ViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::unique_lock aGuard( m_aMutex );
-
             // get the current ViewTransformation
             const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
 
@@ -96,14 +88,11 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
         void ObjectAndViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::unique_lock aGuard( m_aMutex );
-
             // get the current ViewTransformation
             const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
 
@@ -130,7 +119,6 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
