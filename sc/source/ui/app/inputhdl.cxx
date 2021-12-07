@@ -1039,6 +1039,29 @@ void ScInputHandler::GetFormulaData()
             pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
         }
     }
+
+    // Increase suggestion priority of MRU formulas
+    const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
+    const sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
+    const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
+    for (sal_uInt16 i = 0; i < nMRUCount; i++)
+    {
+        const sal_uInt16 nId = pMRUList[i];
+        for (sal_uInt32 j = 0; j < nListCount; j++)
+        {
+            const ScFuncDesc* pDesc = pFuncList->GetFunction(j);
+            if (pDesc->nFIndex == nId && pDesc->mxFuncName)
+            {
+                const OUString aEntry = *pDesc->mxFuncName + aParenthesesReplacement;;
+                const ScTypedStrData aData(aEntry, 0.0, 0.0, ScTypedStrData::Standard);
+                auto it = pFormulaData->find(aData);
+                if (it != pFormulaData->end())
+                    pFormulaData->erase(it);
+                pFormulaData->insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::MRU));
+                break; // Stop searching
+            }
+        }
+    }
     miAutoPosFormula = pFormulaData->end();
     rDoc.GetFormulaEntries( *pFormulaData );
     rDoc.GetFormulaEntries( *pFormulaDataPara );
