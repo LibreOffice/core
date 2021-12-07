@@ -21,28 +21,8 @@
     <allowlist>
     </allowlist>
     <denylist>
-        <entry os="all" vendor="intel" compare="less" version="10.18.14.4264">
-            <device id="all"/>
-        </entry>
-        <entry os="7" vendor="intel">
-            <device id="all"/>
-        </entry>
-        <entry os="8" vendor="intel" compare="equal" version="10.18.10.3308"><!-- Intel(R) HD Graphics 4000 -->
-            <device id="0x0166"/>
-        </entry>
+        <!-- tdf#125516: crash on preview of slide transitions, or in slideshow, when OpenGL rendering enabled Windows 10, with Intel DCH packaged driver -->
         <entry os="10" vendor="intel" compare="between_inclusive_start" minVersion="26.20.100.6861" maxVersion="26.20.100.7584"><!-- tdf#125516 -->
-            <device id="all"/>
-        </entry>
-        <entry os="all" vendor="amd" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
-            <device id="all"/>
-        </entry>
-        <entry os="all" vendor="nvidia" compare="less" version="10.18.13.5362"> <!-- 353.62 -->
-            <device id="all"/>
-        </entry>
-        <entry os="10" vendor="nvidia"> <!-- tdf#128441 -->
-            <device id="0x2182"/>
-        </entry>
-        <entry os="all" vendor="microsoft" compare="less" version="6.2.0.0"> <!-- 6.2.0.0 -->
             <device id="all"/>
         </entry>
     </denylist>
