@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81e9f867_89354c21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-07T21:08:14Z",
+      "side": 1,
+      "message": "probably wanted 7-2 here, not 6-2 ?",
+      "revId": "078a701ecf6622fca8a7e507ba4fc8c7c9b6c6f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
