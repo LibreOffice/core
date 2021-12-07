@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce63f2fb_0dda76ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-07T12:27:10Z",
+      "side": 1,
+      "message": "Hi Xisco,\nSo, i have debugged the test with VS and i found the following:\nI have tried many variations, testing with different selecting methods with various shells (I think the drawsh is the most acceptable for in this case) but the simplest and the best is this version (yes, the original one :) ), because all of them works, not the really same but can do the rest. I think there is no problem at all with the test, however there are strange problems with the command dispatcher: In the first case (patch-set #1 ) if i remember well, on Jenkins, there was an assert because selection was bad. (suspicious, there the dispatcher has the problem too.) But in the other cases the main problem, that assert where the textbox state is checked. So, when i debugged the test there were everything right until the line \".uno:AddTextBox\" dispatcher call reached.  There behind the dispatcher call after about 4 step in the call stack when the command parsed there is a slotId ( like there https://wiki.documentfoundation.org/Development/DispatchCommands ) what is the equivalent of the TextBoxAdding call. And, there is a method which should find the shell and the function what have to be executed with this slot. In this method there is a list/stack i don\u0027t remember well, but never mind in this case i think, so there is a container with the running shells. But, by a mysterious reason the draw-shell does not be there always, i do not know what it depends but sometimes it missing. Maybe due to this, the method gives back nothing (could not find the shell and the execution method), and the command ignored, and that leads to fail. So i think -- to summarise it -- we should keep the python version of this test, or we have to bypass the dispatcher i this case and call the functions directly... Or, i have no idea what determinates the dispatcher to be able to find the needed method (in this case SwTextBoxHelper::create in the drawsh) Sorry for writing so long... :)\nWhat is your opinion?\n ",
+      "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "569b426c_4947387d",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-12-06T12:49:56Z",
       "side": 1,
       "message": "In this case, according to the log, on that two platform, the test failed here. For some misty reason the selection is unsuccessful. maybe if the selection is made by the SwFEShell::SelectObj(SdrObj*) that might be work. If you don\u0027t mind i give it a try. :)",
+      "range": {
+        "startLine": 1210,
+        "startChar": 4,
+        "endLine": 1210,
+        "endChar": 75
+      },
+      "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4e75b2b_1734f9e4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-07T12:27:10Z",
+      "side": 1,
+      "message": "Update: forget about this. I am afraid i find the main problem...",
+      "parentUuid": "569b426c_4947387d",
       "range": {
         "startLine": 1210,
         "startChar": 4,
