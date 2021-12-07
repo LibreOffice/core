@@ -417,6 +417,7 @@
           <menu:menuitem menu:id=".uno:ColorSettings"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:GrafAttrCrop"/>
+          <menu:menuitem menu:id=".uno:GraphicSizeCheck"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
