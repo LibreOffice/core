@@ -45,6 +45,7 @@
 #include <tools/zcodec.hxx>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 #include "svgfilter.hxx"
@@ -258,15 +259,10 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 
                     for(const auto& rCandidate : aContainer)
                     {
-                        if(rCandidate.is())
+                        if(rCandidate && PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != rCandidate->getPrimitive2DID())
                         {
-                            auto pBasePrimitive = static_cast< const drawinglayer::primitive2d::BasePrimitive2D* >(rCandidate.get());
-
-                            if(PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != pBasePrimitive->getPrimitive2DID())
-                            {
-                                bAllAreHiddenGeometry = false;
-                                break;
-                            }
+                            bAllAreHiddenGeometry = false;
+                            break;
                         }
                     }
 

@@ -53,16 +53,13 @@ namespace drawinglayer::primitive2d
             getChildren(rVisitor);
         }
 
-        sal_Int64 SAL_CALL GroupPrimitive2D::estimateUsage()
+        sal_Int64 GroupPrimitive2D::estimateUsage()
         {
             size_t nRet(0);
             for (auto& it : getChildren())
             {
-                uno::Reference<util::XAccounting> const xAcc(it, uno::UNO_QUERY);
-                if (xAcc.is())
-                {
-                    nRet += xAcc->estimateUsage();
-                }
+                if (it)
+                    nRet += it->estimateUsage();
             }
             return nRet;
         }

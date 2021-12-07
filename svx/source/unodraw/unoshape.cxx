@@ -80,6 +80,7 @@
 #include <svx/lathe3d.hxx>
 #include <extrud3d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <drawinglayer/converters.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
@@ -748,8 +749,8 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
                 }
 
                 const BitmapEx aBmp(
-                    convertPrimitive2DSequenceToBitmapEx(
-                        xPrimitives,
+                    drawinglayer::convertPrimitive2DContainerToBitmapEx(
+                        std::move(xPrimitives),
                         aRange));
 
                 Graphic aGraph(aBmp);
