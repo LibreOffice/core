@@ -634,8 +634,8 @@ public:
 class AutoFilterColorPopupStartAction : public AutoFilterSubMenuAction
 {
 public:
-    AutoFilterColorPopupStartAction(ScGridWindow* p, ScListSubMenuControl* pSubMenu, ScGridWindow::AutoFilterMode eMode)
-        : AutoFilterSubMenuAction(p, pSubMenu, eMode)
+    AutoFilterColorPopupStartAction(ScGridWindow* p, ScListSubMenuControl* pSubMenu)
+        : AutoFilterSubMenuAction(p, pSubMenu, ScGridWindow::AutoFilterMode::None)
     {
     }
 
@@ -660,10 +660,6 @@ public:
 
         m_pSubMenu->clearMenuItems();
 
-        std::set<Color> aColors = meMode == ScGridWindow::AutoFilterMode::TextColor
-                                      ? aFilterEntries.getTextColors()
-                                      : aFilterEntries.getBackgroundColors();
-
         XColorListRef xUserColorList;
 
         OUString aPaletteName(officecfg::Office::Common::UserColors::PaletteName::get());
@@ -687,76 +683,86 @@ public:
         pDBData->GetQueryParam(aParam);
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
 
-        for (auto& rColor : aColors)
+        int nMenu = 0;
+        for (auto eMode : {ScGridWindow::AutoFilterMode::BackgroundColor, ScGridWindow::AutoFilterMode::TextColor})
         {
-            bool bActive = false;
+            std::set<Color> aColors = eMode == ScGridWindow::AutoFilterMode::TextColor
+                                          ? aFilterEntries.getTextColors()
+                                          : aFilterEntries.getBackgroundColors();
 
-            if (pEntry)
+            for (auto& rColor : aColors)
             {
-                auto aItem = pEntry->GetQueryItem();
-                if (aItem.maColor == rColor
-                    && ((meMode == ScGridWindow::AutoFilterMode::TextColor
-                         && aItem.meType == ScQueryEntry::ByTextColor)
-                        || (meMode == ScGridWindow::AutoFilterMode::BackgroundColor
-                            && aItem.meType == ScQueryEntry::ByBackgroundColor)))
+                bool bActive = false;
+
+                if (pEntry)
                 {
-                    bActive = true;
-                }
-            }
-
-            const bool bAutoColor = rColor == COL_AUTO;
-
-            // ColorListBox::ShowPreview is similar
-            ScopedVclPtr<VirtualDevice> xDev(m_pSubMenu->create_virtual_device());
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-            Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
-            xDev->SetOutputSize(aImageSize);
-            const tools::Rectangle aRect(Point(0, 0), aImageSize);
-
-            if (bAutoColor)
-            {
-                const Color aW(COL_WHITE);
-                const Color aG(0xef, 0xef, 0xef);
-                int nMinDim = std::min(aImageSize.Width(), aImageSize.Height()) + 1;
-                int nCheckSize = nMinDim / 3;
-                xDev->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), std::min(nCheckSize, 8), aW, aG);
-                xDev->SetFillColor();
-            }
-            else
-                xDev->SetFillColor(rColor);
-
-            xDev->SetLineColor(rStyleSettings.GetDisableColor());
-            xDev->DrawRect(aRect);
-
-            if (bAutoColor)
-            {
-                OUString sText = meMode == ScGridWindow::AutoFilterMode::TextColor
-                                     ? ScResId(SCSTR_FILTER_AUTOMATIC_COLOR)
-                                     : ScResId(SCSTR_FILTER_NO_FILL);
-                m_pSubMenu->addMenuCheckItem(sText, bActive, *xDev,
-                                             new AutoFilterColorAction(mpWindow, m_pSubMenu, meMode, rColor));
-            }
-            else
-            {
-                OUString sName;
-
-                bool bFoundColorName = false;
-                if (xUserColorList)
-                {
-                    sal_Int32 nPos = xUserColorList->GetIndexOfColor(rColor);
-                    if (nPos != -1)
+                    auto aItem = pEntry->GetQueryItem();
+                    if (aItem.maColor == rColor
+                        && ((eMode == ScGridWindow::AutoFilterMode::TextColor
+                             && aItem.meType == ScQueryEntry::ByTextColor)
+                            || (eMode == ScGridWindow::AutoFilterMode::BackgroundColor
+                                && aItem.meType == ScQueryEntry::ByBackgroundColor)))
                     {
-                        XColorEntry* pColorEntry = xUserColorList->GetColor(nPos);
-                        sName = pColorEntry->GetName();
-                        bFoundColorName = true;
+                        bActive = true;
                     }
                 }
-                if (!bFoundColorName)
-                    sName = "#" + rColor.AsRGBHexString().toAsciiUpperCase();
 
-                m_pSubMenu->addMenuCheckItem(sName, bActive, *xDev,
-                                             new AutoFilterColorAction(mpWindow, m_pSubMenu, meMode, rColor));
+                const bool bAutoColor = rColor == COL_AUTO;
+
+                // ColorListBox::ShowPreview is similar
+                ScopedVclPtr<VirtualDevice> xDev(m_pSubMenu->create_virtual_device());
+                const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+                xDev->SetOutputSize(aImageSize);
+                const tools::Rectangle aRect(Point(0, 0), aImageSize);
+
+                if (bAutoColor)
+                {
+                    const Color aW(COL_WHITE);
+                    const Color aG(0xef, 0xef, 0xef);
+                    int nMinDim = std::min(aImageSize.Width(), aImageSize.Height()) + 1;
+                    int nCheckSize = nMinDim / 3;
+                    xDev->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), std::min(nCheckSize, 8), aW, aG);
+                    xDev->SetFillColor();
+                }
+                else
+                    xDev->SetFillColor(rColor);
+
+                xDev->SetLineColor(rStyleSettings.GetDisableColor());
+                xDev->DrawRect(aRect);
+
+                if (bAutoColor)
+                {
+                    OUString sText = eMode == ScGridWindow::AutoFilterMode::TextColor
+                                         ? ScResId(SCSTR_FILTER_AUTOMATIC_COLOR)
+                                         : ScResId(SCSTR_FILTER_NO_FILL);
+                    m_pSubMenu->addMenuColorItem(sText, bActive, *xDev, nMenu,
+                                                 new AutoFilterColorAction(mpWindow, m_pSubMenu, eMode, rColor));
+                }
+                else
+                {
+                    OUString sName;
+
+                    bool bFoundColorName = false;
+                    if (xUserColorList)
+                    {
+                        sal_Int32 nPos = xUserColorList->GetIndexOfColor(rColor);
+                        if (nPos != -1)
+                        {
+                            XColorEntry* pColorEntry = xUserColorList->GetColor(nPos);
+                            sName = pColorEntry->GetName();
+                            bFoundColorName = true;
+                        }
+                    }
+                    if (!bFoundColorName)
+                        sName = "#" + rColor.AsRGBHexString().toAsciiUpperCase();
+
+                    m_pSubMenu->addMenuColorItem(sName, bActive, *xDev, nMenu,
+                                                 new AutoFilterColorAction(mpWindow, m_pSubMenu, eMode, rColor));
+                }
             }
+
+            ++nMenu;
         }
 
         m_pSubMenu->resizeToFitMenuItems();
@@ -977,11 +983,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
     mpAutoFilterPopup->addSeparator();
-    if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_TEXT_COLOR), true, true))
-        pSubMenu->setPopupStartAction(new AutoFilterColorPopupStartAction(this, pSubMenu, AutoFilterMode::TextColor));
-    if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_BACKGROUND_COLOR), true, true))
-        pSubMenu->setPopupStartAction(new AutoFilterColorPopupStartAction(this, pSubMenu, AutoFilterMode::BackgroundColor));
-    mpAutoFilterPopup->addSeparator();
+    if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_COLOR), true, true))
+        pSubMenu->setPopupStartAction(new AutoFilterColorPopupStartAction(this, pSubMenu));
     mpAutoFilterPopup->addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
     if (aEntries.size())
