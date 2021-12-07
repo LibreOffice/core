@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0f6497_d6c015a5",
+        "filename": "xmloff/source/text/txtparaimphint.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1003487
+      },
+      "writtenOn": "2021-12-07T14:02:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7525f9d2_8c0d736b",
+      "revId": "990a1fa72390538217cce594821f52e658dc8b15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2aceaaa7_b46956a7",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-07T12:47:04Z",
       "side": 1,
       "message": "I think it would be better to define this variable as XMLHintType to avoid additional casts.",
+      "revId": "990a1fa72390538217cce594821f52e658dc8b15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d6ddecd_4c48b42c",
+        "filename": "xmloff/source/text/txtparaimphint.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1003487
+      },
+      "writtenOn": "2021-12-07T14:02:46Z",
+      "side": 1,
+      "message": "I just noticed that comments link to a specific line of code (as you commented earlier). Done",
+      "parentUuid": "2aceaaa7_b46956a7",
       "revId": "990a1fa72390538217cce594821f52e658dc8b15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
