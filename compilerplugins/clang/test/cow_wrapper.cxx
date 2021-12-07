@@ -9,6 +9,7 @@
 
 #include "config_clang.h"
 #include "o3tl/cow_wrapper.hxx"
+#include <utility>
 
 struct ImplBitmapPalette
 {
@@ -26,6 +27,16 @@ struct BitmapPalette
     {
         // no error expected
         mpImpl->foo();
+    }
+    void foo3()
+    {
+        // expected-error@+1 {{calling const method on o3tl::cow_wrapper impl class via non-const pointer, rather use std::as_const to prevent triggering an unnecessary copy [loplugin:cow_wrapper]}}
+        (*mpImpl).foo();
+    }
+    void foo4()
+    {
+        // expected-error@+1 {{calling const method on o3tl::cow_wrapper impl class via non-const pointer, rather use std::as_const to prevent triggering an unnecessary copy [loplugin:cow_wrapper]}}
+        std::as_const(*mpImpl).foo();
     }
     o3tl::cow_wrapper<ImplBitmapPalette> mpImpl;
 };
