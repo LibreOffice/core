@@ -179,12 +179,12 @@ void ScCheckListMenuControl::CreateDropDown()
                          DrawSymbolFlags::NONE);
 }
 
-ScListSubMenuControl* ScCheckListMenuControl::addSubMenuItem(const OUString& rText, bool bEnabled, bool bCheckList)
+ScListSubMenuControl* ScCheckListMenuControl::addSubMenuItem(const OUString& rText, bool bEnabled, bool bColorMenu)
 {
     MenuItemData aItem;
     aItem.mbEnabled = bEnabled;
 
-    aItem.mxSubMenuWin.reset(new ScListSubMenuControl(mxMenu.get(), *this, bCheckList, mpNotifier));
+    aItem.mxSubMenuWin.reset(new ScListSubMenuControl(mxMenu.get(), *this, bColorMenu, mpNotifier));
     maMenuItems.emplace_back(std::move(aItem));
 
     mxMenu->show();
@@ -1437,24 +1437,44 @@ int ScCheckListMenuControl::IncreaseWindowWidthToFitText(int nMaxTextWidth)
     return mnCheckWidthReq + nBorder;
 }
 
-ScListSubMenuControl::ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bCheckList, vcl::ILibreOfficeKitNotifier* pNotifier)
+ScListSubMenuControl::ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bColorMenu, vcl::ILibreOfficeKitNotifier* pNotifier)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/filtersubdropdown.ui"))
     , mxPopover(mxBuilder->weld_popover("FilterSubDropDown"))
     , mxContainer(mxBuilder->weld_container("container"))
     , mxMenu(mxBuilder->weld_tree_view("menu"))
+    , mxBackColorMenu(mxBuilder->weld_tree_view("background"))
+    , mxTextColorMenu(mxBuilder->weld_tree_view("textcolor"))
     , mxScratchIter(mxMenu->make_iterator())
     , mrParentControl(rParentControl)
     , mpNotifier(pNotifier)
+    , mbColorMenu(bColorMenu)
 {
-    if (bCheckList)
-    {
-        mxMenu->set_clicks_to_toggle(1);
-        mxMenu->enable_toggle_buttons(weld::ColumnToggleType::Radio);
-    }
+    mxMenu->hide();
+    mxBackColorMenu->hide();
+    mxTextColorMenu->hide();
 
-    mxMenu->connect_row_activated(LINK(this, ScListSubMenuControl, RowActivatedHdl));
-    mxMenu->connect_toggled(LINK(this, ScListSubMenuControl, CheckToggledHdl));
-    mxMenu->connect_key_press(LINK(this, ScListSubMenuControl, MenuKeyInputHdl));
+    if (!bColorMenu)
+    {
+        SetupMenu(*mxMenu);
+        mxMenu->show();
+    }
+    else
+    {
+        mxBackColorMenu->set_clicks_to_toggle(1);
+        mxBackColorMenu->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+        mxBackColorMenu->connect_changed(LINK(this, ScListSubMenuControl, ColorSelChangedHdl));
+        mxTextColorMenu->set_clicks_to_toggle(1);
+        mxTextColorMenu->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+        mxTextColorMenu->connect_changed(LINK(this, ScListSubMenuControl, ColorSelChangedHdl));
+        SetupMenu(*mxBackColorMenu);
+        SetupMenu(*mxTextColorMenu);
+    }
+}
+
+void ScListSubMenuControl::SetupMenu(weld::TreeView& rMenu)
+{
+    rMenu.connect_row_activated(LINK(this, ScListSubMenuControl, RowActivatedHdl));
+    rMenu.connect_key_press(LINK(this, ScListSubMenuControl, MenuKeyInputHdl));
 }
 
 void ScListSubMenuControl::StartPopupMode(weld::Widget* pParent, const tools::Rectangle& rRect)
@@ -1464,8 +1484,9 @@ void ScListSubMenuControl::StartPopupMode(weld::Widget* pParent, const tools::Re
 
     mxPopover->popup_at_rect(pParent, rRect, weld::Placement::End);
 
-    mxMenu->set_cursor(0);
-    mxMenu->select(0);
+    weld::TreeView& rFirstMenu = mbColorMenu ? *mxBackColorMenu : *mxMenu;
+    rFirstMenu.set_cursor(0);
+    rFirstMenu.select(0);
 
     mrParentControl.setSubMenuFocused(this);
 }
@@ -1477,7 +1498,8 @@ void ScListSubMenuControl::EndPopupMode()
 
 void ScListSubMenuControl::GrabFocus()
 {
-    mxMenu->grab_focus();
+    weld::TreeView& rFirstMenu = mbColorMenu ? *mxBackColorMenu : *mxMenu;
+    rFirstMenu.grab_focus();
 }
 
 bool ScListSubMenuControl::IsVisible() const
@@ -1487,7 +1509,13 @@ bool ScListSubMenuControl::IsVisible() const
 
 void ScListSubMenuControl::resizeToFitMenuItems()
 {
-    mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height() + 2);
+    if (!mbColorMenu)
+        mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height());
+    else
+    {
+        mxBackColorMenu->set_size_request(-1, mxBackColorMenu->get_preferred_size().Height());
+        mxTextColorMenu->set_size_request(-1, mxTextColorMenu->get_preferred_size().Height());
+    }
 }
 
 void ScListSubMenuControl::addItem(ScCheckListMenuControl::Action* pAction)
@@ -1501,20 +1529,29 @@ void ScListSubMenuControl::addItem(ScCheckListMenuControl::Action* pAction)
 void ScListSubMenuControl::addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction)
 {
     addItem(pAction);
-    mxMenu->append_text(rText);
+    mxMenu->append(OUString::number(reinterpret_cast<sal_Int64>(pAction)), rText);
 }
 
-void ScListSubMenuControl::addMenuCheckItem(const OUString& rText, bool bActive, VirtualDevice& rImage, ScCheckListMenuControl::Action* pAction)
+void ScListSubMenuControl::addMenuColorItem(const OUString& rText, bool bActive, VirtualDevice& rImage,
+                                            int nMenu, ScCheckListMenuControl::Action* pAction)
 {
     addItem(pAction);
-    mxMenu->insert(nullptr, -1, &rText, nullptr, nullptr, &rImage, false, mxScratchIter.get());
-    mxMenu->set_toggle(*mxScratchIter, bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
+
+    weld::TreeView& rColorMenu = nMenu == 0 ? *mxBackColorMenu : *mxTextColorMenu;
+    rColorMenu.show();
+
+    OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pAction));
+    rColorMenu.insert(nullptr, -1, &rText, &sId, nullptr, nullptr, false, mxScratchIter.get());
+    rColorMenu.set_toggle(*mxScratchIter, bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
+    rColorMenu.set_image(*mxScratchIter, rImage);
 }
 
 void ScListSubMenuControl::clearMenuItems()
 {
     maMenuItems.clear();
     mxMenu->clear();
+    mxBackColorMenu->clear();
+    mxTextColorMenu->clear();
 }
 
 IMPL_LINK(ScListSubMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
@@ -1534,8 +1571,39 @@ IMPL_LINK(ScListSubMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
         case KEY_SPACE:
         case KEY_RETURN:
         {
+            weld::TreeView& rMenu = !mbColorMenu ? *mxMenu :
+                                    (mxBackColorMenu->has_focus() ? *mxBackColorMenu : *mxTextColorMenu);
             // don't toggle checkbutton, go straight to activating entry
-            bConsumed = RowActivatedHdl(*mxMenu);
+            bConsumed = RowActivatedHdl(rMenu);
+            break;
+        }
+        case KEY_DOWN:
+        {
+            if (mxTextColorMenu->get_visible() &&
+                mxBackColorMenu->has_focus() &&
+                mxBackColorMenu->get_selected_index() == mxBackColorMenu->n_children() - 1)
+            {
+                mxBackColorMenu->unselect_all();
+                mxTextColorMenu->select(0);
+                mxTextColorMenu->set_cursor(0);
+                mxTextColorMenu->grab_focus();
+                bConsumed = true;
+            }
+            break;
+        }
+        case KEY_UP:
+        {
+            if (mxBackColorMenu->get_visible() &&
+                mxTextColorMenu->has_focus() &&
+                mxTextColorMenu->get_selected_index() == 0)
+            {
+                mxTextColorMenu->unselect_all();
+                int nIndex = mxBackColorMenu->n_children() - 1;
+                mxBackColorMenu->select(nIndex);
+                mxBackColorMenu->set_cursor(nIndex);
+                mxBackColorMenu->grab_focus();
+                bConsumed = true;
+            }
             break;
         }
     }
@@ -1543,32 +1611,30 @@ IMPL_LINK(ScListSubMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
     return bConsumed;
 }
 
-IMPL_LINK_NOARG(ScListSubMenuControl, RowActivatedHdl, weld::TreeView&, bool)
+IMPL_LINK(ScListSubMenuControl, ColorSelChangedHdl, weld::TreeView&, rMenu, void)
 {
-    executeMenuItem(mxMenu->get_selected_index());
+    if (rMenu.get_selected_index() == -1)
+        return;
+    if (&rMenu != mxTextColorMenu.get())
+        mxTextColorMenu->unselect_all();
+    else
+        mxBackColorMenu->unselect_all();
+    rMenu.grab_focus();
+}
+
+IMPL_LINK(ScListSubMenuControl, RowActivatedHdl, weld::TreeView&, rMenu, bool)
+{
+    executeMenuItem(reinterpret_cast<ScCheckListMenuControl::Action*>(rMenu.get_selected_id().toInt64()));
     return true;
 }
 
-IMPL_LINK(ScListSubMenuControl, CheckToggledHdl, const weld::TreeView::iter_col&, rRowCol, void)
+void ScListSubMenuControl::executeMenuItem(ScCheckListMenuControl::Action* pAction)
 {
-    mxMenu->all_foreach([this, &rRowCol](weld::TreeIter& rEntry){
-        bool bToggledEntry = mxMenu->iter_compare(rEntry, rRowCol.first) == 0;
-        if (!bToggledEntry)
-            mxMenu->set_toggle(rEntry, TRISTATE_FALSE);
-        return false;
-    });
-}
-
-void ScListSubMenuControl::executeMenuItem(size_t nPos)
-{
-    if (nPos >= maMenuItems.size())
+    // if no action is defined.
+    if (!pAction)
         return;
 
-    if (!maMenuItems[nPos].mxAction)
-        // no action is defined.
-        return;
-
-    const bool bClosePopup = maMenuItems[nPos].mxAction->execute();
+    const bool bClosePopup = pAction->execute();
     if (bClosePopup)
         terminateAllPopupMenus();
 }

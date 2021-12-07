@@ -6,8 +6,40 @@
     <columns>
       <!-- column-name check1 -->
       <column type="gboolean"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text1 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text1 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore3">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
       <!-- column-name text1 -->
       <column type="gchararray"/>
       <!-- column-name id -->
@@ -38,7 +70,6 @@
             <property name="vexpand">True</property>
             <property name="hscrollbar-policy">never</property>
             <property name="vscrollbar-policy">never</property>
-            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="menu">
                 <property name="visible">True</property>
@@ -64,20 +95,12 @@
                         <attribute name="active">0</attribute>
                       </attributes>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf"/>
                       <attributes>
-                        <attribute name="surface">1</attribute>
+                        <attribute name="pixbuf">1</attribute>
                       </attributes>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext"/>
                       <attributes>
@@ -93,6 +116,118 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="vexpand">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">never</property>
+            <child>
+              <object class="GtkTreeView" id="background">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="valign">center</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore2</property>
+                <property name="headers-clickable">False</property>
+                <property name="search-column">0</property>
+                <property name="hover-selection">True</property>
+                <property name="show-expanders">False</property>
+                <property name="activate-on-single-click">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                    <property name="title" translatable="yes" context="filtersubdropdown|background">Background Color</property>
+                    <child>
+                      <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
+                      <attributes>
+                        <attribute name="visible">4</attribute>
+                        <attribute name="active">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
+                      <attributes>
+                        <attribute name="pixbuf">1</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="vexpand">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">never</property>
+            <child>
+              <object class="GtkTreeView" id="textcolor">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="valign">center</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore3</property>
+                <property name="headers-clickable">False</property>
+                <property name="search-column">0</property>
+                <property name="hover-selection">True</property>
+                <property name="show-expanders">False</property>
+                <property name="activate-on-single-click">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn7">
+                    <property name="title" translatable="yes" context="filtersubdropdown|textcolor">Text Color</property>
+                    <child>
+                      <object class="GtkCellRendererToggle" id="cellrenderertoggle2"/>
+                      <attributes>
+                        <attribute name="visible">4</attribute>
+                        <attribute name="active">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf2"/>
+                      <attributes>
+                        <attribute name="pixbuf">1</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
