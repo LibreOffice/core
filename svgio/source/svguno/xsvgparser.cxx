@@ -141,7 +141,7 @@ namespace svgio::svgreader
                 OSL_ENSURE(false, "Invalid stream (!)");
             }
 
-            return comphelper::containerToSequence(aRetval);
+            return aRetval.toSequence();
         }
 
         uno::Any SAL_CALL XSvgParser::getDrawCommands(
