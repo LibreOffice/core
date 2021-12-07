@@ -193,7 +193,7 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
             // if range is not computed (new or LazyInvalidate objects), force it
             const DisplayInfo aDisplayInfo;
-            const drawinglayer::primitive2d::Primitive2DContainer xSequence(getPrimitive2DSequence(aDisplayInfo));
+            const drawinglayer::primitive2d::Primitive2DContainer& xSequence(getPrimitive2DSequence(aDisplayInfo));
 
             if(!xSequence.empty())
             {
@@ -418,7 +418,7 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!isPrimitiveVisible(rDisplayInfo))
         return;
 
-    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequence(rDisplayInfo);
+    const drawinglayer::primitive2d::Primitive2DContainer& xRetval = getPrimitive2DSequence(rDisplayInfo);
     if(xRetval.empty())
         return;
 
