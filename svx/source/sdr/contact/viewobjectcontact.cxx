@@ -330,6 +330,9 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
 
 drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
+    if (!mxPrimitive2DSequence.empty())
+        return mxPrimitive2DSequence;
+
     /**
     This method is weird because
     (1) we have to re-walk the primitive tree because the flushing is unreliable
