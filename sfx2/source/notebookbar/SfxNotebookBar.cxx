@@ -467,8 +467,6 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
 
                 if (xLayoutManager.is())
                 {
-                    xLayoutManager->lock();
-
                     if (xLayoutManager->getElement(MENUBAR_STR).is())
                     {
                         if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
@@ -476,8 +474,6 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
                         else if(!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
                             xLayoutManager->showElement(MENUBAR_STR);
                     }
-
-                    xLayoutManager->unlock();
                 }
             }
         }
@@ -500,8 +496,6 @@ void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
         const Reference<frame::XLayoutManager>& xLayoutManager = lcl_getLayoutManager(xFrame);
         if (xLayoutManager.is())
         {
-            xLayoutManager->lock();
-
             if (xLayoutManager->getElement(MENUBAR_STR).is())
             {
                 if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
@@ -509,8 +503,6 @@ void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
                 else if (!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
                     xLayoutManager->showElement(MENUBAR_STR);
             }
-
-            xLayoutManager->unlock();
         }
     }
     m_bLock = false;
