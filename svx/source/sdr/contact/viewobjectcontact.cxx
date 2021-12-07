@@ -424,15 +424,14 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
 
     // get ranges
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
     const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
 
     // check geometrical visibility
-    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
+    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(maObjectRange);
     if(!bVisible)
         return;
 
-    rVisitor.visit(std::move(xRetval));
+    rVisitor.visit(xRetval);
 }
 
 void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
