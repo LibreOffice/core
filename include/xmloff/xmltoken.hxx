@@ -3467,6 +3467,7 @@ namespace xmloff::token {
 
         XML_LINKED_STYLE_NAME,
 
+        XML_THEME,
 
         XML_CONTENT_CONTROL,
         XML_SHOWING_PLACE_HOLDER,

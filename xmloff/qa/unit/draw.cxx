@@ -18,6 +18,9 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -40,6 +43,7 @@ public:
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    void save(const OUString& rFilterName, utl::TempFile& rTempFile);
 };
 
 void XmloffDrawTest::setUp()
@@ -60,6 +64,16 @@ void XmloffDrawTest::tearDown()
 void XmloffDrawTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
+}
+
+void XmloffDrawTest::save(const OUString& rFilterName, utl::TempFile& rTempFile)
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= rFilterName;
+    rTempFile.EnableKillingFile();
+    xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(rTempFile.GetFileName(), test::ODF);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
@@ -95,12 +109,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     getComponent() = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
 
     // Prepare use of XPath
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw8");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("draw8", aTempFile);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("content.xml"),
@@ -113,26 +123,36 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-skew", "50 -135");
 }
 
-CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
 {
-    // Given a document with a shape with a "FrameX" parent style (starts with Frame, but is not
-    // Frame):
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-in-shape.fodt";
+    // Create an Impress document which has a master page which has a theme associated with it.
+    getComponent() = loadFromDesktop("private:factory/simpress");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap;
+    aMap["Name"] <<= OUString("mytheme");
+    aMap["ColorSchemeName"] <<= OUString("mycolorscheme");
+    uno::Sequence<util::Color> aColorScheme
+        = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb };
+    aMap["ColorScheme"] <<= aColorScheme;
+    uno::Any aTheme = uno::makeAny(aMap.getAsConstPropertyValueList());
+    xMasterPage->setPropertyValue("Theme", aTheme);
 
-    // When loading that document:
-    getComponent() = loadFromDesktop(aURL);
+    // Export to ODP:
+    utl::TempFile aTempFile;
+    save("impress8", aTempFile);
 
-    // Then make sure the table inside the shape is not lost:
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xEnum = xText->createEnumeration();
-    uno::Reference<text::XTextTable> xTable(xEnum->nextElement(), uno::UNO_QUERY);
-    // Without the accompanying fix in place, this test would have crashed, as xTable was an empty
-    // reference, i.e. the table inside the shape was lost.
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("A1"), xCell->getString());
+    // Check if the 12 colors are written in the XML:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 12
+    // - Actual  : 0
+    // - XPath '//style:master-page/loext:theme/loext:color-table/loext:color' number of nodes is incorrect
+    // i.e. the theme was lost on exporting to ODF.
+    assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:color-table/loext:color", 12);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
