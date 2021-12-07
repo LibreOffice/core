@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac2b697a_6fdec0d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-07T14:25:22Z",
+      "side": 1,
+      "message": "Back again.... The trying of replacing the py test went wrong way so i have decided to restore the uitest. The patch should work without (known) crash and leak and so on.. Ready for review if Jenkins finishes with +1. Any idea and opinion are welcome! Thanks.",
+      "revId": "23f0687fed935715e16f29f50f0b08c7d03c6e00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f561063f_eaefb60e",
+        "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 3851,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-07T14:25:22Z",
+      "side": 1,
+      "message": "Should i remove?",
+      "range": {
+        "startLine": 3725,
+        "startChar": 1,
+        "endLine": 3851,
+        "endChar": 3
+      },
+      "revId": "23f0687fed935715e16f29f50f0b08c7d03c6e00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04109bc5_f25c8b49",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-07T14:25:22Z",
+      "side": 1,
+      "message": "The title has been replaced as i promised. Sorry for the py test, but i have tried to do it in cppunit and it went wrong way see last build attempts. I think there is a problem with the dispatcher when i try to add a textbox via UNO command. For details see: https://gerrit.libreoffice.org/c/core/+/125808\nBut a good thing (maybe), if the dispatcher is fixed the test is in this patch so it is enough to uncomment it have to work. In that case if better to remove, of course i do it.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "23f0687fed935715e16f29f50f0b08c7d03c6e00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
