@@ -63,7 +63,10 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
     if (!rXModel.is())
         return aRetval;
 
+    // don't broadcast until we're finished building, more efficient
+    rXModel->lockControllers();
     updateChart(rXModel);
+    rXModel->unlockControllers();
 
     try
     {
