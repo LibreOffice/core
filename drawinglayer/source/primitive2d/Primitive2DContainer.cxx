@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
@@ -27,6 +27,32 @@ using namespace css;
 
 namespace drawinglayer::primitive2d
 {
+Primitive2DContainer::Primitive2DContainer(
+    const css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>& rSource)
+{
+    for (const auto& rPrimitive : rSource)
+        append(static_cast<const UnoPrimitive2D*>(rPrimitive.get())->getBasePrimitive2D());
+}
+Primitive2DContainer::Primitive2DContainer(
+    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& rSource)
+{
+    for (const auto& rPrimitive : rSource)
+        append(static_cast<const UnoPrimitive2D*>(rPrimitive.get())->getBasePrimitive2D());
+}
+
+css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>
+Primitive2DContainer::toSequence() const
+{
+    css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> aVal(size());
+    auto p = aVal.getArray();
+    for (const auto& rPrimitive : *this)
+    {
+        *p = new UnoPrimitive2D(rPrimitive);
+        ++p;
+    }
+    return aVal;
+}
+
 Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert) const
 {
     const sal_uInt32 nSize(size());
@@ -115,7 +141,47 @@ void Primitive2DContainer::append(Primitive2DContainer&& rSource)
 
 void Primitive2DContainer::append(const Primitive2DSequence& rSource)
 {
-    this->insert(this->end(), rSource.begin(), rSource.end());
+    for (const auto& rPrimitive : rSource)
+        append(static_cast<const UnoPrimitive2D*>(rPrimitive.get())->getBasePrimitive2D());
+}
+
+UnoPrimitive2D::~UnoPrimitive2D() {}
+
+basegfx::B2DRange
+UnoPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+{
+    std::unique_lock aGuard(m_aMutex);
+    return mxPrimitive->getB2DRange(rViewInformation);
+}
+
+sal_uInt32 UnoPrimitive2D::getPrimitive2DID() const { return mxPrimitive->getPrimitive2DID(); }
+
+void UnoPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                        const geometry::ViewInformation2D& rViewInformation) const
+{
+    std::unique_lock aGuard(m_aMutex);
+    mxPrimitive->get2DDecomposition(rVisitor, rViewInformation);
+}
+
+css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>>
+    SAL_CALL UnoPrimitive2D::getDecomposition(
+        const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
+{
+    std::unique_lock aGuard(m_aMutex);
+    return mxPrimitive->getDecomposition(rViewParameters).toSequence();
+}
+
+css::geometry::RealRectangle2D SAL_CALL
+UnoPrimitive2D::getRange(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
+{
+    std::unique_lock aGuard(m_aMutex);
+    return mxPrimitive->getRange(rViewParameters);
+}
+
+sal_Int64 SAL_CALL UnoPrimitive2D::estimateUsage()
+{
+    std::unique_lock aGuard(m_aMutex);
+    return mxPrimitive->estimateUsage();
 }
 
 } // end of namespace drawinglayer::primitive2d

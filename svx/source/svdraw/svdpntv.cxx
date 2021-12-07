@@ -41,6 +41,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdviter.hxx>
@@ -117,7 +118,7 @@ BitmapEx convertMetafileToBitmapEx(
                     rTargetRange.getRange(),
                     rTargetRange.getMinimum()),
                 rMtf));
-        aBitmapEx = convertPrimitive2DSequenceToBitmapEx(
+        aBitmapEx = drawinglayer::convertPrimitive2DContainerToBitmapEx(
             drawinglayer::primitive2d::Primitive2DContainer { aMtf },
             rTargetRange,
             nMaximumQuadraticPixels);

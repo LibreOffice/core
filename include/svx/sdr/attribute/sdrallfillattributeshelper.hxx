@@ -22,7 +22,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svl/itemset.hxx>
 #include <optional>
 

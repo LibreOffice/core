@@ -44,5 +44,6 @@ $(eval $(call gb_CppunitTest_use_configuration,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_ure,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_vcl,emfio_wmf))
+$(eval $(call gb_CppunitTest_use_rdb,emfio_wmf,services))
 
 # vim: set noet sw=4 ts=4:

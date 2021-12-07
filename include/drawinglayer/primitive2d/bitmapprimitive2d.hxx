@@ -68,7 +68,7 @@ public:
     getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
     // XAccounting
-    virtual sal_Int64 SAL_CALL estimateUsage() override;
+    virtual sal_Int64 estimateUsage() override;
 
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;

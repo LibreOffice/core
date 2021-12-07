@@ -1256,7 +1256,7 @@ namespace wmfemfhelper
 
                 // prepare Primitive2DSequence, put text in foreground
                 drawinglayer::primitive2d::Primitive2DContainer aSequence(2);
-                aSequence[1] = drawinglayer::primitive2d::Primitive2DReference(pResult);
+                aSequence[1] = pResult;
 
                 // prepare filled polygon
                 basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aTextRange));

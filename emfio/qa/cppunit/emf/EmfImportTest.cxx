@@ -24,7 +24,7 @@
 
 #include <com/sun/star/graphic/EmfTools.hpp>
 
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
@@ -162,8 +162,7 @@ void Test::testPolyPolygon()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
 
     CPPUNIT_ASSERT(pDocument);
 
@@ -205,8 +204,7 @@ void Test::TestDrawImagePointsTypeBitmap()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawImagePointsTypeBitmap.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color", "#0080ff");
@@ -237,8 +235,7 @@ void Test::TestDrawString()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawString.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawString: height, position, text, color and font
@@ -259,8 +256,7 @@ void Test::TestDrawStringAlign()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringAlign.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/transform", 9);
@@ -330,8 +326,7 @@ void Test::TestDrawStringTransparent()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/transform/unifiedtransparence", "transparence",
@@ -358,8 +353,7 @@ void Test::TestDrawStringWithBrush()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringWithBrush.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy11", "20");
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "xy13", "16");
@@ -379,8 +373,7 @@ void Test::TestDrawLine()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawLine: color and width of the line
@@ -394,8 +387,7 @@ void Test::TestLinearGradient()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, "/primitive2D/metafile/transform", "xy11", "1");
@@ -433,8 +425,7 @@ void Test::TestTextMapMode()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TextMapMode.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 2);
@@ -471,8 +462,7 @@ void Test::TestEnglishMapMode()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/test_mm_hienglish_ref.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", 1);
@@ -514,8 +504,7 @@ void Test::TestRectangleWithModifyWorldTransform()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRectangleWithModifyWorldTransform.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 1);
@@ -535,8 +524,7 @@ void Test::TestChordWithModifyWorldTransform()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestChordWithModifyWorldTransform.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color", "#ffffff");
@@ -557,8 +545,7 @@ void Test::TestArcStartPointEqualEndPoint()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestArcStartPointEqualEndPoint.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/group/mask/polygonhairline", "color", "#000000");
@@ -607,8 +594,7 @@ void Test::TestArcInsideWronglyDefinedRectangle()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestArcInsideWronglyDefinedRectangle.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polygonhairline", "color", "#000000");
@@ -634,8 +620,7 @@ void Test::TestEllipseWithSelectClipPath()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEllipseWithSelectClipPath.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygon", 1);
@@ -666,8 +651,7 @@ void Test::TestEllipseXformIntersectClipRect()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEllipseXformIntersectClipRect.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", "m0 0h3000v2000h-3000z");
@@ -725,8 +709,7 @@ void Test::TestDrawPolyLine16WithClip()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawPolyLine16WithClip.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", "m0 0h3943v3939h-3943z");
@@ -754,8 +737,7 @@ void Test::TestFillRegion()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestFillRegion.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", "m0 0h3943v3939h-3943z");
@@ -779,8 +761,7 @@ void Test::TestPolylinetoCloseStroke()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestPolylinetoCloseStroke.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polygonhairline", 2);
@@ -807,8 +788,7 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestExtTextOutOpaqueAndClipTransform.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "textsimpleportion", 2);
@@ -862,8 +842,7 @@ void Test::TestBitBltStretchBltWMF()
         = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestBitBltStretchBlt.wmf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap", 2);
@@ -913,8 +892,7 @@ void Test::TestExtTextOutOpaqueAndClipWMF()
         = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestExtTextOutOpaqueAndClip.wmf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
 #ifdef MACOSX
@@ -964,8 +942,7 @@ void Test::TestPaletteWMF()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestPalette.wmf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 2);
@@ -995,8 +972,7 @@ void Test::TestRestoreDCWMF()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestRestoreDC.wmf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 3);
@@ -1024,8 +1000,7 @@ void Test::TestRoundrectWMF()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestRoundRect.wmf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color", "#ffffff");
@@ -1066,8 +1041,7 @@ void Test::TestStretchDIBWMF()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestStretchDIB.wmf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "xy11", "12065");
@@ -1095,8 +1069,7 @@ void Test::TestPolyLineWidth()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestPolyLineWidth.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor/polypolygon", "path",
@@ -1115,8 +1088,7 @@ void Test::TestRestoreDC()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRestoreDC.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color", "#ff0000");
@@ -1133,8 +1105,7 @@ void Test::TestRoundRect()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRoundRect.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 2);
@@ -1186,8 +1157,7 @@ void Test::TestCreatePen()
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestCreatePen.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument
-        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", "m0 0h31250v18192h-31250z");

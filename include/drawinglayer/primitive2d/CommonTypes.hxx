@@ -20,11 +20,13 @@
 #pragma once
 
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <rtl/ref.hxx>
 
 namespace drawinglayer::primitive2d
 {
-typedef css::uno::Reference<css::graphic::XPrimitive2D> Primitive2DReference;
-typedef css::uno::Sequence<Primitive2DReference> Primitive2DSequence;
+class BasePrimitive2D;
+typedef rtl::Reference<BasePrimitive2D> Primitive2DReference;
+typedef css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> Primitive2DSequence;
 
 } // end of namespace drawinglayer::primitive2d
 
