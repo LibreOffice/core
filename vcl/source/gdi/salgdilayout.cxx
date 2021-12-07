@@ -54,6 +54,8 @@ SalGraphics::SalGraphics()
     m_aLastMirrorW(0),
     m_nLastMirrorDeviceLTRButBiDiRtlTranslate(0),
     m_bLastMirrorDeviceLTRButBiDiRtlSet(false),
+    m_bFastDrawTransformedBitmapChecked(false),
+    m_bFastDrawTransformedBitmap(false),
     m_bAntiAlias(false)
 {
     // read global RTL settings
@@ -842,6 +844,9 @@ bool SalGraphics::DrawTransformedBitmap(
     double fAlpha,
     const OutputDevice& rOutDev)
 {
+    bool bRetval(false);
+    bool bDone(false);
+
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
     {
         // mirroring set
@@ -856,16 +861,49 @@ bool SalGraphics::DrawTransformedBitmap(
             basegfx::B2DPoint aX = aTranslateToMirroredBounds * rX;
             basegfx::B2DPoint aY = aTranslateToMirroredBounds * rY;
 
-            return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap, fAlpha);
+            bRetval = drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap, fAlpha);
+            bDone = true;
         }
     }
 
-    return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
+    if(!bDone)
+    {
+        bRetval = drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
+    }
+
+    if(bRetval && !m_bFastDrawTransformedBitmap)
+    {
+        // we had a sucessful call, note it for this SalGraphics
+        m_bFastDrawTransformedBitmap = true;
+    }
+
+    return bRetval;
 }
 
-bool SalGraphics::HasFastDrawTransformedBitmap() const
+bool SalGraphics::ImplementsFastDrawTransformedBitmap(bool bTestAllowed) const
 {
-    return hasFastDrawTransformedBitmap();
+    // do not check when we already had a sucessful usage of drawTransformedBitmap (see above)
+    // only check if calling OutputDevice is not empty (bTestAllowed)
+    // check only once using the direct check method (see below)
+    if(!m_bFastDrawTransformedBitmap && bTestAllowed && !m_bFastDrawTransformedBitmapChecked)
+    {
+        // for check and to not change anything, get the top-left pixel as SalBitmap
+        // and try to paint it again. This avoids an extra virtual method hat would need
+        // to be implemened at all backends and cald all the time (virual calls).
+        // Nothing simpler came to my mind, maybe there is something...
+        SalGraphics* that(const_cast<SalGraphics*>(this));
+        std::shared_ptr<SalBitmap> aTest(that->getBitmap(0, 0, 1, 1));
+        that->m_bFastDrawTransformedBitmapChecked = true;
+        that->m_bFastDrawTransformedBitmap = that->drawTransformedBitmap(
+            basegfx::B2DPoint::getEmptyPoint(),
+            basegfx::B2DPoint(1.0, 0.0),
+            basegfx::B2DPoint(0.0, 1.0),
+            *aTest,
+            nullptr,
+            1.0);
+    }
+
+    return m_bFastDrawTransformedBitmap;
 }
 
 bool SalGraphics::DrawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,

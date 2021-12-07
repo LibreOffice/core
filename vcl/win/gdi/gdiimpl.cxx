@@ -2714,11 +2714,6 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
     return false;
 }
 
-bool WinSalGraphicsImpl::hasFastDrawTransformedBitmap() const
-{
-    return false;
-}
-
 bool WinSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
         const Gradient& /*rGradient*/)
 {

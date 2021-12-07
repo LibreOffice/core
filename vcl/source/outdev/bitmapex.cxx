@@ -525,7 +525,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(rtl::math::approxEqual( fAlpha, 1.0 ))
         fAlpha = 1.0; // avoid the need for approxEqual in backends
 
-    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
+    if(bTryDirectPaint && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
         return;
 
     // decompose matrix to check rotation and shear
@@ -687,6 +687,11 @@ void OutputDevice::DrawTransformedBitmapEx(
         basegfx::fround(aVisibleRange.getMaxY()) - aDestPt.Y());
 
     DrawBitmapEx(aDestPt, aDestSize, aTransformed);
+}
+
+bool OutputDevice::ImplementsFastDrawTransformedBitmap() const
+{
+    return mpGraphics->ImplementsFastDrawTransformedBitmap(!GetOutputSizePixel().IsEmpty());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -92,13 +92,12 @@ bool WinSalGraphics::drawTransformedBitmap(
     const SalBitmap* pAlphaBitmap,
     double fAlpha)
 {
+    // called mpImpl->drawTransformedBitmap also checks this, but spares a call
+    if( fAlpha != 1.0 )
+        return false;
+
     return mpImpl->drawTransformedBitmap(rNull, rX, rY,
             rSourceBitmap, pAlphaBitmap, fAlpha);
-}
-
-bool WinSalGraphics::hasFastDrawTransformedBitmap() const
-{
-    return mpImpl->hasFastDrawTransformedBitmap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
