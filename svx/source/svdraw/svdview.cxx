@@ -456,14 +456,11 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 
                 for (const drawinglayer::primitive2d::Primitive2DReference& xReference : aHitContainer)
                 {
-                    if (xReference.is())
+                    auto pBasePrimitive = xReference.get();
+                    if (pBasePrimitive && pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D)
                     {
-                        auto pBasePrimitive = static_cast<const drawinglayer::primitive2d::BasePrimitive2D*>(xReference.get());
-                        if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D)
-                        {
-                            pTextHierarchyFieldPrimitive2D = static_cast<const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D*>(xReference.get());
-                            break;
-                        }
+                        pTextHierarchyFieldPrimitive2D = static_cast<const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D*>(pBasePrimitive);
+                        break;
                     }
                 }
 

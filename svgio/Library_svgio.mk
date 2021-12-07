@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,svgio,\
     cppu \
     cppuhelper \
     sal \
+    salhelper \
     tk \
     tl \
     sax \

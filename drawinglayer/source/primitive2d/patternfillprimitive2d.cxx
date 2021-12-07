@@ -350,17 +350,12 @@ namespace drawinglayer::primitive2d
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
-        sal_Int64 SAL_CALL PatternFillPrimitive2D::estimateUsage()
+        sal_Int64 PatternFillPrimitive2D::estimateUsage()
         {
             size_t nRet(0);
             for (auto& it : getChildren())
-            {
-                uno::Reference<util::XAccounting> const xAcc(it, uno::UNO_QUERY);
-                if (xAcc.is())
-                {
-                    nRet += xAcc->estimateUsage();
-                }
-            }
+                if (it)
+                    nRet += it->estimateUsage();
             return nRet;
         }
 
