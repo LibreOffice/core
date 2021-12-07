@@ -36,7 +36,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
             drawinglayer::primitive2d::Primitive2DContainer aSourceVal;
             rSource.getViewIndependentPrimitive2DContainer(aSourceVal);
-            aRetval = comphelper::containerToSequence(aSourceVal);
+            aRetval = aSourceVal.toSequence();
         }
     }
 
@@ -75,7 +75,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
             drawinglayer::primitive2d::Primitive2DContainer aSourceRetval;
             rSource.getViewIndependentPrimitive2DContainer(aSourceRetval);
-            aRetval = comphelper::containerToSequence(aSourceRetval);
+            aRetval = aSourceRetval.toSequence();
         }
     }
 

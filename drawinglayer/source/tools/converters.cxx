@@ -23,7 +23,10 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <drawinglayer/converters.hxx>
 
@@ -170,6 +173,100 @@ namespace drawinglayer
         return aRetval;
     }
 
+    BitmapEx convertPrimitive2DContainerToBitmapEx(
+        primitive2d::Primitive2DContainer&& rSequence,
+        const basegfx::B2DRange& rTargetRange,
+        sal_uInt32 nMaximumQuadraticPixels,
+        const o3tl::Length eTargetUnit,
+        const std::optional<Size>& rTargetDPI)
+    {
+        if(rSequence.empty())
+            return BitmapEx();
+
+        try
+        {
+            css::geometry::RealRectangle2D aRealRect;
+            aRealRect.X1 = rTargetRange.getMinX();
+            aRealRect.Y1 = rTargetRange.getMinY();
+            aRealRect.X2 = rTargetRange.getMaxX();
+            aRealRect.Y2 = rTargetRange.getMaxY();
+
+            // get system DPI
+            Size aDPI(Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+            if (rTargetDPI.has_value())
+            {
+                aDPI = *rTargetDPI;
+            }
+
+            ::sal_uInt32 DPI_X = aDPI.getWidth();
+            ::sal_uInt32 DPI_Y = aDPI.getHeight();
+            const basegfx::B2DRange aRange(aRealRect.X1, aRealRect.Y1, aRealRect.X2, aRealRect.Y2);
+            const double fWidth(aRange.getWidth());
+            const double fHeight(aRange.getHeight());
+
+            if(!(basegfx::fTools::more(fWidth, 0.0) && basegfx::fTools::more(fHeight, 0.0)))
+                return BitmapEx();
+
+            if(0 == DPI_X)
+            {
+                DPI_X = 75;
+            }
+
+            if(0 == DPI_Y)
+            {
+                DPI_Y = 75;
+            }
+
+            if(0 == nMaximumQuadraticPixels)
+            {
+                nMaximumQuadraticPixels = 500000;
+            }
+
+            const auto aViewInformation2D = geometry::createViewInformation2D({});
+            const sal_uInt32 nDiscreteWidth(basegfx::fround(o3tl::convert(fWidth, eTargetUnit, o3tl::Length::in) * DPI_X));
+            const sal_uInt32 nDiscreteHeight(basegfx::fround(o3tl::convert(fHeight, eTargetUnit, o3tl::Length::in) * DPI_Y));
+
+            basegfx::B2DHomMatrix aEmbedding(
+                basegfx::utils::createTranslateB2DHomMatrix(
+                    -aRange.getMinX(),
+                    -aRange.getMinY()));
+
+            aEmbedding.scale(
+                nDiscreteWidth / fWidth,
+                nDiscreteHeight / fHeight);
+
+            const primitive2d::Primitive2DReference xEmbedRef(
+                new primitive2d::TransformPrimitive2D(
+                    aEmbedding,
+                    std::move(rSequence)));
+            primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+
+            BitmapEx aBitmapEx(
+                convertToBitmapEx(
+                    std::move(xEmbedSeq),
+                    aViewInformation2D,
+                    nDiscreteWidth,
+                    nDiscreteHeight,
+                    nMaximumQuadraticPixels));
+
+            if(aBitmapEx.IsEmpty())
+                return BitmapEx();
+            aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+            aBitmapEx.SetPrefSize(Size(basegfx::fround(fWidth), basegfx::fround(fHeight)));
+
+            return aBitmapEx;
+        }
+        catch (const css::uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("vcl", "Got no graphic::XPrimitive2DRenderer!");
+        }
+        catch (const std::exception& e)
+        {
+            SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << e.what());
+        }
+
+        return BitmapEx();
+    }
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

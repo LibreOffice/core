@@ -35,9 +35,7 @@ getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate,
     if (!rCandidate)
         return basegfx::B2DRange();
 
-    // get C++ implementation base
-    const BasePrimitive2D* pCandidate(static_cast<BasePrimitive2D*>(rCandidate.get()));
-    return pCandidate->getB2DRange(aViewInformation);
+    return rCandidate->getB2DRange(aViewInformation);
 }
 
 bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primitive2DReference& rxB)
@@ -54,10 +52,28 @@ bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primit
         return true;
     }
 
-    const BasePrimitive2D* pA(static_cast<const BasePrimitive2D*>(rxA.get()));
-    const BasePrimitive2D* pB(static_cast<const BasePrimitive2D*>(rxB.get()));
+    return rxA->operator==(*rxB);
+}
 
-    return pA->operator==(*pB);
+bool arePrimitive2DReferencesEqual(const css::uno::Reference<css::graphic::XPrimitive2D>& rxA,
+                                   const css::uno::Reference<css::graphic::XPrimitive2D>& rxB)
+{
+    const bool bAIs(rxA.is());
+
+    if (bAIs != rxB.is())
+    {
+        return false;
+    }
+
+    if (!bAIs)
+    {
+        return true;
+    }
+
+    auto pA = static_cast<const UnoPrimitive2D*>(rxA.get());
+    auto pB = static_cast<const UnoPrimitive2D*>(rxB.get());
+
+    return (*pA->getBasePrimitive2D()) == (*pB->getBasePrimitive2D());
 }
 
 OUString idToString(sal_uInt32 nId)

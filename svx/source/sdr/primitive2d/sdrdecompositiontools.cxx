@@ -212,7 +212,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
             else
             {
                 // add to decomposition
-                return Primitive2DReference(pNewFillPrimitive);
+                return pNewFillPrimitive;
             }
         }
 
@@ -249,7 +249,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
             else
             {
                 // add to decomposition
-                return Primitive2DReference(pNewLinePrimitive);
+                return pNewLinePrimitive;
             }
         }
 
