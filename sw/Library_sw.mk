@@ -308,6 +308,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/frmedt/tblsel \
     sw/source/core/graphic/grfatr \
     sw/source/core/graphic/ndgrf \
+    sw/source/core/graphic/GraphicSizeCheck \
     sw/source/core/layout/anchoreddrawobject \
     sw/source/core/layout/anchoredobject \
     sw/source/core/layout/atrfrm \
@@ -348,6 +349,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/unusedf \
     sw/source/core/layout/virtoutp \
     sw/source/core/layout/wsfrm \
+    sw/source/core/model/ModelTraverser \
     sw/source/core/objectpositioning/anchoredobjectposition \
     sw/source/core/objectpositioning/ascharanchoredobjectposition \
     sw/source/core/objectpositioning/environmentofanchoredobject \
