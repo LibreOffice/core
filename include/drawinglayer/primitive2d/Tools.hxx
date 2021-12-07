@@ -40,6 +40,13 @@ basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(
 bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DReference& rA,
                                                           const Primitive2DReference& rB);
 
+/** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
+    and using compare operator
+ */
+bool DRAWINGLAYER_DLLPUBLIC
+arePrimitive2DReferencesEqual(const css::uno::Reference<css::graphic::XPrimitive2D>& rA,
+                              const css::uno::Reference<css::graphic::XPrimitive2D>& rB);
+
 OUString DRAWINGLAYER_DLLPUBLIC idToString(sal_uInt32 nId);
 
 } // end of namespace drawinglayer::primitive2d

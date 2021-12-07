@@ -129,7 +129,7 @@ Primitive2DSequence Test::parseSvg(std::u16string_view aSource)
 void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 {
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(rPrimitive));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -149,8 +149,11 @@ void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
 {
     return std::equal(rA.begin(), rA.end(), rB.begin(), rB.end(),
-        [](const Primitive2DReference& a, const Primitive2DReference& b) {
-            return drawinglayer::primitive2d::arePrimitive2DReferencesEqual(a, b); });
+        [](const css::uno::Reference<css::graphic::XPrimitive2D>& a,
+           const css::uno::Reference<css::graphic::XPrimitive2D>& b)
+        {
+            return drawinglayer::primitive2d::arePrimitive2DReferencesEqual(a, b);
+        });
 }
 
 // Attributes for an object (like rect as in this case) can be defined
@@ -185,7 +188,7 @@ void Test::testTdf87309()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf87309.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf87309));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf87309);
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -204,7 +207,7 @@ void Test::testFontsizeKeywords()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceFontsizeKeywords.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceFontsizeKeywords));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceFontsizeKeywords);
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -267,7 +270,7 @@ void Test::testFontsizePercentage()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceFontsizePercentage.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceFontsizePercentage));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceFontsizePercentage);
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -284,7 +287,7 @@ void Test::testFontsizeRelative()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceFontsizeRelative.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceFontsizeRelative));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceFontsizeRelative);
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -306,7 +309,7 @@ void Test::testTdf45771()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf45771.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf45771));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf45771);
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -323,7 +326,7 @@ void Test::testTdf97941()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97941.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97941));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf97941);
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -339,7 +342,7 @@ void Test::testTdf104339()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf104339.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf104339));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf104339);
 
     CPPUNIT_ASSERT (pDocument);
     assertXPath(pDocument, "/primitive2D/transform/transform/transform/transform/transform/polypolygoncolor", "color", "#000000");
@@ -351,7 +354,7 @@ void Test::testTdf85770()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf85770.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf85770));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf85770));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -377,7 +380,7 @@ void Test::testTdf79163()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf79163.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf79163));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf79163));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -390,7 +393,7 @@ void Test::testTdf97542_1()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97542_1.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97542_1));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf97542_1));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -406,7 +409,7 @@ void Test::testTdf97542_2()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97542_2.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97542_2));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf97542_2));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -422,7 +425,7 @@ void Test::testTdf97543()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97543.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97543));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf97543));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -441,7 +444,7 @@ void Test::testRGBColor()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRGBColor.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBColor));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceRGBColor));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -460,7 +463,7 @@ void Test::testRGBAColor()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRGBAColor.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBAColor));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceRGBAColor));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -473,7 +476,7 @@ void Test::testNoneColor()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRGBAColor.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBAColor));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceRGBAColor));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -490,7 +493,7 @@ void Test::testTdf97936()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97936.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97936));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf97936));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -518,7 +521,7 @@ void Test::testClipPathAndParentStyle()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceClipPathAndParentStyle.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceClipPathAndParentStyle));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceClipPathAndParentStyle));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -536,7 +539,7 @@ void Test::testClipPathAndStyle()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceClipPathAndStyle.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceClipPathAndStyle));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceClipPathAndStyle));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -553,7 +556,7 @@ void Test::testi125329()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequencei125329.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequencei125329));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequencei125329));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -576,7 +579,7 @@ void Test::testMaskingPath07b()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceMaskingPath07b.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceMaskingPath07b));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceMaskingPath07b));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -588,7 +591,7 @@ void Test::test123926()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence123926.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence123926));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence123926));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -602,7 +605,7 @@ void Test::test47446()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence47446.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence47446));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence47446));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -617,7 +620,7 @@ void Test::test47446b()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence47446b.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence47446b));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence47446b));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -632,7 +635,7 @@ void Test::testMaskText()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceMaskText.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceMaskText));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceMaskText));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -650,7 +653,7 @@ void Test::testTdf99994()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf99994.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf99994));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf99994));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -667,7 +670,7 @@ void Test::testTdf99115()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf99115.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf99115) );
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf99115) );
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -716,7 +719,7 @@ void Test::testTdf101237()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf101237.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf101237));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf101237));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -731,7 +734,7 @@ void Test::testTdf94765()
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf94765.getLength()));
 
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf94765));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceTdf94765));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -762,7 +765,7 @@ void Test::testBehaviourWhenWidthAndHeightIsOrIsNotSet()
         basegfx::B2DRange aRange;
         uno::Sequence<beans::PropertyValue> aViewParameters;
 
-        for (Primitive2DReference const & xReference : aSequence)
+        for (css::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
         {
             if (xReference.is())
             {
@@ -787,7 +790,7 @@ void Test::testBehaviourWhenWidthAndHeightIsOrIsNotSet()
         basegfx::B2DRange aRange;
         uno::Sequence<beans::PropertyValue> aViewParameters;
 
-        for (Primitive2DReference const & xReference : aSequence)
+        for (css::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
         {
             if (xReference.is())
             {

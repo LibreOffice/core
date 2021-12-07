@@ -91,7 +91,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 
     geometry::RealRectangle2D aRealRect;
     basegfx::B2DRange aRange;
-    for (Primitive2DReference const & xReference : aPrimitiveSequence)
+    for (css::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aPrimitiveSequence)
     {
         if (xReference.is())
         {

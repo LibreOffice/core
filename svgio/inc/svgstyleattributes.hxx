@@ -23,7 +23,7 @@
 #include "svgnode.hxx"
 #include <tools/fontenum.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 
 // predefines
