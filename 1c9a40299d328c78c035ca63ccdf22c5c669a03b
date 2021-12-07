@@ -52,6 +52,24 @@
       "parentUuid": "00a73b4d_e84283d9",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91b54dcc_679fdb91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-07T15:43:19Z",
+      "side": 1,
+      "message": "\u003e Information about the \"prefix\" attribute is missing.  (Plus, we might want to extend the set of component element attributes in the future.)\n\nThe prefix also comes from the library, when it calls gb_ComponentTarget_ComponentTarget. I did forget to mention that. It\u0027s not that the whole concept of writing the \"\u003ccomponent\u003e\" tag from gbuild is un-extendable.\n\n\u003e \u003e So my suggestion: get rid of the component tag in gbuild\u0027s component files and generate the libraries component files to concat by Rdb from implementation snippets selected by gbuild. Any reason why this can\u0027t work?\n\u003e \n\u003e Then why didn\u0027t you do that?  Why did you need to introduce a new --enable-services-rdb-from-build option?  Why did you need to split the svx and sw component files?  Me confused.\n\nI don\u0027t follow. Because it works? And the RDB has just the components built and the workdir/CustomTarget/static/component_maps.cxx has just the existing constructors. No more extra management of solenv/bin/native-code.py, because the input from gbuild is correct. And it\u0027s just managed in gbuild. In theory you have the same logic for the source files then for the component files / snippets.\n\nAs I wrote in the commit message, I wanted to get rid of the duplicated build logic outside of the build system. This is mainly used by the WASM build, which is a stripped down version of LO to \"just\" Writer.\n\nAnd there is a horrible additional patch waiting in feature/wasm to link static binaries from the exposed gbuild info. That can either build LO WASM or link a static soffice.bin + oosplash.",
+      "parentUuid": "4003191f_cf769ee1",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
