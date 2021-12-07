@@ -41,7 +41,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	filter/source/svg/svgfilter \
 	framework/util/fwk \
 	i18npool/source/search/i18nsearch \
-	i18npool/util/i18npool \
+	$(if $(filter en,$(WITH_LOCALES)),i18npool/util/i18npool.en,i18npool/util/i18npool) \
 	package/source/xstor/xstor \
 	package/util/package2 \
 	sax/source/expatwrap/expwrap \
