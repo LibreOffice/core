@@ -458,6 +458,28 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 
 void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
 {
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // lock / unlock only the dispatchers of Calc documents
+        ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));
+        while (pDocShell)
+        {
+            SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDocShell);
+            while (pFrame)
+            {
+                SfxDispatcher* pDisp = pFrame->GetDispatcher();
+                if (pDisp)
+                    pDisp->Lock(bLock);
+                pFrame = SfxViewFrame::GetNext(*pFrame, pDocShell);
+            }
+            pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, checkSfxObjectShell<ScDocShell>));
+        }
+        return;
+        // if a new view is created while the dialog is open,
+        // that view's dispatcher is locked when trying to create the dialog
+        // for that view (ScTabViewShell::CreateRefDialog)
+    }
+
     //  lock / unlock only the dispatcher of Calc document
     SfxDispatcher* pDisp = nullptr;
     if ( m_pBindings )
