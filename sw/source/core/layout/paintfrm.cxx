@@ -75,6 +75,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 #include <ndole.hxx>
 #include <PostItMgr.hxx>
@@ -6318,6 +6319,24 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode, /*bConsiderTextBox=*/false );
+
+    // show track changes of table row
+    if( IsRowFrame() && !getRootFrame()->IsHideRedlines() )
+    {
+        RedlineType eType = static_cast<const SwRowFrame*>(this)->GetTabLine()->GetRedlineType();
+        if ( RedlineType::Delete == eType || RedlineType::Insert == eType )
+        {
+            pCol = RedlineType::Delete == eType ? COL_AUTHOR_TABLE_DEL : COL_AUTHOR_TABLE_INS;
+            bBack = true;
+        }
+    }
+    else if ( bBack && IsCellFrame() && !getRootFrame()->IsHideRedlines() &&
+        // skip cell background to show the row colored according to its tracked change
+        RedlineType::None != static_cast<const SwRowFrame*>(GetUpper())->GetTabLine()->GetRedlineType() )
+    {
+        return;
+    }
+
     //- Output if a separate background is used.
     bool bNoFlyBackground = !gProp.bSFlyMetafile && !bBack && IsFlyFrame();
     if ( bNoFlyBackground )
