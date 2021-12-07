@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6debaf6_40fcfb1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-07T21:44:45Z",
+      "side": 1,
+      "message": "Except the fact, with this new patch I don\u0027t reproduce this:\nFAIL: test_tdf39917_find_replace_R1C1 (tdf39917.tdf39917)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/julien/lo/libreoffice/sc/qa/uitest/search_replace/tdf39917.py\", line 78, in test_tdf39917_find_replace_R1C1\n    self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), \"\u003dPage3!RC\")\nAssertionError: \u0027\u003dPage2!RC\u0027 !\u003d \u0027\u003dPage3!RC\u0027\n- \u003dPage2!RC\n?      ^\n+ \u003dPage3!RC\n?      ^\n\nthe only difference I\u0027ve seen is Ctrl-F will search by value by default (as we want) but not the whole Find/Replace dialog (Ctrl-H) which will still use by default a search by formula.",
+      "revId": "b7a85d24b640a0406a1eb1c0d53d82753bc223c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
