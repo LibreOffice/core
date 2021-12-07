@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_OVERLAY_OVERLAYPRIMITIVE2DSEQUENCEOBJECT_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 
 namespace sdr::overlay

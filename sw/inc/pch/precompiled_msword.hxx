@@ -310,7 +310,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
