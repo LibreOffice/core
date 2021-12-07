@@ -1330,15 +1330,15 @@ namespace
     class ScLOKProxyObjectContact final : public sdr::contact::ObjectContactOfPageView
     {
     private:
-        sdr::contact::ObjectContact& mrRealObjectContact;
+        ScDrawView* mpScDrawView;
 
     public:
         explicit ScLOKProxyObjectContact(
-            sdr::contact::ObjectContact& rRealOC,
+            ScDrawView* pDrawView,
             SdrPageWindow& rPageWindow,
             const char* pDebugName) :
             ObjectContactOfPageView(rPageWindow, pDebugName),
-            mrRealObjectContact(rRealOC)
+            mpScDrawView(pDrawView)
         {
         }
 
@@ -1348,9 +1348,22 @@ namespace
             basegfx::B2DVector& rTarget,
             const sdr::contact::ViewObjectContact& rClient) const override
         {
+            if (!mpScDrawView)
+                return;
+
+            SdrPageView* pPageView(mpScDrawView->GetSdrPageView());
+            if (!pPageView)
+                return;
+
+            SdrPageWindow* pSdrPageWindow = pPageView->GetPageWindow(0);
+            if (!pSdrPageWindow)
+                return;
+
+            sdr::contact::ObjectContact& rObjContact(pSdrPageWindow->GetObjectContact());
+
             SdrObject* pTargetSdrObject(rClient.GetViewContact().TryToGetSdrObject());
             if (pTargetSdrObject)
-                rTarget = pTargetSdrObject->GetViewContact().GetViewObjectContact(mrRealObjectContact).getGridOffset();
+                rTarget = pTargetSdrObject->GetViewContact().GetViewObjectContact(rObjContact).getGridOffset();
         }
     };
 
@@ -1359,29 +1372,21 @@ namespace
     public:
         ScLOKDrawView(OutputDevice* pOut, ScViewData& rData) :
             FmFormView(*rData.GetDocument().GetDrawLayer(), pOut),
-            pScDrawView(rData.GetScDrawView())
+            mpScDrawView(rData.GetScDrawView())
         {
         }
 
         virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
                 SdrPageWindow& rPageWindow, const char* pDebugName) const override
         {
-            if (!pScDrawView)
+            if (!mpScDrawView)
                 return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
 
-            SdrPageView* pPageView(pScDrawView->GetSdrPageView());
-            if (!pPageView)
-                return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
-
-            SdrPageWindow* pSdrPageWindow = pPageView->GetPageWindow(0);
-            if (!pSdrPageWindow)
-                return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
-
-            return new ScLOKProxyObjectContact(pSdrPageWindow->GetObjectContact(), rPageWindow, pDebugName);
+            return new ScLOKProxyObjectContact(mpScDrawView, rPageWindow, pDebugName);
         }
 
     private:
-        ScDrawView* pScDrawView;
+        ScDrawView* mpScDrawView;
     };
 } // anonymous namespace
 
