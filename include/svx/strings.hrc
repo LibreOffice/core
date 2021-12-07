@@ -1816,6 +1816,13 @@
 #define RID_SVXSTR_HOR_PRESET_ONLYHOR               NC_("RID_SVXSTR_HOR_PRESET_ONLYHOR", "Top and Bottom Borders, and All Inner Lines")
 #define RID_SVXSTR_VER_PRESET_ONLYVER               NC_("RID_SVXSTR_VER_PRESET_ONLYVER", "Left and Right Borders, and All Inner Lines")
 
+/*--------------------------------------------------------------------
+    Description: GraphicSizeCheck strings
+ --------------------------------------------------------------------*/
+#define STR_GRAPHIC_SIZE_CHECK_DIALOG_TITLE   NC_("STR_GRAPHIC_SIZE_CHECK_DIALOG_TITLE", "Graphic Size Check")
+#define STR_WARNING_GRAPHIC_PIXEL_COUNT_LOW   NC_("STR_WARNING_GRAPHIC_PIXEL_COUNT_LOW", "Image '%NAME%' has too few pixels for the current size (%DPIX% x %DPIY% DPI)")
+#define STR_WARNING_GRAPHIC_PIXEL_COUNT_HIGH  NC_("STR_WARNING_GRAPHIC_PIXEL_COUNT_HIGH", "Image '%NAME%' has too many pixels for the current size (%DPIX% x %DPIY% DPI)")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
