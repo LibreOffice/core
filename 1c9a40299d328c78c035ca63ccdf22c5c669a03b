@@ -88,6 +88,23 @@
       "parentUuid": "91b54dcc_679fdb91",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e66e13_43613771",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-07T20:51:00Z",
+      "side": 1,
+      "message": "today\u0027s oss-fuzz builds fail with\n\nStep #3 - \"compile-honggfuzz-address-x86_64\": /src/libreoffice/solenv/gbuild/ComponentTarget.mk:53: *** No LIBFILENAME set at component target: /work/workdir/ComponentTarget/i18npool/util/i18npool.component.  Stop.\nStep #3 - \"compile-honggfuzz-address-x86_64\": make[1]: *** Waiting for unfinished jobs....\nStep #3 - \"compile-honggfuzz-address-x86_64\": [build CMP] i18npool/util/i18npool\n\nhttps://oss-fuzz-build-logs.storage.googleapis.com/index.html#libreoffice",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
