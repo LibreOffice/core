@@ -16,6 +16,24 @@
       "message": "So this splits up some component files into multiple component files for a single shared library (svx/util/crashreport.component broken out of svx/util/svx.component, and sw/util/sw_mm.component broken out of sw/util/sw.component), which then leads in the resulting services rdb file to multiple \u003ccomponent\u003e elements with the same \"uri\" attribute.  While the current implementation in cppuhelper/source/servicemanager.cxx appears to happen to work fine with multiple \u003ccomponent\u003e elements with the same \"uri\" attribute, I\u0027m not really happy with this change:  It opens the door for inconsistencies among the other attributes (\"environment\", \"loader\", \"prefix\") of multiple \u003ccomponent\u003e elements that describe what is conceptionally a single component with a unique \"uri\", and which needs to have unambiguous \"environment\", \"loader\", and \"prefix\" attributes.  I think I would prefer an alternative approach where individual \u003cimplementation\u003e elements in a component file can be marked with some condition, and those conditions are then processed and acted upon when assembling a services rdb file in solenv/gbuild/Rdb.mk and solenv/bin/packcomponents.xslt.",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00a73b4d_e84283d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-07T14:38:17Z",
+      "side": 1,
+      "message": "\u003e I think I would prefer an alternative approach where individual \u003cimplementation\u003e elements in a component file can be marked with some condition, and those conditions are then processed and acted upon when assembling a services rdb file in solenv/gbuild/Rdb.mk and solenv/bin/packcomponents.xslt.\n\nThat seems too complicated. And then you need additional sync logic between the component file and build system, which I wanted to avoid. I wanted to get rid of the duplicated build logic. AFAIK know there is no additional info in the component tag, that gbuild doesn\u0027t already have:\n\n* Based on the library type, you can select the loader\n* The \"@CPPU_ENV@\" already comes from gbuild\n* The URI comes from the library name.\n\nSo my suggestion: get rid of the component tag in gbuild\u0027s component files and generate the libraries component files to concat by Rdb from implementation snippets selected by gbuild. Any reason why this can\u0027t work?",
+      "parentUuid": "172ca897_72e226a3",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
