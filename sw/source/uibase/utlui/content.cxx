@@ -693,9 +693,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
             }
 
-            if (nullptr != pbLevelOrVisibilityChanged)
+            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
             {
-                assert(pOldMember);
                 // need to check visibility (and equal entry number) after
                 // creation due to a sorted list being used here (before,
                 // entries with same index were compared already at creation
@@ -746,9 +745,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
             }
 
-            if(nullptr != pbLevelOrVisibilityChanged)
+            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
             {
-                assert(pOldMember);
                 // need to check visibility (and equal entry number) after
                 // creation due to a sorted list being used here (before,
                 // entries with same index were compared already at creation
@@ -929,9 +927,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     m_pMember->insert(std::move(pCnt));
                 }
 
-                if(nullptr != pbLevelOrVisibilityChanged)
+                if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
                 {
-                    assert(pOldMember);
                     // need to check visibility (and equal entry number) after
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
@@ -1046,9 +1043,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     }
                 }
 
-                if (nullptr != pbLevelOrVisibilityChanged)
+                if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
                 {
-                    assert(pOldMember);
                     // need to check visibility (and equal entry number) after
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
@@ -2781,7 +2777,7 @@ void SwContentTree::ToggleToRoot()
     pBox->set_item_active("root", m_bIsRoot);
 }
 
-bool SwContentTree::HasContentChanged()
+bool SwContentTree::HasContentOrVisibilityChanged()
 {
     bool bContentChanged = false;
 
@@ -2820,32 +2816,22 @@ bool SwContentTree::HasContentChanged()
             assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xRootEntry).toInt64())));
             const ContentTypeId nType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xRootEntry).toInt64())->GetType();
             SwContentType* pArrType = m_aActiveContentArr[nType].get();
+            assert(OUString::number(reinterpret_cast<sal_Int64>(pArrType)) == m_xTreeView->get_id(*xRootEntry));
             if (!pArrType)
                 bContentChanged = true;
             else
             {
-                // start check if first selected outline level has changed
-                bool bCheckChanged = m_nRootType == ContentTypeId::OUTLINE && !m_xTreeView->has_focus();
-                if (bCheckChanged)
+                // bLevelOrVisibilityChanged is set if outlines have changed their level
+                // or if the visibility of objects has changed
+                bool bLevelOrVisibilityChanged = false;
+                pArrType->FillMemberList(&bLevelOrVisibilityChanged);
+                if (bLevelOrVisibilityChanged)
                 {
-                    std::unique_ptr<weld::TreeIter> xFirstSel(m_xTreeView->make_iterator());
-                    bool bFirstSel = m_xTreeView->get_selected(xFirstSel.get());
-                    if (bFirstSel && lcl_IsContent(*xFirstSel, *m_xTreeView))
-                    {
-                        assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xFirstSel).toInt64())));
-                        const auto nSelLevel = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirstSel).toInt64())->GetOutlineLevel();
-                        SwWrtShell* pSh = GetWrtShell();
-                        const SwOutlineNodes::size_type nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
-                        if (nOutlinePos != SwOutlineNodes::npos && pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel)
-                            bContentChanged = true;
-                    }
+                    if (nType == ContentTypeId::OUTLINE)
+                        bContentChanged = true;
+                    else
+                        bVisibilityChanged = true;
                 }
-                // end check if first selected outline level has changed
-
-                pArrType->Init(&bVisibilityChanged);
-                pArrType->FillMemberList();
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pArrType)));
-                m_xTreeView->set_id(*xRootEntry, sId);
                 if (!bContentChanged)
                 {
                     const size_t nChildCount = GetChildCount(*xRootEntry);
@@ -2887,29 +2873,25 @@ bool SwContentTree::HasContentChanged()
             const size_t nCntCount = pCntType->GetMemberCount();
             const ContentTypeId nType = pCntType->GetType();
             SwContentType* pArrType = m_aActiveContentArr[nType].get();
+            assert(OUString::number(reinterpret_cast<sal_Int64>(pArrType)) == m_xTreeView->get_id(*xEntry));
             if (!pArrType)
                 bContentChanged = true;
             else
             {
-                pArrType->Init(&bVisibilityChanged);
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pArrType)));
-                m_xTreeView->set_id(*xEntry, sId);
+                // bLevelOrVisibilityChanged is set if outlines have changed their level
+                // or if the visibility of objects has changed
+                bool bLevelOrVisibilityChanged = false;
+                pArrType->FillMemberList(&bLevelOrVisibilityChanged);
+                if (bLevelOrVisibilityChanged)
+                {
+                    if (nType == ContentTypeId::OUTLINE)
+                        bContentChanged = true;
+                    else
+                        bVisibilityChanged = true;
+                }
                 if (m_xTreeView->get_row_expanded(*xEntry))
                 {
-                    bool bLevelOrVisibilityChanged = false;
-                    // bLevelOrVisibilityChanged is set if outlines have changed their level
-                    // or if the visibility of objects (frames, sections, tables) has changed
-                    // i.e. in header/footer
-                    pArrType->FillMemberList(&bLevelOrVisibilityChanged);
                     const size_t nChildCount = GetChildCount(*xEntry);
-                    if (bLevelOrVisibilityChanged)
-                    {
-                        if (nType == ContentTypeId::OUTLINE)
-                            bContentChanged = true;
-                        else
-                            bVisibilityChanged = true;
-                    }
-
                     if(nChildCount != pArrType->GetMemberCount())
                         bContentChanged = true;
                     else
@@ -2931,14 +2913,6 @@ bool SwContentTree::HasContentChanged()
                 // not expanded and has children
                 else if (m_xTreeView->iter_has_child(*xEntry))
                 {
-                    // was the entry once opened, then must also the
-                    // invisible records be examined.
-                    // At least the user data must be updated.
-                    bool bLevelOrVisibilityChanged = false;
-                    // bLevelOrVisibilityChanged is set if outlines have changed their level
-                    // or if the visibility of objects (frames, sections, tables) has changed
-                    // i.e. in header/footer
-                    pArrType->FillMemberList(&bLevelOrVisibilityChanged);
                     bool bRemoveChildren = false;
                     const size_t nOldChildCount = GetChildCount(*xEntry);
                     const size_t nNewChildCount = pArrType->GetMemberCount();
@@ -2987,10 +2961,6 @@ bool SwContentTree::HasContentChanged()
             }
         }
     }
-
-    if (!bContentChanged && bVisibilityChanged)
-        m_aUpdTimer.Start();
-
     return bContentChanged || bVisibilityChanged;
 }
 
@@ -3645,7 +3615,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
                 SetActiveShell(pActShell);
             }
             else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
-                        HasContentChanged())
+                        HasContentOrVisibilityChanged())
             {
                 FindActiveTypeAndRemoveUserData();
                 Display(true);
@@ -4100,7 +4070,7 @@ IMPL_LINK_NOARG(SwContentTree, FocusInHdl, weld::Widget&, void)
         if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
             SetActiveShell(pActShell);
         else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
-                    HasContentChanged())
+                    HasContentOrVisibilityChanged())
         {
             Display(true);
         }

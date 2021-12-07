@@ -159,7 +159,7 @@ class SwContentTree final : public SfxListener
                                             sal_Int8& rDragMode );
 
     /** Check if the displayed content is valid. */
-    bool            HasContentChanged();
+    bool            HasContentOrVisibilityChanged();
 
     size_t          GetAbsPos(const weld::TreeIter& rIter);
 
