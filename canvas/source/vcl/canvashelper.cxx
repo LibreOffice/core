@@ -721,7 +721,7 @@ namespace vclcanvas
                 // itself serves this purpose
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr);
             }
-            else if( mpOutDevProvider->getOutDev().ImplementsFastDrawTransformedBitmap())
+            else if( mpOutDevProvider->getOutDev().HasFastDrawTransformedBitmap())
             {
                 ::basegfx::B2DHomMatrix aSizeTransform;
                 aSizeTransform.scale( aBmpEx.GetSizePixel().Width(), aBmpEx.GetSizePixel().Height() );

@@ -387,6 +387,8 @@ bool GenPspGfxBackend::drawTransformedBitmap(const basegfx::B2DPoint& /*rNull*/,
     return false;
 }
 
+bool GenPspGfxBackend::hasFastDrawTransformedBitmap() const { return false; }
+
 bool GenPspGfxBackend::drawAlphaRect(tools::Long /*nX*/, tools::Long /*nY*/, tools::Long /*nWidth*/,
                                      tools::Long /*nHeight*/, sal_uInt8 /*nTransparency*/)
 {

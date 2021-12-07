@@ -2750,8 +2750,8 @@ SalGraphics::DrawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint c
 SalGraphics::FillFontSubsetInfo(vcl::TTGlobalFontInfo_ const&, rtl::OUString const&, FontSubsetInfo&)
 SalGraphics::GetBitmap(long, long, long, long, OutputDevice const&)
 SalGraphics::GetNativeControlRegion(ControlType, ControlPart, tools::Rectangle const&, ControlState, ImplControlValue const&, tools::Rectangle&, tools::Rectangle&, OutputDevice const&)
-SalGraphics::ImplementsFastDrawTransformedBitmap(bool) const
 SalGraphics::GetPixel(long, long, OutputDevice const&)
+SalGraphics::HasFastDrawTransformedBitmap() const
 SalGraphics::HitTestNativeScrollbar(ControlPart, tools::Rectangle const&, Point const&, bool&, OutputDevice const&)
 SalGraphics::Invert(long, long, long, long, SalInvert, OutputDevice const&)
 SalGraphics::Invert(unsigned int, Point const*, SalInvert, OutputDevice const&)
