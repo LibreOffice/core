@@ -213,8 +213,6 @@ void TextEffectPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    std::unique_lock aGuard(m_aMutex);
-
     if (!getBuffered2DDecomposition().empty())
     {
         if (maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
@@ -233,7 +231,6 @@ void TextEffectPrimitive2D::get2DDecomposition(
     }
 
     // use parent implementation
-    aGuard.unlock();
     BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
 }
 

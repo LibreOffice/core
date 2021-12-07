@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/bitmapex.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 namespace drawinglayer
 {
@@ -28,6 +28,14 @@ BitmapEx DRAWINGLAYER_DLLPUBLIC
 convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
                   const geometry::ViewInformation2D& rViewInformation2D, sal_uInt32 nDiscreteWidth,
                   sal_uInt32 nDiscreteHeight, sal_uInt32 nMaxSquarePixels);
+
+// helper to convert any Primitive2DSequence to a good quality BitmapEx,
+// using default parameters
+BitmapEx DRAWINGLAYER_DLLPUBLIC convertPrimitive2DContainerToBitmapEx(
+    drawinglayer::primitive2d::Primitive2DContainer&& rSeq, const basegfx::B2DRange& rTargetRange,
+    const sal_uInt32 nMaximumQuadraticPixels = 500000,
+    const o3tl::Length eTargetUnit = o3tl::Length::mm100,
+    const std::optional<Size>& rTargetDPI = std::nullopt);
 
 } // end of namespace drawinglayer
 

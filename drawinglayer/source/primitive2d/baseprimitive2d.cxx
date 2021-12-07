@@ -141,13 +141,13 @@ void BasePrimitive2D::get2DDecomposition(
 {
 }
 
-css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>> SAL_CALL
+Primitive2DContainer
 BasePrimitive2D::getDecomposition(const uno::Sequence<beans::PropertyValue>& rViewParameters)
 {
     const auto aViewInformation = geometry::createViewInformation2D(rViewParameters);
     Primitive2DContainer aContainer;
     get2DDecomposition(aContainer, aViewInformation);
-    return comphelper::containerToSequence(aContainer);
+    return aContainer;
 }
 
 css::geometry::RealRectangle2D SAL_CALL

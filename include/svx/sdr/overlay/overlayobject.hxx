@@ -25,7 +25,7 @@
 #include <tools/color.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/svxdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 #include <vector>
 
