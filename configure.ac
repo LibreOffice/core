@@ -1179,6 +1179,9 @@ if test "$using_freetype_fontconfig" = yes; then
         AC_DEFINE(ENABLE_HEADLESS)
         ENABLE_HEADLESS=TRUE
     fi
+else
+    test_fontconfig=no
+    test_freetype=no
 fi
 
 AC_SUBST(ENABLE_HEADLESS)
@@ -5839,23 +5842,7 @@ fi
 
 AC_SUBST(ENABLE_CUPS)
 
-# fontconfig checks
-if test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_CHECKING([which fontconfig to use])
-fi
-if test "$using_freetype_fontconfig" = yes -a "$test_system_fontconfig" != no; then
-    AC_MSG_RESULT([external])
-    PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.4.1])
-    SYSTEM_FONTCONFIG=TRUE
-    FilterLibs "${FONTCONFIG_LIBS}"
-    FONTCONFIG_LIBS="${filteredlibs}"
-elif test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE FONTCONFIG"
-fi
-AC_SUBST(FONTCONFIG_CFLAGS)
-AC_SUBST(FONTCONFIG_LIBS)
-AC_SUBST([SYSTEM_FONTCONFIG])
+libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],,,TRUE)
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
@@ -9456,38 +9443,25 @@ fi
 
 dnl ===================================================================
 dnl Check whether freetype is available
+dnl
+dnl FreeType has 3 different kinds of versions
+dnl * release, like 2.4.10
+dnl * libtool, like 13.0.7 (this what pkg-config returns)
+dnl * soname
+dnl FreeType's docs/VERSION.DLL provides a table mapping between the three
+dnl
+dnl 9.9.3 is 2.2.0
+dnl When the minimal version is at least 2.8.1, remove Skia's check down below.
 dnl ===================================================================
-if test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_CHECKING([which freetype to use])
-fi
-if test "$using_freetype_fontconfig" = yes -a "$test_system_freetype" != no; then
-    AC_MSG_RESULT([external])
-    # FreeType has 3 different kinds of versions
-    # * release, like 2.4.10
-    # * libtool, like 13.0.7 (this what pkg-config returns)
-    # * soname
-    # FreeType's docs/VERSION.DLL provides a table mapping between the three
-    #
-    # 9.9.3 is 2.2.0
-    # When the minimal version is at least 2.8.1, remove Skia's check down below.
-    PKG_CHECK_MODULES(FREETYPE, freetype2 >= 9.9.3)
-    FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    FilterLibs "${FREETYPE_LIBS}"
-    FREETYPE_LIBS="${filteredlibs}"
-    SYSTEM_FREETYPE=TRUE
-elif test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_RESULT([internal])
-    FREETYPE_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"
+if test "$test_freetype" != no; then
     if test "x$ac_config_site_64bit_host" = xYES; then
-        FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib64 -lfreetype"
+        FREETYPE_LIBS_INTERNAL="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib64 -lfreetype"
     else
-        FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
+        FREETYPE_LIBS_INTERNAL="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
     fi
-    BUILD_TYPE="$BUILD_TYPE FREETYPE"
 fi
-AC_SUBST(FREETYPE_CFLAGS)
-AC_SUBST(FREETYPE_LIBS)
-AC_SUBST([SYSTEM_FREETYPE])
+libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],
+    ["${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"],["$FREETYPE_LIBS_INTERNAL"],TRUE)
 
 # ===================================================================
 # Check for system libxslt
