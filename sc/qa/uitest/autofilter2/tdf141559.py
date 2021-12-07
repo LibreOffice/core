@@ -37,7 +37,7 @@ class tdf141559(UITestCase):
 
             # check last item: 'Standard Filter...' (new menu item 'Clear Filter' is optional)
             nLastIdx = int(get_state_as_dict(xMenu)['Children']) - 1
-            self.assertEqual(10, nLastIdx)
+            self.assertEqual(9, nLastIdx)
             self.assertEqual('Standard Filter...', get_state_as_dict(xMenu.getChild(str(nLastIdx)))['Text'])
 
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
@@ -71,7 +71,7 @@ class tdf141559(UITestCase):
 
             # check last item: 'Clear Filter'
             nLastIdx = int(get_state_as_dict(xMenu)['Children']) - 1
-            self.assertEqual(11, nLastIdx)
+            self.assertEqual(10, nLastIdx)
             self.assertEqual('Clear Filter', get_state_as_dict(xMenu.getChild(str(nLastIdx)))['Text'])
 
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
