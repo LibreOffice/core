@@ -129,7 +129,7 @@ public:
 
     void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
-    ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled, bool bCheckList);
+    ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled, bool bColorMenu);
 
     void selectMenuItem(size_t nPos, bool bSubMenuTimer);
     void queueLaunchSubMenu(size_t nPos, ScListSubMenuControl* pMenu);
@@ -321,7 +321,7 @@ private:
 class ScListSubMenuControl final
 {
 public:
-    ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bCheckList, vcl::ILibreOfficeKitNotifier* pNotifier);
+    ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bColorMenu, vcl::ILibreOfficeKitNotifier* pNotifier);
 
     void setPopupStartAction(ScCheckListMenuControl::Action* p);
 
@@ -332,7 +332,9 @@ public:
     void EndPopupMode();
 
     void addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction);
-    void addMenuCheckItem(const OUString& rText, bool bActive, VirtualDevice& rImage, ScCheckListMenuControl::Action* pAction);
+    // nMenu of 0 for background color, nMenu of 1 for text color
+    void addMenuColorItem(const OUString& rText, bool bActive, VirtualDevice& rImage,
+                          int nMenu, ScCheckListMenuControl::Action* pAction);
     void clearMenuItems();
     void resizeToFitMenuItems();
 
@@ -351,18 +353,23 @@ private:
     std::unique_ptr<weld::Popover> mxPopover;
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<weld::TreeView> mxMenu;
+    std::unique_ptr<weld::TreeView> mxBackColorMenu;
+    std::unique_ptr<weld::TreeView> mxTextColorMenu;
     std::unique_ptr<weld::TreeIter> mxScratchIter;
     std::unique_ptr<ScCheckListMenuControl::Action> mxPopupStartAction;
     std::vector<ScCheckListMenuControl::MenuItemData> maMenuItems;
     ScCheckListMenuControl& mrParentControl;
     vcl::ILibreOfficeKitNotifier* mpNotifier;
+    bool mbColorMenu;
 
     DECL_LINK(RowActivatedHdl, weld::TreeView& rMEvt, bool);
-    DECL_LINK(CheckToggledHdl, const weld::TreeView::iter_col&, void);
+    DECL_LINK(ColorSelChangedHdl, weld::TreeView&, void);
     DECL_LINK(MenuKeyInputHdl, const KeyEvent&, bool);
 
+    void SetupMenu(weld::TreeView& rMenu);
+
     void NotifyCloseLOK();
-    void executeMenuItem(size_t nPos);
+    void executeMenuItem(ScCheckListMenuControl::Action* pAction);
     void addItem(ScCheckListMenuControl::Action* pAction);
 };
 
