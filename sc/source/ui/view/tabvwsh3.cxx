@@ -86,22 +86,24 @@ namespace
     };
 
     ScRefFlagsAndType lcl_ParseRangeOrAddress(ScRange& rScRange, ScAddress& rScAddress,
-                                              const OUString& aAddress, const ScDocument& rDoc)
+                                              const OUString& aAddress, const ScDocument& rDoc,
+                                              SCCOL nCurCol, SCROW nCurRow)
     {
         ScRefFlagsAndType aRet;
 
-        formula::FormulaGrammar::AddressConvention eConv;
+        // Relative address parsing needs current position.
+        // row,col parameters, not col,row!
+        ScAddress::Details aDetails( rDoc.GetAddressConvention(), nCurRow, nCurCol);
 
         // start with the address convention set in the document
-        eConv = rDoc.GetAddressConvention();
-        aRet.nResult = rScRange.Parse(aAddress, rDoc, eConv);
+        aRet.nResult = rScRange.Parse(aAddress, rDoc, aDetails);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::RANGE;
             return aRet;
         }
 
-        aRet.nResult = rScAddress.Parse(aAddress, rDoc, eConv);
+        aRet.nResult = rScAddress.Parse(aAddress, rDoc, aDetails);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::ADDRESS;
@@ -140,14 +142,15 @@ namespace
         }
 
         // try Excel R1C1 address convention
-        aRet.nResult = rScRange.Parse(aAddress, rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        aDetails.eConv = formula::FormulaGrammar::CONV_XL_R1C1;
+        aRet.nResult = rScRange.Parse(aAddress, rDoc, aDetails);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::RANGE;
             return aRet;
         }
 
-        aRet.nResult = rScAddress.Parse(aAddress, rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        aRet.nResult = rScAddress.Parse(aAddress, rDoc, aDetails);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::ADDRESS;
@@ -330,7 +333,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScMarkData& rMark     = rViewData.GetMarkData();
                 ScRange     aScRange;
                 ScAddress   aScAddress;
-                ScRefFlagsAndType aResult = lcl_ParseRangeOrAddress(aScRange, aScAddress, aAddress, rDoc);
+                ScRefFlagsAndType aResult = lcl_ParseRangeOrAddress(aScRange, aScAddress, aAddress, rDoc,
+                        rViewData.GetCurX(), rViewData.GetCurY());
                 ScRefFlags  nResult = aResult.nResult;
                 SCTAB       nTab = rViewData.GetTabNo();
                 bool        bMark = true;
