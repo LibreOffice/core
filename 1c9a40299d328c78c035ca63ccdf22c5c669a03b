@@ -70,6 +70,24 @@
       "parentUuid": "4003191f_cf769ee1",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b61b6e4e_2083f420",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-07T17:57:16Z",
+      "side": 1,
+      "message": "Thinking a bit more about a \"strip stuff from component file\": one problem is, that normally the build system knows what it builds, but not what it doesn\u0027t. That probably will make a solution stripping stuff instead of adding stuff harder, as you would need to remove the implementations you don\u0027t build. But then you probably can also match anything that doesn\u0027t match X|Y.",
+      "parentUuid": "91b54dcc_679fdb91",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
