@@ -602,7 +602,8 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
             return false;
         otherBitmap = otherBitmapAllocated.get();
     }
-    sk_sp<SkSurface> surface = createSkSurface(mSize);
+    // This is 8-bit bitmap serving as mask, so the image itself needs no alpha.
+    sk_sp<SkSurface> surface = createSkSurface(mSize, kOpaque_SkAlphaType);
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is
     surface->getCanvas()->drawImage(GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
