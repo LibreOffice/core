@@ -161,7 +161,7 @@ static VclPtr<ScInputBarGroup> lcl_chooseRuntimeImpl( vcl::Window* pParent, cons
 ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN | WB_BORDER | WB_NOSHADOW) ),
-        aWndPos         ( VclPtr<ScPosWnd>::Create(this) ),
+        aWndPos         ( !comphelper::LibreOfficeKit::isActive() ? VclPtr<ScPosWnd>::Create(this) : nullptr ),
         mxTextWindow    ( lcl_chooseRuntimeImpl( this, pBind ) ),
         pInputHdl       ( nullptr ),
         mpViewShell     ( nullptr ),
@@ -589,7 +589,8 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
 
 void ScInputWindow::SetPosString( const OUString& rStr )
 {
-    aWndPos->SetPos( rStr );
+    if (!comphelper::LibreOfficeKit::isActive())
+        aWndPos->SetPos( rStr );
 }
 
 void ScInputWindow::SetTextString( const OUString& rString )
@@ -648,7 +649,8 @@ void ScInputWindow::SetSumAssignMode()
 
 void ScInputWindow::SetFormulaMode( bool bSet )
 {
-    aWndPos->SetFormulaMode(bSet);
+    if (!comphelper::LibreOfficeKit::isActive())
+        aWndPos->SetFormulaMode(bSet);
     mxTextWindow->SetFormulaMode(bSet);
 }
 
@@ -713,7 +715,8 @@ void ScInputWindow::SwitchToTextWin()
 
 void ScInputWindow::PosGrabFocus()
 {
-    aWndPos->GrabFocus();
+    if (!comphelper::LibreOfficeKit::isActive())
+        aWndPos->GrabFocus();
 }
 
 void ScInputWindow::EnableButtons( bool bEnable )
