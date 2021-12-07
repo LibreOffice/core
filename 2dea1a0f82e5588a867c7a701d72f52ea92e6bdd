@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "182e1ce6_e089ae59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-07T14:27:36Z",
+      "side": 1,
+      "message": "After https://gerrit.libreoffice.org/c/core/+/126052 merged this can be the next one. ",
+      "revId": "2dea1a0f82e5588a867c7a701d72f52ea92e6bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
