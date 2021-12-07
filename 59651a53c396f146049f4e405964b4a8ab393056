@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f931dd1c_1790ed4d",
+        "filename": "vcl/inc/unx/gtk/gtkdata.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-07T06:06:32Z",
+      "side": 1,
+      "message": "Is there a reason to keep it unsigned, when everything in glib is signed; and thus use those \"o3tl::make_unsigned\"?",
+      "revId": "59651a53c396f146049f4e405964b4a8ab393056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d705bad_d58c0c3d",
+        "filename": "vcl/unx/gtk3/gtkdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-07T06:06:32Z",
+      "side": 1,
+      "message": "OTOH, this virtual function takes unsigned argument ...",
+      "revId": "59651a53c396f146049f4e405964b4a8ab393056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
