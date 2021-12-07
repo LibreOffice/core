@@ -359,6 +359,7 @@ class SW_DLLPUBLIC SwTableLine final : public SwClient     // Client of FrameFor
 {
     SwTableBoxes m_aBoxes;
     SwTableBox *m_pUpper;
+    RedlineType m_eRedlineType;
 
 public:
 
@@ -402,9 +403,13 @@ public:
     // Return with the redline, which associated to the row change (latest deletion
     // in the case of deleted row, the first insertion in the case of row insertion
     // or npos, if TextChangesOnly is true, i.e. the table row is not deleted or inserted).
+    // Cache also the type of the redline associated to the changed table row.
     SwRedlineTable::size_type UpdateTextChangesOnly(SwRedlineTable::size_type& rRedlinePos) const;
     // is it a tracked deleted row
     bool IsDeleted(SwRedlineTable::size_type& rRedlinePos) const;
+    // set/get (if it's possible, cached) redline type
+    RedlineType GetRedlineType() const;
+    void SetRedlineType(RedlineType eType) { m_eRedlineType = eType; }
 };
 
 /// SwTableBox is one table cell in the document model.
