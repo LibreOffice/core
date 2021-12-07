@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf832d1_1f5bf3a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-07T08:41:53Z",
+      "side": 1,
+      "message": "(that\u0027s \u003chttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d103597\u003e \"[12 Regression] False -Wimplicit-fallthrough\u003d involving macro since r12-5638-ga3e75c1491cd2d50\", but the modified code is arguably more readable anyway, even if it the change would no longer be needed once the GCC regression is fixed)",
+      "revId": "ea0d55fa45173a5fa5f53f421615298f80b42a78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
