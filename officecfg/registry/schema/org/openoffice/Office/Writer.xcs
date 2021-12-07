@@ -1109,6 +1109,13 @@
           </constraints>
           <value>1</value>
         </prop>
+        <prop oor:name="HideWhitespace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether whitespace is displayed.</desc>
+            <label>Show Whitespace</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
       <group oor:name="NonprintingCharacter">
         <info>

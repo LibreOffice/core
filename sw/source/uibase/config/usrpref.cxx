@@ -107,7 +107,8 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Display/ShowOutlineContentVisibilityButton", // 22
         "Display/TreatSubOutlineLevelsAsContent",     // 23
         "Display/ShowChangesInMargin",          // 24
-        "Display/DefaultAnchor"                 // 25
+        "Display/DefaultAnchor",                // 25
+        "Display/HideWhitespace"                // 26
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
@@ -180,6 +181,7 @@ void SwContentViewConfig::ImplCommit()
             case 23: bVal = m_rParent.IsTreatSubOutlineLevelsAsContent(); break;// "Display/TreatSubOutlineLevelsAsContent"
             case 24: bVal = m_rParent.IsShowChangesInMargin(); break;// "Display/ShowChangesInMargin"
             case 25: pValues[nProp] <<= m_rParent.GetDefaultAnchor(); break;// "Display/DefaultAnchor"
+            case 26: bVal = m_rParent.IsHideWhitespaceMode(); break; // "Display/HideWhitespace"
         }
         if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor))
             pValues[nProp] <<= bVal;
@@ -241,6 +243,7 @@ void SwContentViewConfig::Load()
                     m_rParent.SetDefaultAnchor(nSet);
                 }
                 break; // "Display/DefaultAnchor"
+                case 26: m_rParent.SetHideWhitespaceMode(bSet); break; // "Display/HideWhitespace"
             }
         }
     }
