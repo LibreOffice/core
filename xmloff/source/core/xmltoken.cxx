@@ -3443,6 +3443,8 @@ namespace xmloff::token {
 
         TOKEN("linked-style-name",   XML_LINKED_STYLE_NAME ),
 
+        TOKEN("theme",               XML_THEME ),
+
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
