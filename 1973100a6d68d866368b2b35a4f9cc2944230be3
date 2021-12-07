@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b0101bd_e7a27e02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2021-12-07T09:52:06Z",
+      "side": 1,
+      "message": "I\u0027ve changed IsAtPrefixed to IsCJKVerticalFont for better understanding. Thanks for reviewing this.",
+      "revId": "1973100a6d68d866368b2b35a4f9cc2944230be3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
