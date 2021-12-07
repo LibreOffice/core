@@ -43,4 +43,8 @@ $(eval $(call gb_CppunitTest_use_custom_headers,xmloff_draw,\
 
 $(eval $(call gb_CppunitTest_use_configuration,xmloff_draw))
 
+$(eval $(call gb_CppunitTest_add_arguments,xmloff_draw, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:
