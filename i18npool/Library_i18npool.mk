@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,i18npool))
 
-ifeq ($(WITH_LOCALES),en)
+ifeq ($(WITH_LOCALES)-$(OS),en-EMSCRIPTEN)
 $(eval $(call gb_Library_set_componentfile,i18npool,i18npool/util/i18npool.en))
 else
 $(eval $(call gb_Library_set_componentfile,i18npool,i18npool/util/i18npool))
