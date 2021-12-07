@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "172ca897_72e226a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-07T09:40:44Z",
+      "side": 1,
+      "message": "So this splits up some component files into multiple component files for a single shared library (svx/util/crashreport.component broken out of svx/util/svx.component, and sw/util/sw_mm.component broken out of sw/util/sw.component), which then leads in the resulting services rdb file to multiple \u003ccomponent\u003e elements with the same \"uri\" attribute.  While the current implementation in cppuhelper/source/servicemanager.cxx appears to happen to work fine with multiple \u003ccomponent\u003e elements with the same \"uri\" attribute, I\u0027m not really happy with this change:  It opens the door for inconsistencies among the other attributes (\"environment\", \"loader\", \"prefix\") of multiple \u003ccomponent\u003e elements that describe what is conceptionally a single component with a unique \"uri\", and which needs to have unambiguous \"environment\", \"loader\", and \"prefix\" attributes.  I think I would prefer an alternative approach where individual \u003cimplementation\u003e elements in a component file can be marked with some condition, and those conditions are then processed and acted upon when assembling a services rdb file in solenv/gbuild/Rdb.mk and solenv/bin/packcomponents.xslt.",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
