@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0033f54_cc62799e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-12-07T13:35:07Z",
+      "side": 1,
+      "message": "The tolerance is arbitrary and I know that Mac needs larger values than Windows. But I wonder why such failure is not detected by the Jenkins builds.",
+      "revId": "6afc665b79b9016079a0d86def70c7255de73832",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
