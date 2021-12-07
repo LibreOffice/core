@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7525f9d2_8c0d736b",
+        "filename": "xmloff/source/text/txtparaimphint.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-07T12:47:04Z",
+      "side": 1,
+      "message": "Could you please add a note here that we don\u0027t have 4 here? A one line comment after 3, like this:\n// There is no 4 defined here",
+      "revId": "990a1fa72390538217cce594821f52e658dc8b15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aceaaa7_b46956a7",
+        "filename": "xmloff/source/text/txtparaimphint.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-07T12:47:04Z",
+      "side": 1,
+      "message": "I think it would be better to define this variable as XMLHintType to avoid additional casts.",
+      "revId": "990a1fa72390538217cce594821f52e658dc8b15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
