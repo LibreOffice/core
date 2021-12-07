@@ -499,6 +499,8 @@ constexpr ::Color COL_AUTHOR8_LIGHT           ( 0xE2, 0xEA, 0xF1 );
 constexpr ::Color COL_AUTHOR9_DARK            ( 0xD1, 0x76, 0x00 );
 constexpr ::Color COL_AUTHOR9_NORMAL          ( 0xFF, 0xE2, 0xB9 );
 constexpr ::Color COL_AUTHOR9_LIGHT           ( 0xFF, 0xE7, 0xC7 );
+constexpr ::Color COL_AUTHOR_TABLE_INS        ( 0xA3, 0xCE, 0xF1 );
+constexpr ::Color COL_AUTHOR_TABLE_DEL        ( 0xFC, 0xE6, 0xF4 );
 
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const Color& rColor)

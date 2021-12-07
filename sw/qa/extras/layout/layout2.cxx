@@ -366,6 +366,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
     assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 4);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testChangedTableRows)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "changed_table_rows.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was 0 (other color, not COL_AUTHOR_TABLE_DEL, color of the tracked row deletion)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#fce6f4']", 1);
+    // This was 0 (other color, not COL_AUTHOR_TABLE_DEL, color of the tracked row insertion)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#a3cef1']", 1);
+    // This was 3 (color of the cells of the last column, 2 of them disabled by change tracking )
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#3faf46']", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertion)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf42748.fodt");
