@@ -72,6 +72,9 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/util/Color.hpp>
+
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2299,6 +2302,12 @@ void SdXMLExport::ExportMasterStyles_()
             // write optional office:forms
             exportFormsElement( xMasterPage );
 
+            // write optional loext:theme
+            if (IsImpress())
+            {
+                ExportThemeElement(xMasterPage);
+            }
+
             // write graphic objects on this master page (if any)
             if(xMasterPage.is() && xMasterPage->getCount())
                 GetShapeExport()->exportShapes( xMasterPage );
@@ -2351,6 +2360,82 @@ void SdXMLExport::exportFormsElement( const Reference< XDrawPage >& xDrawPage )
     if(! GetFormExport()->seekPage( xDrawPage ) )
     {
         OSL_FAIL( "OFormLayerXMLExport::seekPage failed!" );
+    }
+}
+
+void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& xDrawPage)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return;
+
+    comphelper::SequenceAsHashMap aMap(xPropertySet->getPropertyValue("Theme"));
+    if (aMap.empty())
+    {
+        return;
+    }
+
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
+    {
+        // Do not export in standard ODF 1.3 or older.
+        return;
+    }
+
+    auto it = aMap.find("Name");
+    if (it != aMap.end())
+    {
+        OUString aName;
+        it->second >>= aName;
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, aName);
+    }
+    SvXMLElementExport aTheme(*this, XML_NAMESPACE_LO_EXT, XML_THEME, true, true);
+
+    uno::Sequence<util::Color> aColors;
+    it = aMap.find("ColorScheme");
+    if (it != aMap.end())
+    {
+        it->second >>= aColors;
+    }
+    if (!aColors.hasElements())
+    {
+        return;
+    }
+
+    it = aMap.find("ColorSchemeName");
+    if (it != aMap.end())
+    {
+        OUString aName;
+        it->second >>= aName;
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, aName);
+    }
+    SvXMLElementExport aColorTable(*this, XML_NAMESPACE_LO_EXT, XML_COLOR_TABLE, true, true);
+
+    static const std::u16string_view aColorNames[] = {
+        u"dk1", // Background 1
+        u"lt1", // Text 1
+        u"dk2", // Background 2
+        u"lt2", // Text 2
+        u"accent1", // Accent 1
+        u"accent2", // Accent 2
+        u"accent3", // Accent 3
+        u"accent4", // Accent 4
+        u"accent5", // Accent 5
+        u"accent6", // Accent 6
+        u"hlink", // Hyperlink
+        u"folHlink", // Followed hyperlink
+    };
+    for (size_t nColor = 0; nColor < aColors.size(); ++nColor)
+    {
+        // Import goes via svx::Theme::FromAny(), which sanitizes user input.
+        assert(nColor < SAL_N_ELEMENTS(aColorNames));
+
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, OUString(aColorNames[nColor]));
+
+        OUStringBuffer sValue;
+        sax::Converter::convertColor(sValue, aColors[nColor]);
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR, sValue.makeStringAndClear());
+
+        SvXMLElementExport aColor(*this, XML_NAMESPACE_LO_EXT, XML_COLOR, true, true);
     }
 }
 

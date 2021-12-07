@@ -3214,6 +3214,7 @@ rspace
 rtl
 symmetric
 linked-style-name
+theme
 content-control
 showing-place-holder
 checked-state

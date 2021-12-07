@@ -3470,6 +3470,8 @@ namespace xmloff::token {
 
         TOKEN("linked-style-name",   XML_LINKED_STYLE_NAME ),
 
+        TOKEN("theme",               XML_THEME ),
+
         TOKEN("content-control",     XML_CONTENT_CONTROL ),
         TOKEN("showing-place-holder", XML_SHOWING_PLACE_HOLDER ),
         TOKEN("checked-state", XML_CHECKED_STATE),
