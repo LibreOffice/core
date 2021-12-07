@@ -271,9 +271,10 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames() const
         "ViewLayout/BookMode",                  //17
         "Other/IsSquaredPageMode",              //18
         "Other/ApplyCharUnit",                  //19
-        "Window/ShowScrollBarTips"              //20
+        "Window/ShowScrollBarTips",             //20
+        "ViewLayout/HideWhitespace",            //21
     };
-    const int nCount = m_bWeb ? 14 : 21;
+    const int nCount = m_bWeb ? 14 : 22;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -336,6 +337,7 @@ void SwLayoutViewConfig::ImplCommit()
             case 18: rVal <<= m_rParent.IsSquaredPageMode(); break;                   // "Other/IsSquaredPageMode",
             case 19: rVal <<= m_rParent.IsApplyCharUnit(); break;                     // "Other/ApplyCharUnit",
             case 20: rVal <<= m_rParent.IsShowScrollBarTips(); break;                 // "Window/ShowScrollBarTips",
+            case 21: rVal <<= m_rParent.IsHideWhitespaceMode(); break;                // "ViewLayout/HideWhitespace"
         }
     }
     PutProperties(aNames, aValues);
@@ -392,6 +394,7 @@ void SwLayoutViewConfig::Load()
                 case 18: m_rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
                 case 19: m_rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"
                 case 20: m_rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
+                case 21: m_rParent.SetHideWhitespaceMode(bSet); break;// "ViewLayout/HideWhitespace"
             }
         }
     }
