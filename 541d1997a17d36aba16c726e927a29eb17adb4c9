@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c4bcf7_129d3477",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2975,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-12-07T13:08:28Z",
+      "side": 1,
+      "message": "maybe better have a config option instead of an environment variable if this is to be used by end users?",
+      "range": {
+        "startLine": 2975,
+        "startChar": 24,
+        "endLine": 2975,
+        "endChar": 68
+      },
+      "revId": "541d1997a17d36aba16c726e927a29eb17adb4c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
