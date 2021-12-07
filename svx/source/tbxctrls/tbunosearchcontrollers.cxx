@@ -169,6 +169,9 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 
     auto aArgs( comphelper::InitPropertySequence( {
         { "SearchItem.SearchString", css::uno::makeAny( sFindText ) },
+        // Related tdf#102506: make Find Bar Ctrl+F searching by value by default
+        // corresponds to SvxSearchCellType::VALUE
+        { "SearchItem.CellType", css::uno::makeAny( 1 ) },
         { "SearchItem.Backward", css::uno::makeAny( aSearchBackwards ) },
         { "SearchItem.SearchFlags", css::uno::makeAny( sal_Int32(0) ) },
         { "SearchItem.TransliterateFlags", css::uno::makeAny( static_cast<sal_Int32>(nFlags) ) },
