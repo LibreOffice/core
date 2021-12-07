@@ -32,17 +32,10 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio_wmf,\
     vcl \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,emfio_wmf,\
-    configmgr/source/configmgr \
-    emfio/emfio \
-    i18npool/util/i18npool \
-    ucb/source/core/ucb1 \
-    unotools/util/utl \
-))
-
 $(eval $(call gb_CppunitTest_use_configuration,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_ure,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_vcl,emfio_wmf))
+$(eval $(call gb_CppunitTest_use_rdb,emfio_wmf,services))
 
 # vim: set noet sw=4 ts=4:

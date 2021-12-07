@@ -518,7 +518,7 @@ namespace drawinglayer::primitive2d
                             aRetval.resize(1);
                             aRetval[0] = new TransformPrimitive2D(
                                 aEmbedVectorGraphic,
-                                rGraphic.getVectorGraphicData()->getPrimitive2DSequence());
+                                Primitive2DContainer(rGraphic.getVectorGraphicData()->getPrimitive2DSequence()));
                         }
                     }
                     else

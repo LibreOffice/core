@@ -39,7 +39,7 @@ namespace drawinglayer::primitive2d
         {
         private:
             const TextSimplePortionPrimitive2D&     mrSource;
-            Primitive2DContainer                       mxResult;
+            Primitive2DContainer                    mxResult;
             TextLayouterDevice                      maTextLayouter;
             basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose maDecTrans;
 

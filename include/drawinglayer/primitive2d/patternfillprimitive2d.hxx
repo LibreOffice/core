@@ -85,7 +85,7 @@ namespace drawinglayer::primitive2d
             virtual sal_uInt32 getPrimitive2DID() const override;
 
             // XAccounting
-            virtual sal_Int64 SAL_CALL estimateUsage() override;
+            virtual sal_Int64 estimateUsage() override;
 
             /// helper which creates the content - checks if clipping is needed and eventually
             /// creates buffered content to speed up rendering
