@@ -2245,7 +2245,9 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     sal_uInt16           nModifier = mxFrameSet->GetModifier();
     FrmValidFlags        nValidFlags = FrmValidFlags::NONE;
 
-    theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(), SvxBorderLineWidth::Hairline);
+    // tdf#48622, tdf#145828 use correct default to create intended 0.75pt
+    // cell border using the border formatting tool in the standard toolbar
+    theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(), SvxBorderLineWidth::Thin);
 
     switch ( nSel )
     {
