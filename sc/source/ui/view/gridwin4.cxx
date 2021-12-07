@@ -1292,15 +1292,15 @@ namespace
     class ScLOKProxyObjectContact final : public sdr::contact::ObjectContactOfPageView
     {
     private:
-        sdr::contact::ObjectContact& mrRealObjectContact;
+        ScDrawView* pScDrawView;
 
     public:
         explicit ScLOKProxyObjectContact(
-            sdr::contact::ObjectContact& rRealOC,
+            ScDrawView* pDrawView,
             SdrPageWindow& rPageWindow,
             const char* pDebugName) :
             ObjectContactOfPageView(rPageWindow, pDebugName),
-            mrRealObjectContact(rRealOC)
+            pScDrawView(pDrawView)
         {
         }
 
@@ -1310,9 +1310,22 @@ namespace
             basegfx::B2DVector& rTarget,
             const sdr::contact::ViewObjectContact& rClient) const override
         {
+            if (!pScDrawView)
+                return;
+
+            SdrPageView* pPageView(pScDrawView->GetSdrPageView());
+            if (!pPageView)
+                return;
+
+            SdrPageWindow* pSdrPageWindow = pPageView->GetPageWindow(0);
+            if (!pSdrPageWindow)
+                return;
+
+            sdr::contact::ObjectContact& rObjContact(pSdrPageWindow->GetObjectContact());
+
             SdrObject* pTargetSdrObject(rClient.GetViewContact().TryToGetSdrObject());
             if (pTargetSdrObject)
-                rTarget = pTargetSdrObject->GetViewContact().GetViewObjectContact(mrRealObjectContact).getGridOffset();
+                rTarget = pTargetSdrObject->GetViewContact().GetViewObjectContact(rObjContact).getGridOffset();
         }
     };
 
@@ -1331,15 +1344,7 @@ namespace
             if (!pScDrawView)
                 return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
 
-            SdrPageView* pPageView(pScDrawView->GetSdrPageView());
-            if (!pPageView)
-                return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
-
-            SdrPageWindow* pSdrPageWindow = pPageView->GetPageWindow(0);
-            if (!pSdrPageWindow)
-                return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
-
-            return new ScLOKProxyObjectContact(pSdrPageWindow->GetObjectContact(), rPageWindow, pDebugName);
+            return new ScLOKProxyObjectContact(pScDrawView, rPageWindow, pDebugName);
         }
 
     private:
