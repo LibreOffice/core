@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4ef50e7_98450601",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003487
+      },
+      "writtenOn": "2021-12-07T09:24:08Z",
+      "side": 1,
+      "message": "I implemented the proposed changes. Apologies it took multiple patch sets, I was trying to figure out how to amend a previous commit.",
+      "revId": "f7b9241f5518c6c6634fc06521c021ec731bbe53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
