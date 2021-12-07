@@ -13,7 +13,7 @@
 #include "FrameControl.hxx"
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 /**
  *  Button painter helper class used to paint a runtime button positioned to a writer frame.

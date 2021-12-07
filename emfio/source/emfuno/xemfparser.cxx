@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -202,7 +202,7 @@ namespace emfio::emfreader
                 SAL_WARN("emfio", "Invalid stream (!)");
             }
 
-            return comphelper::containerToSequence(aRetval);
+            return aRetval.toSequence();
         }
 
         void XEmfParser::setSizeHint(const geometry::RealPoint2D& rSize)

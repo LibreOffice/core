@@ -48,8 +48,7 @@ namespace drawinglayer::processor2d
         // Primitive2DDecompositionVisitor
         void BaseProcessor2D::visit(const primitive2d::Primitive2DReference& rCandidate)
         {
-            const primitive2d::BasePrimitive2D* pBasePrimitive = static_cast< const primitive2d::BasePrimitive2D* >(rCandidate.get());
-            processBasePrimitive2D(*pBasePrimitive);
+            processBasePrimitive2D(*rCandidate);
         }
         void BaseProcessor2D::visit(const primitive2d::Primitive2DContainer& rContainer)
         {
@@ -64,9 +63,8 @@ namespace drawinglayer::processor2d
         {
             for (const primitive2d::Primitive2DReference& rCandidate : rSource)
             {
-                const primitive2d::BasePrimitive2D* pBasePrimitive = static_cast< const primitive2d::BasePrimitive2D* >(rCandidate.get());
-                if (pBasePrimitive)
-                    processBasePrimitive2D(*pBasePrimitive);
+                if (rCandidate)
+                    processBasePrimitive2D(*rCandidate);
             }
         }
 

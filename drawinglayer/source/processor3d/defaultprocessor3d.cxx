@@ -34,6 +34,7 @@
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/graph.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 

@@ -43,6 +43,7 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/converters.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -501,8 +502,8 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
 
                     // if we have geometry and it has a range, convert to BitmapEx using
                     // common tooling
-                    aBmp = convertPrimitive2DSequenceToBitmapEx(
-                        xPrimitives,
+                    aBmp = drawinglayer::convertPrimitive2DContainerToBitmapEx(
+                        std::move(xPrimitives),
                         aRange,
                         nMaximumQuadraticPixels,
                         eRangeUnit,

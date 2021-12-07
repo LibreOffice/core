@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svgio,\
     cppuhelper \
     comphelper \
     sal \
+    salhelper \
     sax \
     svt \
     test \

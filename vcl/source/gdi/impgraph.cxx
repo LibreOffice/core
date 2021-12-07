@@ -42,6 +42,7 @@
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/dibtools.hxx>
 #include <map>
 #include <memory>
@@ -715,12 +716,16 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
         {
             // try to cast to MetafileAccessor implementation
             const css::uno::Reference< css::graphic::XPrimitive2D > xReference(aSequence[0]);
-            const MetafileAccessor* pMetafileAccessor = dynamic_cast< const MetafileAccessor* >(xReference.get());
-
-            if (pMetafileAccessor)
+            auto pUnoPrimitive = static_cast< const drawinglayer::primitive2d::UnoPrimitive2D* >(xReference.get());
+            if (pUnoPrimitive)
             {
-                // it is a MetafileAccessor implementation, get Metafile
-                pMetafileAccessor->accessMetafile(const_cast< ImpGraphic* >(this)->maMetaFile);
+                const MetafileAccessor* pMetafileAccessor = dynamic_cast< const MetafileAccessor* >(pUnoPrimitive->getBasePrimitive2D().get());
+
+                if (pMetafileAccessor)
+                {
+                    // it is a MetafileAccessor implementation, get Metafile
+                    pMetafileAccessor->accessMetafile(const_cast< ImpGraphic* >(this)->maMetaFile);
+                }
             }
         }
     }

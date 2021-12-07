@@ -604,10 +604,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 {
     for (size_t i = 0; i < rPrimitive2DSequence.size(); i++)
     {
-        drawinglayer::primitive2d::Primitive2DReference xPrimitive2DReference
-            = rPrimitive2DSequence[i];
-        const BasePrimitive2D* pBasePrimitive
-            = static_cast<const BasePrimitive2D*>(xPrimitive2DReference.get());
+        const BasePrimitive2D* pBasePrimitive = rPrimitive2DSequence[i].get();
         sal_uInt32 nId = pBasePrimitive->getPrimitive2DID();
         if (nId < maFilter.size() && maFilter[nId])
             continue;

@@ -127,9 +127,6 @@ bool MoveParam::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
 
     StringRef aFileName = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(parmVarDecl)));
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR
-                                    "/include/drawinglayer/primitive2d/Primitive2DContainer.hxx"))
-        return true;
     if (loplugin::hasPathnamePrefix(aFileName,
                                     SRCDIR "/include/drawinglayer/primitive3d/baseprimitive3d.hxx"))
         return true;

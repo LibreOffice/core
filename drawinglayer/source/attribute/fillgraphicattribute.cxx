@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <vcl/graph.hxx>
 
