@@ -35,6 +35,15 @@ SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, Sfx
 :   m_aPropertyMap( pMap ),
     mrItemPool( rItemPool )
 {
+    sal_uInt16 nMin = SAL_MAX_UINT16;
+    sal_uInt16 nMax = 0;
+    for ( const SfxItemPropertyMapEntry* pEntry : m_aPropertyMap.getPropertyEntries())
+    {
+        nMax = std::max(nMax, pEntry->nWID);
+        nMin = std::min(nMax, pEntry->nWID);
+    }
+    mnMinWID = nMin;
+    mnMaxWID = nMax;
 }
 
 

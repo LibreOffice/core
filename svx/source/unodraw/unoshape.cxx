@@ -1640,11 +1640,8 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     {
         if( !mpImpl->mxItemSet )
         {
-            mpImpl->mxItemSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID );
-        }
-        else
-        {
-            mpImpl->mxItemSet->MergeRange(pMap->nWID, pMap->nWID);
+            // avoid having to do repeated MergeRange() by just allocating all the space we need up front
+            mpImpl->mxItemSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), mpPropSet->GetMinWhichID(), mpPropSet->GetMaxWhichID() );
         }
         pSet = &*mpImpl->mxItemSet;
     }

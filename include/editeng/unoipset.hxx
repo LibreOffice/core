@@ -35,6 +35,8 @@ class EDITENG_DLLPUBLIC SvxItemPropertySet
     SfxItemPropertyMap          m_aPropertyMap;
     mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
     SfxItemPool&                    mrItemPool;
+    sal_uInt16                  mnMinWID;  ///< WhichId of SfxPoolItem
+    sal_uInt16                  mnMaxWID;  ///< WhichId of SfxPoolItem
 
 public:
     SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool );
@@ -54,6 +56,9 @@ public:
     css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
     const SfxItemPropertyMapEntry* getPropertyMapEntry(std::u16string_view rName) const;
+
+    sal_uInt16 GetMinWhichID() const { return mnMinWID; }
+    sal_uInt16 GetMaxWhichID() const { return mnMaxWID; }
 };
 
 struct SvxIDPropertyCombine
