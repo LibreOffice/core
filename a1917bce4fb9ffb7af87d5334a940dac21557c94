@@ -16,6 +16,24 @@
       "message": "That looks like something to be pushed into l10n framework now?",
       "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd98226_6f80cafb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-07T06:15:40Z",
+      "side": 1,
+      "message": "I do think there should be a simpler way to do this. E.g. we also may want to add LANGUAGE_CHINESE_SIMPLIFIED and LANGUAGE_CHINESE_TRADITIONAL to this exclusion list, and it seems LANGUAGE_KOREAN may also be exculded. This of block may be too long if more languages are added in this list.",
+      "parentUuid": "b4c810c6_3fccae3b",
+      "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
