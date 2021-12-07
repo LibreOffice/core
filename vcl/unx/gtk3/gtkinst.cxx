@@ -15401,6 +15401,12 @@ public:
                         gtk_scrolled_window_get_min_content_height(GTK_SCROLLED_WINDOW(pParent)));
         }
         GtkRequisition size;
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // sometimes gtk gives a bad outcome for gtk_widget_get_preferred_size if GtkTreeView's
+        // do_validate_rows hasn't been run before querying the preferred size, if we call
+        // gtk_widget_get_preferred_width first, we can guarantee do_validate_rows get's called
+        gtk_widget_get_preferred_width(m_pWidget, nullptr, &size.width);
+#endif
         gtk_widget_get_preferred_size(m_pWidget, nullptr, &size);
         if (aRet.Width() == -1)
             aRet.setWidth(size.width);
