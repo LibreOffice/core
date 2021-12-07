@@ -183,6 +183,7 @@
 #include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
+#include <tools/GraphicSizeCheck.hxx>
 
 #include <ViewShellBase.hxx>
 #include <memory>
@@ -1457,6 +1458,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         }
                     }
             }
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
+        case SID_GRAPHIC_SIZE_CHECK:
+        {
+            sd::GraphicSizeCheckGUIResult aResult(GetDoc());
+            svx::GenericCheckDialog aDialog(GetFrameWeld(), aResult);
+            aDialog.run();
+
             Cancel();
             rReq.Ignore();
         }
