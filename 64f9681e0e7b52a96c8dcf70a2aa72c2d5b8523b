@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b59d0fc_99c66334",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-07T14:31:42Z",
+      "side": 1,
+      "message": "This will be the last one after this: https://gerrit.libreoffice.org/c/core/+/124964",
+      "revId": "64f9681e0e7b52a96c8dcf70a2aa72c2d5b8523b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
