@@ -34,6 +34,24 @@
       "parentUuid": "172ca897_72e226a3",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4003191f_cf769ee1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-07T15:11:49Z",
+      "side": 1,
+      "message": "\u003e That seems too complicated. And then you need additional sync logic between the component file and build system, which I wanted to avoid. I wanted to get rid of the duplicated build logic. AFAIK know there is no additional info in the component tag, that gbuild doesn\u0027t already have:\n\u003e \n\u003e * Based on the library type, you can select the loader\n\u003e * The \"@CPPU_ENV@\" already comes from gbuild\n\u003e * The URI comes from the library name.\n\nInformation about the \"prefix\" attribute is missing.  (Plus, we might want to extend the set of component element attributes in the future.)\n\n\u003e So my suggestion: get rid of the component tag in gbuild\u0027s component files and generate the libraries component files to concat by Rdb from implementation snippets selected by gbuild. Any reason why this can\u0027t work?\n\nThen why didn\u0027t you do that?  Why did you need to introduce a new --enable-services-rdb-from-build option?  Why did you need to split the svx and sw component files?  Me confused.",
+      "parentUuid": "00a73b4d_e84283d9",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
