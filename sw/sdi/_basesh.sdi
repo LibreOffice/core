@@ -577,4 +577,11 @@ interface BaseTextSelection
         ExecMethod = ExecDlg;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+
+    SID_GRAPHIC_SIZE_CHECK
+    [
+        ExecMethod = ExecDlg;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
 }

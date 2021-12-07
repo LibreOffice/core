@@ -80,6 +80,8 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/gallerymenu2 \
 	svx/uiconfig/ui/grafctrlbox \
 	svx/uiconfig/ui/grafmodebox \
+	svx/uiconfig/ui/genericcheckdialog \
+	svx/uiconfig/ui/genericcheckentry \
 	svx/uiconfig/ui/headfootformatpage \
 	svx/uiconfig/ui/imapdialog \
 	svx/uiconfig/ui/imapmenu \

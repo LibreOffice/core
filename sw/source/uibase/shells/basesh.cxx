@@ -84,6 +84,7 @@
 #include <modcfg.hxx>
 #include <svx/fmshell.hxx>
 #include <SwRewriter.hxx>
+#include <GraphicSizeCheck.hxx>
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <memory>
@@ -1875,6 +1876,13 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 else
                     rSet.Put( SfxVisibilityItem( nWhich, false ) );
                 break;
+            case SID_GRAPHIC_SIZE_CHECK:
+            {
+                sal_Int32 nDPI = rSh.GetDoc()->getIDocumentSettingAccess().getImagePreferredDPI();
+                if (nDPI <= 0)
+                    rSet.DisableItem(nWhich);
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -2694,6 +2702,13 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             sw::AccessibilityCheck aCheck(rSh.GetDoc());
             aCheck.check();
             svx::AccessibilityCheckDialog aDialog(pMDI, aCheck.getIssueCollection());
+            aDialog.run();
+        }
+        break;
+        case SID_GRAPHIC_SIZE_CHECK:
+        {
+            sw::GraphicSizeCheckGUIResult aResult(rSh.GetDoc());
+            svx::GenericCheckDialog aDialog(pMDI, aResult);
             aDialog.run();
         }
         break;

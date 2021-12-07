@@ -489,6 +489,7 @@
           <menu:menuitem menu:id=".uno:ColorSettings"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:GraphicDialog"/>
+          <menu:menuitem menu:id=".uno:GraphicSizeCheck"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:FormatObjectMenu">

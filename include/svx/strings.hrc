@@ -1754,6 +1754,13 @@
 #define RID_SVXSTR_SIGNATURELINE_DSIGNED_BY                 NC_("RID_SVXSTR_SIGNATURELINE_DSIGNED_BY", "Digitally signed by:")
 #define RID_SVXSTR_SIGNATURELINE_DATE                       NC_("RID_SVXSTR_SIGNATURELINE_DATE", "Date: %1")
 
+/*--------------------------------------------------------------------
+    Description: GraphicSizeCheck strings
+ --------------------------------------------------------------------*/
+#define STR_GRAPHIC_SIZE_CHECK_DIALOG_TITLE   NC_("STR_GRAPHIC_SIZE_CHECK_DIALOG_TITLE", "Graphic Size Check")
+#define STR_WARNING_GRAPHIC_PIXEL_COUNT_LOW   NC_("STR_WARNING_GRAPHIC_PIXEL_COUNT_LOW", "Image '%NAME%' has too few pixels for the current size (%DPIX% x %DPIY% DPI)")
+#define STR_WARNING_GRAPHIC_PIXEL_COUNT_HIGH  NC_("STR_WARNING_GRAPHIC_PIXEL_COUNT_HIGH", "Image '%NAME%' has too many pixels for the current size (%DPIX% x %DPIY% DPI)")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

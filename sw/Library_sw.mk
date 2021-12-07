@@ -311,6 +311,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/frmedt/tblsel \
     sw/source/core/graphic/grfatr \
     sw/source/core/graphic/ndgrf \
+    sw/source/core/graphic/GraphicSizeCheck \
     sw/source/core/layout/anchoreddrawobject \
     sw/source/core/layout/anchoredobject \
     sw/source/core/layout/atrfrm \
