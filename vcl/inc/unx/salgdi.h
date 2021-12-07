@@ -253,8 +253,6 @@ public:
                                         const SalBitmap* pAlphaBitmap,
                                         double fAlpha) override;
 
-    virtual bool                    hasFastDrawTransformedBitmap() const override;
-
     virtual bool                    drawAlphaRect(
                                         tools::Long nX, tools::Long nY, tools::Long nWidth,
                                         tools::Long nHeight, sal_uInt8 nTransparency ) override;

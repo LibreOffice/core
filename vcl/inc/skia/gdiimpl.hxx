@@ -173,8 +173,6 @@ public:
                                        const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
                                        const SalBitmap* pAlphaBitmap, double fAlpha) override;
 
-    virtual bool hasFastDrawTransformedBitmap() const override;
-
     /** Render solid rectangle with given transparency
 
       @param nX             Top left coordinate of rectangle

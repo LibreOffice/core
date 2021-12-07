@@ -1299,8 +1299,6 @@ bool AquaGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     return true;
 }
 
-bool AquaGraphicsBackend::hasFastDrawTransformedBitmap() const { return false; }
-
 bool AquaGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                         tools::Long nHeight, sal_uInt8 nTransparency)
 {

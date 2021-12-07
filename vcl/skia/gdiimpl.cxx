@@ -1829,13 +1829,6 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
     postDraw();
 }
 
-bool SkiaSalGraphicsImpl::hasFastDrawTransformedBitmap() const
-{
-    // Return true even in raster mode, even that way Skia is faster than e.g. GraphicObject
-    // trying to handle stuff manually.
-    return true;
-}
-
 // Whether applying matrix needs image smoothing for the transformation.
 static bool matrixNeedsHighQuality(const SkMatrix& matrix)
 {

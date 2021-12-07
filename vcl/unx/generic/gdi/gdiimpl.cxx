@@ -852,11 +852,6 @@ bool X11SalGraphicsImpl::drawTransformedBitmap(
     return false;
 }
 
-bool X11SalGraphicsImpl::hasFastDrawTransformedBitmap() const
-{
-    return false;
-}
-
 bool X11SalGraphicsImpl::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
                                     tools::Long nHeight, sal_uInt8 nTransparency )
 {

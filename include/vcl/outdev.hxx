@@ -1381,11 +1381,11 @@ public:
                                     const BitmapEx& rBitmapEx,
                                     double fAlpha = 1.0);
 
-    /** Return true if DrawTransformedBitmapEx() is fast.
-
-        @since 7.2
+    /** Return true if DrawTransformedBitmapEx() is implemented. It may still fail,
+        e.g when fAlpha != 1.0 and that aspect is not implemented. This is a hint
+        that calling it is worth a try
     */
-    bool                        HasFastDrawTransformedBitmap() const;
+    bool                        ImplementsFastDrawTransformedBitmap() const;
 
 protected:
 
