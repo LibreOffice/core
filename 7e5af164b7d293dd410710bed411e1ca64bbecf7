@@ -16,6 +16,23 @@
       "message": "FYI :-)",
       "revId": "7e5af164b7d293dd410710bed411e1ca64bbecf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d868cf23_45ec09f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-07T22:31:29Z",
+      "side": 1,
+      "message": "So, I think I\u0027ve already cooled off, so let\u0027s go over how this commit is all wrong and why the only thing to do with it is to revert it.\n\nFirst of all, in case it wasn\u0027t obvious from the two comments about it that you removed, this originates from my fix for tdf#138068, where you introduced a performance problem by preferring DrawTransformedBitmap() over plain DrawBitmap(). According to all the people reporting the problem, DrawTransformedBitmap() was slower then DrawBitmap() for pretty much every VCL backend except for Skia.\n\nNow, the key word in the function name HasFastDrawTransformedBitmap() is \"Fast\", and the long confused commit message suggests that you missed that the function name includes that. The function was checked in OutputDevice\u0027s function before the attempt to convert the call to plain DrawBitmap(), because it makes sense to prefer DrawTransformedBitmap() over DrawBitmap() only if it doesn\u0027t make things slower. As established above, at least by the time of writing the code this was the case only for Skia, and that\u0027s why the function returns true only for Skia. The only case where this makes sense is to avoid Mirror(), as said by the relevant commit 5d2faf94c2f0ac59223a, and this is because with Vulkan-backed bitmaps pixel-based Mirror() will slow things down. At the time of the writing the comment for hasFastDrawTransformedBitmap() seemed enough, but if it\u0027s not then I suppose I can improve it by commenting also at the place of usage.\n\nThere is no regression for any other backend caused by checking for HasDrawTransformedBitmap(), because another call to DrawTransformedBitmap() is done right after the attempt to simplify to DrawBitmap() if that doesn\u0027t work out. Given that you left it in as a duplicate, I assume that you missed it too. The second usage in vclcanvas is probably only relevant to Skia as well, because AFAIK(?) only Skia by now uses vclcanvas.\n\nWith regards to the extra alpha parameter, I called it alpha simply because that\u0027s what the vclcanvas code called it, and last time I checked opacity and alpha were pretty much the same thing. I did not bother to implement it in any other VCL backend because I didn\u0027t see the point, as it really matters only for vclcanvas and Skia\u0027s Vulkan drawing, but feel free to add it wherever you feel like. Also, your bailing out on fAlpha !\u003d 1.0 breaks the Skia handling of it.\n\nAs for the conversion of a simple virtual method on a path to an expensive call to an ugly fragile hack and considering it an improvement, that\u0027s so awfully clueless that I\u0027m not even going to deride it.\n\nFinally, this all makes me wonder whether and how much you tested this, particularly WRT to tdf#138068. This doesn\u0027t seem to regress as badly as I remember tdf#138068 did, but I can still subjectively see worse result with GDI (tearing when scrolling) and with Gtk3 if I scroll a bit down to see all 6 images and then just hold a key to type into a textbox, I do not see the text updated until I release the key (which shows that the Cairo version of DrawTransformedBitmap() performs worse than DrawBitmap(), since without this change that works fine). That also means that HasFastDrawTransformedBitmap() returning false for at least these is correct.\n\n\u003e from my POV in those cases choosing possible runtime speed over complexity is not always preferable.\n\nI assume that\u0027s not what you meant to write, but it\u0027s a funny coincidence that you did.\n\nAnyways, in short this whole commit is a broken confused nonsense, and, unless you have any questions, I am going to revert it.\n",
+      "revId": "7e5af164b7d293dd410710bed411e1ca64bbecf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
