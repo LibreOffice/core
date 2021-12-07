@@ -1431,7 +1431,7 @@ namespace basegfx
 
     void B3DPolygon::setB3DPoint(sal_uInt32 nIndex, const basegfx::B3DPoint& rValue)
     {
-        OSL_ENSURE(nIndex < std::as_const(*mpPolygon).count(), "B3DPolygon access outside range (!)");
+        OSL_ENSURE(nIndex < std::as_const(mpPolygon)->count(), "B3DPolygon access outside range (!)");
 
         if(getB3DPoint(nIndex) != rValue)
             mpPolygon->setPoint(nIndex, rValue);
@@ -1446,9 +1446,9 @@ namespace basegfx
 
     void B3DPolygon::setBColor(sal_uInt32 nIndex, const BColor& rValue)
     {
-        OSL_ENSURE(nIndex < std::as_const(*mpPolygon).count(), "B3DPolygon access outside range (!)");
+        OSL_ENSURE(nIndex < std::as_const(mpPolygon)->count(), "B3DPolygon access outside range (!)");
 
-        if(std::as_const(*mpPolygon).getBColor(nIndex) != rValue)
+        if(std::as_const(mpPolygon)->getBColor(nIndex) != rValue)
             mpPolygon->setBColor(nIndex, rValue);
     }
 
@@ -1459,7 +1459,7 @@ namespace basegfx
 
     void B3DPolygon::clearBColors()
     {
-        if(std::as_const(*mpPolygon).areBColorsUsed())
+        if(std::as_const(mpPolygon)->areBColorsUsed())
             mpPolygon->clearBColors();
     }
 
@@ -1477,15 +1477,15 @@ namespace basegfx
 
     void B3DPolygon::setNormal(sal_uInt32 nIndex, const B3DVector& rValue)
     {
-        OSL_ENSURE(nIndex < std::as_const(*mpPolygon).count(), "B3DPolygon access outside range (!)");
+        OSL_ENSURE(nIndex < std::as_const(mpPolygon)->count(), "B3DPolygon access outside range (!)");
 
-        if(std::as_const(*mpPolygon).getNormal(nIndex) != rValue)
+        if(std::as_const(mpPolygon)->getNormal(nIndex) != rValue)
             mpPolygon->setNormal(nIndex, rValue);
     }
 
     void B3DPolygon::transformNormals(const B3DHomMatrix& rMatrix)
     {
-        if(std::as_const(*mpPolygon).areNormalsUsed() && !rMatrix.isIdentity())
+        if(std::as_const(mpPolygon)->areNormalsUsed() && !rMatrix.isIdentity())
             mpPolygon->transformNormals(rMatrix);
     }
 
@@ -1496,7 +1496,7 @@ namespace basegfx
 
     void B3DPolygon::clearNormals()
     {
-        if(std::as_const(*mpPolygon).areNormalsUsed())
+        if(std::as_const(mpPolygon)->areNormalsUsed())
             mpPolygon->clearNormals();
     }
 
@@ -1509,15 +1509,15 @@ namespace basegfx
 
     void B3DPolygon::setTextureCoordinate(sal_uInt32 nIndex, const B2DPoint& rValue)
     {
-        OSL_ENSURE(nIndex < std::as_const(*mpPolygon).count(), "B3DPolygon access outside range (!)");
+        OSL_ENSURE(nIndex < std::as_const(mpPolygon)->count(), "B3DPolygon access outside range (!)");
 
-        if(std::as_const(*mpPolygon).getTextureCoordinate(nIndex) != rValue)
+        if(std::as_const(mpPolygon)->getTextureCoordinate(nIndex) != rValue)
             mpPolygon->setTextureCoordinate(nIndex, rValue);
     }
 
     void B3DPolygon::transformTextureCoordinates(const B2DHomMatrix& rMatrix)
     {
-        if(std::as_const(*mpPolygon).areTextureCoordinatesUsed() && !rMatrix.isIdentity())
+        if(std::as_const(mpPolygon)->areTextureCoordinatesUsed() && !rMatrix.isIdentity())
             mpPolygon->transformTextureCoordinates(rMatrix);
     }
 
@@ -1528,14 +1528,14 @@ namespace basegfx
 
     void B3DPolygon::clearTextureCoordinates()
     {
-        if(std::as_const(*mpPolygon).areTextureCoordinatesUsed())
+        if(std::as_const(mpPolygon)->areTextureCoordinatesUsed())
             mpPolygon->clearTextureCoordinates();
     }
 
     void B3DPolygon::append(const basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
-            mpPolygon->insert(std::as_const(*mpPolygon).count(), rPoint, nCount);
+            mpPolygon->insert(std::as_const(mpPolygon)->count(), rPoint, nCount);
     }
 
     void B3DPolygon::append(const B3DPolygon& rPoly, sal_uInt32 nIndex, sal_uInt32 nCount)
@@ -1550,19 +1550,19 @@ namespace basegfx
 
         if(nIndex == 0 && nCount == rPoly.count())
         {
-            mpPolygon->insert(std::as_const(*mpPolygon).count(), *rPoly.mpPolygon);
+            mpPolygon->insert(std::as_const(mpPolygon)->count(), *rPoly.mpPolygon);
         }
         else
         {
             OSL_ENSURE(nIndex + nCount <= rPoly.mpPolygon->count(), "B3DPolygon Append outside range (!)");
             ImplB3DPolygon aTempPoly(*rPoly.mpPolygon, nIndex, nCount);
-            mpPolygon->insert(std::as_const(*mpPolygon).count(), aTempPoly);
+            mpPolygon->insert(std::as_const(mpPolygon)->count(), aTempPoly);
         }
     }
 
     void B3DPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
-        OSL_ENSURE(nIndex + nCount <= std::as_const(*mpPolygon).count(), "B3DPolygon Remove outside range (!)");
+        OSL_ENSURE(nIndex + nCount <= std::as_const(mpPolygon)->count(), "B3DPolygon Remove outside range (!)");
 
         if(nCount)
             mpPolygon->remove(nIndex, nCount);
@@ -1606,7 +1606,7 @@ namespace basegfx
 
     void B3DPolygon::transform(const basegfx::B3DHomMatrix& rMatrix)
     {
-        if(std::as_const(*mpPolygon).count() && !rMatrix.isIdentity())
+        if(std::as_const(mpPolygon)->count() && !rMatrix.isIdentity())
         {
             mpPolygon->transform(rMatrix);
         }

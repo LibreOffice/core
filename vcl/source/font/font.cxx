@@ -184,7 +184,7 @@ void Font::SetSymbolFlag( bool bSymbol )
         }
         else
         {
-            if ( std::as_const(*mpImplFont).GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+            if ( std::as_const(mpImplFont)->GetCharSet() == RTL_TEXTENCODING_SYMBOL )
                 mpImplFont->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
         }
     }
@@ -851,9 +851,9 @@ const OUString& Font::GetFamilyName() const { return mpImplFont->GetFamilyName()
 const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
 
 const Size& Font::GetFontSize() const { return mpImplFont->GetFontSize(); }
-void Font::SetFontHeight( tools::Long nHeight ) { SetFontSize( Size( std::as_const(*mpImplFont).GetFontSize().Width(), nHeight ) ); }
+void Font::SetFontHeight( tools::Long nHeight ) { SetFontSize( Size( std::as_const(mpImplFont)->GetFontSize().Width(), nHeight ) ); }
 tools::Long Font::GetFontHeight() const { return mpImplFont->GetFontSize().Height(); }
-void Font::SetAverageFontWidth( tools::Long nWidth ) { SetFontSize( Size( nWidth, std::as_const(*mpImplFont).GetFontSize().Height() ) ); }
+void Font::SetAverageFontWidth( tools::Long nWidth ) { SetFontSize( Size( nWidth, std::as_const(mpImplFont)->GetFontSize().Height() ) ); }
 tools::Long Font::GetAverageFontWidth() const { return mpImplFont->GetFontSize().Width(); }
 
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->GetCharSet(); }

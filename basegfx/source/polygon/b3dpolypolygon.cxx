@@ -241,7 +241,7 @@ namespace basegfx
 
     void B3DPolyPolygon::setB3DPolygon(sal_uInt32 nIndex, const B3DPolygon& rPolygon)
     {
-        OSL_ENSURE(nIndex < std::as_const(*mpPolyPolygon).count(), "B3DPolyPolygon access outside range (!)");
+        OSL_ENSURE(nIndex < std::as_const(mpPolyPolygon)->count(), "B3DPolyPolygon access outside range (!)");
 
         if(getB3DPolygon(nIndex) != rPolygon)
             mpPolyPolygon->setB3DPolygon(nIndex, rPolygon);
@@ -319,18 +319,18 @@ namespace basegfx
     void B3DPolyPolygon::append(const B3DPolygon& rPolygon, sal_uInt32 nCount)
     {
         if(nCount)
-            mpPolyPolygon->insert(std::as_const(*mpPolyPolygon).count(), rPolygon, nCount);
+            mpPolyPolygon->insert(std::as_const(mpPolyPolygon)->count(), rPolygon, nCount);
     }
 
     void B3DPolyPolygon::append(const B3DPolyPolygon& rPolyPolygon)
     {
         if(rPolyPolygon.count())
-            mpPolyPolygon->insert(std::as_const(*mpPolyPolygon).count(), rPolyPolygon);
+            mpPolyPolygon->insert(std::as_const(mpPolyPolygon)->count(), rPolyPolygon);
     }
 
     void B3DPolyPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
-        OSL_ENSURE(nIndex + nCount <= std::as_const(*mpPolyPolygon).count(), "B3DPolyPolygon Remove outside range (!)");
+        OSL_ENSURE(nIndex + nCount <= std::as_const(mpPolyPolygon)->count(), "B3DPolyPolygon Remove outside range (!)");
 
         if(nCount)
             mpPolyPolygon->remove(nIndex, nCount);
@@ -369,7 +369,7 @@ namespace basegfx
 
     void B3DPolyPolygon::transform(const B3DHomMatrix& rMatrix)
     {
-        if(std::as_const(*mpPolyPolygon).count() && !rMatrix.isIdentity())
+        if(std::as_const(mpPolyPolygon)->count() && !rMatrix.isIdentity())
         {
             mpPolyPolygon->transform(rMatrix);
         }

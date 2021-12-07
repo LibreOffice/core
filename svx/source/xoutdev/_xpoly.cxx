@@ -322,7 +322,7 @@ XPolygon::~XPolygon() = default;
 
 void XPolygon::SetPointCount( sal_uInt16 nPoints )
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(pImpXPolygon)->CheckPointDelete();
 
     if( pImpXPolygon->nSize < nPoints )
         pImpXPolygon->Resize( nPoints );
@@ -425,7 +425,7 @@ const Point& XPolygon::operator[]( sal_uInt16 nPos ) const
 
 Point& XPolygon::operator[]( sal_uInt16 nPos )
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(pImpXPolygon)->CheckPointDelete();
 
     if( nPos >= pImpXPolygon->nSize )
     {
@@ -458,7 +458,7 @@ PolyFlags XPolygon::GetFlags( sal_uInt16 nPos ) const
 /// set the flags for the point at the given position
 void XPolygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(pImpXPolygon)->CheckPointDelete();
     pImpXPolygon->pFlagAry[nPos] = eFlags;
 }
 
@@ -741,7 +741,7 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 /// scale in X- and/or Y-direction
 void XPolygon::Scale(double fSx, double fSy)
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(pImpXPolygon)->CheckPointDelete();
 
     sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
@@ -766,7 +766,7 @@ void XPolygon::Scale(double fSx, double fSy)
 void XPolygon::Distort(const tools::Rectangle& rRefRect,
                        const XPolygon& rDistortedRect)
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(pImpXPolygon)->CheckPointDelete();
 
     tools::Long    Xr, Wr;
     tools::Long    Yr, Hr;

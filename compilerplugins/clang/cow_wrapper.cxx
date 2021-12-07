@@ -53,22 +53,55 @@ bool Cow_Wrapper::VisitCXXMemberCallExpr(const CXXMemberCallExpr* memberCallExpr
     if (!methodDecl || !methodDecl->isConst())
         return true;
 
-    auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(
-        compat::IgnoreImplicit(memberCallExpr->getImplicitObjectArgument()));
-    if (!operatorCallExpr)
-        return true;
-    if (operatorCallExpr->getOperator() != OO_Arrow)
-        return true;
-    auto arrowMethodDecl = dyn_cast_or_null<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
-    if (!arrowMethodDecl)
-        return true;
-    if (arrowMethodDecl->isConst())
-        return true;
-    auto dc = loplugin::DeclCheck(arrowMethodDecl->getParent())
-                  .Class("cow_wrapper")
-                  .Namespace("o3tl")
-                  .GlobalNamespace();
-    if (!dc)
+    auto expr = compat::IgnoreImplicit(memberCallExpr->getImplicitObjectArgument())->IgnoreParens();
+    auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(expr);
+
+    if (operatorCallExpr && operatorCallExpr->getOperator() == OO_Arrow)
+    {
+        auto arrowMethodDecl = dyn_cast_or_null<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
+        if (!arrowMethodDecl)
+            return true;
+        if (arrowMethodDecl->isConst())
+            return true;
+        auto dc = loplugin::DeclCheck(arrowMethodDecl->getParent())
+                      .Class("cow_wrapper")
+                      .Namespace("o3tl")
+                      .GlobalNamespace();
+        if (!dc)
+            return true;
+    }
+    else if (operatorCallExpr)
+    {
+        auto methodDecl2 = dyn_cast_or_null<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
+        if (!methodDecl2)
+            return true;
+        auto dc = loplugin::DeclCheck(methodDecl2->getParent())
+                      .Class("cow_wrapper")
+                      .Namespace("o3tl")
+                      .GlobalNamespace();
+        if (!dc)
+            return true;
+    }
+    else if (auto callExpr = dyn_cast<CallExpr>(expr))
+    {
+        if (!isa<ImplicitCastExpr>(callExpr->getCallee())) // std::as_const shows up as this
+            return true;
+        if (callExpr->getNumArgs() < 1)
+            return true;
+        auto arg0 = dyn_cast<CXXOperatorCallExpr>(callExpr->getArg(0));
+        if (!arg0)
+            return true;
+        auto starMethodDecl = dyn_cast_or_null<CXXMethodDecl>(arg0->getDirectCallee());
+        if (!starMethodDecl)
+            return true;
+        auto dc = loplugin::DeclCheck(starMethodDecl->getParent())
+                      .Class("cow_wrapper")
+                      .Namespace("o3tl")
+                      .GlobalNamespace();
+        if (!dc)
+            return true;
+    }
+    else
         return true;
 
     report(DiagnosticsEngine::Warning,
