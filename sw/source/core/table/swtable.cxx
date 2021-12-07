@@ -1451,8 +1451,9 @@ bool SwTable::IsTableComplex() const
 
 SwTableLine::SwTableLine( SwTableLineFormat *pFormat, sal_uInt16 nBoxes,
                             SwTableBox *pUp )
-    : SwClient( pFormat ),
-    m_pUpper( pUp )
+    : SwClient( pFormat )
+    , m_pUpper( pUp )
+    , m_eRedlineType( RedlineType::None )
 {
     m_aBoxes.reserve( nBoxes );
 }
@@ -1679,6 +1680,12 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(SwRedlineTable::siz
             // TODO: check also text outside of the redlines
         }
     }
+
+    // cache the result
+    const_cast<SwTableLine*>(this)->SetRedlineType( SwRedlineTable::npos == nRet
+        ? RedlineType::None
+        : aRedlineTable[ nRet ]->GetType());
+
     return nRet;
 }
 
@@ -1693,6 +1700,33 @@ bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
            return true;
    }
    return false;
+}
+
+RedlineType SwTableLine::GetRedlineType() const
+{
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    if ( aRedlineTable.empty() )
+        return RedlineType::None;
+
+    // check table row property "HasTextChangesOnly", if it's defined and its value is
+    // false, return with the cached redline type, if it exists, otherwise calculate it
+    const SvxPrintItem *pHasTextChangesOnlyProp =
+            GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+    if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
+    {
+        if ( RedlineType::None != m_eRedlineType )
+            return m_eRedlineType;
+
+        SwRedlineTable::size_type nPos = 0;
+        nPos = UpdateTextChangesOnly(nPos);
+        if ( nPos != SwRedlineTable::npos )
+            return aRedlineTable[nPos]->GetType();
+    }
+    else if ( RedlineType::None != m_eRedlineType )
+        // empty the cache
+        const_cast<SwTableLine*>(this)->SetRedlineType( RedlineType::None );
+
+    return RedlineType::None;
 }
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
