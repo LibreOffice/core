@@ -110,7 +110,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                         SearchAlgorithms2::ABSOLUTE, '\\' ),
     m_eFamily         ( SfxStyleFamily::Para ),
     m_nCommand        ( SvxSearchCmd::FIND ),
-    m_nCellType       ( SvxSearchCellType::FORMULA ),
+    m_nCellType       ( SvxSearchCellType::VALUE ),
     m_nAppFlag        ( SvxSearchApp::WRITER ),
     m_bRowDirection   ( true ),
     m_bAllTables      ( false ),
