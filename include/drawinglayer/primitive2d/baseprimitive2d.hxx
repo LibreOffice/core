@@ -21,7 +21,6 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 
 #include <cppuhelper/compbase.hxx>
@@ -29,6 +28,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <salhelper/simplereferenceobject.hxx>
+#include <rtl/ref.hxx>
+#include <deque>
 #include <mutex>
 
 namespace drawinglayer::geometry
@@ -145,7 +147,7 @@ namespace drawinglayer::primitive2d
     for view-independent primitives which are defined by not using ViewInformation2D
     in their get2DDecomposition/getB2DRange implementations.
 */
-class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D : public BasePrimitive2DImplBase
+class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D : public salhelper::SimpleReferenceObject
 {
     BasePrimitive2D(const BasePrimitive2D&) = delete;
     BasePrimitive2D& operator=(const BasePrimitive2D&) = delete;
@@ -181,6 +183,54 @@ public:
     /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
+    virtual Primitive2DContainer
+    getDecomposition(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
+
+    /** The getRange implementation for UNO API will use getRange from this implementation. It
+        will construct a ViewInformation2D from the ViewParameters for that purpose
+     */
+    virtual css::geometry::RealRectangle2D
+    getRange(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
+
+    // XAccounting
+    virtual sal_Int64 estimateUsage();
+};
+
+/**
+  Rather than make all the BasePrimitive2D classes bear the cost of being an UNO
+  object, we just wrap the top level BasePrimitive2D in this class when we need
+  to pass them over UNO
+*/
+class DRAWINGLAYER_DLLPUBLIC UnoPrimitive2D final : public BasePrimitive2DImplBase
+{
+    UnoPrimitive2D(const UnoPrimitive2D&) = delete;
+    UnoPrimitive2D& operator=(const UnoPrimitive2D&) = delete;
+
+public:
+    // constructor/destructor
+    UnoPrimitive2D(const rtl::Reference<BasePrimitive2D>& rPrimitive)
+        : mxPrimitive(rPrimitive)
+    {
+    }
+    virtual ~UnoPrimitive2D() override;
+
+    /// The default implementation will use getDecomposition results to create the range
+    basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+    /** provide unique ID for fast identifying of known primitive implementations in renderers. These use
+        the defines from drawinglayer_primitivetypes2d.hxx to define unique IDs.
+     */
+    sal_uInt32 getPrimitive2DID() const;
+
+    /// The default implementation will return an empty sequence
+    void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                            const geometry::ViewInformation2D& rViewInformation) const;
+
+    // Methods from XPrimitive2D
+
+    /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
+        will construct a ViewInformation2D from the ViewParameters for that purpose
+     */
     virtual css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>> SAL_CALL
     getDecomposition(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters) override;
 
@@ -192,6 +242,77 @@ public:
 
     // XAccounting
     virtual sal_Int64 SAL_CALL estimateUsage() override;
+
+    rtl::Reference<BasePrimitive2D> const& getBasePrimitive2D() const { return mxPrimitive; }
+
+private:
+    rtl::Reference<BasePrimitive2D> mxPrimitive;
+};
+
+class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer final
+    : public std::deque<Primitive2DReference>,
+      public Primitive2DDecompositionVisitor
+{
+public:
+    // use zero because we allocate a lot of empty containers
+    explicit Primitive2DContainer()
+        : deque(0)
+    {
+    }
+    explicit Primitive2DContainer(size_type count)
+        : deque(count)
+    {
+    }
+    virtual ~Primitive2DContainer() override;
+    Primitive2DContainer(const Primitive2DContainer& other)
+        : deque(other)
+    {
+    }
+    Primitive2DContainer(Primitive2DContainer&& other) noexcept
+        : deque(std::move(other))
+    {
+    }
+    Primitive2DContainer(const std::deque<Primitive2DReference>& other)
+        : deque(other)
+    {
+    }
+    Primitive2DContainer(std::initializer_list<Primitive2DReference> init)
+        : deque(init)
+    {
+    }
+    template <class Iter>
+    Primitive2DContainer(Iter first, Iter last)
+        : deque(first, last)
+    {
+    }
+    Primitive2DContainer(
+        const css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>&);
+    Primitive2DContainer(const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>&);
+
+    virtual void visit(const Primitive2DReference& rSource) override { append(rSource); }
+    virtual void visit(const Primitive2DContainer& rSource) override { append(rSource); }
+    virtual void visit(Primitive2DContainer&& rSource) override { append(std::move(rSource)); }
+
+    void append(const Primitive2DReference&);
+    void append(const Primitive2DContainer& rSource);
+    void append(Primitive2DContainer&& rSource);
+    void append(const Primitive2DSequence& rSource);
+    Primitive2DContainer& operator=(const Primitive2DContainer& r)
+    {
+        deque::operator=(r);
+        return *this;
+    }
+    Primitive2DContainer& operator=(Primitive2DContainer&& r) noexcept
+    {
+        deque::operator=(std::move(r));
+        return *this;
+    }
+    bool operator==(const Primitive2DContainer& rB) const;
+    bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
+    basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
+    Primitive2DContainer maybeInvert(bool bInvert = false) const;
+
+    css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> toSequence() const;
 };
 
 } // end of namespace drawinglayer::primitive2d

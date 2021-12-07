@@ -58,11 +58,7 @@ namespace drawinglayer::primitive2d
             size_t nRet(0);
             for (auto& it : getChildren())
             {
-                uno::Reference<util::XAccounting> const xAcc(it, uno::UNO_QUERY);
-                if (xAcc.is())
-                {
-                    nRet += xAcc->estimateUsage();
-                }
+                nRet += it->estimateUsage();
             }
             return nRet;
         }

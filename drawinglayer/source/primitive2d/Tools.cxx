@@ -60,6 +60,27 @@ bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primit
     return pA->operator==(*pB);
 }
 
+bool arePrimitive2DReferencesEqual(const css::uno::Reference<css::graphic::XPrimitive2D>& rxA,
+                                   const css::uno::Reference<css::graphic::XPrimitive2D>& rxB)
+{
+    const bool bAIs(rxA.is());
+
+    if (bAIs != rxB.is())
+    {
+        return false;
+    }
+
+    if (!bAIs)
+    {
+        return true;
+    }
+
+    auto pA = static_cast<const UnoPrimitive2D*>(rxA.get());
+    auto pB = static_cast<const UnoPrimitive2D*>(rxB.get());
+
+    return (*pA->getBasePrimitive2D()) == (*pB->getBasePrimitive2D());
+}
+
 OUString idToString(sal_uInt32 nId)
 {
     switch (nId)

@@ -145,15 +145,15 @@ void SdrGrafObj::onGraphicChanged()
     if (rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Pdf)
         return;
 
-    const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
+    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& rContainer(rVectorGraphicDataPtr->getPrimitive2DSequence());
 
-    if (aSequence.empty())
+    if (rContainer.empty())
         return;
 
     drawinglayer::geometry::ViewInformation2D aViewInformation2D;
     drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
 
-    aProcessor.process(aSequence);
+    aProcessor.process(rContainer);
 
     const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pResult = aProcessor.getResult();
 

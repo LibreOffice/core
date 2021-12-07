@@ -317,7 +317,6 @@ namespace drawinglayer::primitive2d
         {
             // this primitive is view-dependent related to the scaling. If scaling has changed,
             // destroy existing decomposition. To detect change, use size of unit size in view coordinates
-            std::unique_lock aGuard( m_aMutex );
             const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
             if(!getBuffered2DDecomposition().empty())
@@ -336,7 +335,6 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
-            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
