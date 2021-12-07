@@ -3440,6 +3440,8 @@ namespace xmloff::token {
 
         XML_LINKED_STYLE_NAME,
 
+        XML_THEME,
+
         XML_TOKEN_END
     };
 

@@ -16,6 +16,9 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -38,6 +41,7 @@ public:
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    void save(const OUString& rFilterName, utl::TempFile& rTempFile);
 };
 
 void XmloffDrawTest::setUp()
@@ -58,6 +62,16 @@ void XmloffDrawTest::tearDown()
 void XmloffDrawTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
+}
+
+void XmloffDrawTest::save(const OUString& rFilterName, utl::TempFile& rTempFile)
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= rFilterName;
+    rTempFile.EnableKillingFile();
+    xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(rTempFile.GetFileName(), test::ODF);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
@@ -93,12 +107,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     getComponent() = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
 
     // Prepare use of XPath
-    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw8");
-    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    save("draw8", aTempFile);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("content.xml"),
@@ -109,6 +119,38 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
     // default in ODF, but only default inside LO.
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-skew", "50 -135");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
+{
+    // Create an Impress document which has a master page which has a theme associated with it.
+    getComponent() = loadFromDesktop("private:factory/simpress");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap;
+    aMap["Name"] <<= OUString("mytheme");
+    aMap["ColorSchemeName"] <<= OUString("mycolorscheme");
+    uno::Sequence<util::Color> aColorScheme
+        = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb };
+    aMap["ColorScheme"] <<= aColorScheme;
+    uno::Any aTheme = uno::makeAny(aMap.getAsConstPropertyValueList());
+    xMasterPage->setPropertyValue("Theme", aTheme);
+
+    // Export to ODP:
+    utl::TempFile aTempFile;
+    save("impress8", aTempFile);
+
+    // Check if the 12 colors are written in the XML:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 12
+    // - Actual  : 0
+    // - XPath '//style:master-page/loext:theme/loext:color-table/loext:color' number of nodes is incorrect
+    // i.e. the theme was lost on exporting to ODF.
+    assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:color-table/loext:color", 12);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
