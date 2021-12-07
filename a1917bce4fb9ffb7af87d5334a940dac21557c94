@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4c810c6_3fccae3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-12-07T03:06:13Z",
+      "side": 1,
+      "message": "That looks like something to be pushed into l10n framework now?",
+      "revId": "a1917bce4fb9ffb7af87d5334a940dac21557c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
