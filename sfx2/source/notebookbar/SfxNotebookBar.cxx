@@ -65,7 +65,7 @@ static void NotebookbarAddonValues(
                 {
                     OUString sImage;
                     rProp.Value >>= sImage;
-                    aImage = Image(framework::AddonsOptions().GetImageFromURL(sImage, isBigImage));
+                    aImage = Image(aAddonsItems.GetImageFromURL(sImage, isBigImage));
                 }
             }
             aImageValues.push_back(aImage);
