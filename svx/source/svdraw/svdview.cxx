@@ -458,10 +458,10 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 {
                     if (xReference.is())
                     {
-                        auto pBasePrimitive = static_cast<const drawinglayer::primitive2d::BasePrimitive2D*>(xReference.get());
+                        auto pBasePrimitive = xReference.get();
                         if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D)
                         {
-                            pTextHierarchyFieldPrimitive2D = static_cast<const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D*>(xReference.get());
+                            pTextHierarchyFieldPrimitive2D = static_cast<const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D*>(pBasePrimitive);
                             break;
                         }
                     }

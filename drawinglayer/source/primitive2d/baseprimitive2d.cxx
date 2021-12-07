@@ -141,23 +141,23 @@ void BasePrimitive2D::get2DDecomposition(
 {
 }
 
-css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>> SAL_CALL
+Primitive2DContainer
 BasePrimitive2D::getDecomposition(const uno::Sequence<beans::PropertyValue>& rViewParameters)
 {
     const auto aViewInformation = geometry::createViewInformation2D(rViewParameters);
     Primitive2DContainer aContainer;
     get2DDecomposition(aContainer, aViewInformation);
-    return comphelper::containerToSequence(aContainer);
+    return aContainer;
 }
 
-css::geometry::RealRectangle2D SAL_CALL
+css::geometry::RealRectangle2D
 BasePrimitive2D::getRange(const uno::Sequence<beans::PropertyValue>& rViewParameters)
 {
     const auto aViewInformation = geometry::createViewInformation2D(rViewParameters);
     return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aViewInformation));
 }
 
-sal_Int64 SAL_CALL BasePrimitive2D::estimateUsage()
+sal_Int64 BasePrimitive2D::estimateUsage()
 {
     return 0; // for now ignore the objects themselves
 }

@@ -52,7 +52,7 @@ BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInforma
     return aRetval;
 }
 
-sal_Int64 SAL_CALL BitmapPrimitive2D::estimateUsage()
+sal_Int64 BitmapPrimitive2D::estimateUsage()
 {
     if (!getXBitmap().is())
     {

@@ -509,8 +509,6 @@ namespace drawinglayer::primitive2d
 
         Primitive2DContainer ScenePrimitive2D::getShadow2D() const
         {
-            std::unique_lock aGuard( m_aMutex );
-
             Primitive2DContainer aRetval;
 
             // create 2D shadows from contained 3D primitives
@@ -626,8 +624,6 @@ namespace drawinglayer::primitive2d
 
         void ScenePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::unique_lock aGuard( m_aMutex );
-
             // get the involved ranges (see helper method calculateDiscreteSizes for details)
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
@@ -681,7 +677,6 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
-            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 

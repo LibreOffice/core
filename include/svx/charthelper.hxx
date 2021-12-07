@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_CHARTHELPER_HXX
 #define INCLUDED_SVX_CHARTHELPER_HXX
 
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 

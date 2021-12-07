@@ -20,9 +20,7 @@
 #pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 // GroupPrimitive2D class
 
@@ -85,7 +83,7 @@ namespace drawinglayer::primitive2d
             virtual sal_uInt32 getPrimitive2DID() const override;
 
             // XAccounting
-            virtual sal_Int64 SAL_CALL estimateUsage() override;
+            virtual sal_Int64 estimateUsage() override;
         };
 } // end of namespace drawinglayer::primitive2d
 
