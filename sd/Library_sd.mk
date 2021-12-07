@@ -401,6 +401,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/tools/AsynchronousCall \
 	sd/source/ui/tools/ConfigurationAccess \
 	sd/source/ui/tools/EventMultiplexer \
+	sd/source/ui/tools/GraphicSizeCheck \
 	sd/source/ui/tools/IconCache \
 	sd/source/ui/tools/IdleDetection \
 	sd/source/ui/tools/PreviewRenderer \

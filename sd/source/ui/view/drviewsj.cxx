@@ -539,6 +539,10 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem(SID_SAVE_GRAPHIC);
         rSet.DisableItem(SID_EXTERNAL_EDIT);
     }
+    if (GetDoc()->getImagePreferredDPI() <= 0)
+    {
+        rSet.DisableItem(SID_GRAPHIC_SIZE_CHECK);
+    }
 }
 
 } // end of namespace sd
