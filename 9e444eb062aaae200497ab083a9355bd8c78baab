@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "385aede1_8f84570f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2021-12-08T10:07:18Z",
+      "side": 1,
+      "message": "+2 again - thanks for the patch Gabriel! :-)",
+      "revId": "9e444eb062aaae200497ab083a9355bd8c78baab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
