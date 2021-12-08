@@ -77,6 +77,7 @@ struct StackMember
     SvtGraphicStroke::CapType   eLineCap;
     SvtGraphicStroke::JoinType  eJoinType;
     SvtGraphicStroke::DashArray aDashArray;
+    SvtGraphicFill::FillRule eFillRule;
 };
 
 struct PSLZWCTreeNode
@@ -122,6 +123,8 @@ private:
     Color               aColor;             // current color which is used for output
     bool                bLineColor;
     Color               aLineColor;         // current GDIMetafile color settings
+    bool                bFillMode;
+    PolyFillMode        eFillMode;
     bool                bFillColor;
     Color               aFillColor;
     Color               aTextColor;
@@ -977,6 +980,19 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     bFillColor = false;
             }
             break;
+
+            case MetaActionType::FILLMODE :
+            {
+                if ( static_cast<const MetaFillColorAction*>(pMA)->IsSetting() )
+                {
+                    bFillMode = true;
+                    eFillMode =  static_cast<const MetaFillModeAction*>(pMA)->GetFillMode();
+                }
+                else
+                    bFillMode = false;
+            }
+            break;
+
 
             case MetaActionType::TEXTCOLOR :
             {

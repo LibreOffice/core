@@ -46,6 +46,7 @@
 #define WIN_EMR_SETPIXELV                   15
 #define WIN_EMR_SETMAPMODE                  17
 #define WIN_EMR_SETBKMODE                   18
+#define WIN_EMR_SETPOLYFILLMODE             19
 #define WIN_EMR_SETROP2                     20
 #define WIN_EMR_SETTEXTALIGN                22
 #define WIN_EMR_SETTEXTCOLOR                24
@@ -247,8 +248,8 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     mHandlesUsed = std::vector<bool>(MAXHANDLES, false);
     mnHandleCount = mnRecordCount = mnRecordPos = mnRecordPlusPos = 0;
     mbRecordOpen = mbRecordPlusOpen = false;
-    mbLineChanged = mbFillChanged = mbTextChanged = false;
-    mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
+    mbLineChanged = mbFillModeChanged = mbFillChanged = mbTextChanged = false;
+    mnLineHandle = mnFillModeHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
     mnHorTextAlign = 0;
 
     const Size aMtfSizePix( maVDev->LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
@@ -288,6 +289,11 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
 
     ImplBeginRecord( WIN_EMR_SETBKMODE );
     m_rStm.WriteUInt32( 1 ); // TRANSPARENT
+    ImplEndRecord();
+
+    // FIXME: Revise this
+    ImplBeginRecord( WIN_EMR_SETPOLYFILLMODE );
+    m_rStm.WriteUInt32( 1 ); // ALTERNATE
     ImplEndRecord();
 
     // write emf data
@@ -1389,6 +1395,13 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 mbLineChanged = true;
+            }
+            break;
+
+            case MetaActionType::FILLMODE:
+            {
+                const_cast<MetaAction*>(pAction)->Execute( maVDev );
+                mbFillModeChanged = true;
             }
             break;
 

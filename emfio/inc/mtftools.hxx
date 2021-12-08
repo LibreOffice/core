@@ -28,6 +28,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/rendercontext/State.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/metaact.hxx>
 
 #include "emfiodllapi.h"
 
@@ -436,6 +437,7 @@ namespace emfio
     struct SaveStruct
     {
         BkMode              nBkMode;
+        PolyFillMode        nPolyFillMode;
         sal_uInt32          nMapMode, nGfxMode;
         vcl::text::ComplexTextLayoutFlags nTextLayoutMode;
         sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
@@ -525,6 +527,8 @@ namespace emfio
         Color               maBkColor;
         vcl::text::ComplexTextLayoutFlags  mnLatestTextLayoutMode;
         vcl::text::ComplexTextLayoutFlags  mnTextLayoutMode;
+        PolyFillMode        meLatestPolyFillMode;
+        PolyFillMode        mePolyFillMode;
         BkMode              mnLatestBkMode;
         BkMode              mnBkMode;
         RasterOp            meLatestRasterOp;
@@ -573,6 +577,7 @@ namespace emfio
         bool                mbIsMapDevSet : 1;
 
         void                UpdateLineStyle();
+        void                UpdateFillMode();
         void                UpdateFillStyle();
 
         Point               ImplMap(const Point& rPt);
@@ -619,6 +624,7 @@ namespace emfio
 
         void                SetGfxMode(sal_Int32 nGfxMode) { mnGfxMode = nGfxMode; };
         sal_Int32           GetGfxMode() const { return mnGfxMode; };
+        void                setPolyFillMode(PolyFillMode nMode);
         void                SetBkMode(BkMode nMode);
         void                SetBkColor(const Color& rColor);
         void                SetTextColor(const Color& rColor);

@@ -66,6 +66,12 @@ public:
     // set the line color to a specific color
     virtual void SetLineColor(Color nColor) override;
 
+    // set the fill rule to default (= FillRule_NON_ZERO)
+    virtual void SetFillRule() override;
+
+    // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
+    virtual void SetFillRule(PolyFillMode eFillRule) override;
+
     // set the fill color to transparent (= don't fill)
     virtual void SetFillColor() override;
 
@@ -357,6 +363,10 @@ protected:
         Xor
     };
     XorMode mXorMode;
+    PolyFillMode meFillRule;
+    SkBitmap mXorBitmap;
+    std::unique_ptr<SkCanvas> mXorCanvas;
+    SkRegion mXorRegion; // the area that needs updating for the xor operation
     std::unique_ptr<SkiaFlushIdle> mFlush;
     // Info about pending polygons to draw (we try to merge adjacent polygons into one).
     struct LastPolyPolygonInfo

@@ -970,6 +970,17 @@ void SvpSalGraphics::SetLineColor( Color nColor )
     m_aLineColor = nColor;
 }
 
+void SvpSalGraphics::SetFillRule()
+{
+    m_eFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+}
+
+void SvpSalGraphics::SetFillRule( PolyFillMode eFillRule )
+{
+    m_eFillRule = eFillRule;
+}
+
+
 void SvpSalGraphics::SetFillColor()
 {
     m_aFillColor = SALCOLOR_NONE;
@@ -1115,6 +1126,7 @@ void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
                                      const Point**   pPtAry)
 {
     basegfx::B2DPolyPolygon aPolyPoly;
+
     for(sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
     {
         sal_uInt32 nPoints = pPointCounts[nPolygon];
@@ -2498,7 +2510,12 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
     else
         cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
-    cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+
+    if(m_eFillRule == PolyFillMode::EVEN_ODD_RULE_ALTERNATE)
+        cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+    else
+        cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
+
     cairo_set_antialias(cr, getAntiAlias() ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 

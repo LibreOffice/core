@@ -1029,6 +1029,11 @@ namespace emfio
                     break;
 
                     case EMR_SETPOLYFILLMODE :
+                    {
+                        mpInputStream->ReadUInt32( nDat32 );
+                        SAL_INFO("emfio", "\t\tPolyFillMode: 0x" << std::hex << nDat32 << std::dec);
+                        setPolyFillMode( static_cast<PolyFillMode>(nDat32) );
+                    }
                     break;
 
                     case EMR_SETROP2 :

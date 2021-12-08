@@ -890,6 +890,16 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
+                case MetaActionType::FILLMODE:
+                {
+                    const MetaFillModeAction* pA = static_cast<const MetaFillModeAction*>(pAction);
+                    if( pA->IsSetting() )
+                        m_rOuterFace.SetFillMode( pA->GetFillMode() );
+                    else
+                        m_rOuterFace.SetFillMode();
+                }
+                break;
+
                 case MetaActionType::FILLCOLOR:
                 {
                     const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pAction);
