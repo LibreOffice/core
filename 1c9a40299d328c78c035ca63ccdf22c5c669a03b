@@ -159,6 +159,24 @@
       "parentUuid": "fed3a8e0_d4fe1d9f",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21d80a89_091a0592",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-08T22:20:13Z",
+      "side": 1,
+      "message": "\u003e I think I would prefer an alternative approach where individual \u003cimplementation\u003e elements in a component file can be marked with some condition, and those conditions are then processed and acted upon when assembling a services rdb file in solenv/gbuild/Rdb.mk and solenv/bin/packcomponents.xslt.\n\nsee \u003chttps://gerrit.libreoffice.org/c/core/+/126560\u003e \"Allow for conditional parts of component files\"",
+      "parentUuid": "cee99817_1ae85930",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
