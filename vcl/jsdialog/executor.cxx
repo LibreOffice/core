@@ -102,7 +102,12 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
                 else if (sAction == "change")
                 {
-                    pCombobox->set_entry_text(rData["data"]);
+                    // it might be other class than JSComboBox
+                    auto pJSCombobox = dynamic_cast<JSComboBox*>(pWidget);
+                    if (pJSCombobox)
+                        pJSCombobox->set_entry_text_without_notify(rData["data"]);
+                    else
+                        pCombobox->set_entry_text(rData["data"]);
                     LOKTrigger::trigger_changed(*pCombobox);
                     return true;
                 }
