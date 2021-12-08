@@ -23,6 +23,9 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -1853,7 +1856,7 @@ static void Change( Menu* pMenu, SfxViewShell* pView )
 }
 
 
-bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, ui::ContextMenuExecuteEvent aEvent )
+bool SfxViewShell::TryContextMenuInterception( const Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, ui::ContextMenuExecuteEvent aEvent )
 {
     rpOut = nullptr;
     bool bModified = false;
@@ -1917,12 +1920,18 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
     return true;
 }
 
-bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent )
+bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
+                                              const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent)
 {
+    VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>(rPopupMenu);
+    PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
+    if (!pVCLMenu)
+        return false;
+
     bool bModified = false;
 
     // create container from menu
-    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rMenu, &rMenuIdentifier );
+    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(pVCLMenu, &rMenuIdentifier);
 
     // get selection from controller
     aEvent.Selection = css::uno::Reference< css::view::XSelectionSupplier >( GetController(), css::uno::UNO_QUERY );
@@ -1969,8 +1978,8 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMen
 
     if ( bModified )
     {
-        rMenu.Clear();
-        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer( &rMenu, aEvent.ActionTriggerContainer );
+        pVCLMenu->Clear();
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(pVCLMenu, aEvent.ActionTriggerContainer);
     }
 
     return true;

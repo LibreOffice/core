@@ -59,6 +59,8 @@ namespace vcl { class PrinterController; }
 
 namespace com::sun::star::datatransfer { namespace clipboard { class XClipboardListener; } }
 namespace com::sun::star::datatransfer { namespace clipboard { class XClipboardNotifier; } }
+namespace com::sun::star::awt{ class XPopupMenu; }
+namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XEmbeddedObject; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XModel; }
@@ -278,8 +280,10 @@ public:
     void                        SetController( SfxBaseController* pController );
     css::uno::Reference<css::frame::XController> GetController() const;
 
-    bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, css::ui::ContextMenuExecuteEvent aEvent );
-    bool                        TryContextMenuInterception( Menu& rMenu, const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent );
+    bool                        TryContextMenuInterception( const Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, css::ui::ContextMenuExecuteEvent aEvent );
+    bool                        TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>&,
+                                                           const OUString& rMenuIdentifier,
+                                                           css::ui::ContextMenuExecuteEvent aEvent);
 
     void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
