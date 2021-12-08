@@ -24,12 +24,6 @@
 
 inline constexpr OStringLiteral HID_EDIT_WIN = "SW_HID_EDIT_WIN";
 
-#define HID_NAVI_DRAG_HYP                                       "SW_HID_NAVI_DRAG_HYP"
-#define HID_NAVI_DRAG_LINK                                      "SW_HID_NAVI_DRAG_LINK"
-#define HID_NAVI_DRAG_COPY                                      "SW_HID_NAVI_DRAG_COPY"
-#define HID_NAVI_OUTLINES                                       "SW_HID_NAVI_OUTLINES"
-
-
 inline constexpr OStringLiteral HID_PAGEPREVIEW = "SW_HID_PAGEPREVIEW";
 inline constexpr OStringLiteral HID_SOURCE_EDITWIN = "SW_HID_SOURCE_EDITWIN";
 
@@ -38,24 +32,8 @@ inline constexpr OStringLiteral HID_SOURCE_EDITWIN = "SW_HID_SOURCE_EDITWIN";
 inline constexpr OStringLiteral HID_NAVIGATOR_TREELIST = "SW_HID_NAVIGATOR_TREELIST";
 inline constexpr OStringLiteral HID_NAVIGATOR_TOOLBOX = "SW_HID_NAVIGATOR_TOOLBOX";
 inline constexpr OStringLiteral HID_NAVIGATOR_LISTBOX = "SW_HID_NAVIGATOR_LISTBOX";
-#define HID_NAVI_VS                                             "SW_HID_NAVI_VS"
 inline constexpr OStringLiteral HID_NAVIGATOR_GLOBAL_TOOLBOX = "SW_HID_NAVIGATOR_GLOBAL_TOOLBOX";
 inline constexpr OStringLiteral HID_NAVIGATOR_GLOB_TREELIST = "SW_HID_NAVIGATOR_GLOB_TREELIST";
-#define HID_GLBLTREE_UPDATE                                     "SW_HID_GLBLTREE_UPDATE"
-#define HID_GLBLTREE_INSERT                                     "SW_HID_GLBLTREE_INSERT"
-#define HID_GLBLTREE_EDIT                                       "SW_HID_GLBLTREE_EDIT"
-#define HID_GLBLTREE_DEL                                        "SW_HID_GLBLTREE_DEL"
-#define HID_GLBLTREE_INS_IDX                                    "SW_HID_GLBLTREE_INS_IDX"
-#define HID_GLBLTREE_INS_FILE                                   "SW_HID_GLBLTREE_INS_FILE"
-#define HID_GLBLTREE_INS_NEW_FILE                               "SW_HID_GLBLTREE_INS_NEW_FILE"
-#define HID_GLBLTREE_INS_TEXT                                   "SW_HID_GLBLTREE_INS_TEXT"
-#define HID_GLBLTREE_UPD_SEL                                    "SW_HID_GLBLTREE_UPD_SEL"
-#define HID_GLBLTREE_UPD_IDX                                    "SW_HID_GLBLTREE_UPD_IDX"
-#define HID_GLBLTREE_UPD_LINK                                   "SW_HID_GLBLTREE_UPD_LINK"
-#define HID_GLBLTREEUPD_ALL                                     "SW_HID_GLBLTREEUPD_ALL"
-
-#define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
-
 
 // TabPage Help-IDs
 
@@ -124,26 +102,6 @@ inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE_TYPE = "SW_HID_BUSINESS_FM
 
 inline constexpr OStringLiteral HID_PVIEW_ZOOM_LB = "SW_HID_PVIEW_ZOOM_LB";
 
-#define HID_NID_TBL                                             "SW_HID_NID_TBL"
-#define HID_NID_FRM                                             "SW_HID_NID_FRM"
-#define HID_NID_GRF                                             "SW_HID_NID_GRF"
-#define HID_NID_OLE                                             "SW_HID_NID_OLE"
-#define HID_NID_PGE                                             "SW_HID_NID_PGE"
-#define HID_NID_OUTL                                            "SW_HID_NID_OUTL"
-#define HID_NID_MARK                                            "SW_HID_NID_MARK"
-#define HID_NID_DRW                                             "SW_HID_NID_DRW"
-#define HID_NID_CTRL                                            "SW_HID_NID_CTRL"
-#define HID_NID_PREV                                            "SW_HID_NID_PREV"
-#define HID_NID_REG                                             "SW_HID_NID_REG"
-#define HID_NID_BKM                                             "SW_HID_NID_BKM"
-#define HID_NID_SEL                                             "SW_HID_NID_SEL"
-#define HID_NID_FTN                                             "SW_HID_NID_FTN"
-#define HID_NID_POSTIT                                          "SW_HID_NID_POSTIT"
-#define HID_NID_SRCH_REP                                        "SW_HID_NID_SRCH_REP"
-#define HID_NID_INDEX_ENTRY                                     "SW_HID_NID_INDEX_ENTRY"
-#define HID_NID_TABLE_FORMULA                                   "SW_HID_NID_TABLE_FORMULA"
-#define HID_NID_TABLE_FORMULA_ERROR                             "SW_HID_NID_TABLE_FORMULA_ERROR"
-#define HID_NID_NEXT                                            "SW_HID_NID_NEXT"
 inline constexpr OStringLiteral HID_MM_NEXT_PAGE = "SW_HID_MM_NEXT_PAGE";
 inline constexpr OStringLiteral HID_MM_PREV_PAGE = "SW_HID_MM_PREV_PAGE";
 inline constexpr OStringLiteral HID_MM_ADDBLOCK_ELEMENTS = "SW_HID_MM_ADDBLOCK_ELEMENTS";

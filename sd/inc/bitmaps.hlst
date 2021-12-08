@@ -12,27 +12,27 @@
 #include <rtl/ustring.hxx>
 
 // preview bitmaps for layouts
-#define BMP_LAYOUT_EMPTY                                        "sd/res/layout_empty.png"
-#define BMP_LAYOUT_HEAD01                                       "sd/res/layout_head01.png"
-#define BMP_LAYOUT_HEAD02                                       "sd/res/layout_head02.png"
-#define BMP_LAYOUT_HEAD02A                                      "sd/res/layout_head02a.png"
-#define BMP_LAYOUT_HEAD02B                                      "sd/res/layout_head02b.png"
-#define BMP_LAYOUT_HEAD03                                       "sd/res/layout_head03.png"
-#define BMP_LAYOUT_HEAD03A                                      "sd/res/layout_head03a.png"
-#define BMP_LAYOUT_HEAD03B                                      "sd/res/layout_head03b.png"
-#define BMP_LAYOUT_HEAD03C                                      "sd/res/layout_head03c.png"
-#define BMP_LAYOUT_HEAD04                                       "sd/res/layout_head04.png"
-#define BMP_LAYOUT_HEAD06                                       "sd/res/layout_head06.png"
-#define BMP_LAYOUT_TEXTONLY                                     "sd/res/layout_textonly.png"
-#define BMP_LAYOUT_VERTICAL01                                   "sd/res/layout_vertical01.png"
-#define BMP_LAYOUT_VERTICAL02                                   "sd/res/layout_vertical02.png"
+inline constexpr OUStringLiteral BMP_LAYOUT_EMPTY = u"sd/res/layout_empty.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD01 = u"sd/res/layout_head01.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD02 = u"sd/res/layout_head02.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD02A = u"sd/res/layout_head02a.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD02B = u"sd/res/layout_head02b.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD03 = u"sd/res/layout_head03.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD03A = u"sd/res/layout_head03a.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD03B = u"sd/res/layout_head03b.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD03C = u"sd/res/layout_head03c.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD04 = u"sd/res/layout_head04.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_HEAD06 = u"sd/res/layout_head06.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_TEXTONLY = u"sd/res/layout_textonly.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_VERTICAL01 = u"sd/res/layout_vertical01.png";
+inline constexpr OUStringLiteral BMP_LAYOUT_VERTICAL02 = u"sd/res/layout_vertical02.png";
 inline constexpr OUStringLiteral BMP_FOIL_NONE = u"sd/res/foilnone.png";
-#define BMP_FOILH_01                                            "sd/res/foilh01.png"
-#define BMP_FOILH_02                                            "sd/res/foilh02.png"
-#define BMP_FOILH_03                                            "sd/res/foilh03.png"
-#define BMP_FOILH_04                                            "sd/res/foilh04.png"
-#define BMP_FOILH_06                                            "sd/res/foilh06.png"
-#define BMP_FOILH_09                                            "sd/res/foilh09.png"
+inline constexpr OUStringLiteral BMP_FOILH_01 = u"sd/res/foilh01.png";
+inline constexpr OUStringLiteral BMP_FOILH_02 = u"sd/res/foilh02.png";
+inline constexpr OUStringLiteral BMP_FOILH_03 = u"sd/res/foilh03.png";
+inline constexpr OUStringLiteral BMP_FOILH_04 = u"sd/res/foilh04.png";
+inline constexpr OUStringLiteral BMP_FOILH_06 = u"sd/res/foilh06.png";
+inline constexpr OUStringLiteral BMP_FOILH_09 = u"sd/res/foilh09.png";
 inline constexpr OUStringLiteral BMP_DISPLAYMODE_SLIDE = u"sd/res/displaymode_slide.png";
 inline constexpr OUStringLiteral BMP_DISPLAYMODE_OUTLINE = u"sd/res/displaymode_outline.png";
 inline constexpr OUStringLiteral BMP_DISPLAYMODE_NOTES = u"sd/res/displaymode_notes.png";
@@ -56,7 +56,7 @@ inline constexpr OUStringLiteral BMP_PLACEHOLDER_MOVIE_LARGE = u"sd/res/placehol
 inline constexpr OUStringLiteral BMP_PLACEHOLDER_MOVIE_LARGE_HOVER = u"sd/res/placeholder_movie_large_hover.png";
 inline constexpr OUStringLiteral BMP_PLACEHOLDER_TABLE_LARGE = u"sd/res/placeholder_table_large.png";
 inline constexpr OUStringLiteral BMP_PLACEHOLDER_TABLE_LARGE_HOVER = u"sd/res/placeholder_table_large_hover.png";
-#define BMP_FOILN_01                                            "sd/res/foiln01.png" 
+inline constexpr OUStringLiteral BMP_FOILN_01 = u"sd/res/foiln01.png";
 inline constexpr OUStringLiteral BMP_PAGE = u"sd/res/page.png"; 
 inline constexpr OUStringLiteral BMP_PAGE_EXCLUDED = u"sd/res/pageexcl.png"; 
 inline constexpr OUStringLiteral BMP_PAGEOBJS_EXCLUDED = u"sd/res/pagobjex.png"; 
@@ -65,10 +65,7 @@ inline constexpr OUStringLiteral BMP_OBJECTS = u"sd/res/objects.png";
 inline constexpr OUStringLiteral BMP_OLE = u"sd/res/ole.png"; 
 inline constexpr OUStringLiteral BMP_GROUP = u"sd/res/group.png"; 
 inline constexpr OUStringLiteral BMP_DOC_OPEN = u"sd/res/docopen.png"; 
-#define BMP_DOC_CLOSED                                          "sd/res/docclose.png" 
 inline constexpr OUStringLiteral BMP_DOC_TEXT = u"sd/res/doctext.png" ;
-#define BMP_EXPAND                                              "res/plus.png" 
-#define BMP_COLLAPSE                                            "res/minus.png" 
 inline constexpr OUStringLiteral BMP_GRAPHIC = u"sd/res/graphic.png"; 
 inline constexpr OUStringLiteral BMP_STYLES_FAMILY_GRAPHICS = u"sd/res/sf01.png"; 
 inline constexpr OUStringLiteral BMP_STYLES_FAMILY_PRESENTATIONS = u"sd/res/sf02.png"; 
@@ -82,108 +79,108 @@ inline constexpr OUStringLiteral BMP_WAIT_ICON = u"sd/res/waiticon.png";
 inline constexpr OUStringLiteral BMP_FADE_EFFECT_INDICATOR = u"sd/res/fade_effect_indicator.png";
 inline constexpr OUStringLiteral BMP_CUSTOM_ANIMATION_INDICATOR = u"sd/res/click_16.png";
 // Presenter Screen bitmaps:
-#define BMP_PRESENTERSCREEN_BORDER_LEFT                         "sd/res/presenterscreen-BorderLeft.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_DISABLED          "sd/res/presenterscreen-ButtonSlideNextDisabled.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_SELECTED      "sd/res/presenterscreen-ButtonSlidePreviousSelected.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP            "sd/res/presenterscreen-BorderCurrentSlideTop.png"
-#define BMP_PRESENTERSCREEN_BUTTON_NOTES_SELECTED               "sd/res/presenterscreen-ButtonNotesSelected.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_SELECTED       "sd/res/presenterscreen-ScrollbarArrowDownSelected.png"
-#define BMP_PRESENTERSCREEN_BACKGROUND                          "sd/res/presenterscreen-Background.png"
-#define BMP_PRESENTERSCREEN_ANIMATION                           "sd/res/presenterscreen-Animation.png"
-#define BMP_PRESENTERSCREEN_TRANSITION                          "sd/res/presenterscreen-Transition.png"
-#define BMP_PRESENTERSCREEN_BORDER_RIGHT                        "sd/res/presenterscreen-BorderRight.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP                   "sd/res/presenterscreen-BorderActiveTop.png"
-#define BMP_PRESENTERSCREEN_BUTTON_HELP_DISABLED                "sd/res/presenterscreen-ButtonHelpDisabled.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_RIGHT                 "sd/res/presenterscreen-BorderActiveRight.png"
-#define BMP_PRESENTERSCREEN_BUTTON_FRAME_CENTER_NORMAL          "sd/res/presenterscreen-ButtonFrameCenterNormal.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_MIDDLE_MOUSE_OVER   "sd/res/presenterscreen-ScrollbarThumbMiddleMouseOver.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM_RIGHT   "sd/res/presenterscreen-BorderCurrentSlideBottomRight.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOP_LEFT                     "sd/res/presenterscreen-BorderTopLeft.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM                "sd/res/presenterscreen-BorderActiveBottom.png"
-#define BMP_PRESENTERSCREEN_BORDER_BOTTOM_LEFT                  "sd/res/presenterscreen-BorderBottomLeft.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP                  "sd/res/presenterscreen-BorderToolbarTop.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_LEFT                  "sd/res/presenterscreen-BorderActiveLeft.png"
-#define BMP_PRESENTERSCREEN_BUTTON_HELP_NORMAL                  "sd/res/presenterscreen-ButtonHelpNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_EXIT_PRESENTER_NORMAL        "sd/res/presenterscreen-ButtonExitPresenterNormal.png"
-#define BMP_PRESENTERSCREEN_SEPARATOR                           "sd/res/presenterscreen-Separator.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_CALLOUT        "sd/res/presenterscreen-BorderActiveBottomCallout.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOOLBAR_LEFT                 "sd/res/presenterscreen-BorderToolbarLeft.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_NORMAL          "sd/res/presenterscreen-ButtonSlideSorterNormal.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_PAGER_MIDDLE_NORMAL       "sd/res/presenterscreen-ScrollbarPagerMiddleNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_FRAME_RIGHT_NORMAL           "sd/res/presenterscreen-ButtonFrameRightNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_MOUSE_OVER       "sd/res/presenterscreen-ButtonEffectNextMouseOver.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_MOUSE_OVER      "sd/res/presenterscreen-ScrollbarThumbTopMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_DISABLED         "sd/res/presenterscreen-ButtonEffectNextDisabled.png"
-#define BMP_PRESENTERSCREEN_BUTTON_FRAME_CENTER_MOUSE_OVER      "sd/res/presenterscreen-ButtonFrameCenterMouseOver.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_LEFT           "sd/res/presenterscreen-BorderCurrentSlideLeft.png"
-#define BMP_PRESENTERSCREEN_BUTTON_FRAME_LEFT_MOUSE_OVER        "sd/res/presenterscreen-ButtonFrameLeftMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_HELP_SELECTED                "sd/res/presenterscreen-ButtonHelpSelected.png"
-#define BMP_PRESENTERSCREEN_VIEW_BACKGROUND                     "sd/res/presenterscreen-ViewBackground.png"
-#define BMP_PRESENTERSCREEN_BUTTON_NOTES_MOUSE_OVER             "sd/res/presenterscreen-ButtonNotesMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_PLUS_MOUSE_OVER              "sd/res/presenterscreen-ButtonPlusMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_SELECTED        "sd/res/presenterscreen-ButtonSlideSorterSelected.png"
-#define BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_RIGHT              "sd/res/presenterscreen-LabelMouseOverRight.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_NORMAL        "sd/res/presenterscreen-ButtonSwitchMonitorNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_RESTART_TIMER_NORMAL         "sd/res/presenterscreen-ButtonRestartTimerNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_PAUSE_TIMER_NORMAL           "sd/res/presenterscreen-ButtonPauseTimerNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_RESUME_TIMER_NORMAL          "sd/res/presenterscreen-ButtonResumeTimerNormal.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOOLBAR_RIGHT                "sd/res/presenterscreen-BorderToolbarRight.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_MIDDLE_NORMAL       "sd/res/presenterscreen-ScrollbarThumbMiddleNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_SELECTED         "sd/res/presenterscreen-ButtonEffectNextSelected.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_NORMAL         "sd/res/presenterscreen-ScrollbarArrowDownNormal.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP_RIGHT      "sd/res/presenterscreen-BorderCurrentSlideTopRight.png"
-#define BMP_PRESENTERSCREEN_BUTTON_PLUS_NORMAL                  "sd/res/presenterscreen-ButtonPlusNormal.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP_RIGHT            "sd/res/presenterscreen-BorderToolbarTopRight.png"
-#define BMP_PRESENTERSCREEN_BUTTON_MINUS_DISABLED               "sd/res/presenterscreen-ButtonMinusDisabled.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_DISABLED       "sd/res/presenterscreen-ScrollbarArrowDownDisabled.png"
-#define BMP_PRESENTERSCREEN_BUTTON_FRAME_RIGHT_MOUSE_OVER       "sd/res/presenterscreen-ButtonFrameRightMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_MOUSE_OVER    "sd/res/presenterscreen-ButtonSwitchMonitorMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_RESTART_TIMER_MOUSE_OVER     "sd/res/presenterscreen-ButtonRestartTimerMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_PAUSE_TIMER_MOUSE_OVER       "sd/res/presenterscreen-ButtonPauseTimerMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_RESUME_TIMER_MOUSE_OVER      "sd/res/presenterscreen-ButtonResumeTimerMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_DISABLED      "sd/res/presenterscreen-ButtonSlidePreviousDisabled.png"
-#define BMP_PRESENTERSCREEN_BUTTON_MINUS_SELECTED               "sd/res/presenterscreen-ButtonMinusSelected.png"
-#define BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_CENTER             "sd/res/presenterscreen-LabelMouseOverCenter.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_MOUSE_OVER        "sd/res/presenterscreen-ButtonSlideNextMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_NORMAL            "sd/res/presenterscreen-ButtonSlideNextNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_MOUSE_OVER    "sd/res/presenterscreen-ButtonSlidePreviousMouseOver.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOP                          "sd/res/presenterscreen-BorderTop.png"
-#define BMP_PRESENTERSCREEN_BUTTON_FRAME_LEFT_NORMAL            "sd/res/presenterscreen-ButtonFrameLeftNormal.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_MOUSE_OVER       "sd/res/presenterscreen-ScrollbarArrowUpMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_NOTES_NORMAL                 "sd/res/presenterscreen-ButtonNotesNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_DISABLED        "sd/res/presenterscreen-ButtonSlideSorterDisabled.png"
-#define BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_NORMAL           "sd/res/presenterscreen-ButtonEffectNextNormal.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP_LEFT             "sd/res/presenterscreen-BorderToolbarTopLeft.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_RIGHT          "sd/res/presenterscreen-BorderActiveBottomRight.png"
-#define BMP_PRESENTERSCREEN_BORDER_BOTTOM                       "sd/res/presenterscreen-BorderBottom.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_LEFT           "sd/res/presenterscreen-BorderActiveBottomLeft.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_MOUSE_OVER     "sd/res/presenterscreen-ScrollbarArrowDownMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_PLUS_SELECTED                "sd/res/presenterscreen-ButtonPlusSelected.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP_RIGHT             "sd/res/presenterscreen-BorderActiveTopRight.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_NORMAL        "sd/res/presenterscreen-ButtonSlidePreviousNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_MOUSE_OVER      "sd/res/presenterscreen-ButtonSlideSorterMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_MINUS_MOUSE_OVER             "sd/res/presenterscreen-ButtonMinusMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_NOTES_DISABLED               "sd/res/presenterscreen-ButtonNotesDisabled.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM_LEFT    "sd/res/presenterscreen-BorderCurrentSlideBottomLeft.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOP_RIGHT                    "sd/res/presenterscreen-BorderTopRight.png"
-#define BMP_PRESENTERSCREEN_BUTTON_HELP_MOUSE_OVER              "sd/res/presenterscreen-ButtonHelpMouseOver.png"
-#define BMP_PRESENTERSCREEN_BUTTON_EXIT_PRESENTER_MOUSE_OVER    "sd/res/presenterscreen-ButtonExitPresenterMouseOver.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_NORMAL          "sd/res/presenterscreen-ScrollbarThumbTopNormal.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_SELECTED         "sd/res/presenterscreen-ScrollbarArrowUpSelected.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_DISABLED         "sd/res/presenterscreen-ScrollbarArrowUpDisabled.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_NORMAL           "sd/res/presenterscreen-ScrollbarArrowUpNormal.png"
-#define BMP_PRESENTERSCREEN_BORDER_TOOLBAR_BOTTOM               "sd/res/presenterscreen-BorderToolbarBottom.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP_LEFT       "sd/res/presenterscreen-BorderCurrentSlideTopLeft.png"
-#define BMP_PRESENTERSCREEN_BUTTON_MINUS_NORMAL                 "sd/res/presenterscreen-ButtonMinusNormal.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_MOUSE_OVER   "sd/res/presenterscreen-ScrollbarThumbBottomMouseOver.png"
-#define BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP_LEFT              "sd/res/presenterscreen-BorderActiveTopLeft.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM         "sd/res/presenterscreen-BorderCurrentSlideBottom.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_PAGER_MIDDLE_MOUSE_OVER   "sd/res/presenterscreen-ScrollbarPagerMiddleMouseOver.png"
-#define BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_LEFT               "sd/res/presenterscreen-LabelMouseOverLeft.png"
-#define BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_RIGHT          "sd/res/presenterscreen-BorderCurrentSlideRight.png"
-#define BMP_PRESENTERSCREEN_BORDER_BOTTOM_RIGHT                 "sd/res/presenterscreen-BorderBottomRight.png"
-#define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_NORMAL       "sd/res/presenterscreen-ScrollbarThumbBottomNormal.png"
-#define BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED                "sd/res/presenterscreen-ButtonPlusDisabled.png"
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_LEFT = u"sd/res/presenterscreen-BorderLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_DISABLED = u"sd/res/presenterscreen-ButtonSlideNextDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_SELECTED = u"sd/res/presenterscreen-ButtonSlidePreviousSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP = u"sd/res/presenterscreen-BorderCurrentSlideTop.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_NOTES_SELECTED = u"sd/res/presenterscreen-ButtonNotesSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_SELECTED = u"sd/res/presenterscreen-ScrollbarArrowDownSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BACKGROUND = u"sd/res/presenterscreen-Background.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_ANIMATION = u"sd/res/presenterscreen-Animation.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_TRANSITION = u"sd/res/presenterscreen-Transition.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_RIGHT = u"sd/res/presenterscreen-BorderRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP = u"sd/res/presenterscreen-BorderActiveTop.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_HELP_DISABLED = u"sd/res/presenterscreen-ButtonHelpDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_RIGHT = u"sd/res/presenterscreen-BorderActiveRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_FRAME_CENTER_NORMAL = u"sd/res/presenterscreen-ButtonFrameCenterNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_MIDDLE_MOUSE_OVER = u"sd/res/presenterscreen-ScrollbarThumbMiddleMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM_RIGHT = u"sd/res/presenterscreen-BorderCurrentSlideBottomRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOP_LEFT = u"sd/res/presenterscreen-BorderTopLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM = u"sd/res/presenterscreen-BorderActiveBottom.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_BOTTOM_LEFT = u"sd/res/presenterscreen-BorderBottomLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP = u"sd/res/presenterscreen-BorderToolbarTop.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_LEFT = u"sd/res/presenterscreen-BorderActiveLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_HELP_NORMAL = u"sd/res/presenterscreen-ButtonHelpNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_EXIT_PRESENTER_NORMAL = u"sd/res/presenterscreen-ButtonExitPresenterNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SEPARATOR = u"sd/res/presenterscreen-Separator.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_CALLOUT = u"sd/res/presenterscreen-BorderActiveBottomCallout.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOOLBAR_LEFT = u"sd/res/presenterscreen-BorderToolbarLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_NORMAL = u"sd/res/presenterscreen-ButtonSlideSorterNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_PAGER_MIDDLE_NORMAL = u"sd/res/presenterscreen-ScrollbarPagerMiddleNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_FRAME_RIGHT_NORMAL = u"sd/res/presenterscreen-ButtonFrameRightNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_MOUSE_OVER = u"sd/res/presenterscreen-ButtonEffectNextMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_MOUSE_OVER = u"sd/res/presenterscreen-ScrollbarThumbTopMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_DISABLED = u"sd/res/presenterscreen-ButtonEffectNextDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_FRAME_CENTER_MOUSE_OVER = u"sd/res/presenterscreen-ButtonFrameCenterMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_LEFT = u"sd/res/presenterscreen-BorderCurrentSlideLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_FRAME_LEFT_MOUSE_OVER = u"sd/res/presenterscreen-ButtonFrameLeftMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_HELP_SELECTED = u"sd/res/presenterscreen-ButtonHelpSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_VIEW_BACKGROUND = u"sd/res/presenterscreen-ViewBackground.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_NOTES_MOUSE_OVER = u"sd/res/presenterscreen-ButtonNotesMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_PLUS_MOUSE_OVER = u"sd/res/presenterscreen-ButtonPlusMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_SELECTED = u"sd/res/presenterscreen-ButtonSlideSorterSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_RIGHT = u"sd/res/presenterscreen-LabelMouseOverRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_NORMAL = u"sd/res/presenterscreen-ButtonSwitchMonitorNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_RESTART_TIMER_NORMAL = u"sd/res/presenterscreen-ButtonRestartTimerNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_PAUSE_TIMER_NORMAL = u"sd/res/presenterscreen-ButtonPauseTimerNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_RESUME_TIMER_NORMAL = u"sd/res/presenterscreen-ButtonResumeTimerNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOOLBAR_RIGHT = u"sd/res/presenterscreen-BorderToolbarRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_MIDDLE_NORMAL = u"sd/res/presenterscreen-ScrollbarThumbMiddleNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_SELECTED = u"sd/res/presenterscreen-ButtonEffectNextSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_NORMAL = u"sd/res/presenterscreen-ScrollbarArrowDownNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP_RIGHT = u"sd/res/presenterscreen-BorderCurrentSlideTopRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_PLUS_NORMAL = u"sd/res/presenterscreen-ButtonPlusNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP_RIGHT = u"sd/res/presenterscreen-BorderToolbarTopRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_MINUS_DISABLED = u"sd/res/presenterscreen-ButtonMinusDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_DISABLED = u"sd/res/presenterscreen-ScrollbarArrowDownDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_FRAME_RIGHT_MOUSE_OVER = u"sd/res/presenterscreen-ButtonFrameRightMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_MOUSE_OVER = u"sd/res/presenterscreen-ButtonSwitchMonitorMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_RESTART_TIMER_MOUSE_OVER = u"sd/res/presenterscreen-ButtonRestartTimerMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_PAUSE_TIMER_MOUSE_OVER = u"sd/res/presenterscreen-ButtonPauseTimerMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_RESUME_TIMER_MOUSE_OVER = u"sd/res/presenterscreen-ButtonResumeTimerMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_DISABLED = u"sd/res/presenterscreen-ButtonSlidePreviousDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_MINUS_SELECTED = u"sd/res/presenterscreen-ButtonMinusSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_CENTER = u"sd/res/presenterscreen-LabelMouseOverCenter.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_MOUSE_OVER = u"sd/res/presenterscreen-ButtonSlideNextMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_NEXT_NORMAL = u"sd/res/presenterscreen-ButtonSlideNextNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_MOUSE_OVER = u"sd/res/presenterscreen-ButtonSlidePreviousMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOP = u"sd/res/presenterscreen-BorderTop.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_FRAME_LEFT_NORMAL = u"sd/res/presenterscreen-ButtonFrameLeftNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_MOUSE_OVER = u"sd/res/presenterscreen-ScrollbarArrowUpMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_NOTES_NORMAL = u"sd/res/presenterscreen-ButtonNotesNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_DISABLED = u"sd/res/presenterscreen-ButtonSlideSorterDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_EFFECT_NEXT_NORMAL = u"sd/res/presenterscreen-ButtonEffectNextNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOOLBAR_TOP_LEFT = u"sd/res/presenterscreen-BorderToolbarTopLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_RIGHT = u"sd/res/presenterscreen-BorderActiveBottomRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_BOTTOM = u"sd/res/presenterscreen-BorderBottom.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_LEFT = u"sd/res/presenterscreen-BorderActiveBottomLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_DOWN_MOUSE_OVER = u"sd/res/presenterscreen-ScrollbarArrowDownMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_PLUS_SELECTED = u"sd/res/presenterscreen-ButtonPlusSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP_RIGHT = u"sd/res/presenterscreen-BorderActiveTopRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_NORMAL = u"sd/res/presenterscreen-ButtonSlidePreviousNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_MOUSE_OVER = u"sd/res/presenterscreen-ButtonSlideSorterMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_MINUS_MOUSE_OVER = u"sd/res/presenterscreen-ButtonMinusMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_NOTES_DISABLED = u"sd/res/presenterscreen-ButtonNotesDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM_LEFT = u"sd/res/presenterscreen-BorderCurrentSlideBottomLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOP_RIGHT = u"sd/res/presenterscreen-BorderTopRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_HELP_MOUSE_OVER = u"sd/res/presenterscreen-ButtonHelpMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_EXIT_PRESENTER_MOUSE_OVER = u"sd/res/presenterscreen-ButtonExitPresenterMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_NORMAL = u"sd/res/presenterscreen-ScrollbarThumbTopNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_SELECTED = u"sd/res/presenterscreen-ScrollbarArrowUpSelected.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_DISABLED = u"sd/res/presenterscreen-ScrollbarArrowUpDisabled.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_ARROW_UP_NORMAL = u"sd/res/presenterscreen-ScrollbarArrowUpNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_TOOLBAR_BOTTOM = u"sd/res/presenterscreen-BorderToolbarBottom.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_TOP_LEFT = u"sd/res/presenterscreen-BorderCurrentSlideTopLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_MINUS_NORMAL = u"sd/res/presenterscreen-ButtonMinusNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_MOUSE_OVER = u"sd/res/presenterscreen-ScrollbarThumbBottomMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_ACTIVE_TOP_LEFT = u"sd/res/presenterscreen-BorderActiveTopLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_BOTTOM = u"sd/res/presenterscreen-BorderCurrentSlideBottom.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_PAGER_MIDDLE_MOUSE_OVER = u"sd/res/presenterscreen-ScrollbarPagerMiddleMouseOver.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_LABEL_MOUSE_OVER_LEFT = u"sd/res/presenterscreen-LabelMouseOverLeft.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_CURRENT_SLIDE_RIGHT = u"sd/res/presenterscreen-BorderCurrentSlideRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BORDER_BOTTOM_RIGHT = u"sd/res/presenterscreen-BorderBottomRight.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_NORMAL = u"sd/res/presenterscreen-ScrollbarThumbBottomNormal.png";
+inline constexpr OUStringLiteral BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED = u"sd/res/presenterscreen-ButtonPlusDisabled.png";
 
 inline constexpr OUStringLiteral BMP_EMBEDDED = u"sd/res/nv08.png"; 
 inline constexpr OUStringLiteral BMP_LINK = u"sd/res/nv09.png"; 

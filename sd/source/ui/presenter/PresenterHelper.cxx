@@ -173,7 +173,7 @@ namespace {
 
 struct IdMapEntry {
     char const * sid;
-    const char* bmpid;
+    rtl::OUStringConstExpr bmpid;
 };
 
 }
@@ -386,7 +386,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     OUString bmpid;
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(map); ++i) {
         if (id.equalsAscii(map[i].sid)) {
-            bmpid = OUString::createFromAscii(map[i].bmpid);
+            bmpid = map[i].bmpid;
             break;
         }
     }

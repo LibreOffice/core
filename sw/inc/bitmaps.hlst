@@ -29,8 +29,6 @@ inline constexpr OUStringLiteral BMP_REDLINE_FMTCOLLSET = u"sw/res/redline_fmtco
 inline constexpr OUStringLiteral BMP_REDLINE_MOVED_INSERTION = u"cmd/sc_paste.png";
 inline constexpr OUStringLiteral BMP_REDLINE_MOVED_DELETION = u"cmd/sc_cut.png";
 
-#define RID_BMP_COLLAPSE                        "res/sx18002.png"
-#define RID_BMP_EXPAND                          "res/sx18003.png"
 inline constexpr OUStringLiteral RID_BMP_DB = u"sw/res/sx01.png";
 inline constexpr OUStringLiteral RID_BMP_DBTABLE = u"sw/res/sx02.png";
 inline constexpr OUStringLiteral RID_BMP_DBQUERY = u"sw/res/sx03.png";
@@ -53,29 +51,27 @@ inline constexpr OUStringLiteral RID_BMP_PROT_NO_HIDE = u"sw/res/re04.png";
 
 inline constexpr OUStringLiteral BMP_INFO_16 = u"res/info_16.png";
 
-#define RID_BMP_RIBBAR_NEXT                     "sw/res/sr20000.png"
-#define RID_BMP_RIBBAR_PREV                     "sw/res/sr20001.png"
-#define RID_BMP_RIBBAR_TBL                      "sw/res/sr20002.png"
-#define RID_BMP_RIBBAR_FRM                      "sw/res/sr20003.png"
-#define RID_BMP_RIBBAR_PGE                      "sw/res/sr20004.png"
-#define RID_BMP_RIBBAR_DRW                      "sw/res/sr20005.png"
-#define RID_BMP_RIBBAR_CTRL                     "sw/res/sr20006.png"
-#define RID_BMP_RIBBAR_REG                      "sw/res/sr20007.png"
-#define RID_BMP_RIBBAR_BKM                      "sw/res/sr20008.png"
-#define RID_BMP_RIBBAR_GRF                      "sw/res/sr20009.png"
-#define RID_BMP_RIBBAR_OLE                      "sw/res/sr20010.png"
-#define RID_BMP_RIBBAR_OUTL                     "sw/res/sr20011.png"
-#define RID_BMP_RIBBAR_SEL                      "sw/res/sr20012.png"
-#define RID_BMP_RIBBAR_FTN                      "sw/res/sr20013.png"
-#define RID_BMP_RIBBAR_MARK                     "sw/res/sr20014.png"
-#define RID_BMP_RIBBAR_POSTIT                   "sw/res/sr20015.png"
-#define RID_BMP_RIBBAR_REP                      "sw/res/sr20016.png"
-#define RID_BMP_RIBBAR_ENTRY                    "sw/res/sr20017.png"
-#define RID_BMP_RIBBAR_FORMULA                  "sw/res/sr20018.png"
-#define RID_BMP_RIBBAR_ERROR                    "sw/res/sr20019.png"
-#define RID_BMP_RIBBAR_RECENCY                  "sw/res/sc20244.png"
-#define RID_BMP_RIBBAR_FIELD                    "sw/res/sc20244.png"
-#define RID_BMP_RIBBAR_FIELD_BYTYPE             "sw/res/sc20244.png"
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_TBL = u"sw/res/sr20002.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_FRM = u"sw/res/sr20003.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_PGE = u"sw/res/sr20004.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_DRW = u"sw/res/sr20005.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_CTRL = u"sw/res/sr20006.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_REG = u"sw/res/sr20007.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_BKM = u"sw/res/sr20008.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_GRF = u"sw/res/sr20009.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_OLE = u"sw/res/sr20010.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_OUTL = u"sw/res/sr20011.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_SEL = u"sw/res/sr20012.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_FTN = u"sw/res/sr20013.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_MARK = u"sw/res/sr20014.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_POSTIT = u"sw/res/sr20015.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_REP = u"sw/res/sr20016.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_ENTRY = u"sw/res/sr20017.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_FORMULA = u"sw/res/sr20018.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_ERROR = u"sw/res/sr20019.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_RECENCY = u"sw/res/sc20244.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_FIELD = u"sw/res/sc20244.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_FIELD_BYTYPE = u"sw/res/sc20244.png";
 
 inline constexpr OUStringLiteral RID_BMP_NAVI_OUTLINE = u"sw/res/nc20000.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_TABLE = u"sw/res/nc20001.png";

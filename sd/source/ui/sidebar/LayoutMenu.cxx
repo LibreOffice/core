@@ -74,7 +74,7 @@ namespace {
 
 struct snewfoil_value_info
 {
-    const char* msBmpResId;
+    rtl::OUStringConstExpr msBmpResId;
     TranslateId mpStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
@@ -82,11 +82,13 @@ struct snewfoil_value_info
 
 }
 
+constexpr OUStringLiteral EMPTY = u"";
+
 const snewfoil_value_info notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
-    {"", {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 const snewfoil_value_info handout[] =
@@ -103,7 +105,7 @@ const snewfoil_value_info handout[] =
      AUTOLAYOUT_HANDOUT6},
     {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
-    {"", {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 const snewfoil_value_info standard[] =
@@ -126,7 +128,7 @@ const snewfoil_value_info standard[] =
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VTITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_2VTEXT},
-    {"", {}, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 class LayoutValueSet : public ValueSet
@@ -542,7 +544,7 @@ void LayoutMenu::Fill()
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            Image aImg("private:graphicrepository/" + OUString::createFromAscii(pInfo->msBmpResId));
+            Image aImg("private:graphicrepository/" + static_cast<const OUString &>(pInfo->msBmpResId));
 
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
             { // FIXME: avoid interpolating RTL layouts.
