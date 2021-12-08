@@ -22,7 +22,6 @@
 #include <unotextrange.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
-#include <view.hxx>
 
 using namespace ::com::sun::star;
 
