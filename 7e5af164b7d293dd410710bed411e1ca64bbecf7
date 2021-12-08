@@ -51,6 +51,24 @@
       "parentUuid": "d868cf23_45ec09f2",
       "revId": "7e5af164b7d293dd410710bed411e1ca64bbecf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c317df1c_012d9507",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-08T12:11:34Z",
+      "side": 1,
+      "message": "\u003e I am sorry if that gave you a need to cool off, that was not intended. I am also sorry that I did not see that stuff earlier, that would have given the chance to do this together and discuss before it was done. Revert is always an option if we find better ways do do this together\n\nSorry if some of this was harsh. I really did not like the commit, both the technical side and the way you went about it. And yes, I still maintain that the change is fundamentally wrong and should be reverted. It seems we both have principal disagreements and perhaps lack of insight on how things look from the other side, so I like Michael\u0027s idea of discussing this elsewhere rather than having a back and forth here. So I\u0027ll leave short comments where I deem important, but otherwise I\u0027d prefer discuss this in a better place than here.\n  \n\u003e The other reason I dared to do that (I know about the dangers/weaknesses of that old code, that\u0027s the reason for primitives) was that DrawTransformedBitmap() and DrawBitmap() existed for something like 5 years and I thought time has come to do another step in that direction - aware that it may need corrections.\n\nIt\u0027s not clear to me whether this is about tdf#138068 or this commit, but if it\u0027s about this commit, then tdf#138068 already showed this to be incorrect (although apparently less incorrect by now, given that this has not regressed to tdf#138068 again). And tdf#138068 was referenced by a comment describing hasFastDrawTransformedBitmap(), twice, and your commit removes it, plus you were originally CC-ed on tdf#138068 and reacted there, so you should have been aware of it.\n\n\u003e I would suggest:\n\u003e - revert this one\n\nPlease do, unless you want to wait until the discussion. I\u0027ll follow that up with a commit commenting the code better.\n\n\u003e - remove HasFastDrawTransformedBitmap, decide system-specific stuff inside system-specific renderer (in this case Skia)\n\nThat\u0027s not so simple. That would mean moving and copy\u0026pasting the part deciding whether to simplify to DrawBitmap() into each backend, so it\u0027d be again a case of it being theoretically better, but in practice making things worse because of it being fragile, maintenance burden, etc.\n\n\u003e - Add ImplementsFastDrawTransformedBitmap as used here due to needed in canvashelper - hopefully for limited time\n\nThat information provided by that function is provided by the DrawTransformedBitmapEx() call itself, and the cost of it is insignificant, so it\u0027s not necessary. If this needs improving (which is a question, as I said I\u0027m not sure if vclcanvas is used by anything else than Skia), then the proper improvement would be simply changing it to call the function unconditionally and falling back if it fails. Plus, as I mentioned on the mailing list, canvas bitmap caching is broken anyway, and I failed repeatedly at fixing it.\n\n\u003e I was definitely too fast with this one, but I am happy to have started a discussion and I hope we can cleanup some stuff here!\n\nThank you, so do I. I hope we can sort this out.",
+      "parentUuid": "ccc0d854_0491a68f",
+      "revId": "7e5af164b7d293dd410710bed411e1ca64bbecf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
