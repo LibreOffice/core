@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "617d5845_8e0d591c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-08T12:11:59Z",
+      "side": 1,
+      "message": "Bit of a long commit message - prolly worth pruning some more of the trace if we can (?)\n\nThanks ! \u003d)",
+      "revId": "b331b81391408ac736e1b288721161bf2cc160fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e04b4a0_672b49b5",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-08T12:11:59Z",
+      "side": 1,
+      "message": "Sorry to nit-pick; mpScDrawView ? or mpDrawView ? \u003d) either way the \u0027m\u0027 is helpful I think.",
+      "revId": "b331b81391408ac736e1b288721161bf2cc160fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
