@@ -89,6 +89,21 @@ private:
     void writeEscapedOUString(const OUString& rPropVal);
     std::pair<char*, int> extractDataImpl();
     void ensureSpace(int noMoreBytesRequired);
+
+    // overflow validation in debug mode
+    static constexpr unsigned char JSON_WRITER_DEBUG_MARKER = 0xde;
+
+    inline void addValidationMark()
+    {
+#ifndef NDEBUG
+        *(mpBuffer + mSpaceAllocated - 1) = JSON_WRITER_DEBUG_MARKER;
+#endif
+    }
+
+    inline void validate()
+    {
+        assert(*(mpBuffer + mSpaceAllocated - 1) == JSON_WRITER_DEBUG_MARKER);
+    }
 };
 
 /**
