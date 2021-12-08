@@ -153,6 +153,30 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:color-table/loext:color", 12);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
+{
+    // Given a document that has a master page with a theme associated:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "theme.odp";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure the doc model has a master page with a theme:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap(xMasterpage->getPropertyValue("Theme"));
+    // Without the accompanying fix in place, this test would have failed with:
+    // Cannot extract an Any(void) to string!
+    // i.e. the master page had no theme.
+    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), aMap["Name"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), aMap["ColorSchemeName"].get<OUString>());
+    auto aColorScheme = aMap["ColorScheme"].get<uno::Sequence<util::Color>>();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aColorScheme.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<util::Color>(0x954F72), aColorScheme[11]);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
