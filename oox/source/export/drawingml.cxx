@@ -2549,7 +2549,13 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
 void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropSet, float fFirstCharHeight, sal_Int16 nLevel )
 {
     if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))
+    {
+        if (GetDocumentType() == DOCUMENT_PPTX)
+        {
+            mpFS->singleElementNS(XML_a, XML_buNone);
+        }
         return;
+    }
 
     Reference< XIndexAccess > rXIndexAccess;
 
