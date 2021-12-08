@@ -46,6 +46,30 @@
       },
       "revId": "541d1997a17d36aba16c726e927a29eb17adb4c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ddafafb_83cab637",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2975,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-12-08T07:43:41Z",
+      "side": 1,
+      "message": "Ok, understood.\nStill think a config option is the right thing to do then. You don\u0027t need a UI option for that, just having a config option which expert users can change via Expert config if needed should be enough.",
+      "parentUuid": "c5c996a5_33ab1c2a",
+      "range": {
+        "startLine": 2975,
+        "startChar": 24,
+        "endLine": 2975,
+        "endChar": 68
+      },
+      "revId": "541d1997a17d36aba16c726e927a29eb17adb4c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
