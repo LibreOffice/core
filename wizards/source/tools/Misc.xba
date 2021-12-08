@@ -67,7 +67,7 @@ Dim oDBSource as Object
 		oDBSource = oDBContext.GetByName(DSName)
 		ConnectToDatabase = oDBSource.GetConnection(UserID, Password)
 	Else
-		If Not IsMissing(Namelist()) Then
+		If Not IsMissing(Propertylist()) Then
 			If Not IsMissing(DriverProperties()) Then
 				RegisterNewDataSource(DSName, PropertyList(), DriverProperties())
 			Else
