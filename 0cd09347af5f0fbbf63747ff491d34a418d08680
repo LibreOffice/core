@@ -50,6 +50,23 @@
       "message": "Don\u0027t mind if you split it into two patches. But without proper feedback user have all rights to complain about too many changes. So -1 to backport to 7.2 and +1 have this string also in 7.3. Or just do it for 7.4. Also up to QA/l10n to decide. ",
       "revId": "0cd09347af5f0fbbf63747ff491d34a418d08680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "860c2b91_46770b57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2021-12-08T14:34:51Z",
+      "side": 1,
+      "message": "Fine with me to have the strings in 7.3",
+      "revId": "0cd09347af5f0fbbf63747ff491d34a418d08680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
