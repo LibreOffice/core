@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b4d5824_af005922",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-08T15:14:11Z",
+      "side": 1,
+      "message": "This seems to be a mistake.",
+      "revId": "96838a8cccce9600de7e74811af0481b676c151f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
