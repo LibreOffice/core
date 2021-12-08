@@ -25,8 +25,6 @@
         <desc>Provides information used to initialize a Java Virtual Machine. </desc>
       </info>
       <prop oor:name="Home" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <!-- Notice: Default: depends on Java installation path -->
         <info>
           <deprecated/>
@@ -36,8 +34,6 @@
         <value>NULL</value>
       </prop>
       <prop oor:name="Version" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <!-- Notice: Default: depends on version used -->
         <info>
           <deprecated/>
@@ -47,8 +43,6 @@
         <value>NULL</value>
       </prop>
       <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <info>
           <deprecated/>
           <desc>Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
@@ -57,8 +51,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="Security" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
         <info>
           <desc>Determines if security checks are performed for applets.</desc>
@@ -67,8 +59,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="NetAccess" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
         <info>
           <desc>Determines if and to what extent Java applets are allowed to access the network.</desc>
@@ -93,8 +83,6 @@
         </constraints>
       </prop>
       <prop oor:name="UserClassPath" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
         <info>
           <deprecated/>
@@ -105,16 +93,12 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
       </prop>
       <prop oor:name="Debug" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <info>
           <deprecated/>
           <desc> Indicates that JVM supports debugging.</desc>
         </info>
       </prop>
       <prop oor:name="Properties" oor:type="oor:string-list">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
         <info>
           <deprecated/>
           <desc>Specifies properties for use with the Java VM.</desc>

@@ -1269,8 +1269,6 @@
         <desc>Contains miscellaneous settings for the auto correction.</desc>
       </info>
       <prop oor:name="UseReplacementTable" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement
              table -->
         <info>
@@ -1281,8 +1279,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo
              INitial Capitals -->
         <info>
@@ -1293,8 +1289,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first
              letter of every sentence -->
         <info>
@@ -1305,8 +1299,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold*,
              /italic/, -strikeout- and _underline_ -->
         <info>
@@ -1318,8 +1310,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="SetInetAttribute" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL
              recognition -->
         <info>
@@ -1330,8 +1320,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace
              1st... -->
         <info>
@@ -1342,8 +1330,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="ChangeDash" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace
              dashes -->
         <info>
@@ -1354,8 +1340,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking
              space -->
         <info>
@@ -1382,8 +1366,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="RemoveDoubleSpaces" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Ignore Double
              Spaces -->
         <info>
@@ -1403,8 +1385,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="ReplaceSingleQuote" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single
              quotes -->
         <info>
@@ -1414,8 +1394,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="SingleQuoteAtStart" oor:type="xs:int">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single
              quotes -->
         <info>
@@ -1424,8 +1402,6 @@
         </info>
       </prop>
       <prop oor:name="SingleQuoteAtEnd" oor:type="xs:int">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single
              quotes -->
         <info>
@@ -1434,8 +1410,6 @@
         </info>
       </prop>
       <prop oor:name="ReplaceDoubleQuote" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double
              quotes -->
         <info>
@@ -1445,8 +1419,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="DoubleQuoteAtStart" oor:type="xs:int">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double
              quotes -->
         <info>
@@ -1455,8 +1427,6 @@
         </info>
       </prop>
       <prop oor:name="DoubleQuoteAtEnd" oor:type="xs:int">
-        <!-- OldPath: AutoCorrect/Options/All -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double
              quotes -->
         <info>
@@ -1470,8 +1440,6 @@
           exceptions.</desc>
         </info>
         <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: AutoCorrect/Options/All -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions - Words with
                2 initial capitals or small initial -->
           <info>
@@ -1484,8 +1452,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: AutoCorrect/Options/All -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions -
                Abbreviation -->
           <info>
@@ -1508,8 +1474,6 @@
           engine.</desc>
         </info>
         <prop oor:name="OLE_Objects" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: soffice-WorkingSet -->
-          <!-- OldLocation: soffice.ini -->
           <!-- Notice: MaxOLEObjectsInDrawingEngineMemory -->
           <info>
             <desc>Determines the maximum number of OLE objects that can be held
@@ -1527,8 +1491,6 @@
           <desc>Specifies the cache related options for Writer.</desc>
         </info>
         <prop oor:name="OLE_Objects" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: soffice-WorkingSet -->
-          <!-- OldLocation: soffice.ini -->
           <!-- Notice: MaxOLEObjectsInSWMemory -->
           <info>
             <desc>Determines the maximum number of OLE objects that can be held
@@ -2017,8 +1979,6 @@
           <desc>Contains settings for the font substitution.</desc>
         </info>
         <prop oor:name="Replacement" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: FontSubstitution -->
-          <!-- OldLocation: fntsubst.ini -->
           <!-- UIHints: Tools - Options - General - Font replacement -->
           <info>
             <desc>Determines if the list of font replacements is applied or
@@ -2028,8 +1988,6 @@
           <value>false</value>
         </prop>
         <set oor:name="FontPairs" oor:node-type="FontReplacement">
-          <!-- OldPath: FontSubstitution-->
-          <!-- OldLocation: fntsubst.ini-->
           <!-- UIHints: Tools - Options - General - Font replacement -->
           <info>
             <desc>Specifies a substitution of the requested font, even if this
@@ -2043,8 +2001,6 @@
           bar.</desc>
         </info>
         <prop oor:name="History" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Desktop/FontHistory -->
-          <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
           <info>
             <desc>Contains the last five fonts, which are shown on the top of a
@@ -2054,8 +2010,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="ShowFontBoxWYSIWYG" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Desktop/ShowFontBoxWYSIWYG -->
-          <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
           <info>
             <desc>Specifies that the names of the selectable fonts will be
@@ -2168,7 +2122,6 @@
       </prop>
     </group>
     <group oor:name="History">
-      <!-- OldLocation: soffice.ini -->
       <info>
         <desc>Contains history information.</desc>
       </info>
@@ -2273,8 +2226,6 @@
         <desc>Contains general settings about the saving process.</desc>
       </info>
       <prop oor:name="WorkingSet" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: General/Restore -->
-        <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Tools  Options - General  Save - [Section] Restore editing
              view - Open documents-->
         <info>
@@ -2300,7 +2251,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="UseUserData" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldLocation: soffice.ini -->
           <!-- UIHints: File - Save/Save As -->
           <info>
             <desc>Specifies if the user's name should be written into the
@@ -2310,8 +2260,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="AutoSave" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Save/Documents -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
             <desc>Specifies whether all modified documents are automatically
@@ -2330,8 +2278,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="CreateBackup" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Save/Documents -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
             <desc>Specifies whether to create a backup copy when a modified
@@ -2341,8 +2287,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="EditProperty" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Save/Documents -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
             <desc>Specifies if the document properties dialog will be opened for
@@ -2352,8 +2296,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="AutoSavePrompt" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Save/Documents -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
             <desc>Shows a prompt during AutoSave,even when the document has a
@@ -2363,8 +2305,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="AutoSaveTimeIntervall" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: General/Save/Documents -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
             <desc>Specifies the AutoSave time interval in minutes.</desc>
@@ -2385,8 +2325,6 @@
           <value>10</value>
         </prop>
         <prop oor:name="ViewInfo" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Restore -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Restore
                editing view - Document view-->
           <info>
@@ -2441,8 +2379,6 @@
           be saved.</desc>
         </info>
         <prop oor:name="Format" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: General/Save/Graphics -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save
                graphics -->
           <info>
@@ -2483,8 +2419,6 @@
           save.</desc>
         </info>
         <prop oor:name="FileSystem" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Save/URL -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save URLs
                relative to -->
           <info>
@@ -2495,8 +2429,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Internet" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Save/URL -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save URLs
                relative to -->
           <info>
@@ -2649,8 +2581,6 @@
           <desc>Contains security settings regarding Basic scripts.</desc>
         </info>
         <prop oor:name="SecureURL" oor:type="oor:string-list" oor:nillable="false">
-          <!-- OldPath: Security/SecureURL -->
-          <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - Browser -->
           <info>
             <desc>Lists all trustworthy URLs: file: All scripts from the local
@@ -2664,8 +2594,6 @@
           <value/>
         </prop>
         <prop oor:name="OfficeBasic" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Security/StarBASIC -->
-          <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - Browser -->
           <info>
             <desc>Determines how Office Basic scripts should be handled.</desc>
@@ -2860,8 +2788,6 @@
           displayed.</desc>
         </info>
         <prop oor:name="FullScreen" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: soffice-view/App-Window -->
-          <!-- OldLocation: soffice.ini -->
           <info>
             <desc>Specifies whether the application window should be opened in
             Fullscreen mode.</desc>
@@ -2869,8 +2795,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Preference" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: soffice-view/App-Window -->
-          <!-- OldLocation: soffice.ini -->
           <info>
             <desc>Specifies the preferred view of the application window.</desc>
           </info>
@@ -2900,8 +2824,6 @@
           be displayed.</desc>
         </info>
         <prop oor:name="ButtonLarge" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/View -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
           <info>
             <desc>Specifies whether toolbar buttons should be drawn large or
@@ -2911,8 +2833,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="ButtonFlat" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/View -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
           <info>
             <desc>Specifies whether toolbox buttons should be drawn with a flat
@@ -2922,8 +2842,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="MousePositioning" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: General/View -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Mouse
                positioning -->
           <info>
@@ -2951,7 +2869,6 @@
           <value>2</value>
         </prop>
         <prop oor:name="MiddleMouseButton" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: General/View -->
           <!-- UIHints: Tools  Options - General  View  [Section] Middle mouse
                button -->
           <info>
@@ -2984,8 +2901,6 @@
           <desc>Contains menu view settings.</desc>
         </info>
         <prop oor:name="DontHideDisabledEntry" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Desktop/DontHideDisabledEntry -->
-          <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
           <info>
             <desc>Shows all deactivated menu entries. Menu commands that are
@@ -3001,7 +2916,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="ShowIconsInMenues" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/View -->
           <!-- UIHints: Tools  Options - General  View  [Section] Options -->
           <info>
             <desc>Indicates whether icons in the office menus should be
@@ -3010,8 +2924,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="FollowMouse" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/View -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Options -->
           <info>
             <desc>Specifies automatic selection while moving the mouse over a
@@ -3052,8 +2964,6 @@
           <desc>Contains settings for general windows used by the Office.</desc>
         </info>
         <prop oor:name="Drag" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: General/View -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Display -->
           <info>
             <desc>Specifies the representation of the window while
@@ -3080,8 +2990,6 @@
           <value>2</value>
         </prop>
         <prop oor:name="Key" oor:type="xs:int">
-          <!-- OldPath: soffice_View/Window -->
-          <!-- OldLocation: soffice.ini -->
           <!-- Notice: LM: Description is missing
                5962Window=V1,995/150/280/321,H,0,AL:(16,4,0/0/400/250)#100 -->
           <info>
@@ -3090,8 +2998,6 @@
           </info>
         </prop>
         <prop oor:name="Version" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: soffice_View/Window -->
-          <!-- OldLocation: soffice.ini -->
           <!-- Notice: LM: Description is missing -->
           <info>
             <deprecated/>
@@ -3102,8 +3008,6 @@
                NIL was intended -->
         </prop>
         <prop oor:name="State" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: soffice_View/Window -->
-          <!-- OldLocation: soffice.ini -->
           <!-- Notice: LM: Description is missing -->
           <info>
             <deprecated/>
@@ -3112,8 +3016,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Flag" oor:type="xs:int">
-          <!-- OldPath: soffice_View/Window -->
-          <!-- OldLocation: soffice.ini -->
           <!-- Notice: LM: Description is missing -->
           <info>
             <deprecated/>
@@ -3153,8 +3055,6 @@
           </constraints>
         </prop>
         <prop oor:name="UserData" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: soffice_View/Window -->
-          <!-- OldLocation: soffice.ini -->
           <!-- Notice: LM: Description is missing -->
           <info>
             <deprecated/>
@@ -3193,8 +3093,6 @@
         Office.</desc>
       </info>
       <prop oor:name="Steps" oor:type="xs:int" oor:nillable="false">
-        <!-- OldPath: General/Undo -->
-        <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Tools  Options - General  Save - [Section] Undo -->
         <info>
           <desc>Specifies how many operations can be undone in a row.</desc>
@@ -3253,8 +3151,6 @@
           <desc>Contains settings for print specific warnings.</desc>
         </info>
         <prop oor:name="PaperSize" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Print/Warning -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
             <desc>Specifies if a warning should be displayed in case the
@@ -3264,8 +3160,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="PaperOrientation" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Print/Warning -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
             <desc>Specifies if a warning should be displayed in case the
@@ -3275,8 +3169,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="NotFound" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: General/Print/Warning -->
-          <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
             <desc>Specifies if a warning should be displayed in case the printer
@@ -3558,8 +3450,6 @@
         applications binary files.</desc>
       </info>
       <prop oor:name="Writer" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Writer -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
           <desc>Defines if a XML package is added to the Writer binary
@@ -3567,8 +3457,6 @@
         </info>
       </prop>
       <prop oor:name="Calc" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Calc -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
           <desc>Defines if a XML package is added to the Calc binary
@@ -3576,8 +3464,6 @@
         </info>
       </prop>
       <prop oor:name="Impress" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Impress -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
           <desc>Defines if a XML package is added to the Impress binary
@@ -3585,8 +3471,6 @@
         </info>
       </prop>
       <prop oor:name="Draw" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Draw -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
           <desc>Defines if a XML package is added to the Draw binary
@@ -3717,7 +3601,6 @@
              was intended -->
       </prop>
       <prop oor:name="Tip" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Help menu-->
         <info>
           <desc>Activates the Tip help.</desc>
@@ -3726,7 +3609,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="ExtendedTip" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Help menu-->
         <info>
           <desc>Activates the Extended help.</desc>
@@ -3815,8 +3697,6 @@
         bitmaps.</desc>
       </info>
       <prop oor:name="ColorCount" oor:type="xs:short" oor:nillable="false">
-        <!-- OldPath: Draw_Impress/Vectorize -->
-        <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap =&gt; context menu  convert  To polygon -->
         <info>
           <desc>Specifies the number of colors that are used to create a vector
@@ -3840,8 +3720,6 @@
         <value>8</value>
       </prop>
       <prop oor:name="PointReduce" oor:type="xs:short" oor:nillable="false">
-        <!-- OldPath: Draw_Impress/Vectorize -->
-        <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap =&gt; context menu  convert  To polygon -->
         <info>
           <desc>Specifies the number of pixels that you want to combine as a
@@ -3865,8 +3743,6 @@
         <value>0</value>
       </prop>
       <prop oor:name="FillHole" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Draw_Impress/Vectorize -->
-        <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap => context menu  convert  To polygon -->
         <info>
           <desc>Indicates whether to create a tiled background before
@@ -3876,8 +3752,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="TileExtent" oor:type="xs:short" oor:nillable="false">
-        <!-- OldPath: Draw_Impress/Vectorize -->
-        <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap => context menu  convert  To polygon -->
         <info>
           <desc>Specifies the extent of background tiles that are used for
@@ -3904,8 +3778,6 @@
         <desc>Specifies settings for the date formats used.</desc>
       </info>
       <prop oor:name="TwoDigitYear" oor:type="xs:int" oor:nillable="false">
-        <!-- OldPath: General/Other -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - General - Other - Year (two digits) -->
         <info>
           <desc>Specifies the first year that can be entered using
@@ -4084,8 +3956,6 @@
               dialog.</desc>
             </info>
             <prop oor:name="Resolution" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: PCD-IMPORT-RESOLUTION -->
-              <!-- OldLocation: fltopt.ini -->
               <info>
                 <desc>Specifies import resolution of PCD graphics.</desc>
                 <label>Resolution - Base16 / Base4 / Base</label>
@@ -4254,7 +4124,6 @@
               dialog.</desc>
             </info>
             <prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog]
                    BMP Options -->
               <info>
@@ -4307,8 +4176,6 @@
               <value>0</value>
             </prop>
             <prop oor:name="RLE_Coding" oor:type="xs:boolean" oor:nillable="false">
-              <!-- OldPath: BMP-RLE_CODING -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog]
                    BMP Options -->
               <info>
@@ -4320,7 +4187,6 @@
             </prop>
           </group>
           <group oor:name="EPS">
-            <!-- OldLocation: fltopt.ini -->
             <!-- UIHints: File  Export  Filetype File  Export  Filetype
                  EPS-Encapsulated Postscript -->
             <info>
@@ -4457,8 +4323,6 @@
               export dialog.</desc>
             </info>
             <prop oor:name="Interlaced" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: GIF-EXPORT-INTERLACED -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  GIF-Graphics Interchange -->
               <info>
                 <desc>Specifies if graphics should be exported using interlace.
@@ -4481,8 +4345,6 @@
               <value>1</value>
             </prop>
             <prop oor:name="Translucent" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: GIF-EXPORT-TRANSLUCENT -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  GIF-Graphics Interchange -->
               <info>
                 <desc>Specifies if the graphic background is stored as
@@ -4509,8 +4371,6 @@
               Experts Group export dialog.</desc>
             </info>
             <prop oor:name="Quality" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: JPG-EXPORT-QUALITY -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  JPG-JPEG -->
               <info>
                 <desc>Specifies quality of the JPG export. A higher value
@@ -4535,8 +4395,6 @@
               <value>75</value>
             </prop>
             <prop oor:name="ColorMode" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: JPG_EXPORT_COLORMODE -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  JPG-JPEG -->
               <info>
                 <desc>Specifies if graphics are exported using true color or
@@ -4563,8 +4421,6 @@
               export dialog.</desc>
             </info>
             <prop oor:name="FileFormat" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: PBM-EXPORT-FORMAT -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  PBM-Portable Bitmap -->
               <info>
                 <desc>Specifies if graphics are exported to binary- or ASCII
@@ -4591,8 +4447,6 @@
               export dialog.</desc>
             </info>
             <prop oor:name="FileFormat" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: PGM-EXPORT-FORMAT -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  PGM-Portable Graymap -->
               <info>
                 <desc>Specifies if graphics are exported to a binary- or ASCII
@@ -4619,8 +4473,6 @@
               export dialog.</desc>
             </info>
             <prop oor:name="FileFormat" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: PPM-EXPORT-FORMAT -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  PPM-Portable Pixelmap -->
               <info>
                 <desc>Specifies if graphics are exported to a binary- or ASCII
@@ -4647,8 +4499,6 @@
               Graphic export dialog.</desc>
             </info>
             <prop oor:name="Compression" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: PNG-EXPORT-COMPRESSION -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  PNG-Portable Network
                    Graphic -->
               <info>
@@ -4675,8 +4525,6 @@
               <value>6</value>
             </prop>
             <prop oor:name="Interlaced" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: PNG-EXPORT-INTERLACED -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  PNG-Portable Network
                    Graphic -->
               <info>
@@ -4700,8 +4548,6 @@
               <value>1</value>
             </prop>
             <prop oor:name="Translucent" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: PNG-EXPORT-TRANSLUCENT -->
-              <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphics -->
               <info>
                 <desc>Specifies if the graphic background is stored as
@@ -4770,8 +4616,6 @@
             <value>false</value>
           </prop>
           <prop oor:name="UnknownTag" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Browser/HTML/Import -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
             <info>
               <desc>Specifies if unknown tags should be imported as
@@ -4781,8 +4625,6 @@
             <value>false</value>
           </prop>
           <prop oor:name="FontSetting" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Browser/HTML/Import -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
             <info>
               <desc>Specifies if font settings should be ignored when
@@ -4796,8 +4638,6 @@
               <desc>Specifies font size for HTML.</desc>
             </info>
             <prop oor:name="Size_1" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: Browser/HTML/Font_Sizes -->
-              <!-- OldLocation: soffice.cfg -->
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
@@ -4807,8 +4647,6 @@
               <value>7</value>
             </prop>
             <prop oor:name="Size_2" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: Browser/HTML/Font_Sizes -->
-              <!-- OldLocation: soffice.cfg -->
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
@@ -4818,8 +4656,6 @@
               <value>10</value>
             </prop>
             <prop oor:name="Size_3" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: Browser/HTML/Font_Sizes -->
-              <!-- OldLocation: soffice.cfg -->
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
@@ -4829,8 +4665,6 @@
               <value>12</value>
             </prop>
             <prop oor:name="Size_4" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: Browser/HTML/Font_Sizes -->
-              <!-- OldLocation: soffice.cfg -->
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
@@ -4840,8 +4674,6 @@
               <value>14</value>
             </prop>
             <prop oor:name="Size_5" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: Browser/HTML/Font_Sizes -->
-              <!-- OldLocation: soffice.cfg -->
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
@@ -4851,8 +4683,6 @@
               <value>18</value>
             </prop>
             <prop oor:name="Size_6" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: Browser/HTML/Font_Sizes -->
-              <!-- OldLocation: soffice.cfg -->
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
@@ -4862,8 +4692,6 @@
               <value>24</value>
             </prop>
             <prop oor:name="Size_7" oor:type="xs:int" oor:nillable="false">
-              <!-- OldPath: Browser/HTML/Font_Sizes -->
-              <!-- OldLocation: soffice.cfg -->
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
@@ -4879,8 +4707,6 @@
             <desc>Contains settings for HTML export.</desc>
           </info>
           <prop oor:name="Browser" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Browser/HTML/Export -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
               <desc>Specifies the browser for which the HTML export should be
@@ -4917,8 +4743,6 @@
             <value>4</value>
           </prop>
           <prop oor:name="Basic" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Browser/HTML/Export -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
               <desc>Specifies if Office Basic instructions are considered when
@@ -4928,8 +4752,6 @@
             <value>false</value>
           </prop>
           <prop oor:name="PrintLayout" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Browser/HTML/Export -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
               <desc>Specifies if the print layout of the current document should
@@ -4939,8 +4761,6 @@
             <value>false</value>
           </prop>
           <prop oor:name="LocalGraphic" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Browser/HTML/Export -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
               <desc>Specifies whether images are copied to the Internet server when
@@ -4950,8 +4770,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="Warning" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Browser/HTML/Export -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
               <desc>Specifies if a warning should be displayed to point out that
@@ -5570,8 +5388,6 @@
         </value>
       </prop>
       <prop oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: ? -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Browser  Other  Plug-Ins  Enable -->
         <info>
           <desc>Enables/Disables Plugins.</desc>
@@ -6029,8 +5845,6 @@
         <desc>Contains layout specific settings for Asian languages.</desc>
       </info>
       <prop oor:name="IsKerningWesternTextOnly" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Tools  Options  Asian typography  Asian layout Kerning
              Western text only -->
         <info>
@@ -6041,8 +5855,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="CompressCharacterDistance" oor:type="xs:short" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Tools  Options  Asian typography  Asian layout Character
              distance  -->
         <info>
@@ -6067,8 +5879,6 @@
         <desc>Contains all options for search.</desc>
       </info>
       <prop oor:name="IsWholeWordsOnly" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search for whole words only.</desc>
@@ -6076,8 +5886,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsBackwards" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search backwards.</desc>
@@ -6085,8 +5893,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsUseWildcard" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of wildcards.</desc>
@@ -6094,8 +5900,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsUseRegularExpression" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of regular expressions.</desc>
@@ -6103,8 +5907,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsSearchForStyles" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search for styles only.</desc>
@@ -6112,8 +5914,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsSimilaritySearch" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with similarity.</desc>
@@ -6121,8 +5921,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsMatchCase" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search as case sensitive.</desc>
@@ -6130,8 +5928,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsIgnoreDiacritics_CTL" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search ignores diacritics, not only CTL though.</desc>
@@ -6139,8 +5935,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsIgnoreKashida_CTL" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of CTL option.</desc>
@@ -6148,8 +5942,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
         <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of Asian options.</desc>
@@ -6196,8 +5988,6 @@
           <desc>Contains search options for the Japanese language.</desc>
         </info>
         <prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Does not distinguish between full-width and half-width
@@ -6206,8 +5996,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Does not distinguish between hiragana and katakana
@@ -6216,8 +6004,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatchContractions" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between characters
@@ -6226,8 +6012,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between minus signs,
@@ -6236,8 +6020,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between repeat
@@ -6246,8 +6028,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between standard and
@@ -6256,8 +6036,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatchOldKanaForms" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between standard and
@@ -6266,8 +6044,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between 'Di' and 'Zi'
@@ -6276,8 +6052,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between 'Ba' and 'Va'
@@ -6286,8 +6060,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between 'Tsi', 'Thi'
@@ -6296,8 +6068,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between 'Hyu' and
@@ -6306,8 +6076,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between 'Se' and 'She'
@@ -6316,8 +6084,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatch_IaIya" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between 'Ia' and
@@ -6326,8 +6092,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsMatch_KiKu" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between 'Ki' and
@@ -6336,8 +6100,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsIgnorePunctuation" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between punctuation
@@ -6346,8 +6108,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsIgnoreWhitespace" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between characters
@@ -6357,8 +6117,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between prolonged
@@ -6367,8 +6125,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: -->
-          <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
             <desc>Specifies search without distinguishing between normal dots

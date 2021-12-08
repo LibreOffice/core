@@ -328,8 +328,6 @@
         <value>true</value>
       </prop>
       <node-ref oor:name="CurrentDataSource" oor:node-type="DataSource">
-        <!-- OldPath: Bibliography/BibliographyCurrent-->
-        <!-- OldLocation: Soffice.ini-->
         <info>
           <desc>Determines the current data source for the bibliography.</desc>
         </info>
