@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b82f8d40_d506b34d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-08T15:33:32Z",
+      "side": 1,
+      "message": "Looks great - thanks Szymon \u003d)",
+      "revId": "732be77c4017c7fef7a189f5bc45cd2b056c8048",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
