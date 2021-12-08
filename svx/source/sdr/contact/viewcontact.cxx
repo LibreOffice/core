@@ -101,7 +101,9 @@ void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
         maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
 
     if (aFindResult != maViewObjectContactVector.end())
+    {
         maViewObjectContactVector.erase(aFindResult);
+    }
 }
 
 // Test if this ViewContact has ViewObjectContacts at all. This can
@@ -226,6 +228,9 @@ ViewContact::createViewIndependentPrimitive2DSequence() const
 drawinglayer::primitive2d::Primitive2DContainer
 ViewContact::getViewIndependentPrimitive2DContainer() const
 {
+    /* Local up-to-date checks. Create new list and compare.
+        We cannot just always use the new data because the old data has cached bitmaps in it e.g. see the document in tdf#146108.
+    */
     drawinglayer::primitive2d::Primitive2DContainer xNew(
         createViewIndependentPrimitive2DSequence());
 
@@ -235,7 +240,14 @@ ViewContact::getViewIndependentPrimitive2DContainer() const
         xNew = embedToObjectSpecificInformation(std::move(xNew));
     }
 
-    return xNew;
+    if (mxViewIndependentPrimitive2DSequence != xNew)
+    {
+        // has changed, copy content
+        const_cast<ViewContact*>(this)->mxViewIndependentPrimitive2DSequence = std::move(xNew);
+    }
+
+    // return current Primitive2DContainer
+    return mxViewIndependentPrimitive2DSequence;
 }
 
 // add Gluepoints (if available)
