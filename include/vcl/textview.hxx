@@ -196,6 +196,7 @@ public:
     TextPaM             CursorDown( const TextPaM& rPaM );
     TextPaM             CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIteratorMode );
     TextPaM             CursorRight( const TextPaM& rPaM, sal_uInt16 nCharacterIteratorMode );
+    TextPaM             CursorFirstWord( const TextPaM& rPaM );
     TextPaM             CursorWordLeft( const TextPaM& rPaM );
     TextPaM             CursorWordRight( const TextPaM& rPaM );
     TextPaM             CursorStartOfLine( const TextPaM& rPaM );
