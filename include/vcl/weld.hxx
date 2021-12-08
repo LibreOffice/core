@@ -1277,6 +1277,10 @@ public:
     // remove the selected nodes
     virtual void remove_selection() = 0;
 
+    // only meaningful is call this from a "changed" callback, true if the change
+    // was due to mouse hovering over the entry
+    virtual bool changed_by_hover() const = 0;
+
     virtual void vadjustment_set_value(int value) = 0;
     virtual int vadjustment_get_value() const = 0;
 

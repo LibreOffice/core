@@ -1708,7 +1708,9 @@ public:
 
     virtual void vadjustment_set_value(int nValue) override;
 
-    void set_show_expanders(bool bShow) override;
+    virtual void set_show_expanders(bool bShow) override;
+
+    virtual bool changed_by_hover() const override;
 
     virtual ~SalInstanceTreeView() override;
 };

@@ -4904,6 +4904,8 @@ void SalInstanceTreeView::set_show_expanders(bool bShow)
     m_xTreeView->set_property("show-expanders", OUString::boolean(bShow));
 }
 
+bool SalInstanceTreeView::changed_by_hover() const { return m_xTreeView->IsSelectDueToHover(); }
+
 SalInstanceTreeView::~SalInstanceTreeView()
 {
     LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());

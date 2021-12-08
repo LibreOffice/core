@@ -357,7 +357,7 @@ void ScCheckListMenuControl::selectMenuItem(size_t nPos, bool bSubMenuTimer)
 
     if (bSubMenuTimer)
     {
-        if (maMenuItems[nPos].mxSubMenuWin)
+        if (maMenuItems[nPos].mxSubMenuWin && mxMenu->changed_by_hover())
         {
             ScListSubMenuControl* pSubMenu = maMenuItems[nPos].mxSubMenuWin.get();
             queueLaunchSubMenu(nPos, pSubMenu);

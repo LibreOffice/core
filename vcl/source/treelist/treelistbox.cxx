@@ -397,6 +397,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbQuickSearch(false),
     mbActivateOnSingleClick(false),
     mbHoverSelection(false),
+    mbSelectingByHover(false),
     mnClicksToToggle(0), //at default clicking on a row won't toggle its default checkbox
     eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
