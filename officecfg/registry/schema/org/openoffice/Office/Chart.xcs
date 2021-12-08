@@ -28,8 +28,6 @@
         <desc>Specifies the colors for creating new charts.</desc>
       </info>
       <prop oor:name="Series" oor:type="oor:long-list" oor:nillable="false">
-        <!-- OldPath: Chart/Default_Colors -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options  Chart  Default colors  [Section] Chart colors -->
         <info>
           <desc>Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>

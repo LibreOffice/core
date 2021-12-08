@@ -27,8 +27,6 @@
         <desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
       </info>
       <prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Inet/NoProxy -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Enumerates the names of servers that do not require any proxies.</desc>
@@ -37,8 +35,6 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
       </prop>
       <prop oor:name="ooInetProxyType" oor:type="xs:int">
-        <!-- OldPath: Inet/ProxyType -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the type of proxy selection.</desc>
@@ -62,8 +58,6 @@
         </constraints>
       </prop>
       <prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Inet/FTPProxyName -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the name of the FTP proxy server.</desc>
@@ -72,8 +66,6 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
       </prop>
       <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
-        <!-- OldPath: Inet/FTPProxyPort -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the port of the FTP proxy server.</desc>
@@ -92,8 +84,6 @@
         </constraints>
       </prop>
       <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Inet/HTTPProxyName -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the name of the HTTP proxy server.</desc>
@@ -102,8 +92,6 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
       </prop>
       <prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
-        <!-- OldPath: Inet/HTTPProxyPort -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the port of the HTTP proxy server.</desc>
@@ -122,8 +110,6 @@
         </constraints>
       </prop>
       <prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Inet/HTTPSProxyName -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the name of the HTTPS proxy server.</desc>
@@ -132,8 +118,6 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
       </prop>
       <prop oor:name="ooInetHTTPSProxyPort" oor:type="xs:int">
-        <!-- OldPath: Inet/HTTPSProxyPort -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
           <desc>Specifies the port of the HTTPS proxy server.</desc>
