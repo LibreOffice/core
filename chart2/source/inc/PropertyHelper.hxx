@@ -29,9 +29,69 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace chart
 {
 
-typedef int tPropertyValueMapKey;
+class OOO_DLLPUBLIC_CHARTTOOLS tPropertyValueMap
+{
+    std::unordered_map<sal_Int32, css::uno::Any> maValues;
 
-typedef std::unordered_map<tPropertyValueMapKey, css::uno::Any> tPropertyValueMap;
+public:
+
+    /** Set a property to a certain value in the given map.  This works for
+        properties that are already set, and those which are not yet in the map.
+
+        @param any is the value encapsulated in the variant type Any
+     */
+    void setPropertyValueAny( sal_Int32 key, const css::uno::Any & rAny );
+    void setPropertyValueAny( sal_Int32 key, css::uno::Any && rAny );
+
+    /** Set a property to a certain value in the given map.  This works for
+        properties that are already set, and those which are not yet in the map.
+
+        @param value is the value of type Value that will be put into a variant type
+            Any before set in the property map.
+     */
+    template< typename Value >
+    void setPropertyValue( sal_Int32 key, const Value & value )
+    {
+        setPropertyValueAny( key, css::uno::Any( value ));
+    }
+
+    void setPropertyValue( sal_Int32 key, const css::uno::Any & rAny )
+    {
+        setPropertyValueAny( key, rAny );
+    }
+    void setPropertyValue( sal_Int32 key, const css::uno::Any && rAny );
+
+    void setPropertyValueDefaultAny( sal_Int32 key, const css::uno::Any & rAny );
+
+    /** Calls setPropertyValueDefault() with an empty Any as value
+     */
+    void setEmptyPropertyValueDefault( sal_Int32 key );
+
+    /** Calls setPropertyValue() but asserts that the given property hasn't been set
+        before.
+     */
+    template< typename Value >
+    void setPropertyValueDefault( sal_Int32 key, const Value & value )
+    {
+        setPropertyValueDefaultAny(key, css::uno::Any( value ));
+    }
+
+    /** Calls setPropertyValue() but asserts that the given property hasn't been set
+        before.
+     */
+    void setPropertyValueDefault( sal_Int32 key, const css::uno::Any & rAny );
+    void setPropertyValueDefault( sal_Int32 key, css::uno::Any && rAny );
+
+    /**
+        The odd construction here, taking an out param instead of a return value, is to
+        reduce the cost of manipulating the Any, one assignment, instead of a copy and a move
+    */
+    void get( sal_Int32 nHandle, css::uno::Any& rAny ) const;
+    /**
+     * Used by the methods that implemeent UNO API
+     */
+    css::uno::Any get( sal_Int32 nHandle ) const;
+};
 
 namespace PropertyHelper
 {
@@ -86,51 +146,6 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString addBitmapUniqueNameToTable(
     const css::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
-
-/** Set a property to a certain value in the given map.  This works for
-    properties that are already set, and those which are not yet in the map.
-
-    @param any is the value encapsulated in the variant type Any
- */
-OOO_DLLPUBLIC_CHARTTOOLS
-void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
-                          const css::uno::Any & rAny );
-
-/** Set a property to a certain value in the given map.  This works for
-    properties that are already set, and those which are not yet in the map.
-
-    @param value is the value of type Value that will be put into a variant type
-        Any before set in the property map.
- */
-template< typename Value >
-    void setPropertyValue( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
-{
-    setPropertyValueAny( rOutMap, key, css::uno::Any( value ));
-}
-
-template<>
-    void setPropertyValue< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
-
-OOO_DLLPUBLIC_CHARTTOOLS void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
-
-/** Calls setPropertyValue() but asserts that the given property hasn't been set
-    before.
- */
-template< typename Value >
-    void setPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
-{
-    setPropertyValueDefaultAny( rOutMap, key, css::uno::Any( value ));
-}
-
-/** Calls setPropertyValue() but asserts that the given property hasn't been set
-    before.
- */
-template<>
-    void setPropertyValueDefault< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
-
-/** Calls setPropertyValueDefault() with an empty Any as value
- */
-OOO_DLLPUBLIC_CHARTTOOLS void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
 
 } // namespace PropertyHelper
 

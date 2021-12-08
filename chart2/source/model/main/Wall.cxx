@@ -51,7 +51,7 @@ private:
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
         // override other defaults
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+        rOutMap.setPropertyValue( ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
     }
 };
 
@@ -130,11 +130,7 @@ uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 void Wall::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticWallDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Wall::getInfoHelper()
