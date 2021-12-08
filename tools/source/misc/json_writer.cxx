@@ -30,6 +30,8 @@ JsonWriter::JsonWriter()
     ++mPos;
     *mPos = ' ';
     ++mPos;
+
+    addValidationMark();
 }
 
 JsonWriter::~JsonWriter()
@@ -41,7 +43,7 @@ JsonWriter::~JsonWriter()
 ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
 {
     auto len = strlen(pNodeName);
-    ensureSpace(len + 6);
+    ensureSpace(len + 8);
 
     addCommaBeforeField();
 
@@ -53,6 +55,9 @@ ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
     mPos += 5;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
+
+    validate();
+
     return ScopedJsonWriterNode(*this);
 }
 
@@ -64,12 +69,14 @@ void JsonWriter::endNode()
     *mPos = '}';
     ++mPos;
     mbFirstFieldInNode = false;
+
+    validate();
 }
 
 ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
 {
     auto len = strlen(pNodeName);
-    ensureSpace(len + 6);
+    ensureSpace(len + 8);
 
     addCommaBeforeField();
 
@@ -81,6 +88,9 @@ ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
     mPos += 5;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
+
+    validate();
+
     return ScopedJsonWriterArray(*this);
 }
 
@@ -92,6 +102,8 @@ void JsonWriter::endArray()
     *mPos = ']';
     ++mPos;
     mbFirstFieldInNode = false;
+
+    validate();
 }
 
 ScopedJsonWriterStruct JsonWriter::startStruct()
@@ -106,6 +118,9 @@ ScopedJsonWriterStruct JsonWriter::startStruct()
     ++mPos;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
+
+    validate();
+
     return ScopedJsonWriterStruct(*this);
 }
 
@@ -117,6 +132,8 @@ void JsonWriter::endStruct()
     *mPos = '}';
     ++mPos;
     mbFirstFieldInNode = false;
+
+    validate();
 }
 
 static char getEscapementChar(char ch)
@@ -211,6 +228,8 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
             ++mPos;
         }
     }
+
+    validate();
 }
 
 void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
@@ -234,6 +253,8 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 
     *mPos = '"';
     ++mPos;
+
+    validate();
 }
 
 void JsonWriter::put(const char* pPropName, std::string_view rPropVal)
@@ -287,6 +308,8 @@ void JsonWriter::put(const char* pPropName, std::string_view rPropVal)
 
     *mPos = '"';
     ++mPos;
+
+    validate();
 }
 
 void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
@@ -305,6 +328,8 @@ void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
     mPos += 3;
 
     mPos += sprintf(mPos, "%" SAL_PRIdINT64, nPropVal);
+
+    validate();
 }
 
 void JsonWriter::put(const char* pPropName, double fPropVal)
@@ -324,6 +349,8 @@ void JsonWriter::put(const char* pPropName, double fPropVal)
 
     memcpy(mPos, sPropVal.getStr(), sPropVal.getLength());
     mPos += sPropVal.getLength();
+
+    validate();
 }
 
 void JsonWriter::put(const char* pPropName, bool nPropVal)
@@ -347,6 +374,8 @@ void JsonWriter::put(const char* pPropName, bool nPropVal)
         pVal = "false";
     memcpy(mPos, pVal, strlen(pVal));
     mPos += strlen(pVal);
+
+    validate();
 }
 
 void JsonWriter::putSimpleValue(const OUString& rPropVal)
@@ -363,6 +392,8 @@ void JsonWriter::putSimpleValue(const OUString& rPropVal)
 
     *mPos = '"';
     ++mPos;
+
+    validate();
 }
 
 void JsonWriter::putRaw(std::string_view rRawBuf)
@@ -373,6 +404,8 @@ void JsonWriter::putRaw(std::string_view rRawBuf)
 
     memcpy(mPos, rRawBuf.data(), rRawBuf.size());
     mPos += rRawBuf.size();
+
+    validate();
 }
 
 void JsonWriter::addCommaBeforeField()
@@ -398,6 +431,8 @@ void JsonWriter::ensureSpace(int noMoreBytesRequired)
         mpBuffer = static_cast<char*>(realloc(mpBuffer, newSize));
         mPos = mpBuffer + currentUsed;
         mSpaceAllocated = newSize;
+
+        addValidationMark();
     }
 }
 
