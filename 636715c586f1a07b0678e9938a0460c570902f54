@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef0a9d5c_cd266f8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-08T14:59:07Z",
+      "side": 1,
+      "message": "Beautiful - thanks Szymon - hopefully that keeps us on the straight \u0026 narrow \u003d)",
+      "revId": "636715c586f1a07b0678e9938a0460c570902f54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "778cb4ad_dbfd8a97",
@@ -14,6 +31,24 @@
       "writtenOn": "2021-12-08T14:21:49Z",
       "side": 1,
       "message": "NDEBUG as used in assert: https://en.cppreference.com/w/c/error/assert",
+      "revId": "636715c586f1a07b0678e9938a0460c570902f54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "798d7a43_b748e1e8",
+        "filename": "include/tools/json_writer.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-08T14:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "778cb4ad_dbfd8a97",
       "revId": "636715c586f1a07b0678e9938a0460c570902f54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
