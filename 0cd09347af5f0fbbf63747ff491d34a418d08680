@@ -16,6 +16,23 @@
       "message": "Works well. But please also change infotext (suggest \"Find values\") and tooltip (\"Find text in values; to search in formulas use the dialog\"). Users have no chance to know that we switched from formula to value.",
       "revId": "0cd09347af5f0fbbf63747ff491d34a418d08680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33adc4c5_13f7d952",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-08T11:31:03Z",
+      "side": 1,
+      "message": "Heiko: ok but what about distinct commit so we can cherry-pick this one in 7.3 (perhaps 7.2?) branch.\nIndeed, the other changes have an impact to translations part.",
+      "revId": "0cd09347af5f0fbbf63747ff491d34a418d08680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
