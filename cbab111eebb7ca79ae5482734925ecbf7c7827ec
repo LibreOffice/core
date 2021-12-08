@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b09f41_c1fcd74d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-08T12:33:43Z",
+      "side": 1,
+      "message": "Still looks a bit fragile, but I guess it\u0027s in some inner loop \u003d)\n\nIn debug mode - can we have a canary at the end of the buffer(s) - set it in ensureSpace() just put a magic number like 0xde in the space after the end, and then check it with an assert in-line at the end of each of these methods - only in debug mode of course (would need ensureSpace to add an extra one for this I guess) \u003d)\n\nDoes that make sense ? and do we need this in cp-6.4 ? \u003d)\n\nThanks !",
+      "revId": "cbab111eebb7ca79ae5482734925ecbf7c7827ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
