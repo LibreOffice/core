@@ -32,7 +32,8 @@ $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component targ
 	mkdir -p $(dir $(1)) && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		--stringparam uri '$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' \
-		--stringparam cppu_env $(CPPU_ENV) -o $(1) \
+		--stringparam cppu_env $(CPPU_ENV) \
+		--stringparam features '$(patsubst %,(BUILD_TYPE:%),$(BUILD_TYPE))' -o $(1) \
 		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(COMPONENTSOURCE)
 endef
 
