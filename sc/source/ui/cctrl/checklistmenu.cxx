@@ -144,6 +144,8 @@ void ScCheckListMenuControl::addSeparator()
 
 IMPL_LINK(ScCheckListMenuControl, TreeSizeAllocHdl, const Size&, rSize, void)
 {
+    if (maAllocatedSize == rSize)
+        return;
     maAllocatedSize = rSize;
     SetDropdownPos();
     if (!mnAsyncSetDropdownPosId && Application::GetToolkitName().startsWith("gtk"))
