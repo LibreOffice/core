@@ -1560,6 +1560,14 @@ void ScListSubMenuControl::addMenuColorItem(const OUString& rText, bool bActive,
         mnBackColorMenuPrefHeight = mxBackColorMenu->get_preferred_size().Height();
 }
 
+void ScListSubMenuControl::addSeparator()
+{
+    ScCheckListMenuControl::MenuItemData aItem;
+    maMenuItems.emplace_back(std::move(aItem));
+
+    mxMenu->append_separator("separator" + OUString::number(maMenuItems.size()));
+}
+
 void ScListSubMenuControl::clearMenuItems()
 {
     maMenuItems.clear();
