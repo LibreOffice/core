@@ -148,12 +148,6 @@ $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 
 endef
 
-# call gb_Library_set_componentfiles,library,componentfiles,rdb
-define gb_Library_set_componentfiles
-$(foreach comp,$(2),$(call gb_Library_set_componentfile,$(1),$(comp),$(3)))
-
-endef
-
 gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))
 
 gb_Library__get_componentprefix = \

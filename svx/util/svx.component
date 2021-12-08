@@ -32,6 +32,11 @@
       constructor="com_sun_star_comp_svx_RecoveryUI_get_implementation">
     <service name="com.sun.star.dialog.RecoveryUI"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.CrashReportUI"
+      constructor="com_sun_star_comp_svx_CrashReportUI_get_implementation"
+      CONDITION="BUILD_TYPE:BREAKPAD">
+    <service name="com.sun.star.dialog.CrashReportUI"/>
+  </implementation>
   <implementation name="com.sun.star.comp.svx.SafeModeUI"
       constructor="com_sun_star_comp_svx_SafeModeUI_get_implementation">
     <service name="com.sun.star.dialog.SafeModeUI"/>
