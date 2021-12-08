@@ -425,7 +425,7 @@ Dim vNodePath As Variant
 					vNodePath(0) = New com.sun.star.beans.PropertyValue
 					vNodePath(0).Name = &quot;nodepath&quot;	:	vNodePath(0).Value = &quot;org.openoffice.System/L10N&quot;
 					sLocale = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, vNodePath()).getByName(&quot;SystemLocale&quot;)
-					.Locale.Language = Left(sLocale, 2)
+					.Locale.Language = Split(sLocale, &quot;-&quot;)(0)	&apos;	Language is most often 2 chars long, but not always
 					.Locale.Country = Right(sLocale, 2)
 				End If
 				Set _GetUNOService = .Locale
