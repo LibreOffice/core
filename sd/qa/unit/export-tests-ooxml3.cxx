@@ -69,6 +69,7 @@ public:
     void testTdf118806();
     void testTdf130058();
     void testTdf111789();
+    void testTdf145162();
     void testTdf100348_convert_Fontwork2TextWarp();
     void testTdf1225573_FontWorkScaleX();
     void testTdf99497_keepAppearanceOfCircleKind();
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testTdf118806);
     CPPUNIT_TEST(testTdf130058);
     CPPUNIT_TEST(testTdf111789);
+    CPPUNIT_TEST(testTdf145162);
     CPPUNIT_TEST(testTdf100348_convert_Fontwork2TextWarp);
     CPPUNIT_TEST(testTdf1225573_FontWorkScaleX);
     CPPUNIT_TEST(testTdf99497_keepAppearanceOfCircleKind);
@@ -605,6 +607,20 @@ void SdOOXMLExportTest3::testTdf111789()
         xShape->getPropertyValue("Shadow") >>= bHasShadow;
         CPPUNIT_ASSERT(!bHasShadow);
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testTdf145162()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf145162.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buNone");
+    // Before the fix, that tag was missing so PP put bullet to each para.
 
     xDocShRef->DoClose();
 }
