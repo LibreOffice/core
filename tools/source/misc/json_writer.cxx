@@ -42,7 +42,7 @@ JsonWriter::~JsonWriter()
 ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
 {
     auto len = strlen(pNodeName);
-    ensureSpace(len + 6);
+    ensureSpace(len + 8);
 
     addCommaBeforeField();
 
@@ -70,7 +70,7 @@ void JsonWriter::endNode()
 ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
 {
     auto len = strlen(pNodeName);
-    ensureSpace(len + 6);
+    ensureSpace(len + 8);
 
     addCommaBeforeField();
 
