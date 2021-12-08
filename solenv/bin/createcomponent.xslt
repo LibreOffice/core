@@ -23,6 +23,7 @@
     xmlns:uc="http://openoffice.org/2010/uno-components">
   <xsl:param name="uri"/>
   <xsl:param name="cppu_env"/>
+  <xsl:param name="features"/>
   <xsl:strip-space elements="*"/>
   <xsl:template match="uc:component">
     <components>
@@ -34,6 +35,16 @@
         <xsl:apply-templates/>
       </xsl:copy>
     </components>
+  </xsl:template>
+  <xsl:template match="uc:implementation[@CONDITION]">
+    <xsl:variable name="feature" select="@CONDITION"/>
+    <xsl:variable name="feature2" select="concat('(',$feature,')')"/>
+    <xsl:if test="contains($features,$feature2)">
+      <xsl:copy>
+        <xsl:apply-templates select="@*"/>
+        <xsl:apply-templates/>
+      </xsl:copy>
+    </xsl:if>
   </xsl:template>
   <xsl:template match="*">
     <xsl:copy>
@@ -50,6 +61,7 @@
       </xsl:call-template>
     </xsl:attribute>
   </xsl:template>
+  <xsl:template match="@CONDITION"/>
   <xsl:template match="@*">
     <xsl:copy/>
   </xsl:template>

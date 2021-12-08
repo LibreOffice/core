@@ -118,7 +118,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	slideshow/util/slideshow \
 	starmath/util/sm \
 	starmath/util/smd \
-    $(call gb_Helper_optional,BREAKPAD,svx/util/crashreport) \
 	svx/util/svx \
 	svx/util/textconversiondlgs \
 	sw/util/msword \
@@ -275,7 +274,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	reportdesign/util/rptui \
 	reportdesign/util/rptxml \
 	shell/source/backends/localebe/localebe1 \
-    sw/util/sw_mm \
 	$(if $(filter-out ANDROID iOS,$(OS)),\
 		connectivity/source/drivers/odbc/odbc \
 	) \
