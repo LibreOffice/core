@@ -38,6 +38,15 @@ class Gradient;
 class SalVirtualDevice;
 struct SalGradient;
 
+/**
+Implementation class for SalGraphics.
+
+This class allows having an implementation of drawing calls that is separate from SalGraphics,
+and SalGraphics can forward all such calls to SalGraphicsImpl. For example X11SalGraphics
+may internally use either Xlib-based X11SalGraphicsImpl or Skia-based SkiaSalGraphicsImpl,
+and the latter may be used also by other SalGraphics implementations. All the functions
+here should be implementations of the relevant SalGraphics functions.
+*/
 class VCL_PLUGIN_PUBLIC SalGraphicsImpl
 {
     bool m_bAntiAlias;
@@ -59,6 +68,10 @@ public:
 
     virtual ~SalGraphicsImpl();
 
+    // All the functions are implementations of functions from the SalGraphics class,
+    // so see the SalGraphics class for documentation (both uppercase and lowercase
+    // function variants).
+
     virtual void Init() = 0;
 
     virtual void DeInit() {}
@@ -68,40 +81,27 @@ public:
     virtual OUString getRenderBackendName() const = 0;
 
     virtual bool setClipRegion( const vcl::Region& ) = 0;
-    //
-    // get the depth of the device
+
     virtual sal_uInt16 GetBitCount() const = 0;
 
-    // get the width of the device
     virtual tools::Long GetGraphicsWidth() const = 0;
 
-    // set the clip region to empty
     virtual void ResetClipRegion() = 0;
-
-    // set the line color to transparent (= don't draw lines)
 
     virtual void SetLineColor() = 0;
 
-    // set the line color to a specific color
     virtual void SetLineColor( Color nColor ) = 0;
 
-    // set the fill color to transparent (= don't fill)
     virtual void SetFillColor() = 0;
 
-    // set the fill color to a specific color, shapes will be
-    // filled accordingly
     virtual void SetFillColor( Color nColor ) = 0;
 
-    // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet, bool bInvertOnly ) = 0;
 
-    // set line color for raster operations
     virtual void SetROPLineColor( SalROPColor nROPColor ) = 0;
 
-    // set fill color for raster operations
     virtual void SetROPFillColor( SalROPColor nROPColor ) = 0;
 
-    // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void drawPixel( tools::Long nX, tools::Long nY ) = 0;
     virtual void drawPixel( tools::Long nX, tools::Long nY, Color nColor ) = 0;
 
@@ -125,7 +125,7 @@ public:
                 const basegfx::B2DPolygon&,
                 double fTransparency,
                 double fLineWidth,
-                const std::vector< double >* pStroke, // MM01
+                const std::vector< double >* pStroke,
                 basegfx::B2DLineJoin,
                 css::drawing::LineCap,
                 double fMiterMinimumAngle,
@@ -147,15 +147,12 @@ public:
                 const Point* const* pPtAry,
                 const PolyFlags* const* pFlgAry ) = 0;
 
-    // CopyArea --> No RasterOp, but ClipRegion
     virtual void copyArea(
                 tools::Long nDestX, tools::Long nDestY,
                 tools::Long nSrcX, tools::Long nSrcY,
                 tools::Long nSrcWidth, tools::Long nSrcHeight,
                 bool bWindowInvalidate ) = 0;
 
-    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
-    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) = 0;
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
@@ -174,7 +171,6 @@ public:
 
     virtual Color getPixel( tools::Long nX, tools::Long nY ) = 0;
 
-    // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(
                 tools::Long nX, tools::Long nY,
                 tools::Long nWidth, tools::Long nHeight,
@@ -203,7 +199,6 @@ public:
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap& rAlphaBitmap ) = 0;
 
-    /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
     virtual bool drawTransformedBitmap(
                 const basegfx::B2DPoint& rNull,
                 const basegfx::B2DPoint& rX,
@@ -212,8 +207,6 @@ public:
                 const SalBitmap* pAlphaBitmap,
                 double fAlpha) = 0;
 
-    /// Used e.g. by canvas to know whether to cache the drawing.
-    /// See also tdf#138068.
     virtual bool hasFastDrawTransformedBitmap() const = 0;
 
     virtual bool drawAlphaRect(
