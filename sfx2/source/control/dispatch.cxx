@@ -28,6 +28,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -1732,10 +1733,10 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     aEvent.ExecutePosition.Y = aPos.Y();
 
     xPopupController->setPopupMenu( xPopupMenu );
-    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( xPopupMenu );
-    PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
     if (comphelper::LibreOfficeKit::isActive())
     {
+        VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( xPopupMenu );
+        PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
         boost::property_tree::ptree aMenu = fillPopupMenu(pVCLMenu);
         boost::property_tree::ptree aRoot;
         aRoot.add_child("menu", aMenu);
@@ -1748,9 +1749,10 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     else
     {
         OUString aMenuURL = "private:resource/popupmenu/" + rResName;
-        if (pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception(*pVCLMenu, aMenuURL, aEvent))
+        if (GetFrame()->GetViewShell()->TryContextMenuInterception(xPopupMenu, aMenuURL, aEvent))
         {
-            pVCLMenu->Execute(pWindow, aPos);
+            css::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, css::uno::UNO_QUERY);
+            xPopupMenu->execute(xParent, css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1), css::awt::PopupMenuDirection::EXECUTE_DOWN);
         }
     }
 
