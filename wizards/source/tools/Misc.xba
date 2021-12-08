@@ -58,7 +58,7 @@ End Function
 
 
 &apos; Connects to a registered Database
-Function ConnecttoDatabase(DSName as String, UserID as String, Password as String, Optional Propertylist(), Optional DriverProperties() as New com.sun.star.beans.PropertyValue)
+Function ConnectToDatabase(DSName as String, UserID as String, Password as String, Optional Propertylist(), Optional DriverProperties() as New com.sun.star.beans.PropertyValue)
 Dim oDBContext as Object
 Dim oDBSource as Object
 &apos;	On Local Error Goto NOCONNECTION
@@ -68,14 +68,11 @@ Dim oDBSource as Object
 		ConnectToDatabase = oDBSource.GetConnection(UserID, Password)
 	Else
 		If Not IsMissing(Propertylist()) Then
-			If Not IsMissing(DriverProperties()) Then
-				RegisterNewDataSource(DSName, PropertyList(), DriverProperties())
-			Else
-				RegisterNewDataSource(DSName, PropertyList())
-			End If
+			RegisterNewDataSource(DSName, PropertyList(), DriverProperties())
 			oDBSource = oDBContext.GetByName(DSName)
 			ConnectToDatabase = oDBSource.GetConnection(UserID, Password)
 		Else
+		    &apos; FIXME: How missing Propertylist might mean DSName not registered?
 			Msgbox(&quot;DataSource &quot; &amp; DSName &amp; &quot; is not registered&quot; , 16, GetProductname())
 			ConnectToDatabase() = NULL
 		End If
@@ -114,14 +111,11 @@ Dim aNodePath(0) as new com.sun.star.beans.PropertyValue
 	oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
 	aNodePath(0).Name = &quot;nodepath&quot;
 	aNodePath(0).Value = sKeyName
-	If IsMissing(bForUpdate) Then
-		GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
+	If IsMissing(bForUpdate) Then bForUpdate = False
+	If bForUpdate Then
+		GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationUpdateAccess&quot;, aNodePath())
 	Else
-		If bForUpdate Then
-			GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationUpdateAccess&quot;, aNodePath())
-		Else
-			GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
-		End If
+		GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
 	End If
 End Function
 
