@@ -86,8 +86,7 @@ You can help us to fix this issue by sending an anonymous crash report to the %P
             <property name="valign">center</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.
-You can soon find the report at:
-crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
+Please contact your IT support with the following ID: %CRASHID</property>
             <property name="wrap">True</property>
             <property name="selectable">True</property>
           </object>
@@ -95,20 +94,6 @@ crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTextView" id="ed_bugreport">
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="crashreportdlg|ed_bugreport">Please check the report and if no bug report is connected to the crash report yet, open a new bug report at bugs.documentfoundation.org.
-Add detailed instructions on how to reproduce the crash and the shown crash ID into the crash report field.
-Thank you for your help in improving %PRODUCTNAME.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
           </packing>
         </child>
         <child>
