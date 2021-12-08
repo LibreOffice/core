@@ -175,6 +175,7 @@
 
 #include "lokinteractionhandler.hxx"
 #include "lokclipboard.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 
 using namespace css;
@@ -6418,6 +6419,25 @@ static void activateNotebookbar(const OUString& rApp)
     }
 }
 
+void setCertificateDir()
+{
+    const char* pEnvVarString = ::getenv("LO_CERTIFICATE_DATABASE_PATH");
+    if (pEnvVarString)
+    {
+        OUString aCertificareDatabasePath = OStringToOUString(pEnvVarString, RTL_TEXTENCODING_UTF8);
+        try
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Security::Scripting::CertDir::set(aCertificareDatabasePath, batch);
+            officecfg::Office::Common::Security::Scripting::ManualCertDir::set(aCertificareDatabasePath, batch);
+            batch->commit();
+        }
+        catch (const uno::Exception &)
+        {
+        }
+    }
+}
+
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
@@ -6726,6 +6746,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         batch->commit();
     }
 #endif
+
+    setCertificateDir();
 
     if (bNotebookbar)
     {
