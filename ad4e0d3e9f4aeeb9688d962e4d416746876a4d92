@@ -33,6 +33,24 @@
       "message": "I suggest, unless that is absolutely necessary, that we do not expose this as a Basic function. There is a way to examine configuration settings from Basic (see e.g. call to GetRegistryKeyContent in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d132145#c0). So in the spirit of this setting being targeted to those who know what they do, I suppose it\u0027s not needed to advertise it here.\n\nFor the sake of the unit test, GetRegistryKeyContent function is implemented in our Tools library:\n\n  Function GetRegistryKeyContent(sKeyName as string, Optional bforUpdate as Boolean)\n  Dim oConfigProvider as Object\n  Dim aNodePath(0) as new com.sun.star.beans.PropertyValue\n  \toConfigProvider \u003d createUnoService(\"com.sun.star.configuration.ConfigurationProvider\")\n  \taNodePath(0).Name \u003d \"nodepath\"\n  \taNodePath(0).Value \u003d sKeyName\n  \tIf IsMissing(bForUpdate) Then\n  \t\tGetRegistryKeyContent() \u003d oConfigProvider.createInstanceWithArguments(\"com.sun.star.configuration.ConfigurationAccess\", aNodePath())\n  \tElse\n  \t\tIf bForUpdate Then\n  \t\t\tGetRegistryKeyContent() \u003d oConfigProvider.createInstanceWithArguments(\"com.sun.star.configuration.ConfigurationUpdateAccess\", aNodePath())\n  \t\tElse\n  \t\t\tGetRegistryKeyContent() \u003d oConfigProvider.createInstanceWithArguments(\"com.sun.star.configuration.ConfigurationAccess\", aNodePath())\n  \t\tEnd If\n  \tEnd If\n  End Function\n\nwhich may be added to the test, to not depend on the library (no idea if the library is available for the test, if \u0027GlobalScope.BasicLibraries.LoadLibrary(\"Tools\")\u0027 would be called).",
       "revId": "ad4e0d3e9f4aeeb9688d962e4d416746876a4d92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5087dac5_a4489c8e",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2983,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-08T16:23:45Z",
+      "side": 1,
+      "message": "Yeah, I kinda agree that it is not good to expose this function to BASIC code. On the other hand, I don\u0027t like to write BASIC code like in your comment... And I guess it is possible to get environment variables from BASI, too? But oh well, it is not my own time that I am wasting;) Will spend some more days on this and do what you suggest.",
+      "parentUuid": "fdf138b1_9f3c53a6",
+      "revId": "ad4e0d3e9f4aeeb9688d962e4d416746876a4d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
