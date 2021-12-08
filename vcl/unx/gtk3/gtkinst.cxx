@@ -9933,7 +9933,13 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
         pFrame->UnblockTooltip();
 
     if (bHadFocus)
+    {
+        GdkSurface* pParentSurface = pParent ? widget_get_surface(pParent) : nullptr;
+        void* pParentIsPopover = pParentSurface ? g_object_get_data(G_OBJECT(pParentSurface), "g-lo-InstancePopup") : nullptr;
+        if (pParentIsPopover)
+            do_grab(pAnchor);
         gtk_widget_grab_focus(pAnchor);
+    }
 }
 
 #endif
