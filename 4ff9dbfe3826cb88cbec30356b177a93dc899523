@@ -16,6 +16,23 @@
       "message": "This is ready for review.",
       "revId": "4ff9dbfe3826cb88cbec30356b177a93dc899523",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d308e61c_5e8c1346",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-08T07:33:23Z",
+      "side": 1,
+      "message": "Works as expected and the selection is not extended to the beginning of the word anymore. Code review for the more experienced fellows.",
+      "revId": "4ff9dbfe3826cb88cbec30356b177a93dc899523",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
