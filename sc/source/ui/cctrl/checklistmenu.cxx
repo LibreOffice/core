@@ -450,7 +450,9 @@ ScCheckListMember::ScCheckListMember()
 // the value of border-width of FilterDropDown
 constexpr int nBorderWidth = 4;
 // number of rows visible in checklist
-constexpr int nCheckListVisibleRows = 8;
+constexpr int nCheckListVisibleRows = 9;
+// number of rows visible in colorlist
+constexpr int nColorListVisibleRows = 9;
 
 ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData& rViewData,
                                                bool bHasDates, int nWidth, vcl::ILibreOfficeKitNotifier* pNotifier)
@@ -1565,11 +1567,19 @@ void ScListSubMenuControl::addMenuColorItem(const OUString& rText, bool bActive,
     rColorMenu.set_toggle(*mxScratchIter, bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
     rColorMenu.set_image(*mxScratchIter, rImage);
 
-    if (mnTextColorMenuPrefHeight == -1 && &rColorMenu == mxTextColorMenu.get() && mxTextColorMenu->n_children() == 8)
+    if (mnTextColorMenuPrefHeight == -1 &&
+        &rColorMenu == mxTextColorMenu.get() &&
+        mxTextColorMenu->n_children() == nColorListVisibleRows)
+    {
         mnTextColorMenuPrefHeight = mxTextColorMenu->get_preferred_size().Height();
+    }
 
-    if (mnBackColorMenuPrefHeight == -1 && &rColorMenu == mxBackColorMenu.get() && mxBackColorMenu->n_children() == 8)
+    if (mnBackColorMenuPrefHeight == -1 &&
+        &rColorMenu == mxBackColorMenu.get() &&
+        mxBackColorMenu->n_children() == nColorListVisibleRows)
+    {
         mnBackColorMenuPrefHeight = mxBackColorMenu->get_preferred_size().Height();
+    }
 }
 
 void ScListSubMenuControl::addSeparator()
