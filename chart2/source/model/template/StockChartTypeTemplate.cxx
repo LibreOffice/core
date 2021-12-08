@@ -83,10 +83,10 @@ void lcl_AddPropertiesToVector(
     static ::chart::tPropertyValueMap aStaticDefaults =
         [](){
             ::chart::tPropertyValueMap aTmp;
-            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME, false );
-            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_OPEN, false );
-            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH, true );
-            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE, false );
+            aTmp.setPropertyValueDefault( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME, false );
+            aTmp.setPropertyValueDefault( PROP_STOCKCHARTTYPE_TEMPLATE_OPEN, false );
+            aTmp.setPropertyValueDefault( PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH, true );
+            aTmp.setPropertyValueDefault( PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE, false );
             return aTmp;
         }();
     return aStaticDefaults;
@@ -150,11 +150,7 @@ StockChartTypeTemplate::~StockChartTypeTemplate()
 void StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = GetStaticStockChartTypeTemplateDefaults();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockChartTypeTemplate::getInfoHelper()

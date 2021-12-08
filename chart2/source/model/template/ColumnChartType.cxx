@@ -66,10 +66,10 @@ private:
     static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         Sequence< sal_Int32 > aSeq{ 0, 0 };
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BARCHARTTYPE_OVERLAP_SEQUENCE, aSeq );
+        rOutMap.setPropertyValueDefault( PROP_BARCHARTTYPE_OVERLAP_SEQUENCE, aSeq );
 
         aSeq = { 100, 100 };
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE, aSeq );
+        rOutMap.setPropertyValueDefault( PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE, aSeq );
     }
 };
 
@@ -154,11 +154,7 @@ uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
 void ColumnChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticColumnChartTypeDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL ColumnChartType::getInfoHelper()

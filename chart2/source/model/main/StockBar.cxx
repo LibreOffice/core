@@ -95,7 +95,7 @@ private:
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
         // override other defaults
-        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
+        rOutMap.setPropertyValue< sal_Int32 >( ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
     }
 };
 
@@ -142,11 +142,7 @@ uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
 void StockBar::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticStockBarDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()

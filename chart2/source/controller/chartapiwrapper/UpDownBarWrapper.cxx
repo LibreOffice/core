@@ -300,10 +300,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const OUString& rPropertyN
 uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     const tPropertyValueMap& rStaticDefaults = *StaticUpDownBarWrapperDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticUpDownBarWrapperInfoHelper::get()->getHandleByName( rPropertyName ) ) );
-    if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+    return rStaticDefaults.get( StaticUpDownBarWrapperInfoHelper::get()->getHandleByName( rPropertyName ) );
 }
 
 //XMultiPropertyStates

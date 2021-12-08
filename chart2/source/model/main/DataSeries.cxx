@@ -55,9 +55,9 @@ struct StaticDataSeriesDefaults : public rtl::StaticWithInit< ::chart::tProperty
         ::chart::DataSeriesProperties::AddDefaultsToMap( aStaticDefaults );
         ::chart::CharacterProperties::AddDefaultsToMap( aStaticDefaults );
         float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+        aStaticDefaults.setPropertyValue( ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+        aStaticDefaults.setPropertyValue( ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+        aStaticDefaults.setPropertyValue( ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
         return aStaticDefaults;
     }
 };
@@ -233,11 +233,7 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 void DataSeries::GetDefaultValue( sal_Int32 nHandle, uno::Any& rDest ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rDest.clear();
-    else
-        rDest = (*aFound).second;
+    rStaticDefaults.get(nHandle, rDest);
 }
 
 // ____ OPropertySet ____

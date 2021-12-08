@@ -67,8 +67,8 @@ struct StaticPieChartTypeDefaults_Initializer
 private:
     static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIECHARTTYPE_USE_RINGS, false );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
+        rOutMap.setPropertyValueDefault( PROP_PIECHARTTYPE_USE_RINGS, false );
+        rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
     }
 };
 
@@ -189,11 +189,7 @@ uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
 void PieChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticPieChartTypeDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 // ____ OPropertySet ____

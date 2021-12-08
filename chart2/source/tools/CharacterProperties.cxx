@@ -358,55 +358,55 @@ void CharacterProperties::AddDefaultsToMap(
     nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aDefaultLocale_CTL, false), COMPLEX);
     vcl::Font aFontCTL = OutputDevice::GetDefaultFont( DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne );
 
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, aFont.GetFamilyName() );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_STYLE_NAME, aFont.GetStyleName() );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_FAMILY, sal_Int16(aFont.GetFamilyType()) );//awt::FontFamily::SWISS
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_CHAR_SET, sal_Int16(aFont.GetCharSet()) );//use awt::CharSet::DONTKNOW instead of SYSTEM to avoid assertion issue 50249
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_PITCH, sal_Int16(aFont.GetPitch()) );//awt::FontPitch::VARIABLE
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_COLOR, -1 ); //automatic color (COL_AUTO)
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CHAR_HEIGHT, fDefaultFontHeight );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE, awt::FontUnderline::NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_UNDERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE_HAS_COLOR, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_OVERLINE, awt::FontUnderline::NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_OVERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_OVERLINE_HAS_COLOR, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WEIGHT, awt::FontWeight::NORMAL );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_POSTURE, awt::FontSlant_NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_AUTO_KERNING, true );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_KERNING, 0 );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_STRIKE_OUT, awt::FontStrikeout::NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WORD_MODE, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_LOCALE, aDefaultLocale );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_SHADOWED, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CONTOURED, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RELIEF, text::FontRelief::NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_EMPHASIS, text::FontEmphasis::NONE );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_FONT_NAME, aFont.GetFamilyName() );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_FONT_STYLE_NAME, aFont.GetStyleName() );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_FONT_FAMILY, sal_Int16(aFont.GetFamilyType()) );//awt::FontFamily::SWISS
+    rOutMap.setPropertyValueDefault( PROP_CHAR_FONT_CHAR_SET, sal_Int16(aFont.GetCharSet()) );//use awt::CharSet::DONTKNOW instead of SYSTEM to avoid assertion issue 50249
+    rOutMap.setPropertyValueDefault( PROP_CHAR_FONT_PITCH, sal_Int16(aFont.GetPitch()) );//awt::FontPitch::VARIABLE
+    rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_CHAR_COLOR, -1 ); //automatic color (COL_AUTO)
+    rOutMap.setPropertyValueDefault( PROP_CHAR_CHAR_HEIGHT, fDefaultFontHeight );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_UNDERLINE, awt::FontUnderline::NONE );
+    rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_CHAR_UNDERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
+    rOutMap.setPropertyValueDefault( PROP_CHAR_UNDERLINE_HAS_COLOR, false );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_OVERLINE, awt::FontUnderline::NONE );
+    rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_CHAR_OVERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
+    rOutMap.setPropertyValueDefault( PROP_CHAR_OVERLINE_HAS_COLOR, false );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_WEIGHT, awt::FontWeight::NORMAL );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_POSTURE, awt::FontSlant_NONE );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_AUTO_KERNING, true );
+    rOutMap.setPropertyValueDefault< sal_Int16 >( PROP_CHAR_KERNING, 0 );
+    rOutMap.setPropertyValueDefault< sal_Int16 >( PROP_CHAR_STRIKE_OUT, awt::FontStrikeout::NONE );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_WORD_MODE, false );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_LOCALE, aDefaultLocale );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_SHADOWED, false );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_CONTOURED, false );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_RELIEF, text::FontRelief::NONE );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_EMPHASIS, text::FontEmphasis::NONE );
 
     // Asian (com.sun.star.style.CharacterPropertiesAsian)
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultFontHeight );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_WEIGHT, awt::FontWeight::NORMAL );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_POSTURE, awt::FontSlant_NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_LOCALE, aDefaultLocale_CJK );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_NAME, aFontCJK.GetFamilyName() );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_STYLE_NAME, aFontCJK.GetStyleName() );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_FAMILY, sal_Int16(aFontCJK.GetFamilyType()) );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_SET, sal_Int16(aFontCJK.GetCharSet()) );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_PITCH, sal_Int16(aFontCJK.GetPitch()) );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultFontHeight );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_WEIGHT, awt::FontWeight::NORMAL );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_POSTURE, awt::FontSlant_NONE );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_LOCALE, aDefaultLocale_CJK );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_FONT_NAME, aFontCJK.GetFamilyName() );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_FONT_STYLE_NAME, aFontCJK.GetStyleName() );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_FONT_FAMILY, sal_Int16(aFontCJK.GetFamilyType()) );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_CHAR_SET, sal_Int16(aFontCJK.GetCharSet()) );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_ASIAN_FONT_PITCH, sal_Int16(aFontCJK.GetPitch()) );
 
     // Complex Text Layout (com.sun.star.style.CharacterPropertiesComplex)
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultFontHeight );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_WEIGHT, awt::FontWeight::NORMAL );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_POSTURE, awt::FontSlant_NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_LOCALE, aDefaultLocale_CTL );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_NAME, aFontCTL.GetFamilyName() );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_STYLE_NAME, aFontCTL.GetStyleName() );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_FAMILY, sal_Int16(aFontCTL.GetFamilyType()) );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_SET, sal_Int16(aFontCTL.GetCharSet()) );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_PITCH, sal_Int16(aFontCTL.GetPitch()) );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultFontHeight );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_WEIGHT, awt::FontWeight::NORMAL );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_POSTURE, awt::FontSlant_NONE );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_LOCALE, aDefaultLocale_CTL );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_FONT_NAME, aFontCTL.GetFamilyName() );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_FONT_STYLE_NAME, aFontCTL.GetStyleName() );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_FONT_FAMILY, sal_Int16(aFontCTL.GetFamilyType()) );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_CHAR_SET, sal_Int16(aFontCTL.GetCharSet()) );
+    rOutMap.setPropertyValueDefault( PROP_CHAR_COMPLEX_FONT_PITCH, sal_Int16(aFontCTL.GetPitch()) );
 
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_WRITING_MODE, sal_Int16( css::text::WritingMode2::PAGE ) );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PARA_IS_CHARACTER_DISTANCE, true );
+    rOutMap.setPropertyValueDefault( PROP_WRITING_MODE, sal_Int16( css::text::WritingMode2::PAGE ) );
+    rOutMap.setPropertyValueDefault( PROP_PARA_IS_CHARACTER_DISTANCE, true );
 }
 
 bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )

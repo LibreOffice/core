@@ -65,7 +65,7 @@ struct StaticColumnLineChartTypeTemplateDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aStaticDefaults, PROP_COL_LINE_NUMBER_OF_LINES, 1 );
+        aStaticDefaults.setPropertyValueDefault< sal_Int32 >( PROP_COL_LINE_NUMBER_OF_LINES, 1 );
         return &aStaticDefaults;
     }
 };
@@ -139,11 +139,7 @@ ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
 void ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticColumnLineChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL ColumnLineChartTypeTemplate::getInfoHelper()

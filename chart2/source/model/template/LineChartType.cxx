@@ -75,12 +75,12 @@ struct StaticLineChartTypeDefaults_Initializer
 private:
     static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_CURVE_STYLE, ::chart2::CurveStyle_LINES );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_CURVE_RESOLUTION, 20 );
+        rOutMap.setPropertyValueDefault( PROP_LINECHARTTYPE_CURVE_STYLE, ::chart2::CurveStyle_LINES );
+        rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_LINECHARTTYPE_CURVE_RESOLUTION, 20 );
 
         // todo: check whether order 3 means polygons of order 3 or 2. (see
         // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_SPLINE_ORDER, 3 );
+        rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_LINECHARTTYPE_SPLINE_ORDER, 3 );
     }
 };
 
@@ -161,11 +161,7 @@ OUString SAL_CALL LineChartType::getChartType()
 void LineChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticLineChartTypeDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL LineChartType::getInfoHelper()

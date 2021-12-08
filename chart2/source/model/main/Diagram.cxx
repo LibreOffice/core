@@ -183,17 +183,17 @@ const ::chart::tPropertyValueMap& StaticDiagramDefaults()
     static ::chart::tPropertyValueMap aStaticDefaults = []()
     {
         ::chart::tPropertyValueMap aMap;
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_CONNECT_BARS, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEHBORDER, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEVBORDER, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_SORT_BY_X_VALUES, false );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_CONNECT_BARS, false );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_DATATABLEHBORDER, false );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_DATATABLEVBORDER, false );
+        aMap.setPropertyValueDefault( PROP_DIAGRAM_DATATABLEOUTLINE, false );
+        aMap.setPropertyValueDefault< sal_Int32 >( PROP_DIAGRAM_STARTING_ANGLE, 90 );
+        aMap.setPropertyValueDefault< sal_Int32 >( PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
         ::chart::SceneProperties::AddDefaultsToMap( aMap );
         return aMap;
     }();
@@ -570,11 +570,7 @@ void Diagram::fireModifyEvent()
 void Diagram::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticDiagramDefaults();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 // ____ OPropertySet ____
