@@ -105,6 +105,24 @@
       "message": "today\u0027s oss-fuzz builds fail with\n\nStep #3 - \"compile-honggfuzz-address-x86_64\": /src/libreoffice/solenv/gbuild/ComponentTarget.mk:53: *** No LIBFILENAME set at component target: /work/workdir/ComponentTarget/i18npool/util/i18npool.component.  Stop.\nStep #3 - \"compile-honggfuzz-address-x86_64\": make[1]: *** Waiting for unfinished jobs....\nStep #3 - \"compile-honggfuzz-address-x86_64\": [build CMP] i18npool/util/i18npool\n\nhttps://oss-fuzz-build-logs.storage.googleapis.com/index.html#libreoffice",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "947ebb56_edb1ea3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-08T09:19:29Z",
+      "side": 1,
+      "message": "So this change apparently combines three different things, two of which I see issues with (and the third I can\u0027t say anything about):\n\n1  Introduce --enable-services-rdb-from-build option.  Instead of codifying in postprocess/Rdb_services.mk which component files go into Rdb_services, it tries to construct that (with a `gb_Rdb_add_components,services,...` added to Makefile.gbuild) from the set of libraries that are built.  Trying to reduce the redundancies there is a good thing.  However:\n\n1.1  Rdb_services shall not contain the component files of all libraries that are built.  While this change filters out the component files that go into Rdb_ure/services (ure/Rdb_ure.mk), it fails to filter out the component files that go into others like Rdb_postgresql-sdbc (connectivity/Rdb_postgresql-sdbc.mk).\n\n1.2  The code added to Makefile.gbuild codifies the knowledge that there is an Rdb_services.  This is brittle.\n\n1.3  The code added to solenv/gbuild/Rdb.mk codifies the knowlege (for gb_Rdb__URECOMPONENTS) that there is an Rdb_ure/services.  This is brittle.\n\n1.4  Introducing an --enable-services-rdb-from-build option needlessly provides two different ways how the content of Rdb_services is assembled.  This should be consolidated.  (I understand that you only added the option as work-in-progress, but the current situation is nevertheless confusing for reviewers and maintainers, and leads to the danger that this will never be cleaned up fully and the two alternative ways will stay in the code base forever.)\n\n2  Some of the existing component files (at least svx/util/svx.component and sw/uitl/sw.component) contain \u003cimplementation\u003e entries that may not actually be implemented in the corresponding library, dependening on the build configuration.  While somewhat dirty, at least for --enable-dynloading builds that has never caused any actual problems (if any code asked for the instantiation of a service or singleton provided by such an implementation, instead of failing because the service or singleton was unknown, it failed because the implementation could not be loaded; the net effect was about the same).  I assume that does cause whatever problems for your WASM build now, though (and hence you try to address it here).  And trying to clean that up is a good thing anyway.  However:\n\n2.1  This causes the issue of multiple \u003ccomponent\u003e elements in Rdb_services for a single library, as I already explained (and gave suggestions for an alternative solution) in my earlier comment \u003chttps://gerrit.libreoffice.org/c/core/+/126185/7#message-003096db47859a909f8130ce20cbf31cb5dcdce9\u003e here.\n\n3  Something that is apparently only relevant for --disable-dynloading builds (i.e., the changes to solenv/bin/native-code.py), and which I don\u0027t know anything and can\u0027t say anything about.",
+      "parentUuid": "b61b6e4e_2083f420",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
