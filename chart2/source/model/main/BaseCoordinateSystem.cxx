@@ -60,7 +60,7 @@ struct StaticCooSysDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::PropertyHelper::setPropertyValueDefault( aStaticDefaults, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
+        aStaticDefaults.setPropertyValueDefault( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
         return &aStaticDefaults;
     }
 };
@@ -333,11 +333,7 @@ void BaseCoordinateSystem::fireModifyEvent()
 void BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticCooSysDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 // ____ OPropertySet ____

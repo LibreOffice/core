@@ -92,10 +92,10 @@ struct StaticPieChartTypeTemplateDefaults_Initializer
 private:
     static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
+        rOutMap.setPropertyValueDefault( PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
+        rOutMap.setPropertyValueDefault< double >( PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
+        rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_PIE_TEMPLATE_DIMENSION, 2 );
+        rOutMap.setPropertyValueDefault( PROP_PIE_TEMPLATE_USE_RINGS, false );
     }
 };
 
@@ -170,11 +170,7 @@ PieChartTypeTemplate::~PieChartTypeTemplate()
 void PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticPieChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()

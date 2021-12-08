@@ -114,20 +114,20 @@ void lcl_AddPropertiesToVector(
             ::chart::FillProperties::AddDefaultsToMap( aOutMap );
             ::chart::CharacterProperties::AddDefaultsToMap( aOutMap );
 
-            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SHOW, false );
-            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_XNAME, OUString("x") );
-            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_YNAME, OUString("f(x)") );
-            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
+            aOutMap.setPropertyValueDefault( PROP_EQUATION_SHOW, false );
+            aOutMap.setPropertyValueDefault( PROP_EQUATION_XNAME, OUString("x") );
+            aOutMap.setPropertyValueDefault( PROP_EQUATION_YNAME, OUString("f(x)") );
+            aOutMap.setPropertyValueDefault( PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
             //::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_EQUATION_SEPARATOR, OUString( '\n' ));
 
             // override other defaults
-            ::chart::PropertyHelper::setPropertyValue( aOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
-            ::chart::PropertyHelper::setPropertyValue( aOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+            aOutMap.setPropertyValue( ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
+            aOutMap.setPropertyValue( ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 
             float fDefaultCharHeight = 10.0;
-            ::chart::PropertyHelper::setPropertyValue( aOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-            ::chart::PropertyHelper::setPropertyValue( aOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-            ::chart::PropertyHelper::setPropertyValue( aOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+            aOutMap.setPropertyValue( ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+            aOutMap.setPropertyValue( ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+            aOutMap.setPropertyValue( ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
             return aOutMap;
         }();
     return aStaticDefaults;
@@ -188,11 +188,7 @@ uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
 void RegressionEquation::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = GetStaticRegressionEquationDefaults();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL RegressionEquation::getInfoHelper()

@@ -67,11 +67,10 @@ private:
     {
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
 
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_GRID_SHOW, false );
+        rOutMap.setPropertyValueDefault( PROP_GRID_SHOW, false );
 
         // override other defaults
-        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >(
-            rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
+        rOutMap.setPropertyValue< sal_Int32 >( ::chart::LinePropertiesHelper::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
     }
 };
 
@@ -145,11 +144,7 @@ GridProperties::~GridProperties()
 void GridProperties::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticGridDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL GridProperties::getInfoHelper()

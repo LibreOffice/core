@@ -91,9 +91,9 @@ private:
     static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         // must match default in CTOR!
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_JAPANESE, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW, true );
+        rOutMap.setPropertyValueDefault( PROP_CANDLESTICKCHARTTYPE_JAPANESE, false );
+        rOutMap.setPropertyValueDefault( PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST, false );
+        rOutMap.setPropertyValueDefault( PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW, true );
     }
 };
 
@@ -266,11 +266,7 @@ OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
 void CandleStickChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticCandleStickChartTypeDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 // ____ OPropertySet ____

@@ -82,11 +82,11 @@ void DataSeriesProperties::AddPropertiesToVector(
 void DataSeriesProperties::AddDefaultsToMap(
     tPropertyValueMap & rOutMap )
 {
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_STACKING_DIRECTION, chart2::StackingDirection_NO_STACKING );
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_VARY_COLORS_BY_POINT, false );
-    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATASERIES_ATTACHED_AXIS_INDEX, 0 );
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_SHOW_LEGEND_ENTRY, true );
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES, true );
+    rOutMap.setPropertyValueDefault( PROP_DATASERIES_STACKING_DIRECTION, chart2::StackingDirection_NO_STACKING );
+    rOutMap.setPropertyValueDefault( PROP_DATASERIES_VARY_COLORS_BY_POINT, false );
+    rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_DATASERIES_ATTACHED_AXIS_INDEX, 0 );
+    rOutMap.setPropertyValueDefault( PROP_DATASERIES_SHOW_LEGEND_ENTRY, true );
+    rOutMap.setPropertyValueDefault( PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES, true );
 
     // PROP_DATASERIES_ATTRIBUTED_DATA_POINTS has no default
 
