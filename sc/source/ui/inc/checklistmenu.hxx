@@ -335,6 +335,7 @@ public:
     // nMenu of 0 for background color, nMenu of 1 for text color
     void addMenuColorItem(const OUString& rText, bool bActive, VirtualDevice& rImage,
                           int nMenu, ScCheckListMenuControl::Action* pAction);
+    void addSeparator();
     void clearMenuItems();
     void resizeToFitMenuItems();
 

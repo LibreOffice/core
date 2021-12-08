@@ -80,7 +80,11 @@ class tdf126306(UITestCase):
             xMenu = xFloatWindow.getChild("menu")
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xSubFloatWindow = self.xUITest.getFloatWindow()
+            xSubMenu = xSubFloatWindow.getChild("menu")
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
             top10_hidden_values = [True, True, True, False, True, False, True,
                     True, False, True, True, False, True, True]
@@ -102,6 +106,10 @@ class tdf126306(UITestCase):
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xSubFloatWindow = self.xUITest.getFloatWindow()
+            xSubMenu = xSubFloatWindow.getChild("menu")
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
             empty_values = [False] * 14
             #Values are the same
@@ -120,8 +128,12 @@ class tdf126306(UITestCase):
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xSubFloatWindow = self.xUITest.getFloatWindow()
+            xSubMenu = xSubFloatWindow.getChild("menu")
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
             #Nothing should change
             self.check_values(document, default_values)
