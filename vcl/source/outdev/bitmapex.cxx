@@ -525,6 +525,8 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(rtl::math::approxEqual( fAlpha, 1.0 ))
         fAlpha = 1.0; // avoid the need for approxEqual in backends
 
+    // If the backend's implementation is known to not need any optimizations here, pass to it directly.
+    // With most backends it's more performant to try to simplify to DrawBitmapEx() first.
     if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
         return;
 
@@ -562,11 +564,9 @@ void OutputDevice::DrawTransformedBitmapEx(
         return;
     }
 
+    // Try the backend's implementation before resorting to the slower fallback here.
     if(bTryDirectPaint && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
-    {
-        // we are done
         return;
-    }
 
     // take the fallback when no rotate and shear, but mirror (else we would have done this above)
     if(!bRotated && !bSheared)

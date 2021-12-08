@@ -600,7 +600,12 @@ protected:
                                     const SalBitmap* pAlphaBitmap,
                                     double fAlpha) = 0;
 
-    /// Used e.g. by canvas to know whether to cache the drawing.
+    /// Returns true if the drawTransformedBitmap() call is fast, and so it should
+    /// be used directly without trying to optimize some calls e.g. by calling drawBitmap()
+    /// instead (which is faster for most VCL backends). These optimizations are not
+    /// done unconditionally because they may be counter-productive for some fast VCL backends
+    /// (for example, some OutputDevice optimizations could try access the pixels, which
+    /// would make performance worse for GPU-backed backends).
     /// See also tdf#138068.
     virtual bool hasFastDrawTransformedBitmap() const = 0;
 
