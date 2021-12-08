@@ -653,6 +653,22 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             new SwRangeRedline( pRedlineData, *aPaM.GetPoint(),
                            !pRedlineInfo->bMergeLastParagraph );
 
+        // tdf#107292 fix order of delete redlines at the same position by removing
+        // the already inserted redlines temporarily and inserting them back in reverse
+        // order after inserting pRedline
+        std::vector<const SwRangeRedline*> aSwapRedlines;
+        if ( RedlineType::Delete == pRedlineInfo->eType )
+        {
+            SwRedlineTable::size_type n = 0;
+            while ( const SwRangeRedline* pRedline2 =
+                    pDoc->getIDocumentRedlineAccess().GetRedline( *pRedline->Start(), &n ) )
+            {
+                SwRedlineTable& aRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+                aSwapRedlines.push_back(pRedline2);
+                aRedlineTable.Remove(n);
+            }
+        }
+
         // set mark
         if( aPaM.HasMark() )
         {
@@ -674,6 +690,11 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // set redline mode (without doing the associated book-keeping)
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::On);
         pDoc->getIDocumentRedlineAccess().AppendRedline(pRedline, false);
+
+        // restore the correct order of the delete redlines at the same position
+        for (auto i = aSwapRedlines.rbegin(); i != aSwapRedlines.rend(); ++i)
+            pDoc->getIDocumentRedlineAccess().AppendRedline(const_cast<SwRangeRedline*>(*i), false);
+
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::NONE);
     }
 }
