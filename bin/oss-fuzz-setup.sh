@@ -4,8 +4,6 @@ set -e
 
 echo start downloading dependencies at `date -u`
 
-apt-get install -y lockfile-progs
-
 # convert FOO := BAR$(MICRO) to FOO=BAR$MICRO
 source <(sed -e's# := #=#g' download.lst | sed -e 's#[)(]##g')
 
