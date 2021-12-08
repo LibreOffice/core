@@ -51,6 +51,24 @@
       "parentUuid": "fdf138b1_9f3c53a6",
       "revId": "ad4e0d3e9f4aeeb9688d962e4d416746876a4d92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ede16b1_723ba8ef",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2983,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-08T16:50:54Z",
+      "side": 1,
+      "message": "\u003e And I guess it is possible to get environment variables from BASI, too?\n\nAh yes, I forgot about the environment variable, sorry. Yes, there\u0027s Environ function:\nhttps://help.libreoffice.org/latest/en-US/text/sbasic/shared/03130800.html?DbPAR\u003dBASIC",
+      "parentUuid": "5087dac5_a4489c8e",
+      "revId": "ad4e0d3e9f4aeeb9688d962e4d416746876a4d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
