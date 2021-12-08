@@ -220,6 +220,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     bool mbQuickSearch; // Enables type-ahead search in the check list box.
     bool mbActivateOnSingleClick; // Make single click "activate" a row like a double-click normally does
     bool mbHoverSelection; // Make mouse over a row "select" a row like a single-click normally does
+    bool mbSelectingByHover; // true during "Select" if it was due to hover
     sal_Int8        mnClicksToToggle; // 0 == Click on a row not toggle its checkbox.
                                       // 1 == Every click on row toggle its checkbox.
                                       // 2 == First click select, second click toggle.
@@ -676,6 +677,9 @@ public:
     // Make mouse over a row "select" a row like a single-click normally does
     void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }
     bool            GetHoverSelection() const { return mbHoverSelection; }
+
+    // only true during Select if the Select is due to a Hover
+    bool            IsSelectDueToHover() const { return mbSelectingByHover; }
 
     // Set when clicks toggle the checkbox of the row.
     void            SetClicksToToggle(sal_Int8 nCount) { mnClicksToToggle = nCount; }

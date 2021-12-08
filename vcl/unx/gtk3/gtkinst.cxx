@@ -13263,6 +13263,7 @@ private:
     std::vector<int> m_aSavedSortColumns;
     bool m_bWorkAroundBadDragRegion;
     bool m_bInDrag;
+    bool m_bChangedByMouse;
     gint m_nTextCol;
     gint m_nTextView;
     gint m_nImageCol;
@@ -13297,6 +13298,14 @@ private:
         //has been processed
         if (m_pChangeEvent)
             Application::RemoveUserEvent(m_pChangeEvent);
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GdkEvent *pEvent = gtk_get_current_event();
+        m_bChangedByMouse = pEvent && categorizeEvent(pEvent) == VclInputFlags::MOUSE;
+#else
+        //TODO maybe iterate over gtk_widget_observe_controllers looking for a motion controller
+#endif
+
         m_pChangeEvent = Application::PostUserEvent(LINK(this, GtkInstanceTreeView, async_signal_changed));
     }
 
@@ -13959,6 +13968,7 @@ public:
         , m_pTreeModel(gtk_tree_view_get_model(m_pTreeView))
         , m_bWorkAroundBadDragRegion(false)
         , m_bInDrag(false)
+        , m_bChangedByMouse(false)
         , m_nTextCol(-1)
         , m_nTextView(-1)
         , m_nImageCol(-1)
@@ -15758,6 +15768,11 @@ public:
         gtk_tree_view_set_show_expanders(m_pTreeView, bShow);
     }
 
+    virtual bool changed_by_hover() const override
+    {
+        return m_bChangedByMouse;
+    }
+
     virtual ~GtkInstanceTreeView() override
     {
         if (m_pChangeEvent)
@@ -15813,6 +15828,7 @@ IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
 {
     m_pChangeEvent = nullptr;
     signal_changed();
+    m_bChangedByMouse = false;
 }
 
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
