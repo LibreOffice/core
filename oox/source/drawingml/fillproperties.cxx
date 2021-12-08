@@ -816,8 +816,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     // Set background color for hatch
                     if(maPatternProps.maPattBgColor.isUsed())
                     {
-                        rPropMap.setProperty( ShapeProperty::FillBackground, true );
-                        rPropMap.setProperty( ShapeProperty::FillColor, maPatternProps.maPattBgColor.getColor( rGraphicHelper, nPhClr ) );
+                        aColor = maPatternProps.maPattBgColor;
+                        rPropMap.setProperty( ShapeProperty::FillBackground, aColor.getTransparency() != 100 );
+                        rPropMap.setProperty( ShapeProperty::FillColor, aColor.getColor( rGraphicHelper, nPhClr ) );
                     }
                 }
                 else if ( maPatternProps.maPattBgColor.isUsed() )

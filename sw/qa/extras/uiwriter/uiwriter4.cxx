@@ -286,6 +286,7 @@ public:
     void testTdf129270();
     void testInsertPdf();
     void testTdf143760WrapContourToOff();
+    void testTdf127989();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
@@ -405,6 +406,7 @@ public:
     CPPUNIT_TEST(testTdf129270);
     CPPUNIT_TEST(testInsertPdf);
     CPPUNIT_TEST(testTdf143760WrapContourToOff);
+    CPPUNIT_TEST(testTdf127989);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -3883,6 +3885,32 @@ void SwUiWriterTest4::testTdf143760WrapContourToOff()
     // Without fix this had failed, because the shape was written to file with contour.
     reload("Office Open XML Text", "tdf143760_ContourToWrapOff.docx");
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "SurroundContour"));
+}
+
+void SwUiWriterTest4::testTdf127989()
+{
+    createSwDoc();
+
+    // Add a rectangle shape to the document.
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    xShape->setPosition(awt::Point(1000, 1000));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_HATCH));
+    xShapeProps->setPropertyValue("FillHatchName", uno::makeAny(OUString("Black 0 Degrees")));
+    xShapeProps->setPropertyValue("FillBackground", uno::makeAny(false));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    xDrawPage->add(xShape);
+
+    // Save it as DOCX and load it again.
+    reload("Office Open XML Text", "tdf127989.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // Without fix this had failed, because the background of the hatch was not set as 'no background'.
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "FillBackground"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest4);
