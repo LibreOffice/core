@@ -123,6 +123,24 @@
       "parentUuid": "b61b6e4e_2083f420",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed3a8e0_d4fe1d9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-08T10:01:41Z",
+      "side": 1,
+      "message": "\u003e 1  Introduce --enable-services-rdb-from-build option.  Instead of codifying in postprocess/Rdb_services.mk which component files go into Rdb_services, it tries to construct that (with a `gb_Rdb_add_components,services,...` added to Makefile.gbuild) from the set of libraries that are built.  Trying to reduce the redundancies there is a good thing.  However:\n\u003e \n\u003e 1.1  Rdb_services shall not contain the component files of all libraries that are built.  While this change filters out the component files that go into Rdb_ure/services (ure/Rdb_ure.mk), it fails to filter out the component files that go into others like Rdb_postgresql-sdbc (connectivity/Rdb_postgresql-sdbc.mk).\n\u003e \n\u003e 1.2  The code added to Makefile.gbuild codifies the knowledge that there is an Rdb_services.  This is brittle.\n\u003e \n\u003e 1.3  The code added to solenv/gbuild/Rdb.mk codifies the knowlege (for gb_Rdb__URECOMPONENTS) that there is an Rdb_ure/services.  This is brittle.\n\u003e \n\u003e 1.4  Introducing an --enable-services-rdb-from-build option needlessly provides two different ways how the content of Rdb_services is assembled.  This should be consolidated.  (I understand that you only added the option as work-in-progress, but the current situation is nevertheless confusing for reviewers and maintainers, and leads to the danger that this will never be cleaned up fully and the two alternative ways will stay in the code base forever.)\n\nI have some idea how to address all four issues 1.1--1.4.  Will come up with a proposed change.",
+      "parentUuid": "947ebb56_edb1ea3d",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
