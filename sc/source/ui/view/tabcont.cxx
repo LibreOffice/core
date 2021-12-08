@@ -233,6 +233,10 @@ void ScTabControl::AddTabClick()
     ScModule* pScMod = SC_MOD();
     if (!rDoc.IsDocEditable() || pScMod->IsTableLocked())
         return;
+
+    // cancel any in-process input - which would end up on our new sheet
+    pScMod->InputCancelHandler();
+
     OUString aName;
     rDoc.CreateValidTabName(aName);
     SCTAB nTabCount = rDoc.GetTableCount();
