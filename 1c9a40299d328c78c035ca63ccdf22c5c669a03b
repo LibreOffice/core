@@ -141,6 +141,24 @@
       "parentUuid": "947ebb56_edb1ea3d",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cee99817_1ae85930",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-08T13:50:45Z",
+      "side": 1,
+      "message": "\u003e 1  Introduce --enable-services-rdb-from-build option.  Instead of codifying in postprocess/Rdb_services.mk which component files go into Rdb_services, it tries to construct that (with a `gb_Rdb_add_components,services,...` added to Makefile.gbuild) from the set of libraries that are built.  Trying to reduce the redundancies there is a good thing.\n\nYeah, the current implementation with the filter is a hacked solution, good enough for the static WASM build. I\u0027m not sure there is a good solution without explicitly tagging all the services.rdb components. Something like \"It\u0027s a services.rdb component, if it\u0027s not used in an other RDB\" seems brittle too. Some tools writer their own minimal RDB AFAIK.\n\n\u003e 2  Some of the existing component files (at least svx/util/svx.component and sw/uitl/sw.component) contain \u003cimplementation\u003e entries that may not actually be implemented in the corresponding library, dependening on the build configuration.  While somewhat dirty, at least for --enable-dynloading builds that has never caused any actual problems (if any code asked for the instantiation of a service or singleton provided by such an implementation, instead of failing because the service or singleton was unknown, it failed because the implementation could not be loaded; the net effect was about the same).  I assume that does cause whatever problems for your WASM build now, though (and hence you try to address it here).  And trying to clean that up is a good thing anyway.\n\nFor a static build the library is not relevant. The static build just uses a map of constructor names to constructor functions. I don\u0027t know if this map is really needed in the WASM case, as there are function table you can directly access and AFAIK manipulate these table at runtime. But the current implementation is the same mechanism iOS and Android use (see solenv/bin/native-code.py). And I can\u0027t actually say anything is missing, because the linker doesn\u0027t fail with missing symbols, as it otherwise would.\n\n\u003e 3  Something that is apparently only relevant for --disable-dynloading builds (i.e., the changes to solenv/bin/native-code.py), and which I don\u0027t know anything and can\u0027t say anything about.\n\nThe whole change is in the end also about creating a list of constructors for component creation, based on the build components, so solenv/bin/native-code.py doesn\u0027t need the whole long list of #ifdef constructors in the map.\n\nAnd you already know my plan is to get rid of --enable-services-rdb-from-build in the end, defaulting to it.",
+      "parentUuid": "fed3a8e0_d4fe1d9f",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
