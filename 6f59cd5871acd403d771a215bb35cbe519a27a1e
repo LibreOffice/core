@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd842952_73c2c419",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-08T09:29:41Z",
+      "side": 1,
+      "message": "WIP: Unit test under dev after it is ready and Jenkins accepts it can be merged.",
+      "revId": "6f59cd5871acd403d771a215bb35cbe519a27a1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
