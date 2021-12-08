@@ -315,8 +315,6 @@
         factories for creating documents.</desc>
       </info>
       <prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Service User/[username] -->
-        <!-- OldLocation: userdb.ini -->
         <info>
           <desc>Indicates if the user data is copied successfully.</desc>
         </info>
@@ -329,8 +327,6 @@
         </info>
       </set>
       <prop oor:name="ooSetupConnectionURL" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: Common-->
-        <!-- OldLocation: soffice.ini -->
         <info>
           <desc>Specifies the URL for a UNO connection that can be used to
           script the office from outside.</desc>
@@ -374,8 +370,6 @@
       </info>
       <!--The default must be written by the setup.-->
       <prop oor:name="ooLocale" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: User/Language -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Other -->
         <!--The initial default should be written by the setup.-->
         <info>

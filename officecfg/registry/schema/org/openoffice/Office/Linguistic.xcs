@@ -150,7 +150,6 @@
         configurations.</desc>
       </info>
       <prop oor:name="UILocale" oor:type="xs:string" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <!-- UIHints: Tools - Options - General - Language Settings - Languages
         -->
         <info>
@@ -160,7 +159,6 @@
         <value/>
       </prop>
       <prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Ignores the control characters (ASCII characters &lt; 32) for
           spell checking, hyphenation and the thesaurus.</desc>
@@ -168,8 +166,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="DefaultLocale" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: DefaultLanguage -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Specifies the default document language.</desc>
@@ -180,7 +176,6 @@
              was intended -->
       </prop>
       <prop oor:name="DefaultLocale_CJK" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: DefaultLanguage -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Specifies the default document CJK language.</desc>
@@ -191,7 +186,6 @@
              was intended -->
       </prop>
       <prop oor:name="DefaultLocale_CTL" oor:type="xs:string" oor:nillable="false">
-        <!-- OldPath: DefaultLanguage -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Specifies the default document CTL language.</desc>
@@ -206,8 +200,6 @@
           <desc>Defines which personal dictionaries are used.</desc>
         </info>
         <prop oor:name="ActiveDictionaries" oor:type="oor:string-list" oor:nillable="false">
-          <!-- OldPath: Active-Dictionaries -->
-          <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - Language -->
           <info>
             <desc>Specifies the custom dictionaries to be used. The Ignore list
@@ -226,7 +218,6 @@
           </value>
         </prop>
         <prop oor:name="IsUseDictionaryList" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldLocation: NEW -->
           <info>
             <desc>Determines if personal dictionaries should be used for spell
             checking and hyphenation.</desc>
@@ -240,7 +231,6 @@
         <desc>Defines settings used by the text conversion.</desc>
       </info>
       <prop oor:name="ActiveConversionDictionaries" oor:type="oor:string-list" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies the user dictionaries to be used. </desc>
           <label>Active text conversion user dictionaries</label>
@@ -248,7 +238,6 @@
         <value/>
       </prop>
       <prop oor:name="IsIgnorePostPositionalWord" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if post positionals should be ignored when looking for
           Korean entries.</desc>
@@ -257,7 +246,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="IsAutoCloseDialog" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if the dialog should be closed automatically after the
           conversion of the current text portion is processed.</desc>
@@ -266,7 +254,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsShowEntriesRecentlyUsedFirst" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if entries that were recently used as replacements
           should be listed first.</desc>
@@ -275,7 +262,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsAutoReplaceUniqueEntries" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if entries for which have only one possible
           replacement should be replaced automatically.</desc>
@@ -284,7 +270,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsDirectionToSimplified" oor:type="xs:boolean">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies in which direction the translation will be made, from
           traditional to simplified or the other way round.</desc>
@@ -292,7 +277,6 @@
         </info>
       </prop>
       <prop oor:name="IsUseCharacterVariants" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies whether Taiwan, Hongkong SAR, and Macao SAR character
           variants should be used for translation.</desc>
@@ -301,7 +285,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsTranslateCommonTerms" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies whether common terms should be detected and translated
           as whole words.</desc>
@@ -310,7 +293,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsReverseMapping" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: NEW -->
         <info>
           <desc>If Reverse Mapping is active than every dictionary entry added
           or modified will also be added or modified within the dictionary in
@@ -325,8 +307,6 @@
         <desc>Contains spell checking-relevant settings.</desc>
       </info>
       <prop oor:name="IsSpellUpperCase" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions / SpellOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Specifies whether to include uppercase words in the spellcheck
@@ -336,8 +316,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="IsSpellWithDigits" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions / SpellOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Specifies whether to check the spelling of words which contain
@@ -347,8 +325,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsSpellCapitalization" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions / SpellOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <deprecated/>
@@ -358,8 +334,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="IsSpellAuto" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions / SpellOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Checks spelling automatically.</desc>
@@ -368,8 +342,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="IsSpellSpecial" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions / SpellOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Allows spellchecking in headers, footers, and frames.</desc>
@@ -378,8 +350,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="IsReverseDirection" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions / SpellOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Advances backwards through the text for spell checking.</desc>
@@ -413,8 +383,6 @@
         <desc>Contains hyphenation relevant settings.</desc>
       </info>
       <prop oor:name="MinLeading" oor:type="xs:short" oor:nillable="false">
-        <!-- OldPath: HyphMinLeading -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Specifies the minimum number of characters of the hyphenated
@@ -436,8 +404,6 @@
         <value>2</value>
       </prop>
       <prop oor:name="MinTrailing" oor:type="xs:short" oor:nillable="false">
-        <!-- OldPath: HyphMinTrailing -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Specifies the minimum number of characters of the hyphenated
@@ -459,8 +425,6 @@
         <value>2</value>
       </prop>
       <prop oor:name="MinWordLength" oor:type="xs:short" oor:nillable="false">
-        <!-- OldPath: HyphMinWordLength -->
-        <!-- OldLocation: soffice.ini -->
         <info>
           <desc>Specifies the minimum word length to allow a hyphenation.</desc>
           <label>Minimal word length</label>
@@ -480,8 +444,6 @@
         <value>5</value>
       </prop>
       <prop oor:name="IsHyphSpecial" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Allows hyphenation in headers, footers, and frames.</desc>
@@ -490,8 +452,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="IsHyphAuto" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: MiscOptions -->
-        <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Allows for automatic insertion of soft hyphens.</desc>

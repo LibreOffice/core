@@ -997,8 +997,6 @@
           <desc>Contains settings for the visibility of various elements.</desc>
         </info>
         <prop oor:name="GraphicObject" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Display -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
             <desc>Specifies whether images and objects are displayed.</desc>
@@ -1007,8 +1005,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Display -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
             <desc>Specifies whether tables are displayed.</desc>
@@ -1017,8 +1013,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="DrawingControl" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Display -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
             <desc>Specifies whether drawings and controls are displayed.</desc>
@@ -1027,8 +1021,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="FieldCode" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Display -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
             <desc>Specifies whether field codes are displayed.</desc>
@@ -1037,8 +1029,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Note" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Display -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
             <desc>Specifies whether comments are displayed.</desc>
@@ -1047,7 +1037,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="ShowContentTips" oor:type="xs:boolean">
-          <!-- OldPath: Writer/Content/Display/PreventTips -->
           <!-- UIHints: Not accessible via user interface -->
           <info>
             <desc>Enables the writer to prevent the display of tips for document content programmatically.</desc>
@@ -1134,8 +1123,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="ParagraphEnd" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether paragraph ends are shown on the screen.</desc>
@@ -1144,8 +1131,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="OptionalHyphen" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether optional hyphens are shown on the screen.</desc>
@@ -1154,8 +1139,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether spaces are shown on the screen.</desc>
@@ -1164,8 +1147,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="ProtectedSpace" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether protected spaces are shown on the screen.</desc>
@@ -1174,8 +1155,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Tab" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether breaks are shown on the screen.</desc>
@@ -1184,8 +1163,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Break" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether paragraph ends are shown on the screen.</desc>
@@ -1194,8 +1171,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="HiddenText" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether hidden text fields are displayed on the screen.</desc>
@@ -1204,8 +1179,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="HiddenParagraph" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Contents/Nonprinting_characters -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether hidden paragraphs are displayed on the screen.</desc>
@@ -1235,8 +1208,6 @@
           <desc>Contains settings for the automatic update of some elements.</desc>
         </info>
         <prop oor:name="Link" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Other/Update -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Update links -->
           <info>
             <desc>Specifies whether links in the document are updated during loading.</desc>
@@ -1262,8 +1233,6 @@
           <value>1</value>
         </prop>
         <prop oor:name="Field" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Other/Update -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
           <info>
             <desc>Specifies whether fields in the document are updated during loading.</desc>
@@ -1272,8 +1241,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Chart" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Other/Update -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
           <info>
             <desc>Specifies whether charts in the document are updated during loading.</desc>
@@ -1292,8 +1259,6 @@
           <desc>Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
         </info>
         <prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Layout/Lines -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <info>
             <desc>Displays helplines around the frames when frames are moved.</desc>
@@ -1302,8 +1267,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
-          <!-- OldPath: Writer/Layout/Lines -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <info>
             <desc>Specifies whether control points are displayed simple or enhanced.</desc>
@@ -1312,8 +1275,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="LargeControlPoint" oor:type="xs:boolean">
-          <!-- OldPath: Writer/Layout/Lines -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
           <info>
             <desc>Specifies whether control points are displayed as larger than the default size.</desc>
@@ -1335,8 +1296,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="HorizontalScroll" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Layout/Window -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
             <desc>Specifies whether the horizontal scroll bar is displayed.</desc>
@@ -1345,8 +1304,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="VerticalScroll" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Layout/Window -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
             <desc>Specifies whether the vertical scroll bar is displayed.</desc>
@@ -1363,8 +1320,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Layout/Window -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
             <desc>Specifies whether the horizontal ruler is displayed.</desc>
@@ -1373,7 +1328,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="HorizontalRulerUnit" oor:type="xs:int">
-          <!-- OldPath: Writer/Layout -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
             <desc>Specifies the measurement unit for the horizontal ruler.</desc>
@@ -1428,8 +1382,6 @@
           </constraints>
         </prop>
         <prop oor:name="VerticalRuler" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Layout/Window -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
             <desc>Specifies whether the vertical ruler is displayed.</desc>
@@ -1446,7 +1398,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="VerticalRulerUnit" oor:type="xs:int">
-          <!-- OldPath: Writer/Layout -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
             <desc>Specifies the measurement unit for the vertical ruler.</desc>
@@ -1501,8 +1452,6 @@
           </constraints>
         </prop>
         <prop oor:name="SmoothScroll" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Layout/Window -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
             <desc>Activates the smooth page scrolling function.</desc>
@@ -1524,8 +1473,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="MeasureUnit" oor:type="xs:int">
-          <!-- OldPath: Writer/Layout -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Meas. Units -->
           <info>
             <desc>Specifies the measurement units.</desc>
@@ -1580,8 +1527,6 @@
           </constraints>
         </prop>
         <prop oor:name="TabStop" oor:type="xs:int" oor:nillable="false" oor:localized="true">
-          <!-- OldPath: Writer/Layout -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Tab stops -->
           <!-- Notice: The default value is valid for the English Version (depends, if a metric system is used on the platform); NonMetric: 1270 1/100 mm-->
           <info>
@@ -1599,8 +1544,6 @@
         </prop>
         <!-- added for apply char unit 2006-12-1 -->
         <prop oor:name="ApplyCharUnit" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Layout -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Apply char unit -->
           <info>
             <desc>apply char unit to calculate the paragraph's indent</desc>
@@ -1678,8 +1621,6 @@
           <desc>Contains options for the grid.</desc>
         </info>
         <prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Grid/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
           <info>
             <desc>Moves frames, drawing elements, and form functions only between the grid points.</desc>
@@ -1688,8 +1629,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Grid/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
           <info>
             <desc>Displays the grid.</desc>
@@ -1698,8 +1637,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Grid/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
           <info>
             <desc>Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
@@ -1713,8 +1650,6 @@
           <desc>Contains settings for specifying the grid resolution.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Grid/Resolution -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <info>
             <desc>Defines the grid points distance in the X-axis [UNIT=1/100 mm].</desc>
@@ -1723,8 +1658,6 @@
           <value>1000</value>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Grid/Resolution -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <info>
             <desc>Defines the grid points distance in the Y-axis [UNIT=1/100 mm].</desc>
@@ -1738,8 +1671,6 @@
           <desc>Contains settings for specifying the subdivision of the grid.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Grid/Subdivision -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <info>
             <desc>Specifies the number of intervals between two grid points on the X-axis.</desc>
@@ -1748,8 +1679,6 @@
           <value>3</value>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Grid/Subdivision -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
           <info>
             <desc>Defines the distance between the grid points on the Y-axis.</desc>
@@ -1764,8 +1693,6 @@
         <desc>Specifies the basic western fonts to be used.</desc>
       </info>
       <prop oor:name="Standard" oor:type="xs:string">
-        <!-- OldPath: Writer/Default_Fonts -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
         <info>
           <desc>Specifies the font type to be used for the Standard paragraph style.</desc>
@@ -1780,8 +1707,6 @@
         </info>
       </prop>
       <prop oor:name="Heading" oor:type="xs:string">
-        <!-- OldPath: Writer/Default_Fonts -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <info>
           <desc>Specifies the font type to be used for the paragraph's headings.</desc>
@@ -1796,8 +1721,6 @@
         </info>
       </prop>
       <prop oor:name="List" oor:type="xs:string">
-        <!-- OldPath: Writer/Default_Fonts -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <info>
           <desc>Specifies the font to be used in the paragraph styles for lists and numbering.</desc>
@@ -1812,8 +1735,6 @@
         </info>
       </prop>
       <prop oor:name="Caption" oor:type="xs:string">
-        <!-- OldPath: Writer/Default_Fonts -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <info>
           <desc>Specifies the font to be used for the labels of images and tables.</desc>
@@ -1828,8 +1749,6 @@
         </info>
       </prop>
       <prop oor:name="Index" oor:type="xs:string">
-        <!-- OldPath: Writer/Default_Fonts -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
         <info>
           <desc>Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
@@ -1844,8 +1763,6 @@
         </info>
       </prop>
       <prop oor:name="Document" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Writer/Default_Fonts -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts -->
         <info>
           <desc>Applies the settings to the current document only (true). Otherwise, the settings will apply to all future documents (false).</desc>
@@ -2029,8 +1946,6 @@
           <desc>Contains settings specifying which content types are printed.</desc>
         </info>
         <prop oor:name="Graphic" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Contents -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
             <desc>Specifies whether images are printed.</desc>
@@ -2039,8 +1954,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Contents -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
             <desc>Specifies whether tables are printed.</desc>
@@ -2049,8 +1962,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Drawing" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Contents -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
             <desc>Specifies whether drawings are printed.</desc>
@@ -2059,8 +1970,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Control" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Contents -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
             <desc>Specifies whether controls are printed.</desc>
@@ -2069,8 +1978,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Background" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Contents -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
             <desc>Specifies whether background objects are printed.</desc>
@@ -2079,8 +1986,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="PrintBlack" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Contents -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
             <desc>Specifies whether text is always printed in black.</desc>
@@ -2105,8 +2010,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Note" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Print -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Notes -->
           <info>
             <desc>Specifies whether and how comments are printed.</desc>
@@ -2141,8 +2044,6 @@
           <desc>Specifies which pages are printed or how pages are printed.</desc>
         </info>
         <prop oor:name="LeftPage" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Pages -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <info>
             <desc>Prints only the even pages in the document.</desc>
@@ -2151,8 +2052,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="RightPage" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Pages -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <info>
             <desc>Prints only the odd pages in the document.</desc>
@@ -2161,8 +2060,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Reversed" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Pages -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <info>
             <desc>Reverses the printing order.</desc>
@@ -2171,8 +2068,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Brochure" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Pages -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <info>
             <desc>Prints in brochure format.</desc>
@@ -2181,8 +2076,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="BrochureRightToLeft" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Pages -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
           <info>
             <desc>Prints in brochure format, with right-to-left direction.</desc>
@@ -2196,8 +2089,6 @@
           <desc>Contains other output settings.</desc>
         </info>
         <prop oor:name="SinglePrintJob" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Output -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Output -->
           <info>
             <desc>Controls the print output to avoid problems with duplex printing and odd page numbers.</desc>
@@ -2206,8 +2097,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Fax" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Print -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Print - [Section] Fax -->
           <info>
             <desc>Specifies the fax machine that is used when faxing directly from the document.</desc>
@@ -2222,8 +2111,6 @@
           <desc>Contains settings for printers with multiple paper trays.</desc>
         </info>
         <prop oor:name="FromPrinterSetup" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Print/Papertray -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Paper tray -->
           <info>
             <desc>Specifies that the defined paper source in the printer setup is used by printers with multiple trays.</desc>
@@ -2251,8 +2138,6 @@
           <desc>Contains settings used when shifting table rows/columns.</desc>
         </info>
         <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Table/Shift -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric: 635 1/100 mm-->
           <info>
@@ -2262,8 +2147,6 @@
           <value>500</value>
         </prop>
         <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Table/Shift -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric: 635 1/100 mm-->
           <info>
@@ -2278,8 +2161,6 @@
           <desc>Contains settings used when inserting table rows/columns.</desc>
         </info>
         <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Table/Insert -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric:  635 1/100 mm-->
           <info>
@@ -2289,8 +2170,6 @@
           <value>500</value>
         </prop>
         <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Table/Insert -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
           <!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform);NonMetric:  2540 1/100 mm-->
           <info>
@@ -2305,8 +2184,6 @@
           <desc>Contains settings specifying the effect to the table when modifying rows/columns.</desc>
         </info>
         <prop oor:name="Effect" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Table -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Table - [Section] Effect -->
           <info>
             <desc>Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
@@ -2336,8 +2213,6 @@
           <desc>Contains settings used when inputting text or data in tables.</desc>
         </info>
         <prop oor:name="NumberRecognition" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Insert/IntoTables -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <info>
             <desc>Specifies whether numbers in a table are recognized or if they are saved in a text format.</desc>
@@ -2346,8 +2221,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="NumberFormatRecognition" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Insert/IntoTables -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <info>
             <desc>Specifies whether only entries with the defined format are accepted. This option is only available if the number format recognition is active (Number_recognition = True).</desc>
@@ -2356,8 +2229,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Alignment" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Insert/IntoTables -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <info>
             <desc>Specifies whether all numbers are aligned below right of the cell and not above left (as in the case of text). This option is only available if number format recognition is active (Number_recognition = True).</desc>
@@ -2383,8 +2254,6 @@
           <desc>Contains settings for the Direct Cursor.</desc>
         </info>
         <prop oor:name="UseDirectCursor" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Cursor/DirectCursor -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
           <info>
             <desc>Specifies whether the Direct Cursor is active</desc>
@@ -2393,8 +2262,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Insert" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Cursor/DirectCursor -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
           <info>
             <desc>Defines the insert options for the Direct Cursor.</desc>
@@ -2430,8 +2297,6 @@
           <desc>Contains miscellaneous options.</desc>
         </info>
         <prop oor:name="ProtectedArea" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Cursor/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Options -->
           <info>
             <desc>Specifies whether the Direct Cursor can be positioned in a protected area.</desc>
@@ -2461,8 +2326,6 @@
             <desc>Contains settings for new inserted text.</desc>
           </info>
           <prop oor:name="Attribute" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Writer/Changes/Text display/Insert -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <info>
               <desc>Defines the attribute for displaying changes when text is inserted.</desc>
@@ -2522,8 +2385,6 @@
             <value>3</value>
           </prop>
           <prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Writer/Changes/Text display/Insert -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
             <info>
@@ -2537,8 +2398,6 @@
             <desc>Contains settings for displaying changes when text is deleted.</desc>
           </info>
           <prop oor:name="Attribute" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Writer/Changes/Text display/Delete -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <info>
               <desc>Defines the attribute for displaying changes when text is deleted</desc>
@@ -2593,8 +2452,6 @@
             <value>3</value>
           </prop>
           <prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Writer/Changes/Text display/Delete -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
             <info>
@@ -2608,8 +2465,6 @@
             <desc>Contains settings for displaying modified text attributes.</desc>
           </info>
           <prop oor:name="Attribute" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Writer/Changes/Text display/Changed_Attribute -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <info>
               <desc>Defines the attribute for displaying changes when text attributes are modified.</desc>
@@ -2669,8 +2524,6 @@
             <value>1</value>
           </prop>
           <prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Writer/Changes/Text display/Changed_Attribute -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
             <!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
             <info>
@@ -2685,8 +2538,6 @@
           <desc>Contains settings for defining how lines with changed text are displayed.</desc>
         </info>
         <prop oor:name="Mark" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Changes/Lines_changed -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
           <info>
             <desc>Defines if and where changed lines in the document are marked.</desc>
@@ -2721,8 +2572,6 @@
           <value>3</value>
         </prop>
         <prop oor:name="Color" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Changes//Lines_changed -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
           <info>
             <desc>Defines the color for highlighting changed lines in the text.</desc>
@@ -2766,8 +2615,6 @@
         <desc>Specifies the settings for inserting various object types.</desc>
       </info>
       <group oor:name="Caption">
-        <!-- OldLocation: Soffice.cfg -->
-        <!-- OldPath: Writer/Insert/Caption -->
         <!--UIHints: Tools - Options - Text document  Insert - [Section] Caption  -->
         <info>
           <desc>Specifies the settings for inserting captions for various object types.</desc>
@@ -2790,7 +2637,6 @@
             <desc>Specifies the settings for inserting captions for Writer objects.</desc>
           </info>
           <group oor:name="Table">
-            <!--OldPath: Writer/Insert/Caption/Object/StarWriter_Table-->
             <info>
               <desc>Specifies the settings for inserting captions for tables.</desc>
             </info>
@@ -2923,7 +2769,6 @@
             </group>
           </group>
           <group oor:name="Frame">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Frame -->
             <info>
               <desc>Specifies the settings for inserting captions for frames.</desc>
             </info>
@@ -3055,7 +2900,6 @@
             </group>
           </group>
           <group oor:name="Graphic">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Graphic -->
             <info>
               <desc>Settings for insertion of captions for images.</desc>
             </info>
@@ -3198,7 +3042,6 @@
             <desc>Specifies the settings for inserting captions for office objects.</desc>
           </info>
           <group oor:name="Calc">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Calc -->
             <info>
               <desc>Specifies the settings for inserting captions for Calc documents.</desc>
             </info>
@@ -3336,7 +3179,6 @@
             </group>
           </group>
           <group oor:name="Draw">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Draw -->
             <info>
               <desc>Specifies the settings for inserting captions for Draw documents.</desc>
             </info>
@@ -3474,7 +3316,6 @@
             </group>
           </group>
           <group oor:name="Chart">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Chart -->
             <info>
               <desc>Specifies the settings for inserting captions for Chart documents.</desc>
             </info>
@@ -3612,7 +3453,6 @@
             </group>
           </group>
           <group oor:name="Image">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Image -->
             <info>
               <desc>Specifies the settings for inserting captions for image documents.</desc>
             </info>
@@ -3750,7 +3590,6 @@
             </group>
           </group>
           <group oor:name="Formula">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Formula -->
             <info>
               <desc>Specifies the settings for inserting captions for formula documents.</desc>
             </info>
@@ -3888,7 +3727,6 @@
             </group>
           </group>
           <group oor:name="Impress">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Impress -->
             <info>
               <desc>Specifies the settings for inserting captions for Impress objects.</desc>
             </info>
@@ -4026,7 +3864,6 @@
             </group>
           </group>
           <group oor:name="OLEMisc">
-            <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_OLEMisc -->
             <info>
               <desc>Specifies the settings for inserting captions for other OLE objects.</desc>
             </info>
@@ -4166,8 +4003,6 @@
         </group>
       </group>
       <group oor:name="Table">
-        <!-- OldLocation: Soffice.cfg -->
-        <!-- OldPath: Writer/Insert/Tables -->
         <!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
         <info>
           <desc>Specifies the default settings for tables to be inserted.</desc>
@@ -4211,8 +4046,6 @@
           <desc>Contains settings for MS Word compatibility.</desc>
         </info>
         <prop oor:name="AddBetween" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Other/Compatibility -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
           <info>
             <desc>Specifies whether spacing between paragraphs and tables are added to ensure the compatibility to MS Word documents.</desc>
@@ -4221,8 +4054,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="AddToStart" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Other/Compatibility -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
           <info>
             <desc>Specifies whether paragraph and table spacing are added to the start of pages to ensure compatibility with MS Word documents.</desc>
@@ -4241,8 +4072,6 @@
           <desc>Specifies settings for 'Auto Text'.</desc>
         </info>
         <prop oor:name="FileLinks" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/AutoText -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  Save Links relative -->
           <info>
             <desc>Specifies whether file links inside AutoText modules are saved relatively or absolutely.</desc>
@@ -4251,8 +4080,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="InternetLinks" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/AutoText -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  Save Links relative -->
           <info>
             <desc>Specifies whether Internet links inside AutoText modules are saved relatively or absolutely.</desc>
@@ -4261,8 +4088,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="ShowPreview" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/AutoText -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  Show preview -->
           <info>
             <desc>Specifies whether a preview of the AutoText is displayed.</desc>
@@ -4271,8 +4096,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="ShowToolTip" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/AutoText -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  display remainder ... -->
           <info>
             <desc>Specifies whether the Tip help of the AutoText is displayed.</desc>
@@ -4298,8 +4121,6 @@
             <desc>Specifies options for 'Auto Correct/Auto Format'.</desc>
           </info>
           <prop oor:name="UseReplacementTable" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement table -->
             <info>
               <desc>Specifies whether the replacement table is used to replace letter combinations with defined text.</desc>
@@ -4308,8 +4129,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo INitial Capitals -->
             <info>
               <desc>Specifies whether two initial capitals are corrected automatically.</desc>
@@ -4318,8 +4137,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first letter of every sentence -->
             <info>
               <desc>Specifies whether the letter at the beginning of a sentence is capitalized automatically.</desc>
@@ -4328,8 +4145,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold*, /italic/, -strikeout- and _underline_ -->
             <info>
               <desc>Specifies whether text is formatted in bold or underlined when the corresponding characters are entered (*bold*, /italic/, -strikeout-, _underline_).</desc>
@@ -4338,8 +4153,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="SetInetAttribute" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL recognition -->
             <info>
               <desc>Specifies whether character strings which could represent a URL are converted to a hyperlink.</desc>
@@ -4348,8 +4161,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace 1st... -->
             <info>
               <desc>Specifies whether ordinal numbers are displayed with raised endings.</desc>
@@ -4358,8 +4169,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="ChangeDash" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
             <info>
               <desc>Specifies whether dashes are replaced automatically.</desc>
@@ -4368,8 +4177,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking space -->
             <info>
               <desc>Adds a non-breaking space before the characters :!;? in french.</desc>
@@ -4394,8 +4201,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="DelEmptyParagraphs" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Remove blank paragraphs -->
             <info>
               <desc>Specifies whether blank paragraphs are deleted.</desc>
@@ -4404,8 +4209,6 @@
             <value>false</value>
           </prop>
           <prop oor:name="ReplaceUserStyle" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace custom styles -->
             <info>
               <desc>Specifies whether user-defined styles applied in the document are replaced by predefined text document styles.</desc>
@@ -4414,8 +4217,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="CombineParagraphs" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater -->
             <info>
               <desc>Determines if single line paragraphs are combined when they are shorter than the specified value.</desc>
@@ -4424,8 +4225,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="CombineValue" oor:type="xs:int" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater... / Edit/Combine/Minimum size-->
             <info>
               <desc>Specifies the minimum length value for combining single line paragraphs. [UNIT=%]</desc>
@@ -4434,7 +4233,6 @@
             <value>50</value>
           </prop>
           <prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
             <info>
               <desc>Deletes Spaces/Tabs at the beginning/end of a paragraph (AutoFormat).</desc>
@@ -4443,7 +4241,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="DelSpacesBetween" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs between Lineend and -begin -->
             <info>
               <desc>Deletes Spaces/Tabs between the rows of a paragraph (AutoFormat).</desc>
@@ -4456,8 +4253,6 @@
               <desc>Specifies the settings for the automatic replacement of enumeration characters (dash, plus, and so on) into bullets.</desc>
             </info>
             <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
-              <!-- OldPath: Writer/AutoFormat/Options -->
-              <!-- OldLocation: Soffice.cfg -->
               <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
               <info>
                 <desc>Specifies whether paragraphs starting with a dash, a plus sign or an asterisk followed by space or tab are replaced by a bullet character.</desc>
@@ -4470,8 +4265,6 @@
                 <desc>Specifies the character to be used.</desc>
               </info>
               <prop oor:name="Char" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <info>
                   <desc>Specifies the character code if ChangeToBullets=true.</desc>
@@ -4479,8 +4272,6 @@
                 <value>8226</value>
               </prop>
               <prop oor:name="Font" oor:type="xs:string" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <info>
                   <desc>Specifies the font name if ChangeToBullets=true.</desc>
@@ -4488,8 +4279,6 @@
                 <value>StarSymbol</value>
               </prop>
               <prop oor:name="FontFamily" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <!--Default value 0 = Symbol-->
                 <info>
@@ -4498,8 +4287,6 @@
                 <value>0</value>
               </prop>
               <prop oor:name="FontCharset" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <!--Default value 10 = Symbol-->
                 <info>
@@ -4508,8 +4295,6 @@
                 <value>10</value>
               </prop>
               <prop oor:name="FontPitch" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
                 <!--Default value 2 = Variable-->
                 <info>
@@ -4525,8 +4310,6 @@
             <desc>Contains settings than can be applied while typing text.</desc>
           </info>
           <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: AutoCorrect/Options/All -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - AutoFormat while typing -->
             <info>
               <desc>Specifies whether AutoFormat is active while typing.</desc>
@@ -4535,8 +4318,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="ChangeDash" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/Options -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
             <info>
               <desc>Specifies whether dashes are replaced automatically.</desc>
@@ -4545,8 +4326,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="ChangeToBorders" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/ByInput -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply border -->
             <info>
               <desc>Specifies whether borders are applied to paragraphs automatically.</desc>
@@ -4555,8 +4334,6 @@
             <value>false</value>
           </prop>
           <prop oor:name="ChangeToTable" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/ByInput -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Create table -->
             <info>
               <desc>Specifies whether tables are created by AutoFormat.</desc>
@@ -4565,8 +4342,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="ReplaceStyle" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Writer/AutoFormat/ByInput -->
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply styles -->
             <info>
               <desc>Specifies whether styles are automatically be assigned.</desc>
@@ -4575,7 +4350,6 @@
             <value>false</value>
           </prop>
           <prop oor:name="DelSpacesAtStartEnd" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
             <info>
               <desc>Deletes Spaces/Tabs at the beginning/end of a paragraph (AutoFormat during key input).</desc>
@@ -4584,7 +4358,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="DelSpacesBetween" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect Options  Delete Blanks and Tabs between Lineend and -begin -->
             <info>
               <desc>Deletes Spaces/Tabs between the rows of a paragraph (Autoformat during key input).</desc>
@@ -4597,8 +4370,6 @@
               <desc>Contains settings for automatic numbering.</desc>
             </info>
             <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
-              <!-- OldPath: Writer/AutoFormat/ByInput -->
-              <!-- OldLocation: Soffice.cfg -->
               <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Bulleted and numbered lists-->
               <info>
                 <desc>Specifies whether a numbered or bulleted text is created automatically while typing.</desc>
@@ -4611,8 +4382,6 @@
                 <desc>Defines the character to be used.</desc>
               </info>
               <prop oor:name="Char" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Bulleted and numbered lists-->
                 <info>
                   <desc>Specifies the character code if ApplyNumbering=true.</desc>
@@ -4620,8 +4389,6 @@
                 <value>8226</value>
               </prop>
               <prop oor:name="Font" oor:type="xs:string" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <info>
                   <desc>Specifies the font name if ApplyNumbering=true.</desc>
@@ -4629,8 +4396,6 @@
                 <value>StarSymbol</value>
               </prop>
               <prop oor:name="FontFamily" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <!--Default value 0 = Symbol-->
                 <info>
@@ -4639,8 +4404,6 @@
                 <value>0</value>
               </prop>
               <prop oor:name="FontCharset" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <!--Default value 10 = Symbol-->
                 <info>
@@ -4649,8 +4412,6 @@
                 <value>10</value>
               </prop>
               <prop oor:name="FontPitch" oor:type="xs:int" oor:nillable="false">
-                <!-- OldPath: Writer/AutoFormat/Options -->
-                <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Bulleted and numbered lists-->
                 <!--Default value 2 = Variable-->
                 <info>
@@ -4667,8 +4428,6 @@
           <desc>Contains settings relevant for the word completion ('Auto Completion').</desc>
         </info>
         <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show suggestions -->
           <info>
             <desc>Specifies whether the suggestions for the automatic word completion are displayed on the screen.</desc>
@@ -4677,8 +4436,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="MinWordLen" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  min. word length -->
           <info>
             <desc>Sets the value for the minimum word length.</desc>
@@ -4687,8 +4444,6 @@
           <value>8</value>
         </prop>
         <prop oor:name="MaxListLen" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  max. entries -->
           <info>
             <desc>Sets the maximum number of words to be recalled.</desc>
@@ -4697,8 +4452,6 @@
           <value>1000</value>
         </prop>
         <prop oor:name="CollectWords" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Collect suggestions -->
           <info>
             <desc>Specifies whether the suggestions are compiled in a list.</desc>
@@ -4707,8 +4460,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="EndlessList" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: no UI available anymore -->
           <info>
             <desc>Specifies whether the list containing the suitable suggestions can be navigated with (Ctrl)(Tab)(forward).</desc>
@@ -4717,8 +4468,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="AppendBlank" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Append blanc -->
           <info>
             <desc>Specifies whether a blank is added after the automatic word completion.</desc>
@@ -4727,8 +4476,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="ShowAsTip" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show as tip -->
           <info>
             <desc>Specifies whether the suggestions for the automatic word completion function should be displayed as Tip helps.</desc>
@@ -4737,8 +4484,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="AcceptKey" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/AutoComplete/Words -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Accept with -->
           <info>
             <desc>Specifies the key to be used for accepting the current suggestion of the automatic word completion.</desc>
@@ -4796,8 +4541,6 @@
           <desc>Contains settings for the inscription of the labels text field.</desc>
         </info>
         <prop oor:name="UseAddress" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Labels -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc>Specifies whether the user's address is copied automatically into the label text field.</desc>
@@ -4806,8 +4549,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Address" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Labels -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc>Specifies the label text (address).</desc>
@@ -4817,8 +4558,6 @@
           <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
         </prop>
         <prop oor:name="Database" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Labels -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc>Specifies the database used.</desc>
@@ -4833,8 +4572,6 @@
           <desc>Contains settings for the media type used for the label.</desc>
         </info>
         <prop oor:name="Continuous" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Labels -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc>Specifies whether continuous paper or individual sheets are used.</desc>
@@ -4843,8 +4580,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Brand" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Labels -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc>Specifies the brand name of the label format.</desc>
@@ -4854,8 +4589,6 @@
           <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
         </prop>
         <prop oor:name="Type" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Labels -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc>Specifies the type of the label format.</desc>
@@ -4870,8 +4603,6 @@
           <desc>Contains settings for the label format.</desc>
         </info>
         <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the number of labels arranged next to each other on the page.</desc>
@@ -4880,8 +4611,6 @@
           <value>1</value>
         </prop>
         <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the number of labels arranged from top to bottom on the page.</desc>
@@ -4890,8 +4619,6 @@
           <value>1</value>
         </prop>
         <prop oor:name="HorizontalDistance" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the distance between the left edge of one label to the left edge of the adjacent label. [UNIT=1/100 mm].</desc>
@@ -4900,8 +4627,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="VerticalDistance" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the distance between the upper edge of one label to the upper edge of the label below. [UNIT=1/100 mm].</desc>
@@ -4910,8 +4635,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the width of each label [UNIT=1/100 mm].</desc>
@@ -4920,8 +4643,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the height of each label [UNIT=1/100 mm].</desc>
@@ -4930,8 +4651,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="LeftMargin" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the distance from the left edge of the page to the left edge of the first label [UNIT=1/100 mm].</desc>
@@ -4940,8 +4659,6 @@
           <value>0</value>
         </prop>
         <prop oor:name="TopMargin" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Format -->
           <info>
             <desc>Specifies the distance from the top of the page to the top of the first label [UNIT=1/100 mm].</desc>
@@ -4971,8 +4688,6 @@
           <desc>Contains miscellaneous options for labels.</desc>
         </info>
         <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Options -->
           <info>
             <desc>Specifies whether contents are synchronized.</desc>
@@ -4981,8 +4696,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Page" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Options -->
           <info>
             <desc>Specifies whether the entire page or a single label are printed/generated.</desc>
@@ -4991,8 +4704,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Options -->
           <info>
             <desc>Specifies the number of columns to be printed.</desc>
@@ -5001,8 +4712,6 @@
           <value>1</value>
         </prop>
         <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Labels/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Options -->
           <info>
             <desc>Specifies the number of rows to be printed.</desc>
@@ -5021,8 +4730,6 @@
           <desc>Contains settings for the media type used.</desc>
         </info>
         <prop oor:name="Continuous" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <info>
             <desc>Specifies whether continuous paper or individual sheets are used.</desc>
@@ -5031,8 +4738,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Brand" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <info>
             <desc>Specifies the brand name of the business card format.</desc>
@@ -5042,8 +4747,6 @@
           <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
         </prop>
         <prop oor:name="Type" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <info>
             <desc>Specifies the type of the business card format.</desc>
@@ -5058,8 +4761,6 @@
           <desc>Contains settings for the page format.</desc>
         </info>
         <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the number of business cards arranged next to each other on the page.</desc>
@@ -5068,8 +4769,6 @@
           <value>1</value>
         </prop>
         <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the number of business cards arranged from top to bottom on the page.</desc>
@@ -5078,8 +4777,6 @@
           <value>1</value>
         </prop>
         <prop oor:name="HorizontalDistance" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the distance between the left edge of a business card to the left edge of the adjacent business card. [UNIT=1/100 mm]</desc>
@@ -5088,8 +4785,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="VerticalDistance" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the distance between the upper edge of a label to the upper edge of the label below. [UNIT=1/100 mm]</desc>
@@ -5098,8 +4793,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the width of each business card [UNIT=1/100 mm].</desc>
@@ -5108,8 +4801,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the height of each business card [UNIT=1/100 mm].</desc>
@@ -5118,8 +4809,6 @@
           <value>10000</value>
         </prop>
         <prop oor:name="LeftMargin" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the distance from the left edge of the page to the left edge of the first business card . [UNIT=1/100 mm]</desc>
@@ -5128,8 +4817,6 @@
           <value>0</value>
         </prop>
         <prop oor:name="TopMargin" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Format -->
           <info>
             <desc>Specifies the distance from the top of the page to the top of the first business card [UNIT=1/100 mm].</desc>
@@ -5143,8 +4830,6 @@
           <desc>Contains miscellaneous settings.</desc>
         </info>
         <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <info>
             <desc>Specifies whether contents are synchronized.</desc>
@@ -5153,8 +4838,6 @@
           <value>false</value>
         </prop>
         <prop oor:name="Page" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <info>
             <desc>Specifies whether the entire page or a single business card is printed/generated.</desc>
@@ -5163,8 +4846,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <info>
             <desc>Specifies the number of columns to be printed.</desc>
@@ -5173,8 +4854,6 @@
           <value>1</value>
         </prop>
         <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <info>
             <desc>Specifies the number of rows to be printed.</desc>
@@ -5188,8 +4867,6 @@
           <desc>Contains settings for the AutoText used.</desc>
         </info>
         <prop oor:name="Group" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Content -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  BusinessCards -->
           <info>
             <desc>Specifies the AutoText section name.</desc>
@@ -5197,8 +4874,6 @@
           </info>
         </prop>
         <prop oor:name="Block" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/Content -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  BusinessCards -->
           <info>
             <desc>Specifies the AutoText module name.</desc>
@@ -5210,8 +4885,6 @@
           <desc>Species private address data.</desc>
         </info>
         <prop oor:name="FirstName" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your first name.</desc>
@@ -5219,8 +4892,6 @@
           </info>
         </prop>
         <prop oor:name="Name" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your last name.</desc>
@@ -5228,8 +4899,6 @@
           </info>
         </prop>
         <prop oor:name="ShortCut" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your initials.</desc>
@@ -5237,8 +4906,6 @@
           </info>
         </prop>
         <prop oor:name="SecondFirstName" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your first name (2nd entry).</desc>
@@ -5246,8 +4913,6 @@
           </info>
         </prop>
         <prop oor:name="SecondName" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your last name (2nd entry).</desc>
@@ -5255,8 +4920,6 @@
           </info>
         </prop>
         <prop oor:name="SecondShortCut" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your initials (2nd entry).</desc>
@@ -5264,8 +4927,6 @@
           </info>
         </prop>
         <prop oor:name="Street" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies the name of the street where you live.</desc>
@@ -5273,8 +4934,6 @@
           </info>
         </prop>
         <prop oor:name="Zip" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your ZIP code.</desc>
@@ -5282,8 +4941,6 @@
           </info>
         </prop>
         <prop oor:name="City" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies the city where you live.</desc>
@@ -5291,8 +4948,6 @@
           </info>
         </prop>
         <prop oor:name="Country" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies the country where you live.</desc>
@@ -5300,8 +4955,6 @@
           </info>
         </prop>
         <prop oor:name="State" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies the state where you live.</desc>
@@ -5309,8 +4962,6 @@
           </info>
         </prop>
         <prop oor:name="Title" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your title.</desc>
@@ -5318,8 +4969,6 @@
           </info>
         </prop>
         <prop oor:name="Profession" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your profession.</desc>
@@ -5327,8 +4976,6 @@
           </info>
         </prop>
         <prop oor:name="Phone" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your phone number.</desc>
@@ -5336,8 +4983,6 @@
           </info>
         </prop>
         <prop oor:name="Mobile" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your mobile phone number.</desc>
@@ -5345,8 +4990,6 @@
           </info>
         </prop>
         <prop oor:name="Fax" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your fax number.</desc>
@@ -5354,8 +4997,6 @@
           </info>
         </prop>
         <prop oor:name="WebAddress" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies the address of your homepage.</desc>
@@ -5363,8 +5004,6 @@
           </info>
         </prop>
         <prop oor:name="Email" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <info>
             <desc>Specifies your email address.</desc>
@@ -5377,8 +5016,6 @@
           <desc>Specifies the business address data.</desc>
         </info>
         <prop oor:name="Company" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the company name, 1st line.</desc>
@@ -5386,8 +5023,6 @@
           </info>
         </prop>
         <prop oor:name="CompanyExt" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the company name, 2nd line.</desc>
@@ -5395,8 +5030,6 @@
           </info>
         </prop>
         <prop oor:name="Slogan" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the company slogan.</desc>
@@ -5404,8 +5037,6 @@
           </info>
         </prop>
         <prop oor:name="Street" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the name of the street.</desc>
@@ -5413,8 +5044,6 @@
           </info>
         </prop>
         <prop oor:name="Zip" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the postal code or zip code.</desc>
@@ -5422,8 +5051,6 @@
           </info>
         </prop>
         <prop oor:name="City" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the name of the city.</desc>
@@ -5431,8 +5058,6 @@
           </info>
         </prop>
         <prop oor:name="Country" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the country where the company is located.</desc>
@@ -5440,8 +5065,6 @@
           </info>
         </prop>
         <prop oor:name="State" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the state where the company is located.</desc>
@@ -5449,8 +5072,6 @@
           </info>
         </prop>
         <prop oor:name="Position" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies your position in the company.</desc>
@@ -5458,8 +5079,6 @@
           </info>
         </prop>
         <prop oor:name="Phone" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies your phone number.</desc>
@@ -5467,8 +5086,6 @@
           </info>
         </prop>
         <prop oor:name="Mobile" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies your mobile phone number.</desc>
@@ -5476,8 +5093,6 @@
           </info>
         </prop>
         <prop oor:name="Fax" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies your fax number.</desc>
@@ -5485,8 +5100,6 @@
           </info>
         </prop>
         <prop oor:name="WebAddress" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies the internet address for the company.</desc>
@@ -5494,8 +5107,6 @@
           </info>
         </prop>
         <prop oor:name="Email" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <info>
             <desc>Specifies your email address.</desc>
@@ -5509,8 +5120,6 @@
         <desc>Specifies the settings for the object bar.</desc>
       </info>
       <group oor:name="Selection">
-        <!-- OldPath: Writer/Toolbars/ObjectBar -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Right mouse click to the toolbar with object selection-->
         <info>
           <desc>Specifies which type of object bars are visible.</desc>
@@ -5602,8 +5211,6 @@
         <desc>Contains settings for the Navigator.</desc>
       </info>
       <prop oor:name="ShowListBox" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Writer/PIs/Navigator -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
           <desc>Displays the list box in the lower half of the Navigator.</desc>
@@ -5612,8 +5219,6 @@
         <value>false</value>
       </prop>
       <prop oor:name="GlobalDocMode" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Writer/PIs/Navigator -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
           <desc>Switches from Master View and Normal view when a Master Document is opened.</desc>
@@ -5622,8 +5227,6 @@
         <value>true</value>
       </prop>
       <prop oor:name="RootType" oor:type="xs:int" oor:nillable="false">
-        <!-- OldPath: Writer/PIs/Navigator -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
           <desc>Switches from displaying all of the elements in the Navigator to displaying only a selected category as the root in the tree view.</desc>
@@ -5632,8 +5235,6 @@
         <value>-1</value>
       </prop>
       <prop oor:name="SelectedPosition" oor:type="xs:int" oor:nillable="false">
-        <!-- OldPath: Writer/PIs/Navigator -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
           <desc>Specifies which entry is selected in the Navigator list box.</desc>
@@ -5641,8 +5242,6 @@
         <value>0</value>
       </prop>
       <prop oor:name="OutlineLevel" oor:type="xs:int" oor:nillable="false">
-        <!-- OldPath: Writer/PIs/Navigator -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
           <desc>Specifies the outline level shown in the Navigator.</desc>
@@ -5663,8 +5262,6 @@
         <value>10</value>
       </prop>
       <prop oor:name="InsertMode" oor:type="xs:int" oor:nillable="false">
-        <!-- OldPath: Writer/PIs/Navigator -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
           <desc>Specifies the insert mode when moving elements from the Navigator to another document with drag-and-drop.</desc>
@@ -5690,8 +5287,6 @@
         <value>0</value>
       </prop>
       <prop oor:name="ActiveBlock" oor:type="xs:int" oor:nillable="false">
-        <!-- OldPath: Writer/PIs/Navigator -->
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
           <desc>Specifies whether the contents of a category are displayed in the Navigator list box.</desc>
@@ -5822,8 +5417,6 @@
           <desc>Contains inscription settings.</desc>
         </info>
         <prop oor:name="Addressee" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies the recipient's address.</desc>
@@ -5833,8 +5426,6 @@
           <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
         </prop>
         <prop oor:name="Sender" oor:type="xs:string">
-          <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies the sender's address.</desc>
@@ -5842,8 +5433,6 @@
           </info>
         </prop>
         <prop oor:name="UseSender" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies whether the sender's address is used.</desc>
@@ -5852,8 +5441,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Database" oor:type="xs:string" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies the database to be used for the addressee.</desc>
@@ -5868,8 +5455,6 @@
           <desc>Contains format settings.</desc>
         </info>
         <prop oor:name="AddresseeFromLeft" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Format //  old twips: 6463 / 2-->
           <info>
             <desc>Specifies the position of the addressee field measured from the left margin [UNIT=1/100 mm].</desc>
@@ -5878,8 +5463,6 @@
           <value>5700</value>
         </prop>
         <prop oor:name="AddresseeFromTop" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Format  // old twips: 6463 / 2-->
           <info>
             <desc>Specifies the position of the addressee field measured from the upper margin [UNIT=1/100 mm].</desc>
@@ -5888,8 +5471,6 @@
           <value>5700</value>
         </prop>
         <prop oor:name="SenderFromLeft" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the position of the sender field measured from the left margin [UNIT=1/100 mm].</desc>
@@ -5898,8 +5479,6 @@
           <value>1000</value>
         </prop>
         <prop oor:name="SenderFromTop" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the position of the sender field measured from the upper margin [UNIT=1/100 mm].</desc>
@@ -5908,8 +5487,6 @@
           <value>1000</value>
         </prop>
         <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the width of the envelope [UNIT=1/100 mm].</desc>
@@ -5918,8 +5495,6 @@
           <value>11400</value>
         </prop>
         <prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Format -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the height of the envelope [UNIT=1/100 mm].</desc>
@@ -5933,8 +5508,6 @@
           <desc>Contains settings for printing.</desc>
         </info>
         <prop oor:name="Alignment" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Print -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies the alignment when printing.</desc>
@@ -5975,8 +5548,6 @@
           <value>0</value>
         </prop>
         <prop oor:name="FromAbove" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Print -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies whether the envelope is printed with the side facing up or down in the printer tray.</desc>
@@ -5985,8 +5556,6 @@
           <value>true</value>
         </prop>
         <prop oor:name="Right" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Print -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies the right distance of the printed area (horizontal position).</desc>
@@ -5995,8 +5564,6 @@
           <value>0</value>
         </prop>
         <prop oor:name="Down" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Writer/Dialog/Envelope/Print -->
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies the bottom distance of the printed area (vertical position).</desc>
@@ -6011,7 +5578,6 @@
         <desc>Contains settings for inserting data from a data base.</desc>
       </info>
       <set oor:name="DataSet" oor:node-type="DataSetType">
-        <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Dialog Insert Database Columns -->
         <info>
           <desc>Specifies the data set that you want to insert.</desc>
@@ -6031,8 +5597,6 @@
             <desc>Contains settings for importing VBA Basic.</desc>
           </info>
           <prop oor:name="Load" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Filter/MS_Office/Basic/Word -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
             <info>
               <desc>Converts VBA Basic into Office Basic as commands (True).</desc>
@@ -6048,8 +5612,6 @@
             <value>true</value>
           </prop>
           <prop oor:name="Save" oor:type="xs:boolean" oor:nillable="false">
-            <!-- OldPath: Filter/MS_Office/Basic/Word -->
-            <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
             <info>
               <desc>Holds original VBA storage for saving in the memory (True).</desc>
@@ -6093,7 +5655,6 @@
           <desc>Contains settings for graphics used for bullets.</desc>
         </info>
         <prop oor:name="KeepRatio" oor:type="xs:boolean" oor:nillable="false">
-          <!--OldLocation: Soffice.cfg -->
           <!--UIHints: Numbering/Bullets dialog - Customize - Graphics - Keep Ratio-->
           <info>
             <desc>Maintains the proportions of images when the size is modified.</desc>
@@ -6275,7 +5836,6 @@
           <desc>Contains word number settings.</desc>
         </info>
         <prop oor:name="Delimiter" oor:type="xs:string" oor:nillable="false">
-          <!--OldLocation: Soffice.cfg -->
           <!--UIHints: File - Properties - Statistics - Word number - Separator-->
           <info>
             <desc>Specifies the character to be used as a separator.</desc>
@@ -6289,7 +5849,6 @@
         <desc>Contains settings for indices.</desc>
       </info>
       <prop oor:name="ShowPreview" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: Soffice.cfg -->
         <!--UIHints: Insert - Indexes - Show preview -->
         <info>
           <desc>Specifies whether a preview of the index is displayed in the Insert Index dialog .</desc>
@@ -6307,7 +5866,6 @@
           <desc>Specifies the settings for form letter output to printer.</desc>
         </info>
         <prop oor:name="SinglePrintJobs" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Form letter - Printer output - Single print jobs-->
           <info>
             <desc>Prints each form letter individually with the selected printer (true).</desc>
@@ -6326,7 +5884,6 @@
           <desc>Specifies the settings for form letter output as mail.</desc>
         </info>
         <prop oor:name="Format" oor:type="xs:int">
-          <!-- OldLocation: Soffice.cfg -->
           <!--UIHints: Form letter - Mailing output - Mail format-->
           <info>
             <desc>Specifies the mail format.</desc>
@@ -6360,7 +5917,6 @@
           <desc>Specifies the settings for outputting a form letter to a file.</desc>
         </info>
         <prop oor:name="Path" oor:type="xs:string" oor:nillable="false">
-          <!-- OldLocation: Soffice.cfg -->
           <!--UIHints: Form letter - File output - Path-->
           <info>
             <desc>Specifies the path for the form letter file.</desc>
@@ -6369,8 +5925,6 @@
           <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
         </prop>
         <group oor:name="FileName">
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- OldPath: Writer/Insert/Tables -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
           <info>
             <desc>Specifies how the file name is built.</desc>
@@ -6417,7 +5971,6 @@
         <desc>Contains miscellaneous settings.</desc>
       </info>
       <prop oor:name="GraphicToGalleryAsLink" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldLocation: Soffice.cfg -->
         <!--UIHints: context menu of readonly loaded documents-->
         <info>
           <desc>Specifies whether a preview of the index is displayed in the dialog Insert Index.</desc>

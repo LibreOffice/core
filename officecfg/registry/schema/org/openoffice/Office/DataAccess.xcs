@@ -328,15 +328,11 @@
         <value>true</value>
       </prop>
       <node-ref oor:name="CurrentDataSource" oor:node-type="DataSource">
-        <!-- OldPath: Bibliography/BibliographyCurrent-->
-        <!-- OldLocation: Soffice.ini-->
         <info>
           <desc>Determines the current data source for the bibliography.</desc>
         </info>
       </node-ref>
       <set oor:name="DataSourceHistory" oor:node-type="DataSource">
-        <!--OldPath: Bibliography/Bibliography-->
-        <!--OldLocation: Soffice.ini-->
         <info>
           <desc>Specifies the data source that can be used as a bibliography.</desc>
         </info>
