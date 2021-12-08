@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38ef05a1_da633105",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-08T09:40:36Z",
+      "side": 1,
+      "message": "@Samuel, any preference where in the configuration options such a flag should be?",
+      "revId": "541d1997a17d36aba16c726e927a29eb17adb4c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95c4bcf7_129d3477",
