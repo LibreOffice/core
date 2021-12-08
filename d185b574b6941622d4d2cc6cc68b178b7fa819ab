@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04a628fc_8bb74043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-08T18:33:51Z",
+      "side": 1,
+      "message": "Heiko: I don\u0027t know what\u0027s the diff between infotext and tooltip.\nI just found this.",
+      "revId": "d185b574b6941622d4d2cc6cc68b178b7fa819ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
