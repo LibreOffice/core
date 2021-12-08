@@ -330,7 +330,6 @@ protected:
 public:
     enum class AutoFilterMode
     {
-        None,
         Normal,
         Top10,
         Custom,
