@@ -1236,6 +1236,11 @@ void JSComboBox::remove(int pos)
     sendUpdate();
 }
 
+void JSComboBox::set_entry_text_without_notify(const OUString& rText)
+{
+    SalInstanceComboBoxWithEdit::set_entry_text(rText);
+}
+
 void JSComboBox::set_entry_text(const OUString& rText)
 {
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
