@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3a0321c_7bed87dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-08T10:36:05Z",
+      "side": 1,
+      "message": "\u003e But this setting is not for the IDE\n\nAgree. Rather, the relevant is Scripting.xcs. Which is generally about anything related to scripting; it would need a Basic subsection, with compatibility subsection ...",
+      "parentUuid": "491e89b5_e275a3e5",
+      "revId": "541d1997a17d36aba16c726e927a29eb17adb4c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95c4bcf7_129d3477",
