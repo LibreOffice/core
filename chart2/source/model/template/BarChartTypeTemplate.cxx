@@ -73,8 +73,8 @@ struct StaticBarChartTypeTemplateDefaults_Initializer
 private:
     static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_BAR_TEMPLATE_DIMENSION, 2 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BAR_TEMPLATE_GEOMETRY3D, ::chart2::DataPointGeometry3D::CUBOID );
+        rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_BAR_TEMPLATE_DIMENSION, 2 );
+        rOutMap.setPropertyValueDefault( PROP_BAR_TEMPLATE_GEOMETRY3D, ::chart2::DataPointGeometry3D::CUBOID );
     }
 };
 
@@ -227,11 +227,7 @@ Reference< chart2::XChartType > SAL_CALL BarChartTypeTemplate::getChartTypeForNe
 void BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticBarChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL BarChartTypeTemplate::getInfoHelper()

@@ -333,10 +333,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyToDefault( const OUString& rProperty
 uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     const tPropertyValueMap& rStaticDefaults = *StaticMinMaxLineWrapperDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( StaticMinMaxLineWrapperInfoHelper::get()->getHandleByName( rPropertyName ) ) );
-    if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
+    return rStaticDefaults.get( StaticMinMaxLineWrapperInfoHelper::get()->getHandleByName( rPropertyName ) );
 }
 
 //XMultiPropertyStates

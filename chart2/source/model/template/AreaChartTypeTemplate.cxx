@@ -59,7 +59,7 @@ struct StaticAreaChartTypeTemplateDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aStaticDefaults, PROP_AREA_TEMPLATE_DIMENSION, 2 );
+        aStaticDefaults.setPropertyValueDefault< sal_Int32 >( PROP_AREA_TEMPLATE_DIMENSION, 2 );
         return &aStaticDefaults;
     }
 };
@@ -133,11 +133,7 @@ AreaChartTypeTemplate::~AreaChartTypeTemplate()
 void AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticAreaChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL AreaChartTypeTemplate::getInfoHelper()

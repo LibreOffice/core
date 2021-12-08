@@ -155,24 +155,24 @@ private:
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
         // ParagraphProperties
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_ADJUST,
+        rOutMap.setPropertyValueDefault( PROP_TITLE_PARA_ADJUST,
                                                           css::style::ParagraphAdjust_CENTER );
         // PROP_TITLE_PARA_LAST_LINE_ADJUST
 
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_LEFT_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_RIGHT_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_TOP_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_BOTTOM_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_IS_HYPHENATION, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_VISIBLE, true );
+        rOutMap.setPropertyValueDefault< sal_Int32 >(  PROP_TITLE_PARA_LEFT_MARGIN, 0 );
+        rOutMap.setPropertyValueDefault< sal_Int32 >(  PROP_TITLE_PARA_RIGHT_MARGIN, 0 );
+        rOutMap.setPropertyValueDefault< sal_Int32 >(  PROP_TITLE_PARA_TOP_MARGIN, 0 );
+        rOutMap.setPropertyValueDefault< sal_Int32 >(  PROP_TITLE_PARA_BOTTOM_MARGIN, 0 );
+        rOutMap.setPropertyValueDefault( PROP_TITLE_PARA_IS_HYPHENATION, true );
+        rOutMap.setPropertyValueDefault( PROP_TITLE_VISIBLE, true );
 
         // own properties
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_TITLE_TEXT_ROTATION, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_TEXT_STACKED, false );
+        rOutMap.setPropertyValueDefault< double >( PROP_TITLE_TEXT_ROTATION, 0.0 );
+        rOutMap.setPropertyValueDefault( PROP_TITLE_TEXT_STACKED, false );
 
         // override other defaults
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+        rOutMap.setPropertyValue( ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
+        rOutMap.setPropertyValue( ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
     }
 };
 
@@ -286,11 +286,7 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 void Title::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticTitleDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Title::getInfoHelper()

@@ -91,12 +91,12 @@ void LinePropertiesHelper::AddPropertiesToVector(
 void LinePropertiesHelper::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_STYLE, drawing::LineStyle_SOLID );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_WIDTH, 0 );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_COLOR, 0x000000 );  // black
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_LINE_TRANSPARENCE, 0 );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_ROUND );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_CAP, drawing::LineCap_BUTT );
+    rOutMap.setPropertyValueDefault( PROP_LINE_STYLE, drawing::LineStyle_SOLID );
+    rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_LINE_WIDTH, 0 );
+    rOutMap.setPropertyValueDefault< sal_Int32 >( PROP_LINE_COLOR, 0x000000 );  // black
+    rOutMap.setPropertyValueDefault< sal_Int16 >( PROP_LINE_TRANSPARENCE, 0 );
+    rOutMap.setPropertyValueDefault( PROP_LINE_JOINT, drawing::LineJoint_ROUND );
+    rOutMap.setPropertyValueDefault( PROP_LINE_CAP, drawing::LineCap_BUTT );
 }
 
 bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<

@@ -260,38 +260,61 @@ OUString addBitmapUniqueNameToTable(
     return OUString();
 }
 
-void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
-{
-    tPropertyValueMap::iterator aIt( rOutMap.find( key ));
-    if( aIt == rOutMap.end())
-        rOutMap.emplace( key, rAny );
-    else
-        (*aIt).second = rAny;
-}
-
-template<>
-    void setPropertyValue< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny )
-{
-    setPropertyValueAny( rOutMap, key, rAny );
-}
-
-void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
-{
-    OSL_ENSURE( rOutMap.end() == rOutMap.find( key ), "Default already exists for property" );
-    setPropertyValue( rOutMap, key, rAny );
-}
-
-template<>
-    void setPropertyValueDefault< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny )
-{
-    setPropertyValueDefaultAny( rOutMap, key, rAny );
-}
-
-void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key )
-{
-    setPropertyValueDefault( rOutMap, key, uno::Any());
-}
-
 } //  namespace chart::PropertyHelper
+
+namespace chart
+{
+
+void tPropertyValueMap::setPropertyValueAny( sal_Int32 key, const uno::Any & rAny )
+{
+    maValues.try_emplace(key, rAny);
+}
+
+void tPropertyValueMap::setPropertyValueAny( sal_Int32 key, uno::Any && rAny )
+{
+    maValues.try_emplace(key, std::move(rAny));
+}
+
+void tPropertyValueMap::get(sal_Int32 nHandle, uno::Any& rAny) const
+{
+    auto it = maValues.find(nHandle);
+    if( it == maValues.end() )
+        rAny.clear();
+    else
+        rAny = it->second;
+}
+
+uno::Any tPropertyValueMap::get(sal_Int32 nHandle) const
+{
+    auto it = maValues.find(nHandle);
+    if( it == maValues.end() )
+        return uno::Any();
+    else
+        return it->second;
+}
+
+void tPropertyValueMap::setPropertyValueDefaultAny( sal_Int32 key, const uno::Any & rAny )
+{
+    OSL_ENSURE( maValues.find(key) == maValues.end(), "Default already exists for property" );
+    setPropertyValue( key, rAny );
+}
+
+void tPropertyValueMap::setEmptyPropertyValueDefault( sal_Int32 key )
+{
+    setPropertyValueDefault(key, uno::Any());
+}
+
+void tPropertyValueMap::setPropertyValueDefault( sal_Int32 key, const css::uno::Any & rAny )
+{
+    setPropertyValueDefaultAny( key, rAny );
+}
+
+void tPropertyValueMap::setPropertyValueDefault( sal_Int32 key, css::uno::Any && rAny )
+{
+    setPropertyValueDefaultAny( key, std::move(rAny) );
+}
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

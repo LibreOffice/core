@@ -164,11 +164,7 @@ OUString SAL_CALL BubbleChartType::getRoleOfSequenceForSeriesLabel()
 void BubbleChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = *StaticBubbleChartTypeDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        rAny.clear();
-    else
-        rAny = (*aFound).second;
+    rStaticDefaults.get(nHandle, rAny);
 }
 
 // ____ OPropertySet ____
