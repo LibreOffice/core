@@ -38,10 +38,6 @@ protected:
     // to be changed in any way.
     SdrObject&                                      mrObject;
 
-    // Remember AnimationKind of object. Used to find out if that kind
-    // has changed in ActionChanged()
-    SdrTextAniKind                                  meRememberedAnimationKind;
-
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
@@ -61,9 +57,6 @@ public:
     virtual sal_uInt32 GetObjectCount() const override;
     virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const override;
     virtual ViewContact* GetParentContact() const override;
-
-    // React on changes of the object of this ViewContact
-    virtual void ActionChanged() override;
 
     /// override for accessing the SdrObject
     virtual SdrObject* TryToGetSdrObject() const override;

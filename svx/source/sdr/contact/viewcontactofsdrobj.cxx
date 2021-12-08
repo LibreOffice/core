@@ -41,14 +41,8 @@ ViewObjectContact& ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact(Ob
 }
 
 ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
-:   mrObject(rObj),
-    meRememberedAnimationKind(SdrTextAniKind::NONE)
+:   mrObject(rObj)
 {
-    // init AnimationKind
-    if(auto pTextObj = dynamic_cast<const SdrTextObj*>( &GetSdrObject() ))
-    {
-        meRememberedAnimationKind = pTextObj->GetTextAniKind();
-    }
 }
 
 ViewContactOfSdrObj::~ViewContactOfSdrObj()
@@ -98,23 +92,6 @@ ViewContact* ViewContactOfSdrObj::GetParentContact() const
     }
 
     return pRetval;
-}
-
-// React on changes of the object of this ViewContact
-void ViewContactOfSdrObj::ActionChanged()
-{
-    // look for own changes
-    if (SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(&GetSdrObject()))
-    {
-        if (pTextObj->GetTextAniKind() != meRememberedAnimationKind)
-        {
-            // #i38135# now remember new type
-            meRememberedAnimationKind = pTextObj->GetTextAniKind();
-        }
-    }
-
-    // call parent
-    ViewContact::ActionChanged();
 }
 
 // override for accessing the SdrObject
