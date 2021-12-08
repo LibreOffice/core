@@ -29,7 +29,6 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     , mxBtnClose(m_xBuilder->weld_button("btn_close"))
     , mxEditPreUpload(m_xBuilder->weld_label("ed_pre"))
     , mxEditPostUpload(m_xBuilder->weld_text_view("ed_post"))
-    , mxFtBugReport(m_xBuilder->weld_text_view("ed_bugreport"))
     , mxCBSafeMode(m_xBuilder->weld_check_button("check_safemode"))
 {
     maSuccessMsg = mxEditPostUpload->get_text();
@@ -84,7 +83,6 @@ IMPL_LINK(CrashReportDialog, BtnHdl, weld::Button&, rBtn, void)
         }
 
         mxBtnClose->show();
-        mxFtBugReport->show();
         mxEditPostUpload->show();
         mxBtnSend->set_sensitive(false);
         mxBtnCancel->set_sensitive(false);
