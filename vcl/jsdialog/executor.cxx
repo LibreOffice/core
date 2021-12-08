@@ -88,7 +88,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
         }
         else if (sControlType == "combobox")
         {
-            auto pCombobox = dynamic_cast<weld::ComboBox*>(pWidget);
+            auto pCombobox = dynamic_cast<JSComboBox*>(pWidget);
             if (pCombobox)
             {
                 if (sAction == "selected")
@@ -106,7 +106,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "change")
                 {
-                    pCombobox->set_entry_text(rData["data"]);
+                    pCombobox->set_entry_text_without_notify(rData["data"]);
                     LOKTrigger::trigger_changed(*pCombobox);
                     return true;
                 }
