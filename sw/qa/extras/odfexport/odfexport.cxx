@@ -557,6 +557,17 @@ DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf107292, "tdf107292.odt")
+{
+    // tracked deletions at the same position were loaded in reverse order
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without this fix in place, this test would have failed with
+    // - Expected: Lorem ipsum dolor sit...
+    // - Actual  :  dolor ipsumLorem sit...
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum dolor sit..."), getParagraph(1)->getString());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf140437, "tdf140437.odt")
 {
     // Without the fix in place, the document would have failed to load
