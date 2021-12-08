@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e9a62d4_e8030895",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-08T20:59:20Z",
+      "side": 1,
+      "message": "I thought I would write the Basic implementation, so that you avoid the hassle:\n\n  \u0027 See LibreOffice6FloatingPointMode in basic/source/runtime/methods1.cxx\n  Function LibreOffice6FloatingPointMode() As Boolean\n    Dim bMode As Boolean\n    bMode \u003d Environ(\"LIBREOFFICE6FLOATINGPOINTMODE\") \u003c\u003e \"\";\n    If (Not bMode) Then\n      Dim oConfigProvider As Object, aNodePath(0) As New com.sun.star.beans.PropertyValue, oRegistryKey As Object\n      oConfigProvider \u003d createUnoService(\"com.sun.star.configuration.ConfigurationProvider\")\n      aNodePath(0).Name \u003d \"nodepath\"\n      aNodePath(0).Value \u003d \"org.openoffice.Office.Scripting/Basic/Compatibility\"\n      oRegistryKey \u003d oConfigProvider.createInstanceWithArguments(\"com.sun.star.configuration.ConfigurationAccess\", aNodePath)\n      bMode \u003d oRegistryKey.getPropertyValue(\"UseLibreOffice6FloatingPointConversion\")\n    End If\n    LibreOffice6FloatingPointMode \u003d bMode\n  End Function\n\nHTH",
+      "revId": "ad4e0d3e9f4aeeb9688d962e4d416746876a4d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdf138b1_9f3c53a6",
