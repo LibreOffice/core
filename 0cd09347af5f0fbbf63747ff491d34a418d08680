@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "803fa8a4_d9c6ac45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-08T07:26:47Z",
+      "side": 1,
+      "message": "Works well. But please also change infotext (suggest \"Find values\") and tooltip (\"Find text in values; to search in formulas use the dialog\"). Users have no chance to know that we switched from formula to value.",
+      "revId": "0cd09347af5f0fbbf63747ff491d34a418d08680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
