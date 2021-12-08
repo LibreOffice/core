@@ -2401,8 +2401,6 @@ res/sx10728.png cmd/sc_formattedfield.png
 res/sx10757.png cmd/sc_timefield.png
 res/sx10768.png cmd/sc_scrollbar.png
 res/sx10769.png cmd/sc_spinbutton.png
-res/sx18002.png res/plus.png
-res/sx18003.png res/minus.png
 
 # sc
 # ==============================================

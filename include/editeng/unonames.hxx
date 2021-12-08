@@ -18,8 +18,6 @@ inline constexpr OUStringLiteral UNO_TC_PROP_CURRENT_PRESENTATION = u"CurrentPre
 inline constexpr OUStringLiteral UNO_TC_PROP_NAME = u"Name";
 inline constexpr OUStringLiteral UNO_TC_PROP_IS_FIXED_LANGUAGE = u"IsFixedLanguage";
 inline constexpr OUStringLiteral UNO_TC_PROP_NUMFORMAT = u"NumberFormat";
-#define UNO_TC_PROP_USED                 "IsFieldUsed"
-#define UNO_TC_PROP_DISPLAYED            "IsFieldDisplayed"
 
 // Date & Time
 inline constexpr OUStringLiteral UNO_TC_PROP_IS_DATE = u"IsDate";

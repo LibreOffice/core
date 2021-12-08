@@ -1825,8 +1825,6 @@ res/sx10715.png cmd/sc_datafilterstandardfilter.png
 res/sx10728.png cmd/sc_formattedfield.png
 res/sx10768.png cmd/sc_scrollbar.png
 res/sx10769.png cmd/sc_spinbutton.png
-res/sx18002.png res/plus.png
-res/sx18003.png res/minus.png
 res/sx18013.png res/dialogfolder_16.png
 res/xml_16.png cmd/sc_managexmlsource.png
 sc/res/date.png cmd/sc_datefield.png
@@ -1860,7 +1858,6 @@ sch/res/lc30514.png cmd/lc_viewdatasourcebrowser.png
 sch/res/sc30514.png cmd/sc_viewdatasourcebrowser.png
 sch/res/sc30528.png cmd/sc_diagramtype.png
 sd/res/comments_indicator.png cmd/sc_shownote.png
-sd/res/docclose.png cmd/lc_closedoc.png
 sd/res/docopen.png cmd/lc_open.png
 sd/res/graphic.png cmd/sc_graphic.png
 sd/res/group.png cmd/sc_formatgroup.png
