@@ -89,12 +89,10 @@ IMPL_LINK(ScCheckListMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
                 break;
 
             const MenuItemData& rMenu = maMenuItems[mnSelectedMenu];
-            if (!rMenu.mbEnabled || !rMenu.mxSubMenuWin)
+            if (!rMenu.mxSubMenuWin)
                 break;
 
-            maOpenTimer.mnMenuPos = mnSelectedMenu;
-            maOpenTimer.mpSubMenu = rMenu.mxSubMenuWin.get();
-            launchSubMenu();
+            executeMenuItem(mnSelectedMenu);
         }
     }
 
@@ -199,6 +197,18 @@ void ScCheckListMenuControl::executeMenuItem(size_t nPos)
 {
     if (nPos >= maMenuItems.size())
         return;
+
+    const MenuItemData& rMenu = maMenuItems[nPos];
+    if (rMenu.mxSubMenuWin)
+    {
+        if (rMenu.mbEnabled)
+        {
+            maOpenTimer.mnMenuPos = nPos;
+            maOpenTimer.mpSubMenu = rMenu.mxSubMenuWin.get();
+            launchSubMenu();
+        }
+        return;
+    }
 
     if (!maMenuItems[nPos].mxAction)
         // no action is defined.
@@ -1566,6 +1576,14 @@ void ScListSubMenuControl::addMenuColorItem(const OUString& rText, bool bActive,
 
     if (mnBackColorMenuPrefHeight == -1 && &rColorMenu == mxBackColorMenu.get() && mxBackColorMenu->n_children() == 8)
         mnBackColorMenuPrefHeight = mxBackColorMenu->get_preferred_size().Height();
+}
+
+void ScListSubMenuControl::addSeparator()
+{
+    ScCheckListMenuControl::MenuItemData aItem;
+    maMenuItems.emplace_back(std::move(aItem));
+
+    mxMenu->append_separator("separator" + OUString::number(maMenuItems.size()));
 }
 
 void ScListSubMenuControl::clearMenuItems()

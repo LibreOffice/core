@@ -421,13 +421,17 @@ class AutofilterTest(UITestCase):
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-            # Top 10 filer
+            # Top 10 filter
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
             xFloatWindow = self.xUITest.getFloatWindow()
             xMenu = xFloatWindow.getChild("menu")
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            xSubFloatWindow = self.xUITest.getFloatWindow()
+            xSubMenu = xSubFloatWindow.getChild("menu")
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
             self.assertFalse(is_row_hidden(doc, 0))
             self.assertTrue(is_row_hidden(doc, 1))
