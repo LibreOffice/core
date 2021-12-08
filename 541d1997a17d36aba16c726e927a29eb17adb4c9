@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c756bd3d_50a4ecf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-12-08T09:44:05Z",
+      "side": 1,
+      "message": "officecfg/registry/schema/org/openoffice/Office/BasicIDE.xcs seems like a good place.\nWould add a new group \"Compatibility\" and put the property there.",
+      "parentUuid": "38ef05a1_da633105",
+      "revId": "541d1997a17d36aba16c726e927a29eb17adb4c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95c4bcf7_129d3477",
