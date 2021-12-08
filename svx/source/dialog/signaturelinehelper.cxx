@@ -142,7 +142,8 @@ void setShapeCertificate(const SdrView* pView,
     }
 
     // Remember the selected certificate.
-    uno::Reference<beans::XPropertySet> xShapeProps(pSignatureLine->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = pSignatureLine->getUnoShape();
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
     aMap["SignatureCertificate"] <<= xCertificate;
     xShapeProps->setPropertyValue("InteropGrabBag",
