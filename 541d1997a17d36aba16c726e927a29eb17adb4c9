@@ -89,6 +89,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3afe79aa_72a44631",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-08T10:57:57Z",
+      "side": 1,
+      "message": "Yes, Scripting.xcs sounds like a better place. Now I just need to understand what the things in a .xcs file mean;) (Sure, I might have known that at some stage, but have happily forgotten.)",
+      "parentUuid": "e3a0321c_7bed87dc",
+      "revId": "541d1997a17d36aba16c726e927a29eb17adb4c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95c4bcf7_129d3477",
