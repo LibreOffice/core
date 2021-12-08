@@ -91,8 +91,28 @@ private:
     {
         assert(mpBuffer && "already extracted data");
         int currentUsed = mPos - mpBuffer;
+
+#ifndef NDEBUG
+        currentUsed++; // validation marker
+#endif
+
         if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
             reallocBuffer(noMoreBytesRequired);
+    }
+
+    // overflow validation in debug mode
+    static constexpr char JSON_WRITER_DEBUG_MARKER = 0xde;
+
+    inline void addValidationMark()
+    {
+#ifndef NDEBUG
+        *(mpBuffer + mSpaceAllocated - 1) = JSON_WRITER_DEBUG_MARKER;
+#endif
+    }
+
+    inline void validate()
+    {
+        assert(*(mpBuffer + mSpaceAllocated - 1) == JSON_WRITER_DEBUG_MARKER);
     }
 };
 
