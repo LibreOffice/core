@@ -1708,6 +1708,30 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 }
             }
 
+            if( !bRet && ( IsAttrAtPos::TableRedline & rContentAtPos.eContentAtPos ) )
+            {
+                const SwTableNode* pTableNd;
+                const SwTableBox* pBox;
+                const SwTableLine* pTableLine;
+                const SwStartNode* pSttNd = pTextNd->FindTableBoxStartNode();
+                if( pSttNd && nullptr != ( pTableNd = pTextNd->FindTableNode()) &&
+                    nullptr != ( pBox = pTableNd->GetTable().GetTableBox(
+                    pSttNd->GetIndex() )) &&
+                    nullptr != ( pTableLine = pBox->GetUpper() ) &&
+                    RedlineType::None != pTableLine->GetRedlineType() )
+                {
+                    SwRedlineTable::size_type nPos = 0;
+                    nPos = pTableLine->UpdateTextChangesOnly(nPos);
+                    if ( nPos != SwRedlineTable::npos )
+                    {
+                        rContentAtPos.aFnd.pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable()[nPos];
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::TableRedline;
+                        bRet = true;
+                    }
+
+                }
+            }
+
             if( !bRet
                  && ( IsAttrAtPos::TableBoxFml & rContentAtPos.eContentAtPos
 #ifdef DBG_UTIL
