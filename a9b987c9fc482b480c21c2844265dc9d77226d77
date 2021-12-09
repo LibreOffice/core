@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfa309a3_c069e3a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-09T13:05:47Z",
+      "side": 1,
+      "message": "Verified on all platforms by Jenkins checking the first and rebased patch sets.",
+      "revId": "a9b987c9fc482b480c21c2844265dc9d77226d77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
