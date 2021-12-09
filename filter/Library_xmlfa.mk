@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,xmlfa))
 
-$(eval $(call gb_Library_set_componentfile,xmlfa,filter/source/xmlfilteradaptor/xmlfa))
+$(eval $(call gb_Library_set_componentfile,xmlfa,filter/source/xmlfilteradaptor/xmlfa,services))
 
 $(eval $(call gb_Library_use_external,xmlfa,boost_headers))
 

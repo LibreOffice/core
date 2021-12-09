@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_libraries,namingservice,\
     sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,namingservice,stoc/source/namingservice/namingservice))
+$(eval $(call gb_Library_set_componentfile,namingservice,stoc/source/namingservice/namingservice,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,namingservice,\
     stoc/source/namingservice/namingservice \

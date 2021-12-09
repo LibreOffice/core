@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Library_Library,textfd))
 
-$(eval $(call gb_Library_set_componentfile,textfd,filter/source/textfilterdetect/textfd))
+$(eval $(call gb_Library_set_componentfile,textfd,filter/source/textfilterdetect/textfd,services))
 
 $(eval $(call gb_Library_use_external,textfd,boost_headers))
 

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,smd))
 
-$(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd))
+$(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd,services))
 
 $(eval $(call gb_Library_set_include,smd,\
         -I$(SRCDIR)/starmath/inc \

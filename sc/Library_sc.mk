@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,sc))
 
 $(eval $(call gb_Library_add_sdi_headers,sc,sc/sdi/scslots))
 
-$(eval $(call gb_Library_set_componentfile,sc,sc/util/sc))
+$(eval $(call gb_Library_set_componentfile,sc,sc/util/sc,services))
 
 $(eval $(call gb_Library_set_precompiled_header,sc,sc/inc/pch/precompiled_sc))
 

@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,cached1))
 
-$(eval $(call gb_Library_set_componentfile,cached1,ucb/source/cacher/cached1))
+$(eval $(call gb_Library_set_componentfile,cached1,ucb/source/cacher/cached1,services))
 
 $(eval $(call gb_Library_use_external,cached1,boost_headers))
 

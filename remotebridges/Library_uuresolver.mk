@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,uuresolver))
 
-$(eval $(call gb_Library_set_componentfile,uuresolver,remotebridges/source/unourl_resolver/uuresolver))
+$(eval $(call gb_Library_set_componentfile,uuresolver,remotebridges/source/unourl_resolver/uuresolver,ure/services))
 
 $(eval $(call gb_Library_use_udk_api,uuresolver))
 

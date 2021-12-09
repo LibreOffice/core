@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,scd))
 
-$(eval $(call gb_Library_set_componentfile,scd,sc/util/scd))
+$(eval $(call gb_Library_set_componentfile,scd,sc/util/scd,services))
 
 $(eval $(call gb_Library_set_include,scd,\
 	-I$(SRCDIR)/sc/inc \

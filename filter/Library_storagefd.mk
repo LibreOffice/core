@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Library_Library,storagefd))
 
-$(eval $(call gb_Library_set_componentfile,storagefd,filter/source/storagefilterdetect/storagefd))
+$(eval $(call gb_Library_set_componentfile,storagefd,filter/source/storagefilterdetect/storagefd,services))
 
 $(eval $(call gb_Library_use_external,storagefd,boost_headers))
 

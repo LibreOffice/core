@@ -22,7 +22,7 @@ $(eval $(call gb_Library_use_libraries,kf5be1,\
 	sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,kf5be1,shell/source/backends/kf5be/kf5be1))
+$(eval $(call gb_Library_set_componentfile,kf5be1,shell/source/backends/kf5be/kf5be1,services))
 
 $(eval $(call gb_Library_add_exception_objects,kf5be1,\
     shell/source/backends/kf5be/kf5access \

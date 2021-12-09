@@ -20,6 +20,6 @@ $(eval $(call gb_Pyuno_add_files,fax,wizards/fax,\
     FaxWizardDialog.py \
     FaxWizardDialogResources.py \
 ))
-$(eval $(call gb_Pyuno_set_componentfile_full,fax,wizards/com/sun/star/wizards/fax/fax,vnd.openoffice.pymodule:wizards.fax,.CallWizard))
+$(eval $(call gb_Pyuno_set_componentfile_full,fax,wizards/com/sun/star/wizards/fax/fax,vnd.openoffice.pymodule:wizards.fax,.CallWizard,services))
 
 # vim:set noet sw=4 ts=4:

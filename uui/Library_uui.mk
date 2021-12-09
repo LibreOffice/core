@@ -14,7 +14,7 @@ $(eval $(call gb_Library_set_include,uui,\
     -I$(SRCDIR)/uui/inc \
 ))
 
-$(eval $(call gb_Library_set_componentfile,uui,uui/util/uui))
+$(eval $(call gb_Library_set_componentfile,uui,uui/util/uui,services))
 
 $(eval $(call gb_Library_use_external,uui,boost_headers))
 

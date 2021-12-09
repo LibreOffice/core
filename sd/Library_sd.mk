@@ -125,7 +125,7 @@ $(eval $(call gb_Library_use_system_win32_libs,sd,\
 ))
 endif
 
-$(eval $(call gb_Library_set_componentfile,sd,sd/util/sd))
+$(eval $(call gb_Library_set_componentfile,sd,sd/util/sd,services))
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/CustomAnimationCloner \

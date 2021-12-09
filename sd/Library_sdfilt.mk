@@ -53,7 +53,7 @@ $(eval $(call gb_Library_use_libraries,sdfilt,\
     basegfx \
 ))
 
-$(eval $(call gb_Library_set_componentfile,sdfilt,sd/util/sdfilt))
+$(eval $(call gb_Library_set_componentfile,sdfilt,sd/util/sdfilt,services))
 
 $(eval $(call gb_Library_use_common_precompiled_header,sdfilt))
 

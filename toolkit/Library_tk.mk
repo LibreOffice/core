@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,tk))
 
-$(eval $(call gb_Library_set_componentfile,tk,toolkit/util/tk))
+$(eval $(call gb_Library_set_componentfile,tk,toolkit/util/tk,services))
 
 $(eval $(call gb_Library_use_externals,tk,\
     boost_headers \

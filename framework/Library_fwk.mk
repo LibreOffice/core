@@ -23,7 +23,7 @@ $(eval $(call gb_Library_add_defs,fwk,\
     -DFWK_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_componentfile,fwk,framework/util/fwk))
+$(eval $(call gb_Library_set_componentfile,fwk,framework/util/fwk,services))
 
 $(eval $(call gb_Library_set_include,fwk,\
     -I$(SRCDIR)/framework/source/inc \

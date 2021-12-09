@@ -53,7 +53,7 @@ $(eval $(call gb_Library_use_externals,frm,\
     libxml2 \
 ))
 
-$(eval $(call gb_Library_set_componentfile,frm,forms/util/frm))
+$(eval $(call gb_Library_set_componentfile,frm,forms/util/frm,services))
 
 $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/component/Button \

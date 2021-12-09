@@ -15,7 +15,7 @@ $(eval $(call gb_Jar_add_sourcefiles,passive_java, \
     desktop/test/deployment/passive/com/sun/star/comp/test/deployment/Services \
 ))
 
-$(eval $(call gb_Jar_set_componentfile,passive_java,desktop/test/deployment/passive/passive_java,OXT))
+$(eval $(call gb_Jar_set_componentfile,passive_java,desktop/test/deployment/passive/passive_java,OXT,passive_generic))
 
 $(eval $(call gb_Jar_set_manifest,passive_java,$(SRCDIR)/desktop/test/deployment/passive/MANIFEST.MF))
 

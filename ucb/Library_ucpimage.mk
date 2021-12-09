@@ -13,7 +13,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpimage, \
     ucb/source/ucp/image/ucpimage \
 ))
 
-$(eval $(call gb_Library_set_componentfile,ucpimage,ucb/source/ucp/image/ucpimage))
+$(eval $(call gb_Library_set_componentfile,ucpimage,ucb/source/ucp/image/ucpimage,services))
 
 $(eval $(call gb_Library_use_externals,ucpimage, \
     boost_headers \

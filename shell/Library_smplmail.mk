@@ -24,7 +24,7 @@ $(eval $(call gb_Library_use_libraries,smplmail,\
 	utl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,smplmail,shell/source/win32/simplemail/smplmail))
+$(eval $(call gb_Library_set_componentfile,smplmail,shell/source/win32/simplemail/smplmail,services))
 
 $(eval $(call gb_Library_add_exception_objects,smplmail,\
     shell/source/win32/simplemail/smplmailclient \

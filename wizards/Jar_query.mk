@@ -35,6 +35,6 @@ $(eval $(call gb_Jar_add_sourcefiles,query,\
 	wizards/com/sun/star/wizards/query/QueryWizard \
 ))
 
-$(eval $(call gb_Jar_set_componentfile,query,wizards/com/sun/star/wizards/query/query,OOO))
+$(eval $(call gb_Jar_set_componentfile,query,wizards/com/sun/star/wizards/query/query,OOO,services))
 
 # vim: set noet sw=4 ts=4:

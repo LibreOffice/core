@@ -25,7 +25,7 @@ $(eval $(call gb_Library_use_libraries,postgresql-sdbc,\
 	salhelper \
 ))
 
-$(eval $(call gb_Library_set_componentfile,postgresql-sdbc,connectivity/source/drivers/postgresql/postgresql-sdbc))
+$(eval $(call gb_Library_set_componentfile,postgresql-sdbc,connectivity/source/drivers/postgresql/postgresql-sdbc,postgresql-sdbc))
 
 $(eval $(call gb_Library_add_exception_objects,postgresql-sdbc,\
 	connectivity/source/drivers/postgresql/pq_driver \

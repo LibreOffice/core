@@ -30,7 +30,7 @@ $(eval $(call gb_Library_use_libraries,sdd,\
     vcl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,sdd,sd/util/sdd))
+$(eval $(call gb_Library_set_componentfile,sdd,sd/util/sdd,services))
 
 $(eval $(call gb_Library_use_common_precompiled_header,sdd))
 

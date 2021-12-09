@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,xsltdlg))
 
-$(eval $(call gb_Library_set_componentfile,xsltdlg,filter/source/xsltdialog/xsltdlg))
+$(eval $(call gb_Library_set_componentfile,xsltdlg,filter/source/xsltdialog/xsltdlg,services))
 
 $(eval $(call gb_Library_use_external,xsltdlg,boost_headers))
 

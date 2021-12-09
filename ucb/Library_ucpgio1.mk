@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,ucpgio1))
 
-$(eval $(call gb_Library_set_componentfile,ucpgio1,ucb/source/ucp/gio/ucpgio))
+$(eval $(call gb_Library_set_componentfile,ucpgio1,ucb/source/ucp/gio/ucpgio,services))
 
 $(eval $(call gb_Library_use_external,ucpgio1,boost_headers))
 

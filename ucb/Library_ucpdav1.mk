@@ -29,7 +29,7 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 
 ifeq ($(WITH_WEBDAV),curl)
 
-$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-curl/ucpdav1))
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-curl/ucpdav1,services))
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	curl \
@@ -62,7 +62,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 else
 ifeq ($(WITH_WEBDAV),neon)
 
-$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/ucpdav1))
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/ucpdav1,services))
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
@@ -102,7 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 
 else # WITH_WEBDAV == serf
 
-$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav/ucpdav1))
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav/ucpdav1,services))
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \

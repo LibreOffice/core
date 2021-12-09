@@ -62,6 +62,6 @@ $(eval $(call gb_Library_add_exception_objects,mysqlc,\
 	connectivity/source/drivers/mysqlc/mysqlc_general \
 ))
 
-$(eval $(call gb_Library_set_componentfile,mysqlc,connectivity/source/drivers/mysqlc/mysqlc))
+$(eval $(call gb_Library_set_componentfile,mysqlc,connectivity/source/drivers/mysqlc/mysqlc,services))
 
 # vim: set noet sw=4 ts=4:

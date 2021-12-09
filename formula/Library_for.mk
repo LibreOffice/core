@@ -35,7 +35,7 @@ $(eval $(call gb_Library_use_libraries,for,\
     vcl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,for,formula/util/for))
+$(eval $(call gb_Library_set_componentfile,for,formula/util/for,services))
 
 $(eval $(call gb_Library_add_exception_objects,for,\
     formula/source/core/api/FormulaCompiler \

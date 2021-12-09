@@ -54,7 +54,7 @@ $(eval $(call gb_Library_use_system_win32_libs,deploymentgui,\
 endif
 
 
-$(eval $(call gb_Library_set_componentfile,deploymentgui,desktop/source/deployment/gui/deploymentgui))
+$(eval $(call gb_Library_set_componentfile,deploymentgui,desktop/source/deployment/gui/deploymentgui,services))
 
 $(eval $(call gb_Library_add_exception_objects,deploymentgui,\
     desktop/source/deployment/gui/dp_gui_dependencydialog \

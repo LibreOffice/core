@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,MacOSXSpell))
 
-$(eval $(call gb_Library_set_componentfile,MacOSXSpell,lingucomponent/source/spellcheck/macosxspell/MacOSXSpell))
+$(eval $(call gb_Library_set_componentfile,MacOSXSpell,lingucomponent/source/spellcheck/macosxspell/MacOSXSpell,services))
 
 $(eval $(call gb_Library_set_include,MacOSXSpell,\
 	$$(INCLUDE) \

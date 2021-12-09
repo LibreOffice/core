@@ -26,7 +26,7 @@ $(eval $(call gb_Library_set_include,vclcanvas,\
 
 $(eval $(call gb_Library_set_precompiled_header,vclcanvas,canvas/inc/pch/precompiled_vclcanvas))
 
-$(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas))
+$(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas,services))
 
 $(eval $(call gb_Library_use_external,vclcanvas,boost_headers))
 

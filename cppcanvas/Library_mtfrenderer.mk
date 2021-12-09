@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,mtfrenderer))
 
-$(eval $(call gb_Library_set_componentfile,mtfrenderer,cppcanvas/source/uno/mtfrenderer))
+$(eval $(call gb_Library_set_componentfile,mtfrenderer,cppcanvas/source/uno/mtfrenderer,services))
 
 $(eval $(call gb_Library_use_external,mtfrenderer,boost_headers))
 

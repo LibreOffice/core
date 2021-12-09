@@ -26,7 +26,7 @@ $(eval $(call gb_Library_set_include,cairocanvas,\
 
 $(eval $(call gb_Library_set_precompiled_header,cairocanvas,canvas/inc/pch/precompiled_cairocanvas))
 
-$(eval $(call gb_Library_set_componentfile,cairocanvas,canvas/source/cairo/cairocanvas))
+$(eval $(call gb_Library_set_componentfile,cairocanvas,canvas/source/cairo/cairocanvas,services))
 
 $(eval $(call gb_Library_use_sdk_api,cairocanvas))
 

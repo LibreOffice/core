@@ -39,7 +39,7 @@ $(eval $(call gb_Library_use_libraries,dbaxml,\
     xo \
 ))
 
-$(eval $(call gb_Library_set_componentfile,dbaxml,dbaccess/source/filter/xml/dbaxml))
+$(eval $(call gb_Library_set_componentfile,dbaxml,dbaccess/source/filter/xml/dbaxml,services))
 
 $(eval $(call gb_Library_add_exception_objects,dbaxml,\
     dbaccess/source/filter/xml/dbloader2 \

@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,numbertext))
 
-$(eval $(call gb_Library_set_componentfile,numbertext,lingucomponent/source/numbertext/numbertext))
+$(eval $(call gb_Library_set_componentfile,numbertext,lingucomponent/source/numbertext/numbertext,services))
 
 $(eval $(call gb_Library_use_externals,numbertext,\
 	libnumbertext \

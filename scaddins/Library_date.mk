@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,date))
 
-$(eval $(call gb_Library_set_componentfile,date,scaddins/source/datefunc/date))
+$(eval $(call gb_Library_set_componentfile,date,scaddins/source/datefunc/date,services))
 
 $(eval $(call gb_Library_set_include,date,\
     $$(INCLUDE) \

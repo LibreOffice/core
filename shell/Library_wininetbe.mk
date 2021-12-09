@@ -17,7 +17,7 @@ $(eval $(call gb_Library_use_libraries,wininetbe1,\
 	sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,wininetbe1,shell/source/backends/wininetbe/wininetbe1))
+$(eval $(call gb_Library_set_componentfile,wininetbe1,shell/source/backends/wininetbe/wininetbe1,services))
 
 $(eval $(call gb_Library_add_exception_objects,wininetbe1,\
     shell/source/backends/wininetbe/wininetbackend \

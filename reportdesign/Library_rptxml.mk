@@ -46,7 +46,7 @@ $(eval $(call gb_Library_use_libraries,rptxml,\
     xo \
 ))
 
-$(eval $(call gb_Library_set_componentfile,rptxml,reportdesign/util/rptxml))
+$(eval $(call gb_Library_set_componentfile,rptxml,reportdesign/util/rptxml,services))
 
 $(eval $(call gb_Library_add_exception_objects,rptxml,\
     reportdesign/source/filter/xml/dbloader2 \

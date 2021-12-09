@@ -25,7 +25,7 @@ $(eval $(call gb_Library_use_system_win32_libs,syssh,\
 	shell32 \
 ))
 
-$(eval $(call gb_Library_set_componentfile,syssh,shell/source/win32/syssh))
+$(eval $(call gb_Library_set_componentfile,syssh,shell/source/win32/syssh,services))
 
 $(eval $(call gb_Library_add_exception_objects,syssh,\
 	shell/source/win32/SysShExec \
@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_static_libraries,syssh,\
 	shell_xmlparser \
 ))
 
-$(eval $(call gb_Library_set_componentfile,syssh,shell/source/unix/exec/syssh))
+$(eval $(call gb_Library_set_componentfile,syssh,shell/source/unix/exec/syssh,services))
 
 $(eval $(call gb_Library_add_exception_objects,syssh,\
 	shell/source/unix/exec/shellexec \

@@ -134,11 +134,11 @@ endef
 # gb_Library_get_exports_target for that purpose, since it is already
 # the "final" target of the Library...
 #
-# call gb_Library_set_componentfile,library,componentfile
+# call gb_Library_set_componentfile,library,componentfile,rdb
 define gb_Library_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
-	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)))
+	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)),$(3))
 $(call gb_Library_get_exports_target,$(gb_Library__get_name)) :| \
 	$(call gb_ComponentTarget_get_target,$(2))
 $(call gb_ComponentTarget_get_target,$(2)) :| \
@@ -148,9 +148,9 @@ $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 
 endef
 
-# call gb_Library_set_componentfiles,library,componentfiles
+# call gb_Library_set_componentfiles,library,componentfiles,rdb
 define gb_Library_set_componentfiles
-$(foreach comp,$(2),$(call gb_Library_set_componentfile,$(1),$(comp)))
+$(foreach comp,$(2),$(call gb_Library_set_componentfile,$(1),$(comp),$(3)))
 
 endef
 

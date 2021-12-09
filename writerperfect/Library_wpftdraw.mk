@@ -24,7 +24,7 @@ $(eval $(call gb_Library_set_include,wpftdraw,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_componentfile,wpftdraw,writerperfect/source/draw/wpftdraw))
+$(eval $(call gb_Library_set_componentfile,wpftdraw,writerperfect/source/draw/wpftdraw,services))
 
 $(eval $(call gb_Library_use_sdk_api,wpftdraw))
 

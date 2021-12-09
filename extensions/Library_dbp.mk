@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Library_Library,dbp))
 
-$(eval $(call gb_Library_set_componentfile,dbp,extensions/source/dbpilots/dbp))
+$(eval $(call gb_Library_set_componentfile,dbp,extensions/source/dbpilots/dbp,services))
 
 $(eval $(call gb_Library_set_include,dbp,\
 	$$(INCLUDE) \

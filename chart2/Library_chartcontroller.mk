@@ -50,7 +50,7 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
     vcl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,chartcontroller,chart2/source/controller/chartcontroller))
+$(eval $(call gb_Library_set_componentfile,chartcontroller,chart2/source/controller/chartcontroller,services))
 
 $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/accessibility/AccessibleBase \

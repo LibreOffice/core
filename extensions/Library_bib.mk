@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Library_Library,bib))
 
-$(eval $(call gb_Library_set_componentfile,bib,extensions/source/bibliography/bib))
+$(eval $(call gb_Library_set_componentfile,bib,extensions/source/bibliography/bib,services))
 
 $(eval $(call gb_Library_set_include,bib,\
 	$$(INCLUDE) \

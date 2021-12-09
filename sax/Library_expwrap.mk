@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,expwrap))
 
-$(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap))
+$(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap,services))
 
 $(eval $(call gb_Library_set_include,expwrap,\
 	-I$(SRCDIR)/sax/inc \

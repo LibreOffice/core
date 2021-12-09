@@ -25,7 +25,7 @@ $(eval $(call gb_Library_use_libraries,ctl,\
     tl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,ctl,UnoControls/util/ctl))
+$(eval $(call gb_Library_set_componentfile,ctl,UnoControls/util/ctl,services))
 
 $(eval $(call gb_Library_add_exception_objects,ctl,\
     UnoControls/source/base/basecontainercontrol \

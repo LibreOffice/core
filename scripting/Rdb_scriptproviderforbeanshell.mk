@@ -9,8 +9,4 @@
 
 $(eval $(call gb_Rdb_Rdb_install,scriptproviderforbeanshell))
 
-$(eval $(call gb_Rdb_add_components,scriptproviderforbeanshell,\
-	scripting/java/ScriptProviderForBeanShell \
-))
-
 # vim: set noet sw=4 ts=4:

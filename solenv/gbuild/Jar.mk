@@ -278,7 +278,7 @@ gb_Jar__get_componentprefix = \
 
 # layer must be specified explicitly in this macro (different to libraries)
 define gb_Jar_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Jar__get_componentprefix,$(3)),$(notdir $(call gb_Jar_get_target,$(1))))
+$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Jar__get_componentprefix,$(3)),$(notdir $(call gb_Jar_get_target,$(1))),$(4))
 $(call gb_Jar_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_Jar_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 

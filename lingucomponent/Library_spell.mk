@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,spell))
 
-$(eval $(call gb_Library_set_componentfile,spell,lingucomponent/source/spellcheck/spell/spell))
+$(eval $(call gb_Library_set_componentfile,spell,lingucomponent/source/spellcheck/spell/spell,services))
 
 $(eval $(call gb_Library_set_include,spell,\
 	$$(INCLUDE) \

@@ -9,8 +9,4 @@
 
 $(eval $(call gb_Rdb_Rdb,passive_platform))
 
-$(eval $(call gb_Rdb_add_components,passive_platform, \
-    desktop/test/deployment/passive/passive_native \
-))
-
 # vim: set noet sw=4 ts=4:

@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Library_Library,pcr))
 
-$(eval $(call gb_Library_set_componentfile,pcr,extensions/source/propctrlr/pcr))
+$(eval $(call gb_Library_set_componentfile,pcr,extensions/source/propctrlr/pcr,services))
 
 $(eval $(call gb_Library_use_sdk_api,pcr))
 

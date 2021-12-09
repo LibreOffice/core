@@ -14,7 +14,7 @@ $(eval $(call gb_Library_set_include,updatecheckui,\
        $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_componentfile,updatecheckui,extensions/source/update/ui/updchk))
+$(eval $(call gb_Library_set_componentfile,updatecheckui,extensions/source/update/ui/updchk,services))
 
 $(eval $(call gb_Library_use_external,updatecheckui,boost_headers))
 

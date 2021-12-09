@@ -9,25 +9,4 @@
 
 $(eval $(call gb_Rdb_Rdb_install,ure/services,$(LIBO_URE_MISC_FOLDER)/services.rdb))
 
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    binaryurp/source/binaryurp \
-    io/source/io \
-    stoc/util/bootstrap \
-    stoc/source/inspect/introspection \
-    stoc/source/invocation_adapterfactory/invocadapt \
-    stoc/source/invocation/invocation \
-    stoc/source/namingservice/namingservice \
-    stoc/source/proxy_factory/proxyfac \
-    stoc/source/corereflection/reflection \
-    stoc/util/stocservices \
-    remotebridges/source/unourl_resolver/uuresolver \
-))
-
-ifneq ($(ENABLE_JAVA),)
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    stoc/source/javaloader/javaloader \
-    stoc/source/javavm/javavm \
-))
-endif
-
 # vim:set noet sw=4 ts=4:

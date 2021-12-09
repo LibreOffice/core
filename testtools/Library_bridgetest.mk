@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,testtools_bridgetest))
 
-$(eval $(call gb_Library_set_componentfile,testtools_bridgetest,testtools/source/bridgetest/bridgetest))
+$(eval $(call gb_Library_set_componentfile,testtools_bridgetest,testtools/source/bridgetest/bridgetest,uno_services))
 
 $(eval $(call gb_Library_use_internal_api,testtools_bridgetest,\
     bridgetest \

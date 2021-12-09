@@ -22,6 +22,6 @@ $(eval $(call gb_Pyuno_add_files,agenda,wizards/agenda,\
     TemplateConsts.py \
     TopicsControl.py \
 ))
-$(eval $(call gb_Pyuno_set_componentfile_full,agenda,wizards/com/sun/star/wizards/agenda/agenda,vnd.openoffice.pymodule:wizards.agenda,.CallWizard))
+$(eval $(call gb_Pyuno_set_componentfile_full,agenda,wizards/com/sun/star/wizards/agenda/agenda,vnd.openoffice.pymodule:wizards.agenda,.CallWizard,services))
 
 # vim:set noet sw=4 ts=4:

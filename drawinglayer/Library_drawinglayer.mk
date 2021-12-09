@@ -20,7 +20,7 @@ $(eval $(call gb_Library_add_defs,drawinglayer,\
 
 $(eval $(call gb_Library_set_precompiled_header,drawinglayer,drawinglayer/inc/pch/precompiled_drawinglayer))
 
-$(eval $(call gb_Library_set_componentfile,drawinglayer,drawinglayer/drawinglayer))
+$(eval $(call gb_Library_set_componentfile,drawinglayer,drawinglayer/drawinglayer,services))
 
 $(eval $(call gb_Library_use_sdk_api,drawinglayer))
 

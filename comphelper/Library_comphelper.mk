@@ -23,7 +23,7 @@ $(eval $(call gb_Library_use_custom_headers,comphelper,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
+$(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp,services))
 
 $(eval $(call gb_Library_set_precompiled_header,comphelper,comphelper/inc/pch/precompiled_comphelper))
 

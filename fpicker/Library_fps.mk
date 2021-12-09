@@ -14,7 +14,7 @@ $(eval $(call gb_Library_use_custom_headers,fps,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_Library_set_componentfile,fps,fpicker/source/win32/fps))
+$(eval $(call gb_Library_set_componentfile,fps,fpicker/source/win32/fps,services))
 
 $(eval $(call gb_Library_set_include,fps,\
     $$(INCLUDE) \

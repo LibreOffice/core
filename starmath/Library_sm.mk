@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,sm))
 
 $(eval $(call gb_Library_add_sdi_headers,sm,starmath/sdi/smslots))
 
-$(eval $(call gb_Library_set_componentfile,sm,starmath/util/sm))
+$(eval $(call gb_Library_set_componentfile,sm,starmath/util/sm,services))
 
 $(eval $(call gb_Library_set_precompiled_header,sm,starmath/inc/pch/precompiled_sm))
 

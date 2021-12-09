@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,analysis))
 
-$(eval $(call gb_Library_set_componentfile,analysis,scaddins/source/analysis/analysis))
+$(eval $(call gb_Library_set_componentfile,analysis,scaddins/source/analysis/analysis,services))
 
 $(eval $(call gb_Library_set_include,analysis,\
     $$(INCLUDE) \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,avmediaMacAVF))
 
-$(eval $(call gb_Library_set_componentfile,avmediaMacAVF,avmedia/source/macavf/avmediaMacAVF))
+$(eval $(call gb_Library_set_componentfile,avmediaMacAVF,avmedia/source/macavf/avmediaMacAVF,services))
 
 $(eval $(call gb_Library_set_include,avmediaMacAVF,\
 	$$(INCLUDE) \

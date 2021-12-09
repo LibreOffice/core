@@ -18,7 +18,7 @@ $(eval $(call gb_Library_use_libraries,cmdmail,\
 	tl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,cmdmail,shell/source/cmdmail/cmdmail))
+$(eval $(call gb_Library_set_componentfile,cmdmail,shell/source/cmdmail/cmdmail,services))
 
 $(eval $(call gb_Library_add_exception_objects,cmdmail,\
     shell/source/cmdmail/cmdmailmsg \

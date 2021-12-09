@@ -18,7 +18,7 @@
 
 $(eval $(call gb_Library_Library,svgio))
 
-$(eval $(call gb_Library_set_componentfile,svgio,svgio/svgio))
+$(eval $(call gb_Library_set_componentfile,svgio,svgio/svgio,services))
 
 $(eval $(call gb_Library_set_include,svgio,\
     $$(INCLUDE) \

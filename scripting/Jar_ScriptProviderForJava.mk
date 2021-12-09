@@ -14,7 +14,7 @@ $(eval $(call gb_Jar_use_jars,ScriptProviderForJava,\
 	ScriptFramework \
 ))
 
-$(eval $(call gb_Jar_set_componentfile,ScriptProviderForJava,scripting/java/ScriptProviderForJava,OOO))
+$(eval $(call gb_Jar_set_componentfile,ScriptProviderForJava,scripting/java/ScriptProviderForJava,OOO,services))
 
 $(eval $(call gb_Jar_set_manifest,ScriptProviderForJava,$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/java/MANIFEST.MF))
 

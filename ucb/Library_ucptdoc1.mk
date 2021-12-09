@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,ucptdoc1))
 
-$(eval $(call gb_Library_set_componentfile,ucptdoc1,ucb/source/ucp/tdoc/ucptdoc1))
+$(eval $(call gb_Library_set_componentfile,ucptdoc1,ucb/source/ucp/tdoc/ucptdoc1,services))
 
 $(eval $(call gb_Library_use_sdk_api,ucptdoc1))
 

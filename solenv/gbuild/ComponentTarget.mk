@@ -60,7 +60,10 @@ $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTSOURCE := $(call gb_Compon
 
 $(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
 
-$(if $(filter $(1),$(patsubst CppunitTest/%,%,$(1))),$(eval gb_ComponentTarget__ALLCOMPONENTS += $(1)))
+ifneq ($(4),)
+$$(eval $$(call gb_Rdb_add_component,$(4),$(1)))
+endif
+$(if $(4),$(eval gb_ComponentTarget__ALLCOMPONENTS += $(1)))
 
 endef
 

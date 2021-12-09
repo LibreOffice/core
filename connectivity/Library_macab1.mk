@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,macab1))
 
-$(eval $(call gb_Library_set_componentfile,macab1,connectivity/source/drivers/macab/macab1))
+$(eval $(call gb_Library_set_componentfile,macab1,connectivity/source/drivers/macab/macab1,services))
 
 $(eval $(call gb_Library_use_external,macab1,boost_headers))
 

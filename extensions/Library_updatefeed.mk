@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,updatefeed))
 
-$(eval $(call gb_Library_set_componentfile,updatefeed,extensions/source/update/feed/updatefeed))
+$(eval $(call gb_Library_set_componentfile,updatefeed,extensions/source/update/feed/updatefeed,services))
 
 $(eval $(call gb_Library_use_externals,updatefeed, \
     boost_headers \

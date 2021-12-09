@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Library_Library,abp))
 
-$(eval $(call gb_Library_set_componentfile,abp,extensions/source/abpilot/abp))
+$(eval $(call gb_Library_set_componentfile,abp,extensions/source/abpilot/abp,services))
 
 $(eval $(call gb_Library_set_include,abp,\
 	$$(INCLUDE) \

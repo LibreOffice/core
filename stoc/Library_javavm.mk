@@ -24,7 +24,7 @@ $(eval $(call gb_Library_use_libraries,javavm,\
     tl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,javavm,stoc/source/javavm/javavm))
+$(eval $(call gb_Library_set_componentfile,javavm,stoc/source/javavm/javavm,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,javavm,\
     stoc/source/javavm/interact \

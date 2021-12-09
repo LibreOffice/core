@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,cui))
 
 $(eval $(call gb_Library_set_plugin_for,cui,vcl))
 
-$(eval $(call gb_Library_set_componentfile,cui,cui/util/cui))
+$(eval $(call gb_Library_set_componentfile,cui,cui/util/cui,services))
 
 $(eval $(call gb_Library_set_include,cui,\
     $$(INCLUDE) \

@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,dbpool2))
 
-$(eval $(call gb_Library_set_componentfile,dbpool2,connectivity/source/cpool/dbpool2))
+$(eval $(call gb_Library_set_componentfile,dbpool2,connectivity/source/cpool/dbpool2,services))
 
 $(eval $(call gb_Library_set_include,dbpool2,\
 	$$(INCLUDE) \

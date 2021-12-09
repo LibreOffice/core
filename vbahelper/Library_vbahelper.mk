@@ -20,7 +20,7 @@
 $(eval $(call gb_Library_Library,vbahelper))
 
 # in case UNO services are exported: declare location of component file
-#$(eval $(call gb_Library_set_componentfile,vbahelper,vbahelper/COMPONENT_FILE))
+#$(eval $(call gb_Library_set_componentfile,vbahelper,vbahelper/COMPONENT_FILE,services))
 
 $(eval $(call gb_Library_add_defs,vbahelper,\
     -DVBAHELPER_DLLIMPLEMENTATION \

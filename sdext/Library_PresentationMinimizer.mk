@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,PresentationMinimizer))
 
-$(eval $(call gb_Library_set_componentfile,PresentationMinimizer,sdext/source/minimizer/minimizer))
+$(eval $(call gb_Library_set_componentfile,PresentationMinimizer,sdext/source/minimizer/minimizer,services))
 
 $(eval $(call gb_Library_set_precompiled_header,PresentationMinimizer,sdext/inc/pch/precompiled_PresentationMinimizer))
 

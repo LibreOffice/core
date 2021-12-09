@@ -19,10 +19,10 @@
 
 $(eval $(call gb_Library_Library,solver))
 
-$(if $(ENABLE_COINMP),$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/coinmpsolver)))
-$(if $(ENABLE_LPSOLVE),$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/lpsolvesolver)))
+$(if $(ENABLE_COINMP),$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/coinmpsolver,services)))
+$(if $(ENABLE_LPSOLVE),$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/lpsolvesolver,services)))
 
-$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/swarmsolver))
+$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/swarmsolver,services))
 
 $(eval $(call gb_Library_use_sdk_api,solver))
 

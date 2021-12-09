@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,msfilter))
 
-$(eval $(call gb_Library_set_componentfile,msfilter,filter/source/msfilter/msfilter))
+$(eval $(call gb_Library_set_componentfile,msfilter,filter/source/msfilter/msfilter,services))
 
 $(eval $(call gb_Library_use_external,msfilter,boost_headers))
 

@@ -13,6 +13,6 @@ $(eval $(call gb_Pyuno_add_files,passive_python,,\
     passive_python.py \
 ))
 
-$(eval $(call gb_Pyuno_set_componentfile_full,passive_python,desktop/test/deployment/passive/passive_python,./,passive_python.py))
+$(eval $(call gb_Pyuno_set_componentfile_full,passive_python,desktop/test/deployment/passive/passive_python,./,passive_python.py,passive_generic))
 
 # vim: set noet sw=4 ts=4:

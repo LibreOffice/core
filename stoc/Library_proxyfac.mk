@@ -17,7 +17,7 @@ $(eval $(call gb_Library_use_libraries,proxyfac,\
     sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,proxyfac,stoc/source/proxy_factory/proxyfac))
+$(eval $(call gb_Library_set_componentfile,proxyfac,stoc/source/proxy_factory/proxyfac,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,proxyfac,\
     stoc/source/proxy_factory/proxyfac \

@@ -19,20 +19,20 @@
 
 $(eval $(call gb_Library_Library,vcl))
 
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.common))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.common,services))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx,services))
 else ifeq ($(OS),WNT)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows,services))
 else ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android,services))
 else ifeq ($(OS),iOS)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios,services))
 else ifeq ($(DISABLE_GUI),TRUE)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless,services))
 else
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx,services))
 endif
 
 $(eval $(call gb_Library_set_precompiled_header,vcl,vcl/inc/pch/precompiled_vcl))

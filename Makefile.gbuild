@@ -24,11 +24,6 @@ ifneq (,$(DISABLE_DYNLOADING))
 $(if $(gb_LinkTarget__Lock),$(shell rm -f $(gb_LinkTarget__Lock)))
 endif
 
-ifeq ($(ENABLE_SERVICES_RDB_FROM_BUILD),TRUE)
-$(foreach comp,$(filter-out $(gb_Rdb__URECOMPONENTS),$(gb_ComponentTarget__ALLCOMPONENTS)), \
-    $(eval $(call gb_Rdb_add_components,services,$(comp))))
-endif
-
 upload-symbols:
 	bin/upload_symbols.py $(WORKDIR)/symbols.zip $(BREAKPAD_SYMBOL_CONFIG) "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)"
 

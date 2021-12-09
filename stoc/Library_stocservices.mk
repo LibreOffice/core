@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_libraries,stocservices,\
 
 $(eval $(call gb_Library_use_external,stocservices,boost_headers))
 
-$(eval $(call gb_Library_set_componentfile,stocservices,stoc/util/stocservices))
+$(eval $(call gb_Library_set_componentfile,stocservices,stoc/util/stocservices,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,stocservices,\
     stoc/source/typeconv/convert \

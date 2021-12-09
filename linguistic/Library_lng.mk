@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,lng))
 
-$(eval $(call gb_Library_set_componentfile,lng,linguistic/source/lng))
+$(eval $(call gb_Library_set_componentfile,lng,linguistic/source/lng,services))
 
 $(eval $(call gb_Library_set_include,lng,\
 	$$(INCLUDE) \

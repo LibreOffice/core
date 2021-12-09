@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Library_Library,oleautobridge))
 
-$(eval $(call gb_Library_set_componentfile,oleautobridge,extensions/source/ole/oleautobridge))
+$(eval $(call gb_Library_set_componentfile,oleautobridge,extensions/source/ole/oleautobridge,services))
 
 $(eval $(call gb_Library_use_api,oleautobridge,\
     offapi \

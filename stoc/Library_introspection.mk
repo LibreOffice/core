@@ -20,7 +20,7 @@ $(eval $(call gb_Library_use_libraries,introspection,\
     salhelper \
 ))
 
-$(eval $(call gb_Library_set_componentfile,introspection,stoc/source/inspect/introspection))
+$(eval $(call gb_Library_set_componentfile,introspection,stoc/source/inspect/introspection,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,introspection,\
     stoc/source/inspect/introspection \

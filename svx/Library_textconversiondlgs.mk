@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,textconversiondlgs))
 
-$(eval $(call gb_Library_set_componentfile,textconversiondlgs,svx/util/textconversiondlgs))
+$(eval $(call gb_Library_set_componentfile,textconversiondlgs,svx/util/textconversiondlgs,services))
 
 $(eval $(call gb_Library_set_include,textconversiondlgs,\
     -I$(SRCDIR)/svx/inc \

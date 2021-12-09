@@ -14,7 +14,7 @@ $(eval $(call gb_Jar_add_sourcefiles,smoketest, \
     smoketest/org/libreoffice/smoketest/SmoketestCommandEnvironment \
 ))
 
-$(eval $(call gb_Jar_set_componentfile,smoketest,smoketest/org/libreoffice/smoketest/smoketest,OOO))
+$(eval $(call gb_Jar_set_componentfile,smoketest,smoketest/org/libreoffice/smoketest/smoketest,OOO,services))
 
 $(eval $(call gb_Jar_set_manifest,smoketest,$(SRCDIR)/smoketest/org/libreoffice/smoketest/manifest))
 

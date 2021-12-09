@@ -24,7 +24,7 @@
 $(eval $(call gb_Library_Library,msforms))
 
 # in case UNO services are exported: declare location of component file
-$(eval $(call gb_Library_set_componentfile,msforms,vbahelper/util/msforms))
+$(eval $(call gb_Library_set_componentfile,msforms,vbahelper/util/msforms,services))
 
 $(eval $(call gb_Library_use_external,msforms,boost_headers))
 

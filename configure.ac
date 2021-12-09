@@ -1967,11 +1967,9 @@ AC_ARG_ENABLE(xmlhelp,
         [Disable XML help support]),
 ,enable_xmlhelp=yes)
 
-AC_ARG_ENABLE(services-rdb-from-build,
-    AS_HELP_STRING([--enable-services-rdb-from-build],
-        [Automatically creates the services.rdb from all built components.
-         Splitting the component files and adapting the Library_*.mk files
-         is WIP and probably just works together with --enable-wasm-strip.]))
+AC_ARG_ENABLE(customtarget-components,
+    AS_HELP_STRING([--enable-customtarget-components],
+        [This is WIP and probably just works together with --enable-wasm-strip.]))
 
 
 dnl ===================================================================
@@ -2950,14 +2948,14 @@ if test $_os != iOS -a $_os != Android -a $_os != Emscripten -a "$enable_fuzzers
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
 fi
 
-ENABLE_SERVICES_RDB_FROM_BUILD=
-if test "$enable_services_rdb_from_build" = yes; then
-    ENABLE_SERVICES_RDB_FROM_BUILD=TRUE
+ENABLE_CUSTOMTARGET_COMPONENTS=
+if test "$enable_customtarget_components" = yes; then
+    ENABLE_CUSTOMTARGET_COMPONENTS=TRUE
     if test -n "$with_locales" -a "$with_locales" != en -a "$with_locales" != ALL; then
-        AC_MSG_ERROR([Currently just --with-locales=all or en is supported with --enable-services-rdb-from-build])
+        AC_MSG_ERROR([Currently just --with-locales=all or en is supported with --enable-customtarget-components])
     fi
 fi
-AC_SUBST(ENABLE_SERVICES_RDB_FROM_BUILD)
+AC_SUBST(ENABLE_CUSTOMTARGET_COMPONENTS)
 
 # Whether to build "avmedia" functionality or not.
 
@@ -5531,7 +5529,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-opencl \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
-        --disable-services-rdb-from-build \
+        --disable-customtarget-components \
         --disable-skia \
         --enable-icecream="$enable_icecream" \
         --without-doxygen \

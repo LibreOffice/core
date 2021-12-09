@@ -66,7 +66,7 @@ $(eval $(call gb_Library_add_libs,postgresql-sdbc-impl,\
 endif
 endif
 
-$(eval $(call gb_Library_set_componentfile,postgresql-sdbc-impl,connectivity/source/drivers/postgresql/postgresql-sdbc-impl))
+$(eval $(call gb_Library_set_componentfile,postgresql-sdbc-impl,connectivity/source/drivers/postgresql/postgresql-sdbc-impl,postgresql-sdbc))
 
 $(eval $(call gb_Library_add_exception_objects,postgresql-sdbc-impl,\
 	connectivity/source/drivers/postgresql/pq_array \

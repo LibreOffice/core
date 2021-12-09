@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,sdbc2))
 
-$(eval $(call gb_Library_set_componentfile,sdbc2,connectivity/source/manager/sdbc2))
+$(eval $(call gb_Library_set_componentfile,sdbc2,connectivity/source/manager/sdbc2,services))
 
 $(eval $(call gb_Library_use_external,sdbc2,boost_headers))
 
