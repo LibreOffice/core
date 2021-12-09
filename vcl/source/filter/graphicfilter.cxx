@@ -1311,7 +1311,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                                      WmfExternal const *pExtHeader )
 {
     OUString aFilterName;
-    sal_uLong  nStreamBegin;
+    sal_uInt64 nStreamBegin;
     ErrCode nStatus;
     GfxLinkType eLinkType = GfxLinkType::NONE;
     const bool bLinkSet = rGraphic.IsGfxLink();
@@ -1463,7 +1463,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     {
         if (!pGraphicContent)
         {
-            const sal_uLong nStreamEnd = rIStream.Tell();
+            const sal_uInt64 nStreamEnd = rIStream.Tell();
             nGraphicContentSize = nStreamEnd - nStreamBegin;
 
             if (nGraphicContentSize > 0)
