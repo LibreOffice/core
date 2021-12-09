@@ -73,7 +73,7 @@ private:
     std::shared_ptr<ImpSwapFile> mpSwapFile;
     std::shared_ptr<GfxLink>     mpGfxLink;
     GraphicType                  meType;
-    mutable sal_uLong            mnSizeBytes;
+    mutable sal_uInt32           mnSizeBytes;
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     std::shared_ptr<VectorGraphicData> maVectorGraphicData;
@@ -157,7 +157,7 @@ private:
     MapMode             getPrefMapMode() const;
     void                setPrefMapMode( const MapMode& rPrefMapMode );
 
-    sal_uLong           getSizeBytes() const;
+    sal_uInt32          getSizeBytes() const;
 
     void                draw(OutputDevice& rOutDev, const Point& rDestPt) const;
     void                draw(OutputDevice& rOutDev, const Point& rDestPt,

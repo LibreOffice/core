@@ -338,6 +338,10 @@ public:
     // set the fill color to a specific color, shapes will be
     // filled accordingly
     virtual void            SetFillColor( Color nColor ) override;
+    // set the fill rule to default (= FillRule_EVEN_ODD)
+    virtual void                    SetFillRule() override;
+    // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
+    virtual void                    SetFillRule( PolyFillMode eFillRule ) override;
     // enable/disable XOR drawing
     virtual void            SetXORMode( bool bSet, bool ) override;
     // set line color for raster operations

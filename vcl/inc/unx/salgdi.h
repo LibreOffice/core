@@ -109,6 +109,9 @@ public:
 
     virtual void                    SetFillColor( Color nColor ) override;
 
+    virtual void                    SetFillRule() override;
+    virtual void                    SetFillRule( PolyFillMode eFillRule ) override;
+
     virtual void                    SetXORMode( bool bSet, bool ) override;
 
     virtual void                    SetROPLineColor( SalROPColor nROPColor ) override;
@@ -307,6 +310,7 @@ private:
     vcl::Region                     maClipRegion;
     Color                           mnPenColor;
     Color                           mnFillColor;
+    PolyFillMode                    meFillRule;
 #endif // ENABLE_CAIRO_CANVAS
 
     Pixmap                          hBrush_;        // Dither

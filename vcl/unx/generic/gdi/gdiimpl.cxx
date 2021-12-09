@@ -29,6 +29,7 @@
 
 #include <vcl/gradient.hxx>
 #include <sal/log.hxx>
+#include <vcl/metaact.hxx>
 
 #include <unx/saldisp.hxx>
 #include <unx/salbmp.h>
@@ -1025,6 +1026,22 @@ void X11SalGraphicsImpl::SetLineColor( Color nColor )
     }
 }
 
+void X11SalGraphicsImpl::SetFillRule()
+{
+    if(meFillRule != PolyFillMode::EVEN_ODD_RULE_ALTERNATE)
+    {
+        meFillRule = PolyFillMode::NON_ZERO_RULE_WINDING;
+    }
+}
+
+void X11SalGraphicsImpl::SetFillRule( PolyFillMode eFillRule )
+{
+    if(meFillRule != eFillRule)
+    {
+        meFillRule = eFillRule;
+    }
+}
+
 void X11SalGraphicsImpl::SetFillColor()
 {
     if( mnBrushColor != SALCOLOR_NONE )
@@ -1378,6 +1395,7 @@ bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Lon
     return false;
 }
 
+// INFO: This is the main draw method for drawing the handwriting
 // draw a poly-polygon
 bool X11SalGraphicsImpl::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,

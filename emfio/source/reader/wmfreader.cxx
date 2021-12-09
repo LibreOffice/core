@@ -1359,8 +1359,17 @@ namespace emfio
             }
             break;
 
-            case W_META_SETRELABS:
             case W_META_SETPOLYFILLMODE:
+            {
+                sal_uInt32 nFillMode  = 0;
+                mpInputStream->ReadUInt32( nFillMode );
+                setPolyFillMode( static_cast<PolyFillMode>(nFillMode) );
+                SAL_INFO("emfio", "\t\tPolyFillMode: 0x" << std::hex << nFillMode << std::dec);
+                CreateObject();
+            }
+            break;
+
+            case W_META_SETRELABS:
             case W_META_SETSTRETCHBLTMODE:
             case W_META_SETTEXTCHAREXTRA:
             case W_META_SETTEXTJUSTIFICATION:

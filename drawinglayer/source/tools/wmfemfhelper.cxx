@@ -189,6 +189,11 @@ namespace wmfemfhelper
                         pLast->setLineColor(pTip->getLineColor());
                         pLast->setLineColorActive(pTip->getLineColorActive());
                     }
+                    if (!(nPushFlags & vcl::PushFlags::FILLMODE))
+                    {
+                        pLast->setFillMode(pTip->getFillMode());
+                        pLast->setFillModeActive(pTip->getFillModeActive());
+                    }
                     if (!(nPushFlags & vcl::PushFlags::FILLCOLOR))
                     {
                         pLast->setFillColor(pTip->getFillColor());
@@ -2433,6 +2438,18 @@ namespace wmfemfhelper
 
                     break;
                 }
+
+                case MetaActionType::FILLMODE:
+                {
+                    const MetaFillModeAction* pA = static_cast<const MetaFillModeAction*>(pAction);
+                    const bool bActive(PolyFillMode::EVEN_ODD_RULE_ALTERNATE != pA->GetFillMode());
+                    rPropertyHolders.Current().setFillModeActive(bActive);
+                    if(bActive)
+                        rPropertyHolders.Current().setFillMode(pA->GetFillMode());
+
+                    break;
+                }
+
                 case MetaActionType::FILLCOLOR :
                 {
                     /** CHECKED, WORKS WELL */

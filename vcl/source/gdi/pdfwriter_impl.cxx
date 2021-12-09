@@ -7225,11 +7225,22 @@ void PDFWriterImpl::drawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     m_aPages.back().appendPolyPolygon( rPolyPoly, aLine );
     if( m_aGraphicsStack.front().m_aLineColor != COL_TRANSPARENT &&
         m_aGraphicsStack.front().m_aFillColor != COL_TRANSPARENT )
-        aLine.append( "B*\n" );
+    {
+        aLine.append( "B" );
+        if( GetFillMode() == PolyFillMode::EVEN_ODD_RULE_ALTERNATE )
+            aLine.append( "*" );
+    }
     else if( m_aGraphicsStack.front().m_aLineColor != COL_TRANSPARENT )
+    {
         aLine.append( "S\n" );
+    }
     else
-        aLine.append( "f*\n" );
+    {
+        aLine.append( "f" );
+        if( GetFillMode() == PolyFillMode::EVEN_ODD_RULE_ALTERNATE )
+            aLine.append( "*" );
+    }
+    aLine.append( "\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }

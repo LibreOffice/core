@@ -35,6 +35,7 @@
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
 #include <impfontmetricdata.hxx>
+#include <vcl/metaact.hxx>
 
 #include <cairo.h>
 
@@ -95,6 +96,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
     Color                          m_aLineColor;
     Color                          m_aFillColor;
     PaintMode                      m_ePaintMode;
+    PolyFillMode     m_eFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
 
 public:
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
@@ -167,6 +169,9 @@ public:
     virtual void            SetLineColor( Color nColor ) override;
     virtual void            SetFillColor() override;
     virtual void            SetFillColor( Color nColor ) override;
+
+    virtual void            SetFillRule() override;
+    virtual void            SetFillRule( PolyFillMode eFillRule ) override;
 
     virtual void            SetXORMode( bool bSet, bool ) override;
 

@@ -368,6 +368,24 @@ void X11SalGraphics::SetLineColor( Color nColor )
     mxImpl->SetLineColor( nColor );
 }
 
+void X11SalGraphics::SetFillRule()
+{
+#if ENABLE_CAIRO_CANVAS
+    meFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+#endif // ENABLE_CAIRO_CANVAS
+
+    mxImpl->SetFillRule();
+}
+
+void X11SalGraphics::SetFillRule( PolyFillMode eFillRule )
+{
+#if ENABLE_CAIRO_CANVAS
+    meFillRule = eFillRule;
+#endif // ENABLE_CAIRO_CANVAS
+
+    mxImpl->SetFillRule( eFillRule );
+}
+
 void X11SalGraphics::SetFillColor()
 {
 #if ENABLE_CAIRO_CANVAS

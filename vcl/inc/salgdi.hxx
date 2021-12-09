@@ -28,6 +28,7 @@
 #include "sallayout.hxx"
 #include "SalGradient.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
 #include "WidgetDrawInterface.hxx"
 
 #include <config_cairo_canvas.h>
@@ -116,6 +117,12 @@ public:
 
     // set the line color to a specific color
     virtual void                SetLineColor( Color nColor ) = 0;
+
+    // set the fill rule to default (= FillRule_EVEN_ODD)
+    virtual void            SetFillRule() = 0;
+
+    // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
+    virtual void            SetFillRule( PolyFillMode eFillRule ) = 0;
 
     // set the fill color to transparent (= don't fill)
     virtual void                SetFillColor() = 0;
@@ -712,6 +719,17 @@ public:
     void SetLineColor( Color nColor ) override
     {
         GetImpl()->SetLineColor(nColor);
+    }
+
+
+    void SetFillRule() override
+    {
+        GetImpl()->SetFillRule();
+    }
+
+    void SetFillRule( PolyFillMode eFillRule ) override
+    {
+        GetImpl()->SetFillRule(eFillRule);
     }
 
     void SetFillColor() override

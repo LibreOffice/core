@@ -961,7 +961,7 @@ void ImpGraphic::setPrefMapMode(const MapMode& rPrefMapMode)
     setValuesForPrefMapMod(rPrefMapMode);
 }
 
-sal_uLong ImpGraphic::getSizeBytes() const
+sal_uInt32 ImpGraphic::getSizeBytes() const
 {
     if (mnSizeBytes > 0)
         return mnSizeBytes;
