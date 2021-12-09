@@ -801,13 +801,6 @@ HRESULT CSOActiveX::LoadURLToFrame( )
     HRESULT hr = CallDispatchMethod( mCurFileUrl, aArgNames, aArgVals, nCount );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    CComVariant aBarName( L"MenuBarVisible" );
-    CComVariant aBarVis;
-    aBarVis.vt = VT_BOOL; aBarVis.boolVal = VARIANT_FALSE;
-    hr = CallDispatchMethod( L"slot:6661", &aBarName, &aBarVis, 1 );
-    // does not work for some documents, but it is no error
-    // if( !SUCCEEDED( hr ) ) return hr;
-
     // try to get the model and set the presentation specific property, the setting will fail for other document formats
     CComPtr<IDispatch> pdispController;
     hr = GetIDispByFunc( mpDispFrame, L"getController", nullptr, 0, pdispController );
