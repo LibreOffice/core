@@ -30,7 +30,6 @@ modules/swriter/ui/privateuserpage.ui
 modules/swriter/ui/querycontinuebegindialog.ui
 modules/swriter/ui/querycontinueenddialog.ui
 modules/swriter/ui/querydefaultcompatdialog.ui
-modules/swriter/ui/queryrotateintostandarddialog.ui
 modules/swriter/ui/querysavelabeldialog.ui
 modules/swriter/ui/renameautotextdialog.ui
 modules/swriter/ui/renameentrydialog.ui
@@ -75,4 +74,3 @@ modules/swriter/ui/bibliographyentry.ui
 modules/swriter/ui/inforeadonlydialog.ui
 modules/swriter/ui/inforeadonlydialog.ui
 modules/swriter/ui/inforeadonlydialog.ui
-modules/swriter/ui/queryrotateintostandarddialog.ui
