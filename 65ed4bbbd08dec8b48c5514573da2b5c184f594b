@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5937bcf4_505ef2c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-09T16:55:57Z",
+      "side": 1,
+      "message": "I don\u0027t see any point in letting this live in 7.3 - since it was introduced there and only recently...",
+      "revId": "65ed4bbbd08dec8b48c5514573da2b5c184f594b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
