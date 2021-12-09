@@ -52,6 +52,24 @@
       "parentUuid": "4e1d39cb_2df8e629",
       "revId": "f57cfddb51b7d7409b7b425dc200aa73406a13bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77cf3f45_24e46e7b",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2617,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-09T14:13:20Z",
+      "side": 1,
+      "message": "I just tried it just for being curious, and i cannot repro it with ppt.",
+      "parentUuid": "284bfa3e_2c8300ed",
+      "revId": "f57cfddb51b7d7409b7b425dc200aa73406a13bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
