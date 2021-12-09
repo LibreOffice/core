@@ -3059,7 +3059,30 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 bDone = true;
             }
         }
+<<<<<<< HEAD   (fd0a94 tdf#48622, tdf#145828 use correct default for border line wi)
         else if ( !bMouse )
+=======
+
+        //  #i18735# First select the item under the mouse pointer.
+        //  This can change the selection, and the view state (edit mode, etc).
+        SelectForContextMenu(aPosPixel, bSpellError ? nColSpellError : nCellX, nCellY);
+    }
+
+    bool bDone = false;
+    bool bEdit = mrViewData.HasEditView(eWhich);
+
+    if ( !bEdit )
+    {
+        // Edit cell with spelling errors ?
+        // tdf#127341 the formally used GetEditUrl(aPosPixel) addiionally
+        // to bSpellError acivated EditMode here for right-click on URL
+        // which prevents the regular contex-menu from appearing. Since this
+        // is more expeced than the context-menu for editing an URL I removed
+        // this. If this was wanted and can be argued his migh be re-acivated.
+        // For now, reduce to spelling errors - as the original comment above
+        // suggests.
+        if (bMouse && bSpellError)
+>>>>>>> CHANGE (110d35 tdf#127341 Do not activate TextEdit at right-klick on URL in)
         {
             //  non-edit menu by keyboard -> use lower right of cell cursor position
             ScDocument* aDoc = pViewData->GetDocument();

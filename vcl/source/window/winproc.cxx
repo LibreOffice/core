@@ -262,6 +262,17 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                            long nX, long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode )
 {
+<<<<<<< HEAD   (fd0a94 tdf#48622, tdf#145828 use correct default for border line wi)
+=======
+    SAL_INFO( "vcl.debugevent",
+              "mouse event "
+               "(MouseNotifyEvent " << static_cast<sal_uInt16>(nSVEvent) << ") "
+               "(MouseLeave " << bMouseLeave << ") "
+               "(X, Y " << nX << ", " << nY << ") "
+               "(Code " << nCode << ") "
+               "(Modifiers " << static_cast<sal_uInt16>(nMode) << ")");
+    ImplSVHelpData& aHelpData = ImplGetSVHelpData();
+>>>>>>> CHANGE (110d35 tdf#127341 Do not activate TextEdit at right-klick on URL in)
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
     VclPtr<vcl::Window> pChild;
