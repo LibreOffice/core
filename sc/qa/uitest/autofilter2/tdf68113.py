@@ -39,7 +39,6 @@ class tdf68113(UITestCase):
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
             xSubFloatWindow = self.xUITest.getFloatWindow()
             xSubMenu = xSubFloatWindow.getChild("menu")
-            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
             # Checkbox elements
@@ -64,7 +63,6 @@ class tdf68113(UITestCase):
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
             xSubFloatWindow = self.xUITest.getFloatWindow()
             xSubMenu = xSubFloatWindow.getChild("menu")
-            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 

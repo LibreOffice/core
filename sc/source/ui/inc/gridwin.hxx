@@ -331,10 +331,11 @@ public:
     enum class AutoFilterMode
     {
         Normal,
-        Top10,
-        Custom,
         Empty,
         NonEmpty,
+        Top10,
+        Bottom10,
+        Custom,
         TextColor,
         BackgroundColor,
         SortAscending,

@@ -431,6 +431,8 @@ class AutofilterTest(UITestCase):
             xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
             xSubFloatWindow = self.xUITest.getFloatWindow()
             xSubMenu = xSubFloatWindow.getChild("menu")
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
             self.assertFalse(is_row_hidden(doc, 0))
