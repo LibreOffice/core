@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,odbc))
 
-$(eval $(call gb_Library_set_componentfile,odbc,connectivity/source/drivers/odbc/odbc))
+$(eval $(call gb_Library_set_componentfile,odbc,connectivity/source/drivers/odbc/odbc,services))
 
 $(eval $(call gb_Library_use_sdk_api,odbc))
 

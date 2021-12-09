@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_libraries,invocadapt,\
     sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,invocadapt,stoc/source/invocation_adapterfactory/invocadapt))
+$(eval $(call gb_Library_set_componentfile,invocadapt,stoc/source/invocation_adapterfactory/invocadapt,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,invocadapt,\
     stoc/source/invocation_adapterfactory/iafactory \

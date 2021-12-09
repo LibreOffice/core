@@ -63,7 +63,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     vcl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/chartcore))
+$(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/chartcore,services))
 
 # view pieces ...
 $(eval $(call gb_Library_add_exception_objects,chartcore,\

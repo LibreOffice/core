@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_libraries,offacc,\
     tl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,offacc,desktop/source/offacc/offacc))
+$(eval $(call gb_Library_set_componentfile,offacc,desktop/source/offacc/offacc,services))
 
 $(eval $(call gb_Library_add_exception_objects,offacc,\
     desktop/source/offacc/acceptor \

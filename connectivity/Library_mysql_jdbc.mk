@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,mysql_jdbc))
 
-$(eval $(call gb_Library_set_componentfile,mysql_jdbc,connectivity/source/drivers/mysql_jdbc/mysql_jdbc))
+$(eval $(call gb_Library_set_componentfile,mysql_jdbc,connectivity/source/drivers/mysql_jdbc/mysql_jdbc,services))
 
 $(eval $(call gb_Library_use_external,mysql_jdbc,boost_headers))
 

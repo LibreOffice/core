@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_externals,lwpft,\
     icu_headers \
 ))
 
-$(eval $(call gb_Library_set_componentfile,lwpft,lotuswordpro/util/lwpfilter))
+$(eval $(call gb_Library_set_componentfile,lwpft,lotuswordpro/util/lwpfilter,services))
 
 $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/bencont \

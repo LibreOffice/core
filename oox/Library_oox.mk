@@ -81,7 +81,7 @@ $(eval $(call gb_Library_use_externals,oox,\
 endif
 endif
 
-$(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))
+$(eval $(call gb_Library_set_componentfile,oox,oox/util/oox,services))
 
 $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/binarycodec \

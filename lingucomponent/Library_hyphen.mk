@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,hyphen))
 
-$(eval $(call gb_Library_set_componentfile,hyphen,lingucomponent/source/hyphenator/hyphen/hyphen))
+$(eval $(call gb_Library_set_componentfile,hyphen,lingucomponent/source/hyphenator/hyphen/hyphen,services))
 
 $(eval $(call gb_Library_set_include,hyphen,\
 	$$(INCLUDE) \

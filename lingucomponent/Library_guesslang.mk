@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,guesslang))
 
-$(eval $(call gb_Library_set_componentfile,guesslang,lingucomponent/source/languageguessing/guesslang))
+$(eval $(call gb_Library_set_componentfile,guesslang,lingucomponent/source/languageguessing/guesslang,services))
 
 $(eval $(call gb_Library_use_externals,guesslang,\
 	boost_headers \

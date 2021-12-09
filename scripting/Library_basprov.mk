@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,basprov))
 
-$(eval $(call gb_Library_set_componentfile,basprov,scripting/source/basprov/basprov))
+$(eval $(call gb_Library_set_componentfile,basprov,scripting/source/basprov/basprov,services))
 
 $(eval $(call gb_Library_set_include,basprov,\
 	$$(INCLUDE) \

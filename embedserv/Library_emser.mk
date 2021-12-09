@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,emser))
 
-$(eval $(call gb_Library_set_componentfile,emser,embedserv/util/emser))
+$(eval $(call gb_Library_set_componentfile,emser,embedserv/util/emser,services))
 
 $(eval $(call gb_Library_set_include,emser,\
 	-I$(SRCDIR)/embedserv/source/inc \

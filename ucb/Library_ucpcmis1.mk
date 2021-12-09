@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,ucpcmis1))
 
-$(eval $(call gb_Library_set_componentfile,ucpcmis1,ucb/source/ucp/cmis/ucpcmis1))
+$(eval $(call gb_Library_set_componentfile,ucpcmis1,ucb/source/ucp/cmis/ucpcmis1,services))
 
 $(eval $(call gb_Library_use_sdk_api,ucpcmis1))
 

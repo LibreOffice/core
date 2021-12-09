@@ -52,7 +52,7 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     vcl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,slideshow,slideshow/util/slideshow))
+$(eval $(call gb_Library_set_componentfile,slideshow,slideshow/util/slideshow,services))
 
 $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/activities/activitiesfactory \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,scriptframe))
 
-$(eval $(call gb_Library_set_componentfile,scriptframe,scripting/util/scriptframe))
+$(eval $(call gb_Library_set_componentfile,scriptframe,scripting/util/scriptframe,services))
 
 $(eval $(call gb_Library_set_include,scriptframe,\
 	$$(INCLUDE) \

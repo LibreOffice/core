@@ -34,7 +34,7 @@ $(eval $(call gb_Library_use_libraries,sdbt,\
     utl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,sdbt,dbaccess/util/sdbt))
+$(eval $(call gb_Library_set_componentfile,sdbt,dbaccess/util/sdbt,services))
 
 $(eval $(call gb_Library_add_exception_objects,sdbt,\
     dbaccess/source/sdbtools/connection/connectiontools \

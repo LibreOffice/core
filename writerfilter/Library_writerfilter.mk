@@ -25,7 +25,7 @@ $(eval $(call gb_Library_set_include,writerfilter,\
 
 $(eval $(call gb_Library_use_sdk_api,writerfilter))
 
-$(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
+$(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter,services))
 
 $(eval $(call gb_Library_use_libraries,writerfilter,\
     basegfx \

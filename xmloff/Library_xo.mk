@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,xo))
 
-$(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
+$(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo,services))
 
 $(eval $(call gb_Library_set_precompiled_header,xo,xmloff/inc/pch/precompiled_xo))
 

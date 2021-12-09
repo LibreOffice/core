@@ -21,7 +21,7 @@ $(eval $(call gb_Library_use_libraries,desktopbe1,\
 	vcl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,desktopbe1,shell/source/backends/desktopbe/desktopbe1))
+$(eval $(call gb_Library_set_componentfile,desktopbe1,shell/source/backends/desktopbe/desktopbe1,services))
 
 $(eval $(call gb_Library_add_exception_objects,desktopbe1,\
     shell/source/backends/desktopbe/desktopbackend \

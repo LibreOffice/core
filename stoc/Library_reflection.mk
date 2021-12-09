@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_libraries,reflection,\
     sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,reflection,stoc/source/corereflection/reflection))
+$(eval $(call gb_Library_set_componentfile,reflection,stoc/source/corereflection/reflection,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,reflection,\
     stoc/source/corereflection/crarray \

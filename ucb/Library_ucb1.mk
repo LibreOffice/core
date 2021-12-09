@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,ucb1))
 
-$(eval $(call gb_Library_set_componentfile,ucb1,ucb/source/core/ucb1))
+$(eval $(call gb_Library_set_componentfile,ucb1,ucb/source/core/ucb1,services))
 
 $(eval $(call gb_Library_set_include,ucb1,\
 	-I$(SRCDIR)/ucb/source/inc \

@@ -24,7 +24,7 @@ $(eval $(call gb_Library_add_sdi_headers,sw,sw/sdi/swslots))
 $(eval $(call gb_Library_set_componentfiles,sw, \
     $(call gb_Helper_optional,DBCONNECTIVITY,sw/util/sw_mm) \
     sw/util/sw \
-))
+,services))
 
 $(eval $(call gb_Library_set_precompiled_header,sw,sw/inc/pch/precompiled_sw))
 

@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Jar_Jar,XMergeBridge))
 
-$(eval $(call gb_Jar_set_componentfile,XMergeBridge,xmerge/source/bridge/XMergeBridge,OOO))
+$(eval $(call gb_Jar_set_componentfile,XMergeBridge,xmerge/source/bridge/XMergeBridge,OOO,services))
 
 $(eval $(call gb_Jar_set_manifest,XMergeBridge,$(SRCDIR)/xmerge/source/bridge/manifest.mf))
 

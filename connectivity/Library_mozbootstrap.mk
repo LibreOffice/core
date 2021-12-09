@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,mozbootstrap))
 
-$(eval $(call gb_Library_set_componentfile,mozbootstrap,connectivity/source/drivers/mozab/bootstrap/mozbootstrap))
+$(eval $(call gb_Library_set_componentfile,mozbootstrap,connectivity/source/drivers/mozab/bootstrap/mozbootstrap,services))
 
 $(eval $(call gb_Library_set_include,mozbootstrap,\
 	-I$(SRCDIR)/connectivity/source/drivers/mozab \

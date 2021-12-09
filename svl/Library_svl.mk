@@ -31,7 +31,7 @@ $(eval $(call gb_Library_use_externals,svl,\
     libxml2 \
 ))
 
-$(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
+$(eval $(call gb_Library_set_componentfile,svl,svl/util/svl,services))
 
 $(eval $(call gb_Library_set_include,svl,\
     -I$(SRCDIR)/svl/source/inc \

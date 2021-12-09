@@ -21,7 +21,7 @@ $(eval $(call gb_Library_use_custom_headers,utl,\
 ))
 
 # in case UNO services are exported: declare location of component file
-$(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
+$(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl,services))
 
 $(eval $(call gb_Library_set_include,utl, \
     $$(INCLUDE) \

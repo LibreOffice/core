@@ -22,7 +22,7 @@ $(eval $(call gb_Library_use_externals,evoab,\
 	gobject \
 ))
 
-$(eval $(call gb_Library_set_componentfile,evoab,connectivity/source/drivers/evoab2/evoab))
+$(eval $(call gb_Library_set_componentfile,evoab,connectivity/source/drivers/evoab2/evoab,services))
 
 $(eval $(call gb_Library_use_sdk_api,evoab))
 

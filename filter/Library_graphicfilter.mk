@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,graphicfilter))
 
-$(eval $(call gb_Library_set_componentfile,graphicfilter,filter/source/graphic/graphicfilter))
+$(eval $(call gb_Library_set_componentfile,graphicfilter,filter/source/graphic/graphicfilter,services))
 
 $(eval $(call gb_Library_use_external,graphicfilter,boost_headers))
 

@@ -9,9 +9,4 @@
 
 $(eval $(call gb_Rdb_Rdb_install,postgresql-sdbc))
 
-$(eval $(call gb_Rdb_add_components,postgresql-sdbc,\
-	connectivity/source/drivers/postgresql/postgresql-sdbc \
-	connectivity/source/drivers/postgresql/postgresql-sdbc-impl \
-))
-
 # vim: set noet sw=4 ts=4:

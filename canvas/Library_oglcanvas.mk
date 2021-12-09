@@ -16,7 +16,7 @@ $(eval $(call gb_Library_set_include,oglcanvas,\
 
 $(eval $(call gb_Library_set_precompiled_header,oglcanvas,canvas/inc/pch/precompiled_oglcanvas))
 
-$(eval $(call gb_Library_set_componentfile,oglcanvas,canvas/source/opengl/oglcanvas))
+$(eval $(call gb_Library_set_componentfile,oglcanvas,canvas/source/opengl/oglcanvas,services))
 
 $(eval $(call gb_Library_use_sdk_api,oglcanvas))
 

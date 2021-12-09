@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,xmlsecurity))
 
-$(eval $(call gb_Library_set_componentfile,xmlsecurity,xmlsecurity/util/xmlsecurity))
+$(eval $(call gb_Library_set_componentfile,xmlsecurity,xmlsecurity/util/xmlsecurity,services))
 
 $(eval $(call gb_Library_set_include,xmlsecurity,\
 	$$(INCLUDE) \

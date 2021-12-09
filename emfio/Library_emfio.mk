@@ -18,7 +18,7 @@
 
 $(eval $(call gb_Library_Library,emfio))
 
-$(eval $(call gb_Library_set_componentfile,emfio,emfio/emfio))
+$(eval $(call gb_Library_set_componentfile,emfio,emfio/emfio,services))
 
 $(eval $(call gb_Library_set_include,emfio,\
     $$(INCLUDE) \

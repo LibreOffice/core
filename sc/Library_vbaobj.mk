@@ -19,7 +19,7 @@ $(eval $(call gb_Library_set_include,vbaobj,\
 
 $(eval $(call gb_Library_set_precompiled_header,vbaobj,sc/inc/pch/precompiled_vbaobj))
 
-$(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
+$(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj,services))
 
 $(eval $(call gb_Library_use_externals,vbaobj,\
 	boost_headers \

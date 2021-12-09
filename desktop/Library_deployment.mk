@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_libraries,deployment,\
     i18nlangtag \
 ))
 
-$(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/deployment))
+$(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/deployment,services))
 
 $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/dp_log \

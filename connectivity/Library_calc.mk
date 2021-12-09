@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,calc))
 
-$(eval $(call gb_Library_set_componentfile,calc,connectivity/source/drivers/calc/calc))
+$(eval $(call gb_Library_set_componentfile,calc,connectivity/source/drivers/calc/calc,services))
 
 $(eval $(call gb_Library_use_external,calc,boost_headers))
 

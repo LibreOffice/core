@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,testtools_constructors))
 
-$(eval $(call gb_Library_set_componentfile,testtools_constructors,testtools/source/bridgetest/constructors))
+$(eval $(call gb_Library_set_componentfile,testtools_constructors,testtools/source/bridgetest/constructors,uno_services))
 
 $(eval $(call gb_Executable_set_include,testtools_constructors,\
     -I$(SRCDIR)/testtools/source/bridgetest \

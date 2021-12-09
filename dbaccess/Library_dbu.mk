@@ -66,7 +66,7 @@ $(eval $(call gb_Library_use_system_win32_libs,dbu,\
 ))
 endif
 
-$(eval $(call gb_Library_set_componentfile,dbu,dbaccess/util/dbu))
+$(eval $(call gb_Library_set_componentfile,dbu,dbaccess/util/dbu,services))
 
 $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/app/AppController \

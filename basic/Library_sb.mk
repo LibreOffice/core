@@ -58,7 +58,7 @@ $(eval $(call gb_Library_use_libraries,sb,\
 
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
-$(eval $(call gb_Library_set_componentfile,sb,basic/util/sb))
+$(eval $(call gb_Library_set_componentfile,sb,basic/util/sb,services))
 
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/basmgr/basicmanagerrepository \

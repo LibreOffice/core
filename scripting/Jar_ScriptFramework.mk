@@ -13,7 +13,7 @@ $(eval $(call gb_Jar_use_jars,ScriptFramework,\
 	libreoffice \
 ))
 
-$(eval $(call gb_Jar_set_componentfile,ScriptFramework,scripting/java/ScriptFramework,OOO))
+$(eval $(call gb_Jar_set_componentfile,ScriptFramework,scripting/java/ScriptFramework,OOO,services))
 
 $(eval $(call gb_Jar_set_manifest,ScriptFramework,$(SRCDIR)/scripting/java/Framework/MANIFEST.MF))
 

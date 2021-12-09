@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,updchk))
 
-$(eval $(call gb_Library_set_componentfile,updchk,extensions/source/update/check/updchk.uno))
+$(eval $(call gb_Library_set_componentfile,updchk,extensions/source/update/check/updchk.uno,services))
 
 $(eval $(call gb_Library_set_include,updchk,\
 	$$(INCLUDE) \

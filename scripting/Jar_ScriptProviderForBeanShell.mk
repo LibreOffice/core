@@ -20,7 +20,7 @@ $(eval $(call gb_Jar_use_externals,ScriptProviderForBeanShell,\
 
 $(eval $(call gb_Jar_set_manifest,ScriptProviderForBeanShell,$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/beanshell/MANIFEST.MF))
 
-$(eval $(call gb_Jar_set_componentfile,ScriptProviderForBeanShell,scripting/java/ScriptProviderForBeanShell,OOO))
+$(eval $(call gb_Jar_set_componentfile,ScriptProviderForBeanShell,scripting/java/ScriptProviderForBeanShell,OOO,scriptproviderforbeanshell))
 
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForBeanShell,com))
 

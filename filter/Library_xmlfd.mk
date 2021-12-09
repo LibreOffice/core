@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,xmlfd))
 
-$(eval $(call gb_Library_set_componentfile,xmlfd,filter/source/xmlfilterdetect/xmlfd))
+$(eval $(call gb_Library_set_componentfile,xmlfd,filter/source/xmlfilterdetect/xmlfd,services))
 
 $(eval $(call gb_Library_use_external,xmlfd,boost_headers))
 

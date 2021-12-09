@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,filterconfig))
 
-$(eval $(call gb_Library_set_componentfile,filterconfig,filter/source/config/cache/filterconfig1))
+$(eval $(call gb_Library_set_componentfile,filterconfig,filter/source/config/cache/filterconfig1,services))
 
 $(eval $(call gb_Library_use_external,filterconfig,boost_headers))
 

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,PresenterScreen))
 
-$(eval $(call gb_Library_set_componentfile,PresenterScreen,sdext/source/presenter/presenter))
+$(eval $(call gb_Library_set_componentfile,PresenterScreen,sdext/source/presenter/presenter,services))
 
 $(eval $(call gb_Library_set_precompiled_header,PresenterScreen,sdext/inc/pch/precompiled_PresenterScreen))
 

@@ -46,7 +46,7 @@ $(eval $(call gb_Library_use_externals,avmedia,\
     epoxy \
 ))
 
-$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
+$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia,services))
 
 $(eval $(call gb_Library_use_libraries,avmedia,\
 	i18nlangtag \

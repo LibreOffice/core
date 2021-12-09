@@ -24,7 +24,7 @@ $(eval $(call gb_Library_set_include,wpftcalc,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_componentfile,wpftcalc,writerperfect/source/calc/wpftcalc))
+$(eval $(call gb_Library_set_componentfile,wpftcalc,writerperfect/source/calc/wpftcalc,services))
 
 $(eval $(call gb_Library_use_sdk_api,wpftcalc))
 

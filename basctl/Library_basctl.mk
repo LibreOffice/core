@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,basctl))
 
-$(eval $(call gb_Library_set_componentfile,basctl,basctl/util/basctl))
+$(eval $(call gb_Library_set_componentfile,basctl,basctl/util/basctl,services))
 
 $(eval $(call gb_Library_set_include,basctl,\
 	-I$(SRCDIR)/basctl/inc \

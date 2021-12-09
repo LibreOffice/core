@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,vbaevents))
 
-$(eval $(call gb_Library_set_componentfile,vbaevents,scripting/source/vbaevents/vbaevents))
+$(eval $(call gb_Library_set_componentfile,vbaevents,scripting/source/vbaevents/vbaevents,services))
 
 $(eval $(call gb_Library_set_include,vbaevents,\
 	$$(INCLUDE) \

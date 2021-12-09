@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,ucphier1))
 
-$(eval $(call gb_Library_set_componentfile,ucphier1,ucb/source/ucp/hierarchy/ucphier1))
+$(eval $(call gb_Library_set_componentfile,ucphier1,ucb/source/ucp/hierarchy/ucphier1,services))
 
 $(eval $(call gb_Library_use_external,ucphier1,boost_headers))
 

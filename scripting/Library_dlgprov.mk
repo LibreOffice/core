@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,dlgprov))
 
-$(eval $(call gb_Library_set_componentfile,dlgprov,scripting/source/dlgprov/dlgprov))
+$(eval $(call gb_Library_set_componentfile,dlgprov,scripting/source/dlgprov/dlgprov,services))
 
 $(eval $(call gb_Library_set_include,dlgprov,\
 	$$(INCLUDE) \

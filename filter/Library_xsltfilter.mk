@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,xsltfilter))
 
-$(eval $(call gb_Library_set_componentfile,xsltfilter,filter/source/xsltfilter/xsltfilter))
+$(eval $(call gb_Library_set_componentfile,xsltfilter,filter/source/xsltfilter/xsltfilter,services))
 
 $(eval $(call gb_Library_use_sdk_api,xsltfilter))
 

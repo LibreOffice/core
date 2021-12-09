@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,writer))
 
-$(eval $(call gb_Library_set_componentfile,writer,connectivity/source/drivers/writer/writer))
+$(eval $(call gb_Library_set_componentfile,writer,connectivity/source/drivers/writer/writer,services))
 
 $(eval $(call gb_Library_use_external,writer,boost_headers))
 

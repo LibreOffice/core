@@ -14,7 +14,7 @@ $(eval $(call gb_Library_add_defs,dbtools,\
 	-DOOO_DLLIMPLEMENTATION_DBTOOLS \
 ))
 
-$(eval $(call gb_Library_set_componentfile,dbtools,connectivity/source/dbtools/dbtools))
+$(eval $(call gb_Library_set_componentfile,dbtools,connectivity/source/dbtools/dbtools,services))
 
 $(eval $(call gb_Library_set_include,dbtools,\
 	$$(INCLUDE) \

@@ -64,4 +64,4 @@ $(eval $(call gb_Library_use_libraries,configmgr, \
     i18nlangtag \
 ))
 
-$(eval $(call gb_Library_set_componentfile,configmgr,configmgr/source/configmgr))
+$(eval $(call gb_Library_set_componentfile,configmgr,configmgr/source/configmgr,services))

@@ -24,7 +24,7 @@ $(eval $(call gb_Library_use_libraries,migrationoo2,\
     utl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,migrationoo2,desktop/source/migration/services/migrationoo2))
+$(eval $(call gb_Library_set_componentfile,migrationoo2,desktop/source/migration/services/migrationoo2,services))
 
 $(eval $(call gb_Library_add_exception_objects,migrationoo2,\
     desktop/source/migration/services/basicmigration \

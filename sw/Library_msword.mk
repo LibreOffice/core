@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,msword))
 
-$(eval $(call gb_Library_set_componentfile,msword,sw/util/msword))
+$(eval $(call gb_Library_set_componentfile,msword,sw/util/msword,services))
 
 $(eval $(call gb_Library_use_custom_headers,msword,\
 	officecfg/registry \

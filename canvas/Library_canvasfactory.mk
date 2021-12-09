@@ -24,7 +24,7 @@ $(eval $(call gb_Library_set_include,canvasfactory,\
     -I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_set_componentfile,canvasfactory,canvas/source/factory/canvasfactory))
+$(eval $(call gb_Library_set_componentfile,canvasfactory,canvas/source/factory/canvasfactory,services))
 
 $(eval $(call gb_Library_use_external,canvasfactory,boost_headers))
 

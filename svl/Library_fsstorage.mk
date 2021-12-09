@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,fsstorage))
 
-$(eval $(call gb_Library_set_componentfile,fsstorage,svl/source/fsstor/fsstorage))
+$(eval $(call gb_Library_set_componentfile,fsstorage,svl/source/fsstor/fsstorage,services))
 
 $(eval $(call gb_Library_set_include,fsstorage,\
     -I$(SRCDIR)/svl/source/inc \

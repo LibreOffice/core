@@ -30,7 +30,7 @@ $(eval $(call gb_Jar_use_externals,reportbuilder,\
 
 $(eval $(call gb_Jar_set_manifest,reportbuilder,$(SRCDIR)/reportbuilder/java/manifest.mf))
 
-$(eval $(call gb_Jar_set_componentfile,reportbuilder,reportbuilder/java/reportbuilder,OOO))
+$(eval $(call gb_Jar_set_componentfile,reportbuilder,reportbuilder/java/reportbuilder,OOO,services))
 
 $(eval $(call gb_Jar_set_packageroot,reportbuilder,org))
 

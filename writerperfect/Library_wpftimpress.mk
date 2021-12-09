@@ -24,7 +24,7 @@ $(eval $(call gb_Library_set_include,wpftimpress,\
        $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_componentfile,wpftimpress,writerperfect/source/impress/wpftimpress))
+$(eval $(call gb_Library_set_componentfile,wpftimpress,writerperfect/source/impress/wpftimpress,services))
 
 $(eval $(call gb_Library_use_sdk_api,wpftimpress))
 

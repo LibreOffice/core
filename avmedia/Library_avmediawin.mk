@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,avmediawin))
 
-$(eval $(call gb_Library_set_componentfile,avmediawin,avmedia/source/win/avmediawin))
+$(eval $(call gb_Library_set_componentfile,avmediawin,avmedia/source/win/avmediawin,services))
 
 $(eval $(call gb_Library_use_external,avmediawin,boost_headers))
 

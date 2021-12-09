@@ -36,7 +36,7 @@ $(eval $(call gb_Library_use_system_win32_libs,hwp,\
 
 endif
 
-$(eval $(call gb_Library_set_componentfile,hwp,hwpfilter/source/hwp))
+$(eval $(call gb_Library_set_componentfile,hwp,hwpfilter/source/hwp,services))
 
 $(eval $(call gb_Library_add_exception_objects,hwp,\
     hwpfilter/source/attributes \

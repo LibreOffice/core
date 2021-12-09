@@ -13,7 +13,7 @@ $(eval $(call gb_Library_add_exception_objects,passive_native, \
     desktop/test/deployment/passive/passive_native \
 ))
 
-$(eval $(call gb_Library_set_componentfile,passive_native,desktop/test/deployment/passive/passive_native))
+$(eval $(call gb_Library_set_componentfile,passive_native,desktop/test/deployment/passive/passive_native,passive_platform))
 
 $(eval $(call gb_Library_set_external_code,passive_native))
 

@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,unoxml))
 
-$(eval $(call gb_Library_set_componentfile,unoxml,unoxml/source/service/unoxml))
+$(eval $(call gb_Library_set_componentfile,unoxml,unoxml/source/service/unoxml,services))
 
 $(eval $(call gb_Library_set_precompiled_header,unoxml,unoxml/inc/pch/precompiled_unoxml))
 

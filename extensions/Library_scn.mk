@@ -21,7 +21,7 @@ $(eval $(call gb_Library_set_include,scn,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_componentfile,scn,extensions/source/scanner/scn))
+$(eval $(call gb_Library_set_componentfile,scn,extensions/source/scanner/scn,services))
 
 $(eval $(call gb_Library_use_sdk_api,scn))
 

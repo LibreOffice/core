@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,pythonloader))
 
-$(eval $(call gb_Library_set_componentfile,pythonloader,pyuno/source/loader/pythonloader))
+$(eval $(call gb_Library_set_componentfile,pythonloader,pyuno/source/loader/pythonloader,pyuno))
 
 $(eval $(call gb_Library_set_include,pythonloader,\
     -I$(SRCDIR)/pyuno/source/loader \

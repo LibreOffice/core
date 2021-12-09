@@ -13,7 +13,7 @@ $(eval $(call gb_Module_Module,postprocess))
 # is reused in Package_registry!
 
 $(eval $(call gb_Module_add_targets,postprocess,\
-    $(if $(ENABLE_SERVICES_RDB_FROM_BUILD),CustomTarget_components) \
+    $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),CustomTarget_components) \
 	CustomTarget_registry \
 	Rdb_services \
 ))

@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,sfx))
 
 $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
-$(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
+$(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx,services))
 
 $(eval $(call gb_Library_set_precompiled_header,sfx,sfx2/inc/pch/precompiled_sfx))
 

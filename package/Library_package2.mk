@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,package2))
 
-$(eval $(call gb_Library_set_componentfile,package2,package/util/package2))
+$(eval $(call gb_Library_set_componentfile,package2,package/util/package2,services))
 
 $(eval $(call gb_Library_set_include,package2,\
 	$$(INCLUDE) \

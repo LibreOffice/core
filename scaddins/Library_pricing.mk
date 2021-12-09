@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,pricing))
 
-$(eval $(call gb_Library_set_componentfile,pricing,scaddins/source/pricing/pricing))
+$(eval $(call gb_Library_set_componentfile,pricing,scaddins/source/pricing/pricing,services))
 
 $(eval $(call gb_Library_set_include,pricing,\
     $$(INCLUDE) \

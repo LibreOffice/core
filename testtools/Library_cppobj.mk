@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,testtools_cppobj))
 
-$(eval $(call gb_Library_set_componentfile,testtools_cppobj,testtools/source/bridgetest/cppobj))
+$(eval $(call gb_Library_set_componentfile,testtools_cppobj,testtools/source/bridgetest/cppobj,uno_services))
 
 $(eval $(call gb_Executable_set_include,testtools_cppobj,\
     -I$(SRCDIR)/testtools/source/bridgetest \

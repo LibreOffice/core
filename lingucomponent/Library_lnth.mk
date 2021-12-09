@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,lnth))
 
-$(eval $(call gb_Library_set_componentfile,lnth,lingucomponent/source/thesaurus/libnth/lnth))
+$(eval $(call gb_Library_set_componentfile,lnth,lingucomponent/source/thesaurus/libnth/lnth,services))
 
 $(eval $(call gb_Library_set_include,lnth,\
 	$$(INCLUDE) \

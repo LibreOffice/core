@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,animcore))
 
 $(eval $(call gb_Library_use_external,animcore,boost_headers))
 
-$(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/animcore))
+$(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/animcore,services))
 
 $(eval $(call gb_Library_use_sdk_api,animcore))
 

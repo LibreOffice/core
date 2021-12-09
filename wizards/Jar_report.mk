@@ -48,6 +48,6 @@ $(eval $(call gb_Jar_add_sourcefiles,report,\
 	wizards/com/sun/star/wizards/report/ReportWizard \
 ))
 
-$(eval $(call gb_Jar_set_componentfile,report,wizards/com/sun/star/wizards/report/report,OOO))
+$(eval $(call gb_Jar_set_componentfile,report,wizards/com/sun/star/wizards/report/report,OOO,services))
 
 # vim: set noet sw=4 ts=4:

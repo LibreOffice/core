@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_externals,OGLTrans,\
 	glm_headers \
 ))
 
-$(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/opengl/ogltrans))
+$(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/opengl/ogltrans,services))
 
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/opengl/TransitionerImpl \

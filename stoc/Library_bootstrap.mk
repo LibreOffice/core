@@ -35,7 +35,7 @@ $(eval $(call gb_Library_use_libraries,bootstrap,\
     tl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,bootstrap,stoc/util/bootstrap))
+$(eval $(call gb_Library_set_componentfile,bootstrap,stoc/util/bootstrap,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,bootstrap,\
     stoc/source/defaultregistry/defaultregistry \

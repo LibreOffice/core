@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_libraries,invocation,\
     sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,invocation,stoc/source/invocation/invocation))
+$(eval $(call gb_Library_set_componentfile,invocation,stoc/source/invocation/invocation,ure/services))
 
 $(eval $(call gb_Library_add_exception_objects,invocation,\
     stoc/source/invocation/invocation \

@@ -55,7 +55,7 @@ $(eval $(call gb_Library_use_libraries,dba,\
     xo \
 ))
 
-$(eval $(call gb_Library_set_componentfile,dba,dbaccess/util/dba))
+$(eval $(call gb_Library_set_componentfile,dba,dbaccess/util/dba,services))
 
 $(eval $(call gb_Library_add_exception_objects,dba,\
     dbaccess/source/core/api/BookmarkSet \

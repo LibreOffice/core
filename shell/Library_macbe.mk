@@ -24,7 +24,7 @@ $(eval $(call gb_Library_use_libraries,macbe1,\
 	sal \
 ))
 
-$(eval $(call gb_Library_set_componentfile,macbe1,shell/source/backends/macbe/macbe1))
+$(eval $(call gb_Library_set_componentfile,macbe1,shell/source/backends/macbe/macbe1,services))
 
 $(eval $(call gb_Library_add_objcxxobjects,macbe1,\
     shell/source/backends/macbe/macbackend \

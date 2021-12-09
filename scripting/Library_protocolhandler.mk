@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,protocolhandler))
 
-$(eval $(call gb_Library_set_componentfile,protocolhandler,scripting/source/protocolhandler/protocolhandler))
+$(eval $(call gb_Library_set_componentfile,protocolhandler,scripting/source/protocolhandler/protocolhandler,services))
 
 $(eval $(call gb_Library_set_include,protocolhandler,\
 	$$(INCLUDE) \

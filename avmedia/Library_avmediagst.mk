@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,avmediagst))
 
-$(eval $(call gb_Library_set_componentfile,avmediagst,avmedia/source/gstreamer/avmediagstreamer))
+$(eval $(call gb_Library_set_componentfile,avmediagst,avmedia/source/gstreamer/avmediagstreamer,services))
 
 $(eval $(call gb_Library_set_include,avmediagst,\
 	$$(INCLUDE) \

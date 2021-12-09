@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,losessioninstall))
 
-$(eval $(call gb_Library_set_componentfile,losessioninstall,shell/source/sessioninstall/losessioninstall))
+$(eval $(call gb_Library_set_componentfile,losessioninstall,shell/source/sessioninstall/losessioninstall,services))
 
 $(eval $(call gb_Library_use_api,losessioninstall,\
     offapi \

@@ -7,6 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+# Rdb_saxparser duplicates some of the Rdb_services content, as needed during the build in
+# CustomTarget_i18npool/localedata:
+
 $(eval $(call gb_Rdb_Rdb,saxparser))
 
 $(eval $(call gb_Rdb_add_components,saxparser,\

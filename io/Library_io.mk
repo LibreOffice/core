@@ -21,7 +21,7 @@ $(eval $(call gb_Library_use_libraries,io,\
     tl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,io,io/source/io))
+$(eval $(call gb_Library_set_componentfile,io,io/source/io,ure/services))
 
 $(eval $(call gb_Library_set_include,io,\
 	-I$(SRCDIR)/io/source \

@@ -9,8 +9,4 @@
 
 $(eval $(call gb_Rdb_Rdb_install,pyuno))
 
-$(eval $(call gb_Rdb_add_components,pyuno, \
-    pyuno/source/loader/pythonloader \
-))
-
 # vim: set noet sw=4 ts=4:

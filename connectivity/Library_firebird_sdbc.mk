@@ -38,7 +38,7 @@ $(eval $(call gb_Library_use_libraries,firebird_sdbc, \
     vcl \
 ))
 
-$(eval $(call gb_Library_set_componentfile,firebird_sdbc,connectivity/source/drivers/firebird/firebird_sdbc))
+$(eval $(call gb_Library_set_componentfile,firebird_sdbc,connectivity/source/drivers/firebird/firebird_sdbc,services))
 
 $(eval $(call gb_Library_add_exception_objects,firebird_sdbc,\
     connectivity/source/drivers/firebird/Blob \
