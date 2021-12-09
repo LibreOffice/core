@@ -31,7 +31,6 @@
 #define STR_UNDO_REPLACE                                NC_("STR_UNDO_REPLACE", "Replace")
 #define STR_UNDO_DRAGDROP                               NC_("STR_UNDO_DRAGDROP", "Drag and Drop")
 #define STR_INSERTGRAPHIC                               NC_("STR_INSERTGRAPHIC", "Insert Image")
-#define STR_QUERYROTATION                               NC_("STR_QUERYROTATION", "This image is rotated. Would you like to rotate it into standard orientation?")
 #define STR_UNDO_BEZCLOSE                               NC_("STR_UNDO_BEZCLOSE", "Close Polygon")
 #define STR_SLIDE_SORTER_MODE                           NC_("STR_SLIDE_SORTER_MODE", "Slide Sorter")
 #define STR_NORMAL_MODE                                 NC_("STR_NORMAL_MODE", "Normal")

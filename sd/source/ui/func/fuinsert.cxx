@@ -147,14 +147,8 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             const Degree10 aRotation = aMetadata.getRotation();
             if (aRotation)
             {
-                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Question,VclButtonsType::YesNo,SdResId(STR_QUERYROTATION)));
-                // tdf#145819 Apply the rotation information if the user does NOT want to unrotate the image
-                // If they chose Yes we ignore the rotation
-                if (xQueryBox->run() == RET_NO)
-                {
-                    GraphicNativeTransform aTransform( aGraphic );
-                    aTransform.rotate( aRotation );
-                }
+                GraphicNativeTransform aTransform( aGraphic );
+                aTransform.rotate( aRotation );
             }
         }
         if( dynamic_cast< DrawViewShell *>( mpViewShell ) )
