@@ -181,6 +181,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "441a4f69_6048b447",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-09T09:42:02Z",
+      "side": 1,
+      "message": "\u003e I have some idea how to address all four issues 1.1--1.4.  Will come up with a proposed change.\n\nsee \u003chttps://gerrit.libreoffice.org/c/core/+/126577\u003e \"Generally determine Rdb content from gb_*_set_componentfile calls\"",
+      "parentUuid": "21d80a89_091a0592",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eba9e36a_4b26ee6d",
         "filename": "postprocess/CustomTarget_components.mk",
         "patchSetId": 7
