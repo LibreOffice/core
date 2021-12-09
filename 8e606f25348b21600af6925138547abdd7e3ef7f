@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace6331b_642237ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-09T08:10:37Z",
+      "side": 1,
+      "message": "The color submenu always shows up with the additional submenus in case of gtk3. Works well for kf5, but on gen I also see Sort and Color submenus together from time to time. And Sort never opens immediately, I always have to come from another menu item. Is my approach wrong?",
+      "revId": "8e606f25348b21600af6925138547abdd7e3ef7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
