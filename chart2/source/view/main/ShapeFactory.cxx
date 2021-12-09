@@ -1119,7 +1119,8 @@ uno::Reference< drawing::XShape >
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >& xTarget
-                    , const drawing::PolyPolygonShape3D& rPolyPolygon )
+                    , const drawing::PolyPolygonShape3D& rPolyPolygon
+                    , bool bSetZOrderToZero )
 {
     if( !xTarget.is() )
         return nullptr;
@@ -1146,8 +1147,9 @@ uno::Reference< drawing::XShape >
 
             //ZOrder
             //an area should always be behind other shapes
-            xProp->setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
-                , uno::Any( sal_Int32(0) ) );
+            if (bSetZOrderToZero)
+                xProp->setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
+                    , uno::Any( sal_Int32(0) ) );
         }
         catch( const uno::Exception& )
         {

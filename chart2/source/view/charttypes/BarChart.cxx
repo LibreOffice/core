@@ -628,11 +628,18 @@ void BarChart::createShapes()
                         bDrawConnectionLinesInited = true;
                     }
 
+                    // Use another XShapes for background, so we can avoid needing to set the Z-order on all of them,
+                    // which is expensive in bulk.
+                    uno::Reference<drawing::XShapes> xSeriesBackgroundShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
                     uno::Reference<drawing::XShapes> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
                     uno::Reference<drawing::XShape>  xSeriesGroupShape(xSeriesGroupShape_Shapes, uno::UNO_QUERY);
                     // Suspend setting rects dirty for the duration of this call
                     aShapeSet.insert(xSeriesGroupShape);
+                    aShapeSet.insert(uno::Reference<drawing::XShape>(xSeriesBackgroundShape_Shapes, uno::UNO_QUERY));
                     E3dScene* pScene = lcl_getE3dScene(xSeriesGroupShape);
+                    if (pScene)
+                        pScene->SuspendReportingDirtyRects();
+                    pScene = lcl_getE3dScene(uno::Reference<drawing::XShape>(xSeriesBackgroundShape_Shapes, uno::UNO_QUERY));
                     if (pScene)
                         pScene->SuspendReportingDirtyRects();
 
@@ -853,7 +860,8 @@ void BarChart::createShapes()
                                 AddPointToPoly( aPoly, aLeftUpperPoint );
                                 AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
                                 pPosHelper->transformScaledLogicToScene( aPoly );
-                                xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes, aPoly );
+                                // no need to set the Z-order since we are using a dedicated background XShapes group
+                                xShape = m_pShapeFactory->createArea2D( xSeriesBackgroundShape_Shapes, aPoly, /*bSetZOrderToZero*/false );
                                 setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                             }
 

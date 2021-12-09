@@ -149,7 +149,8 @@ public:
 
     css::uno::Reference< css::drawing::XShape >
         createArea2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
-                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon);
+                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon
+                    , bool bSetZOrderToZero = true);
 
     css::uno::Reference< css::drawing::XShape >
         createSymbol2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
