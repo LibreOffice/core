@@ -43,6 +43,7 @@ bool isVCLSkiaEnabled() { return false; }
 #include <SkGraphics.h>
 #include <GrDirectContext.h>
 #include <SkRuntimeEffect.h>
+#include <SkOpts_spi.h>
 #include <skia_compiler.hxx>
 #include <skia_opts.hxx>
 #include <tools/sk_app/VulkanWindowContext.h>
@@ -581,7 +582,7 @@ struct ImageCacheItem
 } //namespace
 
 // LRU cache, last item is the least recently used. Hopefully there won't be that many items
-// to require a hash/map. Using o3tl::lru_cache would be simpler, but it doesn't support
+// to require a hash/map. Using o3tl::lru_map would be simpler, but it doesn't support
 // calculating cost of each item.
 static std::list<ImageCacheItem> imageCache;
 static tools::Long imageCacheSize = 0; // sum of all ImageCacheItem.size
@@ -642,6 +643,37 @@ tools::Long maxImageCacheSize()
 {
     // Defaults to 4x 2000px 32bpp images, 64MiB.
     return officecfg::Office::Common::Cache::Skia::ImageCacheSize::get();
+}
+
+static o3tl::lru_map<uint32_t, uint32_t> checksumCache(256);
+
+uint32_t computeSkPixmapChecksum(const SkPixmap& pixmap)
+{
+    // Use uint32_t because that's what SkOpts::hash_fn() returns.
+    static_assert(std::is_same_v<uint32_t, decltype(SkOpts::hash_fn(nullptr, 0, 0))>);
+    const size_t dataRowBytes = pixmap.width() << pixmap.shiftPerPixel();
+    if (dataRowBytes == pixmap.rowBytes())
+        return SkOpts::hash_fn(pixmap.addr(), pixmap.height() * dataRowBytes, 0);
+    uint32_t sum = 0;
+    for (int row = 0; row < pixmap.height(); ++row)
+        sum = SkOpts::hash_fn(pixmap.addr(0, row), dataRowBytes, sum);
+    return sum;
+}
+
+uint32_t getSkImageChecksum(sk_sp<SkImage> image)
+{
+    // Cache the checksums based on the uniqueID() (which should stay the same
+    // for the same image), because it may be still somewhat expensive.
+    uint32_t id = image->uniqueID();
+    auto it = checksumCache.find(id);
+    if (it != checksumCache.end())
+        return it->second;
+    SkPixmap pixmap;
+    if (!image->peekPixels(&pixmap))
+        abort(); // Fetching of GPU-based pixels is expensive, and shouldn't(?) be needed anyway.
+    uint32_t checksum = computeSkPixmapChecksum(pixmap);
+    checksumCache.insert({ id, checksum });
+    return checksum;
 }
 
 static sk_sp<SkBlender> invertBlender;

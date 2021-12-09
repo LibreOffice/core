@@ -128,6 +128,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,skia)/include/gpu \
 	-I$(call gb_UnpackedTarball_get_dir,skia)/include/config \
 	-I$(call gb_UnpackedTarball_get_dir,skia)/include/ports \
+	-I$(call gb_UnpackedTarball_get_dir,skia)/include/private \
 	-I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/vulkan \
 	-I$(call gb_UnpackedTarball_get_dir,skia)/tools/gpu \
 	-I$(call gb_UnpackedTarball_get_dir,skia) \
