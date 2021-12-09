@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "634e0575_2a12e128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-09T11:59:41Z",
+      "side": 1,
+      "message": "launch impress, click in one of the \"click to edit\" textboxes and type and click outside. The \"click to edit\" remains visible when it shouldn\u0027t. Seems to be a problem since this commit",
+      "revId": "fe6a140a537eda1b6703c44ff5ee49d2ba875b81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
