@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "79fdd9f6_ffd30416",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6427,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2021-12-09T11:43:59Z",
+      "side": 1,
+      "message": "typo in variable name",
+      "range": {
+        "startLine": 6427,
+        "startChar": 17,
+        "endLine": 6427,
+        "endChar": 41
+      },
+      "revId": "af7f874c451f8005838efa307cd83f43196de803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95605420_3ddf9ac5",
         "filename": "desktop/source/lib/init.cxx",
         "patchSetId": 1
