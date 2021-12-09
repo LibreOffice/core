@@ -458,7 +458,7 @@ OCustomShape::OCustomShape(
 :   SdrObjCustomShape(rSdrModel)
     ,OObjectBase(_xComponent)
 {
-    impl_setUnoShape( uno::Reference< drawing::XShape >(_xComponent,uno::UNO_QUERY_THROW) );
+    setUnoShape( uno::Reference< drawing::XShape >(_xComponent,uno::UNO_QUERY_THROW) );
     m_bIsListening = true;
 }
 
@@ -563,9 +563,9 @@ uno::Reference< drawing::XShape > OCustomShape::getUnoShape()
     return xShape;
 }
 
-void OCustomShape::impl_setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
+void OCustomShape::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
 {
-    SdrObjCustomShape::impl_setUnoShape( rxUnoShape );
+    SdrObjCustomShape::setUnoShape( rxUnoShape );
     releaseUnoShape();
     m_xReportComponent.clear();
 }
@@ -612,7 +612,7 @@ OUnoObject::OUnoObject(
     // tdf#119067
     ,m_bSetDefaultLabel(false)
 {
-    impl_setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
+    setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
 
     if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
@@ -894,9 +894,9 @@ uno::Reference< drawing::XShape > OUnoObject::getUnoShape()
     return OObjectBase::getUnoShapeOf( *this );
 }
 
-void OUnoObject::impl_setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
+void OUnoObject::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
 {
-    SdrUnoObj::impl_setUnoShape( rxUnoShape );
+    SdrUnoObj::setUnoShape( rxUnoShape );
     releaseUnoShape();
 }
 
@@ -915,7 +915,7 @@ OOle2Obj::OOle2Obj(
     ,m_nType(_nType)
     ,m_bOnlyOnce(true)
 {
-    impl_setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
+    setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
     m_bIsListening = true;
 }
 
@@ -1090,9 +1090,9 @@ uno::Reference< drawing::XShape > OOle2Obj::getUnoShape()
     return xShape;
 }
 
-void OOle2Obj::impl_setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
+void OOle2Obj::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
 {
-    SdrOle2Obj::impl_setUnoShape( rxUnoShape );
+    SdrOle2Obj::setUnoShape( rxUnoShape );
     releaseUnoShape();
     m_xReportComponent.clear();
 }

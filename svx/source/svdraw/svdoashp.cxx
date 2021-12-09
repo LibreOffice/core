@@ -3213,9 +3213,9 @@ void SdrObjCustomShape::InvalidateRenderGeometry()
     mpLastShadowGeometry = nullptr;
 }
 
-void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<drawing::XShape>& rxUnoShape)
+void SdrObjCustomShape::setUnoShape(const uno::Reference<drawing::XShape>& rxUnoShape)
 {
-    SdrTextObj::impl_setUnoShape(rxUnoShape);
+    SdrTextObj::setUnoShape(rxUnoShape);
 
     // The shape engine is created with _current_ shape. This means we
     // _must_ reset it when the shape changes.

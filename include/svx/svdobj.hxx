@@ -857,12 +857,19 @@ public:
     // Use SdrObjList::SetObjectNavigationPosition() instead.
     void SetNavigationPosition (const sal_uInt32 nPosition);
 
-    // sets a new UNO representation of the shape
-    // This is only a public interface function. The actual work is
-    // done by impl_setUnoShape().
-    // Calling this function is only allowed for the UNO representation
-    // itself!
-    void setUnoShape( const css::uno::Reference<css::drawing::XShape>& _rxUnoShape);
+    /// Sets a new UNO representation of the shape
+    ///
+    /// Calling this function is only allowed for the UNO representation
+    /// itself!
+    ///
+    /// The default implementation of this function sets the new UNO
+    /// shape. Derived classes should override the function to handle
+    /// any other actions that are needed when the shape is being
+    /// changed.
+    ///
+    /// The implementation _must_ call the same method of its parent
+    /// class (preferably as the first step)!
+    virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& _rxUnoShape );
 
     const css::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
 
@@ -935,17 +942,6 @@ protected:
     {
         return static_cast<const T&>(GetObjectItem(sal_uInt16(nWhich)));
     }
-
-    /// Sets a new UNO shape
-    ///
-    /// The default implementation of this function sets the new UNO
-    /// shape. Derived classes should override the function to handle
-    /// any other actions that are needed when the shape is being
-    /// changed.
-    ///
-    /// The implementation _must_ call the same method of its parent
-    /// class (preferably as the first step)!
-    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& _rxUnoShape );
 
     const SfxItemSet* getBackgroundFillSet() const;
 
