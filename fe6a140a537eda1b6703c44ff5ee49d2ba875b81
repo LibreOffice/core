@@ -16,6 +16,24 @@
       "message": "launch impress, click in one of the \"click to edit\" textboxes and type and click outside. The \"click to edit\" remains visible when it shouldn\u0027t. Seems to be a problem since this commit",
       "revId": "fe6a140a537eda1b6703c44ff5ee49d2ba875b81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5614a63c_d1271a02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-09T12:23:43Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/126573 should fix that",
+      "parentUuid": "634e0575_2a12e128",
+      "revId": "fe6a140a537eda1b6703c44ff5ee49d2ba875b81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
