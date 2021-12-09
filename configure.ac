@@ -10378,9 +10378,7 @@ else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE CUCKOO"
     SYSTEM_CUCKOO=
-    CUCKOO_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/cuckoo"
 fi
-AC_SUBST([CUCKOO_CFLAGS])
 AC_SUBST([SYSTEM_CUCKOO])
 
 dnl ===================================================================

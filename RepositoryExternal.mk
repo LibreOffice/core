@@ -4179,7 +4179,6 @@ gb_ExternalProject__use_cuckoo_headers :=
 
 define gb_LinkTarget__use_cuckoo_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,cuckoo) \
 	$$(INCLUDE) \
 )
 
