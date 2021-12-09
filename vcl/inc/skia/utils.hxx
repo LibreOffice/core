@@ -119,6 +119,10 @@ sk_sp<SkImage> findCachedImage(const OString& key);
 void removeCachedImage(sk_sp<SkImage> image);
 tools::Long maxImageCacheSize();
 
+// Get checksum of the image content, only for raster images. Is cached,
+// but may still be somewhat expensive.
+uint32_t getSkImageChecksum(sk_sp<SkImage> image);
+
 // SkSurfaceProps to be used by all Skia surfaces.
 VCL_DLLPUBLIC const SkSurfaceProps* surfaceProps();
 // Set pixel geometry to be used by SkSurfaceProps.

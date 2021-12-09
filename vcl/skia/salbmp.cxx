@@ -1357,7 +1357,14 @@ OString SkiaSalBitmap::GetImageKey(DirectImage direct) const
         return OString::Concat("E") + ss.str().c_str();
     }
     assert(direct == DirectImage::No || mImage);
-    return OString::Concat("I") + OString::number(GetSkImage(direct)->uniqueID());
+    sk_sp<SkImage> image = GetSkImage(direct);
+    // In some cases drawing code may try to draw the same content but using
+    // different bitmaps (even underlying bitmaps), for example canvas apparently
+    // copies the same things around in tdf#146095. For pixel-based images
+    // it should be still cheaper to compute a checksum and avoid re-caching.
+    if (!image->isTextureBacked())
+        return OString::Concat("C") + OString::number(getSkImageChecksum(image));
+    return OString::Concat("I") + OString::number(image->uniqueID());
 }
 
 OString SkiaSalBitmap::GetAlphaImageKey(DirectImage direct) const
@@ -1370,7 +1377,10 @@ OString SkiaSalBitmap::GetAlphaImageKey(DirectImage direct) const
         return OString::Concat("E") + ss.str().c_str();
     }
     assert(direct == DirectImage::No || mAlphaImage);
-    return OString::Concat("I") + OString::number(GetAlphaSkImage(direct)->uniqueID());
+    sk_sp<SkImage> image = GetAlphaSkImage(direct);
+    if (!image->isTextureBacked())
+        return OString::Concat("C") + OString::number(getSkImageChecksum(image));
+    return OString::Concat("I") + OString::number(image->uniqueID());
 }
 
 void SkiaSalBitmap::dump(const char* file) const
