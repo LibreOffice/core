@@ -16,6 +16,41 @@
       "message": "So the dynamic_cast is still there, but not called in every situation, is that what you are trying to achieve?\nNo problem with that.",
       "revId": "20f59685cae9e7360ce4bb6fee7789e16b1b5aab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33692021_845d85d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-09T12:38:15Z",
+      "side": 1,
+      "message": "Exactly\n@Noel, not sure whether it\u0027s worth it or possible but do you think the loplugins could check for this kind of situations, where some dynamic_cast calls can be avoided and the cheap conditions are checked first ?",
+      "parentUuid": "c32761bf_44102492",
+      "revId": "20f59685cae9e7360ce4bb6fee7789e16b1b5aab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74dcc1c2_0f1690dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-09T12:38:15Z",
+      "side": 1,
+      "message": "Hi Noel,\nnot sure whether it\u0027s worth it or possible but do you think the loplugins could check for this kind of situations, where",
+      "revId": "20f59685cae9e7360ce4bb6fee7789e16b1b5aab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
