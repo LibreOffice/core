@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d16d0b1d_fca5a9d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-12-09T07:07:25Z",
+      "side": 1,
+      "message": "RC1 is not there yet for 7-3.",
+      "revId": "d1c802a78e5e85d60c5f0d28d153751cc5f732b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
