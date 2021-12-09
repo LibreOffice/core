@@ -177,6 +177,23 @@
       "parentUuid": "cee99817_1ae85930",
       "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eba9e36a_4b26ee6d",
+        "filename": "postprocess/CustomTarget_components.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-09T06:58:21Z",
+      "side": 1,
+      "message": "What is the use of this CustomTarget?  Where is the consumer of that generated services_constructors.list?",
+      "revId": "1c9a40299d328c78c035ca63ccdf22c5c669a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
