@@ -658,7 +658,9 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
         if ( xFrame.is() )
         {
-            DispatchURL( mxContext, "slot:27115", xFrame );
+            // this is sd/sdi/sdraw.sdi:SfxVoidItem ClearUndoStack SID_CLEAR_UNDO_STACK
+            // where SID_CLEAR_UNDO_STACK is (SID_SD_START+118)
+            DispatchURL( mxContext, "slot:27118", xFrame );
         }
     }
 
