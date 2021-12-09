@@ -76,24 +76,12 @@ xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
     return xmlDocUniquePtr(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 }
 
-void Chart2XShapeTest::compareAgainstReference(std::u16string_view rReferenceFile,
-                                               bool bCreateReference)
+void Chart2XShapeTest::compareAgainstReference(std::u16string_view rReferenceFile)
 {
-    OUString aDump = getXShapeDumpString();
-
-    OUString aReference = m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/")
-                          + rReferenceFile;
-    if (bCreateReference)
-    {
-        OString aOFile = OUStringToOString(aReference, RTL_TEXTENCODING_UTF8);
-        OString aODump = OUStringToOString(aDump, RTL_TEXTENCODING_UTF8);
-        std::ofstream aReferenceFile(aOFile.getStr());
-        aReferenceFile << aODump;
-    }
-    else
-    {
-        checkDumpAgainstFile(aDump, aReference);
-    }
+    checkDumpAgainstFile(getXShapeDumpString(),
+                         OUStringConcatenation(m_directories.getPathFromSrc(
+                                                   u"/chart2/qa/extras/xshape/data/reference/")
+                                               + rReferenceFile));
 }
 
 void Chart2XShapeTest::testFdo75075()
