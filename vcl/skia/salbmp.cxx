@@ -61,7 +61,11 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
     ResetAllData();
     mImage = image;
     mPalette = BitmapPalette();
+#if SKIA_USE_BITMAP32
     mBitCount = 32;
+#else
+    mBitCount = 24;
+#endif
     mSize = mPixelsSize = Size(image->width(), image->height());
     ComputeScanlineSize();
     mAnyAccessCount = 0;
