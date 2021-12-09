@@ -658,7 +658,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
         if ( xFrame.is() )
         {
-            DispatchURL( mxContext, "slot:27115", xFrame );
+            DispatchURL(mxContext, ".uno:ClearUndoStack", xFrame);
         }
     }
 
