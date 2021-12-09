@@ -210,12 +210,12 @@ void SwModule::StateOther(SfxItemSet &rSet)
 
                 // #i51949# hide e-Mail option if e-Mail is not supported
                 // #i63267# printing might be disabled
+                // Without attempting to open the database, (in case it is remote or passworded),
+                // hide everything after determining there are no valid results. tdf#121606
                 if (!xConfigItem ||
-                    !xConfigItem->GetConnection().is() ||
-                    xConfigItem->GetConnection()->isClosed() ||
-                    !xConfigItem->GetResultSet().is() ||
                     xConfigItem->GetCurrentDBData().sDataSource.isEmpty() ||
                     xConfigItem->GetCurrentDBData().sCommand.isEmpty() ||
+                    (xConfigItem->GetConnection().is() && !xConfigItem->GetConnection()->isClosed() && !xConfigItem->GetResultSet().is()) ||
                     (nWhich == FN_MAILMERGE_PRINT_DOCUMENTS && Application::GetSettings().GetMiscSettings().GetDisablePrinting()) ||
                     (nWhich == FN_MAILMERGE_EMAIL_DOCUMENTS && !xConfigItem->IsMailAvailable()))
                 {
@@ -806,27 +806,43 @@ void SwModule::ExecOther(SfxRequest& rReq)
         }
         break;
         case FN_MAILMERGE_CREATE_DOCUMENTS:
-        {
-            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = SwDBManager::PerformMailMerge(GetActiveView());
-
-            if (xConfigItem && xConfigItem->GetTargetView())
-                xConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
-        }
-        break;
         case FN_MAILMERGE_SAVE_DOCUMENTS:
         case FN_MAILMERGE_PRINT_DOCUMENTS:
         case FN_MAILMERGE_EMAIL_DOCUMENTS:
         {
             std::shared_ptr<SwMailMergeConfigItem> xConfigItem = GetActiveView()->GetMailMergeConfigItem();
-            if(!xConfigItem)
-                return;
-            xConfigItem->SetTargetView(nullptr);
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            switch (nWhich)
+            assert(xConfigItem);
+            if (!xConfigItem->GetResultSet().is())
             {
-                case FN_MAILMERGE_SAVE_DOCUMENTS: pFact->ExecuteMMResultSaveDialog(rReq.GetFrameWeld()); break;
-                case FN_MAILMERGE_PRINT_DOCUMENTS: pFact->ExecuteMMResultPrintDialog(rReq.GetFrameWeld()); break;
-                case FN_MAILMERGE_EMAIL_DOCUMENTS: pFact->ExecuteMMResultEmailDialog(rReq.GetFrameWeld()); break;
+                // The connection has been attempted, but failed or no results found,
+                // so invalidate the toolbar buttons in case they need to be disabled.
+                SfxBindings& rBindings
+                    = GetActiveView()->GetWrtShell().GetView().GetViewFrame()->GetBindings();
+                rBindings.Invalidate(FN_MAILMERGE_CREATE_DOCUMENTS);
+                rBindings.Invalidate(FN_MAILMERGE_SAVE_DOCUMENTS);
+                rBindings.Invalidate(FN_MAILMERGE_PRINT_DOCUMENTS);
+                rBindings.Invalidate(FN_MAILMERGE_EMAIL_DOCUMENTS);
+                rBindings.Update();
+                return;
+            }
+
+            if (nWhich == FN_MAILMERGE_CREATE_DOCUMENTS)
+            {
+                xConfigItem = SwDBManager::PerformMailMerge(GetActiveView());
+
+                if (xConfigItem && xConfigItem->GetTargetView())
+                    xConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
+            }
+            else
+            {
+                xConfigItem->SetTargetView(nullptr);
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                if (nWhich == FN_MAILMERGE_SAVE_DOCUMENTS)
+                    pFact->ExecuteMMResultSaveDialog(rReq.GetFrameWeld());
+                else if (nWhich == FN_MAILMERGE_PRINT_DOCUMENTS)
+                    pFact->ExecuteMMResultPrintDialog(rReq.GetFrameWeld());
+                else if (nWhich == FN_MAILMERGE_EMAIL_DOCUMENTS)
+                    pFact->ExecuteMMResultEmailDialog(rReq.GetFrameWeld());
             }
         }
         break;
