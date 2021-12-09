@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36cb7ec9_c681f002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-12-09T04:35:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "617d5845_8e0d591c",
+      "revId": "b331b81391408ac736e1b288721161bf2cc160fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e04b4a0_672b49b5",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-08T12:11:59Z",
       "side": 1,
       "message": "Sorry to nit-pick; mpScDrawView ? or mpDrawView ? \u003d) either way the \u0027m\u0027 is helpful I think.",
+      "revId": "b331b81391408ac736e1b288721161bf2cc160fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59cf5ec6_2eebd9a9",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-12-09T04:35:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e04b4a0_672b49b5",
       "revId": "b331b81391408ac736e1b288721161bf2cc160fe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
