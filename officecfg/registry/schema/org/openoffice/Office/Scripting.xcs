@@ -39,5 +39,29 @@
         <desc>Lists the registered Scripting Framework runtimes.</desc>
       </info>
     </set>
+    <group oor:name="Basic">
+      <info>
+	<desc>Contains settings for the Basic interpreter.</desc>
+      </info>
+      <group oor:name="Compatibility">
+	<info>
+	  <desc>Contains settings for the compatibility with previous version of this software or
+	    with other software products.
+	  </desc>
+	</info>
+	<prop oor:name="UseLibreOffice6FloatingPointConversion" oor:type="xs:boolean" oor:nillable="false">
+	  <info>
+	    <!-- Yes, this description refers to a bug report and is technobabble. That is
+	         intentional. This property is to be changed only by people who know what they are
+	         doing.
+	    -->
+	    <desc>Whether conversion from strings to floating-point numbers in Basic should behave
+	      as in LibreOffice 6, before the fix to tdf#97983.
+	    </desc>
+	  </info>
+	  <value>false</value>
+	</prop>
+      </group>
+    </group>
   </component>
 </oor:component-schema>
