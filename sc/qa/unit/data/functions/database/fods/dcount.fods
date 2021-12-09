@@ -2183,9 +2183,22 @@
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce30"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:formula="of:=DCOUNT([.J1:.N11];;[.J41:.N42])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce60" table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=DCOUNT(J1:N11,,J41:N42)" calcext:value-type="string">
+      <text:p>=DCOUNT(J1:N11,,J41:N42)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Tdf#13353</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
       <text:p>&gt;=I</text:p>
      </table:table-cell>
