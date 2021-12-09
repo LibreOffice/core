@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be9dabdf_5d7d0274",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-12-09T14:42:13Z",
+      "side": 1,
+      "message": "Please check if after enabling \"Very large spreadsheets (16m rows, 16384 cols)\" there is no performance drop.\n\nI would propose following test case: \n1) Enable \"Very large spreadsheets (16m rows, 16384 cols)\" in Preferences (first you need to \"Enable experimental features)\n2) Restart LO \n3) I create a calc ods spreadsheet file\n4) select columns from D to last column with: Ctrl-Shift+right arrow and hide\n5) save the file and close\n6) reopen the file and type something in some cell\n7) save the file again and close\n\nCheck if there is any performance drop.",
+      "revId": "b512664c4447efb5e985f67cb724fc7159381795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
