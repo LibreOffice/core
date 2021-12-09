@@ -265,6 +265,13 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                            tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode )
 {
+    SAL_INFO( "vcl.debugevent",
+              "mouse event "
+               "(MouseNotifyEvent " << static_cast<sal_uInt16>(nSVEvent) << ") "
+               "(MouseLeave " << bMouseLeave << ") "
+               "(X, Y " << nX << ", " << nY << ") "
+               "(Code " << nCode << ") "
+               "(Modifiers " << static_cast<sal_uInt16>(nMode) << ")");
     ImplSVHelpData& aHelpData = ImplGetSVHelpData();
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
