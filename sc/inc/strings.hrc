@@ -35,6 +35,8 @@
 #define SCSTR_TOP10FILTER                           NC_("SCSTR_TOP10FILTER", "Top 10")
 #define SCSTR_FILTER_EMPTY                          NC_("SCSTR_FILTER_EMPTY", "Empty")
 #define SCSTR_FILTER_NOTEMPTY                       NC_("SCSTR_FILTER_NOTEMPTY", "Not Empty")
+#define SCSTR_FILTER_SORT                           NC_("SCSTR_FILTER_SORT", "Sort")
+#define SCSTR_FILTER_QUICK                          NC_("SCSTR_FILTER_QUICK", "Quick Filter")
 #define SCSTR_FILTER_COLOR                          NC_("SCSTR_FILTER_COLOR", "Color Filter")
 #define SCSTR_FILTER_TEXT_COLOR                     NC_("SCSTR_FILTER_TEXT_COLOR", "Text Color")
 #define SCSTR_FILTER_BACKGROUND_COLOR               NC_("SCSTR_FILTER_BACKGROUND_COLOR", "Background Color")

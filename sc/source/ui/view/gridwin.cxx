@@ -969,20 +969,27 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     }
 
     // Populate the menu.
-    mpAutoFilterPopup->addMenuItem(
-        ScResId(STR_MENU_SORT_ASC),
-        new AutoFilterAction(this, AutoFilterMode::SortAscending));
-    mpAutoFilterPopup->addMenuItem(
-        ScResId(STR_MENU_SORT_DESC),
-        new AutoFilterAction(this, AutoFilterMode::SortDescending));
+    if (ScListSubMenuControl* pSortSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_SORT), true, false))
+    {
+        pSortSubMenu->addMenuItem(
+            ScResId(STR_MENU_SORT_ASC),
+            new AutoFilterAction(this, AutoFilterMode::SortAscending));
+        pSortSubMenu->addMenuItem(
+            ScResId(STR_MENU_SORT_DESC),
+            new AutoFilterAction(this, AutoFilterMode::SortDescending));
+        pSortSubMenu->resizeToFitMenuItems();
+    }
     mpAutoFilterPopup->addSeparator();
-    mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, AutoFilterMode::Top10));
-    mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
-    mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
-    mpAutoFilterPopup->addSeparator();
+    if (ScListSubMenuControl* pQuickSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_QUICK), true, false))
+    {
+        pQuickSubMenu->addMenuItem(
+            ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, AutoFilterMode::Top10));
+        pQuickSubMenu->addMenuItem(
+            ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
+        pQuickSubMenu->addMenuItem(
+            ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
+        pQuickSubMenu->resizeToFitMenuItems();
+    }
     if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_COLOR), true, true))
         pSubMenu->setPopupStartAction(new AutoFilterColorPopupStartAction(this, pSubMenu));
     mpAutoFilterPopup->addMenuItem(
