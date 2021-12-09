@@ -80,14 +80,15 @@ enum class IsAttrAtPos
     NumLabel         = 0x0200,
     ContentCheck     = 0x0400,
     SmartTag         = 0x0800,
-    FormControl      = 0x1000
+    FormControl      = 0x1000,
+    TableRedline     = 0x2000
 #ifdef DBG_UTIL
-    ,CurrAttrs       = 0x2000        ///< only for debugging
-    ,TableBoxValue   = 0x4000        ///< only for debugging
+    ,CurrAttrs       = 0x4000        ///< only for debugging
+    ,TableBoxValue   = 0x8000        ///< only for debugging
 #endif
 };
 namespace o3tl {
-    template<> struct typed_flags<IsAttrAtPos> : is_typed_flags<IsAttrAtPos, 0x7fff> {};
+    template<> struct typed_flags<IsAttrAtPos> : is_typed_flags<IsAttrAtPos, 0xffff> {};
 }
 
 struct SwContentAtPos
