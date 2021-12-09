@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "853fda45_2e230988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-09T14:28:12Z",
+      "side": 1,
+      "message": "The fix itself is lost when going from patch set 8-\u003e9. Please add it again.\nIt also shows that the test is not enough to capture the problem because it does not fail without the fix in place.",
+      "revId": "dd84abef90b64935d77906c3062bc5c3679b4212",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
