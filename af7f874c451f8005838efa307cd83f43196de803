@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3431434a_27c5e6eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-12-09T08:11:48Z",
+      "side": 1,
+      "message": "Looks good, thanks!",
+      "revId": "af7f874c451f8005838efa307cd83f43196de803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95605420_3ddf9ac5",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6435,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-12-09T08:11:48Z",
+      "side": 1,
+      "message": "Should we log a warning with the exception message here?",
+      "revId": "af7f874c451f8005838efa307cd83f43196de803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
