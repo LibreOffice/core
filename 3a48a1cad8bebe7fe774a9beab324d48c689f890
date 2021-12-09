@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26cd9e9c_03599bbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-09T12:30:05Z",
+      "side": 1,
+      "message": "Attila: there is a getShapeByName() helper function to choose the right shape by its name (see and modify shape names in Navigator).",
+      "parentUuid": "cb0fc492_37f6dc8e",
+      "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "569b426c_4947387d",
