@@ -1043,9 +1043,9 @@ void SwAnnotationWin::DeactivatePostIt()
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         GetOutlinerView()->SetBackgroundColor(COL_TRANSPARENT);
 
-    if (!mnEventId && !IsProtected() && mpOutliner->GetEditEngine().GetText().isEmpty())
+    if (!mnDeleteEventId && !IsProtected() && mpOutliner->GetEditEngine().GetText().isEmpty())
     {
-        mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
+        mnDeleteEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
     }
 }
 
@@ -1088,7 +1088,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
         }
         case FN_DELETE_COMMENT:
             //Delete(); // do not kill the parent of our open popup menu
-            mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
+            mnDeleteEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
             break;
         case FN_DELETE_COMMENT_THREAD:
             DeleteThread();
@@ -1207,7 +1207,7 @@ IMPL_LINK_NOARG(SwAnnotationWin, ModifyHdl, LinkParamNone*, void)
 
 IMPL_LINK_NOARG(SwAnnotationWin, DeleteHdl, void*, void)
 {
-    mnEventId = nullptr;
+    mnDeleteEventId = nullptr;
     Delete();
 }
 

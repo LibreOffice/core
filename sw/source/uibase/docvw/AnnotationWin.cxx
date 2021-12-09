@@ -91,7 +91,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     : InterimItemWindow(&rEditWin, "modules/swriter/ui/annotation.ui", "Annotation")
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
-    , mnEventId(nullptr)
+    , mnDeleteEventId(nullptr)
     , meSidebarPosition(sw::sidebarwindows::SidebarPosition::NONE)
     , mPageBorder(0)
     , mbAnchorRectChanged(false)
@@ -152,8 +152,8 @@ void SwAnnotationWin::dispose()
 
     mxMenuButton.reset();
 
-    if (mnEventId)
-        Application::RemoveUserEvent( mnEventId );
+    if (mnDeleteEventId)
+        Application::RemoveUserEvent(mnDeleteEventId);
 
     mpOutliner.reset();
     mpOutlinerView.reset();
@@ -240,11 +240,11 @@ void SwAnnotationWin::DeleteThread()
 
     while(next && next->GetTopReplyNote() == topNote)
     {
-        current->mnEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
+        current->mnDeleteEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
         current = next;
         next = mrMgr.GetNextPostIt(KEY_PAGEDOWN, current);
     }
-    current->mnEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
+    current->mnDeleteEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
 }
 
 bool SwAnnotationWin::IsResolved() const
@@ -318,10 +318,10 @@ void SwAnnotationWin::Delete()
     {
         mrMgr.SetActiveSidebarWin(nullptr);
         // if the note is empty, the previous line will send a delete event, but we are already there
-        if (mnEventId)
+        if (mnDeleteEventId)
         {
-            Application::RemoveUserEvent( mnEventId );
-            mnEventId = nullptr;
+            Application::RemoveUserEvent(mnDeleteEventId);
+            mnDeleteEventId = nullptr;
         }
     }
     // we delete the field directly, the Mgr cleans up the PostIt by listening
