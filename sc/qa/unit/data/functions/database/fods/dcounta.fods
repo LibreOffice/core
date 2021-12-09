@@ -864,9 +864,22 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce13"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:formula="of:=DCOUNTA([.J1:.N10];;[.J41:.N42])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce29" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=DCOUNTA(J1:N10,,J41:N42)" calcext:value-type="string">
+      <text:p>=DCOUNTA(J1:N10,,J41:N42)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Tdf#13353</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Greta</text:p>
      </table:table-cell>
