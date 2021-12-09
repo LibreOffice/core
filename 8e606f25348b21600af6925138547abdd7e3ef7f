@@ -16,6 +16,24 @@
       "message": "The color submenu always shows up with the additional submenus in case of gtk3. Works well for kf5, but on gen I also see Sort and Color submenus together from time to time. And Sort never opens immediately, I always have to come from another menu item. Is my approach wrong?",
       "revId": "8e606f25348b21600af6925138547abdd7e3ef7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9676125_0a32f003",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-09T10:39:11Z",
+      "side": 1,
+      "message": "A submenu in the first row not firing on first entry is probably fixed with https://gerrit.libreoffice.org/c/core/+/126578\n\nI\u0027ll have a look at the multiple menus at the same time problem\n\nThis does conflict with https://gerrit.libreoffice.org/c/core/+/126532 which is a similar rearrangement. What\u0027s also apparent in my effort is that there are a bunch of uitests that need to be (painfully) adjusted to the new positions/submenus",
+      "parentUuid": "ace6331b_642237ba",
+      "revId": "8e606f25348b21600af6925138547abdd7e3ef7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
