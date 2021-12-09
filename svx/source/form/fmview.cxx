@@ -41,6 +41,7 @@
 #include <fmundo.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <o3tl/deleter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -114,15 +115,13 @@ void FmFormView::Init()
     SetDesignMode( bInitDesignMode );
 }
 
-
 FmFormView::~FmFormView()
 {
-    if( pFormShell )
-        pFormShell->SetView( nullptr );
+    if (pFormShell)
+        suppress_fun_call_w_exception(pFormShell->SetView(nullptr));
 
     pImpl->notifyViewDying();
 }
-
 
 FmFormPage* FmFormView::GetCurPage()
 {
@@ -130,7 +129,6 @@ FmFormPage* FmFormView::GetCurPage()
     FmFormPage*  pCurPage = pPageView ? dynamic_cast<FmFormPage*>( pPageView->GetPage()  ) : nullptr;
     return pCurPage;
 }
-
 
 void FmFormView::MarkListHasChanged()
 {
