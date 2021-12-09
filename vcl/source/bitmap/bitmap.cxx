@@ -259,9 +259,8 @@ bool Bitmap::operator==( const Bitmap& rBmp ) const
     if (rBmp.mxSalBmp->GetSize() != mxSalBmp->GetSize() ||
         rBmp.mxSalBmp->GetBitCount() != mxSalBmp->GetBitCount())
         return false;
-    BitmapChecksum aChecksum1, aChecksum2;
-    rBmp.mxSalBmp->GetChecksum(aChecksum1);
-    mxSalBmp->GetChecksum(aChecksum2);
+    BitmapChecksum aChecksum1 = rBmp.mxSalBmp->GetChecksum();
+    BitmapChecksum aChecksum2 = mxSalBmp->GetChecksum();
     // If the bitmaps can't calculate a checksum, best to regard them as different.
     if (aChecksum1 == 0 || aChecksum2 == 0)
         return false;
@@ -331,7 +330,7 @@ BitmapChecksum Bitmap::GetChecksum() const
 
     if( mxSalBmp )
     {
-        mxSalBmp->GetChecksum(nRet);
+        nRet = mxSalBmp->GetChecksum();
 
         if (!nRet)
         {
@@ -344,7 +343,7 @@ BitmapChecksum Bitmap::GetChecksum() const
             {
                 Bitmap* pThis = const_cast<Bitmap*>(this);
                 pThis->mxSalBmp = xNewImpBmp;
-                mxSalBmp->GetChecksum(nRet);
+                nRet = mxSalBmp->GetChecksum();
             }
         }
     }
