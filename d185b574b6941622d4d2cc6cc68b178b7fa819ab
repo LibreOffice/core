@@ -16,6 +16,24 @@
       "message": "Heiko: I don\u0027t know what\u0027s the diff between infotext and tooltip.\nI just found this.",
       "revId": "d185b574b6941622d4d2cc6cc68b178b7fa819ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30920a81_66142d7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-09T08:38:19Z",
+      "side": 1,
+      "message": "Look for \"\u003cprop oor:name\u003d\"TooltipLabel\" oor:type\u003d\"xs:string\"\u003e\" to find a prototype. See also https://design.blog.documentfoundation.org/2018/02/28/easyhacking-all-about-terminology/",
+      "parentUuid": "04a628fc_8bb74043",
+      "revId": "d185b574b6941622d4d2cc6cc68b178b7fa819ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
