@@ -5255,7 +5255,7 @@
      <table:table-cell office:value-type="float" office:value="0.0340917220777493" calcext:value-type="float">
       <text:p>0.034091722077749</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A208];12)=ORG.LIBREOFFICE.ROUNDSIG([.B208];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A208];11)=ORG.LIBREOFFICE.ROUNDSIG([.B208];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A208])" office:value-type="string" office:string-value="=BESSELY($L4,U$1)" calcext:value-type="string">
