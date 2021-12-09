@@ -580,10 +580,10 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
 void ScCheckListMenuControl::prepWindow()
 {
     mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height() + 2);
-    mnSelectedMenu = 0;
+    mnSelectedMenu = MENU_NOT_SELECTED;
     if (mxMenu->n_children())
     {
-        mxMenu->set_cursor(mnSelectedMenu);
+        mxMenu->set_cursor(0);
         mxMenu->unselect_all();
     }
 
