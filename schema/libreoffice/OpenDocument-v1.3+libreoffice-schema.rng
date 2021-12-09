@@ -2093,6 +2093,31 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="zeroToHundredPercent"/>
       </rng:attribute>
     </rng:optional>
+    <!-- TODO no proposal -->
+    <rng:optional>
+      <rng:attribute name="loext:theme-color">
+        <rng:choice>
+          <!-- Background 1 -->
+          <rng:value>dk1</rng:value>
+          <!-- Text 1 -->
+          <rng:value>lt1</rng:value>
+          <!-- Background 2 -->
+          <rng:value>dk2</rng:value>
+          <!-- Text 2 -->
+          <rng:value>lt2</rng:value>
+          <rng:value>accent1</rng:value>
+          <rng:value>accent2</rng:value>
+          <rng:value>accent3</rng:value>
+          <rng:value>accent4</rng:value>
+          <rng:value>accent5</rng:value>
+          <rng:value>accent6</rng:value>
+          <!-- Hyperlink -->
+          <rng:value>hlink</rng:value>
+          <!-- Followed hyperlink -->
+          <rng:value>folHlink</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
 
   <rng:define name="style-text-properties-attlist" combine="interleave">

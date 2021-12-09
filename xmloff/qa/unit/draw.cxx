@@ -177,6 +177,30 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     CPPUNIT_ASSERT_EQUAL(static_cast<util::Color>(0x954F72), aColorScheme[11]);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
+{
+    // Given a document that refers to a theme color:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "refer-to-theme.odp";
+
+    // When loading and saving that document:
+    getComponent() = loadFromDesktop(aURL);
+    utl::TempFile aTempFile;
+    save("impress8", aTempFile);
+
+    // Make sure the export result has the theme reference:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//style:style[@style:name='T1']/style:text-properties' no attribute 'theme-color' exist
+    // i.e. only the direct color was written, but not the theme reference.
+    assertXPath(pXmlDoc, "//style:style[@style:name='T1']/style:text-properties", "theme-color",
+                "accent1");
+    assertXPath(pXmlDoc, "//style:style[@style:name='T2']/style:text-properties", "theme-color",
+                "accent1");
+    assertXPath(pXmlDoc, "//style:style[@style:name='T3']/style:text-properties", "theme-color",
+                "accent1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3441,6 +3441,19 @@ namespace xmloff::token {
         XML_LINKED_STYLE_NAME,
 
         XML_THEME,
+        XML_THEME_COLOR,
+        XML_DK1,
+        XML_LT1,
+        XML_DK2,
+        XML_LT2,
+        XML_ACCENT1,
+        XML_ACCENT2,
+        XML_ACCENT3,
+        XML_ACCENT4,
+        XML_ACCENT5,
+        XML_ACCENT6,
+        XML_HLINK,
+        XML_FOLHLINK,
 
         XML_TOKEN_END
     };

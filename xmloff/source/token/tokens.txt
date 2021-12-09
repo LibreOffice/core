@@ -3188,4 +3188,17 @@ rtl
 symmetric
 linked-style-name
 theme
+theme-color
+dk1
+lt1
+dk2
+lt2
+accent1
+accent2
+accent3
+accent4
+accent5
+accent6
+hlink
+folHlink
 TOKEN_END_DUMMY
