@@ -3444,6 +3444,19 @@ namespace xmloff::token {
         TOKEN("linked-style-name",   XML_LINKED_STYLE_NAME ),
 
         TOKEN("theme",               XML_THEME ),
+        TOKEN("theme-color",         XML_THEME_COLOR ),
+        TOKEN("dk1",                 XML_DK1 ),
+        TOKEN("lt1",                 XML_LT1 ),
+        TOKEN("dk2",                 XML_DK2 ),
+        TOKEN("lt2",                 XML_LT2 ),
+        TOKEN("accent1",             XML_ACCENT1 ),
+        TOKEN("accent2",             XML_ACCENT2 ),
+        TOKEN("accent3",             XML_ACCENT3 ),
+        TOKEN("accent4",             XML_ACCENT4 ),
+        TOKEN("accent5",             XML_ACCENT5 ),
+        TOKEN("accent6",             XML_ACCENT6 ),
+        TOKEN("hlink",               XML_HLINK ),
+        TOKEN("folHlink",            XML_FOLHLINK ),
 
 
 #if OSL_DEBUG_LEVEL > 0
