@@ -129,7 +129,7 @@ namespace slideshow::internal
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Invalid draw shape" );
             ENSURE_OR_THROW( rWakeupEvent,
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Invalid wakeup event" );
-            ENSURE_OR_THROW( !rTimeouts.empty(),
+            ENSURE_OR_THROW( !maTimeouts.empty(),
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Empty timeout vector" );
 
             maContext.mpSubsettableShapeManager->addIntrinsicAnimationHandler(
