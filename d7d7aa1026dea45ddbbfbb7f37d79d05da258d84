@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2daf15a_4f4d4505",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-09T11:35:10Z",
+      "side": 1,
+      "message": "Thank you Heiko for the link!\nI updated the patch accordingly (just used a comma instead of a semicolon)",
+      "revId": "d7d7aa1026dea45ddbbfbb7f37d79d05da258d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
