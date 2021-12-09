@@ -424,15 +424,8 @@ namespace
         Degree10 aRotation = aMetadata.getRotation();
         if (aRotation)
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/queryrotateintostandarddialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryRotateIntoStandardOrientationDialog"));
-            // tdf#145819 Apply the rotation information if the user does NOT want to unrotate the image
-            // If they chose Yes we ignore the rotation
-            if (xQueryBox->run() == RET_NO)
-            {
-                GraphicNativeTransform aTransform( aGraphic );
-                aTransform.rotate( aRotation );
-            }
+            GraphicNativeTransform aTransform( aGraphic );
+            aTransform.rotate( aRotation );
         }
     }
 }
