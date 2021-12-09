@@ -147,7 +147,6 @@ static Methods aMethods[] = {
   { "expression",   SbxVARIANT, 0,nullptr,0 },
 { "CompatibilityMode",  SbxBOOL,  1 | FUNCTION_, RTLNAME(CompatibilityMode),0},
   { "bEnable",      SbxBOOL, 0,nullptr,0 },
-{ "LibreOffice6FloatingPointMode",  SbxBOOL,  0 | FUNCTION_, RTLNAME(LibreOffice6FloatingPointMode),0},
 { "ConvertFromUrl", SbxSTRING,    1 | FUNCTION_, RTLNAME(ConvertFromUrl),0  },
   { "Url",          SbxSTRING, 0,nullptr,0 },
 { "ConvertToUrl",   SbxSTRING,    1 | FUNCTION_, RTLNAME(ConvertToUrl),0    },
