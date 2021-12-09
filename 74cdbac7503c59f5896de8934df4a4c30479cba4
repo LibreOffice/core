@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29c91def_528cad7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-09T00:11:21Z",
+      "side": 1,
+      "message": "Sure this works for single conditional stuff, but our build system has also complex conditions to build components. There is a lot of stuff that depends on some OS; most prominently the file picker implementations. Or just look into postprocess/Rdb_services.mk, where vcl/vcl.unx depends on DESKTOP \u0026\u0026 ! (MACOSX || WNT) \u0026\u0026 !DISABLE_GUI.\n\nOTOH I\u0027m not sure the conditionals in postprocess/Rdb_services.mk even matters for the dynamic build, as AFAIK the service manager would just try to load some component and error out, if it\u0027s missing in the library. The only problem is that currently many component files are just conditionally generated. This obviously wouldn\u0027t work with a static build, where you have the name-to-constructor mappings and symbols must exist at link time.\n\nBut back to this patch: with this kind of workflow, I would have to make up some BUILD_TYPE flag, which I would need to add in configure.ac. That is not generally a bad idea. But now you would eventually want to use these identifiers in the Makefile too, or you\u0027re eventually replicating the same build logic in the Makefile and configure. And for every complex case this requires some extra identifier. This seems to result in the opposite of the intention of my patch: reducing duplicated logic.\n\nOTOH some logic from the Makefiles could be just moved into confgure.ac to select the correct components and matching source code, which may result in simpler Makefiles for the cost of having a large amount of identifiers (which also need some proper naming).\n\nWhile I don\u0027t have a problem with filtering the single component file per-se, the overhead of this approach with additional complexity seems large compared to some eventually mismatched component tags of component snippets, which I wanted to avoid all together. I\u0027ve already tried to express all this in the comments on my patch. This just seem to increase the amount of work.\n\nP.S. you can export ENV variables from a Makefile, so you could probably export BUILD_TYPES with added dynamic flags to avoid the configure.ac path, not that this avoids the whole identifier mess.\n\nBTW: I would be interested in your ideas to fix all the shortcomings of 1.1 - 1.4. No need for a patch, just your ideas.",
+      "revId": "74cdbac7503c59f5896de8934df4a4c30479cba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
