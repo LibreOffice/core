@@ -231,6 +231,9 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
+        if (IsFocused())
+            pStateSet->AddState(AccessibleStateType::FOCUSED);
+
         if (IsFormulaMode())
         {
             pStateSet->AddState(AccessibleStateType::ENABLED);
@@ -335,6 +338,14 @@ bool ScAccessibleCell::IsOpaque() const
             bOpaque = pItem->GetColor() != COL_TRANSPARENT;
     }
     return bOpaque;
+}
+
+bool ScAccessibleCell::IsFocused() const
+{
+    if (mpViewShell && mpViewShell->GetViewData().GetCurPos() == maCellAddress)
+        return mpViewShell->GetActiveWin()->HasFocus();
+
+    return false;
 }
 
 bool ScAccessibleCell::IsSelected()

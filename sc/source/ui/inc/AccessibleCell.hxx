@@ -145,6 +145,7 @@ private:
     virtual bool IsEditable(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates) override;
     bool IsOpaque() const;
+    bool IsFocused() const;
     bool IsSelected();
 
     static ScDocument* GetDocument(ScTabViewShell* mpViewShell);
