@@ -3226,8 +3226,15 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
     if ( !bEdit )
     {
-            // Edit cell with spelling errors ?
-        if (bMouse && (GetEditUrl(aPosPixel) || bSpellError))
+        // Edit cell with spelling errors ?
+        // tdf#127341 the formally used GetEditUrl(aPosPixel) addiionally
+        // to bSpellError acivated EditMode here for right-click on URL
+        // which prevents the regular contex-menu from appearing. Since this
+        // is more expeced than the context-menu for editing an URL I removed
+        // this. If this was wanted and can be argued his migh be re-acivated.
+        // For now, reduce to spelling errors - as the original comment above
+        // suggests.
+        if (bMouse && bSpellError)
         {
             //  GetEditUrlOrError has already moved the Cursor
 
