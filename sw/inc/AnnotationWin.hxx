@@ -229,7 +229,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         SwPostItMgr&    mrMgr;
         SwView&         mrView;
 
-        ImplSVEvent *   mnEventId;
+        ImplSVEvent*    mnDeleteEventId;
 
         std::unique_ptr<OutlinerView>   mpOutlinerView;
         std::unique_ptr<Outliner>       mpOutliner;
