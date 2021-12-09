@@ -1294,22 +1294,14 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     if (comphelper::LibreOfficeKit::isActive() && m_xEditEngine)
     {
-        // in LOK somehow text is rendered very overscaled so render the original content first
-        // on a virtual device then redraw with correct scale to the target device
-
-        ScopedVclPtrInstance<VirtualDevice> pDevice;
-
-        tools::Long aPaperWidth = m_xEditEngine->GetPaperSize().getWidth();
-        double fRatio = static_cast<double>(rRect.GetSize().getHeight()) / rRect.GetSize().getWidth();
-
-        tools::Rectangle aPaperRect(Point(0, 0), Size(aPaperWidth, aPaperWidth * fRatio));
-        aPaperRect = pDevice->PixelToLogic(aPaperRect);
-
-        pDevice->SetOutputSize(aPaperRect.GetSize());
-
-        WeldEditView::Paint(*pDevice, aPaperRect);
-
-        rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(), Point(0,0), aPaperRect.GetSize(), *pDevice);
+        // EditEngine/EditView works in twips logical coordinates, so set the device map-mode to twips before painting
+        // and use twips version of the painting area 'rRect'.
+        // Document zoom should not be included in this conversion.
+        tools::Rectangle aLogicRect = OutputDevice::LogicToLogic(rRect, MapMode(MapUnit::MapPixel), MapMode(MapUnit::MapTwip));
+        MapMode aOriginalMode = rRenderContext.GetMapMode();
+        rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
+        WeldEditView::Paint(rRenderContext, aLogicRect);
+        rRenderContext.SetMapMode(aOriginalMode);
     }
     else
         WeldEditView::Paint(rRenderContext, rRect);
