@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c32761bf_44102492",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-12-09T12:34:36Z",
+      "side": 1,
+      "message": "So the dynamic_cast is still there, but not called in every situation, is that what you are trying to achieve?\nNo problem with that.",
+      "revId": "20f59685cae9e7360ce4bb6fee7789e16b1b5aab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
