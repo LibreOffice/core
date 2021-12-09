@@ -281,6 +281,12 @@ void ScCheckListMenuControl::queueCloseSubMenu()
     // Stop any submenu on queue for opening.
     maOpenTimer.maTimer.Stop();
 
+    // Flush any pending close so it doesn't get skipped
+    if (maCloseTimer.mpSubMenu)
+    {
+        maCloseTimer.mpSubMenu->EndPopupMode();
+    }
+
     maCloseTimer.mpSubMenu = maOpenTimer.mpSubMenu;
     maCloseTimer.mnMenuPos = maOpenTimer.mnMenuPos;
     maCloseTimer.maTimer.Start();
