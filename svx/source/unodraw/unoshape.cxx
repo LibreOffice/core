@@ -345,7 +345,7 @@ void SvxShape::impl_initFromSdrObject()
 
     osl_atomic_increment( &m_refCount );
     {
-        GetSdrObject()->setUnoShape(this);
+        GetSdrObject()->setUnoShape(*this);
     }
     osl_atomic_decrement( &m_refCount );
 

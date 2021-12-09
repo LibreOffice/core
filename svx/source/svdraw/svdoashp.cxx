@@ -3222,6 +3222,15 @@ void SdrObjCustomShape::setUnoShape(const uno::Reference<drawing::XShape>& rxUno
     mxCustomShapeEngine.set(nullptr);
 }
 
+void SdrObjCustomShape::setUnoShape(SvxShape& rNewShape)
+{
+    SdrTextObj::setUnoShape(rNewShape);
+
+    // The shape engine is created with _current_ shape. This means we
+    // _must_ reset it when the shape changes.
+    mxCustomShapeEngine.set(nullptr);
+}
+
 OUString SdrObjCustomShape::GetCustomShapeName() const
 {
     OUString sShapeName;

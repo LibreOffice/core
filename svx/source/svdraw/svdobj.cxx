@@ -2837,6 +2837,45 @@ void SdrObject::setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShap
     }
 }
 
+/// Optimised variant, speeds up creating new shapes
+///
+void SdrObject::setUnoShape( SvxShape& _rxUnoShape )
+{
+    const uno::Reference< uno::XInterface>& xOldUnoShape( maWeakUnoShape );
+    // the UNO shape would be gutted by the following code; return early
+    if ( static_cast<cppu::OWeakObject*>(&_rxUnoShape) == xOldUnoShape.get() )
+    {
+        if ( !xOldUnoShape.is() )
+        {
+            // make sure there is no stale impl. pointer if the UNO
+            // shape was destroyed meanwhile (remember we only hold weak
+            // reference to it!)
+            mpSvxShape = nullptr;
+        }
+        return;
+    }
+
+    bool bTransferOwnership( false );
+    if ( xOldUnoShape.is() )
+    {
+        bTransferOwnership = mpSvxShape->HasSdrObjectOwnership();
+        // Remove yourself from the current UNO shape. Its destructor
+        // will reset our UNO shape otherwise.
+        mpSvxShape->InvalidateSdrObject();
+    }
+
+    maWeakUnoShape = &_rxUnoShape;
+    mpSvxShape = &_rxUnoShape;
+
+    // I think this may never happen... But I am not sure enough .-)
+    if ( bTransferOwnership )
+    {
+        if (mpSvxShape)
+            mpSvxShape->TakeSdrObjectOwnership();
+        SAL_WARN( "svx.uno", "a UNO shape took over an SdrObject previously owned by another UNO shape!");
+    }
+}
+
 /** only for internal use! */
 SvxShape* SdrObject::getSvxShape()
 {

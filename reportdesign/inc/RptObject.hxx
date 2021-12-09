@@ -144,6 +144,7 @@ public:
 
 private:
     virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
+    virtual void setUnoShape( SvxShape& rNewShape ) override;
 
     OCustomShape(
         SdrModel& rSdrModel,
@@ -213,6 +214,7 @@ private:
 
     void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
     virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
+    virtual void setUnoShape( SvxShape& rNewShape ) override;
 
     SdrObjKind m_nType;
     bool    m_bOnlyOnce;
@@ -273,6 +275,7 @@ public:
 
 private:
     virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
+    virtual void setUnoShape( SvxShape& rNewShape ) override;
     void    impl_initializeModel_nothrow();
 };
 

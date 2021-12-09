@@ -570,6 +570,13 @@ void OCustomShape::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoSh
     m_xReportComponent.clear();
 }
 
+void OCustomShape::setUnoShape( SvxShape& rNewShape )
+{
+    SdrObjCustomShape::setUnoShape( rNewShape );
+    releaseUnoShape();
+    m_xReportComponent.clear();
+}
+
 OUnoObject::OUnoObject(
     SdrModel& rSdrModel,
     const OUString& _sComponentName,
@@ -900,6 +907,12 @@ void OUnoObject::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShap
     releaseUnoShape();
 }
 
+void OUnoObject::setUnoShape( SvxShape& rNewShape )
+{
+    SdrUnoObj::setUnoShape( rNewShape );
+    releaseUnoShape();
+}
+
 OUnoObject* OUnoObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new OUnoObject(rTargetModel, *this);
@@ -1097,6 +1110,12 @@ void OOle2Obj::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape 
     m_xReportComponent.clear();
 }
 
+void OOle2Obj::setUnoShape( SvxShape& rNewShape )
+{
+    SdrOle2Obj::setUnoShape( rNewShape );
+    releaseUnoShape();
+    m_xReportComponent.clear();
+}
 
 static uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj)
 {
