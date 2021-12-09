@@ -44,6 +44,7 @@ public:
     void testDelayedScale();
     void testDelayedScaleAlphaImage();
     void testDrawDelayedScaleImage();
+    void testChecksum();
     void testTdf137329();
     void testTdf140848();
     void testTdf132367();
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testDelayedScale);
     CPPUNIT_TEST(testDelayedScaleAlphaImage);
     CPPUNIT_TEST(testDrawDelayedScaleImage);
+    CPPUNIT_TEST(testChecksum);
     CPPUNIT_TEST(testTdf137329);
     CPPUNIT_TEST(testTdf140848);
     CPPUNIT_TEST(testTdf132367);
@@ -466,6 +468,45 @@ void SkiaTest::testDrawDelayedScaleImage()
     CPPUNIT_ASSERT_EQUAL(image1, image3);
     CPPUNIT_ASSERT_EQUAL(Size(5, 5), bitmap.GetSizePixel());
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), SkiaHelper::imageSize(image3));
+}
+
+void SkiaTest::testChecksum()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    bitmap.Erase(COL_RED);
+    BitmapChecksum checksum1 = bitmap.GetChecksum();
+    // Set a pixel to create pixel data, that should change checksum.
+    BitmapWriteAccess(bitmap).SetPixel(0, 0, COL_BLUE);
+    BitmapChecksum checksum2 = bitmap.GetChecksum();
+    CPPUNIT_ASSERT(checksum2 != checksum1);
+    SkiaSalBitmap* skiaBitmap1 = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    // Creating an image should not change the checksum.
+    sk_sp<SkImage> image1 = skiaBitmap1->GetSkImage();
+    BitmapChecksum checksum3 = bitmap.GetChecksum();
+    CPPUNIT_ASSERT_EQUAL(checksum2, checksum3);
+    // Delayed scaling should change checksum even if the scaling has not taken place.
+    bitmap.Scale(Size(20, 20));
+    BitmapChecksum checksum4 = bitmap.GetChecksum();
+    CPPUNIT_ASSERT(checksum4 != checksum3);
+    // Setting back to the original red content should have the original checksum.
+    // (This also makes sure this next step is not affected by the delayed scaling
+    // above possibly taking place now.)
+    bitmap = Bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    bitmap.Erase(COL_RED);
+    BitmapChecksum checksum5 = bitmap.GetChecksum();
+    CPPUNIT_ASSERT_EQUAL(checksum1, checksum5);
+    // The optimized changing of images to greyscale should change the checksum.
+    SkiaSalBitmap* skiaBitmap2 = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    skiaBitmap2->unittestResetToImage();
+    BitmapChecksum checksum6;
+    skiaBitmap2->GetChecksum(checksum6);
+    CPPUNIT_ASSERT_EQUAL(checksum5, checksum6);
+    CPPUNIT_ASSERT(skiaBitmap2->ConvertToGreyscale());
+    BitmapChecksum checksum7;
+    skiaBitmap2->GetChecksum(checksum7);
+    CPPUNIT_ASSERT(checksum7 != checksum6);
 }
 
 void SkiaTest::testTdf137329()

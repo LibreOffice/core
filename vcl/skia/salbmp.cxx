@@ -158,6 +158,8 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics)
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat)
 {
     assert(mAnyAccessCount == 0);
+    assert(&rSalBmp != this);
+    ResetAllData();
     const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
     mImage = src.mImage;
     mAlphaImage = src.mAlphaImage;
@@ -296,7 +298,7 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode,
 #endif
         mPalette = pBuffer->maPalette;
         ResetToBuffer();
-        InvalidateChecksum();
+        DataChanged();
     }
     assert(mAnyAccessCount > 0);
     --mAnyAccessCount;
@@ -451,6 +453,7 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
         ResetToSkImage(mImage);
     else
         ResetToBuffer();
+    DataChanged();
     // The rest will be handled when the scaled bitmap is actually needed,
     // such as in EnsureBitmapData() or GetSkImage().
     return true;
@@ -494,6 +497,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
         ResetToSkImage(makeCheckedImageSnapshot(surface));
+        DataChanged();
         SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
         return true;
     }
@@ -531,6 +535,7 @@ bool SkiaSalBitmap::InterpretAs8Bit()
         ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
         ResetToSkImage(mImage); // keep mImage, it will be interpreted as 8bit if needed
+        DataChanged();
         SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ") with image");
         return true;
     }
@@ -584,6 +589,7 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
         const sal_uInt16 nGrey2 = otherBitmap->mEraseColor.GetRed();
         const sal_uInt8 nGrey = static_cast<sal_uInt8>(nGrey1 + nGrey2 - nGrey1 * nGrey2 / 255);
         mEraseColor = Color(nGrey, nGrey, nGrey);
+        DataChanged();
         SAL_INFO("vcl.skia.trace",
                  "alphablendwith(" << this << ") : with erase color " << otherBitmap);
         return true;
@@ -603,6 +609,7 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
     paint.setBlendMode(SkBlendMode::kScreen); // src+dest - src*dest/255 (in 0..1)
     surface->getCanvas()->drawImage(otherBitmap->GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
     ResetToSkImage(makeCheckedImageSnapshot(surface));
+    DataChanged();
     SAL_INFO("vcl.skia.trace", "alphablendwith(" << this << ") : with image " << otherBitmap);
     return true;
 }
@@ -1318,7 +1325,10 @@ void SkiaSalBitmap::ResetAllData()
     mEraseColorSet = false;
     mPixelsSize = mSize;
     ComputeScanlineSize();
+    DataChanged();
 }
+
+void SkiaSalBitmap::DataChanged() { InvalidateChecksum(); }
 
 void SkiaSalBitmap::ResetPendingScaling()
 {
