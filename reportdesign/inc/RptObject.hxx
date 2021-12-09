@@ -143,7 +143,7 @@ public:
     virtual SdrInventor GetObjInventor() const override;
 
 private:
-    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
+    virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
 
     OCustomShape(
         SdrModel& rSdrModel,
@@ -212,7 +212,7 @@ private:
     virtual SdrPage* GetImplPage() const override;
 
     void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
-    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
+    virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
 
     SdrObjKind m_nType;
     bool    m_bOnlyOnce;
@@ -272,7 +272,7 @@ public:
     virtual OUnoObject* CloneSdrObject(SdrModel& rTargetModel) const override;
 
 private:
-    virtual void impl_setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
+    virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;
     void    impl_initializeModel_nothrow();
 };
 

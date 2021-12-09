@@ -2800,7 +2800,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
     }
 }
 
-void SdrObject::impl_setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShape )
+void SdrObject::setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShape )
 {
     const uno::Reference< uno::XInterface>& xOldUnoShape( maWeakUnoShape );
     // the UNO shape would be gutted by the following code; return early
@@ -2929,7 +2929,7 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
             {
                 // create one
                 xShape = pDrawPage->CreateShape( this );
-                impl_setUnoShape( xShape );
+                setUnoShape( xShape );
             }
         }
     }
@@ -2945,11 +2945,6 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
     }
 
     return xShape;
-}
-
-void SdrObject::setUnoShape(const uno::Reference<drawing::XShape >& _rxUnoShape)
-{
-    impl_setUnoShape( _rxUnoShape );
 }
 
 svx::PropertyChangeNotifier& SdrObject::getShapePropertyChangeNotifier()
