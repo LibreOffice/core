@@ -612,22 +612,25 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
             if (const SvxFieldItem* pFld = pView->GetField(aLogicClick))
             {
                 bool bUrlOpened = GetEditEnginePtr()->FieldClicked( *pFld );
-                auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField());
 
                 // tdf#121039 When in edit mode, editeng is responsible for opening the URL on mouse click
-                if (!bUrlOpened && pUrlField)
+                if (!bUrlOpened)
                 {
-                    bool bCtrlClickHappened = rMEvt.IsMod1();
-                    bool bCtrlClickSecOption
-                        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
-                    if ((bCtrlClickHappened && bCtrlClickSecOption)
-                        || (!bCtrlClickHappened && !bCtrlClickSecOption))
+                    auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField());
+                    if (pUrlField)
                     {
-                        css::uno::Reference<css::system::XSystemShellExecute> exec(
-                            css::system::SystemShellExecute::create(
-                                comphelper::getProcessComponentContext()));
-                        exec->execute(pUrlField->GetURL(), OUString(),
-                                      css::system::SystemShellExecuteFlags::DEFAULTS);
+                        bool bCtrlClickHappened = rMEvt.IsMod1();
+                        bool bCtrlClickSecOption
+                            = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
+                        if ((bCtrlClickHappened && bCtrlClickSecOption)
+                            || (!bCtrlClickHappened && !bCtrlClickSecOption))
+                        {
+                            css::uno::Reference<css::system::XSystemShellExecute> exec(
+                                css::system::SystemShellExecute::create(
+                                    comphelper::getProcessComponentContext()));
+                            exec->execute(pUrlField->GetURL(), OUString(),
+                                          css::system::SystemShellExecuteFlags::DEFAULTS);
+                        }
                     }
                 }
             }
