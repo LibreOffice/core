@@ -1146,7 +1146,7 @@ void PictReader::ReadHeader()
 
     char        sBuf[ 2 ];
     // previous code considers pPict->Tell() as the normal starting position,
-    // can we have nStartPos != 0 ?
+    // nStartPos can be != 0 f.e. a pict embedded in a microsoft word document
     sal_uInt64   nStartPos = pPict->Tell();
     // Standard:
     // a picture file begins by 512 bytes (reserved to the application) followed by the picture data
@@ -1184,7 +1184,7 @@ void PictReader::ReadHeader()
           nOffset = nStartPos+actPos*512;
         }
         else {
-          nOffset = 509+st; // illogical : more logical will be nStartPos+509+st or to consider that nStartPos=0
+          nOffset = nStartPos+509+st;
           // a small test to check if versionOp code exists after the bdbox ( with no extra NOP codes)
           pPict->Seek(nOffset+10);
           pPict->ReadBytes(sBuf, 2);
