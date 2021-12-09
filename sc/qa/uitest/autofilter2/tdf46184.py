@@ -42,6 +42,7 @@ class tdf46184(UITestCase):
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             self.assertEqual("Standard Filter...", get_state_as_dict(xSubMenu)['SelectEntryText'])
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 

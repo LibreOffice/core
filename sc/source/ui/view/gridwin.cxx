@@ -981,11 +981,13 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     if (ScListSubMenuControl* pSubMenu = mpAutoFilterPopup->addSubMenuItem(ScResId(SCSTR_FILTER_CONDITION), true, false))
     {
         pSubMenu->addMenuItem(
-            ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, AutoFilterMode::Top10));
-        pSubMenu->addMenuItem(
             ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
         pSubMenu->addMenuItem(
             ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
+        pSubMenu->addMenuItem(
+            ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, AutoFilterMode::Top10));
+        pSubMenu->addMenuItem(
+            ScResId(SCSTR_BOTTOM10FILTER), new AutoFilterAction(this, AutoFilterMode::Bottom10));
         pSubMenu->addSeparator();
         pSubMenu->addMenuItem(
             ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
@@ -1160,6 +1162,11 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             break;
             case AutoFilterMode::Top10:
                 pEntry->eOp = SC_TOPVAL;
+                pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
+                pEntry->GetQueryItem().maString = rPool.intern("10");
+            break;
+            case AutoFilterMode::Bottom10:
+                pEntry->eOp = SC_BOTVAL;
                 pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
                 pEntry->GetQueryItem().maString = rPool.intern("10");
             break;

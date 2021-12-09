@@ -33,6 +33,7 @@
 #define SCSTR_STDFILTER                             NC_("SCSTR_STDFILTER", "Standard Filter...")
 #define SCSTR_CLEAR_FILTER                          NC_("SCSTR_CLEAR_FILTER", "Clear Filter")
 #define SCSTR_TOP10FILTER                           NC_("SCSTR_TOP10FILTER", "Top 10")
+#define SCSTR_BOTTOM10FILTER                        NC_("SCSTR_BOTTOM10FILTER", "Bottom 10")
 #define SCSTR_FILTER_EMPTY                          NC_("SCSTR_FILTER_EMPTY", "Empty")
 #define SCSTR_FILTER_NOTEMPTY                       NC_("SCSTR_FILTER_NOTEMPTY", "Not Empty")
 #define SCSTR_FILTER_COLOR                          NC_("SCSTR_FILTER_COLOR", "Filter by Color")

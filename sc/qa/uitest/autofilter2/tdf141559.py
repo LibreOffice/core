@@ -43,11 +43,12 @@ class tdf141559(UITestCase):
             xSubMenu = xSubFloatWindow.getChild("menu")
 
             nLastIdx = int(get_state_as_dict(xSubMenu)['Children']) - 1
-            self.assertEqual(4, nLastIdx)
+            self.assertEqual(5, nLastIdx)
 
             # check last item: 'Standard Filter...' (new menu item 'Clear Filter' is optional)
             self.assertEqual('Standard Filter...', get_state_as_dict(xSubMenu.getChild(str(nLastIdx)))['Text'])
 
+            xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
             xSubMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
