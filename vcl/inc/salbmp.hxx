@@ -97,13 +97,12 @@ public:
         return false;
     }
 
-    void GetChecksum(BitmapChecksum& rChecksum) const
+    BitmapChecksum GetChecksum() const
     {
         updateChecksum();
         if (!mbChecksumValid)
-            rChecksum = 0; // back-compat
-        else
-            rChecksum = mnChecksum;
+            return 0; // back-compat
+        return mnChecksum;
     }
 
     void InvalidateChecksum()

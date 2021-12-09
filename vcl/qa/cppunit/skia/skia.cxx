@@ -500,12 +500,10 @@ void SkiaTest::testChecksum()
     // The optimized changing of images to greyscale should change the checksum.
     SkiaSalBitmap* skiaBitmap2 = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     skiaBitmap2->unittestResetToImage();
-    BitmapChecksum checksum6;
-    skiaBitmap2->GetChecksum(checksum6);
+    BitmapChecksum checksum6 = skiaBitmap2->GetChecksum();
     CPPUNIT_ASSERT_EQUAL(checksum5, checksum6);
     CPPUNIT_ASSERT(skiaBitmap2->ConvertToGreyscale());
-    BitmapChecksum checksum7;
-    skiaBitmap2->GetChecksum(checksum7);
+    BitmapChecksum checksum7 = skiaBitmap2->GetChecksum();
     CPPUNIT_ASSERT(checksum7 != checksum6);
 }
 
