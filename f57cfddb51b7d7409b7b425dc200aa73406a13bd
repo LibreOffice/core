@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b86ea966_866e3954",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2617,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-09T13:13:41Z",
+      "side": 1,
+      "message": "Hi Attila,\nI\u0027m wondering, is this issue only happening when exporting to PPTX or is it also happening when exporting to PPT?",
+      "revId": "f57cfddb51b7d7409b7b425dc200aa73406a13bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
