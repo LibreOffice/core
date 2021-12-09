@@ -159,6 +159,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
         ScFormulaCell* pCell = new ScFormulaCell(rContext.rDoc, aAddress, std::move(pResult));
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.rDoc.EnsureTable(0);
+        // coverity[tainted_data : FALSE] - ValidColRow has sanitized aAddr
         rContext.rDoc.SetFormulaCell(ScAddress(nCol, nRow, 0), pCell);
 
         // nFormat = Default -> number of digits in fractional part like Float
@@ -422,6 +423,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
         ScFormulaCell* pCell = new ScFormulaCell(rContext.rDoc, aAddress, std::move(pResult));
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.rDoc.EnsureTable(nTab);
+        // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
         rContext.rDoc.SetFormulaCell(aAddress, pCell);
     }
 }
