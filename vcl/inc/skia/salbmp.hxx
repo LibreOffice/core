@@ -107,8 +107,12 @@ public:
     const sal_uInt8* unittestGetBuffer() const { return mBuffer.get(); }
     const SkImage* unittestGetImage() const { return mImage.get(); }
     const SkImage* unittestGetAlphaImage() const { return mAlphaImage.get(); }
+    void unittestResetToImage() { ResetToSkImage(GetSkImage()); }
 
 private:
+    // This should be called whenever the contents have (possibly) changed.
+    // It may reset some cached data such as the checksum.
+    void DataChanged();
     // Reset the state to pixel data (resets cached images allocated in GetSkImage()/GetAlphaSkImage()).
     void ResetToBuffer();
     // Sets the data only as SkImage (will be converted as needed).
