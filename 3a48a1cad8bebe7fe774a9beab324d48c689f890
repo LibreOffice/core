@@ -116,6 +116,30 @@
       },
       "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d85b828f_4b9d214a",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-09T16:32:03Z",
+      "side": 1,
+      "message": "Hello Attila,\nThe new code uses SelectObj and no getShapes at all, it still fails in\n\nCPPUNIT_ASSERT_EQUAL(true, xShapeProps-\u003egetPropertyValue(\"TextBox\").get\u003cbool\u003e());\nSo I really believe the problem is in .uno:AddTextBox",
+      "parentUuid": "a4e75b2b_1734f9e4",
+      "range": {
+        "startLine": 1210,
+        "startChar": 4,
+        "endLine": 1210,
+        "endChar": 75
+      },
+      "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
