@@ -1299,7 +1299,7 @@ void Dialog::ImplSetModalInputMode( bool bModal )
     }
 }
 
-void Dialog::GrabFocusToFirstControl()
+vcl::Window* Dialog::GetFirstControlForFocus()
 {
     vcl::Window* pFocusControl = nullptr;
     vcl::Window* pFirstOverlapWindow = ImplGetFirstOverlapWindow();
@@ -1323,6 +1323,13 @@ void Dialog::GrabFocusToFirstControl()
     {
         pFocusControl = ImplGetDlgWindow( 0, GetDlgWindowType::First );
     }
+
+    return pFocusControl;
+}
+
+void Dialog::GrabFocusToFirstControl()
+{
+    vcl::Window* pFocusControl = GetFirstControlForFocus();
     if ( pFocusControl )
         pFocusControl->ImplControlFocus( GetFocusFlags::Init );
 }
@@ -1672,6 +1679,10 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("response", rResponse.second);
         }
     }
+
+    vcl::Window* pFocusControl = GetFirstControlForFocus();
+    if (pFocusControl)
+        rJsonWriter.put("init_focus_id", pFocusControl->get_id());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
