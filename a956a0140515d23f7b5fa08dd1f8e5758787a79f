@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3cdf582_73c4520a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-09T11:37:52Z",
+      "side": 1,
+      "message": "These uitests look like a lot of fun ;-)",
+      "revId": "a956a0140515d23f7b5fa08dd1f8e5758787a79f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29a48367_f66a95f9",
+        "filename": "sc/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-09T11:37:52Z",
+      "side": 1,
+      "message": "I like the \"Quick Filter\" term. It fits with \"Color Filter\" and \"Standard Filter\" (by the way, title style capitalization in menus). And \"condition\" has room for associations like \u0027this one is enabled if conditional formatting is active\u0027.",
+      "range": {
+        "startLine": 39,
+        "startChar": 93,
+        "endLine": 39,
+        "endChar": 102
+      },
+      "revId": "a956a0140515d23f7b5fa08dd1f8e5758787a79f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3782ee64_c863d4d6",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-09T11:37:52Z",
+      "side": 1,
+      "message": "How about a submenu for the two sort options? Though, no hard feelings here.",
+      "range": {
+        "startLine": 974,
+        "startChar": 51,
+        "endLine": 974,
+        "endChar": 64
+      },
+      "revId": "a956a0140515d23f7b5fa08dd1f8e5758787a79f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3847f76_65069002",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-09T11:37:52Z",
+      "side": 1,
+      "message": "If this custom filter is the input field I\u0027d keep it extra. The \u0027quick filter\u0027 items are kind of preset options while entering some text has all needed freedom. Would be a major PITA to always go into the submenu when filtering for foo* vs. bar* (without asterisk of course).",
+      "range": {
+        "startLine": 991,
+        "startChar": 81,
+        "endLine": 991,
+        "endChar": 87
+      },
+      "revId": "a956a0140515d23f7b5fa08dd1f8e5758787a79f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
