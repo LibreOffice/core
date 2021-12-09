@@ -249,6 +249,23 @@ SvXMLEnumMapEntry<drawing::TextVerticalAdjust> const pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, drawing::TextVerticalAdjust(0) }
 };
 
+SvXMLEnumMapEntry<sal_uInt16> const pXML_ThemeColor_Enum[] =
+{
+    { XML_DK1, 0 },
+    { XML_LT1, 1 },
+    { XML_DK2, 2 },
+    { XML_LT2, 3 },
+    { XML_ACCENT1, 4 },
+    { XML_ACCENT2, 5 },
+    { XML_ACCENT3, 6 },
+    { XML_ACCENT4, 7 },
+    { XML_ACCENT5, 8 },
+    { XML_ACCENT6, 9 },
+    { XML_HLINK, 10 },
+    { XML_FOLHLINK, 11 },
+    { XML_TOKEN_INVALID, 0 }
+};
+
 namespace {
 
 class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
@@ -1411,6 +1428,9 @@ static const XMLPropertyHandler *GetPropertyHandler
         break;
     case XML_TYPE_GRAPHIC:
         pHdl = new XMLGraphicPropertyHandler;
+        break;
+    case XML_TYPE_THEME_COLOR:
+        pHdl = new XMLConstantsPropertyHandler(pXML_ThemeColor_Enum, XML_TOKEN_INVALID);
         break;
     default:
     {

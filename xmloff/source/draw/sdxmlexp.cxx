@@ -2410,26 +2410,26 @@ void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
     }
     SvXMLElementExport aColorTable(*this, XML_NAMESPACE_LO_EXT, XML_COLOR_TABLE, true, true);
 
-    static const std::u16string_view aColorNames[] = {
-        u"dk1", // Background 1
-        u"lt1", // Text 1
-        u"dk2", // Background 2
-        u"lt2", // Text 2
-        u"accent1", // Accent 1
-        u"accent2", // Accent 2
-        u"accent3", // Accent 3
-        u"accent4", // Accent 4
-        u"accent5", // Accent 5
-        u"accent6", // Accent 6
-        u"hlink", // Hyperlink
-        u"folHlink", // Followed hyperlink
+    static const XMLTokenEnum aColorTokens[] = {
+        XML_DK1, // Background 1
+        XML_LT1, // Text 1
+        XML_DK2, // Background 2
+        XML_LT2, // Text 2
+        XML_ACCENT1,
+        XML_ACCENT2,
+        XML_ACCENT3,
+        XML_ACCENT4,
+        XML_ACCENT5,
+        XML_ACCENT6,
+        XML_HLINK, // Hyperlink
+        XML_FOLHLINK, // Followed hyperlink
     };
     for (size_t nColor = 0; nColor < aColors.size(); ++nColor)
     {
         // Import goes via svx::Theme::FromAny(), which sanitizes user input.
-        assert(nColor < SAL_N_ELEMENTS(aColorNames));
+        assert(nColor < SAL_N_ELEMENTS(aColorTokens));
 
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, OUString(aColorNames[nColor]));
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, GetXMLToken(aColorTokens[nColor]));
 
         OUStringBuffer sValue;
         sax::Converter::convertColor(sValue, aColors[nColor]);
