@@ -80,7 +80,7 @@ private:
 
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
-    virtual void impl_setUnoShape(const css::uno::Reference<css::drawing::XShape>& rxUnoShape) override;
+    virtual void setUnoShape(const css::uno::Reference<css::drawing::XShape>& rxUnoShape) override;
 
 public:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
