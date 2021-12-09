@@ -208,6 +208,9 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
 
 void ViewObjectContact::ActionChanged()
 {
+    // clear cached primitives
+    mxPrimitive2DSequence.clear();
+
     if(mbLazyInvalidate)
         return;
 
