@@ -16,6 +16,23 @@
       "message": "I don\u0027t see any point in letting this live in 7.3 - since it was introduced there and only recently...",
       "revId": "65ed4bbbd08dec8b48c5514573da2b5c184f594b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f2cc9dd_3298d68d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-09T22:01:49Z",
+      "side": 1,
+      "message": "How are the review rules for 7-3 at this stage, no idea, is something expected from me?",
+      "revId": "65ed4bbbd08dec8b48c5514573da2b5c184f594b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
