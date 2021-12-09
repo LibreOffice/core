@@ -620,10 +620,17 @@ void BarChart::createShapes()
                         bDrawConnectionLinesInited = true;
                     }
 
+                    // Use another XShapes for background, so we can avoid needing to set the Z-order on all of them,
+                    // which is expensive in bulk.
                     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
-                    // Suspend setting rects dirty for the duration of this call
+                    rtl::Reference<SvxShapeGroupAnyD> xSeriesBackgroundShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
                     aShapeSet.insert(xSeriesGroupShape_Shapes);
+                    aShapeSet.insert(xSeriesBackgroundShape_Shapes);
+                    // Suspend setting rects dirty for the duration of this call
                     E3dScene* pScene = dynamic_cast<E3dScene*>(xSeriesGroupShape_Shapes->GetSdrObject());
+                    if (pScene)
+                        pScene->SuspendReportingDirtyRects();
+                    pScene = dynamic_cast<E3dScene*>(xSeriesBackgroundShape_Shapes->GetSdrObject());
                     if (pScene)
                         pScene->SuspendReportingDirtyRects();
 
@@ -844,7 +851,8 @@ void BarChart::createShapes()
                                 AddPointToPoly( aPoly, aLeftUpperPoint );
                                 AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
                                 pPosHelper->transformScaledLogicToScene( aPoly );
-                                xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
+                                // no need to set the Z-order since we are using a dedicated background XShapes group
+                                xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly, /*bSetZOrderToZero*/false );
                                 setMappedProperties( *xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                             }
 

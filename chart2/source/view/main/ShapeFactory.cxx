@@ -1079,10 +1079,10 @@ rtl::Reference<Svx3DExtrudeObject>
     return xShape;
 }
 
-
 rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const drawing::PolyPolygonShape3D& rPolyPolygon )
+                    , const drawing::PolyPolygonShape3D& rPolyPolygon
+                    , bool bSetZOrderToZero )
 {
     if( !xTarget.is() )
         return nullptr;
@@ -1104,8 +1104,9 @@ rtl::Reference<SvxShapePolyPolygon>
 
         //ZOrder
         //an area should always be behind other shapes
-        xShape->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
-            , uno::Any( sal_Int32(0) ) );
+        if (bSetZOrderToZero)
+            xShape->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
+                , uno::Any( sal_Int32(0) ) );
     }
     catch( const uno::Exception& )
     {
