@@ -620,10 +620,17 @@ void BarChart::createShapes()
                         bDrawConnectionLinesInited = true;
                     }
 
+                    // Use another XShapes for background, so we can avoid needing to set the Z-order on all of them,
+                    // which is expensive in bulk.
                     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
-                    // Suspend setting rects dirty for the duration of this call
+                    rtl::Reference<SvxShapeGroupAnyD> xSeriesBackgroundShape_Shapes(getSeriesGroupShape(pSeries.get(), xSeriesTarget));
                     aShapeSet.insert(xSeriesGroupShape_Shapes);
+                    aShapeSet.insert(xSeriesBackgroundShape_Shapes);
+                    // Suspend setting rects dirty for the duration of this call
                     E3dScene* pScene = dynamic_cast<E3dScene*>(xSeriesGroupShape_Shapes->GetSdrObject());
+                    if (pScene)
+                        pScene->SuspendReportingDirtyRects();
+                    pScene = dynamic_cast<E3dScene*>(xSeriesBackgroundShape_Shapes->GetSdrObject());
                     if (pScene)
                         pScene->SuspendReportingDirtyRects();
 
@@ -863,7 +870,7 @@ void BarChart::createShapes()
                                     if(!std::isnan(nPropVal))
                                         xFillColor = static_cast<sal_Int32>(nPropVal);
                                 }
-                                SdrPathObj* pShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
+                                SdrPathObj* pShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly, /*bSetZOrderToZero*/false );
                                 PropertyMapper::setPropertyNameMapForFilledSeriesProperties(pShape, xDataPointProperties, xFillColor);
 
                                 //set name/classified ObjectID (CID)

@@ -1081,18 +1081,21 @@ rtl::Reference<Svx3DExtrudeObject>
     return xShape;
 }
 
-
 SdrPathObj*
         ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const drawing::PolyPolygonShape3D& rPolyPolygon )
+                    , const drawing::PolyPolygonShape3D& rPolyPolygon
+                    , bool bSetZOrderToZero )
 {
     if( !xTarget.is() )
         return nullptr;
 
     //create shape
     SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), OBJ_POLY);
-    // insert at ZOrder 0, an area should always be behind other shapes
-    xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
+    if (bSetZOrderToZero)
+        // insert at ZOrder 0, an area should always be behind other shapes
+        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
+    else
+        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath);
 
     //set properties
     try
