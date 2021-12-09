@@ -869,7 +869,13 @@ public:
     ///
     /// The implementation _must_ call the same method of its parent
     /// class (preferably as the first step)!
+    ///
+    /// If you override this, you __have to__ override both of them.
+    /// The second one is an optimised variant that speeds up creating
+    /// new objects.
+    ///
     virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& _rxUnoShape );
+    virtual void setUnoShape( SvxShape& rNewShape );
 
     const css::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
 
