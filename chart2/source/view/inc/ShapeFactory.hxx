@@ -157,7 +157,8 @@ public:
 
     static SdrPathObj*
         createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon);
+                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon
+                    , bool bSetZOrderToZero = true);
 
     static rtl::Reference<SvxShapePolyPolygon>
         createSymbol2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
