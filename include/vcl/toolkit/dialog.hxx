@@ -127,6 +127,8 @@ private:
     bool            ImplStartExecute();
     static void     ImplEndExecuteModal();
     void            ImplSetModalInputMode(bool bModal);
+
+    vcl::Window*    GetFirstControlForFocus();
 public:
 
     /// Commence execution of a modal dialog, disposes owner on failure
