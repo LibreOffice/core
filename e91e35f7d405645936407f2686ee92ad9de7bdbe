@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ffe7c2d_0f51d92e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-12-09T09:55:35Z",
+      "side": 1,
+      "message": "Thanks Dennis, looks great to me \u003d)",
+      "revId": "e91e35f7d405645936407f2686ee92ad9de7bdbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
