@@ -873,7 +873,7 @@ bool SalGraphics::DrawTransformedBitmap(
 
     if(bRetval && !m_bFastDrawTransformedBitmap)
     {
-        // we had a sucessful call, note it for this SalGraphics
+        // we had a successful call, note it for this SalGraphics
         m_bFastDrawTransformedBitmap = true;
     }
 
@@ -882,14 +882,14 @@ bool SalGraphics::DrawTransformedBitmap(
 
 bool SalGraphics::ImplementsFastDrawTransformedBitmap(bool bTestAllowed) const
 {
-    // do not check when we already had a sucessful usage of drawTransformedBitmap (see above)
+    // do not check when we already had a successful usage of drawTransformedBitmap (see above)
     // only check if calling OutputDevice is not empty (bTestAllowed)
     // check only once using the direct check method (see below)
     if(!m_bFastDrawTransformedBitmap && bTestAllowed && !m_bFastDrawTransformedBitmapChecked)
     {
         // for check and to not change anything, get the top-left pixel as SalBitmap
         // and try to paint it again. This avoids an extra virtual method hat would need
-        // to be implemened at all backends and cald all the time (virual calls).
+        // to be implemented at all backends and called all the time (virtual calls).
         // Nothing simpler came to my mind, maybe there is something...
         SalGraphics* that(const_cast<SalGraphics*>(this));
         std::shared_ptr<SalBitmap> aTest(that->getBitmap(0, 0, 1, 1));
