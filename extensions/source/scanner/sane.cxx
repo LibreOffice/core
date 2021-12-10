@@ -169,8 +169,8 @@ Sane::~Sane()
 
 void Sane::Init()
 {
-    OUString sSaneLibName( "libsane" SAL_DLLEXTENSION  );
 #ifndef DISABLE_DYNLOADING
+    OUString sSaneLibName( "libsane" SAL_DLLEXTENSION  );
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
@@ -244,7 +244,9 @@ void Sane::DeInit()
     if( pSaneLib )
     {
         p_exit();
+#ifndef DISABLE_DYNLOADING
         osl_unloadModule( pSaneLib );
+#endif
         pSaneLib = nullptr;
     }
 }
