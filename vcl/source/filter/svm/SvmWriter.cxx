@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
+#include <osl/thread.h>
+#include <tools/vcompat.hxx>
+
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
-
-#include <tools/vcompat.hxx>
-
-#include <osl/thread.h>
 
 SvmWriter::SvmWriter(SvStream& rIStm)
     : mrStream(rIStm)
@@ -798,6 +798,12 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             TextLanguageHandler(pMetaAction);
         }
         break;
+
+        case MetaActionType::LINEARGRADIENT:
+        {
+            auto* pMetaAction = static_cast<MetaLinearGradientAction*>(pAction);
+            LinearGradientHandler(pMetaAction);
+        }
     }
 }
 
@@ -1418,4 +1424,71 @@ void SvmWriter::TextLanguageHandler(const MetaTextLanguageAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetTextLanguage()));
 }
+
+void SvmWriter::LinearGradientHandler(const MetaLinearGradientAction* pActionConst)
+{
+    MetaLinearGradientAction* pAction = const_cast<MetaLinearGradientAction*>(pActionConst);
+
+    for (auto* pLinearAction : *pAction)
+    {
+        MetaActionType nType = pLinearAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::COMMENT:
+            {
+                auto* pMetaAction = static_cast<MetaCommentAction*>(pLinearAction);
+                CommentHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::FILLCOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaFillColorAction*>(pLinearAction);
+                FillColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::LINECOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaLineColorAction*>(pLinearAction);
+                LineColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolygonAction*>(pLinearAction);
+                PolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYPOLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolyPolygonAction*>(pLinearAction);
+                PolyPolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENT:
+            {
+                auto* pMetaAction = static_cast<MetaGradientAction*>(pLinearAction);
+                GradientHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENTEX:
+            {
+                auto* pMetaAction = static_cast<MetaGradientExAction*>(pLinearAction);
+                GradientExHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                SAL_INFO("vcl.gdi", "SVM gradient action not handled: " << (sal_uInt32)nType);
+                break;
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
