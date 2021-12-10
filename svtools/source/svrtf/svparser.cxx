@@ -25,6 +25,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
+#include <unicode/ucsdet.h>
 
 #include <vector>
 #include <climits>
@@ -85,7 +86,6 @@ SvParser<T>::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
     , nNextChPos(0)
     , nNextCh(0)
-    , bUCS2BSrcEnc(false)
     , bSwitchToUCS2(false)
     , bRTF_InTextRead(false)
     , nTokenStackSize( nStackSize )
@@ -188,87 +188,66 @@ sal_uInt32 SvParser<T>::GetNextChar()
     // When reading multiple bytes, we don't have to care about the file
     // position when we run into the pending state. The file position is
     // maintained by SaveState/RestoreState.
-    bool bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
-        unsigned char c1;
-        bool bSeekBack = true;
-
-        rInput.ReadUChar( c1 );
-        bErr = !rInput.good();
-        if( !bErr )
+        rInput.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
+        if (rInput.good())
         {
-            if( 0xff == c1 || 0xfe == c1 )
+            sal_uInt64 nPos = rInput.Tell();
+            if (nPos == 2)
+                eSrcEnc = RTL_TEXTENCODING_UCS2;
+            else if (nPos == 3)
+                SetSrcEncoding(RTL_TEXTENCODING_UTF8);
+            else // Try to detect encoding without BOM
             {
-                unsigned char c2;
-                rInput.ReadUChar( c2 );
-                bErr = !rInput.good();
-                if( !bErr )
+                std::vector<char> buf(65535); // Arbitrarily chosen 64KiB buffer
+                const size_t nSize = rInput.ReadBytes(buf.data(), buf.size());
+                rInput.Seek(0);
+                if (nSize > 0)
                 {
-                    if( 0xfe == c1 && 0xff == c2 )
+                    UErrorCode uerr = U_ZERO_ERROR;
+                    UCharsetDetector* ucd = ucsdet_open(&uerr);
+                    ucsdet_setText(ucd, buf.data(), nSize, &uerr);
+                    if (const UCharsetMatch* match = ucsdet_detect(ucd, &uerr))
                     {
-                        eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = true;
-                        bSeekBack = false;
-                    }
-                    else if( 0xff == c1 && 0xfe == c2 )
-                    {
-                        eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = false;
-                        bSeekBack = false;
-                    }
-                }
-            }
-            else if( 0xef == c1 || 0xbb == c1 ) // check for UTF-8 BOM
-            {
-                unsigned char c2;
-                rInput.ReadUChar( c2 );
-                bErr = !rInput.good();
-                if( !bErr )
-                {
-                    if( ( 0xef == c1 && 0xbb == c2 ) || ( 0xbb == c1 && 0xef == c2 ) )
-                    {
-                        unsigned char c3(0);
-                        rInput.ReadUChar( c3 );
-                        bErr = !rInput.good();
-                        if( !bErr && ( 0xbf == c3 ) )
+                        const char* pEncodingName = ucsdet_getName(match, &uerr);
+
+                        if (U_SUCCESS(uerr))
                         {
-                            SetSrcEncoding(RTL_TEXTENCODING_UTF8);
-                            bSeekBack = false;
+                            if (strcmp("UTF-8", pEncodingName) == 0)
+                            {
+                                SetSrcEncoding(RTL_TEXTENCODING_UTF8);
+                            }
+                            else if (strcmp("UTF-16LE", pEncodingName) == 0)
+                            {
+                                eSrcEnc = RTL_TEXTENCODING_UCS2;
+                                rInput.SetEndian(SvStreamEndian::LITTLE);
+                            }
+                            else if (strcmp("UTF-16BE", pEncodingName) == 0)
+                            {
+                                eSrcEnc = RTL_TEXTENCODING_UCS2;
+                                rInput.SetEndian(SvStreamEndian::BIG);
+                            }
                         }
                     }
+
+                    ucsdet_close(ucd);
                 }
             }
         }
-        if( bSeekBack )
-            rInput.Seek( 0 );
-
         bSwitchToUCS2 = false;
     }
 
+    bool bErr;
     nNextChPos = rInput.Tell();
 
     if( RTL_TEXTENCODING_UCS2 == eSrcEnc )
     {
-        unsigned char c1, c2;
-
-        rInput.ReadUChar( c1 ).ReadUChar( c2 );
-        if( 2 == rInput.Tell() && rInput.good() &&
-            ( (bUCS2BSrcEnc && 0xfe == c1 && 0xff == c2) ||
-              (!bUCS2BSrcEnc && 0xff == c1 && 0xfe == c2) ) )
-            rInput.ReadUChar( c1 ).ReadUChar( c2 );
-
+        sal_Unicode cUC;
+        rInput.ReadUtf16(cUC);
         bErr = !rInput.good();
         if( !bErr )
-        {
-            sal_Unicode cUC = USHRT_MAX;
-            if( bUCS2BSrcEnc )
-                cUC = (sal_Unicode(c1) << 8) | c2;
-            else
-                cUC = (sal_Unicode(c2) << 8) | c1;
-
             c = cUC;
-        }
     }
     else
     {
