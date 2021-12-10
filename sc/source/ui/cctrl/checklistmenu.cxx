@@ -22,9 +22,9 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 
+#include <vcl/commandevent.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -478,9 +478,11 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     , mxButtonBox(mxBuilder->weld_box("buttonbox"))
     , mxBtnOk(mxBuilder->weld_button("ok"))
     , mxBtnCancel(mxBuilder->weld_button("cancel"))
+    , mxContextMenu(mxBuilder->weld_menu("contextmenu"))
     , mxDropDown(mxMenu->create_virtual_device())
     , mnCheckWidthReq(-1)
     , mnWndWidth(0)
+    , mnCheckListVisibleRows(nCheckListVisibleRows)
     , mePrevToggleAllState(TRISTATE_INDET)
     , mnSelectedMenu(MENU_NOT_SELECTED)
     , mrViewData(rViewData)
@@ -499,6 +501,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     mxEdSearch->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxListChecks->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxTreeChecks->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
+    mxListChecks->connect_popup_menu(LINK(this, ScCheckListMenuControl, CommandHdl));
+    mxTreeChecks->connect_popup_menu(LINK(this, ScCheckListMenuControl, CommandHdl));
     mxChkToggleAll->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxBtnSelectSingle->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
     mxBtnUnselectSingle->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseEnterHdl));
@@ -521,7 +525,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
         mpChecks = mxListChecks.get();
     }
 
-    int nChecksHeight = mxTreeChecks->get_height_rows(nCheckListVisibleRows);
+    int nChecksHeight = mxTreeChecks->get_height_rows(mnCheckListVisibleRows);
     if (nWidth != -1)
     {
         mnCheckWidthReq = nWidth - nBorderWidth * 2 - 4;
@@ -629,6 +633,35 @@ void ScCheckListMenuControl::selectCurrentMemberOnly(bool bSet)
     if (!mpChecks->get_cursor(xEntry.get()))
         return;
     mpChecks->set_toggle(*xEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
+}
+
+IMPL_LINK(ScCheckListMenuControl, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    mxContextMenu->set_sensitive("less", mnCheckListVisibleRows > 4);
+    mxContextMenu->set_sensitive("more", mnCheckListVisibleRows < 42);
+
+    OString sCommand = mxContextMenu->popup_at_rect(mpChecks, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    if (sCommand.isEmpty())
+        return true;
+
+    if (sCommand == "more")
+        ++mnCheckListVisibleRows;
+    else if (sCommand == "less")
+        --mnCheckListVisibleRows;
+    ResizeToRequest();
+
+    return true;
+}
+
+void ScCheckListMenuControl::ResizeToRequest()
+{
+    int nChecksHeight = mxTreeChecks->get_height_rows(mnCheckListVisibleRows);
+    mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+    mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+    mxPopover->resize_to_request();
 }
 
 IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)

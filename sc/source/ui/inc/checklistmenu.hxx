@@ -251,6 +251,10 @@ private:
 
     DECL_LINK(SetDropdownPosHdl, void*, void);
 
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+
+    void ResizeToRequest();
+
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Popover> mxPopover;
@@ -271,6 +275,7 @@ private:
     std::unique_ptr<weld::Box> mxButtonBox;
     std::unique_ptr<weld::Button> mxBtnOk;
     std::unique_ptr<weld::Button> mxBtnCancel;
+    std::unique_ptr<weld::Menu> mxContextMenu;
 
     ScopedVclPtr<VirtualDevice> mxDropDown;
 
@@ -286,6 +291,7 @@ private:
     Size maAllocatedSize;
     int mnCheckWidthReq; /// matching width request for mxChecks
     int mnWndWidth;  /// whole window width.
+    int mnCheckListVisibleRows;
     TriState mePrevToggleAllState;
 
     size_t  mnSelectedMenu;
