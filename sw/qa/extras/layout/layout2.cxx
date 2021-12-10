@@ -337,7 +337,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
     // This was 2 (moveFrom and moveTo joined other redlines)
-    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(6), pEditShell->GetRedlineCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(5), pEditShell->GetRedlineCount());
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
