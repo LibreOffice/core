@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2fb83ff_53ee961c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-10T11:10:54Z",
+      "side": 1,
+      "message": "On pc Debian x86-64 with master sources updated today (+ make vcl.clean), I got:\n[CXX] vcl/source/window/commandevent.cxx\n/home/julien/lo/libreoffice/vcl/skia/SkiaHelper.cxx:651:10: error: externally available entity \u0027computeSkPixmapChecksum\u0027 is not previously declared in an included file (if it is only used in this translation unit, make it static; otherwise, provide a declaration of it in an included file) [loplugin:external]\nuint32_t computeSkPixmapChecksum(const SkPixmap\u0026 pixmap)\n~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n[CXX] vcl/source/window/cursor.cxx\n",
+      "revId": "2c86b79e87bc8579f5213708954d5c85fe231407",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
