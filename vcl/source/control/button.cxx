@@ -571,6 +571,9 @@ void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("image", aBuffer.makeStringAndClear());
         }
     }
+
+    if (GetStyle() & WB_DEFBUTTON)
+        rJsonWriter.put("has_default", true);
 }
 
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )

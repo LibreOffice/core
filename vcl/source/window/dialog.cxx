@@ -1683,6 +1683,8 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     vcl::Window* pFocusControl = GetFirstControlForFocus();
     if (pFocusControl)
         rJsonWriter.put("init_focus_id", pFocusControl->get_id());
+
+    rJsonWriter.put("default_button_id", sDialogId.copy(nStartPos));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
