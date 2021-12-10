@@ -1,0 +1,98 @@
+From 5ca63122c53fa0703cad9a8257f123a1ca4c43b1 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 8 Dec 2021 18:24:31 -0500
+Subject: [PATCH 4/4] Apply stb PR#1223 to stb_image
+
+Fixes a crash and an infinite loop in stb_image that could occur with
+specially constructed PGM and HDR files
+
+https://github.com/nothings/stb/pull/1223
+
+This is a candidate fix for:
+
+  https://nvd.nist.gov/vuln/detail/CVE-2021-42715
+
+  In stb_image's HDR reader, loading a specially constructed invalid HDR
+  file can result in an infinite loop within the RLE decoder
+  https://github.com/nothings/stb/issues/1224
+
+Additionally, this is a candidate fix for:
+
+  https://nvd.nist.gov/vuln/detail/CVE-2021-42716
+
+  stbi__pnm_load heap-buffer-overflow bug
+  https://github.com/nothings/stb/issues/1166
+
+  In stb_image's PNM reader, loading a specially constructed valid
+  16-bit PGM file with 4 channels can cause a crash due to an
+  out-of-bounds read
+  https://github.com/nothings/stb/issues/1225
+---
+ thirdparty/stb/stb_image.h     | 17 ++++++++++++-----
+ thirdparty/stb/stb_image.patch |  4 ++--
+ 2 files changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/thirdparty/stb/stb_image.h b/thirdparty/stb/stb_image.h
+index c58bc0c..612bc4c 100644
+--- a/thirdparty/stb/stb_image.h
++++ b/thirdparty/stb/stb_image.h
+@@ -108,7 +108,7 @@ RECENT REVISION HISTORY:
+     Cass Everitt            Ryamond Barbiero                        github:grim210
+     Paul Du Bois            Engin Manap        Aldo Culquicondor    github:sammyhw
+     Philipp Wiesemann       Dale Weiler        Oriol Ferrer Mesia   github:phprus
+-    Josh Tobin                                 Matthew Gregan       github:poppolopoppo
++    Josh Tobin              Neil Bickford      Matthew Gregan       github:poppolopoppo
+     Julian Raschke          Gregory Mullen     Christian Floisand   github:darealshinji
+     Baldur Karlsson         Kevin Schmidt      JR Smith             github:Michaelangel007
+                             Brad Weinberger    Matvey Cherevko      github:mosra
+@@ -7191,12 +7191,12 @@ static float *stbi__hdr_load(stbi__context *s, int *x, int *y, int *comp, int re
+                   // Run
+                   value = stbi__get8(s);
+                   count -= 128;
+-                  if (count > nleft) { STBI_FREE(hdr_data); STBI_FREE(scanline); return stbi__errpf("corrupt", "bad RLE data in HDR"); }
++                  if ((count == 0) || (count > nleft)) { STBI_FREE(hdr_data); STBI_FREE(scanline); return stbi__errpf("corrupt", "bad RLE data in HDR"); }
+                   for (z = 0; z < count; ++z)
+                      scanline[i++ * 4 + k] = value;
+                } else {
+                   // Dump
+-                  if (count > nleft) { STBI_FREE(hdr_data); STBI_FREE(scanline); return stbi__errpf("corrupt", "bad RLE data in HDR"); }
++                  if ((count == 0) || (count > nleft)) { STBI_FREE(hdr_data); STBI_FREE(scanline); return stbi__errpf("corrupt", "bad RLE data in HDR"); }
+                   for (z = 0; z < count; ++z)
+                      scanline[i++ * 4 + k] = stbi__get8(s);
+                }
+@@ -7450,10 +7450,17 @@ static void *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int req
+ 
+    out = (stbi_uc *) stbi__malloc_mad4(s->img_n, s->img_x, s->img_y, ri->bits_per_channel / 8, 0);
+    if (!out) return stbi__errpuc("outofmem", "Out of memory");
+-   stbi__getn(s, out, s->img_n * s->img_x * s->img_y * (ri->bits_per_channel / 8));
++   if (!stbi__getn(s, out, s->img_n * s->img_x * s->img_y * (ri->bits_per_channel / 8))) {
++      STBI_FREE(out);
++      return stbi__errpuc("bad PNM", "PNM file truncated");
++   }
+ 
+    if (req_comp && req_comp != s->img_n) {
+-      out = stbi__convert_format(out, s->img_n, req_comp, s->img_x, s->img_y);
++      if (ri->bits_per_channel == 16) {
++         out = (stbi_uc *) stbi__convert_format16((stbi__uint16 *) out, s->img_n, req_comp, s->img_x, s->img_y);
++      } else {
++         out = stbi__convert_format(out, s->img_n, req_comp, s->img_x, s->img_y);
++      }
+       if (out == NULL) return out; // stbi__convert_format frees input on failure
+    }
+    return out;
+diff --git a/thirdparty/stb/stb_image.patch b/thirdparty/stb/stb_image.patch
+index f1fee52..1768ba8 100644
+--- a/thirdparty/stb/stb_image.patch
++++ b/thirdparty/stb/stb_image.patch
+@@ -1,6 +1,6 @@
+ diff -Naur upstream/stb_image.h zxing/stb_image.h
+---- upstream/stb_image.h	2021-12-08 18:18:07.485461782 -0500
+-+++ zxing/stb_image.h	2021-12-08 18:18:29.596689004 -0500
++--- upstream/stb_image.h	2021-12-08 18:22:56.724466161 -0500
+++++ zxing/stb_image.h	2021-12-08 18:23:15.084657043 -0500
+ @@ -1725,7 +1725,11 @@
+  
+  static stbi_uc stbi__compute_y(int r, int g, int b)
+-- 
+2.33.1
+
