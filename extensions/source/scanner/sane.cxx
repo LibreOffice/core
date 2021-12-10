@@ -170,6 +170,7 @@ Sane::~Sane()
 void Sane::Init()
 {
     OUString sSaneLibName( "libsane" SAL_DLLEXTENSION  );
+#ifndef DISABLE_DYNLOADING
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
@@ -183,7 +184,7 @@ void Sane::Init()
         osl_getFileURLFromSystemPath( sSaneLibSystemPath.pData, &sSaneLibName.pData );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
-
+#endif
     if( pSaneLib )
     {
         bSaneSymbolLoadFailed = false;
