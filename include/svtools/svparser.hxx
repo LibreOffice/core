@@ -62,7 +62,6 @@ protected:
     sal_uInt64          nNextChPos;
     sal_uInt32          nNextCh;            // current character codepoint in UTF32 for the "lex"
 
-    bool                bUCS2BSrcEnc : 1;   // or as big-endian UCS2
     bool                bSwitchToUCS2 : 1;  // switching is allowed
     bool                bRTF_InTextRead : 1;  // only for RTF-Parser!!!
 
