@@ -16,6 +16,23 @@
       "message": "put back +2 from Heiko",
       "revId": "8de602b9edd533a7835cd0cb2f893f489eeb5cbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "509565e2_c97202ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-10T11:20:12Z",
+      "side": 1,
+      "message": "At last! :-)",
+      "revId": "8de602b9edd533a7835cd0cb2f893f489eeb5cbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
