@@ -779,10 +779,10 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     return rIStm.GetError() == ERRCODE_NONE;
 }
 
-bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uLong nOffset, bool bIsMask, bool bMSOFormat)
+bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uInt64 nOffset, bool bIsMask, bool bMSOFormat)
 {
     DIBV5Header aHeader;
-    const sal_uLong nStmPos = rIStm.Tell();
+    const sal_uInt64 nStmPos = rIStm.Tell();
     bool bTopDown(false);
 
     if (!ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat))
@@ -1412,8 +1412,8 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
 {
     const MapMode aMapPixel(MapUnit::MapPixel);
     DIBV5Header aHeader;
-    sal_uLong nImageSizePos(0);
-    sal_uLong nEndPos(0);
+    sal_uInt64 nImageSizePos(0);
+    sal_uInt64 nEndPos(0);
     sal_uInt32 nCompression(COMPRESS_NONE);
     bool bRet(false);
 
@@ -1530,8 +1530,8 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
     {
         ZCodec aCodec;
         SvMemoryStream aMemStm(aHeader.nSizeImage + 4096, 65535);
-        sal_uLong nCodedPos(rOStm.Tell());
-        sal_uLong nLastPos(0);
+        sal_uInt64 nCodedPos(rOStm.Tell());
+        sal_uInt64 nLastPos(0);
         sal_uInt32 nCodedSize(0);
         sal_uInt32 nUncodedSize(0);
 
@@ -1655,7 +1655,7 @@ bool ImplWriteDIB(
         Bitmap::ScopedReadAccess pAcc(const_cast< Bitmap& >(rSource));
         Bitmap::ScopedReadAccess pAccAlpha;
         const SvStreamEndian nOldFormat(rOStm.GetEndian());
-        const sal_uLong nOldPos(rOStm.Tell());
+        const sal_uInt64 nOldPos(rOStm.Tell());
 
         rOStm.SetEndian(SvStreamEndian::LITTLE);
 
@@ -1713,7 +1713,7 @@ bool ReadDIBBitmapEx(
     if(bRetval)
     {
         // base bitmap was read, set as return value and try to read alpha extra-data
-        const sal_uLong nStmPos(rIStm.Tell());
+        const sal_uInt64 nStmPos(rIStm.Tell());
         sal_uInt32 nMagic1(0);
         sal_uInt32 nMagic2(0);
 

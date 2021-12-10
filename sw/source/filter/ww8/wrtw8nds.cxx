@@ -1060,7 +1060,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
     m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, sURL, FieldFlags::Start | FieldFlags::CmdStart );
 
     // write the reference to the "picture" structure
-    sal_uLong nDataStt = m_rWW8Export.pDataStrm->Tell();
+    sal_uInt64 nDataStt = m_rWW8Export.pDataStrm->Tell();
     m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() );
 
     // WinWord 2000 doesn't write this - so it's a temp solution by W97 ?

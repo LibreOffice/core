@@ -112,7 +112,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
     if( pStream )
     {
         char aBuffer[ 4098 ];
-        const sal_uLong nOldPos = pStream->Tell();
+        const sal_uInt64 nOldPos = pStream->Tell();
         const size_t nBytesRead = pStream->ReadBytes(aBuffer, 4096);
         pStream->Seek( nOldPos );
 
@@ -123,7 +123,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
         }
 
         bool bCR = false, bLF = false, bNullChar = false;
-        for( sal_uLong nCnt = 0; nCnt < nBytesRead; ++nCnt )
+        for( sal_uInt64 nCnt = 0; nCnt < nBytesRead; ++nCnt )
             switch( aBuffer[ nCnt ] )
             {
                 case 0x0:   bNullChar = true; break;

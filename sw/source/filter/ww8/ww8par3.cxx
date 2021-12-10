@@ -1164,7 +1164,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     // create Arrays
     bool bLVLOk = true;
 
-    tools::Long nOriginalPos = rSt.Tell();
+    sal_uInt64 nOriginalPos = rSt.Tell();
 
     // 1. read PLCF LST and create list templates in Writer
 
@@ -2105,7 +2105,7 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     sal_uLong nOffset = m_nPicLocFc;
     aSave.Restore(this);
 
-    sal_uLong nOldPos = m_pDataStream->Tell();
+    sal_uInt64 nOldPos = m_pDataStream->Tell();
     WW8_PIC aPic;
     bool bValid = checkSeek(*m_pDataStream, nOffset) &&
                   PicRead(m_pDataStream, &aPic, m_bVer67);

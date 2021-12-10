@@ -85,7 +85,7 @@ css::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFl
     }
     else if ( nT == SotClipboardFormatId::HTML )
     {
-        sal_uLong nLen = GetHTMLStream().TellEnd();
+        sal_uInt64 nLen = GetHTMLStream().TellEnd();
         GetHTMLStream().Seek(0);
 
         css::uno::Sequence< sal_Int8 > aSeq( nLen );

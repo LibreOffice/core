@@ -143,7 +143,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     }
     mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL ).WriteCharPtr( SAL_NEWLINE_STRING );
 
-    sal_uLong nStrmPos = mrStrm.Tell();
+    sal_uInt64 nStrmPos = mrStrm.Tell();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
     {
         WriteCell( nCol, nRow );

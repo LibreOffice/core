@@ -907,7 +907,7 @@ void WW8_WrMagicTable::Write( WW8Export& rWrt )
 {
     if( WW8_WrPlc1::Count() <= 1 )
         return;
-    sal_uLong nFcStart = rWrt.pTableStrm->Tell();
+    sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
     WW8_WrPlc1::Write( *rWrt.pTableStrm );
     rWrt.pFib->m_fcPlcfTch = nFcStart;
     rWrt.pFib->m_lcbPlcfTch = rWrt.pTableStrm->Tell() - nFcStart;
@@ -990,7 +990,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
         *p++ = *pSprms++;
         nVarLen -= 2;
 
-        tools::Long nDataPos = rWrt.pDataStrm->Tell();
+        sal_uInt64 nDataPos = rWrt.pDataStrm->Tell();
         SwWW8Writer::WriteShort( *rWrt.pDataStrm, nVarLen );
         rWrt.pDataStrm->WriteBytes(pSprms, nVarLen);
 
@@ -1493,13 +1493,13 @@ void WW8Export::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
 
 void WW8Export::AppendBookmark( const OUString& rName )
 {
-    sal_uLong nSttCP = Fc2Cp( Strm().Tell() );
+    sal_uInt64 nSttCP = Fc2Cp( Strm().Tell() );
     m_pBkmks->Append( nSttCP, rName );
 }
 
 void WW8Export::AppendBookmarkEndWithCorrection( const OUString& rName )
 {
-    sal_uLong nEndCP = Fc2Cp( Strm().Tell() );
+    sal_uInt64 nEndCP = Fc2Cp( Strm().Tell() );
     m_pBkmks->Append( nEndCP - 1, rName );
 }
 
@@ -3296,11 +3296,11 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
 
 namespace
 {
-    const sal_uLong WW_BLOCKSIZE = 0x200;
+    const sal_uInt64 WW_BLOCKSIZE = 0x200;
 
     ErrCode EncryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
-        sal_uLong nLen = rIn.TellEnd();
+        sal_uInt64 nLen = rIn.TellEnd();
         rIn.Seek(0);
 
         sal_uInt8 in[WW_BLOCKSIZE];

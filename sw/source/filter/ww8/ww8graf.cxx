@@ -1026,7 +1026,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     bool* pbContainsGraphics, SvxMSDffImportRec const * pRecord)
 {
     SwFrameFormat* pFlyFormat = nullptr;
-    sal_uLong nOld = m_pStrm->Tell();
+    sal_uInt64 nOld = m_pStrm->Tell();
 
     ManTypes eType = m_xPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX;
 
@@ -2534,7 +2534,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
 
     if( m_bVer67 )
     {
-        tools::Long nOldPos = m_pStrm->Tell();
+        sal_uInt64 nOldPos = m_pStrm->Tell();
 
         m_nDrawXOfs = m_nDrawYOfs = 0;
         ReadGrafLayer1(*pPF, nGrafAnchorCp);

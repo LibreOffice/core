@@ -58,7 +58,7 @@ static tools::Long StreamRead( SvStream* pStream, void* pBuffer, tools::Long nBu
 
     if( pStream->GetError() != ERRCODE_IO_PENDING )
     {
-        tools::Long nInitialPosition = pStream->Tell();
+        sal_uInt64 nInitialPosition = pStream->Tell();
 
         nRead = static_cast<tools::Long>(pStream->ReadBytes(pBuffer, nBufferSize));
 
