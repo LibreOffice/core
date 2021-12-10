@@ -26,11 +26,11 @@ endef
 $(postprocess_WORKDIR)/services_componentfiles.list: \
     $(call gb_Rdb_get_target,services) \
     $(call gb_Rdb_get_target,ure/services) \
-    $(foreach comp,$(gb_ComponentTarget__ALLCOMPONENTS),$(call gb_ComponentTarget_get_source,$(comp))) \
+    $(foreach comp,$(gb_ComponentTarget__ALLCOMPONENTS),$(call gb_ComponentTarget_get_target,$(comp))) \
     | $(postprocess_WORKDIR)/.dir
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,2)
 	TEMPFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),1, \
-            $(foreach comp,$(sort $(gb_ComponentTarget__ALLCOMPONENTS)),$(call gb_ComponentTarget_get_source,$(comp))$(gb_NEWLINE))) && \
+            $(foreach comp,$(sort $(gb_ComponentTarget__ALLCOMPONENTS)),$(call gb_ComponentTarget_get_target,$(comp))$(gb_NEWLINE))) && \
             mv $$TEMPFILE $@
 
 $(postprocess_WORKDIR)/services_constructors.list: \
