@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f13dc62_edf70d3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-10T09:01:18Z",
+      "side": 1,
+      "message": "Submitted my first patch, let me know if changes are needed 😊",
+      "revId": "378efda49a2758552b06f5a07194f07747e46205",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
