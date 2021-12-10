@@ -22230,6 +22230,11 @@ public:
         }
     }
 
+    virtual void resize_to_request() override
+    {
+        // resizing to request is what gtk does automatically
+    }
+
     virtual ~GtkInstancePopover() override
     {
         PopdownAndFlushClosedSignal();

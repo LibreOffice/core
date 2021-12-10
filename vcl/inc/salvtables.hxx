@@ -1911,6 +1911,8 @@ public:
                                weld::Placement ePlace = weld::Placement::Under) override;
 
     virtual void popdown() override;
+
+    virtual void resize_to_request() override;
 };
 
 class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box

@@ -1441,20 +1441,25 @@ css::uno::Reference<css::awt::XWindow> SalInstanceWindow::GetXWindow()
     return xWindow;
 }
 
-void SalInstanceWindow::resize_to_request()
+namespace
 {
-    if (SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get()))
+void resize_to_request(vcl::Window* pWindow)
+{
+    if (SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(pWindow))
     {
         pSysWin->setOptimalLayoutSize();
         return;
     }
-    if (DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(m_xWindow.get()))
+    if (DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(pWindow))
     {
         pDockWin->setOptimalLayoutSize();
         return;
     }
     assert(false && "must be system or docking window");
 }
+}
+
+void SalInstanceWindow::resize_to_request() { ::resize_to_request(m_xWindow.get()); }
 
 void SalInstanceWindow::set_modal(bool bModal) { m_xWindow->ImplGetFrame()->SetModal(bModal); }
 
@@ -6741,6 +6746,20 @@ void SalInstancePopover::ImplPopDown()
 }
 
 void SalInstancePopover::popdown() { ImplPopDown(); }
+
+void SalInstancePopover::resize_to_request()
+{
+    ::resize_to_request(m_xPopover.get());
+
+    DockingManager* pDockingManager = vcl::Window::GetDockingManager();
+    if (pDockingManager->IsInPopupMode(m_xPopover.get()))
+    {
+        Size aSize = m_xPopover->get_preferred_size();
+        tools::Rectangle aRect = pDockingManager->GetPosSizePixel(m_xPopover.get());
+        pDockingManager->SetPosSizePixel(m_xPopover.get(), aRect.Left(), aRect.Top(), aSize.Width(),
+                                         aSize.Height(), PosSizeFlags::Size);
+    }
+}
 
 IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }
 
