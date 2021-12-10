@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b7c5aca_f22bb99c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-10T13:22:36Z",
+      "side": 1,
+      "message": "Just for information, I had already submitted https://gerrit.libreoffice.org/c/core/+/126635 for this :-)\nAnyway, whatever the patch (yours or mine), the most important is to fix the build so you can push this one and I\u0027ll abandon mine if you want.",
+      "revId": "3b79262a036cc62c1b09a55e5bff23f7883dc1a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
