@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43977c17_88aa7a40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-10T06:16:53Z",
+      "side": 1,
+      "message": "I think I\u0027ll backport to 7.3, since this should be a nice enhancement. It has been around long enough that I don\u0027t think it is critical for 7.2.",
+      "revId": "9a115a254171d702a56a93c5c7e320de755dc8e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

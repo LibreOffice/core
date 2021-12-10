@@ -16,6 +16,29 @@
       "message": "Very nice! Really smart.",
       "revId": "5c686b818cbbec7df10f1445227f859882f495e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f97fd72_3be250f7",
+        "filename": "sw/source/uibase/app/apphdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-10T06:16:53Z",
+      "side": 1,
+      "message": "backports should add if (!xConfigItem) JUST IN CASE I am wrong here. But there should be NO WAY that the buttons should be enabled if there is no xConfigItem.",
+      "range": {
+        "startLine": 815,
+        "startChar": 12,
+        "endLine": 815,
+        "endChar": 28
+      },
+      "revId": "5c686b818cbbec7df10f1445227f859882f495e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
