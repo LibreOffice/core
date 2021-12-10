@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4106ab77_06596883",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-10T19:56:19Z",
+      "side": 1,
+      "message": "Am I missing something or is that an unhandled case where it\u0027s suggesting I use syntax that\u0027s invalid here?\n",
+      "revId": "acfe9044c5ffa6f974995e586791c5c35fc56313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
