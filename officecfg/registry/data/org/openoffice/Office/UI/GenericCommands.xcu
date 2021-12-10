@@ -212,7 +212,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Callout Shapes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Callouts</value>
+          <value xml:lang="en-US">~Callout Shapes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
