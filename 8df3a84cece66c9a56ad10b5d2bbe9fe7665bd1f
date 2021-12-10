@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fe8bc9f_b06163a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-10T18:15:29Z",
+      "side": 1,
+      "message": "See inline comment",
+      "revId": "8df3a84cece66c9a56ad10b5d2bbe9fe7665bd1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33c91638_3196f50d",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5276,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-10T18:15:29Z",
+      "side": 1,
+      "message": "Ok but have in mind it\u0027s not really an error even \"oriented\" seems to be used more widely  (see https://writingexplained.org/oriented-vs-orientated-difference)\n\nand there are also:\nbasegfx/test/B2DPolyRangeTest.cxx:46:        // B2DPolyRange relies on correctly orientated rects\nsc/README.md:25:The format is column orientated which allows quick serialization of the table.\n\nNow as always, I\u0027m not an English native so will let other decide.",
+      "range": {
+        "startLine": 5276,
+        "startChar": 36,
+        "endLine": 5276,
+        "endChar": 44
+      },
+      "revId": "8df3a84cece66c9a56ad10b5d2bbe9fe7665bd1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
