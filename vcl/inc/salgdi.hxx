@@ -430,7 +430,7 @@ public:
                                     double fAlpha,
                                     const OutputDevice& rOutDev );
 
-    bool                        ImplementsFastDrawTransformedBitmap(bool bTestAllowed) const;
+    bool                        HasFastDrawTransformedBitmap() const;
 
     bool                        DrawAlphaRect(
                                     tools::Long nX, tools::Long nY,
@@ -600,6 +600,10 @@ protected:
                                     const SalBitmap* pAlphaBitmap,
                                     double fAlpha) = 0;
 
+    /// Used e.g. by canvas to know whether to cache the drawing.
+    /// See also tdf#138068.
+    virtual bool hasFastDrawTransformedBitmap() const = 0;
+
     /** Render solid rectangle with given transparency
      *
      * @param nX             Top left coordinate of rectangle
@@ -625,10 +629,6 @@ private:
     bool                        m_bLastMirrorDeviceLTRButBiDiRtlSet;
 
 protected:
-    /// check/remember if FastDraw is implemented for this SalGraphics
-    bool                        m_bFastDrawTransformedBitmapChecked;
-    bool                        m_bFastDrawTransformedBitmap;
-
     /// flags which hold the SetAntialiasing() value from OutputDevice
     bool                        m_bAntiAlias : 1;
 
@@ -892,6 +892,11 @@ public:
                                                  const SalBitmap* pAlphaBitmap, double fAlpha) override
     {
         return GetImpl()->drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
+    }
+
+    bool hasFastDrawTransformedBitmap() const override
+    {
+        return GetImpl()->hasFastDrawTransformedBitmap();
     }
 
     bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,

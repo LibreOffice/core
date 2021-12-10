@@ -272,6 +272,8 @@ public:
                 const SalBitmap* pAlphaBitmap,
                 double fAlpha) override;
 
+    virtual bool hasFastDrawTransformedBitmap() const override;
+
     /** Render solid rectangle with given transparency
 
         @param nTransparency

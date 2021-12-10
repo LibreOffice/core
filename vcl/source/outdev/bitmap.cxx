@@ -691,6 +691,18 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     mpMetaFile = pOldMetaFile;
 }
 
+bool OutputDevice::HasFastDrawTransformedBitmap() const
+{
+    if( ImplIsRecordLayout() )
+        return false;
+
+    if (!mpGraphics && !AcquireGraphics())
+        return false;
+    assert(mpGraphics);
+
+    return mpGraphics->HasFastDrawTransformedBitmap();
+}
+
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
     assert(!is_double_buffered_window());

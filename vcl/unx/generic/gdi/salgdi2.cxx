@@ -139,11 +139,12 @@ bool X11SalGraphics::drawTransformedBitmap(
     const SalBitmap* pAlphaBitmap,
     double fAlpha)
 {
-    // called mxImpl->drawTransformedBitmap anyways returns false, but spares a call
-    if( fAlpha != 1.0 )
-        return false;
-
     return mxImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha );
+}
+
+bool X11SalGraphics::hasFastDrawTransformedBitmap() const
+{
+    return mxImpl->hasFastDrawTransformedBitmap();
 }
 
 bool X11SalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
