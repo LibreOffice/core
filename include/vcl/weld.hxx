@@ -2367,6 +2367,8 @@ public:
         = 0;
     virtual void popdown() = 0;
 
+    virtual void resize_to_request() = 0;
+
     void connect_closed(const Link<weld::Popover&, void>& rLink) { m_aCloseHdl = rLink; }
 };
 
