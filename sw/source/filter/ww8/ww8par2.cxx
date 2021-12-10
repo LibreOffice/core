@@ -3976,7 +3976,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     bool bOldNoImp = PrepareStyle(rSI, static_cast<ww::sti>(xStd->sti), nNr, xStd->istdNext);
 
     // if something is interpreted wrong, this should make it work again
-    tools::Long nPos = mpStStrm->Tell();
+    sal_uInt64 nPos = mpStStrm->Tell();
 
     //Variable parts of the STD start at even byte offsets, but "inside
     //the STD", which I take to meaning even in relation to the starting

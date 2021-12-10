@@ -404,7 +404,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
         if (bOleOk)
         {
-            sal_uLong nOldPos = m_pDataStream->Tell();
+            sal_uInt64 nOldPos = m_pDataStream->Tell();
             SvStream *pTmpData = nullptr;
             if (m_nObjLocFc < m_pDataStream->TellEnd())
             {

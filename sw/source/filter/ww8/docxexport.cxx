@@ -607,7 +607,7 @@ void DocxExport::OutputLinkedOLE( const OUString& )
     // Nothing to implement here: WW8 only
 }
 
-sal_uLong DocxExport::ReplaceCr( sal_uInt8 )
+sal_uInt64 DocxExport::ReplaceCr( sal_uInt8 )
 {
     // Completely unused for Docx export... only here for code sharing
     // purpose with binary export

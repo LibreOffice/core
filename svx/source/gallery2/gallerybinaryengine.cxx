@@ -772,7 +772,7 @@ SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryT
     rOStm.WriteUInt32(COMPAT_FORMAT('G', 'A', 'L', 'R'))
         .WriteUInt32(COMPAT_FORMAT('E', 'S', 'R', 'V'));
 
-    const tools::Long nReservePos = rOStm.Tell();
+    const sal_uInt64 nReservePos = rOStm.Tell();
     std::unique_ptr<VersionCompatWrite> pCompat(new VersionCompatWrite(rOStm, 2));
 
     rOStm.WriteUInt32(rId).WriteBool(pThm->IsNameFromResource()); // From version 2 and up

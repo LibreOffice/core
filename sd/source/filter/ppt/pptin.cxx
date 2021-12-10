@@ -180,7 +180,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
 
     if ( mbDocumentFound )
     {
-        sal_uLong nOldPos = rStCtrl.Tell();
+        sal_uInt64 nOldPos = rStCtrl.Tell();
 
         mxPicturesStream = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
         pStData = mxPicturesStream.get();
@@ -1529,7 +1529,7 @@ bool Ppt97AnimationStlSortHelper::operator()( const std::pair< SdrObject*, Ppt97
 
 void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimationsUsed )
 {
-    sal_uLong nOldFilePos = rStCtrl.Tell();
+    sal_uInt64 nOldFilePos = rStCtrl.Tell();
 
     // set PageKind at page (up to now only PageKind::Standard or PageKind::Notes)
     if ( pPage->GetPageKind() == PageKind::Standard )

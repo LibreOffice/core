@@ -1123,7 +1123,7 @@ public:
     void            SetEditAs( const OUString& rEditAs );
     const OUString& GetEditAs() const { return mEditAs; }
     SvStream&       GetStream() const   { return *mpOutStrm; }
-    sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
+    sal_uInt64      GetStreamPos() const    { return mpOutStrm->Tell(); }
 
                 // features during the creation of the following Containers:
 
