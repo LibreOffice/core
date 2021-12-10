@@ -648,7 +648,7 @@ tools::Long maxImageCacheSize()
 
 static o3tl::lru_map<uint32_t, uint32_t> checksumCache(256);
 
-uint32_t computeSkPixmapChecksum(const SkPixmap& pixmap)
+static uint32_t computeSkPixmapChecksum(const SkPixmap& pixmap)
 {
     // Use uint32_t because that's what SkOpts::hash_fn() returns.
     static_assert(std::is_same_v<uint32_t, decltype(SkOpts::hash_fn(nullptr, 0, 0))>);
