@@ -34,8 +34,11 @@ class tdf140661(UITestCase):
             self.assertEqual('DrawObject1', get_state_as_dict(xDrawings.getChild('0'))['Text'])
         else:
             self.assertEqual(12, len(xDrawings.getChildren()))
+
+            # tdf#134960
+            expectedShapeOrder = [1, 2, 8, 9, 7, 10, 11, 3, 12, 4, 5, 6]
             for i in range(12):
-                self.assertEqual('Shape' + str(i + 1), get_state_as_dict(xDrawings.getChild(str(i)))['Text'])
+                self.assertEqual('Shape' + str(expectedShapeOrder[i]), get_state_as_dict(xDrawings.getChild(str(i)))['Text'])
 
         xDrawings.executeAction("COLLAPSE", tuple())
 
