@@ -3119,7 +3119,6 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
     else if ( m_pParaMarkerRedlineMoveFrom )
     {
         // terminating moveFrom redline removes also the paragraph mark
-        m_pParaMarkerRedlineMoveFrom->m_nToken = XML_del;
         CreateRedline( xRange, m_pParaMarkerRedlineMoveFrom );
     }
     if ( m_pParaMarkerRedlineMoveFrom )
