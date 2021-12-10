@@ -224,6 +224,9 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl = false );
 // the necessary notifications in their destructor if needed
 class SwFrameNotify
 {
+private:
+    void ImplDestroy();
+
 protected:
     SwFrame *mpFrame;
     const SwRect maFrame;
@@ -236,7 +239,7 @@ protected:
 
 public:
     SwFrameNotify( SwFrame *pFrame );
-    ~SwFrameNotify() COVERITY_NOEXCEPT_FALSE;
+    ~SwFrameNotify();
 
     const SwRect &getFrameArea() const { return maFrame; }
     void SetInvaKeep() { mbInvaKeep = true; }

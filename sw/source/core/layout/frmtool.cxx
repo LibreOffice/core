@@ -125,7 +125,12 @@ SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
     mbHadFollow = pF->IsContentFrame() && static_cast<SwContentFrame*>(pF)->GetFollow();
 }
 
-SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
+SwFrameNotify::~SwFrameNotify()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
+}
+
+void SwFrameNotify::ImplDestroy()
 {
     SwRectFnSet aRectFnSet(mpFrame);
     const bool bAbsP = aRectFnSet.PosDiff(maFrame, mpFrame->getFrameArea());
