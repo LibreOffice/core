@@ -55,7 +55,6 @@
     <property name="no-show-all">True</property>
     <property name="position">right</property>
     <property name="modal">False</property>
-    <property name="constrain-to">none</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
