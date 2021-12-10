@@ -755,8 +755,13 @@ void SwAnnotationWin::DoResize()
 
     if (aTextHeight > aHeight)
     {
-        // we need vertical scrollbars and have to reduce the width
-        aWidth -= mxVScrollbar->get_scroll_thickness();
+        const int nThickness = mxVScrollbar->get_scroll_thickness();
+        if (nThickness)
+        {
+            // we need vertical scrollbars and have to reduce the width
+            aWidth -= nThickness;
+            mpOutliner->SetPaperSize(PixelToLogic(Size(aWidth, aHeight)));
+        }
         mxVScrollbar->set_vpolicy(VclPolicyType::ALWAYS);
     }
     else
