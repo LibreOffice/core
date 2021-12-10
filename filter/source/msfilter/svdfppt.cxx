@@ -632,7 +632,7 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
     {
         for ( ; i > 0; i-- )
         {
-            sal_uInt32 nPos = rSt.Tell();
+            sal_uInt64 nPos = rSt.Tell();
             sal_uInt16 nChanged;
             rSt.ReadUInt16( nChanged );
             if ( nChanged & 1 )
@@ -2170,7 +2170,7 @@ bool SdrPowerPointImport::ReadFontCollection()
     DffRecordHeader* pEnvHd = aDocRecManager.GetRecordHeader( PPT_PST_Environment );
     if ( pEnvHd )
     {
-        sal_uLong nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it later
+        sal_uInt64 nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it later
         pEnvHd->SeekToContent( rStCtrl );
         DffRecordHeader aListHd;
         if ( SeekToRec( rStCtrl, PPT_PST_FontCollection, pEnvHd->GetRecEndFilePos(), &aListHd ) )
@@ -2381,7 +2381,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
 bool SdrPowerPointImport::SeekToDocument( DffRecordHeader* pRecHd ) const
 {
     bool bRet;
-    sal_uLong nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it should the situation arise
+    sal_uInt64 nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it should the situation arise
     rStCtrl.Seek( m_nDocStreamPos );
     DffRecordHeader aDocHd;
     ReadDffRecordHeader( rStCtrl, aDocHd );
@@ -3052,7 +3052,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
 {
     SdrObject* pRet = nullptr;
     std::optional<SfxItemSet> pSet;
-    sal_uLong nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it later
+    sal_uInt64 nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it later
     DffRecordHeader aPageHd;
     if ( SeekToCurrentPage( &aPageHd ) )
     {   // and now search for the background attributes of the Page

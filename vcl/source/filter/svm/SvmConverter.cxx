@@ -137,7 +137,7 @@ static bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
 
 static void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rString )
 {
-    sal_uInt32 nOld = rIStm.Tell();
+    sal_uInt64 nOld = rIStm.Tell();
     if ( nStrmPos )
     {
         sal_uInt16  nType;
@@ -252,7 +252,7 @@ namespace
 
 #define LF_FACESIZE 32
 
-void static lcl_error( SvStream& rIStm, const SvStreamEndian& nOldFormat, sal_uLong nPos)
+void static lcl_error( SvStream& rIStm, const SvStreamEndian& nOldFormat, sal_uInt64 nPos)
 {
     rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
     rIStm.SetEndian(nOldFormat);
@@ -261,7 +261,7 @@ void static lcl_error( SvStream& rIStm, const SvStreamEndian& nOldFormat, sal_uL
 }
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
-    const sal_uLong         nPos = rIStm.Tell();
+    const sal_uInt64        nPos = rIStm.Tell();
     const SvStreamEndian    nOldFormat = rIStm.GetEndian();
 
     rIStm.SetEndian( SvStreamEndian::LITTLE );

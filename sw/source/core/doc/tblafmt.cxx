@@ -1067,9 +1067,9 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
                 sal_uInt8 nChrSet, nCnt;
-                tools::Long nPos = rStream.Tell();
+                sal_uInt64 nPos = rStream.Tell();
                 rStream.ReadUChar( nCnt ).ReadUChar( nChrSet );
-                if( rStream.Tell() != sal_uLong(nPos + nCnt) )
+                if( rStream.Tell() != nPos + nCnt )
                 {
                     OSL_ENSURE( false, "The Header contains more or newer Data" );
                     rStream.Seek( nPos + nCnt );

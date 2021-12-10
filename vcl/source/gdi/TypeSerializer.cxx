@@ -170,7 +170,7 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
     if (mrStream.GetError())
         return;
 
-    const sal_uLong nInitialStreamPosition = mrStream.Tell();
+    const sal_uInt64 nInitialStreamPosition = mrStream.Tell();
     sal_uInt32 nType;
 
     // if there is no more data, avoid further expensive

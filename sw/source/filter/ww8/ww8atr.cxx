@@ -3839,13 +3839,13 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
  *
  * @return FilePos + 1 of the replaced CR or 0 if nothing was replaced.
  */
-sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
+sal_uInt64 WW8Export::ReplaceCr( sal_uInt8 nChar )
 {
     OSL_ENSURE( nChar, "replaced with 0 crashes WW97/95" );
 
     bool bReplaced = false;
     SvStream& rStrm = Strm();
-    sal_uLong nRetPos = 0, nPos = rStrm.Tell();
+    sal_uInt64 nRetPos = 0, nPos = rStrm.Tell();
     //If there is at least two characters already output
     if (nPos - 2 >= o3tl::make_unsigned(pFib->m_fcMin))
     {

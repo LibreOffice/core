@@ -928,7 +928,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     SCROW nStartRow = aRange.aStart.Row();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
-    sal_uLong  nOldPos = rStrm.Tell();
+    sal_uInt64 nOldPos = rStrm.Tell();
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
     bool   bData = !bSingle;
     if( !bSingle)
@@ -1590,7 +1590,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     bool bQuotedAsText = pExtOptions && pExtOptions->IsQuotedAsText();
 
-    sal_uLong nOriginalStreamPos = rStrm.Tell();
+    sal_uInt64 nOriginalStreamPos = rStrm.Tell();
 
     ScDocumentImport aDocImport(rDoc);
     do
@@ -2004,7 +2004,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     SCROW nStartRow = aRange.aStart.Row();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
-    sal_uLong nOldPos = rStrm.Tell();
+    sal_uInt64 nOldPos = rStrm.Tell();
     bool bData = !bSingle;
     ::std::vector< sal_uInt32 > aFormats;
 

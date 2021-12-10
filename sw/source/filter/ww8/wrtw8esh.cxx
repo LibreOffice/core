@@ -433,7 +433,7 @@ void WW8Export::DoComboBox(const OUString &rName,
     OutputField(nullptr, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              FieldFlags::Start | FieldFlags::CmdStart);
     // write the reference to the "picture" structure
-    sal_uLong nDataStt = pDataStrm->Tell();
+    sal_uInt64 nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
@@ -477,7 +477,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     OutputField(nullptr, ww::eFORMTEXT, FieldString(ww::eFORMTEXT),
         FieldFlags::Start | FieldFlags::CmdStart);
     // write the reference to the "picture" structure
-    sal_uLong nDataStt = pDataStrm->Tell();
+    sal_uInt64 nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
@@ -1410,7 +1410,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
         aAttrIter.OutParaAttr(false);
 
-        sal_uLong nPos = Strm().Tell();
+        sal_uInt64 nPos = Strm().Tell();
         m_pPapPlc->AppendFkpEntry( Strm().Tell(),
                                         pO->size(), pO->data() );
         pO->clear();
@@ -1467,7 +1467,7 @@ void WW8Export::WriteEscher()
 {
     if (m_pEscher)
     {
-        sal_uLong nStart = pTableStrm->Tell();
+        sal_uInt64 nStart = pTableStrm->Tell();
 
         m_pEscher->WritePictures();
         m_pEscher->FinishEscher();
