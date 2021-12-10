@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46756e48_d92b598f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-10T17:03:16Z",
+      "side": 1,
+      "message": "Thank you. To address some of the technical points:\n\n- I think vclcanvas can simply call DrawTransformedBitmapEx() without checking HasFastDrawTransformedBitmap(). I haven\u0027t checked, but I assume that if there is a VCL backend that doesn\u0027t implement it directly the fallback in the OutputDevice function would do the same job as the fallback as vclcanvas. Theoretically the vclcanvas code should do better because it caches the result, but in practice that doesn\u0027t matter because that caching is broken.\n\n- I don\u0027t think doing anything about the HasFastDrawTransformedBitmap() call in OutputDevice is worth the effort, but if you feel like that then I think it\u0027d be ok to have a shared function for backends that\u0027d simplify drawTransformedBitmap() call to drawBitmap() and then call it all VCL backends that need it (that\u0027d be possibly all except Skia?).\n\n- Do I remember correctly that you said you would implement the alpha drawTransformedBitmap() support for the cairo backend? If that\u0027s so, does that address your concern about that part?\n",
+      "revId": "2c6e2fa596d4ecb22adb062a837f1bbf4384fed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
