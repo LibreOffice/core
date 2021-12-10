@@ -194,7 +194,6 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxEventHintId::SaveDocDone:
         case SfxEventHintId::SaveAsDocDone:
         case SfxEventHintId::SaveToDocDone:
-        case SfxEventHintId::CloseDoc:
         {
             AddDocumentToPickList(pDocSh);
         }
