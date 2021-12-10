@@ -16,6 +16,24 @@
       "message": "Please check if after enabling \"Very large spreadsheets (16m rows, 16384 cols)\" there is no performance drop.\n\nI would propose following test case: \n1) Enable \"Very large spreadsheets (16m rows, 16384 cols)\" in Preferences (first you need to \"Enable experimental features)\n2) Restart LO \n3) I create a calc ods spreadsheet file\n4) select columns from D to last column with: Ctrl-Shift+right arrow and hide\n5) save the file and close\n6) reopen the file and type something in some cell\n7) save the file again and close\n\nCheck if there is any performance drop.",
       "revId": "b512664c4447efb5e985f67cb724fc7159381795",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63927c2c_f2a52077",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-10T10:05:22Z",
+      "side": 1,
+      "message": "Test 1 - round-trip test document.\n   -result: as expected, extra columns displayed beyond AMJ - same as the initial bug report, but this time beyond the 1024 limit instead of the 64 limit: not a problem. No slower than expected. when additional columns created.\n\nTest 2 - hide jumbo rows\n   -result: crash attempting to hide rows (step 4 above), so cannot test this patch\u0027s effect. But apart from export bugs, this patch should not cause a reload to be any slower than the original document - because that one will have already created the maximum number of rows and columns anyway. I.E. it will be a really bad idea for a user to hide all columns and rows in a jumbo sheet.",
+      "parentUuid": "be9dabdf_5d7d0274",
+      "revId": "b512664c4447efb5e985f67cb724fc7159381795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
