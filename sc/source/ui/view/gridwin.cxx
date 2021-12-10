@@ -3237,12 +3237,12 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
     if ( !bEdit )
     {
-        // Edit cell with spelling errors ?
-        // tdf#127341 the formally used GetEditUrl(aPosPixel) addiionally
-        // to bSpellError acivated EditMode here for right-click on URL
-        // which prevents the regular contex-menu from appearing. Since this
-        // is more expeced than the context-menu for editing an URL I removed
-        // this. If this was wanted and can be argued his migh be re-acivated.
+        // Edit cell with spelling errors?
+        // tdf#127341 the formally used GetEditUrl(aPosPixel) additionally
+        // to bSpellError activated EditMode here for right-click on URL
+        // which prevents the regular context-menu from appearing. Since this
+        // is more expected than the context-menu for editing an URL, I removed
+        // this. If this was wanted and can be argued it might be re-activated.
         // For now, reduce to spelling errors - as the original comment above
         // suggests.
         if (bMouse && bSpellError)
@@ -5273,7 +5273,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
 
 static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uInt16 nEdges )
 {
-    // the range is always properly orientated
+    // the range is always properly oriented
 
     SCCOL nCol1 = rRange.aStart.Col();
     SCROW nRow1 = rRange.aStart.Row();
