@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "002e7486_0c21a7af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-10T17:11:43Z",
+      "side": 1,
+      "message": "I\u0027m just throwing this out there for comment and for someone to throw a boat-anchor on it to sink it.\n\nHi Kendy.  This is a long shot since it has been over 6 since since you worked with thumbnails, but you seem to be the most recent expert :-).\n\ncommit 192e1cd86f0b072c3efaa7ad32afb303efbff9d9\nAuthor: Jan Holesovsky \u003ckendy@collabora.com\u003e\nDate:   Fri Oct 16 11:54:57 2015 +0200\n\n    Revert \"tdf#95095: Don\u0027t create thumbnails on load.\"\n    \n    It looks more ugly than I had hoped :-(  I\u0027ll try to fine-tune it more.\n    \n    This reverts commit 468b55301f385771d65d2f15f9ad7879af29f1cf.",
+      "revId": "ba377ed8c74f9666e85a33bba1c35f557a8f9733",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
