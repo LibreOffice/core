@@ -1035,18 +1035,14 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     // #i51726# - all drawing objects can be named now
                     if (!pTemp->GetName().isEmpty())
                     {
-                        SwContact* pContact = static_cast<SwContact*>(pTemp->GetUserCall());
-                        tools::Long nYPos = 0;
-                        const Point aNullPt;
-                        if(pContact && pContact->GetFormat())
-                            nYPos = pContact->GetFormat()->FindLayoutRect(false, &aNullPt).Top();
-                        SwContent* pCnt = new SwContent(
-                                            this,
-                                            pTemp->GetName(),
-                                            nYPos);
-                        if(!rIDDMA.IsVisibleLayerId(pTemp->GetLayer()))
+                        tools::Long nYPos = LONG_MIN;
+                        const bool bIsVisible = rIDDMA.IsVisibleLayerId(pTemp->GetLayer());
+                        if (bIsVisible)
+                            nYPos = pTemp->GetLogicRect().Top();
+                        auto pCnt(std::make_unique<SwContent>(this, pTemp->GetName(), nYPos));
+                        if (!bIsVisible)
                             pCnt->SetInvisible();
-                        m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
+                        m_pMember->insert(std::move(pCnt));
                         m_nMemberCount++;
                     }
                 }
