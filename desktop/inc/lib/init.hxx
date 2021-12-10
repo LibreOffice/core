@@ -41,13 +41,18 @@ namespace desktop {
         tools::Rectangle m_aRectangle;
         int m_nPart;
 
+        // This is the "EMPTY" rectangle, which somewhat confusingly actually means
+        // to drop all rectangles (see LOK_CALLBACK_INVALIDATE_TILES documentation),
+        // and so it is actually an infinite rectangle and not an empty one.
+        constexpr static tools::Rectangle emptyAllRectangle = {0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips};
+
         RectangleAndPart()
             : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
         {
         }
 
         RectangleAndPart(const tools::Rectangle* pRect, int nPart)
-            : m_aRectangle( pRect ? *pRect : tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips))
+            : m_aRectangle( pRect ? *pRect : emptyAllRectangle)
             , m_nPart(nPart)
         {
         }
@@ -55,9 +60,10 @@ namespace desktop {
         OString toString() const
         {
             if (m_nPart >= -1)
-                return m_aRectangle.toString() + ", " + OString::number(m_nPart);
+                return (isInfinite() ? "EMPTY" : m_aRectangle.toString())
+                    + ", " + OString::number(m_nPart);
             else
-                return m_aRectangle.toString();
+                return (isInfinite() ? "EMPTY" : m_aRectangle.toString());
         }
 
         /// Infinite Rectangle is both sides are
