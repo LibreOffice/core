@@ -9020,7 +9020,7 @@
      <table:table-cell office:value-type="float" office:value="268.598021151221" calcext:value-type="float">
       <text:p>268.598021151221</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A79];12)=ROUND([.B79];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A79];11)=ROUND([.B79];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A79])" office:value-type="string" office:string-value="{=FORECAST.ETS.MULT(AB43:AB70,AC8:AC43,AB8:AB43,AB3,AB4,AB5)}" calcext:value-type="string">

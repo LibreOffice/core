@@ -4306,7 +4306,7 @@
      <table:table-cell office:value-type="float" office:value="1.66789802691649E-016" calcext:value-type="float">
       <text:p>1.66789802691649E-16</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A10];15)=ORG.LIBREOFFICE.ROUNDSIG([.B10];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A10];14)=ORG.LIBREOFFICE.ROUNDSIG([.B10];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=CHISQ.TEST(T1:T14,U1:U14)" calcext:value-type="string">
