@@ -52,14 +52,14 @@ class SfxPickListImpl : public SfxListener
        certain requirements, e.g. being writable. Check implementation for requirement
        details.
      */
-    static void         AddDocumentToPickList( const SfxObjectShell* pDocShell );
+    static void AddDocumentToPickList(const SfxObjectShell* pDocShell, bool bNoThumbnail = false);
 
 public:
     SfxPickListImpl(SfxApplication& rApp);
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
-void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
+void SfxPickListImpl::AddDocumentToPickList(const SfxObjectShell* pDocSh, bool bNoThumbnail)
 {
     if (pDocSh->IsAvoidRecentDocs() || comphelper::LibreOfficeKit::isActive())
         return;
@@ -96,7 +96,7 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
 
     // generate the thumbnail
     //fdo#74834: only generate thumbnail for history if the corresponding option is not disabled in the configuration
-    if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled() &&
+    if (!bNoThumbnail && !pDocSh->IsModified() && !Application::IsHeadlessModeEnabled() &&
             officecfg::Office::Common::History::RecentDocsThumbnail::get())
     {
         // not modified => the document matches what is in the shell
@@ -198,7 +198,8 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxEventHintId::SaveToDocDone:
         case SfxEventHintId::CloseDoc:
         {
-            AddDocumentToPickList(pDocSh);
+            const bool bNoThumbnail = rEventHint.GetEventId() == SfxEventHintId::CloseDoc;
+            AddDocumentToPickList(pDocSh, bNoThumbnail);
         }
         break;
 
