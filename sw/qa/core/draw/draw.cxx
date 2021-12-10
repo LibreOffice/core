@@ -31,9 +31,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxDeleteAsChar)
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "as-char-textbox.docx");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    sal_Int32 nActual = pPage->GetObjCount();
+    Color nActual = pPage->GetObjCount();
     // 3 objects on the draw page: a shape + fly frame pair and a Writer image.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), nActual);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(3), nActual);
 
     // Select the shape of the textbox and delete it.
     SdrObject* pObject = pPage->GetObj(0);
@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxDeleteAsChar)
     // - Expected: 0
     // - Actual  : 2
     // i.e. the fly frame of the shape and the inner Writer image was not deleted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nActual);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0), nActual);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
@@ -67,8 +67,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
             continue;
         }
 
-        sal_Int32 nDrawOrdNum = pFormat->FindRealSdrObject()->GetOrdNum();
-        sal_Int32 nFlyOrdNum = pFlyFormat->FindRealSdrObject()->GetOrdNum();
+        Color nDrawOrdNum = pFormat->FindRealSdrObject()->GetOrdNum();
+        Color nFlyOrdNum = pFlyFormat->FindRealSdrObject()->GetOrdNum();
         CPPUNIT_ASSERT_EQUAL(nDrawOrdNum + 1, nFlyOrdNum);
     }
 
@@ -88,8 +88,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
             continue;
         }
 
-        sal_Int32 nDrawOrdNum = pFormat->FindRealSdrObject()->GetOrdNum();
-        sal_Int32 nFlyOrdNum = pFlyFormat->FindRealSdrObject()->GetOrdNum();
+        Color nDrawOrdNum = pFormat->FindRealSdrObject()->GetOrdNum();
+        Color nFlyOrdNum = pFlyFormat->FindRealSdrObject()->GetOrdNum();
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: 4
         // - Actual  : 2
