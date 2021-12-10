@@ -238,7 +238,7 @@ void EMFWriter::ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, sal
 
 bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
 {
-    const sal_uLong nHeaderPos = m_rStm.Tell();
+    const sal_uInt64 nHeaderPos = m_rStm.Tell();
 
     maVDev->EnableOutput( false );
     maVDev->SetMapMode( rMtf.GetPrefMapMode() );
@@ -302,7 +302,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     ImplEndRecord();
 
     // write header
-    const sal_uLong nEndPos = m_rStm.Tell(); m_rStm.Seek( nHeaderPos );
+    const sal_uInt64 nEndPos = m_rStm.Tell(); m_rStm.Seek( nHeaderPos );
 
     m_rStm.WriteUInt32( 0x00000001 ).WriteUInt32( 108 )   //use [MS-EMF 2.2.11] HeaderExtension2 Object
             .WriteInt32( 0 ).WriteInt32( 0 ).WriteInt32( aMtfSizePix.Width() - 1 ).WriteInt32( aMtfSizePix.Height() - 1 )
@@ -813,7 +813,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
     m_rStm.WriteInt32( 0 ).WriteInt32( 0 ).WriteInt32( aBmpSizePixel.Width() ).WriteInt32( aBmpSizePixel.Height() );
 
     // write offset positions and sizes later
-    const sal_uLong nOffPos = m_rStm.Tell();
+    const sal_uInt64 nOffPos = m_rStm.Tell();
     m_rStm.SeekRel( 16 );
 
     m_rStm.WriteUInt32( 0 ).WriteInt32( ( RasterOp::Xor == maVDev->GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
@@ -851,7 +851,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
     m_rStm.WriteBytes( aMemStm.GetData(), nDIBSize );
 
-    const sal_uLong nEndPos = m_rStm.Tell();
+    const sal_uInt64 nEndPos = m_rStm.Tell();
     m_rStm.Seek( nOffPos );
     m_rStm.WriteUInt32( 80 ).WriteUInt32( nHeaderSize + nPalSize );
     m_rStm.WriteUInt32( 80 + nHeaderSize + nPalSize ).WriteUInt32( nImageSize );

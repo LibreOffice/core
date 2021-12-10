@@ -376,7 +376,7 @@ void RtfExport::DoFormText(const SwInputField* pField)
                                     + "}}");
 }
 
-sal_uLong RtfExport::ReplaceCr(sal_uInt8 /*nChar*/)
+sal_uInt64 RtfExport::ReplaceCr(sal_uInt8 /*nChar*/)
 {
     // Completely unused for Rtf export... only here for code sharing
     // purpose with binary export

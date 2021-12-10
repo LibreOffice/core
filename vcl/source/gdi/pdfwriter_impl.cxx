@@ -1564,7 +1564,7 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
 {
     if (!g_bDebugDisableCompression)
     {
-        sal_uLong nEndPos = pStream->TellEnd();
+        sal_uInt64 nEndPos = pStream->TellEnd();
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
         ZCodec aCodec( 0x4000, 0x4000 );
         SvMemoryStream aStream;
@@ -7993,7 +7993,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
     bool bFlateFilter = compressStream( rObject.m_pContentStream.get() );
-    sal_uLong nSize = rObject.m_pContentStream->TellEnd();
+    sal_uInt64 nSize = rObject.m_pContentStream->TellEnd();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
     if (g_bDebugDisableCompression)
     {

@@ -114,7 +114,7 @@ public:
 
     void DoFormText(const SwInputField* pField) override;
 
-    sal_uLong ReplaceCr(sal_uInt8 nChar) override;
+    sal_uInt64 ReplaceCr(sal_uInt8 nChar) override;
 
     ExportFormat GetExportFormat() const override { return ExportFormat::RTF; }
 

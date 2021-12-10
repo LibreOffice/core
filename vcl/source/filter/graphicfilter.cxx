@@ -488,7 +488,7 @@ ErrCode GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
 ErrCode GraphicFilter::CanImportGraphic( const OUString& rMainUrl, SvStream& rIStream,
                                         sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
 {
-    sal_uLong nStreamPos = rIStream.Tell();
+    sal_uInt64 nStreamPos = rIStream.Tell();
     ErrCode nRes = ImpTestOrFindFormat( rMainUrl, rIStream, nFormat );
 
     rIStream.Seek(nStreamPos);
@@ -772,7 +772,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
 
     ResetLastError();
 
-    const sal_uLong nStreamBegin = rIStream.Tell();
+    const sal_uInt64 nStreamBegin = rIStream.Tell();
 
     rIStream.Seek(nStreamBegin);
 
@@ -1030,8 +1030,8 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
 {
     ErrCode aReturnCode = ERRCODE_NONE;
 
-    const sal_uInt32 nStreamPosition(rStream.Tell());
-    const sal_uInt32 nStreamLength(rStream.remainingSize());
+    const sal_uInt64 nStreamPosition(rStream.Tell());
+    const sal_uInt64 nStreamLength(rStream.remainingSize());
 
     bool bOkay(false);
 

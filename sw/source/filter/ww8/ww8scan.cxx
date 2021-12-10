@@ -6221,7 +6221,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
                 identify the values for PLCF and PLF LFO
                 and PLCF for the textbox break descriptors
             */
-            tools::Long nOldPos = rSt.Tell();
+            sal_uInt64 nOldPos = rSt.Tell();
 
             rSt.Seek( 0x02da );
             rSt.ReadInt32( m_fcSttbFnm );

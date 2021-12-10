@@ -809,7 +809,7 @@ public:
     // Compute the number format for WW dates
     bool GetNumberFormat(const SwField& rField, OUString& rStr);
 
-    virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) = 0;
+    virtual sal_uInt64 ReplaceCr( sal_uInt8 nChar ) = 0;
 
     const SfxPoolItem* HasItem( sal_uInt16 nWhich ) const;
 
@@ -1090,7 +1090,7 @@ public:
     void WriteAsStringTable(const std::vector<OUString>&, sal_Int32& rfcSttbf,
         sal_Int32& rlcbSttbf);
 
-    virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) override;
+    virtual sal_uInt64 ReplaceCr( sal_uInt8 nChar ) override;
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() ) override;
     void WriteChar( sal_Unicode c ) override;

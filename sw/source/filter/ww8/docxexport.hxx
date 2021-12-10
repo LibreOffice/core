@@ -183,7 +183,7 @@ public:
 
     virtual void DoFormText(const SwInputField * pField) override;
 
-    virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) override;
+    virtual sal_uInt64 ReplaceCr( sal_uInt8 nChar ) override;
 
     /// Returns the relationd id
     OString OutputChart( css::uno::Reference< css::frame::XModel > const & xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer );
