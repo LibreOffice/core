@@ -5585,7 +5585,7 @@
      <table:table-cell table:style-name="ce79" office:value-type="float" office:value="0.299999999999999" calcext:value-type="float">
       <text:p>0.300000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A58];15)=ORG.LIBREOFFICE.ROUNDSIG([.B58];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce80" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A58];14)=ORG.LIBREOFFICE.ROUNDSIG([.B58];14)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" table:formula="of:=FORMULA([.A58])" office:value-type="string" office:string-value="=CHISQDIST(CHISQINV(0.3,20),20,TRUE())" calcext:value-type="string">
