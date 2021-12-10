@@ -15,6 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,zxing,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/zxing_newline.patch.1 \
+	external/zxing/0001-Use-a-patch-file-to-document-changes-from-upstream-s.patch \
+	external/zxing/0002-Update-stb_image_write-from-1.14-to-1.16.patch \
+	external/zxing/0003-Update-stb_image-from-2.25-to-2.27.patch \
+	external/zxing/0004-Apply-stb-PR-1223-to-stb_image.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
