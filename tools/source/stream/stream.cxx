@@ -718,52 +718,56 @@ void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
             eReadBomCharSet == RTL_TEXTENCODING_UTF8))
         return;    // nothing to read
 
-    bool bTryUtf8 = false;
-    sal_uInt16 nFlag(0);
-    sal_sSize nBack = sizeof(nFlag);
-    ReadUInt16( nFlag );
+    const sal_uInt64 nOldPos = Tell();
+    bool bGetBack = true;
+    unsigned char nFlag(0);
+    ReadUChar( nFlag );
     switch ( nFlag )
     {
-        case 0xfeff :
-            // native UTF-16
-            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
-                    eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
-                nBack = 0;
-        break;
-        case 0xfffe :
-            // swapped UTF-16
+        case 0xfe: // UTF-16BE?
             if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
                     eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
             {
-                SetEndian( m_nEndian == SvStreamEndian::BIG ? SvStreamEndian::LITTLE : SvStreamEndian::BIG );
-                nBack = 0;
+                ReadUChar(nFlag);
+                if (nFlag == 0xff)
+                {
+                    SetEndian(SvStreamEndian::BIG);
+                    bGetBack = false;
+                }
             }
-        break;
-        case 0xefbb :
-            if (m_nEndian == SvStreamEndian::BIG &&
-                    (eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
-                     eReadBomCharSet == RTL_TEXTENCODING_UTF8))
-                bTryUtf8 = true;
-        break;
-        case 0xbbef :
-            if (m_nEndian == SvStreamEndian::LITTLE &&
-                    (eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
-                     eReadBomCharSet == RTL_TEXTENCODING_UTF8))
-                bTryUtf8 = true;
-        break;
+
+        case 0xff: // UTF-16LE?
+            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
+                    eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
+            {
+                ReadUChar(nFlag);
+                if (nFlag == 0xfe)
+                {
+                    SetEndian(SvStreamEndian::LITTLE);
+                    bGetBack = false;
+                }
+            }
+
+        case 0xef: // UTF-8?
+            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
+                    eReadBomCharSet == RTL_TEXTENCODING_UTF8)
+            {
+                ReadUChar(nFlag);
+                if (nFlag == 0xbb)
+                {
+                    ReadUChar(nFlag);
+                    if (nFlag == 0xbf)
+                    {
+                        bGetBack = false; // it is UTF-8
+                    }
+                }
+            }
+
         default:
             ;   // nothing
     }
-    if (bTryUtf8)
-    {
-        unsigned char nChar(0);
-        nBack += sizeof(nChar);
-        ReadUChar( nChar );
-        if (nChar == 0xbf)
-            nBack = 0;      // it is UTF-8
-    }
-    if (nBack)
-        SeekRel( -nBack );      // no BOM, pure data
+    if (bGetBack)
+        Seek(nOldPos);      // no BOM, pure data
 }
 
 sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
