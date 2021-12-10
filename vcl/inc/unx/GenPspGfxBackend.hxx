@@ -111,6 +111,8 @@ public:
                                const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
                                const SalBitmap* pAlphaBitmap, double fAlpha) override;
 
+    bool hasFastDrawTransformedBitmap() const override;
+
     bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                        sal_uInt8 nTransparency) override;
 

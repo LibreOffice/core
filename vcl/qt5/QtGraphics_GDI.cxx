@@ -661,7 +661,6 @@ bool QtGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
 {
     if (fAlpha != 1.0)
         return false;
-
     QImage aImage;
     if (pAlphaBitmap && !getAlphaImage(rSourceBitmap, *pAlphaBitmap, aImage))
         return false;
@@ -681,6 +680,8 @@ bool QtGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     aPainter.update(aImage.rect());
     return true;
 }
+
+bool QtGraphicsBackend::hasFastDrawTransformedBitmap() const { return false; }
 
 bool QtGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                       tools::Long nHeight, sal_uInt8 nTransparency)
