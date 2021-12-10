@@ -52,6 +52,24 @@
       "parentUuid": "63927c2c_f2a52077",
       "revId": "b512664c4447efb5e985f67cb724fc7159381795",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ef9e4e2_14f3d8bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-10T11:48:33Z",
+      "side": 1,
+      "message": "\u003e Test 1 - I think the patch should also works for 16384 columns.\nYes, but that is test 2, which I couldn\u0027t create. In this test I was using an ODF that specified number-columns-repeated\u003d1017. It round-tripped that nicely.\n\n\u003e  What value is saved for \"number-columns-repeated\" field (in ODS file), if \"Very large spreadsheets\" is enabled?\nNothing - it crashed.\n\n\u003e Test 2 - Please create bug report for that.\nOK. tdf#146162",
+      "parentUuid": "33c98118_7bbe6d2e",
+      "revId": "b512664c4447efb5e985f67cb724fc7159381795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
