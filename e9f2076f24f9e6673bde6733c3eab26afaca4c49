@@ -16,6 +16,24 @@
       "message": "Marina/Tomaž: since OpenGL rendering has been removed and OpenGL has been kept only for slide transition (+ some canvas part but it seems already broken, see comments from tdf#145910), the goal is to reduce the number of blacklisted elements so more people may use specific OpenGL slide transitions.\n\nOf course, this patch can be reverted partially or totally anytime.\n\nAdolfo: would it be possible you bring back OpenGL part in https://wiki.documentfoundation.org/QA/FirstSteps you had removed?",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10c925b_2dab267c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-12-10T11:51:43Z",
+      "side": 1,
+      "message": "You can do it yourself; it’s a wiki and anyone can edit it, no permission needed from anyone.",
+      "parentUuid": "cf1b5897_a812ff87",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
