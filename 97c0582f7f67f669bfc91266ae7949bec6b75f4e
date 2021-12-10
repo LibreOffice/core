@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "eab21a30_6752f006",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-10T00:39:15Z",
+      "side": 1,
+      "message": "Certainly not, it is a regression of\n\n  commit f6b143a57d9bd8f5d7b29febcb4e01ee1eb2ff1d\n  CommitDate: Wed Jul 7 17:44:46 2021 +0200\n\n    tdf#142910 sc filter: fix \"greater than\" or \"smaller than\" etc\n\nthat introduced the member variable double mfRoundedValue and the ctor\u0027s double fRVal \u003d 0.0. It\u0027s always bad to introduce a defaulted parameter in the middle without adapting *all* callers..",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "97c0582f7f67f669bfc91266ae7949bec6b75f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab177e2d_38bf67bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-10T00:39:15Z",
+      "side": 1,
+      "message": "Au contraire, it\u0027s good to fix this..",
+      "revId": "97c0582f7f67f669bfc91266ae7949bec6b75f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3efa056f_dea3ac4d",
