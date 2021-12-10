@@ -766,10 +766,37 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 2), "RedlineType"));
     CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(2), 2), "RedlineType"));
     CPPUNIT_ASSERT_EQUAL(true, getRun( getParagraph( 2 ), 3 )->getString().endsWith("tellus."));
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 4), "Bookmark"));
     // deleted paragraph mark at the end of the second paragraph
-    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 5), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(2), 5), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 6 )->getString());
+    if (mbExported)
+    {
+        // there is no run after the MoveBookmark
+        bool bCaught = false;
+        try
+        {
+            getRun( getParagraph( 2 ), 5 );
+        }
+        catch (container::NoSuchElementException&)
+        {
+            bCaught = true;
+        }
+        CPPUNIT_ASSERT_EQUAL(true, bCaught);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
+{
+    loadAndSave("tdf123460.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was 1 (put end of paragraph of the previous moveFrom into a w:del,
+    // resulting double deletions at the same position, which is an
+    // ODT back-compatibility issue described in tdf#107292)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:del", 0);
+    // This was 0
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:moveFrom", 1);
 }
 
 //tdf#125298: fix charlimit restrictions in bookmarknames and field references if they contain non-ascii characters
