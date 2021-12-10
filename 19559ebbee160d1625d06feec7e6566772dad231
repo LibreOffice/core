@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4940562_ae4d7da7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-10T06:04:39Z",
+      "side": 1,
+      "message": "Fun thing is that it would also work if the precision was *increased* from 12 to 13 :)",
+      "revId": "19559ebbee160d1625d06feec7e6566772dad231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
