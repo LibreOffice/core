@@ -34,6 +34,24 @@
       "parentUuid": "be9dabdf_5d7d0274",
       "revId": "b512664c4447efb5e985f67cb724fc7159381795",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c98118_7bbe6d2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-12-10T11:02:32Z",
+      "side": 1,
+      "message": "Test 1 - I think the patch should also works for 16384 columns. What value is saved for  \"number-columns-repeated\" field (in ODS file), if \"Very large spreadsheets\" is enabled?\n\nTest 2 - Please create bug report for that.",
+      "parentUuid": "63927c2c_f2a52077",
+      "revId": "b512664c4447efb5e985f67cb724fc7159381795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
