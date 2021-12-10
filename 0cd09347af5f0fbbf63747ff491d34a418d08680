@@ -67,6 +67,24 @@
       "message": "Fine with me to have the strings in 7.3",
       "revId": "0cd09347af5f0fbbf63747ff491d34a418d08680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcd81c35_8dff35f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-10T11:22:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "803fa8a4_d9c6ac45",
+      "revId": "0cd09347af5f0fbbf63747ff491d34a418d08680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
