@@ -1764,7 +1764,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
 
         size_t i = 0;
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 1000000000, 1000000000, 0"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("EMPTY, 0"), std::get<1>(notifs[i++]));
     }
 }
 
@@ -1855,7 +1855,7 @@ void DesktopLOKTest::testBinaryCallback()
 
     const tools::Rectangle rect1(Point(10,15),Size(20,25));
     const std::string rect1String(rect1.toString().getStr());
-    // Very that using queue() and libreOfficeKitViewInvalidateTilesCallback() has the same result.
+    // Verify that using queue() and libreOfficeKitViewInvalidateTilesCallback() has the same result.
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
@@ -1881,6 +1881,20 @@ void DesktopLOKTest::testBinaryCallback()
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
         CPPUNIT_ASSERT_EQUAL(rect1String, std::get<1>(notifs[0]));
+    }
+    // Verify that the "EMPTY" invalidation gets converted properly.
+    {
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
+
+        handler->libreOfficeKitViewInvalidateTilesCallback(nullptr, INT_MIN);
+
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
+        CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(std::string("EMPTY"), std::get<1>(notifs[0]));
     }
 }
 
