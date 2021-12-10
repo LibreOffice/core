@@ -50,14 +50,16 @@ private:
 
 namespace
 {
-bool checkDumpAgainstFile(const OUString& rDump, std::u16string_view aFilePath)
+bool checkDumpAgainstFile(const OUString& rDump, std::u16string_view aFilePath,
+                          char const* toleranceFile)
 {
     OString aOFile = OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
 
     CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.isEmpty());
 
     OString aDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
-    return doXMLDiff(aOFile.getStr(), aDump.getStr(), static_cast<int>(rDump.getLength()), nullptr);
+    return doXMLDiff(aOFile.getStr(), aDump.getStr(), static_cast<int>(rDump.getLength()),
+                     toleranceFile);
 }
 }
 
@@ -78,10 +80,15 @@ xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
 
 void Chart2XShapeTest::compareAgainstReference(std::u16string_view rReferenceFile)
 {
-    checkDumpAgainstFile(getXShapeDumpString(),
-                         OUStringConcatenation(m_directories.getPathFromSrc(
-                                                   u"/chart2/qa/extras/xshape/data/reference/")
-                                               + rReferenceFile));
+    checkDumpAgainstFile(
+        getXShapeDumpString(),
+        OUStringConcatenation(
+            m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/")
+            + rReferenceFile),
+        OUStringToOString(
+            m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/tolerance.xml"),
+            RTL_TEXTENCODING_UTF8)
+            .getStr());
 }
 
 void Chart2XShapeTest::testFdo75075()
