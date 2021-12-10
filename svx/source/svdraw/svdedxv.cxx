@@ -24,6 +24,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/unotext.hxx>
+#include <o3tl/deleter.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
 #include <svl/whiter.hxx>
@@ -91,7 +92,7 @@ SdrObjEditView::~SdrObjEditView()
     mpTextEditWin = nullptr; // so there's no ShowCursor in SdrEndTextEdit
     assert(!IsTextEdit());
     if (IsTextEdit())
-        SdrEndTextEdit();
+        suppress_fun_call_w_exception(SdrEndTextEdit());
     mpTextEditOutliner.reset();
     assert(nullptr == mpOldTextEditUndoManager); // should have been reset
 }
