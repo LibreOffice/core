@@ -158,7 +158,7 @@ tools::Long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         if( nLen > MAX_FIELDLEN )
             nLen = MAX_FIELDLEN;
 
-        tools::Long nOldPos = m_pStrm->Tell();
+        sal_uInt64 nOldPos = m_pStrm->Tell();
         m_xSBase->WW8ReadString( *m_pStrm, aVal, pB->GetStartPos(), nLen,
                                         m_eStructCharSet );
         m_pStrm->Seek( nOldPos );
@@ -957,7 +957,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if (aF.bResNest && !AcceptableNestedField(aF.nId))
             return aF.nLen;                 // Result nested -> unusable
 
-        tools::Long nOldPos = m_pStrm->Tell();
+        sal_uInt64 nOldPos = m_pStrm->Tell();
         OUString aStr;
         aF.nLCode = m_xSBase->WW8ReadString( *m_pStrm, aStr, m_xPlcxMan->GetCpOfs()+
             aF.nSCode, aF.nLCode, m_eTextCharSet );
@@ -1136,7 +1136,7 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTag
 
 WW8_CP SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
 {
-    tools::Long nOldPos = m_pStrm->Tell();
+    sal_uInt64 nOldPos = m_pStrm->Tell();
 
     WW8_CP nStart = pF->nSCode - 1;         // starting with 0x19
     WW8_CP nL = pF->nLen;                     // Total length with result and nest
@@ -1196,7 +1196,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
 // GetFieldResult allocates a string and reads the resulted field
 OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc const * pF )
 {
-    tools::Long nOldPos = m_pStrm->Tell();
+    sal_uInt64 nOldPos = m_pStrm->Tell();
 
     WW8_CP nStart = pF->nSRes;              // result start
     WW8_CP nL = pF->nLRes;                    // result length
@@ -3680,7 +3680,7 @@ void SwWW8ImplReader::Read_FieldVanish( sal_uInt16, const sal_uInt8*, short nLen
         return;
 
     m_bIgnoreText = true;
-    tools::Long nOldPos = m_pStrm->Tell();
+    sal_uInt64 nOldPos = m_pStrm->Tell();
 
     WW8_CP nStartCp = m_xPlcxMan->Where() + m_xPlcxMan->GetCpOfs();
 

@@ -68,7 +68,7 @@ SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
         return mrStream;
     }
 
-    sal_uLong nStmPos = mrStream.Tell();
+    sal_uInt64 nStmPos = mrStream.Tell();
     SvStreamEndian nOldFormat = mrStream.GetEndian();
 
     mrStream.SetEndian(SvStreamEndian::LITTLE);

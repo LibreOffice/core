@@ -1278,14 +1278,14 @@ bool ImpGraphic::swapOutContent(SvStream& rStream)
     rStream.WriteInt32(0);
 
     // write data block
-    const sal_uLong nDataStart = rStream.Tell();
+    const sal_uInt64 nDataStart = rStream.Tell();
 
     swapOutGraphic(rStream);
 
     if (!rStream.GetError())
     {
         // Write the written length th the header
-        const sal_uLong nCurrentPosition = rStream.Tell();
+        const sal_uInt64 nCurrentPosition = rStream.Tell();
         rStream.Seek(nDataFieldPos);
         rStream.WriteInt32(nCurrentPosition - nDataStart);
         rStream.Seek(nCurrentPosition);
