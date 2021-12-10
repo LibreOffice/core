@@ -802,7 +802,7 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
     }
 
     const OUString sTrimmed = pPaM->GetText().trim();
-    if ( sTrimmed.isEmpty() )
+    if ( sTrimmed.getLength() < 2 )
     {
         if ( bDeletePaM )
             delete pPaM;
