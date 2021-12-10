@@ -16,6 +16,24 @@
       "message": "Hello Winfried,\nBug id is incorrect",
       "revId": "a81b25635b9feed805ec19ce1b3758c228071328",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37910d49_f6172781",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-10T00:17:26Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "4d1296af_62798ecb",
+      "revId": "a81b25635b9feed805ec19ce1b3758c228071328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
