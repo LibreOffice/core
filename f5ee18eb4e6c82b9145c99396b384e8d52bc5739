@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f0c0324_fc5e9e96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-10T15:58:44Z",
+      "side": 1,
+      "message": "or am I missing any reason why you used gb_Component_get_source in the first place?",
+      "revId": "f5ee18eb4e6c82b9145c99396b384e8d52bc5739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
