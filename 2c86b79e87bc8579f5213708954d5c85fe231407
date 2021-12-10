@@ -16,6 +16,23 @@
       "message": "On pc Debian x86-64 with master sources updated today (+ make vcl.clean), I got:\n[CXX] vcl/source/window/commandevent.cxx\n/home/julien/lo/libreoffice/vcl/skia/SkiaHelper.cxx:651:10: error: externally available entity \u0027computeSkPixmapChecksum\u0027 is not previously declared in an included file (if it is only used in this translation unit, make it static; otherwise, provide a declaration of it in an included file) [loplugin:external]\nuint32_t computeSkPixmapChecksum(const SkPixmap\u0026 pixmap)\n~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n[CXX] vcl/source/window/cursor.cxx\n",
       "revId": "2c86b79e87bc8579f5213708954d5c85fe231407",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9213c59_4c9cbbed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-10T11:12:16Z",
+      "side": 1,
+      "message": "Ok for this patch?\ndiff --git a/vcl/skia/SkiaHelper.cxx b/vcl/skia/SkiaHelper.cxx\nindex 2a4a7f1a6d7f..8dc3827b097a 100644\n--- a/vcl/skia/SkiaHelper.cxx\n+++ b/vcl/skia/SkiaHelper.cxx\n@@ -648,7 +648,7 @@ tools::Long maxImageCacheSize()\n \n static o3tl::lru_map\u003cuint32_t, uint32_t\u003e checksumCache(256);\n \n-uint32_t computeSkPixmapChecksum(const SkPixmap\u0026 pixmap)\n+static uint32_t computeSkPixmapChecksum(const SkPixmap\u0026 pixmap)\n {\n     // Use uint32_t because that\u0027s what SkOpts::hash_fn() returns.\n     static_assert(std::is_same_v\u003cuint32_t, decltype(SkOpts::hash_fn(nullptr, 0, 0))\u003e);\n\n(it builds for me locally)",
+      "revId": "2c86b79e87bc8579f5213708954d5c85fe231407",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
