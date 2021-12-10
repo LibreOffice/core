@@ -16,6 +16,23 @@
       "message": "Submitted my first patch, let me know if changes are needed 😊",
       "revId": "378efda49a2758552b06f5a07194f07747e46205",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bcb089e_b1b55e5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-10T09:31:03Z",
+      "side": 1,
+      "message": "Edit the commit message (git commit --amend) to tdf#143148 Use pragma once in vcl",
+      "revId": "378efda49a2758552b06f5a07194f07747e46205",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
