@@ -1108,7 +1108,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         if (rSt.ReadBytes(aBuffer.data(), nBufferSize) == nBufferSize)
         {
             aMemStream.WriteBytes(aBuffer.data(), nBufferSize);
-            sal_uInt8 nStreamSize = aMemStream.TellEnd();
+            sal_uInt64 nStreamSize = aMemStream.TellEnd();
             aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
             bool bRet = 4 <= nStreamSize;
             sal_uInt16 nRawRecId,nRawRecSize;
@@ -3689,7 +3689,7 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
                 bool bReadObj = IsInlineEscherHack();
                 if( bReadObj )
                 {
-                    tools::Long nCurPos = m_pStrm->Tell();
+                    sal_uInt64 nCurPos = m_pStrm->Tell();
                     sal_uInt16 nWordCode(0);
 
                     if( m_bIsUnicode )
@@ -4921,7 +4921,7 @@ void WW8Customizations::Import( SwDocShell* pShell )
     try
     {
         Tcg aTCG;
-        tools::Long nCur = mpTableStream->Tell();
+        sal_uInt64 nCur = mpTableStream->Tell();
         if (!checkSeek(*mpTableStream, mWw8Fib.m_fcCmds)) // point at tgc record
         {
             SAL_WARN("sw.ww8", "** Seek to Customization data failed!!!! ");
@@ -6266,7 +6266,7 @@ ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
                 // Test for own 97 fake!
                 if (m_pStg && 0xa5ec == nMagic)
                 {
-                    sal_uLong nCurPos = m_pStrm->Tell();
+                    sal_uInt64 nCurPos = m_pStrm->Tell();
                     if (checkSeek(*m_pStrm, nCurPos + 2))
                     {
                         sal_uInt32 nfcMin(0);
@@ -6596,7 +6596,7 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
         // We should then find the EmbeddedField and the corresponding Sprms
         // in that Area.
         // We only need the Sprm for the Picture Id.
-        tools::Long nOldPos = rReader.m_pStrm->Tell();
+        sal_uInt64 nOldPos = rReader.m_pStrm->Tell();
         {
             // #i32596# - consider return value of method
             // <rReader.GetTxbxTextSttEndCp(..)>. If it returns false, method

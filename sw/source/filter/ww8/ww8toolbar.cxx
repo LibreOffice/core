@@ -119,7 +119,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
     Tcg255SubStruct::Read( rS );
     rS.ReadUInt16( reserved2 ).ReadUChar( reserved3 ).ReadUInt16( reserved4 ).ReadUInt16( reserved5 );
     rS.ReadInt16( cbTBD ).ReadUInt16( cCust ).ReadInt32( cbDTBC );
-    tools::Long nExpectedPos =  rS.Tell() + cbDTBC;
+    sal_uInt64 nExpectedPos =  rS.Tell() + cbDTBC;
     if ( cbDTBC )
     {
         // cbDTBC is the size in bytes of the SwTBC array
@@ -139,12 +139,12 @@ bool SwCTBWrapper::Read( SvStream& rS )
             bytesToRead = cbDTBC - ( rS.Tell() - nStart );
         } while ( bytesToRead > 0 );
     }
-    if ( static_cast< tools::Long >( rS.Tell() ) != nExpectedPos )
+    if ( rS.Tell() != nExpectedPos )
     {
         // Strange error condition, shouldn't happen ( but does in at least
         // one test document ) In the case where it happens the SwTBC &
         // TBCHeader records seem blank??? ( and incorrect )
-        SAL_WARN_IF( static_cast< tools::Long >(rS.Tell()) != nExpectedPos, "sw.ww8","### Error: Expected pos not equal to actual pos after reading rtbdc");
+        SAL_WARN_IF( rS.Tell() != nExpectedPos, "sw.ww8","### Error: Expected pos not equal to actual pos after reading rtbdc");
         SAL_INFO("sw.ww8","\tPos now is 0x" << std::hex << rS.Tell() << " should be 0x" << std::hex << nExpectedPos );
         // seek to correct position after rtbdc
         rS.Seek( nExpectedPos );

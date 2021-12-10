@@ -672,7 +672,7 @@ void WW8AttributeOutput::StartStyles()
 {
     WW8Fib& rFib = *m_rWW8Export.pFib;
 
-    sal_uLong nCurPos = m_rWW8Export.pTableStrm->Tell();
+    sal_uInt64 nCurPos = m_rWW8Export.pTableStrm->Tell();
     if ( nCurPos & 1 )                   // start on even
     {
         m_rWW8Export.pTableStrm->WriteChar( char(0) );        // Address
@@ -2047,7 +2047,7 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
     OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.size())
         , "WritePlcSed(): arrays out of sync!");
     OSL_ENSURE( aCps.size() == aSects.size() + 1, "WrPlcSepx: DeSync" );
-    sal_uLong nFcStart = rWrt.pTableStrm->Tell();
+    sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
 
     for( decltype(aSects)::size_type i = 0; i <= aSects.size(); i++ )
     {
@@ -2371,7 +2371,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     WW8_FC& rTextStart, sal_Int32& rTextCount, WW8_FC& rRefStart, sal_Int32& rRefCount ) const
 {
 
-    sal_uLong nFcStart = rWrt.pTableStrm->Tell();
+    sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
     sal_uInt16 nLen = aCps.size();
     if ( !nLen )
         return;
