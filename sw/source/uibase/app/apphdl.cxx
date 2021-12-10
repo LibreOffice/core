@@ -822,6 +822,10 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 rBindings.Invalidate(FN_MAILMERGE_SAVE_DOCUMENTS);
                 rBindings.Invalidate(FN_MAILMERGE_PRINT_DOCUMENTS);
                 rBindings.Invalidate(FN_MAILMERGE_EMAIL_DOCUMENTS);
+                rBindings.Invalidate(FN_MAILMERGE_FIRST_ENTRY);
+                rBindings.Invalidate(FN_MAILMERGE_PREV_ENTRY);
+                rBindings.Invalidate(FN_MAILMERGE_NEXT_ENTRY);
+                rBindings.Invalidate(FN_MAILMERGE_LAST_ENTRY);
                 rBindings.Update();
                 return;
             }
