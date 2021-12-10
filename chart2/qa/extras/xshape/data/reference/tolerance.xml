@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<tolerances>
+  <tolerance elementName="Line2" attribName="column2" value="1"/>
+  <tolerance elementName="Line2" attribName="column3" value="1"/>
+  <tolerance elementName="XShape" attribName="positionY" value="1"/>
+  <tolerance elementName="XShape" attribName="sizeY" value="1"/>
+</tolerances>
