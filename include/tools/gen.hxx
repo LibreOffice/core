@@ -382,7 +382,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle final
 public:
                         Rectangle();
                         Rectangle( const Point& rLT, const Point& rRB );
-                        Rectangle( tools::Long nLeft, tools::Long nTop,
+    constexpr           Rectangle( tools::Long nLeft, tools::Long nTop,
                                    tools::Long nRight, tools::Long nBottom );
     /// Constructs an empty Rectangle, with top/left at the specified params
                         Rectangle( tools::Long nLeft, tools::Long nTop );
@@ -504,14 +504,13 @@ inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
     nBottom = rRB.Y();
 }
 
-inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop,
+constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop,
                              tools::Long _nRight, tools::Long _nBottom )
-{
-    nLeft   = _nLeft;
-    nTop    = _nTop;
-    nRight  = _nRight;
-    nBottom = _nBottom;
-}
+    : nLeft( _nLeft )
+    , nTop( _nTop )
+    , nRight( _nRight )
+    , nBottom( _nBottom )
+{}
 
 inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop )
 {
