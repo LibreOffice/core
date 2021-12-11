@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7440261_8ed5d7f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-11T12:09:51Z",
+      "side": 1,
+      "message": "@Attila: thanks for the clean-up! I suggest to fix the following typo before merging.",
+      "revId": "d5fed36be66624fc32b086faf922082b20dd3f26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c743ca08_b1efb082",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 27
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-11T12:09:51Z",
+      "side": 1,
+      "message": "synchronize",
+      "range": {
+        "startLine": 1408,
+        "startChar": 22,
+        "endLine": 1408,
+        "endChar": 32
+      },
+      "revId": "d5fed36be66624fc32b086faf922082b20dd3f26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
