@@ -980,7 +980,7 @@ bool LoadEnv::impl_filterHasInteractiveDialog() const
     if (m_aURL.Arguments == "Interactive")
        return true;
 
-    // unless (tdf#116277) its the labels/business cards slave frame
+    // unless (tdf#116277) it's the labels/business cards slave frame
     if (m_aURL.Arguments.indexOf("slot=") != -1)
         return true;
 

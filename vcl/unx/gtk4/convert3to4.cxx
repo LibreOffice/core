@@ -1316,7 +1316,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 // for GtkMenuButton if this is a gearmenu with just an icon
                 // then "icon-name" is used for the indicator and there is
                 // expected to be no text. If there is a GtkPicture then treat
-                // this like a GtkButton and presumably its a ToggleMenuButton
+                // this like a GtkButton and presumably it's a ToggleMenuButton
                 // and the relocation of contents happens in the builder
                 if (sClass == "GtkMenuButton")
                 {

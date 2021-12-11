@@ -3566,7 +3566,7 @@ void SalInstanceTreeView::InvalidateModelEntry(SvTreeListEntry* pEntry)
 void SalInstanceTreeView::do_set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
 {
     assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
-    // if its the placeholder to allow a blank column, replace it now
+    // if it's the placeholder to allow a blank column, replace it now
     if (pEntry->GetItem(col).GetType() != SvLBoxItemType::Button)
     {
         SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
