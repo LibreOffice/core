@@ -140,6 +140,30 @@
       },
       "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecd15d21_0a815cc1",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-11T07:55:49Z",
+      "side": 1,
+      "message": "Hello Xisco!\n\nSorry for the late reply. Yes i have checked the execution of the dispatch command .uno:AddTextBox, and you are right the problem was there. Laszlo\u0027s suggestion was that, if the selection unsuccessful, that will cause problems with the textbox adding. However as I seen in the debug in VS, the selection was successful (but maybe i have not told that to Laszlo yet.) because in the shell there was a mark list field that has the shape, so it was selected, and the assert also passed the selection, only the dispatcher left as the source of the problem. With many steps in the call stack inside, the getshellandslot() cause the problem because it gives nullptr randomly. I you would like i can go inside that method but i think -- due to the randomly behavior --  this can be a so long procedure to find what the real problem is...",
+      "parentUuid": "d85b828f_4b9d214a",
+      "range": {
+        "startLine": 1210,
+        "startChar": 4,
+        "endLine": 1210,
+        "endChar": 75
+      },
+      "revId": "3a48a1cad8bebe7fe774a9beab324d48c689f890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
