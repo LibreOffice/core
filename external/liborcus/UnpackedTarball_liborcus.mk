@@ -24,11 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/libtool.patch.0 \
 	external/liborcus/fix-pch.patch.0 \
 	external/liborcus/liborcus_newline.patch.1 \
-	external/liborcus/remove-unused-parameters.patch.1 \
-	external/liborcus/unused-variables.patch.1 \
-	external/liborcus/boost-filesystem.patch.1 \
 	external/liborcus/std-get-busted.patch.1 \
-	external/liborcus/crashtesting-crash-on-passing-null-to-std-string_vie.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
