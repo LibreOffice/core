@@ -132,12 +132,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/xlsx_workbook_context \
 	UnpackedTarball/liborcus/src/liborcus/xml_context_base \
 	UnpackedTarball/liborcus/src/liborcus/xml_context_global \
+	UnpackedTarball/liborcus/src/liborcus/xml_element_validator.cpp \
+	UnpackedTarball/liborcus/src/liborcus/xml_empty_context.cpp \
 	UnpackedTarball/liborcus/src/liborcus/xml_map_tree \
 	UnpackedTarball/liborcus/src/liborcus/xml_simple_stream_handler \
 	UnpackedTarball/liborcus/src/liborcus/xml_stream_handler \
 	UnpackedTarball/liborcus/src/liborcus/xml_stream_parser \
 	UnpackedTarball/liborcus/src/liborcus/xml_structure_mapper \
 	UnpackedTarball/liborcus/src/liborcus/xml_structure_tree \
+	UnpackedTarball/liborcus/src/liborcus/xml_util.cpp \
 	UnpackedTarball/liborcus/src/liborcus/xpath_parser \
 	UnpackedTarball/liborcus/src/liborcus/yaml_document_tree \
 ))
