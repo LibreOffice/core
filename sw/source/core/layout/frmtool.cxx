@@ -471,7 +471,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
     }
 }
 
-SwLayNotify::~SwLayNotify()
+void SwLayNotify::ImplDestroy()
 {
     SwLayoutFrame *pLay = static_cast<SwLayoutFrame*>(mpFrame);
     SwRectFnSet aRectFnSet(pLay);
@@ -648,6 +648,11 @@ SwLayNotify::~SwLayNotify()
         static_cast<SwFlyFrame*>(pLay)->AnchorFrame()->InvalidateSize();
 }
 
+SwLayNotify::~SwLayNotify()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
+}
+
 SwFlyNotify::SwFlyNotify( SwFlyFrame *pFlyFrame ) :
     SwLayNotify( pFlyFrame ),
     // #115759# - keep correct page frame - the page frame
@@ -657,7 +662,7 @@ SwFlyNotify::SwFlyNotify( SwFlyFrame *pFlyFrame ) :
 {
 }
 
-SwFlyNotify::~SwFlyNotify()
+void SwFlyNotify::ImplDestroy()
 {
     SwFlyFrame *pFly = static_cast<SwFlyFrame*>(mpFrame);
     if ( pFly->IsNotifyBack() )
@@ -761,6 +766,11 @@ SwFlyNotify::~SwFlyNotify()
     // a re-format of the anchor frame, which also causes a
     // re-format of the invalid previous frames of the anchor frame.
     pFly->AnchorFrame()->InvalidatePos();
+}
+
+SwFlyNotify::~SwFlyNotify()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
