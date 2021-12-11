@@ -1852,6 +1852,8 @@ void SfxViewShell::RemoveContextMenuInterceptor_Impl( const uno::Reference< ui::
 
 static void Change( Menu* pMenu, SfxViewShell* pView )
 {
+    std::abort();
+
     SfxDispatcher *pDisp = pView->GetViewFrame()->GetDispatcher();
     sal_uInt16 nCount = pMenu->GetItemCount();
     for ( sal_uInt16 nPos=0; nPos<nCount; ++nPos )
