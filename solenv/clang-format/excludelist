@@ -4267,7 +4267,6 @@ framework/inc/classes/actiontriggercontainer.hxx
 framework/inc/classes/actiontriggerpropertyset.hxx
 framework/inc/classes/actiontriggerseparatorpropertyset.hxx
 framework/inc/classes/converter.hxx
-framework/inc/classes/imagewrapper.hxx
 framework/inc/classes/protocolhandlercache.hxx
 framework/inc/classes/resource.hxx
 framework/inc/classes/rootactiontriggercontainer.hxx
@@ -4404,7 +4403,6 @@ framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx
 framework/source/fwe/classes/addonmenu.cxx
 framework/source/fwe/classes/addonsoptions.cxx
 framework/source/fwe/classes/framelistanalyzer.cxx
-framework/source/fwe/classes/imagewrapper.cxx
 framework/source/fwe/classes/rootactiontriggercontainer.cxx
 framework/source/fwe/classes/sfxhelperfunctions.cxx
 framework/source/fwe/dispatch/interaction.cxx

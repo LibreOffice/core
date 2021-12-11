@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_ACTIONTRIGGERHELPER_HXX
-#define INCLUDED_FRAMEWORK_ACTIONTRIGGERHELPER_HXX
+#pragma once
 
 #include <framework/fwkdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
+namespace com::sun::star::awt { class XPopupMenu; }
 namespace com::sun::star::container { class XIndexContainer; }
 class Menu;
-
 
 namespace framework
 {
@@ -38,8 +37,8 @@ namespace framework
             // @param rActionTriggerContainer = must be an instance of service "com.sun.star.ui.ActionTriggerContainer"
             static void
                 CreateMenuFromActionTriggerContainer(
-                    Menu* pNewMenu,
-                    const css::uno::Reference< css::container::XIndexContainer >& rActionTriggerContainer );
+                    const css::uno::Reference<css::awt::XPopupMenu>& rNewMenu,
+                    const css::uno::Reference<css::container::XIndexContainer>& rActionTriggerContainer);
 
             // Creates a "css::ui::ActionTriggerContainer" with the structure of the menu
             // provided as a parameter. The implementation class stores the menu pointer
@@ -63,7 +62,5 @@ namespace framework
 
     };
 }
-
-#endif // INCLUDED_FRAMEWORK_ACTIONTRIGGERHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
