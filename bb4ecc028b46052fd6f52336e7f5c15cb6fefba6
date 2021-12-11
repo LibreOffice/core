@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "625311f4_36ff97dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-11T14:03:51Z",
+      "side": 1,
+      "message": "Verified by Jenkins on all platforms (except Clang, but that was verified on master).",
+      "revId": "bb4ecc028b46052fd6f52336e7f5c15cb6fefba6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
