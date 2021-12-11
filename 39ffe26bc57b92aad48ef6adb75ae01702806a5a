@@ -140,6 +140,24 @@
       "parentUuid": "d6211819_c8990fd5",
       "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cca29632_46245499",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-11T16:24:46Z",
+      "side": 1,
+      "message": "There is no need to apologize, thank you for the submission. :-)\nI am waiting for your next patch set whenever you had time. That\u0027s how it works: Growing patch by patch.\nPlease send an email to me to send you some learning materials. My email address is: hossein at libreoffice dot org",
+      "parentUuid": "dbce2c74_44432d8c",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
