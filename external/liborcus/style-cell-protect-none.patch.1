@@ -1,0 +1,51 @@
+From 8e270ff28bcbdfec1e07b01d8b34b6f4b2ce5545 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Tue, 14 Dec 2021 22:37:00 -0500
+Subject: [PATCH] style:cell-protect="none" means explicitly not protected.
+
+We need to therefore pass this state to the handler explicitly.
+---
+ src/liborcus/odf_styles_context.cpp | 7 +++++++
+ src/orcus_test_import_ods.cpp       | 6 ++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/src/liborcus/odf_styles_context.cpp b/src/liborcus/odf_styles_context.cpp
+index 302fb9f7..b9ed2b27 100644
+--- a/src/liborcus/odf_styles_context.cpp
++++ b/src/liborcus/odf_styles_context.cpp
+@@ -660,6 +660,13 @@ void styles_context::start_table_cell_properties(const xml_token_pair_t& parent,
+                         formula_hidden = true;
+                         locked = true;
+                     }
++                    else if (attr.value == "none")
++                    {
++                        cell_protection = true;
++                        locked = false;
++                        hidden = false;
++                        formula_hidden = false;
++                    }
+                     break;
+                 }
+                 case XML_vertical_align:
+diff --git a/src/orcus_test_import_ods.cpp b/src/orcus_test_import_ods.cpp
+index 5f9530bc..8fa9b2e4 100644
+--- a/src/orcus_test_import_ods.cpp
++++ b/src/orcus_test_import_ods.cpp
+@@ -1009,8 +1009,14 @@ void test_cell_protection_styles()
+         assert(protection_state);
+ 
+         std::pair<ss::protection_t, ss::protection_active_t> expected;
++        expected.first.locked = false;
++        expected.first.hidden = false;
+         expected.first.print_content = true;
++        expected.first.formula_hidden = false;
++        expected.second.locked = true;
++        expected.second.hidden = true;
+         expected.second.print_content = true;
++        expected.second.formula_hidden = true;
+ 
+         assert(verify_active_protection_attrs(expected, *protection_state));
+     }
+-- 
+2.25.1
+
