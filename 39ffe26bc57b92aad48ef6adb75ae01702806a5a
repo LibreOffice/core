@@ -104,6 +104,24 @@
       "parentUuid": "61d33bc8_55fde26c",
       "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6211819_c8990fd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-11T15:04:42Z",
+      "side": 1,
+      "message": "We prefer to not close any patch.",
+      "parentUuid": "433b65d4_8bc42619",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
