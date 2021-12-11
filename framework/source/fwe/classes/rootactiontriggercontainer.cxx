@@ -151,10 +151,7 @@ sal_Int32 SAL_CALL RootActionTriggerContainer::getCount()
     if ( !m_bContainerCreated )
     {
         if ( m_xMenu )
-        {
-            SolarMutexGuard aSolarMutexGuard;
             return m_xMenu->getItemCount();
-        }
         else
             return 0;
     }
@@ -183,11 +180,7 @@ Type SAL_CALL RootActionTriggerContainer::getElementType()
 sal_Bool SAL_CALL RootActionTriggerContainer::hasElements()
 {
     if (m_xMenu)
-    {
-        SolarMutexGuard aSolarMutexGuard;
         return m_xMenu->getItemCount() > 0;
-    }
-
     return false;
 }
 
