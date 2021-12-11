@@ -299,7 +299,9 @@ public:
     void                        SetController( SfxBaseController* pController );
     css::uno::Reference<css::frame::XController> GetController() const;
 
-    bool                        TryContextMenuInterception( const Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, css::ui::ContextMenuExecuteEvent aEvent );
+    bool                        TryContextMenuInterception(const Menu& rIn, const OUString& rMenuIdentifier,
+                                                           css::uno::Reference<css::awt::XPopupMenu>& rOut,
+                                                           css::ui::ContextMenuExecuteEvent aEvent);
     bool                        TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>&,
                                                            const OUString& rMenuIdentifier,
                                                            css::ui::ContextMenuExecuteEvent aEvent);

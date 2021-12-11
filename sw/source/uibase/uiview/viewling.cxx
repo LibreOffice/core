@@ -709,21 +709,23 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.SourceWindow = VCLUnoHelper::GetInterface( m_pEditWin );
                 aEvent.ExecutePosition.X = aPixPos.X();
                 aEvent.ExecutePosition.Y = aPixPos.Y();
-                ScopedVclPtr<Menu> pMenu;
+                css::uno::Reference<css::awt::XPopupMenu> xMenu;
 
                 OUString sMenuName = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
-                if (TryContextMenuInterception(xPopup->GetMenu(), sMenuName, pMenu, aEvent))
+                if (TryContextMenuInterception(xPopup->GetMenu(), sMenuName, xMenu, aEvent))
                 {
                     //! happy hacking for context menu modifying extensions of this
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
-                    if ( pMenu )
+                    if (xMenu.is())
                     {
-                        const sal_uInt16 nId = static_cast<PopupMenu*>(pMenu.get())->Execute(m_pEditWin, aPixPos);
-                        OUString aCommand = static_cast<PopupMenu*>(pMenu.get())->GetItemCommand(nId);
+                        css::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, css::uno::UNO_QUERY);
+                        const sal_uInt16 nId = xMenu->execute(xParent, css::awt::Rectangle(aPixPos.X(), aPixPos.Y(), 1, 1),
+                                                              css::awt::PopupMenuDirection::EXECUTE_DOWN);
+                        OUString aCommand = xMenu->getCommand(nId);
                         if (aCommand.isEmpty() )
                         {
-                            if (!ExecuteMenuCommand(dynamic_cast<PopupMenu&>(*pMenu), *GetViewFrame(), nId))
+                            if (!ExecuteMenuCommand(xMenu, *GetViewFrame(), nId))
                                 xPopup->Execute(nId);
                         }
                         else
