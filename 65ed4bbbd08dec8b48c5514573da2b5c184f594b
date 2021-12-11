@@ -33,6 +33,24 @@
       "message": "How are the review rules for 7-3 at this stage, no idea, is something expected from me?",
       "revId": "65ed4bbbd08dec8b48c5514573da2b5c184f594b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c700a57f_6ed4e727",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-11T06:38:48Z",
+      "side": 1,
+      "message": "I believe the rules are that the author can push his own changes until x.y.0rc1. I\u0027ll take your non-objection as tacit approval.",
+      "parentUuid": "9f2cc9dd_3298d68d",
+      "revId": "65ed4bbbd08dec8b48c5514573da2b5c184f594b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
