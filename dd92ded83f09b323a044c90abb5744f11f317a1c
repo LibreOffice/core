@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3752a688_da3c132c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-11T19:25:14Z",
+      "side": 1,
+      "message": "Nice idea, works.\n\nBut there\u0027s an odd result if more than one MRU would match, then it displays only one. That might be due to how the actual three matches are picked, I didn\u0027t investigate deeper.\nFor example, have ABS and AND in the MRU, then start typing \u003da\nsuggests \"[AND], ACCRINT, ACCRINTM and 22 more\", ABS is even at the end of the list when travelling through with Ctrl+Tab.\nExpected would be \"[ABS], AND, ACCRINT and 22 more\" (well, my expectation..).\n",
+      "revId": "dd92ded83f09b323a044c90abb5744f11f317a1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
