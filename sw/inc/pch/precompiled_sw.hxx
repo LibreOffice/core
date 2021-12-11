@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:52:12 using:
+ Generated on 2021-12-11 12:59:04 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,7 +35,9 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -50,6 +52,12 @@
 #include <utility>
 #include <vector>
 #include <boost/circular_buffer.hpp>
+#include <boost/multi_index/composite_key.hpp>
+#include <boost/multi_index/identity.hpp>
+#include <boost/multi_index/mem_fun.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
+#include <boost/multi_index_container.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
@@ -57,10 +65,8 @@
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
@@ -77,9 +83,11 @@
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
@@ -148,6 +156,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -192,7 +201,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -204,15 +212,15 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -221,7 +229,6 @@
 #include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -231,7 +238,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -266,6 +273,7 @@
 #include <editeng/paperinf.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/prntitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -291,6 +299,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -339,8 +348,10 @@
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
 #include <svl/metitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/ptitem.hxx>
+#include <svl/setitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
@@ -376,7 +387,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdtypes.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
@@ -421,10 +431,12 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>
 #include <xmloff/dllapi.h>
@@ -470,6 +482,7 @@
 #include <UndoAttribute.hxx>
 #include <UndoCore.hxx>
 #include <UndoDelete.hxx>
+#include <UndoInsert.hxx>
 #include <UndoManager.hxx>
 #include <UndoRedline.hxx>
 #include <UndoTable.hxx>
@@ -584,6 +597,7 @@
 #include <ndtxt.hxx>
 #include <node.hxx>
 #include <node2lay.hxx>
+#include <nodeoffset.hxx>
 #include <notxtfrm.hxx>
 #include <numrule.hxx>
 #include <objectformatter.hxx>
