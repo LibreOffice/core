@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustmentIndent">
@@ -32,14 +32,13 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
-      <object class="GtkGrid">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="border_width">6</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
         <child>
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
@@ -187,109 +186,127 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-            <property name="width">2</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="orientationdegrees">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes" context="sidebaralignment|orientationdegrees|tooltip_text">Select the angle for rotation.</property>
-            <property name="halign">end</property>
-            <property name="adjustment">adjustmentSpinDegrees</property>
-            <property name="wrap">True</property>
-            <property name="truncate-multiline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="orientationdegrees-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebaralignment|orientationdegrees-atkobject">Text Orientation</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="leftindent">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes" context="sidebaralignment|leftindent|tooltip_text">Indents from the left edge.</property>
-            <property name="halign">end</property>
-            <property name="valign">center</property>
-            <property name="adjustment">adjustmentIndent</property>
-            <property name="truncate-multiline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="leftindent-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebaralignment|leftindent-atkobject">Left Indent</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToolbar" id="indentbuttons">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="toolbar_style">icons</property>
-            <property name="show_arrow">False</property>
-            <property name="icon_size">2</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkToolButton" id=".uno:IncrementIndent">
+              <object class="GtkToolbar" id="indentbuttons">
                 <property name="visible">True</property>
-                <property name="use_underline">True</property>
+                <property name="can_focus">True</property>
+                <property name="toolbar_style">icons</property>
+                <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:IncrementIndent">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:DecrementIndent">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id=".uno:DecrementIndent">
+              <object class="GtkSpinButton" id="leftindent">
                 <property name="visible">True</property>
-                <property name="use_underline">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes" context="sidebaralignment|leftindent|tooltip_text">Indents from the left edge.</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="truncate_multiline">True</property>
+                <property name="adjustment">adjustmentIndent</property>
+                <child internal_child="accessible">
+                  <object class="AtkObject" id="leftindent_atkobject">
+                    <property name="AtkObject::accessible_name" translatable="yes" context="sidebaralignment|leftindent_atkobject">Left Indent</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkSeparator" id="separator1">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin-start">3</property>
-            <property name="margin-end">3</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="orientationlabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="sidebaralignment|orientationlabel">Text _orientation:</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="orientationdegrees">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes" context="sidebaralignment|orientationdegrees|tooltip_text">Select the angle for rotation.</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="truncate_multiline">True</property>
+                <property name="adjustment">adjustmentSpinDegrees</property>
+                <property name="wrap">True</property>
+                <child internal_child="accessible">
+                  <object class="AtkObject" id="orientationdegrees_atkobject">
+                    <property name="AtkObject::accessible_name" translatable="yes" context="sidebaralignment|orientationdegrees_atkobject">Text Orientation</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="orientationlabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="sidebaralignment|orientationlabel">Text _orientation:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">orientationdegrees</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -303,6 +320,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="halign">start</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -316,7 +334,9 @@
               <object class="GtkBox" id="textorientbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">end</property>
                 <property name="valign">center</property>
+                <property name="hexpand">True</property>
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkToggleButton" id="bottom">
@@ -374,15 +394,14 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">5</property>
-            <property name="width">2</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -392,13 +411,14 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes" context="sidebaralignment|wraptext|tooltip_text">Wrap texts automatically.</property>
-            <property name="halign">end</property>
+            <property name="halign">start</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -408,12 +428,14 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes" context="sidebaralignment|mergecells|tooltip_text">Joins the selected cells into one.</property>
+            <property name="halign">start</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -421,16 +443,13 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="sidebaralignment|leftindentlabel">_Indent:</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">leftindent</property>
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">6</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">6</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>
@@ -442,6 +461,7 @@
   <object class="GtkSizeGroup" id="sizegroupWidget">
     <widgets>
       <widget name="leftindent"/>
+      <widget name="textorientbox"/>
       <widget name="orientationdegrees"/>
     </widgets>
   </object>
