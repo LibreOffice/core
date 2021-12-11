@@ -36,6 +36,7 @@
 #include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -887,17 +888,18 @@ void SetApplyCharUnit(bool bApplyChar, bool bWeb)
     SW_MOD()->ApplyUserCharUnit(bApplyChar, bWeb);
 }
 
-bool ExecuteMenuCommand( PopupMenu const & rMenu, SfxViewFrame const & rViewFrame, sal_uInt16 nId )
+bool ExecuteMenuCommand(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, const SfxViewFrame& rViewFrame, sal_uInt16 nId)
 {
     bool bRet = false;
-    const sal_uInt16 nItemCount = rMenu.GetItemCount();
+    const sal_uInt16 nItemCount = rMenu->getItemCount();
     OUString sCommand;
-    for( sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem)
+    for (sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem)
     {
-        PopupMenu* pPopup = rMenu.GetPopupMenu( rMenu.GetItemId( nItem ) );
-        if(pPopup)
+        sal_Int16 nItemId = rMenu->getItemId(nItem);
+        css::uno::Reference<css::awt::XPopupMenu> xPopup = rMenu->getPopupMenu(nItemId);
+        if (xPopup.is())
         {
-            sCommand = pPopup->GetItemCommand(nId);
+            sCommand = xPopup->getCommand(nId);
             if(!sCommand.isEmpty())
                 break;
         }

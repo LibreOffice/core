@@ -19,15 +19,18 @@
 
 #include <swtypes.hxx>
 #include <hintids.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <comphelper/string.hxx>
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-
 #include <com/sun/star/i18n/UnicodeScript.hpp>
+#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 #include <com/sun/star/ui/ContextMenuExecuteEvent.hpp>
+
+#include <comphelper/string.hxx>
 
 #include <vcl/dialoghelper.hxx>
 #include <vcl/inputctx.hxx>
@@ -5373,13 +5376,15 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
-                        ScopedVclPtr<Menu> pMenu;
-                        if (GetView().TryContextMenuInterception(aROPopup.GetMenu(), "private:resource/ReadonlyContextMenu", pMenu, aEvent))
+                        css::uno::Reference<css::awt::XPopupMenu> xMenu;
+                        if (GetView().TryContextMenuInterception(aROPopup.GetMenu(), "private:resource/ReadonlyContextMenu", xMenu, aEvent))
                         {
-                            if ( pMenu )
+                            if (xMenu.is())
                             {
-                                sal_uInt16 nExecId = static_cast<PopupMenu*>(pMenu.get())->Execute(this, aPixPos);
-                                if( !::ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu.get()), *m_rView.GetViewFrame(), nExecId ))
+                                css::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, css::uno::UNO_QUERY);
+                                sal_uInt16 nExecId = xMenu->execute(xParent, css::awt::Rectangle(aPixPos.X(), aPixPos.Y(), 1, 1),
+                                                                    css::awt::PopupMenuDirection::EXECUTE_DOWN);
+                                if (!::ExecuteMenuCommand(xMenu, *m_rView.GetViewFrame(), nExecId))
                                     aROPopup.Execute(this, nExecId);
                             }
                             else
