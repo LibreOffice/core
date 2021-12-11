@@ -989,7 +989,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
     auto nNbTypes = SAL_N_ELEMENTS(sTableTypes);
-    ODatabaseMetaDataResultSet::ORows aRows(nNbTypes);
+    ODatabaseMetaDataResultSet::ORows aRows;
     for(std::size_t i=0;i < nNbTypes;++i)
     {
         // bound row
@@ -1010,7 +1010,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
-        ODatabaseMetaDataResultSet::ORows tmp(2);
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow
         {
              ODatabaseMetaDataResultSet::getEmptyValue() ,
