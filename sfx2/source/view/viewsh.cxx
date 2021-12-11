@@ -1850,45 +1850,6 @@ void SfxViewShell::RemoveContextMenuInterceptor_Impl( const uno::Reference< ui::
     pImpl->aInterceptorContainer.removeInterface( xInterceptor );
 }
 
-static void Change( Menu* pMenu, SfxViewShell* pView )
-{
-    SfxDispatcher *pDisp = pView->GetViewFrame()->GetDispatcher();
-    sal_uInt16 nCount = pMenu->GetItemCount();
-    for ( sal_uInt16 nPos=0; nPos<nCount; ++nPos )
-    {
-        sal_uInt16 nId = pMenu->GetItemId(nPos);
-        OUString aCmd = pMenu->GetItemCommand(nId);
-        PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
-        if ( pPopup )
-        {
-            Change( pPopup, pView );
-        }
-        else if ( nId < 5000 )
-        {
-            if ( aCmd.startsWith(".uno:") )
-            {
-                for (sal_uInt16 nIdx=0;;)
-                {
-                    SfxShell *pShell=pDisp->GetShell(nIdx++);
-                    if (pShell == nullptr)
-                        break;
-                    const SfxInterface *pIFace = pShell->GetInterface();
-                    const SfxSlot* pSlot = pIFace->GetSlot( aCmd );
-                    if ( pSlot )
-                    {
-                        pMenu->InsertItem( pSlot->GetSlotId(), pMenu->GetItemText( nId ),
-                            pMenu->GetItemBits( nId ), OString(), nPos );
-                        pMenu->SetItemCommand( pSlot->GetSlotId(), aCmd );
-                        pMenu->RemoveItem( nPos+1 );
-                        break;
-                    }
-                }
-            }
-        }
-    }
-}
-
-
 bool SfxViewShell::TryContextMenuInterception(const Menu& rIn, const OUString& rMenuIdentifier,
                                               css::uno::Reference<css::awt::XPopupMenu>& rOut,
                                               ui::ContextMenuExecuteEvent aEvent)
@@ -1957,8 +1918,6 @@ bool SfxViewShell::TryContextMenuInterception(const Menu& rIn, const OUString& r
         assert(pVCLMenu);
 
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(pVCLMenu, aEvent.ActionTriggerContainer);
-
-        Change(pVCLMenu, this);
     }
 
     return true;
