@@ -53,7 +53,6 @@ class SfxModule;
 class SfxViewFrame;
 class Printer;
 class SfxPrinter;
-class Menu;
 class NotifyEvent;
 class SfxInPlaceClient;
 class SfxLokCallbackInterface;
@@ -299,7 +298,8 @@ public:
     void                        SetController( SfxBaseController* pController );
     css::uno::Reference<css::frame::XController> GetController() const;
 
-    bool                        TryContextMenuInterception(const Menu& rIn, const OUString& rMenuIdentifier,
+    bool                        TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rIn,
+                                                           const OUString& rMenuIdentifier,
                                                            css::uno::Reference<css::awt::XPopupMenu>& rOut,
                                                            css::ui::ContextMenuExecuteEvent aEvent);
     bool                        TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>&,

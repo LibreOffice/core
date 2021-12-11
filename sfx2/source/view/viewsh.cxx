@@ -25,7 +25,6 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
@@ -1850,7 +1849,8 @@ void SfxViewShell::RemoveContextMenuInterceptor_Impl( const uno::Reference< ui::
     pImpl->aInterceptorContainer.removeInterface( xInterceptor );
 }
 
-bool SfxViewShell::TryContextMenuInterception(const Menu& rIn, const OUString& rMenuIdentifier,
+bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rIn,
+                                              const OUString& rMenuIdentifier,
                                               css::uno::Reference<css::awt::XPopupMenu>& rOut,
                                               ui::ContextMenuExecuteEvent aEvent)
 {
@@ -1859,7 +1859,7 @@ bool SfxViewShell::TryContextMenuInterception(const Menu& rIn, const OUString& r
 
     // create container from menu
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        &rIn, &rMenuIdentifier );
+        rIn, &rMenuIdentifier);
 
     // get selection from controller
     aEvent.Selection.set( GetController(), uno::UNO_QUERY );
@@ -1920,15 +1920,11 @@ bool SfxViewShell::TryContextMenuInterception(const Menu& rIn, const OUString& r
 bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
                                               const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent)
 {
-    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>(rPopupMenu);
-    PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
-    if (!pVCLMenu)
-        return false;
-
     bool bModified = false;
 
     // create container from menu
-    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(pVCLMenu, &rMenuIdentifier);
+    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
+        rPopupMenu, &rMenuIdentifier);
 
     // get selection from controller
     aEvent.Selection = css::uno::Reference< css::view::XSelectionSupplier >( GetController(), css::uno::UNO_QUERY );
