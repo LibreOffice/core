@@ -1151,7 +1151,7 @@ SvtFileView_Impl::SvtFileView_Impl(SvtFileView* pAntiImpl, weld::Window* pTopLev
 {
     weld::TreeView* pWidget = mxView->getWidget();
 
-    // set the width to something small so its the parent that decides the final
+    // set the width to something small so it's the parent that decides the final
     // width
     Size aSize(42, pWidget->get_height_rows(7));
     pWidget->set_size_request(aSize.Width(), aSize.Height());
