@@ -50,6 +50,60 @@
       "message": "Also, always build your own changes locally before submitting.",
       "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66cfb15b_ce029249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-11T15:02:23Z",
+      "side": 1,
+      "message": "I swear the I built the patch on my laptop, I started the build before going to bed, woke up and saw that the build was successful, that\u0027s why I submitted the patch for review",
+      "parentUuid": "01b84dbb_287a4c54",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "433b65d4_8bc42619",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-11T15:02:23Z",
+      "side": 1,
+      "message": "I will study more about Color and sal_Int32 and will resubmit a patch later after a week or so, you may close this patch if you want, day after tomorrow I have my first end semester exam and thus won\u0027t be able to make new patches",
+      "parentUuid": "54711918_5457e249",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbce2c74_44432d8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2021-12-11T15:02:23Z",
+      "side": 1,
+      "message": "I apologize for these blunders, will take care next time I submit a patch",
+      "parentUuid": "61d33bc8_55fde26c",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
