@@ -200,6 +200,7 @@ public:
     void testTdf104440();
     void testTdf104425();
     void testTdf104814();
+    void testTableRedlineRedoCrash();
     void testTdf66405();
     void testTdf35021_tabOverMarginDemo();
     void testTdf106701_tabOverMarginAutotab();
@@ -322,6 +323,7 @@ public:
     CPPUNIT_TEST(testTdf104440);
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
+    CPPUNIT_TEST(testTableRedlineRedoCrash);
     CPPUNIT_TEST(testTdf66405);
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
@@ -1657,6 +1659,26 @@ void SwUiWriterTest4::testTdf104814()
     // accept all redlines
     while (pEditShell->GetRedlineCount())
         pEditShell->AcceptRedline(0);
+}
+
+// crash at redo of accepting table change tracking imported from DOCX
+void SwUiWriterTest4::testTableRedlineRedoCrash()
+{
+    SwDoc* const pDoc(createSwDoc(DATA_DIRECTORY, "TC-table-del-add.docx"));
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+
+    // accept all redlines, Undo and accept all redlines again
+
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(/*bAccept=*/true);
+
+    rUndoManager.Undo();
+
+    // without the fix, it crashes
+    rIDRA.AcceptAllRedline(true);
 }
 
 void SwUiWriterTest4::testTdf66405()
