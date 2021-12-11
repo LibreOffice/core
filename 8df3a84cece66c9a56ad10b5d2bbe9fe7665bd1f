@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9423c69f_fafa244e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-12-11T16:58:09Z",
+      "side": 1,
+      "message": "I’d rewrite the whole comment, seems to have more grammar problems than just a few misspellings",
+      "revId": "8df3a84cece66c9a56ad10b5d2bbe9fe7665bd1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33c91638_3196f50d",
