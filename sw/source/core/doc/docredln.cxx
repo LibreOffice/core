@@ -172,31 +172,6 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc& rDoc, const SwTable& rT
                 }
             }
         }
-        else
-        {
-            const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
-            if (pTableRowRedline)
-            {
-                const SwTableLine *pRedTabLine = &pTableRowRedline->GetTableLine();
-                const SwTableBoxes &rRedTabBoxes = pRedTabLine->GetTabBoxes();
-                const SwTable& rRedTable = rRedTabBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
-                if ( &rRedTable == &rTable )
-                {
-                    // Redline for this table
-                    const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
-                    const RedlineType nRedlineType = aRedlineData.GetType();
-
-                    // Check if this redline object type should be deleted
-                    if (RedlineType::Any == nRedlineTypeToDelete || nRedlineTypeToDelete == nRedlineType)
-
-                    {
-                        DeleteAndDestroy( nCurRedlinePos );
-                        bChg = true;
-                        continue; // don't increment position after delete
-                    }
-                }
-            }
-        }
         ++nCurRedlinePos;
     }
 
