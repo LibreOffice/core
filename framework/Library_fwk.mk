@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/fwe/classes/addonsoptions \
     framework/source/fwe/classes/framelistanalyzer \
     framework/source/fwe/classes/fwkresid \
-    framework/source/fwe/classes/imagewrapper \
     framework/source/fwe/classes/rootactiontriggercontainer \
     framework/source/fwe/classes/sfxhelperfunctions \
     framework/source/fwe/dispatch/interaction \

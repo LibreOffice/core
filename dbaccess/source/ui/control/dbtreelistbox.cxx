@@ -448,7 +448,7 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
         {
             xPopupMenu->clear();
             ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
-                pContextMenu, aEvent.ActionTriggerContainer );
+                xPopupMenu, aEvent.ActionTriggerContainer );
             aEvent.ActionTriggerContainer.clear();
         }
     }
