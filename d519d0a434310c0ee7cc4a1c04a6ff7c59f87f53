@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "760a89fe_0501214a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000674
+      },
+      "writtenOn": "2021-12-11T15:08:41Z",
+      "side": 1,
+      "message": "Would it be possible to backport this fix to 7.3? This test fails for 7.3 too and this fix works for it. Thank you very much.",
+      "revId": "d519d0a434310c0ee7cc4a1c04a6ff7c59f87f53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
