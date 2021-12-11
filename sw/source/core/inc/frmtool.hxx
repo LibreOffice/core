@@ -249,6 +249,8 @@ class SwLayNotify : public SwFrameNotify
 {
     bool m_bLowersComplete;
 
+    void ImplDestroy();
+
 public:
     SwLayNotify( SwLayoutFrame *pLayFrame );
     ~SwLayNotify();
@@ -261,6 +263,8 @@ class SwFlyNotify : public SwLayNotify
 {
     SwPageFrame *pOldPage;
     const SwRect aFrameAndSpace;
+
+    void ImplDestroy();
 
 public:
     SwFlyNotify( SwFlyFrame *pFlyFrame );
