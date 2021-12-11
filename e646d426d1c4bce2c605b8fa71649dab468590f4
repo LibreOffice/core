@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e26461bc_31c07987",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-11T19:53:07Z",
+      "side": 1,
+      "message": "I don\u0027t think so. If I was in the middle of editing a formula and inserted a sheet to reference it I would be annoyed if all my editing was gone. Rather accept the current input instead.\nI\u0027ll ad this as a bug comment as well.",
+      "revId": "e646d426d1c4bce2c605b8fa71649dab468590f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
