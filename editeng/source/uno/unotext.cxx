@@ -1905,6 +1905,10 @@ void SAL_CALL SvxUnoTextBase::setString( const OUString& aString )
 uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumeration()
 {
     SolarMutexGuard aGuard;
+
+    if (!GetEditSource())
+        return uno::Reference< container::XEnumeration >();
+
     if( maSelection == ESelection(0,0,0,0) || maSelection == ESelection(EE_PARA_MAX_COUNT,0,0,0) )
     {
         ESelection aSelection;
