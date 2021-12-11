@@ -1983,7 +1983,7 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
 
     if ( bModified )
     {
-        pVCLMenu->Clear();
+        rPopupMenu->clear();
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(pVCLMenu, aEvent.ActionTriggerContainer);
     }
 
