@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "519efb90_19c4238e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-11T12:54:46Z",
+      "side": 1,
+      "message": "@Laszlo: Okay, done. :) Let\u0027s see what is the answer of Jenkins...",
+      "revId": "03dfe30b81a778d68ae743d3a92c59e8aa0683c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
