@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e16c56b9_62c3f384",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2021-12-11T18:15:56Z",
+      "side": 1,
+      "message": "Hi Heiko,\n\nsince I didn\u0027t make changes for a longer time. Can you please review the patch. I want submit something without the a go from the design team",
+      "revId": "4246953d8a1cda42128cf898a416bf6d8893da3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
