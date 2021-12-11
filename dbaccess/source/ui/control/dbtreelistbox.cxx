@@ -549,9 +549,10 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
     if ( bModifiedMenu )
     {
         pContextMenu->Clear();
-        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
-            pContextMenu, aEvent.ActionTriggerContainer );
-        aEvent.ActionTriggerContainer.clear();
+        // FIXME this does not compile
+        //::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
+        //    pContextMenu, aEvent.ActionTriggerContainer );
+        //aEvent.ActionTriggerContainer.clear();
     }
 
     return pContextMenu;

@@ -20,15 +20,18 @@
 #include <framework/actiontriggerhelper.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
 #include <classes/rootactiontriggercontainer.hxx>
-#include <classes/imagewrapper.hxx>
 #include <framework/addonsoptions.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/XPopupMenu.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <vcl/svapp.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/weak.hxx>
+#include <vcl/image.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 
 const sal_uInt16 START_ITEMID = 1000;
@@ -94,141 +97,130 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
     }
 }
 
-static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< XIndexContainer >& xActionTriggerContainer )
+static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16& nItemId,
+                               const Reference<XIndexContainer>& xActionTriggerContainer)
 {
-    if ( xActionTriggerContainer.is() )
+    if ( !xActionTriggerContainer.is() )
+        return;
+
+    AddonsOptions aAddonOptions;
+    OUString aSlotURL( "slot:" );
+
+    for ( sal_Int32 i = 0; i < xActionTriggerContainer->getCount(); i++ )
     {
-        AddonsOptions aAddonOptions;
-        OUString aSlotURL( "slot:" );
-
-        for ( sal_Int32 i = 0; i < xActionTriggerContainer->getCount(); i++ )
+        try
         {
-            try
+            Reference< XPropertySet > xPropSet;
+            if (( xActionTriggerContainer->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
             {
-                Reference< XPropertySet > xPropSet;
-                if (( xActionTriggerContainer->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
+                if ( IsSeparator( xPropSet ))
                 {
-                    if ( IsSeparator( xPropSet ))
-                    {
-                        // Separator
-                        SolarMutexGuard aGuard;
-                        pSubMenu->InsertSeparator();
-                    }
-                    else
-                    {
-                        // Menu item
-                        OUString aLabel;
-                        OUString aCommandURL;
-                        OUString aHelpURL;
-                        Reference< XBitmap > xBitmap;
-                        Reference< XIndexContainer > xSubContainer;
+                    // Separator
+                    SolarMutexGuard aGuard;
+                    rSubMenu->insertSeparator(i);
+                }
+                else
+                {
+                    // Menu item
+                    OUString aLabel;
+                    OUString aCommandURL;
+                    OUString aHelpURL;
+                    Reference< XBitmap > xBitmap;
+                    Reference< XIndexContainer > xSubContainer;
 
-                        sal_uInt16 nNewItemId = nItemId++;
-                        GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
+                    sal_uInt16 nNewItemId = nItemId++;
+                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
 
-                        SolarMutexGuard aGuard;
+                    SolarMutexGuard aGuard;
+                    {
+                        // insert new menu item
+                        sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
+                        if ( nIndex >= 0 )
                         {
-                            // insert new menu item
-                            sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
-                            if ( nIndex >= 0 )
+                            // Special code for our menu implementation: some menu items don't have a
+                            // command url but uses the item id as a unique identifier. These entries
+                            // got a special url during conversion from menu=>actiontriggercontainer.
+                            // Now we have to extract this special url and set the correct item id!!!
+                            nNewItemId = static_cast<sal_uInt16>(aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32());
+                            rSubMenu->insertItem(nNewItemId, aLabel, 0, i);
+                        }
+                        else
+                        {
+                            rSubMenu->insertItem(nNewItemId, aLabel, 0, i);
+                            rSubMenu->setCommand(nNewItemId, aCommandURL);
+                        }
+
+                        // handle bitmap
+                        if ( xBitmap.is() )
+                        {
+                            bool bImageSet = false;
+
+                            Reference<css::graphic::XGraphic> xGraphic(xBitmap, UNO_QUERY);
+                            if (xGraphic.is())
                             {
-                                // Special code for our menu implementation: some menu items don't have a
-                                // command url but uses the item id as a unique identifier. These entries
-                                // got a special url during conversion from menu=>actiontriggercontainer.
-                                // Now we have to extract this special url and set the correct item id!!!
-                                nNewItemId = static_cast<sal_uInt16>(aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32());
-                                pSubMenu->InsertItem( nNewItemId, aLabel );
-                            }
-                            else
-                            {
-                                pSubMenu->InsertItem( nNewItemId, aLabel );
-                                pSubMenu->SetItemCommand( nNewItemId, aCommandURL );
+                                // we can take the optimized route if XGraphic is supported
+                                rSubMenu->setItemImage(nNewItemId, xGraphic, false);
+                                bImageSet = true;
                             }
 
-                            // handle bitmap
-                            if ( xBitmap.is() )
+                            if ( !bImageSet )
                             {
-                                bool bImageSet = false;
+                                // This is an unknown implementation of a XBitmap interface. We have to
+                                // use a more time consuming way to build an Image!
+                                BitmapEx aBitmap;
 
-                                Reference< XUnoTunnel > xUnoTunnel( xBitmap, UNO_QUERY );
-                                if ( xUnoTunnel.is() )
+                                Sequence< sal_Int8 > aDIBSeq;
                                 {
-                                    // Try to get implementation pointer through XUnoTunnel
-                                    sal_Int64 nPointer = xUnoTunnel->getSomething( ImageWrapper::GetUnoTunnelId() );
-                                    if ( nPointer )
-                                    {
-                                        // This is our own optimized implementation of menu images!
-                                        ImageWrapper* pImageWrapper = reinterpret_cast< ImageWrapper * >( nPointer );
-                                        const Image& aMenuImage = pImageWrapper->GetImage();
-
-                                        if ( !!aMenuImage )
-                                            pSubMenu->SetItemImage( nNewItemId, aMenuImage );
-
-                                        bImageSet = true;
-                                    }
+                                    aDIBSeq = xBitmap->getDIB();
+                                    SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
+                                    ReadDIBBitmapEx(aBitmap, aMem);
                                 }
 
-                                if ( !bImageSet )
+                                aDIBSeq = xBitmap->getMaskDIB();
+                                if ( aDIBSeq.hasElements() )
                                 {
-                                    // This is an unknown implementation of a XBitmap interface. We have to
-                                    // use a more time consuming way to build an Image!
-                                    Image   aImage;
-                                    BitmapEx aBitmap;
-
-                                    Sequence< sal_Int8 > aDIBSeq;
-                                    {
-                                        aDIBSeq = xBitmap->getDIB();
-                                        SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
-                                        ReadDIBBitmapEx(aBitmap, aMem);
-                                    }
-
-                                    aDIBSeq = xBitmap->getMaskDIB();
-                                    if ( aDIBSeq.hasElements() )
-                                    {
-                                        Bitmap aMaskBitmap;
-                                        SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
-                                        ReadDIB(aMaskBitmap, aMem, true);
-                                        aImage = Image(BitmapEx(aBitmap.GetBitmap(), aMaskBitmap));
-                                    }
-                                    else
-                                        aImage = Image( aBitmap );
-
-                                    if ( !!aImage )
-                                        pSubMenu->SetItemImage( nNewItemId, aImage );
+                                    Bitmap aMaskBitmap;
+                                    SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
+                                    ReadDIB(aMaskBitmap, aMem, true);
+                                    aBitmap = BitmapEx(aBitmap.GetBitmap(), aMaskBitmap);
                                 }
-                            }
-                            else
-                            {
-                                // Support add-on images for context menu interceptors
-                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, false, true );
-                                if ( !!aImage )
-                                    pSubMenu->SetItemImage( nNewItemId, aImage );
-                            }
 
-                            if ( xSubContainer.is() )
-                            {
-                                VclPtr<PopupMenu> pNewSubMenu = VclPtr<PopupMenu>::Create();
-
-                                // Sub menu (recursive call CreateSubMenu )
-                                InsertSubMenuItems( pNewSubMenu, nItemId, xSubContainer );
-                                pSubMenu->SetPopupMenu( nNewItemId, pNewSubMenu );
+                                if (!aBitmap.IsEmpty())
+                                    rSubMenu->setItemImage(nNewItemId, Graphic(aBitmap).GetXGraphic(), false);
                             }
+                        }
+                        else
+                        {
+                            // Support add-on images for context menu interceptors
+                            Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, false, true );
+                            if (!!aImage )
+                                rSubMenu->setItemImage(nNewItemId, Graphic(aImage).GetXGraphic(), false);
+                        }
+
+                        if ( xSubContainer.is() )
+                        {   // FIXME this does not compile
+                            //rtl::Reference xNewSubMenu(new VCLXPopupMenu);
+
+                            // Sub menu (recursive call CreateSubMenu )
+
+                            //InsertSubMenuItems(xNewSubMenu, nItemId, xSubContainer);
+                            //rSubMenu->setPopupMenu(nNewItemId, xNewSubMenu);
                         }
                     }
                 }
             }
-            catch (const IndexOutOfBoundsException&)
-            {
-                return;
-            }
-            catch (const WrappedTargetException&)
-            {
-                return;
-            }
-            catch (const RuntimeException&)
-            {
-                return;
-            }
+        }
+        catch (const IndexOutOfBoundsException&)
+        {
+            return;
+        }
+        catch (const WrappedTargetException&)
+        {
+            return;
+        }
+        catch (const RuntimeException&)
+        {
+            return;
         }
     }
 }
@@ -268,8 +260,9 @@ static Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const 
             Image aImage = pMenu->GetItemImage( nItemId );
             if ( !!aImage )
             {
-                // We use our own optimized XBitmap implementation
-                Reference< XBitmap > xBitmap( static_cast< cppu::OWeakObject* >( new ImageWrapper( aImage )), UNO_QUERY );
+                Reference<css::graphic::XGraphic> xGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
+                Reference<XBitmap> xBitmap(xGraphic, UNO_QUERY);
+                assert(xGraphic.is() == xBitmap.is());
                 a <<= xBitmap;
                 xPropSet->setPropertyValue("Image", a );
             }
@@ -317,14 +310,14 @@ static void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XI
     for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {
         sal_uInt16          nItemId = pMenu->GetItemId( nPos );
-        MenuItemType    nType   = pMenu->GetItemType( nPos );
+        ::MenuItemType nType   = pMenu->GetItemType( nPos );
 
         try
         {
             Any a;
             Reference< XPropertySet > xPropSet;
 
-            if ( nType == MenuItemType::SEPARATOR )
+            if ( nType == ::MenuItemType::SEPARATOR )
             {
                 xPropSet = CreateActionTriggerSeparator( rActionTriggerContainer );
 
@@ -357,13 +350,14 @@ static void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XI
 }
 
 void ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
-    Menu* pNewMenu,
-    const Reference< XIndexContainer >& rActionTriggerContainer )
+    const Reference<XPopupMenu>& rNewMenu,
+    const Reference<XIndexContainer>& rActionTriggerContainer)
 {
     sal_uInt16 nItemId = START_ITEMID;
 
-    if ( rActionTriggerContainer.is() )
-        InsertSubMenuItems( pNewMenu, nItemId, rActionTriggerContainer );
+    // FIXME this does not compile
+    //if ( rActionTriggerContainer.is() )
+    //    InsertSubMenuItems(rNewMenu, nItemId, rActionTriggerContainer);
 }
 
 void ActionTriggerHelper::FillActionTriggerContainerFromMenu(

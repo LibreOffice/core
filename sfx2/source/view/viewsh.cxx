@@ -1921,7 +1921,7 @@ bool SfxViewShell::TryContextMenuInterception(const Menu& rIn, const OUString& r
         PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
         assert(pVCLMenu);
 
-        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(pVCLMenu, aEvent.ActionTriggerContainer);
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(rOut, aEvent.ActionTriggerContainer);
 
         Change(pVCLMenu, this);
     }
@@ -1987,8 +1987,8 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
 
     if ( bModified )
     {
-        pVCLMenu->Clear();
-        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(pVCLMenu, aEvent.ActionTriggerContainer);
+        rPopupMenu->clear();
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(rPopupMenu, aEvent.ActionTriggerContainer);
     }
 
     return true;
