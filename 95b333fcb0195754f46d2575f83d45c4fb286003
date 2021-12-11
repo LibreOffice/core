@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c26056c_c8a7f737",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2021-12-11T21:04:09Z",
+      "side": 1,
+      "message": "GtkBoxes are easier than GtkGrid (on mobile release) so I switched it to GtkBoxes. In addition the rearrangement is from my point of view easier to read AND you get less issues with translations cause you have always only one (translation) text string per row.",
+      "revId": "95b333fcb0195754f46d2575f83d45c4fb286003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
