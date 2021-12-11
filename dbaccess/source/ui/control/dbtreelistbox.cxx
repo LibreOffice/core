@@ -400,7 +400,7 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
         aEvent.ExecutePosition.X = -1;
         aEvent.ExecutePosition.Y = -1;
         aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-            pContextMenu.get(), &aMenuIdentifier );
+            xPopupMenu, &aMenuIdentifier );
         aEvent.Selection = new SelectionSupplier(m_pContextMenuProvider->getCurrentSelection(*m_xTreeView));
 
         ::comphelper::OInterfaceIteratorHelper2 aIter( *pInterceptors );

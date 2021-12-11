@@ -20,7 +20,7 @@
 #pragma once
 
 #include <helper/propertysetcontainer.hxx>
-#include <vcl/menu.hxx>
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -40,7 +40,7 @@ class RootActionTriggerContainer final : public PropertySetContainer,
                                     public css::container::XNamed
 {
     public:
-        RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier);
+        RootActionTriggerContainer(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, const OUString* pMenuIdentifier);
         virtual ~RootActionTriggerContainer() override;
 
         // XInterface
@@ -92,7 +92,7 @@ class RootActionTriggerContainer final : public PropertySetContainer,
         void FillContainer();
 
         bool            m_bContainerCreated;
-        VclPtr<const Menu>  m_pMenu;
+        css::uno::Reference<css::awt::XPopupMenu> m_xMenu;
         const OUString* m_pMenuIdentifier;
 };
 

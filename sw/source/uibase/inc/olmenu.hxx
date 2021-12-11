@@ -129,6 +129,8 @@ public:
         return *m_xPopupMenu;
     }
 
+    css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface() { return m_xPopupMenu->CreateMenuInterface(); }
+
     void Execute( const tools::Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );
 };

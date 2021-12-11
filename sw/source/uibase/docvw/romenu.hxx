@@ -70,7 +70,7 @@ class SwReadOnlyPopup
 
 public:
     SwReadOnlyPopup(const Point &rDPos, SwView &rV);
-    PopupMenu& GetMenu() const { return *m_xMenu; }
+    css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface() { return m_xMenu->CreateMenuInterface(); }
     ~SwReadOnlyPopup();
 
     void Execute( vcl::Window* pWin, const Point &rPPos );
