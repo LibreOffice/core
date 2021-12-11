@@ -528,6 +528,14 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleImgSvg)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testUTF16_nonBMP)
+{
+    load(mpTestDocumentPath, "emojis16BE.html");
+    // tdf#146173: non-BMP characters' surrogates didn't combine correctly
+    CPPUNIT_ASSERT_EQUAL(OUString(u"a text with emojis: 🌾 ☀👨🏼‍🌾🏃🏼‍♂️🤙🏽🔍"),
+                         getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
