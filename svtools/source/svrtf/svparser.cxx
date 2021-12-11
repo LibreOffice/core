@@ -247,7 +247,27 @@ sal_uInt32 SvParser<T>::GetNextChar()
         rInput.ReadUtf16(cUC);
         bErr = !rInput.good();
         if( !bErr )
+        {
             c = cUC;
+            if (rtl::isHighSurrogate(cUC))
+            {
+                const sal_uInt64 nPos = rInput.Tell();
+                rInput.ReadUtf16(cUC);
+                bErr = !rInput.good();
+                if (!bErr)
+                {
+                    if (rtl::isLowSurrogate(cUC))
+                        c = rtl::combineSurrogates(c, cUC);
+                    else
+                        rInput.Seek(nPos); // process lone high surrogate
+                }
+                else
+                {
+                    bErr = false; // process lone high surrogate
+                    rInput.Seek(nPos); // maybe step 1 byte back
+                }
+            }
+        }
     }
     else
     {
