@@ -16,6 +16,23 @@
       "message": "Please be careful about what you are changing. Not every sal_Int32 should be changed to Color. Please take a look, at least to the variable and function names.",
       "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54711918_5457e249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-11T12:25:20Z",
+      "side": 1,
+      "message": "Vaibhav: amend this patch to change some actual color stuff (just saying as many incorrectly abandon their patch in a situation like this).",
+      "revId": "39ffe26bc57b92aad48ef6adb75ae01702806a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
