@@ -42,8 +42,8 @@ published struct Locale
         defined by ISO 639-1, or three-letter codes as defined by ISO
         639-3. You can find a full list of these codes at a number of
         sites, such as: <br/>
-        <a href="http://sil.org/iso639-3/codes.asp">
-        <code>http://sil.org/iso639-3/codes.asp</code></a>.
+        <a href="https://iso639-3.sil.org/code_tables/639/data">
+        <code>https://iso639-3.sil.org/code_tables/639/data</code></a>.
         </p>
 
         <p>If this field contains an empty string, the meaning depends on the
@@ -62,8 +62,8 @@ published struct Locale
         <p>These codes are the upper-case two-letter codes as
         defined by ISO 3166-1.  You can find a full list of these codes
         at a number of sites, such as: <br/>
-        <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/country_names_and_code_elements.htm">
-        <code>http://www.iso.org/iso/country_codes/iso_3166_code_lists/country_names_and_code_elements.htm</code></a>.
+        <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">
+        <code>https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</code></a>.
         </p>
 
         <p>If this field contains an empty string, the meaning depends on the
