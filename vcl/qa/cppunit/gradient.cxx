@@ -39,10 +39,12 @@ public:
 
     void testDrawGradient_rect_linear();
     void testDrawGradient_rect_axial();
+    void testDrawGradient_rect_complex();
 
     CPPUNIT_TEST_SUITE(VclGradientTest);
     CPPUNIT_TEST(testDrawGradient_rect_linear);
     CPPUNIT_TEST(testDrawGradient_rect_axial);
+    CPPUNIT_TEST(testDrawGradient_rect_complex);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -176,6 +178,63 @@ void VclGradientTest::testDrawGradient_rect_axial()
 
     TestAxialStripes(
         MetaLinearGradientAction(tools::Rectangle(Point(10, 10), Size(40, 40)), aGradient, 3));
+}
+
+static void TestComplexStripes(MetaComplexGradientAction const& rComplexAction)
+{
+    size_t nIndex = 0;
+
+    MetaAction* pAction = rComplexAction.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (Start)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+
+    pAction = rComplexAction.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+
+    // starts at 1 because the code does!
+    for (size_t i = 1; i < rComplexAction.GetSteps(); i++)
+    {
+        pAction = rComplexAction.GetAction(nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action", MetaActionType::POLYPOLYGON,
+                                     pAction->GetType());
+        nIndex++;
+
+        pAction = rComplexAction.GetAction(nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                     pAction->GetType());
+        nIndex++;
+    }
+
+    pAction = rComplexAction.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (end)", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rComplexAction.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action (end)", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rComplexAction.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (end)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("More actions to be processed", rComplexAction.size(), nIndex);
+}
+
+void VclGradientTest::testDrawGradient_rect_complex()
+{
+    Gradient aGradient(GradientStyle::Square, COL_RED, COL_WHITE);
+    aGradient.SetBorder(10);
+
+    TestComplexStripes(
+        MetaComplexGradientAction(tools::Rectangle(Point(10, 10), Size(40, 40)), aGradient, 42));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclGradientTest);

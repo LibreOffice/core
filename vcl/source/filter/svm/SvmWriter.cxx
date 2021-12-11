@@ -804,6 +804,14 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             auto* pMetaAction = static_cast<MetaLinearGradientAction*>(pAction);
             LinearGradientHandler(pMetaAction);
         }
+        break;
+
+        case MetaActionType::COMPLEXGRADIENT:
+        {
+            auto* pMetaAction = static_cast<MetaComplexGradientAction*>(pAction);
+            ComplexGradientHandler(pMetaAction);
+        }
+        break;
     }
 }
 
@@ -1480,6 +1488,72 @@ void SvmWriter::LinearGradientHandler(const MetaLinearGradientAction* pActionCon
             case MetaActionType::GRADIENTEX:
             {
                 auto* pMetaAction = static_cast<MetaGradientExAction*>(pLinearAction);
+                GradientExHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                SAL_INFO("vcl.gdi", "SVM gradient action not handled: " << (sal_uInt32)nType);
+                break;
+        }
+    }
+}
+
+void SvmWriter::ComplexGradientHandler(const MetaComplexGradientAction* pActionConst)
+{
+    MetaComplexGradientAction* pAction = const_cast<MetaComplexGradientAction*>(pActionConst);
+
+    for (auto* pComplexAction : *pAction)
+    {
+        MetaActionType nType = pComplexAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::COMMENT:
+            {
+                auto* pMetaAction = static_cast<MetaCommentAction*>(pComplexAction);
+                CommentHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::FILLCOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaFillColorAction*>(pComplexAction);
+                FillColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::LINECOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaLineColorAction*>(pComplexAction);
+                LineColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolygonAction*>(pComplexAction);
+                PolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYPOLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolyPolygonAction*>(pComplexAction);
+                PolyPolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENT:
+            {
+                auto* pMetaAction = static_cast<MetaGradientAction*>(pComplexAction);
+                GradientHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENTEX:
+            {
+                auto* pMetaAction = static_cast<MetaGradientExAction*>(pComplexAction);
                 GradientExHandler(pMetaAction);
             }
             break;

@@ -1776,6 +1776,35 @@ public:
     size_t size() const { return maActions.size(); }
 };
 
+class VCL_DLLPUBLIC MetaComplexGradientAction final : public MetaAction
+{
+    using ActionsType = std::vector<MetaAction*>;
+
+private:
+    ActionsType maActions;
+    size_t mnSteps;
+
+public:
+    MetaComplexGradientAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount);
+    MetaComplexGradientAction(MetaComplexGradientAction const &) = default;
+    MetaComplexGradientAction(MetaComplexGradientAction &&) = default;
+    MetaComplexGradientAction & operator =(MetaComplexGradientAction const &) = delete; // due to MetaAction
+    MetaComplexGradientAction & operator =(MetaComplexGradientAction &&) = delete; // due to MetaAction
+
+public:
+    virtual void Execute(OutputDevice* pOut) override;
+    virtual void Move(tools::Long nHorzMove, tools::Long nVertMove) override;
+    virtual void Scale(double fScaleX, double fScaleY) override;
+
+    MetaAction* GetAction(size_t nIndex) const { return maActions[nIndex]; }
+    size_t GetSteps() const { return mnSteps; }
+
+    ActionsType::iterator begin() { return maActions.begin(); }
+    ActionsType::iterator end() { return maActions.end(); }
+
+    size_t size() const { return maActions.size(); }
+};
+
 #endif // INCLUDED_VCL_METAACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

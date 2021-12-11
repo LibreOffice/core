@@ -2293,4 +2293,171 @@ void MetaLinearGradientAction::Scale(double fScaleX, double fScaleY)
     }
 }
 
+MetaComplexGradientAction::MetaComplexGradientAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount)
+    : MetaAction(MetaActionType::COMPLEXGRADIENT)
+{
+    maActions.push_back(new MetaCommentAction("XGRAD_COMPLEX_BEGIN"));
+
+    // Determine if we output via Polygon or PolyPolygon
+    // For all rasteroperations other than Overpaint always use PolyPolygon,
+    // as we will get wrong results if we output multiple times on top of each other.
+    // Also for printers always use PolyPolygon, as not all printers
+    // can print polygons on top of each other.
+
+    std::optional<tools::PolyPolygon> xPolyPoly;
+    tools::Rectangle       aRect;
+    Point           aCenter;
+    Color           aStartCol( rGradient.GetStartColor() );
+    Color           aEndCol( rGradient.GetEndColor() );
+    tools::Long            nStartRed = ( static_cast<tools::Long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nStartGreen = ( static_cast<tools::Long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nStartBlue = ( static_cast<tools::Long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nEndRed = ( static_cast<tools::Long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nEndGreen = ( static_cast<tools::Long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nEndBlue = ( static_cast<tools::Long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nRedSteps = nEndRed - nStartRed;
+    tools::Long            nGreenSteps = nEndGreen - nStartGreen;
+    tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
+    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
+
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
+
+    xPolyPoly = tools::PolyPolygon( 2 );
+
+    // at least three steps and at most the number of colour differences
+    tools::Long nSteps = std::max( nStepCount, tools::Long(2) );
+    tools::Long nCalcSteps  = std::abs( nRedSteps );
+    tools::Long nTempSteps = std::abs( nGreenSteps );
+    if ( nTempSteps > nCalcSteps )
+        nCalcSteps = nTempSteps;
+    nTempSteps = std::abs( nBlueSteps );
+    if ( nTempSteps > nCalcSteps )
+        nCalcSteps = nTempSteps;
+    if ( nCalcSteps < nSteps )
+        nSteps = nCalcSteps;
+    if ( !nSteps )
+        nSteps = 1;
+
+    // determine output limits and stepsizes for all directions
+    tools::Polygon aPoly;
+    double  fScanLeft = aRect.Left();
+    double  fScanTop = aRect.Top();
+    double  fScanRight = aRect.Right();
+    double  fScanBottom = aRect.Bottom();
+    double fScanIncX = static_cast<double>(aRect.GetWidth()) / static_cast<double>(nSteps) * 0.5;
+    double fScanIncY = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps) * 0.5;
+
+    // all gradients are rendered as nested rectangles which shrink
+    // equally in each dimension - except for 'square' gradients
+    // which shrink to a central vertex but are not per-se square.
+    if( rGradient.GetStyle() != GradientStyle::Square )
+    {
+        fScanIncY = std::min( fScanIncY, fScanIncX );
+        fScanIncX = fScanIncY;
+    }
+    sal_uInt8   nRed = static_cast<sal_uInt8>(nStartRed), nGreen = static_cast<sal_uInt8>(nStartGreen), nBlue = static_cast<sal_uInt8>(nStartBlue);
+    bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
+
+    maActions.push_back(new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+
+    aPoly = rRect;
+    xPolyPoly->Insert( aPoly );
+    xPolyPoly->Insert( aPoly );
+
+    mnSteps = 0;
+
+    // loop to output Polygon/PolyPolygon sequentially
+    for( tools::Long i = 1; i < nSteps; i++ )
+    {
+        mnSteps = i; // capture the number of gradient steps as we may bail out early if the gradient stripe gets too small
+
+        // calculate new Polygon
+        fScanLeft += fScanIncX;
+        aRect.SetLeft( static_cast<tools::Long>( fScanLeft ) );
+        fScanTop += fScanIncY;
+        aRect.SetTop( static_cast<tools::Long>( fScanTop ) );
+        fScanRight -= fScanIncX;
+        aRect.SetRight( static_cast<tools::Long>( fScanRight ) );
+        fScanBottom -= fScanIncY;
+        aRect.SetBottom( static_cast<tools::Long>( fScanBottom ) );
+
+        if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
+            break;
+
+        if( rGradient.GetStyle() == GradientStyle::Radial || rGradient.GetStyle() == GradientStyle::Elliptical )
+            aPoly = tools::Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
+        else
+            aPoly = tools::Polygon( aRect );
+
+        aPoly.Rotate( aCenter, nAngle );
+
+        // adapt colour accordingly
+        const tools::Long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
+        nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
+        nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
+        nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
+
+        bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
+
+        xPolyPoly->Replace( xPolyPoly->GetObject( 1 ), 0 );
+        xPolyPoly->Replace( aPoly, 1 );
+
+        maActions.push_back(new MetaPolyPolygonAction( *xPolyPoly ) );
+
+        // #107349# Set fill color _after_ geometry painting:
+        // xPolyPoly's geometry is the band from last iteration's
+        // aPoly to current iteration's aPoly. The window outdev
+        // path (see else below), on the other hand, paints the
+        // full aPoly. Thus, here, we're painting the band before
+        // the one painted in the window outdev path below. To get
+        // matching colors, have to delay color setting here.
+        maActions.push_back(new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+    }
+
+    const tools::Polygon& rPoly = xPolyPoly->GetObject( 1 );
+
+    if( rPoly.GetBoundRect().IsEmpty() )
+        return;
+
+    // #107349# Paint last polygon with end color only if loop
+    // has generated output. Otherwise, the current
+    // (i.e. start) color is taken, to generate _any_ output.
+    if( bPaintLastPolygon )
+    {
+        nRed = GetGradientColorValue( nEndRed );
+        nGreen = GetGradientColorValue( nEndGreen );
+        nBlue = GetGradientColorValue( nEndBlue );
+    }
+
+    maActions.push_back(new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+    maActions.push_back(new MetaPolygonAction( rPoly ) );
+
+    maActions.push_back(new MetaCommentAction("XGRAD_COMPLEX_END"));
+}
+
+void MetaComplexGradientAction::Execute(OutputDevice* pOutDev)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Execute(pOutDev);
+    }
+}
+
+void MetaComplexGradientAction::Move(tools::Long nHorzMove, tools::Long nVertMove)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Move(nHorzMove, nVertMove);
+    }
+}
+
+void MetaComplexGradientAction::Scale(double fScaleX, double fScaleY)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Scale(fScaleX, fScaleY);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -76,6 +76,7 @@ enum class MetaActionType
     TEXTLANGUAGE            = 150,
     OVERLINECOLOR           = 151,
     LINEARGRADIENT          = 152,
+    COMPLEXGRADIENT         = 153,
 
     COMMENT                 = 512,
     LAST                    = COMMENT
