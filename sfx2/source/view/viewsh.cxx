@@ -1911,13 +1911,7 @@ bool SfxViewShell::TryContextMenuInterception(const Menu& rIn, const OUString& r
         // container was modified, create a new menu out of it
         css::uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
         rOut.set(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.PopupMenu", xContext), css::uno::UNO_QUERY_THROW);
-
-        VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>(rOut);
-        assert(pAwtMenu);
-        PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
-        assert(pVCLMenu);
-
-        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(pVCLMenu, aEvent.ActionTriggerContainer);
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(rOut, aEvent.ActionTriggerContainer);
     }
 
     return true;
@@ -1984,7 +1978,7 @@ bool SfxViewShell::TryContextMenuInterception(const css::uno::Reference<css::awt
     if ( bModified )
     {
         rPopupMenu->clear();
-        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(pVCLMenu, aEvent.ActionTriggerContainer);
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(rPopupMenu, aEvent.ActionTriggerContainer);
     }
 
     return true;
