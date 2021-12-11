@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e940773f_09aa96a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-12-11T14:29:36Z",
+      "side": 1,
+      "message": "axial gradient: https://i.imgur.com/BdfKUWV.png\nradial-gradient: https://i.imgur.com/bGOOnCw.png\nWould these be fine?",
+      "revId": "98477cd446c9450886259dfcc8bd52f51e0de044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
