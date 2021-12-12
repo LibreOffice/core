@@ -23,15 +23,15 @@
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
+#include <svtools/imagemgr.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <tools/urlobj.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/historyoptions.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/imagemgr.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -194,8 +194,8 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             rPopupMenu->insertItem(sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear(), 0, -1);
 
             if ( bIsIconsAllowed ) {
-                Image aThumbnail = SvFileInformationManager::GetImage(aURL, false, {});
-                pVCLPopupMenu->SetItemImage(sal_uInt16 ( i+1 ), aThumbnail);
+                BitmapEx aThumbnail(SvFileInformationManager::GetImageId(aURL, false));
+                rPopupMenu->setItemImage(sal_uInt16(i + 1), Graphic(aThumbnail).GetXGraphic(), false);
             }
 
             rPopupMenu->setTipHelpText(sal_uInt16(i + 1), aTipHelpText);
