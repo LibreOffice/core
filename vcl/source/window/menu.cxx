@@ -469,28 +469,6 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr,
     SetItemImage( nItemId, rImage );
 }
 
-void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame)
-{
-    sal_uInt16 nItemId = GetItemCount() + 1;
-
-    if (rFrame.is())
-    {
-        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, aModuleName);
-        OUString aLabel(CommandInfoProvider::GetPopupLabelForCommand(aProperties));
-        OUString aTooltip(CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, rFrame));
-        Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, rFrame));
-
-        InsertItem(nItemId, aLabel, aImage);
-        SetHelpText(nItemId, aTooltip);
-    }
-    else
-        InsertItem(nItemId, OUString());
-
-    SetItemCommand(nItemId, rCommand);
-}
-
-
 void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
 {
     // do nothing if it's a menu bar

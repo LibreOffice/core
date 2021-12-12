@@ -241,8 +241,6 @@ public:
                     MenuItemBits nItemBits = MenuItemBits::NONE,
                     const OString &rIdent = OString(),
                     sal_uInt16 nPos = MENU_APPEND);
-    void InsertItem(const OUString& rCommand,
-                    const css::uno::Reference<css::frame::XFrame>& rFrame);
     void InsertSeparator(const OString &rIdent = OString(), sal_uInt16 nPos = MENU_APPEND);
     void RemoveItem( sal_uInt16 nPos );
     void Clear();
