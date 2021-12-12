@@ -16,6 +16,24 @@
       "message": "Specifically, I suppose that here you just obtain CursorFirstWord( aPaM ), then check if resulting PaM\u0027s index is equal to aPaM.GetIndex(), to decide if you assign new PaM to aPaM, or you assign CursorStartOfLine( aPaM ) to aPaM.",
       "revId": "809236ed826b67328409e008313dea87de6d5243",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c78c02a2_3bea424b",
+        "filename": "vcl/source/edit/textview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-12T11:17:55Z",
+      "side": 0,
+      "message": "Yep, I am currently not in front of a machine, but I will implement it in the evening.",
+      "parentUuid": "0800cc81_7fecc671",
+      "revId": "809236ed826b67328409e008313dea87de6d5243",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

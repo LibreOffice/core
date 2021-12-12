@@ -16,6 +16,24 @@
       "message": "I suppose there\u0027s no need to revert-then-reimplement, since it would be the ~same code, just with different conditions?",
       "revId": "e4fe43e6f414d65d8a9dba01d56cb21d749b7e57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83de754e_aeedfc5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-12T11:17:55Z",
+      "side": 1,
+      "message": "Is a follow-up patch enough?",
+      "parentUuid": "cad5ef7a_8de4e5a7",
+      "revId": "e4fe43e6f414d65d8a9dba01d56cb21d749b7e57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
