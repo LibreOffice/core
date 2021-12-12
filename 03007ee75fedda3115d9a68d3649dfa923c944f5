@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc61150b_d5a6070b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-12T21:47:35Z",
+      "side": 1,
+      "message": "See inline comment",
+      "revId": "03007ee75fedda3115d9a68d3649dfa923c944f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e1fd48e_cc1f0be1",
+        "filename": "vcl/unx/gtk3/gtkinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 15423,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-12T21:47:35Z",
+      "side": 1,
+      "message": "Argh, just rethinking about this, IMHO it should be \"gets\".\nIndeed \"we can guarantee do_validate_rows...\" is equivalent to:\n\"we can guarantee that the function \"do_validate_rows\"...\", so 3rd person Singular with simple present \u003d\u003e we need a \"s\".\nSorry for having missed this first.",
+      "range": {
+        "startLine": 15423,
+        "startChar": 83,
+        "endLine": 15423,
+        "endChar": 86
+      },
+      "revId": "03007ee75fedda3115d9a68d3649dfa923c944f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
