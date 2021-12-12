@@ -191,30 +191,27 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
             aMenuShortCut.append( aMenuTitle );
 
-            pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear() );
+            rPopupMenu->insertItem(sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear(), 0, -1);
 
             if ( bIsIconsAllowed ) {
                 Image aThumbnail = SvFileInformationManager::GetImage(aURL, false, {});
                 pVCLPopupMenu->SetItemImage(sal_uInt16 ( i+1 ), aThumbnail);
             }
 
-            pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
-            pVCLPopupMenu->SetItemCommand( sal_uInt16( i+1 ), aURLString );
+            rPopupMenu->setTipHelpText(sal_uInt16(i + 1), aTipHelpText);
+            rPopupMenu->setCommand(sal_uInt16(i + 1), aURLString);
         }
 
-        pVCLPopupMenu->InsertSeparator();
+        rPopupMenu->insertSeparator(-1);
         // Clear List menu entry
-        pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 1 ),
-                                   FwkResId(STR_CLEAR_RECENT_FILES) );
-        pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 1 ),
-                                       CMD_CLEAR_LIST );
-        pVCLPopupMenu->SetHelpText( sal_uInt16( nCount + 1 ),
-                                    FwkResId(STR_CLEAR_RECENT_FILES_HELP) );
+        rPopupMenu->insertItem(sal_uInt16(nCount + 1), FwkResId(STR_CLEAR_RECENT_FILES), 0, -1);
+        rPopupMenu->setCommand(sal_uInt16(nCount + 1), CMD_CLEAR_LIST);
+        rPopupMenu->setHelpText(sal_uInt16(nCount + 1), FwkResId(STR_CLEAR_RECENT_FILES_HELP));
 
         // Open remote menu entry
         if ( m_bShowToolbarEntries )
         {
-            pVCLPopupMenu->InsertSeparator();
+            rPopupMenu->insertSeparator(-1);
             pVCLPopupMenu->InsertItem( CMD_OPEN_AS_TEMPLATE, m_xFrame );
             pVCLPopupMenu->InsertItem( CMD_OPEN_REMOTE, m_xFrame );
         }
@@ -230,12 +227,11 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         {
             // Add InsertSeparator(), otherwise it will display
             // the first item icon of recent files instead of displaying no icon.
-            pVCLPopupMenu->InsertSeparator();
+            rPopupMenu->insertSeparator(-1);
             // No recent documents => insert "no documents" string
-            pVCLPopupMenu->InsertItem( 1, FwkResId(STR_NODOCUMENT) );
             // Do not disable it, otherwise the Toolbar controller and MenuButton
             // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
-            pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MenuItemBits::NOSELECT );
+            rPopupMenu->insertItem(1, FwkResId(STR_NODOCUMENT), static_cast<sal_Int16>(MenuItemBits::NOSELECT), -1);
         }
     }
 }
