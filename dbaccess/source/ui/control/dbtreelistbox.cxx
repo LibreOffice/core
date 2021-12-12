@@ -38,7 +38,6 @@
 #include <svx/dbaobjectex.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
 #include <memory>
@@ -387,7 +386,6 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     rtl::Reference xPopupMenu( new VCLXPopupMenu );
     xMenuController->setPopupMenu( xPopupMenu );
-    VclPtr<PopupMenu> pContextMenu( static_cast< PopupMenu* >( xPopupMenu->GetMenu() ) );
 
     // allow context menu interception
     ::comphelper::OInterfaceContainerHelper2* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
@@ -459,7 +457,6 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     // do action for selected entry in popup menu
     css::uno::Reference<css::awt::XWindowPeer> xParent(xSourceWindow, css::uno::UNO_QUERY);
     xPopupMenu->execute(xParent, css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1), css::awt::PopupMenuDirection::EXECUTE_DOWN);
-    pContextMenu.disposeAndClear();
 
     css::uno::Reference<css::lang::XComponent> xComponent(xMenuController, css::uno::UNO_QUERY);
     if (xComponent.is())
