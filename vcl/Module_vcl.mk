@@ -29,7 +29,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Package_opengl_denylist ) \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         Package_skia_denylist ) \
-    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
+    $(if $(filter DESKTOP FUZZERS,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
         $(if $(DISABLE_GUI),, \
             $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
@@ -151,7 +151,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_nativedraw \
     CustomTarget_nativewriter \
     CustomTarget_nativemath \
-    StaticLibrary_fuzzerstubs \
     StaticLibrary_fuzzer_core \
     StaticLibrary_fuzzer_calc \
     StaticLibrary_fuzzer_draw \

@@ -19,6 +19,8 @@ $(eval $(call gb_Executable_use_api,docxfuzzer,\
 
 $(eval $(call gb_Executable_use_externals,docxfuzzer,\
     $(fuzzer_externals) \
+    epubgen \
+    revenge \
 ))
 
 $(eval $(call gb_Executable_set_include,docxfuzzer,\
