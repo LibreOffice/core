@@ -55,7 +55,6 @@ enum class VclEventId;
 
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace com::sun::star::accessibility { class XAccessible;  }
-namespace com::sun::star::frame { class XFrame; }
 
 namespace vcl
 {
