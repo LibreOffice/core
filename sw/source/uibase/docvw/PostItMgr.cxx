@@ -525,6 +525,7 @@ void SwPostItMgr::Focus(const SfxBroadcaster& rBC)
                 // when the layout algorithm starts, this postit is created and receives focus
                 postItField->mbFocus = true;
             }
+            break;
         }
     }
 }
