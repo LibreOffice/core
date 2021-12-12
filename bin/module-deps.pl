@@ -29,6 +29,7 @@ sub read_deps()
     my $invalid_tolerance = 100;
     my $line_count = 0;
     my %deps;
+    my $child_pid = 0;
     if (defined $to_file)
     {
         open($to, ">$to_file") or die "can not open file for writing $to_file";
@@ -36,14 +37,15 @@ sub read_deps()
     if (defined $from_file) {
         open ($p, $from_file) || die "can't read deps from cache file: $!";
     } else {
-        open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -qrf $makefile_build|") || die "can't launch make: $!";
+        $child_pid = open ($p, "-|", "ENABLE_PRINT_DEPS=1 $gnumake -qrf $makefile_build") // die "couldn't launch make: $!";
+        exit if (!$child_pid);
     }
     $|=1;
     print STDERR "reading deps ";
     while (<$p>) {
         my $line = $_;
         $line_count++;
-        print STDERR '.' if ($line_count % 10 == 0);
+        print STDERR '.' if (!$verbose && $line_count % 10 == 0);
         logit($line);
         print $to $line if defined $to_file;
         chomp ($line);
@@ -68,6 +70,14 @@ sub read_deps()
         }
     }
     close ($p);
+    if ($child_pid) {
+        my $err = $? >> 8;
+        # make query mode returns 0 or 1, depending on the build status
+        if ($err != 0 && $err != 1) {
+            print STDERR " error\n" if (!$verbose);
+            die("Errorcode $err from make - aborting!");
+        }
+    }
     print STDERR " done\n";
 
     return \%deps;
@@ -189,8 +199,13 @@ sub optimize_tree($)
 {
     my $tree = shift;
     prune_redundant_deps($tree);
+    my @errors;
     for my $name (sort keys %{$tree}) {
         my $result = $tree->{$name};
+        if (!defined($result->{target})) {
+            push @errors, "missing target for dependency '$name'!";
+            next;
+        }
         logit("minimising deps for $result->{target}\n");
         my @newdeps;
         for my $dep (@{$result->{deps}}) {
@@ -209,6 +224,10 @@ sub optimize_tree($)
         }
         # re-write the shrunk set to accelerate things
         $result->{deps} = \@newdeps;
+    }
+    if (scalar @errors > 0) {
+        print STDERR join("\n", @errors) . "\n";
+        die("Missing targets for dependencies - aborting!");
     }
     return $tree;
 }
@@ -337,12 +356,21 @@ END
             'shape=box,style=filled,color="#CCCCCC"' .
             "];" . join(';', @merged_names) . "\n";
 
+   my @errors;
    for my $name (sort keys %{$tree}) {
        my $result = $tree->{$name};
+       if (!defined($result->{target})) {
+           push @errors, "Missing target for dependency '$name'!";
+           next;
+       }
        logit("minimising deps for $result->{target}\n");
        for my $dep (@{$result->{deps}}) {
            print $to "$name -> $dep;\n" ;
        }
+    }
+    if (scalar @errors > 0) {
+        print STDERR join("\n", @errors) . "\n";
+        die("Missing targets for dependencies - aborting!");
     }
     print $to "}\n";
 }
