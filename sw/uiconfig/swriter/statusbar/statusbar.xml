@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:mandatory="false" statusbar:width="16"/>
+ <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:mandatory="true" statusbar:width="16"/>
  <statusbar:statusbaritem xlink:href=".uno:StatePageNumber" statusbar:align="left" statusbar:autosize="true" statusbar:mandatory="true" statusbar:width="54"/>
  <statusbar:statusbaritem xlink:href=".uno:StateWordCount" statusbar:align="left" statusbar:autosize="true"/>
  <statusbar:statusbaritem xlink:href=".uno:PageStyleName" statusbar:align="left" statusbar:autosize="true" statusbar:width="79"/>
