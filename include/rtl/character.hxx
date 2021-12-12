@@ -53,7 +53,6 @@ inline SAL_CONSTEXPR bool isUnicodeCodePoint(sal_uInt32 code) { return code <= 0
  */
 inline SAL_CONSTEXPR bool isAscii(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code <= 0x7F;
 }
 
@@ -74,7 +73,6 @@ template <typename T> inline constexpr bool isAscii(T code) { return isAscii(sal
  */
 inline SAL_CONSTEXPR bool isAsciiLowerCase(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code >= 'a' && code <= 'z';
 }
 
@@ -98,7 +96,6 @@ template <typename T> inline constexpr bool isAsciiLowerCase(T code)
  */
 inline SAL_CONSTEXPR bool isAsciiUpperCase(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code >= 'A' && code <= 'Z';
 }
 
@@ -122,7 +119,6 @@ template <typename T> inline constexpr bool isAsciiUpperCase(T code)
  */
 inline SAL_CONSTEXPR bool isAsciiAlpha(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return isAsciiLowerCase(code) || isAsciiUpperCase(code);
 }
 
@@ -146,7 +142,6 @@ template <typename T> inline constexpr bool isAsciiAlpha(T code)
  */
 inline SAL_CONSTEXPR bool isAsciiDigit(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code >= '0' && code <= '9';
 }
 
@@ -170,7 +165,6 @@ template <typename T> inline constexpr bool isAsciiDigit(T code)
  */
 inline SAL_CONSTEXPR bool isAsciiAlphanumeric(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return isAsciiDigit(code) || isAsciiAlpha(code);
 }
 
@@ -194,7 +188,6 @@ template <typename T> inline constexpr bool isAsciiAlphanumeric(T code)
  */
 inline SAL_CONSTEXPR bool isAsciiCanonicHexDigit(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return isAsciiDigit(code) || (code >= 'A' && code <= 'F');
 }
 
@@ -218,7 +211,6 @@ template <typename T> inline constexpr bool isAsciiCanonicHexDigit(T code)
  */
 inline SAL_CONSTEXPR bool isAsciiHexDigit(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
 }
 
@@ -241,7 +233,6 @@ template <typename T> inline constexpr bool isAsciiHexDigit(T code)
  */
 inline SAL_CONSTEXPR bool isAsciiOctalDigit(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code >= '0' && code <= '7';
 }
 
@@ -265,7 +256,6 @@ template <typename T> inline constexpr bool isAsciiOctalDigit(T code)
 */
 inline SAL_CONSTEXPR bool isAsciiWhiteSpace(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code == ' ' || code == '\f' || code == '\n' || code == '\r' || code == '\t'
            || code == '\v';
 }
@@ -365,7 +355,6 @@ sal_uInt32 const surrogatesLowLast = 0xDFFF;
 */
 inline SAL_CONSTEXPR bool isSurrogate(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesHighFirst && code <= detail::surrogatesLowLast;
 }
 
@@ -379,7 +368,6 @@ inline SAL_CONSTEXPR bool isSurrogate(sal_uInt32 code)
 */
 inline SAL_CONSTEXPR bool isHighSurrogate(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesHighFirst && code <= detail::surrogatesHighLast;
 }
 
@@ -393,7 +381,6 @@ inline SAL_CONSTEXPR bool isHighSurrogate(sal_uInt32 code)
 */
 inline SAL_CONSTEXPR bool isLowSurrogate(sal_uInt32 code)
 {
-    assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesLowFirst && code <= detail::surrogatesLowLast;
 }
 
