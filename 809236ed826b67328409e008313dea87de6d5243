@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2694d0bf_28f780af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-12T10:08:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "329f9136_663540f4",
+      "range": {
+        "startLine": 9,
+        "startChar": 52,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "809236ed826b67328409e008313dea87de6d5243",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64052f6b_20f2f987",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-12-12T09:32:47Z",
       "side": 1,
       "message": "I suppose that the logic should be different, if some commonly implemented and expected behavior is targeted. Generally it\u0027s not \"if we are at position 0\" that is important, but \"if we are at start of first word\".\n\nIn current implementation, pressing Home at any place except position 0 would go to position 0; while most IDEs do \"pressing Home at any place except start of first word goes to start of first word\". So it\u0027s the difference \"only pressing in one position moves to 0\" vs \"only pressing in one position moves to start of first word\".\n\nhttps://imgur.com/beZiG3C - I put cursor and press Home. VS IDE puts cursor to position 0 only from a single position - at start of first word.",
+      "revId": "809236ed826b67328409e008313dea87de6d5243",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fb902a5_8cd04eb0",
+        "filename": "vcl/source/edit/textview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-12T10:08:00Z",
+      "side": 1,
+      "message": "You are correct. I missunderstood the enhancement request. I will revert this patch an create a new one where I consider your thoughts. Thank you for the testing.",
+      "parentUuid": "64052f6b_20f2f987",
       "revId": "809236ed826b67328409e008313dea87de6d5243",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
