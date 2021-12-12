@@ -385,25 +385,24 @@ SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< css::uno:
 {
 }
 
+void InsertItem(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
+                const OUString& rCommand)
+{
+    sal_uInt16 nItemId = rPopupMenu->getItemCount() + 1;
+    rPopupMenu->insertItem(nItemId, OUString(), 0, -1);
+    rPopupMenu->setCommand(nItemId, rCommand);
+}
+
 void SaveAsMenuController::impl_setPopupMenu()
 {
-    VCLXMenu* pPopupMenu    = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu );
-    Menu*     pVCLPopupMenu = nullptr;
-
     SolarMutexGuard aGuard;
 
-    if ( pPopupMenu )
-        pVCLPopupMenu = pPopupMenu->GetMenu();
-
-    if ( !pVCLPopupMenu )
-        return;
-
-    pVCLPopupMenu->InsertItem( ".uno:SaveAs", nullptr );
-    pVCLPopupMenu->InsertItem( ".uno:ExportTo", nullptr );
-    pVCLPopupMenu->InsertItem( ".uno:SaveACopy", nullptr );
-    pVCLPopupMenu->InsertItem( ".uno:SaveAsTemplate", nullptr );
-    pVCLPopupMenu->InsertSeparator();
-    pVCLPopupMenu->InsertItem( ".uno:SaveAsRemote", nullptr );
+    InsertItem(m_xPopupMenu, ".uno:SaveAs");
+    InsertItem(m_xPopupMenu, ".uno:ExportTo");
+    InsertItem(m_xPopupMenu, ".uno:SaveACopy");
+    InsertItem(m_xPopupMenu, ".uno:SaveAsTemplate");
+    m_xPopupMenu->insertSeparator(-1);
+    InsertItem(m_xPopupMenu, ".uno:SaveAsRemote");
 }
 
 OUString SaveAsMenuController::getImplementationName()
