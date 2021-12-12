@@ -172,80 +172,6 @@ drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, co
 
 }
 
-EnhancedCustomShape3d::Transformation2D::Transformation2D(
-    const SdrObjCustomShape& rSdrObjCustomShape,
-    const double *pMap)
-:   aCenter(rSdrObjCustomShape.GetSnapRect().Center())
-    , eProjectionMode( drawing::ProjectionMode_PARALLEL )
-    , fSkewAngle(0.0)
-    , fSkew(0.0)
-    , fOriginX(0.0)
-    , fOriginY(0.0)
-{
-    const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );
-    if ( pAny )
-        *pAny >>= eProjectionMode;
-
-    if ( eProjectionMode == drawing::ProjectionMode_PARALLEL )
-        GetSkew( rGeometryItem, fSkew, fSkewAngle );
-    else
-    {
-        GetOrigin( rGeometryItem, fOriginX, fOriginY );
-        fOriginX = fOriginX * rSdrObjCustomShape.GetLogicRect().GetWidth();
-        fOriginY = fOriginY * rSdrObjCustomShape.GetLogicRect().GetHeight();
-
-        drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
-        drawing::Position3D aViewPoint( GetPosition3D( rGeometryItem, "ViewPoint", aViewPointDefault, pMap ) );
-        fViewPoint.setX(aViewPoint.PositionX);
-        fViewPoint.setY(aViewPoint.PositionY);
-        fViewPoint.setZ(-aViewPoint.PositionZ);
-    }
-}
-
-basegfx::B3DPolygon EnhancedCustomShape3d::Transformation2D::ApplySkewSettings( const basegfx::B3DPolygon& rPoly3D ) const
-{
-    basegfx::B3DPolygon aRetval;
-
-    sal_uInt32 j;
-    for ( j = 0; j < rPoly3D.count(); j++ )
-    {
-        const basegfx::B3DPoint aPoint(rPoly3D.getB3DPoint(j));
-        double fDepth(-( aPoint.getZ() * fSkew ) / 100.0);
-        aRetval.append(basegfx::B3DPoint(
-            aPoint.getX() + (fDepth * cos( fSkewAngle )),
-            aPoint.getY() - (fDepth * sin( fSkewAngle )),
-            aPoint.getZ()));
-    }
-
-    return aRetval;
-}
-
-Point EnhancedCustomShape3d::Transformation2D::Transform2D( const basegfx::B3DPoint& rPoint3D ) const
-{
-    Point aPoint2D;
-    if ( eProjectionMode == drawing::ProjectionMode_PARALLEL )
-    {
-        aPoint2D.setX( static_cast<sal_Int32>(rPoint3D.getX()) );
-        aPoint2D.setY( static_cast<sal_Int32>(rPoint3D.getY()) );
-    }
-    else if (double fDiv = rPoint3D.getZ() - fViewPoint.getZ(); fDiv != 0.0)
-    {
-        double fX = rPoint3D.getX() - fOriginX;
-        double fY = rPoint3D.getY() - fOriginY;
-        double f = ( - fViewPoint.getZ() ) / fDiv;
-        aPoint2D.setX( static_cast<sal_Int32>(( fX - fViewPoint.getX() ) * f + fViewPoint.getX() + fOriginX ) );
-        aPoint2D.setY( static_cast<sal_Int32>(( fY - fViewPoint.getY() ) * f + fViewPoint.getY() + fOriginY ) );
-    }
-    aPoint2D.Move( aCenter.X(), aCenter.Y() );
-    return aPoint2D;
-}
-
-bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
-{
-    return eProjectionMode == css::drawing::ProjectionMode_PARALLEL;
-}
-
 SdrObject* EnhancedCustomShape3d::Create3DObject(
     const SdrObject* pShape2d,
     const SdrObjCustomShape& rSdrObjCustomShape)
@@ -313,7 +239,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );
         if ( pAny )
             *pAny >>= eProjectionMode;
-        ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? ProjectionType::Parallel : ProjectionType::Perspective );
         // pShape2d Convert in scenes which include 3D Objects
         E3dDefaultAttributes a3DDefaultAttr;
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
@@ -365,6 +290,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         }
 
         tools::Rectangle aBoundRect2d;
+        basegfx::B2DPolyPolygon aTotalPolyPoly;
         SdrObjListIter aIter( *pShape2d, SdrIterMode::DeepNoGroups );
         const bool bMultipleSubObjects(aIter.Count() > 1);
 
@@ -473,6 +399,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
                 const basegfx::B2DRange aTempRange(basegfx::utils::getRange(aPolyPoly));
                 const tools::Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
+                aTotalPolyPoly.append(aPolyPoly);
                 aBoundRect2d.Union( aBoundRect );
 
                 // #i122777# depth 0 is okay for planes when using double-sided
@@ -584,45 +511,73 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             // Camera settings, Perspective ...
             Camera3D rCamera = pScene->GetCamera();
-            const basegfx::B3DRange& rVolume = pScene->GetBoundVolume();
             pScene->NbcSetSnapRect( aSnapRect );
 
             // InitScene replacement
-            double fW = rVolume.getWidth();
-            double fH = rVolume.getHeight();
-
+            double fW = aBoundRect2d.getWidth();
+            double fH = aBoundRect2d.getHeight();
             rCamera.SetAutoAdjustProjection( false );
             rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt( 0.0, 0.0, 0.0 );
             basegfx::B3DPoint aCamPos( 0.0, 0.0, 100.0 );
             rCamera.SetPosAndLookAt( aCamPos, aLookAt );
             rCamera.SetFocalLength( 1.0 );
+            ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? ProjectionType::Parallel : ProjectionType::Perspective );
             rCamera.SetProjection( eProjectionType );
             pScene->SetCamera( rCamera );
             pScene->SetBoundAndSnapRectsDirty();
 
-            double fOriginX, fOriginY;
-            GetOrigin( rGeometryItem, fOriginX, fOriginY );
-            fOriginX = fOriginX * aSnapRect.GetWidth();
-            fOriginY = fOriginY * aSnapRect.GetHeight();
-
             basegfx::B3DHomMatrix aNewTransform( pScene->GetTransform() );
-            aNewTransform.translate( -aCenter.X(), aCenter.Y(), -pScene->GetBoundVolume().getDepth() );
+            basegfx::B2DHomMatrix aPolyPolyTransform;
+            // Apply flip and z-rotation to scene transformation (y up). At same time transform
+            // aTotalPolyPoly (y down) which will be used for 2D boundRect of shape having 2D
+            // transformations applied.
 
-            double fXRotate, fYRotate;
-            GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
+            // API values use shape center as origin. Move scene so, that shape center is origin.
+            aNewTransform.translate( -aCenter.X(), aCenter.Y(), -fExtrusionBackward);
+            aPolyPolyTransform.translate(-aCenter.X(), -aCenter.Y());
+
             double fZRotate(basegfx::deg2rad(rSdrObjCustomShape.GetObjectRotation()));
             if ( fZRotate != 0.0 )
+            {
                 aNewTransform.rotate( 0.0, 0.0, fZRotate );
+                aPolyPolyTransform.rotate(-fZRotate);
+            }
             if ( bIsMirroredX )
+            {
                 aNewTransform.scale( -1.0, 1, 1 );
+                aPolyPolyTransform.scale(-1.0, 1);
+            }
             if ( bIsMirroredY )
+            {
                 aNewTransform.scale( 1, -1.0, 1 );
+                aPolyPolyTransform.scale(1, -1.0);
+            }
+            aPolyPolyTransform.translate(aCenter.X(), aCenter.Y());
+            aTotalPolyPoly.transform(aPolyPolyTransform);
+
+            // x- and y-rotation have an own rotation center. x- and y-value of rotation center are
+            // fractions of shape size, z-value is in Hmm in property. Shape center is (0 0 0).
+            // Values in property are in custom shape extrusion space with y-axis down.
+            double fXRotate, fYRotate;
+            GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
+            drawing::Direction3D aRotationCenterDefault( 0, 0, 0 );
+            drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, "RotationCenter", aRotationCenterDefault ) );
+            aRotationCenter.DirectionX *= aSnapRect.getWidth();
+            aRotationCenter.DirectionY *= aSnapRect.getHeight();
+            if (pMap)
+            {
+                aRotationCenter.DirectionZ *= *pMap;
+            }
+            aNewTransform.translate( -aRotationCenter.DirectionX, aRotationCenter.DirectionY, -aRotationCenter.DirectionZ );
             if( fYRotate != 0.0 )
                 aNewTransform.rotate( 0.0, -fYRotate, 0.0 );
             if( fXRotate != 0.0 )
                 aNewTransform.rotate( -fXRotate, 0.0, 0.0 );
-            if ( eProjectionType == ProjectionType::Parallel )
+            aNewTransform.translate(aRotationCenter.DirectionX, -aRotationCenter.DirectionY, aRotationCenter.DirectionZ);
+
+            // oblique parallel projection is done by shearing the object, not by moving the camera
+            if (eProjectionMode == drawing::ProjectionMode_PARALLEL)
             {
                 double fSkew, fAlpha;
                 GetSkew( rGeometryItem, fSkew, fAlpha );
@@ -636,6 +591,53 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                             fInvTanBeta * sin(fAlpha));
                     }
                 }
+            }
+
+            pScene->NbcSetTransform( aNewTransform );
+
+            // These values are used later again, so declare them outside the if-statement. They will
+            // contain the absolute values of ViewPoint in 3D scene coordinate system, y-axis up.
+            double fViewPointX = 0; // dummy values
+            double fViewPointY = 0;
+            double fViewPointZ = 25000;
+            if (eProjectionMode == drawing::ProjectionMode_PERSPECTIVE)
+            {
+                double fOriginX, fOriginY;
+                // Calculate BoundRect of shape, including flip and z-rotation, from aTotalPolyPoly.
+                tools::Rectangle aBoundAfter2DTransform; // aBoundAfter2DTransform has y-axis down.
+                basegfx::B2DRange aTotalPolyPolyRange(aTotalPolyPoly.getB2DRange());
+                aBoundAfter2DTransform.SetLeft(aTotalPolyPolyRange.getMinX());
+                aBoundAfter2DTransform.SetTop(aTotalPolyPolyRange.getMinY());
+                aBoundAfter2DTransform.SetRight(aTotalPolyPolyRange.getMaxX());
+                aBoundAfter2DTransform.SetBottom(aTotalPolyPolyRange.getMaxY());
+
+                // Property "Origin" in API is relativ to bounding box of shape after 2D
+                // transformations. Range is [-0.5;0.5] with center of bounding box as 0.
+                // Resolve "Origin" fractions to length
+                GetOrigin( rGeometryItem, fOriginX, fOriginY );
+                fOriginX *= aBoundAfter2DTransform.GetWidth();
+                fOriginY *= aBoundAfter2DTransform.GetHeight();
+                // Resolve length to absolute value for 3D
+                fOriginX += aBoundAfter2DTransform.Center().X();
+                fOriginY += aBoundAfter2DTransform.Center().Y();
+                fOriginY = - fOriginY;
+                // Scene is translated so that shape center is origin of coordinate system.
+                // Translate point "Origin" too.
+                fOriginX -= aCenter.X();
+                fOriginY -= -aCenter.Y();
+                // API ViewPoint values are relativ to point "Origin" and have y-axis down.
+                // ToDo: These default ViewPoint values are used as default by MS Office. But ODF
+                // default is (3500, -3500, 25000), details in tdf#146192.
+                drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
+                drawing::Position3D aViewPoint( GetPosition3D( rGeometryItem, "ViewPoint", aViewPointDefault, pMap ) );
+                fViewPointX = aViewPoint.PositionX + fOriginX;
+                fViewPointY = - aViewPoint.PositionY + fOriginY;
+                fViewPointZ = aViewPoint.PositionZ;
+            }
+
+            // now set correct camera position
+            if (eProjectionMode == drawing::ProjectionMode_PARALLEL)
+            {
                 basegfx::B3DPoint _aLookAt( 0.0, 0.0, 0.0 );
                 basegfx::B3DPoint _aNewCamPos( 0.0, 0.0, 25000.0 );
                 rCamera.SetPosAndLookAt( _aNewCamPos, _aLookAt );
@@ -643,20 +645,62 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             }
             else
             {
-                aNewTransform.translate( -fOriginX, fOriginY, 0.0 );
-                // now set correct camera position
-                drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
-                drawing::Position3D aViewPoint( GetPosition3D( rGeometryItem, "ViewPoint", aViewPointDefault, pMap ) );
-                double fViewPointX = aViewPoint.PositionX;
-                double fViewPointY = aViewPoint.PositionY;
-                double fViewPointZ = aViewPoint.PositionZ;
-                basegfx::B3DPoint _aLookAt( fViewPointX, -fViewPointY, 0.0 );
-                basegfx::B3DPoint aNewCamPos( fViewPointX, -fViewPointY, fViewPointZ );
+                basegfx::B3DPoint _aLookAt(fViewPointX, fViewPointY, 0.0);
+                basegfx::B3DPoint aNewCamPos(fViewPointX, fViewPointY, fViewPointZ);
                 rCamera.SetPosAndLookAt( aNewCamPos, _aLookAt );
                 pScene->SetCamera( rCamera );
             }
 
-            pScene->NbcSetTransform( aNewTransform );
+            // NbcSetTransform has not updated the scene 2D rectangles.
+            // Idea: Get a bound volume as polygon from bound rectangle of shape without 2D
+            // transfomations. Calculate its projection to the XY-plane. Then calculate the bounding
+            // rectangle of the projection and convert this rectangle back to absolut 2D coordinates.
+            // Set that as 2D rectangle of the scene.
+            const tools::Polygon aPolygon(aBoundRect2d); // y-up
+            basegfx::B3DPolygon aPolygonBoundVolume; // y-down, scene coordinates
+            for (sal_uInt16 i = 0; i < 4; i++ )
+            {
+                aPolygonBoundVolume.append(basegfx::B3DPoint(aPolygon[i].X(), -aPolygon[i].Y(), 0));
+            }
+            for (sal_uInt16 i = 0; i < 4; i++ )
+            {
+                aPolygonBoundVolume.append(basegfx::B3DPoint(aPolygon[i].X(), -aPolygon[i].Y(), fDepth));
+            }
+            aPolygonBoundVolume.transform(aNewTransform);
+
+            // projection
+            tools::Polygon a2DProjectionResult(8); // in fact 3D points with z=0
+            for (sal_uInt16 i = 0; i < 8; i++ )
+            {
+                const basegfx::B3DPoint aPoint3D(aPolygonBoundVolume.getB3DPoint(i));
+
+                if (eProjectionMode == drawing::ProjectionMode_PARALLEL)
+                {
+                    a2DProjectionResult[i].setX(aPoint3D.getX());
+                    a2DProjectionResult[i].setY(aPoint3D.getY());
+                }
+                else
+                {
+                    // skip point if line from viewpoint to point is parallel to xy-plane
+                    if (double fDiv = aPoint3D.getZ() - fViewPointZ; fDiv != 0.0)
+                    {
+                        double f = (- fViewPointZ) / fDiv;
+                        double fX = (aPoint3D.getX() - fViewPointX) * f + fViewPointX;
+                        double fY = (aPoint3D.getY() - fViewPointY) * f + fViewPointY;;
+                        a2DProjectionResult[i].setX(static_cast<sal_Int32>(fX));
+                        a2DProjectionResult[i].setY(static_cast<sal_Int32>(fY));
+                    }
+                }
+            }
+            // Convert to y-axis down
+            for (sal_uInt16 i = 0; i < 8; i++ )
+            {
+                a2DProjectionResult[i].setY(- a2DProjectionResult[i].Y());
+            }
+            // Shift back to shape center
+            a2DProjectionResult.Translate(aCenter);
+
+            pScene->SetLogicRect(a2DProjectionResult.GetBoundRect());
 
 
             // light
@@ -760,13 +804,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                 pScene->GetProperties().SetObjectItem(makeSvx3DLightDirection4Item(aSpotLight1));
             }
 
-            pScene->SetLogicRect(
-                CalculateNewSnapRect(
-                    rSdrObjCustomShape,
-                    aSnapRect,
-                    aBoundRect2d,
-                    pMap));
-
             // removing placeholder objects
             for (E3dCompoundObject* pTemp : aPlaceholderObjectList)
             {
@@ -784,69 +821,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         }
     }
     return pRet;
-}
-
-tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect(
-    const SdrObjCustomShape& rSdrObjCustomShape,
-    const tools::Rectangle& rSnapRect,
-    const tools::Rectangle& rBoundRect,
-    const double* pMap)
-{
-    const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    const Point aCenter( rSnapRect.Center() );
-    double fExtrusionBackward, fExtrusionForward;
-    GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );
-    sal_uInt32 i;
-
-    // creating initial bound volume ( without rotation. skewing.and camera )
-    basegfx::B3DPolygon aBoundVolume;
-    const tools::Polygon aPolygon( rBoundRect );
-
-    for ( i = 0; i < 4; i++ )
-    {
-        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ static_cast<sal_uInt16>(i) ].X() - aCenter.X(), aPolygon[ static_cast<sal_uInt16>(i) ].Y() - aCenter.Y(), -fExtrusionForward));
-    }
-
-    for ( i = 0; i < 4; i++ )
-    {
-        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ static_cast<sal_uInt16>(i) ].X() - aCenter.X(), aPolygon[ static_cast<sal_uInt16>(i) ].Y() - aCenter.Y(), fExtrusionBackward));
-    }
-
-    drawing::Direction3D aRotationCenterDefault( 0, 0, 0 ); // default seems to be wrong, a fractional size of shape has to be used!!
-    drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, "RotationCenter", aRotationCenterDefault ) );
-
-    double fXRotate, fYRotate;
-    GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
-    double fZRotate(basegfx::deg2rad(rSdrObjCustomShape.GetObjectRotation()));
-
-    // rotating bound volume
-    basegfx::B3DHomMatrix aMatrix;
-    aMatrix.translate(-aRotationCenter.DirectionX, -aRotationCenter.DirectionY, -aRotationCenter.DirectionZ);
-    if ( fZRotate != 0.0 )
-        aMatrix.rotate( 0.0, 0.0, fZRotate );
-    if (rSdrObjCustomShape.IsMirroredX())
-        aMatrix.scale( -1.0, 1, 1 );
-    if (rSdrObjCustomShape.IsMirroredY())
-        aMatrix.scale( 1, -1.0, 1 );
-    if( fYRotate != 0.0 )
-        aMatrix.rotate( 0.0, fYRotate, 0.0 );
-    if( fXRotate != 0.0 )
-        aMatrix.rotate( -fXRotate, 0.0, 0.0 );
-    aMatrix.translate(aRotationCenter.DirectionX, aRotationCenter.DirectionY, aRotationCenter.DirectionZ);
-    aBoundVolume.transform(aMatrix);
-
-    Transformation2D aTransformation2D(
-        rSdrObjCustomShape,
-        pMap);
-
-    if ( aTransformation2D.IsParallel() )
-        aBoundVolume = aTransformation2D.ApplySkewSettings( aBoundVolume );
-
-    tools::Polygon aTransformed( 8 );
-    for ( i = 0; i < 8; i++ )
-        aTransformed[ static_cast<sal_uInt16>(i) ] = aTransformation2D.Transform2D( aBoundVolume.getB3DPoint( i ) );
-
-    return aTransformed.GetBoundRect();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
