@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0800cc81_7fecc671",
+        "filename": "vcl/source/edit/textview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-12T11:12:14Z",
+      "side": 0,
+      "message": "Specifically, I suppose that here you just obtain CursorFirstWord( aPaM ), then check if resulting PaM\u0027s index is equal to aPaM.GetIndex(), to decide if you assign new PaM to aPaM, or you assign CursorStartOfLine( aPaM ) to aPaM.",
+      "revId": "809236ed826b67328409e008313dea87de6d5243",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
