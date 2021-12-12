@@ -352,22 +352,21 @@ void GenericPopupToolbarController::statusChanged( const css::frame::FeatureStat
 
     if ( m_bReplaceWithLast && !rEvent.IsEnabled && m_xPopupMenu.is() )
     {
-        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
-
         ToolBox* pToolBox = nullptr;
         ToolBoxItemId nId;
         if ( getToolboxId( nId, &pToolBox ) && pToolBox->IsItemEnabled( nId ) )
         {
+            Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
             pVclMenu->Activate();
             pVclMenu->Deactivate();
         }
 
-        for ( sal_uInt16 i = 0; i < pVclMenu->GetItemCount(); ++i )
+        for (sal_uInt16 i = 0, nCount = m_xPopupMenu->getItemCount(); i < nCount; ++i )
         {
-            sal_uInt16 nItemId = pVclMenu->GetItemId( i );
-            if ( nItemId && pVclMenu->IsItemEnabled( nItemId ) && !pVclMenu->GetPopupMenu( nItemId ) )
+            sal_uInt16 nItemId = m_xPopupMenu->getItemId(i);
+            if (nItemId && m_xPopupMenu->isItemEnabled(nItemId) && !m_xPopupMenu->getPopupMenu(nItemId).is())
             {
-                functionExecuted( pVclMenu->GetItemCommand( nItemId ) );
+                functionExecuted(m_xPopupMenu->getCommand(nItemId));
                 return;
             }
         }
