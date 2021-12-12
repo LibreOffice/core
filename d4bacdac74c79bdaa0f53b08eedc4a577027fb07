@@ -16,6 +16,23 @@
       "message": "I\u0027m ok for the typos but there\u0027s a merge conflict.\nI suppose because this one depends on the other patch you submitted.",
       "revId": "d4bacdac74c79bdaa0f53b08eedc4a577027fb07",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fde1bb3_f48d59bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-12-12T21:34:39Z",
+      "side": 1,
+      "message": "Thansk a  lot Julien.\n\nWell, it seems related to a revert committed.\n\nI am going to push new version.\n",
+      "revId": "d4bacdac74c79bdaa0f53b08eedc4a577027fb07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
