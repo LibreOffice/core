@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaaf3753_a0aeb82d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-12T17:13:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c59c92d9_e8a36bbd",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 81
+      },
+      "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6a78e75_b858509b",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-12-12T14:03:30Z",
       "side": 1,
       "message": "This tests whether pAscDesc *itself* is SQL_TOKEN_DESC, a different test altoghether. Given the definition of opt_asc_desc, if pAscDesc is expected to be an opt_asc_desc, then indeed that is the correct test. Also since it works in your tests :-)",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 47
+      },
+      "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80366dcb_c080b41e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-12T17:13:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d6a78e75_b858509b",
       "range": {
         "startLine": 32,
         "startChar": 0,
@@ -84,6 +132,30 @@
       "side": 1,
       "message": "Actually, on second thought, the right test is maybe:\npAscDesc-\u003ecount() \u003d\u003d 0\nand not\npAscDesc-\u003ecount() \u003d\u003d 1\n\nCould you please test that? This for the case where there is no ASC and do DESC, as in:\nSELECT foo, bar FROM qux ORDER BY foo;",
       "parentUuid": "ecce7980_553a2eac",
+      "range": {
+        "startLine": 271,
+        "startChar": 16,
+        "endLine": 271,
+        "endChar": 85
+      },
+      "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c98a2d76_41be3a43",
+        "filename": "connectivity/source/drivers/evoab2/NStatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-12T17:13:17Z",
+      "side": 1,
+      "message": "I\u0027ve tested by changing order when viewing the table (ASC and DESC) + with SQL query directly with explicit ASC and DESC in the ORDER BY. Ok for me! :-)",
+      "parentUuid": "0961e813_facaff1a",
       "range": {
         "startLine": 271,
         "startChar": 16,

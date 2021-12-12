@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69668558_3147c3a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-12T17:13:17Z",
+      "side": 1,
+      "message": "Thank you for the feedback! (great to know that you\u0027re still around! :-))\nI uploaded a new version with your suggestion.",
+      "revId": "8046c9bdf3f18a43c4b30307d959c25095b99e3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
