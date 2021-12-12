@@ -31,37 +31,6 @@ class SdrObjCustomShape;
 
 class EnhancedCustomShape3d final
 {
-    class Transformation2D
-    {
-        Point                                   aCenter;
-        css::drawing::ProjectionMode eProjectionMode;
-
-        // parallel projection
-        double      fSkewAngle;
-        double      fSkew;          // in percent
-
-        // perspective projection
-        basegfx::B3DPoint fViewPoint;
-        double      fOriginX;
-        double      fOriginY;
-
-        public:
-            Transformation2D(
-                const SdrObjCustomShape& rSdrObjCustomShape,
-                const double* pMap);
-
-            basegfx::B3DPolygon ApplySkewSettings( const basegfx::B3DPolygon& rPolygon3D ) const;
-            Point       Transform2D( const basegfx::B3DPoint& rPoint ) const;
-            bool    IsParallel() const;
-    };
-
-    friend class Transformation2D;
-
-    static tools::Rectangle CalculateNewSnapRect(
-        const SdrObjCustomShape& rSdrObjCustomShape,
-        const tools::Rectangle& rSnapRect,
-        const tools::Rectangle& rBoundRect,
-        const double* pMap);
 
 public:
     static SdrObject* Create3DObject(

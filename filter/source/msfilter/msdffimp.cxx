@@ -1808,9 +1808,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             // "RotationCenter"
             if ( IsProperty( DFF_Prop_c3DRotationCenterX ) || IsProperty( DFF_Prop_c3DRotationCenterY ) || IsProperty( DFF_Prop_c3DRotationCenterZ ) )
             {
+                // tdf#145904 X- and Y-component is fraction, Z-component in EMU
                 css::drawing::Direction3D aRotationCenter(
-                    static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 ))) / 360.0,
-                    static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 ))) / 360.0,
+                    static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 ))) / 65536.0,
+                    static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 ))) / 65536.0,
                     static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 ))) / 360.0 );
 
                 aProp.Name = "RotationCenter";

@@ -2849,8 +2849,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         drawing::Direction3D aExtrusionRotationCenter;
                         if ( rrProp.Value >>= aExtrusionRotationCenter )
                         {
-                            AddOpt( DFF_Prop_c3DRotationCenterX, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionX * 360.0 ) );
-                            AddOpt( DFF_Prop_c3DRotationCenterY, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionY * 360.0 ) );
+                            // tdf#145904 X- and Y-component is fraction, Z-component in EMU
+                            AddOpt( DFF_Prop_c3DRotationCenterX, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionX * 65536.0 ) );
+                            AddOpt( DFF_Prop_c3DRotationCenterY, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionY * 65536.0 ) );
                             AddOpt( DFF_Prop_c3DRotationCenterZ, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionZ * 360.0 ) );
                             nFillHarshFlags &=~8; // don't use AutoRotationCenter;
                         }
