@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cad5ef7a_8de4e5a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-12T11:09:16Z",
+      "side": 1,
+      "message": "I suppose there\u0027s no need to revert-then-reimplement, since it would be the ~same code, just with different conditions?",
+      "revId": "e4fe43e6f414d65d8a9dba01d56cb21d749b7e57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
