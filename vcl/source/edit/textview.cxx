@@ -1016,11 +1016,7 @@ TextSelection const & TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_DOWN:      aPaM = CursorDown( aPaM );
                             break;
-        case KEY_HOME:
-            // tdf#145764 - move cursor to the beginning or first character in the same line
-            aPaM = bCtrl                  ? CursorStartOfDoc()
-                   : aPaM.GetIndex() == 0 ? CursorFirstWord( aPaM )
-                                          : CursorStartOfLine( aPaM );
+        case KEY_HOME:      aPaM = bCtrl ? CursorStartOfDoc() : CursorStartOfLine( aPaM );
                             break;
         case KEY_END:       aPaM = bCtrl ? CursorEndOfDoc() : CursorEndOfLine( aPaM );
                             break;
@@ -1156,17 +1152,6 @@ TextPaM TextView::CursorRight( const TextPaM& rPaM, sal_uInt16 nCharacterIterato
         aPaM.GetPara()++;
         aPaM.GetIndex() = 0;
     }
-
-    return aPaM;
-}
-
-TextPaM TextView::CursorFirstWord( const TextPaM& rPaM )
-{
-    TextPaM aPaM(rPaM);
-    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[aPaM.GetPara()].get();
-
-    css::uno::Reference<css::i18n::XBreakIterator> xBI = mpImpl->mpTextEngine->GetBreakIterator();
-    aPaM.GetIndex() = xBI->nextWord(pNode->GetText(), 0, mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
 
     return aPaM;
 }
