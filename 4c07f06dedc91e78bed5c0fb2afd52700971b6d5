@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c0be42c_7edfdd88",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-12T08:49:37Z",
+      "side": 1,
+      "message": "I mentioned specific code, that I created (and you might call the use of the functions there \"incorrect\" 😊) in the message:\n\nhttps://git.libreoffice.org/core/+/21154ea8c450f9f5568b32123d34a20e498a9290/svtools/source/svrtf/svparser.cxx#244\n\nisHighSurrogat/isLowSurrogate",
+      "parentUuid": "22b870c0_92fb0982",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1529508d_7092f067",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-12T08:41:03Z",
       "side": 1,
       "message": "The functions are meant to check certain properties of Unicode code points, their domains are Unicode code points, hence the asserts checking the precondition that the functions are actually called with values matching their domains.",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf9ab7d_d080f1db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-12T08:49:37Z",
+      "side": 1,
+      "message": "I see the idea. However, I do *not* see how the asserts help programmer, or make anything more correct. If there\u0027s some code that asks if a *random* value is e.g. ascii, it doesn\u0027t make the code more correct if the programmer made a previous call to check that it\u0027s correct Unicode. The outer code would only become incorrect when the programmer does something in \"not ascii\" case, assuming it\u0027s correct Unicode; but then, it\u0027s the other code in fictional \"else\" branch that is incorrect, not the check itself.\n\nI see these asserts just wrong, making any unchecked use of *checks* on user-supplied data wrong, and thus making use of the functions unnecessarily complicated, verbose, and resulting code more difficult to follow.",
+      "parentUuid": "1529508d_7092f067",
       "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
