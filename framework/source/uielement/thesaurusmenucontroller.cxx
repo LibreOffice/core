@@ -92,26 +92,27 @@ void ThesaurusMenuController::fillPopupMenu()
     if ( !aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty() )
         aImage = Image( aSynonymsImageUrl );
 
-    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu );
-    Menu* pVCLMenu = pAwtMenu->GetMenu();
-
     sal_uInt16 nId = 1;
     for ( const auto& aSynonym : aSynonyms )
     {
         OUString aItemText( linguistic::GetThesaurusReplaceText( aSynonym ) );
-        pVCLMenu->InsertItem( nId, aItemText );
-        pVCLMenu->SetItemCommand( nId, ".uno:ThesaurusFromContext?WordReplace:string=" + aItemText );
+        m_xPopupMenu->insertItem(nId, aItemText, 0, -1);
+        m_xPopupMenu->setCommand(nId, ".uno:ThesaurusFromContext?WordReplace:string=" + aItemText);
 
-        if ( !aSynonymsImageUrl.isEmpty() )
+        if (!aSynonymsImageUrl.isEmpty())
+        {
+            VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>(m_xPopupMenu);
+            Menu* pVCLMenu = pAwtMenu->GetMenu();
             pVCLMenu->SetItemImage( nId, aImage );
+        }
         nId++;
     }
 
-    pVCLMenu->InsertSeparator();
+    m_xPopupMenu->insertSeparator(-1);
     OUString aThesaurusDialogCmd( ".uno:ThesaurusDialog" );
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aThesaurusDialogCmd, m_aModuleName);
-    pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties) );
-    pVCLMenu->SetItemCommand( nId, aThesaurusDialogCmd );
+    m_xPopupMenu->insertItem(nId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties), 0, -1);
+    m_xPopupMenu->setCommand(nId, aThesaurusDialogCmd);
 }
 
 void ThesaurusMenuController::getMeanings( std::vector< OUString >& rSynonyms, const OUString& rWord,
