@@ -531,21 +531,17 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             if (m_pPostItMgr->HasNotes())
             {
                 rSh.EnterStdMode();
-                sw::annotation::SwAnnotationWin* pPostIt = m_pPostItMgr->GetActiveSidebarWin();
-                if (pPostIt)
-                    m_pPostItMgr->SetActiveSidebarWin(nullptr);
-                SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);
+                const SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);
                 rSh.StartAction();
                 if (!rSh.MoveFieldType(pFieldType, bNext))
                 {
-                    // no postits found in the move direction
+                    // no postit found in the move direction
                     // wrap and try again
                     SwShellCursor* pCursor = rSh.GetCursor_();
                     SwCursorSaveState aSaveState(*pCursor);
                     rSh.SttEndDoc(bNext);
                     if (rSh.MoveFieldType(pFieldType, bNext))
                     {
-                        GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
                         SvxSearchDialogWrapper::SetSearchLabel(bNext ? SearchLabel::EndWrapped :
                                                                        SearchLabel::StartWrapped);
                     }
@@ -558,7 +554,6 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                 }
                 else
                 {
-                    GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
                     SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
                 }
                 rSh.EndAction();
