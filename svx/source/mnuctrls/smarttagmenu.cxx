@@ -22,7 +22,6 @@
 #include <svx/SmartTagItem.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/menu.hxx>
 
 const sal_uInt16 MN_ST_INSERT_START = 500;
 
@@ -36,13 +35,16 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
+    // XMenuListener
+    virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) override;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void FillMenu();
-    DECL_LINK( MenuSelect, Menu*, bool );
+    bool MenuSelect(sal_uInt16 nMyId);
     struct InvokeAction
     {
         css::uno::Reference< css::smarttags::XSmartTagAction > m_xAction;
@@ -111,9 +113,6 @@ void SmartTagMenuController::FillMenu()
     sal_uInt16 nMenuId = 1;
     sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
-    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu );
-    PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
-
     const css::uno::Sequence< css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence = m_pSmartTagItem->GetActionComponentsSequence();
     const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence = m_pSmartTagItem->GetActionIndicesSequence();
     const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps = m_pSmartTagItem->GetStringKeyMaps();
@@ -145,20 +144,18 @@ void SmartTagMenuController::FillMenu()
         const OUString aSmartTagCaption = xFirstAction->getSmartTagCaption( nSmartTagIndex, rLocale );
 
         // No sub-menus if there's only one smart tag type listed
-        PopupMenu* pSubMenu = pVCLMenu;
+        css::uno::Reference<css::awt::XPopupMenu> xSubMenu = m_xPopupMenu;
         if ( 1 < rActionComponentsSequence.getLength() )
         {
-            pVCLMenu->InsertItem( nMenuId, aSmartTagCaption );
-            VclPtrInstance<PopupMenu> pMenu;
-            pSubMenu = pMenu;
-            pVCLMenu->SetPopupMenu( nMenuId++, pSubMenu );
+            m_xPopupMenu->insertItem(nMenuId, aSmartTagCaption, 0, -1);
+            xSubMenu.set(new VCLXPopupMenu);
+            m_xPopupMenu->setPopupMenu(nMenuId++, xSubMenu);
         }
-        pSubMenu->SetSelectHdl( LINK( this, SmartTagMenuController, MenuSelect ) );
 
         // Sub-menu starts with smart tag caption and separator
         const OUString aSmartTagCaption2 = aSmartTagCaption + ": " + aRangeText;
-        pSubMenu->InsertItem( nMenuId++, aSmartTagCaption2, MenuItemBits::NOSELECT );
-        pSubMenu->InsertSeparator();
+        xSubMenu->insertItem(nMenuId++, aSmartTagCaption2, static_cast<sal_Int16>(MenuItemBits::NOSELECT), -1);
+        xSubMenu->insertSeparator(-1);
 
         // Add subitem for every action reference for the current smart tag type
         for ( const auto& xAction : rActionComponents )
@@ -175,7 +172,7 @@ void SmartTagMenuController::FillMenu()
                                                                            xController,
                                                                            xTextRange );
 
-                pSubMenu->InsertItem( nSubMenuId++, aActionCaption );
+                xSubMenu->insertItem(nSubMenuId++, aActionCaption, 0, -1);
                 InvokeAction aEntry( xAction, xSmartTagProperties, nActionID );
                 m_aInvokeActions.push_back( aEntry );
             }
@@ -194,12 +191,18 @@ void SmartTagMenuController::FillMenu()
     }
 }
 
-IMPL_LINK( SmartTagMenuController, MenuSelect, Menu*, pMenu, bool )
+void SmartTagMenuController::itemSelected(const css::awt::MenuEvent& rEvent)
+{
+    if (MenuSelect(rEvent.MenuId))
+        return;
+    svt::PopupMenuControllerBase::itemSelected(rEvent);
+}
+
+bool SmartTagMenuController::MenuSelect(sal_uInt16 nMyId)
 {
     if ( !m_pSmartTagItem )
         return false;
 
-    sal_uInt16 nMyId = pMenu->GetCurItemId();
     if ( nMyId < MN_ST_INSERT_START )
         return false;
 
@@ -208,19 +211,20 @@ IMPL_LINK( SmartTagMenuController, MenuSelect, Menu*, pMenu, bool )
     // Compute SmartTag lib index and action index
     css::uno::Reference< css::smarttags::XSmartTagAction > xSmartTagAction = m_aInvokeActions[nMyId].m_xAction;
 
+    if (!xSmartTagAction.is())
+        return false;
+
     // Execute action
-    if ( xSmartTagAction.is() )
-    {
-        xSmartTagAction->invokeAction( m_aInvokeActions[nMyId].m_nActionID,
-                                       m_pSmartTagItem->GetApplicationName(),
-                                       m_pSmartTagItem->GetController(),
-                                       m_pSmartTagItem->GetTextRange(),
-                                       m_aInvokeActions[nMyId].m_xSmartTagProperties,
-                                       m_pSmartTagItem->GetRangeText(),
-                                       OUString(),
-                                       m_pSmartTagItem->GetLocale() );
-    }
-    return false;
+    xSmartTagAction->invokeAction( m_aInvokeActions[nMyId].m_nActionID,
+                                   m_pSmartTagItem->GetApplicationName(),
+                                   m_pSmartTagItem->GetController(),
+                                   m_pSmartTagItem->GetTextRange(),
+                                   m_aInvokeActions[nMyId].m_xSmartTagProperties,
+                                   m_pSmartTagItem->GetRangeText(),
+                                   OUString(),
+                                   m_pSmartTagItem->GetLocale() );
+
+    return true;
 }
 
 OUString SmartTagMenuController::getImplementationName()
