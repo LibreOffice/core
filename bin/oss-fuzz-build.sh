@@ -12,10 +12,14 @@ echo start at `date -u`
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
 export CXX="$CXX -stdlib=libc++ -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
+export CXX_FOR_BUILD="$CXX"
 export CC="$CC -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
+export CC_FOR_BUILD="$CC"
 #similarly force the -fsanitize etc args in as well as pthread to get
 #things to link successfully during the build
 export LDFLAGS="$CFLAGS -Wl,--compress-debug-sections,zlib -lpthread"
+#build-time rsc tool leaks a titch
+export ASAN_OPTIONS="detect_leaks=0"
 
 df -h $OUT $WORK
 
@@ -24,10 +28,7 @@ $SRC/libreoffice/autogen.sh --with-distro=LibreOfficeOssFuzz --with-external-tar
 
 make clean
 
-#build-time rsc tool leaks a titch
-export ASAN_OPTIONS="detect_leaks=0"
-
-make fuzzers
+make
 
 pushd instdir/program
 head -c -14 services.rdb  > templateservices.rdb

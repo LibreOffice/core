@@ -575,8 +575,11 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     }
     rTab = 0;
 #if ENABLE_FUZZERS
+    (void)aDocTab;
+    (void)aFileName;
+    (void)aTabName;
     return false;
-#endif
+#else
     OUString  aFilterName; // Is filled by the Loader
     OUString  aOptions; // Filter options
     sal_uInt32 nLinkCnt = pExtDocOptions ? pExtDocOptions->GetDocSettings().mnLinkCnt : 0;
@@ -618,6 +621,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
             pBindings->Invalidate( SID_LINKS );
     }
     return true;
+#endif
 }
 
 ScExternalRefManager* ScDocument::GetExternalRefManager() const

@@ -12,10 +12,12 @@ $(eval $(call gb_Module_Module,smoketest))
 
 ifeq ($(CROSS_COMPILING),)
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,smoketest,\
 	Library_smoketest \
 	Zip_smoketestdoc \
 ))
+endif
 
 ifneq ($(ENABLE_JAVA),)
 ifneq ($(filter EXTENSIONS,$(BUILD_TYPE)),)
