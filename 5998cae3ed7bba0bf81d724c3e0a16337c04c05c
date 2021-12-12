@@ -68,6 +68,30 @@
       },
       "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0961e813_facaff1a",
+        "filename": "connectivity/source/drivers/evoab2/NStatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-12T14:05:23Z",
+      "side": 1,
+      "message": "Actually, on second thought, the right test is maybe:\npAscDesc-\u003ecount() \u003d\u003d 0\nand not\npAscDesc-\u003ecount() \u003d\u003d 1\n\nCould you please test that? This for the case where there is no ASC and do DESC, as in:\nSELECT foo, bar FROM qux ORDER BY foo;",
+      "parentUuid": "ecce7980_553a2eac",
+      "range": {
+        "startLine": 271,
+        "startChar": 16,
+        "endLine": 271,
+        "endChar": 85
+      },
+      "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
