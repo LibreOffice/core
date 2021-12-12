@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "808f1553_cfb254e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-12T09:53:35Z",
+      "side": 1,
+      "message": "But what\u0027s the problem there?  cUC is of type sal_Unicode, so rtl::isHigh/LowSurrogate(cUC) will necessarily fulfill the asserts.",
+      "parentUuid": "4c0be42c_7edfdd88",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1529508d_7092f067",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "\u003e their domains are Unicode code points\n\nAdditionally, e.g. surrogates are not even code points. So the check mixes Unicode code points and UTF-16-encoding detail (code units that represent code points, and surrogate code units that are not).",
       "parentUuid": "caf9ab7d_d080f1db",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11b2fffd_df220944",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-12T09:53:35Z",
+      "side": 1,
+      "message": "The surrogate code points /are/ Unicode code points.  (They are excluded from the Unicode scalar values, though.)",
+      "parentUuid": "3c25ddff_c80a3f7d",
       "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
