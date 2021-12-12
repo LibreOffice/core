@@ -127,6 +127,58 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterY_odt)
+{
+    // The X- and Y-component of the extrusion rotation center specify the position as fraction of
+    // shape size. Error was, that the relative fraction was handled as absolute value in Hmm.
+
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf145904_center_Y0dot25.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+
+    // The shape is extruded and tilt down 90deg. The rotation center is in the middle between shape
+    // center and bottom shape edge. The bottom edge of the projected solid has roughly the
+    // y-coordinate of the rotation center.
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    awt::Rectangle aBoundRect;
+    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    awt::Point aAnchorPosition;
+    xPropSet->getPropertyValue("AnchorPosition") >>= aAnchorPosition;
+    sal_Int32 nActualTop = aBoundRect.Y - aAnchorPosition.Y;
+
+    // Without the fix it would have failed with top = 2252.
+    // The tolerance 10 is estimated and can be adjusted if required for HiDPI.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("top", 3208, nActualTop, 10);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterY_doc)
+{
+    // The X- and Y-component of the extrusion rotation center specify the position as fraction of
+    // shape size. Error was, that the relative fraction was handled as absolute value in EMU.
+
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf145904_center_Y0dot25.doc";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+
+    // The shape is extruded and tilt down 90deg. The rotation center is in the middle between shape
+    // center and bottom shape edge. The bottom edge of the projected solid has roughly the
+    // y-coordinate of the center.
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    awt::Rectangle aBoundRect;
+    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    awt::Point aAnchorPosition;
+    xPropSet->getPropertyValue("AnchorPosition") >>= aAnchorPosition;
+    sal_Int32 nActualTop = aBoundRect.Y - aAnchorPosition.Y;
+
+    // Without the fix it would have failed with top = 2330
+    // The tolerance 10 is estimated and can be adjusted if required for HiDPI.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("top", 3208, nActualTop, 10);
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145245_ExtrusionPosition)
 {
     // The second parameter of the extrusion-depth property specifies how much of the extrusion
@@ -1002,7 +1054,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141268)
     // Check left/bottom of bound rect. Without fix it would be left=6722, bottom=9483.
     tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
     CPPUNIT_ASSERT_EQUAL(tools::Long(7620), aBoundRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(8585), aBoundRect.Bottom());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(8584), aBoundRect.Bottom());
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
