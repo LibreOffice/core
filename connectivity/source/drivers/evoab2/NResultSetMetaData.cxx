@@ -101,15 +101,7 @@ OUString SAL_CALL OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnN
 
 OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum )
 {
-    sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
-    const ColumnProperty *pSpecs = getField(nField);
-    GParamSpec *pSpec = pSpecs->pField;
-    OUString aLabel;
-
-    if( pSpec )
-            aLabel = OStringToOUString( g_param_spec_get_nick( pSpec ),
-                                             RTL_TEXTENCODING_UTF8 );
-    return aLabel;
+    return getColumnName(nColumnNum);
 }
 
 OUString SAL_CALL OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 /*nColumnNum*/ )

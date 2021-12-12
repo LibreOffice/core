@@ -308,6 +308,10 @@ static int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _us
     for ( const auto& sortCol : rCompData.rSortOrder )
     {
         sal_Int32 nField = sortCol.nField;
+        int nOrder = 1;
+        // if descending sort, reverse order
+        if (!sortCol.bAscending)
+            nOrder = -1;
         GType eFieldType = evoab::getGFieldType( nField );
 
         bool success =  getValue( lhs, nField, eFieldType, &aLhsValue, bLhsNull )
@@ -317,9 +321,9 @@ static int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _us
             return 0;
 
         if ( bLhsNull && !bRhsNull )
-            return -1;
+            return -1 * nOrder;
         if ( !bLhsNull && bRhsNull )
-            return 1;
+            return 1 * nOrder;
         if ( bLhsNull && bRhsNull )
             continue;
 
@@ -329,16 +333,16 @@ static int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _us
             sRhs = valueToOUString( aRhsValue );
             sal_Int32 nCompResult = rCompData.aIntlWrapper.getCaseCollator()->compareString( sLhs, sRhs );
             if ( nCompResult != 0 )
-                return nCompResult;
+                return nCompResult * nOrder;
             continue;
         }
 
         bLhs = valueToBool( aLhsValue );
         bRhs = valueToBool( aRhsValue );
         if ( bLhs && !bRhs )
-            return -1;
+            return -1 * nOrder;
         if ( !bLhs && bRhs )
-            return 1;
+            return 1 * nOrder;
         continue;
     }
 
