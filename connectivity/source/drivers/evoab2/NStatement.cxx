@@ -268,7 +268,11 @@ void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, So
         ENSURE_OR_THROW(
                 ( pColumnRef != nullptr )
             &&  ( pAscDesc != nullptr )
-            &&  SQL_ISRULE( pAscDesc, opt_asc_desc )
+            &&  ( pAscDesc->isLeaf() )
+            &&  (    SQL_ISRULE( pAscDesc, opt_asc_desc )
+                     || SQL_ISTOKEN(pAscDesc, ASC)
+                     || SQL_ISTOKEN(pAscDesc, DESC)
+                )
             &&  ( pAscDesc->count() < 2 ),
             "ordering_spec structure error" );
 
@@ -278,11 +282,7 @@ void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, So
         const OUString sColumnName( impl_getColumnRefColumnName_throw( *pColumnRef ) );
         guint nField = evoab::findEvoabField( sColumnName );
         // ascending/descending?
-        bool bAscending = true;
-        if  (   ( pAscDesc->count() == 1 )
-            &&  SQL_ISTOKEN( pAscDesc->getChild( 0 ), DESC )
-            )
-            bAscending = false;
+        bool bAscending = !SQL_ISTOKEN(pAscDesc, DESC);
 
         _out_rSort.push_back( FieldSort( nField, bAscending ) );
     }
@@ -506,6 +506,7 @@ void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData
         pOrderByClause->showParseTree( sTreeDebug );
         SAL_INFO( "connectivity.evoab2", "found order-by tree:\n" << sTreeDebug );
     #endif
+
         orderByAnalysis( pOrderByClause, _out_rQueryData.aSortOrder );
     }
 
