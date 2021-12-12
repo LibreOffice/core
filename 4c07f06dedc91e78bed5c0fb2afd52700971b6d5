@@ -69,6 +69,24 @@
       "parentUuid": "1529508d_7092f067",
       "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c25ddff_c80a3f7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-12T09:04:14Z",
+      "side": 1,
+      "message": "\u003e their domains are Unicode code points\n\nAdditionally, e.g. surrogates are not even code points. So the check mixes Unicode code points and UTF-16-encoding detail (code units that represent code points, and surrogate code units that are not).",
+      "parentUuid": "caf9ab7d_d080f1db",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
