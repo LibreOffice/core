@@ -26,10 +26,9 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <tools/urlobj.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/historyoptions.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -116,20 +115,37 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
     }
 }
 
+void InsertItem(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
+                const OUString& rCommand,
+                const css::uno::Reference<css::frame::XFrame>& rFrame)
+{
+    sal_uInt16 nItemId = rPopupMenu->getItemCount() + 1;
+
+    if (rFrame.is())
+    {
+        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, aModuleName);
+        OUString aLabel(vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties));
+        OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, rFrame));
+        css::uno::Reference<css::graphic::XGraphic> xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(rCommand, rFrame));
+
+        rPopupMenu->insertItem(nItemId, aLabel, 0, -1);
+        rPopupMenu->setItemImage(nItemId, xGraphic, false);
+        rPopupMenu->setHelpText(nItemId, aTooltip);
+    }
+    else
+        rPopupMenu->insertItem(nItemId, OUString(), 0, -1);
+
+    rPopupMenu->setCommand(nItemId, rCommand);
+}
+
+
 // private function
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-    PopupMenu*     pVCLPopupMenu = nullptr;
-
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
-    if ( pPopupMenu )
-        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-
-    if ( !pVCLPopupMenu )
-        return;
 
     std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
 
@@ -212,16 +228,16 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         if ( m_bShowToolbarEntries )
         {
             rPopupMenu->insertSeparator(-1);
-            pVCLPopupMenu->InsertItem( CMD_OPEN_AS_TEMPLATE, m_xFrame );
-            pVCLPopupMenu->InsertItem( CMD_OPEN_REMOTE, m_xFrame );
+            InsertItem(rPopupMenu, CMD_OPEN_AS_TEMPLATE, m_xFrame);
+            InsertItem(rPopupMenu, CMD_OPEN_REMOTE, m_xFrame);
         }
     }
     else
     {
         if ( m_bShowToolbarEntries )
         {
-            pVCLPopupMenu->InsertItem( CMD_OPEN_AS_TEMPLATE, m_xFrame );
-            pVCLPopupMenu->InsertItem( CMD_OPEN_REMOTE, m_xFrame );
+            InsertItem(rPopupMenu, CMD_OPEN_AS_TEMPLATE, m_xFrame);
+            InsertItem(rPopupMenu, CMD_OPEN_REMOTE, m_xFrame);
         }
         else
         {
