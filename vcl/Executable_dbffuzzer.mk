@@ -36,7 +36,6 @@ $(eval $(call gb_Executable_use_static_libraries,dbffuzzer,\
     findsofficepath \
     ulingu \
     fuzzer_calc \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,dbffuzzer,\

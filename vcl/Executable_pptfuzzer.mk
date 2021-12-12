@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_use_libraries,pptfuzzer,\
 $(eval $(call gb_Executable_use_static_libraries,pptfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,pptfuzzer,\

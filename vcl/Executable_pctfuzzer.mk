@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_use_libraries,pctfuzzer,\
 $(eval $(call gb_Executable_use_static_libraries,pctfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,pctfuzzer,\

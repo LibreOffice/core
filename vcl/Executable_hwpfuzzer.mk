@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_use_libraries,hwpfuzzer,\
 $(eval $(call gb_Executable_use_static_libraries,hwpfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,hwpfuzzer,\
