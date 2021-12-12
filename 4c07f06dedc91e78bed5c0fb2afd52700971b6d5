@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9aafcd60_c00387c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-12T10:27:55Z",
+      "side": 1,
+      "message": "Yes. Still it feels wrong to assert on what is logically wrong, on user-defined data.",
+      "parentUuid": "808f1553_cfb254e4",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1529508d_7092f067",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "The surrogate code points /are/ Unicode code points.  (They are excluded from the Unicode scalar values, though.)",
       "parentUuid": "3c25ddff_c80a3f7d",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b7fc328_52c20fc0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-12T10:27:55Z",
+      "side": 1,
+      "message": "There are reserved *Unicode code points* in the range U+D800 - U+DFFF, that are reserved (to account for evolution of Unicode from \"65535 code points is enough for everyone\" to \"There\u0027s now UTF-16 *encoding*, that is not UCS2, and we need to ensure some compatibility\" - they are *artifacts*).\n\nThere are UTF-16 *code units*, that may be *decoded* to either Unicode code points (happening to have same numeric value), or in combinations with adjacent surrogate code units. You never combine \"code points\", you only combine surrogate code units. So using isUnicodeCodePoint on a UTF-16 code unit is conceptually wrong (even on non-surrogates) - they must be *decoded* first, even if for non-surrogates the decoding is trivial. The more it\u0027s true for surrogates: checking if a surrogate UTF-16 code unit is Unicode code point, to combine it on the next step, is crossing *domains* several times in both directions.",
+      "parentUuid": "11b2fffd_df220944",
       "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
