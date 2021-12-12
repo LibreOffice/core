@@ -161,6 +161,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a260a79c_59542715",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-12T14:04:18Z",
+      "side": 1,
+      "message": "\u003e There are reserved *Unicode code points* in the range U+D800 - U+DFFF, that are reserved (to account for evolution of Unicode from \"65535 code points is enough for everyone\" to \"There\u0027s now UTF-16 *encoding*, that is not UCS2, and we need to ensure some compatibility\" - they are *artifacts*).\n\nReserved code points are something entirely different still :)\n\n\u003e There are UTF-16 *code units*, that may be *decoded* to either Unicode code points (happening to have same numeric value), or in combinations with adjacent surrogate code units. You never combine \"code points\", you only combine surrogate code units. So using isUnicodeCodePoint on a UTF-16 code unit is conceptually wrong (even on non-surrogates) - they must be *decoded* first, even if for non-surrogates the decoding is trivial. The more it\u0027s true for surrogates: checking if a surrogate UTF-16 code unit is Unicode code point, to combine it on the next step, is crossing *domains* several times in both directions.\n\nThe injection from UTF-16 code units into the Unicode codespace is a deliberate and important design decision (similar to the injection from ASCII into the Unicode codespace), and, yes, something that is routinely exploited in code traversing among the domains of UTF-16 code units and Unicode code points.  What would be the alternative, two sets of (otherwise identical) rtl::isHigh/LowSurrogate functions operating on, respectively, UTF-16 code units and Unicode scalar values?  That would look like overkill to me.\n\nSure, a function like rtl::combineSurrogates should conceptually take UTF-16 code units rather than Unicode scalar values.  But then again, it seemed better to uniformly use Unicode scalar values (represented as sal_uInt32) throughout all the rtl/character.hxx functionality.",
+      "parentUuid": "6b7fc328_52c20fc0",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9fd19aaf_b9c2c62b",
