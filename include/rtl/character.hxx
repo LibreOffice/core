@@ -28,6 +28,10 @@
 
 #include <cassert>
 #include <cstddef>
+#if defined LIBO_INTERNAL_ONLY
+#include <type_traits>
+#include <utility>
+#endif
 
 #include "sal/types.h"
 
@@ -42,6 +46,27 @@ namespace rtl
     @since LibreOffice 5.2
 */
 inline SAL_CONSTEXPR bool isUnicodeCodePoint(sal_uInt32 code) { return code <= 0x10FFFF; }
+
+#if defined LIBO_INTERNAL_ONLY
+bool isUnicodeCodePoint(char) = delete;
+bool isUnicodeCodePoint(signed char) = delete;
+template <typename T> inline constexpr bool isUnicodeCodePoint(T code)
+{
+    return static_cast<typename std::make_unsigned_t<T>>(code) <= 0x10FFFF;
+}
+
+// Safe cast to 32-bit "character" for rtl::is* checks, to avoid casting large 64-bit value
+// to "valid" Unicode code point: if value is outside of the 32-bit range, return invalid
+// "too large" code point value.
+template <typename T> inline constexpr sal_uInt32 CodePointCast(T code)
+{
+    if constexpr (sizeof(T) <= sizeof(sal_uInt32))
+        return static_cast<sal_uInt32>(code);
+    else
+        return std::min<typename std::make_unsigned_t<T>>(
+            static_cast<typename std::make_unsigned_t<T>>(code), SAL_MAX_UINT32);
+}
+#endif
 
 /** Check for ASCII character.
 
@@ -60,7 +85,7 @@ inline SAL_CONSTEXPR bool isAscii(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAscii(char) = delete;
 bool isAscii(signed char) = delete;
-template <typename T> inline constexpr bool isAscii(T code) { return isAscii(sal_uInt32(code)); }
+template <typename T> inline constexpr bool isAscii(T code) { return isAscii(CodePointCast(code)); }
 #endif
 
 /** Check for ASCII lower case character.
@@ -83,7 +108,7 @@ bool isAsciiLowerCase(char) = delete;
 bool isAsciiLowerCase(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiLowerCase(T code)
 {
-    return isAsciiLowerCase(sal_uInt32(code));
+    return isAsciiLowerCase(CodePointCast(code));
 }
 #endif
 
@@ -107,7 +132,7 @@ bool isAsciiUpperCase(char) = delete;
 bool isAsciiUpperCase(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiUpperCase(T code)
 {
-    return isAsciiUpperCase(sal_uInt32(code));
+    return isAsciiUpperCase(CodePointCast(code));
 }
 #endif
 
@@ -131,7 +156,7 @@ bool isAsciiAlpha(char) = delete;
 bool isAsciiAlpha(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiAlpha(T code)
 {
-    return isAsciiAlpha(sal_uInt32(code));
+    return isAsciiAlpha(CodePointCast(code));
 }
 #endif
 
@@ -155,7 +180,7 @@ bool isAsciiDigit(char) = delete;
 bool isAsciiDigit(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiDigit(T code)
 {
-    return isAsciiDigit(sal_uInt32(code));
+    return isAsciiDigit(CodePointCast(code));
 }
 #endif
 
@@ -179,7 +204,7 @@ bool isAsciiAlphanumeric(char) = delete;
 bool isAsciiAlphanumeric(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiAlphanumeric(T code)
 {
-    return isAsciiAlphanumeric(sal_uInt32(code));
+    return isAsciiAlphanumeric(CodePointCast(code));
 }
 #endif
 
@@ -203,7 +228,7 @@ bool isAsciiCanonicHexDigit(char) = delete;
 bool isAsciiCanonicHexDigit(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiCanonicHexDigit(T code)
 {
-    return isAsciiCanonicHexDigit(sal_uInt32(code));
+    return isAsciiCanonicHexDigit(CodePointCast(code));
 }
 #endif
 
@@ -227,7 +252,7 @@ bool isAsciiHexDigit(char) = delete;
 bool isAsciiHexDigit(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiHexDigit(T code)
 {
-    return isAsciiHexDigit(sal_uInt32(code));
+    return isAsciiHexDigit(CodePointCast(code));
 }
 #endif
 
@@ -250,7 +275,7 @@ bool isAsciiOctalDigit(char) = delete;
 bool isAsciiOctalDigit(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiOctalDigit(T code)
 {
-    return isAsciiOctalDigit(sal_uInt32(code));
+    return isAsciiOctalDigit(CodePointCast(code));
 }
 #endif
 
@@ -275,7 +300,7 @@ bool isAsciiWhiteSpace(char) = delete;
 bool isAsciiWhiteSpace(signed char) = delete;
 template <typename T> inline constexpr bool isAsciiWhiteSpace(T code)
 {
-    return isAsciiWhiteSpace(sal_uInt32(code));
+    return isAsciiWhiteSpace(CodePointCast(code));
 }
 #endif
 
@@ -298,7 +323,7 @@ sal_uInt32 toAsciiUpperCase(char) = delete;
 sal_uInt32 toAsciiUpperCase(signed char) = delete;
 template <typename T> inline constexpr sal_uInt32 toAsciiUpperCase(T code)
 {
-    return toAsciiUpperCase(sal_uInt32(code));
+    return toAsciiUpperCase(CodePointCast(code));
 }
 #endif
 
@@ -321,7 +346,7 @@ sal_uInt32 toAsciiLowerCase(char) = delete;
 sal_uInt32 toAsciiLowerCase(signed char) = delete;
 template <typename T> inline constexpr sal_uInt32 toAsciiLowerCase(T code)
 {
-    return toAsciiLowerCase(sal_uInt32(code));
+    return toAsciiLowerCase(CodePointCast(code));
 }
 #endif
 
