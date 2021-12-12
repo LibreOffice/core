@@ -17,16 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <sal/log.hxx>
 #include <svl/lngmisc.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <unotools/lingucfg.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <unotools/lingucfg.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/image.hxx>
-#include <vcl/menu.hxx>
-#include <sal/log.hxx>
 
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 namespace {
@@ -86,11 +87,22 @@ void ThesaurusMenuController::fillPopupMenu()
         return;
 
     SvtLinguConfig aCfg;
-    Image aImage;
+    css::uno::Reference<css::graphic::XGraphic> xGraphic;
     OUString aThesImplName( getThesImplName( aLocale ) );
     OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( aThesImplName ) );
-    if ( !aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty() )
-        aImage = Image( aSynonymsImageUrl );
+    if (!aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty())
+    {
+        try
+        {
+            css::uno::Reference<css::uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+            css::uno::Reference<css::graphic::XGraphicProvider> xProvider(css::graphic::GraphicProvider::create(xContext));
+            xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue("URL", aSynonymsImageUrl) });
+        }
+        catch (const css::uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("fwk");
+        }
+    }
 
     sal_uInt16 nId = 1;
     for ( const auto& aSynonym : aSynonyms )
@@ -99,12 +111,9 @@ void ThesaurusMenuController::fillPopupMenu()
         m_xPopupMenu->insertItem(nId, aItemText, 0, -1);
         m_xPopupMenu->setCommand(nId, ".uno:ThesaurusFromContext?WordReplace:string=" + aItemText);
 
-        if (!aSynonymsImageUrl.isEmpty())
-        {
-            VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>(m_xPopupMenu);
-            Menu* pVCLMenu = pAwtMenu->GetMenu();
-            pVCLMenu->SetItemImage( nId, aImage );
-        }
+        if (xGraphic.is())
+            m_xPopupMenu->setItemImage(nId, xGraphic, false);
+
         nId++;
     }
 
