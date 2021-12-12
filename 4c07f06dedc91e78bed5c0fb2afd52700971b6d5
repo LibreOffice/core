@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22b870c0_92fb0982",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-12T08:41:03Z",
+      "side": 1,
+      "message": "where exactly do the rtl::is* functions cause problems there?",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1529508d_7092f067",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-12T08:41:03Z",
+      "side": 1,
+      "message": "The functions are meant to check certain properties of Unicode code points, their domains are Unicode code points, hence the asserts checking the precondition that the functions are actually called with values matching their domains.",
+      "revId": "4c07f06dedc91e78bed5c0fb2afd52700971b6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
