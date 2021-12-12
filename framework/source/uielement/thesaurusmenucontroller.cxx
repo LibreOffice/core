@@ -81,9 +81,7 @@ void ThesaurusMenuController::fillPopupMenu()
     css::lang::Locale aLocale = LanguageTag::convertToLocale( aIsoLang );
     getMeanings( aSynonyms, aText, aLocale, 7 /*max number of synonyms to retrieve*/ );
 
-    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu );
-    Menu* pVCLMenu = pAwtMenu->GetMenu();
-    pVCLMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );
+    m_xPopupMenu->enableAutoMnemonics(false);
     if ( aSynonyms.empty() )
         return;
 
@@ -93,6 +91,9 @@ void ThesaurusMenuController::fillPopupMenu()
     OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( aThesImplName ) );
     if ( !aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty() )
         aImage = Image( aSynonymsImageUrl );
+
+    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu );
+    Menu* pVCLMenu = pAwtMenu->GetMenu();
 
     sal_uInt16 nId = 1;
     for ( const auto& aSynonym : aSynonyms )
