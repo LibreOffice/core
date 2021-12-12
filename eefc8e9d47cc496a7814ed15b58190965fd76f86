@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0fc8a2a_fbee8234",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-12T19:08:11Z",
+      "side": 1,
+      "message": "It should work now as in any other IDE. Maybe you could take a look. Thank you",
+      "revId": "eefc8e9d47cc496a7814ed15b58190965fd76f86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
