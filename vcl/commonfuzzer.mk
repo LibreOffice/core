@@ -144,6 +144,9 @@ fuzzer_core_libraries = \
     gcc3_uno \
     salhelper \
     sal \
+    index_data \
+    localedata_en \
+    localedata_others \
 
 fuzzer_calc_libraries = \
     analysis \

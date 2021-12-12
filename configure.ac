@@ -3812,7 +3812,7 @@ if test -n "$WIN_MULTI_ARCH" -a -n "$WIN_OTHER_ARCH"; then
 fi
 
 
-if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu" -o \( "$DISABLE_DYNLOADING" = TRUE -a "$enable_fuzzers" != yes \) ; then
+if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu" -o "$DISABLE_DYNLOADING" = TRUE ; then
     # To allow building Windows multi-arch releases without cross-tooling
     if test -z "$WIN_MULTI_ARCH" -a -z "$WIN_OTHER_ARCH"; then
         cross_compiling="yes"
@@ -9578,7 +9578,7 @@ else
         LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/win32/bin.msvc/libxml2.lib"
     else
         LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/libxml2/.libs -lxml2"
-        if test "$DISABLE_DYNLOADING" = TRUE -a "$ENABLE_FUZZERS" != "TRUE"; then
+        if test "$DISABLE_DYNLOADING" = TRUE; then
             LIBXML_LIBS="$LIBXML_LIBS -lm"
         fi
     fi

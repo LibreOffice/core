@@ -39,6 +39,9 @@ $(eval $(call gb_Module_add_targets,vcl,\
                 Executable_mtfdemo \
             ) \
     )) \
+    $(if $(filter FUZZERS,$(BUILD_TYPE)), \
+        StaticLibrary_vclmain \
+    ) \
 ))
 
 ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
@@ -129,7 +132,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_nativedraw \
     CustomTarget_nativewriter \
     CustomTarget_nativemath \
-    StaticLibrary_fuzzerstubs \
     StaticLibrary_fuzzer_core \
     StaticLibrary_fuzzer_calc \
     StaticLibrary_fuzzer_draw \

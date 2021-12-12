@@ -36,7 +36,6 @@ $(eval $(call gb_Executable_use_static_libraries,mmlfuzzer,\
     findsofficepath \
     ulingu \
     fuzzer_math \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,mmlfuzzer,\

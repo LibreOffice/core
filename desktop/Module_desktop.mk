@@ -105,9 +105,11 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 else ifeq (,$(filter MACOSX ANDROID iOS HAIKU EMSCRIPTEN,$(OS)))
 
+ifeq (,$(filter FUZZERS,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_oosplash \
 ))
+endif
 
 endif
 

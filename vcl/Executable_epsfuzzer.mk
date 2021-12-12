@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_use_libraries,epsfuzzer,\
 $(eval $(call gb_Executable_use_static_libraries,epsfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,epsfuzzer,\
