@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59c92d9_e8a36bbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-12T14:03:30Z",
+      "side": 1,
+      "message": "This tests whether the *child* of pAscDesc, if it has exactly one. is a SQL_TOKEN_DESC.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 81
+      },
+      "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6a78e75_b858509b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-12T14:03:30Z",
+      "side": 1,
+      "message": "This tests whether pAscDesc *itself* is SQL_TOKEN_DESC, a different test altoghether. Given the definition of opt_asc_desc, if pAscDesc is expected to be an opt_asc_desc, then indeed that is the correct test. Also since it works in your tests :-)",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 47
+      },
+      "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecce7980_553a2eac",
+        "filename": "connectivity/source/drivers/evoab2/NStatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-12T14:03:30Z",
+      "side": 1,
+      "message": "This will still throw if the \"ASC\" token is present explicitly. As in:\nSELECT foo, bar FROM qux ORDER BY foo ASC;\n\nI suggest to rewrite the whole assertion test as:\n\n                ( pColumnRef !\u003d nullptr )\n            \u0026\u0026  ( pAscDesc !\u003d nullptr )\n            \u0026\u0026  (    (SQL_ISRULE( pAscDesc, opt_asc_desc ) \u0026\u0026 pAscDesc-\u003ecount() \u003d\u003d 1)\n                  || SQL_ISTOKEN(pAscDesc, ASC)\n                  || SQL_ISTOKEN(pAscDesc, DESC))",
+      "range": {
+        "startLine": 271,
+        "startChar": 16,
+        "endLine": 271,
+        "endChar": 85
+      },
+      "revId": "5998cae3ed7bba0bf81d724c3e0a16337c04c05c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
