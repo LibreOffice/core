@@ -182,13 +182,15 @@ void SmartTagMenuController::FillMenu()
         }
     }
 
-    if ( 0 < pVCLMenu->GetItemCount() )
+    sal_Int16 nItemCount = m_xPopupMenu->getItemCount();
+    if (nItemCount > 0)
     {
         static const OUStringLiteral aCommand = u".uno:AutoCorrectDlg?OpenSmartTag:bool=true";
-        pVCLMenu->InsertSeparator();
+        m_xPopupMenu->insertSeparator(nItemCount++);
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, m_aModuleName);
-        pVCLMenu->InsertItem( nMenuId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties) );
-        pVCLMenu->SetItemCommand( nMenuId, aCommand );
+        m_xPopupMenu->insertItem(nMenuId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties),
+                                 0, nItemCount);
+        m_xPopupMenu->setCommand(nMenuId, aCommand);
     }
 }
 
