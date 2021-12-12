@@ -13,8 +13,6 @@
 
 extern "C" void* SwCreateDialogFactory() { return nullptr; }
 
-extern "C" void* com_sun_star_comp_Writer_EPUBExportFilter_get_implementation() { return nullptr; }
-
 extern "C" bool TestImportHTML(SvStream& rStream);
 
 extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)

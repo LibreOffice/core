@@ -44,7 +44,6 @@ fuzzer_externals = \
 
 fuzzer_statics = \
      findsofficepath \
-     fuzzerstubs \
      ulingu \
 
 fuzzer_core_libraries = \
@@ -150,6 +149,9 @@ fuzzer_core_libraries = \
     gcc3_uno \
     salhelper \
     sal \
+    index_data \
+    localedata_en \
+    localedata_others \
 
 fuzzer_calc_libraries = \
     analysis \
