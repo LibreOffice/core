@@ -889,6 +889,25 @@ public:
     sal_uInt32 GetTextAreaWidth() const;
 };
 
+class TextNodeListener : public SwClient
+{
+protected:
+    SwTextNode *m_pTextNode;
+
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+
+public:
+    TextNodeListener(SwTextNode* pTextNode);
+    bool operator<(const TextNodeListener& rOther) const
+    {
+        return m_pTextNode->GetIndex() < rOther.m_pTextNode->GetIndex();
+    }
+    void StopListening(SwModify* pTextNode);
+    SwTextNode* GetTextNode() const { return m_pTextNode; }
+    virtual void removed(SwModify* pTextNode);
+    virtual ~TextNodeListener() override;
+};
+
 //Various writer elements like frames start off containing a blank paragraph,
 //sometimes this paragraph turns out to be extraneous, e.g. the frame should
 //only contain a table with no trailing paragraph.
@@ -904,26 +923,23 @@ public:
 class wwExtraneousParas
 {
 private:
-    struct TextNodeListener : public SwClient
+    class ExtraTextNodeListener : public TextNodeListener
     {
-        TextNodeListener(SwTextNode* pTextNode, wwExtraneousParas* pOwner)
-            : m_pTextNode(pTextNode)
+    private:
+        wwExtraneousParas* m_pOwner;
+    public:
+        ExtraTextNodeListener(SwTextNode* pTextNode, wwExtraneousParas* pOwner)
+            : TextNodeListener(pTextNode)
             , m_pOwner(pOwner)
         {
         }
-        bool operator<(const TextNodeListener& rOther) const
-        {
-            return m_pTextNode->GetIndex() < rOther.m_pTextNode->GetIndex();
-        }
-        virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
-
-        SwTextNode *m_pTextNode;
-        wwExtraneousParas* m_pOwner;
+        virtual void removed(SwModify* pTextNode) override;
     };
+
     /*
     A vector of SwTextNodes to erase from a document after import is complete
     */
-    std::set<TextNodeListener> m_aTextNodes;
+    std::set<ExtraTextNodeListener> m_aTextNodes;
     SwDoc& m_rDoc;
 
     void remove_if_present(SwModify* pModify);
@@ -1381,7 +1397,7 @@ private:
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     std::unique_ptr<SwPaM> m_pPosAfterTOC;
     // used for some dropcap tweaking
-    SwTextNode* m_pPreviousNode;
+    std::unique_ptr<TextNodeListener> m_xPreviousNode;
 
     std::unique_ptr< SwPosition > m_pLastAnchorPos;
 
