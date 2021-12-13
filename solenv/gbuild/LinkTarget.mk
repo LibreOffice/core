@@ -2073,7 +2073,7 @@ endef
 
 # call gb_LinkTarget_use_glxtest,linktarget,add_libs
 define gb_LinkTarget_use_glxtest
-$(call gb_LinkTarget_use_libraries,$(1),vcl)
+$(call gb_LinkTarget_use_libraries,$(1),vcl,,$(4))
 
 ifeq (,$(DISABLE_DYNLOADING))
 $(call gb_LinkTarget_add_libs,$(1),$(DLOPEN_LIBS))
@@ -2134,7 +2134,7 @@ ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
 $$(eval $$(call gb_Output_error,Plugin support for build tools not implemented))
 endif
 
-$(if $(3),,$(call gb_LinkTarget_use_libraries,$(1),$(2)))
+$(if $(3),,$(call gb_LinkTarget_use_libraries,$(1),$(2),,$(4)))
 
 endef
 
