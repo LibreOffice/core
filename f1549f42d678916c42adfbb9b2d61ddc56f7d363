@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9b12d1b_fecf1336",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-13T18:38:57Z",
+      "side": 1,
+      "message": "After having applied your last suggestion, I made the 3 requests explicitely in SQL:\n- ASC\n- DESC\n- neither ASC nor DESC\nit was ok.",
+      "revId": "f1549f42d678916c42adfbb9b2d61ddc56f7d363",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
