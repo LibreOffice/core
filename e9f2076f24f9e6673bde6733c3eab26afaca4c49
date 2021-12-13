@@ -34,6 +34,23 @@
       "parentUuid": "cf1b5897_a812ff87",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "765fd950_aef8da9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-13T12:58:49Z",
+      "side": 1,
+      "message": "Looking at this, most of the entries check for some driver version (and older), and by now presumably those versions should be rather old, so is there any gain in removing those? If somebody still uses those driver versions, then either the user or the vendor don\u0027t update drivers, and in such case it\u0027s probably better not to do anything. Similarly the os\u003d\"7\" entry checks for by-no-unsupported Windows 7.\n\nThe only entry I see worth removing is the nvidia entry that checks only for device id, as that one blocks the gfx card indefinitely.\n\n",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
