@@ -16,6 +16,29 @@
       "message": "Thank you for the feedback! (great to know that you\u0027re still around! :-))\nI uploaded a new version with your suggestion.",
       "revId": "8046c9bdf3f18a43c4b30307d959c25095b99e3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9ad15ed_2aab33b6",
+        "filename": "connectivity/source/drivers/evoab2/NStatement.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-13T08:12:23Z",
+      "side": 1,
+      "message": "Since we now know that an opt_asc_desc is always a leaf (i.e. no children), this can be simplified/factorised as:\n\n                ( pColumnRef !\u003d nullptr )\n            \u0026\u0026  ( pAscDesc !\u003d nullptr )\n            \u0026\u0026  ( pAscDesc-\u003eisLeaf() )\n            \u0026\u0026  (    SQL_ISRULE ( pAscDesc, opt_asc_desc )\n                  || SQL_ISTOKEN( pAscDesc, ASC )\n                  || SQL_ISTOKEN( pAscDesc, DESC ) )\n\nNOTE: ( pAscDesc-\u003ecount() \u003d\u003d 0 ) is the same as ( pAscDesc-\u003eisLeaf() )",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 42
+      },
+      "revId": "8046c9bdf3f18a43c4b30307d959c25095b99e3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
