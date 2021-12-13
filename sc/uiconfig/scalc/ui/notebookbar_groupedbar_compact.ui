@@ -230,7 +230,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator2">https://opengrok.libreoffice.org/xref/core/sd/uiconfig/simpress/ui/notebookbar_groupedbar_compact.ui
+      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
