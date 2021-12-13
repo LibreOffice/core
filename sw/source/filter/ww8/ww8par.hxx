@@ -901,7 +901,7 @@ public:
 //Safest thing is to not delete SwTextNodes from a document during import, and
 //remove these extraneous paragraphs at the end after all SwFltControlStack are
 //destroyed.
-class wwExtraneousParas : public SwClient
+class wwExtraneousParas
 {
 private:
     struct TextNodeListener : public SwClient
