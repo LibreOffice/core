@@ -44,6 +44,8 @@ public:
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwFixPortion : public SwGluePortion
