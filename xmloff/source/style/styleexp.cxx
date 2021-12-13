@@ -147,7 +147,8 @@ void ExportStyleListlevel(const uno::Reference<beans::XPropertySetInfo>& xPropSe
         return;
     }
 
-    rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_LIST_LEVEL, OUString::number(nNumberingLevel));
+    // The spec is positiveInteger (1-based), but the implementation is 0-based.
+    rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_LIST_LEVEL, OUString::number(++nNumberingLevel));
 }
 }
 
