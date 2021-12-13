@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("mystyle"), uno::UNO_QUERY);
     sal_Int16 nNumberingLevel{};
     CPPUNIT_ASSERT(xStyle->getPropertyValue("NumberingLevel") >>= nNumberingLevel);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), nNumberingLevel);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), nNumberingLevel);
 
     // Test the export as well:
 
