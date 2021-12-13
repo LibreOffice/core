@@ -176,6 +176,7 @@ public:
     void testTdf137063();
     void testTdf126342();
     void testAdvancedFilter();
+    void testDateFilterContains();
     void testTdf98642();
     void testMergedCells();
     void testUpdateReference();
@@ -301,6 +302,7 @@ public:
     CPPUNIT_TEST(testTdf137063);
     CPPUNIT_TEST(testTdf126342);
     CPPUNIT_TEST(testAdvancedFilter);
+    CPPUNIT_TEST(testDateFilterContains);
     CPPUNIT_TEST(testTdf98642);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
@@ -3898,6 +3900,60 @@ void Test::testAdvancedFilter()
     CPPUNIT_ASSERT_MESSAGE("rows 8-10 should be visible.", !bFiltered);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 8-10 should be visible.", SCROW(7), nRow1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 8-10 should be visible.", SCROW(9), nRow2);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDateFilterContains()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    constexpr SCCOL nCols = 1;
+    constexpr SCROW nRows = 5;
+    m_pDoc->SetString(0, 0, 0, "Date");
+    m_pDoc->SetString(0, 1, 0, "1/2/2021");
+    m_pDoc->SetString(0, 2, 0, "2/1/1999");
+    m_pDoc->SetString(0, 3, 0, "2/1/1997");
+    m_pDoc->SetString(0, 4, 0, "3/3/2001");
+    m_pDoc->SetString(0, 5, 0, "3/3/1996");
+
+    // Set the fields as dates.
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_DATE_DIN_YYMMDD, LANGUAGE_ENGLISH_US);
+    ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    m_pDoc->ApplyPatternAreaTab(0, 1, 0, 5, 0, aNewAttrs); // apply it to A1:A6
+
+    ScDBData* pDBData = new ScDBData("NONAME", 0, 0, 0, nCols, nRows);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
+
+    pDBData->SetAutoFilter(true);
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    m_pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                           aRange.aEnd.Col(), aRange.aStart.Row(),
+                           aRange.aStart.Tab(), ScMF::Auto);
+
+    //create the query param
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+    ScQueryEntry& rEntry = aParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.nField = 0;
+    rEntry.eOp = SC_CONTAINS;
+    rEntry.GetQueryItem().maString = m_pDoc->GetSharedStringPool().intern("2");
+    pDBData->SetQueryParam(aParam);
+
+    // perform the query.
+    m_pDoc->Query(0, aParam, true);
+
+    // Dates in rows 2-4 contain '2', row 5 shows 2001 only as 01, and row 6 doesn't contain it at all.
+    CPPUNIT_ASSERT_MESSAGE("row 2 should be visible", !m_pDoc->RowHidden(1, 0));
+    CPPUNIT_ASSERT_MESSAGE("row 3 should be visible", !m_pDoc->RowHidden(2, 0));
+    CPPUNIT_ASSERT_MESSAGE("row 4 should be visible", !m_pDoc->RowHidden(3, 0));
+    CPPUNIT_ASSERT_MESSAGE("row 5 should be hidden", m_pDoc->RowHidden(4, 0));
+    CPPUNIT_ASSERT_MESSAGE("row 6 should be hidden", m_pDoc->RowHidden(5, 0));
 
     m_pDoc->DeleteTab(0);
 }

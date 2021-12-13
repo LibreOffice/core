@@ -47,6 +47,7 @@
 #include <svl/sharedstring.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <limits>
@@ -642,6 +643,8 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
                 break;
             default:
                 // Only the above operators are supported.
+                SAL_WARN("sc.core", "Unsupported operator " << rEntry.eOp
+                    << " in ScDBQueryDataIterator::DataAccessMatrix::isValidQuery()");
                 continue;
         }
 

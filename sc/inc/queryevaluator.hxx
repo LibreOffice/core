@@ -79,7 +79,8 @@ class ScQueryEvaluator
 
     bool isRealWildOrRegExp(const ScQueryEntry& rEntry) const;
     bool isTestWildOrRegExp(const ScQueryEntry& rEntry) const;
-    static bool isQueryByValue(const ScQueryEntry::Item& rItem, const ScRefCellValue& rCell);
+    static bool isQueryByValue(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+                               const ScRefCellValue& rCell);
     static bool isQueryByValueForCell(const ScRefCellValue& rCell);
     static bool isQueryByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
                                 const ScRefCellValue& rCell);
