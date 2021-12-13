@@ -33,6 +33,24 @@
       "message": "Please keep the formatting as it was before.",
       "revId": "52b85f69e2e28bd981e1df89f0cb0e4bb444f38f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "941be6ab_162a83e6",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4060,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T17:39:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71199ba5_09146b61",
+      "revId": "52b85f69e2e28bd981e1df89f0cb0e4bb444f38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
