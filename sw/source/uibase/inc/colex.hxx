@@ -44,7 +44,7 @@ public:
 
 class SW_DLLPUBLIC SwPageGridExample final : public SwPageExample
 {
-    std::unique_ptr<SwTextGridItem> pGridItem;
+    std::unique_ptr<SwTextGridItem> m_pGridItem;
 
     virtual void DrawPage(vcl::RenderContext& rRenderContext,
                           const Point& rPoint,
@@ -59,7 +59,7 @@ public:
 
 class SW_DLLPUBLIC SwColExample final : public SwPageExample
 {
-    SwColMgr*   pColMgr;
+    SwColMgr*   m_pColMgr;
 
     using SwPageExample::UpdateExample;
 
@@ -70,13 +70,13 @@ class SW_DLLPUBLIC SwColExample final : public SwPageExample
 
 public:
     SwColExample()
-        : pColMgr(nullptr)
+        : m_pColMgr(nullptr)
     {
     }
 
     void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr  )
     {
-        pColMgr = pMgr;
+        m_pColMgr = pMgr;
         SwPageExample::UpdateExample(rSet);
     }
 };
