@@ -16,6 +16,24 @@
       "message": "Do you know if this improves Word compatibility or not?",
       "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c2b7d65_ce9b3a6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-13T08:23:19Z",
+      "side": 1,
+      "message": "In MS Word (at least in Word 2010), changing line height does not affect the first line indent value.\n\nHowever our behaviour here is not a compatibility issue - even if we change the first line indent upon line height change, it is still fine because in the saved DOCX the updated indent is used; and upon fileopen the first line indent value as written by the creator application is there. The only problem is the one described in tdf#129448: If I set first line indent to \"2 Characters\" and then suppose it calculates an indent value of 0.68cm, then when the line height is changed then the first line indent is changed to a much bigger value which is not the user wanted. Even for other languages, for instance English, line height is line height and first line indent is first line indent, why should the first line indent be changed in case of line height change?",
+      "parentUuid": "11f0a046_2980b450",
+      "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
