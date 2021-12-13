@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,desktop_detector))
 
+$(eval $(call gb_Library_set_plugin_for,desktop_detector,vcl))
+
 $(eval $(call gb_Library_set_include,desktop_detector,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
@@ -31,7 +33,6 @@ $(eval $(call gb_Library_add_defs,desktop_detector,\
 $(eval $(call gb_Library_use_sdk_api,desktop_detector))
 
 $(eval $(call gb_Library_use_libraries,desktop_detector,\
-    vcl \
     tl \
     utl \
     sot \

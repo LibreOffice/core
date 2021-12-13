@@ -140,6 +140,8 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 #ifdef DESKTOPDETECT
 #ifndef DISABLE_DYNLOADING
 extern "C" typedef DesktopType Fn_get_desktop_environment();
+#else
+extern "C" DesktopType get_desktop_environment();
 #endif
 
 DesktopType lcl_get_desktop_environment()

@@ -363,7 +363,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	dbtools \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
-	$(if $(USING_X11),desktop_detector) \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
@@ -486,6 +485,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     acc \
     cui \
+    $(if $(USING_X11),desktop_detector) \
     icg \
     sdui \
     $(if $(USING_X11),vclplug_gen) \
