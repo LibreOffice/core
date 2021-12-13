@@ -38,8 +38,6 @@ AVAILABLE TARGETS
        slowcheck            run slow unit tests
        screenshot           create all screenshots
        subsequentcheck      run system tests (requires full installation)
-       stagingcheck         run (unstable/failing) tests from staging area
-                            (requires full installation)
        perfcheck            run performance/callgrind unit tests
 
        build-l10n-only      builds translation files for the build products
