@@ -28,33 +28,33 @@
 
 // handle indexes with TOXMgr
 SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
-    pSh(pShell)
+    m_pSh(pShell)
 {
-    pSh->GetCurTOXMarks(aCurMarks);
+    m_pSh->GetCurTOXMarks(m_aCurMarks);
     SetCurTOXMark(0);
 }
 
 SwTOXMark* SwTOXMgr::GetTOXMark(sal_uInt16 nId)
 {
-    if(!aCurMarks.empty())
-        return aCurMarks[nId];
+    if(!m_aCurMarks.empty())
+        return m_aCurMarks[nId];
     return nullptr;
 }
 
 void SwTOXMgr::DeleteTOXMark()
 {
     SwTOXMark* pNext = nullptr;
-    if( pCurTOXMark )
+    if( m_pCurTOXMark )
     {
-        pNext = const_cast<SwTOXMark*>(&pSh->GotoTOXMark( *pCurTOXMark, TOX_NXT ));
-        if( pNext == pCurTOXMark )
+        pNext = const_cast<SwTOXMark*>(&m_pSh->GotoTOXMark( *m_pCurTOXMark, TOX_NXT ));
+        if( pNext == m_pCurTOXMark )
             pNext = nullptr;
 
-        pSh->DeleteTOXMark( pCurTOXMark );
-        pSh->SetModified();
+        m_pSh->DeleteTOXMark( m_pCurTOXMark );
+        m_pSh->SetModified();
     }
     // go to next one
-    pCurTOXMark = pNext;
+    m_pCurTOXMark = pNext;
 }
 
 void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
@@ -66,7 +66,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         {
             OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
                        "invalid InsertTOCMark level");
-            pMark = new SwTOXMark(pSh->GetTOXType(TOX_CONTENT, 0));
+            pMark = new SwTOXMark(m_pSh->GetTOXType(TOX_CONTENT, 0));
             pMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
 
             if(rDesc.GetAltStr())
@@ -75,7 +75,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         break;
         case  TOX_INDEX:
         {
-            pMark = new SwTOXMark(pSh->GetTOXType(TOX_INDEX, 0));
+            pMark = new SwTOXMark(m_pSh->GetTOXType(TOX_INDEX, 0));
 
             if( rDesc.GetPrimKey() && !rDesc.GetPrimKey()->isEmpty() )
             {
@@ -103,7 +103,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
                        "invalid InsertTOCMark level");
             sal_uInt16 nId = rDesc.GetTOUName() ?
                 GetUserTypeID(*rDesc.GetTOUName()) : 0;
-            pMark = new SwTOXMark(pSh->GetTOXType(TOX_USER, nId));
+            pMark = new SwTOXMark(m_pSh->GetTOXType(TOX_USER, nId));
             pMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
 
             if(rDesc.GetAltStr())
@@ -112,7 +112,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         break;
         case  TOX_BIBLIOGRAPHY:
         {
-            pMark = new SwTOXMark(pSh->GetTOXType(TOX_BIBLIOGRAPHY, 0));
+            pMark = new SwTOXMark(m_pSh->GetTOXType(TOX_BIBLIOGRAPHY, 0));
 
             if( rDesc.GetPrimKey() && !rDesc.GetPrimKey()->isEmpty() )
             {
@@ -140,80 +140,80 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     if (!pMark)
         return;
 
-    pSh->StartAllAction();
-    pSh->SwEditShell::Insert(*pMark);
-    pSh->EndAllAction();
+    m_pSh->StartAllAction();
+    m_pSh->SwEditShell::Insert(*pMark);
+    m_pSh->EndAllAction();
 }
 
 // Update of TOXMarks
 void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 {
-    assert(pCurTOXMark && "no current TOXMark");
-    pSh->StartAllAction();
-    if(pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
+    assert(m_pCurTOXMark && "no current TOXMark");
+    m_pSh->StartAllAction();
+    if(m_pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
     {
         if(rDesc.GetPrimKey() && !rDesc.GetPrimKey()->isEmpty() )
         {
-            pCurTOXMark->SetPrimaryKey( *rDesc.GetPrimKey() );
+            m_pCurTOXMark->SetPrimaryKey( *rDesc.GetPrimKey() );
             if(rDesc.GetPhoneticReadingOfPrimKey())
-                pCurTOXMark->SetPrimaryKeyReading( *rDesc.GetPhoneticReadingOfPrimKey() );
+                m_pCurTOXMark->SetPrimaryKeyReading( *rDesc.GetPhoneticReadingOfPrimKey() );
             else
-                pCurTOXMark->SetPrimaryKeyReading(OUString());
+                m_pCurTOXMark->SetPrimaryKeyReading(OUString());
 
             if( rDesc.GetSecKey() && !rDesc.GetSecKey()->isEmpty() )
             {
-                pCurTOXMark->SetSecondaryKey( *rDesc.GetSecKey() );
+                m_pCurTOXMark->SetSecondaryKey( *rDesc.GetSecKey() );
                 if(rDesc.GetPhoneticReadingOfSecKey())
-                    pCurTOXMark->SetSecondaryKeyReading( *rDesc.GetPhoneticReadingOfSecKey() );
+                    m_pCurTOXMark->SetSecondaryKeyReading( *rDesc.GetPhoneticReadingOfSecKey() );
                 else
-                    pCurTOXMark->SetSecondaryKeyReading(OUString());
+                    m_pCurTOXMark->SetSecondaryKeyReading(OUString());
             }
             else
             {
-                pCurTOXMark->SetSecondaryKey(OUString());
-                pCurTOXMark->SetSecondaryKeyReading(OUString());
+                m_pCurTOXMark->SetSecondaryKey(OUString());
+                m_pCurTOXMark->SetSecondaryKeyReading(OUString());
             }
         }
         else
         {
-            pCurTOXMark->SetPrimaryKey(OUString());
-            pCurTOXMark->SetPrimaryKeyReading(OUString());
-            pCurTOXMark->SetSecondaryKey(OUString());
-            pCurTOXMark->SetSecondaryKeyReading(OUString());
+            m_pCurTOXMark->SetPrimaryKey(OUString());
+            m_pCurTOXMark->SetPrimaryKeyReading(OUString());
+            m_pCurTOXMark->SetSecondaryKey(OUString());
+            m_pCurTOXMark->SetSecondaryKeyReading(OUString());
         }
         if(rDesc.GetPhoneticReadingOfAltStr())
-            pCurTOXMark->SetTextReading( *rDesc.GetPhoneticReadingOfAltStr() );
+            m_pCurTOXMark->SetTextReading( *rDesc.GetPhoneticReadingOfAltStr() );
         else
-            pCurTOXMark->SetTextReading(OUString());
-        pCurTOXMark->SetMainEntry(rDesc.IsMainEntry());
+            m_pCurTOXMark->SetTextReading(OUString());
+        m_pCurTOXMark->SetMainEntry(rDesc.IsMainEntry());
     }
     else
-        pCurTOXMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
+        m_pCurTOXMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
 
     if(rDesc.GetAltStr())
     {
         // JP 26.08.96: Bug 30344 - either the text of a Doc or an alternative test,
         //                          not both!
-        bool bReplace = pCurTOXMark->IsAlternativeText();
+        bool bReplace = m_pCurTOXMark->IsAlternativeText();
         if( bReplace )
-            pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
+            m_pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
         else
         {
-            SwTOXMark aCpy( *pCurTOXMark );
-            aCurMarks.clear();
-            pSh->DeleteTOXMark(pCurTOXMark);
+            SwTOXMark aCpy( *m_pCurTOXMark );
+            m_aCurMarks.clear();
+            m_pSh->DeleteTOXMark(m_pCurTOXMark);
             aCpy.SetAlternativeText( *rDesc.GetAltStr() );
-            pSh->SwEditShell::Insert( aCpy );
-            pCurTOXMark = nullptr;
+            m_pSh->SwEditShell::Insert( aCpy );
+            m_pCurTOXMark = nullptr;
         }
     }
-    pSh->SetModified();
-    pSh->EndAllAction();
+    m_pSh->SetModified();
+    m_pSh->EndAllAction();
     // Bug 36207 pCurTOXMark points nowhere here!
-    if(!pCurTOXMark)
+    if(!m_pCurTOXMark)
     {
-        pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
-        pSh->GetCurTOXMarks(aCurMarks);
+        m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
+        m_pSh->GetCurTOXMarks(m_aCurMarks);
         SetCurTOXMark(0);
     }
 }
@@ -221,62 +221,62 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 // determine UserTypeID
 sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
 {
-    sal_uInt16 nSize = pSh->GetTOXTypeCount(TOX_USER);
+    sal_uInt16 nSize = m_pSh->GetTOXTypeCount(TOX_USER);
     for(sal_uInt16 i=0; i < nSize; ++i)
     {
-        const SwTOXType* pTmp = pSh->GetTOXType(TOX_USER, i);
+        const SwTOXType* pTmp = m_pSh->GetTOXType(TOX_USER, i);
         if(pTmp && pTmp->GetTypeName() == rStr)
             return i;
     }
-    SwTOXType aUserType(*pSh->GetDoc(), TOX_USER, rStr);
-    pSh->InsertTOXType(aUserType);
+    SwTOXType aUserType(*m_pSh->GetDoc(), TOX_USER, rStr);
+    m_pSh->InsertTOXType(aUserType);
     return nSize;
 }
 
 // traveling between TOXMarks
 void SwTOXMgr::NextTOXMark(bool bSame)
 {
-    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
-    if( pCurTOXMark )
+    OSL_ENSURE(m_pCurTOXMark, "no current TOXMark");
+    if( m_pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_NXT : TOX_NXT;
-        pCurTOXMark = const_cast<SwTOXMark*>(&pSh->GotoTOXMark( *pCurTOXMark, eDir ));
+        m_pCurTOXMark = const_cast<SwTOXMark*>(&m_pSh->GotoTOXMark( *m_pCurTOXMark, eDir ));
     }
 }
 
 void SwTOXMgr::PrevTOXMark(bool bSame)
 {
-    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
-    if( pCurTOXMark )
+    OSL_ENSURE(m_pCurTOXMark, "no current TOXMark");
+    if( m_pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_PRV : TOX_PRV;
-        pCurTOXMark = const_cast<SwTOXMark*>(&pSh->GotoTOXMark(*pCurTOXMark, eDir ));
+        m_pCurTOXMark = const_cast<SwTOXMark*>(&m_pSh->GotoTOXMark(*m_pCurTOXMark, eDir ));
     }
 }
 
 const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp) const
 {
-    return pSh->GetTOXType(eTyp, 0);
+    return m_pSh->GetTOXType(eTyp, 0);
 }
 
 void SwTOXMgr::SetCurTOXMark(sal_uInt16 nId)
 {
-    pCurTOXMark = (nId < aCurMarks.size()) ? aCurMarks[nId] : nullptr;
+    m_pCurTOXMark = (nId < m_aCurMarks.size()) ? m_aCurMarks[nId] : nullptr;
 }
 
 bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                                     SwTOXBase** ppBase,
                                     const SfxItemSet* pSet)
 {
-    SwWait aWait( *pSh->GetView().GetDocShell(), true );
+    SwWait aWait( *m_pSh->GetView().GetDocShell(), true );
     bool bRet = true;
-    const SwTOXBase *const pCurTOX = ppBase && *ppBase ? *ppBase : pSh->GetCurTOX();
+    const SwTOXBase *const pCurTOX = ppBase && *ppBase ? *ppBase : m_pSh->GetCurTOX();
 
     SwTOXBase * pNewTOX = pCurTOX ? new SwTOXBase(*pCurTOX) : nullptr;
 
     TOXTypes eCurTOXType = rDesc.GetTOXType();
-    if(pCurTOX && !ppBase && pSh->HasSelection())
-        pSh->EnterStdMode();
+    if(pCurTOX && !ppBase && m_pSh->HasSelection())
+        m_pSh->EnterStdMode();
 
     switch(eCurTOXType)
     {
@@ -284,21 +284,21 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         {
             if(!pCurTOX || (ppBase && !(*ppBase)))
             {
-                const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
+                const SwTOXType* pType = m_pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
                 pNewTOX = new SwTOXBase(pType, aForm, SwTOXElement::Mark, pType->GetTypeName());
             }
             pNewTOX->SetOptions(rDesc.GetIndexOptions());
             pNewTOX->SetMainEntryCharStyle(rDesc.GetMainEntryCharStyle());
-            pSh->SetTOIAutoMarkURL(rDesc.GetAutoMarkURL());
-            pSh->ApplyAutoMark();
+            m_pSh->SetTOIAutoMarkURL(rDesc.GetAutoMarkURL());
+            m_pSh->ApplyAutoMark();
         }
         break;
         case TOX_CONTENT :
         {
             if(!pCurTOX || (ppBase && !(*ppBase)))
             {
-                const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
+                const SwTOXType* pType = m_pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
                 pNewTOX = new SwTOXBase(pType, aForm, rDesc.GetContentOptions(), pType->GetTypeName());
             }
@@ -311,15 +311,15 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             if(!pCurTOX || (ppBase && !(*ppBase)))
             {
                 sal_uInt16 nPos  = 0;
-                sal_uInt16 nSize = pSh->GetTOXTypeCount(eCurTOXType);
+                sal_uInt16 nSize = m_pSh->GetTOXTypeCount(eCurTOXType);
                 for(sal_uInt16 i=0; rDesc.GetTOUName() && i < nSize; ++i)
-                {   const SwTOXType* pType = pSh->GetTOXType(TOX_USER, i);
+                {   const SwTOXType* pType = m_pSh->GetTOXType(TOX_USER, i);
                     if(pType->GetTypeName() == *rDesc.GetTOUName())
                     {   nPos = i;
                         break;
                     }
                 }
-                const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, nPos);
+                const SwTOXType* pType = m_pSh->GetTOXType(eCurTOXType, nPos);
 
                 SwForm aForm(eCurTOXType);
                 pNewTOX = new SwTOXBase(pType, aForm, rDesc.GetContentOptions(), pType->GetTypeName());
@@ -343,12 +343,12 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             if(TOX_AUTHORITIES == eCurTOXType)
             {
                 SwAuthorityFieldType* pFType = static_cast<SwAuthorityFieldType*>(
-                                                pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
+                                                m_pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
                 if (!pFType)
                 {
-                    SwAuthorityFieldType const type(pSh->GetDoc());
+                    SwAuthorityFieldType const type(m_pSh->GetDoc());
                     pFType = static_cast<SwAuthorityFieldType*>(
-                                pSh->InsertFieldType(type));
+                                m_pSh->InsertFieldType(type));
                 }
                 OUString const& rBrackets(rDesc.GetAuthBrackets());
                 if (rBrackets.isEmpty())
@@ -375,7 +375,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             // TODO: consider properties of the current TOXType
             if(!pCurTOX || (ppBase && !(*ppBase)))
             {
-                const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
+                const SwTOXType* pType = m_pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
                 pNewTOX = new SwTOXBase(
                     pType, aForm,
@@ -415,13 +415,13 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             (*ppBase) = pNewTOX;
         else
         {
-            pSh->InsertTableOf(*pNewTOX, pSet);
+            m_pSh->InsertTableOf(*pNewTOX, pSet);
             delete pNewTOX;
         }
     }
     else
     {
-        SwDoc * pDoc = pSh->GetDoc();
+        SwDoc * pDoc = m_pSh->GetDoc();
 
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
@@ -432,7 +432,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         pDoc->ChangeTOX(*pTOX, *pNewTOX);
 
         pTOX->DisableKeepExpression();
-        pSh->UpdateTableOf(*pTOX, pSet);
+        m_pSh->UpdateTableOf(*pTOX, pSet);
         bRet = false;
         pTOX->EnableKeepExpression();
 

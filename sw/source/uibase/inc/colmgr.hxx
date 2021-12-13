@@ -60,56 +60,56 @@ public:
 
     inline void         NoCols();
 
-    const SwFormatCol&  GetColumns() const { return aFormatCol; }
+    const SwFormatCol&  GetColumns() const { return m_aFormatCol; }
 
     void                SetActualWidth(sal_uInt16 nW);
-    sal_uInt16          GetActualSize() const { return nWidth; }
+    sal_uInt16          GetActualSize() const { return m_nWidth; }
 
 private:
-    SwFormatCol             aFormatCol;
-    sal_uInt16              nWidth;
+    SwFormatCol             m_aFormatCol;
+    sal_uInt16              m_nWidth;
 };
 
 inline  sal_uInt16 SwColMgr::GetCount() const
 {
-    return aFormatCol.GetNumCols();
+    return m_aFormatCol.GetNumCols();
 }
 
 inline SvxBorderLineStyle SwColMgr::GetLineStyle() const
 {
-    return aFormatCol.GetLineStyle();
+    return m_aFormatCol.GetLineStyle();
 }
 inline sal_uLong        SwColMgr::GetLineWidth() const
 {
-    return aFormatCol.GetLineWidth();
+    return m_aFormatCol.GetLineWidth();
 }
 
 inline const Color& SwColMgr::GetLineColor() const
 {
-    return aFormatCol.GetLineColor();
+    return m_aFormatCol.GetLineColor();
 }
 
 inline  SwColLineAdj SwColMgr::GetAdjust() const
 {
-    return aFormatCol.GetLineAdj();
+    return m_aFormatCol.GetLineAdj();
 }
 
 inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
-    aFormatCol.SetLineAdj(eAdj);
+    m_aFormatCol.SetLineAdj(eAdj);
 }
 inline bool SwColMgr::IsAutoWidth() const
 {
-    return aFormatCol.IsOrtho();
+    return m_aFormatCol.IsOrtho();
 }
 inline void SwColMgr::SetAutoWidth(bool bOn, sal_uInt16 nGutterWidth)
 {
-    aFormatCol.SetOrtho(bOn, nGutterWidth, nWidth);
+    m_aFormatCol.SetOrtho(bOn, nGutterWidth, m_nWidth);
 }
 
 inline void SwColMgr::NoCols()
 {
-    aFormatCol.GetColumns().clear();
+    m_aFormatCol.GetColumns().clear();
 }
 inline bool SwColMgr::HasLine() const
 {

@@ -225,9 +225,9 @@ public:
 
 class SW_DLLPUBLIC SwTOXMgr
 {
-    SwWrtShell*         pSh;
-    SwTOXMark*          pCurTOXMark;
-    SwTOXMarks          aCurMarks;
+    SwWrtShell*         m_pSh;
+    SwTOXMark*          m_pCurTOXMark;
+    SwTOXMarks          m_aCurMarks;
 
     SAL_DLLPRIVATE sal_uInt16                GetUserTypeID(const OUString& rStr);
 
@@ -256,15 +256,15 @@ public:
     bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase, const SfxItemSet* pSet);
 
     const SwTOXType*    GetTOXType(TOXTypes eTyp) const;
-    SwWrtShell * GetShell() { return pSh; }
+    SwWrtShell * GetShell() { return m_pSh; }
 };
 
 // inlines
 inline sal_uInt16 SwTOXMgr::GetTOXMarkCount() const
-    {   return aCurMarks.size();   }
+    {   return m_aCurMarks.size();   }
 
 inline SwTOXMark* SwTOXMgr::GetCurTOXMark()
-    {   return pCurTOXMark; }
+    {   return m_pCurTOXMark; }
 
 #endif
 
