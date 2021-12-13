@@ -52,6 +52,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ac2c8fc_b520b74f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-12-13T03:36:35Z",
+      "side": 1,
+      "message": "Andrea, please propose the change yourself, and only let other developers know if you need to check correctness. Armin is a busy person, and I don’t think it’s wise to bother him with these trivialities.",
+      "revId": "8df3a84cece66c9a56ad10b5d2bbe9fe7665bd1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33c91638_3196f50d",
