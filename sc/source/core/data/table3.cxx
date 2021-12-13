@@ -2294,10 +2294,10 @@ public:
     {
     }
 
-    bool isQueryByValue(
+    bool isQueryByValue(const ScQueryEntry& rEntry,
         const ScQueryEntry::Item& rItem, SCCOL nCol, SCROW nRow, ScRefCellValue& rCell)
     {
-        if (rItem.meType == ScQueryEntry::ByString)
+        if (rItem.meType == ScQueryEntry::ByString || isPartialTextMatchOp(rEntry))
             return false;
 
         if (!rCell.isEmpty())
@@ -2785,7 +2785,7 @@ bool ScTable::ValidQuery(
         {
             for (const auto& rItem : rItems)
             {
-                if (aEval.isQueryByValue(rItem, nCol, nRow, aCell))
+                if (aEval.isQueryByValue(rEntry, rItem, nCol, nRow, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
                         aEval.compareByValue(aCell, nCol, nRow, rEntry, rItem, pContext);
