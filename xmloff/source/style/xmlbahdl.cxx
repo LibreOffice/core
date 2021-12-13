@@ -361,6 +361,36 @@ bool XMLDoublePercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
     return bRet;
 }
 
+bool XML100thPercentPropHdl::importXML(const OUString& rStrImpValue, Any& rValue,
+                                       const SvXMLUnitConverter&) const
+{
+    bool bRet = false;
+
+    sal_Int32 nValue = 0;
+    bRet = sax::Converter::convertPercent(nValue, rStrImpValue);
+    rValue <<= static_cast<sal_Int16>(nValue * 100);
+
+    return bRet;
+}
+
+bool XML100thPercentPropHdl::exportXML(OUString& rStrExpValue, const Any& rValue,
+                                       const SvXMLUnitConverter&) const
+{
+    bool bRet = false;
+    sal_Int16 nValue = 0;
+
+    if (rValue >>= nValue)
+    {
+        nValue = std::round(static_cast<double>(nValue) / 100);
+        OUStringBuffer aOut;
+        sax::Converter::convertPercent(aOut, nValue);
+        rStrExpValue = aOut.makeStringAndClear();
+        bRet = true;
+    }
+
+    return bRet;
+}
+
 
 XMLNegPercentPropHdl::~XMLNegPercentPropHdl()
 {

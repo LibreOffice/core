@@ -2118,6 +2118,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         </rng:choice>
       </rng:attribute>
     </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:color-lum-mod">
+        <rng:ref name="zeroToHundredPercent"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:color-lum-off">
+        <rng:ref name="zeroToHundredPercent"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
 
   <rng:define name="style-text-properties-attlist" combine="interleave">

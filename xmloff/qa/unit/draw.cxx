@@ -195,10 +195,27 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
     // i.e. only the direct color was written, but not the theme reference.
     assertXPath(pXmlDoc, "//style:style[@style:name='T1']/style:text-properties", "theme-color",
                 "accent1");
+    assertXPathNoAttribute(pXmlDoc, "//style:style[@style:name='T1']/style:text-properties",
+                           "color-lum-mod");
+    assertXPathNoAttribute(pXmlDoc, "//style:style[@style:name='T1']/style:text-properties",
+                           "color-lum-off");
+
     assertXPath(pXmlDoc, "//style:style[@style:name='T2']/style:text-properties", "theme-color",
                 "accent1");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//style:style[@style:name='T2']/style:text-properties' no attribute 'color-lum-mod' exist
+    // i.e. effects on a referenced theme color were lost.
+    assertXPath(pXmlDoc, "//style:style[@style:name='T2']/style:text-properties", "color-lum-mod",
+                "40%");
+    assertXPath(pXmlDoc, "//style:style[@style:name='T2']/style:text-properties", "color-lum-off",
+                "60%");
+
     assertXPath(pXmlDoc, "//style:style[@style:name='T3']/style:text-properties", "theme-color",
                 "accent1");
+    assertXPath(pXmlDoc, "//style:style[@style:name='T3']/style:text-properties", "color-lum-mod",
+                "75%");
+    assertXPathNoAttribute(pXmlDoc, "//style:style[@style:name='T3']/style:text-properties",
+                           "color-lum-off");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
