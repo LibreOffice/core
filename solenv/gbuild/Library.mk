@@ -192,7 +192,7 @@ endif
 
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(2))) : PLUGINS += $(1)
 $(eval $(call gb_LinkTarget__add_plugin,$(call gb_Library_get_linktarget,$(2)),$(1)))
-$(eval $(call gb_LinkTarget__set_plugin_for,$(call gb_Library_get_linktarget,$(1)),$(2),$(3)))
+$(eval $(call gb_LinkTarget__set_plugin_for,$(call gb_Library_get_linktarget,$(1)),$(2),$(3),Library_$(1)))
 endef
 
 # call gb_Library_set_plugin_for_nodep,library,loader
