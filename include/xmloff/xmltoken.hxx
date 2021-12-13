@@ -3481,6 +3481,8 @@ namespace xmloff::token {
         XML_ACCENT6,
         XML_HLINK,
         XML_FOLHLINK,
+        XML_COLOR_LUM_MOD,
+        XML_COLOR_LUM_OFF,
 
         XML_CONTENT_CONTROL,
         XML_SHOWING_PLACE_HOLDER,

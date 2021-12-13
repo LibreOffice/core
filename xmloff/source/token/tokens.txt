@@ -3228,6 +3228,8 @@ accent5
 accent6
 hlink
 folHlink
+color-lum-mod
+color-lum-off
 content-control
 showing-place-holder
 checked-state
