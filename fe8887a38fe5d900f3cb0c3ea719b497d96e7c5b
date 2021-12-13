@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b56a1ea_e9ded4b0",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cddc0c23_6666f228",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e77cdd37_aba070d6",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-12-13T05:58:47Z",
       "side": 1,
       "message": "Also this.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e6cda71_a7b4444c",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e77cdd37_aba070d6",
       "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -69,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49be2f10_4c041d0c",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a10cc365_5951f23c",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9410859_6f5568ce",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-12-13T05:58:47Z",
       "side": 1,
       "message": "Also this one.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55bd6cbe_9c6ac37b",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9410859_6f5568ce",
       "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -103,6 +175,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "131cc2d5_5798364d",
+        "filename": "chart2/source/view/main/PolarLabelPositionHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d1db2c7_c325ab25",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38ce49b0_c0e4736b",
@@ -116,6 +206,24 @@
       "writtenOn": "2021-12-13T05:58:47Z",
       "side": 1,
       "message": "Also this one.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cebd8855_7d1537d1",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38ce49b0_c0e4736b",
       "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -137,6 +245,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf3b2804_90465116",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4261,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e20fa5f_51c65fb7",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2af1ea4f_6f642856",
@@ -150,6 +276,24 @@
       "writtenOn": "2021-12-13T05:58:47Z",
       "side": 1,
       "message": "You may also get rid of most of the subsequent conditions by using atan2. Please take a closer look to the parameters you are sending to atan2, and compare them to the conditions.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b40deee9_29a62e21",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4282,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2021-12-13T06:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2af1ea4f_6f642856",
       "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
