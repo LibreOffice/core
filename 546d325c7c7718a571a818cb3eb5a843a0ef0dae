@@ -16,6 +16,24 @@
       "message": "I notice that FindTextAll is used for lots of things - including general text that I am typing, so the impact of this change might be startlingly high. But it can only be a good thing, right?",
       "revId": "546d325c7c7718a571a818cb3eb5a843a0ef0dae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01dc8a34_f6f27f77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-13T17:40:57Z",
+      "side": 1,
+      "message": "No - the only other use is related to the longest match, so alphabetic sorting is irrelevant in that case.",
+      "parentUuid": "d12339fe_82f382d0",
+      "revId": "546d325c7c7718a571a818cb3eb5a843a0ef0dae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
