@@ -642,6 +642,8 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
                 break;
             default:
                 // Only the above operators are supported.
+                SAL_WARN("sc", "Unsupported operator " << rEntry.eOp
+                    << " in ScDBQueryDataIterator::DataAccessMatrix::isValidQuery()");
                 continue;
         }
 
