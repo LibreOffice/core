@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8f5d2dd_d6f4584d",
+        "filename": "sw/uiconfig/swriter/statusbar/statusbar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-12-13T00:27:06Z",
+      "side": 1,
+      "message": "In core/toolkit SAL_USE_VCLPLUGIN\u003dgen make JunitTest passes all tests for me with mandatory set \"true\"\nSAL_USE_VCLPLUGIN\u003dgtk3 and SAL_USE_VCLPLUGIN\u003dsvp fail\n\nhttps://gerrit.libreoffice.org/c/core/+/126714",
+      "range": {
+        "startLine": 21,
+        "startChar": 132,
+        "endLine": 21,
+        "endChar": 137
+      },
+      "revId": "0707380f05d4cce2d17eb74c4b871dcf17d3ac1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
