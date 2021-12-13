@@ -2562,7 +2562,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         if (bStealAttr)
             m_xCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
-        if (m_pLastAnchorPos || m_pPreviousNode || (m_xSFlyPara && m_xSFlyPara->xMainTextPos))
+        if (m_pLastAnchorPos || m_xPreviousNode || (m_xSFlyPara && m_xSFlyPara->xMainTextPos))
         {
             SwNodeIndex aToBeJoined(aPref, 1);
 
@@ -2580,12 +2580,12 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
                     m_pLastAnchorPos.reset();
             }
 
-            if (m_pPreviousNode)
+            if (m_xPreviousNode)
             {
                 //If the drop character start pos is here, then clear it.
-                SwNodeIndex aDropCharPos(*m_pPreviousNode);
+                SwNodeIndex aDropCharPos(*m_xPreviousNode->GetTextNode());
                 if (aDropCharPos == aToBeJoined)
-                    m_pPreviousNode = nullptr;
+                    m_xPreviousNode.reset();
             }
 
             if (m_xSFlyPara && m_xSFlyPara->xMainTextPos)

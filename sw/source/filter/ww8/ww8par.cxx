@@ -4025,7 +4025,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     tools::Long nCpOfs = m_xPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
 
     WW8_CP nNext = m_xPlcxMan->Where();
-    m_pPreviousNode = nullptr;
+    m_xPreviousNode.reset();
     sal_uInt8 nDropLines = 0;
     SwCharFormat* pNewSwCharFormat = nullptr;
     const SwCharFormat* pFormat = nullptr;
@@ -4057,7 +4057,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
         // If the previous paragraph was a dropcap then do not
         // create a new txtnode and join the two paragraphs together
-        if (bStartLine && !m_pPreviousNode) // Line end
+        if (bStartLine && !m_xPreviousNode) // Line end
         {
             bool bSplit = true;
             if (m_bCareFirstParaEndInToc)
@@ -4078,10 +4078,10 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             }
         }
 
-        if (m_pPreviousNode && bStartLine)
+        if (SwTextNode* pPreviousNode = (bStartLine && m_xPreviousNode) ? m_xPreviousNode->GetTextNode() : nullptr)
         {
             SwTextNode* pEndNd = m_pPaM->GetNode().GetTextNode();
-            const sal_Int32 nDropCapLen = m_pPreviousNode->GetText().getLength();
+            const sal_Int32 nDropCapLen = pPreviousNode->GetText().getLength();
 
             // Need to reset the font size and text position for the dropcap
             {
@@ -4108,12 +4108,12 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             SwPosition aStart(*pEndNd);
             m_xCtrlStck->NewAttr(aStart, aDrop);
             m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_DROP);
-            m_pPreviousNode = nullptr;
+            m_xPreviousNode.reset();
         }
         else if (m_bDropCap)
         {
             // If we have found a dropcap store the textnode
-            m_pPreviousNode = m_pPaM->GetNode().GetTextNode();
+            m_xPreviousNode.reset(new TextNodeListener(m_pPaM->GetNode().GetTextNode()));
 
             SprmResult aDCS;
             if (m_bVer67)
@@ -4124,7 +4124,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             if (aDCS.pSprm && aDCS.nRemainingData >= 1)
                 nDropLines = (*aDCS.pSprm) >> 3;
             else    // There is no Drop Cap Specifier hence no dropcap
-                m_pPreviousNode = nullptr;
+                m_xPreviousNode.reset();
 
             SprmResult aDistance = m_xPlcxMan->GetPapPLCF()->HasSprm(0x842F);
             if (aDistance.pSprm && aDistance.nRemainingData >= 2)
@@ -4196,7 +4196,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
         }
     }
 
-    m_pPreviousNode = nullptr;
+    m_xPreviousNode.reset();
 
     if (m_pPaM->GetPoint()->nContent.GetIndex())
         AppendTextNode(*m_pPaM->GetPoint());
@@ -4307,7 +4307,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_bLoadingTOXCache(false)
     , m_nEmbeddedTOXLevel(0)
     , m_bLoadingTOXHyperlink(false)
-    , m_pPreviousNode(nullptr)
     , m_bCareFirstParaEndInToc(false)
     , m_bCareLastParaEndInToc(false)
     , m_bNotifyMacroEventRead(false)
@@ -4685,9 +4684,9 @@ void wwExtraneousParas::delete_all_from_doc()
     auto aEnd = m_aTextNodes.rend();
     for (auto aI = m_aTextNodes.rbegin(); aI != aEnd; ++aI)
     {
-        const TextNodeListener& rListener = *aI;
-        SwTextNode *pTextNode = rListener.m_pTextNode;
-        pTextNode->Remove(const_cast<TextNodeListener*>(&rListener));
+        ExtraTextNodeListener& rListener = const_cast<ExtraTextNodeListener&>(*aI);
+        SwTextNode* pTextNode = rListener.GetTextNode();
+        rListener.StopListening(pTextNode);
 
         SwNodeIndex aIdx(*pTextNode);
         SwPaM aTest(aIdx);
@@ -4698,24 +4697,33 @@ void wwExtraneousParas::delete_all_from_doc()
 
 void wwExtraneousParas::insert(SwTextNode *pTextNode)
 {
-    auto it = m_aTextNodes.emplace(pTextNode, this).first;
-    const TextNodeListener& rListener = *it;
-    pTextNode->Add(const_cast<TextNodeListener*>(&rListener));
+    m_aTextNodes.emplace(pTextNode, this);
 }
 
 void wwExtraneousParas::remove_if_present(SwModify* pModify)
 {
     auto it = std::find_if(m_aTextNodes.begin(), m_aTextNodes.end(),
-        [pModify](const wwExtraneousParas::TextNodeListener& rEntry) { return rEntry.m_pTextNode == pModify; });
+        [pModify](const ExtraTextNodeListener& rEntry) { return rEntry.GetTextNode() == pModify; });
     if (it == m_aTextNodes.end())
         return;
     SAL_WARN("sw.ww8", "It is unexpected to drop a para scheduled for removal");
-    const TextNodeListener& rListener = *it;
-    pModify->Remove(const_cast<TextNodeListener*>(&rListener));
     m_aTextNodes.erase(it);
 }
 
-void wwExtraneousParas::TextNodeListener::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+TextNodeListener::TextNodeListener(SwTextNode* pTextNode)
+    : m_pTextNode(pTextNode)
+{
+    m_pTextNode->Add(this);
+}
+
+TextNodeListener::~TextNodeListener()
+{
+    if (!m_pTextNode)
+        return;
+    StopListening(m_pTextNode);
+}
+
+void TextNodeListener::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
@@ -4724,9 +4732,23 @@ void wwExtraneousParas::TextNodeListener::SwClientNotify(const SwModify& rModify
     // before wwExtraneousParas gets its chance to do so. Not the usual scenario,
     // indicates an underlying bug.
     if (pLegacy->GetWhich() == RES_OBJECTDYING)
-    {
-        m_pOwner->remove_if_present(const_cast<SwModify*>(&rModify));
-    }
+        removed(const_cast<SwModify*>(&rModify));
+}
+
+void TextNodeListener::StopListening(SwModify* pTextNode)
+{
+    pTextNode->Remove(this);
+    m_pTextNode = nullptr;
+}
+
+void TextNodeListener::removed(SwModify* pTextNode)
+{
+    StopListening(pTextNode);
+}
+
+void wwExtraneousParas::ExtraTextNodeListener::removed(SwModify* pTextNode)
+{
+    m_pOwner->remove_if_present(pTextNode);
 }
 
 void SwWW8ImplReader::StoreMacroCmds()
