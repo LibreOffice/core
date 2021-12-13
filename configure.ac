@@ -12496,7 +12496,7 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
      fi
    fi
 else
-    AC_MSG_RESULT([no (unsuppoted OS)])
+    AC_MSG_RESULT([no (unsupported OS)])
 fi
 AC_SUBST(ENABLE_GPGMEPP)
 AC_SUBST(SYSTEM_GPGMEPP)
