@@ -16,6 +16,29 @@
       "message": "I don\u0027t think so. If I was in the middle of editing a formula and inserted a sheet to reference it I would be annoyed if all my editing was gone. Rather accept the current input instead.\nI\u0027ll ad this as a bug comment as well.",
       "revId": "e646d426d1c4bce2c605b8fa71649dab468590f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c949098_844fe39a",
+        "filename": "sc/source/ui/view/tabcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-13T14:41:17Z",
+      "side": 1,
+      "message": "if (!pScMod-\u003eIsFormulaMode())\n    pScMod-\u003eInputEnterHandler();\n\nThis seems to work for \"commit change before creating sheet\", but that is just discovered by copy/paste of random bits of code that I don\u0027t understand. Highly likely not the right thing to do.",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 33
+      },
+      "revId": "e646d426d1c4bce2c605b8fa71649dab468590f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
