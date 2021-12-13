@@ -1,10 +1,6 @@
 ---
 assumeFilename: ucb/source/core/ucb.cxx
 excludelist:
-    ucb/source/ucp/cmis/std_outputstream.hxx:
-    - boost/shared_ptr.hpp
-    ucb/source/ucp/cmis/std_inputstream.hxx:
-    - boost/shared_ptr.hpp
     ucb/source/ucp/ftp/ftploaderthread.hxx:
     # Wrapper for external lib
     - curl.hxx
