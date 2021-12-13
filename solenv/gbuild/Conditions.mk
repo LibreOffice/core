@@ -11,4 +11,8 @@ define gb_CondBuildLockfile
 $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS))),$(1),$(2))
 endef
 
+define gb_CondSalTextEncodingLibrary
+$(if $(filter ANDROID,$(OS)),,$(if $(DISABLE_DYNLOADING),$(2),$(1)))
+endef
+
 # vim: set noet sw=4 ts=4:
