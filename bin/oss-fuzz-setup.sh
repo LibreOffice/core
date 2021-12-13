@@ -7,7 +7,8 @@ echo start downloading dependencies at `date -u`
 # convert FOO := BAR$(MICRO) to FOO=BAR$MICRO
 source <(sed -e's# := #=#g' download.lst | sed -e 's#[)(]##g')
 
-cd $SRC
+mkdir $SRC/external-tar
+cd $SRC/external-tar
 
 #cache build dependencies
 curl --no-progress-meter -S \
@@ -70,6 +71,9 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/$EPUBGEN_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$LIBNUMBERTEXT_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$QXP_TARBALL
+
+cd $SRC
+
 #fuzzing dictionaries
 curl --no-progress-meter -S \
     -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/gif.dict \
