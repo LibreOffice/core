@@ -13,7 +13,7 @@ gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uic
 
 MAKECMDGOALS?=build
 build_goal:=$(if $(filter build uicheck,$(MAKECMDGOALS)),build)\
- $(if $(filter check,$(MAKECMDGOALS)),unitcheck slowcheck subsequentcheck $(if $(filter Linux, $(shell uname)), uicheck))\
+ $(if $(filter check,$(MAKECMDGOALS)),unitcheck slowcheck subsequentcheck uicheck)\
  $(filter build-l10n-only build-non-l10n-only debugrun help showmodules translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo gbuildtojson,$(MAKECMDGOALS))
 
 SRCDIR := @SRC_ROOT@
