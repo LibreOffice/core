@@ -52,7 +52,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     CustomTarget_soffice \
 ))
 
-ifeq ($(USING_X11), TRUE)
+ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_targets,desktop,\
     Package_sbase_sh \
     Package_scalc_sh \
@@ -98,15 +98,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     WinResTarget_swriter \
 ))
 
-else ifeq ($(OS),MACOSX)
-
-else ifeq ($(OS),ANDROID)
-
-else ifeq ($(OS),iOS)
-
-else ifeq ($(OS),HAIKU)
-
-else
+else ifeq (,$(filter MACOSX ANDROID iOS HAIKU,$(OS)))
 
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_oosplash \

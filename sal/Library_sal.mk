@@ -131,19 +131,19 @@ $(eval $(call gb_Library_add_cxxflags,sal,\
 endif
 
 sal_textenc_code= \
-	sal/textenc/context \
-	sal/textenc/convertbig5hkscs \
-	sal/textenc/converteuctw \
-	sal/textenc/convertgb18030 \
-	sal/textenc/convertisciidevangari \
-	sal/textenc/convertiso2022cn \
-	sal/textenc/convertiso2022jp \
-	sal/textenc/convertiso2022kr \
-	sal/textenc/convertsinglebytetobmpunicode \
-	sal/textenc/tables \
-	sal/textenc/tcvtbyte \
-	sal/textenc/tcvtmb \
-	sal/textenc/tcvtutf7 \
+    sal/textenc/context \
+    sal/textenc/convertbig5hkscs \
+    sal/textenc/converteuctw \
+    sal/textenc/convertgb18030 \
+    sal/textenc/convertisciidevangari \
+    sal/textenc/convertiso2022cn \
+    sal/textenc/convertiso2022jp \
+    sal/textenc/convertiso2022kr \
+    sal/textenc/convertsinglebytetobmpunicode \
+    sal/textenc/tables \
+    sal/textenc/tcvtbyte \
+    sal/textenc/tcvtmb \
+    sal/textenc/tcvtutf7 \
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_exception_objects,sal,\

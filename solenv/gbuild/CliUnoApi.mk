@@ -24,7 +24,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--assembly-description "This assembly contains metadata for the LibreOffice API." \
 		--assembly-version $(CLI_UNOAPI_VERSION) \
 		--keyfile $(CLI_UNOAPI_KEYFILE) \
-		$(if $(verbose),--verbose) \
+		$(if $(gb_VERBOSE),--verbose) \
 		$(foreach api,$(CLI_UNOAPI_DEPS),-X $(api)) \
 		$(foreach assembly,$(CLI_UNOAPI_ASSEMBLIES),-r $(assembly)) \
 		$(CLI_UNOAPI_API) \
