@@ -128,6 +128,18 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
     delete pVictim;
 }
 
+void SwGluePortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwGluePortion"));
+    SwLinePortion::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("fix-width"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(m_nFixWidth).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 /**
  * We're expecting a frame-local SwRect!
  */
