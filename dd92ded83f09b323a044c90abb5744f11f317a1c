@@ -34,6 +34,24 @@
       "parentUuid": "3752a688_da3c132c",
       "revId": "dd92ded83f09b323a044c90abb5744f11f317a1c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3380be_48a2b428",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-13T09:38:29Z",
+      "side": 1,
+      "message": "\u003e I\u0027ll look into this, but it should be handled separately as its own bug.\n\nhttp://gerrit.libreoffice.org/c/core/+/126723",
+      "parentUuid": "6a3b6976_0eb3b2e3",
+      "revId": "dd92ded83f09b323a044c90abb5744f11f317a1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
