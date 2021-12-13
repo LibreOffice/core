@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec064662_76bbead2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-12-13T15:02:12Z",
+      "side": 1,
+      "message": "Note that the EXIF rotation feature does not work in Calc/Impress on DnD, unlike in Writer.\nThat should be a separate enhancement request - see also bug 116438.",
+      "revId": "60058d8d87842ff0f208bc2b3b6df13b4baf8242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
