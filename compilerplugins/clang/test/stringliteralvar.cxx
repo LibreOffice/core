@@ -81,7 +81,7 @@ void f8()
 
 void f9()
 {
-    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]') to OUStringLiteral [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]'{{( \(aka 'const char16_t\[3\]'\))?}}) to OUStringLiteral [loplugin:stringliteralvar]}}
     static sal_Unicode const literal[] = { 'f', 'o', 'o' };
     // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
     f(OUString(literal, SAL_N_ELEMENTS(literal)));
@@ -89,7 +89,7 @@ void f9()
 
 void f10()
 {
-    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]') to OUStringLiteral [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]'{{( \(aka 'const char16_t\[3\]'\))?}}) to OUStringLiteral [loplugin:stringliteralvar]}}
     static sal_Unicode const literal[] = { 'f', 'o', 'o' };
     // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
     f(OUString(literal, 3));
