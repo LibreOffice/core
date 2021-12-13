@@ -1803,7 +1803,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         return;
     }
 
-    if ( !(nTab != aViewData.GetTabNo() || bNew) )
+    if (!bNew && nTab == aViewData.GetTabNo())
         return;
 
     // FormShell would like to be informed before the switch
