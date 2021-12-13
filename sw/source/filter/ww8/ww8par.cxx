@@ -1896,7 +1896,7 @@ void SwWW8ImplReader::ImportDop()
 
     // COMPATIBILITY FLAGS END
 
-    // Import magic doptypography information, if its there
+    // Import magic doptypography information, if it's there
     if (m_xWwFib->m_nFib > 105)
         ImportDopTypography(m_xWDop->doptypography);
 
