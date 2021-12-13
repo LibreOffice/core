@@ -201,6 +201,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/RagTimeSpreadsheet \
 	UnpackedTarball/libmwaw/src/lib/RagTimeStruct \
 	UnpackedTarball/libmwaw/src/lib/RagTimeText \
+	UnpackedTarball/libmwaw/src/lib/ReadySetGoParser \
+	UnpackedTarball/libmwaw/src/lib/ScoopParser \
+	UnpackedTarball/libmwaw/src/lib/ScriptWriterParser \
 	UnpackedTarball/libmwaw/src/lib/StudentWritingCParser \
 	UnpackedTarball/libmwaw/src/lib/StyleParser \
 	UnpackedTarball/libmwaw/src/lib/SuperPaintParser \
