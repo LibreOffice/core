@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88b45037_f5f25069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T07:03:46Z",
+      "side": 1,
+      "message": "Thank you. Please also fix the formatting.",
+      "revId": "52b85f69e2e28bd981e1df89f0cb0e4bb444f38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71199ba5_09146b61",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4060,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T07:03:46Z",
+      "side": 1,
+      "message": "Please keep the formatting as it was before.",
+      "revId": "52b85f69e2e28bd981e1df89f0cb0e4bb444f38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
