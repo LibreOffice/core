@@ -16,6 +16,23 @@
       "message": "It should work now as in any other IDE. Maybe you could take a look. Thank you",
       "revId": "eefc8e9d47cc496a7814ed15b58190965fd76f86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da96562f_0bfb3b79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-13T06:53:56Z",
+      "side": 1,
+      "message": "Looks great! Thanks!",
+      "revId": "eefc8e9d47cc496a7814ed15b58190965fd76f86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
