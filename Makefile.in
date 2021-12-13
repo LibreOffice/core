@@ -463,13 +463,13 @@ create-partial-info:
 	$(MAKE) -f $(SRCDIR)/Makefile.gbuild create-partial-info
 
 dump-deps:
-	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild
+	@$(SRCDIR)/bin/module-deps.pl $(if $(verbose),-v) $(MAKE) $(SRCDIR)/Makefile.gbuild
 
 dump-deps-png:
-	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
+	@$(SRCDIR)/bin/module-deps.pl $(if $(verbose),-v) $(MAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
 
 dump-deps-sort:
-	@$(SRCDIR)/bin/module-deps.pl -t $(MAKE) $(SRCDIR)/Makefile.gbuild
+	@$(SRCDIR)/bin/module-deps.pl -t $(if $(verbose),-v) $(MAKE) $(SRCDIR)/Makefile.gbuild
 
 clang-format-check:
 	@$(SRCDIR)/solenv/clang-format/check-last-commit
