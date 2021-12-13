@@ -16,6 +16,142 @@
       "message": "I think I fixed the merge conflict and got rid of .gitignore.",
       "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cddc0c23_6666f228",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "Please remove this comment.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e77cdd37_aba070d6",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "Also this.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a10cc365_5951f23c",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "Also this one.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9410859_6f5568ce",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "Also this one.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d1db2c7_c325ab25",
+        "filename": "chart2/source/view/main/PolarLabelPositionHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "Also this one.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38ce49b0_c0e4736b",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "Also this one.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e20fa5f_51c65fb7",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4261,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "I think the code between line 4261 and 4292 can be greatly simplified if you look closer into the parameters you are sending to the atan2, and the formula here (from Wikipedia):\nhttps://dev.blog.documentfoundation.org/2021/11/17/use-atan2-function-instead-of-atan-easyhack/\nConsider atan(y, x), then:\n    if( pal-\u003ept[1].x \u003d\u003d pal-\u003ept[0].x ) -\u003e x \u003d\u003d 0 \n    if( pal-\u003ept[0].y \u003c pal-\u003ept[1].y ) -\u003e y \u003c 0\nThen you know from the formula that \"if x\u003d\u003d0 and y\u003c0\" then the output of atan2(y,x) would be -M_PI_2",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2af1ea4f_6f642856",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4282,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T05:58:47Z",
+      "side": 1,
+      "message": "You may also get rid of most of the subsequent conditions by using atan2. Please take a closer look to the parameters you are sending to atan2, and compare them to the conditions.",
+      "revId": "fe8887a38fe5d900f3cb0c3ea719b497d96e7c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
