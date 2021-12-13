@@ -408,8 +408,15 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     // If the cursor position isn't on a redline, disable
                     // accepting/rejecting changes.
-                    if (nullptr == pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), nullptr))
+                    SwTableBox* pTableBox;
+                    if (nullptr == pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), nullptr) &&
+                       // except in the case of an inserted or deleted table row
+                       ( !m_pWrtShell->IsCursorInTable() ||
+                           (pTableBox = pCursor->Start()->nNode.GetNode().GetTableBox() ) == nullptr ||
+                           RedlineType::None == pTableBox->GetUpper()->GetRedlineType() ) )
+                    {
                         bDisable = true;
+                    }
                 }
 
                 // LibreOfficeKit wants to handle changes by index, so always allow here.
