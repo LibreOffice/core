@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3d1640f_c0b4f480",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-13T12:35:50Z",
+      "side": 1,
+      "message": "Without this autogen.sh doesn\u0027t succeed on Fedora 35. ",
+      "revId": "9a261c4df60a2de222ffc5813915402fe91b4c81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
