@@ -818,7 +818,6 @@ disable_database_connectivity_dependencies()
 # This is also true for most test_* variables.
 # ===================================================================
 build_crypto=yes
-test_cmis=yes
 test_gdb_index=no
 test_openldap=yes
 test_split_debug=no
@@ -967,7 +966,7 @@ ios*) # iOS
     using_vclplug=no
     using_x11=no
     build_crypto=no
-    test_cmis=no
+    test_libcmis=no
     test_openldap=no
     test_webdav=no
     if test -n "$LODE_HOME" ; then
@@ -1108,7 +1107,7 @@ emscripten)
     using_x11=no
     test_openldap=no
     enable_compiler_plugins=no
-    test_cmis=no
+    test_libcmis=no
     test_webdav=no
     enable_database_connectivity=no
     enable_lpsolve=no
@@ -1950,16 +1949,6 @@ libo_FUZZ_ARG_ENABLE(librelogo,
         [Do not build LibreLogo.]),
 ,enable_librelogo=yes)
 
-AC_ARG_ENABLE(cmis,
-    AS_HELP_STRING([--disable-cmis],
-        [Disable CMIS support.]),
-,enable_cmis=yes)
-
-AC_ARG_ENABLE(curl,
-    AS_HELP_STRING([--disable-curl],
-        [Disable CURL support.]),
-,enable_curl=yes)
-
 AC_ARG_ENABLE(wasm-strip,
     AS_HELP_STRING([--enable-wasm-strip],
         [Strip the static build like for WASM/emscripten platform.]),
@@ -2357,11 +2346,6 @@ AC_ARG_WITH(system-bluez,
     AS_HELP_STRING([--with-system-bluez],
         [Use bluetooth.h already on system.]),,
     [with_system_bluez="$with_system_headers"])
-
-AC_ARG_WITH(system-curl,
-    AS_HELP_STRING([--with-system-curl],
-        [Use curl already on system.]),,
-    [with_system_curl=auto])
 
 AC_ARG_WITH(system-boost,
     AS_HELP_STRING([--with-system-boost],
@@ -5526,6 +5510,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-gstreamer-1-0 \
         --disable-gtk3 \
         --disable-gtk4 \
+        --disable-libcmis \
         --disable-mariadb-sdbc \
         --disable-nss \
         --disable-online-update \
@@ -7294,14 +7279,7 @@ AC_SUBST(GPERF)
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-# libcmis requires curl and we can't build curl for iOS
-if test "$test_cmis" = "yes" -a "$enable_cmis" = "yes"; then
-    libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2])
-    ENABLE_LIBCMIS=TRUE
-else
-    ENABLE_LIBCMIS=
-fi
-AC_SUBST(ENABLE_LIBCMIS)
+libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2],,,,TRUE)
 
 dnl ===================================================================
 dnl C++11
@@ -10304,30 +10282,7 @@ AC_SUBST(LIBTOMMATH_LIBS)
 dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
-AC_MSG_CHECKING([which libcurl to use])
-if test "$with_system_curl" = "auto"; then
-    with_system_curl="$with_system_libs"
-fi
-
-if test "$enable_curl" = "yes" -a "$with_system_curl" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_CURL=TRUE
-
-    PKG_CHECK_MODULES(CURL, libcurl >= 7.68.0)
-
-    ENABLE_CURL=TRUE
-elif test "$enable_curl" = "no"; then
-    AC_MSG_RESULT([none])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_CURL=
-    BUILD_TYPE="$BUILD_TYPE CURL"
-    ENABLE_CURL=TRUE
-fi
-AC_SUBST(SYSTEM_CURL)
-AC_SUBST(CURL_CFLAGS)
-AC_SUBST(CURL_LIBS)
-AC_SUBST(ENABLE_CURL)
+libo_CHECK_SYSTEM_MODULE([curl],[CURL],[libcurl >= 7.68.0],,,,TRUE)
 
 dnl ===================================================================
 dnl Check for system boost
