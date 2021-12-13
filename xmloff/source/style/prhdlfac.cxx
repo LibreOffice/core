@@ -200,6 +200,9 @@ std::unique_ptr<XMLPropertyHandler> XMLPropertyHandlerFactory::CreatePropertyHan
         case XML_TYPE_PERCENT16 :
             pPropHdl.reset(new XMLPercentPropHdl( 2 ));
             break;
+        case XML_TYPE_PERCENT100:
+            pPropHdl.reset(new XML100thPercentPropHdl);
+            break;
         case XML_TYPE_DOUBLE_PERCENT :
             pPropHdl.reset(new XMLDoublePercentPropHdl);
             break;

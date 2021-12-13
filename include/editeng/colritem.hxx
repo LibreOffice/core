@@ -83,6 +83,10 @@ public:
         maTintShade = nTintOrShade;
     }
 
+    sal_Int16 GetLumMod() const { return mnLumMod; }
+
+    sal_Int16 GetLumOff() const { return mnLumOff; }
+
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
