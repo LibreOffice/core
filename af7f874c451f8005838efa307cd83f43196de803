@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2094ea87_cce05400",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6427,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2021-12-13T11:57:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79fdd9f6_ffd30416",
+      "range": {
+        "startLine": 6427,
+        "startChar": 17,
+        "endLine": 6427,
+        "endChar": 41
+      },
+      "revId": "af7f874c451f8005838efa307cd83f43196de803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95605420_3ddf9ac5",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-12-09T08:11:48Z",
       "side": 1,
       "message": "Should we log a warning with the exception message here?",
+      "revId": "af7f874c451f8005838efa307cd83f43196de803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93136629_dc8e4e7f",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6435,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2021-12-13T11:57:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95605420_3ddf9ac5",
       "revId": "af7f874c451f8005838efa307cd83f43196de803",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
