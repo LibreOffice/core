@@ -16,6 +16,24 @@
       "message": "Nice idea, works.\n\nBut there\u0027s an odd result if more than one MRU would match, then it displays only one. That might be due to how the actual three matches are picked, I didn\u0027t investigate deeper.\nFor example, have ABS and AND in the MRU, then start typing \u003da\nsuggests \"[AND], ACCRINT, ACCRINTM and 22 more\", ABS is even at the end of the list when travelling through with Ctrl+Tab.\nExpected would be \"[ABS], AND, ACCRINT and 22 more\" (well, my expectation..).\n",
       "revId": "dd92ded83f09b323a044c90abb5744f11f317a1c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3b6976_0eb3b2e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-12-13T08:37:03Z",
+      "side": 1,
+      "message": "The first item in the entire list (previously ABS) is an exception because it is always entered last (after ZTEST) based on the way FindTextAll re-loops (ever since 5.2\u0027s three suggestions). I noticed that anomaly while developing this. [Try typing \u003da prior to my fix and you will find ABS at the end of the list.]\n\nAssuming a clean user profile, \"AVERAGE\" is in the MRU by default, and now with my patch\u0027s prioritization it ends up being item #1 (instead of ABS), so it is now sorted dead last. Thus everything other than \"\u003da\" should work as expected. (See MAX,MIN,match instead of match,max,maxa for an easy example)\n\nI\u0027ll look into this, but it should be handled separately as its own bug.",
+      "parentUuid": "3752a688_da3c132c",
+      "revId": "dd92ded83f09b323a044c90abb5744f11f317a1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
