@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Code-Review+1: Justin Luth <jluth@mail.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Mon, 13 Dec 2021 22:18:06 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/126499
+Project: core
+Branch: refs/heads/master
