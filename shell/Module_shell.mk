@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,shell))
 
-ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_lngconvex \
 ))

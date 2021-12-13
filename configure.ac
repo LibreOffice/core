@@ -2987,14 +2987,6 @@ if test -z "$enable_extensions"; then
     fi
 fi
 
-if test "$enable_extensions" = yes; then
-    BUILD_TYPE="$BUILD_TYPE EXTENSIONS"
-    AC_DEFINE(HAVE_FEATURE_EXTENSIONS)
-else
-    enable_extension_integration=no
-    enable_extension_update=no
-fi
-
 DISABLE_SCRIPTING=''
 if test "$enable_scripting" = yes; then
     BUILD_TYPE="$BUILD_TYPE SCRIPTING"
@@ -3019,6 +3011,14 @@ else
     DISABLE_DYNLOADING='TRUE'
 fi
 AC_SUBST(DISABLE_DYNLOADING)
+
+if test "$enable_extensions" = yes; then
+    BUILD_TYPE="$BUILD_TYPE EXTENSIONS"
+    AC_DEFINE(HAVE_FEATURE_EXTENSIONS)
+else
+    enable_extension_integration=no
+    enable_extension_update=no
+fi
 
 # remember SYSBASE value
 AC_SUBST(SYSBASE)
@@ -11582,7 +11582,6 @@ if test "x$enable_qt6" = "xyes"; then
 fi
 AC_SUBST(ENABLE_QT6)
 
-
 ENABLE_KF5=""
 if test "x$enable_kf5" = "xyes"; then
     ENABLE_KF5="TRUE"
@@ -12414,15 +12413,13 @@ AC_SUBST([HAVE_LO_CLANG_DLLEXPORTINLINES])
 
 SYSTEM_GPGMEPP=
 
+AC_MSG_CHECKING([whether to enable gpgmepp])
 if test "$enable_gpgmepp" = no; then
-    AC_MSG_CHECKING([whether to enable gpgmepp])
     AC_MSG_RESULT([no])
 elif test "$enable_mpl_subset" = "yes"; then
-    AC_MSG_CHECKING([whether gpgmepp should be disabled due to building just MPL])
-    AC_MSG_RESULT([yes])
+    AC_MSG_RESULT([no (MPL only])
 elif test "$enable_fuzzers" = "yes"; then
-    AC_MSG_CHECKING([whether gpgmepp should be disabled due to oss-fuzz])
-    AC_MSG_RESULT([yes])
+    AC_MSG_RESULT([no (oss-fuzz)])
 elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     dnl ===================================================================
     dnl Check for system gpgme
@@ -12498,6 +12495,8 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
         AC_MSG_RESULT([no])
      fi
    fi
+else
+    AC_MSG_RESULT([no (unsuppoted OS)])
 fi
 AC_SUBST(ENABLE_GPGMEPP)
 AC_SUBST(SYSTEM_GPGMEPP)

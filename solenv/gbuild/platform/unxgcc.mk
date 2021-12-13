@@ -103,6 +103,8 @@ gb_LinkTarget__cmd_lockfile = $(if $(LOCKFILE),$(LOCKFILE),$(call gb_Executable_
 gb_LinkTarget__Lock := $(WORKDIR)/LinkTarget/link.lock
 gb_LinkTarget__WantLock = $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS)),$(filter TRUE,$(DISABLE_DYNLOADING)),$(filter CppunitTest Executable,$(TARGETTYPE))),$(true))
 
+gb_LinkTarget__NeedsCxxLinker = $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(true))
+
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
 # link with C compiler if there are no C++ files (pyuno_wrapper depends on this)
@@ -113,7 +115,7 @@ gb_LinkTarget__WantLock = $(if $(and $(filter-out ANDROID MACOSX iOS WNT,$(OS)),
 define gb_LinkTarget__command_dynamiclink
 $(if $(gb_LinkTarget__WantLock),$(gb_LinkTarget__cmd_lockfile) -r -1 $(gb_LinkTarget__Lock))
 $(call gb_Helper_abbreviate_dirs,\
-	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
+	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(T_LTOFLAGS) \
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--soname=$(notdir $(1)) \
@@ -132,13 +134,13 @@ $(call gb_Helper_abbreviate_dirs,\
 		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
 		    $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		    $(T_LIBS) \
-		    $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(T_STDLIBS_CXX)) \
+		    $(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
 		    -Wl$(COMMA)--end-group \
-		    , \
+		, \
 		    -Wl$(COMMA)--start-group \
 		    $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		    $(T_LIBS) \
-		    $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(T_STDLIBS_CXX)) \
+		    $(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
 		    -Wl$(COMMA)--end-group \
 		    -Wl$(COMMA)--no-as-needed \
 		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
@@ -146,13 +148,13 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) \
 	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)) \
 	$(if $(gb_LinkTarget__WantLock),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
-	$(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
-		$(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
-		$(NM) $(gb_LTOPLUGINFLAGS) --dynamic --extern-only --defined-only --format=posix $(1) \
-			| cut -d' ' -f1-2 \
-			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
-		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
-			$(WORKDIR)/LinkTarget/$(2).exports,$(1))))
+
+$(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
+    $(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
+    $(NM) $(gb_LTOPLUGINFLAGS) --dynamic --extern-only --defined-only --format=posix $(1) \
+        | cut -d' ' -f1-2 >> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
+    $(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
+        $(WORKDIR)/LinkTarget/$(2).exports,$(1))))
 endef
 
 define gb_LinkTarget__command_staticlink

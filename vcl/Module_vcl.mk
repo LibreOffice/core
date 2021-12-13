@@ -31,15 +31,16 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Package_skia_denylist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-        $(if $(ENABLE_MACOSX_SANDBOX),, \
-            $(if $(DISABLE_GUI),, \
-                Executable_ui-previewer)) \
-        $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
-            $(if $(DISABLE_GUI),, \
+        $(if $(DISABLE_GUI),, \
+            $(if $(ENABLE_MACOSX_SANDBOX),, \
+                Executable_ui-previewer) \
+            $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
                 Executable_vcldemo \
                 Executable_icontest \
                 Executable_visualbackendtest \
-                Executable_mtfdemo ))) \
+                Executable_mtfdemo \
+            ) \
+    )) \
 ))
 
 ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
@@ -72,29 +73,34 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk3 \
 ))
 endif
+
 ifneq ($(ENABLE_GTK4),)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk4 \
 ))
 endif
+
 ifneq ($(ENABLE_KF5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_kf5_moc \
     Library_vclplug_kf5 \
 ))
 endif
+
 ifneq ($(ENABLE_QT5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_qt5_moc \
     Library_vclplug_qt5 \
 ))
 endif
+
 ifneq ($(ENABLE_QT6),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_qt6_moc \
     Library_vclplug_qt6 \
 ))
 endif
+
 ifneq ($(ENABLE_GTK3_KDE5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_gtk3_kde5_moc \

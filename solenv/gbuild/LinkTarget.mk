@@ -45,10 +45,9 @@ gb_LinkTarget__symbols_enabled = \
 
 # debug flags, if the LinkTarget is named in the list of libraries of ENABLE_SYMBOLS_FOR
 gb_LinkTarget__get_debugflags= \
-$(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS), \
-$(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS), \
-$(gb_COMPILERNOOPTFLAGS))) \
-$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS))
+    $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS), \
+        $(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS),$(gb_COMPILERNOOPTFLAGS))) \
+    $(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS))
 
 # similar for LDFLAGS, use linker optimization flags in non-debug case,
 # but moreover strip debug from libraries for which debuginfo is not wanted
