@@ -813,7 +813,7 @@ private:
 
     SAL_DLLPRIVATE void         DrawGradientToMetafile( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
     SAL_DLLPRIVATE void         DrawLinearGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
+    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient, tools::Long nStepCount );
 
     SAL_DLLPRIVATE tools::Long  GetLinearGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf);
     SAL_DLLPRIVATE tools::Long  GetComplexGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf);

@@ -244,7 +244,7 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
     if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial )
         mpMetaFile->AddAction(new MetaLinearGradientAction(aRect, aGradient, GetLinearGradientSteps(rGradient, aRect, true)));
     else
-        DrawComplexGradientToMetafile( aRect, aGradient );
+        DrawComplexGradientToMetafile(aRect, aGradient, GetComplexGradientSteps(rGradient, aRect, true));
 }
 
 namespace
@@ -801,7 +801,8 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
 }
 
 void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
-                                                  const Gradient& rGradient )
+                                                  const Gradient& rGradient,
+                                                  tools::Long nStepCount )
 {
     assert(!is_double_buffered_window());
 
@@ -817,9 +818,6 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
 
     std::optional<tools::PolyPolygon> xPolyPoly;
     xPolyPoly = tools::PolyPolygon( 2 );
-
-    // last parameter - true if complex gradient, false if linear
-    tools::Long nStepCount = GetComplexGradientSteps(rGradient, rRect, true);
 
     // at least three steps and at most the number of colour differences
     tools::Long nSteps = std::max(nStepCount, tools::Long(2));
@@ -1049,7 +1047,7 @@ void OutputDevice::AddGradientActions( const tools::Rectangle& rRect, const Grad
     if( aGradient.GetStyle() == GradientStyle::Linear || aGradient.GetStyle() == GradientStyle::Axial )
         DrawLinearGradientToMetafile( aRect, aGradient );
     else
-        DrawComplexGradientToMetafile( aRect, aGradient );
+        DrawComplexGradientToMetafile( aRect, aGradient, GetComplexGradientSteps(rGradient, rRect, true) );
 
     mpMetaFile->AddAction( new MetaPopAction() );
     mpMetaFile = pOldMtf;
