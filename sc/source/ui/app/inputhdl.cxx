@@ -258,7 +258,7 @@ ScTypedCaseStrSet::const_iterator findTextAll(
         ScTypedCaseStrSet::const_iterator it, itEnd;
         it = itPos;
         if ( it == rDataSet.end() )
-            it = rDataSet.begin();
+            it = --rDataSet.end();
         itEnd = it;
         bool bFirstTime = true;
 
