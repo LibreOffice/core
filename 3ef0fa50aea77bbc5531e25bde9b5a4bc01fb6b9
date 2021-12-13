@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "209eec5e_0e3ac21e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-12-13T13:09:12Z",
+      "side": 1,
+      "message": "It is very unlikely that the Cypress test failure is caused by this change, right?",
+      "revId": "3ef0fa50aea77bbc5531e25bde9b5a4bc01fb6b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
