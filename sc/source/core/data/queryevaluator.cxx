@@ -128,9 +128,10 @@ bool ScQueryEvaluator::isTestWildOrRegExp(const ScQueryEntry& rEntry) const
     return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);
 }
 
-bool ScQueryEvaluator::isQueryByValue(const ScQueryEntry::Item& rItem, const ScRefCellValue& rCell)
+bool ScQueryEvaluator::isQueryByValue(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+                                      const ScRefCellValue& rCell)
 {
-    if (rItem.meType == ScQueryEntry::ByString)
+    if (rItem.meType == ScQueryEntry::ByString || isPartialTextMatchOp(rEntry))
         return false;
 
     return isQueryByValueForCell(rCell);
@@ -270,9 +271,8 @@ std::pair<bool, bool> ScQueryEvaluator::compareByValue(const ScRefCellValue& rCe
             bOk = !::rtl::math::approxEqual(nCellVal, fQueryVal);
             break;
         default:
-        {
-            // added to avoid warnings
-        }
+            assert(false);
+            break;
     }
 
     return std::pair<bool, bool>(bOk, bTestEqual);
@@ -412,9 +412,8 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
                     bOk = !(bMatch && (nEnd == rValue.getLength()));
                     break;
                 default:
-                {
-                    // added to avoid warnings
-                }
+                    assert(false);
+                    break;
             }
         }
         else
@@ -545,9 +544,8 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
                         bOk = (nStrPos < 0);
                         break;
                     default:
-                    {
-                        // added to avoid warnings
-                    }
+                        assert(false);
+                        break;
                 }
             }
         }
@@ -575,9 +573,8 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
                         bTestEqual = (nCompare == 0);
                     break;
                 default:
-                {
-                    // added to avoid warnings
-                }
+                    assert(false);
+                    break;
             }
         }
     }
@@ -845,7 +842,7 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
             aRes.first |= aThisRes.first;
             aRes.second |= aThisRes.second;
         }
-        else if (isQueryByValue(rItem, aCell))
+        else if (isQueryByValue(rEntry, rItem, aCell))
         {
             std::pair<bool, bool> aThisRes = compareByValue(aCell, nCol, nRow, rEntry, rItem);
             aRes.first |= aThisRes.first;
