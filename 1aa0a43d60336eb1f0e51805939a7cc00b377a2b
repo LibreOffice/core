@@ -16,6 +16,24 @@
       "message": "Andreas, thanks for implementing this feature. Should we cherry-pick it for 7.3 ?",
       "revId": "1aa0a43d60336eb1f0e51805939a7cc00b377a2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce2aab1_f6bc5fbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-12-13T17:24:14Z",
+      "side": 1,
+      "message": "I normally let Xisco decided whether he cherry picks it to an older branch 😀",
+      "parentUuid": "869b6537_2ab3c79c",
+      "revId": "1aa0a43d60336eb1f0e51805939a7cc00b377a2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
