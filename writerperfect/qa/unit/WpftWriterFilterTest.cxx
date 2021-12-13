@@ -44,6 +44,7 @@ void WpftWriterFilterTest::test()
         { "RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
         { "RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
         { "RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6) },
+        { "ScriptWriter", REQUIRE_MWAW_VERSION(0, 3, 21) },
         { "StudentWritingCenter", REQUIRE_MWAW_VERSION(0, 3, 20) },
         { "WordMaker", REQUIRE_MWAW_VERSION(0, 3, 20) },
     };
