@@ -86,6 +86,8 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         return True
     if include == "boost/intrusive_ptr.hpp" and "boost/smart_ptr/intrusive_ptr.hpp" in toAdd:
         return True
+    if include == "boost/shared_ptr.hpp" and "boost/smart_ptr/shared_ptr.hpp" in toAdd:
+        return True
     if include == "boost/variant.hpp" and "boost/variant/variant.hpp" in toAdd:
         return True
     if include == "boost/unordered_map.hpp" and "boost/unordered/unordered_map.hpp" in toAdd:
