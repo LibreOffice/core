@@ -16,6 +16,24 @@
       "message": "It is very unlikely that the Cypress test failure is caused by this change, right?",
       "revId": "3ef0fa50aea77bbc5531e25bde9b5a4bc01fb6b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e99f912_3bd4b369",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-13T13:16:50Z",
+      "side": 1,
+      "message": "I also thought so; I resumed and rebased it in the hope it gets past the problem. But it is very stubborn, and I\u0027m confused.",
+      "parentUuid": "209eec5e_0e3ac21e",
+      "revId": "3ef0fa50aea77bbc5531e25bde9b5a4bc01fb6b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
