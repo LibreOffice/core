@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dad94f24_82ac8d09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T23:33:18Z",
+      "side": 1,
+      "message": "I think changes on \u0027chart2/source/tools/ThreeDHelper.cxx\u0027 should be revised. Many additions of ±M_PI or ±M_PI_2 are ignored. Please take a look. Changes on the other 2 files seem to be OK.",
+      "revId": "8b6c6e8ac55474993a6f1df693c86d311ef3715b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c695965_e437ac57",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 4066,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-13T23:33:18Z",
+      "side": 1,
+      "message": "Please remove this extra blank line.",
+      "revId": "8b6c6e8ac55474993a6f1df693c86d311ef3715b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
