@@ -118,9 +118,10 @@ void XMLTextStyleContext::SetAttribute( sal_Int32 nElement,
         case XML_ELEMENT(STYLE, XML_LIST_LEVEL):
         {
             sal_Int32 nTmp;
-            if (sax::Converter::convertNumber(nTmp, rValue) && nTmp >= 0 && nTmp <= 10)
+            // The spec is positiveInteger (1-based), but the implementation is 0-based.
+            if (sax::Converter::convertNumber(nTmp, rValue) && nTmp > 0 && nTmp <= 10)
             {
-                m_aListLevel.emplace(nTmp);
+                m_aListLevel.emplace(--nTmp);
             }
             break;
         }
