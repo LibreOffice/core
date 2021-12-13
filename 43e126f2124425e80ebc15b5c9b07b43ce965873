@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc25630_4da57624",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-13T12:43:56Z",
+      "side": 1,
+      "message": "Note that calling a function does not mean the operation also gets executed by the function, the operation may only get queued for later. For example BitmapEx::Scale() does not actually scale the bitmap if the Skia backend is used, it\u0027s only flagged and then scaled only when needed. Drawing commands with Skia/Vulkan get only queued for the GPU and then flushed at once somewhen later. Even the GetBitmap() call, although it theoretically should ensure all drawing is done, might not necessarily do it as long as you don\u0027t use the bitmap.\n\nSo if you want to measure how long something takes, you need to make sure that the operation actually takes place, and also that you do not include delayed operations from before. That should generally be done by calling Flush() on the relevant object before measuring time. To make things even more complicated, it seems that Flush() is empty for OutputDevice and only implemented for WindowOutputDevice, so that would need to be added.",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
