@@ -827,8 +827,59 @@ void SwView::Execute(SfxRequest &rReq)
                 else
                     pRedline = pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline);
 
-                assert(pRedline != nullptr);
-                if (pRedline)
+                // accept or reject table row deletion or insertion
+                bool bTableChange = false;
+                if ( !pRedline && m_pWrtShell->IsCursorInTable() )
+                {
+                    nRedline = 0;
+                    auto pTabLine = pCursor->Start()->nNode.GetNode().GetTableBox()->GetUpper();
+
+                    if ( RedlineType::None != pTabLine->GetRedlineType() )
+                    {
+                        nRedline = pTabLine->UpdateTextChangesOnly(nRedline);
+
+                        if ( nRedline != SwRedlineTable::npos )
+                        {
+                            bTableChange = true;
+
+                            SwWrtShell& rSh = GetWrtShell();
+                            SwRewriter aRewriter;
+
+                            aRewriter.AddRule(UndoArg1, SwResId(
+                                rRedlineTable[nRedline]->GetType() == RedlineType::Delete
+                                    ? STR_REDLINE_TABLE_ROW_DELETE
+                                    : STR_REDLINE_TABLE_ROW_INSERT ));
+
+                            SwUndoId eUndoId =
+                                (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
+                                    ? SwUndoId::ACCEPT_REDLINE
+                                    : SwUndoId::REJECT_REDLINE;
+
+                            rSh.StartUndo( eUndoId, &aRewriter);
+                            while ( nRedline != SwRedlineTable::npos && nRedline < rRedlineTable.size() )
+                            {
+                                pRedline = rRedlineTable[nRedline];
+
+                                // until next redline is not in the same row
+                                SwTableBox* pTableBox = pRedline->Start()->nNode.GetNode().GetTableBox();
+                                if ( !pTableBox || pTableBox->GetUpper() != pTabLine )
+                                    break;
+
+                                if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
+                                    m_pWrtShell->AcceptRedline(nRedline);
+                                else
+                                    m_pWrtShell->RejectRedline(nRedline);
+                            }
+                            rSh.EndUndo( eUndoId, &aRewriter);
+                        }
+                    }
+                }
+                else
+                {
+                    assert(pRedline != nullptr);
+                }
+
+                if (pRedline && !bTableChange)
                 {
                     if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
                         m_pWrtShell->AcceptRedline(nRedline);
