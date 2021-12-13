@@ -694,6 +694,7 @@ OUString lcl_getDragParameterString( const OUString& rCID )
 bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
 {
     bool result = false;
+    tools::Long nSignX = mbNegativeX ? -1 : 1;
     if (OutputDevice* pOutDev = mpMarkedPV ? mpMarkedPV->GetView().GetFirstOutputDevice() : nullptr)
     {
         bool bConvertUnit = false;
@@ -726,7 +727,7 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
                 {
                     rPoint = o3tl::convert(rPoint, o3tl::Length::mm100, o3tl::Length::twip);
                 }
-                point.put("x", rPoint.getX());
+                point.put("x", nSignX * rPoint.getX());
                 point.put("y", rPoint.getY());
                 node.add_child("point", point);
                 points.push_back(std::make_pair("", node));
@@ -741,7 +742,7 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
                     p = o3tl::convert(p, o3tl::Length::mm100, o3tl::Length::twip);
                 }
                 boost::property_tree::ptree gridOffset;
-                gridOffset.put("x", p.getX());
+                gridOffset.put("x", nSignX * p.getX());
                 gridOffset.put("y", p.getY());
                 object.add_child("gridoffset", gridOffset);
             }
@@ -760,6 +761,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
     SfxViewShell* pViewShell = GetSfxViewShell();
 
     tools::Rectangle aSelection(rRect);
+    tools::Long nSignX = mbNegativeX ? -1 : 1;
     bool bIsChart = false;
     Point addLogicOffset(0, 0);
     bool convertMapMode = false;
@@ -853,7 +855,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 if (convertMapMode)
                     p = o3tl::convert(p, o3tl::Length::mm100, o3tl::Length::twip);
                 aExtraInfo.append(",\"gridOffsetX\":");
-                aExtraInfo.append(p.getX());
+                aExtraInfo.append(nSignX * p.getX());
                 aExtraInfo.append(",\"gridOffsetY\":");
                 aExtraInfo.append(p.getY());
             }
@@ -957,6 +959,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                                     const basegfx::B2DPoint aB2Point = aPolygon.getB2DPoint(nIndex);
                                                     Point aPoint(aB2Point.getX(), aB2Point.getY());
                                                     aPoint.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                                                    if (mbNegativeX)
+                                                        aPoint.setX(-aPoint.X());
                                                     if (nIndex > 0)
                                                         sPolygonElem += " ";
                                                     sPolygonElem += aPoint.toString();
@@ -1069,8 +1073,21 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     handleArrayStr = handleArrayStr + aStream.str().c_str();
                 }
             }
-            sSelectionText = aSelection.toString() +
-                ", " + OString::number(nRotAngle.get());
+
+            if (mbNegativeX)
+            {
+                tools::Rectangle aNegatedRect(aSelection);
+                aNegatedRect.SetLeft(-aNegatedRect.Left());
+                aNegatedRect.SetRight(-aNegatedRect.Right());
+                aNegatedRect.Justify();
+                sSelectionText = aNegatedRect.toString() +
+                    ", " + OString::number(nRotAngle.get());
+            }
+            else
+            {
+                sSelectionText = aSelection.toString() +
+                    ", " + OString::number(nRotAngle.get());
+            }
             if (!aExtraInfo.isEmpty())
             {
                 sSelectionTextView = sSelectionText + ", " + aExtraInfo.toString() + "}";
