@@ -7,8 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_COMPILEROPTFLAGS := -Os
-
 include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:
