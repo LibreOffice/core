@@ -46,6 +46,8 @@ void WpftDrawFilterTest::test()
         { "MacDraw_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
         { "MacDraw_II.hqx", REQUIRE_MWAW_VERSION(0, 3, 3) },
         { "MacDraw_Pro_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 4) },
+        { "ReadySetGo_1", REQUIRE_MWAW_VERSION(0, 3, 21) },
+        { "Scoop_1", REQUIRE_MWAW_VERSION(0, 3, 21) },
     };
     const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional{
         { "Draw_3.1.sda", REQUIRE_STAROFFICE_VERSION(0, 0, 1) },
