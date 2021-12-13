@@ -1133,14 +1133,31 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
 
         if(bItemStateSet)
         {
-            if (pMap->nWID == EE_CHAR_COLOR && pMap->nMemberId == MID_COLOR_THEME_INDEX)
+            if (pMap->nWID == EE_CHAR_COLOR)
             {
-                // Theme can be DEFAULT_VALUE, even if the same pool item has a color which is a
-                // DIRECT_VALUE.
+                // Theme & effects can be DEFAULT_VALUE, even if the same pool item has a color
+                // which is a DIRECT_VALUE.
                 const SvxColorItem* pColor = pSet->GetItem<SvxColorItem>(EE_CHAR_COLOR);
-                if (pColor->GetThemeIndex() == -1)
+                switch (pMap->nMemberId)
                 {
-                    eItemState = SfxItemState::DEFAULT;
+                    case MID_COLOR_THEME_INDEX:
+                        if (pColor->GetThemeIndex() == -1)
+                        {
+                            eItemState = SfxItemState::DEFAULT;
+                        }
+                        break;
+                    case MID_COLOR_LUM_MOD:
+                        if (pColor->GetLumMod() == 10000)
+                        {
+                            eItemState = SfxItemState::DEFAULT;
+                        }
+                        break;
+                    case MID_COLOR_LUM_OFF:
+                        if (pColor->GetLumOff() == 0)
+                        {
+                            eItemState = SfxItemState::DEFAULT;
+                        }
+                        break;
                 }
             }
 

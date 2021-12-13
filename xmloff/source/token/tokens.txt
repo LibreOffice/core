@@ -3201,4 +3201,6 @@ accent5
 accent6
 hlink
 folHlink
+color-lum-mod
+color-lum-off
 TOKEN_END_DUMMY

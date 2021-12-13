@@ -3457,6 +3457,8 @@ namespace xmloff::token {
         TOKEN("accent6",             XML_ACCENT6 ),
         TOKEN("hlink",               XML_HLINK ),
         TOKEN("folHlink",            XML_FOLHLINK ),
+        TOKEN("color-lum-mod",       XML_COLOR_LUM_MOD ),
+        TOKEN("color-lum-off",       XML_COLOR_LUM_OFF ),
 
 
 #if OSL_DEBUG_LEVEL > 0

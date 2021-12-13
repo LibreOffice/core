@@ -92,6 +92,15 @@ class XMLDoublePercentPropHdl : public XMLPropertyHandler
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
+/// Maps between XML percentage and our 100th percent ints.
+class XML100thPercentPropHdl : public XMLPropertyHandler
+{
+    virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue,
+                           const SvXMLUnitConverter& rUnitConverter) const override;
+    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue,
+                           const SvXMLUnitConverter& rUnitConverter) const override;
+};
+
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_NEG_PERCENT
 */
