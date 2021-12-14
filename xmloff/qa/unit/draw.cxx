@@ -16,6 +16,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -109,6 +111,28 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
     // default in ODF, but only default inside LO.
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-skew", "50 -135");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
+{
+    // Given a document with a shape with a "FrameX" parent style (starts with Frame, but is not
+    // Frame):
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-in-shape.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure the table inside the shape is not lost:
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xEnum = xText->createEnumeration();
+    uno::Reference<text::XTextTable> xTable(xEnum->nextElement(), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have crashed, as xTable was an empty
+    // reference, i.e. the table inside the shape was lost.
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), xCell->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
