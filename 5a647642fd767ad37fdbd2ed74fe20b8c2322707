@@ -50,6 +50,24 @@
       "message": "Untested, but should work:\n\n\u003e    // find the next content type (root) entry\n\u003e    auto lcl_nextEntry \u003d [\u0026m_xTreeView, \u0026xEntry]() {\n\u003e        while (m_xTreeView-\u003eget_iter_depth(*xEntry))\n\u003e             m_xTreeView-\u003eiter_parent(*xEntry);\n\u003e        return m_xTreeView-\u003eiter_next_sibling(*xEntry);\n\u003e    };\n\u003e \n\u003e    for (bool bEntry \u003d m_xTreeView-\u003eget_iter_first(*xEntry); bEntry; bEntry \u003d lcl_nextEntry())\n\nOr something like it.\n\nAnd then use continue instead of goto. goto is so C-style and shouldn\u0027t be allowed in C++ code; there are enough possibilities in C++ to archive the same result done with goto and labels.",
       "revId": "5a647642fd767ad37fdbd2ed74fe20b8c2322707",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99c3cf92_9b178f3b",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2868,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-12-14T21:42:19Z",
+      "side": 1,
+      "message": "I didn\u0027t think about using a lambda. Thanks Jan-Marek!",
+      "parentUuid": "26b530f9_cceaac0a",
+      "revId": "5a647642fd767ad37fdbd2ed74fe20b8c2322707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
