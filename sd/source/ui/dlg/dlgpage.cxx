@@ -36,7 +36,7 @@
  * Constructor of tab dialog: appends pages to the dialog
  */
 SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const SfxItemSet* pAttr,
-                     bool bAreaPage, bool bIsImpressDoc)
+                     bool bAreaPage, bool bIsImpressDoc, bool bIsImpressMaster)
     : SfxTabDialogController(pParent, "modules/sdraw/ui/drawpagedialog.ui", "DrawPageDialog", pAttr)
     , mbIsImpressDoc(bIsImpressDoc)
 {
@@ -58,11 +58,18 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
     AddTabPage("RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), nullptr);
     AddTabPage("RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
                nullptr);
+    AddTabPage("RID_SVXPAGE_THEME", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_THEME), nullptr);
 
     if (!bAreaPage) // I have to add the page before I remove it !
     {
         RemoveTabPage("RID_SVXPAGE_AREA");
         RemoveTabPage("RID_SVXPAGE_TRANSPARENCE");
+    }
+
+    if (!bIsImpressMaster)
+    {
+        // Only slide masters can have a theme.
+        RemoveTabPage("RID_SVXPAGE_THEME");
     }
 
     if (mbIsImpressDoc)
