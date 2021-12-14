@@ -3291,6 +3291,9 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
             pEditView->ExecuteSpellPopup(aMenuPos, aLink);
 
+            if (pHdl)
+                pHdl->EnterHandler();
+
             bDone = true;
         }
     }
