@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_screenshot_targets,cui,\
 
 $(eval $(call gb_Module_add_uicheck_targets,cui,\
     UITest_cui_dialogs \
+    UITest_cui_tabpages \
 ))
 
 # vim: set noet sw=4 ts=4:

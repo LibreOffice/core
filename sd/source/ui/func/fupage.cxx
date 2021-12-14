@@ -47,6 +47,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <sfx2/opengrf.hxx>
+#include <sal/log.hxx>
 
 #include <strings.hrc>
 #include <sdpage.hxx>
@@ -261,6 +262,19 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
     SfxGrabBagItem grabBag(SID_ATTR_CHAR_GRABBAG);
     grabBag.GetGrabBag()["BackgroundFullSize"] <<= bFullSize;
+
+    if (mpDoc->GetDocumentType() == DocumentType::Impress && mpPage->IsMasterPage())
+    {
+        // A master slide may have a theme.
+        svx::Theme* pTheme = mpPage->getSdrPageProperties().GetTheme();
+        if (pTheme)
+        {
+            uno::Any aTheme;
+            pTheme->ToAny(aTheme);
+            grabBag.GetGrabBag()["Theme"] = aTheme;
+        }
+    }
+
     aNewAttr.Put(grabBag);
 
     // Merge ItemSet for dialog
@@ -350,7 +364,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
         // create the dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabPageDialog(mpViewShell->GetFrameWeld(), &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage, bIsImpressDoc) );
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabPageDialog(mpViewShell->GetFrameWeld(), &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage, bIsImpressDoc, mbMasterPage) );
         if( pDlg->Execute() == RET_OK )
             pTempSet.emplace( *pDlg->GetOutputItemSet() );
     }
@@ -552,6 +566,21 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             if (pMasterPage->IsBackgroundFullSize() != bFullSize)
             {
                 bSetPageSizeAndBorder = true;
+            }
+        }
+
+        if (mpDoc->GetDocumentType() == DocumentType::Impress && mpPage->IsMasterPage())
+        {
+            // The item set may have a theme.
+            auto it = pGrabBag->GetGrabBag().find("Theme");
+            if (it != pGrabBag->GetGrabBag().end())
+            {
+                std::unique_ptr<svx::Theme> pTheme = svx::Theme::FromAny(it->second);
+                pMasterPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+            }
+            else
+            {
+                SAL_WARN("sd.ui", "FuPage::ApplyItemSet: got no theme");
             }
         }
     }
