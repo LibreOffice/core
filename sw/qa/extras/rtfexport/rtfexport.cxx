@@ -54,17 +54,8 @@ public:
 
     bool mustTestImportOf(const char* filename) const override
     {
-        // Don't test the first import of these, for some reason those tests fail
-        const char* aDenylist[] = {
-            "math-escaping.rtf", "math-lim.rtf", "math-mso2007.rtf",
-            "math-nary.rtf",     "math-rad.rtf", "math-vertical-stacks.rtf",
-            "math-runs.rtf",
-        };
-        std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
-
         // If the testcase is stored in some other format, it's pointless to test.
-        return (OString(filename).endsWith(".rtf")
-                && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
+        return OString(filename).endsWith(".rtf");
     }
 };
 
@@ -229,14 +220,16 @@ DECLARE_RTFEXPORT_TEST(testMathD, "math-d.rtf")
         aActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testMathEscaping, "math-escaping.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathEscaping)
 {
+    loadAndReload("math-escaping.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString(u"\u00E1 \\{"), aActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testMathLim, "math-lim.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathLim)
 {
+    loadAndReload("math-lim.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString(u"lim from {x \u2192 1} {x}"), aActual);
 }
@@ -253,8 +246,9 @@ DECLARE_RTFEXPORT_TEST(testMathBox, "math-mbox.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("a"), aActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathMso2007)
 {
+    loadAndReload("math-mso2007.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected(u"A = \u03C0 {r} ^ {2}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -299,8 +293,9 @@ DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testMathNary, "math-nary.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathNary)
 {
+    loadAndReload("math-nary.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(
         OUString("lllint from {1} to {2} {x + 1} prod from {a} {b} sum to {2} {x}"), aActual);
@@ -327,8 +322,9 @@ DECLARE_RTFEXPORT_TEST(testMathPlaceholders, "math-placeholders.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("sum from <?> to <?> <?>"), aActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testMathRad, "math-rad.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathRad)
 {
+    loadAndReload("math-rad.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("sqrt {4} nroot {3} {x + 1}"), aActual);
 }
@@ -349,8 +345,9 @@ DECLARE_RTFEXPORT_TEST(testMathSubscripts, "math-subscripts.rtf")
         aActual);
 }
 
-DECLARE_RTFEXPORT_TEST(testMathVerticalstacks, "math-vertical-stacks.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathVerticalstacks)
 {
+    loadAndReload("math-vertical-stacks.rtf");
     CPPUNIT_ASSERT_EQUAL(OUString("{a} over {b}"), getFormula(getRun(getParagraph(1), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("{a} / {b}"), getFormula(getRun(getParagraph(2), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("stack { a # b }"), getFormula(getRun(getParagraph(3), 1)));
@@ -382,8 +379,9 @@ DECLARE_RTFEXPORT_TEST(testTdf49073, "tdf49073.rtf")
                          getProperty<sal_Int16>(getParagraph(7)->getStart(), "RubyPosition"));
 }
 
-DECLARE_RTFEXPORT_TEST(testMathRuns, "math-runs.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testMathRuns)
 {
+    loadAndReload("math-runs.rtf");
     // was [](){}, i.e. first curly bracket had an incorrect position
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"),
                          getFormula(getRun(getParagraph(1), 1)));
