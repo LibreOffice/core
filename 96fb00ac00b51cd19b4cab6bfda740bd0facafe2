@@ -70,6 +70,24 @@
       "parentUuid": "b8a12275_4dda1c14",
       "revId": "96fb00ac00b51cd19b4cab6bfda740bd0facafe2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f1051ff_5619e196",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-14T13:10:15Z",
+      "side": 1,
+      "message": "Hm, cannot run junit tests locally. Isn\u0027t this part of the CI procedure?",
+      "parentUuid": "787eb715_e39f4085",
+      "revId": "96fb00ac00b51cd19b4cab6bfda740bd0facafe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
