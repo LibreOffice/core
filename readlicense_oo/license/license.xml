@@ -1433,20 +1433,6 @@
         OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
         DAMAGE.</p>
     </div>
-    <div class="NEON">
-        <h2>neon</h2>
-        <p>The following software may be included in this product: neon. Use of any of this software is governed by the
-        terms of the license below:</p>
-        <p>neon is Copyright (C) 1999-2007 Joe Orton &lt;joe@manyfish.co.uk&gt;<br />
-        Portions are:<br />
-        Copyright (C) 1999-2000 Tommi Komulainen &lt;Tommi.Komulainen@iki.fi&gt;<br />
-        Copyright (C) 1999-2000 Peter Boos &lt;pedib@colorfullife.com&gt;<br />
-        Copyright (C) 1991, 1995, 1996, 1997 Free Software Foundation, Inc.<br />
-        Copyright (C) 2004 Aleix Conchillo Flaque &lt;aleix@member.fsf.org&gt;<br />
-        Copyright (C) 2004 Jiang Lei &lt;tristone@deluxe.ocn.ne.jp&gt;<br />
-        Copyright (C) 2004-2005 Vladimir Berezniker @ http://public.xdi.org/=vmpn</p>
-        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
-    </div>
     <div class="NSS" >
         <h2>Network Security Services (NSS)</h2>
         <p>The following software may be included in this product: Network Security Services (NSS). Use of any of this
