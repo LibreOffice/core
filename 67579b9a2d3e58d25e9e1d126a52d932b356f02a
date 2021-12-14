@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bfeb6cc_8337a30a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-12-14T14:31:50Z",
+      "side": 1,
+      "message": "@Attila: very nice and important fix! ",
+      "revId": "67579b9a2d3e58d25e9e1d126a52d932b356f02a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
