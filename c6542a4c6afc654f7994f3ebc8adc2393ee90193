@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "525d8eda_f20a7add",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-14T17:13:05Z",
+      "side": 1,
+      "message": "I think the timer should be set to SetPriority(TaskPriority::HIGH_IDLE), so that it runs already before painting and not after it, as otherwise it would either repaint twice or possibly miss the actual repaint with the new data (I\u0027m not sure which one).\n\nAlso, on master Task/Timer/Idle will assert if you don\u0027t name it.\n\n",
+      "revId": "c6542a4c6afc654f7994f3ebc8adc2393ee90193",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
