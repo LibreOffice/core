@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25eca724_028150d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-12-14T23:45:11Z",
+      "side": 1,
+      "message": "Hi Miklos, please have a look, whether you see principle problems. The unit tests do not cover all cases yet and more will follow. But now, near to Christmas I have less time than usual and I want to show you the current state. With this patch there remains only the problem of wrong light directions. But that can go into a different patch.",
+      "revId": "8b01ddfd3f4db4120f6ea6371bd132273d9dee6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
