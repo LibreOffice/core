@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "169f20d3_b771638f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-14T18:47:52Z",
+      "side": 1,
+      "message": "Do you have one in mind which I could orient at - to make it easier?",
+      "parentUuid": "7054510b_169759e3",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a86d1640_ffc0b91a",
         "filename": "svl/source/misc/urihelper.cxx",
         "patchSetId": 1
@@ -54,6 +72,24 @@
       "writtenOn": "2021-12-14T14:44:10Z",
       "side": 1,
       "message": "the above comment doesn\u0027t look to useful",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbfe8c61_b0187ceb",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-14T18:47:52Z",
+      "side": 1,
+      "message": "Wanted to be informative - remove?",
+      "parentUuid": "a86d1640_ffc0b91a",
       "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -77,6 +113,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6489212_9c8cbe84",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-14T18:47:52Z",
+      "side": 1,
+      "message": "Yepp, that\u0027s what I hoped you would tell me - so I will just remove square brackets again?",
+      "parentUuid": "dca36e21_40f629f7",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "67ade1d1_629008a7",
         "filename": "svl/source/misc/urihelper.cxx",
         "patchSetId": 1
@@ -88,6 +142,24 @@
       "writtenOn": "2021-12-14T14:44:10Z",
       "side": 1,
       "message": "the above comment doesn\u0027t look useful",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dc7efb1_8967a581",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-14T18:47:52Z",
+      "side": 1,
+      "message": "So what is wanted? Not informative, just let the code speak? Am I commenting too much (serious question, I try to do the right thing)?",
+      "parentUuid": "67ade1d1_629008a7",
       "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -128,6 +200,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "960b7cef_48602a45",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-14T18:47:52Z",
+      "side": 1,
+      "message": "I wanted to keep it close to \u00271\u0027 to which these belonged initially.",
+      "parentUuid": "4482234c_8a71b484",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "776bd403_af512117",
         "filename": "svl/source/misc/urihelper.cxx",
         "patchSetId": 1
@@ -145,6 +235,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "450ad383_86d3d556",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-14T18:47:52Z",
+      "side": 1,
+      "message": "It is more oriented as addendum to the productions above, while it\u0027s not a production itself. \u0027this fix\u0027 refers to the tdf# at the start of the comment...?",
+      "parentUuid": "776bd403_af512117",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3cf958fe_983f4167",
         "filename": "svl/source/misc/urihelper.cxx",
         "patchSetId": 1
@@ -156,6 +264,30 @@
       "writtenOn": "2021-12-14T14:44:10Z",
       "side": 1,
       "message": "why do random reformatting by moving this here from the preceding line (which would still run shorter than the 100 character limit after the addition of \"nullptr,\" there)",
+      "range": {
+        "startLine": 550,
+        "startChar": 40,
+        "endLine": 550,
+        "endChar": 45
+      },
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32fd3b00_7a1e69aa",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-12-14T18:47:52Z",
+      "side": 1,
+      "message": "Because I thought that it\u0027s an 80-char limit, so wanted to be nice. I love long lines, usually, and was criticized for these...",
+      "parentUuid": "3cf958fe_983f4167",
       "range": {
         "startLine": 550,
         "startChar": 40,
