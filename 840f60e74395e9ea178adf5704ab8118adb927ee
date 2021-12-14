@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62022362_cc691a05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-14T17:34:36Z",
+      "side": 1,
+      "message": "checking the last results from Jenkins, this is definitely a timing issue. In this build, linux gcc passed while Windows failed, in the previous one it was the opposite.",
+      "revId": "840f60e74395e9ea178adf5704ab8118adb927ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
