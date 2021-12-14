@@ -2776,9 +2776,20 @@ void SwContentTree::ToggleToRoot()
     else
     {
         m_xTreeView->set_selection_mode(SelectionMode::Single);
+        m_nLastSelType = m_nRootType;
         m_nRootType = ContentTypeId::UNKNOWN;
         m_bIsRoot = false;
-        FindActiveTypeAndRemoveUserData();
+        // Other content type member data could have changed while in root view. Fill the content
+        // member lists excluding the toggled from root content which should already have the most
+        // recent data.
+        if (State::HIDDEN != m_eState)
+        {
+            for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
+            {
+                if (i != m_nLastSelType)
+                    m_aActiveContentArr[i]->FillMemberList();
+            }
+        }
         Display(State::HIDDEN != m_eState);
     }
     m_pConfig->SetRootType( m_nRootType );
