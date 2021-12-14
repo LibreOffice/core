@@ -28,9 +28,9 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
