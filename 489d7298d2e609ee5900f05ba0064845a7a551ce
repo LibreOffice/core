@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "432517af_2a33fe9d",
+        "filename": "vcl/unx/gtk3/gtkdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-14T14:11:27Z",
+      "side": 1,
+      "message": "So the problem seems to be in this line?",
+      "revId": "489d7298d2e609ee5900f05ba0064845a7a551ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
