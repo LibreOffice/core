@@ -16,6 +16,40 @@
       "message": "Maybe this is more performance art :) but Eike commented in the chat: \"sometimes there may be reasons for a goto, but not in this case\"",
       "revId": "5a647642fd767ad37fdbd2ed74fe20b8c2322707",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7e219ac_e54f3b8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-14T15:00:23Z",
+      "side": 1,
+      "message": "Please no goto in C++.",
+      "revId": "5a647642fd767ad37fdbd2ed74fe20b8c2322707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26b530f9_cceaac0a",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2868,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-14T15:00:23Z",
+      "side": 1,
+      "message": "Untested, but should work:\n\n\u003e    // find the next content type (root) entry\n\u003e    auto lcl_nextEntry \u003d [\u0026m_xTreeView, \u0026xEntry]() {\n\u003e        while (m_xTreeView-\u003eget_iter_depth(*xEntry))\n\u003e             m_xTreeView-\u003eiter_parent(*xEntry);\n\u003e        return m_xTreeView-\u003eiter_next_sibling(*xEntry);\n\u003e    };\n\u003e \n\u003e    for (bool bEntry \u003d m_xTreeView-\u003eget_iter_first(*xEntry); bEntry; bEntry \u003d lcl_nextEntry())\n\nOr something like it.\n\nAnd then use continue instead of goto. goto is so C-style and shouldn\u0027t be allowed in C++ code; there are enough possibilities in C++ to archive the same result done with goto and labels.",
+      "revId": "5a647642fd767ad37fdbd2ed74fe20b8c2322707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
