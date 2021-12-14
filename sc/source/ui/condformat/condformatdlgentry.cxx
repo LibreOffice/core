@@ -77,7 +77,11 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, EntrySelectHdl, const MouseEvent&, bool)
 
 void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
 {
-    mxFtCondNr->set_label(maStrCondition + OUString::number(nIndex));
+    OUString sLabel = maStrCondition + OUString::number(nIndex);
+    mxFtCondNr->set_label(sLabel);
+
+    // tdf#124412: uitest
+    mxFtCondition->set_buildable_name(sLabel.toUtf8());
 }
 
 void ScCondFrmtEntry::Select()
