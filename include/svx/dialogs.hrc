@@ -43,6 +43,7 @@
 #define RID_SVXPAGE_BKG                     (RID_SVX_START +  57)
 #define RID_SVXPAGE_SHADOW                  (RID_SVX_START +  61)
 #define RID_SVXPAGE_TRANSPARENCE            (RID_SVX_START +  54)
+#define RID_SVXPAGE_THEME                   (RID_SVX_START +  55)
 #define RID_SVXPAGE_TEXTATTR                (RID_SVX_START + 153)
 #define RID_SVXPAGE_TEXTANIMATION           (RID_SVX_START + 184)
 #define RID_SVXPAGE_TEXTCOLUMNS             (RID_SVX_START + 154)
