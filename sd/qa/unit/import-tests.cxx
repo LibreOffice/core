@@ -123,6 +123,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf146223();
     void testTdf144918();
     void testTdf144917();
     void testHyperlinkOnImage();
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf146223);
     CPPUNIT_TEST(testTdf144918);
     CPPUNIT_TEST(testTdf144917);
     CPPUNIT_TEST(testHyperlinkOnImage);
@@ -333,6 +335,24 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf146223()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf146223.pptx"), PPTX);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY_THROW);
+
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSet(xPage1, uno::UNO_QUERY_THROW);
+
+    bool bBackgroundObjectsVisible;
+    xSet->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisible;
+    CPPUNIT_ASSERT_EQUAL(bBackgroundObjectsVisible, false);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf144918()
