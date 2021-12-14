@@ -74,14 +74,33 @@ private:
                                       const tools::Rectangle& aContentRect, const Color& aColor);
 };
 
+class StylesListUpdateTask : public Idle
+{
+    StylesPreviewWindow_Base& m_rStylesList;
+
+public:
+    StylesListUpdateTask(StylesPreviewWindow_Base& rStylesList)
+        : Idle("StylesListUpdateTask")
+        , m_rStylesList(rStylesList)
+    {
+        SetPriority(TaskPriority::HIGH_IDLE);
+    }
+
+    virtual void Invoke() override;
+};
+
 class StylesPreviewWindow_Base
 {
+    friend class StylesListUpdateTask;
+
 protected:
     static constexpr unsigned STYLES_COUNT = 6;
 
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
     std::unique_ptr<weld::IconView> m_xStylesView;
+
+    StylesListUpdateTask m_aUpdateTask;
 
     rtl::Reference<StyleStatusListener> m_xStatusListener;
     std::unique_ptr<StylePoolChangeListener> m_pStylePoolChangeListener;
@@ -102,10 +121,11 @@ public:
     ~StylesPreviewWindow_Base();
 
     void Select(const OUString& rStyleName);
-    void UpdateStylesList();
+    void RequestStylesListUpdate();
 
 private:
-    void Update();
+    void UpdateStylesList();
+    void UpdateSelection();
     bool Command(const CommandEvent& rEvent);
 };
 
