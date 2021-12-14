@@ -408,7 +408,8 @@ namespace
                                             *pDelPam->GetPoint(), nDelCount );
                         }
 
-                        if (pDelPam->GetNext() && *pDelPam->GetNext()->End() == *pDelPam->Start())
+                        if (pDelPam->GetNext() != pDelPam.get()
+                            && *pDelPam->GetNext()->End() == *pDelPam->Start())
                         {
                             *pDelPam->GetNext()->End() = *pDelPam->End();
                             pDelPam.reset(pDelPam->GetNext());
