@@ -2298,6 +2298,23 @@ struct hash<::rtl::OString>
 #endif
 /// @endcond
 
+#if defined LIBO_INTERNAL_ONLY
+// cppunit: message_to_string specializations for OString and OStringConcat (see <cppunit/TestAssert.h>)
+namespace CppUnit
+{
+inline ::std::string message_to_string(const ::rtl::OString& s)
+{
+    return { s.getStr(), s.getLength() };
+}
+
+template<typename T1, typename T2>
+inline ::std::string message_to_string(::rtl::OStringConcat<T1, T2> const& c)
+{
+    return ::std::string_view(::rtl::OStringConcatenation(c));
+}
+}
+#endif
+
 #endif // INCLUDED_RTL_STRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
