@@ -653,19 +653,29 @@ extern "C" {
     static gboolean sal_gtk_timeout_expired( SalGtkTimeoutSource *pTSource,
                                              gint *nTimeoutMS, gint64 const pTimeNow )
     {
-        gint64 nDeltaUSec = pTSource->aFireTime - pTimeNow;
-        if( nDeltaUSec < 0 )
+        glong tv_sec = pTimeNow / 1000000;
+        glong tv_usec = pTimeNow - tv_sec * 1000000;
+        glong nDeltaSec = pTSource->aFireTime / 1000000 - tv_sec;
+        glong nDeltaUSec = pTSource->aFireTime - (nDeltaSec * 1000000) - tv_usec;
+        if( nDeltaSec < 0 || ( nDeltaSec == 0 && nDeltaUSec < 0) )
         {
             *nTimeoutMS = 0;
             return true;
         }
+        if( nDeltaUSec < 0 )
+        {
+            nDeltaUSec += 1000000;
+            nDeltaSec -= 1;
+        }
         // if the clock changes backwards we need to cope ...
-        if( o3tl::make_unsigned(nDeltaUSec) > 1000000 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
+        if( o3tl::make_unsigned(nDeltaSec) > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
         {
             sal_gtk_timeout_defer( pTSource );
             return true;
         }
-        *nTimeoutMS = MIN( G_MAXINT,  (nDeltaUSec + 999) / 1000 );
+
+        *nTimeoutMS = MIN( G_MAXINT, ( nDeltaSec * 1000 + (nDeltaUSec + 999) / 1000 ) );
+
         return *nTimeoutMS == 0;
     }
 
