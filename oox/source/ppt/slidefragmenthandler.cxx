@@ -78,8 +78,13 @@ SlideFragmentHandler::~SlideFragmentHandler()
     case PPT_TOKEN( sld ):              // CT_CommonSlideData
     {
         Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
+        Reference< css::beans::XPropertySet > xSet(xSlide, UNO_QUERY);
         PropertyMap aPropMap;
         PropertySet aSlideProp( xSlide );
+
+        OptValue<bool> aShowMasterShapes = rAttribs.getBool(XML_showMasterSp);
+        if (aShowMasterShapes.has() && !aShowMasterShapes.get())
+            xSet->setPropertyValue("IsBackgroundObjectsVisible", Any(false));
 
         aPropMap.setProperty( PROP_Visible, rAttribs.getBool( XML_show, true ));
         aSlideProp.setProperties( aPropMap );
