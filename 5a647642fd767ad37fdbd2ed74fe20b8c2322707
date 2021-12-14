@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c14568f9_82a8b427",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-14T14:17:38Z",
+      "side": 1,
+      "message": "Maybe this is more performance art :) but Eike commented in the chat: \"sometimes there may be reasons for a goto, but not in this case\"",
+      "revId": "5a647642fd767ad37fdbd2ed74fe20b8c2322707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
