@@ -4595,8 +4595,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();
-                if(pBkmk->IsExpanded())
-                    *rPam.GetMark() = pBkmk->GetOtherMarkPos();
+                *rPam.GetMark() = pBkmk->IsExpanded() ? pBkmk->GetOtherMarkPos() : pBkmk->GetMarkPos();
+
                 m_rDoc.getIDocumentMarkAccess()->deleteMark(pBkmk);
             }
             bJoinText = false;
