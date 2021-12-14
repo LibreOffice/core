@@ -16,6 +16,24 @@
       "message": "Where is the reference to the regressing commit?",
       "revId": "1ebf1e0af0b104f6d5dd0365fe1b9d43cacd5f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41c8b9a9_69d50784",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-14T14:16:06Z",
+      "side": 1,
+      "message": "It is now added to the commit message.",
+      "parentUuid": "0cabb63c_1eab3cf0",
+      "revId": "1ebf1e0af0b104f6d5dd0365fe1b9d43cacd5f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
