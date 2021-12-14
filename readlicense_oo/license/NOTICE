@@ -96,15 +96,10 @@ ____
 
 As part of the base system this product may also includes code from the following
 projects which are licensed under the Apache license:
-- serf
 - redland
 - Apache BeanShell Scripting for Java
 
 The notices from these projects are following:
-
-serf
-This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
 
 redland
 This product includes Redland software (http://librdf.org/)

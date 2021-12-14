@@ -126,9 +126,9 @@ excludelist:
     ucb/source/ucp/webdav-neon/webdavcontent.cxx:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
-    ucb/source/ucp/webdav/DateTimeHelper.cxx:
+    ucb/source/ucp/webdav-curl/DateTimeHelper.cxx:
     # Actually in use
     - com/sun/star/util/DateTime.hpp
-    ucb/source/ucp/webdav/webdavcontent.cxx:
+    ucb/source/ucp/webdav-curl/webdavcontent.cxx:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp

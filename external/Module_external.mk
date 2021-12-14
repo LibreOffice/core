@@ -16,7 +16,6 @@ endif
 $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,XMLSEC,xmlsec) \
 	$(call gb_Helper_optional,ABW,libabw) \
-	$(call gb_Helper_optional,APR,apr) \
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BOX2D,box2d) \
 	$(call gb_Helper_optional,BREAKPAD,breakpad) \
@@ -92,7 +91,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,REDLAND,redland) \
 	$(call gb_Helper_optional,REVENGE,librevenge) \
 	$(call gb_Helper_optional,RHINO,rhino) \
-	$(call gb_Helper_optional,SERF,serf) \
 	$(call gb_Helper_optional,SKIA,skia) \
 	$(call gb_Helper_optional,STAROFFICE,libstaroffice) \
 	$(if $(filter WNT,$(OS)),twain_dsm) \
