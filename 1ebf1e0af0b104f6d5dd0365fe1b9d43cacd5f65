@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cabb63c_1eab3cf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-14T14:06:40Z",
+      "side": 1,
+      "message": "Where is the reference to the regressing commit?",
+      "revId": "1ebf1e0af0b104f6d5dd0365fe1b9d43cacd5f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
