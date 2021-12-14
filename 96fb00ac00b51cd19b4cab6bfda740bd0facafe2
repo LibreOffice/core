@@ -52,6 +52,24 @@
       "parentUuid": "bb9a1021_4f4a6292",
       "revId": "96fb00ac00b51cd19b4cab6bfda740bd0facafe2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "787eb715_e39f4085",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-12-14T08:13:50Z",
+      "side": 1,
+      "message": "From my experience, unit tests don\u0027t work well with gtk3. I\u0027m not really sure what svp is, I think it has to do with headless operations. I have used it before but I can\u0027t recall for what purpose. The vcl documentation says “svp” stands for “StarView Plugin”. As long as Jenkins passes and the local unit test SAL_USE_VCLPLUGIN\u003dgen make JunitTest done from the tookkit directory passes, I think no problem exists that stops this patch from being merged.",
+      "parentUuid": "b8a12275_4dda1c14",
+      "revId": "96fb00ac00b51cd19b4cab6bfda740bd0facafe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
