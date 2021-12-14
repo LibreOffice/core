@@ -3534,6 +3534,23 @@ struct hash<::rtl::OUString>
 #endif
 /// @endcond
 
+#if defined LIBO_INTERNAL_ONLY
+// cppunit: message_to_string specializations for OUString and OUStringConcat (see <cppunit/TestAssert.h>)
+namespace CppUnit
+{
+inline ::std::string message_to_string(const ::rtl::OUString& s)
+{
+    return message_to_string(::rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8));
+}
+
+template<typename T1, typename T2>
+inline ::std::string message_to_string(::rtl::OUStringConcat<T1, T2> const& c)
+{
+    return message_to_string(::rtl::OUStringToOString(::rtl::OUStringConcatenation(c), RTL_TEXTENCODING_UTF8));
+}
+}
+#endif
+
 #endif /* _RTL_USTRING_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
