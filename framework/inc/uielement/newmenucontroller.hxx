@@ -23,7 +23,9 @@
 
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/keycod.hxx>
+
+class VCLXPopupMenu;
 
 namespace framework
 {
@@ -62,7 +64,7 @@ namespace framework
                                                      std::vector< vcl::KeyCode >& aMenuShortCuts );
             void setAccelerators();
             void determineAndSetNewDocAccel(const css::awt::KeyEvent& rKeyCode);
-            void setMenuImages( PopupMenu* pPopupMenu, bool bSetImages );
+            void setMenuImages(VCLXPopupMenu& rPopupMenu, bool bSetImages);
 
         private:
             // members
