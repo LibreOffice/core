@@ -1307,7 +1307,7 @@ public:
         Moves or renames a file, replacing an existing file if exist. If the old file existed,
         moved file's metadata, e.g. creation time (on FSes which keep files' creation time) or
         ACLs, are set to old one's (to keep the old file's identity) - currently this is only
-        implemented fully on Windows; on other platforms, this is mostly equivalent to osl_moveFile.
+        implemented fully on Windows; on other platforms, this is mostly equivalent to move().
 
         @param[in] ustrSourceFileURL
         Full qualified URL of the source file.

@@ -1130,7 +1130,10 @@ oslFileError SAL_CALL osl_replaceFile(rtl_uString* strPath, rtl_uString* strDest
                           nullptr, nullptr))
         {
             DWORD dwError = GetLastError();
-            if (dwError == ERROR_FILE_NOT_FOUND) // no strDestPath file?
+            if (dwError == ERROR_FILE_NOT_FOUND // no strDestPath file?
+                || dwError == ERROR_UNABLE_TO_MOVE_REPLACEMENT // e.g., files on different volumes
+                || dwError == ERROR_UNABLE_TO_MOVE_REPLACEMENT_2
+                || dwError == ERROR_UNABLE_TO_REMOVE_REPLACED)
                 error = osl_moveFile(strPath, strDestPath);
             else
                 error = oslTranslateFileError(dwError);
