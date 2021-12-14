@@ -348,25 +348,31 @@ bool isBoundary2(CharClass const & rCharClass, OUString const & rStr,
 }
 
 bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
-                sal_Int32 * pPos, sal_Int32 * pEnd, bool bBackslash = false,
-                bool bPipe = false)
+                sal_Int32 * pPos, sal_Int32 * pEnd,
+                sal_Int32 * pMatchingBracketDepth = nullptr,
+                bool bBackslash = false, bool bPipe = false)
 {
     sal_Unicode c = rStr[*pPos];
     if (rtl::isAscii(c))
     {
+        // tdf#145381 Added cases
+        //  5: for opening bracket "(" or "["
+        //  6: for closing bracket ")" or "]"
+        // to allow detecting matching bracket pairs when and using the
+        // matching bracket counter *pMatchingBracketDepth
         static sal_uInt8 const aMap[128]
             = { 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 1, 0, 0, 4, 4, 4, 1,   //  !"#$%&'
-                1, 1, 1, 1, 1, 4, 1, 4,   // ()*+,-./
+                5, 6, 1, 1, 1, 4, 1, 4,   // ()*+,-./
                 4, 4, 4, 4, 4, 4, 4, 4,   // 01234567
                 4, 4, 1, 1, 0, 1, 0, 1,   // 89:;<=>?
                 4, 4, 4, 4, 4, 4, 4, 4,   // @ABCDEFG
                 4, 4, 4, 4, 4, 4, 4, 4,   // HIJKLMNO
                 4, 4, 4, 4, 4, 4, 4, 4,   // PQRSTUVW
-                4, 4, 4, 1, 2, 1, 0, 1,   // XYZ[\]^_
+                4, 4, 4, 5, 2, 6, 0, 1,   // XYZ[\]^_
                 0, 4, 4, 4, 4, 4, 4, 4,   // `abcdefg
                 4, 4, 4, 4, 4, 4, 4, 4,   // hijklmno
                 4, 4, 4, 4, 4, 4, 4, 4,   // pqrstuvw
@@ -378,6 +384,25 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
 
             case 1: // uric
                 ++(*pPos);
+                return true;
+
+            case 5: // opening bracket "(" or "["
+                ++(*pPos);
+                // if matching bracket detection is active, increase counter
+                if(nullptr != pMatchingBracketDepth)
+                    ++(*pMatchingBracketDepth);
+                return true;
+
+            case 6: // closing bracket ")" or "]"
+                ++(*pPos);
+                // if matching bracket detection is active && there was an opening one, decrease counter
+                if(nullptr != pMatchingBracketDepth && *pMatchingBracketDepth > 0)
+                {
+                    --(*pMatchingBracketDepth);
+                    // tdf#145381 This is the important part: When there was an opening bracket,
+                    // detect this closing bracket as part of the URL
+                    *pEnd = *pPos;
+                }
                 return true;
 
             case 2: // "\"
@@ -499,6 +524,11 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     // Productions 6--9 are only applicable if the FSysStyle::Dos bit is set in
     // eStyle.
 
+    // tdf#145381
+    // Shows the case of a URL https://en.wikipedia.org/wiki/Rank_(linear_algebra)
+    // which contains matching brackets. The closing bracket was left out before
+    // this fix due to checkWChar not matching it as part of the URL, so I extended it
+    // to do so (see there)
     bool bBoundary1 = true;
     bool bBoundary2 = true;
     for (sal_Int32 nPos = rBegin; nPos != rEnd; nPos = nextChar(rText, nPos))
@@ -516,8 +546,8 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     sal_Int32 nPrefixEnd = i;
                     sal_Int32 nUriEnd = i;
                     while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nUriEnd, true,
-                                         true)) ;
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd, nullptr,
+                                        true, true)) ;
                     if (i != nPrefixEnd && i != rEnd && rText[i] == '#')
                     {
                         ++i;
@@ -544,8 +574,10 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     while (rText[i++] != ':') ;
                     sal_Int32 nPrefixEnd = i;
                     sal_Int32 nUriEnd = i;
+                    sal_Int32 nMatchingBracketDepth = 0;
                     while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd,
+                                         &nMatchingBracketDepth)) ;
                     if (i != nPrefixEnd && i != rEnd && rText[i] == '#')
                     {
                         ++i;
@@ -655,7 +687,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     sal_Int32 nUriEnd = ++i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd,
-                                         true)) ;
+                                         nullptr, true)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
                         INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
