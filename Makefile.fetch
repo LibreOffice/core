@@ -101,8 +101,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
 		$(call fetch_Optional,ABW,ABW_TARBALL) \
-		$(call fetch_Optional,APR,APR_TARBALL) \
-		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
 		$(call fetch_Optional,BOOST,BOOST_TARBALL) \
 		$(call fetch_Optional,BOX2D,BOX2D_TARBALL) \
 		$(call fetch_Optional,BREAKPAD,BREAKPAD_TARBALL) \
@@ -214,7 +212,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,REVENGE,REVENGE_TARBALL) \
 		$(call fetch_Optional,RHINO,RHINO_TARBALL) \
 		$(call fetch_Optional,RHINO,SWING_TARBALL) \
-		$(call fetch_Optional,SERF,SERF_TARBALL) \
 		$(call fetch_Optional,SKIA,SKIA_TARBALL) \
 		$(call fetch_Optional,STAROFFICE,STAROFFICE_TARBALL) \
 		$(if $(filter WNT,$(OS)),TWAIN_DSM_TARBALL) \

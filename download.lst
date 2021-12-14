@@ -5,10 +5,6 @@
 
 export ABW_SHA256SUM := e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed
 export ABW_TARBALL := libabw-0.1.3.tar.xz
-export APR_SHA256SUM := 1af06e1720a58851d90694a984af18355b65bb0d047be03ec7d659c746d6dbdb
-export APR_TARBALL := apr-1.5.2.tar.gz
-export APR_UTIL_SHA256SUM := 976a12a59bc286d634a21d7be0841cc74289ea9077aa1af46be19d1a6e844c19
-export APR_UTIL_TARBALL := apr-util-1.5.4.tar.gz
 # please repack the tarball using external/boost/repack_tarball.sh
 export BOOST_SHA256SUM := 9b334d6c6d7af5a0687280788cd84444398b8e0b472cd88e52bbc3c3ef11d98e
 export BOOST_TARBALL := boost_1_77_0.tar.xz
@@ -235,8 +231,6 @@ export REVENGE_VERSION_MICRO := 4
 export REVENGE_TARBALL := librevenge-0.0.$(REVENGE_VERSION_MICRO).tar.bz2
 export RHINO_SHA256SUM := 1fb458d6aab06932693cc8a9b6e4e70944ee1ff052fa63606e3131df34e21753
 export RHINO_TARBALL := 798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip
-export SERF_SHA256SUM := 549c2d21c577a8a9c0450facb5cca809f26591f048e466552240947bdf7a87cc
-export SERF_TARBALL := serf-1.3.9.tar.bz2
 export SKIA_SHA256SUM := 97e859e8467eca9d2441cd23079b61c2c3863b5687620f18cc31a9f966740177
 export SKIA_TARBALL := skia-m97-a7230803d64ae9d44f4e1282444801119a3ae967.tar.xz
 export STAROFFICE_SHA256SUM := f94fb0ad8216f97127bedef163a45886b43c62deac5e5b0f5e628e234220c8db

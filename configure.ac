@@ -2429,8 +2429,8 @@ AC_ARG_WITH(system-lockfile,
 AC_ARG_WITH(webdav,
     AS_HELP_STRING([--with-webdav],
         [Specify which library to use for webdav implementation.
-         Possible values: "neon", "serf", "curl", "no". The default value is "neon".
-         Example: --with-webdav="serf"]))
+         Possible values: "neon", "curl", "no". The default value is "neon".
+         Example: --with-webdav="curl"]))
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -10848,21 +10848,6 @@ curl)
         AC_MSG_ERROR(["--with-webdav=curl conflicts with --disable-curl"])
     fi
     ;;
-serf)
-    AC_MSG_RESULT([serf])
-    # Check for system apr-util
-    libo_CHECK_SYSTEM_MODULE([apr],[APR],[apr-util-1],
-                             ["-I${WORKDIR}/UnpackedTarball/apr/include -I${WORKDIR}/UnpackedTarball/apr_util/include"],
-                             ["-L${WORKDIR}/UnpackedTarball/apr/.libs -lapr-1 -L${WORKDIR}/UnpackedTarball/apr_util/.libs -laprutil-1"])
-    if test "$COM" = "MSC"; then
-        APR_LIB_DIR="LibR"
-        test -n "${MSVC_USE_DEBUG_RUNTIME}" && APR_LIB_DIR="LibD"
-        APR_LIBS="${WORKDIR}/UnpackedTarball/apr/${APR_LIB_DIR}/apr-1.lib ${WORKDIR}/UnpackedTarball/apr_util/${APR_LIB_DIR}/aprutil-1.lib"
-    fi
-
-    # Check for system serf
-    libo_CHECK_SYSTEM_MODULE([serf],[SERF],[serf-1 >= 1.3.9])
-    ;;
 neon)
     AC_MSG_RESULT([neon])
     # Check for system neon
@@ -14353,7 +14338,7 @@ if test "$enable_mpl_subset" = "yes"; then
         AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
     fi
     if test "$WITH_WEBDAV" = "neon"; then
-        AC_MSG_ERROR([need --with-webdav=serf or --without-webdav - webdav support.])
+        AC_MSG_ERROR([need --with-webdav=curl or --without-webdav - webdav support.])
     fi
     if test -n "$ENABLE_POPPLER"; then
         if test "x$SYSTEM_POPPLER" = "x"; then
