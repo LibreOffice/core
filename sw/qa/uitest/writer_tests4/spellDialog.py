@@ -96,6 +96,23 @@ frog, dogg, catt"""
             output_text = document.Text.getString().replace('\r\n', '\n')
             self.assertTrue(re.match(self.TDF46852_REGEX, output_text))
 
+    def test_tdf136855(self):
+        supported_locale = self.is_supported_locale("en", "US")
+        if not supported_locale:
+            self.skipTest("no dictionary support for en_US available")
+
+        with self.ui_test.load_file(get_url_for_data_file("tdf136855.odt")) as writer_doc:
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
+
+                xChangeBtn = xDialog.getChild('change')
+                for i in range(6):
+                    # Without the fix in place, this test would have crashed here
+                    xChangeBtn.executeAction("CLICK", ())
+
+            output_text = writer_doc.Text.getString().replace('\n', '')
+            self.assertTrue(output_text.startswith("xx xx xx xxxxxxxxxxix xxxxxxxxxxxxxxviii"))
+
     def test_tdf66043(self):
         supported_locale = self.is_supported_locale("en", "US")
         if not supported_locale:
