@@ -23,7 +23,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <sdr/contact/viewobjectcontactofpageobj.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 
 namespace sdr::contact
 {
