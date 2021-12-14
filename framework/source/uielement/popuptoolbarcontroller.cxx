@@ -696,8 +696,8 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
         aURL = m_xPopupMenu->getCommand(m_nMenuId);
 
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
-        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
-        MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );
+        VCLXMenu* pMenu = comphelper::getFromUnoTunnel<VCLXMenu>(m_xPopupMenu);
+        MenuAttributes* pMenuAttributes(static_cast<MenuAttributes*>(pMenu->getUserValue(m_nMenuId)));
         if ( pMenuAttributes )
             aTarget = pMenuAttributes->aTargetFrame;
         else
@@ -749,8 +749,8 @@ void SAL_CALL NewToolbarController::updateImage()
     if ( m_xPopupMenu.is() && m_nMenuId )
     {
         aURL = m_xPopupMenu->getCommand(m_nMenuId);
-        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
-        MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );
+        VCLXMenu* pMenu = comphelper::getFromUnoTunnel<VCLXMenu>(m_xPopupMenu);
+        MenuAttributes* pMenuAttributes(static_cast<MenuAttributes*>(pMenu->getUserValue(m_nMenuId)));
         if ( pMenuAttributes )
             aImageId = pMenuAttributes->aImageId;
     }
