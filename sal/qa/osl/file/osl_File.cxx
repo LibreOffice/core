@@ -2230,8 +2230,13 @@ namespace osl_File
             deleteTestFile(aTestFile);
 #endif
 
-            CPPUNIT_ASSERT_MESSAGE("test for open function: create an illegal file",
-                                    bOK);
+            CPPUNIT_ASSERT_MESSAGE(
+                OUStringToOString(
+                    OUStringConcatenation(
+                        "test for open function: create an illegal file <" + aTestFile + ">: "
+                        + OUString::number(nError1)),
+                    RTL_TEXTENCODING_UTF8).getStr(),
+                bOK);
         }
 
         void open_005()
