@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d768e094_eba2e9e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-12-14T19:03:23Z",
+      "side": 1,
+      "message": "Luboš, can you please add the changed behaviour to the ReleaseNotes\nhttps://wiki.documentfoundation.org/ReleaseNotes/7.3#Calc\nThanks.\n",
+      "revId": "0bed7b1979dbc09994f095ab33b461a645f21e77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
