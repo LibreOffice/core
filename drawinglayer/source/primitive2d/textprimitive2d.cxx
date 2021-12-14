@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <primitive2d/texteffectprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

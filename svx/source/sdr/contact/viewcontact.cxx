@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 
 namespace sdr::contact

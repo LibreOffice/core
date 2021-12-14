@@ -21,7 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/color/bcolor.hxx>

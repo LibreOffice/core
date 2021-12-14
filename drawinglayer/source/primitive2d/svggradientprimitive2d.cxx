@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <cmath>
 #include <vcl/skia/SkiaHelper.hxx>

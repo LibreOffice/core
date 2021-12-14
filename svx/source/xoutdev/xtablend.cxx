@@ -25,6 +25,7 @@
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/xtable.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>

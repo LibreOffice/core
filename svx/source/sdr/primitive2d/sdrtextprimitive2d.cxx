@@ -30,6 +30,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <osl/diagnose.h>
 
 
 using namespace com::sun::star;

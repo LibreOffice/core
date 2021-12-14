@@ -58,6 +58,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

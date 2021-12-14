@@ -31,6 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <osl/diagnose.h>
 
 
 namespace sdr::contact {

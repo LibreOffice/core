@@ -25,7 +25,6 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <memory>
 #include <optional>
 
 

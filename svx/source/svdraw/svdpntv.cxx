@@ -45,6 +45,7 @@
 #include <comphelper/lok.hxx>
 #include <svx/svdviter.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

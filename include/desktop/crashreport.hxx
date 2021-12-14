@@ -10,8 +10,6 @@
 #ifndef INCLUDED_DESKTOP_CRASHREPORT_HXX
 #define INCLUDED_DESKTOP_CRASHREPORT_HXX
 
-#include <desktop/dllapi.h>
-
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 

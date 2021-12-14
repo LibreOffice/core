@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <osl/diagnose.h>
 
 using namespace drawinglayer::primitive2d;
 

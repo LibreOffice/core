@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>

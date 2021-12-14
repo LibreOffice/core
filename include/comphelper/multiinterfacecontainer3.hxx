@@ -21,16 +21,10 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer3.hxx>
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::uno
-{
-class XInterface;
-}
 namespace osl
 {
 class Mutex;

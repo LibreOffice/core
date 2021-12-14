@@ -29,6 +29,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <osl/diagnose.h>
 #include <memory>
 
 

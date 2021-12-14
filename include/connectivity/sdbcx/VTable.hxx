@@ -31,7 +31,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <rtl/ref.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
