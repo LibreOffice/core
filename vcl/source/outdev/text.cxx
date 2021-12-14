@@ -1348,10 +1348,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             xDXPixelArray.reset(new DeviceCoordinate[nLen]);
             pDXPixelArray = xDXPixelArray.get();
             // using base position for better rounding a.k.a. "dancing characters"
-            DeviceCoordinate nPixelXOfs = LogicWidthToDeviceCoordinate( rLogicalPos.X() );
+            DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] = LogicWidthToDeviceCoordinate( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
+                pDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
             }
         }
         else
