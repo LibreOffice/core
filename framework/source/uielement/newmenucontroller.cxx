@@ -339,11 +339,11 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
             continue;
 
         if ( aDynamicMenuEntry.sURL == "private:separator" )
-            pVCLPopupMenu->InsertSeparator();
+            rPopupMenu->insertSeparator(-1);
         else
         {
-            pVCLPopupMenu->InsertItem( nItemId, aDynamicMenuEntry.sTitle );
-            pVCLPopupMenu->SetItemCommand( nItemId, aDynamicMenuEntry.sURL );
+            rPopupMenu->insertItem(nItemId, aDynamicMenuEntry.sTitle, 0, -1);
+            rPopupMenu->setCommand(nItemId, aDynamicMenuEntry.sURL);
 
             void* nAttributePtr = MenuAttributes::CreateAttribute( aDynamicMenuEntry.sTargetName, aDynamicMenuEntry.sImageIdentifier );
             pVCLPopupMenu->SetUserValue( nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute );
