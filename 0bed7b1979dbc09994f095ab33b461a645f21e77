@@ -16,6 +16,24 @@
       "message": "Luboš, can you please add the changed behaviour to the ReleaseNotes\nhttps://wiki.documentfoundation.org/ReleaseNotes/7.3#Calc\nThanks.\n",
       "revId": "0bed7b1979dbc09994f095ab33b461a645f21e77",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baad2dd1_01e44c7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-14T20:17:38Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "d768e094_eba2e9e5",
+      "revId": "0bed7b1979dbc09994f095ab33b461a645f21e77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
