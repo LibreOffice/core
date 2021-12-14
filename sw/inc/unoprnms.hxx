@@ -771,7 +771,7 @@
 #define UNO_NAME_LINE_COUNT "LineCount"
 #define UNO_NAME_IS_CONSTANT_SPELLCHECK "IsConstantSpellcheck"
 #define UNO_NAME_IS_HIDE_SPELL_MARKS "IsHideSpellMarks" /* deprecated #i91949 */
-
+#define UNO_NAME_LAYOUT_IN_TABLE_CELL "LayoutInCell"
 #define UNO_NAME_IS_FIELD_USED "IsFieldUsed"
 #define UNO_NAME_IS_FIELD_DISPLAYED "IsFieldDisplayed"
 #define UNO_NAME_BUILDID "BuildId"

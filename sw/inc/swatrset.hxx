@@ -128,6 +128,8 @@ class SwTableBoxNumFormat;
 class SwTableBoxFormula;
 class SwTableBoxValue;
 
+class SwFormatLayoutInCell;
+
 namespace vcl {
     typedef OutputDevice RenderContext;
 };
@@ -309,6 +311,8 @@ public:
     inline  const SwTableBoxNumFormat       &GetTableBoxNumFormat( bool = true ) const;
     inline  const SwTableBoxFormula     &GetTableBoxFormula( bool = true ) const;
     inline  const SwTableBoxValue           &GetTableBoxValue( bool = true ) const;
+
+    inline  const SwFormatLayoutInCell &GetLayoutInCell( bool = true ) const;
 };
 
 //Helper for filters to find true lineheight of a font

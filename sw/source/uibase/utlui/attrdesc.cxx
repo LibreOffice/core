@@ -54,6 +54,7 @@
 #include <strings.hrc>
 #include <fmtftntx.hxx>
 #include <fmtfollowtextflow.hxx>
+#include <fmtLayoutInCell.hxx>
 #include <libxml/xmlwriter.h>
 
 using namespace com::sun::star;
@@ -842,5 +843,31 @@ void SwFormatFollowTextFlow::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
+
+
+bool SwFormatLayoutInCell::GetPresentation( SfxItemPresentation ePres,
+                                              MapUnit /*eCoreMetric*/,
+                                              MapUnit /*ePresMetric*/,
+                                              OUString &rText,
+                                              const IntlWrapper& /*rIntl*/ ) const
+{
+    rText.clear();
+    if( SfxItemPresentation::Complete == ePres )
+    {
+        // TODO:
+        // TranslateId pId = GetValue() ? STR_LAYOUT_IN_TABLE_CELL : STR_DO_NOT_LAYOUT_IN_TABLE_CELL;
+        rText = GetValue() ? OUString("Layout In Table Cell") : OUString("Do Not Layout In Table Cell"); //SwResId(pId);
+    }
+    return true;
+}
+
+void SwFormatLayoutInCell::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatLayoutInTableCell"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
