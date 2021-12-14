@@ -105,6 +105,7 @@
 #include <fmtruby.hxx>
 #include <fmtsrnd.hxx>
 #include <fmturl.hxx>
+#include <fmtLayoutInCell.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <fntcache.hxx>
 #include <grfatr.hxx>
@@ -598,6 +599,7 @@ void InitCore()
     // #i28701#
     // #i35017# - constant name has changed
     aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] = new SwFormatWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+    aAttrTab[ RES_LAYOUT_IN_CELL - POOLATTR_BEGIN ] = new SwFormatLayoutInCell( false );
 
     aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] =           new SwFormatAutoFormat( RES_AUTO_STYLE );
     aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] =    new SfxStringItem( RES_FRMATR_STYLE_NAME, OUString());

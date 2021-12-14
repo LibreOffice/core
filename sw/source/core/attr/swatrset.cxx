@@ -26,6 +26,7 @@
 #include <IDocumentListsAccess.hxx>
 #include <editeng/editeng.hxx>
 #include <fmtanchr.hxx>
+#include <fmtLayoutInCell.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtautofmt.hxx>
 #include <hintids.hxx>

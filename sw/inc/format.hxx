@@ -241,6 +241,8 @@ public:
     inline  const SwTableBoxFormula       &GetTableBoxFormula( bool = true ) const;
     inline  const SwTableBoxValue         &GetTableBoxValue( bool = true ) const;
 
+    inline  const SwFormatLayoutInCell         &GetLayoutInCell( bool = true ) const;
+
     void SetPageFormatToDefault();
 
     /** SwFormat::IsBackgroundTransparent

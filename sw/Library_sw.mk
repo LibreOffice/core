@@ -131,6 +131,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/attr/calbck \
     sw/source/core/attr/cellatr \
     sw/source/core/attr/fmtfollowtextflow \
+    sw/source/core/attr/fmtLayoutInCell \
     sw/source/core/attr/fmtwrapinfluenceonobjpos \
     sw/source/core/attr/format \
     sw/source/core/attr/hints \

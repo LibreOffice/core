@@ -95,6 +95,7 @@
 #include <fmtclds.hxx>
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
+#include <fmtLayoutInCell.hxx>
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>
 #include <osl/mutex.hxx>
