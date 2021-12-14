@@ -2216,29 +2216,6 @@ namespace osl_File
                                      File::E_NOENT, nError1);
         }
 
-        void open_004()
-        {
-            OUString  aTestFile(aRootURL);
-            concatURL(aTestFile, aTmpName2);
-            File testFile(aTestFile);
-
-            auto nError1 = testFile.open(osl_File_OpenFlag_Create);
-            bool bOK = (nError1 == File::E_ACCES || nError1 == File::E_ROFS);
-#ifdef _WIN32
-            bOK = true;  /// in Windows, you can create file in c:\ any way.
-            testFile.close();
-            deleteTestFile(aTestFile);
-#endif
-
-            CPPUNIT_ASSERT_MESSAGE(
-                OUStringToOString(
-                    OUStringConcatenation(
-                        "test for open function: create an illegal file <" + aTestFile + ">: "
-                        + OUString::number(nError1)),
-                    RTL_TEXTENCODING_UTF8).getStr(),
-                bOK);
-        }
-
         void open_005()
         {
             File testFile(aTmpName4);
@@ -2283,7 +2260,6 @@ namespace osl_File
             CPPUNIT_TEST(open_001);
             CPPUNIT_TEST(open_002);
             CPPUNIT_TEST(open_003);
-            CPPUNIT_TEST(open_004);
             CPPUNIT_TEST(open_005);
             CPPUNIT_TEST(open_006);
         CPPUNIT_TEST_SUITE_END();
