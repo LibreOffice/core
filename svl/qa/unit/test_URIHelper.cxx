@@ -322,6 +322,7 @@ void Test::testFindFirstURLInText() {
         { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
         { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
         { "a:/", "file:///a:/", 0, 3 },
+        { "http://sun.com/R_(l_a)", "http://sun.com/R_(l_a)", 0, 22 },
         { ".component:", nullptr, 0, 0 },
         { ".uno:", nullptr, 0, 0 },
         { "cid:", nullptr, 0, 0 },
