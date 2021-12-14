@@ -347,9 +347,12 @@ bool isBoundary2(CharClass const & rCharClass, OUString const & rStr,
     }
 }
 
+// tdf#145381 Added MatchingBracketDepth counter o detect maching closing
+// brackets that are part of the uri
 bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
-                sal_Int32 * pPos, sal_Int32 * pEnd, bool bBackslash = false,
-                bool bPipe = false)
+                sal_Int32 * pPos, sal_Int32 * pEnd,
+                sal_Int32 * pMatchingBracketDepth = nullptr,
+                bool bBackslash = false, bool bPipe = false)
 {
     sal_Unicode c = rStr[*pPos];
     if (rtl::isAscii(c))
@@ -360,7 +363,7 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 1, 0, 0, 4, 4, 4, 1,   //  !"#$%&'
-                1, 1, 1, 1, 1, 4, 1, 4,   // ()*+,-./
+                5, 6, 1, 1, 1, 4, 1, 4,   // ()*+,-./
                 4, 4, 4, 4, 4, 4, 4, 4,   // 01234567
                 4, 4, 1, 1, 0, 1, 0, 1,   // 89:;<=>?
                 4, 4, 4, 4, 4, 4, 4, 4,   // @ABCDEFG
@@ -402,6 +405,24 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                     // isBoundary1)
                 *pEnd = ++(*pPos);
                 return true;
+
+            case 5: // opening bracket
+                ++(*pPos);
+                if(nullptr != pMatchingBracketDepth)
+                    ++(*pMatchingBracketDepth);
+                return true;
+
+            case 6: // closing bracket
+                ++(*pPos);
+                if(nullptr != pMatchingBracketDepth && *pMatchingBracketDepth > 0)
+                {
+                    --(*pMatchingBracketDepth);
+                    // tdf#145381 When there was an opening bracket, detect this closing bracket
+                    // as part of the uri
+                    *pEnd = *pPos;
+                }
+                return true;
+
         }
     }
     else if (rCharClass.isLetterNumeric(rStr, *pPos))
@@ -499,6 +520,11 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     // Productions 6--9 are only applicable if the FSysStyle::Dos bit is set in
     // eStyle.
 
+    // tdf#145381: In addition to the productions I added a mechanism to detect
+    // matching brackets. The task presents the case of an url that ends on a
+    // closing bracket. This needs to be detected as part of the uri in the case
+    // that a matching opening bracket exists.
+
     bool bBoundary1 = true;
     bool bBoundary2 = true;
     for (sal_Int32 nPos = rBegin; nPos != rEnd; nPos = nextChar(rText, nPos))
@@ -516,7 +542,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     sal_Int32 nPrefixEnd = i;
                     sal_Int32 nUriEnd = i;
                     while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nUriEnd, true,
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd, nullptr, true,
                                          true)) ;
                     if (i != nPrefixEnd && i != rEnd && rText[i] == '#')
                     {
@@ -544,8 +570,10 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     while (rText[i++] != ':') ;
                     sal_Int32 nPrefixEnd = i;
                     sal_Int32 nUriEnd = i;
+                    sal_Int32 nMatchingBracketDepth = 0;
                     while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd,
+                                         &nMatchingBracketDepth)) ;
                     if (i != nPrefixEnd && i != rEnd && rText[i] == '#')
                     {
                         ++i;
@@ -655,7 +683,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     sal_Int32 nUriEnd = ++i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd,
-                                         true)) ;
+                                         nullptr, true)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
                         INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
