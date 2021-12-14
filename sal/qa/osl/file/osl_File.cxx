@@ -2231,11 +2231,8 @@ namespace osl_File
 #endif
 
             CPPUNIT_ASSERT_MESSAGE(
-                OUStringToOString(
-                    OUStringConcatenation(
-                        "test for open function: create an illegal file <" + aTestFile + ">: "
-                        + OUString::number(nError1)),
-                    RTL_TEXTENCODING_UTF8).getStr(),
+                "test for open function: create an illegal file <" + aTestFile + ">: "
+                        + OUString::number(nError1),
                 bOK);
         }
 
