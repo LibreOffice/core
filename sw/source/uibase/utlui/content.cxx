@@ -339,260 +339,69 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
     m_bEdit(false),
     m_bDelete(true)
 {
-    Init();
-}
-
-void SwContentType::Init(bool* pbInvalidateWindow)
-{
-    // if the MemberCount is changing ...
-    size_t nOldMemberCount = m_nMemberCount;
-    m_nMemberCount = 0;
     switch(m_nContentType)
     {
-        case ContentTypeId::OUTLINE   :
-        {
+        case ContentTypeId::OUTLINE:
             m_sTypeToken = "outline";
-            m_nMemberCount = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-            if (m_nOutlineLevel < MAXLEVEL)
-            {
-                const size_t nOutlineCount = m_nMemberCount;
-                for(size_t j = 0; j < nOutlineCount; ++j)
-                {
-                    if (m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > m_nOutlineLevel
-                        || !m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(j, *m_pWrtShell->GetLayout()))
-                    {
-                        m_nMemberCount --;
-                    }
-                }
-            }
-        }
         break;
-
-        case ContentTypeId::TABLE     :
+        case ContentTypeId::TABLE:
             m_sTypeToken = "table";
-            m_nMemberCount = m_pWrtShell->GetTableFrameFormatCount(true);
             m_bEdit = true;
         break;
-
-        case ContentTypeId::FRAME     :
-        case ContentTypeId::GRAPHIC   :
-        case ContentTypeId::OLE       :
-        {
-            FlyCntType eType = FLYCNTTYPE_FRM;
+        case ContentTypeId::FRAME:
             m_sTypeToken = "frame";
-            if(m_nContentType == ContentTypeId::OLE)
-            {
-                eType = FLYCNTTYPE_OLE;
-                m_sTypeToken = "ole";
-            }
-            else if(m_nContentType == ContentTypeId::GRAPHIC)
-            {
-                eType = FLYCNTTYPE_GRF;
-                m_sTypeToken = "graphic";
-            }
-            m_nMemberCount = m_pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
             m_bEdit = true;
-        }
+        break;
+        case ContentTypeId::GRAPHIC:
+            m_sTypeToken = "graphic";
+            m_bEdit = true;
+        break;
+        case ContentTypeId::OLE:
+            m_sTypeToken = "ole";
+            m_bEdit = true;
         break;
         case ContentTypeId::TEXTFIELD:
-        {
-            m_sTypeToken.clear();
             m_bEdit = true;
             m_bDelete = true;
-            const SwFieldTypes& rFieldTypes = *m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
-            const size_t nSize = rFieldTypes.size();
-            for (size_t i = 0; i < nSize; ++i)
-            {
-                const SwFieldType* pFieldType = rFieldTypes[i].get();
-                std::vector<SwFormatField*> vFields;
-                pFieldType->GatherFields(vFields);
-                for (SwFormatField* pFormatField: vFields)
-                {
-                    SwField* pField = pFormatField->GetField();
-                    if (pField && pField->GetTypeId() != SwFieldTypesEnum::Postit)
-                        m_nMemberCount++;
-                }
-            }
-        }
         break;
         case ContentTypeId::FOOTNOTE:
-        {
-            m_sTypeToken.clear();
             m_bEdit = true;
             m_bDelete = false;
-            const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
-            m_nMemberCount = rFootnoteIdxs.size();
-            // account for the separator line
-            if (m_nMemberCount > 0)
-                m_nMemberCount++;
-        }
         break;
         case ContentTypeId::BOOKMARK:
         {
-            IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
-            m_nMemberCount = count_if(
-                pMarkAccess->getBookmarksBegin(),
-                pMarkAccess->getBookmarksEnd(),
-                &lcl_IsUiVisibleBookmark);
-            m_sTypeToken.clear();
-            const bool bProtectedBM = m_pWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
+            const bool bProtectedBM = m_pWrtShell->getIDocumentSettingAccess().get(
+                        DocumentSettingId::PROTECT_BOOKMARKS);
             m_bEdit = !bProtectedBM;
             m_bDelete = !bProtectedBM;
         }
         break;
-        case ContentTypeId::REGION :
-        {
-            std::unique_ptr<SwContentArr> pOldMember;
-            if(!m_pMember)
-                m_pMember.reset( new SwContentArr );
-            else if(!m_pMember->empty())
-            {
-                pOldMember = std::move(m_pMember);
-                m_pMember.reset( new SwContentArr );
-            }
-            m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
-            for(size_t i = 0; i < m_nMemberCount; ++i)
-            {
-                const SwSectionFormat* pFormat = &m_pWrtShell->GetSectionFormat(i);
-                if (!pFormat->IsInNodesArr())
-                    continue;
-                const SwSection* pSection = pFormat->GetSection();
-                if (SectionType eTmpType = pSection->GetType();
-                    eTmpType == SectionType::ToxContent || eTmpType == SectionType::ToxHeader)
-                    continue;
-                const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
-                if (pNodeIndex)
-                {
-                    const OUString& rSectionName = pSection->GetSectionName();
-                    sal_uInt8 nLevel = 0;
-                    SwSectionFormat* pParentFormat = pFormat->GetParent();
-                    while(pParentFormat)
-                    {
-                        nLevel++;
-                        pParentFormat = pParentFormat->GetParent();
-                    }
-
-                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, rSectionName,
-                            nLevel, getYPosForSection(*pNodeIndex)));
-
-                    SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
-                    if( !pFormat->GetInfo( aAskItem ) &&
-                        !aAskItem.pObject )     // not visible
-                        pCnt->SetInvisible();
-                    m_pMember->insert(std::move(pCnt));
-                }
-            }
-            m_nMemberCount = m_pMember->size();
+        case ContentTypeId::REGION:
             m_sTypeToken = "region";
             m_bEdit = true;
             m_bDelete = false;
-            if(pOldMember)
-            {
-                if(nullptr != pbInvalidateWindow)
-                {
-                    // need to check visibility (and equal entry number) after
-                    // creation due to a sorted list being used here (before,
-                    // entries with same index were compared already at creation
-                    // time what worked before a sorted list was used)
-                    *pbInvalidateWindow = checkVisibilityChanged(
-                        *pOldMember,
-                        *m_pMember);
-                }
-            }
-        }
         break;
         case ContentTypeId::INDEX:
-        {
-            m_nMemberCount = m_pWrtShell->GetTOXCount();
             m_bEdit = true;
             m_bDelete = false;
-        }
         break;
         case ContentTypeId::REFERENCE:
-        {
-            m_nMemberCount = m_pWrtShell->GetRefMarks();
             m_bEdit = false;
             m_bDelete = false;
-        }
         break;
         case ContentTypeId::URLFIELD:
-        {
-            m_nMemberCount = 0;
-            if(!m_pMember)
-                m_pMember.reset( new SwContentArr );
-            else
-                m_pMember->clear();
-
-            m_nMemberCount = lcl_InsertURLFieldContent(m_pMember.get(), m_pWrtShell, this);
-
             m_bEdit = true;
-            nOldMemberCount = m_nMemberCount;
             m_bDelete = true;
-        }
         break;
         case ContentTypeId::POSTIT:
-        {
-            m_nMemberCount = 0;
-            if(!m_pMember)
-                m_pMember.reset( new SwContentArr );
-            else
-                m_pMember->clear();
-
-            SwPostItMgr* aMgr = m_pWrtShell->GetView().GetPostItMgr();
-            if (aMgr)
-            {
-                for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
-                {
-                    if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadcaster())) // SwPostit
-                    {
-                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc() &&
-                            (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
-                        {
-                            OUString sEntry = pFormatField->GetField()->GetPar2();
-                            sEntry = RemoveNewline(sEntry);
-                            std::unique_ptr<SwPostItContent> pCnt(new SwPostItContent(
-                                                this,
-                                                sEntry,
-                                                pFormatField,
-                                                m_nMemberCount));
-                            m_pMember->insert(std::move(pCnt));
-                            m_nMemberCount++;
-                        }
-                    }
-                }
-            }
-            m_sTypeToken.clear();
             m_bEdit = true;
-            nOldMemberCount = m_nMemberCount;
-        }
         break;
         case ContentTypeId::DRAWOBJECT:
-        {
-            m_sTypeToken.clear();
             m_bEdit = true;
-            m_nMemberCount = 0;
-            SwDrawModel* pModel = m_pWrtShell->getIDocumentDrawModelAccess().GetDrawModel();
-            if(pModel)
-            {
-                SdrPage* pPage = pModel->GetPage(0);
-                const size_t nCount = pPage->GetObjCount();
-                for( size_t i=0; i<nCount; ++i )
-                {
-                    SdrObject* pTemp = pPage->GetObj(i);
-                    // #i51726# - all drawing objects can be named now
-                    if (!pTemp->GetName().isEmpty())
-                        m_nMemberCount++;
-                }
-            }
-        }
         break;
         default: break;
     }
-    // ... then, the data can also no longer be valid,
-    // apart from those which have already been corrected,
-    // then nOldMemberCount is nevertheless not so old.
-    if( nOldMemberCount != m_nMemberCount )
-        m_bDataValid = false;
+    FillMemberList();
 }
 
 SwContentType::~SwContentType()
@@ -4716,10 +4525,7 @@ void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
             ? m_aActiveContentArr[ContentTypeId::OUTLINE]
             : m_aHiddenContentArr[ContentTypeId::OUTLINE];
     if(rpContentT)
-    {
         rpContentT->SetOutlineLevel(m_nOutlineLevel);
-        rpContentT->Init();
-    }
     Display(State::ACTIVE == m_eState);
 }
 
