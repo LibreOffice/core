@@ -102,7 +102,7 @@ StylePoolChangeListener::~StylePoolChangeListener()
 
 void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
-    m_pPreviewControl->UpdateStylesList();
+    m_pPreviewControl->RequestStylesListUpdate();
 }
 
 StyleItemController::StyleItemController(const std::pair<OUString, OUString>& aStyleName)
@@ -373,6 +373,7 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : m_xDispatchProvider(xDispatchProvider)
     , m_xStylesView(xBuilder.weld_icon_view("stylesview"))
+    , m_aUpdateTask(*this)
     , m_aDefaultStyles(aDefaultStyles)
 {
     m_xStylesView->connect_selection_changed(LINK(this, StylesPreviewWindow_Base, Selected));
@@ -384,8 +385,7 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
 
     m_pStylePoolChangeListener.reset(new StylePoolChangeListener(this));
 
-    UpdateStylesList();
-    Update();
+    RequestStylesListUpdate();
 }
 
 IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
@@ -425,6 +425,8 @@ StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
 {
     m_pStatusListener->UnBind();
 
+    m_aUpdateTask.Stop();
+
     try
     {
         m_xStatusListener->dispose();
@@ -440,10 +442,10 @@ void StylesPreviewWindow_Base::Select(const OUString& rStyleName)
 {
     m_sSelectedStyle = rStyleName;
 
-    Update();
+    UpdateSelection();
 }
 
-void StylesPreviewWindow_Base::Update()
+void StylesPreviewWindow_Base::UpdateSelection()
 {
     for (unsigned long i = 0; i < m_aAllStyles.size(); ++i)
     {
@@ -453,6 +455,14 @@ void StylesPreviewWindow_Base::Update()
             break;
         }
     }
+}
+
+void StylesPreviewWindow_Base::RequestStylesListUpdate() { m_aUpdateTask.Start(); }
+
+void StylesListUpdateTask::Invoke()
+{
+    m_rStylesList.UpdateStylesList();
+    m_rStylesList.UpdateSelection();
 }
 
 void StylesPreviewWindow_Base::UpdateStylesList()
