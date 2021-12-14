@@ -88,6 +88,24 @@
       "parentUuid": "9ab1cac7_1d6bef13",
       "revId": "40e28991288f6ef905b178f6f2ba11c6d0c5035a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dea22151_e3690282",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T10:38:24Z",
+      "side": 1,
+      "message": "\u003e Thanks! Do you plan to create such family?\n\nno",
+      "parentUuid": "215a4a06_792c5bf6",
+      "revId": "40e28991288f6ef905b178f6f2ba11c6d0c5035a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
