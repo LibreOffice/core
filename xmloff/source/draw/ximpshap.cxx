@@ -3503,7 +3503,9 @@ SdXMLCustomShapeContext::SdXMLCustomShapeContext(
                 rtl::Reference<XMLTextImportHelper> xTxtImport = GetImport().GetTextImport();
                 XMLPropStyleContext* pStyle = xTxtImport->FindAutoFrameStyle(aStyleName);
                 // Note that this an API name, so intentionally not localized.
-                if (pStyle && pStyle->GetParentName() == "Frame")
+                // Also allow other Frame styles with the same prefix, we just want to reject
+                // Graphics after all.
+                if (pStyle && pStyle->GetParentName().startsWith("Frame"))
                 {
                     mbTextBox = true;
                     break;
