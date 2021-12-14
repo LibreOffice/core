@@ -16,6 +16,24 @@
       "message": "Do not create the monstrous calculation above. The original expression was comparing\n\n  o3tl::make_unsigned(nDeltaSec) \u003e 1 + ( pTSource-\u003epInstance-\u003em_nTimeoutMS / 1000 )\n\nYour modified expression was (incorrectly) comparing\n\n  o3tl::make_unsigned(nDeltaUSec) \u003e 1000000 + ( pTSource-\u003epInstance-\u003em_nTimeoutMS / 1000 )\n\nThe difference was that first one added seconds to seconds, and your was adding microseconds to seconds. You added many lines, instead of just making your comparison expression add microseconds to microseconds.",
       "revId": "de5e85b41289cd77b3d4fabefa78d4fb9ff09e91",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40da3ed5_d42c46ce",
+        "filename": "vcl/unx/gtk3/gtkdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-14T17:38:58Z",
+      "side": 1,
+      "message": "This is mostly reverting this specific function back to it was before 489d7298d2e609ee5900f05ba0064845a7a551ce.",
+      "parentUuid": "1583737d_f24018b3",
+      "revId": "de5e85b41289cd77b3d4fabefa78d4fb9ff09e91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
