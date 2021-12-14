@@ -114,7 +114,7 @@ void TempFile::closeAndRename(const OUString &_url) {
         throw css::uno::RuntimeException(
             "cannot close " + url);
     }
-    if (osl::File::move(url, _url) != osl::FileBase::E_None) {
+    if (osl::File::replace(url, _url) != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
             "cannot move " + url);
     }
