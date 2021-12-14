@@ -14,8 +14,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
-	external/mdds/remove-unused-parameters.patch.1 \
-	external/mdds/remove-more-unused-parameters.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
