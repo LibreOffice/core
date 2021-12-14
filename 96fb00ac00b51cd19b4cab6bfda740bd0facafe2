@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8a9abe7_6fb84001",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-14T05:47:45Z",
+      "side": 1,
+      "message": "Jim, after pushing the patch for master yesterday I\u0027ve seen your reversion. Do you still have trouble with the junit test, see BZ? If not, please +2 to have it in 7.3.",
+      "revId": "96fb00ac00b51cd19b4cab6bfda740bd0facafe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
