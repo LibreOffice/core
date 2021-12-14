@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8738bad_1b97e220",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-14T07:39:27Z",
+      "side": 1,
+      "message": "Oh, boost::shared_ptr is still a thing...",
+      "revId": "dabe433590da0bff57a3b223fe62402534046bf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
