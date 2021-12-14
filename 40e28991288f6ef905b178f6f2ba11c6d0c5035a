@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8e4097c_d6b25e6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T10:17:47Z",
+      "side": 1,
+      "message": "* I don\u0027t think such special-purpose functions would belong into include/rtl/[u]string.hxx.\n\n* I think the CPPUNIT_ASSERT family of macros has multiple shortcomings, just one of them being the issue of constructing message arguments from variable content.  Another common nuisance is that the expected and actual value arguments need to be of the exact same type.  Maybe it would make more sense to switch to our own set of macros that addresses all the shortcomings.",
+      "revId": "40e28991288f6ef905b178f6f2ba11c6d0c5035a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
