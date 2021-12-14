@@ -53,9 +53,9 @@
 #include <svx/svditer.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/polypolygoneditor.hxx>
+#include <drawinglayer/primitive2d/PolygonMarkerPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>

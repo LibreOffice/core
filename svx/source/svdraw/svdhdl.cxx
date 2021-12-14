@@ -59,10 +59,10 @@
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <memory>
 #include <bitmaps.hlst>

@@ -18,10 +18,10 @@
  */
 
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonMarkerPrimitive2D.hxx>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 using namespace com::sun::star;
 

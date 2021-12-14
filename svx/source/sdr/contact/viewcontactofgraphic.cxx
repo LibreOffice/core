@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <editeng/eeitem.hxx>

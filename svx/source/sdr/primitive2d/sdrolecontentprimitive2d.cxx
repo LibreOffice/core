@@ -22,10 +22,10 @@
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <svtools/colorcfg.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 

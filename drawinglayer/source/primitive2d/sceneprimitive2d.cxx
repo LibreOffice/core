@@ -23,13 +23,13 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <processor3d/zbufferprocessor3d.hxx>
 #include <processor3d/shadow3dextractor.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <processor3d/geometry2dextractor.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/threadpool.hxx>
