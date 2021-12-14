@@ -34,6 +34,24 @@
       "parentUuid": "e8a9abe7_6fb84001",
       "revId": "96fb00ac00b51cd19b4cab6bfda740bd0facafe2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8a12275_4dda1c14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-12-14T07:12:25Z",
+      "side": 1,
+      "message": "No twice makes no sense to me :-). With 0707380f05d4cce2d17eb74c4b871dcf17d3ac1f I tried to make the save indicator always visible. But you found an issue on gtk3/svp and removed the mandatory flag at Icd1fbefdd8f1be73b511d6ca0d13d6362f6a5509. Realized this after submitting and cherry-picking, so the question is whether the problem still exists.",
+      "parentUuid": "bb9a1021_4f4a6292",
+      "revId": "96fb00ac00b51cd19b4cab6bfda740bd0facafe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
