@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "687b5b83_1df742f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-14T07:06:53Z",
+      "side": 1,
+      "message": "I mean, obvious it would be better to just send a better message than EMPTY which means \"FULL\" :-)",
+      "revId": "e7f1657ac75dd770b3b208b4013a59d271f074e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "771a001f_db0e26b6",
