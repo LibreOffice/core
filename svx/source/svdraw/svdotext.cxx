@@ -52,6 +52,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
 #include <o3tl/temporary.hxx>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star;
 
@@ -1340,6 +1341,15 @@ void SdrTextObj::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTex
     NbcSetOutlinerParaObjectForText( std::move(pTextObject), getActiveText() );
 }
 
+namespace
+{
+    bool IsAutoGrow(const SdrTextObj& rObj)
+    {
+        bool bAutoGrow = rObj.IsAutoGrowHeight() || rObj.IsAutoGrowWidth();
+        return bAutoGrow && !utl::ConfigManager::IsFuzzing();
+    }
+}
+
 void SdrTextObj::NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObject> pTextObject, SdrText* pText )
 {
     if( pText )
@@ -1355,7 +1365,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObje
     }
 
     SetTextSizeDirty();
-    if (IsTextFrame() && (IsAutoGrowHeight() || IsAutoGrowWidth()))
+    if (IsTextFrame() && IsAutoGrow(*this))
     { // adapt text frame!
         NbcAdjustTextFrameWidthAndHeight();
     }
