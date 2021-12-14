@@ -489,6 +489,13 @@ IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
         mrViewData.GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
     else if (rInfo.nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
         mrViewData.GetDispatcher().Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
+    else //IGNOREWORD, ADDTODICTIONARY, WORDLANGUAGE, PARALANGUAGE
+    {
+        // The spelling status of the word has changed. Close the cell to reset the caches
+        ScInputHandler* pHdl = SC_MOD()->GetInputHdl(mrViewData.GetViewShell());
+        if (pHdl)
+            pHdl->EnterHandler();
+    }
 }
 
 namespace {
@@ -3294,8 +3301,13 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             if (pHdl)
                 pHdl->SetModified();
 
+            const OUString sOldText = pHdl ? pHdl->GetEditString() : "";
+
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
             pEditView->ExecuteSpellPopup(aMenuPos, aLink);
+
+            if (pHdl && pHdl->GetEditString() != sOldText)
+                pHdl->EnterHandler();
 
             bDone = true;
         }
