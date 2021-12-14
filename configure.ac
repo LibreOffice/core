@@ -2070,7 +2070,7 @@ AC_ARG_WITH(tls,
     AS_HELP_STRING([--with-tls],
         [Decides which TLS/SSL and cryptographic implementations to use for
          LibreOffice's code. Notice that this doesn't apply for depending
-         libraries like "neon", for example. Default is to use NSS
+         libraries like "curl", for example. Default is to use NSS
          although OpenSSL is also possible. Notice that selecting NSS restricts
          the usage of OpenSSL in LO's code but selecting OpenSSL doesn't
          restrict by now the usage of NSS in LO's code. Possible values:
@@ -2429,7 +2429,7 @@ AC_ARG_WITH(system-lockfile,
 AC_ARG_WITH(webdav,
     AS_HELP_STRING([--with-webdav],
         [Specify which library to use for webdav implementation.
-         Possible values: "neon", "curl", "no". The default value is "neon".
+         Possible values: "curl", "no". The default value is "curl".
          Example: --with-webdav="curl"]))
 
 AC_ARG_WITH(linker-hash-style,
@@ -10848,17 +10848,6 @@ curl)
         AC_MSG_ERROR(["--with-webdav=curl conflicts with --disable-curl"])
     fi
     ;;
-neon)
-    AC_MSG_RESULT([neon])
-    # Check for system neon
-    libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.31.2])
-    if test "$with_system_neon" = "yes"; then
-        NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
-    else
-        NEON_VERSION=0312
-    fi
-    AC_SUBST(NEON_VERSION)
-    ;;
 *)
     AC_MSG_RESULT([none, disabled])
     WITH_WEBDAV=""
@@ -14336,9 +14325,6 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
     if test "$enable_lotuswordpro" = "yes"; then
         AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
-    fi
-    if test "$WITH_WEBDAV" = "neon"; then
-        AC_MSG_ERROR([need --with-webdav=curl or --without-webdav - webdav support.])
     fi
     if test -n "$ENABLE_POPPLER"; then
         if test "x$SYSTEM_POPPLER" = "x"; then

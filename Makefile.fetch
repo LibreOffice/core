@@ -192,7 +192,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,MYTHES,MYTHES_TARBALL) \
-		$(call fetch_Optional,NEON,NEON_TARBALL) \
 		$(call fetch_Optional,NSS,NSS_TARBALL) \
 		$(call fetch_Optional_pack,NUMBERTEXT_EXTENSION_PACK) \
 		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \

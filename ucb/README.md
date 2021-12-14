@@ -2,8 +2,3 @@
 
 Universal Content Broker (has ucp) which do things like convert files to strings in content broker world.
 
-mmeeks: so - I renamed the old LGPLv3 webdav code to `webdav-neon`, and imported
-the (not built) serf webdav ucp into the old space. so that in future, we can
-merge changes more easily - and still choose which to use. cbosdonnat kindly
-volunteered to do some comparative analysis of the two codebases to decide which
-is best for what etc.

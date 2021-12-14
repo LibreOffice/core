@@ -10,48 +10,6 @@ excludelist:
     ucb/source/ucp/ftp/ftpcontentprovider.hxx:
     # Wrapper for external lib
     - curl.hxx
-    ucb/source/ucp/webdav-neon/ContentProperties.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DateTimeHelper.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DAVException.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/LockSequence.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DAVAuthListenerImpl.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DAVAuthListener.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DAVResource.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/NeonInputStream.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DAVTypes.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DAVSessionFactory.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/DAVRequestEnvironment.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/PropertyMap.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/webdavdatasupplier.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/webdavprovider.hxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
     ucb/source/core/ucb.cxx:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
@@ -95,31 +53,6 @@ excludelist:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
     ucb/source/ucp/tdoc/tdoc_content.cxx:
-    # Needed for UnoType
-    - com/sun/star/ucb/XCommandInfo.hpp
-    ucb/source/ucp/webdav-neon/DateTimeHelper.cxx:
-    # Actually in use
-    - com/sun/star/util/DateTime.hpp
-    ucb/source/ucp/webdav-neon/LockEntrySequence.cxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/LinkSequence.cxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/LinkSequence.cxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/LockSequence.cxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/NeonSession.cxx:
-    # Needed for UnoType
-    - com/sun/star/ucb/Lock.hpp
-    - com/sun/star/beans/NamedValue.hpp
-    ucb/source/ucp/webdav-neon/UCBDeadPropertyValue.cxx:
-    # Needed for LGPL code licensing
-    - config_lgpl.h
-    ucb/source/ucp/webdav-neon/webdavcontent.cxx:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
     ucb/source/ucp/webdav-curl/DateTimeHelper.cxx:

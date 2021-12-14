@@ -58,9 +58,6 @@ bool StringStatic::preRun()
     // passing around pointers to global OUString
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/svg/"))
          return false;
-    // has a mix of literals and refs to external OUStrings
-    if (loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-neon/ContentProperties.cxx"))
-         return false;
     return true;
 }
 
