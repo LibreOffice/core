@@ -1,0 +1,169 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41ba9e7f_2e30639a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "a*n* ending *b*racket will be added *t*o",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7054510b_169759e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "please add a unit test",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a86d1640_ffc0b91a",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "the above comment doesn\u0027t look to useful",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dca36e21_40f629f7",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "* for one, why be imprecise here and try to track two different kinds of brackets with just a single counter\n* for another, square brackets have limited syntactic uses in URIs, and are not typically allowed in a URI\u0027s \"payload\"; I would not handle them specially at all in the context of tdf#145381",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67ade1d1_629008a7",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "the above comment doesn\u0027t look useful",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "114e8546_95007470",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "the above comment doesn\u0027t look useful",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4482234c_8a71b484",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "it looks odd that cases 5 and 6 appear between cases 1 and 2",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776bd403_af512117",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "the above comment is confusing (how exactly does it appertain to the following code starting with `bool bBoundary1 \u003d true;`? what does \"this fix\" refer to?)",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf958fe_983f4167",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T14:44:10Z",
+      "side": 1,
+      "message": "why do random reformatting by moving this here from the preceding line (which would still run shorter than the 100 character limit after the addition of \"nullptr,\" there)",
+      "range": {
+        "startLine": 550,
+        "startChar": 40,
+        "endLine": 550,
+        "endChar": 45
+      },
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
