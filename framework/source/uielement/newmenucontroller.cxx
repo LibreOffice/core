@@ -32,17 +32,18 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/propertyvalue.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/commandinfoprovider.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/imagemgr.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <osl/mutex.hxx>
-#include <cppuhelper/supportsservice.hxx>
+#include <vcl/commandinfoprovider.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 //  Defines
 constexpr OUStringLiteral aSlotNewDocDirect = u".uno:AddDirect";
@@ -74,35 +75,34 @@ css::uno::Sequence< OUString > SAL_CALL NewMenuController::getSupportedServiceNa
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
+void NewMenuController::setMenuImages(VCLXPopupMenu& rPopupMenu, bool bSetImages)
 {
-    sal_uInt16 nItemCount = pPopupMenu->GetItemCount();
+    sal_uInt16 nItemCount = rPopupMenu.getItemCount();
     Reference< XFrame > xFrame( m_xFrame );
 
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        sal_uInt16 nItemId = pPopupMenu->GetItemId( i );
+        sal_uInt16 nItemId = rPopupMenu.getItemId(i);
         if ( nItemId != 0 )
         {
             if ( bSetImages )
             {
                 OUString aImageId;
-                OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
-                void* nAttributePtr = pPopupMenu->GetUserValue( nItemId );
+                OUString aCmd(rPopupMenu.getCommand(nItemId));
+                void* nAttributePtr = rPopupMenu.getUserValue(nItemId);
                 MenuAttributes* pAttributes = static_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aImageId = pAttributes->aImageId;
 
                 INetURLObject aURLObj( aImageId.isEmpty() ? aCmd : aImageId );
-                Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj );
-                if ( !aImage )
-                    aImage = vcl::CommandInfoProvider::GetImageForCommand(aCmd, xFrame);
+                css::uno::Reference<css::graphic::XGraphic> xGraphic = Graphic(SvFileInformationManager::GetImageNoDefault(aURLObj)).GetXGraphic();
+                if (!xGraphic.is())
+                    xGraphic = vcl::CommandInfoProvider::GetXGraphicForCommand(aCmd, xFrame);
 
-                if ( !!aImage )
-                    pPopupMenu->SetItemImage( nItemId, aImage );
+                rPopupMenu.setItemImage(nItemId, xGraphic, false);
             }
             else
-                pPopupMenu->SetItemImage( nItemId, Image() );
+                rPopupMenu.setItemImage(nItemId, nullptr, false);
         }
     }
 }
@@ -309,15 +309,12 @@ NewMenuController::~NewMenuController()
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
-    PopupMenu*     pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
-    if ( pPopupMenu )
-        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
-    if ( !pVCLPopupMenu )
+    if (!pPopupMenu)
         return;
 
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
@@ -353,7 +350,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
     }
 
     if ( m_bShowImages )
-        setMenuImages( pVCLPopupMenu, m_bShowImages );
+        setMenuImages(*pPopupMenu, m_bShowImages);
 }
 
 // XEventListener
@@ -400,7 +397,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
     {
         SolarMutexGuard aSolarMutexGuard;
-        aURL = pPopupMenu->getCommand(rEvent.MenuId);
+        aURL = xPopupMenu->getCommand(rEvent.MenuId);
         void* nAttributePtr = pPopupMenu->getUserValue(rEvent.MenuId);
         MenuAttributes* pAttributes = static_cast<MenuAttributes *>(nAttributePtr);
         if (pAttributes)
@@ -427,13 +424,11 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& )
     bool bShowImages( rSettings.GetUseImagesInMenus() );
     OUString aIconTheme( rSettings.DetermineIconTheme() );
 
-    PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-
     if ( m_bShowImages != bShowImages || m_aIconTheme != aIconTheme )
     {
         m_bShowImages = bShowImages;
         m_aIconTheme = aIconTheme;
-        setMenuImages( pVCLPopupMenu, m_bShowImages );
+        setMenuImages(*pPopupMenu, m_bShowImages);
     }
 
     setAccelerators();
