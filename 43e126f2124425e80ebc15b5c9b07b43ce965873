@@ -34,6 +34,24 @@
       "parentUuid": "ddc25630_4da57624",
       "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4086a604_b74dc83c",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-14T20:21:15Z",
+      "side": 1,
+      "message": "I think the only thing that\u0027d work 100% would be adding a specific Flush() call to Bitmap, which is probably an overkill. Realistically I think that just GetBitmap() will do the job well enough, and so calling OutputDevice::Flush() (and fixing it to actually flush) before any time call should be sufficient to get reasonably close.",
+      "parentUuid": "bfabdd9c_db781bde",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
