@@ -34,6 +34,7 @@
 #include <sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <osl/diagnose.h>
 
 namespace sdr::table {
 

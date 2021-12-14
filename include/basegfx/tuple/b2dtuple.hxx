@@ -20,7 +20,6 @@
 #pragma once
 
 #include <sal/types.h>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/tuple/Tuple2D.hxx>
 

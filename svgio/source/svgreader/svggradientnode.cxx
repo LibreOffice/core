@@ -20,6 +20,7 @@
 #include <svggradientnode.hxx>
 #include <svgdocument.hxx>
 #include <svggradientstopnode.hxx>
+#include <osl/diagnose.h>
 
 namespace svgio::svgreader
 {

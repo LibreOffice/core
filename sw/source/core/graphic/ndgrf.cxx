@@ -49,6 +49,7 @@
 
 #include <rtl/ustring.hxx>
 #include <o3tl/deleter.hxx>
+#include <osl/diagnose.h>
 #include <retrieveinputstreamconsumer.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>

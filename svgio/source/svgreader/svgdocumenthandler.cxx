@@ -46,6 +46,7 @@
 #include <svgpatternnode.hxx>
 #include <svgtitledescnode.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

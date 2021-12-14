@@ -32,6 +32,7 @@
 
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include <dummyobject.hxx>
 
 

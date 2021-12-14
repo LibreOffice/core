@@ -24,8 +24,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <type_traits>
-
 namespace comphelper {
 
     // Class incapsulating UIDs used as e.g. tunnel IDs for css::lang::XUnoTunnel,

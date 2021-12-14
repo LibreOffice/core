@@ -72,6 +72,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <osl/diagnose.h>
 
 // MM02 needed for VOC mechanism and getting the OC - may be moved to an own file
 #include <svx/sdrpagewindow.hxx>

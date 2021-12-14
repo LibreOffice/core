@@ -22,6 +22,7 @@
 #include <svx/svdoedge.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrconnectorprimitive2d.hxx>
+#include <osl/diagnose.h>
 
 
 namespace sdr::contact

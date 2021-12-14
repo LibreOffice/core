@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/basegfxdllapi.h>
 

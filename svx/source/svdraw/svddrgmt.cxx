@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <o3tl/numeric.hxx>
+#include <osl/diagnose.h>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
