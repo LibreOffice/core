@@ -346,7 +346,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
             rPopupMenu->setCommand(nItemId, aDynamicMenuEntry.sURL);
 
             void* nAttributePtr = MenuAttributes::CreateAttribute( aDynamicMenuEntry.sTargetName, aDynamicMenuEntry.sImageIdentifier );
-            pVCLPopupMenu->SetUserValue( nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute );
+            pPopupMenu->setUserValue(nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute);
 
             nItemId++;
         }
@@ -400,9 +400,8 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
     {
         SolarMutexGuard aSolarMutexGuard;
-        PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-        aURL = pVCLPopupMenu->GetItemCommand(rEvent.MenuId);
-        void* nAttributePtr = pVCLPopupMenu->GetUserValue(rEvent.MenuId);
+        aURL = pPopupMenu->getCommand(rEvent.MenuId);
+        void* nAttributePtr = pPopupMenu->getUserValue(rEvent.MenuId);
         MenuAttributes* pAttributes = static_cast<MenuAttributes *>(nAttributePtr);
         if (pAttributes)
             aTargetFrame = pAttributes->aTargetFrame;

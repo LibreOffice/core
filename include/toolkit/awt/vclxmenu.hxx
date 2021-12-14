@@ -48,8 +48,7 @@ typedef ::std::vector<
     css::uno::Reference< css::awt::XPopupMenu >
 > PopupMenuRefList;
 
-
-
+typedef void (*MenuUserDataReleaseFunction)(void*);
 
 class TOOLKIT_DLLPUBLIC VCLXMenu :  public css::awt::XMenuBar,
                                     public css::awt::XPopupMenu,
@@ -81,6 +80,8 @@ public:
 
     Menu*    GetMenu() const { return mpMenu; }
     bool IsPopupMenu() const;
+    void setUserValue(sal_uInt16 nItemId, void* nUserValue, MenuUserDataReleaseFunction aFunc);
+    void* getUserValue(sal_uInt16 nItemId);
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;

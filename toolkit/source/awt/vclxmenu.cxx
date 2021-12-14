@@ -818,6 +818,22 @@ VCLXMenu::getItemImage(
     return rxGraphic;
 }
 
+void VCLXMenu::setUserValue(sal_uInt16 nItemId, void* nUserValue, MenuUserDataReleaseFunction aFunc)
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    mpMenu->SetUserValue(nItemId, nUserValue, aFunc);
+}
+
+void* VCLXMenu::getUserValue(sal_uInt16 nItemId)
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    return mpMenu->GetUserValue(nItemId);
+}
+
 VCLXMenuBar::VCLXMenuBar()
 {
     ImplCreateMenu( false );
