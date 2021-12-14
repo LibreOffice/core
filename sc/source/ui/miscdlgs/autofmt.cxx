@@ -31,6 +31,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <osl/diagnose.h>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/scriptedtext.hxx>

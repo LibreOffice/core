@@ -21,15 +21,10 @@
 
 #include <sal/config.h>
 
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
-#include <cstddef>
-#include <functional>
 #include <memory>
 #include <vector>
 #include <utility>

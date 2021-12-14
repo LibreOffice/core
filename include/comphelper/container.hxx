@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_CONTAINER_HXX
 #define INCLUDED_COMPHELPER_CONTAINER_HXX
 
-#include <config_options.h>
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>

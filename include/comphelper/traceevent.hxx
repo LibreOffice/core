@@ -12,7 +12,6 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
 #include <atomic>
 #include <map>
 #include <memory>

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 
 namespace drawinglayer::primitive2d

@@ -22,6 +22,7 @@
 #include <svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <o3tl/string_view.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 
 

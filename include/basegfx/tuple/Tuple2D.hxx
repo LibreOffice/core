@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include <sal/types.h>
-#include <basegfx/basegfxdllapi.h>
 #include <basegfx/utils/common.hxx>
 #include <basegfx/numeric/ftools.hxx>
 

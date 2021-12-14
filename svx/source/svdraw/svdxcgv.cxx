@@ -48,6 +48,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdotable.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

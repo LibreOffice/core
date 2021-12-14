@@ -28,6 +28,7 @@
 #include <sdr/primitive2d/sdrpathprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <osl/diagnose.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/canvastools.hxx>
 

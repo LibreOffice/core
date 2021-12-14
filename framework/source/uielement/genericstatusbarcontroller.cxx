@@ -20,6 +20,7 @@
 #include <uielement/genericstatusbarcontroller.hxx>
 #include <uielement/statusbarmerger.hxx>
 
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/ui/ItemStyle.hpp>

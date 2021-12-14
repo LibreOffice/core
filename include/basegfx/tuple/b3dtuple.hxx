@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/basegfxdllapi.h>

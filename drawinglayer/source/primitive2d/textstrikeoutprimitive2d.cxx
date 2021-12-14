@@ -26,6 +26,7 @@
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
 

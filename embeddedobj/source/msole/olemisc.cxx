@@ -31,6 +31,7 @@
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 
 #include <oleembobj.hxx>
 #include "olepersist.hxx"

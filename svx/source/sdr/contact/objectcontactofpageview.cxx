@@ -33,6 +33,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <osl/diagnose.h>
 #include <svx/unoapi.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/canvastools.hxx>

@@ -55,6 +55,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <osl/diagnose.h>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>

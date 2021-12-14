@@ -24,9 +24,10 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 
-#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/weak.hxx>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <mutex>
