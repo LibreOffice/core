@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "967912c0_1b418629",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-14T06:43:43Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e7f1657ac75dd770b3b208b4013a59d271f074e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "771a001f_db0e26b6",
+        "filename": "desktop/qa/desktop_lib/test_desktop_lib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-14T06:43:43Z",
+      "side": 1,
+      "message": "Very -\u003e Verify",
+      "revId": "e7f1657ac75dd770b3b208b4013a59d271f074e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
