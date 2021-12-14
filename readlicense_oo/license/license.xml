@@ -52,18 +52,6 @@
     <h1 style="text-align: center;"><a id="thirdparty" name="thirdparty">Third Party Code Additional Copyright
     Notices and License Terms</a></h1>
     <h1><a id="a__Libraries" name="a__Libraries">Libraries</a></h1>
-    <div class="APR">
-        <h2>Apache Portable Runtime (APR)</h2>
-        <p>The following software may be included in this product: Apache Portable Runtime (APR).
-        Use of any of this software is governed by the terms of the license below:</p>
-        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
-    </div>
-    <div class="SERF">
-        <h2>Apache Serf</h2>
-        <p>The following software may be included in this product: Apache Serf.
-        Use of any of this software is governed by the terms of the license below:</p>
-        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
-    </div>
     <div class="BSH">
         <h2>beanshell</h2>
         <p>The following software may be included in this product: beanshell. Use of any of this software is governed

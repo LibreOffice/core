@@ -1080,78 +1080,7 @@ endef
 endif # SYSTEM_LIBLANGTAG
 
 
-gb_ExternalProject__use_apr :=
-
-ifeq ($(WITH_WEBDAV),serf)
-
-define gb_LinkTarget__use_apr
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(APR_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(APR_LIBS) \
-	$(if $(filter $(OS),LINUX),-lpthread) \
-	$(if $(filter $(OS),MACOSX),-liconv) \
-)
-
-ifeq ($(SYSTEM_APR),)
-$(call gb_LinkTarget_use_system_win32_libs,$(1),\
-	mswsock \
-	rpcrt4 \
-	shell32 \
-)
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DAPR_DECLARE_STATIC \
-	-DAPU_DECLARE_STATIC \
-)
-$(call gb_LinkTarget_use_external_project,$(1),apr_util,full)
-endif
-
-endef
-
-define gb_ExternalProject__use_apr
-ifeq ($(SYSTEM_APR),)
-$(call gb_ExternalProject_use_external_project,$(1),apr_util,full)
-endif
-
-endef
-
-ifneq ($(SYSTEM_SERF),)
-
-define gb_LinkTarget__use_serf
-$(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(SERF_CFLAGS))) \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(SERF_CFLAGS)))) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(SERF_LIBS) \
-)
-
-endef
-
-else # !SYSTEM_SERF
-
-define gb_LinkTarget__use_serf
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,serf) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	serf \
-)
-
-endef
-
-endif # SYSTEM_SERF
-
-else ifeq ($(WITH_WEBDAV),neon)
+ifeq ($(WITH_WEBDAV),neon)
 
 ifneq ($(SYSTEM_NEON),)
 

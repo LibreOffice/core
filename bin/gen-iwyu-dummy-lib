@@ -24,7 +24,7 @@ iwyu_INCLUDEDIRS=$(echo "$iwyu_INCLUDES" | sed -e "s,/[^/]*$,," | grep -v "^incl
 
 iwyu_EXTERNALS=$(ls "$SRCDIR"/*/*Library*mk "$SRCDIR"/*/*Executable*mk \
     | xargs awk -f "$SRCDIR"/bin/gen-iwyu-dummy-lib.awk \
-    | grep -v '$(\|)\|\\$\|apr\|breakpad\|bzip2\|expat_x64\|mDNSResponder\|serf\|zlib_x64')
+    | grep -v '$(\|)\|\\$\|breakpad\|bzip2\|expat_x64\|mDNSResponder\|zlib_x64')
 
 iwyu_DIR="$BUILDDIR"/iwyudummy/
 mkdir -p "$iwyu_DIR"
