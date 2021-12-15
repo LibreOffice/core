@@ -795,6 +795,8 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/dbui/dbtree \
     sw/source/uibase/dbui/mailmergetoolbarcontrols \
 ))
+
+$(eval $(call gb_Library_add_componentimpl,sw,mailmerge))
 endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
