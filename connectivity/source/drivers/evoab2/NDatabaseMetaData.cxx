@@ -1102,104 +1102,49 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
-    if (eds_check_version(3, 6, 0) == nullptr)
+    GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
+
+    for (GList* liter = pSources; liter; liter = liter->next)
     {
-        GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
-
-        for (GList* liter = pSources; liter; liter = liter->next)
+        ESource *pSource = E_SOURCE (liter->data);
+        bool can = false;
+        switch (m_pConnection->getSDBCAddressType())
         {
-            ESource *pSource = E_SOURCE (liter->data);
-            bool can = false;
-            switch (m_pConnection->getSDBCAddressType())
-            {
-                case SDBCAddress::EVO_GWISE:
-                    can = isSourceBackend( pSource, "groupwise"); // not supported in evo/eds 3.6.x+, somehow
-                    break;
-                case SDBCAddress::EVO_LOCAL:
-                    can = isSourceBackend( pSource, "local");
-                    break;
-                case SDBCAddress::EVO_LDAP:
-                    can = isSourceBackend( pSource, "ldap");
-                    break;
-                case SDBCAddress::Unknown:
-                    can = true;
-                    break;
-            }
-            if (!can)
-                continue;
-
-            OUString aHumanName = OStringToOUString( e_source_get_display_name( pSource ),
-                                                          RTL_TEXTENCODING_UTF8 );
-            OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
-                                                          RTL_TEXTENCODING_UTF8 );
-            ODatabaseMetaDataResultSet::ORow aRow{
-                ORowSetValueDecoratorRef(),
-                ORowSetValueDecoratorRef(),
-                ORowSetValueDecoratorRef(),
-                new ORowSetValueDecorator(aHumanName), //tablename
-                new ORowSetValueDecorator(ORowSetValue(aTable)),
-                new ORowSetValueDecorator(aUID)}; //comment
-            //I'd prefer to swap the comment and the human name and
-            //just use e_source_registry_ref_source(get_e_source_registry(), aUID);
-            //in open book rather than search for the name again
-            aRows.push_back(aRow);
-        }
-
-        g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), nullptr);
-        g_list_free (pSources);
-    }
-    else
-    {
-        ESourceList *pSourceList;
-        if( !e_book_get_addressbooks (&pSourceList, nullptr) )
-                pSourceList = nullptr;
-
-        GSList *g;
-        for( g = e_source_list_peek_groups( pSourceList ); g; g = g->next)
-        {
-            GSList *s;
-            const char *p = e_source_group_peek_base_uri(E_SOURCE_GROUP(g->data));
-
-            switch (m_pConnection->getSDBCAddressType()) {
             case SDBCAddress::EVO_GWISE:
-                        if ( !strncmp( "groupwise://", p, 11 ))
-                            break;
-                        else
-                            continue;
-            case SDBCAddress::EVO_LOCAL:
-                        if ( !strncmp( "file://", p, 6 ) ||
-                             !strncmp( "local://", p, 6 ) )
-                            break;
-                        else
-                            continue;
-            case SDBCAddress::EVO_LDAP:
-                        if ( !strncmp( "ldap://", p, 6 ))
-                            break;
-                        else
-                            continue;
-            case SDBCAddress::Unknown:
+                can = isSourceBackend( pSource, "groupwise"); // not supported in evo/eds 3.6.x+, somehow
                 break;
-            }
-            for (s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
-            {
-                ESource *pSource = E_SOURCE (s->data);
-
-                OUString aName = OStringToOUString( e_source_peek_name( pSource ),
-                                                              RTL_TEXTENCODING_UTF8 );
-
-                aRows.push_back(
-                                 {
-                                     ORowSetValueDecoratorRef(),
-                                     ORowSetValueDecoratorRef(),
-                                     ORowSetValueDecoratorRef(),
-                                     new ORowSetValueDecorator(aName),
-                                     new ORowSetValueDecorator(ORowSetValue(aTable)),
-                                     ODatabaseMetaDataResultSet::getEmptyValue()
-                                 }
-                               );
-            }
+            case SDBCAddress::EVO_LOCAL:
+                can = isSourceBackend( pSource, "local");
+                break;
+            case SDBCAddress::EVO_LDAP:
+                can = isSourceBackend( pSource, "ldap");
+                break;
+            case SDBCAddress::Unknown:
+                can = true;
+                break;
         }
+        if (!can)
+            continue;
+
+        OUString aHumanName = OStringToOUString( e_source_get_display_name( pSource ),
+                                                      RTL_TEXTENCODING_UTF8 );
+        OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
+                                                      RTL_TEXTENCODING_UTF8 );
+        ODatabaseMetaDataResultSet::ORow aRow{
+            ORowSetValueDecoratorRef(),
+            ORowSetValueDecoratorRef(),
+            ORowSetValueDecoratorRef(),
+            new ORowSetValueDecorator(aHumanName), //tablename
+            new ORowSetValueDecorator(ORowSetValue(aTable)),
+            new ORowSetValueDecorator(aUID)}; //comment
+        //I'd prefer to swap the comment and the human name and
+        //just use e_source_registry_ref_source(get_e_source_registry(), aUID);
+        //in open book rather than search for the name again
+        aRows.push_back(aRow);
     }
+
+    g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), nullptr);
+    g_list_free (pSources);
 
     pResult->setRows(std::move(aRows));
 

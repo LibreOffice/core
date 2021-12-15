@@ -23,16 +23,7 @@
 static const char *eBookLibNames[] = {
     "libebook-1.2.so.20", // evolution-data-server 3.33.2+
     "libebook-1.2.so.19", // evolution-data-server 3.24+
-    "libebook-1.2.so.16",
-    "libebook-1.2.so.15",
-    "libebook-1.2.so.14", // bumped again (evolution-3.6)
-    "libebook-1.2.so.13", // bumped again (evolution-3.4)
-    "libebook-1.2.so.12", // bumped again
-    "libebook-1.2.so.10", // bumped again
-    "libebook-1.2.so.9",  // evolution-2.8
-    "libebook-1.2.so.5",  // evolution-2.4 and 2.6+
-    "libebook-1.2.so.3",  // evolution-2.2
-    "libebook.so.8"       // evolution-2.0
+    "libebook-1.2.so.16"
 };
 
 typedef void (*SymbolFunc) ();
@@ -69,20 +60,6 @@ const ApiMap aCommonApiMap[] =
     { "e_book_query_field_exists", reinterpret_cast<SymbolFunc *>(&e_book_query_field_exists) }
 };
 
-//< 3.6 api
-const ApiMap aOldApiMap[] =
-{
-    { "e_book_get_addressbooks", reinterpret_cast<SymbolFunc *>(&e_book_get_addressbooks) },
-    { "e_book_get_uri", reinterpret_cast<SymbolFunc *>(&e_book_get_uri) },
-    { "e_book_authenticate_user", reinterpret_cast<SymbolFunc *>(&e_book_authenticate_user) },
-    { "e_source_group_peek_base_uri", reinterpret_cast<SymbolFunc *>(&e_source_group_peek_base_uri) },
-    { "e_source_peek_name", reinterpret_cast<SymbolFunc *>(&e_source_peek_name) },
-    { "e_source_get_property", reinterpret_cast<SymbolFunc *>(&e_source_get_property) },
-    { "e_source_list_peek_groups", reinterpret_cast<SymbolFunc *>(&e_source_list_peek_groups) },
-    { "e_source_group_peek_sources", reinterpret_cast<SymbolFunc *>(&e_source_group_peek_sources) }
-};
-
-//>= 3.6 api
 const ApiMap aNewApiMap[] =
 {
     { "e_source_registry_list_sources", reinterpret_cast<SymbolFunc *>(&e_source_registry_list_sources) },
@@ -97,12 +74,6 @@ const ApiMap aNewApiMap[] =
     { "e_client_get_source", reinterpret_cast<SymbolFunc *>(&e_client_get_source) },
     { "e_book_client_get_contacts_sync", reinterpret_cast<SymbolFunc *>(&e_book_client_get_contacts_sync) },
     { "e_client_util_free_object_slist", reinterpret_cast<SymbolFunc *>(&e_client_util_free_object_slist) }
-};
-
-//== indirect read access (3.6 only)
-const ApiMap aClientApiMap36[] =
-{
-    { "e_book_client_new", reinterpret_cast<SymbolFunc *>(&e_book_client_new) }
 };
 
 //>= direct read access API (>= 3.8)
@@ -140,31 +111,12 @@ bool EApiInit()
 
         if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap))
         {
-            if (eds_check_version( 3, 6, 0 ) != nullptr)
+            if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap))
             {
-                if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap))
+                if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap38))
                 {
                     aModule.release();
                     return true;
-                }
-            }
-            else if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap))
-            {
-                if (eds_check_version( 3, 7, 6 ) != nullptr)
-                {
-                    if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap36))
-                    {
-                        aModule.release();
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap38))
-                    {
-                        aModule.release();
-                        return true;
-                    }
                 }
             }
         }

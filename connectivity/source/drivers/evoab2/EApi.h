@@ -146,7 +146,7 @@ EAPI_EXTERN const gchar* (*eds_check_version) (guint required_major, guint requi
 EAPI_EXTERN const gchar* (*e_source_get_uid) (ESource *source);
 EAPI_EXTERN ESource* (*e_source_registry_ref_source) (ESourceRegistry *registry, const gchar *uid);
 EAPI_EXTERN EBookClient* (*e_book_client_new) (ESource *source, GError **error);
-EAPI_EXTERN EBookClient* (*e_book_client_connect_direct_sync) (ESourceRegistry *registry, ESource *source, GCancellable *cancellable, GError **error);
+EAPI_EXTERN EBookClient* (*e_book_client_connect_direct_sync) (ESourceRegistry *registry, ESource *source, guint32 wait_for_connected_seconds, GCancellable *cancellable, GError **error);
 EAPI_EXTERN gboolean (*e_client_open_sync) (EClient *client, gboolean only_if_exists, GCancellable *cancellable, GError **error);
 EAPI_EXTERN ESource* (*e_client_get_source) (EClient *client);
 EAPI_EXTERN gboolean (*e_book_client_get_contacts_sync) (EBookClient *client, const gchar *sexp, GSList **contacts, GCancellable *cancellable, GError **error);
