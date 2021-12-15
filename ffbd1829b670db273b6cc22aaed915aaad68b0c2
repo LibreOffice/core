@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d412247_fbce98d9",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T09:19:17Z",
+      "side": 1,
+      "message": "(I would still consider that excessive and irrelevant commenting, but YMMV.  Besides, there is a typo in \"*t*o\".)",
+      "revId": "ffbd1829b670db273b6cc22aaed915aaad68b0c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
