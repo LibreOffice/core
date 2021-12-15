@@ -23,7 +23,8 @@ class Test(UITestCase):
             drawPage = component.getDrawPages().getByIndex(0)
             master = drawPage.MasterPage
             theme = mkPropertyValues({
-                "Name": "nameA"
+                "Name": "nameA",
+                "ColorSchemeName": "colorSetA"
             })
             master.Theme = theme
 
@@ -34,7 +35,13 @@ class Test(UITestCase):
                 # Select RID_SVXPAGE_THEME.
                 select_pos(xTabs, "3")
                 themeName = xDialog.getChild("themeName")
+                themeName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                themeName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                 themeName.executeAction("TYPE", mkPropertyValues({"TEXT": "nameB"}))
+                colorSetName = xDialog.getChild("colorSetName")
+                colorSetName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                colorSetName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                colorSetName.executeAction("TYPE", mkPropertyValues({"TEXT": "colorSetB"}))
 
             # Then make sure the doc model is updated accordingly:
             # Without the accompanying fix in place, this test would have failed with:
@@ -42,6 +49,10 @@ class Test(UITestCase):
             # i.e. the UI didn't update the theme name.
             theme = convert_property_values_to_dict(master.Theme)
             self.assertEqual(theme["Name"], "nameB")
+            # Without the accompanying fix in place, this test would have failed with:
+            # AssertionError: 'colorSetA' != 'colorSetB'
+            # i.e. the UI didn't update the color scheme name.
+            self.assertEqual(theme["ColorSchemeName"], "colorSetB")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

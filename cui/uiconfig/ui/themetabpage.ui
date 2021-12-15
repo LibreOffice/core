@@ -68,5 +68,65 @@
         <property name="position">0</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkFrame" id="frmColors">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkGrid" id="gdColors">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_start">6</property>
+            <property name="margin_end">6</property>
+            <property name="row_spacing">3</property>
+            <property name="column_spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="lbColorSetName">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="themetabpage|lbColorSetName">Name:</property>
+                <accessibility>
+                  <relation type="label-for" target="colorSetName"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="colorSetName">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="lbColorSetName"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="colorSet">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="themetabpage|colorSet">Color set</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
   </object>
 </interface>
