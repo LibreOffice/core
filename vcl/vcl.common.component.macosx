@@ -1,0 +1,12 @@
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+com.sun.star.comp.datatransfer.dnd.OleDragSource_V1
+com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1
+com.sun.star.datatransfer.clipboard.AquaClipboard
+com.sun.star.frame.VCLSessionManagerClient
+org.libreoffice.uitest.UITest
+vcl::FontIdentificator
