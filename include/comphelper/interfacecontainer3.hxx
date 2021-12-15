@@ -135,7 +135,11 @@ public:
       Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
      */
-    sal_Int32 getLength() const;
+    sal_Int32 getLength() const
+    {
+        osl::MutexGuard aGuard(mrMutex);
+        return maData->size();
+    }
 
     /**
       Return all interfaces added to this container.
@@ -273,12 +277,6 @@ inline void OInterfaceContainerHelper3<ListenerT>::notifyEach(
     void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event)
 {
     forEach<NotifySingleListener<EventT>>(NotifySingleListener<EventT>(NotificationMethod, Event));
-}
-
-template <class ListenerT> sal_Int32 OInterfaceContainerHelper3<ListenerT>::getLength() const
-{
-    osl::MutexGuard aGuard(mrMutex);
-    return maData->size();
 }
 
 template <class ListenerT>
