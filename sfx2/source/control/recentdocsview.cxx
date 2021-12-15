@@ -206,13 +206,15 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
            (mnFileTypes & ApplicationType::TYPE_OTHER    && typeMatchesExtension(ApplicationType::TYPE_OTHER,   aExt));
 }
 
-BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
+BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL, bool bCheckEncrypted)
 {
     BitmapEx aImg;
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
 
-    const std::map<ApplicationType,OUString>& rWhichMap = IsDocEncrypted( rURL) ?
+    // tdf#131850: avoid reading the file to check if it's encrypted,
+    // if we only need its generic "module" thumbnail
+    const std::map<ApplicationType,OUString>& rWhichMap = bCheckEncrypted && IsDocEncrypted(rURL) ?
         EncryptedBitmapForExtension : BitmapForExtension;
 
     std::map<ApplicationType,OUString>::const_iterator mIt =
@@ -269,7 +271,7 @@ void RecentDocsView::Reload()
             }
         }
 
-        aModule = getDefaultThumbnail(aURL);
+        aModule = getDefaultThumbnail(aURL, false); // We don't need an "encrypted" icon here
         if (!aModule.IsEmpty() && !aThumbnail.IsEmpty()) {
             ScopedVclPtr<VirtualDevice> m_pVirDev(VclPtr<VirtualDevice>::Create());
             Size aSize(aThumbnail.GetSizePixel());
