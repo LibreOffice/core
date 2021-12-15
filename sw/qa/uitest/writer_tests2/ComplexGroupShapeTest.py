@@ -91,6 +91,7 @@ class ComplexGroupShapeTest(UITestCase):
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
             self.ui_test.wait_until_child_is_available('metricfield')
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            time.sleep(0.1)
 
             # check if it is a textbox
             self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)
@@ -98,6 +99,7 @@ class ComplexGroupShapeTest(UITestCase):
             # go to the other one
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            time.sleep(0.1)
 
             # this is still a group, so it cannot be a textbox
             self.assertEqual(False,document.getCurrentSelection().getByIndex(0).TextBox)
@@ -115,6 +117,7 @@ class ComplexGroupShapeTest(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            time.sleep(0.1)
 
             # check if it is a textbox
             self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)
