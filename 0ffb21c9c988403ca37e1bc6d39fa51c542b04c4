@@ -70,6 +70,24 @@
       "parentUuid": "870c7b2b_983e2957",
       "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bef4f514_b286aab5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-15T20:33:50Z",
+      "side": 1,
+      "message": "Yes, I see. $(SRCDIR) happens to be the same as $(WORKDIR) for me, so I don\u0027t see the problem.\n\nYet, the .py from $(WORKDIR)/instdir/program refer to .py in $(SRCDIR)/solenv/gdb - should we add both, or only the former?",
+      "parentUuid": "fdc32411_bbc3ef85",
+      "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
