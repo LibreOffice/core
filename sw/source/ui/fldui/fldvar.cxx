@@ -79,6 +79,9 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     m_xChapterLevelLB->set_active(0);
     //enable 'active' language selection
     m_xNumFormatLB->SetShowLanguageControl(true);
+
+    // uitests
+    m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-var");
 }
 
 SwFieldVarPage::~SwFieldVarPage()

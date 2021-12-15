@@ -68,6 +68,9 @@ SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* p
     m_xDateOffsetED->set_range(INT_MIN, INT_MAX);
     //enable 'active' language selection
     m_xNumFormatLB->SetShowLanguageControl(true);
+
+    // uitests
+    m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-doc");
 }
 
 SwFieldDokPage::~SwFieldDokPage()

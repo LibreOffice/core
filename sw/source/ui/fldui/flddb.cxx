@@ -62,6 +62,9 @@ SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pCo
 
     m_xValueED->connect_changed(LINK(this, SwFieldDBPage, ModifyHdl));
     m_xAddDBPB->connect_clicked(LINK(this, SwFieldDBPage, AddDBHdl));
+
+    // uitests
+    m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-db");
 }
 
 SwFieldDBPage::~SwFieldDBPage()
