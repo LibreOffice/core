@@ -21,6 +21,7 @@ class SvxThemePage : public SfxTabPage
     static const WhichRangesContainer m_pRanges;
 
     std::unique_ptr<weld::Entry> m_xThemeName;
+    std::unique_ptr<weld::Entry> m_xColorSetName;
 
 public:
     SvxThemePage(weld::Container* pPage, weld::DialogController* pController,
