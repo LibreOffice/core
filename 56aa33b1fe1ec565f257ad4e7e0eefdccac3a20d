@@ -33,6 +33,23 @@
       "message": "Lionel: do you have anything else in mind to tackle?",
       "revId": "56aa33b1fe1ec565f257ad4e7e0eefdccac3a20d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24086880_ea6dfbc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-15T06:11:48Z",
+      "side": 1,
+      "message": "No other comment. I must admit I didn\u0027t look at the changes in NResultSet.cxx and NResultSetMetaData.cxx.",
+      "revId": "56aa33b1fe1ec565f257ad4e7e0eefdccac3a20d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
