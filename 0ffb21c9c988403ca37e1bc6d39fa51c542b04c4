@@ -16,6 +16,24 @@
       "message": "I have \n\"add-auto-load-safe-path /home/cl/rpmbuild/BUILD/lo/instdir/program/\"\nin my ~/.gdbinit and that\u0027s where the lib-gdb.py files\nSo should be @INSTDIR@ and not the srcdir that should be added, right?",
       "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "220b5d2f_2e516f93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-15T15:13:08Z",
+      "side": 1,
+      "message": "I was pointed on IRC to\n\nhttps://wiki.documentfoundation.org/Development/How_to_debug#Dumping_Strings_.28etc.29\n\nwhich mentions \u0027/path/to/your/lo/git\u0027. So I think I did what was mentioned there. Is that source wrong?",
+      "parentUuid": "2cb501bf_7d361a3b",
+      "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
