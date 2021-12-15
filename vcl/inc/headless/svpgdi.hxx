@@ -54,24 +54,6 @@ public:
         return CairoCommon::getDamageKey();
     }
 
-    // need this static version of ::drawPolyLine for usage from
-    // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
-    // ::drawPolyLine with some added parameters (see there)
-    static bool drawPolyLine(
-        cairo_t* cr,
-        basegfx::B2DRange* pExtents,
-        const Color& rLineColor,
-        bool bAntiAlias,
-        const basegfx::B2DHomMatrix& rObjectToDevice,
-        const basegfx::B2DPolygon& rPolyLine,
-        double fTransparency,
-        double fLineWidth,
-        const std::vector< double >* pStroke, // MM01
-        basegfx::B2DLineJoin eLineJoin,
-        css::drawing::LineCap eLineCap,
-        double fMiterMinimumAngle,
-        bool bPixelSnapHairline);
-
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
     void copyWithOperator(const SalTwoRect& rTR, cairo_surface_t* source,
                           cairo_operator_t eOp = CAIRO_OPERATOR_SOURCE);
@@ -137,17 +119,6 @@ public:
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 
-    virtual bool            drawPolyLine(
-                                const basegfx::B2DHomMatrix& rObjectToDevice,
-                                const basegfx::B2DPolygon&,
-                                double fTransparency,
-                                double fLineWidth,
-                                const std::vector< double >* pStroke, // MM01
-                                basegfx::B2DLineJoin,
-                                css::drawing::LineCap,
-                                double fMiterMinimumAngle,
-                                bool bPixelSnapHairline) override;
-    virtual void            drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
 
     virtual bool drawGradient(tools::PolyPolygon const & rPolyPolygon, Gradient const & rGradient) override;

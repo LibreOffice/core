@@ -187,7 +187,19 @@ void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nW
     m_rCairoCommon.m_aLineColor = aOrigLineColor;
 }
 
-void SvpGraphicsBackend::drawPolyLine(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/) {}
+void SvpGraphicsBackend::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
+{
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
+    aPoly.setClosed(false);
+
+    drawPolyLine(basegfx::B2DHomMatrix(), aPoly, 0.0, 1.0,
+                 nullptr, // MM01
+                 basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
+                 basegfx::deg2rad(15.0) /*default*/, false);
+}
 
 void SvpGraphicsBackend::drawPolygon(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/) {}
 
@@ -281,15 +293,37 @@ bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToD
     return true;
 }
 
-bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& /*rObjectToDevice*/,
-                                      const basegfx::B2DPolygon& /*rPolyLine*/,
-                                      double /*fTransparency*/, double /*fLineWidth*/,
-                                      const std::vector<double>* /*pStroke*/,
-                                      basegfx::B2DLineJoin /*eLineJoin*/,
-                                      css::drawing::LineCap /*eLineCap*/,
-                                      double /*fMiterMinimumAngle*/, bool /*bPixelSnapHairline*/)
+bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
+                                      const basegfx::B2DPolygon& rPolyLine, double fTransparency,
+                                      double fLineWidth, const std::vector<double>* pStroke,
+                                      basegfx::B2DLineJoin eLineJoin,
+                                      css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
+                                      bool bPixelSnapHairline)
 {
-    return false;
+    // short circuit if there is nothing to do
+    if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
+    {
+        return true;
+    }
+
+    // Wrap call to static version of ::drawPolyLine by
+    // preparing/getting some local data and parameters
+    // due to usage in vcl/unx/generic/gdi/salgdi.cxx.
+    // This is mainly about extended handling of extents
+    // and the way destruction of CairoContext is handled
+    // due to current XOR stuff
+    cairo_t* cr = m_rCairoCommon.getCairoContext(false, getAntiAlias());
+    basegfx::B2DRange aExtents;
+    m_rCairoCommon.clipRegion(cr);
+
+    bool bRetval(CairoCommon::drawPolyLine(cr, &aExtents, m_rCairoCommon.m_aLineColor,
+                                           getAntiAlias(), rObjectToDevice, rPolyLine,
+                                           fTransparency, fLineWidth, pStroke, eLineJoin, eLineCap,
+                                           fMiterMinimumAngle, bPixelSnapHairline));
+
+    m_rCairoCommon.releaseCairoContext(cr, false, aExtents);
+
+    return bRetval;
 }
 
 bool SvpGraphicsBackend::drawPolyLineBezier(sal_uInt32, const Point*, const PolyFlags*)

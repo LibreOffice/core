@@ -733,7 +733,7 @@ bool X11SalGraphics::drawPolyLine(
         // Use the now available static drawPolyLine from the Cairo-Headless-Fallback
         // that will take care of all needed stuff
         const bool bRetval(
-            SvpSalGraphics::drawPolyLine(
+            CairoCommon::drawPolyLine(
                 cr,
                 nullptr,
                 mnPenColor,
