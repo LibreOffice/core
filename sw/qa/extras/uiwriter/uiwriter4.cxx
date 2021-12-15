@@ -288,6 +288,9 @@ public:
     void testTdf129270();
     void testInsertPdf();
     void testTdf143760WrapContourToOff();
+    void testComplexGroupShapeCrash();
+    void testComplexGroupShapeCreating();
+    void testComplexGroupShapeGrouping();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
@@ -409,6 +412,9 @@ public:
     CPPUNIT_TEST(testTdf129270);
     CPPUNIT_TEST(testInsertPdf);
     CPPUNIT_TEST(testTdf143760WrapContourToOff);
+    CPPUNIT_TEST(testComplexGroupShapeCrash);
+    CPPUNIT_TEST(testComplexGroupShapeCreating);
+    CPPUNIT_TEST(testComplexGroupShapeGrouping);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -3977,6 +3983,239 @@ void SwUiWriterTest4::testTdf143760WrapContourToOff()
     // Without fix this had failed, because the shape was written to file with contour.
     reload("Office Open XML Text", "tdf143760_ContourToWrapOff.docx");
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "SurroundContour"));
+}
+
+void SwUiWriterTest4::testComplexGroupShapeCrash()
+{
+    // Get the bugdoc.
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ComplexGroupShapeTest.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    // Get the Writershell
+    auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Check the shapes
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), getShape(2)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(3)->getShapeType());
+
+    // Select the first shape
+    pWrtShell->SelectObj(Point(), 0, SdrObject::getSdrObjectFromXShape(getShape(1)));
+    Scheduler::ProcessEventsToIdle();
+
+    // Check if ONE shape selected
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // Go inside this group
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Get the first subshape, and select it
+    uno::Reference<drawing::XShapes> xGroup(getShape(2), uno::UNO_QUERY_THROW);
+    pWrtShell->SelectObj(Point(), 0,
+                         SdrObject::getSdrObjectFromXShape(
+                             xGroup->getByIndex(0).get<uno::Reference<drawing::XShape>>()));
+    Scheduler::ProcessEventsToIdle();
+
+    // Check if ONE shape selected
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // Add a textbox to this groupshape. At this point before the fix, Writer crashed.
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Check if Writer sill alive.
+    CPPUNIT_ASSERT_MESSAGE("Writer should not be crashed beacuse of this!", mxComponent);
+}
+
+void SwUiWriterTest4::testComplexGroupShapeCreating()
+{
+    // Get the desired bugdoc.
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ComplexGroupShapeTest.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    // get the shell too
+    auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // check the shapes
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), getShape(2)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(3)->getShapeType());
+
+    // select the group shape
+    pWrtShell->SelectObj(Point(), 0, SdrObject::getSdrObjectFromXShape(getShape(2)));
+    Scheduler::ProcessEventsToIdle();
+
+    // check the selection
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // go inside
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // select the first member
+    uno::Reference<drawing::XShapes> xGroup(getShape(2), uno::UNO_QUERY_THROW);
+    pWrtShell->SelectObj(Point(), 0,
+                         SdrObject::getSdrObjectFromXShape(
+                             xGroup->getByIndex(0).get<uno::Reference<drawing::XShape>>()));
+    Scheduler::ProcessEventsToIdle();
+
+    // check the selection
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // Add a textbox to it.
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the textbox is added successfully. Before it was not.
+    uno::Reference<beans::XPropertySet> xTextBox(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This MUST be a textbox!", true,
+                                 xTextBox->getPropertyValue("TextBox").get<bool>());
+}
+
+void SwUiWriterTest4::testComplexGroupShapeGrouping()
+{
+    // Load the desired bugdoc.
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ComplexGroupShapeTest.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    // and shell
+    auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // check the shapes
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), getShape(2)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(3)->getShapeType());
+
+    // Select the group-shape
+    pWrtShell->SelectObj(Point(), 0, SdrObject::getSdrObjectFromXShape(getShape(2)));
+    Scheduler::ProcessEventsToIdle();
+
+    // check the selection
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // go inside
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // select the first child shape
+    uno::Reference<drawing::XShapes> xGroup(getShape(2), uno::UNO_QUERY_THROW);
+    pWrtShell->SelectObj(Point(), 0,
+                         SdrObject::getSdrObjectFromXShape(
+                             xGroup->getByIndex(0).get<uno::Reference<drawing::XShape>>()));
+    Scheduler::ProcessEventsToIdle();
+
+    // check selection
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // add a textbox to it.
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // test if the textbox has been added successfuly
+    uno::Reference<beans::XPropertySet> xTextBox;
+    xTextBox.set(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(true, xTextBox->getPropertyValue("TextBox").get<bool>());
+
+    // select the other child
+    pWrtShell->SelectObj(Point(), 0,
+                         SdrObject::getSdrObjectFromXShape(
+                             xGroup->getByIndex(1).get<uno::Reference<drawing::XShape>>()));
+    Scheduler::ProcessEventsToIdle();
+
+    // check the selection
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // add textbox
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // check if the textbox added
+    xTextBox.set(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(true, xTextBox->getPropertyValue("TextBox").get<bool>());
+
+    // levae the group
+    dispatchCommand(mxComponent, ".uno:LeaveGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // select the group
+    pWrtShell->SelectObj(Point(), 0, SdrObject::getSdrObjectFromXShape(getShape(1)));
+    Scheduler::ProcessEventsToIdle();
+
+    // check selection
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // add the other shape to the selection
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, SdrObject::getSdrObjectFromXShape(getShape(2)));
+    Scheduler::ProcessEventsToIdle();
+
+    // check selection
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // group the selected shapes
+    dispatchCommand(mxComponent, ".uno:FormatGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // check the shapes
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(2)->getShapeType());
+
+    // select the group
+    pWrtShell->SelectObj(Point(), 0, SdrObject::getSdrObjectFromXShape(getShape(1)));
+    Scheduler::ProcessEventsToIdle();
+
+    // check selection
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // do a cast, too ;) ...and save the psosition of the group.
+    auto pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    const auto aOrigPos = getShape(1)->getPosition();
+
+    // make the program to press down button 30 times
+    for (int i = 0; i < 30; ++i)
+    {
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // the shape have to moved... check it.
+    CPPUNIT_ASSERT(getShape(1)->getPosition() != aOrigPos);
+
+    // get that shape
+    pWrtShell->SelectObj(Point(), 0, SdrObject::getSdrObjectFromXShape(getShape(1)));
+    Scheduler::ProcessEventsToIdle();
+
+    // and check selection as always...
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetDrawView()->GetMarkedObjectCount());
+
+    // explode the group
+    dispatchCommand(mxComponent, ".uno:FormatUnGroup", {});
+    Scheduler::ProcessEventsToIdle();
+    // and the subgroup too
+    dispatchCommand(mxComponent, ".uno:FormatUnGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Now every shape have to be a simple textbox shape, so check it.
+    for (int i = 1; i < 4; ++i)
+    {
+        // get the shape
+        xTextBox.set(getShape(i), uno::UNO_QUERY_THROW);
+
+        OString aMessage
+            = OString("The shape NO. ") + OString::number(i) + OString(" MUST be a TextBox!");
+        // check if it has a textbox. it MUST have. Before the fix that was impossibe, it was:
+        // Expected: 1
+        // Actual:   0
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), true,
+                                     xTextBox->getPropertyValue("TextBox").get<bool>());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest4);
