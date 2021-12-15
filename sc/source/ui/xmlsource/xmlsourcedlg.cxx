@@ -553,7 +553,9 @@ void ScXMLSourceDlg::RefEditModified()
     OUString aRefStr = mxRefEdit->GetText();
 
     // Check if the address is valid.
+    // Preset current sheet in case only address was entered.
     ScAddress aLinkedPos;
+    aLinkedPos.SetTab( ScDocShell::GetCurTab());
     ScRefFlags nRes = aLinkedPos.Parse(aRefStr, *mpDoc, mpDoc->GetAddressConvention());
     bool bValid = ( (nRes & ScRefFlags::VALID) == ScRefFlags::VALID );
 
