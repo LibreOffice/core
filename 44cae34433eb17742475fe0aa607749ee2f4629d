@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1730da58_55e26bc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-12-15T17:16:26Z",
+      "side": 1,
+      "message": "I updated the code as you requested, CI failures seems to be unrelated (different every time)",
+      "revId": "44cae34433eb17742475fe0aa607749ee2f4629d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -16,6 +16,24 @@
       "message": "Can you avoid the \"published \" prefix here? That gives us some flexiblity when it comes to modifying this service (if it\u0027s not published).",
       "revId": "0907824672ec4e61e9486610902392549dc6033e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a52b3c7_4dc89c12",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/LokClipboard.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-12-15T17:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f9335c5_d70ffea5",
+      "revId": "0907824672ec4e61e9486610902392549dc6033e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
