@@ -852,19 +852,6 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
-{
-    basegfx::B2DPolygon aPoly;
-    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
-    for (sal_uInt32 i = 1; i < nPoints; ++i)
-        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
-
-    GetImpl()->drawPolyPolygon(
-        basegfx::B2DHomMatrix(),
-        basegfx::B2DPolyPolygon(aPoly),
-        0.0);
-}
-
 bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient)
 {
     if (rGradient.GetStyle() != GradientStyle::Linear
