@@ -16,6 +16,24 @@
       "message": "I don\u0027t think adding random sleeps is a good solution.   Especially sanitizer-instrumented builds can be rather slow, so might happen to work with some sleep value most of the time, but still fail occasionally.  (Besides, this makes already slow UITests even slower for everyone.)",
       "revId": "88bee55dd22d2eff504de87efee4fa2e95b7b19f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2abda102_40773a35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-15T15:44:54Z",
+      "side": 1,
+      "message": "I totally agree with you, but if the SfxDispatcher::GetShellAndSlot_Impl() \u003c https://opengrok.libreoffice.org/xref/core/sfx2/source/control/dispatch.cxx?r\u003d35417853#696 \u003e returns with randomly (once return with shell and slot once with nullptrs) that will lead to undefined behaviour. So i am so curious what is the reason of it. (Because as i think if there is no shell or slot the command cannot be executed and the shape -- in this case -- will not be selected and if no shape in the selection there will not be any textbox attribute at all and that will lead to the assert). What is your suggestion what should i do? Thanks your answer in advance.",
+      "parentUuid": "82e5c55f_7e1e462a",
+      "revId": "88bee55dd22d2eff504de87efee4fa2e95b7b19f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
