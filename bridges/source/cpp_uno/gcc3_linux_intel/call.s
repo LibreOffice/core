@@ -22,6 +22,7 @@
     .type   privateSnippetExecutorGeneral,@function
 privateSnippetExecutorGeneral:
 .LFBg:
+    endbr64
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIg0:
@@ -44,6 +45,7 @@ privateSnippetExecutorGeneral:
     .type   privateSnippetExecutorVoid,@function
 privateSnippetExecutorVoid:
 .LFBv:
+    endbr64
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIv0:
@@ -64,6 +66,7 @@ privateSnippetExecutorVoid:
     .type   privateSnippetExecutorHyper,@function
 privateSnippetExecutorHyper:
 .LFBh:
+    endbr64
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIh0:
@@ -87,6 +90,7 @@ privateSnippetExecutorHyper:
     .type   privateSnippetExecutorFloat,@function
 privateSnippetExecutorFloat:
 .LFBf:
+    endbr64
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIf0:
@@ -109,6 +113,7 @@ privateSnippetExecutorFloat:
     .type   privateSnippetExecutorDouble,@function
 privateSnippetExecutorDouble:
 .LFBd:
+    endbr64
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFId0:
@@ -131,6 +136,7 @@ privateSnippetExecutorDouble:
     .type   privateSnippetExecutorClass,@function
 privateSnippetExecutorClass:
 .LFBc:
+    endbr64
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIc0:
@@ -290,3 +296,19 @@ privateSnippetExecutorClass:
     .align 4
 .LEFDEc:
     .section .note.GNU-stack,"",@progbits
+    .section .note.gnu.property,"a"
+    .align 8
+    .long     1f - 0f
+    .long     4f - 1f
+    .long     5
+0:
+    .string     "GNU"
+1:
+    .align 8
+    .long     0xc0000002
+    .long     3f - 2f
+2:
+    .long     0x3
+3:
+    .align 8
+4:
