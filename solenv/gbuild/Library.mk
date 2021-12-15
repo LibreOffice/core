@@ -148,6 +148,16 @@ $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 
 endef
 
+# The implid is appended to the component file, separated by a dot.
+#
+# call gb_Library_add_componentimpl,library,implid
+define gb_Library_add_componentimpl
+$(if $(call gb_Library__get_component,$(1)),, \
+    $(error Set gb_Library_set_componentfile before using gb_Library_add_componentimpl))
+$(call gb_ComponentTarget_add_componentimpl,$(call gb_Library__get_component,$(1)),$(2))
+
+endef
+
 gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))
 
 gb_Library__get_componentprefix = \
