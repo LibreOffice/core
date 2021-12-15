@@ -1116,6 +1116,7 @@ void GtkSalMenu::DestroyMenuBarWidget()
     g_clear_pointer(&mpMenuBarContainerWidget, gtk_widget_unparent);
 #endif
     mpMenuBarContainerWidget = nullptr;
+    mpMenuBarWidget = nullptr;
     mpCloseButton = nullptr;
 }
 
