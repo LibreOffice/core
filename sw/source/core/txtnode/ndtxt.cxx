@@ -3076,11 +3076,11 @@ sal_uInt16 lcl_BoundListLevel(const int nActualLevel)
 }
 
 // -> #i29560#
-bool SwTextNode::HasNumber() const
+bool SwTextNode::HasNumber(SwRootFrame const*const pLayout) const
 {
     bool bResult = false;
 
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
+    const SwNumRule *const pRule = GetNum(pLayout) ? GetNum(pLayout)->GetNumRule() : nullptr;
     if ( pRule )
     {
         const SwNumFormat& aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
