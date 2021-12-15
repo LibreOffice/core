@@ -16,6 +16,24 @@
       "message": "this test might be timing dependent or otherwise brittle, it failed at \u003chttps://ci.libreoffice.org//job/lo_ubsan/2232/consoleFull#-18254137699567f988-cbcf-4519-af05-6000b834f13f\u003e with\n\n  ERROR: test_ComplexGroupShape (ComplexGroupShapeTest.ComplexGroupShapeTest)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/tdf/lode/jenkins/workspace/lo_ubsan/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\", line 96, in test_ComplexGroupShape\n      self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)\n  AttributeError: TextBox",
       "revId": "e5650de86072b9db586a4532b5239acda77598c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "921de60f_714e4293",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-15T09:05:38Z",
+      "side": 1,
+      "message": "This is strange because the Cppunit-version of this one and the pt1-2 ones see  https://gerrit.libreoffice.org/c/core/+/125808 have same symptoms. In this case -- i think -- a waiting method in the line 94 might solve this issue, but at the Cppunit versions i have done a debug with VS IDE and saw that during the execution of the .uno:AddTextBox dispatch command the FindSlotAndShell() function worked randomly; once it gave back the shell and the slot and the task done successfully in other case it returned with null. The selection was successful according to the MarkList in the SwDocShell (at least there was an sdrobject in the list, hopefully that was my shape but i do not remember well.). I try to fix this one with a  wait, but if there the problem occurs during the .uno:JumpToNextFrame execution, there might be a dispatcher issue too. So I think will debug theese tests again. According to Xisco there are time issues too with the cppunit. What is your opinion?",
+      "parentUuid": "26cb9b72_8a74e80c",
+      "revId": "e5650de86072b9db586a4532b5239acda77598c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
