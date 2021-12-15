@@ -148,7 +148,9 @@ $(call gb_ComponentTarget_get_target,$(2)) :| \
 	$(call gb_Library_get_target,$(gb_Library__get_name))
 $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
-$(eval $(call gb_Library__get_component_var,$(1)) += $(2))
+
+$(if $(call gb_Library__get_component,$(1)),$(error Can't have multiple component files per library))
+$(eval $(call gb_Library__get_component_var,$(1)) = $(2))
 
 endef
 
@@ -160,6 +162,11 @@ $(if $(call gb_Library__get_component,$(1)),, \
     $(error Set gb_Library_set_componentfile before using gb_Library_add_componentimpl))
 $(call gb_ComponentTarget_add_componentimpl,$(call gb_Library__get_component,$(1)),$(2))
 
+endef
+
+# call gb_Library_add_componentimpls,library,implids
+define gb_Library_add_componentimpls
+$(foreach comp,$(2),$(call gb_Library_add_componentimpl,$(1),$(comp)))
 endef
 
 gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))

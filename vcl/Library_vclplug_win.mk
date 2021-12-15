@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,vclplug_win))
 
 $(eval $(call gb_Library_set_plugin_for,vclplug_win,vcl))
 
-$(eval $(call gb_Library_set_componentfile,vclplug_win,vcl/vclplug_win,services))
+$(eval $(call gb_Library_set_componentfile,vclplug_win,vcl/util/vclplug_win,services))
 
 $(eval $(call gb_Library_set_include,vclplug_win,\
     $$(INCLUDE) \
