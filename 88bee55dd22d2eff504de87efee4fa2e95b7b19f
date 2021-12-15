@@ -52,6 +52,23 @@
       "parentUuid": "2abda102_40773a35",
       "revId": "88bee55dd22d2eff504de87efee4fa2e95b7b19f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b9c43a9_d9fb4caf",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-15T15:56:13Z",
+      "side": 1,
+      "message": "this will fail anyway, since it fails before\n\n  Traceback (most recent call last):\n    File \"/home/tdf/lode/jenkins/workspace/lo_ubsan/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\", line 96, in test_ComplexGroupShape\n      self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)\n  AttributeError: TextBox",
+      "revId": "88bee55dd22d2eff504de87efee4fa2e95b7b19f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
