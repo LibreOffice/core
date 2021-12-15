@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b1717a9_a0088f2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-15T20:46:18Z",
+      "side": 1,
+      "message": "I removed the superfluous line and tested it again (ASC, DESC and order by without ASC and DESC)",
+      "revId": "03c3f0d3a18a983f9d5562eb1d15208bfc74894c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
