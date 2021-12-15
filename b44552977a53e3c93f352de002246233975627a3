@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a301765f_03dc5450",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-15T19:57:30Z",
+      "side": 1,
+      "message": "I see this warning in the annocheck output in rhel9. The doc I found says \"if even a single component does not support CET then it must be disabled for the entire process\" which sounds like a thing to avoid. Though here I\u0027m only really guessing at the placement of the endbr[64|32] instructions.",
+      "revId": "b44552977a53e3c93f352de002246233975627a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
