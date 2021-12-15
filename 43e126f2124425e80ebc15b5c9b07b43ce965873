@@ -52,6 +52,24 @@
       "parentUuid": "bfabdd9c_db781bde",
       "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92a6d5d8_1a4ab77e",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-12-15T02:25:00Z",
+      "side": 1,
+      "message": "As a first solution we could just call BitmapInfoAccess access(aBitmap); which would call (in constructor) AccuireBuffer on SalBitmap and force a flush of draw calls. Implementation of OutputDevice::Flush can then be done in a separate commit.",
+      "parentUuid": "4086a604_b74dc83c",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
