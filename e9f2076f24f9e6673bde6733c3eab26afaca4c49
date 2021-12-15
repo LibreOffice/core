@@ -105,6 +105,24 @@
       "parentUuid": "0e2d8453_0d232ffe",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac84fd93_cdbe2d62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-15T21:28:34Z",
+      "side": 1,
+      "message": "Yep. OpenGL rendering is deprecated but not specific slide transitions related to OpenGL.\nThere are at least these 2 cases to take into account now:\n1) those who could use specific slide transitions related to OpenGL but can\u0027t because their driver have been blacklisted whereas the pb was only with OpenGL rendering, not the slide transitions (case of tdf#145910)\nThat\u0027s the goal of \"relaxing\" deny list for OpenGL\n\n2) those who would have a crash when specific slide transitions related to OpenGL because of the driver of their graphic card.\nThat\u0027s the goal of putting back OpenGL part in wiki.",
+      "parentUuid": "bbe10a48_11eea976",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
