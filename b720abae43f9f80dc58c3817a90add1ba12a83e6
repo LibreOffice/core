@@ -51,6 +51,24 @@
       "message": "Hmm, https://help.libreoffice.org/7.4/en-US/text/shared/01/05030100.html states that automatic indent depends on the font size and line spacing, so this seems to be intentional. However, ODF 1.3, 20.246 style:auto-text-indent indeed says that this depends only on the font size. I believe you can only change this if you add a compat flag to not break old documents, but I\u0027m a bit unsure if the benefit of that tiny ODF conformance outweighs the cost of one more compat flag.\n\nLooping in Regina and Michael to hear they input.",
       "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4fc18cf_7c7665d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-15T09:38:06Z",
+      "side": 1,
+      "message": "hmm this code exists since CVS initial import, so we need a new compatibility flag for this change.\n\nthe ODF indeed only mentions the font size, so i guess we could claim that this improves ODF conformance and should be enabled by default.\n\nalthough, in many cases the line spacing itself depends on the font size, but it\u0027s possible to set it independent of the font size.\n\nsee for example commit c5cf8824a619401627f18abc7b3049551c71ac2a on how to add a compatibility flag.",
+      "parentUuid": "60a81775_3c038208",
+      "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
