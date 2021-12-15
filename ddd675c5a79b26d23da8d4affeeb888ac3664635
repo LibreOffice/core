@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa61e72f_7c4f9b9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-15T09:41:29Z",
+      "side": 1,
+      "message": "Hi Hossein,\nyou should not change the author when submitting a new patch",
+      "revId": "ddd675c5a79b26d23da8d4affeeb888ac3664635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
