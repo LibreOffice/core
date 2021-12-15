@@ -68,6 +68,7 @@ AVAILABLE TARGETS
            o CliLibrary
            o CliNativeLibrary
            o CliUnoApi
+           o ComponentTarget
            o Configuration
            o CppunitTest
            o CustomTarget
