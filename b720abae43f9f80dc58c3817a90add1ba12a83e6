@@ -69,6 +69,24 @@
       "parentUuid": "60a81775_3c038208",
       "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e4f74fb_3f330caa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-15T10:02:52Z",
+      "side": 1,
+      "message": "Wow... The compatibility flag staff is too complicated for a beginner like me. Could someone take over this patch?",
+      "parentUuid": "e4fc18cf_7c7665d6",
+      "revId": "b720abae43f9f80dc58c3817a90add1ba12a83e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
