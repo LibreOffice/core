@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import select_pos
 
 class WriterInsertBreakDialog(UITestCase):
 
@@ -51,7 +52,7 @@ class WriterInsertBreakDialog(UITestCase):
                         xOption.executeAction("CLICK", tuple())
 
                         xStyleList = xDialog.getChild("stylelb")
-                        xStyleList.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+                        select_pos(xStyleList, str(i))
 
                     self.getPages(i + 2)
 

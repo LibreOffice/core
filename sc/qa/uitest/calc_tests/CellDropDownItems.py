@@ -9,6 +9,7 @@
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import select_pos
 
 class CellDropDownItems(UITestCase):
 
@@ -27,7 +28,7 @@ class CellDropDownItems(UITestCase):
 
                 #Select List option
                 xallow = xDialog.getChild("allow")
-                xallow.executeAction("SELECT", mkPropertyValues({"POS": "6"}))
+                select_pos(xallow, "6")
 
                 #Add items to the List
                 xminlist = xDialog.getChild("minlist")

@@ -10,7 +10,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text, select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 
 class ManualCalcTests(UITestCase):
@@ -94,10 +94,10 @@ class ManualCalcTests(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xValidationDlg:
 
                 xAllowList = xValidationDlg.getChild("allow")
-                xAllowList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+                select_pos(xAllowList, "1")
 
                 xData = xValidationDlg.getChild("data")
-                xData.executeAction("SELECT", mkPropertyValues({"POS": "5"}))
+                select_pos(xData, "5")
 
                 xVal = xValidationDlg.getChild("max")
                 xVal.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
@@ -171,7 +171,7 @@ class ManualCalcTests(UITestCase):
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog") as xRandomNumberDlg:
                 xDistributionLstBox = xRandomNumberDlg.getChild("distribution-combo")
-                xDistributionLstBox.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+                select_pos(xDistributionLstBox, "1")
 
                 xMin = xRandomNumberDlg.getChild("parameter1-spin")
                 xMin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
