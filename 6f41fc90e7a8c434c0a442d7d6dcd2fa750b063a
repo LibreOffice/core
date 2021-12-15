@@ -16,6 +16,24 @@
       "message": "Andras, presumably this can go in, the Cypress failure surely must be unrelated.",
       "revId": "6f41fc90e7a8c434c0a442d7d6dcd2fa750b063a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e4065a6_787db7be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2021-12-15T12:40:09Z",
+      "side": 1,
+      "message": "Sure!",
+      "parentUuid": "2a7e5297_cc6d1ba6",
+      "revId": "6f41fc90e7a8c434c0a442d7d6dcd2fa750b063a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
