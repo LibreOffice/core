@@ -54,7 +54,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <comphelper/flagguard.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/profilezone.hxx>
 #include "stylesettings.hxx"
@@ -1349,12 +1348,12 @@ void VCLXWindow::GetPropertyIds( std::vector< sal_uInt16 >& _out_rIds )
     return ImplGetPropertyIds( _out_rIds, mpImpl->mbWithDefaultProps );
 }
 
-::comphelper::OInterfaceContainerHelper2& VCLXWindow::GetContainerListeners()
+::comphelper::OInterfaceContainerHelper3<css::awt::XVclContainerListener>& VCLXWindow::GetContainerListeners()
 {
     return mpImpl->getContainerListeners();
 }
 
-::comphelper::OInterfaceContainerHelper2& VCLXWindow::GetTopWindowListeners()
+::comphelper::OInterfaceContainerHelper3<css::awt::XTopWindowListener>& VCLXWindow::GetTopWindowListeners()
 {
     return mpImpl->getTopWindowListeners();
 }
