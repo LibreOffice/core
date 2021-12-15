@@ -201,7 +201,15 @@ void SvpGraphicsBackend::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
                  basegfx::deg2rad(15.0) /*default*/, false);
 }
 
-void SvpGraphicsBackend::drawPolygon(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/) {}
+void SvpGraphicsBackend::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
+{
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
+
+    drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aPoly), 0.0);
+}
 
 void SvpGraphicsBackend::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPointCounts,
                                          const Point** pPtAry)
