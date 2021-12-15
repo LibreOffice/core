@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73660004_0589acf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-12-15T15:48:54Z",
+      "side": 1,
+      "message": "I have manually checked this does not break build on Windows in --disable-pch mode.",
+      "revId": "b17bbcc03f30b5283a6e33eb13c4f16e73f157ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
