@@ -22,6 +22,10 @@
 #include <vcl/BitmapTools.hxx>
 #include <svdata.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+
 void dl_cairo_surface_set_device_scale(cairo_surface_t* surface, double x_scale, double y_scale)
 {
 #ifdef ANDROID
@@ -583,5 +587,250 @@ void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 }
 
 void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
+
+bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                               bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
+                               const basegfx::B2DPolygon& rPolyLine, double fTransparency,
+                               double fLineWidth, const std::vector<double>* pStroke,
+                               basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
+                               double fMiterMinimumAngle, bool bPixelSnapHairline)
+{
+    // short circuit if there is nothing to do
+    if (0 == rPolyLine.count() || fTransparency < 0.0 || fTransparency >= 1.0)
+    {
+        return true;
+    }
+
+    // need to check/handle LineWidth when ObjectToDevice transformation is used
+    const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
+
+    // tdf#124848 calculate-back logical LineWidth for a hairline
+    // since this implementation hands over the transformation to
+    // the graphic sub-system
+    if (fLineWidth == 0)
+    {
+        fLineWidth = 1.0;
+
+        if (!bObjectToDeviceIsIdentity)
+        {
+            basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+            aObjectToDeviceInv.invert();
+            fLineWidth = (aObjectToDeviceInv * basegfx::B2DVector(fLineWidth, 0)).getLength();
+        }
+    }
+
+    // PixelOffset used: Need to reflect in linear transformation
+    cairo_matrix_t aMatrix;
+    basegfx::B2DHomMatrix aDamageMatrix(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+
+    if (bObjectToDeviceIsIdentity)
+    {
+        // Set PixelOffset as requested
+        cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
+    }
+    else
+    {
+        // Prepare ObjectToDevice transformation. Take PixelOffset for Lines into
+        // account: Multiply from left to act in DeviceCoordinates
+        aDamageMatrix = aDamageMatrix * rObjectToDevice;
+        cairo_matrix_init(&aMatrix, aDamageMatrix.get(0, 0), aDamageMatrix.get(1, 0),
+                          aDamageMatrix.get(0, 1), aDamageMatrix.get(1, 1), aDamageMatrix.get(0, 2),
+                          aDamageMatrix.get(1, 2));
+    }
+
+    // set linear transformation
+    cairo_set_matrix(cr, &aMatrix);
+
+    // setup line attributes
+    cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
+    switch (eLineJoin)
+    {
+        case basegfx::B2DLineJoin::Bevel:
+            eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
+            break;
+        case basegfx::B2DLineJoin::Round:
+            eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
+            break;
+        case basegfx::B2DLineJoin::NONE:
+        case basegfx::B2DLineJoin::Miter:
+            eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
+            break;
+    }
+
+    // convert miter minimum angle to miter limit
+    double fMiterLimit = 1.0 / sin(fMiterMinimumAngle / 2.0);
+
+    // setup cap attribute
+    cairo_line_cap_t eCairoLineCap(CAIRO_LINE_CAP_BUTT);
+
+    switch (eLineCap)
+    {
+        default: // css::drawing::LineCap_BUTT:
+        {
+            eCairoLineCap = CAIRO_LINE_CAP_BUTT;
+            break;
+        }
+        case css::drawing::LineCap_ROUND:
+        {
+            eCairoLineCap = CAIRO_LINE_CAP_ROUND;
+            break;
+        }
+        case css::drawing::LineCap_SQUARE:
+        {
+            eCairoLineCap = CAIRO_LINE_CAP_SQUARE;
+            break;
+        }
+    }
+
+    cairo_set_source_rgba(cr, rLineColor.GetRed() / 255.0, rLineColor.GetGreen() / 255.0,
+                          rLineColor.GetBlue() / 255.0, 1.0 - fTransparency);
+
+    cairo_set_line_join(cr, eCairoLineJoin);
+    cairo_set_line_cap(cr, eCairoLineCap);
+    cairo_set_line_width(cr, fLineWidth);
+    cairo_set_miter_limit(cr, fMiterLimit);
+
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+        rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
+
+    // MM01 need to do line dashing as fallback stuff here now
+    const double fDotDashLength(
+        nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
+    const bool bStrokeUsed(0.0 != fDotDashLength);
+    assert(!bStrokeUsed || (bStrokeUsed && pStroke));
+
+    // MM01 decide if to stroke directly
+    static const bool bDoDirectCairoStroke(true);
+
+    // MM01 activate to stroke directly
+    if (bDoDirectCairoStroke && bStrokeUsed)
+    {
+        cairo_set_dash(cr, pStroke->data(), pStroke->size(), 0.0);
+    }
+
+    if (!bDoDirectCairoStroke && pSystemDependentData_CairoPath)
+    {
+        // MM01 - check on stroke change. Used against not used, or if both used,
+        // equal or different?
+        const bool bStrokeWasUsed(!pSystemDependentData_CairoPath->getStroke().empty());
+
+        if (bStrokeWasUsed != bStrokeUsed
+            || (bStrokeUsed && *pStroke != pSystemDependentData_CairoPath->getStroke()))
+        {
+            // data invalid, forget
+            pSystemDependentData_CairoPath.reset();
+        }
+    }
+
+    // check for basegfx::B2DLineJoin::NONE to react accordingly
+    const bool bNoJoin(
+        (basegfx::B2DLineJoin::NONE == eLineJoin && basegfx::fTools::more(fLineWidth, 0.0)));
+
+    if (pSystemDependentData_CairoPath)
+    {
+        // check data validity
+        if (nullptr == pSystemDependentData_CairoPath->getCairoPath()
+            || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
+            || pSystemDependentData_CairoPath->getAntiAlias() != bAntiAlias
+            || bPixelSnapHairline /*tdf#124700*/)
+        {
+            // data invalid, forget
+            pSystemDependentData_CairoPath.reset();
+        }
+    }
+
+    if (pSystemDependentData_CairoPath)
+    {
+        // re-use data
+        cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
+    }
+    else
+    {
+        // create data
+        size_t nSizeMeasure(0);
+
+        // MM01 need to do line dashing as fallback stuff here now
+        basegfx::B2DPolyPolygon aPolyPolygonLine;
+
+        if (!bDoDirectCairoStroke && bStrokeUsed)
+        {
+            // apply LineStyle
+            basegfx::utils::applyLineDashing(rPolyLine, // source
+                                             *pStroke, // pattern
+                                             &aPolyPolygonLine, // target for lines
+                                             nullptr, // target for gaps
+                                             fDotDashLength); // full length if available
+        }
+        else
+        {
+            // no line dashing or direct stroke, just copy
+            aPolyPolygonLine.append(rPolyLine);
+        }
+
+        // MM01 checked/verified for Cairo
+        for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+        {
+            const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+
+            if (!bNoJoin)
+            {
+                // PixelOffset now reflected in linear transformation used
+                nSizeMeasure
+                    += AddPolygonToPath(cr, aPolyLine,
+                                        rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
+                                        !bAntiAlias, bPixelSnapHairline);
+            }
+            else
+            {
+                const sal_uInt32 nPointCount(aPolyLine.count());
+                const sal_uInt32 nEdgeCount(aPolyLine.isClosed() ? nPointCount : nPointCount - 1);
+                basegfx::B2DPolygon aEdge;
+
+                aEdge.append(aPolyLine.getB2DPoint(0));
+                aEdge.append(basegfx::B2DPoint(0.0, 0.0));
+
+                for (sal_uInt32 i(0); i < nEdgeCount; i++)
+                {
+                    const sal_uInt32 nNextIndex((i + 1) % nPointCount);
+                    aEdge.setB2DPoint(1, aPolyLine.getB2DPoint(nNextIndex));
+                    aEdge.setNextControlPoint(0, aPolyLine.getNextControlPoint(i));
+                    aEdge.setPrevControlPoint(1, aPolyLine.getPrevControlPoint(nNextIndex));
+
+                    // PixelOffset now reflected in linear transformation used
+                    nSizeMeasure += AddPolygonToPath(
+                        cr, aEdge,
+                        rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
+                        !bAntiAlias, bPixelSnapHairline);
+
+                    // prepare next step
+                    aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
+                }
+            }
+        }
+
+        // copy and add to buffering mechanism
+        if (!bPixelSnapHairline /*tdf#124700*/)
+        {
+            pSystemDependentData_CairoPath
+                = rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+                    ImplGetSystemDependentDataManager(), nSizeMeasure, cr, bNoJoin, bAntiAlias,
+                    pStroke);
+        }
+    }
+
+    // extract extents
+    if (pExtents)
+    {
+        *pExtents = getClippedStrokeDamage(cr);
+        // transform also extents (ranges) of damage so they can be correctly redrawn
+        pExtents->transform(aDamageMatrix);
+    }
+
+    // draw and consume
+    cairo_stroke(cr);
+
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
