@@ -52,6 +52,24 @@
       "parentUuid": "220b5d2f_2e516f93",
       "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdc32411_bbc3ef85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-15T18:36:02Z",
+      "side": 1,
+      "message": "but the libname-gdb.py are generated in @INSTROOT@/program, and indeed without my config gdb complains with e.g.:\n\n  To enable execution of this file add\n\tadd-auto-load-safe-path /home/cl/rpmbuild/BUILD/lo/instdir/program/libuno_sal.so.3-gdb.py\n  line to your configuration file \"/home/cl/.gdbinit\".\n\nNo such complaints if I add instdir to the path (sources are in different path ~/vc/git/libo-core)",
+      "parentUuid": "870c7b2b_983e2957",
+      "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
