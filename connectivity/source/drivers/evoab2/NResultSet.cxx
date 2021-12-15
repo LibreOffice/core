@@ -476,123 +476,7 @@ class OEvoabVersion38Helper : public OEvoabVersion36Helper
 protected:
     virtual EBookClient * createClient( ESource *pSource ) override
     {
-        return e_book_client_connect_direct_sync (get_e_source_registry (), pSource, nullptr, nullptr);
-    }
-};
-
-ESource * findSource( const char *id )
-{
-    ESourceList *pSourceList = nullptr;
-
-    g_return_val_if_fail (id != nullptr, nullptr);
-
-    if (!e_book_get_addressbooks (&pSourceList, nullptr))
-        pSourceList = nullptr;
-
-    for ( GSList *g = e_source_list_peek_groups (pSourceList); g; g = g->next)
-    {
-        for (GSList *s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
-        {
-            ESource *pSource = E_SOURCE (s->data);
-            if (!strcmp (e_source_peek_name (pSource), id))
-                return pSource;
-        }
-    }
-    return nullptr;
-}
-
-bool isAuthRequired( EBook *pBook )
-{
-    return e_source_get_property( e_book_get_source( pBook ),
-                                  "auth" ) != nullptr;
-}
-
-class OEvoabVersion35Helper : public OEvoabVersionHelper
-{
-private:
-    GList *m_pContacts;
-
-public:
-    OEvoabVersion35Helper()
-        : m_pContacts(nullptr)
-    {
-    }
-
-    virtual ~OEvoabVersion35Helper() override
-    {
-        freeContacts();
-    }
-
-    virtual EBook* openBook(const char *abname) override
-    {
-        ESource *pSource = findSource (abname);
-        EBook *pBook = pSource ? e_book_new (pSource, nullptr) : nullptr;
-        if (pBook && !e_book_open (pBook, true, nullptr))
-        {
-            g_object_unref (G_OBJECT (pBook));
-            pBook = nullptr;
-        }
-        return pBook;
-    }
-
-    virtual bool isLDAP( EBook *pBook ) override
-    {
-        return pBook && !strncmp( "ldap://", e_book_get_uri( pBook ), 6 );
-    }
-
-    virtual bool isLocal( EBook *pBook ) override
-    {
-        return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
-                          !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
-    }
-
-    virtual void freeContacts() override final
-    {
-        g_list_free(m_pContacts);
-        m_pContacts = nullptr;
-    }
-
-    virtual void executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) override
-    {
-        freeContacts();
-
-        ESource *pSource = e_book_get_source( pBook );
-        bool bAuthSuccess = true;
-
-        if( isAuthRequired( pBook ) )
-        {
-            OString aUser( getUserName( pBook ) );
-            const char *pAuth = e_source_get_property( pSource, "auth" );
-            bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, nullptr );
-        }
-
-        if (bAuthSuccess)
-            e_book_get_contacts( pBook, pQuery, &m_pContacts, nullptr );
-    }
-
-    virtual EContact *getContact(sal_Int32 nIndex) override
-    {
-        gpointer pData = g_list_nth_data (m_pContacts, nIndex);
-        return pData ? E_CONTACT (pData) : nullptr;
-    }
-
-    virtual sal_Int32 getNumContacts() override
-    {
-        return g_list_length( m_pContacts );
-    }
-
-    virtual bool hasContacts() override
-    {
-        return m_pContacts != nullptr;
-    }
-
-    virtual void sortContacts( const ComparisonData& _rCompData ) override
-    {
-        OSL_ENSURE( !_rCompData.rSortOrder.empty(), "sortContacts: no need to call this without any sort order!" );
-        ENSURE_OR_THROW( _rCompData.aIntlWrapper.getCaseCollator(), "no collator for comparing strings" );
-
-        m_pContacts = g_list_sort_with_data( m_pContacts, &CompareContacts,
-            const_cast< gpointer >( static_cast< gconstpointer >( &_rCompData ) ) );
+        return e_book_client_connect_direct_sync (get_e_source_registry (), pSource, 10, nullptr, nullptr);
     }
 };
 
@@ -611,12 +495,7 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     ,m_nIndex(-1)
     ,m_nLength(0)
 {
-    if (eds_check_version( 3, 7, 6 ) == nullptr)
-        m_pVersionHelper  = std::make_unique<OEvoabVersion38Helper>();
-    else if (eds_check_version( 3, 6, 0 ) == nullptr)
-        m_pVersionHelper  = std::make_unique<OEvoabVersion36Helper>();
-    else
-        m_pVersionHelper  = std::make_unique<OEvoabVersion35Helper>();
+    m_pVersionHelper  = std::make_unique<OEvoabVersion38Helper>();
 
     registerProperty(
         OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
