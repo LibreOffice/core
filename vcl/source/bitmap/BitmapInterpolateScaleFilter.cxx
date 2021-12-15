@@ -47,26 +47,11 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
             if (pWriteAcc)
             {
-                const sal_Int32 nNewWidth1 = nNewWidth - 1;
-                const sal_Int32 nWidth1 = pReadAcc->Width() - 1;
-                const double fRevScaleX = static_cast<double>(nWidth1) / nNewWidth1;
-
-                std::unique_ptr<sal_Int32[]> pLutInt(new sal_Int32[nNewWidth]);
-                std::unique_ptr<sal_Int32[]> pLutFrac(new sal_Int32[nNewWidth]);
-
-                for (sal_Int32 nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++)
+                if (1 == nWidth)
                 {
-                    double fTemp = nX * fRevScaleX;
-                    pLutInt[nX] = MinMax(static_cast<sal_Int32>(fTemp), 0, nTemp);
-                    fTemp -= pLutInt[nX];
-                    pLutFrac[nX] = static_cast<sal_Int32>(fTemp * 1024.);
-                }
-
-                for (sal_Int32 nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    if (1 == nWidth)
+                    for (sal_Int32 nY = 0; nY < nHeight; nY++)
                     {
+                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                         BitmapColor aCol0;
                         if (pReadAcc->HasPalette())
                         {
@@ -84,8 +69,27 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                             pWriteAcc->SetPixelOnData(pScanline, nX, aCol0);
                         }
                     }
-                    else
+                }
+                else
+                {
+                    const sal_Int32 nNewWidth1 = nNewWidth - 1;
+                    const sal_Int32 nWidth1 = pReadAcc->Width() - 1;
+                    const double fRevScaleX = static_cast<double>(nWidth1) / nNewWidth1;
+
+                    std::unique_ptr<sal_Int32[]> pLutInt(new sal_Int32[nNewWidth]);
+                    std::unique_ptr<sal_Int32[]> pLutFrac(new sal_Int32[nNewWidth]);
+
+                    for (sal_Int32 nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++)
                     {
+                        double fTemp = nX * fRevScaleX;
+                        pLutInt[nX] = MinMax(static_cast<sal_Int32>(fTemp), 0, nTemp);
+                        fTemp -= pLutInt[nX];
+                        pLutFrac[nX] = static_cast<sal_Int32>(fTemp * 1024.);
+                    }
+
+                    for (sal_Int32 nY = 0; nY < nHeight; nY++)
+                    {
+                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                         Scanline pScanline = pWriteAcc->GetScanline(nY);
                         for (sal_Int32 nX = 0; nX < nNewWidth; nX++)
                         {
@@ -143,29 +147,14 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
                 if (pReadAcc && pWriteAcc)
                 {
-                    const sal_Int32 nNewHeight1 = nNewHeight - 1;
-                    const sal_Int32 nHeight1 = pReadAcc->Height() - 1;
-                    const double fRevScaleY = static_cast<double>(nHeight1) / nNewHeight1;
-
-                    std::unique_ptr<sal_Int32[]> pLutInt(new sal_Int32[nNewHeight]);
-                    std::unique_ptr<sal_Int32[]> pLutFrac(new sal_Int32[nNewHeight]);
-
-                    for (sal_Int32 nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++)
-                    {
-                        double fTemp = nY * fRevScaleY;
-                        pLutInt[nY] = MinMax(static_cast<sal_Int32>(fTemp), 0, nTemp);
-                        fTemp -= pLutInt[nY];
-                        pLutFrac[nY] = static_cast<sal_Int32>(fTemp * 1024.);
-                    }
-
                     // after 1st step, bitmap *is* 24bit format (see above)
                     OSL_ENSURE(!pReadAcc->HasPalette(), "OOps, somehow ImplScaleInterpolate "
                                                         "in-between format has palette, should not "
                                                         "happen (!)");
 
-                    for (sal_Int32 nX = 0; nX < nNewWidth; nX++)
+                    if (1 == nHeight)
                     {
-                        if (1 == nHeight)
+                        for (sal_Int32 nX = 0; nX < nNewWidth; nX++)
                         {
                             BitmapColor aCol0 = pReadAcc->GetPixel(0, nX);
 
@@ -174,7 +163,25 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                                 pWriteAcc->SetPixel(nY, nX, aCol0);
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        const sal_Int32 nNewHeight1 = nNewHeight - 1;
+                        const sal_Int32 nHeight1 = pReadAcc->Height() - 1;
+                        const double fRevScaleY = static_cast<double>(nHeight1) / nNewHeight1;
+
+                        std::unique_ptr<sal_Int32[]> pLutInt(new sal_Int32[nNewHeight]);
+                        std::unique_ptr<sal_Int32[]> pLutFrac(new sal_Int32[nNewHeight]);
+
+                        for (sal_Int32 nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++)
+                        {
+                            double fTemp = nY * fRevScaleY;
+                            pLutInt[nY] = MinMax(static_cast<sal_Int32>(fTemp), 0, nTemp);
+                            fTemp -= pLutInt[nY];
+                            pLutFrac[nY] = static_cast<sal_Int32>(fTemp * 1024.);
+                        }
+
+                        for (sal_Int32 nX = 0; nX < nNewWidth; nX++)
                         {
                             for (sal_Int32 nY = 0; nY < nNewHeight; nY++)
                             {
