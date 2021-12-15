@@ -53,7 +53,7 @@ namespace desktop {
         }
 
         RectangleAndPart(const tools::Rectangle* pRect, int nPart)
-            : m_aRectangle( pRect ? *pRect : emptyAllRectangle)
+            : m_aRectangle( pRect ? SanitizedRectangle(*pRect) : emptyAllRectangle)
             , m_nPart(nPart)
         {
         }
@@ -82,6 +82,9 @@ namespace desktop {
         }
 
         static RectangleAndPart Create(const std::string& rPayload);
+        /// Makes sure a rectangle is valid (apparently some code does not like negative coordinates for example).
+        static tools::Rectangle SanitizedRectangle(tools::Long nLeft, tools::Long nTop, tools::Long nWidth, tools::Long nHeight);
+        static tools::Rectangle SanitizedRectangle(const tools::Rectangle& rect);
     };
 
     class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
