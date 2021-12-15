@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e43f7542_470c94ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-15T11:03:20Z",
+      "side": 1,
+      "message": "I find it rather confusing that this patch uses the name \u0027CurrentViewClipboard\u0027 even though it\u0027s the LOK clipboard and it doesn\u0027t really have anything to do with the current view in the LO sense. Why is the interface not simply called LOKClipboard too?\n\n(I also don\u0027t understand why there are two new interfaces that both add nothing, but maybe that\u0027s just not me getting some UNO intricacy.)\n\n",
+      "revId": "2d0640af5e7b676b211c1412efd04d443689257b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
