@@ -24,17 +24,15 @@
 
 //  class ListenerMultiplexerBase
 
-ListenerMultiplexerBase::ListenerMultiplexerBase( ::cppu::OWeakObject& rSource )
-    : ::comphelper::OInterfaceContainerHelper2( GetMutex() ), mrContext( rSource )
-{
-}
-
-ListenerMultiplexerBase::~ListenerMultiplexerBase()
+template <class ListenerT>
+ListenerMultiplexerBase<ListenerT>::ListenerMultiplexerBase(::cppu::OWeakObject& rSource)
+    : ::comphelper::OInterfaceContainerHelper3<ListenerT>(GetMutex()), mrContext(rSource)
 {
 }
 
 // css::uno::XInterface
-css::uno::Any ListenerMultiplexerBase::queryInterface( const css::uno::Type & rType )
+template <class ListenerT>
+css::uno::Any ListenerMultiplexerBase<ListenerT>::queryInterface( const css::uno::Type & rType )
 {
     return ::cppu::queryInterface( rType, static_cast< css::uno::XInterface* >(this) );
 }
@@ -51,6 +49,7 @@ void SAL_CALL EventListenerMultiplexer::acquire() noexcept
 {
     return ListenerMultiplexerBase::acquire();
 }
+
 void SAL_CALL EventListenerMultiplexer::release() noexcept
 {
     return ListenerMultiplexerBase::release();
@@ -165,11 +164,10 @@ IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, 
 void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< css::beans::NamedValue >& evt2 )
 {
     sal_Int32 aMulti( evt );
-    ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
     while( aIt.hasMoreElements() )
     {
-        css::uno::Reference< css::awt::XTabListener > xListener(
-            static_cast< css::awt::XTabListener* >( aIt.next() ) );
+        css::uno::Reference<css::awt::XTabListener> xListener(aIt.next());
         try
         {
             xListener->changed( aMulti, evt2 );
