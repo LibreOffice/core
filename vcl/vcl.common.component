@@ -18,21 +18,61 @@
 -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.graphic.GraphicProvider"
-      constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
-    <service name="com.sun.star.graphic.GraphicProvider"/>
+    prefix="vcl" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.datatransfer.dnd.OleDragSource_V1">
+    <service name="com.sun.star.datatransfer.dnd.OleDragSource"/>
   </implementation>
-  <implementation name="com.sun.star.graphic.GraphicObject"
-      constructor="com_sun_star_graphic_GraphicObject_get_implementation">
-    <service name="com.sun.star.graphic.GraphicObject"/>
+  <implementation name="com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1">
+    <service name="com.sun.star.datatransfer.dnd.OleDropTarget"/>
   </implementation>
   <implementation name="com.sun.star.comp.graphic.GraphicMapper"
       constructor="com_sun_star_comp_graphic_GraphicMapper_get_implementation">
     <service name="com.sun.star.graphic.GraphicMapper"/>
   </implementation>
+  <implementation name="com.sun.star.comp.graphic.GraphicProvider"
+      constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
+    <service name="com.sun.star.graphic.GraphicProvider"/>
+  </implementation>
+  <implementation name="com.sun.star.datatransfer.clipboard.AquaClipboard"
+      constructor="vcl_SystemClipboard_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
+  </implementation>
+  <implementation name="com.sun.star.datatransfer.clipboard.iOSClipboard"
+      constructor="vcl_SystemClipboard_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
+  </implementation>
+  <implementation name="com.sun.star.datatransfer.dnd.XdndDropTarget">
+    <service name="com.sun.star.datatransfer.dnd.X11DropTarget"/>
+  </implementation>
+  <implementation name="com.sun.star.datatransfer.dnd.XdndSupport">
+    <service name="com.sun.star.datatransfer.dnd.X11DragSource"/>
+  </implementation>
   <implementation name="com.sun.star.datatransfer.MimeCntTypeFactory"
-    constructor="dtrans_CMimeContentTypeFactory_get_implementation">
+      constructor="dtrans_CMimeContentTypeFactory_get_implementation">
     <service name="com.sun.star.datatransfer.MimeContentTypeFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.datatransfer.VCLGenericClipboard"
+      constructor="vcl_SystemClipboard_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
+  </implementation>
+  <implementation name="com.sun.star.datatransfer.X11ClipboardSupport"
+      constructor="vcl_SystemClipboard_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
+  </implementation>
+  <implementation name="com.sun.star.frame.VCLSessionManagerClient"
+      constructor="com_sun_star_frame_VCLSessionManagerClient_get_implementation">
+    <service name="com.sun.star.frame.SessionManagerClient"/>
+  </implementation>
+  <implementation name="com.sun.star.graphic.GraphicObject"
+      constructor="com_sun_star_graphic_GraphicObject_get_implementation">
+    <service name="com.sun.star.graphic.GraphicObject"/>
+  </implementation>
+  <implementation name="org.libreoffice.uitest.UITest"
+      constructor="UITest_get_implementation">
+    <service name="com.sun.star.ui.test.UITest"/>
+  </implementation>
+  <implementation name="vcl::FontIdentificator"
+      constructor="vcl_FontIdentificator_get_implementation">
+    <service name="com.sun.star.awt.FontIdentificator"/>
   </implementation>
 </component>
