@@ -56,7 +56,6 @@ public:
     void testShouldFindCapitalsFamily();
     void testShouldFindFamilyName();
     void testShouldFindOtherStyleFamily();
-    void testShouldNotFindOtherStyleFamily();
     void testShouldFindSchoolbookFamily();
 
     CPPUNIT_TEST_SUITE(VclPhysicalFontCollectionTest);
@@ -87,7 +86,6 @@ public:
     CPPUNIT_TEST(testShouldFindCapitalsFamily);
     CPPUNIT_TEST(testShouldFindFamilyName);
     CPPUNIT_TEST(testShouldFindOtherStyleFamily);
-    CPPUNIT_TEST(testShouldNotFindOtherStyleFamily);
     CPPUNIT_TEST(testShouldFindSchoolbookFamily);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -521,17 +519,6 @@ void VclPhysicalFontCollectionTest::testShouldFindOtherStyleFamily()
     CPPUNIT_ASSERT_MESSAGE("Did not find font name", aFontCollection.FindFontFamilyByAttributes(
                                                          ImplFontAttrs::OtherStyle, WEIGHT_NORMAL,
                                                          WIDTH_NORMAL, ITALIC_NORMAL, ""));
-}
-
-void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
-{
-    vcl::font::PhysicalFontCollection aFontCollection;
-    vcl::font::PhysicalFontFamily* pFontFamily = aFontCollection.FindOrCreateFontFamily("monotype");
-    AddNormalFontFace(pFontFamily, "monotype");
-
-    CPPUNIT_ASSERT_MESSAGE("Found font name", !aFontCollection.FindFontFamilyByAttributes(
-                                                  ImplFontAttrs::OtherStyle, WEIGHT_NORMAL,
-                                                  WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindSchoolbookFamily()
