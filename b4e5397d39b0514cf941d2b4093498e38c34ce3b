@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09fc7bb0_ac84d7aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-15T00:32:24Z",
+      "side": 1,
+      "message": "Looks good to me.\nLicense statement\nhttps://lists.freedesktop.org/archives/libreoffice/2021-December/088141.html",
+      "revId": "b4e5397d39b0514cf941d2b4093498e38c34ce3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
