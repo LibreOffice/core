@@ -22,7 +22,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
