@@ -9,9 +9,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import importlib
-from uitest.debug import sleep
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text, select_pos
 
 class slideShowSettings(UITestCase):
     def test_slideShowSettings(self):
@@ -26,7 +24,7 @@ class slideShowSettings(UITestCase):
                 xfrom = PresentationDialog.getChild("from")
                 xfrom.executeAction("CLICK",tuple())
                 from_cb = PresentationDialog.getChild("from_cb")
-                from_cb.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
+                select_pos(from_cb, "0")
                 window = PresentationDialog.getChild("window")
                 window.executeAction("CLICK",tuple())
                 manualslides = PresentationDialog.getChild("manualslides")

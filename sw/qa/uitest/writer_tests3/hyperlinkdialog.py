@@ -10,7 +10,7 @@
 from uitest.framework import UITestCase
 import os
 import re
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 #test Hyperlink dialog
@@ -27,19 +27,19 @@ class HyperlinkDialog(UITestCase):
                 xtab=xDialog.getChild("tabcontrol")
                 self.assertEqual(get_state_as_dict(xtab)["PageCount"], "4")
 
-                xtab.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
+                select_pos(xtab, "0")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Internet")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "0")
 
-                xtab.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+                select_pos(xtab, "1")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Mail")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "1")
 
-                xtab.executeAction("SELECT", mkPropertyValues({"POS": "2"}))
+                select_pos(xtab, "2")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Document")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "2")
 
-                xtab.executeAction("SELECT", mkPropertyValues({"POS": "3"}))
+                select_pos(xtab, "3")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~New Document")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "3")
 
@@ -54,7 +54,7 @@ class HyperlinkDialog(UITestCase):
 
                 # insert link
                 xtab=xDialog.getChild("tabcontrol")
-                xtab.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
+                select_pos(xtab, "0")
 
                 xtarget = xDialog.getChild("target")
                 xtarget.executeAction("TYPE", mkPropertyValues({"TEXT": "http://www.libreoffice.org/"}))

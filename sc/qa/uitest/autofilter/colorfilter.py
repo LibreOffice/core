@@ -8,7 +8,7 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_pos
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_pos, select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import is_row_hidden
 
@@ -117,9 +117,7 @@ class ColorFilterTest(UITestCase):
 
                 self.assertEqual("Another", get_state_as_dict(xField1)['DisplayText'])
 
-                props = {"TEXT": "Background color"}
-                actionProps = mkPropertyValues(props)
-                xCond1.executeAction("SELECT", actionProps)
+                select_by_text(xCond1, "Background color")
                 self.assertEqual("Background color", get_state_as_dict(xCond1)['DisplayText'])
 
                 xColor1 = xDialog.getChild("color1")

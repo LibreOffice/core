@@ -48,9 +48,7 @@ def change_measurement_unit(UITestCase, unit):
         elif 'units' in xDialogOpt.getChildren():
             xUnit = xDialogOpt.getChild("units")
 
-        props = {"TEXT": unit}
-        actionProps = mkPropertyValues(props)
-        xUnit.executeAction("SELECT", actionProps)
+        select_by_text(xUnit, unit)
 
         # tdf#137930: Check apply button doesn't reset the value
         xApplyBtn = xDialogOpt.getChild("apply")

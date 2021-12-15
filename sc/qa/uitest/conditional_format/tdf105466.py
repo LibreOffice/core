@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import select_pos
 
 import unittest
 
@@ -24,6 +25,6 @@ class tdf105466(UITestCase):
                 for i in range(0,4):
                     with self.subTest(i = i):
                         xTypeLstBox = xCondFormatDlg.getChild("type")
-                        xTypeLstBox.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+                        select_pos(xTypeLstBox, str(i))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
