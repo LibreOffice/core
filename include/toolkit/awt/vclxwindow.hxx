@@ -42,8 +42,10 @@
 #include <vector>
 #include <functional>
 
-namespace comphelper { class OInterfaceContainerHelper2; }
+namespace comphelper { template <class ListenerT> class OInterfaceContainerHelper3; }
 namespace com::sun::star::accessibility { class XAccessibleContext; }
+namespace com::sun::star::awt { class XTopWindowListener; }
+namespace com::sun::star::awt { class XVclContainerListener; }
 namespace vcl { class Window; }
 
 class VclWindowEvent;
@@ -97,8 +99,8 @@ protected:
                                         bool bWithDefaults = false );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds );
 
-    ::comphelper::OInterfaceContainerHelper2&  GetContainerListeners();
-    ::comphelper::OInterfaceContainerHelper2&  GetTopWindowListeners();
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XVclContainerListener>& GetContainerListeners();
+    ::comphelper::OInterfaceContainerHelper3<css::awt::XTopWindowListener>& GetTopWindowListeners();
 
 public:
     typedef ::std::function<void ()>  Callback;
