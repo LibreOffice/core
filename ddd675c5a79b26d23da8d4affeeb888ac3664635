@@ -16,6 +16,24 @@
       "message": "Hi Hossein,\nyou should not change the author when submitting a new patch",
       "revId": "ddd675c5a79b26d23da8d4affeeb888ac3664635",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fed76d4_d99d42ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-15T10:25:11Z",
+      "side": 1,
+      "message": "Yeah, sure. I had to re-create the patch, and I forgot the --author option. :-(\nI have used the correct option after that for the next patches.",
+      "parentUuid": "aa61e72f_7c4f9b9b",
+      "revId": "ddd675c5a79b26d23da8d4affeeb888ac3664635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
