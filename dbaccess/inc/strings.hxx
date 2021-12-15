@@ -57,10 +57,7 @@
 #define PROPERTY_SERVICENAME "ServiceName"
 #define PROPERTY_ISBOOKMARKABLE "IsBookmarkable"
 #define PROPERTY_CANUPDATEINSERTEDROWS "CanUpdateInsertedRows"
-#define PROPERTY_ISSET "IsSet"
-#define PROPERTY_ISOUTPARAMETER "IsOutParameter"
 #define PROPERTY_NUMBERFORMATSSUPPLIER "NumberFormatsSupplier"
-#define PROPERTY_ISCALCULATED "IsCalculated"
 #define PROPERTY_DATASOURCENAME "DataSourceName"
 #define PROPERTY_DATABASE_LOCATION "DatabaseLocation"
 #define PROPERTY_CONNECTION_RESOURCE "ConnectionResource"
@@ -86,7 +83,6 @@
 #define PROPERTY_ISNEW "IsNew"
 #define PROPERTY_ROWCOUNT "RowCount"
 #define PROPERTY_ISROWCOUNTFINAL "IsRowCountFinal"
-#define PROPERTY_HELPFILENAME "HelpFileName"
 #define PROPERTY_WIDTH "Width"
 #define PROPERTY_ROW_HEIGHT "RowHeight"
 #define PROPERTY_AUTOGROW "AutoGrow"
@@ -97,13 +93,11 @@
 #define PROPERTY_BOUNDFIELD "BoundField"
 #define PROPERTY_CONTROLSOURCE "DataField"
 #define PROPERTY_REALNAME "RealName"
-#define PROPERTY_ISHIDDEN "IsHidden"
 #define PROPERTY_UPDATE_TABLENAME "UpdateTableName"
 #define PROPERTY_UPDATE_SCHEMANAME "UpdateSchemaName"
 #define PROPERTY_UPDATE_CATALOGNAME "UpdateCatalogName"
 #define PROPERTY_RELATIVEPOSITION "RelativePosition"
 #define PROPERTY_CONTROLMODEL "ControlModel"
-#define PROPERTY_ISASCENDING "IsAscending"
 #define PROPERTY_RELATEDCOLUMN "RelatedColumn"
 #define PROPERTY_ISUNIQUE "IsUnique"
 #define PROPERTY_ISPRIMARYKEYINDEX "IsPrimaryKeyIndex"
@@ -111,11 +105,8 @@
 #define PROPERTY_UPDATERULE "UpdateRule"
 #define PROPERTY_DELETERULE "DeleteRule"
 #define PROPERTY_REFERENCEDTABLE "ReferencedTable"
-#define PROPERTY_REFERENCEDCOLUMN "ReferencedColumn"
-#define PROPERTY_PARENTWINDOW "ParentWindow"
 #define PROPERTY_SQLEXCEPTION "SQLException"
 #define PROPERTY_BORDER "Border"
-#define PROPERTY_THREADSAFE "ThreadSafe"
 #define PROPERTY_HELPTEXT "HelpText"
 #define PROPERTY_CONTROLDEFAULT "ControlDefault"
 #define PROPERTY_HIDDEN "Hidden"
@@ -126,10 +117,6 @@
 #define PROPERTY_SHOWMENU "ShowMenu"
 #define PROPERTY_LAYOUTINFORMATION "LayoutInformation"
 #define PROPERTY_CURRENTTABLE "CurrentTable"
-#define PROPERTY_DATABASENAME "DatabaseName"
-#define PROPERTY_CONTROLUSER "ControlUser"
-#define PROPERTY_CONTROLPASSWORD "ControlPassword"
-#define PROPERTY_CACHESIZE "CacheSize"
 #define PROPERTY_TEXTLINECOLOR "TextLineColor"
 #define PROPERTY_TEXTEMPHASIS "FontEmphasisMark"
 #define PROPERTY_TEXTRELIEF "FontRelief"
@@ -266,7 +253,6 @@ inline constexpr OUStringLiteral SERVICE_CONTROLDEFAULT = u"com.sun.star.comp.db
 
 // other DBU properties
 
-#define PROPERTY_TRISTATE "TriState"
 #define PROPERTY_ENABLEOUTERJOIN "EnableOuterJoinEscape"
 #define PROPERTY_TABSTOP "TabStop"
 #define PROPERTY_DEFAULTCONTROL "DefaultControl"
@@ -275,7 +261,6 @@ inline constexpr OUStringLiteral SERVICE_CONTROLDEFAULT = u"com.sun.star.comp.db
 
 inline constexpr OUStringLiteral SQLSTATE_GENERAL = u"01000";
 
-#define PROPERTY_APPLYFORMDESIGNMODE "ApplyFormDesignMode"
 #define PROPERTY_IS_FORM "IsForm"
 #define PROPERTY_PERSISTENT_PATH "PersistentPath"
 
