@@ -16,6 +16,24 @@
       "message": "wdyt?\n\none part in me says: hide the template away, put it in workdir or similar, the other part says: that will make it harder for people to compare their version if they modified it...",
       "revId": "1b5a55376fc7c10203fd7b9960e87b68bc4133a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e86946bc_3d30662e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-15T13:42:56Z",
+      "side": 1,
+      "message": "Keep them both here in $(BUILDDIR). But rename the template to something like \u0027vs-code-template\u0027, without the extension (that makes VSCode recognize it), or with a different extension. That would make everyone happy? (unless VSCode will recognize it anyway?)",
+      "parentUuid": "5c9c38ae_7d3ff7cf",
+      "revId": "1b5a55376fc7c10203fd7b9960e87b68bc4133a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
