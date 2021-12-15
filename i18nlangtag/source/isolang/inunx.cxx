@@ -39,11 +39,12 @@ static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 
 
 // Get locale of category LC_CTYPE of environment variables
-static const char* getLangFromEnvironment()
+static const char* getLangFromEnvironment( bool& rbColonList )
 {
     static const char* const pFallback = "C";
     const char *pLang = nullptr;
 
+    rbColonList = false;
     pLang = getenv ( "LC_ALL" );
     if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_CTYPE" );
@@ -57,14 +58,18 @@ static const char* getLangFromEnvironment()
 
 
 // Get locale of category LC_MESSAGES of environment variables
-static const char* getUILangFromEnvironment()
+static const char* getUILangFromEnvironment( bool& rbColonList )
 {
     static const char* const pFallback = "C";
     const char *pLang = nullptr;
 
+    rbColonList = true;
     pLang = getenv ( "LANGUAGE" );      // respect the GNU extension
     if (! pLang || pLang[0] == 0)
+    {
+        rbColonList = false;
         pLang = getenv ( "LC_ALL" );
+    }
     if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_MESSAGES" );
     if (! pLang || pLang[0] == 0)
@@ -76,7 +81,7 @@ static const char* getUILangFromEnvironment()
 }
 
 
-typedef const char * (*getLangFromEnv)();
+typedef const char * (*getLangFromEnv)( bool& rbColonList );
 
 static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
         getLangFromEnv pGetLangFromEnv )
@@ -104,7 +109,31 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
 #endif
             }
 #else   /* MACOSX */
-            OString aUnxLang( pGetLangFromEnv() );
+            bool bColonList = false;
+            OString aUnxLang( pGetLangFromEnv( bColonList));
+            if (bColonList)
+            {
+                // Only a very simple "take first". If empty try second or keep empty.
+                sal_Int32 n = aUnxLang.indexOf(':');
+                if (n >= 0)
+                {
+                    sal_Int32 s = 0;
+                    if (n == 0 && aUnxLang.getLength() > 1)
+                    {
+                        n = aUnxLang.indexOf(':', 1);
+                        if (n < 0)
+                            n = aUnxLang.getLength();
+                        if (n < 2)
+                            s = n = 0;
+                        else
+                        {
+                            s = 1;
+                            --n;
+                        }
+                    }
+                    aUnxLang = aUnxLang.copy(s,n);
+                }
+            }
             nLang = MsLangId::convertUnxByteStringToLanguage( aUnxLang );
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             rSystemLanguage = nLang;
