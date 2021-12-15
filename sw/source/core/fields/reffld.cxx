@@ -771,7 +771,7 @@ static std::pair<OUString, bool> MakeRefNumStr(
     SwTextNode const& rTextNodeOfReferencedItem(pLayout
             ?   *sw::GetParaPropsNode(*pLayout, i_rTextNodeOfReferencedItem)
             :   i_rTextNodeOfReferencedItem);
-    if ( rTextNodeOfReferencedItem.HasNumber() &&
+    if ( rTextNodeOfReferencedItem.HasNumber(pLayout) &&
          rTextNodeOfReferencedItem.IsCountedInList() )
     {
         OSL_ENSURE( rTextNodeOfReferencedItem.GetNum(pLayout),
@@ -795,7 +795,7 @@ static std::pair<OUString, bool> MakeRefNumStr(
                             == rTextNodeOfReferencedItem.FindFooterStartNode() )
         {
             const SwNodeNum* pNodeNumForTextNodeOfField( nullptr );
-            if ( rTextNodeOfField.HasNumber() &&
+            if ( rTextNodeOfField.HasNumber(pLayout) &&
                  rTextNodeOfField.GetNumRule() == rTextNodeOfReferencedItem.GetNumRule() )
             {
                 pNodeNumForTextNodeOfField = rTextNodeOfField.GetNum(pLayout);
