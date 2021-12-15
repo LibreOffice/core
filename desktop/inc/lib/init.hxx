@@ -52,7 +52,7 @@ namespace desktop {
         }
 
         RectangleAndPart(const tools::Rectangle* pRect, int nPart)
-            : m_aRectangle( pRect ? *pRect : emptyAllRectangle)
+            : m_aRectangle( pRect ? CheckedRectangle(*pRect) : emptyAllRectangle)
             , m_nPart(nPart)
         {
         }
@@ -81,6 +81,8 @@ namespace desktop {
         }
 
         static RectangleAndPart Create(const std::string& rPayload);
+        static tools::Rectangle CheckedRectangle(tools::Long nLeft, tools::Long nTop, tools::Long nWidth, tools::Long nHeight);
+        static tools::Rectangle CheckedRectangle(const tools::Rectangle& rect);
     };
 
     class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface

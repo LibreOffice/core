@@ -555,6 +555,13 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
         nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     }
 
+    aRet.m_aRectangle = CheckedRectangle(nLeft, nTop, nWidth, nHeight);
+    aRet.m_nPart = nPart;
+    return aRet;
+}
+
+tools::Rectangle RectangleAndPart::CheckedRectangle(tools::Long nLeft, tools::Long nTop, tools::Long nWidth, tools::Long nHeight)
+{
     if (nWidth > 0 && nHeight > 0)
     {
         // The top-left corner starts at (0, 0).
@@ -572,14 +579,15 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
         }
 
         if (nWidth > 0 && nHeight > 0)
-        {
-            aRet.m_aRectangle = tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
-        }
+            return tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
     }
-    // else leave empty rect.
+    // Else set empty rect.
+    return tools::Rectangle();
+}
 
-    aRet.m_nPart = nPart;
-    return aRet;
+tools::Rectangle RectangleAndPart::CheckedRectangle(const tools::Rectangle& rect)
+{
+    return CheckedRectangle(rect.Left(), rect.Top(), rect.getWidth(), rect.getHeight());
 }
 
 const std::string& CallbackFlushHandler::CallbackData::getPayload() const
