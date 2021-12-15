@@ -22,6 +22,9 @@
     .type   privateSnippetExecutorGeneral,@function
 privateSnippetExecutorGeneral:
 .LFBg:
+#if defined(END_BRANCH_INS_SUPPORT)
+    endbr32
+#endif
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIg0:
@@ -44,6 +47,9 @@ privateSnippetExecutorGeneral:
     .type   privateSnippetExecutorVoid,@function
 privateSnippetExecutorVoid:
 .LFBv:
+#if defined(END_BRANCH_INS_SUPPORT)
+    endbr32
+#endif
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIv0:
@@ -64,6 +70,9 @@ privateSnippetExecutorVoid:
     .type   privateSnippetExecutorHyper,@function
 privateSnippetExecutorHyper:
 .LFBh:
+#if defined(END_BRANCH_INS_SUPPORT)
+    endbr32
+#endif
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIh0:
@@ -87,6 +96,9 @@ privateSnippetExecutorHyper:
     .type   privateSnippetExecutorFloat,@function
 privateSnippetExecutorFloat:
 .LFBf:
+#if defined(END_BRANCH_INS_SUPPORT)
+    endbr32
+#endif
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIf0:
@@ -109,6 +121,9 @@ privateSnippetExecutorFloat:
     .type   privateSnippetExecutorDouble,@function
 privateSnippetExecutorDouble:
 .LFBd:
+#if defined(END_BRANCH_INS_SUPPORT)
+    endbr32
+#endif
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFId0:
@@ -131,6 +146,9 @@ privateSnippetExecutorDouble:
     .type   privateSnippetExecutorClass,@function
 privateSnippetExecutorClass:
 .LFBc:
+#if defined(END_BRANCH_INS_SUPPORT)
+    endbr32
+#endif
     movl    %esp,%ecx
     pushl   %ebp              # proper stack frame needed for exception handling
 .LCFIc0:
@@ -290,3 +308,19 @@ privateSnippetExecutorClass:
     .align 4
 .LEFDEc:
     .section .note.GNU-stack,"",@progbits
+    .section .note.gnu.property,"a"
+    .p2align 2
+    .long     1f - 0f
+    .long     4f - 1f
+    .long     5
+0:
+    .string     "GNU"
+1:
+    .p2align 2
+    .long     0xc0000002
+    .long     3f - 2f
+2:
+    .long     0x3
+3:
+    .p2align 2
+4:
