@@ -94,10 +94,12 @@ class ComplexGroupShapeTest(UITestCase):
 
             # check if it is a textbox
             self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)
+            time.sleep(0.1)
 
             # go to the other one
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            time.sleep(0.1)
 
             # this is still a group, so it cannot be a textbox
             self.assertEqual(False,document.getCurrentSelection().getByIndex(0).TextBox)
@@ -115,6 +117,7 @@ class ComplexGroupShapeTest(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            time.sleep(0.1)
 
             # check if it is a textbox
             self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)
