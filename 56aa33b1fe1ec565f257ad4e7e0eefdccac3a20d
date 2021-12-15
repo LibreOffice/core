@@ -50,6 +50,29 @@
       "message": "No other comment. I must admit I didn\u0027t look at the changes in NResultSet.cxx and NResultSetMetaData.cxx.",
       "revId": "56aa33b1fe1ec565f257ad4e7e0eefdccac3a20d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f456eb4_12793924",
+        "filename": "connectivity/source/drivers/evoab2/NStatement.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-12-15T06:15:03Z",
+      "side": 1,
+      "message": "( pAscDesc-\u003eisLeaf() ) is the same as ( pAscDesc-\u003ecount() \u003d\u003d 0 ), so the test ( pAscDesc-\u003ecount() \u003c 2 ) is superfluous and can be removed.",
+      "range": {
+        "startLine": 276,
+        "startChar": 16,
+        "endLine": 276,
+        "endChar": 41
+      },
+      "revId": "56aa33b1fe1ec565f257ad4e7e0eefdccac3a20d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
