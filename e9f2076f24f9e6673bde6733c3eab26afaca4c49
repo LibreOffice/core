@@ -176,6 +176,23 @@
       "message": "Ilmari: I did some changes on https://wiki.documentfoundation.org/QA/FirstSteps. Hope it\u0027s clearer now.\nSince I\u0027m using now my Linux machine (not the Windows one), I didn\u0027t have in mind the precise location of opengl_denylist_windows.xml",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7b9a7bd_729e3c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001128
+      },
+      "writtenOn": "2021-12-15T22:24:17Z",
+      "side": 1,
+      "message": "hello Julien,\nthanks for adding me here.\n\nunfortunately I don\u0027t have access anymore to the hardware with that intel card that broke with LibO and windows 8.\n\nwhen I made that change it was needed but I need to admit that probably, the risk to still break something is really low and a cleaning is beneficial.",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
