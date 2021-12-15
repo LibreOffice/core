@@ -61,6 +61,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68de553e_a02381af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T07:50:30Z",
+      "side": 1,
+      "message": "there\u0027s Test::testFindFirstURLInText in svl/qa/unit/test_URIHelper.cxx",
+      "parentUuid": "169f20d3_b771638f",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a86d1640_ffc0b91a",
         "filename": "svl/source/misc/urihelper.cxx",
         "patchSetId": 1
@@ -90,6 +108,24 @@
       "side": 1,
       "message": "Wanted to be informative - remove?",
       "parentUuid": "a86d1640_ffc0b91a",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e60a37af_85e8f8e2",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T07:50:30Z",
+      "side": 1,
+      "message": "There\u0027s no documentation about the other values here either (as there is already documentation at the case labels in the switch statement below).  And that cases 5 and 6 got added as the result of some bug fix is rather irrelevant for the reader of the resulting code, I think.",
+      "parentUuid": "bbfe8c61_b0187ceb",
       "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -131,6 +167,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eccebf3f_cbabf5d1",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T07:50:30Z",
+      "side": 1,
+      "message": "yes :)",
+      "parentUuid": "f6489212_9c8cbe84",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "67ade1d1_629008a7",
         "filename": "svl/source/misc/urihelper.cxx",
         "patchSetId": 1
@@ -160,6 +214,24 @@
       "side": 1,
       "message": "So what is wanted? Not informative, just let the code speak? Am I commenting too much (serious question, I try to do the right thing)?",
       "parentUuid": "67ade1d1_629008a7",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251adc4f_9aa65309",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T07:50:30Z",
+      "side": 1,
+      "message": "yeah, I find that level of commenting excessive---it just states what the code is obviously doing anyway (and runs the danger of getting out of sync in the future, and then doing more harm than good)",
+      "parentUuid": "6dc7efb1_8967a581",
       "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -218,6 +290,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "abe201a9_da874bd0",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T07:50:30Z",
+      "side": 1,
+      "message": "...which might make sense if you look at the patch in isolation, but doesn\u0027t make that much sense when you just look at the resulting code.  (If it were really important to group the two new cases with case 1, you should label them 2 and 3 and move the renumber the remaining cases, but I would urge against that here.)",
+      "parentUuid": "960b7cef_48602a45",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "776bd403_af512117",
         "filename": "svl/source/misc/urihelper.cxx",
         "patchSetId": 1
@@ -247,6 +337,24 @@
       "side": 1,
       "message": "It is more oriented as addendum to the productions above, while it\u0027s not a production itself. \u0027this fix\u0027 refers to the tdf# at the start of the comment...?",
       "parentUuid": "776bd403_af512117",
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf0f2fc7_c65f0a77",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T07:50:30Z",
+      "side": 1,
+      "message": "The existing set of comments had a blank line after them, to make it clear they don\u0027t just appertain to the exact next statement, but to the code at large.\nAnd that the current code is the result of applying some bug fixes is rather irrelevant to any reader of the resulting code, I think.\nWhat might work best is to augment the above \"Productions 1--4, and 6--8 try to find...\" paragraph with something like \"Productions X, Y, and Z take care to extend URLs past matching pairs of parentheses.\"",
+      "parentUuid": "450ad383_86d3d556",
       "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -288,6 +396,30 @@
       "side": 1,
       "message": "Because I thought that it\u0027s an 80-char limit, so wanted to be nice. I love long lines, usually, and was criticized for these...",
       "parentUuid": "3cf958fe_983f4167",
+      "range": {
+        "startLine": 550,
+        "startChar": 40,
+        "endLine": 550,
+        "endChar": 45
+      },
+      "revId": "f38a1a36021a34a0e394525e773ccb31b2876070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dbd257f_f1f5f314",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T07:50:30Z",
+      "side": 1,
+      "message": "we settled on a line length of 100 quite a while ago (cf. e.g. \u003chttps://git.libreoffice.org/core/+/708dd92578a3029edd1d63e89bf7860bb9d3d37f%5E!/\u003e \"clang-format: Increase column limit to 100\")",
+      "parentUuid": "32fd3b00_7a1e69aa",
       "range": {
         "startLine": 550,
         "startChar": 40,
