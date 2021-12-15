@@ -106,6 +106,24 @@
       "parentUuid": "de169db1_a67b943d",
       "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a229557_ebb23a70",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-15T14:40:58Z",
+      "side": 1,
+      "message": "Some backends might need to convert from their internal format to whatever VCL expects, so it\u0027s not going to be constant. With some such as GPU-backed Skia/Vulkan it could even be somewhat large.",
+      "parentUuid": "14605530_9c5a9674",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
