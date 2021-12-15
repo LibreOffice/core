@@ -159,6 +159,23 @@
       "parentUuid": "61e9f3d2_104f11f1",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45824807_5cbc09ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-15T22:05:30Z",
+      "side": 1,
+      "message": "Ilmari: I did some changes on https://wiki.documentfoundation.org/QA/FirstSteps. Hope it\u0027s clearer now.\nSince I\u0027m using now my Linux machine (not the Windows one), I didn\u0027t have in mind the precise location of opengl_denylist_windows.xml",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
