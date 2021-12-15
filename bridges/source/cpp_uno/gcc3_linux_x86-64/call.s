@@ -22,6 +22,9 @@
 	.type	privateSnippetExecutor, @function
 privateSnippetExecutor:
 .LFB3:
+#if defined(END_BRANCH_INS_SUPPORT)
+	endbr64
+#endif
 	pushq	%rbp
 .LCFI0:
 	movq	%rsp, %rbp
@@ -121,3 +124,19 @@ privateSnippetExecutor:
 	.align 8
 .LEFDE1:
 	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.p2align 3
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.p2align 3
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.p2align 3
+4:
