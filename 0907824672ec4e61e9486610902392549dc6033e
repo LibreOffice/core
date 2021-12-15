@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f9335c5_d70ffea5",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/LokClipboard.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-15T11:59:53Z",
+      "side": 1,
+      "message": "Can you avoid the \"published \" prefix here? That gives us some flexiblity when it comes to modifying this service (if it\u0027s not published).",
+      "revId": "0907824672ec4e61e9486610902392549dc6033e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
