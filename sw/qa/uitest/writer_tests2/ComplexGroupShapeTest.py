@@ -21,6 +21,9 @@ class ComplexGroupShapeTest(UITestCase):
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             document = self.ui_test.get_component()
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
             # check the shape type
             self.assertEqual("com.sun.star.drawing.GroupShape", document.DrawPage.getByIndex(1).ShapeType)
 
@@ -30,21 +33,27 @@ class ComplexGroupShapeTest(UITestCase):
 
             # go inside the group
             self.xUITest.executeCommand(".uno:EnterGroup")
+            xToolkit.processEventsToIdle()
 
             # select a shape in the group
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            xToolkit.processEventsToIdle()
 
             # add a textbox to this subshape
             self.xUITest.executeCommand(".uno:AddTextBox")
+            xToolkit.processEventsToIdle()
 
             # select the next shape in the group
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
+            xToolkit.processEventsToIdle()
 
             # add a textbox to this subshape
             self.xUITest.executeCommand(".uno:AddTextBox")
+            xToolkit.processEventsToIdle()
 
             # leave the groupshape
             self.xUITest.executeCommand(".uno:LeaveGroup")
+            xToolkit.processEventsToIdle()
 
             # select the other shape
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
@@ -62,62 +71,31 @@ class ComplexGroupShapeTest(UITestCase):
 
             # do ungroup
             self.xUITest.executeCommand(".uno:FormatGroup")
-
-            # deselect
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"ESC"}))
-            time.sleep(0.1)
-
-            # select the group
-            self.xUITest.executeCommand(".uno:JumpToNextFrame")
-            self.ui_test.wait_until_child_is_available('metricfield')
+            xToolkit.processEventsToIdle()
 
             # move it down
             for i in range(1, 30):
                 xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
                 time.sleep(0.1)
 
-            # select again
-            self.xUITest.executeCommand(".uno:JumpToNextFrame")
-            self.ui_test.wait_until_child_is_available('metricfield')
+            # do ungroup
+            self.xUITest.executeCommand(".uno:FormatUngroup")
+            xToolkit.processEventsToIdle()
+
+            # check if the first shape in the selection is a textbox
+            self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)
+
+            # the socond shape is still a group, so it cannot be a textbox
+            self.assertEqual(False,document.getCurrentSelection().getByIndex(1).TextBox)
 
             # do ungroup
             self.xUITest.executeCommand(".uno:FormatUngroup")
+            xToolkit.processEventsToIdle()
 
-            # deselect everything
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"ESC"}))
-            time.sleep(0.1)
-
-            # select the first ex-group member shape
-            self.xUITest.executeCommand(".uno:JumpToNextFrame")
-            self.ui_test.wait_until_child_is_available('metricfield')
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
-
-            # check if it is a textbox
+            # check if all shapes in the seloection are textbox
             self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)
-
-            # go to the other one
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
-
-            # this is still a group, so it cannot be a textbox
-            self.assertEqual(False,document.getCurrentSelection().getByIndex(0).TextBox)
-
-            # do ungroup
-            self.xUITest.executeCommand(".uno:FormatUngroup")
-
-            # deselect
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"ESC"}))
-            time.sleep(0.1)
-
-            # select one shape of the last group
-            self.xUITest.executeCommand(".uno:JumpToNextFrame")
-            self.ui_test.wait_until_child_is_available('metricfield')
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
-            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
-
-            # check if it is a textbox
-            self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)
+            self.assertEqual(True,document.getCurrentSelection().getByIndex(1).TextBox)
+            self.assertEqual(True,document.getCurrentSelection().getByIndex(2).TextBox)
 
             # Without the fix in place, the following problems occurred during this test:
             # - After the grouping old textbox frames detached from their shape before
