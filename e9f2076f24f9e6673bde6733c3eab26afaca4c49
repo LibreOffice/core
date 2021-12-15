@@ -141,6 +141,24 @@
       "parentUuid": "ac84fd93_cdbe2d62",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a12ece1_fd7edd03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-15T21:43:25Z",
+      "side": 1,
+      "message": "I had just remembered about this section but not about the content quoting OpenGL rendering, re-reading the section, you\u0027re obviously right since it talks about OpenGL rendering.\nSorry Adolfo, my fault, I\u0027ll try to find some time to modify this part.",
+      "parentUuid": "61e9f3d2_104f11f1",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
