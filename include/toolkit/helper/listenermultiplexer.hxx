@@ -42,8 +42,9 @@
 #include <com/sun/star/awt/tree/XTreeExpansionListener.hpp>
 #include <com/sun/star/awt/tree/XTreeEditListener.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
@@ -51,9 +52,9 @@
 
 //  class ListenerMultiplexerBase
 
-
+template <class ListenerT>
 class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) ListenerMultiplexerBase : public MutexHelper,
-                                public ::comphelper::OInterfaceContainerHelper2,
+                                public ::comphelper::OInterfaceContainerHelper3<ListenerT>,
                                 public css::uno::XInterface
 {
 private:
@@ -63,15 +64,24 @@ protected:
     ::cppu::OWeakObject&    GetContext() { return mrContext; }
 
 public:
-    ListenerMultiplexerBase( ::cppu::OWeakObject& rSource );
-    virtual ~ListenerMultiplexerBase();
+    ListenerMultiplexerBase( ::cppu::OWeakObject& rSource )
+        : ::comphelper::OInterfaceContainerHelper3<ListenerT>(GetMutex()), mrContext(rSource)
+    {
+    }
+
+    virtual ~ListenerMultiplexerBase()
+    {
+    }
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    css::uno::Any  SAL_CALL queryInterface(const css::uno::Type & rType) override
+    {
+        return ::cppu::queryInterface(rType, static_cast<css::uno::XInterface*>(this));
+    }
+
     void                        SAL_CALL acquire() noexcept override  { mrContext.acquire(); }
     void                        SAL_CALL release() noexcept override  { mrContext.release(); }
 };
-
 
 //  class EventListenerMultiplexer
 

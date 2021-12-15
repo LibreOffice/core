@@ -47,6 +47,7 @@
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
 #include <tools/diagnose_ex.h>
 
 class DbCellControl;

@@ -32,7 +32,7 @@ css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \
 
 
 #define DECL_LISTENERMULTIPLEXER_START( ClassName, InterfaceName ) \
-class ClassName final : public ListenerMultiplexerBase, public InterfaceName \
+class ClassName final : public ListenerMultiplexerBase<InterfaceName>, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
@@ -43,7 +43,7 @@ public: \
 
 
 #define DECL_LISTENERMULTIPLEXER_START_DLLPUB( ClassName, InterfaceName ) \
-class TOOLKIT_DLLPUBLIC ClassName final : public ListenerMultiplexerBase, public InterfaceName \
+class TOOLKIT_DLLPUBLIC ClassName final : public ListenerMultiplexerBase<InterfaceName>, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
@@ -59,7 +59,7 @@ public: \
 
 #define IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ClassName, InterfaceName ) \
 ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
-    : ListenerMultiplexerBase( rSource ) \
+    : ListenerMultiplexerBase<InterfaceName>(rSource) \
 { \
 } \
 void SAL_CALL ClassName::acquire() noexcept { ListenerMultiplexerBase::acquire(); } \
@@ -87,11 +87,10 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 #define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
 { \
     ParamType1 aMulti( evt ); \
-    ::comphelper::OInterfaceIteratorHelper2 aIt( *this ); \
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this); \
     while( aIt.hasMoreElements() ) \
     { \
-        css::uno::Reference< InterfaceName > xListener( \
-            static_cast< InterfaceName* >( aIt.next() ) ); \
+        css::uno::Reference<InterfaceName> xListener(aIt.next()); \
         try \
         { \
             xListener->MethodName( aMulti ); \
@@ -113,11 +112,10 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 { \
     EventType aMulti( evt ); \
     aMulti.Source = &GetContext(); \
-    ::comphelper::OInterfaceIteratorHelper2 aIt( *this ); \
+    ::comphelper::OInterfaceIteratorHelper3 aIt(*this); \
     while( aIt.hasMoreElements() ) \
     { \
-        css::uno::Reference< InterfaceName > xListener( \
-            static_cast< InterfaceName* >( aIt.next() ) ); \
+        css::uno::Reference<InterfaceName> xListener(aIt.next()); \
         try \
         { \
             xListener->MethodName( aMulti ); \
