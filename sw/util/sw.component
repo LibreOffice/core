@@ -40,14 +40,14 @@
     <service name="com.sun.star.text.MailMerge"/>
   </implementation>
   <implementation name="lo.writer.MMCurrentEntryController"
-      constructor="lo_writer_MMCurrentEntryController_get_implementation"
-      CONDITION="BUILD_TYPE:DBCONNECTIVITY">
+      constructor="lo_writer_MMCurrentEntryController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
+    <optional/>
   </implementation>
   <implementation name="lo.writer.MMExcludeEntryController"
-      constructor="lo_writer_MMExcludeEntryController_get_implementation"
-      CONDITION="BUILD_TYPE:DBCONNECTIVITY">
+      constructor="lo_writer_MMExcludeEntryController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
+    <optional/>
   </implementation>
   <implementation name="lo.writer.PageSizeToolBoxControl"
     constructor="lo_writer_PageSizeToolBoxControl_get_implementation">
