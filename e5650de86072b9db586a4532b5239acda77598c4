@@ -34,6 +34,24 @@
       "parentUuid": "26cb9b72_8a74e80c",
       "revId": "e5650de86072b9db586a4532b5239acda77598c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc60ffa6_3196aefd",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T14:39:54Z",
+      "side": 1,
+      "message": "(and note how Jenkins had failed patch set 26, where sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py was identical to submitted patch set 32, in a very similar way at \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/102993/consoleFull#-18254137699567f988-cbcf-4519-af05-6000b834f13f\u003e,\n\n  ERROR: test_ComplexGroupShape (ComplexGroupShapeTest.ComplexGroupShapeTest)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\", line 120, in test_ComplexGroupShape\n      self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)\n  AttributeError: TextBox\n\n)",
+      "parentUuid": "921de60f_714e4293",
+      "revId": "e5650de86072b9db586a4532b5239acda77598c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
