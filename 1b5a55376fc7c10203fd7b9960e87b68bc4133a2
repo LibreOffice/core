@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c9c38ae_7d3ff7cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-15T13:34:46Z",
+      "side": 1,
+      "message": "wdyt?\n\none part in me says: hide the template away, put it in workdir or similar, the other part says: that will make it harder for people to compare their version if they modified it...",
+      "revId": "1b5a55376fc7c10203fd7b9960e87b68bc4133a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
