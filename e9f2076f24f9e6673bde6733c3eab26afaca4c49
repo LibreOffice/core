@@ -87,6 +87,24 @@
       "parentUuid": "765fd950_aef8da9c",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe10a48_11eea976",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-15T21:17:40Z",
+      "side": 1,
+      "message": "I don\u0027t understand why the wiki section had to be put back as it is obsolete since 7.2. Am I missing something?",
+      "parentUuid": "0e2d8453_0d232ffe",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
