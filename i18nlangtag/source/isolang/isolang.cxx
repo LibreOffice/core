@@ -1408,10 +1408,12 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( std::string_view r
     // actually call into LanguageTag to create an on-the-fly mapping.
     if (nLang == LANGUAGE_DONTKNOW)
     {
-        nLang = LanguageTag( aLang + "-" + aCountry).getLanguageType(false);
+        OUString aTag( aCountry.isEmpty() ? aLang : aLang + "-" + aCountry );
+        nLang = LanguageTag( aTag).getLanguageType(false);
         SAL_WARN("i18nlangtag", "convertIsoNamesToLanguage(string_view): on-the-fly for {"
-                << aLang << "-" << aCountry << "} " << nLang);
-        if (nLang == LANGUAGE_DONTKNOW)
+                << aTag << "} " << nLang);
+        // Do not leave empty as SYSTEM unresolved.
+        if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_SYSTEM)
         {
             SAL_WARN("i18nlangtag", "convertIsoNamesToLanguage(string_view): on-the-fly bad, using {en-US}");
             nLang = LANGUAGE_ENGLISH_US;
