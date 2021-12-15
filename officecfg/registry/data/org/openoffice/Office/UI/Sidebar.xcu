@@ -1860,7 +1860,6 @@
             DrawImpress,    Draw,       hidden ;
             DrawImpress,    Graphic,    hidden ;
             DrawImpress,    TextObject, hidden ;
-            WriterVariants, Draw,       hidden ;
             WriterVariants, Graphic,    hidden ;
           </value>
         </prop>
