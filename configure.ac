@@ -8017,6 +8017,20 @@ _ACEOF
 
     CPPFLAGS="$save_CPPFLAGS"
 
+    AC_MSG_CHECKING([if CET endbranch is recognized])
+cat > endbr.s <<_ACEOF
+endbr32
+_ACEOF
+    HAVE_ASM_END_BRANCH_INS_SUPPORT=
+    if $CXX -c endbr.s -o endbr.o >/dev/null 2>&5; then
+        AC_MSG_RESULT([yes])
+        HAVE_ASM_END_BRANCH_INS_SUPPORT=TRUE
+    else
+        AC_MSG_RESULT([no])
+    fi
+    rm -f endbr.s endbr.o
+    AC_SUBST(HAVE_ASM_END_BRANCH_INS_SUPPORT)
+
     AC_LANG_POP([C++])
 fi
 
