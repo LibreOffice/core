@@ -35,6 +35,7 @@ public:
     void testShouldFindFontFamilyByTokenNames();
     void testShouldFindNoFamilyWithWorthlessAttributes();
     void testShouldFindCJKFamily();
+    void testShouldNotFindCJKFamily();
     void testShouldFindStarsymbolFamily();
     void testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies();
     void testShouldFindSymboltypeFamily();
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testShouldFindFontFamilyByTokenNames);
     CPPUNIT_TEST(testShouldFindNoFamilyWithWorthlessAttributes);
     CPPUNIT_TEST(testShouldFindCJKFamily);
+    CPPUNIT_TEST(testShouldNotFindCJKFamily);
     CPPUNIT_TEST(testShouldFindStarsymbolFamily);
     CPPUNIT_TEST(testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies);
     CPPUNIT_TEST(testShouldFindSymboltypeFamily);
@@ -184,6 +186,18 @@ void VclPhysicalFontCollectionTest::testShouldFindCJKFamily()
     CPPUNIT_ASSERT_MESSAGE("family not found", pCJKFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cjk family not found", GetEnglishSearchFontName(u"시험"),
                                  pCJKFamily->GetSearchName());
+}
+
+void VclPhysicalFontCollectionTest::testShouldNotFindCJKFamily()
+{
+    vcl::font::PhysicalFontCollection aFontCollection;
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName(u"No CJK characters"));
+    AddNormalFontFace(pFontFamily, "No CJK characters");
+
+    CPPUNIT_ASSERT_MESSAGE("family found",
+                           !aFontCollection.FindFontFamilyByAttributes(
+                               ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, ""));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindStarsymbolFamily()
