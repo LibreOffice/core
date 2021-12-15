@@ -27,9 +27,12 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 
+#include <fontinstance.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/fontsubstitution.hxx>
+
+#include <string_view>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
@@ -397,30 +400,632 @@ void PhysicalFontCollection::ImplInitMatchData() const
     }
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontAttrs nSearchType,
-                                                                       FontWeight eSearchWeight,
-                                                                       FontWidth eSearchWidth,
-                                                                       FontItalic eSearchItalic,
-                                                                       OUString const& rSearchFamilyName ) const
+static bool AttributesAreNotWorthMatching(ImplFontAttrs nSearchType, FontWeight eSearchWeight,
+                                   FontWidth eSearchWidth)
 {
-    if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW) )
+    return nSearchType == ImplFontAttrs::None
+           && ((eSearchWeight == WEIGHT_DONTKNOW) || (eSearchWeight == WEIGHT_NORMAL))
+           && ((eSearchWidth == WIDTH_DONTKNOW) || (eSearchWidth == WIDTH_NORMAL));
+}
+
+static tools::Long GetCJKMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    tools::Long nTestMatch = 0;
+
+    // test CJK script attributes
+    if (nSearchType & ImplFontAttrs::CJK)
+    {
+        // if the matching font doesn't support any CJK languages, then
+        // it is not appropriate
+        if (!(nMatchType & ImplFontAttrs::CJK_AllLang))
+        {
+            nTestMatch -= CJK_MATCH_VALUE;
+        }
+        else
+        {
+            // Matching language
+            if ((nSearchType & ImplFontAttrs::CJK_AllLang)
+                && (nMatchType & ImplFontAttrs::CJK_AllLang))
+                nTestMatch += CJK_MATCH_VALUE * 3;
+
+            if (nMatchType & ImplFontAttrs::CJK)
+                nTestMatch += CJK_MATCH_VALUE * 2;
+
+            if (nMatchType & ImplFontAttrs::Full)
+                nTestMatch += CJK_MATCH_VALUE;
+        }
+    }
+    else if (nMatchType & ImplFontAttrs::CJK)
+    {
+        nTestMatch -= CJK_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetCJKMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static tools::Long GetCTLMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    tools::Long nTestMatch = 0;
+
+    // test CTL script attributes
+    if (nSearchType & ImplFontAttrs::CTL)
+    {
+        SAL_WARN("vcl.fonts", "CTL search not implemented");
+        if (nMatchType & ImplFontAttrs::CTL)
+            nTestMatch += CTL_MATCH_VALUE * 2;
+        if (nMatchType & ImplFontAttrs::Full)
+            nTestMatch += CTL_MATCH_VALUE;
+    }
+    else if (nMatchType & ImplFontAttrs::CTL)
+    {
+        SAL_WARN("vcl.fonts", "CTL matching not implemented");
+        nTestMatch -= CTL_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetCTLMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static tools::Long GetNoneLatinMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    tools::Long nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::NoneLatin)
+    {
+        SAL_WARN("vcl.fonts", "None latin matching is not implemented");
+
+        if (nMatchType & ImplFontAttrs::NoneLatin)
+            nTestMatch += NONLATIN_MATCH_VALUE * 2;
+
+        if (nMatchType & ImplFontAttrs::Full)
+            nTestMatch += NONLATIN_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetNoneLatinMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static tools::Long GetSymbolMatchValue(std::u16string_view const& rSearchName, ImplFontAttrs nSearchType,
+                                       ImplFontAttrs nMatchType, FontTypeFaces eTypeFaces)
+{
+    tools::Long nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::Symbol)
+    {
+        // prefer some special known symbol fonts
+        if (rSearchName == u"starsymbol")
+        {
+            nTestMatch += SYMBOL_MATCH_VALUE * 6 + (10000 * 3);
+        }
+        else if (rSearchName == u"opensymbol")
+        {
+            nTestMatch += SYMBOL_MATCH_VALUE * 6;
+        }
+        else if (rSearchName == u"starbats" || rSearchName == u"wingdings"
+                 || rSearchName == u"monotypesorts" || rSearchName == u"dingbats"
+                 || rSearchName == u"zapfdingbats")
+        {
+            nTestMatch += SYMBOL_MATCH_VALUE * 5;
+        }
+        else if (eTypeFaces & FontTypeFaces::Symbol)
+        {
+            nTestMatch += SYMBOL_MATCH_VALUE * 4;
+        }
+        else
+        {
+            if (nMatchType & ImplFontAttrs::Symbol)
+                nTestMatch += SYMBOL_MATCH_VALUE * 2;
+
+            if (nMatchType & ImplFontAttrs::Full)
+                nTestMatch += SYMBOL_MATCH_VALUE;
+        }
+    }
+    else if ((eTypeFaces & (FontTypeFaces::Symbol | FontTypeFaces::NoneSymbol))
+             == FontTypeFaces::Symbol)
+    {
+        nTestMatch -= SYMBOL_MATCH_VALUE;
+    }
+    else if (nMatchType & ImplFontAttrs::Symbol)
+    {
+        nTestMatch -= 10000;
+    }
+
+    SAL_INFO("vcl.fonts", "GetSymbolMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetFamilyNameMatchValue(std::u16string_view const& rSearchFamilyName,
+                                   std::u16string_view const& rMatchFamilyName)
+{
+    int nTestMatch = 0;
+
+    // match stripped family name
+    if (!rSearchFamilyName.empty() && (rSearchFamilyName == rMatchFamilyName))
+        nTestMatch += FAMILY_NAME_MATCH_VALUE * 3;
+
+    SAL_INFO("vcl.fonts", "GetFamilyNameMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetScriptMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if( nSearchType & ImplFontAttrs::AllScript )
+    {
+        if( nMatchType & ImplFontAttrs::AllScript )
+        {
+            nTestMatch += 1000000*2;
+        }
+        if( nSearchType & ImplFontAttrs::AllSubscript )
+        {
+            if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::AllSubscript) )
+                nTestMatch += 1000000*2;
+            if( ImplFontAttrs::None != ((nSearchType ^ nMatchType) & ImplFontAttrs::BrushScript) )
+                nTestMatch -= 1000000;
+        }
+    }
+    else if( nMatchType & ImplFontAttrs::AllScript )
+    {
+        nTestMatch -= 1000000;
+    }
+
+    SAL_INFO("vcl.fonts", "GetScriptMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetFixedMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    // test MONOSPACE+TYPEWRITER attributes
+    if( nSearchType & ImplFontAttrs::Fixed )
+    {
+        if( nMatchType & ImplFontAttrs::Fixed )
+            nTestMatch += 1000000*2;
+
+        // a typewriter attribute is even better
+        if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::Typewriter) )
+            nTestMatch += 10000*2;
+    }
+    else if( nMatchType & ImplFontAttrs::Fixed )
+    {
+        nTestMatch -= 1000000;
+    }
+
+    SAL_INFO("vcl.fonts", "GetFixedMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetSpecialMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::Special)
+    {
+        SAL_WARN("vcl.fonts", "Matching on special families not implemented");
+        if (nMatchType & ImplFontAttrs::Special)
+        {
+            nTestMatch += 10000;
+        }
+        else if (!(nSearchType & ImplFontAttrs::AllSerifStyle))
+        {
+            if (nMatchType & ImplFontAttrs::Serif)
+                nTestMatch += 1000 * 2;
+            else if (nMatchType & ImplFontAttrs::SansSerif)
+                nTestMatch += 1000;
+        }
+    }
+    else if ((nMatchType & ImplFontAttrs::Special) && !(nSearchType & ImplFontAttrs::Symbol))
+    {
+        nTestMatch -= SPECIAL_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetSpecialMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetDecorativeMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::Decorative)
+    {
+        if (nMatchType & ImplFontAttrs::Decorative)
+        {
+            nTestMatch += 10000;
+        }
+        else if (!(nSearchType & ImplFontAttrs::AllSerifStyle))
+        {
+            SAL_WARN("vcl.fonts", "All serif search is not implemented");
+
+            if (nMatchType & ImplFontAttrs::Serif)
+                nTestMatch += 1000 * 2;
+            else if (nMatchType & ImplFontAttrs::SansSerif)
+                nTestMatch += 1000;
+        }
+    }
+    else if (nMatchType & ImplFontAttrs::Decorative)
+    {
+        nTestMatch -= DECORATIVE_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetDecorativeMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetTitlingCapitalsMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if( nSearchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
+    {
+        if( nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
+        {
+            nTestMatch += 1000000*2;
+        }
+        if( ImplFontAttrs::None == ((nSearchType^nMatchType) & ImplFontAttrs(ImplFontAttrs::Titling | ImplFontAttrs::Capitals)))
+        {
+            nTestMatch += 1000000;
+        }
+        else if( (nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals)) &&
+                 (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)) )
+        {
+            nTestMatch += 1000000;
+        }
+    }
+    else if( nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
+    {
+        nTestMatch -= 1000000;
+    }
+
+    SAL_INFO("vcl.fonts", "GetTitlingCapitalsMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetOutlineShadowMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if( nSearchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
+    {
+        if( nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
+        {
+            nTestMatch += 1000000*2;
+        }
+        if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs(ImplFontAttrs::Outline | ImplFontAttrs::Shadow)) )
+        {
+            nTestMatch += 1000000;
+        }
+        else if( (nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow)) &&
+                 (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)) )
+        {
+            nTestMatch += 1000000;
+        }
+    }
+    else if ( nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
+    {
+        nTestMatch -= 1000000;
+    }
+
+    SAL_INFO("vcl.fonts", "GetOutlineShadowMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetFontNameMatchValue(OUString const& rSearchFamilyName,
+                                 OUString const& rMatchFamilyName)
+{
+    int nTestMatch = 0;
+
+    // test font name substrings
+    // TODO: calculate name matching score using e.g. Levenstein distance
+    if ((rSearchFamilyName.getLength() >= 4) && (rMatchFamilyName.getLength() >= 4)
+        && ((rSearchFamilyName.indexOf(rMatchFamilyName) != -1)
+            || (rMatchFamilyName.indexOf(rSearchFamilyName) != -1)))
+    {
+        nTestMatch += FONTNAME_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetFontNameMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetSerifMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::Serif)
+    {
+        if (nMatchType & ImplFontAttrs::Serif)
+            nTestMatch += SERIF_MATCH_VALUE * 2;
+        else if (nMatchType & ImplFontAttrs::SansSerif)
+            nTestMatch -= SERIF_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetSerifMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetSansSerifMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::SansSerif)
+    {
+        if (nMatchType & ImplFontAttrs::SansSerif)
+            nTestMatch += SANSERIF_MATCH_VALUE;
+        else if (nMatchType & ImplFontAttrs::Serif)
+            nTestMatch -= SANSERIF_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetSansSerifMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetItalicMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType,
+                               FontTypeFaces eTypeFaces)
+{
+    int nTestMatch = 0;
+
+    // test ITALIC attribute
+    if (nSearchType & ImplFontAttrs::Italic)
+    {
+        if (eTypeFaces & FontTypeFaces::Italic)
+            nTestMatch += ITALIC_MATCH_VALUE * 3;
+
+        if (nMatchType & ImplFontAttrs::Italic)
+            nTestMatch += ITALIC_MATCH_VALUE;
+    }
+    else if (!(nSearchType & ImplFontAttrs::AllScript)
+             && ((nMatchType & ImplFontAttrs::Italic) || !(eTypeFaces & FontTypeFaces::NoneItalic)))
+    {
+        nTestMatch -= ITALIC_MATCH_VALUE * 2;
+    }
+
+    SAL_INFO("vcl.fonts", "GetItalicMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetWidthMatchValue(FontWidth eSearchWidth, FontWidth eMatchWidth)
+{
+    int nTestMatch = 0;
+
+    if ((eSearchWidth != WIDTH_DONTKNOW) && (eSearchWidth != WIDTH_NORMAL))
+    {
+        if (eSearchWidth < WIDTH_NORMAL)
+        {
+            if (eSearchWidth == eMatchWidth)
+                nTestMatch += WIDTH_MATCH_VALUE * 3;
+            else if ((eMatchWidth < WIDTH_NORMAL) && (eMatchWidth != WIDTH_DONTKNOW))
+                nTestMatch += WIDTH_MATCH_VALUE;
+        }
+        else
+        {
+            if (eSearchWidth == eMatchWidth)
+                nTestMatch += WIDTH_MATCH_VALUE * 3;
+            else if (eMatchWidth > WIDTH_NORMAL)
+                nTestMatch += WIDTH_MATCH_VALUE;
+        }
+    }
+    else if ((eMatchWidth != WIDTH_DONTKNOW) && (eMatchWidth != WIDTH_NORMAL))
+    {
+        nTestMatch -= WIDTH_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetWidthMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetWeightMatchValue(FontWeight eSearchWeight, FontWeight eMatchWeight,
+                               FontTypeFaces eTypeFaces)
+{
+    int nTestMatch = 0;
+
+    if ((eSearchWeight != WEIGHT_DONTKNOW) && (eSearchWeight != WEIGHT_NORMAL)
+        && (eSearchWeight != WEIGHT_MEDIUM))
+    {
+        if (eSearchWeight < WEIGHT_NORMAL)
+        {
+            if (eTypeFaces & FontTypeFaces::Light)
+                nTestMatch += WEIGHT_MATCH_VALUE;
+
+            if ((eMatchWeight < WEIGHT_NORMAL) && (eMatchWeight != WEIGHT_DONTKNOW))
+                nTestMatch += WEIGHT_MATCH_VALUE;
+        }
+        else
+        {
+            if (eTypeFaces & FontTypeFaces::Bold)
+                nTestMatch += WEIGHT_MATCH_VALUE;
+
+            if (eMatchWeight > WEIGHT_BOLD)
+                nTestMatch += WEIGHT_MATCH_VALUE;
+        }
+    }
+    else if (((eMatchWeight != WEIGHT_DONTKNOW) && (eMatchWeight != WEIGHT_NORMAL)
+              && (eMatchWeight != WEIGHT_MEDIUM))
+             || !(eTypeFaces & FontTypeFaces::Normal))
+    {
+        nTestMatch -= WEIGHT_MATCH_VALUE;
+    }
+
+    SAL_INFO("vcl.fonts", "GetWeightMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetScalableMatchValue(FontTypeFaces eTypeFaces)
+{
+    int nTestMatch = 0;
+
+    // prefer scalable fonts
+    if (eTypeFaces & FontTypeFaces::Scalable)
+        nTestMatch += SCALABLE_MATCH_VALUE * 4;
+    else
+        nTestMatch -= SCALABLE_MATCH_VALUE * 4;
+
+    SAL_INFO("vcl.fonts", "GetScalableMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetStandardMatchValue(ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nMatchType & ImplFontAttrs::Standard)
+        nTestMatch += STANDARD_MATCH_VALUE * 2;
+
+    SAL_INFO("vcl.fonts", "GetStandardMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetDefaultMatchValue(ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nMatchType & ImplFontAttrs::Default)
+        nTestMatch += DEFAULT_MATCH_VALUE;
+
+    SAL_INFO("vcl.fonts", "GetDefaultMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetFullMatchValue(ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nMatchType & ImplFontAttrs::Full)
+        nTestMatch += FULL_MATCH_VALUE;
+
+    SAL_INFO("vcl.fonts", "GetFullMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetNormalMatchValue(ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nMatchType & ImplFontAttrs::Normal)
+        nTestMatch += NORMAL_MATCH_VALUE;
+
+    SAL_INFO("vcl.fonts", "GetNormalMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetOtherStyleMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if( ((nSearchType ^ nMatchType) & ImplFontAttrs::OtherStyle) != ImplFontAttrs::None )
+        nTestMatch += OTHERSTYLE_MATCH_VALUE;
+
+    SAL_INFO("vcl.fonts", "GetOtherMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetRoundedMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::Rounded) )
+        nTestMatch += ROUNDED_MATCH_VALUE;
+
+    SAL_INFO("vcl.fonts", "GetRoundedMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetTypewriterMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if ((nSearchType & ImplFontAttrs::Typewriter) && (nMatchType & ImplFontAttrs::Typewriter))
+        nTestMatch += TYPEWRITER_MATCH_VALUE;
+
+    SAL_INFO("vcl.fonts", "GetTypewriterMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetGothicMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::Gothic)
+    {
+        if (nMatchType & ImplFontAttrs::Gothic)
+            nTestMatch += GOTHIC_MATCH_VALUE * 3;
+
+        if (nMatchType & ImplFontAttrs::SansSerif)
+            nTestMatch += GOTHIC_MATCH_VALUE * 2;
+    }
+
+    SAL_INFO("vcl.fonts", "GetGothicMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+static int GetSchoolbookMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchType)
+{
+    int nTestMatch = 0;
+
+    if (nSearchType & ImplFontAttrs::Schoolbook)
+    {
+        if (nMatchType & ImplFontAttrs::Schoolbook)
+            nTestMatch += SCHOOLBOOK_MATCH_VALUE * 3;
+
+        if (nMatchType & ImplFontAttrs::Serif)
+            nTestMatch += GOTHIC_MATCH_VALUE * 2;
+    }
+
+    SAL_INFO("vcl.fonts", "GetSchoolbookMatchValue: " << nTestMatch);
+
+    return nTestMatch;
+}
+
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFontAttrs nSearchType,
+                                                                        FontWeight eSearchWeight,
+                                                                        FontWidth eSearchWidth,
+                                                                        FontItalic eSearchItalic,
+                                                                        const OUString& rSearchFamilyName ) const
+{
+    if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW))
         nSearchType |= ImplFontAttrs::Italic;
 
-    // don't bother to match attributes if the attributes aren't worth matching
-    if( nSearchType == ImplFontAttrs::None
-    && ((eSearchWeight == WEIGHT_DONTKNOW) || (eSearchWeight == WEIGHT_NORMAL))
-    && ((eSearchWidth == WIDTH_DONTKNOW) || (eSearchWidth == WIDTH_NORMAL)) )
+    if (AttributesAreNotWorthMatching(nSearchType, eSearchWeight, eSearchWidth))
         return nullptr;
 
     ImplInitMatchData();
-    PhysicalFontFamily* pFoundData = nullptr;
+    vcl::font::PhysicalFontFamily* pFoundData = nullptr;
 
     tools::Long    nBestMatch = 40000;
     ImplFontAttrs  nBestType = ImplFontAttrs::None;
 
     for (auto const& family : maPhysicalFontFamilies)
     {
-        PhysicalFontFamily* pData = family.second.get();
+        vcl::font::PhysicalFontFamily* pData = family.second.get();
 
         // Get all information about the matching font
         ImplFontAttrs nMatchType  = pData->GetMatchType();
@@ -438,368 +1043,43 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontA
         //      10000   Scalable, Standard, Default,
         //              full, Normal, Knownfont,
         //              Otherstyle, +Special, +Decorative,
-        //       1000   Typewriter, Rounded, Gothic, Schollbook
+        //       1000   Typewriter, Rounded, Gothic, Schoolbook
         //        100
-        tools::Long nTestMatch = 0;
 
-        // test CJK script attributes
-        if ( nSearchType & ImplFontAttrs::CJK )
-        {
-            // if the matching font doesn't support any CJK languages, then
-            // it is not appropriate
-            if ( !(nMatchType & ImplFontAttrs::CJK_AllLang) )
-            {
-                nTestMatch -= 10000000;
-            }
-            else
-            {
-                // Matching language
-                if ( (nSearchType & ImplFontAttrs::CJK_AllLang)
-                    && (nMatchType & ImplFontAttrs::CJK_AllLang) )
-                    nTestMatch += 10000000*3;
-                if ( nMatchType & ImplFontAttrs::CJK )
-                    nTestMatch += 10000000*2;
-                if ( nMatchType & ImplFontAttrs::Full )
-                    nTestMatch += 10000000;
-            }
-        }
-        else if ( nMatchType & ImplFontAttrs::CJK )
-        {
-            nTestMatch -= 10000000;
-        }
+        tools::Long nTestMatch = GetCJKMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetCTLMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetNoneLatinMatchValue(nSearchType, nMatchType);
+        nTestMatch
+            += GetSymbolMatchValue(family.first, nSearchType, nMatchType, pData->GetTypeFaces());
 
-        // test CTL script attributes
-        if( nSearchType & ImplFontAttrs::CTL )
-        {
-            if( nMatchType & ImplFontAttrs::CTL )
-                nTestMatch += 10000000*2;
-            if( nMatchType & ImplFontAttrs::Full )
-                nTestMatch += 10000000;
-        }
-        else if ( nMatchType & ImplFontAttrs::CTL )
-        {
-            nTestMatch -= 10000000;
-        }
+        nTestMatch += GetFamilyNameMatchValue(rSearchFamilyName, pData->GetMatchFamilyName());
+        nTestMatch += GetScriptMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetFixedMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetSpecialMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetDecorativeMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetTitlingCapitalsMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetOutlineShadowMatchValue(nSearchType, nMatchType);
 
-        // test LATIN script attributes
-        if( nSearchType & ImplFontAttrs::NoneLatin )
-        {
-            if( nMatchType & ImplFontAttrs::NoneLatin )
-                nTestMatch += 10000000*2;
-            if( nMatchType & ImplFontAttrs::Full )
-                nTestMatch += 10000000;
-        }
+        nTestMatch += GetFontNameMatchValue(rSearchFamilyName, pData->GetMatchFamilyName());
+        nTestMatch += GetSerifMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetSansSerifMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetItalicMatchValue(nSearchType, nMatchType, pData->GetTypeFaces());
+        nTestMatch += GetWidthMatchValue(eSearchWidth, eMatchWidth);
+        nTestMatch += GetWeightMatchValue(eSearchWeight, eMatchWeight, pData->GetTypeFaces());
 
-        // test SYMBOL attributes
-        if ( nSearchType & ImplFontAttrs::Symbol )
-        {
-            const OUString& rSearchName = family.first;
-            // prefer some special known symbol fonts
-            if ( rSearchName == "starsymbol" )
-            {
-                nTestMatch += 10000000*6+(10000*3);
-            }
-            else if ( rSearchName == "opensymbol" )
-            {
-                nTestMatch += 10000000*6;
-            }
-            else if ( rSearchName == "starbats" ||
-                      rSearchName == "wingdings" ||
-                      rSearchName == "monotypesorts" ||
-                      rSearchName == "dingbats" ||
-                      rSearchName == "zapfdingbats" )
-            {
-                nTestMatch += 10000000*5;
-            }
-            else if (pData->GetTypeFaces() & FontTypeFaces::Symbol)
-            {
-                nTestMatch += 10000000*4;
-            }
-            else
-            {
-                if( nMatchType & ImplFontAttrs::Symbol )
-                    nTestMatch += 10000000*2;
-                if( nMatchType & ImplFontAttrs::Full )
-                    nTestMatch += 10000000;
-            }
-        }
-        else if ((pData->GetTypeFaces() & (FontTypeFaces::Symbol | FontTypeFaces::NoneSymbol)) == FontTypeFaces::Symbol)
-        {
-            nTestMatch -= 10000000;
-        }
-        else if ( nMatchType & ImplFontAttrs::Symbol )
-        {
-            nTestMatch -= 10000;
-        }
+        nTestMatch += GetScalableMatchValue(pData->GetTypeFaces());
+        nTestMatch += GetStandardMatchValue(nMatchType);
+        nTestMatch += GetDefaultMatchValue(nMatchType);
+        nTestMatch += GetFullMatchValue(nMatchType);
+        nTestMatch += GetNormalMatchValue(nMatchType);
+        nTestMatch += GetOtherStyleMatchValue(nSearchType, nMatchType);
 
-        // match stripped family name
-        if( !rSearchFamilyName.isEmpty() && (rSearchFamilyName == pData->GetMatchFamilyName()) )
-        {
-            nTestMatch += 1000000*3;
-        }
+        nTestMatch += GetRoundedMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetTypewriterMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetGothicMatchValue(nSearchType, nMatchType);
+        nTestMatch += GetSchoolbookMatchValue(nSearchType, nMatchType);
 
-        // match ALLSCRIPT? attribute
-        if( nSearchType & ImplFontAttrs::AllScript )
-        {
-            if( nMatchType & ImplFontAttrs::AllScript )
-            {
-                nTestMatch += 1000000*2;
-            }
-            if( nSearchType & ImplFontAttrs::AllSubscript )
-            {
-                if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::AllSubscript) )
-                    nTestMatch += 1000000*2;
-                if( ImplFontAttrs::None != ((nSearchType ^ nMatchType) & ImplFontAttrs::BrushScript) )
-                    nTestMatch -= 1000000;
-            }
-        }
-        else if( nMatchType & ImplFontAttrs::AllScript )
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // test MONOSPACE+TYPEWRITER attributes
-        if( nSearchType & ImplFontAttrs::Fixed )
-        {
-            if( nMatchType & ImplFontAttrs::Fixed )
-                nTestMatch += 1000000*2;
-            // a typewriter attribute is even better
-            if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::Typewriter) )
-                nTestMatch += 10000*2;
-        }
-        else if( nMatchType & ImplFontAttrs::Fixed )
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // test SPECIAL attribute
-        if( nSearchType & ImplFontAttrs::Special )
-        {
-            if( nMatchType & ImplFontAttrs::Special )
-            {
-                nTestMatch += 10000;
-            }
-            else if( !(nSearchType & ImplFontAttrs::AllSerifStyle) )
-            {
-                 if( nMatchType & ImplFontAttrs::Serif )
-                 {
-                     nTestMatch += 1000*2;
-                 }
-                 else if( nMatchType & ImplFontAttrs::SansSerif )
-                 {
-                     nTestMatch += 1000;
-                 }
-             }
-        }
-        else if( (nMatchType & ImplFontAttrs::Special) && !(nSearchType & ImplFontAttrs::Symbol) )
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // test DECORATIVE attribute
-        if( nSearchType & ImplFontAttrs::Decorative )
-        {
-            if( nMatchType & ImplFontAttrs::Decorative )
-            {
-                nTestMatch += 10000;
-            }
-            else if( !(nSearchType & ImplFontAttrs::AllSerifStyle) )
-            {
-                if( nMatchType & ImplFontAttrs::Serif )
-                    nTestMatch += 1000*2;
-                else if ( nMatchType & ImplFontAttrs::SansSerif )
-                    nTestMatch += 1000;
-            }
-        }
-        else if( nMatchType & ImplFontAttrs::Decorative )
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // test TITLE+CAPITALS attributes
-        if( nSearchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
-        {
-            if( nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
-            {
-                nTestMatch += 1000000*2;
-            }
-            if( ImplFontAttrs::None == ((nSearchType^nMatchType) & ImplFontAttrs(ImplFontAttrs::Titling | ImplFontAttrs::Capitals)))
-            {
-                nTestMatch += 1000000;
-            }
-            else if( (nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals)) &&
-                     (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)) )
-            {
-                nTestMatch += 1000000;
-            }
-        }
-        else if( nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // test OUTLINE+SHADOW attributes
-        if( nSearchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
-        {
-            if( nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
-            {
-                nTestMatch += 1000000*2;
-            }
-            if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs(ImplFontAttrs::Outline | ImplFontAttrs::Shadow)) )
-            {
-                nTestMatch += 1000000;
-            }
-            else if( (nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow)) &&
-                     (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)) )
-            {
-                nTestMatch += 1000000;
-            }
-        }
-        else if ( nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // test font name substrings
-        // TODO: calculate name matching score using e.g. Levenstein distance
-        if( (rSearchFamilyName.getLength() >= 4) &&
-            (pData->GetMatchFamilyName().getLength() >= 4) &&
-            ((rSearchFamilyName.indexOf( pData->GetMatchFamilyName() ) != -1) ||
-             (pData->GetMatchFamilyName().indexOf( rSearchFamilyName ) != -1)) )
-        {
-            nTestMatch += 5000;
-        }
-        // test SERIF attribute
-        if( nSearchType & ImplFontAttrs::Serif )
-        {
-            if( nMatchType & ImplFontAttrs::Serif )
-                nTestMatch += 1000000*2;
-            else if( nMatchType & ImplFontAttrs::SansSerif )
-                nTestMatch -= 1000000;
-        }
-
-        // test SANSERIF attribute
-        if( nSearchType & ImplFontAttrs::SansSerif )
-        {
-            if( nMatchType & ImplFontAttrs::SansSerif )
-                nTestMatch += 1000000;
-            else if ( nMatchType & ImplFontAttrs::Serif )
-                nTestMatch -= 1000000;
-        }
-
-        // test ITALIC attribute
-        if( nSearchType & ImplFontAttrs::Italic )
-        {
-            if (pData->GetTypeFaces() & FontTypeFaces::Italic)
-                nTestMatch += 1000000*3;
-            if( nMatchType & ImplFontAttrs::Italic )
-                nTestMatch += 1000000;
-        }
-        else if (!(nSearchType & ImplFontAttrs::AllScript)
-                 && ((nMatchType & ImplFontAttrs::Italic)
-                 || !(pData->GetTypeFaces() & FontTypeFaces::NoneItalic)))
-        {
-            nTestMatch -= 1000000*2;
-        }
-
-        // test WIDTH attribute
-        if( (eSearchWidth != WIDTH_DONTKNOW) && (eSearchWidth != WIDTH_NORMAL) )
-        {
-            if( eSearchWidth < WIDTH_NORMAL )
-            {
-                if( eSearchWidth == eMatchWidth )
-                    nTestMatch += 1000000*3;
-                else if( (eMatchWidth < WIDTH_NORMAL) && (eMatchWidth != WIDTH_DONTKNOW) )
-                    nTestMatch += 1000000;
-            }
-            else
-            {
-                if( eSearchWidth == eMatchWidth )
-                    nTestMatch += 1000000*3;
-                else if( eMatchWidth > WIDTH_NORMAL )
-                    nTestMatch += 1000000;
-            }
-        }
-        else if( (eMatchWidth != WIDTH_DONTKNOW) && (eMatchWidth != WIDTH_NORMAL) )
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // test WEIGHT attribute
-        if( (eSearchWeight != WEIGHT_DONTKNOW) &&
-            (eSearchWeight != WEIGHT_NORMAL) &&
-            (eSearchWeight != WEIGHT_MEDIUM) )
-        {
-            if( eSearchWeight < WEIGHT_NORMAL )
-            {
-                if (pData->GetTypeFaces() & FontTypeFaces::Light)
-                    nTestMatch += 1000000;
-                if( (eMatchWeight < WEIGHT_NORMAL) && (eMatchWeight != WEIGHT_DONTKNOW) )
-                    nTestMatch += 1000000;
-            }
-            else
-            {
-                if (pData->GetTypeFaces() & FontTypeFaces::Bold)
-                    nTestMatch += 1000000;
-                if( eMatchWeight > WEIGHT_BOLD )
-                    nTestMatch += 1000000;
-            }
-        }
-        else if (((eMatchWeight != WEIGHT_DONTKNOW)
-                  && (eMatchWeight != WEIGHT_NORMAL)
-                  && (eMatchWeight != WEIGHT_MEDIUM))
-                  || !(pData->GetTypeFaces() & FontTypeFaces::Normal))
-        {
-            nTestMatch -= 1000000;
-        }
-
-        // prefer scalable fonts
-        if (pData->GetTypeFaces() & FontTypeFaces::Scalable)
-            nTestMatch += 10000*4;
-        else
-            nTestMatch -= 10000*4;
-
-        // test STANDARD+DEFAULT+FULL+NORMAL attributes
-        if( nMatchType & ImplFontAttrs::Standard )
-            nTestMatch += 10000*2;
-        if( nMatchType & ImplFontAttrs::Default )
-            nTestMatch += 10000;
-        if( nMatchType & ImplFontAttrs::Full )
-            nTestMatch += 10000;
-        if( nMatchType & ImplFontAttrs::Normal )
-            nTestMatch += 10000;
-
-        // test OTHERSTYLE attribute
-        if( ((nSearchType ^ nMatchType) & ImplFontAttrs::OtherStyle) != ImplFontAttrs::None )
-        {
-            nTestMatch -= 10000;
-        }
-
-        // test ROUNDED attribute
-        if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::Rounded) )
-            nTestMatch += 1000;
-
-        // test TYPEWRITER attribute
-        if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::Typewriter) )
-            nTestMatch += 1000;
-
-        // test GOTHIC attribute
-        if( nSearchType & ImplFontAttrs::Gothic )
-        {
-            if( nMatchType & ImplFontAttrs::Gothic )
-                nTestMatch += 1000*3;
-            if( nMatchType & ImplFontAttrs::SansSerif )
-                nTestMatch += 1000*2;
-        }
-
-        // test SCHOOLBOOK attribute
-        if( nSearchType & ImplFontAttrs::Schoolbook )
-        {
-            if( nMatchType & ImplFontAttrs::Schoolbook )
-                nTestMatch += 1000*3;
-            if( nMatchType & ImplFontAttrs::Serif )
-                nTestMatch += 1000*2;
-        }
+        SAL_INFO("vcl.fonts", "Total match value: " << nTestMatch);
 
         // compare with best matching font yet
         if ( nTestMatch > nBestMatch )
