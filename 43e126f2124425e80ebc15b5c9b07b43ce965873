@@ -88,6 +88,24 @@
       "parentUuid": "92a6d5d8_1a4ab77e",
       "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14605530_9c5a9674",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-12-15T14:06:17Z",
+      "side": 1,
+      "message": "Yeah.. I misremembered that the BitmapInfoAccess already forces the conversion to a compatible array of colors which would force flushing. I\u0027m not concerned about the costly conversion as long the cost is constant and not unreasonably large - at least not initially, but sure it is better if there is no additional processing that would have an influence on the result.",
+      "parentUuid": "de169db1_a67b943d",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
