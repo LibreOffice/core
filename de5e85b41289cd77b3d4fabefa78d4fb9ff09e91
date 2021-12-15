@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5d5d5f5_b836747b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-12-15T11:08:46Z",
+      "side": 1,
+      "message": "Merging this as per discussion, will work on simplifying this function later.",
+      "revId": "de5e85b41289cd77b3d4fabefa78d4fb9ff09e91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1583737d_f24018b3",
