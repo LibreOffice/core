@@ -27,6 +27,7 @@ SvxThemePage::SvxThemePage(weld::Container* pPage, weld::DialogController* pCont
                            const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/themetabpage.ui", "ThemePage", &rInAttrs)
     , m_xThemeName(m_xBuilder->weld_entry("themeName"))
+    , m_xColorSetName(m_xBuilder->weld_entry("colorSetName"))
 {
 }
 
@@ -57,6 +58,14 @@ void SvxThemePage::Reset(const SfxItemSet* pAttrs)
         it->second >>= aName;
         m_xThemeName->set_text(aName);
     }
+
+    it = aMap.find("ColorSchemeName");
+    if (it != aMap.end())
+    {
+        OUString aName;
+        it->second >>= aName;
+        m_xColorSetName->set_text(aName);
+    }
 }
 
 bool SvxThemePage::FillItemSet(SfxItemSet* pAttrs)
@@ -76,6 +85,7 @@ bool SvxThemePage::FillItemSet(SfxItemSet* pAttrs)
         }
 
         aMap["Name"] <<= m_xThemeName->get_text();
+        aMap["ColorSchemeName"] <<= m_xColorSetName->get_text();
 
         beans::PropertyValues aTheme = aMap.getAsConstPropertyValueList();
         aGrabBagItem.GetGrabBag()["Theme"] <<= aTheme;
