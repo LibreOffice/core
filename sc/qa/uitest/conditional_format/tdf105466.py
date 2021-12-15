@@ -9,21 +9,24 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
-import unittest
+from uitest.uihelper.common import select_pos
 
 class tdf105466(UITestCase):
 
-    @unittest.skip("issue with floating windows")
     def test_changing_conditional_format(self):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog") as xCondFormatDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog", close_button="") as xCondFormatDlg:
 
                 for i in range(0,4):
-                    with self.subTest(i = i):
-                        xTypeLstBox = xCondFormatDlg.getChild("type")
-                        xTypeLstBox.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+                    xTypeLstBox = xCondFormatDlg.getChild("type")
+                    select_pos(xTypeLstBox, str(i))
+
+                    # After changing the type, the dialog is recalculated
+                    xCondFormatDlg = self.xUITest.getTopFocusWindow()
+
+                xOkBtn = xCondFormatDlg.getChild("ok")
+                self.ui_test.close_dialog_through_button(xOkBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
