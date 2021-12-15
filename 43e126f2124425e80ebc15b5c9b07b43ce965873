@@ -70,6 +70,24 @@
       "parentUuid": "4086a604_b74dc83c",
       "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de169db1_a67b943d",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-15T10:46:31Z",
+      "side": 1,
+      "message": "I wouldn\u0027t bother with BitmapInfoAccess. It only provides info such as size, none of which requires flushing of drawing commands, so it may not do anything. And BitmapReadAccess could do a relatively costly conversion, so it wouldn\u0027t be a good solution either. As far as I\u0027m concerned Flush() in a separate commit is good enough.",
+      "parentUuid": "92a6d5d8_1a4ab77e",
+      "revId": "43e126f2124425e80ebc15b5c9b07b43ce965873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
