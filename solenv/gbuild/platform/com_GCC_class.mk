@@ -44,6 +44,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-x assembler-with-cpp \
 		$(T_LTOFLAGS) \
 		$(gb_AFLAGS) \
+		$(if $(HAVE_ASM_END_BRANCH_INS_SUPPORT),-DEND_BRANCH_INS_SUPPORT) \
 		-c $(3) \
 		-o $(1)) \
 		$(INCLUDE) && \
