@@ -512,7 +512,7 @@ public:
         @retval true    This text node has a number.
         @retval false   else
      */
-    bool HasNumber() const;
+    bool HasNumber(SwRootFrame const* pLayout = nullptr) const;
 
     /** Returns if this text node has a bullet.
 
