@@ -137,10 +137,15 @@
 				"MIMode": "gdb",
 				"setupCommands": [
 					{
-						"description": "Enable prett-printing for gdb",
+						"description": "Enable pretty-printing for gdb",
 						"text": "-enable-pretty-printing",
 						"ignoreFailures": true
-					}
+					},
+					{
+						"description": "mark pretty-printers safe",
+						"text": "add-auto-load-safe-path ${workspaceFolder:srcdir}",
+						"ignoreFailures": true
+					},
 				],
 				"linux": {
 					"miDebuggerPath": "/usr/libexec/gdb"
@@ -185,7 +190,12 @@
 						"description": "Enable pretty-printing for gdb",
 						"text": "-enable-pretty-printing",
 						"ignoreFailures": true
-					}
+					},
+					{
+						"description": "mark pretty-printers safe",
+						"text": "add-auto-load-safe-path ${workspaceFolder:srcdir}",
+						"ignoreFailures": true
+					},
 				],
 				"linux": {
 					"miDebuggerPath": "/usr/libexec/gdb"
