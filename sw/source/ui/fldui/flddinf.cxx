@@ -77,6 +77,9 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
         : nullptr;
     if ( pItem )
         pItem->GetValue() >>= xCustomPropertySet;
+
+    // uitests
+    m_xTypeTLB->set_buildable_name(m_xTypeTLB->get_buildable_name() + "-docinf");
 }
 
 SwFieldDokInfPage::~SwFieldDokInfPage()
