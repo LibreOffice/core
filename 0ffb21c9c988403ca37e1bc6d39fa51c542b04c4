@@ -34,6 +34,24 @@
       "parentUuid": "2cb501bf_7d361a3b",
       "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "870c7b2b_983e2957",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-12-15T15:30:28Z",
+      "side": 1,
+      "message": "And I only see \u0027sal.py\u0027 in $(SRCDIR)/solenv/gdb/libreoffice, not in any workdir directories?",
+      "parentUuid": "220b5d2f_2e516f93",
+      "revId": "0ffb21c9c988403ca37e1bc6d39fa51c542b04c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
