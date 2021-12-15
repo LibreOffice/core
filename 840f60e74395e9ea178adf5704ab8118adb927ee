@@ -16,6 +16,24 @@
       "message": "checking the last results from Jenkins, this is definitely a timing issue. In this build, linux gcc passed while Windows failed, in the previous one it was the opposite.",
       "revId": "840f60e74395e9ea178adf5704ab8118adb927ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f79e40f_b54d3cf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-15T08:00:27Z",
+      "side": 1,
+      "message": "well i did not think of the timing, but you are right i think. But as it can see it works totally randomly, that is why i left it. Now i work on the oox part of the group shapes because according to jenkins there might be a crash on export so i check that after i go back to this one.",
+      "parentUuid": "62022362_cc691a05",
+      "revId": "840f60e74395e9ea178adf5704ab8118adb927ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
