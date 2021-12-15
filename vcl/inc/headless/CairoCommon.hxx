@@ -28,11 +28,14 @@
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
 
-#include <basegfx/utils/systemdependentdata.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
+#include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //Using formats that match cairo's formats. For android we patch cairo,
 //which is internal in that case, to swap the rgb components so that
@@ -162,6 +165,16 @@ struct VCL_DLLPUBLIC CairoCommon
     void applyColor(cairo_t* cr, Color rColor, double fTransparency = 0.0);
     void clipRegion(cairo_t* cr);
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
+
+    // need this static version of ::drawPolyLine for usage from
+    // vcl/unx/generic/gdi/salgdi.cxx. It gets wrapped by
+    // ::drawPolyLine with some added parameters (see there)
+    static bool drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const Color& rLineColor,
+                             bool bAntiAlias, const basegfx::B2DHomMatrix& rObjectToDevice,
+                             const basegfx::B2DPolygon& rPolyLine, double fTransparency,
+                             double fLineWidth, const std::vector<double>* pStroke,
+                             basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
+                             double fMiterMinimumAngle, bool bPixelSnapHairline);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
