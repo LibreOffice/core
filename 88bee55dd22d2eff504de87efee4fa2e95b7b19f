@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82e5c55f_7e1e462a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T14:43:16Z",
+      "side": 1,
+      "message": "I don\u0027t think adding random sleeps is a good solution.   Especially sanitizer-instrumented builds can be rather slow, so might happen to work with some sleep value most of the time, but still fail occasionally.  (Besides, this makes already slow UITests even slower for everyone.)",
+      "revId": "88bee55dd22d2eff504de87efee4fa2e95b7b19f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
