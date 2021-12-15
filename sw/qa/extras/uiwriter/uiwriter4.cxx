@@ -201,6 +201,7 @@ public:
     void testTdf104425();
     void testTdf104814();
     void testTableRedlineRedoCrash();
+    void testTableRemoveHasTextChangesOnly();
     void testTdf66405();
     void testTdf35021_tabOverMarginDemo();
     void testTdf106701_tabOverMarginAutotab();
@@ -324,6 +325,7 @@ public:
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTableRedlineRedoCrash);
+    CPPUNIT_TEST(testTableRemoveHasTextChangesOnly);
     CPPUNIT_TEST(testTdf66405);
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
@@ -1676,6 +1678,79 @@ void SwUiWriterTest4::testTableRedlineRedoCrash()
 
     // without the fix, it crashes
     rIDRA.AcceptAllRedline(true);
+}
+
+void SwUiWriterTest4::testTableRemoveHasTextChangesOnly()
+{
+    //createSwDoc(DATA_DIRECTORY, "tdf91292_paraBackground.docx");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-del-add.docx");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // disable Record Changes
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // 4 rows in Show Changes mode
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+
+    // Accepting tracked deletions results 3 rows
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(/*bAccept=*/true);
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 3);
+
+    // Undo: 4 rows again
+    pDoc->GetIDocumentUndoRedo().Undo();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+
+    // Accepting again: 3 rows (Undo of HasTextChangesOnly is correct)
+    rIDRA.AcceptAllRedline(/*bAccept=*/true);
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 3);
+
+    // Undo: 4 rows again
+    pDoc->GetIDocumentUndoRedo().Undo();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+
+    // Move the cursor after the redline, and insert some text without change tracking
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Insert("X");
+
+    // Accepting again: 4 rows (extra text keeps the deleted row)
+    rIDRA.AcceptAllRedline(/*bAccept=*/true);
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+
+    // delete the extra text with change tracking:
+    // this resulted tracked row deletion again, because of missing
+    // removing of HasTextChangeOnly SwTabLine property at accepting deletions previously
+
+    // disable Record Changes
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    dispatchCommand(mxComponent, ".uno:SwBackSpace", {});
+    rIDRA.AcceptAllRedline(/*bAccept=*/true);
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 3
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
 }
 
 void SwUiWriterTest4::testTdf66405()
