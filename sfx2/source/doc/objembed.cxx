@@ -129,6 +129,9 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
                             const JobSetup & rSetup,
                             sal_uInt16 nAspect )
 {
+    if (!rSize.Width() || !rSize.Height())
+        return;
+
     MapMode aMod = pDev->GetMapMode();
     Size aSize = GetVisArea( nAspect ).GetSize();
     MapMode aWilliMode( GetMapUnit() );
