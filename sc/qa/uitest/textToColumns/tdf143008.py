@@ -8,7 +8,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.calc import enter_text_to_cell
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, select_by_text
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -30,7 +30,7 @@ class tdf143008(UITestCase):
 
                 self.assertEqual('true', get_state_as_dict(xColumnType)['Enabled'])
 
-                xColumnType.executeAction("SELECT", mkPropertyValues({"TEXT": "Date (DMY)"}))
+                select_by_text(xColumnType, "Date (DMY)")
 
                 self.assertEqual('Date (DMY)', get_state_as_dict(xColumnType)['SelectEntryText'])
 
