@@ -624,22 +624,22 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             switch (nKeyword)
             {
                 case RTFKeyword::CLBRDRT:
-                    nParam = NS_ooxml::LN_CT_TcBorders_top;
+                    nSprm = NS_ooxml::LN_CT_TcBorders_top;
                     break;
                 case RTFKeyword::CLBRDRL:
-                    nParam = NS_ooxml::LN_CT_TcBorders_left;
+                    nSprm = NS_ooxml::LN_CT_TcBorders_left;
                     break;
                 case RTFKeyword::CLBRDRB:
-                    nParam = NS_ooxml::LN_CT_TcBorders_bottom;
+                    nSprm = NS_ooxml::LN_CT_TcBorders_bottom;
                     break;
                 case RTFKeyword::CLBRDRR:
-                    nParam = NS_ooxml::LN_CT_TcBorders_right;
+                    nSprm = NS_ooxml::LN_CT_TcBorders_right;
                     break;
                 default:
                     break;
             }
             putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcBorders,
-                          nParam, pValue);
+                          nSprm, pValue);
             m_aStates.top().setBorderState(RTFBorderState::CELL);
         }
         break;
@@ -654,22 +654,22 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             switch (nKeyword)
             {
                 case RTFKeyword::PGBRDRT:
-                    nParam = NS_ooxml::LN_CT_PageBorders_top;
+                    nSprm = NS_ooxml::LN_CT_PageBorders_top;
                     break;
                 case RTFKeyword::PGBRDRL:
-                    nParam = NS_ooxml::LN_CT_PageBorders_left;
+                    nSprm = NS_ooxml::LN_CT_PageBorders_left;
                     break;
                 case RTFKeyword::PGBRDRB:
-                    nParam = NS_ooxml::LN_CT_PageBorders_bottom;
+                    nSprm = NS_ooxml::LN_CT_PageBorders_bottom;
                     break;
                 case RTFKeyword::PGBRDRR:
-                    nParam = NS_ooxml::LN_CT_PageBorders_right;
+                    nSprm = NS_ooxml::LN_CT_PageBorders_right;
                     break;
                 default:
                     break;
             }
             putNestedSprm(m_aStates.top().getSectionSprms(),
-                          NS_ooxml::LN_EG_SectPrContents_pgBorders, nParam, pValue);
+                          NS_ooxml::LN_EG_SectPrContents_pgBorders, nSprm, pValue);
             m_aStates.top().setBorderState(RTFBorderState::PAGE);
         }
         break;
@@ -684,21 +684,21 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             switch (nKeyword)
             {
                 case RTFKeyword::BRDRT:
-                    nParam = getParagraphBorder(0);
+                    nSprm = getParagraphBorder(0);
                     break;
                 case RTFKeyword::BRDRL:
-                    nParam = getParagraphBorder(1);
+                    nSprm = getParagraphBorder(1);
                     break;
                 case RTFKeyword::BRDRB:
-                    nParam = getParagraphBorder(2);
+                    nSprm = getParagraphBorder(2);
                     break;
                 case RTFKeyword::BRDRR:
-                    nParam = getParagraphBorder(3);
+                    nSprm = getParagraphBorder(3);
                     break;
                 default:
                     break;
             }
-            putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_pBdr, nParam,
+            putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_pBdr, nSprm,
                           pValue);
             m_aStates.top().setBorderState(RTFBorderState::PARAGRAPH);
         }
