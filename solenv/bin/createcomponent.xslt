@@ -36,9 +36,8 @@
       </xsl:copy>
     </components>
   </xsl:template>
-  <xsl:template match="uc:implementation[@CONDITION]">
-    <xsl:variable name="feature" select="concat('(',@CONDITION,')')"/>
-    <xsl:if test="contains($features,$feature)">
+  <xsl:template match="uc:implementation">
+    <xsl:if test="not(contains($filtered,@name))">
       <xsl:copy>
         <xsl:apply-templates select="@*"/>
         <xsl:apply-templates/>
@@ -60,7 +59,6 @@
       </xsl:call-template>
     </xsl:attribute>
   </xsl:template>
-  <xsl:template match="@CONDITION"/>
   <xsl:template match="@*">
     <xsl:copy/>
   </xsl:template>

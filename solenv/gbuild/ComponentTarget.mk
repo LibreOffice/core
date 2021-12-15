@@ -27,44 +27,63 @@ gb_ComponentTarget_get_source = $(SRCDIR)/$(1).component
 # each statically linked app using some subset of LO components, there
 # is a mapping from library filenames to direct pointers to the
 # corresponding PREFIX_component_getFactory functions.
+#
 define gb_ComponentTarget__command
 $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component target: $(1)))
-	mkdir -p $(dir $(1)) && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		--stringparam uri '$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' \
 		--stringparam cppu_env $(CPPU_ENV) \
-		--stringparam features '$(patsubst %,(BUILD_TYPE:%),$(BUILD_TYPE))' -o $(1) \
-		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(COMPONENTSOURCE)
+		--stringparam filtered '$(shell cat $(1).filtered)' \
+		-o $(1) $(gb_ComponentTarget_XSLTCOMMANDFILE) $(COMPONENTSOURCE)
 endef
-
 
 $(call gb_ComponentTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CMP,1)
 	rm -f $(call gb_ComponentTarget_get_target,$*) \
+	    $(call gb_ComponentTarget_get_target,$*).filtered \
+	    $(call gb_ComponentTarget_get_target,$*).optionals \
 
+# %.optionals : list of all optional implementations
+$(call gb_ComponentTarget_get_target,%).optionals :
+	mkdir -p $(dir $@) && \
+	$(if $(wildcard $(COMPONENTSOURCE).*), \
+	    cat $(wildcard $(COMPONENTSOURCE).*) | sed -e '/^#\|^\s*$$/d' | sort -u >,touch) $@
+
+# %.filtered : list of all optional implementations we don't build
+$(call gb_ComponentTarget_get_target,%).filtered : $(call gb_ComponentTarget_get_target,%).optionals
+	$(if $(wildcard $(COMPONENTSOURCE).*), \
+	    cat $^ $(COMPONENTIMPL) | sed -e '/^#\|^\s*$$/d' | sort | uniq -u >,touch) $@
 
 # when a library is renamed, the component file needs to be rebuilt to match.
 # hence simply depend on Repository{,Fixes}.mk since the command runs quickly.
 $(call gb_ComponentTarget_get_target,%) : \
 		$(SRCDIR)/Repository.mk \
 		$(SRCDIR)/RepositoryFixes.mk \
+		$(gb_ComponentTarget_XSLTCOMMANDFILE) \
+		$(call gb_ComponentTarget_get_target,%).filtered \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*,$(true),CMP,1)
 	$(call gb_Trace_StartRange,$*,CMP)
-	$(call gb_ComponentTarget__command,$@,$*)
+	$(call gb_ComponentTarget__command,$@)
 	$(call gb_Trace_EndRange,$*,CMP)
 
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTSOURCE := $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
+$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTIMPL :=
 
 $(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
 
-ifneq ($(4),)
-$$(eval $$(call gb_Rdb_add_component,$(4),$(1)))
-endif
+$(if $(4),$(call gb_Rdb_add_component,$(4),$(1)))
 $(if $(4),$(eval gb_ComponentTarget__ALLCOMPONENTS += $(1)))
+
+endef
+
+# call gb_ComponentTarget_add_componentimpl,componentfile,implid
+define gb_ComponentTarget_add_componentimpl
+$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTIMPL += $(call gb_ComponentTarget_get_source,$(1)).$(2)
+$(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_source,$(1)).$(2)
 
 endef
 
