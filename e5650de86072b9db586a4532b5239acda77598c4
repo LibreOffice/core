@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26cb9b72_8a74e80c",
+        "filename": "sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T08:17:21Z",
+      "side": 1,
+      "message": "this test might be timing dependent or otherwise brittle, it failed at \u003chttps://ci.libreoffice.org//job/lo_ubsan/2232/consoleFull#-18254137699567f988-cbcf-4519-af05-6000b834f13f\u003e with\n\n  ERROR: test_ComplexGroupShape (ComplexGroupShapeTest.ComplexGroupShapeTest)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/tdf/lode/jenkins/workspace/lo_ubsan/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\", line 96, in test_ComplexGroupShape\n      self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)\n  AttributeError: TextBox",
+      "revId": "e5650de86072b9db586a4532b5239acda77598c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
