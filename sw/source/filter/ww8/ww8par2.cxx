@@ -273,7 +273,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                 pFN->SetNumber(0, 0, sChar);
 
             /*
-                Delete the footnote char from the footnote if its at the beginning
+                Delete the footnote char from the footnote if it's at the beginning
                 as usual. Might not be if the user has already deleted it, e.g.
                 #i14737#
             */

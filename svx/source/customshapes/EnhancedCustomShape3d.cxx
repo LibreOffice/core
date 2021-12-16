@@ -611,7 +611,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                 aBoundAfter2DTransform.SetRight(aTotalPolyPolyRange.getMaxX());
                 aBoundAfter2DTransform.SetBottom(aTotalPolyPolyRange.getMaxY());
 
-                // Property "Origin" in API is relativ to bounding box of shape after 2D
+                // Property "Origin" in API is relative to bounding box of shape after 2D
                 // transformations. Range is [-0.5;0.5] with center of bounding box as 0.
                 // Resolve "Origin" fractions to length
                 GetOrigin( rGeometryItem, fOriginX, fOriginY );
@@ -625,7 +625,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                 // Translate point "Origin" too.
                 fOriginX -= aCenter.X();
                 fOriginY -= -aCenter.Y();
-                // API ViewPoint values are relativ to point "Origin" and have y-axis down.
+                // API ViewPoint values are relative to point "Origin" and have y-axis down.
                 // ToDo: These default ViewPoint values are used as default by MS Office. But ODF
                 // default is (3500, -3500, 25000), details in tdf#146192.
                 drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
@@ -653,8 +653,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             // NbcSetTransform has not updated the scene 2D rectangles.
             // Idea: Get a bound volume as polygon from bound rectangle of shape without 2D
-            // transfomations. Calculate its projection to the XY-plane. Then calculate the bounding
-            // rectangle of the projection and convert this rectangle back to absolut 2D coordinates.
+            // transformations. Calculate its projection to the XY-plane. Then calculate the bounding
+            // rectangle of the projection and convert this rectangle back to absolute 2D coordinates.
             // Set that as 2D rectangle of the scene.
             const tools::Polygon aPolygon(aBoundRect2d); // y-up
             basegfx::B3DPolygon aPolygonBoundVolume; // y-down, scene coordinates

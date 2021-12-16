@@ -2381,7 +2381,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
 bool SdrPowerPointImport::SeekToDocument( DffRecordHeader* pRecHd ) const
 {
     bool bRet;
-    sal_uInt64 nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it should the situation arise
+    sal_uInt64 nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it, if the situation should happen
     rStCtrl.Seek( m_nDocStreamPos );
     DffRecordHeader aDocHd;
     ReadDffRecordHeader( rStCtrl, aDocHd );

@@ -5408,7 +5408,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
                 /*
-                On failed seek we have run out of sprms, probably.  But if its
+                On failed seek we have run out of sprms, probably. But if it's
                 a fastsaved file (has pPcd) then we may be just in a sprm free
                 gap between pieces that have them, so set dirty flag in sprm
                 finder to consider than.
