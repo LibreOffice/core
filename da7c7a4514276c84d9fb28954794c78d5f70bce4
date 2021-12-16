@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11ade844_396e11ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-12-16T10:58:03Z",
+      "side": 1,
+      "message": "Does not work yet (crashes when copying table).\n\nI just wonder if this is the right approach.\n\nThe problem is that the sheet is copied, but the named range is bound to the first sheet and is not found by the autofilter on the second sheet.\n\nSo you think this is the correct approach? Or any other suggestions?",
+      "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
