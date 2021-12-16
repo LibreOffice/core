@@ -90,7 +90,8 @@ bool IsPrintLayoutExtension()
 bool IsDefaultTextEncoding()
 {
     std::optional<sal_Int32> x = officecfg::Office::Common::Filter::HTML::Export::Encoding::get();
-    return bool(x);
+    // if we have a value, then the text encoding is not default
+    return !bool(x);
 }
 rtl_TextEncoding GetTextEncoding()
 {
