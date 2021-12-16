@@ -34,6 +34,24 @@
       "parentUuid": "375a5d46_a53c6156",
       "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2741bbc5_978da1ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T09:01:23Z",
+      "side": 1,
+      "message": "what I meant with my \"I\u0027ll report back once I have robust data\" is that I\u0027ll provide a patch that contains those\n\n  xToolkit.processEventsToIdle()\n\ncalls in exactly the two strategic places that appear to need them, according to my findings with my local test build",
+      "parentUuid": "80913ede_ac09e089",
+      "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
