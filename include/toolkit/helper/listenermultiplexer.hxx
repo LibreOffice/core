@@ -91,7 +91,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class FocusListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( FocusListenerMultiplexer, css::awt::XFocusListener )
+DECL_LISTENERMULTIPLEXER_START( FocusListenerMultiplexer, css::awt::XFocusListener )
     void SAL_CALL focusGained( const css::awt::FocusEvent& e ) override;
     void SAL_CALL focusLost( const css::awt::FocusEvent& e ) override;
 DECL_LISTENERMULTIPLEXER_END
@@ -99,7 +99,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class WindowListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( WindowListenerMultiplexer, css::awt::XWindowListener )
+DECL_LISTENERMULTIPLEXER_START( WindowListenerMultiplexer, css::awt::XWindowListener )
     void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override;
     void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override;
     void SAL_CALL windowShown( const css::lang::EventObject& e ) override;
@@ -117,7 +117,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class KeyListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( KeyListenerMultiplexer, css::awt::XKeyListener )
+DECL_LISTENERMULTIPLEXER_START( KeyListenerMultiplexer, css::awt::XKeyListener )
     void SAL_CALL keyPressed( const css::awt::KeyEvent& e ) override;
     void SAL_CALL keyReleased( const css::awt::KeyEvent& e ) override;
 DECL_LISTENERMULTIPLEXER_END
@@ -125,7 +125,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class MouseListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( MouseListenerMultiplexer, css::awt::XMouseListener )
+DECL_LISTENERMULTIPLEXER_START( MouseListenerMultiplexer, css::awt::XMouseListener )
     void SAL_CALL mousePressed( const css::awt::MouseEvent& e ) override;
     void SAL_CALL mouseReleased( const css::awt::MouseEvent& e ) override;
     void SAL_CALL mouseEntered( const css::awt::MouseEvent& e ) override;
@@ -135,7 +135,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class MouseMotionListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( MouseMotionListenerMultiplexer, css::awt::XMouseMotionListener )
+DECL_LISTENERMULTIPLEXER_START( MouseMotionListenerMultiplexer, css::awt::XMouseMotionListener )
     void SAL_CALL mouseDragged( const css::awt::MouseEvent& e ) override;
     void SAL_CALL mouseMoved( const css::awt::MouseEvent& e ) override;
 DECL_LISTENERMULTIPLEXER_END
@@ -143,7 +143,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class PaintListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( PaintListenerMultiplexer, css::awt::XPaintListener )
+DECL_LISTENERMULTIPLEXER_START( PaintListenerMultiplexer, css::awt::XPaintListener )
     void SAL_CALL windowPaint( const css::awt::PaintEvent& e ) override;
 DECL_LISTENERMULTIPLEXER_END
 
@@ -204,7 +204,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class SpinListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( SpinListenerMultiplexer, css::awt::XSpinListener )
+DECL_LISTENERMULTIPLEXER_START( SpinListenerMultiplexer, css::awt::XSpinListener )
     void SAL_CALL up( const css::awt::SpinEvent& rEvent ) override;
     void SAL_CALL down( const css::awt::SpinEvent& rEvent ) override;
     void SAL_CALL first( const css::awt::SpinEvent& rEvent ) override;
