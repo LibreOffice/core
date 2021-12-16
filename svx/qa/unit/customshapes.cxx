@@ -127,6 +127,54 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145956_Origin_Relative_BoundRect)
+{
+    // The ViewPoint is relative to point Origin. The coordinates of point Origin are fractions of
+    // the actual (2D) bounding rectangle of the shape, including rotation around z-axis and flip.
+    // Error (among others) was, that the unrotated snap rectangle was used.
+
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf145956_Origin.odp";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+
+    // The shape is extruded with 10cm. viewpoint="(0cm 0cm 25cm)", origin="0 0".
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    awt::Rectangle aBoundRect;
+    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    sal_Int32 nActualTop = aBoundRect.Y;
+
+    // Without the fix it would have failed with top = 9462.
+    // The tolerance 10 is estimated and can be adjusted if required for HiDPI.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("top", 10448, nActualTop, 10);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterZ_odt)
+{
+    // The Z-component of the extrusion rotation center specifies the position in Hmm.
+    // Error (among others) was, that the value was interpreted as Twips.
+
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf145904_center_Zminus2000.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+
+    // The shape is extruded and tilt left 60deg. The rotation center is at -2000Hmm on the z-axis.
+    // That is a position behind the back face of the extruded shape.
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the properties", xPropSet.is());
+    awt::Rectangle aBoundRect;
+    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect;
+    awt::Point aAnchorPosition;
+    xPropSet->getPropertyValue("AnchorPosition") >>= aAnchorPosition;
+    sal_Int32 nActualLeft = aBoundRect.X - aAnchorPosition.X;
+
+    // Without the fix it would have failed with left = 7731.
+    // The tolerance 10 is estimated and can be adjusted if required for HiDPI.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("left", 3501, nActualLeft, 10);
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145904_Extrusion_CenterY_odt)
 {
     // The X- and Y-component of the extrusion rotation center specify the position as fraction of
