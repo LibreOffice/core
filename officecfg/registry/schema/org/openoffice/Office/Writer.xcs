@@ -5407,6 +5407,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="NavigateOnSelect" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if navigate on entry select is active.</desc>
+          <label>Navigate on entry select on/off</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Envelope">
       <info>
