@@ -24,7 +24,6 @@
 #include <editeng/editengdllapi.h>
 #include <editeng/editdata.hxx>
 #include <svl/itemset.hxx>
-#include <memory>
 #include <optional>
 
 class Outliner;

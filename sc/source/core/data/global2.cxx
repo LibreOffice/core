@@ -27,6 +27,7 @@
 #include <formula/errorcodes.hxx>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
+#include <rtl/math.hxx>
 
 #include <global.hxx>
 #include <rangeutl.hxx>

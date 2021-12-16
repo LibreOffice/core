@@ -27,6 +27,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
 #include <rtl/ref.hxx>
+#include <tools/color.hxx>
 
 namespace oox::drawingml::table {
 

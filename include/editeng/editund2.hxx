@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_EDITUND2_HXX
 #define INCLUDED_EDITENG_EDITUND2_HXX
 
-#include <config_options.h>
 #include <editeng/editengdllapi.h>
 #include <svl/undo.hxx>
 

@@ -20,12 +20,10 @@
 #ifndef INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
-#include <config_options.h>
 #include <editeng/editengdllapi.h>
 #include <editeng/editdata.hxx>
 
 #include <com/sun/star/uno/Reference.h>
-#include <memory>
 #include <optional>
 
 namespace com::sun::star {

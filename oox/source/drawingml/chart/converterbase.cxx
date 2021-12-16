@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/helper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 

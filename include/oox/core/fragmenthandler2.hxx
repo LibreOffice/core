@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
 #define INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
 
-#include <vector>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>

@@ -24,7 +24,6 @@
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <deque>
-#include <memory>
 #include <optional>
 
 namespace basegfx {
