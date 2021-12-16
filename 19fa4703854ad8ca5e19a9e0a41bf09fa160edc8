@@ -16,6 +16,52 @@
       "message": "Please note this is not ready for submitting. This is in a WIP state. Debugging in progress. I will notify everyone  if this is ready.",
       "revId": "19fa4703854ad8ca5e19a9e0a41bf09fa160edc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e70204f0_16c132b1",
+        "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3951,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T14:05:14Z",
+      "side": 1,
+      "message": "this runs randomly... sometimes with success sometimes without...",
+      "range": {
+        "startLine": 3951,
+        "startChar": 4,
+        "endLine": 3951,
+        "endChar": 56
+      },
+      "revId": "19fa4703854ad8ca5e19a9e0a41bf09fa160edc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2870c221_48c9a604",
+        "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3996,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T14:05:14Z",
+      "side": 1,
+      "message": "this can fail too.",
+      "range": {
+        "startLine": 3996,
+        "startChar": 4,
+        "endLine": 3996,
+        "endChar": 56
+      },
+      "revId": "19fa4703854ad8ca5e19a9e0a41bf09fa160edc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
