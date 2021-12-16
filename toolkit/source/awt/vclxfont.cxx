@@ -72,7 +72,7 @@ UNO3_GETIMPLEMENTATION_IMPL( VCLXFont );
 
 css::awt::FontDescriptor VCLXFont::getFontDescriptor(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     return VCLUnoHelper::CreateFontDescriptor( maFont );
 
@@ -80,7 +80,7 @@ css::awt::FontDescriptor VCLXFont::getFontDescriptor(  )
 
 css::awt::SimpleFontMetric VCLXFont::getFontMetric(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     css::awt::SimpleFontMetric aFM;
     if ( ImplAssertValidFontMetric() )
@@ -90,7 +90,7 @@ css::awt::SimpleFontMetric VCLXFont::getFontMetric(  )
 
 sal_Int16 VCLXFont::getCharWidth( sal_Unicode c )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     sal_Int16 nRet = -1;
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
@@ -109,7 +109,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c )
 
 css::uno::Sequence< sal_Int16 > VCLXFont::getCharWidths( sal_Unicode nFirst, sal_Unicode nLast )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     css::uno::Sequence<sal_Int16> aSeq;
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
@@ -134,7 +134,7 @@ css::uno::Sequence< sal_Int16 > VCLXFont::getCharWidths( sal_Unicode nFirst, sal
 
 sal_Int32 VCLXFont::getStringWidth( const OUString& str )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     sal_Int32 nRet = -1;
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
@@ -150,7 +150,7 @@ sal_Int32 VCLXFont::getStringWidth( const OUString& str )
 
 sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence< sal_Int32 >& rDXArray )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     sal_Int32 nRet = -1;
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
@@ -175,7 +175,7 @@ void VCLXFont::getKernPairs( css::uno::Sequence< sal_Unicode >& /*rnChars1*/, cs
 // css::awt::XFont2
 sal_Bool VCLXFont::hasGlyphs( const OUString& aText )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     SolarMutexGuard aSolarGuard;
 
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
