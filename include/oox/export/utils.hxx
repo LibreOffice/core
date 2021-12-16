@@ -26,6 +26,8 @@
 #include <rtl/string.hxx>
 #include <sal/types.h>
 
+#include <cmath>
+
 inline OString I32SHEX(sal_Int32 x)
 {
     OString aStr = OString::number(x, 16);

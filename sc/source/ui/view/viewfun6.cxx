@@ -28,6 +28,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <editeng/editview.hxx>
+#include <rtl/math.hxx>
 #include <sal/log.hxx>
 
 #include <viewfunc.hxx>

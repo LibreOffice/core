@@ -43,6 +43,10 @@ excludelist:
     include/android/compatibility.hxx:
     # TODO check whether actually needed, just silence this for now
     - math.h
+    include/LibreOfficeKit/LibreOfficeKit.h:
+    # the unstable API needs C99's bool
+    - stdbool.h
+    - stdint.h
     include/sfx2/toolbarids.hxx:
     # needed for enum definition
     - sal/types.h
@@ -233,6 +237,9 @@ excludelist:
     include/o3tl/make_shared.hxx:
     # Needed for __COVERITY__
     - o3tl/deleter.hxx
+    include/o3tl/safeint.hxx:
+    # Needed for std::min
+    - algorithm
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp

@@ -63,6 +63,7 @@
 #include <editeng/editobj.hxx>
 #include <svl/numformat.hxx>
 #include <rtl/character.hxx>
+#include <rtl/math.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <memory>

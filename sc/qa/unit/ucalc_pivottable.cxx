@@ -14,6 +14,7 @@
 #include <cppunit/TestAssert.h>
 
 #include <sal/types.h>
+#include <rtl/math.hxx>
 #include <scdll.hxx>
 #include "helper/qahelper.hxx"
 #include <dpshttab.hxx>

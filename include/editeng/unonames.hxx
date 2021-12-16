@@ -10,6 +10,8 @@
 #ifndef INCLUDED_EDITENG_UNONAMES_HXX
 #define INCLUDED_EDITENG_UNONAMES_HXX
 
+#include <rtl/ustring.hxx>
+
 // Common across fields
 inline constexpr OUStringLiteral UNO_TC_PROP_ANCHOR = u"Anchor";
 inline constexpr OUStringLiteral UNO_TC_PROP_TEXTFIELD_TYPE = u"TextFieldType";

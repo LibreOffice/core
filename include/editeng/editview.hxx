@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_EDITVIEW_HXX
 #define INCLUDED_EDITENG_EDITVIEW_HXX
 
-#include <config_options.h>
 #include <memory>
 #include <com/sun/star/i18n/WordType.hpp>
 
