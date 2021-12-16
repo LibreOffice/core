@@ -355,22 +355,14 @@ private:
 
     struct font
     {
-        OUString maName;
-        double mnSize;
-        Color maColor;
-        bool mbBold;
-        bool mbItalic;
-
-        bool mbHasFontAttr;
-        bool mbHasUnderlineAttr;
-        bool mbHasStrikeout;
-
-        FontLineStyle meUnderline;
-        Color maUnderlineColor;
-
-        FontStrikeout meStrikeout;
-
-        font();
+        std::optional<OUString> maName;
+        std::optional<double> mnSize;
+        std::optional<Color> maColor;
+        std::optional<bool> mbBold;
+        std::optional<bool> mbItalic;
+        std::optional<FontLineStyle> meUnderline;
+        std::optional<Color> maUnderlineColor;
+        std::optional<FontStrikeout> meStrikeout;
 
         void applyToItemSet(SfxItemSet& rSet) const;
     };
@@ -380,13 +372,9 @@ private:
 
     struct fill
     {
-        orcus::spreadsheet::fill_pattern_t mePattern;
-        Color maFgColor;
-        Color maBgColor;
-
-        bool mbHasFillAttr;
-
-        fill();
+        std::optional<orcus::spreadsheet::fill_pattern_t> mePattern;
+        std::optional<Color> maFgColor;
+        std::optional<Color> maBgColor; // currently not used.
 
         void applyToItemSet(SfxItemSet& rSet) const;
     };
@@ -398,17 +386,12 @@ private:
     {
         struct border_line
         {
-            SvxBorderLineStyle meStyle;
-            Color maColor;
-            double mnWidth;
-
-            border_line();
+            std::optional<SvxBorderLineStyle> meStyle;
+            std::optional<Color> maColor;
+            std::optional<double> mnWidth;
         };
-        std::map<orcus::spreadsheet::border_direction_t, border_line> border_lines;
 
-        bool mbHasBorderAttr;
-
-        border();
+        std::map<orcus::spreadsheet::border_direction_t, border_line> maBorders;
 
         void applyToItemSet(SfxItemSet& rSet) const;
     };
@@ -418,14 +401,11 @@ private:
 
     struct protection
     {
-        bool mbHidden;
-        bool mbLocked;
-        bool mbPrintContent;
-        bool mbFormulaHidden;
+        std::optional<bool> mbLocked;
+        std::optional<bool> mbHidden;
+        std::optional<bool> mbPrintContent;
+        std::optional<bool> mbFormulaHidden;
 
-        bool mbHasProtectionAttr;
-
-        protection();
         void applyToItemSet(SfxItemSet& rSet) const;
     };
 
@@ -434,11 +414,8 @@ private:
 
     struct number_format
     {
-        OUString maCode;
+        std::optional<OUString> maCode;
 
-        bool mbHasNumberFormatAttr;
-
-        number_format();
         void applyToItemSet(SfxItemSet& rSet, const ScDocument& rDoc) const;
     };
 
