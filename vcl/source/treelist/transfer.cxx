@@ -668,7 +668,7 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
 #ifdef IOS
             // Use faster compression on slow devices
             aFilterData.realloc(aFilterData.getLength() + 1);
-            aFilterData[aFilterData.getLength() - 1].Name = "Compression";
+            aFilterData.getArray()[aFilterData.getLength() - 1].Name = "Compression";
 
             // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed. For a
             // typical 15 megapixel image from a DSLR, we are talking about a difference of 17 s for
@@ -677,7 +677,7 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
             // Sure, the best would be to not have to re-encode the image at all, but have access to
             // the original JPEG or PNG when there is a such.
 
-            aFilterData[aFilterData.getLength() - 1].Value <<= 1;
+            aFilterData.getArray()[aFilterData.getLength() - 1].Value <<= 1;
 #endif
             vcl::PNGWriter aPNGWriter(rBitmapEx, &aFilterData);
 
