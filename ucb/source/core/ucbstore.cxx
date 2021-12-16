@@ -1906,12 +1906,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
             m_pPropertyChangeListeners->getContainer( rEvent.PropertyName );
     if ( pContainer && pContainer->getLength() )
     {
-        OInterfaceIteratorHelper3 aIter( *pContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            // Propagate event.
-            aIter.next()->propertyChange( rEvent );
-        }
+        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvent );
     }
 
     // Get "normal" listeners for all properties.
@@ -1919,12 +1914,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
             m_pPropertyChangeListeners->getContainer( OUString() );
     if ( pNoNameContainer && pNoNameContainer->getLength() )
     {
-        OInterfaceIteratorHelper3 aIter( *pNoNameContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            // Propagate event.
-            aIter.next()->propertyChange( rEvent );
-        }
+        pNoNameContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvent );
     }
 }
 
@@ -1936,12 +1926,7 @@ void PersistentPropertySet::notifyPropertySetInfoChange(
         return;
 
     // Notify event listeners.
-    OInterfaceIteratorHelper3 aIter( *m_pPropSetChangeListeners );
-    while ( aIter.hasMoreElements() )
-    {
-        // Propagate event.
-        aIter.next()->propertySetInfoChange( evt );
-    }
+    m_pPropSetChangeListeners->notifyEach( &XPropertySetInfoChangeListener::propertySetInfoChange, evt );
 }
 
 

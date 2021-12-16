@@ -1186,24 +1186,12 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
     OInterfaceContainerHelper3<XPropertyChangeListener>* pPropsContainer =
             mpPropChangeListeners->getContainer( rEvt.PropertyName );
     if ( pPropsContainer )
-    {
-        OInterfaceIteratorHelper3 aIter( *pPropsContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            aIter.next()->propertyChange( rEvt );
-        }
-    }
+        pPropsContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
 
     // Notify listeners interested in all properties.
     pPropsContainer = mpPropChangeListeners->getContainer( OUString() );
     if ( pPropsContainer )
-    {
-        OInterfaceIteratorHelper3 aIter( *pPropsContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            aIter.next()->propertyChange( rEvt );
-        }
-    }
+        pPropsContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
 }
 
 

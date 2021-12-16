@@ -724,9 +724,7 @@ void ContentImplHelper::notifyPropertySetInfoChange(
         return;
 
     // Notify event listeners.
-    comphelper::OInterfaceIteratorHelper3 aIter( *m_pImpl->m_pPropSetChangeListeners );
-    while ( aIter.hasMoreElements() )
-        aIter.next()->propertySetInfoChange( evt );
+    m_pImpl->m_pPropSetChangeListeners->notifyEach( &beans::XPropertySetInfoChangeListener::propertySetInfoChange, evt );
 }
 
 void ContentImplHelper::notifyContentEvent(
@@ -736,9 +734,7 @@ void ContentImplHelper::notifyContentEvent(
         return;
 
     // Notify event listeners.
-    comphelper::OInterfaceIteratorHelper3 aIter( *m_pImpl->m_pContentEventListeners );
-    while ( aIter.hasMoreElements() )
-        aIter.next()->contentEvent( evt );
+    m_pImpl->m_pContentEventListeners->notifyEach( &css::ucb::XContentEventListener::contentEvent, evt);
 }
 
 void ContentImplHelper::inserted()

@@ -2930,12 +2930,8 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
         // the approval is done by the aggregate
         if (!m_aRowSetApproveListeners.getLength())
         {
-            ::comphelper::OInterfaceIteratorHelper3 aIter(m_aLoadListeners);
             aGuard.clear();
-
-            while (aIter.hasMoreElements())
-                aIter.next()->reloading(aEvent);
-
+            m_aLoadListeners.notifyEach( &XLoadListener::reloading, aEvent);
             aGuard.reset();
         }
     }
@@ -2953,10 +2949,8 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
 
     if (bSuccess)
     {
-        ::comphelper::OInterfaceIteratorHelper3 aIter(m_aLoadListeners);
         aGuard.clear();
-        while (aIter.hasMoreElements())
-            aIter.next()->reloaded(aEvent);
+        m_aLoadListeners.notifyEach( &XLoadListener::reloaded, aEvent);
 
         // if we are on the insert row, we have to reset all controls
         // to set the default values

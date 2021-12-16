@@ -179,9 +179,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     aScriptEvent.ScriptCode     = aScriptCode;
 
     // Iterate over all listeners and pass events.
-    OInterfaceIteratorHelper3 aIt( mxManager->aScriptListeners );
-    while( aIt.hasMoreElements() )
-        aIt.next()->firing( aScriptEvent );
+    mxManager->aScriptListeners.notifyEach( &XScriptListener::firing, aScriptEvent );
 }
 
 

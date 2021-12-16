@@ -843,11 +843,7 @@ void SwXMailMerge::launchEvent( const PropertyChangeEvent &rEvt ) const
             m_aPropListeners.getContainer( rEvt.PropertyHandle );
     if (pContainer)
     {
-        comphelper::OInterfaceIteratorHelper3 aIt( *pContainer );
-        while (aIt.hasMoreElements())
-        {
-            aIt.next()->propertyChange( rEvt );
-        }
+        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
     }
 }
 

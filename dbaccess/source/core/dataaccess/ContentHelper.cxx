@@ -505,14 +505,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
     // First, notify listeners interested in changes of every property.
     comphelper::OInterfaceContainerHelper3<XPropertiesChangeListener>* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
     if ( pAllPropsContainer )
-    {
-        comphelper::OInterfaceIteratorHelper3 aIter( *pAllPropsContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            // Propagate event.
-            aIter.next()->propertiesChange( evt );
-        }
-    }
+        pAllPropsContainer->notifyEach( &XPropertiesChangeListener::propertiesChange, evt );
 
     typedef std::map< XPropertiesChangeListener*, Sequence< PropertyChangeEvent > > PropertiesEventListenerMap;
     PropertiesEventListenerMap aListeners;

@@ -4301,15 +4301,12 @@ IMPL_LINK(FmXListBoxCell, ChangedHdl, bool, bInteractive, void)
 
 void FmXListBoxCell::OnDoubleClick()
 {
-    ::comphelper::OInterfaceIteratorHelper3 aIt( m_aActionListeners );
-
     css::awt::ActionEvent aEvent;
     aEvent.Source = *this;
     weld::ComboBox& rBox = m_pBox->get_widget();
     aEvent.ActionCommand = rBox.get_active_text();
 
-    while( aIt.hasMoreElements() )
-        aIt.next()->actionPerformed( aEvent );
+    m_aActionListeners.notifyEach( &css::awt::XActionListener::actionPerformed, aEvent );
 }
 
 FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl )
@@ -4620,11 +4617,9 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ )
 
 IMPL_LINK_NOARG(FmXFilterCell, OnCommit, DbFilterField&, void)
 {
-    ::comphelper::OInterfaceIteratorHelper3 aIt( m_aTextListeners );
     css::awt::TextEvent aEvt;
     aEvt.Source = *this;
-    while( aIt.hasMoreElements() )
-        aIt.next()->textChanged( aEvt );
+    m_aTextListeners.notifyEach( &css::awt::XTextListener::textChanged, aEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
