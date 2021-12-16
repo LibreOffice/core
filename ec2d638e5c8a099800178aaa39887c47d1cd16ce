@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "441a97d1_660317ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T21:49:21Z",
+      "side": 1,
+      "message": "note \u003chttps://gerrit.libreoffice.org/c/core/+/126990\u003e \"Revert brittle UITest for now\"",
+      "revId": "ec2d638e5c8a099800178aaa39887c47d1cd16ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
