@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iostream>
+#include <cassert>
 #include <algorithm>
 #include <iterator>
 #include <vector>
@@ -287,9 +289,9 @@ bool Impl_calcSafeParams_clip( double&          t1,
 
     Polygon2D convHull( convexHull( poly ) );
 
-    cout << "# convex hull testing" << endl
+    std::cout << "# convex hull testing" << std::endl
          << "plot [t=0:1] ";
-    cout << " bez("
+    std::cout << " bez("
          << poly[0].x << ","
          << poly[1].x << ","
          << poly[2].x << ","
@@ -303,22 +305,22 @@ bool Impl_calcSafeParams_clip( double&          t1,
          << t1 << ", t, "
          << t2 << ", t, "
          << "'-' using ($1):($2) title \"control polygon\" with lp, "
-         << "'-' using ($1):($2) title \"convex hull\" with lp" << endl;
+         << "'-' using ($1):($2) title \"convex hull\" with lp" << std::endl;
 
     unsigned int k;
     for( k=0; k<poly.size(); ++k )
     {
-        cout << poly[k].x << " " << poly[k].y << endl;
+        std::cout << poly[k].x << " " << poly[k].y << std::endl;
     }
-    cout << poly[0].x << " " << poly[0].y << endl;
-    cout << "e" << endl;
+    std::cout << poly[0].x << " " << poly[0].y << std::endl;
+    std::cout << "e" << std::endl;
 
     for( k=0; k<convHull.size(); ++k )
     {
-        cout << convHull[k].x << " " << convHull[k].y << endl;
+        std::cout << convHull[k].x << " " << convHull[k].y << std::endl;
     }
-    cout << convHull[0].x << " " << convHull[0].y << endl;
-    cout << "e" << endl;
+    std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
+    std::cout << "e" << std::endl;
 
     return bRet;
 #endif
@@ -376,7 +378,7 @@ void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1,
 {
     static int offset = 0;
 
-    cout << "# safe param range testing" << endl
+    std::cout << "# safe param range testing" << std::endl
          << "plot [t=0.0:1.0] ";
 
     // clip safe ranges off c1
@@ -391,7 +393,7 @@ void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1,
 
     // output remaining segment (c1_part1)
 
-    cout << "bez("
+    std::cout << "bez("
          << c1.p0.x+offset << ","
          << c1.p1.x+offset << ","
          << c1.p2.x+offset << ","
@@ -448,7 +450,7 @@ void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1,
          << bounds_c2.c-bounds_c2.dMax << ",t)+" << offset << ", liney("
          << bounds_c2.a << ","
          << bounds_c2.b << ","
-         << bounds_c2.c-bounds_c2.dMax << ",t) title \"fat line (max) \"" << endl;
+         << bounds_c2.c-bounds_c2.dMax << ",t) title \"fat line (max) \"" << std::endl;
 
     offset += 1;
 }
@@ -459,10 +461,10 @@ void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
 {
     static int offset = 0;
 
-    cout << "# final result" << endl
+    std::cout << "# final result" << std::endl
          << "plot [t=0.0:1.0] ";
 
-    cout << "bez("
+    std::cout << "bez("
          << c1.p0.x+offset << ","
          << c1.p1.x+offset << ","
          << c1.p2.x+offset << ","
@@ -521,7 +523,7 @@ void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
          << c2_part.p0.y << ","
          << c2_part.p1.y << ","
          << c2_part.p2.y << ","
-         << c2_part.p3.y << ",t)" << endl;
+         << c2_part.p3.y << ",t)" << std::endl;
 
     offset += 1;
 }
@@ -682,7 +684,7 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
         fRes[0] = 0.0;
         fRes[1] = 1.0;
 
-        cerr << "Matrix singular!" << endl;
+        std::cerr << "Matrix singular!" << std::endl;
     }
 
     // now, the reordered and per-coefficient collected focus curve is
@@ -842,25 +844,25 @@ bool Impl_calcSafeParams_focus( double&         t1,
 
     Polygon2D convHull( convexHull( controlPolygon ) );
 
-    cout << "# convex hull testing (focus)" << endl
+    std::cout << "# convex hull testing (focus)" << std::endl
          << "plot [t=0:1] ";
-    cout << "'-' using ($1):($2) title \"control polygon\" with lp, "
-         << "'-' using ($1):($2) title \"convex hull\" with lp" << endl;
+    std::cout << "'-' using ($1):($2) title \"control polygon\" with lp, "
+         << "'-' using ($1):($2) title \"convex hull\" with lp" << std::endl;
 
     unsigned int count;
     for( count=0; count<controlPolygon.size(); ++count )
     {
-        cout << controlPolygon[count].x << " " << controlPolygon[count].y << endl;
+        std::cout << controlPolygon[count].x << " " << controlPolygon[count].y << std::endl;
     }
-    cout << controlPolygon[0].x << " " << controlPolygon[0].y << endl;
-    cout << "e" << endl;
+    std::cout << controlPolygon[0].x << " " << controlPolygon[0].y << std::endl;
+    std::cout << "e" << std::endl;
 
     for( count=0; count<convHull.size(); ++count )
     {
-        cout << convHull[count].x << " " << convHull[count].y << endl;
+        std::cout << convHull[count].x << " " << convHull[count].y << std::endl;
     }
-    cout << convHull[0].x << " " << convHull[0].y << endl;
-    cout << "e" << endl;
+    std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
+    std::cout << "e" << std::endl;
 
     return bRet;
 #endif
@@ -922,24 +924,24 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
     // tangency, and justifies to return a single intersection
     // point. Otherwise, inside/outside test might fail here.
 
-    for( int i=0; i<recursionLevel; ++i ) cerr << " ";
+    for( int i=0; i<recursionLevel; ++i ) std::cerr << " ";
     if( recursionLevel % 2 )
     {
-        cerr << "level: " << recursionLevel
+        std::cerr << std::endl << "level: " << recursionLevel
              << " t: "
              << last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0
              << ", c1: " << last_t1_c2 << " " << last_t2_c2
              << ", c2: " << last_t1_c1 << " " << last_t2_c1
-             << endl;
+             << std::endl;
     }
     else
     {
-        cerr << "level: " << recursionLevel
+        std::cerr << std::endl << "level: " << recursionLevel
              << " t: "
              << last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0
              << ", c1: " << last_t1_c1 << " " << last_t2_c1
              << ", c2: " << last_t1_c2 << " " << last_t2_c2
-             << endl;
+             << std::endl;
     }
 
     // refine solution
@@ -1141,7 +1143,7 @@ struct BezierTangencyFunctor
                                               c1_orig, // use orig curve here, need t's on original curve
                                               focus ) );
 
-        cerr << "range: " << t2_c1 - t1_c1 << ", ret: " << bRet << endl;
+        std::cerr << "range: " << t2_c1 - t1_c1 << ", ret: " << bRet << std::endl;
 
         return bRet;
     }
@@ -1299,24 +1301,24 @@ int main(int argc, const char *argv[])
         };
 
     // output gnuplot setup
-    cout << "#!/usr/bin/gnuplot -persist" << endl
-         << "#" << endl
-         << "# automatically generated by bezierclip, don't change!" << endl
-         << "#" << endl
-         << "set parametric" << endl
-         << "bez(p,q,r,s,t) = p*(1-t)**3+q*3*(1-t)**2*t+r*3*(1-t)*t**2+s*t**3" << endl
-         << "bezd(p,q,r,s,t) = 3*(q-p)*(1-t)**2+6*(r-q)*(1-t)*t+3*(s-r)*t**2" << endl
-         << "pointmarkx(c,t) = c-0.03*t" << endl
-         << "pointmarky(c,t) = c+0.03*t" << endl
-         << "linex(a,b,c,t) = a*-c + t*-b" << endl
-         << "liney(a,b,c,t) = b*-c + t*a" << endl << endl
-         << "# end of setup" << endl << endl;
+    std::cout << "#!/usr/bin/gnuplot -persist" << std::endl
+         << "#" << std::endl
+         << "# automatically generated by bezierclip, don't change!" << std::endl
+         << "#" << std::endl
+         << "set parametric" << std::endl
+         << "bez(p,q,r,s,t) = p*(1-t)**3+q*3*(1-t)**2*t+r*3*(1-t)*t**2+s*t**3" << std::endl
+         << "bezd(p,q,r,s,t) = 3*(q-p)*(1-t)**2+6*(r-q)*(1-t)*t+3*(s-r)*t**2" << std::endl
+         << "pointmarkx(c,t) = c-0.03*t" << std::endl
+         << "pointmarky(c,t) = c+0.03*t" << std::endl
+         << "linex(a,b,c,t) = a*-c + t*-b" << std::endl
+         << "liney(a,b,c,t) = b*-c + t*a" << std::endl << std::endl
+         << "# end of setup" << std::endl << std::endl;
 
 #ifdef WITH_CONVEXHULL_TEST
     // test convex hull algorithm
     const double convHull_xOffset( curr_Offset );
     curr_Offset += 20;
-    cout << "# convex hull testing" << endl
+    std::cout << "# convex hull testing" << std::endl
          << "plot [t=0:1] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1331,7 +1333,7 @@ int main(int argc, const char *argv[])
         aTestPoly[2].x += convHull_xOffset;
         aTestPoly[3].x += convHull_xOffset;
 
-        cout << " bez("
+        std::cout << " bez("
              << aTestPoly[0].x << ","
              << aTestPoly[1].x << ","
              << aTestPoly[2].x << ","
@@ -1342,9 +1344,9 @@ int main(int argc, const char *argv[])
              << aTestPoly[3].y << ",t), '-' using ($1):($2) title \"convex hull " << i << "\" with lp";
 
         if( i+1<sizeof(someCurves)/sizeof(Bezier) )
-            cout << ",\\" << endl;
+            std::cout << ",\\" << std::endl;
         else
-            cout << endl;
+            std::cout << std::endl;
     }
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1363,10 +1365,10 @@ int main(int argc, const char *argv[])
 
         for( k=0; k<convHull.size(); ++k )
         {
-            cout << convHull[k].x << " " << convHull[k].y << endl;
+            std::cout << convHull[k].x << " " << convHull[k].y << std::endl;
         }
-        cout << convHull[0].x << " " << convHull[0].y << endl;
-        cout << "e" << endl;
+        std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
+        std::cout << "e" << std::endl;
     }
 #endif
 
@@ -1374,7 +1376,7 @@ int main(int argc, const char *argv[])
     // test convex hull algorithm
     const double multiSubdivide_xOffset( curr_Offset );
     curr_Offset += 20;
-    cout << "# multi subdivide testing" << endl
+    std::cout << "# multi subdivide testing" << std::endl
          << "plot [t=0:1] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1406,7 +1408,7 @@ int main(int argc, const char *argv[])
         // subdivide at t2
         Impl_deCasteljauAt( c1_part3, c1_part2, c, t2 );
 
-        cout << " bez("
+        std::cout << " bez("
              << c1_part1.p0.x << ","
              << c1_part1.p1.x << ","
              << c1_part1.p2.x << ","
@@ -1435,9 +1437,9 @@ int main(int argc, const char *argv[])
              << c1_part3.p3.y << ",t) title \"left " << i << "\"";
 
         if( i+1<sizeof(someCurves)/sizeof(Bezier) )
-            cout << ",\\" << endl;
+            std::cout << ",\\" << std::endl;
         else
-            cout << endl;
+            std::cout << std::endl;
     }
 #endif
 
@@ -1445,7 +1447,7 @@ int main(int argc, const char *argv[])
     // test fatline algorithm
     const double fatLine_xOffset( curr_Offset );
     curr_Offset += 20;
-    cout << "# fat line testing" << endl
+    std::cout << "# fat line testing" << std::endl
          << "plot [t=0:1] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1460,7 +1462,7 @@ int main(int argc, const char *argv[])
 
         Impl_calcFatLine(line, c);
 
-        cout << " bez("
+        std::cout << " bez("
              << c.p0.x << ","
              << c.p1.x << ","
              << c.p2.x << ","
@@ -1489,9 +1491,9 @@ int main(int argc, const char *argv[])
              << line.c-line.dMax << ",t) title \"fat line (max) on " << i << "\"";
 
         if( i+1<sizeof(someCurves)/sizeof(Bezier) )
-            cout << ",\\" << endl;
+            std::cout << ",\\" << std::endl;
         else
-            cout << endl;
+            std::cout << std::endl;
     }
 #endif
 
@@ -1499,7 +1501,7 @@ int main(int argc, const char *argv[])
     // test focus curve algorithm
     const double focus_xOffset( curr_Offset );
     curr_Offset += 20;
-    cout << "# focus line testing" << endl
+    std::cout << "# focus line testing" << std::endl
          << "plot [t=0:1] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1514,7 +1516,7 @@ int main(int argc, const char *argv[])
         Bezier focus;
         Impl_calcFocus(focus, c);
 
-        cout << " bez("
+        std::cout << " bez("
              << c.p0.x << ","
              << c.p1.x << ","
              << c.p2.x << ","
@@ -1533,16 +1535,16 @@ int main(int argc, const char *argv[])
              << focus.p3.y << ",t) title \"focus " << i << "\"";
 
         if( i+1<sizeof(someCurves)/sizeof(Bezier) )
-            cout << ",\\" << endl;
+            std::cout << ",\\" << std::endl;
         else
-            cout << endl;
+            std::cout << std::endl;
     }
 #endif
 
 #ifdef WITH_SAFEPARAMBASE_TEST
     // test safe params base method
     double safeParamsBase_xOffset( curr_Offset );
-    cout << "# safe param base method testing" << endl
+    std::cout << "# safe param base method testing" << std::endl
          << "plot [t=0:1] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1565,7 +1567,7 @@ int main(int argc, const char *argv[])
 
         Polygon2D convHull( convexHull( poly ) );
 
-        cout << " bez("
+        std::cout << " bez("
              << poly[0].x << ","
              << poly[1].x << ","
              << poly[2].x << ","
@@ -1578,16 +1580,16 @@ int main(int argc, const char *argv[])
              << "t+" << safeParamsBase_xOffset << ", 1, ";
         if( bRet )
         {
-            cout << t1+safeParamsBase_xOffset << ", t, "
+            std::cout << t1+safeParamsBase_xOffset << ", t, "
                  << t2+safeParamsBase_xOffset << ", t, ";
         }
-        cout << "'-' using ($1):($2) title \"control polygon\" with lp, "
+        std::cout << "'-' using ($1):($2) title \"control polygon\" with lp, "
              << "'-' using ($1):($2) title \"convex hull\" with lp";
 
         if( i+1<sizeof(someCurves)/sizeof(Bezier) )
-            cout << ",\\" << endl;
+            std::cout << ",\\" << std::endl;
         else
-            cout << endl;
+            std::cout << std::endl;
 
         safeParamsBase_xOffset += 2;
     }
@@ -1617,17 +1619,17 @@ int main(int argc, const char *argv[])
         unsigned int k;
         for( k=0; k<poly.size(); ++k )
         {
-            cout << poly[k].x << " " << poly[k].y << endl;
+            std::cout << poly[k].x << " " << poly[k].y << std::endl;
         }
-        cout << poly[0].x << " " << poly[0].y << endl;
-        cout << "e" << endl;
+        std::cout << poly[0].x << " " << poly[0].y << std::endl;
+        std::cout << "e" << std::endl;
 
         for( k=0; k<convHull.size(); ++k )
         {
-            cout << convHull[k].x << " " << convHull[k].y << endl;
+            std::cout << convHull[k].x << " " << convHull[k].y << std::endl;
         }
-        cout << convHull[0].x << " " << convHull[0].y << endl;
-        cout << "e" << endl;
+        std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
+        std::cout << "e" << std::endl;
 
         safeParamsBase_xOffset += 2;
     }
@@ -1638,7 +1640,7 @@ int main(int argc, const char *argv[])
     // test safe parameter range algorithm
     const double safeParams_xOffset( curr_Offset );
     curr_Offset += 20;
-    cout << "# safe param range testing" << endl
+    std::cout << "# safe param range testing" << std::endl
          << "plot [t=0.0:1.0] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1672,7 +1674,7 @@ int main(int argc, const char *argv[])
 
                 // output remaining segment (c1_part1)
 
-                cout << " bez("
+                std::cout << " bez("
                      << c1.p0.x << ","
                      << c1.p1.x << ","
                      << c1.p2.x << ","
@@ -1699,9 +1701,9 @@ int main(int argc, const char *argv[])
                      << c1_part1.p3.y << ",t)";
 
                 if( i+2<sizeof(someCurves)/sizeof(Bezier) )
-                    cout << ",\\" << endl;
+                    std::cout << ",\\" << std::endl;
                 else
-                    cout << endl;
+                    std::cout << std::endl;
             }
         }
     }
@@ -1736,7 +1738,7 @@ int main(int argc, const char *argv[])
     // test safe parameter range from focus algorithm
     const double safeParamsFocus_xOffset( curr_Offset );
     curr_Offset += 20;
-    cout << "# safe param range from focus testing" << endl
+    std::cout << "# safe param range from focus testing" << std::endl
          << "plot [t=0.0:1.0] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1790,7 +1792,7 @@ int main(int argc, const char *argv[])
             bool bRet( Impl_calcSafeParams_focus( t1, t2,
                                                   c1, focus ) );
 
-            cerr << "t1: " << t1 << ", t2: " << t2 << endl;
+            std::cerr << "t1: " << t1 << ", t2: " << t2 << std::endl;
 
             // clip safe ranges off c1
             Bezier c1_part1;
@@ -1804,7 +1806,7 @@ int main(int argc, const char *argv[])
 
             // output remaining segment (c1_part1)
 
-            cout << " bez("
+            std::cout << " bez("
                  << c1.p0.x << ","
                  << c1.p1.x << ","
                  << c1.p2.x << ","
@@ -1845,7 +1847,7 @@ int main(int argc, const char *argv[])
 #endif
             if( bRet )
             {
-                cout << ", bez("
+                std::cout << ", bez("
                      << c1_part1.p0.x << ","
                      << c1_part1.p1.x << ","
                      << c1_part1.p2.x << ","
@@ -1857,9 +1859,9 @@ int main(int argc, const char *argv[])
             }
 
             if( i+2<sizeof(someCurves)/sizeof(Bezier) )
-                cout << ",\\" << endl;
+                std::cout << ",\\" << std::endl;
             else
-                cout << endl;
+                std::cout << std::endl;
         }
     }
 #endif
@@ -1903,7 +1905,7 @@ int main(int argc, const char *argv[])
 
     // test full bezier clipping
     const double bezierClip_xOffset( curr_Offset );
-    cout << endl << endl << "# bezier clip testing" << endl
+    std::cout << std::endl << std::endl << "# bezier clip testing" << std::endl
          << "plot [t=0:1] ";
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
     {
@@ -1921,7 +1923,7 @@ int main(int argc, const char *argv[])
             c2.p2.x += bezierClip_xOffset;
             c2.p3.x += bezierClip_xOffset;
 
-            cout << " bez("
+            std::cout << " bez("
                  << c1.p0.x << ","
                  << c1.p1.x << ","
                  << c1.p2.x << ","
@@ -1959,9 +1961,9 @@ int main(int argc, const char *argv[])
                  << c2.p3.y << ",$1)) title \"bezier " << i << " clipped against " << j << " (t on " << j << ")\"";
 
             if( i+2<sizeof(someCurves)/sizeof(Bezier) )
-                cout << ",\\" << endl;
+                std::cout << ",\\" << std::endl;
             else
-                cout << endl;
+                std::cout << std::endl;
         }
     }
     for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
@@ -1985,15 +1987,15 @@ int main(int argc, const char *argv[])
 
             for( k=0; k<result.size(); ++k )
             {
-                cout << result[k].first << endl;
+                std::cout << result[k].first << std::endl;
             }
-            cout << "e" << endl;
+            std::cout << "e" << std::endl;
 
             for( k=0; k<result.size(); ++k )
             {
-                cout << result[k].second << endl;
+                std::cout << result[k].second << std::endl;
             }
-            cout << "e" << endl;
+            std::cout << "e" << std::endl;
         }
     }
 #endif
