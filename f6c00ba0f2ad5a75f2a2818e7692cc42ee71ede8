@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06c85906_e2c6aae1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-12-16T08:20:39Z",
+      "side": 1,
+      "message": "previously failed on impress/repair_document_spec.js",
+      "revId": "f6c00ba0f2ad5a75f2a2818e7692cc42ee71ede8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
