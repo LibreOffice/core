@@ -32,7 +32,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
@@ -59,14 +59,13 @@ class TOOLKIT_DLLPUBLIC VCLXMenu :  public css::awt::XMenuBar,
                                     public ::cppu::OWeakObject
 {
 private:
-    ::osl::Mutex            maMutex;
+    std::mutex              maMutex;
     VclPtr<Menu>            mpMenu;
     MenuListenerMultiplexer maMenuListeners;
     PopupMenuRefList        maPopupMenuRefs;
     sal_Int16               mnDefaultItem;
 
 protected:
-    ::osl::Mutex&           GetMutex() { return maMutex; }
 
     DECL_DLLPRIVATE_LINK( MenuEventListener, VclMenuEvent&, void );
 

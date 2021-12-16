@@ -167,9 +167,9 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 
 OUString SAL_CALL VCLXMenu::getImplementationName(  )
 {
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
-    aGuard.clear();
+    aGuard.unlock();
 
     OUString implName( "stardiv.Toolkit." );
     if ( bIsPopupMenu )
@@ -182,9 +182,9 @@ OUString SAL_CALL VCLXMenu::getImplementationName(  )
 
 css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
 {
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
-    aGuard.clear();
+    aGuard.unlock();
 
     if ( bIsPopupMenu )
         return css::uno::Sequence<OUString>{
@@ -204,9 +204,9 @@ sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
 css::uno::Any VCLXMenu::queryInterface(
     const css::uno::Type & rType )
 {
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
-    aGuard.clear();
+    aGuard.unlock();
 
     css::uno::Any aRet;
 
@@ -233,9 +233,9 @@ UNO3_GETIMPLEMENTATION_IMPL( VCLXMenu );
 
 css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
 {
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
-    aGuard.clear();
+    aGuard.unlock();
 
     if ( bIsPopupMenu )
     {
@@ -264,7 +264,7 @@ css::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
 void VCLXMenu::addMenuListener(
     const css::uno::Reference< css::awt::XMenuListener >& rxListener )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     maMenuListeners.addInterface( rxListener );
 }
@@ -272,7 +272,7 @@ void VCLXMenu::addMenuListener(
 void VCLXMenu::removeMenuListener(
     const css::uno::Reference< css::awt::XMenuListener >& rxListener )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     maMenuListeners.removeInterface( rxListener );
 }
@@ -284,7 +284,7 @@ void VCLXMenu::insertItem(
     sal_Int16 nPos )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
         mpMenu->InsertItem(nItemId, aText, static_cast<MenuItemBits>(nItemStyle), OString(), nPos);
@@ -295,7 +295,7 @@ void VCLXMenu::removeItem(
     sal_Int16 nCount )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if (!mpMenu)
         return;
@@ -313,7 +313,7 @@ void VCLXMenu::removeItem(
 sal_Int16 VCLXMenu::getItemCount(  )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     return mpMenu ? mpMenu->GetItemCount() : 0;
 }
@@ -322,7 +322,7 @@ sal_Int16 VCLXMenu::getItemId(
     sal_Int16 nPos )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     return mpMenu ? mpMenu->GetItemId( nPos ) : 0;
 }
@@ -331,7 +331,7 @@ sal_Int16 VCLXMenu::getItemPos(
     sal_Int16 nId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     return mpMenu ? mpMenu->GetItemPos( nId ) : 0;
 }
@@ -341,7 +341,7 @@ void VCLXMenu::enableItem(
     sal_Bool bEnable )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
         mpMenu->EnableItem( nItemId, bEnable );
@@ -351,7 +351,7 @@ sal_Bool VCLXMenu::isItemEnabled(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     return mpMenu && mpMenu->IsItemEnabled( nItemId );
 }
@@ -361,7 +361,7 @@ void VCLXMenu::setItemText(
     const OUString& aText )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
         mpMenu->SetItemText( nItemId, aText );
@@ -371,7 +371,7 @@ OUString VCLXMenu::getItemText(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     OUString aItemText;
     if ( mpMenu )
@@ -384,7 +384,7 @@ void VCLXMenu::setPopupMenu(
     const css::uno::Reference< css::awt::XPopupMenu >& rxPopupMenu )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     VCLXMenu* pVCLMenu = comphelper::getFromUnoTunnel<VCLXMenu>( rxPopupMenu );
     DBG_ASSERT( pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu(), "setPopupMenu: Invalid Menu!" );
@@ -401,7 +401,7 @@ css::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     css::uno::Reference< css::awt::XPopupMenu >  aRef;
     Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : nullptr;
@@ -432,7 +432,7 @@ void VCLXMenu::insertSeparator(
     sal_Int16 nPos )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
         mpMenu->InsertSeparator(OString(), nPos);
@@ -441,14 +441,14 @@ void VCLXMenu::insertSeparator(
 void VCLXMenu::setDefaultItem(
     sal_Int16 nItemId )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     mnDefaultItem = nItemId;
 }
 
 sal_Int16 VCLXMenu::getDefaultItem(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     return mnDefaultItem;
 }
@@ -458,7 +458,7 @@ void VCLXMenu::checkItem(
     sal_Bool bCheck )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
         mpMenu->CheckItem( nItemId, bCheck );
@@ -468,7 +468,7 @@ sal_Bool VCLXMenu::isItemChecked(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     return mpMenu && mpMenu->IsItemChecked( nItemId );
 }
@@ -479,7 +479,7 @@ sal_Int16 VCLXMenu::execute(
     sal_Int16 nFlags )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     sal_Int16 nRet = 0;
     if ( mpMenu && IsPopupMenu() )
@@ -497,7 +497,7 @@ void SAL_CALL VCLXMenu::setCommand(
     const OUString& aCommand )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
         mpMenu->SetItemCommand( nItemId, aCommand );
@@ -507,7 +507,7 @@ OUString SAL_CALL VCLXMenu::getCommand(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     OUString aItemCommand;
     if ( mpMenu )
@@ -520,7 +520,7 @@ void SAL_CALL VCLXMenu::setHelpCommand(
     const OUString& aHelp )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
         mpMenu->SetHelpCommand( nItemId, aHelp );
@@ -530,7 +530,7 @@ OUString SAL_CALL VCLXMenu::getHelpCommand(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     OUString aHelpCommand;
     if ( mpMenu )
@@ -612,14 +612,14 @@ namespace
 sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     return IsPopupMenu();
 }
 
 void SAL_CALL VCLXMenu::clear(  )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     if ( mpMenu )
         mpMenu->Clear();
 }
@@ -629,7 +629,7 @@ css::awt::MenuItemType SAL_CALL VCLXMenu::getItemType(
     ::sal_Int16 nItemPos )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     css::awt::MenuItemType aMenuItemType =
         css::awt::MenuItemType_DONTKNOW;
@@ -645,7 +645,7 @@ void SAL_CALL VCLXMenu::hideDisabledEntries(
     sal_Bool bHide )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     if ( mpMenu )
     {
         if ( bHide )
@@ -659,7 +659,7 @@ void SAL_CALL VCLXMenu::hideDisabledEntries(
 sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu && IsPopupMenu() )
         return vcl::IsInPopupMenuExecute();
@@ -671,7 +671,7 @@ sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
 void SAL_CALL VCLXMenu::endExecute()
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu && IsPopupMenu() )
         static_cast<PopupMenu*>( mpMenu.get() )->EndExecute();
@@ -682,7 +682,7 @@ void SAL_CALL VCLXMenu::enableAutoMnemonics(
     sal_Bool bEnable )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
     if ( mpMenu )
     {
         if ( !bEnable )
@@ -698,7 +698,7 @@ void SAL_CALL VCLXMenu::setAcceleratorKeyEvent(
     const css::awt::KeyEvent& aKeyEvent )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
@@ -712,7 +712,7 @@ css::awt::KeyEvent SAL_CALL VCLXMenu::getAcceleratorKeyEvent(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     css::awt::KeyEvent aKeyEvent;
     if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
@@ -730,7 +730,7 @@ void SAL_CALL VCLXMenu::setHelpText(
     const OUString& sHelpText )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
@@ -743,7 +743,7 @@ OUString SAL_CALL VCLXMenu::getHelpText(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     OUString sHelpText;
     if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
@@ -760,7 +760,7 @@ void SAL_CALL VCLXMenu::setTipHelpText(
     const OUString& sTipHelpText )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
@@ -773,7 +773,7 @@ OUString SAL_CALL VCLXMenu::getTipHelpText(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     OUString sTipHelpText;
     if ( mpMenu && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
@@ -790,7 +790,7 @@ void SAL_CALL VCLXMenu::setItemImage(
     sal_Bool bScale )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
@@ -805,7 +805,7 @@ VCLXMenu::getItemImage(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( maMutex );
 
     css::uno::Reference< css::graphic::XGraphic > rxGraphic;
 
