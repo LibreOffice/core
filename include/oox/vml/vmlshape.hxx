@@ -114,6 +114,12 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OptValue<OUString> moCropTop; ///< Specifies how much to crop the image from the top down as a fraction of picture size.
     OUString maLayoutFlowAlt; ///< Specifies the alternate layout flow for text in textboxes.
 
+    /// An adjustment for the intensity of all colors, i.e. contrast, on a 0..0x10000 scale.
+    sal_Int32 mnGain = 0x10000;
+
+    /// The image brightness, on a 0..0x10000 scale.
+    sal_Int16 mnBlacklevel = 0;
+
     explicit            ShapeTypeModel();
 
     void                assignUsed( const ShapeTypeModel& rSource );
