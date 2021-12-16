@@ -117,7 +117,8 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
 
     const bool bHTML = rFormat.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
     Color aCol( bHTML ? COL_GRAY : COL_BLACK );
-    SvxBorderLine aLine( &aCol, SvxBorderLineWidth::Hairline );
+    // Default border in Writer: 0.5pt (matching Word)
+    SvxBorderLine aLine( &aCol, SvxBorderLineWidth::VeryThin );
     if ( bHTML )
     {
         aLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
