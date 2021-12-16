@@ -72,6 +72,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svpclient ) \
 	$(if $(filter LINUX %BSD SOLARIS,$(OS)), tilebench) \
 	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest) \
+    $(if $(DISABLE_GUI),,ui-previewer) \
 	vcldemo \
 	tiledrendering \
     mtfdemo \
@@ -204,11 +205,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
-	$(if $(ENABLE_MACOSX_SANDBOX),, \
-		$(if $(DISABLE_GUI),, \
-			ui-previewer \
-		) \
-	) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
 	) \
