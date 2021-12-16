@@ -35,7 +35,7 @@ class CheckTable(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls.OOLineHairline = 2
+        cls.OOLineVeryThin = 18
 
     @classmethod
     def tearDownClass(cls):
@@ -44,13 +44,13 @@ class CheckTable(unittest.TestCase):
     def __test_borderAsserts(self, xBorderLine, line_valid):
         self.assertTrue(line_valid)
         self.assertEqual(0, xBorderLine.InnerLineWidth)
-        self.assertEqual(self.OOLineHairline, xBorderLine.OuterLineWidth)
+        self.assertEqual(self.OOLineVeryThin, xBorderLine.OuterLineWidth)
         self.assertEqual(0, xBorderLine.LineDistance)
         self.assertEqual(0, xBorderLine.Color)
 
     def __test_borderAssertsWithLineStyle(self, xBorderLine, line_valid):
         self.__test_borderAsserts(xBorderLine, line_valid)
-        self.assertEqual(self.OOLineHairline, xBorderLine.LineWidth)
+        self.assertEqual(self.OOLineVeryThin, xBorderLine.LineWidth)
         self.assertEqual(SOLID, xBorderLine.LineStyle)
 
     def __test_borderDistance(self, border):
