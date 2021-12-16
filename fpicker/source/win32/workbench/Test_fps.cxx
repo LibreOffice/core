@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <osl/file.hxx>
 
-#include <cppuhelper/servicefactory.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -42,13 +42,12 @@
 #include <osl/thread.h>
 
 #include <stdio.h>
+#include <iostream>
+
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-
-#include "..\FPServiceInfo.hxx"
-
 
 //  namespaces
 
@@ -346,7 +345,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
     // Dispose and clear factory
     xComponent->dispose();
-    g_xFactory.clear();
+//    g_xFactory.clear();
 
     printf("Test successful\n");
 
