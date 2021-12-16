@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "375a5d46_a53c6156",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T06:48:17Z",
+      "side": 1,
+      "message": "I can reproduce the failure somewhat reliably locally when I run UITest_writer_tests2 in an ASan+UBSan build when the machine is under heavy load (i.e., when I run that test as part of a parallelizing `make check`).  What appears to help is to stick an\n\n  xToolkit.processEventsToIdle()\n\ninto two strategic places.  I\u0027ll report back once I have robust data.",
+      "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
