@@ -1314,20 +1314,6 @@ ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, bool bSkipDefaultStyles 
         rDoc.GetStyleSheetPool()->CreateStandardStyles();
 }
 
-ScOrcusStyles::font::font():
-    mnSize(10),
-    maColor(COL_BLACK),
-    mbBold(false),
-    mbItalic(false),
-    mbHasFontAttr(false),
-    mbHasUnderlineAttr(false),
-    mbHasStrikeout(false),
-    meUnderline(LINESTYLE_NONE),
-    maUnderlineColor(COL_WHITE),
-    meStrikeout(STRIKEOUT_NONE)
-{
-}
-
 ScOrcusStyles::fill::fill():
     mePattern(orcus::spreadsheet::fill_pattern_t::none),
     maFgColor(COL_WHITE),
@@ -1356,37 +1342,46 @@ std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 
 void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
 {
-    if (mbHasFontAttr)
+    if (mbItalic)
     {
-        FontItalic eItalic = mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
+        FontItalic eItalic = *mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
         rSet.Put(SvxPostureItem(eItalic, ATTR_FONT_POSTURE));
         rSet.Put(SvxPostureItem(eItalic, ATTR_CJK_FONT_POSTURE));
         rSet.Put(SvxPostureItem(eItalic, ATTR_CTL_FONT_POSTURE));
+    }
 
-        FontWeight eWeight = mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
+    if (mbBold)
+    {
+        FontWeight eWeight = *mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
         rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
         rSet.Put(SvxWeightItem(eWeight, ATTR_CJK_FONT_WEIGHT));
         rSet.Put(SvxWeightItem(eWeight, ATTR_CTL_FONT_WEIGHT));
-
-        rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
-
-        if(!maName.isEmpty())
-            rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
-
-        rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_FONT_HEIGHT));
-        rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_CJK_FONT_HEIGHT));
-        rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_CTL_FONT_HEIGHT));
     }
 
-    if (mbHasUnderlineAttr)
+    if (maColor)
+        rSet.Put( SvxColorItem(*maColor, ATTR_FONT_COLOR));
+
+    if (maName && !maName->isEmpty())
+        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, *maName, *maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
+
+    if (mnSize)
     {
-        SvxUnderlineItem aUnderline(meUnderline, ATTR_FONT_UNDERLINE);
-        aUnderline.SetColor(maUnderlineColor);
+        double fSize = translateToInternal(*mnSize, orcus::length_unit_t::point);
+        rSet.Put(SvxFontHeightItem(fSize, 100, ATTR_FONT_HEIGHT));
+        rSet.Put(SvxFontHeightItem(fSize, 100, ATTR_CJK_FONT_HEIGHT));
+        rSet.Put(SvxFontHeightItem(fSize, 100, ATTR_CTL_FONT_HEIGHT));
+    }
+
+    if (meUnderline)
+    {
+        SvxUnderlineItem aUnderline(*meUnderline, ATTR_FONT_UNDERLINE);
+        if (maUnderlineColor)
+            aUnderline.SetColor(*maUnderlineColor);
         rSet.Put(aUnderline);
     }
 
-    if (mbHasStrikeout)
-        rSet.Put(SvxCrossedOutItem(meStrikeout, ATTR_FONT_CROSSEDOUT));
+    if (meStrikeout)
+        rSet.Put(SvxCrossedOutItem(*meStrikeout, ATTR_FONT_CROSSEDOUT));
 }
 
 void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
@@ -1599,26 +1594,22 @@ void ScOrcusStyles::set_font_count(size_t /*n*/)
 void ScOrcusStyles::set_font_bold(bool b)
 {
     maCurrentFont.mbBold = b;
-    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_italic(bool b)
 {
     maCurrentFont.mbItalic = b;
-    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_name(std::string_view name)
 {
     OUString aName(name.data(), name.size(), mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentFont.maName = aName;
-    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_size(double point)
 {
     maCurrentFont.mnSize = point;
-    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
@@ -1657,67 +1648,73 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
         default:
             ;
     }
-    maCurrentFont.mbHasUnderlineAttr = true;
 }
 
 void ScOrcusStyles::set_font_underline_width(orcus::spreadsheet::underline_width_t e )
 {
     if (e == orcus::spreadsheet::underline_width_t::bold || e == orcus::spreadsheet::underline_width_t::thick)
     {
-        switch(maCurrentFont.meUnderline)
+        if (maCurrentFont.meUnderline)
         {
-            case LINESTYLE_NONE:
-            case LINESTYLE_SINGLE:
-                maCurrentFont.meUnderline = LINESTYLE_BOLD;
-                break;
-            case LINESTYLE_DOTTED:
-                maCurrentFont.meUnderline = LINESTYLE_BOLDDOTTED;
-                break;
-            case LINESTYLE_DASH:
-                maCurrentFont.meUnderline = LINESTYLE_BOLDDASH;
-                break;
-            case LINESTYLE_LONGDASH:
-                maCurrentFont.meUnderline = LINESTYLE_BOLDLONGDASH;
-                break;
-            case LINESTYLE_DASHDOT:
-                maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOT;
-                break;
-            case LINESTYLE_DASHDOTDOT:
-                maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOTDOT;
-                break;
-            case LINESTYLE_WAVE:
-                maCurrentFont.meUnderline = LINESTYLE_BOLDWAVE;
-                break;
-            default:
-                ;
+            switch (*maCurrentFont.meUnderline)
+            {
+                case LINESTYLE_NONE:
+                case LINESTYLE_SINGLE:
+                    maCurrentFont.meUnderline = LINESTYLE_BOLD;
+                    break;
+                case LINESTYLE_DOTTED:
+                    maCurrentFont.meUnderline = LINESTYLE_BOLDDOTTED;
+                    break;
+                case LINESTYLE_DASH:
+                    maCurrentFont.meUnderline = LINESTYLE_BOLDDASH;
+                    break;
+                case LINESTYLE_LONGDASH:
+                    maCurrentFont.meUnderline = LINESTYLE_BOLDLONGDASH;
+                    break;
+                case LINESTYLE_DASHDOT:
+                    maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOT;
+                    break;
+                case LINESTYLE_DASHDOTDOT:
+                    maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOTDOT;
+                    break;
+                case LINESTYLE_WAVE:
+                    maCurrentFont.meUnderline = LINESTYLE_BOLDWAVE;
+                    break;
+                default:
+                    ;
+            }
         }
+        else
+            maCurrentFont.meUnderline = LINESTYLE_BOLD;
     }
-    maCurrentFont.mbHasUnderlineAttr = true;
 }
 
-void ScOrcusStyles::set_font_underline_mode(orcus::spreadsheet::underline_mode_t /* e */)
+void ScOrcusStyles::set_font_underline_mode(orcus::spreadsheet::underline_mode_t /*e*/)
 {
-
 }
 
 void ScOrcusStyles::set_font_underline_type(orcus::spreadsheet::underline_type_t  e )
 {
     if (e == orcus::spreadsheet::underline_type_t::double_type)
     {
-        switch(maCurrentFont.meUnderline)
+        if (maCurrentFont.meUnderline)
         {
-            case LINESTYLE_NONE:
-            case LINESTYLE_SINGLE:
-                maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
-                break;
-            case LINESTYLE_WAVE:
-                maCurrentFont.meUnderline = LINESTYLE_DOUBLEWAVE;
-                break;
-            default:
-                ;
+            switch (*maCurrentFont.meUnderline)
+            {
+                case LINESTYLE_NONE:
+                case LINESTYLE_SINGLE:
+                    maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
+                    break;
+                case LINESTYLE_WAVE:
+                    maCurrentFont.meUnderline = LINESTYLE_DOUBLEWAVE;
+                    break;
+                default:
+                    ;
+            }
         }
+        else
+            maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
     }
-    maCurrentFont.mbHasUnderlineAttr = true;
 }
 
 void ScOrcusStyles::set_font_underline_color(orcus::spreadsheet::color_elem_t alpha,
@@ -1734,7 +1731,6 @@ void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t blue)
 {
     maCurrentFont.maColor = Color(ColorAlpha, alpha, red, green, blue);
-    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_strikethrough_style(orcus::spreadsheet::strikethrough_style_t /*s*/)
@@ -1743,29 +1739,31 @@ void ScOrcusStyles::set_strikethrough_style(orcus::spreadsheet::strikethrough_st
 
 void ScOrcusStyles::set_strikethrough_type(orcus::spreadsheet::strikethrough_type_t s)
 {
-    if (maCurrentFont.meStrikeout != STRIKEOUT_BOLD &&
-        maCurrentFont.meStrikeout != STRIKEOUT_SLASH &&
-        maCurrentFont.meStrikeout != STRIKEOUT_X)
+    if (maCurrentFont.meStrikeout)
     {
-        switch (s)
-        {
-            case os::strikethrough_type_t::unknown:
-                maCurrentFont.meStrikeout = STRIKEOUT_DONTKNOW;
-                break;
-            case os::strikethrough_type_t::none:
-                maCurrentFont.meStrikeout = STRIKEOUT_NONE;
-                break;
-            case os::strikethrough_type_t::single:
-                maCurrentFont.meStrikeout = STRIKEOUT_SINGLE;
-                break;
-            case os::strikethrough_type_t::double_type:
-                maCurrentFont.meStrikeout = STRIKEOUT_DOUBLE;
-                break;
-            default:
-                ;
-        }
+        if (*maCurrentFont.meStrikeout == STRIKEOUT_BOLD ||
+            *maCurrentFont.meStrikeout == STRIKEOUT_SLASH ||
+            *maCurrentFont.meStrikeout == STRIKEOUT_X)
+            return;
     }
-    maCurrentFont.mbHasStrikeout = true;
+
+    switch (s)
+    {
+        case os::strikethrough_type_t::unknown:
+            maCurrentFont.meStrikeout = STRIKEOUT_DONTKNOW;
+            break;
+        case os::strikethrough_type_t::none:
+            maCurrentFont.meStrikeout = STRIKEOUT_NONE;
+            break;
+        case os::strikethrough_type_t::single:
+            maCurrentFont.meStrikeout = STRIKEOUT_SINGLE;
+            break;
+        case os::strikethrough_type_t::double_type:
+            maCurrentFont.meStrikeout = STRIKEOUT_DOUBLE;
+            break;
+        default:
+            ;
+    }
 }
 
 void ScOrcusStyles::set_strikethrough_width(orcus::spreadsheet::strikethrough_width_t s)
@@ -1778,7 +1776,6 @@ void ScOrcusStyles::set_strikethrough_width(orcus::spreadsheet::strikethrough_wi
         default:
             ;
     }
-    maCurrentFont.mbHasStrikeout = true;
 }
 
 void ScOrcusStyles::set_strikethrough_text(orcus::spreadsheet::strikethrough_text_t s)
@@ -1794,7 +1791,6 @@ void ScOrcusStyles::set_strikethrough_text(orcus::spreadsheet::strikethrough_tex
         default:
             ;
     }
-    maCurrentFont.mbHasStrikeout = true;
 }
 
 size_t ScOrcusStyles::commit_font()
