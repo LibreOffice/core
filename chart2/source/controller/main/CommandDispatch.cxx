@@ -69,7 +69,7 @@ void SAL_CALL CommandDispatch::addStatusListener( const Reference< frame::XStatu
     {
         aIt = m_aListeners.insert(
             m_aListeners.begin(),
-            tListenerMap::value_type( URL.Complete, new ::comphelper::OInterfaceContainerHelper2( m_aMutex )));
+            tListenerMap::value_type( URL.Complete, new ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>( m_aMutex )));
     }
     OSL_ASSERT( aIt != m_aListeners.end());
 
@@ -134,15 +134,13 @@ void CommandDispatch::fireStatusEventForURL(
         {
             if( aIt->second )
             {
-                ::comphelper::OInterfaceIteratorHelper2 aIntfIt( *((*aIt).second) );
+                ::comphelper::OInterfaceIteratorHelper3 aIntfIt( *((*aIt).second) );
 
                 while( aIntfIt.hasMoreElements())
                 {
-                    Reference< frame::XStatusListener > xListener( aIntfIt.next(), uno::UNO_QUERY );
                     try
                     {
-                        if( xListener.is())
-                            xListener->statusChanged( aEventToSend );
+                        aIntfIt.next()->statusChanged( aEventToSend );
                     }
                     catch( const uno::Exception & )
                     {
