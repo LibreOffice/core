@@ -111,6 +111,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if ( maFillProperties.moFillType.has() )
     {
         Color aColor = maFillProperties.getBestSolidColor();
+        bool bContoured = false;
 
         // noFill doesn't exist for characters. Map noFill to 99% transparency
         if (maFillProperties.moFillType.get() == XML_noFill)
@@ -124,7 +125,11 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         {
             Color aLineColor = moTextOutlineProperties.get().maLineFill.getBestSolidColor();
             sal_Int16 nLineTransparency = aLineColor.getTransparency();
-            if (nLineTransparency < aColor.getTransparency())
+
+            // tdf#127696 If the text color is white (and the outline color doesn't dominate),
+            //            then this is contoured text in LO.
+            if (nLineTransparency < aColor.getTransparency()
+                || (bContoured = aColor.getColor(rFilter.getGraphicHelper()) == COL_WHITE))
                 aColor = aLineColor;
         }
         rPropMap.setProperty(PROP_CharColor, aColor.getColor(rFilter.getGraphicHelper()));
@@ -133,6 +138,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty(PROP_CharColorTintOrShade, aColor.getTintOrShade());
         rPropMap.setProperty(PROP_CharColorLumMod, aColor.getLumMod());
         rPropMap.setProperty(PROP_CharColorLumOff, aColor.getLumOff());
+        rPropMap.setProperty(PROP_CharContoured, bContoured);
 
         if (aColor.hasTransparency())
         {
