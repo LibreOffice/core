@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4aaf38b6_0615c227",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T10:16:03Z",
+      "side": 1,
+      "message": "Feel free to implement that, but I don\u0027t like it.\n\nI can see, that with XML snippets you can easier see the optional components. The easiest fix for the current approach would be to replace the \"magic\" wildcard with a fixed %_optionals, which is probably a sensible / better alternative anyway. Or just keep marking optional components in the component file, but without the condition handling.\n\nWith the XML snippets approach, you must either handle duplicate snippets or split things up much further; see the vcl.common case in the follow-up patch. IMHO it complicates stuff for no gain; and FWIW you wanted a single component file.\n\nIn the commit message I wrote, that you could also select implementation names via gbuild calls. I prefer the extra \"selection files\".\n\nFor the current approach: if you mistype the component name, then it\u0027s ignored for filtering. Adding an error by extracting all implementations from the component matching with the optional declarations seems easy enough, if you assume \u0027implementation name\u003d\".*\"\u0027 is a fixed token, like:\n\n$(sed -i -e \u0027/implementation.*name/!d\u0027 -e \u0027s/.*\"\\(.*\\)\".*$/\\1/\u0027 %) $(%.optionals) | sort | uniq --repeated \u003e %_optionals\nif !cmp -s %_optionals %.optionals, $(error ...)\n\nLess magic (and simpler), if you mark optional components in an extra or the component file.\n\nOr any \"real\" XML tool to extract the name attribute of optional components from the implementation tag. No idea, if xsltproc can be misused for that. Some minimal python?",
+      "parentUuid": "70a5f45c_6daab48f",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f84b1e6_8309e43a",
         "filename": "solenv/bin/createcomponent.xslt",
         "patchSetId": 4
@@ -48,6 +66,24 @@
       "writtenOn": "2021-12-16T08:44:59Z",
       "side": 1,
       "message": "If you revert \u003chttps://git.libreoffice.org/core/+/65c0887bca2909b2046eb5aa4aaace0cc320c3f2%5E!/\u003e \"Allow for conditional parts of component files\" as part of this change, please revert it completely.  (Alternatively, revert it in a follow-up change.)",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4a74ec9_b9bae876",
+        "filename": "solenv/bin/createcomponent.xslt",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T10:16:03Z",
+      "side": 1,
+      "message": "Hadn\u0027t noticed the xslt additionally defines the xsltproc parameters. Now renamed to filtered.",
+      "parentUuid": "1f84b1e6_8309e43a",
       "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -75,6 +111,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64dc12a2_8742553c",
+        "filename": "solenv/bin/createcomponent.xslt",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T10:16:03Z",
+      "side": 1,
+      "message": "In the xsltproc call.",
+      "parentUuid": "80c0decb_23ecdf77",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60964645_c28169e6",
@@ -88,6 +148,24 @@
       "writtenOn": "2021-12-16T08:44:59Z",
       "side": 1,
       "message": "is this an unrelated drive-by modification, or is it relevant for this change?",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08ce037c_c2d18cc6",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T10:16:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60964645_c28169e6",
       "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -109,6 +187,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f636ba2_5f084c33",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T10:16:03Z",
+      "side": 1,
+      "message": "I like to keep this block more together. I was looking for a sensible gb_ComponentTarget__command, but the shell callout happens before the rest of the rule, so it got more complicated with the additional implicit rules.",
+      "parentUuid": "4d0c6551_982f469b",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db7d1fac_e0e47310",
@@ -126,6 +222,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa069532_076ed33c",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T10:16:03Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "db7d1fac_e0e47310",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fff34bdf_b6bf2b29",
@@ -139,6 +253,24 @@
       "writtenOn": "2021-12-16T08:44:59Z",
       "side": 1,
       "message": "I assume there is a gb_Library_add_componentimpl call missing from svx/Library_svx.mk that would reference this file",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a21b06b4_059e9b5a",
+        "filename": "svx/util/svx.component.breakpad",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T10:16:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fff34bdf_b6bf2b29",
       "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
