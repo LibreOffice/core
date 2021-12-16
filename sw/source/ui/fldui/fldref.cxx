@@ -105,6 +105,9 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
 
     // uitests
     m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-ref");
+    m_xNameED->set_buildable_name(m_xNameED->get_buildable_name() + "-ref");
+    m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-ref");
+    m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-ref");
 }
 
 SwFieldRefPage::~SwFieldRefPage()

@@ -82,6 +82,8 @@ SwFieldFuncPage::SwFieldFuncPage(weld::Container* pPage, weld::DialogController*
 
     // uitests
     m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-func");
+    m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-func");
+    m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-func");
 }
 
 SwFieldFuncPage::~SwFieldFuncPage()

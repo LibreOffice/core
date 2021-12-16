@@ -61,6 +61,9 @@ public:
     void hide() { m_xControl->hide(); }
     weld::Entry& get_widget() { return *m_xControl; }
 
+    OString get_buildable_name() const { return m_xControl->get_buildable_name(); }
+    void set_buildable_name(const OString& rId) { m_xControl->set_buildable_name(rId); }
+
     void ShowBrackets(bool bShow) { bBrackets = bShow; }
     bool GetBrackets() const { return bBrackets; }
     void SetDropEnable(bool bFlag) { bEnableDrop = bFlag; }
