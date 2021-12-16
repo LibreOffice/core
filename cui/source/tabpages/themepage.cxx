@@ -10,11 +10,14 @@
 #include <sal/config.h>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/util/Color.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/editids.hrc>
 #include <sal/log.hxx>
 #include <svl/grabbagitem.hxx>
+#include <svx/colorbox.hxx>
 
 #include <themepage.hxx>
 
@@ -28,6 +31,30 @@ SvxThemePage::SvxThemePage(weld::Container* pPage, weld::DialogController* pCont
     : SfxTabPage(pPage, pController, "cui/ui/themetabpage.ui", "ThemePage", &rInAttrs)
     , m_xThemeName(m_xBuilder->weld_entry("themeName"))
     , m_xColorSetName(m_xBuilder->weld_entry("colorSetName"))
+    , m_xDk1(new ColorListBox(m_xBuilder->weld_menu_button("btnDk1"),
+                              [this] { return GetDialogController()->getDialog(); }))
+    , m_xLt1(new ColorListBox(m_xBuilder->weld_menu_button("btnLt1"),
+                              [this] { return GetDialogController()->getDialog(); }))
+    , m_xDk2(new ColorListBox(m_xBuilder->weld_menu_button("btnDk2"),
+                              [this] { return GetDialogController()->getDialog(); }))
+    , m_xLt2(new ColorListBox(m_xBuilder->weld_menu_button("btnLt2"),
+                              [this] { return GetDialogController()->getDialog(); }))
+    , m_xAccent1(new ColorListBox(m_xBuilder->weld_menu_button("btnAccent1"),
+                                  [this] { return GetDialogController()->getDialog(); }))
+    , m_xAccent2(new ColorListBox(m_xBuilder->weld_menu_button("btnAccent2"),
+                                  [this] { return GetDialogController()->getDialog(); }))
+    , m_xAccent3(new ColorListBox(m_xBuilder->weld_menu_button("btnAccent3"),
+                                  [this] { return GetDialogController()->getDialog(); }))
+    , m_xAccent4(new ColorListBox(m_xBuilder->weld_menu_button("btnAccent4"),
+                                  [this] { return GetDialogController()->getDialog(); }))
+    , m_xAccent5(new ColorListBox(m_xBuilder->weld_menu_button("btnAccent5"),
+                                  [this] { return GetDialogController()->getDialog(); }))
+    , m_xAccent6(new ColorListBox(m_xBuilder->weld_menu_button("btnAccent6"),
+                                  [this] { return GetDialogController()->getDialog(); }))
+    , m_xHlink(new ColorListBox(m_xBuilder->weld_menu_button("btnHlink"),
+                                [this] { return GetDialogController()->getDialog(); }))
+    , m_xFolHlink(new ColorListBox(m_xBuilder->weld_menu_button("btnFolHlink"),
+                                   [this] { return GetDialogController()->getDialog(); }))
 {
 }
 
@@ -66,6 +93,25 @@ void SvxThemePage::Reset(const SfxItemSet* pAttrs)
         it->second >>= aName;
         m_xColorSetName->set_text(aName);
     }
+
+    it = aMap.find("ColorScheme");
+    if (it != aMap.end())
+    {
+        uno::Sequence<util::Color> aColors;
+        it->second >>= aColors;
+        m_xDk1->SelectEntry(Color(ColorTransparency, aColors[0]));
+        m_xLt1->SelectEntry(Color(ColorTransparency, aColors[1]));
+        m_xDk2->SelectEntry(Color(ColorTransparency, aColors[2]));
+        m_xLt2->SelectEntry(Color(ColorTransparency, aColors[3]));
+        m_xAccent1->SelectEntry(Color(ColorTransparency, aColors[4]));
+        m_xAccent2->SelectEntry(Color(ColorTransparency, aColors[5]));
+        m_xAccent3->SelectEntry(Color(ColorTransparency, aColors[6]));
+        m_xAccent4->SelectEntry(Color(ColorTransparency, aColors[7]));
+        m_xAccent5->SelectEntry(Color(ColorTransparency, aColors[8]));
+        m_xAccent6->SelectEntry(Color(ColorTransparency, aColors[9]));
+        m_xHlink->SelectEntry(Color(ColorTransparency, aColors[10]));
+        m_xFolHlink->SelectEntry(Color(ColorTransparency, aColors[11]));
+    }
 }
 
 bool SvxThemePage::FillItemSet(SfxItemSet* pAttrs)
@@ -86,6 +132,21 @@ bool SvxThemePage::FillItemSet(SfxItemSet* pAttrs)
 
         aMap["Name"] <<= m_xThemeName->get_text();
         aMap["ColorSchemeName"] <<= m_xColorSetName->get_text();
+        std::vector<util::Color> aColorScheme = {
+            static_cast<sal_Int32>(m_xDk1->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xLt1->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xDk2->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xLt2->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xAccent1->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xAccent2->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xAccent3->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xAccent4->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xAccent5->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xAccent6->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xHlink->GetSelectEntryColor()),
+            static_cast<sal_Int32>(m_xFolHlink->GetSelectEntryColor()),
+        };
+        aMap["ColorScheme"] <<= comphelper::containerToSequence(aColorScheme);
 
         beans::PropertyValues aTheme = aMap.getAsConstPropertyValueList();
         aGrabBagItem.GetGrabBag()["Theme"] <<= aTheme;

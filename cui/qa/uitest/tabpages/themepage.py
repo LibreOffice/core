@@ -9,6 +9,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 
 # Test for cui/source/tabpages/themepage.cxx.
 class Test(UITestCase):
@@ -24,7 +25,21 @@ class Test(UITestCase):
             master = drawPage.MasterPage
             theme = mkPropertyValues({
                 "Name": "nameA",
-                "ColorSchemeName": "colorSetA"
+                "ColorSchemeName": "colorSetA",
+                "ColorScheme": tuple([
+                    0x000000,  # dk1
+                    0x000000,  # lt1
+                    0x000000,  # dk2
+                    0x000000,  # lt2
+                    0x0000ff,  # accent1
+                    0x000000,  # accent2
+                    0x000000,  # accent3
+                    0x000000,  # accent4
+                    0x000000,  # accent5
+                    0x000000,  # accent6
+                    0x000000,  # hlink
+                    0x000000,  # folHlink
+                ])
             })
             master.Theme = theme
 
@@ -43,6 +58,15 @@ class Test(UITestCase):
                 colorSetName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                 colorSetName.executeAction("TYPE", mkPropertyValues({"TEXT": "colorSetB"}))
 
+                # Select a custom accent1 color.
+                accent1 = xDialog.getChild("btnAccent1")
+                accent1.executeAction("OPENLIST", tuple())
+                floatWindow = self.xUITest.getFloatWindow()
+                paletteSelector = floatWindow.getChild("palette_listbox")
+                select_by_text(paletteSelector, "chart-palettes")
+                colorSet = floatWindow.getChild("colorset")
+                colorSet.executeAction("CHOOSE", mkPropertyValues({"POS": "2"}))
+
             # Then make sure the doc model is updated accordingly:
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: 'nameA' != 'nameB'
@@ -53,6 +77,11 @@ class Test(UITestCase):
             # AssertionError: 'colorSetA' != 'colorSetB'
             # i.e. the UI didn't update the color scheme name.
             self.assertEqual(theme["ColorSchemeName"], "colorSetB")
+            colorSet = theme["ColorScheme"]
+            # Without the accompanying fix in place, this test would have failed with:
+            # AssertionError: 0 != 16728590 (#ff420e)
+            # i.e. the UI didn't update the accent1 color from black to a custom value.
+            self.assertEqual(colorSet[4], 0xff420e)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
