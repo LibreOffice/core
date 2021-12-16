@@ -522,7 +522,7 @@
 
         <xsl:choose>
             <xsl:when test="name() = 'text:tab'">
-                <!-- every frame sibling have to be incapuslated within a div with left indent  -->
+                <!-- every frame sibling have to be encapsulated within a div with left indent  -->
                 <xsl:element name="span">
                     <xsl:choose>
                         <xsl:when test="count($tabStops/style:tab-stop) &gt; 0 and count($tabStops/style:tab-stop) &lt; 3">
@@ -816,7 +816,7 @@
                 <xsl:choose>
                     <xsl:when test="normalize-space(.) != ''">
                         <!-- every following frame sibling till the next draw:frame
-                            have to be incapuslated within a div with left indent.
+                            have to be encapsulated within a div with left indent.
                             To be moved altogether according the indent (usually right) -->
                         <xsl:comment>Next 'div' added for floating.</xsl:comment>
                         <xsl:element name="div">
@@ -828,7 +828,7 @@
                             <xsl:apply-templates select=".">
                                 <xsl:with-param name="globalData" select="$globalData"/>
                             </xsl:apply-templates>
-                            <!-- if it is a frame sibling it will be NOT incapuslated within the div (as already within one) -->
+                            <!-- if it is a frame sibling it will be NOT encapsulated within the div (as already within one) -->
                             <xsl:if test="not($nextSiblingIsFrame)">
                                 <xsl:apply-templates select="following-sibling::node()[1]" mode="frameFloating">
                                     <xsl:with-param name="globalData" select="$globalData"/>
