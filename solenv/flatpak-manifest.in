@@ -404,13 +404,6 @@
                     "dest-filename": "@MDDS_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@NEON_TARBALL@",
-                    "sha256": "@NEON_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@NEON_TARBALL@"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/@FONT_NOTO_TARBALL@",
                     "sha256": "@FONT_NOTO_SHA256SUM@",
                     "type": "file",
