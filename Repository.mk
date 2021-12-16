@@ -65,6 +65,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	unoidl-read \
 	unoidl-write \
 	xrmex \
+	$(if $(filter WNT,$(OS)), \
+        fpicker \ ) \
 	$(if $(filter-out ANDROID iOS WNT,$(OS)), \
         svdemo \
         fftester \
