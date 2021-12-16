@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36746711_04f623dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-12-16T06:48:23Z",
+      "side": 1,
+      "message": "If UnoControl used the pImpl paradigm, all of the *ListenerMultiplexer stuff could be module-private ?",
+      "revId": "ae9c00e60540864bebd16f163532a6215fd292b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
