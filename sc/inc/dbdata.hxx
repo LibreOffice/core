@@ -68,7 +68,7 @@ private:
     ScDBDataContainerBase* mpContainer;
 
     /// DBParam
-    const OUString aName;
+    OUString aName;
     OUString aUpper;
     SCTAB           nTable;
     SCCOL           nStartCol;
@@ -119,7 +119,9 @@ public:
     bool        operator== (const ScDBData& rData) const;
 
     const OUString& GetName() const { return aName; }
+    void SetName(const OUString& sName) { aName = sName; }
     const OUString& GetUpperName() const { return aUpper; }
+    void SetUpperName(const OUString& sUpper) { aUpper = sUpper; }
     SCTAB       GetTab() const                  { return nTable; }
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
     SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
@@ -332,6 +334,7 @@ public:
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCCOL nDx, SCROW nDy, SCTAB nDz);
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void    CopyToTable(SCTAB nOldPos, SCTAB nNewPos);
 
     void            SetRefreshHandler( const Link<Timer *, void>& rLink )
                         { aRefreshHandler = rLink; }

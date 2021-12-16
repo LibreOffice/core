@@ -994,6 +994,46 @@ public:
     }
 };
 
+namespace
+{
+OUString lcl_IncrementNumberInNamedRange(const OUString& sOldName)
+{
+    sal_Int32 lastIndex = sOldName.lastIndexOf('_');
+    sal_Int32 nOldNumber = sOldName.copy(lastIndex).toInt32();
+    return sOldName.copy(0, lastIndex + 1) + OUString::number(++nOldNumber);
+}
+}
+
+class CopyToTableFunc
+{
+    ScDBCollection* mpCollection;
+    SCTAB mnOldTab;
+    SCTAB mnNewTab;
+
+public:
+    CopyToTableFunc(ScDBCollection* pCollection, SCTAB nOld, SCTAB nNew)
+        : mpCollection(pCollection)
+        , mnOldTab(nOld)
+        , mnNewTab(nNew)
+    {
+    }
+    void operator()(std::unique_ptr<ScDBData> const& p)
+    {
+        if (p->GetTab() != mnOldTab)
+            return;
+
+        std::unique_ptr<ScDBData> pDataCopy(new ScDBData(*p));
+        pDataCopy->UpdateMoveTab(mnOldTab, mnNewTab);
+        pDataCopy->SetName(lcl_IncrementNumberInNamedRange(pDataCopy->GetName()));
+        pDataCopy->SetUpperName(lcl_IncrementNumberInNamedRange(pDataCopy->GetUpperName()));
+        pDataCopy->SetIndex(0);
+        if (mpCollection->getNamedDBs().insert(std::move(pDataCopy)))
+        {
+            // TODO: Update references?
+        }
+    }
+};
+
 class FindByCursor
 {
     SCCOL mnCol;
@@ -1481,6 +1521,12 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
     UpdateMoveTabFunc func(nOldPos, nNewPos);
     for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
     for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
+}
+
+void ScDBCollection::CopyToTable( SCTAB nOldPos, SCTAB nNewPos )
+{
+    CopyToTableFunc func(this, nOldPos, nNewPos);
+    for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
 }
 
 ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
