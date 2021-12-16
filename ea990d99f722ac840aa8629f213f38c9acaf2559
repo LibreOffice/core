@@ -16,6 +16,131 @@
       "message": "Also see the follow up patch in the relation chain.",
       "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70a5f45c_6daab48f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T08:44:59Z",
+      "side": 1,
+      "message": "I think I would prefer I slightly different approach:\n\nIntroduce \"component snippet\" files that contain arbitrary numbers of \u003cimplementation\u003e elements (either as a raw XML snippet, or, if we want those \"component snippet\" files to be well-formed XML, under some new top-level element like \u003cadditional-components\u003e); add an arbitrary number of such \"component snippet\" files to a ComponentTarget with some new gb_ComponentTarget_add_snippet function; and in gb_ComponentTarget__command instruct the XSLT code to include the \u003cimplementation\u003e elements from the added \"component snippet\" files in the generated component file.  And in svx.component, sw.component, etc., move the conditional \u003cimplementation\u003e elements into such new \"component snippet\" files.\n\nThat would avoid having to keep information about an individual implementation in multiple places (in a component file and a componentimpl file; avoiding questions like \"what shall happen if a mistyped item in a componentimpl file doesn\u0027t match any \u003cimplementation\u003e element in the corresponding component file\" etc.), and it would avoid the magic of wildcard-scanning all $(COMPONENTSOURCE).* files to compute a .filtered file.",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f84b1e6_8309e43a",
+        "filename": "solenv/bin/createcomponent.xslt",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T08:44:59Z",
+      "side": 1,
+      "message": "If you revert \u003chttps://git.libreoffice.org/core/+/65c0887bca2909b2046eb5aa4aaace0cc320c3f2%5E!/\u003e \"Allow for conditional parts of component files\" as part of this change, please revert it completely.  (Alternatively, revert it in a follow-up change.)",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80c0decb_23ecdf77",
+        "filename": "solenv/bin/createcomponent.xslt",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T08:44:59Z",
+      "side": 1,
+      "message": "where is $filtered set?",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60964645_c28169e6",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T08:44:59Z",
+      "side": 1,
+      "message": "is this an unrelated drive-by modification, or is it relevant for this change?",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d0c6551_982f469b",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T08:44:59Z",
+      "side": 1,
+      "message": "is the removal of the additional empty line an unrelated drive-by modification, or is it relevant for this change?",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db7d1fac_e0e47310",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T08:44:59Z",
+      "side": 1,
+      "message": "is this an unrelated drive-by modification, or is it relevant for this change?",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff34bdf_b6bf2b29",
+        "filename": "svx/util/svx.component.breakpad",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T08:44:59Z",
+      "side": 1,
+      "message": "I assume there is a gb_Library_add_componentimpl call missing from svx/Library_svx.mk that would reference this file",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
