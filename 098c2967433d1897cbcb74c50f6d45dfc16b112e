@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eff9d9b_8b3e670a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-16T12:29:40Z",
+      "side": 1,
+      "message": "As I understand it, the problem here was that the message used negative coordinates, and some COOL code choked on that. So at least here no, the fix is just to sanitize the rectangle.",
+      "parentUuid": "8918b8a9_183a86b8",
+      "revId": "098c2967433d1897cbcb74c50f6d45dfc16b112e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c55932a_71761aef",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-16T07:51:15Z",
       "side": 1,
       "message": "Would be great to have documentation here. \"CheckedRectangle\" is very generic and hard to guess what it will check and what it will return.",
+      "revId": "098c2967433d1897cbcb74c50f6d45dfc16b112e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eb616c5_864c58d8",
+        "filename": "desktop/inc/lib/init.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-12-16T12:29:40Z",
+      "side": 1,
+      "message": "Makes sense, I\u0027ll do that in the master commit.",
+      "parentUuid": "6c55932a_71761aef",
       "revId": "098c2967433d1897cbcb74c50f6d45dfc16b112e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
