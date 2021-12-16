@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bd4d1ca_674354cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T07:39:38Z",
+      "side": 1,
+      "message": "\u003e Uploaded patch set 2.\n\n[Accidentally initiated a second cherry-pick to libreoffice-7-2-5, not being aware that Xisco had already done so too.  And seen the fix be successful in a patched Flatpak test build, see the comment at \u003chttps://github.com/flathub/org.libreoffice.LibreOffice/pull/172#issuecomment-995360523\u003e \"Update to LibreOffice 7.2.5\".]",
+      "revId": "5352f67f1d0f4085de68e574eabb29cf4d8d62a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
