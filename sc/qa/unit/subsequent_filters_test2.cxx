@@ -130,6 +130,7 @@ public:
     void testVBAUserFunctionXLSM();
     void testEmbeddedImageXLS();
     void testErrorOnExternalReferences();
+    void testTdf145054();
     void testTdf84762();
     void testTdf44076();
     void testEditEngStrikeThroughXLSX();
@@ -237,6 +238,7 @@ public:
     CPPUNIT_TEST(testVBAUserFunctionXLSM);
     CPPUNIT_TEST(testEmbeddedImageXLS);
     CPPUNIT_TEST(testErrorOnExternalReferences);
+    CPPUNIT_TEST(testTdf145054);
     CPPUNIT_TEST(testTdf84762);
     CPPUNIT_TEST(testTdf44076);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
@@ -1042,6 +1044,22 @@ void ScFiltersTest2::testErrorOnExternalReferences()
                          "Formula changed");
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf145054()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf145054.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Copy sheet
+    rDoc.CopyTab(0, 1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDoc.GetTableCount());
+
+    // Make sure named DB was copied
+    ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByName("__Anonymous_Sheet_DB__1");
+    CPPUNIT_ASSERT(pDBData);
 }
 
 void ScFiltersTest2::testTdf84762()

@@ -995,6 +995,20 @@ public:
     }
 };
 
+OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
+                                         const OUString& sOldName,bool bIsUpperName)
+{
+    sal_Int32 lastIndex = sOldName.lastIndexOf('_');
+    sal_Int32 nOldNumber = OUString(sOldName.subView(lastIndex)).toInt32();
+    OUString sNewName;
+    do
+    {
+        sNewName = sOldName.subView(0, lastIndex + 1) + OUString::number(++nOldNumber);
+    } while ((bIsUpperName ? namedDBs.findByUpperName(sNewName) : namedDBs.findByName(sNewName))
+             != nullptr);
+    return sNewName;
+}
+
 class FindByCursor
 {
     SCCOL mnCol;
@@ -1043,6 +1057,17 @@ public:
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
         return p->GetUpperName() == mrName;
+    }
+};
+
+class FindByName
+{
+    const OUString& mrName;
+public:
+    explicit FindByName(const OUString& rName) : mrName(rName) {}
+    bool operator() (std::unique_ptr<ScDBData> const& p) const
+    {
+        return p->GetName() == mrName;
     }
 };
 
@@ -1150,6 +1175,12 @@ auto ScDBCollection::NamedDBs::findByUpperName2(const OUString& rName) -> iterat
 {
     return find_if(
         m_DBs.begin(), m_DBs.end(), FindByUpperName(rName));
+}
+
+ScDBData* ScDBCollection::NamedDBs::findByName(const OUString& rName)
+{
+    DBsType::iterator itr = find_if(m_DBs.begin(), m_DBs.end(), FindByName(rName));
+    return itr == m_DBs.end() ? nullptr : itr->get();
 }
 
 bool ScDBCollection::NamedDBs::insert(std::unique_ptr<ScDBData> pData)
@@ -1482,6 +1513,22 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
     UpdateMoveTabFunc func(nOldPos, nNewPos);
     for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
     for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
+}
+
+void ScDBCollection::CopyToTable(SCTAB nOldPos, SCTAB nNewPos)
+{
+    for (const auto& rxNamedDB : maNamedDBs)
+    {
+        if (rxNamedDB->GetTab() != nOldPos)
+            return;
+
+        OUString newName
+            = lcl_IncrementNumberInNamedRange(getNamedDBs(), rxNamedDB->GetName(), false);
+        std::unique_ptr<ScDBData> pDataCopy = std::make_unique<ScDBData>(newName, *rxNamedDB);
+        pDataCopy->UpdateMoveTab(nOldPos, nNewPos);
+        pDataCopy->SetIndex(0);
+        getNamedDBs().insert(std::move(pDataCopy));
+    }
 }
 
 ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )

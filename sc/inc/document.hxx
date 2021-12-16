@@ -951,7 +951,7 @@ public:
     SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const OUString& rName,
                                            bool bExternalDocument = false );
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = nullptr );
-    bool                        CopyTab( SCTAB nOldPos, SCTAB nNewPos,
+    SC_DLLPUBLIC bool           CopyTab( SCTAB nOldPos, SCTAB nNewPos,
                                          const ScMarkData* pOnlyMarked = nullptr );
     SC_DLLPUBLIC sal_uLong      TransferTab(ScDocument& rSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
                                             bool bInsertNew = true,
