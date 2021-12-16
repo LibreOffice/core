@@ -33,6 +33,23 @@
       "message": "CI fails at writer/delete_objects_spec.js, resume.",
       "revId": "44cae34433eb17742475fe0aa607749ee2f4629d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0197ab16_3f4714c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-16T08:09:30Z",
+      "side": 1,
+      "message": "Now in calc/repair_document_spec.js, resume.",
+      "revId": "44cae34433eb17742475fe0aa607749ee2f4629d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
