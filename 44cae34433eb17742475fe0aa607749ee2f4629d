@@ -16,6 +16,23 @@
       "message": "I updated the code as you requested, CI failures seems to be unrelated (different every time)",
       "revId": "44cae34433eb17742475fe0aa607749ee2f4629d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f6119db_3f2c187f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-16T07:32:56Z",
+      "side": 1,
+      "message": "CI fails at writer/delete_objects_spec.js, resume.",
+      "revId": "44cae34433eb17742475fe0aa607749ee2f4629d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
