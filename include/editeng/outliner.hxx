@@ -345,6 +345,11 @@ public:
     void SwitchOffBulletsNumbering(
         const bool bAtSelection = false );
 
+    /** enables numbering for the selected paragraphs that are not enabled and ignore all selected
+        paragraphs that already have numbering enabled.
+    */
+    void        EnableBullets();
+
     bool        IsCursorAtWrongSpelledWord();
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel );
     void        ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void>& rCallBack);

@@ -91,6 +91,19 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
 
     if( nResult == RET_OK )
     {
+        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+
+        std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
+
+        if (OutlineView* pOutlineView = dynamic_cast<OutlineView*>(pView))
+        {
+            pOLV = pOutlineView->GetViewByWindow(mpViewShell->GetActiveWindow());
+            aGuard.reset(new OutlineViewModelChangeGuard(*pOutlineView));
+        }
+
+        if( pOLV )
+            pOLV->EnableBullets();
+
         const SfxItemSet pOutputSet( *pDlg->GetOutputItemSet( &aNewAttr ) );
         pView->SetAttributes(pOutputSet, /*bReplaceAll=*/false, /*bSlide*/ pDlg->IsSlideScope(), /*bMaster=*/pDlg->IsApplyToMaster());
     }
