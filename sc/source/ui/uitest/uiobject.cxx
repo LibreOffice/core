@@ -165,7 +165,15 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             sal_Int32 nTab = rStr.toUInt32();
             ScTabView* pTabView = mxGridWindow->getViewData().GetView();
             if (pTabView)
-                pTabView->SetTabNo(nTab);
+            {
+                ScDocument& rDoc = mxGridWindow->getViewData().GetDocument();
+                if( nTab < rDoc.GetTableCount() )
+                    pTabView->SetTabNo(nTab);
+                else
+                {
+                    SAL_WARN("sc.uitest", "incorrect table number");
+                }
+            }
         }
         else if (rParameters.find("OBJECT") != rParameters.end())
         {
