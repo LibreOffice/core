@@ -995,6 +995,53 @@ public:
     }
 };
 
+OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
+                                         const OUString& sOldName,bool bIsUpperName)
+{
+    sal_Int32 lastIndex = sOldName.lastIndexOf('_');
+    sal_Int32 nOldNumber = OUString(sOldName.subView(lastIndex)).toInt32();
+    OUString sNewName;
+    do
+    {
+        sNewName = sOldName.subView(0, lastIndex + 1) + OUString::number(++nOldNumber);
+    } while ((bIsUpperName ? namedDBs.findByUpperName(sNewName) : namedDBs.findByName(sNewName))
+             != nullptr);
+    return sNewName;
+}
+
+class CopyToTableFunc
+{
+    ScDBCollection* mpCollection;
+    SCTAB mnOldTab;
+    SCTAB mnNewTab;
+
+public:
+    CopyToTableFunc(ScDBCollection* pCollection, SCTAB nOld, SCTAB nNew)
+        : mpCollection(pCollection)
+        , mnOldTab(nOld)
+        , mnNewTab(nNew)
+    {
+    }
+    void operator()(std::unique_ptr<ScDBData> const& p)
+    {
+        if (p->GetTab() != mnOldTab)
+            return;
+
+        std::unique_ptr<ScDBData> pDataCopy(new ScDBData(*p));
+        pDataCopy->UpdateMoveTab(mnOldTab, mnNewTab);
+        pDataCopy->SetUpperName(lcl_IncrementNumberInNamedRange(mpCollection->getNamedDBs(),
+                                                                pDataCopy->GetUpperName(), true));
+        pDataCopy->SetName(lcl_IncrementNumberInNamedRange(mpCollection->getNamedDBs(),
+                                                           pDataCopy->GetName(), false));
+
+        pDataCopy->SetIndex(0);
+        if (mpCollection->getNamedDBs().insert(std::move(pDataCopy)))
+        {
+            // TODO: Update references?
+        }
+    }
+};
+
 class FindByCursor
 {
     SCCOL mnCol;
@@ -1043,6 +1090,17 @@ public:
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
         return p->GetUpperName() == mrName;
+    }
+};
+
+class FindByName
+{
+    const OUString& mrName;
+public:
+    explicit FindByName(const OUString& rName) : mrName(rName) {}
+    bool operator() (std::unique_ptr<ScDBData> const& p) const
+    {
+        return p->GetName() == mrName;
     }
 };
 
@@ -1150,6 +1208,12 @@ auto ScDBCollection::NamedDBs::findByUpperName2(const OUString& rName) -> iterat
 {
     return find_if(
         m_DBs.begin(), m_DBs.end(), FindByUpperName(rName));
+}
+
+ScDBData* ScDBCollection::NamedDBs::findByName(const OUString& rName)
+{
+    DBsType::iterator itr = find_if(m_DBs.begin(), m_DBs.end(), FindByName(rName));
+    return itr == m_DBs.end() ? nullptr : itr->get();
 }
 
 bool ScDBCollection::NamedDBs::insert(std::unique_ptr<ScDBData> pData)
@@ -1482,6 +1546,12 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
     UpdateMoveTabFunc func(nOldPos, nNewPos);
     for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
     for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
+}
+
+void ScDBCollection::CopyToTable( SCTAB nOldPos, SCTAB nNewPos )
+{
+    CopyToTableFunc func(this, nOldPos, nNewPos);
+    for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
 }
 
 ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
