@@ -32,7 +32,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <oox/dllapi.h>
-#include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

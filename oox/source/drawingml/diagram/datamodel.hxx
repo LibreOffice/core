@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/helper/helper.hxx>
 #include <oox/token/tokens.hxx>
 #include <svx/DiagramDataInterface.hxx>
 

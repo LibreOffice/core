@@ -22,7 +22,6 @@
 
 #include <editeng/editengdllapi.h>
 #include <svl/itemprop.hxx>
-#include <memory>
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
