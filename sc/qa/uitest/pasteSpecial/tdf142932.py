@@ -29,7 +29,6 @@ class tdf142932(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:Insert") as xDialog:
                 xAfter = xDialog.getChild('after')
                 xAfter.executeAction("CLICK", tuple())
-                pass
 
             self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
 
