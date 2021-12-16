@@ -33,6 +33,23 @@
       "message": "calc/bottom_toolbar_spec.js",
       "revId": "f6c00ba0f2ad5a75f2a2818e7692cc42ee71ede8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb3f5fdc_b1c0ef2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-12-16T12:06:22Z",
+      "side": 1,
+      "message": "integration_tests/mobile/calc/sheet_operation_spec.js",
+      "revId": "f6c00ba0f2ad5a75f2a2818e7692cc42ee71ede8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
