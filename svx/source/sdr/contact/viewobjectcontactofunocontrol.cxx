@@ -551,7 +551,7 @@ namespace sdr::contact {
             @precond
                 We're not disposed.
         */
-        bool    getUnoObject( SdrUnoObj*& _out_rpObject ) const;
+        SdrUnoObj*    getUnoObject() const;
 
         /** ensures that we have an ->XControl
 
@@ -904,18 +904,15 @@ namespace sdr::contact {
     }
 
 
-    bool ViewObjectContactOfUnoControl_Impl::getUnoObject( SdrUnoObj*& _out_rpObject ) const
+    SdrUnoObj* ViewObjectContactOfUnoControl_Impl::getUnoObject() const
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::getUnoObject: already disposed()" );
         if ( impl_isDisposed_nofail() )
-            _out_rpObject = nullptr;
-        else
-        {
-            _out_rpObject = dynamic_cast< SdrUnoObj* >( m_pAntiImpl->GetViewContact().TryToGetSdrObject() );
-            DBG_ASSERT( _out_rpObject || !m_pAntiImpl->GetViewContact().TryToGetSdrObject(),
-                "ViewObjectContactOfUnoControl_Impl::getUnoObject: invalid SdrObject!" );
-        }
-        return ( _out_rpObject != nullptr );
+            return nullptr;
+        auto pRet = dynamic_cast< SdrUnoObj* >( m_pAntiImpl->GetViewContact().TryToGetSdrObject() );
+        DBG_ASSERT( pRet || !m_pAntiImpl->GetViewContact().TryToGetSdrObject(),
+            "ViewObjectContactOfUnoControl_Impl::getUnoObject: invalid SdrObject!" );
+        return pRet;
     }
 
 
@@ -927,8 +924,8 @@ namespace sdr::contact {
 
         try
         {
-            SdrUnoObj* pUnoObject( nullptr );
-            if ( getUnoObject( pUnoObject ) )
+            SdrUnoObj* pUnoObject = getUnoObject();
+            if ( pUnoObject )
             {
                 const tools::Rectangle aRect( pUnoObject->GetLogicRect() );
                 UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, aRect, _rViewTransformation, m_aZoomLevelNormalization );
@@ -1033,8 +1030,8 @@ namespace sdr::contact {
             UnoControlContactHelper::disposeAndClearControl_nothrow( m_aControl );
         }
 
-        SdrUnoObj* pUnoObject( nullptr );
-        if ( !getUnoObject( pUnoObject ) )
+        SdrUnoObj* pUnoObject = getUnoObject();
+        if ( !pUnoObject )
             return false;
 
         ControlHolder aControl;
@@ -1159,8 +1156,8 @@ namespace sdr::contact {
         if ( !impl_getPageView_nothrow( pPageView ) )
             return;
 
-        SdrUnoObj* pUnoObject( nullptr );
-        if ( !getUnoObject( pUnoObject ) )
+        SdrUnoObj* pUnoObject = getUnoObject();
+        if ( !pUnoObject )
             return;
 
         SdrPageViewAccess aPVAccess( *pPageView );
@@ -1273,8 +1270,8 @@ namespace sdr::contact {
 
     bool ViewObjectContactOfUnoControl_Impl::isPrintableControl() const
     {
-        SdrUnoObj* pUnoObject( nullptr );
-        if ( !getUnoObject( pUnoObject ) )
+        SdrUnoObj* pUnoObject = getUnoObject();
+        if ( !pUnoObject )
             return false;
 
         bool bIsPrintable = false;
