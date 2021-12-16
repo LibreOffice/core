@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b7ba1ff_27c5b8d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T07:37:17Z",
+      "side": 1,
+      "message": "Also see the follow up patch in the relation chain.",
+      "revId": "ea990d99f722ac840aa8629f213f38c9acaf2559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
