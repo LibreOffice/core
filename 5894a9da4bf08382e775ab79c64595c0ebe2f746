@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b84414c8_46442077",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T10:25:49Z",
+      "side": 1,
+      "message": "So this tries to detect if the toolchain supports ENDBR instructions, and then always emits them (along with announcing GNU_PROPERTY_X86_FEATURE_1_IBT in .note.gnu.property).  An alternative would be to check whether building is done with -fcf-protection\u003dfull or -fcf-protection\u003dbranch and only then emit the ENDBR instructions and announce GNU_PROPERTY_X86_FEATURE_1_IBT in .note.gnu.property.  And thus, when building with -fcf-protection\u003dfull or -fcf-protection\u003dbranch, cause an error if the toolchain doesn\u0027t support the ENDBR instructions for some reason, instead of silently not emitting them in that case.  Not sure if that distinction is worth it, though...\n\n(I think always announcing GNU_PROPERTY_X86_FEATURE_1_SHSTK in .note.gnu.property of the two affected call.s files is fine, as neither of them appears to contain code that could fail if the shadow stack feature is enabled.)",
+      "revId": "5894a9da4bf08382e775ab79c64595c0ebe2f746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2383b1_c1ec828b",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_intel/call.s",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T10:25:49Z",
+      "side": 1,
+      "message": "I don\u0027t think we need any of the endbr32 in this file, as all of them are only targets of non-indirect JMP instructions (E9 rel32) from the trampolines generated in codeSnippet in bridges/source/cpp_uno/gcc3_linux_intel/cpp2uno.cxx",
+      "revId": "5894a9da4bf08382e775ab79c64595c0ebe2f746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
