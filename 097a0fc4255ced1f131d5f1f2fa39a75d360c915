@@ -88,6 +88,24 @@
       "parentUuid": "e96c6b54_4c4804d6",
       "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dea60996_3dfea067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T09:50:40Z",
+      "side": 1,
+      "message": "[that last comment\u0027s formatting got garbled; lets try again:]\n\nbut my assumption was wrong, my local patch attempt\n\n  diff --git a/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py b/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\n  index 7e219d8d7976..4e07b3eced57 100644\n  --- a/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\n  +++ b/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\n  @@ -92,6 +92,9 @@ class ComplexGroupShapeTest(UITestCase):\n               self.ui_test.wait_until_child_is_available(\u0027metricfield\u0027)\n               xWriterEdit.executeAction(\"TYPE\", mkPropertyValues({\"KEYCODE\": \"TAB\"}))\n   \n  +            xToolkit \u003d self.xContext.ServiceManager.createInstance(\u0027com.sun.star.awt.Toolkit\u0027)\n  +            xToolkit.processEventsToIdle()\n  +\n               # check if it is a textbox\n               self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)\n   \n  @@ -116,6 +119,8 @@ class ComplexGroupShapeTest(UITestCase):\n               xWriterEdit.executeAction(\"TYPE\", mkPropertyValues({\"KEYCODE\": \"TAB\"}))\n               xWriterEdit.executeAction(\"TYPE\", mkPropertyValues({\"KEYCODE\": \"TAB\"}))\n   \n  +            xToolkit.processEventsToIdle()\n  +\n               # check if it is a textbox\n               self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)\n   \n\nstill causes\n\n  ERROR: test_ComplexGroupShape (ComplexGroupShapeTest.ComplexGroupShapeTest)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/sbergman/lo/core/sw/qa/uitest/writer_tests2/ComplexGroupShapeTest.py\", line 125, in test_ComplexGroupShape\n      self.assertEqual(True,document.getCurrentSelection().getByIndex(0).TextBox)\n  AttributeError: TextBox",
+      "parentUuid": "1472663a_387797fe",
+      "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
