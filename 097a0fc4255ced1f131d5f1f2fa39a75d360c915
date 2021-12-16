@@ -16,6 +16,24 @@
       "message": "I can reproduce the failure somewhat reliably locally when I run UITest_writer_tests2 in an ASan+UBSan build when the machine is under heavy load (i.e., when I run that test as part of a parallelizing `make check`).  What appears to help is to stick an\n\n  xToolkit.processEventsToIdle()\n\ninto two strategic places.  I\u0027ll report back once I have robust data.",
       "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80913ede_ac09e089",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T08:50:22Z",
+      "side": 1,
+      "message": "Thank you for the advice! I have replaced the sleeps with that, and simplified the test. However i did not try the Asan+Ubsan build with parallel testing, so i do not know it will pass that or not. (I have windows and Linux is only available on a virtual machine, and the build time can be so long... :( )",
+      "parentUuid": "375a5d46_a53c6156",
+      "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
