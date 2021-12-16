@@ -34,7 +34,6 @@ namespace com::sun::star::uno
 class XInterface;
 }
 
-/** */ //for docpp
 namespace comphelper
 {
 /** This is a copy of cppu::OMultiTypeInterfaceContainerHelper2 in include/cppuhelper/interfacecontainer.h,

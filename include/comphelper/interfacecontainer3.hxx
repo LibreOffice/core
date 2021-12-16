@@ -34,7 +34,6 @@ namespace osl
 class Mutex;
 }
 
-/** */ //for docpp
 namespace comphelper
 {
 template <class ListenerT> class OInterfaceContainerHelper3;

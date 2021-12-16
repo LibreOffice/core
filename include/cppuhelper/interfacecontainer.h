@@ -41,7 +41,6 @@
 
 namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
-/** */ //for docpp
 namespace cppu
 {
 

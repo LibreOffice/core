@@ -31,7 +31,6 @@ namespace com::sun::star::uno
 class XInterface;
 }
 
-/** */ //for docpp
 namespace comphelper
 {
 template <class ListenerT> class OInterfaceContainerHelper4;
