@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <vcl/font.hxx>
 
 namespace com::sun::star::awt { class XDevice; }
@@ -41,14 +41,13 @@ class TOOLKIT_DLLPUBLIC VCLXFont final :
                             css::awt::XFont2,
                             css::lang::XUnoTunnel>
 {
-    ::osl::Mutex    maMutex;
+    std::mutex    maMutex;
     css::uno::Reference< css::awt::XDevice> mxDevice;
     vcl::Font       maFont;
     std::unique_ptr<FontMetric>
                     mpFontMetric;
 
     bool            ImplAssertValidFontMetric();
-    ::osl::Mutex&   GetMutex() { return maMutex; }
 
 public:
                     VCLXFont();
