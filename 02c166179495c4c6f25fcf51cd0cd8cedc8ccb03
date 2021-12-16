@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46366c02_e82735a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-16T08:53:48Z",
+      "side": 1,
+      "message": "There is now https://gerrit.libreoffice.org/c/core/+/126891 and a follow-up, which hopefully implements an final + usable way to handle optional component implementations.\n\nIt enforces a single component file per library, as Stephan insisted, so our original approach doesn\u0027t work anymore. But the conversation is straight forward; maybe a bit tedious. For the header file, just generate it from svx/util/svx.component.crashreport. Then do:\n\n* git show \u003cgit id before this patch\u003e:svx/util/svx.component \u003e svx/util/svx.component\n* mv svx/util/crashreport.component svx/util/svx.component.crashreport\n* sed -i -e \u0027/implementation.*name/!d\u0027 -e \u0027s/.*\"\\(.*\\)\".*$/\\1/\u0027 svx/util/svx.component.crashreport\n* for F in svx/util/*.component.*; do cp header /tmp/newcomp ; sort $F \u003e\u003e /tmp/newcomp; mv /tmp/newcomp $F; done\n* change the optional gb_Library_set_componentfile(s) calls to  gb_Library_add_componentimpl(s),svx,crashreport\n",
+      "revId": "02c166179495c4c6f25fcf51cd0cd8cedc8ccb03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
