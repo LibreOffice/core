@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb0d7a4d_f6d1bda9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-16T10:20:50Z",
+      "side": 1,
+      "message": "crashtesting reports a failure since this commit reproducible with\n\nwget https://bz.apache.org/ooo/attachment.cgi?id\u003d16236 -O ooo31011-1.sxw\n./instdir/program/soffice.bin --headless --convert-to odt ./ooo31011-1.sxw",
+      "revId": "681e10eecf67a1a01bdec2cc9b834e0345e25206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
