@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f463a274_3389781e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T15:30:51Z",
+      "side": 1,
+      "message": "oh, i found it, the index is bad at the test (it points to the custom shape and not to the group one). sorry. i debug it again.",
+      "parentUuid": "d86076e1_d653a1ab",
+      "revId": "19fa4703854ad8ca5e19a9e0a41bf09fa160edc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e70204f0_16c132b1",
         "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
         "patchSetId": 4
