@@ -33,6 +33,24 @@
       "message": "I don\u0027t think we need any of the endbr32 in this file, as all of them are only targets of non-indirect JMP instructions (E9 rel32) from the trampolines generated in codeSnippet in bridges/source/cpp_uno/gcc3_linux_intel/cpp2uno.cxx",
       "revId": "5894a9da4bf08382e775ab79c64595c0ebe2f746",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b09ddadb_d9c60c1a",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_intel/call.s",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T10:46:09Z",
+      "side": 1,
+      "message": "(pending clarification whether my understanding is correct via \u003chttps://sourceware.org/bugzilla/show_bug.cgi?id\u003d28705\u003e \"Clarify that ENDBR64 need only be inserted at indirect branch and call targets\")",
+      "parentUuid": "ef2383b1_c1ec828b",
+      "revId": "5894a9da4bf08382e775ab79c64595c0ebe2f746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
