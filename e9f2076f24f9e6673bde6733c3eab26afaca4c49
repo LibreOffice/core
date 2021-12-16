@@ -211,6 +211,23 @@
       "parentUuid": "45824807_5cbc09ed",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20e46074_8b0ba60f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-16T17:08:21Z",
+      "side": 1,
+      "message": "Thank you Marina for your feedback. Let\u0027s push this then.\nTomaž: if you think there\u0027s something wrong here, don\u0027t hesitate to revert the relevant part.",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
