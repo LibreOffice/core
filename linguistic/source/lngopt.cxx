@@ -195,13 +195,7 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
     comphelper::OInterfaceContainerHelper3<XPropertyChangeListener> *pContainer =
             aPropListeners.getContainer( rEvt.PropertyHandle );
     if (pContainer)
-    {
-        comphelper::OInterfaceIteratorHelper3 aIt( *pContainer );
-        while (aIt.hasMoreElements())
-        {
-            aIt.next()->propertyChange( rEvt );
-        }
-    }
+        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
 }
 
 Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()

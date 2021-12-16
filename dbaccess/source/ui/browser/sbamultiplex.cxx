@@ -49,9 +49,7 @@ void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStat
 {
     m_aLastKnownStatus = e;
     m_aLastKnownStatus.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt( *this );
-    while ( aIt.hasMoreElements() )
-        aIt.next()->statusChanged( m_aLastKnownStatus );
+    notifyEach( &XStatusListener::statusChanged, m_aLastKnownStatus );
 }
 
 // LoadListener
@@ -80,44 +78,34 @@ void SAL_CALL SbaXLoadMultiplexer::loaded(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->loaded(aMulti);
+    notifyEach( &XLoadListener::loaded, aMulti );
 }
 void SAL_CALL SbaXLoadMultiplexer::unloaded(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->unloaded(aMulti);
+    notifyEach( &XLoadListener::unloaded, aMulti );
 }
 
 void SAL_CALL SbaXLoadMultiplexer::unloading(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->unloading(aMulti);
+    notifyEach( &XLoadListener::unloading, aMulti );
 }
 
 void SAL_CALL SbaXLoadMultiplexer::reloading(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->reloading(aMulti);
+    notifyEach( &XLoadListener::reloading, aMulti );
 }
 
 void SAL_CALL SbaXLoadMultiplexer::reloaded(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->reloaded(aMulti);
+    notifyEach( &XLoadListener::reloaded, aMulti );
 }
 
 
@@ -147,27 +135,21 @@ void SAL_CALL SbaXRowSetMultiplexer::cursorMoved(const css::lang::EventObject& e
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->cursorMoved(aMulti);
+    notifyEach( &XRowSetListener::cursorMoved, aMulti );
 }
 
 void SAL_CALL SbaXRowSetMultiplexer::rowChanged(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->rowChanged(aMulti);
+    notifyEach( &XRowSetListener::rowChanged, aMulti );
 }
 
 void SAL_CALL SbaXRowSetMultiplexer::rowSetChanged(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->rowSetChanged(aMulti);
+    notifyEach( &XRowSetListener::rowSetChanged, aMulti );
 }
 
 // css::sdb::XRowSetApproveListener
@@ -251,9 +233,7 @@ void SAL_CALL SbaXSQLErrorMultiplexer::errorOccured(const css::sdb::SQLErrorEven
 {
     css::sdb::SQLErrorEvent aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->errorOccured(aMulti);
+    notifyEach( &XSQLErrorListener::errorOccured, aMulti );
 }
 
 // css::form::XDatabaseParameterListener
@@ -362,9 +342,7 @@ void SAL_CALL SbaXResetMultiplexer::resetted(const css::lang::EventObject& e)
 {
     css::lang::EventObject aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->resetted(aMulti);
+    notifyEach( &XResetListener::resetted, aMulti );
 }
 
 // css::beans::XPropertyChangeListener
@@ -436,9 +414,7 @@ void SbaXPropertyChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelp
 {
     css::beans::PropertyChangeEvent aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(rListeners);
-    while (aIt.hasMoreElements())
-        aIt.next()->propertyChange(aMulti);
+    rListeners.notifyEach( &XPropertyChangeListener::propertyChange, aMulti );
 }
 
 // css::beans::XVetoableChangeListener
@@ -510,9 +486,7 @@ void SbaXVetoableChangeMultiplexer::Notify(::comphelper::OInterfaceContainerHelp
 {
     css::beans::PropertyChangeEvent aMulti(e);
     aMulti.Source = &m_rParent;
-    ::comphelper::OInterfaceIteratorHelper3 aIt(rListeners);
-    while (aIt.hasMoreElements())
-        aIt.next()->vetoableChange(aMulti);
+    rListeners.notifyEach( &XVetoableChangeListener::vetoableChange, aMulti );
 }
 
 // css::beans::XPropertiesChangeListener
@@ -546,9 +520,7 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence<
     for (css::beans::PropertyChangeEvent & rEvent : asNonConstRange(aMulti))
         rEvent.Source = &m_rParent;
 
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
-    while (aIt.hasMoreElements())
-        aIt.next()->propertiesChange(aMulti);
+    notifyEach( &css::beans::XPropertiesChangeListener::propertiesChange, aMulti );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

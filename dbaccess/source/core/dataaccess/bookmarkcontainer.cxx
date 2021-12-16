@@ -97,9 +97,7 @@ void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const An
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sNewLink), Any());
-        OInterfaceIteratorHelper3 aListenerIterator(m_aContainerListeners);
-        while (aListenerIterator.hasMoreElements())
-            aListenerIterator.next()->elementInserted(aEvent);
+        m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
     }
 }
 
@@ -127,9 +125,7 @@ void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName )
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sOldBookmark), Any());
-        OInterfaceIteratorHelper3 aListenerIterator(m_aContainerListeners);
-        while (aListenerIterator.hasMoreElements())
-            aListenerIterator.next()->elementRemoved(aEvent);
+        m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
     }
 }
 
@@ -162,9 +158,7 @@ void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const A
     if (m_aContainerListeners.getLength())
     {
         ContainerEvent aEvent(*this, makeAny(_rName), makeAny(sNewLink), makeAny(sOldLink));
-        OInterfaceIteratorHelper3 aListenerIterator(m_aContainerListeners);
-        while (aListenerIterator.hasMoreElements())
-            aListenerIterator.next()->elementReplaced(aEvent);
+        m_aContainerListeners.notifyEach( &XContainerListener::elementReplaced, aEvent );
     }
 }
 

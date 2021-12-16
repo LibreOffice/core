@@ -160,9 +160,7 @@ static void LaunchModifiedEvent(
         const uno::Reference< uno::XInterface > &rxI )
 {
     lang::EventObject aEvtObj( rxI );
-    comphelper::OInterfaceIteratorHelper3 aIt( rICH );
-    while (aIt.hasMoreElements())
-        aIt.next()->modified( aEvtObj );
+    rICH.notifyEach( &util::XModifyListener::modified, aEvtObj );
 }
 
 /**

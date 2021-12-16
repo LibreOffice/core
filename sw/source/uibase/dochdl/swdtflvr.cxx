@@ -1368,10 +1368,7 @@ SwPasteContext::~SwPasteContext()
 
         // Invoke the listeners.
         uno::Sequence<beans::PropertyValue> aEvent{ aPropertyValue };
-
-        comphelper::OInterfaceIteratorHelper3 it(m_rWrtShell.GetPasteListeners());
-        while (it.hasMoreElements())
-            it.next()->notifyPasteEvent(aEvent);
+        m_rWrtShell.GetPasteListeners().notifyEach( &css::text::XPasteListener::notifyPasteEvent, aEvent );
     }
     catch (const uno::Exception& rException)
     {

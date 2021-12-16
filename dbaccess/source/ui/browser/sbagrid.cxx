@@ -285,9 +285,7 @@ void SbaXGridPeer::NotifyStatusChanged(const css::util::URL& _rUrl, const Refere
 
         if (pIter)
         {
-            ::comphelper::OInterfaceIteratorHelper3 aListIter(*pIter);
-            while (aListIter.hasMoreElements())
-                aListIter.next()->statusChanged(aEvt);
+            pIter->notifyEach( &XStatusListener::statusChanged, aEvt );
         }
     }
 }

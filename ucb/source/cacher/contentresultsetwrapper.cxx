@@ -185,22 +185,14 @@ void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const Property
             m_pPropertyChangeListeners->getContainer( rEvt.PropertyName );
     if( pContainer )
     {
-        OInterfaceIteratorHelper3 aIter( *pContainer );
-        while( aIter.hasMoreElements() )
-        {
-            aIter.next()->propertyChange( rEvt );
-        }
+        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
     }
 
     // Notify listeners interested in all properties.
     pContainer = m_pPropertyChangeListeners->getContainer( OUString() );
     if( pContainer )
     {
-        OInterfaceIteratorHelper3 aIter( *pContainer );
-        while( aIter.hasMoreElements() )
-        {
-            aIter.next()->propertyChange( rEvt );
-        }
+        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
     }
 }
 
@@ -217,22 +209,14 @@ void ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const Property
             m_pVetoableChangeListeners->getContainer( rEvt.PropertyName );
     if( pContainer )
     {
-        OInterfaceIteratorHelper3 aIter( *pContainer );
-        while( aIter.hasMoreElements() )
-        {
-            aIter.next()->vetoableChange( rEvt );
-        }
+        pContainer->notifyEach( &XVetoableChangeListener::vetoableChange, rEvt );
     }
 
     // Notify listeners interested in all properties.
     pContainer = m_pVetoableChangeListeners->getContainer( OUString() );
     if( pContainer )
     {
-        OInterfaceIteratorHelper3 aIter( *pContainer );
-        while( aIter.hasMoreElements() )
-        {
-            aIter.next()->vetoableChange( rEvt );
-        }
+        pContainer->notifyEach( &XVetoableChangeListener::vetoableChange, rEvt );
     }
 }
 

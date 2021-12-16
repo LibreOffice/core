@@ -72,12 +72,7 @@ namespace frm
 
     void OErrorBroadcaster::onError( const css::sdb::SQLErrorEvent& _rError )
     {
-        if ( m_aErrorListeners.getLength() )
-        {
-            ::comphelper::OInterfaceIteratorHelper3 aIter( m_aErrorListeners );
-            while ( aIter.hasMoreElements() )
-                aIter.next()->errorOccured( _rError );
-        }
+        m_aErrorListeners.notifyEach( &XSQLErrorListener::errorOccured, _rError );
     }
 
 
