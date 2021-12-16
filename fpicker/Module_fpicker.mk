@@ -12,6 +12,8 @@ $(eval $(call gb_Module_Module,fpicker))
 
 $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_office \
+    $(if $(filter WNT,$(OS)), \
+        Executable_fpicker \ ) \
 	UIConfig_fps \
 ))
 
