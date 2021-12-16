@@ -34,6 +34,24 @@
       "parentUuid": "62022362_cc691a05",
       "revId": "840f60e74395e9ea178adf5704ab8118adb927ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21ee8e9a_92e961f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T14:02:49Z",
+      "side": 1,
+      "message": "Hi Xisco!\nI think we should merge our knowledge of this problem. I have done all 3 tests in cppunit replacing the py ones. Now only the debug left... so if you have information what is the problem with the GetShellAndSlotImpl() and share it with me, it will so helpful. (Just for joke, all test run properly in my local branch...)\nYou can find the merged tests here: https://gerrit.libreoffice.org/c/core/+/126861",
+      "parentUuid": "6f79e40f_b54d3cf5",
+      "revId": "840f60e74395e9ea178adf5704ab8118adb927ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
