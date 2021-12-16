@@ -5,9 +5,6 @@ This module provides support for emscripten cross build
 ## Status
 
     $ make
-    $ emrun --serve_after_close instdir/program/ui-previewer.html
-
-The `ui-previewer` "binary" will "crash" with memory alignment problems.
 
 You can run the WASM mandelbrot Qt example, if you copy its HTML
 and the qtloader.js from the Qt's example folder after build with:

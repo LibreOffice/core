@@ -32,8 +32,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
         $(if $(DISABLE_GUI),, \
-            $(if $(ENABLE_MACOSX_SANDBOX),, \
-                Executable_ui-previewer) \
             $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
                 Executable_vcldemo \
                 Executable_icontest \
