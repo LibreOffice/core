@@ -985,13 +985,30 @@ public:
 
 class UpdateMoveTabFunc
 {
+    ScDBCollection* mpCollection;
     SCTAB mnOldTab;
     SCTAB mnNewTab;
+    bool mbCopy;
 public:
-    UpdateMoveTabFunc(SCTAB nOld, SCTAB nNew) : mnOldTab(nOld), mnNewTab(nNew) {}
-    void operator() (std::unique_ptr<ScDBData> const& p)
+    UpdateMoveTabFunc(ScDBCollection* pCollection, SCTAB nOld, SCTAB nNew, bool bCopy)
+        : mpCollection(pCollection)
+        , mnOldTab(nOld)
+        , mnNewTab(nNew)
+        , mbCopy(bCopy)
     {
-        p->UpdateMoveTab(mnOldTab, mnNewTab);
+    }
+    void operator()(std::unique_ptr<ScDBData> const& p) {
+        if (mbCopy)
+        {
+            ScDBData* pCopy = new ScDBData(*p);
+            std::unique_ptr<ScDBData> pDataCopy(pCopy);
+            mpCollection->getNamedDBs().insert(std::move(pDataCopy));
+            pDataCopy->UpdateMoveTab(mnOldTab, mnNewTab);
+        }
+        else
+        {
+            p->UpdateMoveTab(mnOldTab, mnNewTab);
+        }
     }
 };
 
@@ -1477,9 +1494,9 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
+void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, bool bCopy )
 {
-    UpdateMoveTabFunc func(nOldPos, nNewPos);
+    UpdateMoveTabFunc func(this, nOldPos, nNewPos, bCopy);
     for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
     for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
 }

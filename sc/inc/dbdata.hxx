@@ -331,7 +331,7 @@ public:
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCCOL nDx, SCROW nDy, SCTAB nDz);
-    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, bool bCopy = false );
 
     void            SetRefreshHandler( const Link<Timer *, void>& rLink )
                         { aRefreshHandler = rLink; }
