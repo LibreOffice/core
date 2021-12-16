@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d86076e1_d653a1ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T15:24:40Z",
+      "side": 1,
+      "message": "the full log exceeds the rules of the comment but the useful part is this of the call stack (that step when the calling has the uno:EnterGroup as parameter and runs to fail):\n\n\u003e \tmergedlo.dll!SfxDispatchController_Impl::dispatch(const com::sun::star::util::URL \u0026 aURL, const com::sun::star::uno::Sequence\u003ccom::sun::star::beans::PropertyValue\u003e \u0026 aArgs, const com::sun::star::uno::Reference\u003ccom::sun::star::frame::XDispatchResultListener\u003e \u0026 rListener) Line 692\tC++\n \tmergedlo.dll!SfxOfficeDispatch::dispatchWithNotification(const com::sun::star::util::URL \u0026 aURL, const com::sun::star::uno::Sequence\u003ccom::sun::star::beans::PropertyValue\u003e \u0026 aArgs, const com::sun::star::uno::Reference\u003ccom::sun::star::frame::XDispatchResultListener\u003e \u0026 rListener) Line 272\tC++\n \tmergedlo.dll!framework::DispatchHelper::executeDispatch(const com::sun::star::uno::Reference\u003ccom::sun::star::frame::XDispatch\u003e \u0026 xDispatch, const com::sun::star::util::URL \u0026 aURL, bool SyncronFlag, const com::sun::star::uno::Sequence\u003ccom::sun::star::beans::PropertyValue\u003e \u0026 lArguments) Line 164\tC++\n \tmergedlo.dll!framework::DispatchHelper::executeDispatch(const com::sun::star::uno::Reference\u003ccom::sun::star::frame::XDispatchProvider\u003e \u0026 xDispatchProvider, const rtl::OUString \u0026 sURL, const rtl::OUString \u0026 sTargetFrameName, long nSearchFlags, const com::sun::star::uno::Sequence\u003ccom::sun::star::beans::PropertyValue\u003e \u0026 lArguments) Line 119\tC++\n \tunotest.dll!unotest::MacrosTest::dispatchCommand(const com::sun::star::uno::Reference\u003ccom::sun::star::lang::XComponent\u003e \u0026 xComponent, const rtl::OUString \u0026 rCommand, const com::sun::star::uno::Sequence\u003ccom::sun::star::beans::PropertyValue\u003e \u0026 rPropertyValues) Line 88\tC++\n\ttest_sw_uiwriter4.dll!SwUiWriterTest4::testComplexGroupShapeGrouping() Line 4029\tC++\n \t[External Code]\t\n \ttest_sw_uiwriter4.dll!CppUnit::TestCaller\u003cSwUiWriterTest4\u003e::runTest() Line 176\tC++\n \tcppunit_dll.dll!CppUnit::TestCaseMethodFunctor::operator()() Line 33\tC++\n \tvclbootstrapprotector.dll!`anonymous namespace\u0027::Protector::protect(const CppUnit::Functor \u0026 functor, const CppUnit::ProtectorContext \u0026 __formal) Line 46\tC++\n \tunobootstrapprotector.dll!`anonymous namespace\u0027::Prot::protect(const CppUnit::Functor \u0026 functor, const CppUnit::ProtectorContext \u0026 __formal) Line 79\tC++\n \tunoexceptionprotector.dll!`anonymous namespace\u0027::Prot::protect(const CppUnit::Functor \u0026 functor, const CppUnit::ProtectorContext \u0026 context) Line 62\tC++\n \tcppunit_dll.dll!CppUnit::DefaultProtector::protect(const CppUnit::Functor \u0026 functor, const CppUnit::ProtectorContext \u0026 context) Line 15\tC++\n \tcppunit_dll.dll!CppUnit::ProtectorChain::protect(const CppUnit::Functor \u0026 functor, const CppUnit::ProtectorContext \u0026 context) Line 86\tC++\n \tcppunit_dll.dll!CppUnit::TestResult::protect(const CppUnit::Functor \u0026 functor, CppUnit::Test * test, const std::string \u0026 shortDescription) Line 182\tC++\n \tcppunit_dll.dll!CppUnit::TestCase::run(CppUnit::TestResult * result) Line 91\tC++\n \tcppunit_dll.dll!CppUnit::TestResult::runTest(CppUnit::Test * test) Line 150\tC++\n \tcppunit_dll.dll!CppUnit::TestRunner::run(CppUnit::TestResult \u0026 controller, const std::string \u0026 testPath) Line 96\tC++\n \tcppunittester.exe!`anonymous namespace\u0027::ProtectedFixtureFunctor::run() Line 329\tC++\n \tcppunittester.exe!main2() Line 478\tC++\n \tcppunittester.exe!sal_main() Line 614\tC++\n \tcppunittester.exe!main(int argc, char * * argv) Line 609\tC++\n \t[External Code]",
+      "parentUuid": "18bce4df_e6fc71a8",
+      "revId": "19fa4703854ad8ca5e19a9e0a41bf09fa160edc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e70204f0_16c132b1",
         "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
         "patchSetId": 4
