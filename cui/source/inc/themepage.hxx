@@ -15,6 +15,8 @@
 
 #include <memory>
 
+class ColorListBox;
+
 /// Tab page for themes
 class SvxThemePage : public SfxTabPage
 {
@@ -22,6 +24,18 @@ class SvxThemePage : public SfxTabPage
 
     std::unique_ptr<weld::Entry> m_xThemeName;
     std::unique_ptr<weld::Entry> m_xColorSetName;
+    std::unique_ptr<ColorListBox> m_xDk1;
+    std::unique_ptr<ColorListBox> m_xLt1;
+    std::unique_ptr<ColorListBox> m_xDk2;
+    std::unique_ptr<ColorListBox> m_xLt2;
+    std::unique_ptr<ColorListBox> m_xAccent1;
+    std::unique_ptr<ColorListBox> m_xAccent2;
+    std::unique_ptr<ColorListBox> m_xAccent3;
+    std::unique_ptr<ColorListBox> m_xAccent4;
+    std::unique_ptr<ColorListBox> m_xAccent5;
+    std::unique_ptr<ColorListBox> m_xAccent6;
+    std::unique_ptr<ColorListBox> m_xHlink;
+    std::unique_ptr<ColorListBox> m_xFolHlink;
 
 public:
     SvxThemePage(weld::Container* pPage, weld::DialogController* pController,
