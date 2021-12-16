@@ -18,6 +18,11 @@ class xmlSource(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc") as calc_doc:
 
+            # Create a new tab
+            with self.ui_test.execute_dialog_through_command(".uno:Insert") as xDialog:
+                xAfter = xDialog.getChild('after')
+                xAfter.executeAction("CLICK", tuple())
+
             with self.ui_test.execute_modeless_dialog_through_command(".uno:ManageXMLSource") as xDialog:
 
                 xSource = xDialog.getChild("selectsource")
@@ -37,16 +42,21 @@ class xmlSource(UITestCase):
                 self.assertEqual("11", get_state_as_dict(xTree)["SelectionCount"])
 
                 xEdit = xDialog.getChild("edit")
-                xEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "$Sheet1.$A$1"}))
+                xEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "$A$1"}))
+
+            # tdf#126565: Without the fix in place, this test would have failed with
+            # AssertionError: '' != 'name'
+            for i in range(8):
+                self.assertEqual("", get_cell_by_position(calc_doc, 0, i, 0).getString())
 
             # Check the headers
-            self.assertEqual("name", get_cell_by_position(calc_doc, 0, 0, 0).getString())
-            self.assertEqual("translated-address", get_cell_by_position(calc_doc, 0, 1, 0).getString())
-            self.assertEqual("to", get_cell_by_position(calc_doc, 0, 2, 0).getString())
-            self.assertEqual("from", get_cell_by_position(calc_doc, 0, 3, 0).getString())
-            self.assertEqual("source", get_cell_by_position(calc_doc, 0, 4, 0).getString())
-            self.assertEqual("destination", get_cell_by_position(calc_doc, 0, 5, 0).getString())
-            self.assertEqual("service", get_cell_by_position(calc_doc, 0, 6, 0).getString())
-            self.assertEqual("disabled", get_cell_by_position(calc_doc, 0, 7, 0).getString())
+            self.assertEqual("name", get_cell_by_position(calc_doc, 1, 0, 0).getString())
+            self.assertEqual("translated-address", get_cell_by_position(calc_doc, 1, 1, 0).getString())
+            self.assertEqual("to", get_cell_by_position(calc_doc, 1, 2, 0).getString())
+            self.assertEqual("from", get_cell_by_position(calc_doc, 1, 3, 0).getString())
+            self.assertEqual("source", get_cell_by_position(calc_doc, 1, 4, 0).getString())
+            self.assertEqual("destination", get_cell_by_position(calc_doc, 1, 5, 0).getString())
+            self.assertEqual("service", get_cell_by_position(calc_doc, 1, 6, 0).getString())
+            self.assertEqual("disabled", get_cell_by_position(calc_doc, 1, 7, 0).getString())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
