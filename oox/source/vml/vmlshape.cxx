@@ -47,6 +47,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
 #include <sal/log.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/graphichelper.hxx>
@@ -990,6 +991,12 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
                 aGraphicCrop.Top = lclConvertCrop(maTypeModel.moCropTop.get(), aOriginalSize.Height);
 
             aPropSet.setProperty(PROP_GraphicCrop, aGraphicCrop);
+        }
+
+        if (maTypeModel.mnGain == -70 && maTypeModel.mnBlacklevel == 70)
+        {
+            // Map MSO 'washout' to our watermark colormode.
+            aPropSet.setProperty(PROP_GraphicColorMode, uno::makeAny(drawing::ColorMode_WATERMARK));
         }
     }
     return xShape;
