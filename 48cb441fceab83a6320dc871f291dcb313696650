@@ -16,6 +16,24 @@
       "message": "It seems this OPENLIST was not used in other ui tests before, and hopefully it\u0027s what can be used in any dialog that wants to open a color picker popup. Should I document this somewhere?\n\nA thanks for your hint: getFloatWindow() combined with Caolan\u0027s hint about calc autofilter tests allowed me to cover this with a test. :-)",
       "revId": "48cb441fceab83a6320dc871f291dcb313696650",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92e6451e_0ae9755b",
+        "filename": "cui/qa/uitest/tabpages/themepage.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-16T16:00:14Z",
+      "side": 1,
+      "message": "Nice. We have some examples in https://wiki.documentfoundation.org/Development/UITests but not every action is mentioned there ( e.g OPENFROMLIST ) so up to you whether you want to add it",
+      "parentUuid": "8629ba3a_2609b77d",
+      "revId": "48cb441fceab83a6320dc871f291dcb313696650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
