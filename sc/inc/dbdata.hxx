@@ -256,6 +256,7 @@ public:
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByUpperName(const OUString& rName);
         iterator findByUpperName2(const OUString& rName);
+        ScDBData* findByName(const OUString& rName);
 
         /** Takes ownership of p and attempts to insert it into the collection.
             Deletes p if it could not be inserted, i.e. duplicate name.
@@ -333,6 +334,7 @@ public:
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCCOL nDx, SCROW nDy, SCTAB nDz);
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void    CopyToTable(SCTAB nOldPos, SCTAB nNewPos);
 
     void            SetRefreshHandler( const Link<Timer *, void>& rLink )
                         { aRefreshHandler = rLink; }
