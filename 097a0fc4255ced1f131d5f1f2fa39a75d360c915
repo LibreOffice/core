@@ -52,6 +52,24 @@
       "parentUuid": "80913ede_ac09e089",
       "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e96c6b54_4c4804d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T09:06:03Z",
+      "side": 1,
+      "message": "oh i see. okay i\u0027ll wait for that.",
+      "parentUuid": "2741bbc5_978da1ab",
+      "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
