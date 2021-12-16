@@ -193,6 +193,24 @@
       "message": "hello Julien,\nthanks for adding me here.\n\nunfortunately I don\u0027t have access anymore to the hardware with that intel card that broke with LibO and windows 8.\n\nwhen I made that change it was needed but I need to admit that probably, the risk to still break something is really low and a cleaning is beneficial.",
       "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e58d020e_fefcfee3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-12-16T07:11:11Z",
+      "side": 1,
+      "message": "I corrected it to: under share\\opengl in LibreOffice\u0027s installation directory",
+      "parentUuid": "45824807_5cbc09ed",
+      "revId": "e9f2076f24f9e6673bde6733c3eab26afaca4c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
