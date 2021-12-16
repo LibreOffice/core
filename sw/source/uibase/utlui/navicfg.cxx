@@ -51,7 +51,8 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
         OUString("CommentTracking"),
         OUString("DrawingObjectTracking"),
         OUString("FieldTracking"),
-        OUString("FootnoteTracking")};
+        OUString("FootnoteTracking"),
+        OUString("NavigateOnSelect")};
 }
 
 SwNavigationConfig::SwNavigationConfig() :
@@ -76,7 +77,14 @@ SwNavigationConfig::SwNavigationConfig() :
     m_bIsCommentTracking(true),
     m_bIsDrawingObjectTracking(true),
     m_bIsFieldTracking(true),
-    m_bIsFootnoteTracking(true)
+    m_bIsFootnoteTracking(true),
+    m_bIsNavigateOnSelect(false)
+{
+    Load();
+    EnableNotification(GetPropertyNames());
+}
+
+void SwNavigationConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -134,6 +142,7 @@ SwNavigationConfig::SwNavigationConfig() :
                 case 18: m_bIsDrawingObjectTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 19: m_bIsFieldTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 20: m_bIsFootnoteTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 21: m_bIsNavigateOnSelect = *o3tl::doAccess<bool>(pValues[nProp]); break;
             }
         }
     }
@@ -174,11 +183,15 @@ void SwNavigationConfig::ImplCommit()
             case 18: pValues[nProp] <<= m_bIsDrawingObjectTracking; break;
             case 19: pValues[nProp] <<= m_bIsFieldTracking; break;
             case 20: pValues[nProp] <<= m_bIsFootnoteTracking; break;
+            case 21: pValues[nProp] <<= m_bIsNavigateOnSelect; break;
         }
     }
     PutProperties(aNames, aValues);
 }
 
-void SwNavigationConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwNavigationConfig::Notify( const css::uno::Sequence< OUString >& )
+{
+    Load();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

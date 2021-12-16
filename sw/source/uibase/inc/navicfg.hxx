@@ -47,6 +47,7 @@ class SwNavigationConfig final : public utl::ConfigItem
     bool           m_bIsDrawingObjectTracking;
     bool           m_bIsFieldTracking;
     bool           m_bIsFootnoteTracking;
+    bool           m_bIsNavigateOnSelect;
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
@@ -56,6 +57,7 @@ public:
     SwNavigationConfig();
     virtual ~SwNavigationConfig() override;
 
+    void Load();
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     ContentTypeId GetRootType()const {return m_nRootType;}
@@ -237,6 +239,8 @@ public:
                             m_bIsFootnoteTracking = bSet;
                         }
                     }
+
+    bool    IsNavigateOnSelect() const {return m_bIsNavigateOnSelect;}
 };
 
 #endif

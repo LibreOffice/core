@@ -4840,6 +4840,11 @@ void SwContentTree::ShowActualView()
 
 IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
 {
+    if (m_pConfig->IsNavigateOnSelect())
+    {
+        ContentDoubleClickHdl(*m_xTreeView);
+        grab_focus();
+    }
     Select();
 }
 
