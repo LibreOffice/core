@@ -210,7 +210,9 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             rPopupMenu->insertItem(sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear(), 0, -1);
 
             if ( bIsIconsAllowed ) {
-                BitmapEx aThumbnail(SvFileInformationManager::GetImageId(aURL, false));
+                // tdf#146219: don't use SvFileInformationManager::GetImageId,
+                // which needs to access the URL to detect if it's a directory
+                BitmapEx aThumbnail(SvFileInformationManager::GetFileImageId(aURL));
                 rPopupMenu->setItemImage(sal_uInt16(i + 1), Graphic(aThumbnail).GetXGraphic(), false);
             }
 
