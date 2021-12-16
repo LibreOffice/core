@@ -1219,6 +1219,9 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
                         !aBoxItem->GetLeft() && !aBoxItem->GetRight())
                     {
                         aBorderLine.SetColor( rNewColor );
+                        aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
+                        aBorderLine.SetWidth(SvxBorderLineWidth::Hairline);
+
                         aBoxItem->SetLine(&aBorderLine, SvxBoxItemLine::TOP);
                         aBoxItem->SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
                         aBoxItem->SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
