@@ -18,6 +18,7 @@
  */
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 #include <formula/FormulaCompiler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/token.hxx>

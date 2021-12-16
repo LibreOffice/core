@@ -10,8 +10,6 @@
 #ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
 
-#include <stddef.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif

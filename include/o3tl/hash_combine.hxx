@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include <cstddef>
+#include <functional>
+#include <type_traits>
+
 namespace o3tl
 {
 template <typename T, typename N>

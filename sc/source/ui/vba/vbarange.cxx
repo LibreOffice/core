@@ -23,6 +23,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>

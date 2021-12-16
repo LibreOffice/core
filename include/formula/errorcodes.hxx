@@ -20,10 +20,10 @@
 #ifndef INCLUDED_FORMULA_ERRORCODES_HXX
 #define INCLUDED_FORMULA_ERRORCODES_HXX
 
-#include <rtl/math.hxx>
 #include <sal/mathconf.h>
 #include <sal/types.h>
 
+#include <cmath>
 #include <limits>
 
 // Store as 16-bits, since error values are stored in tokens and formula results,

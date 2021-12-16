@@ -23,7 +23,6 @@
 #include <osl/interlck.h>
 
 #include <optional>
-#include <utility>
 #include <cstddef>
 
 namespace o3tl

@@ -22,7 +22,6 @@
 
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
-#include <memory>
 #include <xmloff/xmlcnimp.hxx>
 
 

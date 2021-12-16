@@ -42,6 +42,7 @@
 #include <svx/msdffdef.hxx>
 #include <vcl/checksum.hxx>
 #include <tools/gen.hxx>
+#include <tools/color.hxx>
 #include <vcl/mapmod.hxx>
 
 class Graphic;

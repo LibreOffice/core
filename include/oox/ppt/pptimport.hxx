@@ -31,7 +31,6 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/ppt/slidepersist.hxx>
-#include <oox/ppt/pptshape.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
