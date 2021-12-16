@@ -51,6 +51,24 @@
       "parentUuid": "ef2383b1_c1ec828b",
       "revId": "5894a9da4bf08382e775ab79c64595c0ebe2f746",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "843cb269_6812bfc6",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_intel/call.s",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-12-16T11:27:59Z",
+      "side": 1,
+      "message": "I see intel has \"The ENDBR32 and ENDBR64 (collectively ENDBRANCH) are two new instructions that are used to mark valid indirect CALL/JMP target locations in the program.\" which is a bit different from the annobin \"Any location in the assembler where a branch or function call can land must now have an ENDBR64 instruction as the first instruction executed\"",
+      "parentUuid": "b09ddadb_d9c60c1a",
+      "revId": "5894a9da4bf08382e775ab79c64595c0ebe2f746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
