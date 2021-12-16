@@ -106,6 +106,24 @@
       "parentUuid": "1472663a_387797fe",
       "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75baba3a_ab1ab635",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T09:59:27Z",
+      "side": 1,
+      "message": "well, i think one step left for me, debugging the above mentioned function (namely GetSlotAndShell_Impl() )and that might lead me to nearest the problem, and reveal what it depends on to give results randomly. I hope that will give useful results for us. :)",
+      "parentUuid": "dea60996_3dfea067",
+      "revId": "097a0fc4255ced1f131d5f1f2fa39a75d360c915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
