@@ -188,7 +188,7 @@ public:
     /// Calls the method given by pFunc with every textboxes of the group given by pFormat.
     static void synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
                                                 SwFrameFormat* pFormat, SdrObject* pObj);
-    /// Collect all textboxes of the group given by the pGoupObj Parameter. Returns with a
+    /// Collect all textboxes of the group given by the pGroupObj Parameter. Returns with a
     /// vector filled with the textboxes.
     static std::vector<SwFrameFormat*> CollectTextBoxes(SdrObject* pGroupObject,
                                                         SwFrameFormat* pFormat);

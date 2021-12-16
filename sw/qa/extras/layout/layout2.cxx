@@ -1562,7 +1562,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTextBoxChangeViaUNO)
     CPPUNIT_ASSERT(createSwDoc(DATA_DIRECTORY, "TextBoxFrame.odt"));
     // this file has a shape and a frame inside. Try to set up
     // the frame for the shape as textbox. Before this was not
-    // implemented. This will be necesary for proper WPG import.
+    // implemented. This will be necessary for proper WPG import.
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be a shape and a frame!", 2, getShapes());
 

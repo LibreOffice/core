@@ -1315,7 +1315,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
         if(pWordline)
             bWord = pWordline->GetValue();
         else
-            SAL_WARN("sw.ww8", "m_rWW8Export has an RES_CHRATR_WORDLINEMODE item, but its of the wrong type.");
+            SAL_WARN("sw.ww8", "m_rWW8Export has an RES_CHRATR_WORDLINEMODE item, but it's of the wrong type.");
     }
 
     // WW95 - parameters:   0 = none,   1 = single, 2 = by Word,
@@ -5299,7 +5299,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
                 nCurrentLeft = pLR->GetTextLeft();
             else
                 // FIXME: This fails in sw.ww8export/testCommentExport::Load_Verify_Reload_Verify
-                SAL_WARN("sw.ww8", "m_rWW8Export has an RES_LR_SPACE item, but its of the wrong type.");
+                SAL_WARN("sw.ww8", "m_rWW8Export has an RES_LR_SPACE item, but it's of the wrong type.");
         }
     }
 

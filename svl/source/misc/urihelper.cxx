@@ -347,7 +347,7 @@ bool isBoundary2(CharClass const & rCharClass, OUString const & rStr,
     }
 }
 
-// tdf#145381 Added MatchingBracketDepth counter o detect maching closing
+// tdf#145381 Added MatchingBracketDepth counter to detect matching closing
 // brackets that are part of the uri
 bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 sal_Int32 * pPos, sal_Int32 * pEnd,
