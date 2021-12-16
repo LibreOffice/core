@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+esty/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -3337,10 +3337,23 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
     // any of the lines visible?
     if( !((eItemState != SfxItemState::DEFAULT) || (eTLBRState != SfxItemState::DEFAULT) || (eBLTRState != SfxItemState::DEFAULT)) )
-        return;
+    {
+        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aOldSet(*rDoc.GetPool());
+        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aNewSet(*rDoc.GetPool());
+        const SvxBorderLine aHairlineBorder(&pLine->GetColor(), SvxBorderLineWidth::ExtraThick,
+                                            pLine->GetBorderLineStyle());
+        SvxBoxItem aBoxItem(ATTR_BORDER);
+        aBoxItem.SetLine(&aHairlineBorder, SvxBoxItemLine::TOP);
+        aBoxItem.SetLine(&aHairlineBorder, SvxBoxItemLine::BOTTOM);
+        aBoxItem.SetLine(&aHairlineBorder, SvxBoxItemLine::LEFT);
+        aBoxItem.SetLine(&aHairlineBorder, SvxBoxItemLine::RIGHT);
 
+//        SetSelectionFrameLines( &aHairlineBorder, false );
+        aNewSet.Put(aBoxItem);
+        ApplyAttributes(&aNewSet, &aOldSet ;
+    }
     // none of the lines don't care?
-    if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
+    else if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
     {
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aOldSet( *rDoc.GetPool() );
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aNewSet( *rDoc.GetPool() );
