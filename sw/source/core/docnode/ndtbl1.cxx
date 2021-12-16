@@ -928,6 +928,8 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
         GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
     }
 
+    const SvxBorderLine aHairlineBorder(pColor, SvxBorderLineWidth::Hairline);
+
     for( auto &rU : aUnions )
     {
         SwSelUnion *pUnion = &rU;
@@ -946,24 +948,32 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             SwFrameFormat *pFormat = pCell->GetFormat();
             std::unique_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
 
+            SvxBorderLine* pTop = const_cast<SvxBorderLine*>(aBox->GetTop());
+            SvxBorderLine* pBot = const_cast<SvxBorderLine*>(aBox->GetBottom());
+            SvxBorderLine* pLeft = const_cast<SvxBorderLine*>(aBox->GetLeft());
+            SvxBorderLine* pRight = const_cast<SvxBorderLine*>(aBox->GetRight());
+
             if ( !pBorderLine && bSetLine )
             {
                 aBox.reset(::GetDfltAttr(RES_BOX)->Clone());
             }
+            else if (pColor && !pBorderLine && !pTop && !pBot && !pLeft && !pRight)
+            {
+                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::TOP);
+                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::BOTTOM);
+                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::LEFT);
+                aBox->SetLine(&aHairlineBorder, SvxBoxItemLine::RIGHT);
+            }
             else
             {
-                if ( aBox->GetTop() )
-                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetTop()),
-                                    pColor, pBorderLine );
-                if ( aBox->GetBottom() )
-                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetBottom()),
-                                    pColor, pBorderLine );
-                if ( aBox->GetLeft() )
-                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetLeft()),
-                                    pColor, pBorderLine );
-                if ( aBox->GetRight() )
-                    ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetRight()),
-                                    pColor, pBorderLine );
+                if (pTop)
+                    ::lcl_SetLineStyle(pTop, pColor, pBorderLine);
+                if (pBot)
+                    ::lcl_SetLineStyle(pBot, pColor, pBorderLine);
+                if (pLeft)
+                    ::lcl_SetLineStyle(pLeft, pColor, pBorderLine);
+                if (pRight)
+                    ::lcl_SetLineStyle(pRight, pColor, pBorderLine);
             }
             pFormat->SetFormatAttr( *aBox );
         }
