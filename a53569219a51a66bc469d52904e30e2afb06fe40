@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02287cab_2a56e390",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-16T17:05:42Z",
+      "side": 1,
+      "message": "See inline comment",
+      "revId": "a53569219a51a66bc469d52904e30e2afb06fe40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21faa311_6b22a910",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2384,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-16T17:05:42Z",
+      "side": 1,
+      "message": "Rather \"remember... it if the situation should happen\"",
+      "range": {
+        "startLine": 2384,
+        "startChar": 45,
+        "endLine": 2384,
+        "endChar": 108
+      },
+      "revId": "a53569219a51a66bc469d52904e30e2afb06fe40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7e874db_62e1d164",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-16T17:05:42Z",
+      "side": 1,
+      "message": "\"to detect\" I suppose?",
+      "range": {
+        "startLine": 350,
+        "startChar": 49,
+        "endLine": 350,
+        "endChar": 57
+      },
+      "revId": "a53569219a51a66bc469d52904e30e2afb06fe40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
