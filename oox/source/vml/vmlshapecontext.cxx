@@ -385,6 +385,34 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.moCropLeft = rAttribs.getString(XML_cropleft);
             mrTypeModel.moCropRight = rAttribs.getString(XML_cropright);
             mrTypeModel.moCropTop = rAttribs.getString(XML_croptop);
+
+            // Gain / contrast.
+            OptValue<OUString> oGain = rAttribs.getString(XML_gain);
+            sal_Int32 nGain = 0x10000;
+            if (oGain.has() && oGain.get().endsWith("f"))
+            {
+                nGain = oGain.get().toInt32();
+            }
+            if (nGain < 0x10000)
+            {
+                nGain *= 101; // 100 + 1 to round
+                nGain /= 0x10000;
+                nGain -= 100;
+            }
+            mrTypeModel.mnGain = nGain;
+
+            // Blacklevel / brightness.
+            OptValue<OUString> oBlacklevel = rAttribs.getString(XML_blacklevel);
+            sal_Int16 nBlacklevel = 0;
+            if (oBlacklevel.has() && oBlacklevel.get().endsWith("f"))
+            {
+                nBlacklevel = oBlacklevel.get().toInt32();
+            }
+            if (nBlacklevel != 0)
+            {
+                nBlacklevel /= 327;
+            }
+            mrTypeModel.mnBlacklevel = nBlacklevel;
         }
         break;
         case NMSP_vmlWord | XML_wrap:

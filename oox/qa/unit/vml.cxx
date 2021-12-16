@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
 
 using namespace ::com::sun::star;
 
@@ -143,6 +144,27 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
     // - Actual  : 0
     // i.e. line style was NONE, not SOLID.
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, eLineStyle);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWatermark)
+{
+    // Given a document with a picture watermark, and the "washout" checkbox is ticked on the Word
+    // UI:
+    // When loading that document:
+    load(u"watermark.docx");
+
+    // Then make sure the watermark effect is not lost on import:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    drawing::ColorMode eMode{};
+    xShape->getPropertyValue("GraphicColorMode") >>= eMode;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 0
+    // i.e. the color mode was STANDARD, not WATERMARK.
+    CPPUNIT_ASSERT_EQUAL(drawing::ColorMode_WATERMARK, eMode);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
