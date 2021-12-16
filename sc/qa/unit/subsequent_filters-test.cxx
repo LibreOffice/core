@@ -123,6 +123,7 @@ public:
     void testMatrixODS();
     void testMatrixXLS();
     void testDoubleThinBorder();
+    void testTdf145054();
     void testBorderODS();
     void testBordersOoo33();
     void testBugFixesODS();
@@ -276,6 +277,7 @@ public:
     CPPUNIT_TEST(testMatrixODS);
     CPPUNIT_TEST(testMatrixXLS);
     CPPUNIT_TEST(testDoubleThinBorder);
+    CPPUNIT_TEST(testTdf145054);
     CPPUNIT_TEST(testBorderODS);
     CPPUNIT_TEST(testBordersOoo33);
     CPPUNIT_TEST(testBugFixesODS);
@@ -972,6 +974,19 @@ void ScFiltersTest::testDoubleThinBorder()
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::DOUBLE_THIN, pRight->GetBorderLineStyle() );
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf145054()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf145054.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    // Copy sheet
+    rDoc.CopyTab(0, 1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDoc.GetTableCount());
+    // Make sure named DB was copied
+    ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByName("__Anonymous_Sheet_DB__1");
+    CPPUNIT_ASSERT(pDBData);
 }
 
 void ScFiltersTest::testBorderODS()
