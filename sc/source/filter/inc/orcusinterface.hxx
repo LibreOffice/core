@@ -355,22 +355,14 @@ private:
 
     struct font
     {
-        OUString maName;
-        double mnSize;
-        Color maColor;
-        bool mbBold;
-        bool mbItalic;
-
-        bool mbHasFontAttr;
-        bool mbHasUnderlineAttr;
-        bool mbHasStrikeout;
-
-        FontLineStyle meUnderline;
-        Color maUnderlineColor;
-
-        FontStrikeout meStrikeout;
-
-        font();
+        std::optional<OUString> maName;
+        std::optional<double> mnSize;
+        std::optional<Color> maColor;
+        std::optional<bool> mbBold;
+        std::optional<bool> mbItalic;
+        std::optional<FontLineStyle> meUnderline;
+        std::optional<Color> maUnderlineColor;
+        std::optional<FontStrikeout> meStrikeout;
 
         void applyToItemSet(SfxItemSet& rSet) const;
     };
@@ -380,13 +372,9 @@ private:
 
     struct fill
     {
-        orcus::spreadsheet::fill_pattern_t mePattern;
-        Color maFgColor;
-        Color maBgColor;
-
-        bool mbHasFillAttr;
-
-        fill();
+        std::optional<orcus::spreadsheet::fill_pattern_t> mePattern;
+        std::optional<Color> maFgColor;
+        std::optional<Color> maBgColor; // currently not used.
 
         void applyToItemSet(SfxItemSet& rSet) const;
     };
