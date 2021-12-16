@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18bce4df_e6fc71a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-12-16T15:19:46Z",
+      "side": 1,
+      "message": "maybe there is the problem:\n\nthe \".uno:EnterGroup\" causes the problem at me locally, it runs to \nSAL_INFO(\"sfx.control\", \"MacroPlayer: Unknown slot dispatched!\"); \n(https://opengrok.libreoffice.org/xref/core/sfx2/source/control/unoctitm.cxx?r\u003d962c9cb5#692). \nAnd, if entering fails the selection might be unreliable, i think...\nThe only question is: Why unknown that command?\n\nI created a detailed running log with\n make CppunitTest_sw_uiwriter4 CPPUNITTRACE\u003dTRUE CPPUNIT_TEST_NAME\u003d\"testComplexGroupShapeGrouping\":\n\nI used three breakpoints:\n1) core/sw/source/core/doc/textboxhelper.cxx: line 64\n2) core/sfx2/source/control/unoctitm.cxx: line 692\n3) In the test at the first textbox dispatch call (line 4043)\n\t",
+      "revId": "19fa4703854ad8ca5e19a9e0a41bf09fa160edc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e70204f0_16c132b1",
         "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
         "patchSetId": 4
