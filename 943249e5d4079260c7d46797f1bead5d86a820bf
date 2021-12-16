@@ -16,6 +16,24 @@
       "message": "I see that the arg used for the \"new\" guint32 wait_for_connected_seconds arg for e_book_client_connect_direct_sync is 10 seconds. Was there any particular reason for that, it seems reasonable, just wondering if there was a recommendation somewhere or knowledge that was the timeout of the old function without the argument.",
       "revId": "943249e5d4079260c7d46797f1bead5d86a820bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "749fb605_5ea48151",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-16T12:32:10Z",
+      "side": 1,
+      "message": "First thank you for your review. About the delay, I didn’t find any recommendation, just picked 10 as a reasonable max value to wait. Perhaps it should be configurable but I don’t know how to do this.",
+      "parentUuid": "d548e2a7_41511245",
+      "revId": "943249e5d4079260c7d46797f1bead5d86a820bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
