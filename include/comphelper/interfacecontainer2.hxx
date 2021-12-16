@@ -31,7 +31,6 @@
 namespace com::sun::star::uno { class XInterface; }
 namespace osl { class Mutex; }
 
-/** */ //for docpp
 namespace comphelper
 {
 

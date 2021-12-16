@@ -33,16 +33,12 @@
 
 #include "uno/lbnames.h"
 
-/** */ //for docpp
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 

@@ -34,7 +34,6 @@
 using namespace osl;
 using namespace com::sun::star::uno;
 
-/** */ //for docpp
 namespace cppu
 {
 
@@ -332,7 +331,6 @@ void OWeakAggObject::setDelegator( const Reference<XInterface > & rDelegator )
 
 }
 
-/** */ //for docpp
 namespace com::sun::star::uno
 {
 

@@ -30,7 +30,6 @@ namespace osl
 class Mutex;
 }
 
-/** */ //for docpp
 namespace comphelper
 {
 /**
