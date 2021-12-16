@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include "sdmodeltestbase.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -43,10 +42,8 @@
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
 
-#include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <app.hrc>
-#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 #include <osl/thread.hxx>
@@ -67,6 +64,8 @@ public:
     void checkCurrentPageNumber(sal_uInt16 nNum);
     void insertStringToObject(sal_uInt16 nObj, const std::string& rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
+    FileFormat* getFormat(sal_Int32 nExportType);
+    void save(sd::DrawDocShell* pShell, FileFormat const* pFormat, utl::TempFile const& rTempFile);
 };
 
 void SdUiImpressTest::setUp()
@@ -146,6 +145,46 @@ sd::slidesorter::SlideSorterViewShell* SdUiImpressTest::getSlideSorterViewShell(
     }
     CPPUNIT_ASSERT(pSSVS);
     return pSSVS;
+}
+
+FileFormat* SdUiImpressTest::getFormat(sal_Int32 nExportType)
+{
+    FileFormat* pFormat = &aFileFormats[0];
+    if (o3tl::make_unsigned(nExportType) < SAL_N_ELEMENTS(aFileFormats))
+        pFormat = &aFileFormats[nExportType];
+    return pFormat;
+}
+
+void SdUiImpressTest::save(sd::DrawDocShell* pShell, FileFormat const* pFormat,
+                           utl::TempFile const& rTempFile)
+{
+    SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
+    if (std::strcmp(pFormat->pName, "odg") == 0)
+    { // Draw
+        SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
+        if (pFormat->nFormatType == ODG_FORMAT_TYPE)
+            nExportFormat = SotClipboardFormatId::STARDRAW_8;
+        auto pExportFilter = std::make_shared<SfxFilter>(
+            OUString::createFromAscii(pFormat->pFilterName), OUString(), pFormat->nFormatType,
+            nExportFormat, OUString::createFromAscii(pFormat->pTypeName), OUString(),
+            OUString::createFromAscii(pFormat->pUserData), "private:factory/sdraw*");
+        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        aStoreMedium.SetFilter(pExportFilter);
+    }
+    else // Impress
+    {
+        SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
+        if (pFormat->nFormatType == ODP_FORMAT_TYPE)
+            nExportFormat = SotClipboardFormatId::STARCHART_8;
+        auto pExportFilter = std::make_shared<SfxFilter>(
+            OUString::createFromAscii(pFormat->pFilterName), OUString(), pFormat->nFormatType,
+            nExportFormat, OUString::createFromAscii(pFormat->pTypeName), OUString(),
+            OUString::createFromAscii(pFormat->pUserData), "private:factory/simpress*");
+        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        aStoreMedium.SetFilter(pExportFilter);
+    }
+    pShell->DoSaveAs(aStoreMedium);
+    pShell->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
@@ -816,6 +855,50 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
     pImpressDocument->GetDoc()->getPresentationSettings().mbStartCustomShow = true;
     sd::slideshowhelp::ShowSlideShow(aRequest, *pImpressDocument->GetDoc());
     CPPUNIT_ASSERT_EQUAL(false, pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    dispatchCommand(mxComponent, ".uno:InsertPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    insertStringToObject(0, "Test", /*bUseEscape*/ false);
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:OutlineFont", {});
+
+    // Save it as PPTX and load it again.
+    utl::TempFile aTempFile;
+    save(dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDocShell(), getFormat(PPTX),
+         aTempFile);
+    mxComponent = loadFromDesktop(aTempFile.GetURL());
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xText
+        = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());
+
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+
+    uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
+
+    uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    bool bContoured = false;
+    xPropSet->getPropertyValue("CharContoured") >>= bContoured;
+    CPPUNIT_ASSERT(bContoured);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -2147,9 +2147,31 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 nTransparency = MAX_PERCENT - (nTransparency * PER_PERCENT);
             }
 
+            bool bContoured = false;
+            if (GetProperty(rXPropSet, "CharContoured"))
+                bContoured = *o3tl::doAccess<bool>(mAny);
+
+            // tdf#127696 If the CharContoured is true, then the text color is white and the outline color is the CharColor.
+            if (bContoured)
+            {
+                mpFS->startElementNS(XML_a, XML_ln);
+                if (color == COL_AUTO)
+                {
+                    mbIsBackgroundDark ? WriteSolidFill(COL_WHITE) : WriteSolidFill(COL_BLACK);
+                }
+                else
+                {
+                    color.SetAlpha(255);
+                    if (!WriteCharColor(rXPropSet))
+                        WriteSolidFill(color, nTransparency);
+                }
+                mpFS->endElementNS(XML_a, XML_ln);
+
+                WriteSolidFill(COL_WHITE);
+            }
             // tdf#104219 In LibreOffice and MS Office, there are two types of colors:
             // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
-            if( color != COL_AUTO )
+            else if( color != COL_AUTO )
             {
                 color.SetAlpha(255);
                 // TODO: special handle embossed/engraved
