@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8918b8a9_183a86b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-12-16T07:51:15Z",
+      "side": 1,
+      "message": "Looks good. I suppose the fix is to invalidate the whole sheet now (when Rectangle is empty) as opposed to some negative/invalid region? One note on documentation, to make things easier to understand and reuse. (Also, probably there is a similar helper, somewhere.)",
+      "revId": "098c2967433d1897cbcb74c50f6d45dfc16b112e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c55932a_71761aef",
+        "filename": "desktop/inc/lib/init.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-12-16T07:51:15Z",
+      "side": 1,
+      "message": "Would be great to have documentation here. \"CheckedRectangle\" is very generic and hard to guess what it will check and what it will return.",
+      "revId": "098c2967433d1897cbcb74c50f6d45dfc16b112e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
