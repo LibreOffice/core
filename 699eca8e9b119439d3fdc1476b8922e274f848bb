@@ -87,6 +87,30 @@
       },
       "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "065ed9a3_be5f2bfd",
+        "filename": "sw/source/core/text/itrcrsr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-12-17T15:41:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bdda6f79_6a93f9b8",
+      "range": {
+        "startLine": 255,
+        "startChar": 12,
+        "endLine": 255,
+        "endChar": 121
+      },
+      "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
