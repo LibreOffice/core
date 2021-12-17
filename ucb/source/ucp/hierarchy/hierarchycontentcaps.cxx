@@ -80,7 +80,7 @@ using namespace hierarchy_ucp;
 uno::Sequence< beans::Property > HierarchyContent::getProperties(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_eKind == LINK )
     {
@@ -374,7 +374,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_eKind == LINK )
     {

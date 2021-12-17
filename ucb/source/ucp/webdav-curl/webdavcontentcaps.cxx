@@ -278,7 +278,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     rtl::Reference< ContentProvider >  xProvider;
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         bTransient = m_bTransient;
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
@@ -498,7 +498,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 uno::Sequence< ucb::CommandInfo > Content::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Sequence< ucb::CommandInfo > aCmdInfo( 10 );
     auto pCmdInfo = aCmdInfo.getArray();

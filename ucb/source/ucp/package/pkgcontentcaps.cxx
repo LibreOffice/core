@@ -81,7 +81,7 @@ using namespace package_ucp;
 uno::Sequence< beans::Property > Content::getProperties(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( isFolder() )
     {
@@ -303,7 +303,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 uno::Sequence< ucb::CommandInfo > Content::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( isFolder() )
     {

@@ -654,7 +654,7 @@ sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
 void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
                         const Reference<XCommandEnvironment>& Env)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if(m_bInserted && !m_bTitleSet) {
         MissingPropertiesException excep;
@@ -772,7 +772,7 @@ Sequence<Any> FTPContent::setPropertyValues(
     auto retRange = asNonConstRange(ret);
     Sequence<PropertyChangeEvent > evt;
 
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
         if ( seqPropVal[i].Name == "Title" ) {
             OUString Title;

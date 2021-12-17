@@ -640,7 +640,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 {
     if ( isFolder() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
@@ -935,7 +935,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         const uno::Sequence< beans::Property >& rProperties )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return getPropertyValues( m_xContext,
                               rProperties,
                               m_aProps,
@@ -948,7 +948,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
@@ -1263,7 +1263,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
 
-        aGuard.clear();
+        aGuard.unlock();
         if ( exchangeIdentity( xNewId ) )
         {
             // Adapt persistent data.
@@ -1319,7 +1319,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             }
         }
 
-        aGuard.clear();
+        aGuard.unlock();
         aChanges.realloc( nChanged );
         notifyPropertiesChange( aChanges );
     }
@@ -1471,7 +1471,7 @@ void Content::insert(
             sal_Int32 nNameClashResolve,
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Check, if all required properties were set.
     if ( isFolder() )
@@ -1614,7 +1614,7 @@ void Content::insert(
                   m_aProps,
                   xXHierarchicalNameAccess );
 
-        aGuard.clear();
+        aGuard.unlock();
         inserted();
     }
 }
@@ -1626,7 +1626,7 @@ void Content::destroy(
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< ucb::XContent > xThis = this;
 
@@ -1643,7 +1643,7 @@ void Content::destroy(
 
     m_eState = DEAD;
 
-    aGuard.clear();
+    aGuard.unlock();
     deleted();
 
     if ( isFolder() )
@@ -1665,7 +1665,7 @@ void Content::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Persistent?
     if ( m_eState != PERSISTENT )
@@ -1944,7 +1944,7 @@ bool Content::exchangeIdentity(
     if ( !xNewId.is() )
         return false;
 
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< ucb::XContent > xThis = this;
 
@@ -1963,7 +1963,7 @@ bool Content::exchangeIdentity(
     {
         OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
-        aGuard.clear();
+        aGuard.unlock();
         if ( exchange( xNewId ) )
         {
             m_aUri = aNewUri;
@@ -2046,7 +2046,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 uno::Reference< container::XHierarchicalNameAccess > Content::getPackage(
                                                 const PackageUri& rURI )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( rURI.getPackage() == m_aUri.getPackage() )
     {
@@ -2079,7 +2079,7 @@ bool Content::hasData(
 
 bool Content::hasData( const PackageUri& rURI )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
     if ( rURI.getPackage() == m_aUri.getPackage() )
@@ -2281,7 +2281,7 @@ void Content::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     PackageUri aURI( xOldId->getContentIdentifier() );
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage(
@@ -2316,7 +2316,7 @@ void Content::renameData(
 
 bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
 
@@ -2545,7 +2545,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
 bool Content::removeData()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
 
@@ -2585,7 +2585,7 @@ bool Content::removeData()
 
 bool Content::flushData()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Note: XChangesBatch is only implemented by the package itself, not
     //       by the single entries. Maybe this has to change...
@@ -2615,7 +2615,7 @@ bool Content::flushData()
 
 uno::Reference< io::XInputStream > Content::getInputStream()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< io::XInputStream > xStream;
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
@@ -2652,7 +2652,7 @@ uno::Reference< io::XInputStream > Content::getInputStream()
 
 uno::Reference< container::XEnumeration > Content::getIterator()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< container::XEnumeration > xIter;
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();

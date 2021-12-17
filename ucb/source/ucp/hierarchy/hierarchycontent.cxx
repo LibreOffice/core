@@ -528,7 +528,7 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
 {
     if ( isFolder() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
@@ -669,7 +669,7 @@ bool HierarchyContent::isReadOnly()
 {
     if ( !m_bCheckedReadOnly )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if ( !m_bCheckedReadOnly )
         {
             m_bCheckedReadOnly = true;
@@ -694,7 +694,7 @@ bool HierarchyContent::isReadOnly()
 uno::Reference< ucb::XContentIdentifier >
 HierarchyContent::makeNewIdentifier( const OUString& rTitle )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Assemble new content identifier...
     HierarchyUri aUri( m_xIdentifier->getContentIdentifier() );
@@ -759,7 +759,7 @@ bool HierarchyContent::exchangeIdentity(
     if ( !xNewId.is() )
         return false;
 
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< ucb::XContent > xThis = this;
 
@@ -785,7 +785,7 @@ bool HierarchyContent::exchangeIdentity(
     {
         OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
-        aGuard.clear();
+        aGuard.unlock();
         if ( exchange( xNewId ) )
         {
             if ( m_eKind == FOLDER )
@@ -971,7 +971,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                         const uno::Sequence< beans::Property >& rProperties )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return getPropertyValues( m_xContext,
                               rProperties,
                               m_aProps,
@@ -984,7 +984,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ResettableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
@@ -1212,7 +1212,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         uno::Reference< ucb::XContentIdentifier > xNewId
             = makeNewIdentifier( m_aProps.getTitle() );
 
-        aGuard.clear();
+        aGuard.unlock();
         if ( exchangeIdentity( xNewId ) )
         {
             // Adapt persistent data.
@@ -1236,7 +1236,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     "Exchange failed!",
                     static_cast< cppu::OWeakObject * >( this ) );
         }
-        aGuard.reset();
+        aGuard.lock();
     }
 
     if ( !aOldTitle.isEmpty() )
@@ -1272,7 +1272,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
         aChanges.realloc( nChanged );
 
-        aGuard.clear();
+        aGuard.unlock();
         notifyPropertiesChange( aChanges );
     }
 
@@ -1284,7 +1284,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                                const uno::Reference<
                                     ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Am I the root folder?
     if ( m_eKind == ROOT )
@@ -1413,7 +1413,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 
     if ( bNewId )
     {
-        aGuard.clear();
+        aGuard.unlock();
         inserted();
     }
 }
@@ -1425,7 +1425,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< ucb::XContent > xThis = this;
 
@@ -1453,7 +1453,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
 
     m_eState = DEAD;
 
-    aGuard.clear();
+    aGuard.unlock();
     deleted();
 
     if ( m_eKind == FOLDER )
@@ -1475,7 +1475,7 @@ void HierarchyContent::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Persistent?
     if ( m_eState != PERSISTENT )

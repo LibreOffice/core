@@ -270,7 +270,7 @@ OUString SAL_CALL Content::getImplementationName()
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Sequence< OUString > aSNS( 1 );
 
@@ -293,7 +293,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 // virtual
 OUString SAL_CALL Content::getContentType()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_aProps.getContentType();
 }
 
@@ -303,7 +303,7 @@ uno::Reference< ucb::XContentIdentifier > SAL_CALL
 Content::getIdentifier()
 {
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         // Transient?
         if ( m_eState == TRANSIENT )
@@ -474,7 +474,7 @@ uno::Any SAL_CALL Content::execute(
 
 
         {
-            osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             ContentType eType = m_aProps.getType();
             if ( ( eType != FOLDER ) && ( eType != STREAM ) )
@@ -520,7 +520,7 @@ uno::Any SAL_CALL Content::execute(
 
 
         {
-            osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             ContentType eType = m_aProps.getType();
             if ( ( eType != FOLDER ) && ( eType != DOCUMENT ) )
@@ -558,7 +558,7 @@ uno::Any SAL_CALL Content::execute(
 
 
         {
-            osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             ContentType eType = m_aProps.getType();
             if ( ( eType != FOLDER ) && ( eType != DOCUMENT ) )
@@ -631,7 +631,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 {
     if ( m_aProps.isContentCreator() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
@@ -680,7 +680,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 // virtual
 OUString Content::getParentURL()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     Uri aUri( m_xIdentifier->getContentIdentifier() );
     return aUri.getParentUri();
 }
@@ -689,7 +689,7 @@ OUString Content::getParentURL()
 uno::Reference< ucb::XContentIdentifier >
 Content::makeNewIdentifier( const OUString& rTitle )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Assemble new content identifier...
     Uri aUri( m_xIdentifier->getContentIdentifier() );
@@ -703,7 +703,7 @@ Content::makeNewIdentifier( const OUString& rTitle )
 
 void Content::queryChildren( ContentRefList& rChildren )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Only folders (root, documents, folders) have children.
     if ( !m_aProps.getIsFolder() )
@@ -757,7 +757,7 @@ bool Content::exchangeIdentity(
     if ( !xNewId.is() )
         return false;
 
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< ucb::XContent > xThis = this;
 
@@ -784,7 +784,7 @@ bool Content::exchangeIdentity(
     {
         OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
-        aGuard.clear();
+        aGuard.unlock();
         if ( exchange( xNewId ) )
         {
             if ( eType == FOLDER )
@@ -1029,7 +1029,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         const uno::Sequence< beans::Property >& rProperties )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return getPropertyValues( m_xContext,
                               rProperties,
                               m_aProps,
@@ -1042,7 +1042,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
@@ -1245,7 +1245,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         uno::Reference< ucb::XContentIdentifier > xNewId
             = makeNewIdentifier( m_aProps.getTitle() );
 
-        aGuard.clear();
+        aGuard.unlock();
         if ( exchangeIdentity( xNewId ) )
         {
             // Adapt persistent data.
@@ -1301,7 +1301,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         aChanges.realloc( nChanged );
 
-        aGuard.clear();
+        aGuard.unlock();
         notifyPropertiesChange( aChanges );
     }
 
@@ -1344,7 +1344,7 @@ uno::Any Content::open(
             // Unreachable
         }
 
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         uno::Reference< io::XActiveDataStreamer > xDataStreamer(
                                         rArg.Sink, uno::UNO_QUERY );
@@ -1484,7 +1484,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                       const uno::Reference<
                           ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentType eType = m_aProps.getType();
 
@@ -1638,7 +1638,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     {
         //loadData( m_pProvider, m_aUri, m_aProps );
 
-        aGuard.clear();
+        aGuard.unlock();
         inserted();
     }
 }
@@ -1650,7 +1650,7 @@ void Content::destroy( bool bDeletePhysical,
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentType eType = m_aProps.getType();
 
@@ -1672,7 +1672,7 @@ void Content::destroy( bool bDeletePhysical,
 
     m_eState = DEAD;
 
-    aGuard.clear();
+    aGuard.unlock();
     deleted();
 
     if ( eType == FOLDER )
@@ -1692,14 +1692,14 @@ void Content::destroy( bool bDeletePhysical,
 
 void Content::notifyDocumentClosed()
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     m_eState = DEAD;
 
     // @@@ anything else to reset or such?
 
     // callback follows!
-    aGuard.clear();
+    aGuard.unlock();
 
     // Propagate destruction to content event listeners
     // Remove this from provider's content list.
@@ -1710,7 +1710,7 @@ void Content::notifyDocumentClosed()
 uno::Reference< ucb::XContent >
 Content::queryChildContent( std::u16string_view rRelativeChildUri )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     const OUString aMyId = getIdentifier()->getContentIdentifier();
     OUStringBuffer aBuf( aMyId );
@@ -1742,7 +1742,7 @@ Content::queryChildContent( std::u16string_view rRelativeChildUri )
 
 void Content::notifyChildRemoved( std::u16string_view rRelativeChildUri )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Ugly! Need to create child content object, just to fill event properly.
     uno::Reference< ucb::XContent > xChild
@@ -1752,7 +1752,7 @@ void Content::notifyChildRemoved( std::u16string_view rRelativeChildUri )
         return;
 
     // callback follows!
-    aGuard.clear();
+    aGuard.unlock();
 
     // Notify "REMOVED" event.
     ucb::ContentEvent aEvt(
@@ -1766,7 +1766,7 @@ void Content::notifyChildRemoved( std::u16string_view rRelativeChildUri )
 
 void Content::notifyChildInserted( std::u16string_view rRelativeChildUri )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Ugly! Need to create child content object, just to fill event properly.
     uno::Reference< ucb::XContent > xChild
@@ -1776,7 +1776,7 @@ void Content::notifyChildInserted( std::u16string_view rRelativeChildUri )
         return;
 
     // callback follows!
-    aGuard.clear();
+    aGuard.unlock();
 
     // Notify "INSERTED" event.
     ucb::ContentEvent aEvt(
@@ -1792,7 +1792,7 @@ void Content::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Persistent?
     if ( m_eState != PERSISTENT )
@@ -2203,7 +2203,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
                          const uno::Reference<
                             ucb::XCommandEnvironment >& xEnv )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
@@ -2343,7 +2343,7 @@ void Content::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
@@ -2409,7 +2409,7 @@ void Content::renameData(
 
 bool Content::removeData()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
@@ -2467,7 +2467,7 @@ bool Content::removeData()
 
 bool Content::copyData( const Uri & rSourceUri, const OUString & rNewName )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == STREAM ) )
@@ -2655,7 +2655,7 @@ uno::Reference< io::XInputStream > Content::getInputStream(
     bool bPasswordRequested = false;
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         OSL_ENSURE( m_aProps.getType() == STREAM,
                     "Content::getInputStream - content is no stream!" );
@@ -2667,7 +2667,7 @@ uno::Reference< io::XInputStream > Content::getInputStream(
     {
         try
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             return m_pProvider->queryInputStream( aUri, aPassword );
         }
         catch ( packages::WrongPasswordException const & )
@@ -2732,7 +2732,7 @@ uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
 uno::Reference< io::XStream > Content::getStream(
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     OSL_ENSURE( m_aProps.getType() == STREAM,
                 "Content::getStream - content is no stream!" );
