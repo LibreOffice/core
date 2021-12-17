@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "368e5d77_d37eac2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-12-17T10:23:53Z",
+      "side": 1,
+      "message": "CppunitTest_sw_globalfilter crashed on WNT but 4 following builds were successful",
+      "revId": "202bcdbf65d89681ca84a182afc240797d4b8e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
