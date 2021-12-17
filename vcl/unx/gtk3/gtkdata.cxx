@@ -641,22 +641,21 @@ extern "C" {
 
     struct SalGtkTimeoutSource {
         GSource      aParent;
-        gint64       aFireTime;
+        GTimeVal     aFireTime;
         GtkSalTimer *pInstance;
     };
 
     static void sal_gtk_timeout_defer( SalGtkTimeoutSource *pTSource )
     {
-        pTSource->aFireTime = g_get_real_time() + pTSource->pInstance->m_nTimeoutMS * 1000;
+        g_get_current_time( &pTSource->aFireTime );
+        g_time_val_add( &pTSource->aFireTime, pTSource->pInstance->m_nTimeoutMS * 1000 );
     }
 
     static gboolean sal_gtk_timeout_expired( SalGtkTimeoutSource *pTSource,
-                                             gint *nTimeoutMS, gint64 const pTimeNow )
+                                             gint *nTimeoutMS, GTimeVal const *pTimeNow )
     {
-        glong tv_sec = pTimeNow / 1000000;
-        glong tv_usec = pTimeNow - tv_sec * 1000000;
-        glong nDeltaSec = pTSource->aFireTime / 1000000 - tv_sec;
-        glong nDeltaUSec = pTSource->aFireTime - (nDeltaSec * 1000000) - tv_usec;
+        glong nDeltaSec = pTSource->aFireTime.tv_sec - pTimeNow->tv_sec;
+        glong nDeltaUSec = pTSource->aFireTime.tv_usec - pTimeNow->tv_usec;
         if( nDeltaSec < 0 || ( nDeltaSec == 0 && nDeltaUSec < 0) )
         {
             *nTimeoutMS = 0;
@@ -683,20 +682,22 @@ extern "C" {
     {
         SalGtkTimeoutSource *pTSource = reinterpret_cast<SalGtkTimeoutSource *>(pSource);
 
-        gint64 aTimeNow;
-        aTimeNow = g_get_real_time();
+        GTimeVal aTimeNow;
+        g_get_current_time( &aTimeNow );
 
-        return sal_gtk_timeout_expired( pTSource, nTimeoutMS, aTimeNow );
+        return sal_gtk_timeout_expired( pTSource, nTimeoutMS, &aTimeNow );
     }
 
     static gboolean sal_gtk_timeout_check( GSource *pSource )
     {
         SalGtkTimeoutSource *pTSource = reinterpret_cast<SalGtkTimeoutSource *>(pSource);
 
-        gint64 aTimeNow;
-        aTimeNow = g_get_real_time();
+        GTimeVal aTimeNow;
+        g_get_current_time( &aTimeNow );
 
-        return ( pTSource->aFireTime < aTimeNow );
+        return ( pTSource->aFireTime.tv_sec < aTimeNow.tv_sec ||
+                 ( pTSource->aFireTime.tv_sec == aTimeNow.tv_sec &&
+                   pTSource->aFireTime.tv_usec < aTimeNow.tv_usec ) );
     }
 
     static gboolean sal_gtk_timeout_dispatch( GSource *pSource, GSourceFunc, gpointer )
@@ -769,13 +770,17 @@ bool GtkSalTimer::Expired()
         return false;
 
     gint nDummy = 0;
-    gint64 aTimeNow;
-    aTimeNow = g_get_real_time();
-    return !!sal_gtk_timeout_expired( m_pTimeout, &nDummy, aTimeNow);
+    GTimeVal aTimeNow;
+    g_get_current_time( &aTimeNow );
+    return !!sal_gtk_timeout_expired( m_pTimeout, &nDummy, &aTimeNow);
 }
 
 void GtkSalTimer::Start( sal_uInt64 nMS )
 {
+    // glib is not 64bit safe in this regard.
+    assert( nMS <= G_MAXINT );
+    if ( nMS > G_MAXINT )
+        nMS = G_MAXINT;
     m_nTimeoutMS = nMS; // for restarting
     Stop(); // FIXME: ideally re-use an existing m_pTimeout
     m_pTimeout = create_sal_gtk_timeout( this );
