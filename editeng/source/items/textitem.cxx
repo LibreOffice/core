@@ -1521,6 +1521,8 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     std::stringstream ss;
     ss << mColor;
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(ss.str().c_str()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("theme-index"),
+                                      BAD_CAST(OString::number(maThemeIndex).getStr()));
 
     OUString aStr;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());

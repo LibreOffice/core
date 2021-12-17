@@ -92,6 +92,8 @@ public:
     static std::unique_ptr<Theme> FromAny(const css::uno::Any& rVal);
 
     void UpdateSdrPage(SdrPage* pPage);
+
+    std::vector<Color> GetColors() const;
 };
 
 } // end of namespace svx

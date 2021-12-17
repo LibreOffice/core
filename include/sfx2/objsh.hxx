@@ -558,6 +558,7 @@ public:
     StarBASIC*                  GetBasic() const;
 
     virtual std::set<Color>     GetDocColors();
+    virtual std::vector<Color> GetThemeColors();
 
     // Accessibility Check
     virtual sfx::AccessibilityIssueCollection runAccessibilityCheck();
