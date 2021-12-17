@@ -710,7 +710,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
         SearchCharHighlightHdl(m_xSearchSet.get());
     }
 
-    // tdf#118304 reselect current glyph to see if its still there in new font
+    // tdf#118304 reselect current glyph to see if it's still there in new font
     selectCharByCode(Radix::hexadecimal);
 }
 

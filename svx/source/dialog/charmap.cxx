@@ -466,7 +466,7 @@ void SvxShowCharSet::DeSelect()
     Invalidate();
 }
 
-// stretch a grid rectangle if its at the edge to fill unused space
+// stretch a grid rectangle if it's at the edge to fill unused space
 tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rOutputSize) const
 {
     tools::Long x = rPointUL.X() - 1;

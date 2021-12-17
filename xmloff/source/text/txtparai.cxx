@@ -1570,7 +1570,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImpSpanContext_Impl
                 rImport, nElement, xAttrList, xShapes );
             pContext = pShapeContext;
             // OD 2004-04-20 #i26791# - keep shape in a text frame hint to
-            // adjust its anchor position, if its at-character anchored
+            // adjust its anchor position, if it's at-character anchored
             Reference < XTextRange > xAnchorPos =
                 rImport.GetTextImport()->GetCursor()->getStart();
             rHints.push_back(

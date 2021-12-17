@@ -738,7 +738,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     bool bInPlaceVisCursor = false;
     if (bInPlaceEditing)
     {
-        // toggle the cursor off if its on to ensure the cursor invert
+        // toggle the cursor off if it's on to ensure the cursor invert
         // background logic remains valid after the background is cleared on
         // the next cursor flash
         pInPlaceCrsr = pEditView->GetCursor();

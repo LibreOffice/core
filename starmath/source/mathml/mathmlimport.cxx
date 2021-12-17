@@ -2293,7 +2293,7 @@ uno::Reference<xml::sax::XFastContextHandler> SmXMLRowContext_Impl::createFastCh
 
     if (!xContext)
     {
-        //Hmm, unrecognized for this level, check to see if its
+        //Hmm, unrecognized for this level, check to see if it's
         //an element that can have an implicit schema around it
         xContext = SmXMLDocContext_Impl::createFastChildContext(nElement, xAttrList);
     }

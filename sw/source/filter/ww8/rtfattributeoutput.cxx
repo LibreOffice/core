@@ -4218,7 +4218,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     /*
        If the graphic is not of type WMF then we will have to store two
        graphics, one in the native format wrapped in shppict, and the other in
-       the wmf format wrapped in nonshppict, so as to keep wordpad happy. If its
+       the wmf format wrapped in nonshppict, so as to keep wordpad happy. If it's
        a wmf already then we don't need any such wrapping
        */
     bool bIsWMF = pBLIPType && std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
