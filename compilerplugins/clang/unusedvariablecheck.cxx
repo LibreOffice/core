@@ -106,7 +106,8 @@ bool UnusedVariableCheck::isUnusedSmartPointer( const VarDecl* var )
         auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(var->getInit());
         if (!cxxConstructExpr)
             return false;
-        return cxxConstructExpr->getConstructor()->isDefaultConstructor();
+        return
+            cxxConstructExpr->getNumArgs() == 0 || cxxConstructExpr->getArg(0)->isDefaultArgument();
     }
 
 static Plugin::Registration< UnusedVariableCheck > unusedvariablecheck( "unusedvariablecheck" );

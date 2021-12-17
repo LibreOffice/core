@@ -19,6 +19,11 @@ namespace
 template <typename T> using Vec = std::vector<T>;
 }
 
+struct S : std::unique_ptr<int>
+{
+    S(int* = nullptr);
+};
+
 int main()
 {
     std::list<int> v1; // expected-error {{unused variable 'v1' [loplugin:unusedvariablecheck]}}
@@ -26,6 +31,8 @@ int main()
     Vec<int> v3; // expected-error {{unused variable 'v3' [loplugin:unusedvariablecheck]}}
     std::unique_ptr<int>
         v4; // expected-error {{unused variable 'v4' [loplugin:unusedvariablecheck]}}
+    S v5; // expected-error {{unused variable 'v5' [loplugin:unusedvariablecheck]}}
+    S v6(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
