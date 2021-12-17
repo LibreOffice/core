@@ -658,12 +658,23 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     aEntry = SwNavigationPI::CleanEntry(aEntry);
                     std::unique_ptr<SwOutlineContent> pCnt(new SwOutlineContent(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable( i ), nPos ));
+                    if (!m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i)->
+                            getLayoutFrame(m_pWrtShell->GetLayout()))
+                        pCnt->SetInvisible();
+                    // Compare old member outline level and visibility to new member outline
+                    // level and visibility. Do this only when there is an old member and when
+                    // level or visibility change has not already been detected. Not testing
+                    // pbLevelOrVisibilityChanged for nullptr is safe here because nOldMemberCount
+                    // will be 0 if pbLevelOrVisiblityChanged is nullptr.
+                    if (nOldMemberCount > nPos && !*pbLevelOrVisibilityChanged)
+                    {
+                        SwOutlineContent* pOldCnt =
+                                static_cast<SwOutlineContent*>((*pOldMember)[nPos].get());
+                        if (pOldCnt->GetOutlineLevel() != nLevel ||
+                                pOldCnt->IsInvisible() != pCnt->IsInvisible())
+                            *pbLevelOrVisibilityChanged = true;
+                    }
                     m_pMember->insert(std::move(pCnt));
-                    // with the same number and existing "pOldMember" the
-                    // old one is compared with the new OutlinePos.
-                    if (nOldMemberCount > nPos && static_cast<SwOutlineContent*>((*pOldMember)[nPos].get())->GetOutlineLevel() != nLevel)
-                        *pbLevelOrVisibilityChanged = true;
-
                     nPos++;
                 }
             }
