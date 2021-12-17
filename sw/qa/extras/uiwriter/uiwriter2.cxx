@@ -332,6 +332,74 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
     rUndoManager.Undo();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
+{
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("A");
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    // hide
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->DelLine();
+    pWrtShell->StartOfSection(false);
+    pWrtShell->SplitNode(true);
+    pWrtShell->SplitNode(true);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text", 0);
+    // not sure why there's an empty text portion here, but it's not a problem
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1][@Portion]", 0);
+
+    pWrtShell->Undo();
+
+    // the problem was that here the "A" showed up again
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1][@Portion]", 0);
+
+    pWrtShell->Undo();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1][@Portion]", 0);
+
+    pWrtShell->Undo();
+
+    // now the "A" is no longer deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1][@Portion]", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nLength", "1");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "A");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
     SwDoc* const pDoc(createSwDoc());

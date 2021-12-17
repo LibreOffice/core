@@ -1016,6 +1016,22 @@ SwContentNode *SwTextNode::JoinNext()
             rDoc.CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
+        auto eRecreateMerged(eOldMergeFlag == SwNode::Merge::First
+                    ? sw::Recreate::ThisNode
+                    : sw::Recreate::No);
+        if (eRecreateMerged == sw::Recreate::No)
+        {
+            // tdf#137318 if a delete is inside one node, flag is still None!
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pTextNode);
+            for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+            {
+                if (pFrame->GetMergedPara())
+                {
+                    eRecreateMerged = sw::Recreate::ThisNode;
+                    break;
+                }
+            }
+        }
         bool bOldHasNumberingWhichNeedsLayoutUpdate = HasNumberingWhichNeedsLayoutUpdate(*pTextNode);
 
         rNds.Delete(aIdx);
@@ -1030,9 +1046,7 @@ SwContentNode *SwTextNode::JoinNext()
             InvalidateNumRule();
         }
 
-        CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::First
-                                            ? sw::Recreate::ThisNode
-                                            : sw::Recreate::No);
+        CheckResetRedlineMergeFlag(*this, eRecreateMerged);
     }
     else {
         OSL_FAIL( "No TextNode." );
