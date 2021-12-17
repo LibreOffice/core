@@ -107,20 +107,17 @@ SwExtTextInput::~SwExtTextInput()
     }
     else
     {
-        // we need to keep correct formatting
-        // ie. when we erase first, then we will lost information about format
+        // 1. Insert text at start position with EMPTYEXPAND to use correct formatting
+        //    ABC<NEW><OLD>
+        // 2. Then remove old (not tracked) content
+        //    ABC<NEW>
 
         sal_Int32 nLenghtOfOldString = nEndCnt - nSttCnt;
 
         if( m_bInsText )
-        {
-            rDoc.getIDocumentContentOperations().InsertString( *this, sText );
+            rDoc.getIDocumentContentOperations().InsertString( *this, sText, SwInsertFlags::EMPTYEXPAND );
 
-            // Copy formatting to the inserted string
-            SfxItemSet aSet(pTNd->GetDoc().GetAttrPool(), aCharFormatSetRange);
-            pTNd->GetParaAttr( aSet, nSttCnt + nLenghtOfOldString, nEndCnt + nLenghtOfOldString );
-            pTNd->SetAttr( aSet, nSttCnt, nEndCnt );
-        }
+        rIdx = nEndCnt;
 
         pTNd->EraseText( rIdx, nLenghtOfOldString );
     }
@@ -208,8 +205,8 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             pTNd->EraseText( aIdx, nEndCnt - nSttCnt );
         }
 
-        pTNd->InsertText( rNewStr, aIdx,
-                SwInsertFlags::EMPTYEXPAND );
+        // NOHINTEXPAND so we can use correct formatting in desctructor when we finish composing
+        pTNd->InsertText( rNewStr, aIdx, SwInsertFlags::NOHINTEXPAND );
         if( !HasMark() )
             SetMark();
     }
