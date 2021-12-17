@@ -52,6 +52,24 @@
       "parentUuid": "92e6451e_0ae9755b",
       "revId": "48cb441fceab83a6320dc871f291dcb313696650",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af77148_0be6e20e",
+        "filename": "cui/qa/uitest/tabpages/themepage.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-12-17T09:22:50Z",
+      "side": 1,
+      "message": "thanks a lot!",
+      "parentUuid": "91c12cb9_bb86e3ed",
+      "revId": "48cb441fceab83a6320dc871f291dcb313696650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
