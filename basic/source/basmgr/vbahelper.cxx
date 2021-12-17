@@ -21,6 +21,7 @@
 #include <basic/vbahelper.hxx>
 
 #include <map>
+#include <mutex>
 #include <vector>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -140,7 +141,7 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
 
 struct CurrDirPool
 {
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     std::map< OUString, OUString > maCurrDirs;
 };
 
@@ -167,7 +168,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
     static CurrDirPool StaticCurrDirPool;
 
     CurrDirPool& rPool = StaticCurrDirPool;
-    ::osl::MutexGuard aGuard( rPool.maMutex );
+    std::unique_lock aGuard( rPool.maMutex );
     try
     {
         uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
