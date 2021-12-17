@@ -445,19 +445,11 @@ namespace
         const SvxPrintItem *pHasTextChangesOnlyProp =
                 pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
         // empty table row with property "HasTextChangesOnly" = false
-        if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
+        if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() &&
+             pLine->IsEmpty() )
         {
-            if ( pLine->IsEmpty() )
-            {
-                SwCursor aCursor( *pPos, nullptr );
-                pPos->GetDoc().DeleteRow( aCursor );
-            }
-            else
-            {
-                // update property "HasTextChangesOnly"
-                SwRedlineTable::size_type nPos = 0;
-                pLine->UpdateTextChangesOnly(nPos);
-            }
+            SwCursor aCursor( *pPos, nullptr );
+            pPos->GetDoc().DeleteRow( aCursor );
         }
     }
 

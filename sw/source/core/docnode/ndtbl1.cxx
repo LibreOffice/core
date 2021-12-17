@@ -573,9 +573,7 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew,
         // add a redline with invisible text CH_TXT_TRACKED_DUMMY_CHAR
         // (unless the table is part of a bigger deletion, where the
         // new redline can cause a problem)
-        if ( !bAll &&
-            // HasTextChangesOnly == false, i.e. a tracked row insertion or deletion
-            !rNew.GetValue() && pLn->IsEmpty() )
+        if (!bAll && pLn->IsEmpty())
         {
             SwNodeIndex aInsPos( *(pLn->GetTabBoxes()[0]->GetSttNd()), 1 );
             RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
