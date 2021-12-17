@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "760570d6_b88c2ce9",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-12-17T03:44:26Z",
+      "side": 1,
+      "message": "Just to add to what Eike said, it would be best to use different code paths for moving of a sheet and copying of a sheet.  What needs to happen between sheet copy and sheet move are different enough that it warrants independent paths.  When moving a sheet, we typically only adjust reference indices etc, but when copying a sheet, we do need to duplicate data and some reference adjustments on top of it.",
+      "revId": "da7c7a4514276c84d9fb28954794c78d5f70bce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee3a0887_3327123d",
         "filename": "sc/source/core/tool/dbdata.cxx",
         "patchSetId": 1
