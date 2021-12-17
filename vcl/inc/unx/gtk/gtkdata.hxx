@@ -214,7 +214,7 @@ public:
     virtual void Stop() override;
     bool         Expired();
 
-    sal_uInt64    m_nTimeoutMS;
+    sal_uLong    m_nTimeoutMS;
 };
 
 class DocumentFocusListener final :
