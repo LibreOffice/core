@@ -80,8 +80,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySe
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    SvXMLImportContextRef xContext;
-
     switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {

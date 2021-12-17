@@ -109,8 +109,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartStyleContext::
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) ||
         IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT) )
     {

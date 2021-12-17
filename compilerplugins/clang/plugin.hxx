@@ -306,6 +306,7 @@ int derivedFromCount(const CXXRecordDecl* subtypeRecord, const CXXRecordDecl* ba
 bool hasExternalLinkage(VarDecl const * decl);
 
 bool isSmartPointerType(const Expr*);
+bool isSmartPointerType(clang::QualType);
 
 const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt);
 

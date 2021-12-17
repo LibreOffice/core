@@ -644,8 +644,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLVariableDeclsImport
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xImportContext;
-
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_TEXT) )
     {
         enum XMLTokenEnum eElementName;

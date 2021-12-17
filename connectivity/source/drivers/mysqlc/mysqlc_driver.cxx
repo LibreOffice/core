@@ -84,7 +84,6 @@ Reference<XConnection> SAL_CALL MysqlCDriver::connect(const OUString& url,
         return nullptr;
     }
 
-    Reference<XConnection> xConn;
     // create a new connection with the given properties and append it to our vector
     rtl::Reference<OConnection> pCon = new OConnection(*this);
 
