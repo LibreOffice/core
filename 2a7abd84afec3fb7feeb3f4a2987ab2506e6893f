@@ -69,6 +69,24 @@
       "parentUuid": "82dd7fe0_52fe14d1",
       "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497c2973_ce196f38",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-12-17T15:27:54Z",
+      "side": 1,
+      "message": "From https://www.gnu.org/software/make/manual/html_node/Pattern-Rules.html\n\n\u003e Note that expansion using ‘%’ in pattern rules occurs after any variable or function expansions, which take place when the makefile is read.\n\nSo no variables at runtime per default.\n\nThere is https://www.gnu.org/software/make/manual/html_node/Secondary-Expansion.html as a workaround…\n\nAll this rules are there, because otherwise \u0027$(shell cat $(1).filtered)\u0027 runs too early.\n\nAny other idea?",
+      "parentUuid": "8a99e70d_213b549e",
+      "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
