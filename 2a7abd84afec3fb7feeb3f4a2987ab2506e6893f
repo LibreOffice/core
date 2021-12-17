@@ -51,6 +51,24 @@
       "parentUuid": "a53c6113_436322fa",
       "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a99e70d_213b549e",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-17T14:50:24Z",
+      "side": 1,
+      "message": "but you can add a line similar to line 79 to gb_ComponentTarget_ComponentTarget,\n\n  $(call gb_ComponentTarget_get_target,$(1)).optional : $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))",
+      "parentUuid": "82dd7fe0_52fe14d1",
+      "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
