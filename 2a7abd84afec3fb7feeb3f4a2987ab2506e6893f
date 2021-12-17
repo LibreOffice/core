@@ -16,6 +16,23 @@
       "message": "\u003e Uploaded patch set 7.\n\nI like the explicit use of \u003coptional\u003e and the wildcard magic gone.  Thanks!",
       "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a53c6113_436322fa",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-17T13:11:32Z",
+      "side": 1,
+      "message": "doesn\u0027t this need a dependency on the source .component file (aka COMPONENTSOURCE)?",
+      "revId": "2a7abd84afec3fb7feeb3f4a2987ab2506e6893f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
