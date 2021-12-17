@@ -190,6 +190,8 @@ namespace
         for( SwGetINetAttrs::size_type n = 0; n < nCount; ++n )
         {
             SwGetINetAttr* p = &aArr[ n ];
+            tools::Long nYPos = p->rINetAttr.GetTextNode().FindLayoutRect().Top()
+                    + p->rINetAttr.GetStart();
             std::unique_ptr<SwURLFieldContent> pCnt(new SwURLFieldContent(
                                 pCntType,
                                 p->sText,
@@ -197,7 +199,7 @@ namespace
                                     p->rINetAttr.GetINetFormat().GetValue(),
                                     INetURLObject::DecodeMechanism::Unambiguous ),
                                 &p->rINetAttr,
-                                n ));
+                                nYPos));
             pMember->insert( std::move(pCnt) );
         }
         return nCount;
