@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab1b9c3d_e6ac8974",
+        "filename": ".vscode/vs-code-template.code-workspace.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-17T11:45:08Z",
+      "side": 1,
+      "message": "This section is not to define random variables, directories listed hear will be listed as separate roots in the explorer view.\nNot sure why you added this to this changeset :-(",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 4
+      },
+      "revId": "986e946d0cf3a6f61873efc09bab8c5e07c04f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc003db_b0fed6e9",
+        "filename": ".vscode/vs-code-template.code-workspace.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-12-17T11:45:08Z",
+      "side": 1,
+      "message": "unnecessary from my experience/could be restricted to solenv dir, but doesn\u0027t matter really...",
+      "revId": "986e946d0cf3a6f61873efc09bab8c5e07c04f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
