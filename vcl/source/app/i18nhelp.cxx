@@ -106,7 +106,7 @@ OUString vcl::I18nHelper::filterFormattingChars( const OUString& rStr )
 
 sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString& rStr2 ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<vcl::I18nHelper*>(this)->maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( mbTransliterateIgnoreCase )
     {
@@ -123,7 +123,7 @@ sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString&
 
 bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<vcl::I18nHelper*>(this)->maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( !mbTransliterateIgnoreCase )
     {
@@ -140,16 +140,11 @@ bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 
 
 bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<vcl::I18nHelper*>(this)->maMutex );
-
-    bool bEqual = false;
     sal_Int32 n = rString.indexOf( '~' );
-    if ( n != -1 )
-    {
-        OUString aMatchStr = rString.copy( n+1 );   // not only one char, because of transliteration...
-        bEqual = MatchString( OUString(cMnemonicChar), aMatchStr );
-    }
-    return bEqual;
+    if ( n == -1 )
+        return false;
+    OUString aMatchStr = rString.copy( n+1 );   // not only one char, because of transliteration...
+    return MatchString( OUString(cMnemonicChar), aMatchStr );
 }
 
 OUString vcl::I18nHelper::GetNum( tools::Long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep, bool bTrailingZeros ) const
