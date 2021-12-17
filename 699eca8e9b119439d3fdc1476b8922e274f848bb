@@ -63,6 +63,30 @@
       },
       "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdda6f79_6a93f9b8",
+        "filename": "sw/source/core/text/itrcrsr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-17T15:35:49Z",
+      "side": 1,
+      "message": "I would not worry too much about that without seeing this on a performance profile. Just a few lines below we already check for an other compat flag as well. Unless your point is that the other check is cheaper than this new one. :-)",
+      "parentUuid": "04532725_9bfbd9d7",
+      "range": {
+        "startLine": 255,
+        "startChar": 12,
+        "endLine": 255,
+        "endChar": 121
+      },
+      "revId": "699eca8e9b119439d3fdc1476b8922e274f848bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
